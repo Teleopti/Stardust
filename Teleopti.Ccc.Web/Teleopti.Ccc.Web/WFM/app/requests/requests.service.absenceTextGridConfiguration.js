@@ -50,6 +50,7 @@
 					displayName: $translate.instant('AgentName'),
 					field: 'AgentName',
 					cellClass: 'request-agent-name',
+					cellTemplate: 'app/requests/html/requests-absence-name-cell.html',
 					headerCellClass: 'request-agent-name-header',
 					enableFiltering: false
 				},
@@ -164,18 +165,15 @@
 					visible: false,
 					enableFiltering: false,
 					headerCellClass: 'request-updated-time-header'
+				},
+				{
+					displayName: $translate.instant('Account'),
+					field: 'PersonAccountSummaryViewModel',
+					enableFiltering: false,
+					cellTemplate: 'app/requests/html/requests-absence-person-account-overview.html',
+					enableSorting: false
 				}
 			];
-
-			var accountColumn = {
-				displayName: $translate.instant('Account'),
-				field: 'PersonAccountSummaryViewModel',
-				enableFiltering: false,
-				cellTemplate: 'app/requests/html/requests-absence-person-account-overview.html',
-				enableSorting: false
-			};
-
-			columns.splice(12, 0, accountColumn);
 		}
 
 		function columnDefinitions() {

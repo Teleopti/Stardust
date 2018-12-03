@@ -2,7 +2,7 @@
 using System.Globalization;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {

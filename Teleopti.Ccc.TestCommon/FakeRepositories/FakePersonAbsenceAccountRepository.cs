@@ -44,6 +44,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
+		public IPersonAccountCollection Find(IPerson person, IAbsence absence)
+		{
+			var personAbsenceAccounts = _absenceAccounts.Where(account => account.Person == person && account.Absence == absence);
+			var personAccountCollection = new PersonAccountCollection(person);
+			personAbsenceAccounts.ForEach(personAbsenceAccount =>
+			{
+				if (personAccountCollection.All(pc => pc.Absence != personAbsenceAccount.Absence))
+				{
+					personAccountCollection.Add(personAbsenceAccount);
+				}
+			});
+			return personAccountCollection;
+		}
+
 		public IDictionary<IPerson, IPersonAccountCollection> LoadAllAccounts()
 		{
 			throw new NotImplementedException();

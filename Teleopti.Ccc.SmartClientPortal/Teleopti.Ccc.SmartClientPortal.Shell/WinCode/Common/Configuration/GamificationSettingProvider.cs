@@ -17,12 +17,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 	        _gamificationSettingRepository = gamificationSettingRepository;
         }
 
-		public IEnumerable<IGamificationSetting> GetGamificationSettingsEmptyNotIncluded()
-        {
-			EnsureInitialized(IsEmptySettingIncluded:false);
-			return _gamificationSettingCollection;
-        }
-
 		public IEnumerable<IGamificationSetting> GetGamificationSettingsEmptyIncluded()
         {
 			EnsureInitialized(IsEmptySettingIncluded: true);

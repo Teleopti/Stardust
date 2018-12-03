@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate
 {

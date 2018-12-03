@@ -174,11 +174,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -297,10 +297,6 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
       <Name>Teleopti.Ccc.UserTexts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>

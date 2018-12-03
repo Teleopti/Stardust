@@ -2,9 +2,10 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 {

@@ -18,7 +18,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {

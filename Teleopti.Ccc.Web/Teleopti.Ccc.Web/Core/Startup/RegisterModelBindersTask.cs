@@ -5,7 +5,7 @@ using Owin;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {

@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
@@ -134,15 +134,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 				// bug 34650 Seems like we don't need this
 				//IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow);
 				//_groupPageCollection = new List<IGroupPage>(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated());
-			}
-		}
-
-		public void ReloadCurrentGroupPageFromDatabase(IUnitOfWork uow)
-		{
-			if (CurrentGroupPage.Id.HasValue)
-			{
-				var groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow);
-				CurrentGroupPage = groupPageRepository.Get(CurrentGroupPage.Id.Value);
 			}
 		}
 

@@ -24,17 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         }
 
         [Test]
-        public void VerifyCanGetAllGamificationSettings()
-        {
-			var result = new List<IGamificationSetting> { _mocks.StrictMock<IGamificationSetting>() };
-            using (_mocks.Record())
-            {
-                Expect.Call(_gamificationSettingRepository.LoadAll()).Return(result);
-            }
-            Assert.AreEqual(result, _target.GetGamificationSettingsEmptyNotIncluded());
-        }
-
-        [Test]
         public void VerifyCanGetAllGamificationSettingsWithNullSettingIncluded()
         {
             var result = new List<IGamificationSetting> { _mocks.StrictMock<IGamificationSetting>() };

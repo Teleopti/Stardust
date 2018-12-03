@@ -4,7 +4,8 @@ using NUnit.Framework;
 using System.Globalization;
 using System.Threading;
 using SharpTestsEx;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Time
 {
@@ -487,7 +488,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual("2:00:00", TimeHelper.GetLongHourMinuteSecondTimeString(timeValue, ci));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "Teleopti.Interfaces.Domain.TimeHelper.TimeOfDayFromTimeSpan(System.TimeSpan)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        [Test]
         public void VerifyTimeOfDayFromTimeSpan()
         {
             TimeSpan timeSpan = new TimeSpan(8,0,0);

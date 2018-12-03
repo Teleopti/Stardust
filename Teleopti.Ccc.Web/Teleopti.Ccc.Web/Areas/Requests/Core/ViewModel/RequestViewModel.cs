@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public string StatusText { get; set; }
 		public Description Payload { get; set; }
 		public string Team { get; set; }
+		public bool IsNew { get; set; }
+		public bool IsPending { get; set; }
+		public bool IsApproved { get; set; }
+		public bool IsDenied { get; set; }
+		public bool IsWaitlisted { get; set; }
 		public string DenyReason { get; set; }
 	}
 

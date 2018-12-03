@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.SeatManagement;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {

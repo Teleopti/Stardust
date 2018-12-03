@@ -26,7 +26,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
@@ -690,7 +690,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			_personAccountGridViewAdaptorCollection.RemoveAt(rowIndex);
 
-			//Fel den returnerar fler fråga Flamländarna
+			//Fel den returnerar fler frï¿½ga Flamlï¿½ndarna
 			IAccount account = accounts.Find(SelectedDate).FirstOrDefault(a => a.Owner.Absence.Equals(SelectedPersonAccountAbsenceType));
 
 			if (account != null)
@@ -1320,7 +1320,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		private void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
 		{
-			//fel här. kan vara flera. fråga estländarna.
+			//fel hï¿½r. kan vara flera. frï¿½ga estlï¿½ndarna.
 			IAccount account = AllAccounts[person].Find(selectedDate).FirstOrDefault();
 
 			// Gets the person account adoptor using the person data and the selcted date
@@ -1334,7 +1334,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			foreach (IPerson person in _filteredPersonCollection)
 			{
-				//fel här. kan vara flera. fråga sydkoreanerna
+				//fel hï¿½r. kan vara flera. frï¿½ga sydkoreanerna
 				IAccount account = AllAccounts[person].Find(SelectedDate).FirstOrDefault();
 				// Gets the person account adoptor using the person data and the selcted date
 				IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account, CommonNameDescription);

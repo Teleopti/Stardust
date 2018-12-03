@@ -268,11 +268,11 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase">
@@ -929,21 +929,12 @@
     <Compile Include="WinCode\PeopleAdmin\ShiftCategoryLimitationCombination.cs" />
     <Compile Include="WinCode\Presentation\IReportPersonsSelectionView.cs" />
     <Compile Include="WinCode\Presentation\IReportSettingsHostView.cs" />
-    <Compile Include="WinCode\Presentation\IReportSettingsScheduleAuditingView.cs" />
-    <Compile Include="WinCode\Presentation\IReportSettingsScheduledTimePerActivityView.cs" />
     <Compile Include="WinCode\Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
-    <Compile Include="WinCode\Presentation\IReportUserSelectorAuditingView.cs" />
     <Compile Include="WinCode\Presentation\IShiftCategoryLimitationView.cs" />
     <Compile Include="WinCode\Presentation\ReportDetail.cs" />
     <Compile Include="WinCode\Presentation\ReportSettingsHostPresenter.cs" />
-    <Compile Include="WinCode\Presentation\ReportSettingsScheduleAuditingModel.cs" />
-    <Compile Include="WinCode\Presentation\ReportSettingsScheduleAuditingPresenter.cs" />
-    <Compile Include="WinCode\Presentation\ReportSettingsScheduledTimePerActivityPresenter.cs" />
     <Compile Include="WinCode\Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
-    <Compile Include="WinCode\Presentation\ReportUserSelectorAuditingModel.cs" />
-    <Compile Include="WinCode\Presentation\ReportUserSelectorAuditingPresenter.cs" />
     <Compile Include="WinCode\Presentation\ShiftCategoryLimitationViewPresenter.cs" />
-    <Compile Include="WinCode\Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="WinCode\Reporting\ReportSettingsScheduleTimeVersusTargetTimeModel.cs" />
     <Compile Include="WinCode\Scheduling\AbsenceMerger.cs" />
     <Compile Include="WinCode\Scheduling\AddAbsenceCommand.cs" />
@@ -1027,7 +1018,6 @@
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesDayOffCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledAbsenceCommand.cs" />
-    <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledDayOffCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesFulfilledShiftCommand.cs" />
     <Compile Include="WinCode\Scheduling\GridlockCommands\GridlockAllPreferencesMustHaveCommand.cs" />
@@ -1243,7 +1233,6 @@
     <Compile Include="WinCode\Shifts\Views\IExplorerView.cs" />
     <Compile Include="WinCode\Shifts\Views\IGeneralView.cs" />
     <Compile Include="WinCode\Shifts\Views\INavigationView.cs" />
-    <Compile Include="WinCode\Shifts\Views\IVisualizeView.cs" />
     <Compile Include="WinCode\Shifts\VisualPayloadInfo.cs" />
     <Compile Include="WinCode\Shifts\WorkShiftAddCallback.cs" />
     <Compile Include="WinCode\Tracking\DefaultTracker.cs" />
@@ -2987,18 +2976,6 @@
     <Compile Include="Win\Reporting\ReportSettingsHostView.Designer.cs">
       <DependentUpon>ReportSettingsHostView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Reporting\ReportSettingsScheduleAuditingView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Win\Reporting\ReportSettingsScheduleAuditingView.Designer.cs">
-      <DependentUpon>ReportSettingsScheduleAuditingView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Reporting\ReportSettingsScheduledTimePerActivityView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Win\Reporting\ReportSettingsScheduledTimePerActivityView.Designer.cs">
-      <DependentUpon>ReportSettingsScheduledTimePerActivityView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Win\Reporting\ReportSettingsScheduleTimeVersusTargetTimeView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3010,12 +2987,6 @@
     </Compile>
     <Compile Include="Win\Reporting\ReportTimeZoneSelector.Designer.cs">
       <DependentUpon>ReportTimeZoneSelector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Reporting\ReportUserSelectorAuditingView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Win\Reporting\ReportUserSelectorAuditingView.Designer.cs">
-      <DependentUpon>ReportUserSelectorAuditingView.cs</DependentUpon>
     </Compile>
     <Compile Include="Win\Reporting\ReportViewerControl.cs">
       <SubType>UserControl</SubType>
@@ -4786,22 +4757,11 @@
     <EmbeddedResource Include="Win\Reporting\ReportSettingsHostView.resx">
       <DependentUpon>ReportSettingsHostView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Win\Reporting\ReportSettingsScheduleAuditingView.resx">
-      <DependentUpon>ReportSettingsScheduleAuditingView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Reporting\ReportSettingsScheduledTimePerActivityView.resx">
-      <DependentUpon>ReportSettingsScheduledTimePerActivityView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Win\Reporting\ReportSettingsScheduleTimeVersusTargetTimeView.resx">
       <DependentUpon>ReportSettingsScheduleTimeVersusTargetTimeView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Reporting\ReportTimeZoneSelector.resx">
       <DependentUpon>ReportTimeZoneSelector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Reporting\ReportUserSelectorAuditingView.resx">
-      <DependentUpon>ReportUserSelectorAuditingView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Reporting\ReportViewerControl.resx">
       <DependentUpon>ReportViewerControl.cs</DependentUpon>

@@ -1,5 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.Domain.Events;
 
 namespace Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence

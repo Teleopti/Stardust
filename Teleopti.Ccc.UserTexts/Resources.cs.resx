@@ -12422,9 +12422,6 @@ Zkontrolujte připojení k internetu nebo se obraťte na správce.</value>
   <data name="ClearCampaign" xml:space="preserve">
     <value>Smazat kampaň</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Zapamatovat si mě?</value>
-  </data>
   <data name="MyTeam" xml:space="preserve">
     <value>Můj tým</value>
   </data>

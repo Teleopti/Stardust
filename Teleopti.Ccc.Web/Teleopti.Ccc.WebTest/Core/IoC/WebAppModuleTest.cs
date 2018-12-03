@@ -61,7 +61,7 @@ using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Interfaces.Domain;
+
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 using TeamScheduleApiController = Teleopti.Ccc.Web.Areas.MyTime.Controllers.TeamScheduleApiController;
 

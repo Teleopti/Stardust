@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {

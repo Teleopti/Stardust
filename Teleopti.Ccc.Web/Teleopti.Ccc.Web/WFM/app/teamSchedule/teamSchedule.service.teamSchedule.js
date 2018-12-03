@@ -8,13 +8,8 @@
 
 		var service = this;	
 		var searchDayViewScheduleUrl = '../api/TeamSchedule/SearchSchedules';
-		var hierarchyUrl;
-
-		if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
-			hierarchyUrl = '../api/TeamScheduleData/GetOrganizationWithPeriod';
-		} else {
-			hierarchyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
-		}
+		var hierarchyUrl = '../api/TeamScheduleData/GetOrganizationWithPeriod';
+		
 		var settingForScheduleAuditTrailUrl = '../api/TeamSchedule/ScheduleAuditTrailSetting';
 
 		service.searchSchedules = searchSchedule;

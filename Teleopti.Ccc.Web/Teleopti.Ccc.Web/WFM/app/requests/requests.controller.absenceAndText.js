@@ -19,8 +19,10 @@
 		'TextAndAbsenceGridConfiguration',
 		'UIGridUtilitiesService',
 		'REQUESTS_TAB_NAMES',
+		'REQUESTS_TYPES',
 		'requestCommandParamsHolder',
-		'uiGridFixService'
+		'uiGridFixService',
+		'requestScheduleService'
 	];
 
 	function requestsAbsenceAndTextController(
@@ -39,8 +41,10 @@
 		textAndAbsenceGridConfigurationService,
 		uiGridUtilitiesService,
 		requestsTabNames,
+		requestsTypes,
 		requestCommandParamsHolder,
-		uiGridFixService
+		uiGridFixService,
+		requestScheduleService
 	) {
 		var vm = this;
 
@@ -57,6 +61,10 @@
 		vm.selectedGroupPageId = undefined;
 		vm.paging = {};
 		vm.initialized = false;
+		vm.absence = {};
+		vm.absenceRequestType = requestsTypes.AbsenceRequest;
+		vm.enableScheduleIcon = false;
+		vm.showingAbsenceSchedules = false;
 
 		var onInitCallBack = undefined;
 
@@ -145,9 +153,50 @@
 			vm.messageFilter = undefined;
 		};
 
+		vm.toggleAbsenceSchedules = function(absence, $event) {
+			$event.preventDefault();
+			$event.stopPropagation();
+
+			if (!absence || !$event) return;
+
+			if (vm.absence && absence.Id === vm.showingScheduleAbsenceId) {
+				vm.showingAbsenceSchedules = !vm.showingAbsenceSchedules;
+				absence.activeShowSchedule = !absence.activeShowSchedule;
+			} else {
+				vm.showingAbsenceSchedules = true;
+				absence.activeShowSchedule = true;
+			}
+
+			deactiveOtherShowScheduleIcons(absence.Id);
+
+			vm.showingScheduleAbsenceId = absence.Id;
+			vm.showingScheduleAgentName = absence.AgentName;
+
+			var shifts = [];
+			absence.Shifts.forEach(function(s) {
+				shifts.push(
+					requestScheduleService.buildShiftData(
+						s,
+						absence.TimeZone,
+						vm.userTimeZone,
+						vm.isUsingRequestSubmitterTimeZone
+					)
+				);
+			});
+
+			vm.shifts = shifts;
+			vm.schedulesContainerStyle = requestScheduleService.buildScheduleContainerStyle(vm.shifts.length, $event);
+		};
+
+		vm.hideAbsenceSchedules = function() {
+			vm.showingAbsenceSchedules = false;
+			deactiveAllShowScheduleIcons();
+		};
+
 		vm.init = function() {
 			vm.defaultStatusesLoaded = false;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			vm.enableScheduleIcon = toggleService.WFM_Request_Show_Shift_for_Absence_Requests_79008;
 
 			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(
 				requestGridStateService.getAbsenceAndTextSorting()
@@ -289,7 +338,7 @@
 				headerTemplate: 'app/requests/html/requests-absence-and-text-header.html',
 				gridMenuTitleFilter: $translate,
 				columnVirtualizationThreshold: 200,
-				rowHeight: 35,
+				rowHeight: 30,
 				saveSelection: false,
 
 				onRegisterApi: function(gridApi) {
@@ -449,6 +498,32 @@
 				vm.gridApi.selection.clearSelectedRows();
 			}
 			requestCommandParamsHolder.resetSelectedRequestIds(false);
+		}
+
+		function deactiveOtherShowScheduleIcons(absenceId) {
+			if (
+				!vm.gridOptions ||
+				!vm.gridOptions.data ||
+				Object.prototype.toString.call(vm.gridOptions.data) != '[object Array]'
+			)
+				return;
+
+			vm.gridOptions.data.forEach(function(d) {
+				if (d.Id !== absenceId) d.activeShowSchedule = false;
+			});
+		}
+
+		function deactiveAllShowScheduleIcons() {
+			if (
+				!vm.gridOptions ||
+				!vm.gridOptions.data ||
+				Object.prototype.toString.call(vm.gridOptions.data) != '[object Array]'
+			)
+				return;
+
+			vm.gridOptions.data.forEach(function(d) {
+				d.activeShowSchedule = false;
+			});
 		}
 	}
 })();

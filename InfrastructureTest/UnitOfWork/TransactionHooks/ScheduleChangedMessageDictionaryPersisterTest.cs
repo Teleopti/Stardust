@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 		public ICurrentDataSource DataSource;
 		public ICurrentBusinessUnit BusinessUnit;
 		public FakeInitiatorIdentifier InitiatorIdentifier;
+		public FakeTime Time;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 				.ModifyDictionary();
 
 			Target.Persist(schedules);
+			Time.Passes("60".Seconds());
 
 			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Should().Have.SameValuesAs(new[] { person1.Id.Value, person2.Id.Value });
@@ -72,6 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 				.ModifyDictionary();
 
 			Target.Persist(schedules);
+			Time.Passes("60".Seconds());
 
 			var message = MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single();
 			message.DataSource.Should().Be(DataSource.CurrentName());
@@ -98,6 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 				.ModifyDictionary();
 
 			Target.Persist(schedules);
+			Time.Passes("60".Seconds());
 
 			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single()
 				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
@@ -120,6 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 				.ScheduledDay("2015-10-19".Date());
 
 			Target.Persist(schedules);
+			Time.Passes("60".Seconds());
 
 			MessageSender.NotificationsOfDomainType<IScheduleChangedMessage>().Single()
 				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);

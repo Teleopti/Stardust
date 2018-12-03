@@ -69,7 +69,7 @@
 <query name="StaffingAuditOnCriteria">
 	<![CDATA[
 Select s from StaffingAudit s
-			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedById
+			where s.TimeStamp between :StartDate and :EndDate and :PersonId = s.ActionPerformedById order by s.TimeStamp
 
 ]]>
 </query>

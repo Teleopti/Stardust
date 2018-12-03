@@ -71,7 +71,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			{
 				Helper = new JobHelperForTest(raptorRepository, null,
 					new Tenants(tenantUnitOfWorkManager, new LoadAllTenants(tenantUnitOfWorkManager), dsFactory,
-						new BaseConfigurationRepository(), new TrueToggleManager())),
+						new BaseConfigurationRepository())),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 

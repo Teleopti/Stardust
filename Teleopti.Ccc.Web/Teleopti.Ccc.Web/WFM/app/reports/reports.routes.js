@@ -18,12 +18,8 @@
 					}
 				},
 				controllerAs: 'vm',
-				controller: function($state, toggles) {
-					if (toggles.WFM_AuditTrail_44006) {
+				controller: function($state) {
 						$state.go('auditTrail');
-					} else {
-						$state.go('main');
-					}
 				}
 			})
 			.state('reports', {

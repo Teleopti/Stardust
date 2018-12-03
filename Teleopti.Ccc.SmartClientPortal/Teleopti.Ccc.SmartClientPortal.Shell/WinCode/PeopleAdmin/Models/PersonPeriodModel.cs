@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
@@ -168,13 +168,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
 			return String.Empty;
         }
-
-        public IPersonPeriod GetCurrentPersonPeriodByDate(DateOnly selectedDate)
-        {
-            _currentPeriod = _containedEntity.Period(selectedDate);
-            return _currentPeriod;
-        }
-
 
         public bool CanGray => _currentPeriod == null;
 

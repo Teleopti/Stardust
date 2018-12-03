@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import format from 'date-fns/format';
-import { NzTreeNode } from 'ng-zorro-antd';
+import { FormBuilder } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { Moment } from '../../../../../node_modules/moment';
 import { UserService } from '../../../core/services';
+import { AuditEntry, Person } from '../../../shared/types';
 import { AuditTrailService } from '../../services';
-import { Person, AuditEntry } from '../../../shared/types';
 
 @Component({
 	selector: 'general-audit-trail',
@@ -33,7 +30,7 @@ export class GeneralAuditTrailComponent implements OnInit {
 		private auditTrailService: AuditTrailService,
 		private userService: UserService
 	) {
-		this.userService.getPreferences().subscribe({
+		this.userService.preferences$.subscribe({
 			next: prefs => {
 				this.locale = prefs.DateFormatLocale;
 			}
@@ -74,7 +71,7 @@ export class GeneralAuditTrailComponent implements OnInit {
 	}
 
 	addAuditEntriesToTable(AuditEntries): void {
-		var parsedEntries = AuditEntries.map(row => {
+		let parsedEntries = AuditEntries.map(row => {
 			return this.formatTimestampInRow(row);
 		});
 

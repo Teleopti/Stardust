@@ -2,13 +2,26 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {
 	public class TeamScheduleAgentScheduleViewModelMapper
 	{
+		
+		private readonly IPermissionProvider _permissionProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
+
+		public TeamScheduleAgentScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser)
+		{
+			_permissionProvider = permissionProvider;
+			_loggedOnUser = loggedOnUser;
+		}
+
 		public IList<TeamScheduleAgentScheduleViewModel> Map(IEnumerable<AgentInTeamScheduleViewModel> agentInTeamScheduleViewModels, DateTimePeriod schedulePeriod, TimeZoneInfo timeZoneInfo)
 		{
 			var startTime = schedulePeriod.StartDateTimeLocal(timeZoneInfo);
@@ -16,9 +29,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var result = new List<TeamScheduleAgentScheduleViewModel>();
 			foreach (var agentInTeamScheduleViewModel in agentInTeamScheduleViewModels)
 			{
+				var personId = agentInTeamScheduleViewModel.PersonId;
 				result.Add(new TeamScheduleAgentScheduleViewModel
 				{
-					Periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime),
+					Periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime, personId==_loggedOnUser.CurrentUser().Id),
 					Name = agentInTeamScheduleViewModel.Name,
 					IsDayOff = agentInTeamScheduleViewModel.IsDayOff,
 					DayOffName = agentInTeamScheduleViewModel.DayOffName,
@@ -31,12 +45,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 		public TeamScheduleAgentScheduleViewModel Map(
 			AgentInTeamScheduleViewModel agentInTeamScheduleViewModel, DateTimePeriod schedulePeriod,
-			TimeZoneInfo timeZoneInfo)
+			TimeZoneInfo timeZoneInfo,bool isMySchedule = false)
 		{
 			var startTime = schedulePeriod.StartDateTimeLocal(timeZoneInfo);
 			var endTime = schedulePeriod.EndDateTimeLocal(timeZoneInfo);
 			
-			List<TeamScheduleAgentScheduleLayerViewModel> periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime);
+			List<TeamScheduleAgentScheduleLayerViewModel> periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime, isMySchedule);
 			return new TeamScheduleAgentScheduleViewModel
 			{
 				Periods = periods,
@@ -48,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			};
 		}
 
-		private static List<TeamScheduleAgentScheduleLayerViewModel> buildPeriods(AgentInTeamScheduleViewModel agentInTeamScheduleViewModel, DateTime startTime, DateTime endTime)
+		private List<TeamScheduleAgentScheduleLayerViewModel> buildPeriods(AgentInTeamScheduleViewModel agentInTeamScheduleViewModel, DateTime startTime, DateTime endTime, bool isMySchedule = false)
 		{
 			var periods = new List<TeamScheduleAgentScheduleLayerViewModel>();
 			var layers = agentInTeamScheduleViewModel.ScheduleLayers;
@@ -57,10 +71,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				var diff = (decimal)(endTime - startTime).Ticks;
 				foreach (var layer in layers)
 				{
-					var scheduleLayerViewModel = new TeamScheduleAgentScheduleLayerViewModel
+
+					string color = layer.Color;
+					string title = layer.TitleHeader;
+					if (!isMySchedule && layer.IsAbsenceConfidential && !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 					{
-						Color = layer.Color,
-						Title = layer.TitleHeader,
+						color = ConfidentialPayloadValues.DisplayColorHex;
+						title = ConfidentialPayloadValues.Description.Name;
+					}
+
+				    var scheduleLayerViewModel = new TeamScheduleAgentScheduleLayerViewModel
+					{
+						Color = color,
+						Title = title,
 						StartTime = layer.Start,
 						EndTime = layer.End,
 						IsOvertime = layer.IsOvertime,

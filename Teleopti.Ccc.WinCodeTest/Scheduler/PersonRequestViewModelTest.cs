@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCodeTest.Helpers;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;

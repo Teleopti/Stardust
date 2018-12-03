@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
 	public interface IGamificationSettingProvider
 	{
-		IEnumerable<IGamificationSetting> GetGamificationSettingsEmptyNotIncluded();
 		IEnumerable<IGamificationSetting> GetGamificationSettingsEmptyIncluded();
 	}
 }

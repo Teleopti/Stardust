@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			_mocks = new MockRepository();
 			_stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-			_target = new FilterHourlyAvailabilityPresenter(_stateHolder);
+			_target = new FilterHourlyAvailabilityPresenter(new SchedulingScreenState(null, _stateHolder));
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();

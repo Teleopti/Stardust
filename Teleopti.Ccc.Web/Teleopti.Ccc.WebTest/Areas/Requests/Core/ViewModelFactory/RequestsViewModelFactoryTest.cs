@@ -7,29 +7,32 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
@@ -43,13 +46,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IPersonRequestRepository PersonRequestRepository;
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakePeopleSearchProvider PeopleSearchProvider;
-		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeToggleManager ToggleManager;
 		public IUserCulture UserCulture;
 		public IApplicationRoleRepository ApplicationRoleRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
-		
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+
+		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
+		public FullPermission Permission;
+		public ICurrentScenario Scenario;
+
+		public IMutateNow Now;
+
 
 		private IPerson[] people;
 		private readonly IAbsence absence = AbsenceFactory.CreateAbsence("absence1").WithId();
@@ -87,6 +96,210 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldGetIsNewTrueForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].IsNew.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldGetIsPendingTrueForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			personRequest.ForcePending();
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].IsPending.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldGetIsApprovedTrueForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			personRequest.ForcePending();
+			personRequest.Approve(
+				new AbsenceRequestApprovalService(Scenario.Current(), new ScheduleDictionary(Scenario.Current(), new ScheduleDateTimePeriod(new DateTimePeriod(2015, 10, 1, 2015, 10, 10)), new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission()),
+					new FakeNewBusinessRuleCollection(), new DoNothingScheduleDayChangeCallBack(),
+					new FakeGlobalSettingDataRepository(),
+					new CheckingPersonalAccountDaysProvider(PersonAbsenceAccountRepository)),
+				new PersonRequestAuthorizationCheckerForTest(), true);
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldGetIsWaitlistedTrueForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			personRequest.ForcePending();
+			personRequest.Deny("waitlisted", new PersonRequestAuthorizationCheckerForTest(), null,
+				PersonRequestDenyOption.AutoDeny);
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].IsWaitlisted.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldGetIsDeniedTrueForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), false);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			personRequest.ForcePending();
+			personRequest.Deny("denied", new PersonRequestAuthorizationCheckerForTest(), null,
+				PersonRequestDenyOption.AutoDeny);
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].IsDenied.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldGetNoAbsenceAndTextRequestWhenNoTeamSelected()
 		{
 			shouldGetNoAbsenceAndTextRequestWhenNoTeamSupplied(new List<string>().ToArray());
@@ -109,7 +322,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -119,6 +332,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetRequestsInTeams()
 		{
+			PeopleSearchProvider.EnablePermittedPeopleInTeams();
 			setUpRequests();
 
 			var input = new AllRequestsFormData
@@ -126,7 +340,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()},
+				SelectedGroupIds = new[] { team.Id.Value.ToString() },
 				SortingOrders = new List<RequestsSortingOrder>()
 			};
 
@@ -137,6 +351,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetNoRequestsInWrongTeams()
 		{
+			PeopleSearchProvider.EnablePermittedPeopleInTeams();
+
 			setUpRequests();
 
 			var input = new AllRequestsFormData
@@ -144,7 +360,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {Guid.NewGuid().ToString()},
+				SelectedGroupIds = new[] { Guid.NewGuid().ToString() },
 				SortingOrders = new List<RequestsSortingOrder>()
 			};
 
@@ -163,7 +379,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 1),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -181,7 +397,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 2),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -198,8 +414,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.AgentNameAsc},
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc },
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests.ToList();
@@ -223,7 +439,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 12, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] {"teamId"}
+				SelectedGroupIds = new[] { "teamId" }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -248,7 +464,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -261,7 +477,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var agentTimeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo();
 			var absenceRequest = new AbsenceRequest(absence, new DateOnly(2015, 10, 2).ToDateTimePeriod(agentTimeZone));
 
-			people = new[] {PersonFactory.CreatePerson("test1").WithId()};
+			people = new[] { PersonFactory.CreatePerson("test1").WithId() };
 			people.ForEach(setUpPerson);
 			people.ForEach(p => { p.PermissionInformation.SetDefaultTimeZone(agentTimeZone); });
 
@@ -281,7 +497,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 2),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -291,21 +507,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldReturnRequestsBelongToQueriedAgents()
 		{
-			ToggleManager.Enable(Toggles.Wfm_GroupPages_45057);
-
 			setUpRequests();
 
 			PeopleSearchProvider.Add(people.First());
 
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = people.First().Id.Value});
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = people.First().Id.Value });
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string> {{PersonFinderField.FirstName, "test1"}},
+				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } },
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] {"teamId"}
+				SelectedGroupIds = new[] { "teamId" }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests.ToList();
@@ -324,7 +538,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -335,7 +549,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetRequestsByRoleDescription()
 		{
-			ToggleManager.Enable(Toggles.Wfm_GroupPages_45057);
 			var roleDescription = "my role";
 			var requests = setUpRequests().ToList();
 
@@ -344,19 +557,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			fakePeopleSearchProvider.Add(requests[1].Person);
 			fakePeopleSearchProvider.Add(requests[2].Person);
 
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = requests[0].Person.Id.Value});
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = requests[1].Person.Id.Value});
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = requests[2].Person.Id.Value});
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[0].Person.Id.Value });
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[1].Person.Id.Value });
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[2].Person.Id.Value });
 
 
-			ApplicationRoleRepository.Add(new ApplicationRole {DescriptionText = roleDescription});
+			ApplicationRoleRepository.Add(new ApplicationRole { DescriptionText = roleDescription });
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {Guid.NewGuid().ToString()}
+				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
 			};
 			input.AgentSearchTerm.Add(PersonFinderField.Role, roleDescription);
 
@@ -384,7 +597,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -436,8 +649,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string> {{PersonFinderField.FirstName, "test1"}},
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } },
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -523,7 +736,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateOvertimeRequestListViewModel(input);
@@ -541,7 +754,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateOvertimeRequestListViewModel(input);
@@ -558,7 +771,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 			var overtimeRequest = requests[3];
 			overtimeRequest.TrySetBrokenBusinessRule(BusinessRuleFlags.MaximumOvertimeRule);
@@ -582,7 +795,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 3),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] {team.Id.Value.ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -639,8 +852,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		private void setUpPerson(IPerson p)
 		{
 			p.AddPersonPeriod(personPeriod);
-			PeopleSearchProvider.Add(p);
 			PersonRepository.Add(p);
+			PeopleSearchProvider.Add(p);
 
 			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail
 			{
@@ -649,6 +862,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				TeamId = team.Id,
 				SiteId = team.Site.Id
 			});
+
+			PeopleSearchProvider.Add(team.Id.GetValueOrDefault(), p);
 		}
 
 		private static void setupStateHolderProxy()
@@ -663,7 +878,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		private static Team createTeam()
 		{
 			var team = TeamFactory.CreateSimpleTeam("_").WithId();
-			team.Site = SiteFactory.CreateSimpleSite("site");
+			team.Site = SiteFactory.CreateSimpleSite("site").WithId();
 			return team;
 		}
 

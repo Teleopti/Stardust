@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Web.Mvc;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {

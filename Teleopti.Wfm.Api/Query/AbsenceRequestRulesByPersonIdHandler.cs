@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Api.Query.Request;
 using Teleopti.Wfm.Api.Query.Response;
 

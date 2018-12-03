@@ -2,10 +2,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timeline
 {

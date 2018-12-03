@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
-using DateTimePeriod=Teleopti.Interfaces.Domain.DateTimePeriod;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         bool IsChanged { get; set; }
         IScheduleDay SchedulePart { get; set; }
         TimeSpan Interval { get; set; }
-        DateTimePeriod Period { get; set; }
+        Domain.InterfaceLegacy.Domain.DateTimePeriod Period { get; set; }
         Color DisplayColor { get; }
         string Description { get; }
         string LayerDescription { get; }

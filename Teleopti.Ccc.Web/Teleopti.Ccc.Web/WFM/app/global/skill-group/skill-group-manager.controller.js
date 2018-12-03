@@ -140,16 +140,6 @@
 		};
 
 		vm.exitConfigMode = function() {
-			//Special case for the rework of intraday //Anders Sjöberg - 2018-09-07 09:35:53
-			if (toggleService.WFM_Intraday_Redesign_77214 && $state.params.returnState === 'intraday') {
-				$state.go('intraday.modern');
-				return;
-			}
-			if (!toggleService.WFM_Intraday_Redesign_77214 && $state.params.returnState === 'intraday') {
-				$state.go('intraday.legacy');
-				return;
-			}
-
 			if (vm.stateName.length > 0) {
 				$state.go(vm.stateName);
 			} else {

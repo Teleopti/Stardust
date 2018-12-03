@@ -11,7 +11,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts.Grids
 {

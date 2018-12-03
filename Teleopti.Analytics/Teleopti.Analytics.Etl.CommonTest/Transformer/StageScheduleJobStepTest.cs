@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
+
 using ScenarioFactory = Teleopti.Ccc.TestCommon.FakeData.ScenarioFactory;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer

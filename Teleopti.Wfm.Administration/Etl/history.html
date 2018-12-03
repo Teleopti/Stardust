@@ -114,7 +114,7 @@
 										<span ng-show="sortType == 'ScheduleName' && !sortReverse">▾</span>
 										<span ng-show="sortType == 'ScheduleName' && sortReverse">▴</span>
 									</th>
-									<th scope="col" ng-if="vm.shouldShowTenantName" ng-click="sortType = 'TenantName'; sortReverse = !sortReverse">
+									<th scope="col" ng-click="sortType = 'TenantName'; sortReverse = !sortReverse">
 										Tenant Name
 										<span ng-show="sortType == 'TenantName' && !sortReverse">▾</span>
 										<span ng-show="sortType == 'TenantName' && sortReverse">▴</span>
@@ -172,7 +172,7 @@
 									<td>
 										{{job.ScheduleName}}
 									</td>
-									<td ng-if="vm.shouldShowTenantName">
+									<td>
 										{{job.TenantName}}
 									</td>
 									<td style="color:tomato;" class="cop" ng-click="$event.stopPropagation()">
@@ -200,7 +200,7 @@
 									<td>{{step.Duration}}</td>
 									<td>{{step.RowsAffected}}</td>
 									<td></td>
-									<td ng-if="vm.shouldShowTenantName"></td>
+									<td></td>
 									<td style="color:tomato;" class="cop" ng-click="$event.stopPropagation()">
 										<div class="cop" ng-init="vm.buildError(step);" ngclipboard data-clipboard-text="{{step.ConstructedError}}" ng-if="step.ErrorMessage" ng-click="vm.copy(step);">
 											<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="!step.Copied">

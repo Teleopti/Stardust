@@ -25,8 +25,9 @@
 
   .chip-text{
     padding:$full-padding;
-    background:$hover;
+    background:$gray-300;
     margin-right: 5px;
+	margin-left: -4px;
   }
   .chip-handle{
     padding:$full-padding;

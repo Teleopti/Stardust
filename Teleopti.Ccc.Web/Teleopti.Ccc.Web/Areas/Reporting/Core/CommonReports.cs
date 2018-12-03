@@ -6,7 +6,8 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {

@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 using AbsenceFactory = Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData.AbsenceFactory;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer

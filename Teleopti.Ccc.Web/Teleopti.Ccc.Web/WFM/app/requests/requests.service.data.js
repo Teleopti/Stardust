@@ -30,15 +30,9 @@
 		var getBudgetGroupsUrl = '../api/RequestAllowance/budgetGroups';
 		var getBudgetAllowanceUrl = '../api/RequestAllowance/allowances';
 		var overtimeTypesUrl = '../api/MultiplicatorDefinitionSet/Overtime';
-		var overtimeLicenseUrl = '../api/Requests/GetOvertimeRequestsLicenseAvailability';
+		var requestLicenseUrl = '../api/Requests/GetRequestsLicenseAvailability';
 		var getPermissionsUrl = '../api/Requests/GetRequestsPermissions';
-		var hierarchyUrl;
-
-		if (toggleSvc.Wfm_HideUnusedTeamsAndSites_42690) {
-			hierarchyUrl = '../api/Requests/GetOrganizationWithPeriod';
-		} else {
-			hierarchyUrl = '../api/Requests/FetchPermittedTeamHierachy';
-		}
+		var hierarchyUrl = '../api/Requests/GetOrganizationWithPeriod';
 
 		this.getPermissionsPromise = function() {
 			return $http.get(getPermissionsUrl);
@@ -128,8 +122,8 @@
 			});
 		};
 
-		this.getOvertimeLicense = function() {
-			return $http.get(overtimeLicenseUrl).then(function(result) {
+		this.getRequestLicense = function() {
+			return $http.get(requestLicenseUrl).then(function(result) {
 				return result;
 			});
 		};

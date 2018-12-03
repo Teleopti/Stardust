@@ -17,7 +17,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 using Activity = Teleopti.Ccc.Domain.Scheduling.Activity;
 using Person = Teleopti.Ccc.Domain.Common.Person;
 using Scenario = Teleopti.Ccc.Domain.Common.Scenario;

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 	public class MessageBrokerServerTest
 	{
 		public IMessageBrokerServer Broker;
+		public FakeTime Time;
 
 		[Test]
 		public void ShouldPublishToMailbox()
@@ -27,11 +29,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			{
 				BusinessUnitId = businessUnitId
 			});
+			Time.Passes("1".Seconds());
 
 			var messages = Broker.PopMessages(subscription.Route(), mailboxId);
 			messages.Should().Have.Count.EqualTo(1);
 		}
-
 
 		[Test]
 		public void ShouldPublishMultipleMessagesToMailbox()
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			{
 				BusinessUnitId = businessUnitId
 			});
+			Time.Passes("1".Seconds());
 
 			var messages = Broker.PopMessages(subscription.Route(), mailboxId);
 			messages.Should().Have.Count.EqualTo(2);

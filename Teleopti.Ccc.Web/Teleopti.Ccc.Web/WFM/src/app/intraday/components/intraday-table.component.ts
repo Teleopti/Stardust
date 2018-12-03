@@ -3,7 +3,8 @@ import { IntradayTrafficSummaryItem, IntradayPerformanceSummaryItem, IntradayCha
 
 @Component({
 	selector: 'intraday-table',
-	templateUrl: './intraday-table.component.html'
+	templateUrl: './intraday-table.component.html',
+	styleUrls: ['./intraday-table.component.scss']
 })
 export class IntradayTableComponent {
 	constructor() {}

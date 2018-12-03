@@ -31,11 +31,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 			var layoutBaseViewModel = (LayoutBaseViewModel)_htmlHelper.ViewData[LayoutBaseViewModelKey];
 			return new MvcHtmlString(layoutBaseViewModel.CultureSpecific.Rtl ? " class=\"rtl\"" : string.Empty);
 		}
-
-		public MvcHtmlString DatePickerGlobalizationAsJson()
-		{
-			var layoutBaseViewModel = (LayoutBaseViewModel)_htmlHelper.ViewData[LayoutBaseViewModelKey];
-			return new MvcHtmlString(layoutBaseViewModel.DatePickerGlobalization.ToJson());
-		}
 	}
 }

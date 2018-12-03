@@ -3,7 +3,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 #endregion
 
 namespace Teleopti.Ccc.DomainTest.Forecasting

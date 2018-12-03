@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;

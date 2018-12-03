@@ -25,8 +25,8 @@
                  class="Teleopti.Ccc.Domain.Common.Site"
                  not-null="true" foreign-key="FK_SiteOpenHours_Site"/>
 
-    <component name="TimePeriod" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
-      <component class="Teleopti.Interfaces.Domain.MinMax`1[System.TimeSpan], Teleopti.Interfaces" name="period" access="field">
+    <component name="TimePeriod" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriod, Teleopti.Ccc.Domain">
+      <component class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.MinMax`1[System.TimeSpan], Teleopti.Ccc.Domain" name="period" access="field">
          <property name="Minimum" column="StartTime" not-null="true" type="TimeSpan"/>
         <property name="Maximum" column="EndTime" not-null="true" type="TimeSpan"/>
       </component>

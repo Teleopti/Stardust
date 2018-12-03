@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
@@ -26,11 +26,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         {
             if (column<-1) throw new ArgumentOutOfRangeException("column");
             return SelectedPeriod.DateOnlyPeriod.StartDate.AddDays(column - (int)ColumnType.StartScheduleColumns);
-        }
-
-        public int GetColumnFromLocalDate(DateOnly now)
-        {
-            return (int)(now.Subtract(SelectedPeriod.DateOnlyPeriod.StartDate).TotalDays) + (int)ColumnType.StartScheduleColumns;
         }
 
         /// <summary>

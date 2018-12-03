@@ -4,9 +4,10 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 {

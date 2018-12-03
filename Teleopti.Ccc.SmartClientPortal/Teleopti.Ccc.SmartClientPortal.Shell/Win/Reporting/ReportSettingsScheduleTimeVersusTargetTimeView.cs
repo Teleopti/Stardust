@@ -20,9 +20,10 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Reporting;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IComponentContext _componentContext;
 		private readonly ReportSettingsScheduleTimeVersusTargetTimePresenter _presenter;
-		private SchedulerStateHolder _schedulerStateHolder;
+		private SchedulingScreenState _schedulerStateHolder;
 		private ReportSettingsScheduledTimeVersusTarget _setting;
 
 		public ReportSettingsScheduleTimeVersusTargetTimeView(IEventAggregator eventAggregator,
@@ -77,8 +78,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		{
 			get
 			{
-				_schedulerStateHolder.FilterPersons(reportAgentSelector1.SelectedPersonGuids);
-				return _schedulerStateHolder.FilteredCombinedAgentsDictionary.Values.ToList();
+				_schedulerStateHolder.SchedulerStateHolder.FilterPersons(reportAgentSelector1.SelectedPersonGuids);
+				return _schedulerStateHolder.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values.ToList();
 			}
 		}
 
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		private void reportAgentSelector1BeforeDialog(object sender, EventArgs e)
 		{
-			_schedulerStateHolder.RequestedPeriod =
+			_schedulerStateHolder.SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(reportDateFromToSelector1.GetSelectedDates[0],
 					TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 		}
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		public void InitAgentSelector()
 		{
-			_schedulerStateHolder = createStateHolder();
+			_schedulerStateHolder = new SchedulingScreenState(null, createStateHolder());
 			reportAgentSelector1.SetStateHolder(_schedulerStateHolder);
 		}
 

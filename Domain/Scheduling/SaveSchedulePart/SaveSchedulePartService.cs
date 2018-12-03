@@ -1,15 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Util;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 {
 	public class SaveSchedulePartService : ISaveSchedulePartService
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(SaveSchedulePartService));
+
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
@@ -34,10 +38,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			var scheduleDay = scheduleDays.FirstOrDefault();
 			openForEditsWhenReadOnlyDictionary(scheduleDay);
 			var dic = scheduleDay.Owner;
-			
+
 			var checkResult = checkRules(dic, scheduleDays, newBusinessRuleCollection, scheduleTag);
+
 			if (checkResult != null)
 			{
+				logger.Error($"Only logged for cancelling absence request used to reproduce bug#79030 PersonAbsenceRemover SaveSchedulePartService:{string.Join(",",scheduleDays.Select(a=>a.DateOnlyAsPeriod.DateOnly.ToString()).ToArray())}|{string.Join(",",checkResult.ToArray())}");
 				return checkResult;
 			}
 			

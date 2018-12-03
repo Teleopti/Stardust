@@ -1,6 +1,4 @@
-import { Component, Input, Output, OnInit } from '@angular/core';
-import * as pbi from 'powerbi-client';
-
+import { Component, Input, OnInit } from '@angular/core';
 import { ReportService } from '../../core/report.service';
 import { Report } from '../../models/Report.model';
 
@@ -20,7 +18,7 @@ export class WorkspaceComponent implements OnInit {
 	public reports: Report[];
 	public selectedReport: string;
 
-	private pbiCoreService: pbi.service.Service;
+	private pbiCoreService: any;
 
 	constructor(private reportSvc: ReportService) {
 		this.initialized = false;
@@ -37,7 +35,7 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.reportSvc.getPermission().then((permission) => {
+		this.reportSvc.getPermission().then(permission => {
 			this.hasViewPermission = permission.CanViewReport;
 			this.hasEditPermission = permission.CanEditReport;
 
@@ -49,12 +47,11 @@ export class WorkspaceComponent implements OnInit {
 		});
 	}
 
-	onEmbedded() {
-	}
+	onEmbedded() {}
 
 	loadReportList() {
 		this.isLoading = true;
-		this.reportSvc.getReports().then((reports) => {
+		this.reportSvc.getReports().then(reports => {
 			this.reports = [];
 			reports.forEach(report => {
 				if (report.Name.trim() !== 'Report Usage Metrics Report') {
@@ -68,20 +65,17 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	loadReport(config) {
-		// TODO: For debug, refer to https://teleopti.visualstudio.com/TeleoptiWFM/_workitems/edit/79021
-		console.log('pbi.models:', pbi.models);
-
 		// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 		const embedConfig = {
 			type: 'report',
-			tokenType: 1, // pbi.models.TokenType.Embed
+			tokenType: pbi.models.TokenType.Embed,
 			accessToken: config.AccessToken,
 			embedUrl: config.ReportUrl,
 			id: config.ReportId,
-			permissions: 7, // pbi.models.Permissions.All
+			permissions: pbi.models.Permissions.All,
 			viewMode: this.canEditReport
-				? 1  // pbi.models.ViewMode.Edit
-				: 0, // pbi.models.ViewMode.View
+				? pbi.models.ViewMode.Edit
+				: pbi.models.ViewMode.View,
 			settings: {
 				filterPaneEnabled: this.enableFilter,
 				navContentPaneEnabled: this.enableNavContent,
@@ -111,7 +105,7 @@ export class WorkspaceComponent implements OnInit {
 		this.pbiCoreService.reset(this.getReportContainer());
 		if (selectedReportId) {
 			this.isLoading = true;
-			this.reportSvc.getReportConfig(selectedReportId).then((config) => {
+			this.reportSvc.getReportConfig(selectedReportId).then(config => {
 				this.loadReport(config);
 				this.isLoading = false;
 			});
@@ -133,7 +127,7 @@ export class WorkspaceComponent implements OnInit {
 
 	public cloneCurrentReport() {
 		this.isLoading = true;
-		this.reportSvc.cloneReport(this.selectedReport).then((config) => {
+		this.reportSvc.cloneReport(this.selectedReport).then(config => {
 			this.loadReportList();
 			this.loadReport(config);
 			this.isLoading = false;

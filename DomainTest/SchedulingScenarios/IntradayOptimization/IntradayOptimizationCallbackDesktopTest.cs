@@ -11,13 +11,14 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			using (ResourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, dateOnly.ToDateOnlyPeriod()))
 			{
 				var callbackTracker = new TrackOptimizationCallback();
-				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
+				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferences{General = {ScheduleTag = NullScheduleTag.Instance }}, callbackTracker);
 				callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
 			}
 		}
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			using (ResourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, dateOnly.ToDateOnlyPeriod()))
 			{
 				var callbackTracker = new TrackOptimizationCallback();
-				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
+				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferences{General = {ScheduleTag = NullScheduleTag.Instance }}, callbackTracker);
 				callbackTracker.UnSuccessfulOptimizations().Should().Be.EqualTo(10);
 			}
 		}

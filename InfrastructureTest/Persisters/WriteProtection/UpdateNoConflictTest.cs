@@ -11,7 +11,7 @@ using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 {

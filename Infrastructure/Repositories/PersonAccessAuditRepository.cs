@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using NHibernate.Criterion;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -14,14 +17,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IEnumerable<IPersonAccess> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
+		public IEnumerable<IPersonAccess> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate, string searchword = "")
 		{
-			var results = new List<IPersonAccess>();
-			results.AddRange(Session.GetNamedQuery("PersonAccessAuditOnCriteria")
-				.SetDateTime("StartDate", startDate)
-				.SetDateTime("EndDate", endDate.AddDays(1).AddMinutes(-1))
-				.SetEntity("PersonId", personId)
-				.List<IPersonAccess>());
+			var criteria = Session.CreateCriteria(typeof(PersonAccess), "personAccess")
+				.Add(Restrictions.Eq("ActionPerformedById", personId.Id.GetValueOrDefault()))
+				.Add(Restrictions.Ge("TimeStamp", new DateTime(startDate.Ticks,DateTimeKind.Utc)))
+				.Add(Restrictions.Le("TimeStamp", new DateTime(endDate.AddDays(1).AddMinutes(-1).Ticks,DateTimeKind.Utc)));
+
+			if (!string.IsNullOrEmpty(searchword))
+				criteria = criteria
+					.Add(Restrictions.Or(
+						Restrictions.Like("Data", $"%{searchword}%"),
+						Restrictions.Like("ActionPerformedOn", $"%{searchword}%")));
+
+			criteria.AddOrder(Order.Desc("TimeStamp")).SetMaxResults(100);
+
+			var results = criteria.SetResultTransformer(Transformers.DistinctRootEntity)
+				.List<IPersonAccess>().ToList();
 			return results;
 		}
 

@@ -5,12 +5,15 @@
     <div class="sub-header">
       <div class="con-row">
         <div class="con-flex">
-          <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="anticon anticon-search">
+          <nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixIconSearch">
             <input nz-input [placeholder]="'Search' | translate" [formControl]="searchControl" (keyup.enter)="onSearch()"
               autofocus data-test-searchinput>
-          </nz-input-group>
+					</nz-input-group>
+					<ng-template #prefixIconSearch>
+						<i nz-icon type="search"></i>
+					</ng-template>
           <ng-template #suffixTemplate>
-            <i class="anticon anticon-close-circle" (click)="searchControl.setValue('')" *ngIf="searchControl.value.length"></i>
+            <i nz-icon type="close-circle" (click)="searchControl.setValue('')" *ngIf="searchControl.value.length"></i>
           </ng-template>
         </div>
         <div class="con-flex x3">
@@ -41,20 +44,20 @@
                 (nzCheckedChange)="selectAllOnPage()"></th>
               <th (click)="sort('FirstName')" class="first-name" data-test-sort-fn>{{'FirstName' | translate}}
                 <ng-container *ngIf="isSortingBy('FirstName')">
-                  <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
-                  <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
+                  <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                  <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
                 </ng-container>
               </th>
               <th (click)="sort('LastName')" class="last-name">{{'LastName' | translate}}
                 <ng-container *ngIf="isSortingBy('LastName')">
-                  <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
-                  <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
+                  <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                  <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
                 </ng-container>
               </th>
               <th (click)="sort('SiteTeam')">{{'SiteTeam' | translate}}
                 <ng-container *ngIf="isSortingBy('SiteTeam')">
-                  <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
-                  <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
+                  <i *ngIf="isSortingAsc()" nz-icon type="arrow-up"></i>
+                  <i *ngIf="isSortingDesc()" nz-icon type="arrow-down"></i>
                 </ng-container>
               </th>
               <th>{{'Roles' | translate}}</th>

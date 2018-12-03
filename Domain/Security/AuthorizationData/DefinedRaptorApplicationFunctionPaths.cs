@@ -93,8 +93,6 @@
 		public const string ViewInsightsReport = Insights + "/ViewInsightsReport";
 
 		// Online Reports
-		public const string ScheduledTimePerActivityReport = "Raptor/OnlineReports/ScheduledTimePerActivityReport";
-		public const string ScheduleAuditTrailReport = "Raptor/OnlineReports/ScheduleAuditTrailReport";
 		public const string ScheduleTimeVersusTargetTimeReport = "Raptor/OnlineReports/ScheduleTimeVersusTargetTimeReport";
 
 		// Reports

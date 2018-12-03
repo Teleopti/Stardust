@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay

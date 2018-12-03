@@ -12,17 +12,17 @@ export interface UserPreferences {
 
 @Injectable()
 export class UserService {
-	private preferences$ = new ReplaySubject<UserPreferences>(1);
+	private _preferences$ = new ReplaySubject<UserPreferences>(1);
+
+	public get preferences$(): Observable<UserPreferences> {
+		return this._preferences$;
+	}
 
 	constructor(private http: HttpClient) {
 		this.http.get('../api/Global/User/CurrentUser').subscribe({
 			next: (preferences: UserPreferences) => {
-				this.preferences$.next(preferences);
+				this._preferences$.next(preferences);
 			}
 		});
-	}
-
-	getPreferences(): Observable<UserPreferences> {
-		return this.preferences$;
 	}
 }

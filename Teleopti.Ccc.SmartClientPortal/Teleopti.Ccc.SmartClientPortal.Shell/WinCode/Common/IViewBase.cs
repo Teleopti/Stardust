@@ -47,17 +47,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         /// </remarks>
         void ShowInformationMessage(string text, string caption);
 
-        /// <summary>
-        /// Shows the ok cancel message.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="caption">The caption.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2009-10-14
-        /// </remarks>
-        DialogResult ShowOkCancelMessage(string text, string caption);
 
         DialogResult ShowWarningMessage(string text, string caption);
     }

@@ -13,8 +13,7 @@ export class BootstrapComponent {
 	style: MainControllerStyle;
 
 	constructor(private themeService: ThemeService) {
-		themeService
-			.getTheme()
+		themeService.theme$
 			.pipe(
 				switchMap(() => {
 					return interval(50).pipe(

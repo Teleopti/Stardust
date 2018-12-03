@@ -19,7 +19,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 {
@@ -331,6 +331,5 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			innerTarget.PersonRequests[0].Changed = true;
 			Assert.IsTrue(innerTarget.ChangedRequests());
 		}
-
 	}
 }

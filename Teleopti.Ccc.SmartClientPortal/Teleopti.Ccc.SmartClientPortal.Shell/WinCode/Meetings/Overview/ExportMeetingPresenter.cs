@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
 {

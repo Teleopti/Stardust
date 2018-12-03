@@ -9681,6 +9681,10 @@ Period</comment>
     <value>Filter:</value>
     <comment>Filter</comment>
   </data>
+  <data name="FiltersColon" xml:space="preserve">
+    <value>Filters:</value>
+    <comment>Filters:</comment>
+  </data>
   <data name="MeetingDeleteConfirmationQuestion" xml:space="preserve">
     <value>Do you want to delete the meeting {0}?</value>
     <comment>Do you want to delete the meeting {0}?</comment>
@@ -13865,6 +13869,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Please add a filter</value>
     <comment>Notice for user that they need to add a filter</comment>
   </data>
+  <data name="YouMustSelectAtLeastOneFilter" xml:space="preserve">
+    <value>You must select at least one filter</value>
+    <comment>Notice for user that they need to add a filter</comment>
+  </data>
   <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
     <value>Both override and campaign added</value>
     <comment>label for the forecasting chart</comment>
@@ -14133,8 +14141,8 @@ Check your internet connection or contact your administrator.</value>
     <comment>Clear campaign</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me?</value>
-    <comment>Remember me?</comment>
+    <value>Remember me</value>
+    <comment>Checkbox to remember login information</comment>
   </data>
   <data name="MyTeam" xml:space="preserve">
     <value>MyTeam</value>
@@ -15959,7 +15967,7 @@ Do you want to participate?</value>
     <comment>Change planning duration</comment>
   </data>
   <data name="CreatePlanningGroup" xml:space="preserve">
-    <value>Create Planning Group</value>
+    <value>Create planning group</value>
     <comment>text for helping information </comment>
   </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
@@ -16003,7 +16011,7 @@ Do you want to participate?</value>
     <comment>Filter validation issues</comment>
   </data>
   <data name="HelpCreatePlanningGroup" xml:space="preserve">
-    <value>A planning group is needed to be able to schedule your agents. Do you want to create a planning group?</value>
+    <value>A planning group is needed to be able to schedule your agents.</value>
     <comment>text for helping information</comment>
   </data>
   <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
@@ -16065,6 +16073,10 @@ Do you want to participate?</value>
   <data name="SearchForPlanningGroup" xml:space="preserve">
     <value>Search site / team / skill / contract</value>
     <comment>SearchForPlanningGroup</comment>
+  </data>
+  <data name="SearchForSiteTeamSkillContract" xml:space="preserve">
+    <value>Search for: site / team / skill / contract</value>
+    <comment>used for creating planning group</comment>
   </data>
   <data name="SearchForDayOff" xml:space="preserve">
     <value>Search site / team / contract</value>
@@ -16132,6 +16144,10 @@ Do you want to participate?</value>
   </data>
   <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
     <value>You need a planning period to schedule your agents. Do you want to create a planning period?</value>
+    <comment>Help text in resource planner to show that you need to create a planning period</comment>
+  </data>
+  <data name="HelpCreatePlanningPeriod" xml:space="preserve">
+    <value>A planning period is needed to schedule your agents.</value>
     <comment>Help text in resource planner to show that you need to create a planning period</comment>
   </data>
   <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
@@ -17507,9 +17523,6 @@ The application will now exit.</value>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>Skill type filter</value>
   </data>
-  <data name="PeopleManageUsers" xml:space="preserve">
-    <value>Manage users</value>
-  </data>
   <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
     <value>Username is already in use</value>
     <comment>Username is taken</comment>
@@ -17955,5 +17968,20 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="PreferenceFulfillmentPercentColon" xml:space="preserve">
     <value>Preference Fulfillment (%):</value>
     <comment>used in web plans</comment>
+  </data>
+  <data name="ClickToViewSchedules" xml:space="preserve">
+    <value>Click to view schedules</value>
+    <comment>Click to view schedules tooltip in WFM/Requests</comment>
+  </data>
+  <data name="SelectSkillOrGroup" xml:space="preserve">
+    <value>Select a skill or skill group</value>
+  </data>
+  <data name="SelectToday" xml:space="preserve">
+    <value>Select today</value>
+    <comment>Select today canlendar tooltip</comment>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>View users</value>
+    <comment>Permission for viewing users</comment>
   </data>
 </root>

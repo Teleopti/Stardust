@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
 	public interface IDesiredShiftLengthCalculator
 	{
-		TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary);
+		TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, OpenHoursSkillResult openHoursSkillResult);
 	}
 
 	public class DesiredShiftLengthCalculator : IDesiredShiftLengthCalculator
@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			_schedulePeriodTargetTimeCalculator = schedulePeriodTargetTimeCalculator;
 		}
 
-		public TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary)
+		public TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, OpenHoursSkillResult openHoursSkillResult)
 		{
 			workShiftMinMaxCalculator.ResetCache();
-			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions, maxWorkTimeDictionary);
+			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions, openHoursSkillResult);
 			var currentAverage = matrix.SchedulePeriod.AverageWorkTimePerDay;
 			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(matrix);
 			if (schedulingOptions.UseCustomTargetTime.HasValue)

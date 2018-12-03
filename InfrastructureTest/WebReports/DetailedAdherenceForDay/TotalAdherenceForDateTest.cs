@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 {

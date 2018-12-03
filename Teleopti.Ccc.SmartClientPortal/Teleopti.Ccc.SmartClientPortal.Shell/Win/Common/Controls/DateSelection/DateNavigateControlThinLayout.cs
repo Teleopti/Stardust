@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {

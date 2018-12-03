@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
@@ -23,17 +23,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		private readonly IPeopleSearchProvider _peopleSearchProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IApplicationRoleRepository _applicationRoleRepository;
-		private readonly IToggleManager _toggleManager;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IPermissionProvider _permissionProvider;
 
 
-		public RequestFilterCreator(IPeopleSearchProvider peopleSearchProvider, IUserTimeZone userTimeZone, IApplicationRoleRepository applicationRoleRepository, IToggleManager toggleManager, IGroupingReadOnlyRepository groupingReadOnlyRepository, IPermissionProvider permissionProvider)
+		public RequestFilterCreator(IPeopleSearchProvider peopleSearchProvider, IUserTimeZone userTimeZone, IApplicationRoleRepository applicationRoleRepository, IGroupingReadOnlyRepository groupingReadOnlyRepository, IPermissionProvider permissionProvider)
 		{
 			_peopleSearchProvider = peopleSearchProvider;
 			_userTimeZone = userTimeZone;
 			_applicationRoleRepository = applicationRoleRepository;
-			_toggleManager = toggleManager;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_permissionProvider = permissionProvider;
 		}
@@ -42,8 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		{
 			var dateTimePeriod = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone());
 			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var searchAgentBasedOnCorrectPeriodToggle = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552);
-			var groupPageToggle = _toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057);
 			var filter = new RequestFilter
 			{
 				RequestFilters = input.Filters,
@@ -56,22 +52,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			adjustRoleFieldValue(input.AgentSearchTerm);
 
 			List<Guid> targetIds;
-			if (groupPageToggle)
-			{
-				var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
-				targetIds = !input.IsDynamic ? _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(period, input.GroupIds, input.AgentSearchTerm)
-											: _peopleSearchProvider.FindPersonIdsInPeriodWithDynamicGroup(period,input.SelectedGroupPageId, input.DynamicOptionalValues, input.AgentSearchTerm);
 
-			}
-			else if (searchAgentBasedOnCorrectPeriodToggle)
-			{
-				targetIds = _peopleSearchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.StartDate, input.EndDate),
-					input.GroupIds, input.AgentSearchTerm);
-			}
-			else
-			{
-				targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.GroupIds, input.AgentSearchTerm);
-			}
+			var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
+			targetIds = !input.IsDynamic ? _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(period, input.GroupIds, input.AgentSearchTerm)
+										: _peopleSearchProvider.FindPersonIdsInPeriodWithDynamicGroup(period, input.SelectedGroupPageId, input.DynamicOptionalValues, input.AgentSearchTerm);
 
 			if (targetIds.Count == 0)
 				filter.Persons = new List<IPerson>();

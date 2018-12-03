@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
@@ -13,13 +13,15 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 		private readonly IPersonAccessContextReaderService _personAccessContextReaderService;
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly ResultCountOfAggregatedAudits _resultCountOfAggregatedAudits;
 
-		public AuditAggregatorService(IStaffingContextReaderService staffingContextReaderService, IPersonAccessContextReaderService personAccessContextReaderService, IPersonRepository personRepository, ILoggedOnUser loggedOnUser)
+		public AuditAggregatorService(IStaffingContextReaderService staffingContextReaderService, IPersonAccessContextReaderService personAccessContextReaderService, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, ResultCountOfAggregatedAudits resultCountOfAggregatedAudits)
 		{
 			_staffingContextReaderService = staffingContextReaderService;
 			_personAccessContextReaderService = personAccessContextReaderService;
 			_personRepository = personRepository;
 			_loggedOnUser = loggedOnUser;
+			_resultCountOfAggregatedAudits = resultCountOfAggregatedAudits;
 		}
 
 		public IList<AuditServiceModel> Load(Guid personId, DateTime startDate, DateTime endDate)
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 
 			fixUserTimeZone(aggregatedAudits);
 
-			return aggregatedAudits;
+			return aggregatedAudits.OrderByDescending(x=>x.TimeStamp).Take(_resultCountOfAggregatedAudits.Limit).ToList();
 
 		}
 
@@ -56,5 +58,11 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
 		}
 
+	}
+
+	public class ResultCountOfAggregatedAudits
+	{
+		//the limit is also applied on the context's sql 
+		public int Limit => 100;
 	}
 }

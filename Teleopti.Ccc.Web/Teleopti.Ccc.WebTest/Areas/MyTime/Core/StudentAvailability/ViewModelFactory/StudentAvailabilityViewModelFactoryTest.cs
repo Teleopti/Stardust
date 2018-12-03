@@ -16,7 +16,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFactory
 {

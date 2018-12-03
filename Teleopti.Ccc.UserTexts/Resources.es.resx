@@ -10979,9 +10979,6 @@ Detalles del error:
   <data name="ClearCampaign" xml:space="preserve">
     <value>Quitar campaña</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Recuérdame</value>
-  </data>
   <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
     <value>El rango de fechas no puede ser mayor a 60 días</value>
   </data>

@@ -3,11 +3,12 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {
@@ -257,11 +258,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		}
 
 		public void ShowInformationMessage(string text, string caption)
-		{
-			throw new NotImplementedException();
-		}
-
-		public DialogResult ShowOkCancelMessage(string text, string caption)
 		{
 			throw new NotImplementedException();
 		}

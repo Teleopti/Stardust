@@ -21,7 +21,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.TeamSchedule;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {
@@ -2695,7 +2695,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldAllowOnlyMaximum750AgentsForScheduleSearchForDayView()
+		public void ShouldAllowOnlyMaximum500AgentsForScheduleSearchForDayView()
 		{
 			var date = new DateTime(2017, 12, 18, 00, 00, 00, DateTimeKind.Utc);
 			var scheduleDate = new DateOnly(date);
@@ -2725,7 +2725,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldAllowOnlyMaximum750AgentsForScheduleSearchForWeekView()
+		public void ShouldAllowOnlyMaximum500AgentsForScheduleSearchForWeekView()
 		{
 			var date = new DateTime(2017, 12, 18, 00, 00, 00, DateTimeKind.Utc);
 			var scheduleDate = new DateOnly(date);

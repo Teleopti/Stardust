@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		private readonly IMailboxRepository _mailboxRepository;
 		private readonly INow _now;
 		private readonly IBeforeSubscribe _beforeSubscribe;
-		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerServer));
 		private readonly TimeSpan _expirationInterval;
 		private readonly TimeSpan _purgeInterval;
 		private DateTime _nextPurge;
 		private readonly MessageBrokerTracer _tracer = new MessageBrokerTracer();
+		private readonly ILog _logger = LogManager.GetLogger(typeof(MessageBrokerServer));
 
 		public MessageBrokerServer(
 			ISignalR signalR,
@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 
 			var route = subscription.Route();
 
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", connectionId, route,
-					RouteToGroupName(route));
+			if (_logger.IsDebugEnabled)
+				_logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", connectionId, route,
+					RouteToGroupName.Convert(route));
 
-			_signalR.AddConnectionToGroup(RouteToGroupName(route), connectionId);
+			_signalR.AddConnectionToGroup(RouteToGroupName.Convert(route), connectionId);
 
 			_tracer.SubscriptionAdded(subscription, connectionId);
 
@@ -55,11 +55,11 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 
 		public void RemoveSubscription(string route, string connectionId)
 		{
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", connectionId, route,
-					RouteToGroupName(route));
+			if (_logger.IsDebugEnabled)
+				_logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", connectionId, route,
+					RouteToGroupName.Convert(route));
 
-			_signalR.RemoveConnectionFromGroup(RouteToGroupName(route), connectionId);
+			_signalR.RemoveConnectionFromGroup(RouteToGroupName.Convert(route), connectionId);
 		}
 
 		[MessageBrokerUnitOfWork]
@@ -98,10 +98,10 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		{
 			var routes = message.Routes();
 
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("New notification from client with (DomainUpdateType: {0}) (Routes: {1}) (Id: {2}).",
+			if (_logger.IsDebugEnabled)
+				_logger.DebugFormat("New notification from client with (DomainUpdateType: {0}) (Routes: {1}) (Id: {2}).",
 					message.DomainUpdateType, string.Join(", ", routes),
-					string.Join(", ", routes.Select(RouteToGroupName)));
+					string.Join(", ", routes.Select(RouteToGroupName.Convert)));
 
 			purgeSometimes();
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 
 			foreach (var route in routes)
 			{
-				_signalR.CallOnEventMessage(RouteToGroupName(route), route, message);
+				_signalR.CallOnEventMessage(RouteToGroupName.Convert(route), route, message);
 			}
 
 			_tracer.ClientsNotified(message);
@@ -122,24 +122,12 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			_mailboxRepository.Purge();
 		}
 
-		public void NotifyClientsMultiple(IEnumerable<Message> notifications)
+		public void NotifyClientsMultiple(IEnumerable<Message> messages)
 		{
-			foreach (var notification in notifications)
+			foreach (var notification in messages)
 			{
 				NotifyClients(notification);
 			}
-		}
-
-		public static string RouteToGroupName(string route)
-		{
-			//gethashcode won't work in 100% of the cases...
-			UInt64 hashedValue = 3074457345618258791ul;
-			for (int i = 0; i < route.Length; i++)
-			{
-				hashedValue += route[i];
-				hashedValue *= 3074457345618258799ul;
-			}
-			return hashedValue.GetHashCode().ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }

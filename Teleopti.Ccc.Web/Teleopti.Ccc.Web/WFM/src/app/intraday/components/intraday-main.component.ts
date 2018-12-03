@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterContentInit, OnChanges } from '@angular/core';
 import moment, { Moment } from 'moment';
 import { IntradayDataService } from '../services/intraday-data.service';
+import { IntradayPersistService } from '../services/intraday-persist.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NzMessageService, NzTabComponent, NzTabChangeEvent } from 'ng-zorro-antd';
 import c3 from 'c3';
 import {
 	SkillPickerItem,
@@ -17,31 +19,60 @@ import {
 	Skill,
 	SkillPickerItemType
 } from '../types';
+import { IntradayIconService } from '../services/intraday-icon.service';
 
 @Component({
 	selector: 'app-intraday-main',
 	templateUrl: './intraday-main.html',
 	styleUrls: ['./intraday-main.component.scss']
 })
-export class IntradayMainComponent implements OnInit, OnDestroy {
-	constructor(public intradayDataService: IntradayDataService, public translate: TranslateService) {}
+export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentInit {
+	constructor(
+		public intradayDataService: IntradayDataService,
+		public translate: TranslateService,
+		private message: NzMessageService,
+		private persistData: IntradayPersistService,
+		private skillIcons: IntradayIconService
+	) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
 	selectedSubSkill: Skill;
 	selectedSubSkillId: string;
 	selectedOffset = 0;
-	displayDate: string = moment().format('LLLL');
-	intradayTabs: IntradayChartType;
 	selectedChartType: IntradayChartType = 'traffic';
 	selectedDate: Moment;
-	chartType: IntradayChartType = 'traffic';
+	selectedTabIndex: number;
+
+	displayDate: string = moment().format('LLLL');
+	intradayTabs: IntradayChartType;
 	chartData: c3.Data = this.trafficDataToC3Data(this.getEmptyTrafficData().DataSeries);
 	summaryData: IntradayTrafficSummaryItem[] | IntradayPerformanceSummaryItem[] = [];
 	loading = false;
+	exporting = false;
 	timer: any;
+	showSkills = true;
 
 	ngOnInit() {
+		this.startTimer();
+	}
+
+	startTimer() {
 		this.timer = setInterval(this.updateOnInterval, 60000);
+	}
+
+	ngAfterContentInit() {
+		const persisted = this.persistData.getPersisted();
+		this.selectedOffset = 0;
+		if (persisted) {
+			this.selectedSkillOrGroup = persisted.selectedSkillOrGroup;
+			this.selectedSubSkill = persisted.selectedSubSkill;
+			this.selectedSubSkillId = persisted.selectedSubSkillId;
+			this.selectedOffset = persisted.selectedOffset;
+			this.selectedChartType = persisted.selectedChartType;
+			this.selectedDate = persisted.selectedDate;
+			this.selectedTabIndex = persisted.selectedTabIndex;
+			this.updateData(false);
+		}
 	}
 
 	updateOnInterval = () => {
@@ -54,46 +85,123 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 		clearInterval(this.timer);
 	}
 
-	onSelecetSkill(e: SkillPickerItem) {
-		this.selectedSkillOrGroup = Object.assign({}, e);
-		this.updateData(false);
+	private setPersistedData() {
+		this.persistData.setPersisted({
+			selectedSkillOrGroup: this.selectedSkillOrGroup,
+			selectedSubSkill: this.selectedSubSkill,
+			selectedSubSkillId: this.selectedSubSkillId,
+			selectedOffset: this.selectedOffset,
+			selectedChartType: this.selectedChartType,
+			selectedDate: this.selectedDate,
+			selectedTabIndex: this.selectedTabIndex
+		});
 	}
 
-	onClickTab() {
-		this.chartType = this.selectedChartType;
+	onSelectSkill(e: SkillPickerItem) {
+		this.selectedSkillOrGroup = e;
+		this.updateData(false);
+		this.setPersistedData();
+	}
+
+	onClickTab(index: number) {
+		this.selectedTabIndex = index;
+		const chartTypes: IntradayChartType[] = ['traffic', 'performance', 'staffing'];
+		this.selectedChartType = chartTypes[index];
+
 		this.updateData(false);
 	}
 
 	onSelectDate(e: number) {
+		if (e !== 0) clearInterval(this.timer);
+		else this.startTimer();
 		this.selectedOffset = e;
 		this.selectedDate = moment().add(e, 'days');
 		this.displayDate = this.selectedDate.format('LLLL');
 		this.updateData(true);
 	}
 
-	getSelectedSkillOrGroup(): SkillPickerItem {
-		clearInterval(this.timer);
-		if (!this.selectedSubSkillId || this.selectedSubSkillId === 'all') {
-			this.timer = setInterval(this.updateData, 1000);
-			return this.selectedSkillOrGroup;
-		} else {
-			const spi: SkillPickerItem = {
-				Id: this.selectedSubSkillId,
-				Name: '',
-				Skills: [],
-				Type: SkillPickerItemType.Skill
-			};
-			this.timer = setInterval(this.updateData, 1000);
-			return spi;
+	onShowHideSkills() {
+		this.showSkills = !this.showSkills;
+	}
+
+	exportToExcel() {
+		if (this.selectedSkillOrGroup && !this.exporting) {
+			this.exporting = true;
+			if (this.selectedSkillOrGroup.Skills.length > 1) {
+				this.intradayDataService
+					.getIntradayExportForSkillGroup(
+						angular.toJson({
+							id: this.selectedSkillOrGroup.Id,
+							dayOffset: this.selectedOffset
+						})
+					)
+					.subscribe(
+						data => {
+							this.saveData(data);
+						},
+						error => this.errorSaveData(error)
+					);
+			} else {
+				this.intradayDataService
+					.getIntradayExportForSkill(
+						angular.toJson({
+							id: this.selectedSkillOrGroup.Id,
+							dayOffset: this.selectedOffset
+						})
+					)
+					.subscribe(
+						data => {
+							this.saveData(data);
+						},
+						error => this.errorSaveData(error)
+					);
+			}
 		}
 	}
+
+	saveData(data) {
+		const blob = new Blob([data]);
+		this.exporting = false;
+		saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
+	}
+
+	errorSaveData(error: Error) {
+		this.message.create('error', error.message);
+		this.exporting = false;
+	}
+
+	// getSelectedSkillOrGroup(): SkillPickerItem {
+	// 	console.log('selected');
+
+	// 	clearInterval(this.timer);
+	// 	if (!this.selectedSubSkillId || this.selectedSubSkillId === 'all') {
+	// 		this.timer = setInterval(this.updateData, 1000);
+	// 		return this.selectedSkillOrGroup;
+	// 	} else {
+	// 		const spi: SkillPickerItem = {
+	// 			Id: this.selectedSubSkillId,
+	// 			Name: '',
+	// 			Skills: [],
+	// 			Type: SkillPickerItemType.Skill
+	// 		};
+	// 		this.timer = setInterval(this.updateData, 1000);
+	// 		return spi;
+	// 	}
+	// }
 
 	onPickSubSkill() {
 		this.updateData(true);
 	}
 
+	onSubSkillClick(event: any) {
+		event.stopPropagation();
+	}
+
 	updateData = (columnsOnly: boolean = true) => {
-		if (!this.selectedSkillOrGroup) {
+		this.setPersistedData();
+		console.log('this.selectedChartType', this.selectedChartType);
+
+		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
 		}
 		let selectedSkill = this.selectedSkillOrGroup;
@@ -105,7 +213,10 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 				Type: SkillPickerItemType.Skill
 			};
 		}
-		if (this.chartType === 'traffic') {
+		if (this.selectedChartType === 'traffic') {
+			console.log('RÖW');
+			console.log('selectedSkill.Skills.length', selectedSkill.Skills.length);
+
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getTrafficData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
@@ -124,7 +235,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 			}
 		}
 
-		if (this.chartType === 'performance') {
+		if (this.selectedChartType === 'performance') {
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getPerformanceData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
@@ -145,7 +256,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy {
 			}
 		}
 
-		if (this.chartType === 'staffing') {
+		if (this.selectedChartType === 'staffing') {
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getStaffingData(selectedSkill.Id, this.selectedOffset).subscribe(data => {

@@ -4,9 +4,6 @@
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
 	beforeEach(
 		module(function ($provide) {
-			$provide.service('Toggle', function () {
-				return { WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952: true };
-			});
 			$provide.service('CurrentUserInfo', function () {
 				return {
 					CurrentUserInfo: function () {
@@ -223,7 +220,7 @@
 				},
 				{
 					ShiftLayerIds: ['31678e5a-ac3f-4daa-9577-a83800e49625'],
-					Color: '#8080c0',
+					Color: '#808080',
 					Description: 'E-mail',
 					Start: '2018-05-28 10:00',
 					End: '2018-05-28 12:00',

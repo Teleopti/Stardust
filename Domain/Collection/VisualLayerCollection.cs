@@ -5,7 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {

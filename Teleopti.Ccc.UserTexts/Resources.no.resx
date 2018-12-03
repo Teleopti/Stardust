@@ -10771,9 +10771,6 @@ Sjekk din internettforbindelse eller kontakt administratoren.</value>
   <data name="ClearCampaign" xml:space="preserve">
     <value>Slett kampanjen</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Husker du meg?</value>
-  </data>
   <data name="MyTeam" xml:space="preserve">
     <value>MyTeam</value>
   </data>

@@ -11,7 +11,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_deletePersonAccountForPersonCommandDto.PersonId)).Return(_person);
                 Expect.Call(_absenceRepository.Get(_deletePersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
-                Expect.Call(_personAbsenceAccountRepository.Find(_person)).Return(personAccounts);
+                Expect.Call(_personAbsenceAccountRepository.Find(_person, _absence)).Return(personAccounts);
                 Expect.Call(personAccounts.Find(_absence, _startDate)).Return(account).Repeat.Twice();
                 Expect.Call(() => personAccounts.Remove(account));
                 Expect.Call(() => _traceableRefreshService.Refresh(account));

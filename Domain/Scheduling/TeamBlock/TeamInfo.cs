@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		void LockMember(DateOnlyPeriod period, IPerson member);
 		string Name { get; }
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroup();
-		IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index);
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndDate(DateOnly dateOnly);
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndPeriod(DateOnlyPeriod period);
 		IScheduleMatrixPro MatrixForMemberAndDate(IPerson groupMember, DateOnly dateOnly);
@@ -83,11 +81,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroup()
 		{
 			return _matrixesForMembers.SelectMany(m => m).ToArray();
-		}
-
-		public IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index)
-		{
-			return _matrixesForMembers[index];
 		}
 
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndDate(DateOnly dateOnly)

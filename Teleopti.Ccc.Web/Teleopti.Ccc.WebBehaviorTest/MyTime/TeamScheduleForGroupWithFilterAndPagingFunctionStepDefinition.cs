@@ -15,7 +15,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
-using Teleopti.Interfaces.Domain;
+
 using SiteConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.SiteConfigurable;
 using Table = TechTalk.SpecFlow.Table;
 

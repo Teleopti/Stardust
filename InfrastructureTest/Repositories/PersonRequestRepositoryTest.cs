@@ -22,7 +22,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -360,25 +360,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var foundRequest = foundRequests.FirstOrDefault();
 			foundRequest.BrokenBusinessRules.Should(null);
 			foundRequest.UpdatedOn.Should().Equals(personRequestWithShiftTrade.UpdatedOn);
-		}
-
-		[Test]
-		public void ShouldFindAllRequestsForAgentAndPeriod()
-		{
-			var personRequestInPeriod =
-				new PersonRequest(_person,
-					new AbsenceRequest(_absence, new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(3))));
-			var personRequestNotInperiod =
-				new PersonRequest(_person,
-					new AbsenceRequest(_absence, new DateTimePeriod(DateTime.UtcNow.AddDays(-3), DateTime.UtcNow.AddDays(-2))));
-
-			PersistAndRemoveFromUnitOfWork(personRequestInPeriod);
-			PersistAndRemoveFromUnitOfWork(personRequestNotInperiod);
-
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person,
-				new DateTimePeriod(DateTime.UtcNow.AddHours(-1), DateTime.UtcNow.AddHours(1)));
-
-			result.Single().Should().Be(personRequestInPeriod);
 		}
 
 		[Test]
@@ -1222,7 +1203,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var period = new DateTimePeriod(startDateTime.AddDays(-1), startDateTime);
 			var requestPeriods = new PersonRequestRepository(UnitOfWork).GetRequestPeriodsForAgent(_person, period);
-			var requests= new PersonRequestRepository (UnitOfWork).FindAllRequestsForAgent(_person, period);
+			var requests= new PersonRequestRepository (UnitOfWork).FindAllRequestsForAgent(_person);
 
 			requests.Count().Should().Be(1);
 			requestPeriods.Count().Should().Be(0);

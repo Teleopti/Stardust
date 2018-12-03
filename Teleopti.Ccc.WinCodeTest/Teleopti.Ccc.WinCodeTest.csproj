@@ -169,11 +169,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase">
@@ -280,7 +280,6 @@
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
     <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
-    <Compile Include="Common\ReportSettingsHostPresenterTest.cs" />
     <Compile Include="Common\SchedulePeriodCloseCalculatorTest.cs" />
     <Compile Include="Common\ScheduleTargetTimeCalculatorTest.cs" />
     <Compile Include="Common\OvertimeLayerViewModelTest.cs" />
@@ -488,16 +487,8 @@
     <Compile Include="PeopleAdmin\ShiftCategoryLimitationCombinationTest.cs" />
     <Compile Include="Presentation\ReportDetailTest.cs" />
     <Compile Include="Presentation\ReportSettingsHostPresenterTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduleAuditingModelTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduleAuditingPresenterTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduleAuditingTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityModelTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityPresenterTest.cs" />
-    <Compile Include="Presentation\ReportSettingsScheduledTimePerActivityTest.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimeModelTest.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenterTest.cs" />
-    <Compile Include="Presentation\ReportUserSelectorAuditingModelTest.cs" />
-    <Compile Include="Presentation\ReportUserSelectorAuditingPresenterTest.cs" />
     <Compile Include="Presentation\ShiftCategoryLimitationViewPresenterTest.cs" />
     <Compile Include="Scheduler\AddAbsenceViewModelTest.cs" />
     <Compile Include="Scheduler\AddActivityViewModelTest.cs" />
@@ -561,7 +552,6 @@
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTestOld.cs" />
     <Compile Include="Scheduler\SchedulePartNoteTests.cs" />
     <Compile Include="Scheduler\SchedulePasteActionTest.cs" />
-    <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortBySeniorityRankingCommandsTest.cs" />
     <Compile Include="Scheduler\SchedulingScreenPersisterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionModelTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftPerAgentPresenterTest.cs" />
@@ -578,8 +568,6 @@
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesAbsenceCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesDayOffCommandTest.cs" />
-    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledAbsenceCommandTest.cs" />
-    <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledDayOffCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesFulfilledShiftCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllPreferencesMustHaveCommandTest.cs" />
@@ -835,10 +823,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.WinCode\Teleopti.Ccc.WinCode.csproj">
       <Project>{3b495e4b-1803-413c-9480-40c8efccba45}</Project>
       <Name>Teleopti.Ccc.WinCode</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>

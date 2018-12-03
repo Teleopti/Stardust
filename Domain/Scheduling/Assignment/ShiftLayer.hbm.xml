@@ -18,7 +18,7 @@
 				 foreign-key="FK_MainShiftActivityLayer_Activity"
 				 access="property"/>
 		<component name="Period"
-					  class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces"
+					  class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateTimePeriod, Teleopti.Ccc.Domain"
 					  access="property">
 			<component name="period" access="field">
 				<property name="Minimum"

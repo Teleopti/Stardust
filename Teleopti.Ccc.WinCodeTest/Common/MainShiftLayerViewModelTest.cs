@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Helpers;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {

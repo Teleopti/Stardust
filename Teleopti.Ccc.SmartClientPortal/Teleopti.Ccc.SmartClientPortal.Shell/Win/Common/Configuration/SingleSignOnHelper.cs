@@ -53,11 +53,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
                 return ms.ToArray();
             }
         }
-
-        private static string getCustomerName()
-        {
-            ILicenseActivator license = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name);
-            return license.CustomerName;
-        }
     }
 }

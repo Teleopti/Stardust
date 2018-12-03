@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {

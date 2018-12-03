@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCodeTest.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 
@@ -88,40 +88,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                 _target.GridControl = grid;
                 Assert.IsNotNull(_target.GridControl);
             }
-		}
-
-		[Test]
-		public void VerifyPropertiesNotNullOrEmpty()
-		{
-			Assert.IsNotNull(_target.Parent);
-			Assert.IsNotEmpty(_target.FullName);
-			Assert.IsNotNull(_target.PeriodDate);
-			Assert.IsNotNull(_target.Contract);
-			Assert.IsNotNull(_target.ContractSchedule);
-			Assert.IsNotNull(_target.PersonContract);
-			Assert.IsNotNull(_target.PartTimePercentage);
-			Assert.IsNotNull(_target.RuleSetBag);
-			Assert.IsFalse(_target.CanGray);
-			Assert.IsFalse(_target.CanBold);
-			Assert.IsNotNull(_target.PeriodCount);
-			Assert.IsNotNull(_target.Period);
-			Assert.IsNotNull(_target.ExternalLogOnNames);
-			Assert.IsNull(_target.Note);
-
-
-			//If current period is null 
-			_target.GetCurrentPersonPeriodByDate(new DateOnly(DateTime.MinValue));
-			Assert.IsNull(_target.PeriodDate);
-			Assert.IsNull(_target.Contract);
-			Assert.IsNull(_target.ContractSchedule);
-			Assert.IsNull(_target.PersonContract);
-			Assert.IsNull(_target.PartTimePercentage);
-			Assert.IsNull(_target.RuleSetBag);
-			Assert.IsTrue(_target.CanGray);
-			Assert.IsNotNull(_target.PeriodCount);
-			Assert.IsNull(_target.Period);
-			Assert.IsEmpty(_target.ExternalLogOnNames);
-			Assert.IsEmpty(_target.Note);
 		}
 
 		[Test]
@@ -216,73 +182,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			Assert.AreEqual(false, _target.ExpandState);
 			_target.ExpandState = true;
 			Assert.AreEqual(true, _target.ExpandState);
-		}
-
-		[Test]
-		public void VerifyPersonSkillCanGetAndSet()
-		{
-			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
-
-			Assert.AreEqual(_personPeriod2, currentPeriod);
-			Assert.AreEqual(Skill2, currentPeriod.PersonSkillCollection.First().Skill);
-			Assert.AreEqual("_skill2", _target.PersonSkills);
-
-			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count());
-			_target.PersonSkills = "_skill1";
-			Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count());
-			Assert.AreEqual("_skill1", _target.PersonSkills);
-		}
-
-		[Test]
-		public void VerifyGetCurrentPersonPeriodByDate()
-		{
-			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyNotInRange);
-			Assert.IsNull(currentPeriod);
-
-			currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
-			Assert.IsNotNull(currentPeriod);
-		}
-
-		[Test]
-		public void VerifyPersonExternalLogOnNamesCanGetAndSet()
-		{
-			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
-
-			Assert.AreEqual(_personPeriod2, currentPeriod);
-			Assert.AreEqual(ExternalLogOn2, currentPeriod.ExternalLogOnCollection.First());
-			Assert.AreEqual("Login name (DS)", _target.ExternalLogOnNames);
-
-			Assert.AreEqual(1, currentPeriod.ExternalLogOnCollection.Count());
-			_target.ExternalLogOnNames = "Login name (DS)";
-			Assert.AreEqual(3, currentPeriod.ExternalLogOnCollection.Count());
-            Assert.AreEqual("Login name (DS), Login name (DS), Login name (DS)", _target.ExternalLogOnNames);
-		}
-
-		[Test]
-		public void VerifySiteTeamCanGetAndSet()
-		{
-			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
-
-			Assert.IsNotNull(currentPeriod);
-			currentPeriod.Team = TeamBlue;
-			Assert.AreEqual(BLUESITE + "/" + BLUETEAM, _target.SiteTeam.Description);
-
-			_target.SiteTeam = SiteTeam2;
-			Assert.AreEqual(REDSITE + "/" + REDTEAM, _target.SiteTeam.Description);
-
-			Assert.IsNull(_target2.SiteTeam);
-		}
-
-		[Test]
-		public void VerifyNoteCanSet()
-		{
-			IPersonPeriod currentPeriod = _target.GetCurrentPersonPeriodByDate(DateOnlyInRange);
-			Assert.IsNotNull(currentPeriod);
-
-			string note = "Mage Note Eka";
-			_target.Note = "Mage Note Eka";
-			Assert.AreEqual(note, _target.Note);
-
 		}
 
 		[Test]

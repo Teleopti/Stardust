@@ -12333,7 +12333,7 @@ Teleopti R&amp;D</value>
     <value>隐藏面板</value>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>记住我？</value>
+    <value>记住我</value>
   </data>
   <data name="DoubleClickHereToEditText" xml:space="preserve">
     <value>双击此处以编辑文本</value>
@@ -14728,9 +14728,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>技能类型过滤</value>
-  </data>
-  <data name="PeopleManageUsers" xml:space="preserve">
-    <value>管理用户</value>
   </data>
   <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
     <value>用户名已经被使用了</value>

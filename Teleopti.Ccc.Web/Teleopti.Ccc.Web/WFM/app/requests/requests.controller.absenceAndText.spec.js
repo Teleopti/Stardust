@@ -677,6 +677,704 @@ describe('Requests - absence and text controller tests: ', function() {
 		expect(requestsDataService.getHasSentRequests()).toBeFalsy();
 	});
 
+	it('should build absence schedule container style and show when toggled absence schedules', function() {
+		var absence = {
+			IsFullDay: false,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T02:00:00',
+						RemainingDescription: '19',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T02:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Social Media',
+							TimeSpan: '8:00 AM - 10:15 AM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T08:00:00',
+							EndTime: '2018-11-23T10:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '10:15 AM - 10:30 AM',
+							Color: '255,0,0',
+							StartTime: '2018-11-23T10:15:00',
+							EndTime: '2018-11-23T10:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.2778,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '10:30 AM - 12:30 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T10:30:00',
+							EndTime: '2018-11-23T12:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2778,
+							EndPositionPercentage: 0.5,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '12:30 PM - 1:30 PM',
+							Color: '255,255,0',
+							StartTime: '2018-11-23T12:30:00',
+							EndTime: '2018-11-23T13:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5,
+							EndPositionPercentage: 0.6111,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '1:30 PM - 3:15 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T13:30:00',
+							EndTime: '2018-11-23T15:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.6111,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '3:15 PM - 3:30 PM',
+							Color: '255,0,0',
+							StartTime: '2018-11-23T15:15:00',
+							EndTime: '2018-11-23T15:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 0.8333,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '3:30 PM - 5:00 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T15:30:00',
+							EndTime: '2018-11-23T17:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8333,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'PM',
+						Name: 'Late',
+						DisplayColor: '#000000'
+					},
+					BelongsToDate: '2018-11-23T00:00:00'
+				}
+			],
+			Subject: 'subject',
+			Message: '',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Asia/Amman',
+			Id: '7cfc4367-0fdd-4c31-981f-a9a1003bde07',
+			Seniority: 23,
+			PeriodStartTime: '2018-11-23T09:00:00',
+			PeriodEndTime: '2018-11-23T18:00:00',
+			UpdatedTime: '2018-11-23T05:37:58.563',
+			CreatedTime: '2018-11-23T05:37:58.21',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 1,
+			StatusText: 'Pending',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			DenyReason: ''
+		};
+		var clickEvent = new MouseEvent('click');
+
+		controller.toggleAbsenceSchedules(absence, clickEvent);
+
+		expect(controller.showingAbsenceSchedules).toEqual(true);
+		expect(controller.schedulesContainerStyle.width).toEqual('745px');
+		expect(controller.schedulesContainerStyle.height).toEqual('102px');
+		expect(controller.schedulesContainerStyle['max-height']).toEqual('242px');
+	});
+
+	it('should get absence shift start and end time when toggled absence schedules', function() {
+		var absence = {
+			IsFullDay: false,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T02:00:00',
+						RemainingDescription: '19',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T02:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Social Media',
+							TimeSpan: '8:00 AM - 10:15 AM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T08:00:00',
+							EndTime: '2018-11-23T10:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '10:15 AM - 10:30 AM',
+							Color: '255,0,0',
+							StartTime: '2018-11-23T10:15:00',
+							EndTime: '2018-11-23T10:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.2778,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '10:30 AM - 12:30 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T10:30:00',
+							EndTime: '2018-11-23T12:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2778,
+							EndPositionPercentage: 0.5,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '12:30 PM - 1:30 PM',
+							Color: '255,255,0',
+							StartTime: '2018-11-23T12:30:00',
+							EndTime: '2018-11-23T13:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5,
+							EndPositionPercentage: 0.6111,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '1:30 PM - 3:15 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T13:30:00',
+							EndTime: '2018-11-23T15:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.6111,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '3:15 PM - 3:30 PM',
+							Color: '255,0,0',
+							StartTime: '2018-11-23T15:15:00',
+							EndTime: '2018-11-23T15:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 0.8333,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '3:30 PM - 5:00 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T15:30:00',
+							EndTime: '2018-11-23T17:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8333,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'PM',
+						Name: 'Late',
+						DisplayColor: '#000000'
+					},
+					BelongsToDate: '2018-11-23T00:00:00'
+				}
+			],
+			Subject: 'subject',
+			Message: '',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Asia/Amman',
+			Id: '7cfc4367-0fdd-4c31-981f-a9a1003bde07',
+			Seniority: 23,
+			PeriodStartTime: '2018-11-23T09:00:00',
+			PeriodEndTime: '2018-11-23T18:00:00',
+			UpdatedTime: '2018-11-23T05:37:58.563',
+			CreatedTime: '2018-11-23T05:37:58.21',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 1,
+			StatusText: 'Pending',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			DenyReason: ''
+		};
+		var clickEvent = new MouseEvent('click');
+
+		controller.toggleAbsenceSchedules(absence, clickEvent);
+		expect(controller.shifts[0].Date).toEqual('11/23/18');
+		expect(controller.shifts[0].ShiftStartTime).toEqual('8:00 AM');
+		expect(controller.shifts[0].ShiftEndTime).toEqual('5:00 PM');
+	});
+
+	it('should get absence shift start on today and shift end on next day with +1 when toggled absence schedules', function() {
+		var absence = {
+			IsFullDay: false,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T02:00:00',
+						RemainingDescription: '19',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T02:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Social Media',
+							TimeSpan: '7:00 PM - 9:15 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T19:00:00',
+							EndTime: '2018-11-23T21:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '9:15 PM - 9:30 PM',
+							Color: '255,0,0',
+							StartTime: '2018-11-23T21:15:00',
+							EndTime: '2018-11-23T21:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.2778,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '9:30 PM - 11:30 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T21:30:00',
+							EndTime: '2018-11-23T23:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2778,
+							EndPositionPercentage: 0.5,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '11:30 PM - 12:30 AM',
+							Color: '255,255,0',
+							StartTime: '2018-11-23T23:30:00',
+							EndTime: '2018-11-24T00:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5,
+							EndPositionPercentage: 0.6111,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '12:30 AM - 2:15 AM',
+							Color: '30,144,255',
+							StartTime: '2018-11-24T00:30:00',
+							EndTime: '2018-11-24T02:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.6111,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '2:15 AM - 2:30 AM',
+							Color: '255,0,0',
+							StartTime: '2018-11-24T02:15:00',
+							EndTime: '2018-11-24T02:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 0.8333,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '2:30 AM - 4:00 AM',
+							Color: '30,144,255',
+							StartTime: '2018-11-24T02:30:00',
+							EndTime: '2018-11-24T04:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8333,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'PM',
+						Name: 'Late',
+						DisplayColor: '#000000'
+					},
+					BelongsToDate: '2018-11-23T00:00:00'
+				}
+			],
+			Subject: 'subject',
+			Message: '',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Asia/Amman',
+			Id: '7cfc4367-0fdd-4c31-981f-a9a1003bde07',
+			Seniority: 23,
+			PeriodStartTime: '2018-11-23T19:00:00',
+			PeriodEndTime: '2018-11-24T04:00:00',
+			UpdatedTime: '2018-11-23T05:37:58.563',
+			CreatedTime: '2018-11-23T05:37:58.21',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 1,
+			StatusText: 'Pending',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			DenyReason: ''
+		};
+		var clickEvent = new MouseEvent('click');
+
+		controller.toggleAbsenceSchedules(absence, clickEvent);
+		expect(controller.shifts[0].Date).toEqual('11/23/18');
+		expect(controller.shifts[0].ShiftStartTime).toEqual('7:00 PM');
+		expect(controller.shifts[0].ShiftEndTime).toEqual('4:00 AM+1');
+	});
+
+	it('should not get shift end with +1 when start time and end time are in the same day in agent time zone after toggled absence schedules', function() {
+		var absence = {
+			IsFullDay: true,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T02:00:00',
+						RemainingDescription: '15',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T02:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Social Media',
+							TimeSpan: '11:00 PM - 1:15 AM',
+							Color: '30,144,255',
+							StartTime: '2018-11-30T23:00:00',
+							EndTime: '2018-12-01T01:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '1:15 AM - 1:30 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-01T01:15:00',
+							EndTime: '2018-12-01T01:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.2778,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '1:30 AM - 3:30 AM',
+							Color: '30,144,255',
+							StartTime: '2018-12-01T01:30:00',
+							EndTime: '2018-12-01T03:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2778,
+							EndPositionPercentage: 0.5,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '3:30 AM - 4:30 AM',
+							Color: '255,255,0',
+							StartTime: '2018-12-01T03:30:00',
+							EndTime: '2018-12-01T04:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5,
+							EndPositionPercentage: 0.6111,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '4:30 AM - 6:15 AM',
+							Color: '30,144,255',
+							StartTime: '2018-12-01T04:30:00',
+							EndTime: '2018-12-01T06:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.6111,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '6:15 AM - 6:30 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-01T06:15:00',
+							EndTime: '2018-12-01T06:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 0.8333,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '6:30 AM - 8:00 AM',
+							Color: '30,144,255',
+							StartTime: '2018-12-01T06:30:00',
+							EndTime: '2018-12-01T08:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8333,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'AM',
+						Name: 'Early',
+						DisplayColor: '#80FFFF'
+					},
+					BelongsToDate: '2018-12-01T00:00:00'
+				}
+			],
+			Subject: 'asdf',
+			Message: 'asdf',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Asia/Amman',
+			Id: '8c713b60-7208-4e58-8399-a9a80062c804',
+			Seniority: 23,
+			PeriodStartTime: '2018-12-01T00:00:00',
+			PeriodEndTime: '2018-12-01T23:59:00',
+			UpdatedTime: '2018-11-30T07:59:39.133',
+			CreatedTime: '2018-11-30T07:59:39.107',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 1,
+			StatusText: 'Pending',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			IsNew: false,
+			IsPending: true,
+			IsApproved: false,
+			IsDenied: false,
+			IsWaitlisted: false,
+			DenyReason: ''
+		};
+		var clickEvent = new MouseEvent('click');
+
+		controller.isUsingRequestSubmitterTimeZone = true;
+		controller.userTimeZone = 'America/Los_Angeles';
+
+		controller.toggleAbsenceSchedules(absence, clickEvent);
+		expect(controller.shifts[0].Date).toEqual('12/1/18');
+		expect(controller.shifts[0].ShiftStartTime).toEqual('9:00 AM');
+		expect(controller.shifts[0].ShiftEndTime).toEqual('6:00 PM');
+	});
+
+	it('should convert the shift start and end time to selected timezone when toggled absence schedules', function() {
+		var absence = {
+			IsFullDay: false,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T02:00:00',
+						RemainingDescription: '19',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T02:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Social Media',
+							TimeSpan: '7:00 PM - 9:15 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T19:00:00',
+							EndTime: '2018-11-23T21:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '9:15 PM - 9:30 PM',
+							Color: '255,0,0',
+							StartTime: '2018-11-23T21:15:00',
+							EndTime: '2018-11-23T21:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.2778,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '9:30 PM - 11:30 PM',
+							Color: '30,144,255',
+							StartTime: '2018-11-23T21:30:00',
+							EndTime: '2018-11-23T23:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2778,
+							EndPositionPercentage: 0.5,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '11:30 PM - 12:30 AM',
+							Color: '255,255,0',
+							StartTime: '2018-11-23T23:30:00',
+							EndTime: '2018-11-24T00:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5,
+							EndPositionPercentage: 0.6111,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '12:30 AM - 2:15 AM',
+							Color: '30,144,255',
+							StartTime: '2018-11-24T00:30:00',
+							EndTime: '2018-11-24T02:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.6111,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '2:15 AM - 2:30 AM',
+							Color: '255,0,0',
+							StartTime: '2018-11-24T02:15:00',
+							EndTime: '2018-11-24T02:30:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 0.8333,
+							Meeting: null
+						},
+						{
+							Title: 'Social Media',
+							TimeSpan: '2:30 AM - 4:00 AM',
+							Color: '30,144,255',
+							StartTime: '2018-11-24T02:30:00',
+							EndTime: '2018-11-24T04:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8333,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'PM',
+						Name: 'Late',
+						DisplayColor: '#000000'
+					},
+					BelongsToDate: '2018-11-23T00:00:00'
+				}
+			],
+			Subject: 'subject',
+			Message: '',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Asia/Amman',
+			Id: '7cfc4367-0fdd-4c31-981f-a9a1003bde07',
+			Seniority: 23,
+			PeriodStartTime: '2018-11-23T19:00:00',
+			PeriodEndTime: '2018-11-24T04:00:00',
+			UpdatedTime: '2018-11-23T05:37:58.563',
+			CreatedTime: '2018-11-23T05:37:58.21',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 1,
+			StatusText: 'Pending',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			DenyReason: ''
+		};
+		var clickEvent = new MouseEvent('click');
+
+		controller.isUsingRequestSubmitterTimeZone = true;
+		controller.userTimeZone = 'Europe/Berlin';
+
+		controller.toggleAbsenceSchedules(absence, clickEvent);
+		expect(controller.shifts[0].Date).toEqual('11/23/18');
+		expect(controller.shifts[0].ShiftStartTime).toEqual('8:00 PM');
+		expect(controller.shifts[0].ShiftEndTime).toEqual('5:00 AM+1');
+	});
+
 	function setUpTarget() {
 		scope = $rootScope.$new();
 		controller = $controller('requestsAbsenceAndTextController', {

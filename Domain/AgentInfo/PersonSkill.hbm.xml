@@ -20,7 +20,7 @@
                  class="Teleopti.Ccc.Domain.Forecasting.Skill"
                  not-null="true" foreign-key="FK_PersonSkill_Skill"/>
 
-    <component name="SkillPercentage" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+    <component name="SkillPercentage" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
       <property name="Value"
             not-null="true"
             type="Double" />

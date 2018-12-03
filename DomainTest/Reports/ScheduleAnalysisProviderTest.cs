@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.DomainTest.Reports
 	[TestFixture]
 	public class ScheduleAnalysisProviderTest
 	{
-		private ScheduleAnalysisProvider _target;
+		private ScheduleAnalysisAuditTrailProvider _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new ScheduleAnalysisProvider();
+			_target = new ScheduleAnalysisAuditTrailProvider();
 		}
 
 		[Test]

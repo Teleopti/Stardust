@@ -16,7 +16,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
@@ -32,9 +32,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly ICurrentScenario _currentScenario;
 		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly TeamScheduleAgentScheduleViewModelMapper _layerMapper;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider,
-			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,  TeamScheduleAgentScheduleViewModelMapper layerMapper, ITeamScheduleShiftViewModelProvider shiftViewModelProvider)
+			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,  TeamScheduleAgentScheduleViewModelMapper layerMapper, ITeamScheduleShiftViewModelProvider shiftViewModelProvider, ILoggedOnUser loggedOnUser)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_currentScenario = currentScenario;
 			_layerMapper = layerMapper;
 			_shiftViewModelProvider = shiftViewModelProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request,
@@ -103,6 +105,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestViewModel.TypeText = request.Request.RequestTypeDescription;
 			requestViewModel.StatusText = request.StatusText;
 			requestViewModel.Status = getRequestStatus(request);
+			requestViewModel.IsNew = request.IsNew;
+			requestViewModel.IsPending = request.IsPending;
+			requestViewModel.IsApproved = request.IsApproved;
+			requestViewModel.IsWaitlisted = request.IsWaitlisted;
+			requestViewModel.IsDenied = request.IsDenied;
 			requestViewModel.Payload = request.Request.RequestPayloadDescription;
 			requestViewModel.Team = team?.SiteAndTeam;
 		}
@@ -141,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
 			var schedulePeriod = getScheduleMinMax(scheduleViewModel, person, scheduleDay.DateOnlyAsPeriod.DateOnly);
 
-			return _layerMapper.Map( scheduleViewModel, schedulePeriod, person.PermissionInformation.DefaultTimeZone());
+			return _layerMapper.Map( scheduleViewModel, schedulePeriod, person.PermissionInformation.DefaultTimeZone(),person.Id== _loggedOnUser.CurrentUser().Id);
 		}
 
 		private DateTimePeriod getScheduleMinMax(AgentInTeamScheduleViewModel schedule, IPerson person, DateOnly date)

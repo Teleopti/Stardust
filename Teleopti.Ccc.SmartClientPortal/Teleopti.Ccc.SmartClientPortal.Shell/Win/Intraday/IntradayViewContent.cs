@@ -34,7 +34,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 using Cursors = System.Windows.Forms.Cursors;
 using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 

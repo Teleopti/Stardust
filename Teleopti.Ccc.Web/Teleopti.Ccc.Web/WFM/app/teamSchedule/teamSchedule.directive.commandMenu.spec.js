@@ -6,7 +6,6 @@
 		validateRulesService,
 		permissions,
 		bootstrapDataService,
-		toggles,
 		overlappedWarningPersonId = ['12345'],
 		noneOverlappedWarningPersonId = ['67890'];
 
@@ -21,7 +20,6 @@
 		personSelectionSvc = new FakePersonSelection();
 		validateRulesService = new FakeValidateRulesService();
 		permissions = new FakePermissions();
-		toggles = new FakeToggles();
 
 		module(function ($provide) {
 			$provide.value('ShortCuts', function () {
@@ -37,7 +35,6 @@
 			});
 
 			$provide.service('teamsPermissions', function () { return permissions; });
-			$provide.service('teamsToggles', function () { return toggles; });
 		});
 
 	});
@@ -374,7 +371,7 @@
 		commonTestsInDifferentLocale();
 	});
 
-	it('should not view remove shift menu unless toggle is on', function () {
+	it('should view remove shift menu', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
@@ -388,11 +385,6 @@
 		var menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift span'));
 		expect(menu.length).toBe(1);
 		expect(menuListItemForRemoveShift[0].innerText).toBe('RemoveShift');
-
-		element.isolateScope().vm.toggles.WfmTeamSchedule_RemoveShift_46322 = false;
-		scope.$apply();
-		menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift span'));
-		expect(menuListItemForRemoveShift.length).toBe(0);
 	});
 
 	it('should not view removing shift menu when user does not have permission and toggle is on', function () {
@@ -961,19 +953,6 @@
 			fakePersonList = input;
 		}
 
-	}
-
-	function FakeToggles() {
-		var _toggles = {
-			WfmTeamSchedule_AddNDeleteDayOff_40555: true,
-			WfmTeamSchedule_RemoveShift_46322: true
-		};
-		this.set = function (toggles) {
-			_toggles = toggles;
-		}
-		this.all = function () {
-			return _toggles;
-		}
 	}
 
 	function FakePermissions() {

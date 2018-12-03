@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.DTOs;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {

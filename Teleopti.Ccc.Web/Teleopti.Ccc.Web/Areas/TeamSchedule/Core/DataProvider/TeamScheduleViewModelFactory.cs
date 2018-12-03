@@ -13,7 +13,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
-		private readonly IToggleManager _toggleManager;
 		private readonly IUserUiCulture _userUiCulture;
 		private readonly IScheduleDayProvider _scheduleDayProvider;
 
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			ITeamScheduleShiftViewModelProvider shiftViewModelProvider,
 			IPeopleSearchProvider searchProvider,
 			IPersonRepository personRepository,
-			IToggleManager toggleManager,
 			IUserUiCulture userUiCulture,
 			IScheduleDayProvider scheduleDayProvider)
 		{
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_shiftViewModelProvider = shiftViewModelProvider;
 			_searchProvider = searchProvider;
 			_personRepository = personRepository;
-			_toggleManager = toggleManager;
 			_userUiCulture = userUiCulture;
 			_scheduleDayProvider = scheduleDayProvider;
 		}
@@ -53,12 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				return new GroupScheduleViewModel();
 
 			var period = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone);
-			var personIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
-							_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057)
-							? !input.IsDynamic ? _searchProvider.FindPersonIdsInPeriodWithGroup(period, input.GroupIds, input.CriteriaDictionary)
-												: _searchProvider.FindPersonIdsInPeriodWithDynamicGroup(period, input.GroupPageId.GetValueOrDefault(), input.DynamicOptionalValues, input.CriteriaDictionary)
-							: _searchProvider.FindPersonIds(input.DateInUserTimeZone, input.GroupIds, input.CriteriaDictionary);
-
+			var personIds = !input.IsDynamic ? _searchProvider.FindPersonIdsInPeriodWithGroup(period, input.GroupIds, input.CriteriaDictionary)
+												: _searchProvider.FindPersonIdsInPeriodWithDynamicGroup(period, input.GroupPageId.GetValueOrDefault(), input.DynamicOptionalValues, input.CriteriaDictionary);
 
 			return createViewModelForPeople(personIds, input);
 		}
@@ -74,18 +67,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				};
 
 			var week = DateHelper.GetWeekPeriod(input.DateInUserTimeZone, DateTimeFormatExtensions.FirstDayOfWeek);
-			var personIds = new List<Guid>();
-			if (_toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
-				_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057))
-			{
-				personIds = !input.IsDynamic ? _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary)
+			var personIds =  !input.IsDynamic ? _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary)
 												: _searchProvider.FindPersonIdsInPeriodWithDynamicGroup(week, input.GroupPageId.GetValueOrDefault(), input.DynamicOptionalValues, input.CriteriaDictionary);
-			}
-			else
-			{
-				personIds = week.DayCollection()
-					.SelectMany(d => _searchProvider.FindPersonIds(d, input.GroupIds, input.CriteriaDictionary)).Distinct().ToList();
-			}
+			
 			return createWeekViewModelForPeople(personIds, input);
 		}
 
@@ -333,13 +317,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-
-
 		private bool isResultTooMany<T>(IEnumerable<T> people)
 		{
-			var max = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871) ? 750 : 500;
-			return people.Count() > max;
-
+			return people.Count() > 500;
 		}
 	}
 }

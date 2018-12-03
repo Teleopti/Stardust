@@ -82,19 +82,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 			return ViewBase.ShowYesNoMessage(this, text, caption);
 		}
 
-		public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
-		{
-			return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
-		}
-
 		public void ShowInformationMessage(string text, string caption)
 		{
 			ViewBase.ShowInformationMessage(this, text, caption);
-		}
-
-		public DialogResult ShowOkCancelMessage(string text, string caption)
-		{
-			return ViewBase.ShowOkCancelMessage(text, caption);
 		}
 
 		public DialogResult ShowWarningMessage(string text, string caption)

@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
+@using Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 @using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
-@using Teleopti.Interfaces.Domain
 @{
 	var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
 					  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))

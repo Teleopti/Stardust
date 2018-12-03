@@ -2,9 +2,10 @@
 using System.Windows;
 using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Shared;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
-using Teleopti.Interfaces.Domain;
+
 using FlowDirection=System.Windows.FlowDirection;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop

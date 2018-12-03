@@ -12,10 +12,8 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Service
@@ -25,7 +23,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlJobStarter));
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly PmInfoProvider _pmInfoProvider;
-		private readonly IToggleManager _toggleManager;
 
 		private readonly string _connectionString;
 		private readonly JobExtractor _jobExtractor;
@@ -40,15 +37,13 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			JobExtractor jobExtractor,
 			ITenants tenants,
 			IBaseConfigurationRepository baseConfigurationRepository,
-			PmInfoProvider pmInfoProvider,
-			IToggleManager toggleManager)
+			PmInfoProvider pmInfoProvider)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
 			_tenants = tenants;
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_pmInfoProvider = pmInfoProvider;
-			_toggleManager = toggleManager;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 		}
 

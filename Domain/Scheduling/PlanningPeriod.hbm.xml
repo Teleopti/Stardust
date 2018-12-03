@@ -12,8 +12,8 @@
 		<property name="UpdatedOn" type="UtcDateTime" not-null="true"/>
 		<!--IEntity-->
 
-		<component name="Range" class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
-			<component class ="Teleopti.Interfaces.Domain.MinMax`1[Teleopti.Interfaces.Domain.DateOnly, Teleopti.Interfaces], Teleopti.Interfaces" name="period" access="field">
+		<component name="Range" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnlyPeriod, Teleopti.Ccc.Domain">
+			<component class ="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.MinMax`1[Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly, Teleopti.Ccc.Domain], Teleopti.Ccc.Domain" name="period" access="field">
 				<property name="Minimum" not-null="false" column="StartDate" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 				<property name="Maximum" not-null="false" column="EndDate" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 			</component>

@@ -10769,9 +10769,6 @@ Pomóż nam ulepszyć swoje doświadczenie poprzez wysłanie raportu o błędzie
   <data name="ClearCampaign" xml:space="preserve">
     <value>Wyczyść kampanię</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Pamiętasz mnie?</value>
-  </data>
   <data name="MyTeam" xml:space="preserve">
     <value>Mój Zespół</value>
   </data>

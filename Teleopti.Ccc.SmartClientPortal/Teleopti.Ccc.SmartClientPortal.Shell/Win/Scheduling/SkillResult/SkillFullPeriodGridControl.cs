@@ -8,7 +8,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 {
@@ -39,11 +39,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             ResumeLayout(false);
         }
-
-		public static int PreferredGridWidth
-		{
-			get { return rowHeaderWidth * 2 + System.Windows.Forms.SystemInformation.VerticalScrollBarWidth; }
-		}
 
         private void Model_ClipboardCanCopy(object sender, GridCutPasteEventArgs e)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NPOI.SS.UserModel;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent
 {

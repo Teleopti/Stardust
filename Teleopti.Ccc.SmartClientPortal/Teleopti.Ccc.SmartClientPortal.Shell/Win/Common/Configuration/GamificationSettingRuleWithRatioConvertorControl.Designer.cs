@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxThresholdForAHT.Name = "timeSpanTextBoxThresholdForAHT";
 			this.timeSpanTextBoxThresholdForAHT.Size = new System.Drawing.Size(240, 33);
 			this.timeSpanTextBoxThresholdForAHT.TabIndex = 4;
-			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxThresholdForAHT.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxHeight = 20;
 			this.timeSpanTextBoxThresholdForAHT.TimeSpanBoxWidth = 65534;
 			this.timeSpanTextBoxThresholdForAHT.Validated += new System.EventHandler(this.timeSpanTextBoxThresholdsForAHT_Validated);

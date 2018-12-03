@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -86,14 +86,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(0, target.ColWeekMap.Count);
         }
         
-        [Test]
-        public void GetColumnFromLocalDateShouldReturnColumn()
-        {
-            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-            int column = target.GetColumnFromLocalDate(_date.AddDays(3));
-            Assert.AreEqual((int)ColumnType.StartScheduleColumns + 3, column);
-        }
-
         [Test]
         public void VerifyPotentialOverflowIsFixed()
         {

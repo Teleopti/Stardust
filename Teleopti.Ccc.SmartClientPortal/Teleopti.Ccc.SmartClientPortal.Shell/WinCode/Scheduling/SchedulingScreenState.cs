@@ -15,7 +15,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
@@ -61,8 +61,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public int DefaultSegmentLength { get; private set; }
 		
 		
-		
-	
+		public bool AgentFilter()
+		{
+			return SchedulerStateHolder.FilteredAgentsDictionary.Count != SchedulerStateHolder.ChoosenAgents.Count;
+		}
 		
 		public bool ChangedRequests()
 		{

@@ -184,7 +184,7 @@ describe("teamschedule person selection tests", function () {
 					'Name': 'Day',
 					'ShortName': 'DY',
 					'DisplayColor': '#FFC080',
-					'ContrastColor': 'black'
+					'TextColor': 'black'
 				},
 				'Shifts': [
 					{
@@ -205,7 +205,6 @@ describe("teamschedule person selection tests", function () {
 								'Start': '2018-02-03 08:00',
 								'StartPosition': 4.545454545454546,
 								'UseLighterBorder': false,
-								'ShowDividedLine': false,
 								'Selectable': function () { return true },
 								'ToggleSelection': function () { }
 							}

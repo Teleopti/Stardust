@@ -125,7 +125,6 @@ Scenario: Add block scheduling setting for planning group
 	 | Team   | Site   |
 	 | Team 1 | Site 1 |
 	 | Team 2 | Site 2 |
-	And I open block scheduling panel
 	And I turn on block scheduling setting
 	And I save scheduling setting
 	Then I should see 'PlanningGroupBlockSetting 1' in the scheduling setting list
@@ -148,7 +147,6 @@ Scenario: Edit scheduling setting for planning group
 	| Block scheduling        | default		           |        
 	When I am viewing edit scheduling setting page for planning group 'PlanningGroup 1'
 	And I input scheduling setting name 'PlanningGroupBlockSetting 1 Update'
-	And I open block scheduling panel
 	And I turn off block scheduling setting
 	And I save scheduling setting
 	Then I should see 'PlanningGroupBlockSetting 1 Update' in the scheduling setting list

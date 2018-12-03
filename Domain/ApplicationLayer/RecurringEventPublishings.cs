@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			if (!_initialized)
 			{
 				_allTenantRecurringEventPublisher.RemoveAllPublishings();
-				_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
+				_recurringEventPublisher.PublishMinutely(new SharedMinuteTickEvent());
+				_recurringEventPublisher.PublishHourly(new SharedHourTickEvent());
 				_initialized = true;
 			}
 			else

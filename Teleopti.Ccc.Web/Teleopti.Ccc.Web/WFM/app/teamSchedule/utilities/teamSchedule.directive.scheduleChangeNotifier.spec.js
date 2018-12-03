@@ -2,16 +2,13 @@
 	var $compile,
 		$rootScope,
 		mockSignalRBackendServer = {},
-		teamsToggles,
 		fakeScheduleManagement;
 
 
 	beforeEach(function () {
 		module('wfm.teamSchedule');
 		module(function ($provide) {
-
 			$provide.service('signalRSVC', setupMockSignalRService);
-			$provide.service('teamsToggles', setupMockTeamsTogglesService);
 			$provide.service('ScheduleManagement', function () {
 				fakeScheduleManagement = new setupFakeScheduleManagement();
 				return fakeScheduleManagement;
@@ -19,10 +16,9 @@
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _teamsToggles_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
-		teamsToggles = _teamsToggles_;
 	}));
 
 	it("should reload schedule when schedule changed by others", inject(function () {
@@ -217,20 +213,5 @@
 				]
 			}
 		}
-	}
-
-	function setupMockTeamsTogglesService() {
-
-		toggles = {
-		};
-
-		return {
-			all: function () {
-				return toggles;
-			},
-			setToggle: function (toggle) {
-				toggles[toggle] = true;
-			}
-		};
 	}
 })

@@ -23,10 +23,8 @@ namespace Teleopti.Ccc.DomainTest.Reports
 			_mocks = new MockRepository();
 			_target = new ReportNavigationModel(new List<IReportVisible>
 			{
-				new ReportScheduledTimePerActivityVisible(),
-				new ReportScheduledTimeVsTargetVisible(),
-				new ReportAuditTrailVisible()
-			}, new ScheduleAnalysisProvider());
+				new ReportScheduledTimeVsTargetVisible()
+			}, new ScheduleAnalysisAuditTrailProvider());
 			_licenseActivator = _mocks.DynamicMock<ILicenseActivator>();
 			DefinedLicenseDataFactory.SetLicenseActivator("for test", _licenseActivator);
 		}
@@ -114,9 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Reports
 			}
 			_target = new ReportNavigationModel(new List<IReportVisible>
 			{
-				new ReportScheduledTimePerActivityVisible(),
-				new ReportScheduledTimeVsTargetVisible(),
-				new ReportAuditTrailVisible()
+				new ReportScheduledTimeVsTargetVisible()
 			}, new ScheduleAnalysisAuditTrailProvider());
 			using (_mocks.Playback())
 			{

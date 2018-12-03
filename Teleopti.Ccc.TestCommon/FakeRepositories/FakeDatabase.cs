@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -25,7 +26,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Configuration;
@@ -914,11 +914,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithShiftCategory(Guid? id, string name, string shortName, Color color)
+		{
+			var existingCategory = _shiftCategories.LoadAll().SingleOrDefault(x => x.Id == id);
+			if (existingCategory != null) return this;
+
+			_shiftCategory = new ShiftCategory();
+			_shiftCategory.Description = new Description(name, shortName);
+			_shiftCategory.DisplayColor = color;
+			_shiftCategory.SetId(Guid.NewGuid());
+			_shiftCategories.Add(_shiftCategory);
+
+			return this;
+		}
+
 		public FakeDatabase WithShiftCategory(Guid? id)
 		{
+			var existingCategory = _shiftCategories.LoadAll().SingleOrDefault(x => x.Id == id);
+			if (existingCategory != null) return this;
+
 			_shiftCategory = new ShiftCategory();
 			_shiftCategory.SetId(Guid.NewGuid());
 			_shiftCategories.Add(_shiftCategory);
+
 			return this;
 		}
 
@@ -1402,6 +1420,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personRequest.SetId(Guid.NewGuid());
 			_shiftTradeSetChecksum.SetChecksum(_personRequest.Request);
 
+			_personRequests.Add(_personRequest);
+			return this;
+		}
+
+		public FakeDatabase WithAbsenceRequest(Guid personId, string date)
+		{
+			ensureExists(_absences, null, () => WithAbsence(null, "defaultAbsence", null));
+			_personRequest = new PersonRequestFactory()
+				.CreateAbsenceRequest(_absence,
+					date.Date().ToDateTimePeriod(TimeZoneInfo.Utc)).Parent as IPersonRequest;
+			_personRequest.SetId(Guid.NewGuid());
+			_personRequest.Person.SetId(personId);
 			_personRequests.Add(_personRequest);
 			return this;
 		}

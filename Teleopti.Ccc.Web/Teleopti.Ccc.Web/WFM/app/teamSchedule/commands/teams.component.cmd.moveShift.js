@@ -9,9 +9,9 @@
 			controller: MoveShiftCtrl
 		});
 
-	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', '$translate', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
+	MoveShiftCtrl.$inject = ['$scope', '$element', '$translate', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
 
-	function MoveShiftCtrl($scope, $locale, $element, $translate, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService, serviceDateFormatHelper) {
+	function MoveShiftCtrl($scope, $element, $translate, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		ctrl.label = 'MoveShift';
 		ctrl.processingCommand = false;
@@ -20,7 +20,7 @@
 
 		ctrl.$onInit = function () {
 			ctrl.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
-			ctrl.moveToTime = getDefaultMoveToTime();
+			ctrl.moveToTime = ctrl.containerCtrl.getDate() + " 08:00";
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
 			addTabindexAndFocus();
 			ctrl.updateInvalidAgents(true);
@@ -33,8 +33,7 @@
 				invalidAgents = invalidAgents.concat(ctrl.agentsInDifferentTimeZone);
 			}
 			if (isTimeValid) {
-				var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
-				validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, getMoveToStartTimeMoment(), currentTimezone);
+				validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, getMoveToStartTimeMoment());
 				invalidAgents = invalidAgents.concat(validator.getInvalidPeople());
 			}
 			ctrl.invalidAgents = filterAgentArray(invalidAgents);
@@ -131,10 +130,6 @@
 			});
 		}
 
-		function getDefaultMoveToTime() {
-			return serviceDateFormatHelper.getDateTime(moment(ctrl.containerCtrl.getDate() + " 08:00"));
-		}
-
 		function getMoveToStartTimeMoment() {
 			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
 			return moment.tz(ctrl.moveToTime, currentTimezone)
@@ -156,7 +151,8 @@
 			ctrl.agentsInDifferentTimeZone.splice(0);
 			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
 			ctrl.selectedAgents.forEach(function (agent) {
-				if (currentTimezone != ctrl.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
+				var personSchedule = ctrl.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
+				if (currentTimezone != personSchedule.Timezone.IanaId) {
 					ctrl.agentsInDifferentTimeZone.push(agent);
 				}
 			});

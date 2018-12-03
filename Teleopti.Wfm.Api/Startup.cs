@@ -7,6 +7,7 @@ using NSwag.AspNet.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,7 +18,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Wfm.Api
 {

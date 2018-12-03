@@ -45,19 +45,6 @@
 
 		vm.Id = cookie ? cookie.id : null;
 
-		$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.shouldShowEtl = data;
-
-				$scope.menuItems.push(
-					{
-						text: "ETL",
-						link: "#/ETL",
-						toggle: vm.shouldShowEtl
-					}
-				);
-			});
-
 		$scope.state = {
 			selected: 1
 		};
@@ -77,6 +64,10 @@
 			}, {
 				text: "Hangfire Statistics",
 				link: "#/HangfireStatistics",
+				toggle: true
+			},{
+				text: "ETL",
+				link: "#/ETL",
 				toggle: true
 			}
 		];

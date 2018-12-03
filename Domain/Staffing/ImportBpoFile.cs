@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Staffing

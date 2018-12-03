@@ -1,6 +1,6 @@
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         GridControl GridControl { get; set; }
         IPersonAccountCollection Parent { get; }
         IAccount CurrentAccount { get; }
-        IAccount GetCurrentPersonAccountByDate(DateOnly selectedDate);
         bool CanBold { get; set; }
         void ResetCanBoldPropertyOfChildAdapters();
     }

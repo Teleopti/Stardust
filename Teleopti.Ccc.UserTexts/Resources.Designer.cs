@@ -6884,6 +6884,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click to view schedules.
+        /// </summary>
+        public static string ClickToViewSchedules {
+            get {
+                return ResourceManager.GetString("ClickToViewSchedules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clip  Absence.
         /// </summary>
         public static string ClipAbsence {
@@ -8156,7 +8165,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create Planning Group.
+        ///   Looks up a localized string similar to Create planning group.
         /// </summary>
         public static string CreatePlanningGroup {
             get {
@@ -13106,6 +13115,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filters:.
+        /// </summary>
+        public static string FiltersColon {
+            get {
+                return ResourceManager.GetString("FiltersColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter sites.
         /// </summary>
         public static string FilterSites {
@@ -14700,11 +14718,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A planning group is needed to be able to schedule your agents. Do you want to create a planning group?.
+        ///   Looks up a localized string similar to A planning group is needed to be able to schedule your agents..
         /// </summary>
         public static string HelpCreatePlanningGroup {
             get {
                 return ResourceManager.GetString("HelpCreatePlanningGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A planning period is needed to schedule your agents..
+        /// </summary>
+        public static string HelpCreatePlanningPeriod {
+            get {
+                return ResourceManager.GetString("HelpCreatePlanningPeriod", resourceCulture);
             }
         }
         
@@ -25119,7 +25146,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage users.
+        ///   Looks up a localized string similar to View users.
         /// </summary>
         public static string PeopleManageUsers {
             get {
@@ -27601,7 +27628,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remember me?.
+        ///   Looks up a localized string similar to Remember me.
         /// </summary>
         public static string RememberMe {
             get {
@@ -31033,6 +31060,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search for: site / team / skill / contract.
+        /// </summary>
+        public static string SearchForSiteTeamSkillContract {
+            get {
+                return ResourceManager.GetString("SearchForSiteTeamSkillContract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search name.
         /// </summary>
         public static string SearchHintForName {
@@ -32048,6 +32084,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a skill or skill group.
+        /// </summary>
+        public static string SelectSkillOrGroup {
+            get {
+                return ResourceManager.GetString("SelectSkillOrGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select start date.
         /// </summary>
         public static string SelectStartDate {
@@ -32107,6 +32152,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectTeams {
             get {
                 return ResourceManager.GetString("SelectTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select today.
+        /// </summary>
+        public static string SelectToday {
+            get {
+                return ResourceManager.GetString("SelectToday", resourceCulture);
             }
         }
         
@@ -40719,6 +40773,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouMustHaveAtLeastOneDateInShiftTradeRequest {
             get {
                 return ResourceManager.GetString("YouMustHaveAtLeastOneDateInShiftTradeRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select at least one filter.
+        /// </summary>
+        public static string YouMustSelectAtLeastOneFilter {
+            get {
+                return ResourceManager.GetString("YouMustSelectAtLeastOneFilter", resourceCulture);
             }
         }
         

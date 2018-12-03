@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces
 {
@@ -15,9 +16,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces
 		void SetRecurringDates(IList<DateOnly> recurringDates);
 		TimeSpan SetSuggestListStartTime { get; set; }
 		TimeSpan SetSuggestListEndTime { get; set; }
-		//void RecalculateSelectorPosition();
-		void NotifyMeetingTimeChanged();
-		//void FindPanel();
 		void NotifyMeetingDatesChanged();
 		bool IsRightToLeft { get; }
 		bool TimeFocused { get; set; }

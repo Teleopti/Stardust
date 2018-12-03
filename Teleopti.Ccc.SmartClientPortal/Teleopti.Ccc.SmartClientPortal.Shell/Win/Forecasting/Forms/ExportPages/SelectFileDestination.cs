@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using log4net;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -20,14 +21,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 {
 	public partial class SelectFileDestination : BaseUserControl, IPropertyPageNoRoot<ExportSkillModel>
 	{
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
 		private static readonly ILog log = LogManager.GetLogger(typeof(SelectFileDestination));
 		private ExportSkillModel _stateObj;
 		private readonly ICollection<string> _errorMessages = new List<string>();
 		private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 		private const string dateTimeFormat = "yyyyMMdd";
 		
-		public SelectFileDestination()
+		public SelectFileDestination(IStaffingCalculatorServiceFacade staffingCalculatorService)
 		{
+			_staffingCalculatorService = staffingCalculatorService;
 			InitializeComponent();
 			if (!DesignMode)
 			{
@@ -110,6 +113,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					var skill = _repositoryFactory.CreateSkillRepository(uow).LoadSkill(commandModel.Skill);
+					
+					skill.SkillType.StaffingCalculatorService = _staffingCalculatorService;
 					var skillDays = _repositoryFactory.CreateSkillDayRepository(uow).FindRange(commandModel.Period,
 																							   skill,
 																							   commandModel.Scenario);

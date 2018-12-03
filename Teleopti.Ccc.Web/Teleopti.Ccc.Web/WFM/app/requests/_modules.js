@@ -16,12 +16,20 @@
 			'wfm.multiplesearchinput',
 			'wfm.favoriteSearch',
 			'wfm.organizationPicker',
-			'wfm.ngEnter'
+			'wfm.ngEnter',
+			'wfm.utilities'
 		])
 		.constant('REQUESTS_TAB_NAMES', {
 			absenceAndText: 'absenceAndText',
 			shiftTrade: 'shiftTrade',
 			overtime: 'overtime'
+		})
+		.constant('REQUESTS_TYPES', {
+			TextRequest: 0,
+			AbsenceRequest: 1,
+			ShiftTradeRequest: 2,
+			ShiftExchangeOffer: 3,
+			OvertimeRequest: 4
 		})
 		.run(moduleRun);
 

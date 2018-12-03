@@ -2,8 +2,9 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule').factory('ShiftEditorViewModelFactory', ShiftEditorViewModelFactory);
-	ShiftEditorViewModelFactory.$inject = ['serviceDateFormatHelper', 'Toggle', 'CurrentUserInfo'];
-	function ShiftEditorViewModelFactory(serviceDateFormatHelper, toggleSvc, CurrentUserInfo) {
+	ShiftEditorViewModelFactory.$inject = ['serviceDateFormatHelper', 'CurrentUserInfo', 'colorUtils'];
+
+	function ShiftEditorViewModelFactory(serviceDateFormatHelper, CurrentUserInfo, colorUtils) {
 		var factory = {
 			CreateTimeline: function (date, timezone, timeRange) {
 				return new TimelineViewModel(date, timezone, timeRange);
@@ -19,9 +20,7 @@
 			var currentTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var layers = createShiftLayers(schedule.Projection, date, timezone, currentTimezone);
 
-			var hasUnderlyingSchedules =
-				toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 &&
-				!!schedule.UnderlyingScheduleSummary;
+			var hasUnderlyingSchedules = !!schedule.UnderlyingScheduleSummary;
 			var underlyingScheduleSummary = hasUnderlyingSchedules
 				? getUnderlyingSummarySchedule(schedule.UnderlyingScheduleSummary, date, timezone, currentTimezone)
 				: null;
@@ -145,7 +144,7 @@
 		}
 
 		ShiftLayerViewModel.prototype.UseLighterBorder = function (color) {
-			return useLighterColor(color || this.Color);
+			return colorUtils.getTextColorBasedOnBackgroundColor(color || this.Color) == 'white';
 		};
 
 		function TimelineViewModel(date, timezone, timeRange) {
@@ -173,22 +172,6 @@
 
 		function getTimeSpan(start, end) {
 			return start.format('L LT') + ' - ' + end.format('L LT');
-		}
-
-		function useLighterColor(color) {
-			var getLumi = function (cstring) {
-				var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
-				if (!matched) return null;
-				return (
-					(299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) /
-					1000
-				);
-			};
-			var lightColor = '#00ffff';
-			var darkColor = '#795548';
-			var lumi = getLumi(color);
-			if (!lumi) return false;
-			return Math.abs(lumi - getLumi(lightColor)) > Math.abs(lumi - getLumi(darkColor));
 		}
 
 		function getIntervals(date, timezone, timeRange) {

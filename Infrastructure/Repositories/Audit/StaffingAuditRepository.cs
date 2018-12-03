@@ -22,19 +22,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{
 			var criteria = Session.CreateCriteria(typeof(StaffingAudit), "staffingAudit")
 				.Add(Restrictions.Eq("ActionPerformedById", personId.Id.GetValueOrDefault()))
-				.Add(Restrictions.Ge("TimeStamp", startDate))
-				.Add(Restrictions.Le("TimeStamp", endDate));
+				.Add(Restrictions.Ge("TimeStamp", new DateTime(startDate.Ticks, DateTimeKind.Utc)))
+				.Add(Restrictions.Le("TimeStamp", new DateTime(endDate.AddDays(1).AddMinutes(-1).Ticks, DateTimeKind.Utc)));
 
 			if (!string.IsNullOrEmpty(searchword))
 				criteria = criteria
 					.Add(Restrictions.Or(
-						Restrictions.Like("ImportFileName", $"%{searchword}%"), 
+						Restrictions.Like("ImportFileName", $"%{searchword}%"),
 						Restrictions.Like("BpoName", $"%{searchword}%")
 					));
 
+			criteria.AddOrder(Order.Desc("TimeStamp")).SetMaxResults(100);
+
 			var results = criteria.SetResultTransformer(Transformers.DistinctRootEntity)
-			.List<IStaffingAudit>().ToList();
-		
+				.List<IStaffingAudit>().ToList();
 			return results;
 		}
 

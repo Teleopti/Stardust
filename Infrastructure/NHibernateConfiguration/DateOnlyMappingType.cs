@@ -6,7 +6,8 @@ using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.Type;
 using NHibernate.UserTypes;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {

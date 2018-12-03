@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Configuration;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 {

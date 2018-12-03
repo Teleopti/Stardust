@@ -169,11 +169,6 @@ namespace Teleopti.Analytics.Parameters
 				parameters.Add(sqlParameter);
 			}
 
-			if (!Selector.Report_Show_Utc_In_Report_Selection_When_In_Use_45079 && ProcName == "mart.report_control_time_zone")
-			{
-				ProcName = "mart.report_control_time_zone_without_utc";
-			}
-
 			if (ProcName != "1")
 			{
 				MyData = DataReader.LoadControlData(ProcName, parameters, Component, _userReportParams.CurrentUserGuid, _userReportParams.BusinessUnitCode);

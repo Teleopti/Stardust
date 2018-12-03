@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Domain.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
+	[RemoveMeWithToggle(Toggles.MessageBroker_ScheduleChangedMessagePackaging_79140)]
 	public class ScheduleChangedMessageSender : ITransactionHook
 	{
 		private readonly IMessageSender _messageSender;

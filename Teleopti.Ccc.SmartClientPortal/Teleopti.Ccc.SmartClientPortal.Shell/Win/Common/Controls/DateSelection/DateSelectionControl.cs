@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 {
@@ -23,11 +23,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 			_dateSelectionControls.Add(dateSelectionCalendar1);
 			dateSelectionFromTo1.SetCulture(CultureInfo.CurrentCulture);
 			dateSelectionFromTo1.ValueChanged += dateSelectionFromTo1DateRangeValueChanged;
-		}
-
-		public void AllowValueChangedEvent(bool allow)
-		{
-			if (!allow) dateSelectionFromTo1.ValueChanged -= dateSelectionFromTo1DateRangeValueChanged;
 		}
 
 		  public IList<DateOnlyPeriod> GetCurrentlySelectedDates()

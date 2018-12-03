@@ -21,7 +21,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Global;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {

@@ -2,10 +2,11 @@
 using SharpTestsEx;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -20,8 +21,9 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Requests.Controller;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 {
@@ -39,14 +41,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakeLicenseAvailability LicenseAvailability;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 			isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>(); 
+			isolate.UseTestDouble<FakeLicenseAvailability>().For<ILicenseAvailability>(); 
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true })).For<IScenarioRepository>();
+		}
+
+		[Test]
+		public void ShouldGetLicenseAvailability()
+		{
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebOvertimeRequest);
+			LicenseAvailability.HasLicense(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
+			LicenseAvailability.HasLicense(DefinedLicenseOptionPaths.TeleoptiCccShiftTrader);
+			var result = Target.GetLicenseAvailability();
+
+			result.IsOvertimeRequestEnabled.Should().Be.True();
+			result.IsShiftTradeRequestEnabled.Should().Be.True();
 		}
 
 		[Test]
@@ -97,7 +113,40 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var input = setupData(expactedDate);
 
 			var result = Target.GetRequests(input);
-			result.Requests.First().Shifts.First().ShiftCategory.Should().Not.Be.Null();
+			result.Requests.First().Shifts.First().IsNotScheduled.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGetShiftCategoryName()
+		{
+			var expactedDate = new DateTime(2018, 11, 26);
+			var expactedName = "blabla";
+			var input = setupDataWithShiftCategory(expactedDate, expactedName, "bla", Color.AliceBlue);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.First().ShiftCategory.Name.Should().Be.EqualTo(expactedName);
+		}
+
+		[Test]
+		public void ShouldGetShiftCategoryShortName()
+		{
+			var expactedDate = new DateTime(2018, 11, 26);
+			var expactedShortName = "blabla";
+			var input = setupDataWithShiftCategory(expactedDate, "bla", expactedShortName, Color.AliceBlue);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.First().ShiftCategory.ShortName.Should().Be.EqualTo(expactedShortName);
+		}
+
+		[Test]
+		public void ShouldGetShiftCategoryColor()
+		{
+			var expactedDate = new DateTime(2018, 11, 26);
+			var expactedColor = Color.Aqua;
+			var input = setupDataWithShiftCategory(expactedDate, "bla", "ha", expactedColor);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.First().ShiftCategory.DisplayColor.Should().Be.EqualTo(expactedColor.ToHtml());
 		}
 
 		[Test]
@@ -110,7 +159,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var result = Target.GetRequests(input);
 			result.Requests.First().Shifts.Count().Should().Equals(2);
 		}
-	
+
+		private AllRequestsFormData setupDataWithShiftCategory(DateTime date, string name, string shortName, Color color)
+		{
+			var scenarioId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+
+			CurrentScenario.Current().WithId(scenarioId);
+
+			Database.WithPerson(personId)
+				.WithScenario(scenarioId)
+				.WithTeam(teamId, "myTeam")
+				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithShiftCategory(null, name, shortName, color)
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+				.WithAbsenceRequest(personId, date.ToString());
+
+			setUpPersonRelatedInfo(personId);
+
+			return getInputForm(teamId, date, null);
+		}
+
 		private AllRequestsFormData setupData
 			(DateTime requestStartTime, IEnumerable<DateTimePeriod> schedulesPeriods=null, DateTime? requestEndTime = null)
 		{
@@ -120,30 +190,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 
 			CurrentScenario.Current().WithId(scenarioId);
 
-			Database.WithMultiSchedulesForShiftTradeWorkflow(requestStartTime.AddDays(10), new Skill("must"))
-				.WithPerson(personId)
+			Database.WithPerson(personId)
 				.WithScenario(scenarioId)
 				.WithTeam(teamId, "myTeam")
 				.WithPeriod(DateOnly.MinValue.ToString())
 				.WithSchedules(schedulesPeriods?? new List<DateTimePeriod> { new DateTimePeriod(requestStartTime.AddHours(8).Utc(), requestStartTime.AddHours(17).Utc()) })
 				.WithAbsenceRequest(personId, requestStartTime, requestEndTime.HasValue?requestEndTime.Value:requestStartTime);
 
+			setUpPersonRelatedInfo(personId);
 
+			return getInputForm(teamId, requestStartTime, requestEndTime);
+		}
+
+		private AllRequestsFormData getInputForm(Guid teamId, DateTime start, DateTime? end)
+		{
+			return new AllRequestsFormData
+			{
+				StartDate = new DateOnly(start).AddDays(-1),
+				EndDate = end.HasValue ? new DateOnly(end.Value).AddDays(1) : new DateOnly(start).AddDays(1),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { teamId.ToString() }
+			};
+		}
+
+		private void setUpPersonRelatedInfo(Guid personId)
+		{
 			var person = PersonRepository.Get(personId);
 			setPermissions(person);
 			PersonFinderReadOnlyRepository.Has(person);
 			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = personId });
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-
-			
-			return new AllRequestsFormData
-			{
-				StartDate = new DateOnly(requestStartTime).AddDays(-1),
-				EndDate = requestEndTime.HasValue? new DateOnly(requestEndTime.Value).AddDays(1): new DateOnly(requestStartTime).AddDays(1),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { teamId.ToString() }
-			};
 		}
 
 		private void setPermissions(IPerson person)

@@ -14,7 +14,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
 {

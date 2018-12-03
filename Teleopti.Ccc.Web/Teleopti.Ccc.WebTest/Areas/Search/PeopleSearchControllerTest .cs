@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.WebTest.Areas.Global;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {

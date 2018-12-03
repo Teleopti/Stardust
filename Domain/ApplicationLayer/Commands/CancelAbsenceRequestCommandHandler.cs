@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
-				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.Cancelled));
+				command.ErrorMessages.Add(string.Format(Resources.RequestInvalidStateTransition, personRequest.StatusText, Resources.Cancelled));
 			}
 
 			return false;

@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.IocCommon;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeRepositories;

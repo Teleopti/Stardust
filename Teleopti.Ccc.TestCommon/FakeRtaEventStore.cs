@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using DateOnly = Teleopti.Wfm.Adherence.DateOnly;
 
 namespace Teleopti.Ccc.TestCommon
 {

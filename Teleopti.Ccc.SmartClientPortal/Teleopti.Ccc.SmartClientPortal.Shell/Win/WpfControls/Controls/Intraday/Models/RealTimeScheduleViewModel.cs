@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Models
 {

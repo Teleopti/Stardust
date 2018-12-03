@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -38,19 +38,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorOrganization)))
 					  .SetReadOnly(true)
 					  .List<IPersonSelectorOrganization>();
-		}
-
-		public IList<IPersonSelectorOrganization> GetOrganizationForWeb(DateOnlyPeriod dateOnlyPeriod)
-		{
-
-			return _unitOfWork.Session().CreateSQLQuery(
-					"exec ReadModel.LoadOrganizationForSelector_Web @ondate=:ondate,@enddate=:enddate, @bu=:bu")
-				.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
-				.SetDateOnly("enddate", dateOnlyPeriod.EndDate)
-				.SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
-				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorOrganization)))
-				.SetReadOnly(true)
-				.List<IPersonSelectorOrganization>();
 		}
 
 		public IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnlyPeriod dateOnlyPeriod, PersonSelectorField loadType, Guid optionalColumnId)

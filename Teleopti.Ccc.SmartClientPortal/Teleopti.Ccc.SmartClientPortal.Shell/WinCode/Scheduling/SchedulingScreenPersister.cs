@@ -12,20 +12,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	public class SchedulingScreenPersister : ISchedulingScreenPersister
 	{
 		private readonly IScheduleDictionaryPersister _scheduleDictionaryPersister;
-		private readonly IPersonAccountPersister _personAccountPersister;
 		private readonly IRequestPersister _requestPersister;
 		private readonly IWriteProtectionPersister _writeProtectionPersister;
 		private readonly IWorkflowControlSetPublishDatePersister _workflowControlSetPublishDatePersister;
 
 		public SchedulingScreenPersister(
 			IScheduleDictionaryPersister scheduleDictionaryPersister,
-			IPersonAccountPersister personAccountPersister,
 			IRequestPersister requestPersister,
 			IWriteProtectionPersister writeProtectionPersister,
 			IWorkflowControlSetPublishDatePersister workflowControlSetPublishDatePersister)
 		{
 			_scheduleDictionaryPersister = scheduleDictionaryPersister;
-			_personAccountPersister = personAccountPersister;
 			_requestPersister = requestPersister;
 			_writeProtectionPersister = writeProtectionPersister;
 			_workflowControlSetPublishDatePersister = workflowControlSetPublishDatePersister;
@@ -44,6 +41,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 			return foundConflicts == null || !foundConflicts.Any();
 		}
-
 	}
 }

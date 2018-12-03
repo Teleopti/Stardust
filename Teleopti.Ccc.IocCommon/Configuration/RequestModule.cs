@@ -117,6 +117,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SmartDeltaDoer>().AsSelf().SingleInstance();
 
 			builder.RegisterType<OvertimeRequestAvailability>().As<IOvertimeRequestAvailability>();
+			builder.RegisterType<ShiftTradeRequestAvailability>().As<IShiftTradeRequestAvailability>();
 			builder.RegisterType<LicenseAvailability>().As<ILicenseAvailability>();
 
 			registerType

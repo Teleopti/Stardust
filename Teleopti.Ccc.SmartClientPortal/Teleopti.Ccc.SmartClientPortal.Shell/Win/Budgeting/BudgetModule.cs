@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 using Teleopti.Ccc.WinCode.Budgeting;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {

@@ -458,8 +458,7 @@
 
 			vm.shiftTradeDayViewModels = shiftTradeGridConfiguration.getDayViewModels(
 				requests,
-				vm.shiftTradeRequestDateSummary,
-				vm.isUsingRequestSubmitterTimeZone
+				vm.shiftTradeRequestDateSummary
 			);
 
 			vm.shiftTradeScheduleViewModels = shiftTradeGridConfiguration.getShiftTradeScheduleViewModels(

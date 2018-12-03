@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
@@ -221,11 +222,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public static void EnableScheduleButton(
 			ToolStripDropDownItem schedulerToolStripButton, 
 			ScheduleViewBase scheduleView, 
-			SplitterManagerRestrictionView splitterManagerView, 
 			bool teamLeaderMode)
 		{
 			bool enabled = 
-				isEnabledScheduleButton(scheduleView, splitterManagerView, teamLeaderMode);
+				isEnabledScheduleButton(scheduleView, teamLeaderMode);
 
 			schedulerToolStripButton.Enabled = enabled;
 			enableSubItems(schedulerToolStripButton, enabled);
@@ -233,7 +233,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private static bool isEnabledScheduleButton(
 			ScheduleViewBase scheduleView,
-			SplitterManagerRestrictionView splitterManagerView,
 			bool teamLeaderMode)
 		{
 			if (teamLeaderMode)
@@ -245,32 +244,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (scheduleView.ViewGrid.Selections.Count != 1)
 				return false;
 
-			if (splitterManagerView.ShowRestrictionView)
-			{
-				if (!isCoherentSelection(scheduleView.SelectedSchedules()))
-					return false;
-			}
+			if (scheduleView is AgentRestrictionsDetailView)
+				return false;
 
-			return true;
-		}
-
-		private static bool isCoherentSelection(IEnumerable<IScheduleDay> selectedSchedules)
-		{
-			IScheduleDay scheduleDay = null;
-			var sortedList = selectedSchedules.OrderBy(d => d.DateOnlyAsPeriod.DateOnly).ToList();
-
-			foreach (var selectedSchedule in sortedList)
-			{
-				if (scheduleDay != null)
-				{
-					if (scheduleDay.DateOnlyAsPeriod.DateOnly.Equals(selectedSchedule.DateOnlyAsPeriod.DateOnly)) continue;
-					if (!scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1).Equals(selectedSchedule.DateOnlyAsPeriod.DateOnly))
-					{
-						return false;
-					}
-				}
-				scheduleDay = selectedSchedule;
-			}
 			return true;
 		}
 
@@ -281,7 +257,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var control = subItem as ToolStripItem;
 				if(control != null)
 					control.Enabled = enable;
-
 			}
 		}
 

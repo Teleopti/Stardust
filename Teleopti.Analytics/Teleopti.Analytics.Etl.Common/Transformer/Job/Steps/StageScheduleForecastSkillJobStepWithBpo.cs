@@ -7,7 +7,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
+
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps

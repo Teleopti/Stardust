@@ -24,7 +24,7 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Messaging.Client;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 

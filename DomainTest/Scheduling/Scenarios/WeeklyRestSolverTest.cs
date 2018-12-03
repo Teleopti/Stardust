@@ -16,7 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 {
@@ -91,8 +91,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			agent2.Period(dateOnly).PersonContract.Contract = contract;
 			agent2.AddSchedulePeriod(new SchedulePeriod(dateOnly.AddDays(-7), SchedulePeriodType.Week, 1));
 			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-
-			SchedulerStateHolder.FilterPersons(new[] { agent1, agent2 });
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent1);
 			SchedulerStateHolder.SchedulingResultState.LoadedAgents.Add(agent2);
 			

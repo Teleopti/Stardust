@@ -50,11 +50,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             ViewBase.ShowInformationMessage(text, caption);
         }
 
-        public DialogResult ShowOkCancelMessage(string text, string caption)
-        {
-            return ViewBase.ShowOkCancelMessage(text, caption);
-        }
-
         public DialogResult ShowWarningMessage(string text, string caption)
         {
             return ViewBase.ShowWarningMessage(text, caption);

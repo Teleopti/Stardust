@@ -26,10 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			foreach (var account in allAccounts)
 			{
 #pragma warning disable 618
-				if (_personAbsenceAccountRepository.UnitOfWork != null)
-				{
-					_personAbsenceAccountRepository.UnitOfWork.Remove(account);
-				}
+				_personAbsenceAccountRepository.UnitOfWork?.Remove(account);
 #pragma warning restore 618
 				result.Add(account.EntityClone());
 			}

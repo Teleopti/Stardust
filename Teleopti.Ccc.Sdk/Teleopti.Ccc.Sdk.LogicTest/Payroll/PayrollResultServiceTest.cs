@@ -2,13 +2,14 @@
 using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.PayrollFormatter;
 using Teleopti.Ccc.Sdk.Logic.Payroll;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
 {

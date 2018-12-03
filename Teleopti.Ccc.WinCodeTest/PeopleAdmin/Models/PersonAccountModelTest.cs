@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
@@ -102,23 +102,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void VerifyCanGetPersonCommonName()
         {
             Assert.AreEqual(_person.Name.ToString(), _targetDay2.FullName);
-        }
-
-        [Test]
-        public void VerifyCurrentPersonAccountNullChecks()
-        {
-            SetTargetDayWithoutAccount();
-            IAccount account = _targetDay.GetCurrentPersonAccountByDate(new DateOnly(2005, 5, 2));
-
-            Assert.IsNull(account);
-            Assert.IsNull(_targetDay.AccountDate);
-            Assert.IsNull(_targetDay.Extra);
-            Assert.IsNull(_targetDay.Accrued);
-            Assert.IsNull(_targetDay.BalanceIn);
-            Assert.IsNull(_targetDay.BalanceOut);
-            Assert.IsTrue(_targetDay.CanGray);
-            Assert.IsNull(_targetDay.Used);
-            Assert.IsFalse(_targetDay.CanBold);
         }
 
         [Test]

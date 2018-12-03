@@ -4,6 +4,7 @@ using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -112,10 +113,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			audits.Count().Should().Be(2);
 		}
 
-		[Test, Repeat(1000)]
+		[Test]//, Repeat(1000)]
 		public void ShouldLoadAuditsMatchingBpoName()
 		{
-			
 			var staffingAudit = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "", "filename1", "BPO1");
 			var staffingAudit2 = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "", "filename1", "BPO2");
 			var staffingAudit3 = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "", "filename1", "xxBPO2xx");
@@ -125,10 +125,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(staffingAudit3);
 
 			var rep = new StaffingAuditRepository(CurrUnitOfWork);
-			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-10), DateTime.UtcNow, "BPO2");
-			audits.Count().Should().Be(2);
-			audits.Should().Contain(staffingAudit2);
-			audits.Should().Contain(staffingAudit3);
+
+			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-10), DateTime.UtcNow, "x");
+			audits.Count().Should().Be(1);
+			audits.First().BpoName.Should().Be.EqualTo("xxBPO2xx");
 		}
 
 		[Test]
@@ -163,6 +163,51 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-10), DateTime.UtcNow, "X");
 			audits.Count().Should().Be(0);
+		}
+		
+	[Test]
+		public void ShouldReturnSortedAuditsBasedOnTimestamp()
+		{
+			var now = new DateTime(2018, 11, 29, 3, 0, 0, DateTimeKind.Utc);
+			var rep = new StaffingAuditRepository(CurrUnitOfWork);
+			var staffingAudit1 = new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename", "");
+			staffingAudit1.TimeStamp = new DateTime(2018,11,27,3,0,0,DateTimeKind.Utc);
+			var staffingAudit2 =
+				new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename", "")
+				{
+					TimeStamp =  new DateTime(2018,11,26,3,0,0,DateTimeKind.Utc)
+				};
+			var staffingAudit3 =
+				new StaffingAudit(LoggedOnPerson, StaffingAuditActionConstants.ImportStaffing, "BPO", "filename", "")
+				{
+					TimeStamp = new DateTime(2018, 11, 29, 3, 0, 0, DateTimeKind.Utc)
+				};
+
+			PersistAndRemoveFromUnitOfWork(staffingAudit1);
+			PersistAndRemoveFromUnitOfWork(staffingAudit2);
+			PersistAndRemoveFromUnitOfWork(staffingAudit3);
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5)).ToList();
+			audits.Count.Should().Be(3);
+
+			audits.First().Should().Be(staffingAudit3);
+			audits.Second().Should().Be(staffingAudit1);
+			audits.Third().Should().Be(staffingAudit2);
+		}
+		
+		[Test]
+		public void ShouldOnlyReturnTop100()
+		{
+			var now = new DateTime(2018, 11, 29, 3, 0, 0, DateTimeKind.Utc);
+			var rep = new StaffingAuditRepository(CurrUnitOfWork);
+			foreach (var i in Enumerable.Range(0, 200))
+			{
+				var staffingAudit = CreateAggregateWithCorrectBusinessUnit();
+				staffingAudit.TimeStamp = now;
+				PersistAndRemoveFromUnitOfWork(staffingAudit);
+			}
+
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-200), now.AddDays(100));
+			audits.Count().Should().Be(100);
 		}
 	}
 }

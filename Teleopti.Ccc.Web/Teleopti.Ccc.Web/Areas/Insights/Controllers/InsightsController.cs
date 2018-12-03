@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Insights.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 {

@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {
@@ -208,29 +208,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             using (_mocks.Playback())
             {
                 _target.RemoveGroupPage(groupPage);
-            }
-        }
-
-        [Test]
-        public void ShouldReloadCurrentGroupPage()
-        {
-            IUnitOfWork unitOfWork = _mocks.StrictMock<IUnitOfWork>();
-            IGroupPageRepository groupPageRepository = _mocks.StrictMock<IGroupPageRepository>();
-            IGroupPage groupPage = _mocks.StrictMock<IGroupPage>();
-            IGroupPage groupPageFromDatabase = _mocks.StrictMock<IGroupPage>();
-            Guid id = Guid.NewGuid();
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_repositoryFactory.CreateGroupPageRepository(unitOfWork)).Return(groupPageRepository);
-                Expect.Call(groupPageRepository.Get(id)).Return(groupPageFromDatabase);
-                Expect.Call(groupPage.Id).Return(id).Repeat.Twice();
-            }
-            using (_mocks.Playback())
-            {
-                _target.CurrentGroupPage = groupPage;
-                _target.ReloadCurrentGroupPageFromDatabase(unitOfWork);
-                Assert.AreEqual(groupPageFromDatabase, _target.CurrentGroupPage);
             }
         }
 

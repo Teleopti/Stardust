@@ -13,7 +13,7 @@
                 <input placeholder="Select person" formControlName="personPicker" nz-input [nzAutocomplete]="auto" />
             </nz-input-group>
             <ng-template #suffixIcon>
-                <i class="anticon anticon-search"></i>
+                <i nz-icon type="search"></i>
             </ng-template>
             <nz-autocomplete #auto>
                 <nz-auto-option *ngFor="let person of personList" [nzLabel]="person.FirstName + ' ' + person.LastName" [nzValue]="person">
@@ -35,7 +35,7 @@
     <nz-form-item>
         <nz-form-control>
             <button [disabled]="notValidFields()" type="submit" nz-button nzType="primary">
-                <i class="anticon anticon-search"></i>{{'Search' | translate}}</button>
+                <i nz-icon type="search"></i>{{'Search' | translate}}</button>
         </nz-form-control>
     </nz-form-item>
 </form>

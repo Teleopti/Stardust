@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Backlog
 {
@@ -234,11 +233,6 @@ namespace Teleopti.Ccc.Domain.Backlog
 				return totalWorkTime.Subtract(planned);
 
 			return TimeSpan.Zero;
-		}
-
-		public void ClearTimeOnDate(DateOnly date)
-		{
-			_taskDays[date].ClearTime();
 		}
 
 		public void Open(DateOnly date)

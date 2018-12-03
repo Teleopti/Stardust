@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
+
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Teleopti.Ccc.Domain.Repositories;

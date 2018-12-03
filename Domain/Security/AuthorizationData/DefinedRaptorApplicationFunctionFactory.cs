@@ -111,8 +111,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport, "xxViewPerformanceManagerReport", DefinedRaptorApplicationFunctionForeignIds.ViewPerformanceManagerReport);
 
 			// Online Reports
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport, "xxScheduledTimePerActivityReport", DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport, "xxScheduleAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport, "xxScheduledTimeVsTarget", DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
 
 			// Reports

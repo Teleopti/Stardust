@@ -305,6 +305,7 @@ table.overview {
 	
 	.list-header-content {
 		overflow: hidden;
+	  	min-height: 44px;
 	}
 }
 
@@ -328,10 +329,6 @@ table.overview {
 		padding: 5px 5px 5px 10px;
 		color: $gray054;
 	}
-}
-
-.wfm-btn{
-	transition: none !important;
 }
 
 .wfm-btn-invis-default.active {
@@ -360,6 +357,16 @@ table.overview {
 
 .pp-validation-color {
 	border-color: $red-600 !important;
+}
+
+.selected{
+  transition-property: width, height;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+  .chevron{
+	transition: $transition-timing;
+	transform:rotate(90deg);
+  }
 }
 
 card-panel-header {
@@ -409,25 +416,9 @@ card-panel-content {
 		background-color: $gray012;
 	}
 
-	.fake-radio-button{
-		position: relative;
-		margin: 8px 0px;
-		i{
-			position: absolute;
-			top: -5px;
-			left: 0;
-			color: $gray026 ;
-		}
-		i.check {
-			color: $blue-300  ;
-		}
-		i:before {
-			font-size: 25px!important;
-
-		}
-		span{
-			margin-left: 30px;
-		}
+	.wfm-option-label{
+	  font-weight: bold;
+	  margin-top: 10px;
 	}
 }
 
@@ -483,4 +474,12 @@ card-panel-content {
 
 .manage-schedule-period-picker wfm-date-range-picker{
   z-index: 40;
+}
+
+.plan-group{
+  cursor: pointer;
+}
+
+.plan-group-pp{
+  cursor: pointer;
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 using RowsUpdatedEventArgs = Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading.RowsUpdatedEventArgs;
 

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {

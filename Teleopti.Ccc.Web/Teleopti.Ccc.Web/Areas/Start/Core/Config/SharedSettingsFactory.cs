@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 {

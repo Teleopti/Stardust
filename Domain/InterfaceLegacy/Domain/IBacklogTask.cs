@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void Close(DateOnly date);
 		void SetTimeOnDate(DateOnly date, TimeSpan timeSpan, PlannedTimeTypeEnum timeType);
 		TimeSpan GetEstimatedIncomingBacklogOnDate(DateOnly date);
-		void ClearTimeOnDate(DateOnly date);
 		void Open(DateOnly date);
 		TimeSpan GetOverstaffTimeOnDate(DateOnly date);
 		TimeSpan GetTimeOutsideSLA();

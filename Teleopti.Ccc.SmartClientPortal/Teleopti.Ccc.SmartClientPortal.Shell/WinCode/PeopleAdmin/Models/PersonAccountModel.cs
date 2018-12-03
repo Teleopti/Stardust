@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
@@ -242,12 +242,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         }
 
         public GridControl GridControl { get; set; }
-
-        public IAccount GetCurrentPersonAccountByDate(DateOnly selectedDate)
-        {
-            _currentAccount = _containedEntity.Find(selectedDate).FirstOrDefault();
-            return _currentAccount;
-        }
 
         public bool CanBold { get; set; }
 

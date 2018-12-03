@@ -378,11 +378,11 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.271\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Validation">
@@ -407,6 +407,7 @@
     <Compile Include="Areas\Insights\Core\DataProvider\PowerBiClientFactory.cs" />
     <Compile Include="Areas\Insights\Core\DataProvider\ReportProvider.cs" />
     <Compile Include="Areas\Insights\Core\InsightsAreaModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
     <Compile Include="Areas\Rta\Controllers\PermissionsController.cs" />
@@ -561,7 +562,6 @@
     <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUser.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdAuthentication.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Model\AdminSiteInfoModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
@@ -952,8 +952,6 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftExchangeOfferPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\PersonAccountViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsNavigationProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleFilterViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeBulletinViewModelFactory.cs" />
@@ -1156,7 +1154,6 @@
     <Compile Include="Areas\MyTime\Core\Asm\Mapping\AsmViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\IPushMessageDialoguePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\PushMessageDialoguePersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Message\Mapping\MessageViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\IMessageViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Message\ViewModelFactory\MessageViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Message\DataProvider\IPushMessageProvider.cs" />
@@ -1430,7 +1427,6 @@
     <Content Include="Areas\MyTime\Content\appdownload.html" />
     <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
-    <Content Include="Areas\MyTime\Content\Css\WebChat.css" />
     <Content Include="Areas\MyTime\Content\Images\download-on-the-app-store.png" />
     <Content Include="Areas\MyTime\Content\Images\google-play-badge.png" />
     <Content Include="Areas\MyTime\Content\Scripts\ai.js" />
@@ -1498,6 +1494,8 @@
     <Content Include="Areas\Start\Content\Css\main.min.css" />
     <Content Include="Areas\Start\Content\Images\bg.png" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
+    <Content Include="Content\botchat\botchat.css" />
+    <Content Include="Content\botchat\botchat.js" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.dialog.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.slider.js" />
@@ -1517,7 +1515,6 @@
     </None>
     <Content Include="Content\signalr\jquery.signalR-2.3.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.3.0.min.js" />
-    <Content Include="Content\webchat\webchat.js" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />
@@ -1621,6 +1618,8 @@
     <Content Include="WFM\app\global\skill-group\skillgroup.html" />
     <Content Include="WFM\app\global\skill-group\skillgroup.service.js" />
     <Content Include="WFM\app\global\skill-group\_modules.js" />
+    <Content Include="WFM\app\global\utilities\colorUtils.service.js" />
+    <Content Include="WFM\app\global\utilities\colorUtils.service.spec.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\intraday\components\intradayDateOffset.component.js" />
@@ -1650,6 +1649,7 @@
     <Content Include="WFM\app\requests\html\requests-footer.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text.html" />
     <Content Include="WFM\app\requests\html\requests-absence-person-account-overview.html" />
+    <Content Include="WFM\app\requests\html\requests-absence-name-cell.html" />
     <Content Include="WFM\app\requests\html\requests-absence-and-text-header.html" />
     <Content Include="WFM\app\requests\html\requests-shift-trade-header.html" />
     <Content Include="WFM\app\requests\html\requests.html" />
@@ -1676,6 +1676,8 @@
     <Content Include="WFM\app\requests\requests.uigridFix.js" />
     <Content Include="WFM\app\requests\requests.controller.js" />
     <Content Include="WFM\app\requests\requests.service.permissions.js" />
+    <Content Include="WFM\app\requests\requests.service.requestSchedule.js" />
+    <Content Include="WFM\app\requests\requests.service.requestSchedule.spec.js" />
     <Content Include="WFM\app\requests\_modules.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.js" />
@@ -1917,6 +1919,7 @@
     <Content Include="WFM\css\_grouppage.scss" />
     <Content Include="WFM\css\_organizationpicker.scss" />
     <Content Include="WFM\css\_gamification.scss" />
+    <Content Include="WFM\css\_global.scss" />
     <Content Include="WFM\css\_cascade.scss" />
     <Content Include="WFM\css\_cardpanel.scss" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-function-tree.html" />
@@ -2003,7 +2006,6 @@
     <Content Include="WFM\app\skillPrio\_modules.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapCommon.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.permissions.js" />
-    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.toggles.js" />
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
     <Content Include="WFM\app\forecasting\html\skillCreate.html" />
@@ -2784,10 +2786,6 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.Web.Auth\Teleopti.Ccc.Web.Auth.csproj">
       <Project>{3A34939D-16EC-4485-8931-ABE7105DDC15}</Project>
       <Name>Teleopti.Ccc.Web.Auth</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>

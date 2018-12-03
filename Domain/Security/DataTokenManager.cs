@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Util;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security
 {

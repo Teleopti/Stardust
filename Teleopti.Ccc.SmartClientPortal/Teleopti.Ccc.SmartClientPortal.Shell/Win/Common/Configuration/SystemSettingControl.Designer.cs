@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tsTextBoxFullDayAbsenceRequestStart.Name = "tsTextBoxFullDayAbsenceRequestStart";
 			this.tsTextBoxFullDayAbsenceRequestStart.Size = new System.Drawing.Size(285, 30);
 			this.tsTextBoxFullDayAbsenceRequestStart.TabIndex = 66;
-			this.tsTextBoxFullDayAbsenceRequestStart.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.tsTextBoxFullDayAbsenceRequestStart.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxHeight = 23;
 			this.tsTextBoxFullDayAbsenceRequestStart.TimeSpanBoxWidth = 780;
 			// 
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tsTextBoxFullDayAbsenceRequestEnd.Name = "tsTextBoxFullDayAbsenceRequestEnd";
 			this.tsTextBoxFullDayAbsenceRequestEnd.Size = new System.Drawing.Size(285, 29);
 			this.tsTextBoxFullDayAbsenceRequestEnd.TabIndex = 67;
-			this.tsTextBoxFullDayAbsenceRequestEnd.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.tsTextBoxFullDayAbsenceRequestEnd.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxHeight = 23;
 			this.tsTextBoxFullDayAbsenceRequestEnd.TimeSpanBoxWidth = 780;
 			// 

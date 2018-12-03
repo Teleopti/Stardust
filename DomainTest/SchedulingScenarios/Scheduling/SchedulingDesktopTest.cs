@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("76118 to be fixed")]
+		[Ignore("To be fixed")]
 		public void ShouldConsiderOpenHourAnyDayInPeriodWhenUsingAverageShiftLength([Values(DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday)] DayOfWeek shortOpenHoursDay)
 		{
 			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))

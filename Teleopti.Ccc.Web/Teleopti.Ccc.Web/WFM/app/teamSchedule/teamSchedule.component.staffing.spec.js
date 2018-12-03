@@ -1,14 +1,12 @@
 ﻿describe('[teamSchedule staffing info component tests]', function () {
 
-	var $componentController, $q, $compile, $rootScope, $document, _staffingInfoService, toggles;
+	var $componentController, $q, $compile, $rootScope, $document, _staffingInfoService;
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule', 'ngMaterial', 'ngMaterial-mock'));
 	beforeEach(function () {
 		module(function ($provide) {
-			toggles = new FakeToggles();
 			_staffingInfoService = setUpStaffingInfoService();
 			$provide.service('SkillGroupSvc', setUpSkillService);
 			$provide.service('StaffingInfoService', function () { return _staffingInfoService; });
-			$provide.service('teamsToggles', function () { return toggles; });
 		});
 	});
 	beforeEach(inject(function ($injector) {
@@ -335,17 +333,5 @@
 			}
 		}
 	}
-
-	function FakeToggles() {
-		var _toggles = {};
-		this.set = function (toggles) {
-			_toggles = toggles;
-		}
-		this.all = function () {
-			return _toggles;
-		}
-	}
-
-
 
 });

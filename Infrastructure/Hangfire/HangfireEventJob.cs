@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var tenant = Tenant ?? "";
 			if (tenant.Length > 15)
 				tenant = tenant.Substring(0, 15);
-			var handler = Type.GetType(HandlerTypeName).Name;
+			var handler = Type.GetType(HandlerTypeName)?.Name ?? "";
 			if (handler.Length > 15)
 				handler = handler.Substring(0, 15);
 			var @event = Event.GetType().Name;

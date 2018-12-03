@@ -24,7 +24,7 @@ using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade

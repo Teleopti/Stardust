@@ -15,11 +15,7 @@
 			<favorite-search current-favorite="vm.selectedFavorite" apply-favorite="vm.applyFavorite(currentFavorite)" get-search="vm.getSearch()"
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057" on-close="vm.onSelectedTeamsChanged()" group-pages="vm.availableGroups" selected-groups="vm.selectedGroups"></group-page-picker>
-
-			<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057" sites-and-teams="vm.sitesAndTeams" class="organization-picker-container"
-								 on-open="vm.searchOptions.focusingSearch = false" on-close="vm.onSelectedTeamsChanged()" selected-text="vm.orgPickerSelectedText()"
-								 selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
+			<group-page-picker on-close="vm.onSelectedTeamsChanged()" group-pages="vm.availableGroups" selected-groups="vm.selectedGroups"></group-page-picker>
 
 			<div class="people-search-container inline-block" ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
@@ -61,7 +57,7 @@
 				<tbody>
 					<tr class="weekview-tr" ng-repeat="person in vm.groupWeeks">
 						<td class="weekview-td weekview-person-name">{{person.name}}</td>
-						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.contrastFontColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
+						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.textColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
 							<div class="full-size" ng-click="vm.onCellClick(person.personId, day.date.Date)" ng-class="{'pointer': vm.enableClickableCell}">
 								<div class="summary" title="{{day.summeryTitle}}">{{day.summeryTitle}}</div>
 								<div>{{day.summeryTimeSpan}}</div>

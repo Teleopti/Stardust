@@ -6,6 +6,7 @@
 		.service('UIGridUtilitiesService', [
 			'$filter',
 			'$translate',
+			'$locale',
 			'requestsDefinitions',
 			'requestCommandParamsHolder',
 			'RequestsFilter',
@@ -17,6 +18,7 @@
 	function uiGridUtilitiesService(
 		$filter,
 		$translate,
+		$locale,
 		requestsDefinitions,
 		requestCommandParamsHolder,
 		requestFiltersMgr,
@@ -38,9 +40,9 @@
 			angularTimezone = angularTimezone.replace(':', '');
 			var targetDateTime = moment.tz(dateTime, requestTimezone).toDate();
 			if (displayDateOnly && isUsingRequestSubmitterTimeZone) {
-				return $filter('date')(targetDateTime, 'shortDate', angularTimezone);
+				return $filter('date')(targetDateTime, $locale.DATETIME_FORMATS.shortDate, angularTimezone);
 			} else {
-				return $filter('date')(targetDateTime, 'short', angularTimezone);
+				return $filter('date')(targetDateTime, $locale.DATETIME_FORMATS.short, angularTimezone);
 			}
 		};
 

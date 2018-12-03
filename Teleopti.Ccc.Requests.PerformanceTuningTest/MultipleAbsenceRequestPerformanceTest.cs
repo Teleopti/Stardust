@@ -19,7 +19,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				connection.Open();
 				StardustJobFeedback.SendProgress($"Will run script");
-				var script = HelperScripts.ClearAbsenceRequestRequestPersonRequestOnPeriod;
+				var script = HelperScripts.ClearExistingAbsencesOnperiod;
 				using (var command = new SqlCommand(script, connection))
 				{
 					command.ExecuteNonQuery();
@@ -131,7 +131,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				WithUnitOfWork.Do(() =>
 				{
-					AbsenceRepository.LoadAll();
 					var startTime = new DateTime(2016, 3, 16, 8, 0, 0, DateTimeKind.Utc);
 					var endDateTime = new DateTime(2016,3,16,17,0,0,DateTimeKind.Utc);
 					

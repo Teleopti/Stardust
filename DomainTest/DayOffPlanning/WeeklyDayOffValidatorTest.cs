@@ -2,7 +2,9 @@
 using System.Collections;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 {

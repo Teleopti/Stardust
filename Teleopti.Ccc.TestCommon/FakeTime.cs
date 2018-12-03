@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private readonly MutableNow _now;
 		private readonly IList<FakeTimer> _timers = new List<FakeTimer>();
-		
+
 		public static FakeTime Make(DateTime time)
 		{
 			return new FakeTime(new MutableNow(time));
@@ -32,6 +32,9 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _now.UtcDateTime();
 		}
+
+		public IDisposable StartTimerWithLock(Action callback, object @lock, TimeSpan period) =>
+			StartTimer(_ => callback(), null, period, period);
 
 		private class FakeTimer
 		{
@@ -59,17 +62,9 @@ namespace Teleopti.Ccc.TestCommon
 			_timers.Add(timer);
 			if (dueTime == TimeSpan.Zero)
 				handleCallbackCall();
-			return new GenericDisposable(() =>
-			{
-				_timers.Remove(timer);
-			});
+			return new GenericDisposable(() => { _timers.Remove(timer); });
 		}
 
-		public int ActiveTimers()
-		{
-			return _timers.Count;
-		}
-		
 		public void Passes(TimeSpan time)
 		{
 			var targetTime = _now.UtcDateTime().Add(time);
@@ -93,6 +88,7 @@ namespace Teleopti.Ccc.TestCommon
 						timer.Callback(timer.State);
 						timer.NextDueTimeHasPassed = true;
 					}
+
 					if (_now.UtcDateTime() >= timer.NextPeriodTime)
 					{
 						timer.Callback(timer.State);

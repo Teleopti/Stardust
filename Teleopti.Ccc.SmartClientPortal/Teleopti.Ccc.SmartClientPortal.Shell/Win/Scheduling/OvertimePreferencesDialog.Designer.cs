@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
@@ -224,8 +225,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// fromToTimeDurationPicker1
 			// 
 			this.fromToTimeDurationPicker1.Location = new System.Drawing.Point(284, 63);
-			this.fromToTimeDurationPicker1.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxEndTime")));
-			this.fromToTimeDurationPicker1.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxStartTime")));
+			this.fromToTimeDurationPicker1.MinMaxEndTime = ((MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxEndTime")));
+			this.fromToTimeDurationPicker1.MinMaxStartTime = ((MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxStartTime")));
 			this.fromToTimeDurationPicker1.Name = "fromToTimeDurationPicker1";
 			this.fromToTimeDurationPicker1.Size = new System.Drawing.Size(204, 26);
 			this.fromToTimeDurationPicker1.TabIndex = 18;
@@ -245,8 +246,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// fromToTimePickerSpecifiedPeriod
 			// 
 			this.fromToTimePickerSpecifiedPeriod.Location = new System.Drawing.Point(284, 95);
-			this.fromToTimePickerSpecifiedPeriod.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxEndTime")));
-			this.fromToTimePickerSpecifiedPeriod.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxStartTime")));
+			this.fromToTimePickerSpecifiedPeriod.MinMaxEndTime = ((MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxEndTime")));
+			this.fromToTimePickerSpecifiedPeriod.MinMaxStartTime = ((MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxStartTime")));
 			this.fromToTimePickerSpecifiedPeriod.Name = "fromToTimePickerSpecifiedPeriod";
 			this.fromToTimePickerSpecifiedPeriod.Size = new System.Drawing.Size(204, 26);
 			this.fromToTimePickerSpecifiedPeriod.TabIndex = 24;

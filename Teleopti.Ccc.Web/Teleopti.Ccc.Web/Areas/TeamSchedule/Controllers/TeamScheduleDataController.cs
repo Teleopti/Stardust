@@ -14,7 +14,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IScheduleValidationProvider _validationProvider;
 		private readonly IShiftCategoryProvider _shiftCategoryProvider;
 		private readonly ITeamsProvider _teamProvider;
-		private readonly IToggleManager _toggleManager;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			IScheduleValidationProvider validationProvider,
 			IShiftCategoryProvider shiftCategoryProvider,
 			ITeamsProvider teamProvider,
-			IToggleManager toggleManager,
 			IScenarioRepository scenarioRepository,
 			IOptionalColumnRepository optionalColumnRepository,
 			IDayOffTemplateRepository dayOffTemplateRepository)
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_validationProvider = validationProvider;
 			_shiftCategoryProvider = shiftCategoryProvider;
 			_teamProvider = teamProvider;
-			_toggleManager = toggleManager;
 			_scenarioRepository = scenarioRepository;
 			_optionalColumnRepository = optionalColumnRepository;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
@@ -115,20 +112,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/GetOrganizationWithPeriod")]
 		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime date)
 		{
-			return _toggleManager.IsEnabled(Toggles.Wfm_FetchBusinessHierarchyFromReadModel_45275)
-				? _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)),
-					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
-				: _teamProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)),
+			return _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)),
 					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/GetOrganizationWithPeriod")]
 		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime startDate, DateTime endDate)
 		{
-			return _toggleManager.IsEnabled(Toggles.Wfm_FetchBusinessHierarchyFromReadModel_45275)
-				? _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
-					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
-				: _teamProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
+			return _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
 					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
 		

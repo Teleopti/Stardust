@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay

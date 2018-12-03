@@ -6,7 +6,6 @@ using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;

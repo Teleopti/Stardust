@@ -6,6 +6,7 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -14,7 +15,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Web.Core.Data;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers

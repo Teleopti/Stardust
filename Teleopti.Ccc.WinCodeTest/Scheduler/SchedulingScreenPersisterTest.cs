@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private ISchedulingScreenPersister target;
 		private IScheduleDictionaryPersister scheduleDictionaryPersister;
-		private IPersonAccountPersister personAccountPersister;
 		private IRequestPersister requestPersister;
 		private IWriteProtectionPersister writeProtectionPersister;
 		private IWorkflowControlSetPublishDatePersister _workflowControlSetPublishDatePersister;
@@ -27,12 +26,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[SetUp]
 		public void Setup()
 		{
-			personAccountPersister = MockRepository.GenerateMock<IPersonAccountPersister>();
 			scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionaryPersister>();
 			requestPersister = MockRepository.GenerateMock<IRequestPersister>();
 			writeProtectionPersister = MockRepository.GenerateMock<IWriteProtectionPersister>();
 			_workflowControlSetPublishDatePersister = MockRepository.GenerateMock<IWorkflowControlSetPublishDatePersister>();
-			target = new SchedulingScreenPersister(scheduleDictionaryPersister, personAccountPersister, requestPersister, writeProtectionPersister, _workflowControlSetPublishDatePersister);
+			target = new SchedulingScreenPersister(scheduleDictionaryPersister, requestPersister, writeProtectionPersister, _workflowControlSetPublishDatePersister);
 		}
 
 		[Test]

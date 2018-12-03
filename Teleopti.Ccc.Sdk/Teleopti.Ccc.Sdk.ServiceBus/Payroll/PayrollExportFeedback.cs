@@ -5,7 +5,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Payroll;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Sdk.Logic;
+using DetailLevel = Teleopti.Interfaces.Domain.DetailLevel;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
         private void AddPayrollResultDetail(DetailLevel detailLevel, string message, Exception exception)
         {
-            _payrollResult.AddDetail(new PayrollResultDetail(detailLevel, message, DateTime.UtcNow, exception));
+            _payrollResult.AddDetail(new PayrollResultDetail(detailLevel.Convert(), message, DateTime.UtcNow, exception));
         }
 
 		public void AddPayrollResultDetail(IPayrollResultDetail payrollResultDetail)

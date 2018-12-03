@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Gamification;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

@@ -2,7 +2,7 @@
 	<div class="view-title">
 		<h1>
 			<i class="mdi mdi-calendar"></i> {{'OpenPlansPage' | translate}}</h1>
-		<p>{{'PlansPageSelectPlanningGroup' | translate}}</p>
+		<p ng-if="vm.hasPg()">{{'PlansPageSelectPlanningGroup' | translate}}</p>
 	</div>
 </div>
 <div class="con-row" ng-if="vm.hasPg()">
@@ -22,8 +22,6 @@
 				<div class="con-flex x3">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goForm()">
 						<i class="mdi mdi-plus"></i>{{'NewPlanningGroup' | translate}}</button>
-					<button class="wfm-btn wfm-btn-invis-disabled" ng-click="">
-						<i class="mdi mdi-information-outline"></i>{{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
 		</div>
@@ -34,15 +32,15 @@
 		<div class="line-center">
 			<i class="mdi mdi-information-outline huge-icon line-center"></i>
 			<h2>{{'HelpCreatePlanningGroup' | translate}}</h2>
-			<button class="wfm-btn wfm-btn-primary" ng-click="vm.goForm()">{{'CreatePlanningGroup' | translate}}</button>
+			<button class="wfm-btn wfm-btn-primary" style="margin-top: 30px;" ng-click="vm.goForm()">{{'CreatePlanningGroup' | translate}}</button>
 		</div>
 	</div>
 </div>
 <div class="con-fluid-row">
 	<div class="con-fluid-flex planingperiod-container" ng-repeat="planningGroup in vm.planningGroups | filter:vm.filterName">
-		<div class="list-content material-depth-1 plan-group">
+		<div class="list-content material-depth-1 plan-group" ng-click="vm.goPlanningGroup(planningGroup.Id)">
 			<div class="list-header">
-				<h1>{{planningGroup.Name }}</h1>
+				<h2>{{planningGroup.Name }}</h2>
 				<div ng-show="planningGroup.AgentCount > 0" class="subtext">{{planningGroup.AgentCount}} {{'Agents' | translate}}</div>
 				<div ng-show="planningGroup.AgentCount == 0" class="subtext">
 					<p class="text-danger">{{'NoAgentsWithinPlanningGroup' | translate}}. Please review the filter setting of plan group {{planningGroup.Name }}</p>
@@ -57,7 +55,6 @@
 					<i class="mdi mdi-settings"></i>
 					<md-tooltip>{{'PlanGroupScheduling' | translate}}</md-tooltip>
 				</div>
-				<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="vm.goPlanningGroup(planningGroup.Id)">{{'PlanningPeriods' | translate}}</button>
 			</div>
 		</div>
 	</div>

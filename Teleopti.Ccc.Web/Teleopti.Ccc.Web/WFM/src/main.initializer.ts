@@ -14,6 +14,7 @@ export const mainInitializer = [
 	'$translate',
 	'$locale',
 	'CurrentUserInfo',
+	'SupportEmailService',
 	'Toggle',
 	'areasService',
 	'NoticeService',
@@ -27,6 +28,7 @@ export const mainInitializer = [
 		$translate,
 		$locale,
 		currentUserInfo,
+		supportEmailService,
 		toggleService,
 		areasService,
 		noticeService,
@@ -56,6 +58,7 @@ export const mainInitializer = [
 			areasService.getAreasList(),
 			areasService.getAreasWithPermission(),
 			toggleService.togglesLoaded,
+			supportEmailService.init(),
 			currentUserInfo.initContext().then(userPreferences => $translate.use(userPreferences.Language))
 		]).then(([areasAvailable, permittedAreas]) => {
 			$rootScope.isAuthenticated = true;

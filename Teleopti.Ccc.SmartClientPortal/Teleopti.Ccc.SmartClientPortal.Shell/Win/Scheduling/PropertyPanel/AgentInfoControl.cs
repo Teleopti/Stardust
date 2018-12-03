@@ -24,7 +24,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 {
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
         }
 
 	    public AgentInfoControl(SchedulerGroupPagesProvider groupPagesProvider,
-	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IRestrictionExtractor restrictionExtractor,
+	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, 
 															 ISchedulerStateHolder stateHolder,
 			IEnumerable<IOptionalColumn> optionalColumns)
 		    : this()
@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 		    _container = container;
 		    _dateOnlyPeriod = dateOnlyPeriod;
 		    _requestedPeriod = requestedPeriod;
-		    _restrictionExtractor = restrictionExtractor;
 		    _stateHolder = stateHolder;
 			_optionalColumns = optionalColumns;
+			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 		}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]

@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
 	selector: 'intraday-date-selector',
 	templateUrl: './intraday-date-selector.html'
 })
 export class IntradayDateSelectorComponent {
-	value = '0';
-	constructor() {}
+	@Input()
+	value: string;
 
 	@Output()
 	selected = new EventEmitter<number>();

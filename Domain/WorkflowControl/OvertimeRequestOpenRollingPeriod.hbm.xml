@@ -7,7 +7,7 @@
             extends="OvertimeRequestOpenPeriod"
             discriminator-value="RollingPeriod">
 
-    <component class ="Teleopti.Interfaces.Domain.MinMax`1[System.Int32], Teleopti.Interfaces" name="BetweenDays">
+    <component class ="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.MinMax`1[System.Int32], Teleopti.Ccc.Domain" name="BetweenDays">
       <property name="Minimum" column="DaysMinimum" not-null="false" type="int"/>
       <property name="Maximum" column="DaysMaximum" not-null="false" type="int"/>
     </component>

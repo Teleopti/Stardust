@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if (_contextMenuSkillGrid != null)
 					_contextMenuSkillGrid.Dispose();
+				if (_splitterManager != null)
+					_splitterManager.Dispose();
 			}
 
 			base.Dispose(disposing);

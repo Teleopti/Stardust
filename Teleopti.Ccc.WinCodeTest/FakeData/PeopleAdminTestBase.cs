@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.FakeData
 {
@@ -194,16 +194,6 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
        public static DateOnly DateOnly3
        {
            get { return new DateOnly(2008, 1, 1); }
-       }
-
-       public static DateOnly DateOnlyNotInRange
-       {
-           get { return new DateOnly(1999, 1, 1); }
-       }
-
-       public static DateOnly DateOnlyInRange
-       {
-           get { return new DateOnly(2006, 1, 1); }
        }
     }
 }

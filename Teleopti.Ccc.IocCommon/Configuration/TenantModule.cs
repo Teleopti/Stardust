@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -18,8 +19,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Wfm.Adherence.Domain.Service;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

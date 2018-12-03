@@ -4,7 +4,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 {
@@ -69,12 +69,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 		}
 
         public bool ExpandState { get; set; }
-
-        public ISchedulePeriod GetCurrentPersonPeriodByDate(DateOnly selectedDate)
-        {
-            _currentSchedulePeriod = _containedEntity.SchedulePeriod(selectedDate);
-            return _currentSchedulePeriod;
-        }
 
         public int? DaysOff
         {

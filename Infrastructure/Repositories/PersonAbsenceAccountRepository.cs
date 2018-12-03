@@ -100,6 +100,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personAccountCollection;
 		}
 
+		public IPersonAccountCollection Find(IPerson person, IAbsence absence)
+		{
+			var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
+						.SetFetchMode("accountCollection", FetchMode.Join)
+						.Add(Restrictions.Eq("Person",person))
+						.Add(Restrictions.Eq("Absence",absence))
+						.SetResultTransformer(Transformers.DistinctRootEntity)
+						.List<IPersonAbsenceAccount>();
+			var personAccountCollection = new PersonAccountCollection(person);
+			foreach (var personAbsenceAccount in result)
+			{
+				personAccountCollection.Add(personAbsenceAccount);
+			}
+			return personAccountCollection;
+		}
+
 		private class dic : IDictionary<IPerson, IPersonAccountCollection>
 		{
 			private readonly IDictionary<IPerson, IPersonAccountCollection> _dictionary;

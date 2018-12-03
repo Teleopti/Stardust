@@ -5,6 +5,7 @@ import { ToggleMenuService } from '../../shared/toggle-menu.service';
 
 interface AreaConfig {
 	InternalName?: string;
+	CustomStateName?: string;
 	url?: string;
 	inNewTab?: boolean;
 	icon?: string;
@@ -26,18 +27,19 @@ const GROUPS: AreaGroup[] = [
 		{ InternalName: 'teams', icon: 'mdi mdi-account-multiple' },
 		{ InternalName: 'requests', icon: 'mdi mdi-numeric-9-plus-box-multiple-outline' },
 		{ InternalName: 'staffingModule', icon: 'mdi mdi-account-switch' },
-		{ InternalName: 'intraday', icon: 'mdi mdi-compass-outline' },
+		{ InternalName: 'intraday', icon: 'mdi mdi-compass-outline', CustomStateName: 'intraday.intradayArea' },
 		{ InternalName: 'rta', icon: 'mdi mdi-alarm' }
 	],
 	[{ InternalName: 'seatPlan', icon: 'mdi mdi-tab-unselected' }, { InternalName: 'seatMap', icon: 'mdi mdi-tab' }],
-	[{ InternalName: 'reports', icon: 'mdi mdi-chart-bar' }, { InternalName: 'gamification', icon: 'mdi mdi-trophy' }],
 	[
-		{ InternalName: 'myTime', inNewTab: true, url: '../MyTime', icon: 'mdi mdi-calendar-clock' },
+		{ InternalName: 'reports', icon: 'mdi mdi-chart-bar' },
 		{
 			icon: 'mdi mdi-elevation-rise',
 			InternalName: 'insights'
-		}
-	]
+		},
+		{ InternalName: 'gamification', icon: 'mdi mdi-trophy' }
+	],
+	[{ InternalName: 'myTime', inNewTab: true, url: '../MyTime', icon: 'mdi mdi-calendar-clock' }]
 ];
 
 @Component({
@@ -90,7 +92,11 @@ export class SideMenuComponent implements OnInit {
 	go(event: Event, area: AreaWithConfig) {
 		if (!area.inNewTab) {
 			event.preventDefault();
-			this.$state.go(area.InternalName);
+			if (area.CustomStateName) {
+				this.$state.go(area.CustomStateName, {}, { reload: true });
+			} else {
+				this.$state.go(area.InternalName, {}, { reload: true });
+			}
 		}
 	}
 

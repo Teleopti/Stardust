@@ -19,7 +19,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.EtlTool;
 using Teleopti.Wfm.Administration.Models;
@@ -69,18 +69,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_now = now;
 			_jobHistoryRepository = jobHistoryRepository;
 			_baseConfigurationValidator = baseConfigurationValidator;
-		}
-
-		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
-		public IHttpActionResult ShouldEtlToolBeVisible()
-		{
-			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_74837));
-		}
-
-		[HttpGet, Route("Etl/ShouldTenantNameBeVisible")]
-		public IHttpActionResult ShouldTenantNameBeVisible()
-		{
-			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Tenant_Name_In_History_75767));
 		}
 
 		[TenantUnitOfWork]

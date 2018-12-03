@@ -590,43 +590,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time
         #endregion
 
         #endregion
-
-        //#region Unit Tests
-        ///// <summary>
-        ///// Exposes TryFocusNeighbourControl
-        ///// </summary>
-        ///// <param name="currentControl"></param>
-        ///// <param name="leftControl"></param>
-        ///// <param name="rightControl"></param>
-        ///// <param name="keyPressed"></param>
-        //[System.Diagnostics.Conditional(Globals.UnitTestSymbol)]
-        //public static void ExposeTryFocusNeighbourControl(TextBox currentControl, TextBox leftControl,
-        //    TextBox rightControl, Key keyPressed)
-        //{
-        //    TryFocusNeighbourControl(currentControl, leftControl, rightControl, keyPressed);
-        //}
-        ///// <summary>
-        ///// Exposes the AdjustCarretIndexOrMoveToNeighbour
-        ///// </summary>
-        ///// <param name="current"></param>
-        ///// <param name="neighbour"></param>
-        //[System.Diagnostics.Conditional(Globals.UnitTestSymbol)]
-        //public static void ExposeAdjustCarretIndexOrMoveToNeighbour(TextBox current, TextBox neighbour)
-        //{
-        //    AdjustCarretIndexOrMoveToNeighbour(current, neighbour);
-        //}
-
-        ///// <summary>
-        ///// Exposes the TrimSelectedText method
-        ///// </summary>
-        ///// <param name="textBox"></param>
-        //[System.Diagnostics.Conditional(Globals.UnitTestSymbol)]
-        //public static void ExposeTrimSelectedText(TextBox textBox)
-        //{
-        //    TrimSelectedText(textBox);
-        //}
-
-        //#endregion
     }
 
     #region Routed Event

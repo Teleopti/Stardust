@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private readonly List<GamificationSettingView> _gamificationSettingList = new List<GamificationSettingView>();
 		private readonly List<GamificationSettingView> _gamificationSettingListToBeDeleted;
 		private readonly IDictionary<GamificationSettingRuleSet, string> _gamificationSettingRuleSetList = new Dictionary<GamificationSettingRuleSet, string>();
-		private readonly IToggleManager _toggleManager;
 		private readonly Lazy<GamificationSettingRuleWithDifferentThresholdControl> gamificationSettingRuleWithDifferentThresholdControl;
 		private readonly Lazy<GamificationSettingRuleWithRatioConvertorControl> gamificationSettingRuleWithRatioConvertorControl;
 		private bool isSelectedSettingDirty = false;
@@ -52,9 +51,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			get { return (GamificationSettingRuleSet) comboBoxAdvBadgeSettingRuleSets.SelectedValue; }
 		}
 
-		public GamificationSettingControl(IToggleManager toggleManager)
+		public GamificationSettingControl()
 		{
-			_toggleManager = toggleManager;
 			_gamificationSettingListToBeDeleted = new List<GamificationSettingView>();
 
 			InitializeComponent();

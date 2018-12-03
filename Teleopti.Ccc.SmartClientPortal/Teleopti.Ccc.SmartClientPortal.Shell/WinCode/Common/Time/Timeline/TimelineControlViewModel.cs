@@ -5,9 +5,10 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline
 {

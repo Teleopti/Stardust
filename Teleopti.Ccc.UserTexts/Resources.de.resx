@@ -11729,9 +11729,6 @@ Details:
   <data name="ClearCampaign" xml:space="preserve">
     <value>Kampagne leeren</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Können Sie sich an mich erinnern?</value>
-  </data>
   <data name="AppliedFilters" xml:space="preserve">
     <value>Die Einstellungen wurden für die folgenden Einheiten angewandt:</value>
   </data>

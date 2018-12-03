@@ -2,7 +2,8 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters.DateTimeConverter
 {

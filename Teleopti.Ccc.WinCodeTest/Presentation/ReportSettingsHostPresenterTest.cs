@@ -28,58 +28,8 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
             _target.ShowSettings(new ReportDetail { FunctionPath = "blablabla/my report" });
         }
 
-        [Test]
-        public void ShouldShowSettingsForScheduledTimePerActivityReport()
-        {
-            IReportSettingsScheduledTimePerActivityView settingsScheduledTimePerActivityView = _mocks.StrictMock<IReportSettingsScheduledTimePerActivityView>();
 
-            Expect.Call(_view.GetSettingsForScheduledTimePerActivityReport()).Return(settingsScheduledTimePerActivityView);
-            Expect.Call(() => _view.AddSettingsForScheduledTimePerActivityReport(settingsScheduledTimePerActivityView));
-            Expect.Call(settingsScheduledTimePerActivityView.InitializeSettings);
-            Expect.Call(() => _view.ReportHeaderCheckRightToLeft());
-            Expect.Call(() => _view.SetHeaderText(UserTexts.Resources.ScheduledTimePerActivity));
-			Expect.Call(() => _view.SetReportFunctionCode("functionCode"));
-            Expect.Call(() => _view.Unfold());
-            _mocks.ReplayAll();
-
-            ReportDetail reportDetail = new ReportDetail
-                                            {
-                                                FunctionPath = DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport,
-                                                DisplayName = UserTexts.Resources.ScheduledTimePerActivity,
-												FunctionCode = "functionCode"
-                                            };
-            _target.ShowSettings(reportDetail);
-            _mocks.VerifyAll();
-
-            Assert.IsNotNull(_target.SettingsForScheduledTimePerActivityReport);
-        }
-
-        [Test]
-        public void ShouldShowSettingsForScheduleAuditingReport()
-        {
-            IReportSettingsScheduleAuditingView settingsScheduleAuditingView = _mocks.StrictMock<IReportSettingsScheduleAuditingView>();
-
-            Expect.Call(_view.GetSettingsForScheduleAuditingReport).Return(settingsScheduleAuditingView);
-            Expect.Call(() => _view.AddSettingsForScheduleAuditingReport(settingsScheduleAuditingView));
-            Expect.Call(settingsScheduleAuditingView.InitializeSettings);
-            Expect.Call(() => _view.ReportHeaderCheckRightToLeft());
-			Expect.Call(() => _view.SetReportFunctionCode("functionCode"));
-            Expect.Call(() => _view.SetHeaderText(UserTexts.Resources.ScheduleAuditTrailReport));
-            Expect.Call(() => _view.Unfold());
-            _mocks.ReplayAll();
-
-            ReportDetail reportDetail = new ReportDetail
-            {
-                FunctionPath = DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport,
-                DisplayName = UserTexts.Resources.ScheduleAuditTrailReport,
-				FunctionCode = "functionCode"
-            };
-            _target.ShowSettings(reportDetail);
-            _mocks.VerifyAll();
-
-            Assert.IsNotNull(_target.SettingsForScheduleAuditingReport);
-        }
-
+      
 		[Test]
 		public void ShouldShowSettingsForScheduleTimeVersusTargetTimeReport()
 		{
@@ -124,58 +74,5 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
             _mocks.VerifyAll();
         }
 
-        [Test]
-        public void ShouldReturnModelForScheduledTimePerActivityReport()
-        {
-            IReportSettingsScheduledTimePerActivityView reportSettingsScheduledTimePerActivityView =
-                _mocks.StrictMock<IReportSettingsScheduledTimePerActivityView>();
-
-
-            ReportSettingsHostPresenterForTest target = new ReportSettingsHostPresenterForTest(_view,
-                                                                                               reportSettingsScheduledTimePerActivityView);
-
-            using (_mocks.Record())
-            {
-                Expect.Call(reportSettingsScheduledTimePerActivityView.ScheduleTimePerActivitySettingsModel).Return(new ReportSettingsScheduledTimePerActivityModel());
-            }
-
-            using (_mocks.Playback())
-            {
-                ReportSettingsScheduledTimePerActivityModel model = target.GetModelForScheduledTimePerActivityReport();
-                Assert.IsNotNull(model);
-            }
-        }
-
-        [Test]
-        public void ShouldReturnModelForScheduleAuditingReport()
-        {
-            var reportSettingsScheduleAuditingView = _mocks.StrictMock<IReportSettingsScheduleAuditingView>();
-            var target = new ReportSettingsHostPresenterForTest(_view, reportSettingsScheduleAuditingView);
-
-            using (_mocks.Record())
-            {
-                Expect.Call(reportSettingsScheduleAuditingView.ScheduleAuditingSettingsModel).Return(new ReportSettingsScheduleAuditingModel());
-            }
-
-            using (_mocks.Playback())
-            {
-                var model = target.GetModelForScheduleAuditingReport;
-                Assert.IsNotNull(model);
-            }
-        }
-
-        [Test]
-        public void ShouldReturnNullIfNoModelForScheduledTimePerActivityReportIsAvailable()
-        {
-            ReportSettingsScheduledTimePerActivityModel model = _target.GetModelForScheduledTimePerActivityReport();
-            Assert.IsNull(model);
-        }
-
-        [Test]
-        public void ShouldReturnNullIfNoModelForScheduleAuditingReportIsAvailable()
-        {
-            var model = _target.GetModelForScheduleAuditingReport;
-            Assert.IsNull(model);
-        }
     }
 }

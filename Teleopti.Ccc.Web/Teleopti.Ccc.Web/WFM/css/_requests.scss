@@ -175,15 +175,17 @@ wfm-multiple-search-input {
 	}
 
 	.ui-grid {
+		.ui-grid-row {
+			height: 30px;
+		}
 		.ui-grid-cell-contents.ui-grid-cell-contents {
-			width: 85%;
+			width: 100%;
 			text-align: left;
 			height: 30px;
 			text-overflow: ellipsis;
 		}
-
 		.ui-grid-column-menu-button-last-col {
-			margin-rgiht: 20px;
+			margin-right: 20px;
 		}
 	}
 
@@ -471,6 +473,107 @@ wfm-multiple-search-input {
 		.ui-grid-pinned-container-right .ui-grid-header-viewport {
 			overflow-y: visible;
 			overflow-x: hidden;
+		}
+	}
+
+	.request-absence-name-cell {
+		height: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+
+		i {
+			margin: 0 5px;
+		}
+		i.active {
+			color: $primary;
+		}
+	}
+
+	.requests-schedule-container {
+		position: fixed;
+		background: $white;
+		border: 1px solid $gray-300;
+		border-radius: 4px;
+		z-index: 1000;
+
+		h2 {
+			padding: 5px;
+			height: 30px;
+			border-bottom: 1px solid $gray-300;
+			margin: 0;
+		}
+		.requests-schedule-list {
+			width: 100%;
+			height: calc(100% - 30px);
+			overflow: auto;
+
+			&::-webkit-scrollbar {
+				width: 8px;
+			}
+			&::-webkit-scrollbar-thumb {
+				border-radius: 4px;
+				background: $gray054;
+				box-shadow: none;
+				-webkit-box-shadow: none;
+				-moz-box-shadow: none;
+			}
+		}
+		.requests-shift-row {
+			height: 50px;
+			width: 100%;
+			padding: 5px 0;
+			border-bottom: 1px solid $gray012;
+			display: flex;
+			align-items: center;
+		}
+		.requests-shift-info {
+			width: 120px;
+			height: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+
+			span.block {
+				font-weight: bold;
+				font-size: 13px;
+			}
+			& > span {
+				flex-grow: 1;
+				font-size: 12px;
+			}
+		}
+		.requests-shift-category-cell {
+			width: 23px;
+			height: 23px;
+			border-radius: 4px;
+			padding: 2px;
+			margin: 2px 5px;
+		}
+		.requests-shift-layer-container {
+			width: calc(100% - 120px - 33px);
+			height: 25px;
+			border-radius: 4px;
+			overflow: hidden;
+
+			.mdi-account {
+				left: 3px;
+			}
+		}
+		.dayoff,
+		.layer {
+			height: 100%;
+		}
+
+		.dayoff {
+			width: 100%;
+
+			& + .layer {
+				left: 25% !important;
+				right: 75% !important;
+				width: 50% !important;
+			}
 		}
 	}
 

@@ -15,7 +15,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
+
 using Is = NUnit.Framework.Is;
 
 namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
