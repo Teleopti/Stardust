@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			else
 			{
-				logger.Error($"Only logged for cancelling absence request used to reproduce bug#79030 PersonAbsenceRemover: person = {person.Id + "/" + person.Name}| scheduleDate = {scheduleDate}| personAbsence = {personAbsence.Id}");
+				logger.Error($"Only logged for cancelling absence request used to reproduce bug#79030 PersonAbsenceRemover:{scheduleDate}| {personAbsence.Id}");
 			}
 
 			if (errorMessages.Any())

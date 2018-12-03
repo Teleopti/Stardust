@@ -38,11 +38,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			var scheduleDay = scheduleDays.FirstOrDefault();
 			openForEditsWhenReadOnlyDictionary(scheduleDay);
 			var dic = scheduleDay.Owner;
-			
+
 			var checkResult = checkRules(dic, scheduleDays, newBusinessRuleCollection, scheduleTag);
+
 			if (checkResult != null)
 			{
-				logger.Error($"Only logged for cancelling absence request used to reproduce bug#79030 PersonAbsenceRemover SaveSchedulePartService: person = {scheduleDay.Person.Id + "/" + scheduleDay.Person.Name}|scheduleDays={string.Join(",",scheduleDays.Select(a=>a.ToJson()))}| checkResult= {string.Join(",",checkResult.ToArray())}");
+				logger.Error($"Only logged for cancelling absence request used to reproduce bug#79030 PersonAbsenceRemover SaveSchedulePartService:{string.Join(",",scheduleDays.Select(a=>a.DateOnlyAsPeriod.DateOnly.ToString()).ToArray())}|{string.Join(",",checkResult.ToArray())}");
 				return checkResult;
 			}
 			
