@@ -46,12 +46,13 @@
 					<p>{{ shift.ShiftCategory.Name }}</p>
 				</md-tooltip>
 			</span>
-			<div class="requests-shift-layer-container pull-left inline-block relative">
+			<div class="requests-shift-layer-container pull-left text-center inline-block relative">
 				<div class="dayoff cursor-pointer absolute" ng-if="shift.IsDayOff">
 					<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
 						<p>{{ shift.DayOffName }}</p>
 					</md-tooltip>
 				</div>
+				<span ng-if="shift.IsNotScheduled">{{ 'NotScheduled' | translate }}</span>
 				<div
 					class="layer absolute cursor-pointer"
 					ng-repeat="projection in shift.Periods"
