@@ -3,7 +3,7 @@
 		<i nz-icon type="user" theme="outline" style="font-size: 20px"></i>
 	</div>
 	<ul nz-menu>
-		<li nz-menu-item class="profile-info">{{(userService.getPreferences() | async).UserName}}</li>
+		<li nz-menu-item class="profile-info">{{UserName}}</li>
 		<li nz-menu-divider></li>
 		<li nz-menu-item><label nz-checkbox [(ngModel)]="lowLightFilter" (ngModelChange)="toggleLightFilter($event)">{{'ToggleLowLightFilter'|translate}}</label></li>
 		<li nz-menu-item><label nz-checkbox [(ngModel)]="darkTheme" (ngModelChange)="toggleDarkTheme($event)">{{'ToggleDarkTheme'|translate}}</label></li>

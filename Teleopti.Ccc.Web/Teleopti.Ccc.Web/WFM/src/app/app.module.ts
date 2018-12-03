@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
 import { TranslateLoader, TranslateModule, TranslateParser, TranslateService } from '@ngx-translate/core';
 import { DowngradeableComponent } from '@wfm/types';
+import { NzIconService } from 'ng-zorro-antd';
 import { ApiAccessModule } from './api-access/api-access.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { BootstrapComponent } from './components/bootstrap/bootstrap.component';
@@ -11,12 +12,11 @@ import { CoreModule } from './core/core.module';
 import { UserPreferences, UserService } from './core/services';
 import { CustomTranslateParser, LanguageLoaderFactory, Zorroi18nService } from './core/translation';
 import { InsightsModule } from './insights/insights.module';
+import { IntradayModule } from './intraday/intraday.module';
 import { MenuModule } from './menu/menu.module';
 import { PeopleModule } from './people/people.module';
 import { ReportModule } from './reports/reports.module';
 import { ResetPasswordModule } from './reset-password/reset-password.module';
-import { IntradayModule } from './intraday/intraday.module';
-import { NzIconService } from 'ng-zorro-antd';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -56,7 +56,7 @@ export class AppModule {
 
 	ngDoBootstrap() {
 		this.translate.setDefaultLang('en-GB');
-		this.userService.getPreferences().subscribe({
+		this.userService.preferences$.subscribe({
 			next: (preferences: UserPreferences) => {
 				this.translate.use(preferences.Language);
 				this.zorroi18n.switchLanguage(preferences.Language);

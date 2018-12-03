@@ -39,7 +39,7 @@ export class ScheduleAuditTrailComponent implements OnInit {
 		private auditTrailService: AuditTrailService,
 		private userService: UserService
 	) {
-		this.userService.getPreferences().subscribe({
+		this.userService.preferences$.subscribe({
 			next: prefs => {
 				//this.moment = moment().locale(prefs.DateFormatLocale);
 				this.dateformat = this.moment.localeData().longDateFormat('L');
