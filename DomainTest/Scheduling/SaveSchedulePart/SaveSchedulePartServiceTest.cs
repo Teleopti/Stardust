@@ -12,12 +12,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -69,6 +66,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			var dictionary = MockRepository.GenerateStrictMock<IReadOnlyScheduleDictionary>();
 
 			scheduleDay.Stub(x => x.Owner).Return(dictionary);
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod)
+				.Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 			dictionary.Stub(x => x.Modify(ScheduleModifier.Scheduler, new[] { scheduleDay }, null, null, null)).IgnoreArguments().Return(response);
 			dictionary.Stub(x => x.MakeEditable());
 
