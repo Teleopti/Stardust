@@ -776,9 +776,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateSelectionFromToStudentAvailability.Size = new System.Drawing.Size(187, 116);
 			this.dateSelectionFromToStudentAvailability.TabIndex = 7;
 			this.dateSelectionFromToStudentAvailability.TodayButtonText = "xxToday";
-			this.dateSelectionFromToStudentAvailability.WorkPeriodEnd =
-				new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(2018, 1, 1);
-			this.dateSelectionFromToStudentAvailability.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(2018, 1, 1);
+			this.dateSelectionFromToStudentAvailability.WorkPeriodEnd = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodEnd"))).Date);
+			this.dateSelectionFromToStudentAvailability.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodStart"))).Date);
 			this.dateSelectionFromToStudentAvailability.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToStudentAvailability_Validating);
 			this.dateSelectionFromToStudentAvailability.Validated += new System.EventHandler(this.dateSelectionFromToStudentAvailability_Validated);
 			// 
@@ -799,8 +798,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateSelectionFromToIsOpenStudentAvailability.Size = new System.Drawing.Size(187, 116);
 			this.dateSelectionFromToIsOpenStudentAvailability.TabIndex = 8;
 			this.dateSelectionFromToIsOpenStudentAvailability.TodayButtonText = "xxToday";
-			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(2018, 1, 1);
-			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(2018, 1, 1);
+			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly( ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd"))).Date);
+			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly( ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart"))).Date);
 			this.dateSelectionFromToIsOpenStudentAvailability.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToIsOpenStudentAvailability_Validating);
 			this.dateSelectionFromToIsOpenStudentAvailability.Validated += new System.EventHandler(this.dateSelectionFromToIsOpenStudentAvailability_Validated);
 			// 
@@ -1246,8 +1245,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateSelectionFromToPreferencePeriod.Size = new System.Drawing.Size(187, 115);
 			this.dateSelectionFromToPreferencePeriod.TabIndex = 7;
 			this.dateSelectionFromToPreferencePeriod.TodayButtonText = "xxToday";
-			this.dateSelectionFromToPreferencePeriod.WorkPeriodEnd = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(2018, 1, 1);
-			this.dateSelectionFromToPreferencePeriod.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(2018, 1, 1);
+			this.dateSelectionFromToPreferencePeriod.WorkPeriodEnd = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly( ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodEnd"))).Date);
+			this.dateSelectionFromToPreferencePeriod.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly( ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodStart"))).Date);
 			this.dateSelectionFromToPreferencePeriod.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToPreferencePeriod_Validating);
 			this.dateSelectionFromToPreferencePeriod.Validated += new System.EventHandler(this.dateSelectionFromToPreferencePeriod_Validated);
 			// 

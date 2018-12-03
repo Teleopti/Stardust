@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="500" 
              d:DataContext="{x:Static payroll:SampleData.PayrollResults}"
 				 xmlns:Payroll1="clr-namespace:Teleopti.Ccc.Domain.Payroll;assembly=Teleopti.Ccc.Domain"
-				 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts" Background="White" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+				 xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts" xmlns:Domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces" Background="White" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
 				 xmlns:domain1="clr-namespace:Teleopti.Ccc.Domain.InterfaceLegacy.Domain;assembly=Teleopti.Ccc.Domain"
                  xmlns:payroll="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Payroll"
                  xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers"
