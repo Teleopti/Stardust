@@ -1,3 +1,3 @@
 export class DocumentMock implements Partial<Document> {
-	location = { href: '' } as Location;
+	location = { href: '', hash: '' } as Location;
 }

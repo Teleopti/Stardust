@@ -1,5 +1,6 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -18,7 +19,7 @@ export class ThemeService {
 		return this._theme$;
 	}
 
-	constructor(private http: HttpClient) {
+	constructor(@Inject(DOCUMENT) private document: Document, private http: HttpClient) {
 		this.http
 			.get('../api/Theme')
 			.pipe(map(this.ensureThemeNotNull.bind(this)))
@@ -42,7 +43,6 @@ export class ThemeService {
 		this.http.post('../api/Theme/Change', theme).subscribe();
 	}
 
-	// This can be made platform agnostic
 	applyTheme(themeToApply: ThemeType) {
 		if (this.getCurrentTheme() !== themeToApply) {
 			const waitForThemes = Promise.all([
@@ -54,13 +54,13 @@ export class ThemeService {
 	}
 
 	async applyAngularMatrialTheme(theme: ThemeType) {
-		if (theme === 'dark' && document.documentElement) {
-			document.documentElement.classList.add('angular-theme-dark');
+		if (theme === 'dark' && this.document.documentElement) {
+			this.document.documentElement.classList.add('angular-theme-dark');
 			document.documentElement.classList.remove('angular-theme-classic');
 		}
-		if (theme === 'classic' && document.documentElement) {
-			document.documentElement.classList.add('angular-theme-classic');
-			document.documentElement.classList.remove('angular-theme-dark');
+		if (theme === 'classic' && this.document.documentElement) {
+			this.document.documentElement.classList.add('angular-theme-classic');
+			this.document.documentElement.classList.remove('angular-theme-dark');
 		}
 		return;
 	}
@@ -75,8 +75,8 @@ export class ThemeService {
 
 	replaceCssFile(path: string, id: string, theme: ThemeType) {
 		return new Promise((res, rej) => {
-			const oldNode = document.getElementById(id);
-			const newNode = document.createElement('link');
+			const oldNode = this.document.getElementById(id);
+			const newNode = this.document.createElement('link');
 			newNode.id = id;
 			newNode.rel = 'stylesheet';
 
@@ -87,12 +87,12 @@ export class ThemeService {
 			newNode.setAttribute('href', path);
 			newNode.setAttribute('class', theme);
 
-			document.body.replaceChild(newNode, oldNode);
+			this.document.body.replaceChild(newNode, oldNode);
 		});
 	}
 
 	getCurrentTheme(): ThemeType {
-		const classList = document.documentElement.classList;
+		const classList = this.document.documentElement.classList;
 		if (classList.contains('angular-theme-dark')) {
 			return 'dark';
 		} else if (classList.contains('angular-theme-classic')) {

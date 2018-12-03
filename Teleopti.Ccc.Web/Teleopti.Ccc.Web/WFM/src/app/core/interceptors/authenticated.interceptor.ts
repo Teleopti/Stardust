@@ -27,6 +27,6 @@ export class AuthenticatedInterceptor implements HttpInterceptor {
 	}
 
 	handleUnauthorized() {
-		this.document.location.href = 'Authentication?redirectUrl=' + document.location.hash;
+		this.document.location.href = 'Authentication?redirectUrl=' + this.document.location.hash;
 	}
 }
