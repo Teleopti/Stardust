@@ -87,7 +87,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Domain\DateHelper.cs" />
     <Compile Include="Domain\DetailLevel.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
     <Compile Include="Domain\DateOnly.cs" />

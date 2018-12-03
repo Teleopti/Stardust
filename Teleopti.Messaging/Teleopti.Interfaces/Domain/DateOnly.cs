@@ -70,17 +70,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created date: 2008-10-18
 		/// </remarks>
 		public int Day => _internalDateTime.Day;
-
-		/// <summary>
-		/// Days the of week.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public DayOfWeek DayOfWeek => _internalDateTime.DayOfWeek;
-
+		
 		/// <summary>
 		/// Gets the date.
 		/// </summary>
@@ -96,36 +86,6 @@ namespace Teleopti.Interfaces.Domain
 			set { _internalDateTime = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, value.Kind); }
 		}
 		
-		/// <summary>
-		/// Gets the max value.
-		/// </summary>
-		/// <value>The max value.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public static DateOnly MaxValue => new DateOnly(DateHelper.MaxSmallDateTime);
-
-		/// <summary>
-		/// Gets the min value.
-		/// </summary>
-		/// <value>The min value.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public static DateOnly MinValue => new DateOnly(DateHelper.MinSmallDateTime);
-
-		/// <summary>
-		/// Gets the today. HA HA !!1
-		/// </summary>
-		/// <value>The today.</value>
-		/// <remarks>
-		/// Created by: HenryG
-		/// Created date: 2010-04-20
-		/// </remarks>
-		public static DateOnly Today => new DateOnly(DateTime.Today);
-
 		#region operators
 
 		/// <summary>
