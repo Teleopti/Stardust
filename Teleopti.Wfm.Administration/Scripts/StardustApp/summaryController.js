@@ -54,15 +54,14 @@
 			if (refreshPromise !== null) {
 				$interval.cancel(refreshPromise);
 				refreshPromise = null;
-				window.alert("Your session has expired, please login again");
-			}
+				window.alert("Your session has expired, please login again");}
 		}
 
 		function refresh() {
 			$http.get("./Stardust/Jobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
 				.then(function (response) {
 					vm.RunningJobs = response.data;
-					if (data.length > 0) {
+					if (response.data.length > 0) {
 						vm.anyHistory = true;
 						vm.showHistoryAlert = false;
 					} else {
