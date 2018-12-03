@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulerSplitters));
 			this.lessIntellegentSplitContainerAdvMain = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.lessIntellegentSplitContainerAdvResultGraph = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.chartControlSkillData = new Syncfusion.Windows.Forms.Chart.ChartControl();
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.tabPageAdvValidationAlerts = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.validationAlertsView1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ValidationAlertsView();
 			this.lessIntellegentSplitContainerAdvMainContainer = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
+			this.imageListSkillTypeIcons = new System.Windows.Forms.ImageList(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMain)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMain.Panel1.SuspendLayout();
 			this.lessIntellegentSplitContainerAdvMain.Panel2.SuspendLayout();
@@ -530,6 +532,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.lessIntellegentSplitContainerAdvMainContainer.Text = "lessIntellegentSplitContainerAdvMainContainer";
 			this.lessIntellegentSplitContainerAdvMainContainer.Visible = false;
 			// 
+			// imageListSkillTypeIcons
+			// 
+			this.imageListSkillTypeIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListSkillTypeIcons.ImageStream")));
+			this.imageListSkillTypeIcons.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListSkillTypeIcons.Images.SetKeyName(0, "ccc_SkillEmail_16x16.png");
+			this.imageListSkillTypeIcons.Images.SetKeyName(1, "ccc_Skill_Fax_16x16.png");
+			this.imageListSkillTypeIcons.Images.SetKeyName(2, "ccc_SkillTelephone_16x16.png");
+			this.imageListSkillTypeIcons.Images.SetKeyName(3, "ccc_Skill_Backoffice_16x16.png");
+			this.imageListSkillTypeIcons.Images.SetKeyName(4, "ccc_PeopleScehdulePeriodView.png");
+			this.imageListSkillTypeIcons.Images.SetKeyName(5, "desktop.png");
+			this.imageListSkillTypeIcons.Images.SetKeyName(6, "skill_retail.png");
+			// 
 			// SchedulerSplitters
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -596,5 +610,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvValidationAlerts;
 		private ValidationAlertsView validationAlertsView1;
 		private AgentsNotPossibleToSchedule agentsNotPossibleToSchedule1;
+		private System.Windows.Forms.ImageList imageListSkillTypeIcons;
 	}
 }
