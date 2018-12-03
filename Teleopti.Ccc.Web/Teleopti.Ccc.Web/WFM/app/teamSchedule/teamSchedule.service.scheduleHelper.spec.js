@@ -91,7 +91,7 @@ describe('teamschedule ScheduleHelper Service tests', function () {
 	it('Should get latest previous day overnight shift end moment', function () {
 		scheduleManagementSvc.resetSchedules([schedule1, schedule2, schedule3], scheduleDate);
 		var schedules = scheduleManagementSvc.schedules();
-		var timeString = target.getLatestPreviousDayOvernightShiftEndMoment(schedules, scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId])
+		var timeString = target.getLatestPreviousDayOvernightShiftEndMoment(schedules, scheduleDate, [schedule1.PersonId, schedule2.PersonId])
 			.locale('en')
 			.format('YYYY-MM-DD HH:mm');
 		expect(timeString).toEqual('2016-01-02 05:00');

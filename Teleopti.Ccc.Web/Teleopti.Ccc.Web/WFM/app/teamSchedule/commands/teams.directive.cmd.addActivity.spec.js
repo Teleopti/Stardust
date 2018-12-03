@@ -3,7 +3,6 @@
 
 	var $compile,
 		$rootScope,
-		$httpBackend,
 		utility,
 		fakeActivityService,
 		fakeCommandCheckService,
@@ -45,12 +44,11 @@
 
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
-		$httpBackend = _$httpBackend_;
 		utility = _UtilityService_;
 		personSelection = PersonSelection;
 		scheduleManagement = ScheduleManagement;
 
-		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
+		_$httpBackend_.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
 	it('add-activity should get date from container', function () {
@@ -493,6 +491,7 @@
 			expect(activityData).not.toBeNull();
 			expect(activityData.PersonDates).toEqual([{ Date: '2018-08-01', PersonId: 'agent1' }]);
 			expect(activityData.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
+			expect(activityData.ActivityType).toEqual(1);
 			expect(activityData.StartTime).toEqual('2018-08-01T08:00');
 			expect(activityData.EndTime).toEqual('2018-08-01T16:00');
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(result.commandControl.trackId);
@@ -530,6 +529,37 @@
 			expect(activityData.StartTime).toEqual('2018-08-01T14:00');
 			expect(activityData.EndTime).toEqual('2018-08-01T22:00');
 		});
+
+		it('should apply with correct activity type for adding personal activity ', function () {
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-08-01',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: []
+				}]
+				, '2018-08-01', 'Asia/Hong_Kong');
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-08-01');
+
+			var result = setUp('2018-08-01', 'Asia/Hong_Kong', 'AddPersonalActivity');
+			result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
+
+			setTime(result.container, 8, 16);
+
+			var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+			applyButton.triggerHandler('click');
+
+			result.scope.$apply();
+			var activityData = fakeActivityService.getAddActivityCalledWith();
+			expect(activityData.ActivityType).toEqual(2);
+		
+		});
 	}
 
 	commonTestsInDifferentLocale();
@@ -559,7 +589,7 @@
 	});
 
 
-	function setUp(inputDate, timezone) {
+	function setUp(inputDate, timezone, commandKey) {
 		var date;
 		var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
@@ -583,7 +613,7 @@
 
 		var vm = container.isolateScope().vm;
 		vm.setReady(true);
-		vm.setActiveCmd('AddActivity');
+		vm.setActiveCmd(commandKey || 'AddActivity');
 		vm.scheduleManagementSvc = scheduleManagement;
 		scope.$apply();
 

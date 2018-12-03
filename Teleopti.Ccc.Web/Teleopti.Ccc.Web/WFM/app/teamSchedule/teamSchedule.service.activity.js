@@ -23,7 +23,6 @@
 		this.fetchAvailableActivities = fetchAvailableActivities;
 		this.fetchAvailableDefinitionSets = fetchAvailableDefinitionSets;
 		this.addActivity = addActivity;
-		this.addPersonalActivity = addPersonalActivity;
 		this.addOvertimeActivity = addOvertimeActivity;
 		this.removeActivity = removeActivity;
 		this.moveActivity = moveActivity;
@@ -87,18 +86,17 @@
 		}
 
 		function addActivity(input) {
+			var url = '';
+			switch (input.ActivityType) {
+				case 1:
+					url = addActivityUrl;
+					break;
+				case 2:
+					url = addPersonalActivityUrl;
+					break;
+			}
 			var deferred = $q.defer();
-			$http.post(addActivityUrl, input).then(function (data) {
-				deferred.resolve(data);
-			}, function (error) {
-				deferred.reject(error);
-			});
-			return deferred.promise;
-		}
-
-		function addPersonalActivity(input) {
-			var deferred = $q.defer();
-			$http.post(addPersonalActivityUrl, input).then(function (data) {
+			$http.post(url, input).then(function (data) {
 				deferred.resolve(data);
 			}, function (error) {
 				deferred.reject(error);

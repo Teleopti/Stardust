@@ -6,7 +6,9 @@
 	function addActivityDirective() {
 		return {
 			restrict: 'E',
-			scope: {},
+			scope: {
+				command: '<'
+			},
 			controller: addActivityCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
@@ -15,9 +17,9 @@
 		};
 	}
 
-	addActivityCtrl.$inject = ['$scope', '$translate', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
+	addActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
 
-	function addActivityCtrl($scope, $translate, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
+	function addActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -104,8 +106,8 @@
 							vm.getActionCb(vm.label)(vm.trackId, personIds);
 						}
 						teamScheduleNotificationService.reportActionResult({
-							success: $translate.instant('SuccessfulMessageForAddingActivity'),
-							warning: $translate.instant('PartialSuccessMessageForAddingActivity')
+							success: vm.command.successfulMessage,
+							warning: vm.command.warningMessage
 						},
 							vm.selectedAgents.map(function (x) {
 								return {
@@ -137,7 +139,7 @@
 				StartTime: vm.convertTime(getDateTimeInTimeZone(vm.timeRange.startTime)),
 				EndTime: vm.convertTime(getDateTimeInTimeZone(vm.timeRange.endTime)),
 				ActivityId: vm.selectedActivityId,
-				ActivityType: 1,
+				ActivityType: vm.command.activityType,
 				TrackedCommandInfo: {
 					TrackId: vm.trackId
 				}

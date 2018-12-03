@@ -2083,7 +2083,6 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addAbsence.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addActivity.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsTimeRangePicker.tpl.html" />
-    <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addPersonalActivity.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.commandCheck.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.settings.html" />
     <Content Include="WFM\app\teamSchedule\html\dayViewSchedule.html" />
@@ -2105,8 +2104,6 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addAbsence.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addActivity.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addActivity.spec.js" />
-    <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addPersonalActivity.js" />
-    <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addPersonalActivity.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.commandCheck.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.moveActivity.js" />

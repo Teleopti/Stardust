@@ -697,13 +697,12 @@ describe('#belongs to date decider service with special locale #', function () {
 					Date: '2016-07-02',
 					Projections: [
 						{
-							Start: '2016-07-02 08:00',
-							End: '2016-07-02 17:00',
-							Minutes: 540
+							StartMoment: moment.tz('2016-07-02 08:00', currentTimezone),
+							EndMoment: moment.tz('2016-07-02 17:00', currentTimezone)
 						}],
 					ProjectionTimeRange: {
-						Start: '2016-07-02 08:00',
-						End: '2016-07-02 17:00'
+						StartMoment: moment.tz('2016-07-02 08:00', currentTimezone),
+						EndMoment: moment.tz('2016-07-02 17:00', currentTimezone)
 					}
 				}]
 		};
