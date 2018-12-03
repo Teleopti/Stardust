@@ -40,36 +40,6 @@ namespace Teleopti.Interfaces.Domain
 		{
 
 		}
-
-		/// <summary>
-		/// Gets the year.
-		/// </summary>
-		/// <value>The year.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public int Year => _internalDateTime.Year;
-
-		/// <summary>
-		/// Gets the month.
-		/// </summary>
-		/// <value>The month.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public int Month => _internalDateTime.Month;
-
-		/// <summary>
-		/// Gets the day.
-		/// </summary>
-		/// <value>The day.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public int Day => _internalDateTime.Day;
 		
 		/// <summary>
 		/// Gets the date.
@@ -299,20 +269,7 @@ namespace Teleopti.Interfaces.Domain
 		{
 			return _internalDateTime.ToString();
 		}
-
-		/// <summary>
-		/// Toes the short date string.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2009-03-21
-		/// </remarks>
-		public string ToShortDateString()
-		{
-			return _internalDateTime.ToShortDateString();
-		}
-
+		
 		/// <summary>
 		/// Toes the short date string using the given culture.
 		/// </summary>
