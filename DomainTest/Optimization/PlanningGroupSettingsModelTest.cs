@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public IFetchPlanningGroupSettingsModel Target;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 
+
 		[Test]
 		public void ShouldIncludeContractFilterWhenFetching()
 		{

@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				MaxFullWeekendsOff = planningGroupSettings.FullWeekendsOff.Maximum,
 				MinWeekendDaysOff = planningGroupSettings.WeekendDaysOff.Minimum,
 				MaxWeekendDaysOff = planningGroupSettings.WeekendDaysOff.Maximum,
+				PlanningGroupName = ((PlanningGroup)planningGroupSettings.Parent).Name
 			};
 		}
 	}

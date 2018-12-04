@@ -32,5 +32,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public int MinWeekendDaysOff { get; set; }
 		public int MaxWeekendDaysOff { get; set; }
 		public int PreferencePercent { get; set; }
+		public string PlanningGroupName { get; set; }
 	}
 }
