@@ -98,8 +98,8 @@ WFM_Intraday_Redesign_77214 = DEV
 WfmStaffing_AddOvertime_42524 = RC
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
 Wfm_Stardust_EnableScaleout_77366 = true
-Wfm_AuditTrail_StaffingAuditTrail_78125 = false
-Wfm_AuditTrail_GenericAuditTrail_74938 = false
+Wfm_AuditTrail_StaffingAuditTrail_78125 = RC
+Wfm_AuditTrail_GenericAuditTrail_74938 = RC
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
 
 # Squids #

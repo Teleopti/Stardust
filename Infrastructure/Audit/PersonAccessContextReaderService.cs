@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 
 		
 
-		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
+		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate, string searchword)
 		{
-			var personAccessAudit = _personAccessAuditRepository.LoadAudits(personId, startDate, endDate);
+			var personAccessAudit = _personAccessAuditRepository.LoadAudits(personId, startDate, endDate, searchword);
 			return getAuditServiceModel(personAccessAudit);
 		}
 

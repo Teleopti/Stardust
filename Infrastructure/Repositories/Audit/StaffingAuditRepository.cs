@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		}
 
 		public IEnumerable<IStaffingAudit> LoadAudits(IPerson personId, DateTime startDate,
-			DateTime endDate, string searchword = "")
+			DateTime endDate, string searchword)
 		{
 			var criteria = Session.CreateCriteria(typeof(StaffingAudit), "staffingAudit")
 				.Add(Restrictions.Eq("ActionPerformedById", personId.Id.GetValueOrDefault()))

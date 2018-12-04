@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/reports/getauditlogs")]
-		public virtual IHttpActionResult GetStaffingAudit(Guid personId, DateTime startDate, DateTime endDate)
+		public virtual IHttpActionResult GetStaffingAudit(Guid personId, DateTime startDate, DateTime endDate, string searchword = "")
 		{
-			return Ok(new { AuditEntries = _auditAggregatorService.Load(personId,startDate,endDate) });
+			return Ok(new { AuditEntries = _auditAggregatorService.Load(personId,startDate,endDate, searchword) });
 		}
 
 	}

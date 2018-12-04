@@ -85,12 +85,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personAccess1);
 			PersistAndRemoveFromUnitOfWork(personAccess2);
 			PersistAndRemoveFromUnitOfWork(personAccess3);
-			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow);
+			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow, "");
 			audits.Count().Should().Be(3);
 
 			rep.PurgeOldAudits(DateTime.UtcNow.AddDays(-60));
 
-			audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow).ToList();
+			audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow, "").ToList();
 			audits.Count().Should().Be(2);
 		}
 
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personAccess3.TimeStamp = new DateTime(2018, 10, 16, 12, 0, 0, DateTimeKind.Utc);
 			PersistAndRemoveFromUnitOfWork(personAccess3);
 
-			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5)).ToList();
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5), "").ToList();
 			audits.Count.Should().Be(3);
 			audits.First().TimeStamp.Should().Be(personAccess3.TimeStamp);
 			audits.Second().TimeStamp.Should().Be(personAccess1.TimeStamp);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(personAccess);
 			}
 
-			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-200), now.AddDays(100));
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-200), now.AddDays(100), "");
 			audits.Count().Should().Be(100);
 		}
 
