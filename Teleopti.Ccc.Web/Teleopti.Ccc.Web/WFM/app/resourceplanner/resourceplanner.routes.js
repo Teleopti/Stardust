@@ -84,7 +84,7 @@
 			params: {
 				groupId: ''
 			},
-			url: '/planninggroup/:groupId/setting/overview',
+			url: '/planninggroup/:groupId/settings',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',
 			controller: 'planningGroupSettingOverviewController as vm',
 			resolve: {
@@ -99,6 +99,14 @@
 					});
 				}]
 			}
+		}).state('resourceplanner.newsetting', {
+			params: {
+				groupId: '',
+				groupName: ''
+			},
+			url: '/planninggroup/:groupId/settings',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',
+			controller: 'planningGroupSettingEditController as vm'
 		}).state('resourceplanner.editsetting', {
 			params: {
 				filterId: '',

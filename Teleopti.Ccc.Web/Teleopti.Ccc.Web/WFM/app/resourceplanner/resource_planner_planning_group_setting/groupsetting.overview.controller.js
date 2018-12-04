@@ -98,8 +98,9 @@
 		}
 
 		function goCreateSchedulingSetting() {
-			$state.go('resourceplanner.editsetting', {
+			$state.go('resourceplanner.newsetting', {
 				groupId: $stateParams.groupId,
+				groupName: vm.planningGroupName
 			});
 		}
 

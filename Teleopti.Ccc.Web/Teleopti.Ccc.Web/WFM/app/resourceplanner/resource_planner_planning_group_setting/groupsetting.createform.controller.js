@@ -11,7 +11,7 @@
         var vm = this;
 
         var filterId = $stateParams.filterId ? $stateParams.filterId : null;
-        vm.isEdit = $stateParams.filterId ? true : false;
+        vm.isEdit = !!filterId;
         vm.settingInfo = {
             BlockSameShift: false,
             BlockSameShiftCategory: false,
@@ -33,6 +33,9 @@
             Name: "",
             PlanningGroupId: $stateParams.groupId
         };
+        if(!vm.isEdit){
+			vm.planningGroupName = $stateParams.groupName;
+		}
         
         vm.blockFinderTypeOptions = [
 			"Off",
@@ -69,9 +72,9 @@
         checkIfEditDefaultRule();
 
         function checkIfEditDefaultRule() {
-            if (!filterId)
+            if (!vm.isEdit)
                 return vm.settingInfo;
-            return PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
+            return PlanGroupSettingService.getSetting({ id: filterId})
                 .$promise.then(function (result) {
 					vm.settingInfo.Default = result.Default;
                     vm.settingInfo.Name = result.Name;
