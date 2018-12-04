@@ -21,9 +21,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Requests.Controller;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
@@ -100,8 +98,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldGetBelongsToDate()
 		{
-			var expactedDate = new DateTime(2018, 11, 26);
-			var input = setupData(expactedDate);
+			var expactedDate = new DateTime(2018, 11, 26, 8, 0, 0, DateTimeKind.Utc);
+			var input = setupData(expactedDate, new List<DateTimePeriod>{new DateTimePeriod(expactedDate, expactedDate.AddHours(9))});
 
 			var result = Target.GetRequests(input);
 			result.Requests.First().Shifts.First().BelongsToDate.Should().Be.EqualTo(expactedDate);
@@ -110,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldGetShiftCategory()
 		{
-			var expactedDate = new DateTime(2018, 11, 26, 0, 0, 0, DateTimeKind.Utc);
+			var expactedDate = new DateTime(2018, 11, 26);
 			var input = setupData(expactedDate);
 
 			var result = Target.GetRequests(input);
