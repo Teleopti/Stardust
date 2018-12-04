@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('planningGroupSettingEditController', function() {
+describe('planningGroupSettingEditController', function() {
 	var $httpBackend,
 		$controller,
 		$state,
