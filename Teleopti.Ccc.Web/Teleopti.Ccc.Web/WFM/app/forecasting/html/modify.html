@@ -202,10 +202,10 @@
 					</div>
 				</div>
 				<div class="con-footer">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.reforecastConfirmation = vm.changesMade; vm.forecastModal = !vm.changesMade;" ng-if="vm.selectedWorkload.SkillType.DoDisplayData">
+					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.reforecastConfirmation = vm.changesMade; vm.forecastModal = !vm.changesMade; vm.confirmDiscardDialog = false; vm.closeConfirmation=false;" ng-if="vm.selectedWorkload.SkillType.DoDisplayData">
 						{{'ForecastDo'|translate}}
 					</button>
-					<button class="wfm-btn wfm-btn-invis-default" ng-if="vm.changesMade && vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.confirmDiscardDialog = true;">
+					<button class="wfm-btn wfm-btn-invis-default" ng-if="vm.changesMade && vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.confirmDiscardDialog = true; vm.reforecastConfirmation=false; vm.closeConfirmation=false;">
 						{{'Discard' | translate}}
 					</button>
 					<button class="wfm-btn wfm-btn-invis-primary" ng-if="vm.changesMade && vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.applyWipToScenario()">
@@ -320,14 +320,13 @@
 
 <section>
 	<div ng-cloak>
-		<div ng-cloak ng-show="vm.confirmDiscardDialog">
+		<div ng-cloak ng-show="vm.confirmDiscardDialog && !vm.reforecastConfirmation && !vm.closeConfirmation">
 			<div class="modalbg">
 				<div class="dialog-mini material-depth-1">
 					<div class="modal-inner-content-forecast">
 						<h3>{{'ThisScenarioHasChanges' | translate}}</h3>
 						{{'ConfirmDiscardAllModifications' | translate}}
 					</div>
-
 					<div class="modal-actions">
 						<aside>
 							<button type="button" focus-me="vm.closeConfirmation" id="confirmDiscardButton" ng-click="vm.changesMade=false; vm.confirmDiscardDialog = false; vm.getWorkloadForecastData(true);
@@ -348,7 +347,7 @@
 
 <section>
 	<div ng-cloak>
-		<div ng-cloak ng-show="vm.closeConfirmation">
+		<div ng-cloak ng-show="vm.closeConfirmation && !vm.confirmDiscardDialog && !vm.reforecastConfirmation">
 			<div class="modalbg">
 				<div class="dialog-mini material-depth-1">
 					<div class="modal-inner-content-forecast">
@@ -405,7 +404,7 @@
 
 <section>
 	<div ng-cloak>
-		<div ng-cloak ng-show="vm.reforecastConfirmation">
+		<div ng-cloak ng-show="vm.reforecastConfirmation && !vm.confirmDiscardDialog && !vm.closeConfirmation">
 			<div class="modalbg">
 				<div class="dialog-mini material-depth-1">
 					<div class="modal-inner-content-forecast">
