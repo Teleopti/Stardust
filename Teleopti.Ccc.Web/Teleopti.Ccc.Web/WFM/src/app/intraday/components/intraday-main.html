@@ -23,13 +23,17 @@
 					</div>
 				</div>
 				<div class="con-flex">
-					<intraday-date-selector [value]="selectedOffset + ''" (selected)="onSelectDate($event)">
+					<intraday-date-selector
+						[hidden]="!selectedSkillOrGroup"
+						[value]="selectedOffset + ''"
+						(selected)="onSelectDate($event)"
+					>
 					</intraday-date-selector>
 				</div>
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
-					<div *ngIf="displayDate && displayDate.length > 0">
+					<div *ngIf="displayDate && displayDate.length > 0" [hidden]="!selectedSkillOrGroup">
 						<h2>{{ displayDate }} <i nz-icon [hidden]="!loading" type="loading"></i>&nbsp;</h2>
 					</div>
 					<div
@@ -98,7 +102,7 @@
 					<app-intraday-chart [chartData]="chartData" [chartType]="selectedChartType"></app-intraday-chart>
 				</div>
 			</div>
-			<div class="con-row">
+			<div class="con-row" [hidden]="!selectedSkillOrGroup">
 				<div class="con-flex"></div>
 				<div class="con-flex">
 					<intraday-table [chartType]="selectedChartType" [tableData]="summaryData"></intraday-table>
