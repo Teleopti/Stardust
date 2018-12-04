@@ -35,7 +35,6 @@ export class TableOptionsMenuComponent {
 	exportToCsv() {
 		if (!this.enableCsvExport) return;
 		if (this.data.length === 0) return this.message.warning('No data to export');
-		console.log('export', this.data);
 		const csvString = Papa.unparse(this.data);
 		const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
 		FileSaver.saveAs(blob, 'export.csv');

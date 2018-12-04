@@ -199,8 +199,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	updateData = (columnsOnly: boolean = true) => {
 		this.setPersistedData();
-		console.log('this.selectedChartType', this.selectedChartType);
-
 		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
 		}
@@ -214,9 +212,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			};
 		}
 		if (this.selectedChartType === 'traffic') {
-			console.log('RÖW');
-			console.log('selectedSkill.Skills.length', selectedSkill.Skills.length);
-
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getTrafficData(selectedSkill.Id, this.selectedOffset).subscribe(data => {

@@ -94,7 +94,6 @@ export class GeneralAuditTrailComponent implements OnInit {
 	}
 
 	submitForm(): void {
-		console.log(this.searchForm.value.changedRange[0]);
 		this.auditTrailService
 			.getStaffingAuditTrail(
 				this.searchForm.value.personPicker.Id,
