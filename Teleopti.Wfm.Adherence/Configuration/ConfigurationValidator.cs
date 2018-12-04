@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Wfm.Adherence.Domain.Service;
 
-namespace Teleopti.Wfm.Adherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Configuration
 {
 	public class ConfigurationValidator
 	{

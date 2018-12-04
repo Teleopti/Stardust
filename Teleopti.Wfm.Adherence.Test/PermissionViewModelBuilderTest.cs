@@ -5,7 +5,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 
-namespace Teleopti.Wfm.Adherence.Test.Common
+namespace Teleopti.Wfm.Adherence.Test
 {
 	[DomainTest]
 	[TestFixture]

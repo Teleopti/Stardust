@@ -43,7 +43,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-23")
 				.WithAssignedActivity("2018-08-23 08:00", "2018-08-23 17:00")
-				.WithHistoricalStateChange("2018-08-23 08:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2018-08-23 08:00", Adherence.Configuration.Adherence.In);
 			Now.Is("2018-08-24 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -61,7 +61,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-23")
 				.WithAssignedActivity("2018-08-23 08:00", "2018-08-23 17:00")
-				.WithHistoricalStateChange("2018-08-23 08:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2018-08-23 08:00", Adherence.Configuration.Adherence.In);
 			Now.Is("2018-08-24 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -79,8 +79,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-17")
 				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
-				.WithHistoricalStateChange("2018-08-17 10:00", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2018-08-17 15:00", Domain.Configuration.Adherence.Out);
+				.WithHistoricalStateChange("2018-08-17 10:00", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-08-17 15:00", Adherence.Configuration.Adherence.Out);
 			Now.Is("2018-08-24 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -98,7 +98,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-17")
 				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
-				.WithHistoricalStateChange("2018-08-17 10:00", Domain.Configuration.Adherence.Out);
+				.WithHistoricalStateChange("2018-08-17 10:00", Adherence.Configuration.Adherence.Out);
 			Now.Is("2018-08-24 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -116,7 +116,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-17")
 				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
-				.WithHistoricalStateChange("2018-08-17 10:00", Domain.Configuration.Adherence.Neutral);
+				.WithHistoricalStateChange("2018-08-17 10:00", Adherence.Configuration.Adherence.Neutral);
 			Now.Is("2018-08-24 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -134,9 +134,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-09-20")
 				.WithAssignedActivity("2018-09-20 10:00", "2018-09-20 18:00")
-				.WithHistoricalStateChange("2018-09-20 10:00", Domain.Configuration.Adherence.Neutral)
-				.WithHistoricalStateChange("2018-09-20 16:00", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-09-20 17:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2018-09-20 10:00", Adherence.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2018-09-20 16:00", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-09-20 17:00", Adherence.Configuration.Adherence.In);
 			Now.Is("2018-09-27 08:00");
 		
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -154,8 +154,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAssignment("2018-10-01")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2018-10-01 22:00", "2018-10-02 02:00")
-				.WithHistoricalStateChange("2018-10-01 22:00", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-10-02 01:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2018-10-01 22:00", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-10-02 01:00", Adherence.Configuration.Adherence.In);
 			Now.Is("2018-10-03 22:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();

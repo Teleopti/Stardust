@@ -4,8 +4,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence
 {
 	public class PermissionsViewModelBuilder
 	{

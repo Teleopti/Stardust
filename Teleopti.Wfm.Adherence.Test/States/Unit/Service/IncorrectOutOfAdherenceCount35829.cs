@@ -38,10 +38,10 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 				.WithSchedule(person, inbound, "2015-11-25 17:45:00", "2015-11-25 20:20:00")
 				.WithSchedule(person, breaks, "2015-11-25 20:20:00", "2015-11-25 20:30:00")
 				.WithSchedule(person, inbound, "2015-11-25 20:30:00", "2015-11-25 23:00:00")
-				.WithMappedRule("1", inbound, -1, Domain.Configuration.Adherence.Out)
-				.WithMappedRule("1", breaks, 0, Domain.Configuration.Adherence.In)
-				.WithMappedRule("1", lunch, 0, Domain.Configuration.Adherence.In)
-				.WithMappedRule("1", null, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("1", inbound, -1, Adherence.Configuration.Adherence.Out)
+				.WithMappedRule("1", breaks, 0, Adherence.Configuration.Adherence.In)
+				.WithMappedRule("1", lunch, 0, Adherence.Configuration.Adherence.In)
+				.WithMappedRule("1", null, 0, Adherence.Configuration.Adherence.In)
 				;
 
 			Now.Is("2015-11-25 13:55");

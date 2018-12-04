@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
 				   assembly="Teleopti.Wfm.Adherence"
-				   namespace="Teleopti.Wfm.Adherence.Domain.Configuration"
+				   namespace="Teleopti.Wfm.Adherence.Configuration"
 				   default-access="field.camelcase-underscore">
 
 	<class name="RtaRule">

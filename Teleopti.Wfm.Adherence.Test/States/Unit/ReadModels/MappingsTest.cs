@@ -111,7 +111,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var rule = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			Database.WithMappedRule(rule, "off", phone, 1, "Out", Domain.Configuration.Adherence.Out, Color.Red);
+			Database.WithMappedRule(rule, "off", phone, 1, "Out", Adherence.Configuration.Adherence.Out, Color.Red);
 
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -119,7 +119,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 			mapping.RuleId.Should().Be(rule);
 			mapping.RuleName.Should().Be("Out");
 			mapping.StaffingEffect.Should().Be(1);
-			mapping.Adherence.Should().Be(Domain.Configuration.Adherence.Out);
+			mapping.Adherence.Should().Be(Adherence.Configuration.Adherence.Out);
 			mapping.DisplayColor.Should().Be(Color.Red.ToArgb());
 		}
 
@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var rule = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			Database.WithMappedRule(rule, "phone", phone, 0, "In", Domain.Configuration.Adherence.In, Color.Green);
+			Database.WithMappedRule(rule, "phone", phone, 0, "In", Adherence.Configuration.Adherence.In, Color.Green);
 			Database.WithAlarm(TimeSpan.FromMinutes(2), Color.Red);
 
 			Target.Handle(new TenantMinuteTickEvent());

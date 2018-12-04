@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 17:00")
-				.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.In);
 
 			var result = Target.LoadUntilNow(person, "2017-12-08".Date());
 
@@ -46,7 +46,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithHistoricalStateChange("2017-12-08 07:30", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2017-12-08 07:30", Adherence.Configuration.Adherence.In);
 
 			var result = Target.LoadUntilNow(person, "2017-12-08".Date());
 
@@ -63,9 +63,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithHistoricalStateChange("2017-12-08 07:30", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2017-12-08 08:30", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2017-12-08 09:30", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2017-12-08 07:30", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 08:30", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 09:30", Adherence.Configuration.Adherence.In);
 
 			var result = Target.LoadUntilNow(person, "2017-12-08".Date());
 
@@ -82,9 +82,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithHistoricalStateChange("2017-12-08 07:30", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2017-12-08 08:30", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2017-12-08 12:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2017-12-08 07:30", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 08:30", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.In);
 
 			var result = Target.Load(person);
 
@@ -102,8 +102,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.In);
-			Database.WithHistoricalStateChange("2017-12-08 12:00", Domain.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.Out);
 
 			var result = Target.Load(person);
 
@@ -121,8 +121,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.Out);
-			Database.WithHistoricalStateChange("2017-12-08 14:00", Domain.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 14:00", Adherence.Configuration.Adherence.In);
 
 			var result = Target.Load(person);
 
@@ -140,11 +140,11 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.Out);
-			Database.WithHistoricalStateChange("2017-12-08 10:00", Domain.Configuration.Adherence.In);
-			Database.WithHistoricalStateChange("2017-12-08 12:00", Domain.Configuration.Adherence.Out);
-			Database.WithHistoricalStateChange("2017-12-08 14:00", Domain.Configuration.Adherence.In);
-			Database.WithHistoricalStateChange("2017-12-08 16:00", Domain.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 10:00", Adherence.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 14:00", Adherence.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 16:00", Adherence.Configuration.Adherence.Out);
 
 			var result = Target.Load(person);
 
@@ -162,8 +162,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-01 00:00", Domain.Configuration.Adherence.Out);
-			Database.WithHistoricalAdherenceDayStart("2017-12-08 07:00", Domain.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-01 00:00", Adherence.Configuration.Adherence.Out);
+			Database.WithHistoricalAdherenceDayStart("2017-12-08 07:00", Adherence.Configuration.Adherence.Out);
 
 			var result = Target.Load(person);
 
@@ -181,7 +181,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-01 00:00", Domain.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-01 00:00", Adherence.Configuration.Adherence.In);
 
 			var result = Target.Load(person);
 
@@ -199,8 +199,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 07:30", Domain.Configuration.Adherence.In);
-			Database.WithHistoricalStateChange("2017-12-08 07:31", Domain.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 07:30", Adherence.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 07:31", Adherence.Configuration.Adherence.Out);
 
 			var result = Target.Load(person);
 
@@ -218,8 +218,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.Out);
-			Database.WithHistoricalStateChange("2017-12-08 16:30", Domain.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 16:30", Adherence.Configuration.Adherence.In);
 
 			var result = Target.Load(person);
 
@@ -249,7 +249,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.In);
 
 			var result = Target.Load(person);
 
@@ -267,8 +267,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.Neutral);
-			Database.WithHistoricalStateChange("2017-12-08 12:00", Domain.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.Neutral);
+			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.In);
 
 			var result = Target.Load(person);
 
@@ -285,10 +285,10 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 09:00", "2017-12-08 20:00")
-				.WithHistoricalStateChange("2017-12-08 06:00", Domain.Configuration.Adherence.Neutral)
-				.WithHistoricalAdherenceDayStart("2017-12-08 08:00", Domain.Configuration.Adherence.Neutral)
-				.WithHistoricalStateChange("2017-12-08 10:00", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2017-12-08 11:00", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 06:00", Adherence.Configuration.Adherence.Neutral)
+				.WithHistoricalAdherenceDayStart("2017-12-08 08:00", Adherence.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2017-12-08 10:00", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 11:00", Adherence.Configuration.Adherence.In)
 				;
 
 			var result = Target.Load(person);
@@ -307,9 +307,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.Out);
-			Database.WithHistoricalStateChange("2017-12-08 10:00", Domain.Configuration.Adherence.In);
-			Database.WithHistoricalStateChange("2017-12-08 12:00", Domain.Configuration.Adherence.Neutral);
+			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 10:00", Adherence.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.Neutral);
 
 			var result = Target.Load(person);
 
@@ -327,9 +327,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithHistoricalStateChange("2017-12-08 07:30", Domain.Configuration.Adherence.Neutral);
-			Database.WithHistoricalStateChange("2017-12-08 08:30", Domain.Configuration.Adherence.Neutral);
-			Database.WithHistoricalStateChange("2017-12-08 14:00", Domain.Configuration.Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 07:30", Adherence.Configuration.Adherence.Neutral);
+			Database.WithHistoricalStateChange("2017-12-08 08:30", Adherence.Configuration.Adherence.Neutral);
+			Database.WithHistoricalStateChange("2017-12-08 14:00", Adherence.Configuration.Adherence.In);
 
 			var result = Target.Load(person);
 

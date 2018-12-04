@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Domain.Events;
 
-namespace Teleopti.Wfm.Adherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Configuration
 {
 	public class RtaStateGroup : VersionedAggregateRootWithBusinessUnitWithoutChangeInfo, IRtaStateGroup
     {

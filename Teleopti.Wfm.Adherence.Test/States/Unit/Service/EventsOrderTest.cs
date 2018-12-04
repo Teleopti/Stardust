@@ -93,10 +93,10 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 17:00")
-				.WithMappedRule("phone", phone, 0, Domain.Configuration.Adherence.In)
-				.WithMappedRule("phone", null, 1, Domain.Configuration.Adherence.Out)
-				.WithMappedRule("loggedout", null, 0, Domain.Configuration.Adherence.In)
-				.WithMappedRule("loggedout", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Adherence.Configuration.Adherence.In)
+				.WithMappedRule("phone", null, 1, Adherence.Configuration.Adherence.Out)
+				.WithMappedRule("loggedout", null, 0, Adherence.Configuration.Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Adherence.Configuration.Adherence.Out)
 				;
 			Now.Is("2014-10-20 7:55");
 			Target.ProcessState(new StateForTest
@@ -132,10 +132,10 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 17:00")
-				.WithMappedRule("phone", phone, 0, Domain.Configuration.Adherence.In)
-				.WithMappedRule("phone", null, 1, Domain.Configuration.Adherence.Neutral)
-				.WithMappedRule("loggedout", null, 0, Domain.Configuration.Adherence.In)
-				.WithMappedRule("loggedout", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Adherence.Configuration.Adherence.In)
+				.WithMappedRule("phone", null, 1, Adherence.Configuration.Adherence.Neutral)
+				.WithMappedRule("loggedout", null, 0, Adherence.Configuration.Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Adherence.Configuration.Adherence.Out)
 				;
 			Now.Is("2014-10-20 16:55");
 			Target.ProcessState(new StateForTest

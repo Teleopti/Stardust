@@ -1,7 +1,7 @@
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Wfm.Adherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Configuration
 {
 	public interface IRtaRule : IPayload, IAggregateRootWithEvents
     {

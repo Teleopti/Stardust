@@ -1,4 +1,4 @@
-namespace Teleopti.Wfm.Adherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Configuration
 {
 	public enum Adherence
 	{

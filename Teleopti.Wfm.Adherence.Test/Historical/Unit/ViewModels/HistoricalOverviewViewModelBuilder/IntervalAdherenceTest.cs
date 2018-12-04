@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 			Database
 				.WithTeam(teamId)
 				.WithAgent()
-				.WithHistoricalStateChange("2018-08-31 08:00", Domain.Configuration.Adherence.Neutral);
+				.WithHistoricalStateChange("2018-08-31 08:00", Adherence.Configuration.Adherence.Neutral);
 			Now.Is("2018-09-01 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -43,7 +43,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-31")
 				.WithAssignedActivity("2018-08-31 08:00", "2018-08-31 17:00")
-				.WithHistoricalStateChange("2018-08-31 08:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2018-08-31 08:00", Adherence.Configuration.Adherence.In);
 			Now.Is("2018-09-01 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -62,11 +62,11 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-31")
 				.WithAssignedActivity("2018-08-31 10:00", "2018-08-31 20:00")
-				.WithHistoricalStateChange("2018-08-31 10:00", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-08-31 10:00", Adherence.Configuration.Adherence.In)
 				.WithAssignment("2018-09-01")
 				.WithAssignedActivity("2018-09-01 10:00", "2018-09-01 20:00")
-				.WithHistoricalStateChange("2018-09-01 10:00", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2018-09-01 15:00", Domain.Configuration.Adherence.Out);
+				.WithHistoricalStateChange("2018-09-01 10:00", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-09-01 15:00", Adherence.Configuration.Adherence.Out);
 			Now.Is("2018-09-02 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -84,12 +84,12 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-31")
 				.WithAssignedActivity("2018-08-31 10:00", "2018-08-31 14:00")
-				.WithHistoricalStateChange("2018-08-31 10:00", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2018-08-31 11:00", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-08-31 10:00", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-08-31 11:00", Adherence.Configuration.Adherence.Out)
 				.WithAssignment("2018-09-01")
 				.WithAssignedActivity("2018-09-01 10:00", "2018-09-01 20:00")
-				.WithHistoricalStateChange("2018-09-01 10:00", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2018-09-01 16:00", Domain.Configuration.Adherence.Out);
+				.WithHistoricalStateChange("2018-09-01 10:00", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-09-01 16:00", Adherence.Configuration.Adherence.Out);
 			Now.Is("2018-09-02 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -107,7 +107,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-08-31")
 				.WithAssignedActivity("2018-08-31 10:00", "2018-08-31 10:30")
-				.WithHistoricalStateChange("2018-08-31 10:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2018-08-31 10:00", Adherence.Configuration.Adherence.In);
 			Now.Is("2018-09-02 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -125,12 +125,12 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-09-20")
 				.WithAssignedActivity("2018-09-20 10:00", "2018-09-20 18:00")
-				.WithHistoricalStateChange("2018-09-20 10:00", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-09-20 10:00", Adherence.Configuration.Adherence.In)
 				.WithAssignment("2018-09-21")
 				.WithAssignedActivity("2018-09-21 10:00", "2018-09-21 18:00")
-				.WithHistoricalStateChange("2018-09-21 10:00", Domain.Configuration.Adherence.Neutral)
-				.WithHistoricalStateChange("2018-09-21 16:00", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-09-21 17:00", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange("2018-09-21 10:00", Adherence.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2018-09-21 16:00", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-09-21 17:00", Adherence.Configuration.Adherence.In);
 			Now.Is("2018-09-22 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -148,7 +148,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-09-20")
 				.WithAssignedActivity("2018-09-20 10:00", "2018-09-20 18:00")
-				.WithHistoricalStateChange("2018-09-20 10:00", Domain.Configuration.Adherence.Neutral);
+				.WithHistoricalStateChange("2018-09-20 10:00", Adherence.Configuration.Adherence.Neutral);
 			Now.Is("2018-09-21 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
@@ -166,7 +166,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithAgent()
 				.WithAssignment("2018-09-20")
 				.WithAssignedActivity("2018-09-20 10:00", "2018-09-20 18:00")
-				.WithHistoricalStateChange("2018-09-20 10:00", Domain.Configuration.Adherence.Out);
+				.WithHistoricalStateChange("2018-09-20 10:00", Adherence.Configuration.Adherence.Out);
 			Now.Is("2018-09-21 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();

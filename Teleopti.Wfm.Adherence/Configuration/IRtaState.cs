@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Wfm.Adherence.Domain.Configuration
+namespace Teleopti.Wfm.Adherence.Configuration
 {
     public interface IRtaState : IAggregateEntity, ICloneableEntity<IRtaState>
     {

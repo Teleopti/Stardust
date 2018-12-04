@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
 			}
 			public new int? Adherence
 			{
-				set { base.Adherence = (Domain.Configuration.Adherence?) value; }
+				set { base.Adherence = (Configuration.Adherence?) value; }
 			}
 			public bool Updated { get; set; }
 		}

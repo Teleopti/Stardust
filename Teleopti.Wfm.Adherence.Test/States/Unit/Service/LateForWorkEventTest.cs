@@ -89,7 +89,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, "Phone", phone, Color.Aqua, "2018-05-30 8:00", "2018-05-30 17:00")
 				.WithStateGroup("Phone").WithStateCode("phone")
-				.WithMappedRule("phone", phone, 0, "InAdherence", Domain.Configuration.Adherence.In, Color.BlueViolet)
+				.WithMappedRule("phone", phone, 0, "InAdherence", Adherence.Configuration.Adherence.In, Color.BlueViolet)
 				.WithLoggedOutStateGroup("Logged Out").WithStateCode("loggedOut");
 			Now.Is("2018-05-29 17:00");
 			Target.ProcessState(new StateForTest
