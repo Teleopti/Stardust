@@ -1,16 +1,16 @@
 ﻿<div class="manual-period-planner-content">
 
-	<div class="row">
-		<div class="col-sm-6 col-md-12 seatplan-manual-planning-calendar">
+	<div class="con-row">
+		<div class="con-flex seatplan-manual-planning-calendar">
 			<date-range-picker class="request-date-range-picker" ng-model="vm.period" template-type="vm.dateRangeTemplateType"></date-range-picker>
 		</div>
 	</div>
 	
-	<div class="row" style="padding-top: 15px;">
-		<div class="col-sm-12 col-md-6">
+	<div class="con-row" style="padding-top: 15px;">
+		<div class="con-flex">
 			<location-picker selected-locations="vm.selectedLocations"></location-picker>
 		</div>
-		<div class="col-sm-12 col-md-6">
+		<div class="con-flex">
 			<team-picker selected-teams="vm.selectedTeams"></team-picker>
 		</div>
 	</div>
