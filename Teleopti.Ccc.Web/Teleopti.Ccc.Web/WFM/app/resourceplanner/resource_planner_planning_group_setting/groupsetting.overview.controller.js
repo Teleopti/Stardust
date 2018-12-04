@@ -93,8 +93,7 @@
 		function goEditSchedulingSetting(setting) {
 			$state.go('resourceplanner.editsetting', {
 				filterId: setting.Id.toString(),
-				groupId: $stateParams.groupId,
-				isDefault: setting.Default,
+				groupId: $stateParams.groupId
 			});
 		}
 

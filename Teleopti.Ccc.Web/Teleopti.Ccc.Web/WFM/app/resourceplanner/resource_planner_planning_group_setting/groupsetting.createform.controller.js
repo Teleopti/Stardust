@@ -11,7 +11,7 @@
         var vm = this;
 
         var filterId = $stateParams.filterId ? $stateParams.filterId : null;
-        vm.default = $stateParams.isDefault ? $stateParams.isDefault : false;
+		vm.default = true;
         vm.isEdit = $stateParams.filterId ? true : false;
         vm.settingInfo = {
             BlockSameShift: false,
@@ -74,6 +74,7 @@
                 return vm.settingInfo;
             return PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
                 .$promise.then(function (result) {
+					vm.default = result.Default;
                     vm.settingInfo.Name = result.Name;
                     vm.settingInfo.Filters = result.Filters;
                     vm.settingInfo.Priority = result.Priority;

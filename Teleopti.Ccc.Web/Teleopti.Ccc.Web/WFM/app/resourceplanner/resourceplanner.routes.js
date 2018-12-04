@@ -102,7 +102,6 @@
 		}).state('resourceplanner.editsetting', {
 			params: {
 				filterId: '',
-				isDefault: undefined,
 				groupId: '',
 			},
 			url: '/planninggroup/:groupId/setting/:filterId',
