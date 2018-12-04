@@ -38,14 +38,14 @@
 		vm.activityCommands = [
 			{
 				key: 'AddActivity',
-				activityType: 1,
+				activityType: 'Normal',
 				title: $translate.instant('AddActivity'),
 				successfulMessage: $translate.instant('SuccessfulMessageForAddingActivity'),
 				warningMessage: $translate.instant('PartialSuccessMessageForAddingActivity')
 			},
 			{
 				key: 'AddPersonalActivity',
-				activityType: 2,
+				activityType: 'PersonalActivity',
 				title: $translate.instant('AddPersonalActivity'),
 				successfulMessage: $translate.instant('SuccessfulMessageForAddingActivity'),
 				warningMessage: $translate.instant('PartialSuccessMessageForAddingActivity')

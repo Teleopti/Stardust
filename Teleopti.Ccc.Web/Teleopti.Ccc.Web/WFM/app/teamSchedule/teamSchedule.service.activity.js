@@ -85,13 +85,13 @@
 			return deferred.promise;
 		}
 
-		function addActivity(input) {
+		function addActivity(activityType, input) {
 			var url = '';
-			switch (input.ActivityType) {
-				case 1:
+			switch (activityType) {
+				case 'Normal':
 					url = addActivityUrl;
 					break;
-				case 2:
+				case 'PersonalActivity':
 					url = addPersonalActivityUrl;
 					break;
 			}

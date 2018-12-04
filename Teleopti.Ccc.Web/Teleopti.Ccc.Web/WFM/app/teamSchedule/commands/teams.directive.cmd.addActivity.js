@@ -98,7 +98,7 @@
 				return personDate.PersonId;
 			});
 			if (requestData.PersonDates.length > 0) {
-				activityService.addActivity(requestData)
+				activityService.addActivity(vm.command.activityType, requestData)
 					.then(function (response) {
 						if (vm.getActionCb(vm.label)) {
 							vm.getActionCb(vm.label)(vm.trackId, personIds);
@@ -137,7 +137,6 @@
 				StartTime: vm.convertTime(getDateTimeInTimeZone(vm.timeRange.startTime)),
 				EndTime: vm.convertTime(getDateTimeInTimeZone(vm.timeRange.endTime)),
 				ActivityId: vm.selectedActivityId,
-				ActivityType: vm.command.activityType,
 				TrackedCommandInfo: {
 					TrackId: vm.trackId
 				}

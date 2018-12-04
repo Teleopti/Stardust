@@ -491,7 +491,7 @@
 			expect(activityData).not.toBeNull();
 			expect(activityData.PersonDates).toEqual([{ Date: '2018-08-01', PersonId: 'agent1' }]);
 			expect(activityData.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
-			expect(activityData.ActivityType).toEqual(1);
+			expect(activityData.activityType).toEqual('Normal');
 			expect(activityData.StartTime).toEqual('2018-08-01T08:00');
 			expect(activityData.EndTime).toEqual('2018-08-01T16:00');
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(result.commandControl.trackId);
@@ -557,7 +557,7 @@
 
 			result.scope.$apply();
 			var activityData = fakeActivityService.getAddActivityCalledWith();
-			expect(activityData.ActivityType).toEqual(2);
+			expect(activityData.activityType).toEqual('PersonalActivity');
 		
 		});
 	}
@@ -702,8 +702,9 @@
 			};
 		};
 
-		this.addActivity = function (input) {
+		this.addActivity = function (activityType, input) {
 			targetActivity = input;
+			targetActivity.activityType = activityType;
 			return {
 				then: (function (cb) {
 					cb(fakeResponse);
