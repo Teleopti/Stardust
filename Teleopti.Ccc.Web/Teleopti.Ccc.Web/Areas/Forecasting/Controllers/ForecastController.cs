@@ -91,6 +91,20 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[HttpPost, Route("api/Forecasting/LoadForecast"), UnitOfWork]
 		public virtual IHttpActionResult LoadForecast(ForecastResultInput input)
 		{
+			var skill = _skillRepository.FindSkillsWithAtLeastOneQueueSource()
+				.SingleOrDefault(s => s.WorkloadCollection.Any(
+					w => w.Id.HasValue && w.Id.Value == input.WorkloadId));
+			if (skill == null)
+			{
+				return Ok(new ForecastViewModel()
+				{
+					WorkloadId = input.WorkloadId,
+					ScenarioId = input.ScenarioId,
+					ForecastDays = new List<ForecastDayModel>(),
+					IsSkillNotInBusinessUnit = true
+				});
+			}
+
 			var period = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
 			return Ok(_forecastProvider.Load(input.WorkloadId, period, scenario, input.HasUserSelectedPeriod));

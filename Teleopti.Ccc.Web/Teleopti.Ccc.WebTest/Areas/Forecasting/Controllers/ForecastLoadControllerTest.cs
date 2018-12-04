@@ -105,6 +105,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldReturnThatSkillDoesNotExistsInBusinessUnit()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay1);
+
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.LoadForecast(new ForecastResultInput()
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = Guid.NewGuid()
+			});
+			result.Content.IsSkillNotInBusinessUnit.Should().Be.EqualTo(true);
+		}
+
+		[Test]
 		public void ShouldLoadForecastWithCampaign()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();

@@ -288,6 +288,8 @@
 					vm.isForecastRunning = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+					if (data.IsSkillNotInBusinessUnit)
+						$state.go("forecast");
 				},
 				function(data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
