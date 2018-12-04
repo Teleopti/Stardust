@@ -17,7 +17,7 @@
 		vm.selectedSchedulingSetting = {};
 		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
-		vm.textManageSchedulingSetting = $translate.instant('ManagePlanningGroupSchedulingSetting').replace("{0}", planningGroupInfo.Name);
+		vm.planningGroupName = planningGroupInfo.Name;
 		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", planningGroupInfo.Name);
 		vm.getSchedulingSettingInfo = getSchedulingSettingInfo;
 		vm.deleteSchedulingSetting = deleteSchedulingSetting;
@@ -179,7 +179,6 @@
 		var vm = this;
 
 		vm.schedulingSetting = [];
-		vm.textManageSchedulingSetting = $translate.instant('ManagePlanningGroupSchedulingSetting').replace("{0}", vm.planningGroup.Name);
 		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", vm.planningGroup.Name);
 		vm.color = {
 			render: 'linear',
