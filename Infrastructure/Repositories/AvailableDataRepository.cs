@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -26,26 +25,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public virtual IList<IAvailableData> LoadAllAvailableData()
         {
             var q1 = Session.CreateCriteria(typeof(AvailableData))
-                .SetFetchMode("ApplicationRole", FetchMode.Join)
+                .Fetch("ApplicationRole")
                 .SetResultTransformer(Transformers.DistinctRootEntity);
             var q2 = Session.CreateCriteria(typeof(AvailableData))
-                .SetFetchMode("AvailableSites", FetchMode.Join);
+                .Fetch("AvailableSites");
             var q3 = Session.CreateCriteria(typeof(AvailableData))
-                .SetFetchMode("AvailableTeams", FetchMode.Join);
+                .Fetch("AvailableTeams");
             var q4 = Session.CreateCriteria(typeof(AvailableData))
-                .SetFetchMode("AvailablePersons", FetchMode.Join);
+                .Fetch("AvailablePersons");
             var q5 = Session.CreateCriteria(typeof(AvailableData))
-                .SetFetchMode("AvailableBusinessUnits", FetchMode.Join);
+                .Fetch("AvailableBusinessUnits");
 
-            IList res = Session.CreateMultiCriteria()
-                            .Add(q1)
-                            .Add(q2)
-                            .Add(q3)
-                            .Add(q4)
-                            .Add(q5)
-                            .List();
+            var res = Session.CreateQueryBatch()
+                            .Add<AvailableData>(q1)
+                            .Add<AvailableData>(q2)
+                            .Add<AvailableData>(q3)
+                            .Add<AvailableData>(q4)
+                            .Add<AvailableData>(q5)
+                            .GetResult<AvailableData>(0);
 
-            return new List<IAvailableData>(CollectionHelper.ToDistinctGenericCollection<IAvailableData>(res[0]));
+            return new List<IAvailableData>(CollectionHelper.ToDistinctGenericCollection<IAvailableData>(res));
         }
     }
 }

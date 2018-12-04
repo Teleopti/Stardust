@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var assCriteria = Session.CreateCriteria(typeof(PersonAssignment), "ass")
 				.SetTimeout(300)
-				.SetFetchMode("ShiftLayers", FetchMode.Join)
+				.Fetch("ShiftLayers")
 				.SetResultTransformer(Transformers.DistinctRootEntity);
 			addScenarioAndFilterClauses(assCriteria, scenario, period);
 			return assCriteria;
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IPersonAssignment LoadAggregate(Guid id)
 		{
 			var ass = Session.CreateCriteria(typeof (PersonAssignment))
-			                               .SetFetchMode("ShiftLayers", FetchMode.Join)
+			                               .Fetch("ShiftLayers")
 			                               .Add(Restrictions.Eq("Id", id))
 			                               .UniqueResult<IPersonAssignment>();
 			if (ass != null)
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)
 		{
 			return Session.CreateCriteria(typeof(PersonAssignment))
-						       .SetFetchMode("ShiftLayers", FetchMode.Join)
+						       .Fetch("ShiftLayers")
 						       .Add(Restrictions.Eq("Scenario", id.Scenario))
 						       .Add(Restrictions.Eq("Person", id.Person))
 						       .Add(Restrictions.Eq("Date", id.Date))

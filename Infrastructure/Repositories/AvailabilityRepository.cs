@@ -5,6 +5,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using NHibernate.Multi;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -33,26 +34,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public IList<IAvailabilityRotation> LoadAllAvailabilitiesWithHierarchyData()
         {
-            DetachedCriteria availabilityRotation = DetachedCriteria.For<AvailabilityRotation>("availabilityRotation")
-                .SetFetchMode("AvailabilityDays", FetchMode.Join);
+            var availabilityRotation = DetachedCriteria.For<AvailabilityRotation>("availabilityRotation")
+                .Fetch("AvailabilityDays");
 
-            DetachedCriteria availabilityDay = DetachedCriteria.For<AvailabilityDay>("availabilityDay")
-                .SetFetchMode("Restriction", FetchMode.Join);
+            var availabilityDay = DetachedCriteria.For<AvailabilityDay>("availabilityDay")
+                .Fetch("Restriction");
 
-            IList result = Session.CreateMultiCriteria()
-                .Add(availabilityRotation)
-                .Add(availabilityDay)
-                .List();
-
-            ICollection<IAvailabilityRotation> availabilityRotations = CollectionHelper.ToDistinctGenericCollection<IAvailabilityRotation>(result[0]);
-            return availabilityRotations.ToList();
+            return CollectionHelper.ToDistinctGenericCollection<IAvailabilityRotation>(Session.CreateQueryBatch()
+                .Add<AvailabilityRotation>(availabilityRotation)
+                .Add<AvailabilityDay>(availabilityDay)
+                .GetResult<AvailabilityRotation>(0)).ToList();
         }
 
         public IAvailabilityRotation LoadAggregate(Guid id)
         {
             IAvailabilityRotation ret = Session.CreateCriteria(typeof(AvailabilityRotation))
-                        .SetFetchMode("AvailabilityDays", FetchMode.Join)
-                        .SetFetchMode("AvailabilityDays.Restriction", FetchMode.Join)
+                        .Fetch("AvailabilityDays")
+                        .Fetch("AvailabilityDays.Restriction")
                         .SetResultTransformer(Transformers.DistinctRootEntity)
                         .Add(Restrictions.Eq("Id", id))
                 .UniqueResult<IAvailabilityRotation>();

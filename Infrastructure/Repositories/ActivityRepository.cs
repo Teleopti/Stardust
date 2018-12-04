@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IList<IActivity> LoadAllWithUpdatedBy()
         {
             return Session.CreateCriteria(typeof(Activity))
-               .SetFetchMode("UpdatedBy", FetchMode.Join)
+               .Fetch("UpdatedBy")
                .SetResultTransformer(Transformers.DistinctRootEntity)
                .List<IActivity>();
         }

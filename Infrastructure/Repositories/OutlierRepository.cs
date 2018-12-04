@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return Session.CreateCriteria(typeof(Outlier))
                 .Add(Restrictions.Or(Restrictions.Eq("Workload",workload),Restrictions.IsNull("Workload")))
-                .SetFetchMode("Dates", FetchMode.Join)
-                .SetFetchMode("OutlierDateProviders", FetchMode.Join)
+                .Fetch("Dates")
+                .Fetch("OutlierDateProviders")
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IOutlier>();
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -37,20 +38,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             DetachedCriteria multisiteDayPeriod = DetachedCriteria.For<MultisiteDay>("md")
                 .Add(Subqueries.PropertyIn("Id", multisiteDaySubquery))
-                .SetFetchMode("MultisitePeriodCollection", FetchMode.Join);
+                .Fetch("MultisitePeriodCollection");
 
             DetachedCriteria multisitePeriodDistribution = DetachedCriteria.For<MultisitePeriod>()
                 .Add(Subqueries.PropertyIn("Parent", multisiteDaySubquery))
-                .SetFetchMode("Distribution", FetchMode.Join);
+                .Fetch("Distribution");
 
-            IList result = Session.CreateMultiCriteria()
-                .Add(multisiteDayPeriod)
-                .Add(multisitePeriodDistribution)
-                .List();
+            var result = Session.CreateQueryBatch()
+				.Add<MultisitePeriod>(multisitePeriodDistribution)
+                .Add<MultisiteDay>(multisiteDayPeriod);
 
-            ICollection<IMultisiteDay> multisiteDays = CollectionHelper.ToDistinctGenericCollection<IMultisiteDay>(result[0]);
-
-            return multisiteDays;
+            return CollectionHelper.ToDistinctGenericCollection<IMultisiteDay>(result.GetResult<MultisiteDay>(1));
         }
 		
         public ICollection<IMultisiteDay> GetAllMultisiteDays(DateOnlyPeriod period, ICollection<IMultisiteDay> multisiteDays, IMultisiteSkill skill, IScenario scenario, bool addToRepository = true)

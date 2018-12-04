@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NHibernate.Transaction;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class TransactionSynchronization : ISynchronization
+	public class TransactionSynchronization : ITransactionCompletionSynchronization
 	{
 		private readonly ICurrentTransactionHooks _hooks;
 		private readonly NHibernateUnitOfWorkInterceptor _interceptor;
@@ -21,11 +23,22 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_interceptor = interceptor;
 		}
 
-		public void BeforeCompletion()
+
+		public void RegisterForAfterCompletion(Action action)
+		{
+			_afterCompletion.Add(action);
+		}
+
+		public void ExecuteBeforeTransactionCompletion()
 		{
 		}
 
-		public void AfterCompletion(bool success)
+		public Task ExecuteBeforeTransactionCompletionAsync(CancellationToken cancellationToken)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ExecuteAfterTransactionCompletion(bool success)
 		{
 			if (!success) return;
 
@@ -41,9 +54,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		public void RegisterForAfterCompletion(Action action)
+		public Task ExecuteAfterTransactionCompletionAsync(bool success, CancellationToken cancellationToken)
 		{
-			_afterCompletion.Add(action);
+			throw new NotImplementedException();
 		}
 	}
 }

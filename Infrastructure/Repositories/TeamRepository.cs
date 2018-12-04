@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				ICollection<ITeam> retList = Session.CreateCriteria<Team>()
 					   .Add(Restrictions.InG("Id", currentBatchIds))
-					   .SetFetchMode("Site", FetchMode.Join)
+					   .Fetch("Site")
 					   .SetResultTransformer(Transformers.DistinctRootEntity)
 					   .List<ITeam>();
 

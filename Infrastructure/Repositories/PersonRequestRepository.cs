@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.CreateCriteria<IPersonRequest>("req")
 				.Add(Restrictions.Eq("Person", person))
 				.Add(Restrictions.Eq("requestStatus", status))
-				.SetFetchMode("requests", FetchMode.Join)
+				.Fetch("requests")
 				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
 				.List<IPersonRequest>();
 		}
@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var returnPersonRequest = Session.CreateCriteria(typeof(PersonRequest), "req")
 				.Add(Restrictions.Eq("Id", id))
-				.SetFetchMode("requests", FetchMode.Join)
-				.SetFetchMode("Person", FetchMode.Join)
+				.Fetch("requests")
+				.Fetch("Person")
 				.UniqueResult<IPersonRequest>();
 
 			var shiftTrade = returnPersonRequest?.Request as IShiftTradeRequest;
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				returnPersonRequests.AddRange(Session.CreateCriteria(typeof(PersonRequest), "req")
 					.Add(Restrictions.In("Id", idBatch.ToArray()))
-					.SetFetchMode("requests", FetchMode.Join)
+					.Fetch("requests")
 					.List<IPersonRequest>());
 			}
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
 			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
-			criteria.SetFetchMode("requests", FetchMode.Join);
+			criteria.Fetch("requests");
 			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
 			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IPersonRequest> FindShiftTradeRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
 			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
-			criteria.SetFetchMode("requests", FetchMode.Join);
+			criteria.Fetch("requests");
 			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
 			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
 
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IPersonRequest> FindShiftTradeRequestsByOfferId(Guid offerId)
 		{
 			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
-			criteria.SetFetchMode("requests", FetchMode.Join);
+			criteria.Fetch("requests");
 			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
 			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
 			criteria.Add(toRequestClassTypeConstraint(RequestType.ShiftTradeRequest));
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IPersonRequest> FindOvertimeRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
 			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
-			criteria.SetFetchMode("requests", FetchMode.Join);
+			criteria.Fetch("requests");
 			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
 			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
 
@@ -563,7 +563,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private ICriteria getRequestsCreatedByAgent(IPerson person)
 		{
 			var criteriaPersonRequestsCreatedByPerson = Session.CreateCriteria<PersonRequest>()
-				.SetFetchMode("requests", FetchMode.Join)
+				.Fetch("requests")
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.Add(Restrictions.Eq("Person", person));
 
@@ -581,7 +581,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("swapDetail.PersonTo", person));
 
 			var criteriaShiftTradeRequestsWithPerson = Session.CreateCriteria<PersonRequest>()
-				.SetFetchMode("requests", FetchMode.Join)
+				.Fetch("requests")
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.Add(Restrictions.Not(Restrictions.Eq("requestStatus", 4)))
 				.Add(Subqueries.PropertyIn("requests", subQueryShiftTradeRequestsWithPerson));
@@ -640,7 +640,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var retList = Session.CreateCriteria(typeof(PersonRequest))
 				.Add(Restrictions.Or(personToRestriction, personFromRestriction))
-				.SetFetchMode("requests", FetchMode.Join)
+				.Fetch("requests")
 				.List<IPersonRequest>();
 
 			return retList;
@@ -652,7 +652,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("Person", person))
 				.Add(Restrictions.Or(Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
 					Restrictions.Eq("requestStatus", 0)))
-				.SetFetchMode("requests", FetchMode.Join)
+				.Fetch("requests")
 				.List<IPersonRequest>();
 			return retList;
 		}
@@ -674,8 +674,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return Session.CreateCriteria<IPersonRequest>()
 				.Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
-				.SetFetchMode("requests", FetchMode.Join)
-				.SetFetchMode("Person", FetchMode.Join)
+				.Fetch("requests")
+				.Fetch("Person")
 				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
 				.List<IPersonRequest>();
 		}
@@ -688,9 +688,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return Session.CreateCriteria<IPersonRequest>()
 				.Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
-				.SetFetchMode("requests", FetchMode.Join)
-				.SetFetchMode("Person", FetchMode.Join)
-				.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+				.Fetch("requests")
+				.Fetch("Person")
+				.Fetch("requests.ShiftTradeSwapDetails")
 				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
 				.List<IPersonRequest>();
 		}
@@ -727,8 +727,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				let personChunkList = personChunk.ToArray()
 				select
 					Session.CreateCriteria(typeof(PersonRequest))
-						.SetFetchMode("requests", FetchMode.Join)
-						.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+						.Fetch("requests")
+						.Fetch("requests.ShiftTradeSwapDetails")
 						.Add
 						(
 							Restrictions.Or(
@@ -779,8 +779,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				retList.AddRange(Session.CreateCriteria(typeof(PersonRequest))
 					.CreateAlias("requests","req")
 					.Add(Restrictions.Not(Restrictions.Eq("req.class",typeof(ShiftTradeRequest))))
-					.SetFetchMode("requests", FetchMode.Join)
-					.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+					.Fetch("requests")
+					.Fetch("requests.ShiftTradeSwapDetails")
 					.Add(Restrictions.InG("Person", item.ToArray()))
 					.Add(Restrictions.Or(Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
 						Restrictions.Eq("requestStatus", 0)))

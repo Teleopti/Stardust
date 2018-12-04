@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return _unitOfWork.Current().Session()
 				.CreateCriteria<IPerson>()
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.ExternalLogOnCollection", FetchMode.Join)
+				.Fetch("PersonPeriodCollection")
+				.Fetch("PersonPeriodCollection.Team")
+				.Fetch("PersonPeriodCollection.Team.Site")
+				.Fetch("PersonPeriodCollection.ExternalLogOnCollection")
 				.SetResultTransformer(new DistinctRootEntityResultTransformer())
 				.List<Person>();
 		}

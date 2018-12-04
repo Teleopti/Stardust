@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 											.Add(Restrictions.Eq("DateOfOvertime", dateOnly))
 											.Add(personCriterion(person))
 											.SetResultTransformer(Transformers.DistinctRootEntity)
-											.SetFetchMode("Restriction", FetchMode.Join);
+											.Fetch("Restriction");
 			IList<IOvertimeAvailability> retList = crit.List<IOvertimeAvailability>();
 
 			initializeStudentDays(retList);

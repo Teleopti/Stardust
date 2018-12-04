@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using log4net;
 using NHibernate;
 using NHibernate.Transaction;
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_transaction.RegisterSynchronization(new transactionCallback(action));
 		}
 
-		private class transactionCallback : ISynchronization
+		private class transactionCallback : ITransactionCompletionSynchronization
 		{
 			private readonly Action _callback;
 
@@ -104,16 +106,26 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_callback = callback;
 			}
 
-			public void BeforeCompletion()
+			public void ExecuteBeforeTransactionCompletion()
 			{
 			}
 
-			public void AfterCompletion(bool success)
+			public Task ExecuteBeforeTransactionCompletionAsync(CancellationToken cancellationToken)
+			{
+				throw new NotImplementedException();
+			}
+
+			public void ExecuteAfterTransactionCompletion(bool success)
 			{
 				if (success)
 				{
 					_callback();
 				}
+			}
+
+			public Task ExecuteAfterTransactionCompletionAsync(bool success, CancellationToken cancellationToken)
+			{
+				throw new NotImplementedException();
 			}
 		}
 

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IList<IShiftCategory> FindAll()
         {
             return Session.CreateCriteria(typeof (ShiftCategory))
-                .SetFetchMode("DayOfWeekJusticeValues.WrappedDictionary", FetchMode.Join)
+                .Fetch("DayOfWeekJusticeValues.WrappedDictionary")
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IShiftCategory>();
         }

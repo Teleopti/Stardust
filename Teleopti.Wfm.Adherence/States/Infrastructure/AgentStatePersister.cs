@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -168,13 +170,12 @@ AND StateGroupId {stateGroups}")
 				.SetResultTransformer(Transformers.AliasToBean<internalKeyValue>())
 				.SetReadOnly(true);
 
-			var results = _unitOfWork.Current().Session().CreateMultiQuery()
-				.Add(agentStateQuery)
-				.Add(keyValueQuery)
-				.List();
+			var results = _unitOfWork.Current().Session().CreateQueryBatch()
+				.Add<internalAgentState>(agentStateQuery)
+				.Add<internalKeyValue>(keyValueQuery);
 
-			var agentStates = (results[0] as IEnumerable<object>).Cast<AgentState>();
-			var keyValues = (results[1] as IEnumerable<object>).Cast<internalKeyValue>();
+			var agentStates = results.GetResult<internalAgentState>(0);
+			var keyValues = results.GetResult<internalKeyValue>(1);
 
 			return new LockedData
 			{

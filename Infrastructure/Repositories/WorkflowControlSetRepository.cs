@@ -27,24 +27,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IWorkflowControlSet> LoadAllSortByName()
 		{
 			Session.CreateCriteria<WorkflowControlSet>()
-				.SetFetchMode("MustMatchSkills", FetchMode.Join)
+				.Fetch("MustMatchSkills")
 				.List();
 			Session.CreateCriteria<WorkflowControlSet>()
-				.SetFetchMode("AllowedPreferenceDayOffs", FetchMode.Join)
+				.Fetch("AllowedPreferenceDayOffs")
 				.List();
 			Session.CreateCriteria<WorkflowControlSet>()
-				  .SetFetchMode("AllowedPreferenceShiftCategories", FetchMode.Join)
+				  .Fetch("AllowedPreferenceShiftCategories")
 				  .List();
 			Session.CreateCriteria<WorkflowControlSet>()
-				  .SetFetchMode("AllowedPreferenceAbsences", FetchMode.Join)
+				  .Fetch("AllowedPreferenceAbsences")
 				  .List();
 			Session.CreateCriteria<WorkflowControlSet>()
-				  .SetFetchMode("AllowedAbsencesForReport", FetchMode.Join)
+				  .Fetch("AllowedAbsencesForReport")
 				  .List();
 			var list = Session.CreateCriteria<WorkflowControlSet>()
 					 .AddOrder(Order.Asc("Name"))
-					 .SetFetchMode("AbsenceRequestOpenPeriods", FetchMode.Join)
-					 .SetFetchMode("AbsenceRequestOpenPeriods.Absence", FetchMode.Join)
+					 .Fetch("AbsenceRequestOpenPeriods")
+					 .Fetch("AbsenceRequestOpenPeriods.Absence")
 					 .SetResultTransformer(Transformers.DistinctRootEntity)
 					 .List<IWorkflowControlSet>();
 			foreach (var workflowControlSet in list)

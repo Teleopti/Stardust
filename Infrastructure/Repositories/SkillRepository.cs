@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Multi;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -43,14 +44,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public ICollection<ISkill> FindAllWithWorkloadAndQueues()
         {
             var skills = Session.CreateCriteria(typeof (Skill))
-                .SetFetchMode("Activity", FetchMode.Join)
-                .SetFetchMode("SkillType", FetchMode.Join)
-                .SetFetchMode("WorkloadCollection", FetchMode.Join)
+                .Fetch("Activity")
+                .Fetch("SkillType")
+                .Fetch("WorkloadCollection")
                 .AddOrder(Order.Asc("Name"))
 				.Future<ISkill>();
 
 			Session.CreateCriteria(typeof(Workload))
-				.SetFetchMode("QueueSourceCollection", FetchMode.Join)
+				.Fetch("QueueSourceCollection")
 				.Future<Workload>();
 
             Session.CreateCriteria(typeof (QueueSource))
@@ -87,29 +88,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                           periodWithSkillDays.EndDate));
 
 			var skills = Session.CreateCriteria(typeof(Skill), "skill")
-				.SetFetchMode("SkillType", FetchMode.Join)
-				.SetFetchMode("Activity", FetchMode.Join)
-				.SetFetchMode("WorkloadCollection", FetchMode.Join)
+				.Fetch("SkillType")
+				.Fetch("Activity")
+				.Fetch("WorkloadCollection")
 				.Add(Subqueries.Exists(subQuery))
 				.Add(Restrictions.Not(Property.ForName("skill.class").Eq(typeof(ChildSkill))))
 				.Future<ISkill>();
 
 			Session.CreateCriteria<MultisiteSkill>("skill")
-				.SetFetchMode("SkillType", FetchMode.Join)
-				.SetFetchMode("Activity", FetchMode.Join)
-				.SetFetchMode("WorkloadCollection", FetchMode.Join)
-				.SetFetchMode("ChildSkills", FetchMode.Join)
+				.Fetch("SkillType")
+				.Fetch("Activity")
+				.Fetch("WorkloadCollection")
+				.Fetch("ChildSkills")
 				.Add(Subqueries.Exists(subQuery))
 				.Future<MultisiteSkill>();
 
 			Session.CreateCriteria<ChildSkill>()
-				.SetFetchMode("SkillType", FetchMode.Join)
-				.SetFetchMode("Activity", FetchMode.Join)
-				.SetFetchMode("WorkloadCollection", FetchMode.Join)
+				.Fetch("SkillType")
+				.Fetch("Activity")
+				.Fetch("WorkloadCollection")
 				.Future<ChildSkill>();
 
 			Session.CreateCriteria<Workload>()
-				.SetFetchMode("QueueSourceCollection", FetchMode.Join)
+				.Fetch("QueueSourceCollection")
 				.Future<Workload>();
 
 			Session.CreateCriteria<QueueSource>()
@@ -128,8 +129,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var openhours = getOpenhours(templateIds);
             var taskPeriods = getTaskPeriods(templateIds);
             var skillDetail = getSkillDetail(skill);
-            var multiCriteria = Session.CreateMultiCriteria().Add(workloads).Add(queues).Add(templates).Add(openhours).Add(taskPeriods).Add(skillDetail);
-            var fetchedSkill = CollectionHelper.ToDistinctGenericCollection<ISkill>(multiCriteria.List()[0]).FirstOrDefault();
+
+            var multiCriteria = Session.CreateQueryBatch().Add<Skill>(workloads).Add<Workload>(queues).Add<Workload>(templates).Add<WorkloadDayBase>(openhours).Add<WorkloadDayBase>(taskPeriods).Add<Skill>(skillDetail);
+            var fetchedSkill = CollectionHelper.ToDistinctGenericCollection<ISkill>(multiCriteria.GetResult<Skill>(0)).FirstOrDefault();
 
             return fetchedSkill;
         }
@@ -140,17 +142,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetProjection(Projections.Property("w.Id"));
 
 			var skills = Session.CreateCriteria<Skill>("skill")
-				.SetFetchMode("WorkloadCollection", FetchMode.Join)
+				.Fetch("WorkloadCollection")
 				.Future<Skill>();
 
 			Session.CreateCriteria<Workload>("workload")
-				.SetFetchMode("TemplateWeekCollection", FetchMode.Join)
+				.Fetch("TemplateWeekCollection")
 				.Future<Workload>();
 			
 			Session.CreateCriteria<WorkloadDayTemplate>()
 				.Add(Subqueries.PropertyIn("Parent", workloadSubquery))
-				.SetFetchMode("OpenHourList", FetchMode.Join)
-				.SetFetchMode("TaskPeriodList", FetchMode.Join)
+				.Fetch("OpenHourList")
+				.Fetch("TaskPeriodList")
 				.Future<WorkloadDayTemplate>();
 
 			return skills.Distinct().ToList();
@@ -168,11 +170,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             var multisiteDayTemplates = DetachedCriteria.For<Skill>()
                 .Add(Restrictions.Eq("Id", skill.Id.GetValueOrDefault()))
-                .SetFetchMode("TemplateMultisiteWeekCollection", FetchMode.Join);
+                .Fetch("TemplateMultisiteWeekCollection");
 
             var templateMultisitePeriods = DetachedCriteria.For<MultisiteDayTemplate>()
                 .Add(Restrictions.Eq("Parent", skill))
-                .SetFetchMode("TemplateMultisitePeriodCollection", FetchMode.Join)
+                .Fetch("TemplateMultisitePeriodCollection")
                 .SetResultTransformer(Transformers.DistinctRootEntity);
 
             var multisiteDayTemplateIds = DetachedCriteria.For<MultisiteDayTemplate>()
@@ -185,48 +187,47 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             var distributions = DetachedCriteria.For<TemplateMultisitePeriod>()
                 .Add(Subqueries.PropertyIn("Id",templateMultisitePeriodIds))
-                .SetFetchMode("Distribution", FetchMode.Join)
+                .Fetch("Distribution")
                 .SetResultTransformer(Transformers.DistinctRootEntity);
 
             var childSkills = DetachedCriteria.For<Skill>()
-                .Add(Restrictions.Eq("Id", skill.Id.GetValueOrDefault())).SetFetchMode("ChildSkills", FetchMode.Join);
+                .Add(Restrictions.Eq("Id", skill.Id.GetValueOrDefault())).Fetch("ChildSkills");
             var childSkillsSubQuery = DetachedCriteria.For<Skill>()
                 .Add(Restrictions.Eq("ParentSkill", skill))
                 .SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
             var childSkillsDetail = getChildSkillDetail(childSkillsSubQuery);
 
             var multiCriteria =
-                Session.CreateMultiCriteria().Add(workloads).Add(queues).Add(templates).Add(openhours).
-                    Add(taskPeriods).Add(multisiteDayTemplates).Add(templateMultisitePeriods).Add(distributions).Add(
-                        childSkills).Add(childSkillsDetail).Add(getSkillDetail(skill));
+                Session.CreateQueryBatch().Add<Skill>(workloads).Add<Workload>(queues).Add<Workload>(templates).Add<WorkloadDayBase>(openhours).
+                    Add<WorkloadDayBase>(taskPeriods).Add<Skill>(multisiteDayTemplates).Add<MultisiteDayTemplate>(templateMultisitePeriods).Add<TemplateMultisitePeriod>(distributions)
+					.Add<Skill>(childSkills).Add<Skill>(childSkillsDetail).Add<Skill>(getSkillDetail(skill));
 
-            var fetchedSkill = CollectionHelper.ToDistinctGenericCollection<IMultisiteSkill>(multiCriteria.List()[0]).FirstOrDefault();
-            return fetchedSkill;
+            return CollectionHelper.ToDistinctGenericCollection<IMultisiteSkill>(multiCriteria.GetResult<Skill>(0)).FirstOrDefault();
         }
 
         private DetachedCriteria getSkillDetail(ISkill skill)
         {
             return DetachedCriteria.For<Skill>()
                 .Add(Restrictions.Eq("Id", skill.Id.GetValueOrDefault()))
-                .SetFetchMode("SkillType", FetchMode.Join)
-                .SetFetchMode("TemplateWeekCollection", FetchMode.Join)
-                .SetFetchMode("TemplateWeekCollection.TemplateSkillDataPeriodCollection", FetchMode.Join);
+                .Fetch("SkillType")
+                .Fetch("TemplateWeekCollection")
+                .Fetch("TemplateWeekCollection.TemplateSkillDataPeriodCollection");
         }
 
         private DetachedCriteria getChildSkillDetail(DetachedCriteria subQuery)
         {
             return DetachedCriteria.For<Skill>()
                 .Add(Subqueries.PropertyIn("Id", subQuery))
-                .SetFetchMode("SkillType", FetchMode.Join)
-                .SetFetchMode("TemplateWeekCollection", FetchMode.Join)
-                .SetFetchMode("TemplateWeekCollection.TemplateSkillDataPeriodCollection", FetchMode.Join);
+                .Fetch("SkillType")
+                .Fetch("TemplateWeekCollection")
+                .Fetch("TemplateWeekCollection.TemplateSkillDataPeriodCollection");
         }
 
         private DetachedCriteria getTaskPeriods(DetachedCriteria templateIds)
         {
             return DetachedCriteria.For<WorkloadDayBase>()
                 .Add(Subqueries.PropertyIn("Id", templateIds))
-                .SetFetchMode("TaskPeriodList", FetchMode.Join)
+                .Fetch("TaskPeriodList")
                 .SetResultTransformer(Transformers.DistinctRootEntity);
         }
 
@@ -234,14 +235,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return DetachedCriteria.For<WorkloadDayBase>()
                 .Add(Subqueries.PropertyIn("Id", templateIds))
-                .SetFetchMode("OpenHourList", FetchMode.Join).SetResultTransformer(Transformers.DistinctRootEntity);
+                .Fetch("OpenHourList").SetResultTransformer(Transformers.DistinctRootEntity);
         }
 
         private DetachedCriteria getWorkloadTemplates(DetachedCriteria workloadIds)
         {
             return DetachedCriteria.For<Workload>()
                 .Add(Subqueries.PropertyIn("Id", workloadIds))
-                .SetFetchMode("TemplateWeekCollection", FetchMode.Join);
+                .Fetch("TemplateWeekCollection");
         }
 
         private DetachedCriteria getWorkloadDayTemplateIds(DetachedCriteria workloadIds)
@@ -255,14 +256,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return DetachedCriteria.For<Workload>()
                 .Add(Subqueries.PropertyIn("Id", workloadIds))
-                .SetFetchMode("QueueSourceCollection", FetchMode.Join);
+                .Fetch("QueueSourceCollection");
         }
 
         private DetachedCriteria getWorkloads(ISkill skill)
         {
             return DetachedCriteria.For<Skill>()
                 .Add(Restrictions.Eq("Id", skill.Id.GetValueOrDefault()))
-                .SetFetchMode("WorkloadCollection", FetchMode.Join);
+                .Fetch("WorkloadCollection");
         }
 
 		private DetachedCriteria getWorkloadIds(ISkill skill)
