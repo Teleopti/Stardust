@@ -1,5 +1,5 @@
 'use strict';
-describe('planningGroupSettingEditController', function() {
+fdescribe('planningGroupSettingEditController', function() {
 	var $httpBackend,
 		$controller,
 		$state,
@@ -9,13 +9,11 @@ describe('planningGroupSettingEditController', function() {
 		stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
 		stateparamsForDefaultDo = {
 			groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-			filterId: '33f52ff4-0314-4a9e-80fa-5c958c57c92f',
-			isDefault: true
+			filterId: '33f52ff4-0314-4a9e-80fa-5c958c57c92f'
 		},
 		stateparamsForUndefaultDo = {
 			groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
-			filterId: '8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb',
-			isDefault: false
+			filterId: '8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb'
 		};
 
 	beforeEach(function() {
@@ -85,7 +83,8 @@ describe('planningGroupSettingEditController', function() {
 						MaxWeekendDaysOff: 16,
 						Filters: [],
 						Priority: 0,
-						PreferencePercent: 23
+						PreferencePercent: 23,
+						Default: true
 					},
 					{}
 				];
@@ -295,7 +294,7 @@ describe('planningGroupSettingEditController', function() {
 		vm.persist();
 		$httpBackend.flush();
 
-		expect(vm.default).toEqual(true);
+		expect(vm.settingInfo.Default).toEqual(true);
 		expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith(vm.settingInfo);
 
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {

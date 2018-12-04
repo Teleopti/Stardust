@@ -11,7 +11,6 @@
         var vm = this;
 
         var filterId = $stateParams.filterId ? $stateParams.filterId : null;
-		vm.default = true;
         vm.isEdit = $stateParams.filterId ? true : false;
         vm.settingInfo = {
             BlockSameShift: false,
@@ -29,9 +28,9 @@
             MaxWeekendDaysOff: 16,
             Priority: null,
             Id: filterId,
-            Default: vm.default,
             Filters: [],
-            Name: $stateParams.isDefault ? $translate.instant('Default') : "",
+			Default: false,
+            Name: "",
             PlanningGroupId: $stateParams.groupId
         };
         
@@ -74,7 +73,7 @@
                 return vm.settingInfo;
             return PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
                 .$promise.then(function (result) {
-					vm.default = result.Default;
+					vm.settingInfo.Default = result.Default;
                     vm.settingInfo.Name = result.Name;
                     vm.settingInfo.Filters = result.Filters;
                     vm.settingInfo.Priority = result.Priority;
@@ -170,7 +169,7 @@
         }
 
         function isValidFilters() {
-            return vm.settingInfo.Filters.length > 0 || vm.default;
+            return vm.settingInfo.Filters.length > 0 || vm.settingInfo.Default;
         }
 
         function isValidName() {

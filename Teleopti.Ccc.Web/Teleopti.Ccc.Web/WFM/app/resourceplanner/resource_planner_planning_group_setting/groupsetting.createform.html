@@ -19,7 +19,7 @@
 						<div class="con-flex">
 							<div class="form-input-wrap">
 								<label for="schedulingSettingName"><b translate>NameColon</b></label>
-								<input type="text" name="schedulingSettingName" id="schedulingSettingName" ng-disabled="vm.default" ng-model="vm.settingInfo.Name" class="pg-setting-name" required minlength="1" maxlength="100" autofocus
+								<input type="text" name="schedulingSettingName" id="schedulingSettingName" ng-disabled="vm.settingInfo.Default" ng-model="vm.settingInfo.Name" class="pg-setting-name" required minlength="1" maxlength="100" autofocus
 								/>
 								<div ng-cloak class="animate-show"
 									 ng-show="(form.$submitted || form.schedulingSettingName.$touched) && form.schedulingSettingName.$error.required">
@@ -30,7 +30,7 @@
 							</div>
 						</div>
 						<div class="con-flex">
-							<div class="form-input-wrap" ng-hide="vm.default">
+							<div class="form-input-wrap" ng-hide="vm.settingInfo.Default">
 								<label for="filtersId"><b translate>Filter:</b></label>
 								<div name="filters" id="filtersId">
 									<md-autocomplete md-input-name="filters" md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForDayOff'|translate}}"
@@ -187,7 +187,7 @@
 							</md-radio-group>
 						</div>
 					</div>
-					<div class="con-row" ng-if="vm.default">
+					<div class="con-row" ng-if="vm.settingInfo.Default">
 						<div class="form-input-wrap">
 							<label for="preferencePercent"><b translate>PreferenceFulfillmentPercentColon</b></label>
 							<input id="preferencePercent" type="number" ng-model="vm.settingInfo.PreferencePercent" placeholder="Preference Percentage" min="0" max="100" step="10"/>
