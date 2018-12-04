@@ -136,7 +136,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			foreach (var date in period.DayCollection())
 			{
 				var viewModel = getAgentScheduleViewModel(person, schedules.ScheduledDay(date));
-				viewModel.BelongsToDate = date.Date;
 				shiftViewModels.Add(viewModel);
 			}
 
@@ -147,14 +146,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		{
 			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
 			var schedulePeriod = getScheduleMinMax(scheduleViewModel, person, scheduleDay.DateOnlyAsPeriod.DateOnly);
+			var isMySchedule = _loggedOnUser.CurrentUser().Equals(person);
 
-			return _layerMapper.Map( scheduleViewModel, schedulePeriod, person.PermissionInformation.DefaultTimeZone(),person.Id== _loggedOnUser.CurrentUser().Id);
+			return _layerMapper.Map(scheduleViewModel, schedulePeriod, isMySchedule);
 		}
 
 		private DateTimePeriod getScheduleMinMax(AgentInTeamScheduleViewModel schedule, IPerson person, DateOnly date)
 		{
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-
+			
 			if (schedule.ScheduleLayers.IsNullOrEmpty()) {
 				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour), date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
 			}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			var startTime = schedule.ScheduleLayers.First().Start;
 			var endTime = schedule.ScheduleLayers.Last().End;
 
-			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);
+			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 		}
 
 		private PersonAccountSummaryViewModel getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)

@@ -28,6 +28,14 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			if (!schedulingOptions.UseAverageShiftLengths && !usingTeamBlockAndSameShift)
 				return shiftList;
 
+			if (openHoursSkillResult != null)
+			{
+				shiftList = shiftList.Select(s => new { Period = s.MainShiftProjection().Period(), s })
+					.Where(s => s.Period.HasValue && s.Period?.ElapsedTime() <= openHoursSkillResult.ForCurrentDate())
+					.Select(s => s.s)
+					.ToList();
+			}
+
 			//ta reda på alla skiftlängder i _shiftList, som en lista
 			var contractTimes = shiftList.ToLookup(s => s.WorkShiftProjectionContractTime());
 			var resultingTimes = contractTimes.Select(x => x.Key).ToArray();

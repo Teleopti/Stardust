@@ -22,17 +22,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public IList<TeamScheduleAgentScheduleViewModel> Map(IEnumerable<AgentInTeamScheduleViewModel> agentInTeamScheduleViewModels, DateTimePeriod schedulePeriod, TimeZoneInfo timeZoneInfo)
+		public IList<TeamScheduleAgentScheduleViewModel> Map(IEnumerable<AgentInTeamScheduleViewModel> agentInTeamScheduleViewModels, DateTimePeriod schedulePeriod)
 		{
+			var timeZoneInfo = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var startTime = schedulePeriod.StartDateTimeLocal(timeZoneInfo);
 			var endTime = schedulePeriod.EndDateTimeLocal(timeZoneInfo);
 			var result = new List<TeamScheduleAgentScheduleViewModel>();
 			foreach (var agentInTeamScheduleViewModel in agentInTeamScheduleViewModels)
 			{
 				var personId = agentInTeamScheduleViewModel.PersonId;
+
 				result.Add(new TeamScheduleAgentScheduleViewModel
 				{
-					Periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime, personId==_loggedOnUser.CurrentUser().Id),
+					Periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime,
+						personId == _loggedOnUser.CurrentUser().Id),
 					Name = agentInTeamScheduleViewModel.Name,
 					IsDayOff = agentInTeamScheduleViewModel.IsDayOff,
 					DayOffName = agentInTeamScheduleViewModel.DayOffName,
@@ -44,9 +47,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		}
 
 		public TeamScheduleAgentScheduleViewModel Map(
-			AgentInTeamScheduleViewModel agentInTeamScheduleViewModel, DateTimePeriod schedulePeriod,
-			TimeZoneInfo timeZoneInfo,bool isMySchedule = false)
+			AgentInTeamScheduleViewModel agentInTeamScheduleViewModel, DateTimePeriod schedulePeriod, bool isMySchedule = false)
 		{
+			var timeZoneInfo = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var startTime = schedulePeriod.StartDateTimeLocal(timeZoneInfo);
 			var endTime = schedulePeriod.EndDateTimeLocal(timeZoneInfo);
 			
@@ -58,7 +61,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				IsDayOff = agentInTeamScheduleViewModel.IsDayOff,
 				DayOffName = agentInTeamScheduleViewModel.DayOffName,
 				IsNotScheduled = agentInTeamScheduleViewModel.IsNotScheduled,
-				ShiftCategory = agentInTeamScheduleViewModel.ShiftCategory
+				ShiftCategory = agentInTeamScheduleViewModel.ShiftCategory,
+				BelongsToDate = schedulePeriod.StartDateTimeLocal(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())
 			};
 		}
 

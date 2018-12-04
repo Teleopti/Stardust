@@ -4208,33 +4208,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void refreshSummarySkillIfActive()
 		{
-			if (schedulerSplitters1.TabSkillData.SelectedIndex < 0) return;
-			var tab = schedulerSplitters1.TabSkillData.TabPages[schedulerSplitters1.TabSkillData.SelectedIndex];
-			var skill = (ISkill)tab.Tag;
-			IAggregateSkill aggregateSkillSkill = skill;
-			if (!aggregateSkillSkill.IsVirtual)
-				return;
-
 			var skillGridControl = resolveControlFromSkillResultViewSetting();
-			if (skillGridControl is SkillIntradayGridControl)
-			{
-				var skillStaffPeriods = SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-					aggregateSkillSkill,
-					TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
-						_currentIntraDayDate.AddDays(1).Date, SchedulerState.SchedulerStateHolder.TimeZoneInfo));
-				if (_skillIntradayGridControl.Presenter.RowManager != null)
-					_skillIntradayGridControl.Presenter.RowManager.SetDataSource(skillStaffPeriods);
-			}
-			else
-			{
-				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
-				if (selectedSkillGridControl == null)
-					return;
-
-				selectedSkillGridControl.SetDataSource(SchedulerState.SchedulerStateHolder, skill);
-			}
-
-			skillGridControl.Refresh();
+			schedulerSplitters1.RefreshSummarySkillIfActive(skillGridControl, _currentIntraDayDate);
 		}
 
 		private void loadBpos(IUnitOfWork uow, SchedulingScreenState stateHolder)
@@ -5486,8 +5461,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					schedulerSplitters1.ShowResult(false);
 				}
 			}
-
-
 		}
 
 		private void toolStripButtonShrinkageClick(object sender, EventArgs e)

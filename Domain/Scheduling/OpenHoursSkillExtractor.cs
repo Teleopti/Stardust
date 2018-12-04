@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface IOpenHoursSkillExtractor
 	{
-		OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period);
+		OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate);
 	}
 
 	public class OpenHoursSkillExtractor : IOpenHoursSkillExtractor
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
+		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate)
 		{
 			var openHoursDictionary = new Dictionary<DateOnly, IEffectiveRestriction>();
 			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, skillDays, _groupPersonSkillAggregator, period);
@@ -33,23 +34,23 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				var openHours = _openHourForDate.OpenHours(day, skillIntervalDataPerDateAndActivity[day]);
 				var restriction = new EffectiveRestriction(
-					new StartTimeLimitation(openHours?.StartTime, null),
-					new EndTimeLimitation(null, openHours?.EndTime),
-					new WorkTimeLimitation(null, null),
-					null, null, null,
-					new List<IActivityRestriction>());
+							new StartTimeLimitation(null, null),
+							new EndTimeLimitation(null, null),
+							new WorkTimeLimitation(null, openHours?.SpanningTime()),
+							null, null, null,
+							new List<IActivityRestriction>());
 
 				openHoursDictionary.Add(day, restriction);
 			}
 
-			return new OpenHoursSkillResult(openHoursDictionary);
+			return new OpenHoursSkillResult(openHoursDictionary, currentDate);
 		}
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)]
 	public class OpenHoursSkillExtractorDoNothing : IOpenHoursSkillExtractor
 	{
-		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
+		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate)
 		{
 			return null;
 		}
@@ -57,11 +58,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	public class OpenHoursSkillResult
 	{
-		public OpenHoursSkillResult(Dictionary<DateOnly, IEffectiveRestriction> openHoursDictionary)
+		private readonly DateOnly _currentDate;
+
+		public OpenHoursSkillResult(Dictionary<DateOnly, IEffectiveRestriction> openHoursDictionary, DateOnly currentDate)
 		{
+			_currentDate = currentDate;
 			OpenHoursDictionary = openHoursDictionary;
 		}
 
 		public Dictionary<DateOnly, IEffectiveRestriction> OpenHoursDictionary { get; }
+
+		public TimeSpan ForCurrentDate()
+		{
+			if (!OpenHoursDictionary.TryGetValue(_currentDate, out var lengthLimit)) return TimeSpan.MaxValue;
+			return lengthLimit.WorkTimeLimitation.EndTime ?? TimeSpan.MaxValue;
+		}
 	}
 }

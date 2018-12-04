@@ -21,7 +21,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Requests.Controller;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 
@@ -35,6 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		public RequestsController Target;
 		public FakeToggleManager ToggleManager;
 		public FakePermissions Permissions;
+		public FakePermissionProvider PermissionProvider;
 		public ICurrentScenario CurrentScenario;
 		public FakeDatabase Database;
 		public FakePersonRepository PersonRepository;
@@ -47,10 +47,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		{
 			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 			isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
+			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>(); 
-			isolate.UseTestDouble<FakeLicenseAvailability>().For<ILicenseAvailability>(); 
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true })).For<IScenarioRepository>();
+			isolate.UseTestDouble<FakeLicenseAvailability>().For<ILicenseAvailability>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") {DefaultScenario = true}))
+				.For<IScenarioRepository>();
 		}
 
 		[Test]
@@ -81,9 +83,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var date = new DateTime(2018, 11, 21);
 			var input = setupData(date);
 
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetShiftPeriods()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupData(date);
+
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 
 			var result = Target.GetRequests(input);
 			result.Requests.First().Shifts.Count().Should().Be.EqualTo(1);
+			result.Requests.First().Shifts.First().Periods.First().StartTime.Should().Be.EqualTo(date.AddHours(1));
+			result.Requests.First().Shifts.First().Periods.First().EndTime.Should().Be.EqualTo(date.AddHours(10));
+			result.Requests.First().Shifts.First().Periods.First().StartPositionPercentage.Should().Be.EqualTo(0.0);
+			result.Requests.First().Shifts.First().Periods.First().EndPositionPercentage.Should().Be.EqualTo(1.0);
 		}
 
 		[Test]
@@ -91,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		{
 			var date = new DateTime(2018, 11, 21);
 			var input = setupData(date);
-
+			
 			var result = Target.GetRequests(input);
 			result.Requests.First().Shifts.First().IsDayOff.Should().Be.False();
 		}
@@ -99,11 +116,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldGetBelongsToDate()
 		{
-			var expactedDate = new DateTime(2018, 11, 26);
-			var input = setupData(expactedDate);
+			var expactedDate = new DateTime(2018, 11, 26, 8, 0, 0, DateTimeKind.Utc);
+			var input = setupData(expactedDate, new List<DateTimePeriod>{new DateTimePeriod(expactedDate, expactedDate.AddHours(9))});
+
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 
 			var result = Target.GetRequests(input);
-			result.Requests.First().Shifts.First().BelongsToDate.Should().Be.EqualTo(expactedDate);
+			result.Requests.First().Shifts.First().BelongsToDate.Should().Be.EqualTo(expactedDate.Date.AddHours(1));
 		}
 
 		[Test]
@@ -158,80 +177,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 
 			var result = Target.GetRequests(input);
 			result.Requests.First().Shifts.Count().Should().Equals(2);
-		}
-
-		private AllRequestsFormData setupDataWithShiftCategory(DateTime date, string name, string shortName, Color color)
-		{
-			var scenarioId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-
-			CurrentScenario.Current().WithId(scenarioId);
-
-			Database.WithPerson(personId)
-				.WithScenario(scenarioId)
-				.WithTeam(teamId, "myTeam")
-				.WithPeriod(DateOnly.MinValue.ToString())
-				.WithShiftCategory(null, name, shortName, color)
-				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
-				.WithAbsenceRequest(personId, date.ToString());
-
-			setUpPersonRelatedInfo(personId);
-
-			return getInputForm(teamId, date, null);
-		}
-
-		private AllRequestsFormData setupData
-			(DateTime requestStartTime, IEnumerable<DateTimePeriod> schedulesPeriods=null, DateTime? requestEndTime = null)
-		{
-			var scenarioId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-
-			CurrentScenario.Current().WithId(scenarioId);
-
-			Database.WithPerson(personId)
-				.WithScenario(scenarioId)
-				.WithTeam(teamId, "myTeam")
-				.WithPeriod(DateOnly.MinValue.ToString())
-				.WithSchedules(schedulesPeriods?? new List<DateTimePeriod> { new DateTimePeriod(requestStartTime.AddHours(8).Utc(), requestStartTime.AddHours(17).Utc()) })
-				.WithAbsenceRequest(personId, requestStartTime, requestEndTime.HasValue?requestEndTime.Value:requestStartTime);
-
-			setUpPersonRelatedInfo(personId);
-
-			return getInputForm(teamId, requestStartTime, requestEndTime);
-		}
-
-		private AllRequestsFormData getInputForm(Guid teamId, DateTime start, DateTime? end)
-		{
-			return new AllRequestsFormData
-			{
-				StartDate = new DateOnly(start).AddDays(-1),
-				EndDate = end.HasValue ? new DateOnly(end.Value).AddDays(1) : new DateOnly(start).AddDays(1),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { teamId.ToString() }
-			};
-		}
-
-		private void setUpPersonRelatedInfo(Guid personId)
-		{
-			var person = PersonRepository.Get(personId);
-			setPermissions(person);
-			PersonFinderReadOnlyRepository.Has(person);
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = personId });
-			LoggedOnUser.SetFakeLoggedOnUser(person);
-		}
-
-		private void setPermissions(IPerson person)
-		{
-			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebRequests);
-			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
-			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-			var role = ApplicationRoleFactory.CreateRole("test", "test");
-			role.AddApplicationFunction(ApplicationFunctionFactory.CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.WebRequests));
-			role.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
-			person.PermissionInformation.AddApplicationRole(role);
 		}
 
 		[Test]
@@ -329,6 +274,91 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var result = Target.GetRequestsPermissions();
 
 			result.Content.HasEditSiteOpenHoursPermission.Should().Be.False();
+		}
+
+		private AllRequestsFormData setupDataWithShiftCategory(DateTime date, string name, string shortName, Color color)
+		{
+			var scenarioId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+
+			CurrentScenario.Current().WithId(scenarioId);
+
+			Database.WithPerson(personId)
+				.WithScenario(scenarioId)
+				.WithTeam(teamId, "myTeam")
+				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithShiftCategory(null, name, shortName, color)
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+				.WithAbsenceRequest(personId, date.ToString());
+
+			setUpPersonRelatedInfo(personId);
+			setUpLogonUser();
+
+			return getInputForm(teamId, date, null);
+		}
+
+		private AllRequestsFormData setupData
+			(DateTime requestStartTime, IEnumerable<DateTimePeriod> schedulesPeriods = null, DateTime? requestEndTime = null)
+		{
+			var scenarioId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+
+			CurrentScenario.Current().WithId(scenarioId);
+
+			Database.WithPerson(personId)
+				.WithScenario(scenarioId)
+				.WithTeam(teamId, "myTeam")
+				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithSchedules(schedulesPeriods ?? new List<DateTimePeriod> { new DateTimePeriod(requestStartTime.AddHours(8).Utc(), requestStartTime.AddHours(17).Utc()) })
+				.WithAbsenceRequest(personId, requestStartTime, requestEndTime.HasValue ? requestEndTime.Value : requestStartTime);
+
+			setUpPersonRelatedInfo(personId);
+			setUpLogonUser();
+
+			return getInputForm(teamId, requestStartTime, requestEndTime);
+		}
+
+		private AllRequestsFormData getInputForm(Guid teamId, DateTime start, DateTime? end)
+		{
+			return new AllRequestsFormData
+			{
+				StartDate = new DateOnly(start).AddDays(-1),
+				EndDate = end.HasValue ? new DateOnly(end.Value).AddDays(1) : new DateOnly(start).AddDays(1),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { teamId.ToString() }
+			};
+		}
+
+		private void setUpPersonRelatedInfo(Guid personId)
+		{
+			var person = PersonRepository.Get(personId);
+
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			PersonFinderReadOnlyRepository.Has(person);
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = personId });
+		}
+
+		private void setUpLogonUser()
+		{
+			var logonUser = PersonFactory.CreatePersonWithGuid("logon", "user");
+			LoggedOnUser.SetFakeLoggedOnUser(logonUser);
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			setLogonUserPermissions();
+			PersonFinderReadOnlyRepository.Has(logonUser);
+		}
+
+		private void setLogonUserPermissions()
+		{
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebRequests);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			var role = ApplicationRoleFactory.CreateRole("test", "test");
+			role.AddApplicationFunction(ApplicationFunctionFactory.CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.WebRequests));
+			role.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone };
+			LoggedOnUser.CurrentUser().PermissionInformation.AddApplicationRole(role);
 		}
 	}
 }

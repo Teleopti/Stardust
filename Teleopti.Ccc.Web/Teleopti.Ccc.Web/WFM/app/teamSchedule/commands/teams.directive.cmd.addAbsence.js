@@ -115,6 +115,7 @@
 		};
 
 		function updateInvalidAgents() {
+			vm.invalidAgents = [];
 			if (vm.isFullDayAbsence) {
 				determineIsSameTimezoneForFullDayAbsence();
 			} 
@@ -143,7 +144,6 @@
 		};
 
 		function determineIsSameTimezoneForFullDayAbsence() {
-			vm.invalidAgents = [];
 			var invalidAgentNameList = [];
 			vm.selectedAgents.forEach(function (agent) {
 				if (vm.getCurrentTimezone() !== vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {

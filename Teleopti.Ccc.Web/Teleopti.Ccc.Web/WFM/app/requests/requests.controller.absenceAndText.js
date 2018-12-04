@@ -173,15 +173,12 @@
 			vm.showingScheduleAgentName = absence.AgentName;
 
 			var shifts = [];
+
 			absence.Shifts.forEach(function(s) {
-				shifts.push(
-					requestScheduleService.buildShiftData(
-						s,
-						absence.TimeZone,
-						vm.userTimeZone,
-						vm.isUsingRequestSubmitterTimeZone
-					)
-				);
+				var currentTimeZone = vm.userTimeZone;
+				var targetTimeZone = vm.isUsingRequestSubmitterTimeZone ? absence.TimeZone : vm.userTimeZone;
+
+				shifts.push(requestScheduleService.buildShiftData(s, currentTimeZone, targetTimeZone));
 			});
 
 			vm.shifts = shifts;

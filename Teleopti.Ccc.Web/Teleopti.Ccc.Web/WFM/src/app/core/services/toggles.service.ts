@@ -10,17 +10,16 @@ export interface Toggles {
 
 @Injectable()
 export class TogglesService {
-	private toggles$ = new ReplaySubject<Toggles>(1);
+	private _toggles$ = new ReplaySubject<Toggles>(1);
+	public get toggles$(): Observable<Toggles> {
+		return this._toggles$;
+	}
 
 	constructor(private http: HttpClient) {
 		this.http.get('../ToggleHandler/AllToggles').subscribe({
 			next: (toggles: Toggles) => {
-				this.toggles$.next(toggles);
+				this._toggles$.next(toggles);
 			}
 		});
-	}
-
-	getToggles(): Observable<Toggles> {
-		return this.toggles$;
 	}
 }

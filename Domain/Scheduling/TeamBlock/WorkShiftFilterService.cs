@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	            var matrixForPerson = matrixList.FirstOrDefault(scheduleMatrixPro => scheduleMatrixPro.Person.Equals(person));
 	            if (matrixForPerson != null)
 	            {
-					var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, skillDays, new DateOnlyPeriod(matrixForPerson.FullWeeksPeriodDays.Min(x => x.Day), matrixForPerson.FullWeeksPeriodDays.Max(x => x.Day)));
+					var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, skillDays, new DateOnlyPeriod(matrixForPerson.FullWeeksPeriodDays.Min(x => x.Day), matrixForPerson.FullWeeksPeriodDays.Max(x => x.Day)), dateOnly);
 					shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions, openHoursResult);
 				}
 			}

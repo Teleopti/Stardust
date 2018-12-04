@@ -44,13 +44,10 @@
 			};
 		};
 
-		svc.buildShiftData = function(shift, requestTimezone, userTimeZone, isUsingRequestSubmitterTimeZone) {
-			var currentTimeZone = userTimeZone;
-			var targetTimeZone = isUsingRequestSubmitterTimeZone ? requestTimezone : userTimeZone;
-
+		svc.buildShiftData = function(shift, currentTimeZone, targetTimeZone) {
 			return {
 				Name: shift.Name,
-				Date: $filter('date')(shift.BelongsToDate, $locale.DATETIME_FORMATS.shortDate),
+				Date: getShiftDate(shift.BelongsToDate, currentTimeZone, targetTimeZone),
 				Periods: buildPeriods(shift.Periods, currentTimeZone, targetTimeZone),
 				IsDayOff: shift.IsDayOff,
 				DayOffName: shift.DayOffName,
@@ -60,6 +57,16 @@
 				ShiftEndTime: getShiftEndTime(shift.Periods, currentTimeZone, targetTimeZone)
 			};
 		};
+
+		function getShiftDate(belongsToDate, currentTimeZone, targetTimeZone) {
+			return $filter('date')(
+				moment
+					.tz(belongsToDate, currentTimeZone)
+					.tz(targetTimeZone)
+					.format('YYYY-MM-DDTHH:mm:ss'),
+				$locale.DATETIME_FORMATS.shortDate
+			);
+		}
 
 		function getShiftStartTime(periods, currentTimeZone, targetTimeZone) {
 			if (!periods || periods.length == 0) return '';

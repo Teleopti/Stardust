@@ -25,7 +25,7 @@ export class SettingsMenuComponent {
 		public toggleService: TogglesService,
 		public userService: UserService
 	) {
-		this.toggleService.getToggles().subscribe({
+		this.toggleService.toggles$.subscribe({
 			next: toggles => {
 				this.changePasswordToggle = toggles.Wfm_Authentication_ChangePasswordMenu_76666;
 			}

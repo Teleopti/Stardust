@@ -28,15 +28,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 				{
 					using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 					{
-						try
-						{
-							_settings = _repositoryFactory.CreateGlobalSettingDataRepository(uow)
-								.FindValueByKey<IExportForecastToFileSettings>("ExportForecastToFileSettings", new ExportForecastToFileSettings());
-						}
-						catch (ArgumentException) // deserialize Teleopti.Interface.DateOnlyPeriod from old data
-						{
-							_settings = new ExportForecastToFileSettings();
-						}
+						_settings = _repositoryFactory.CreateGlobalSettingDataRepository(uow)
+							.FindValueByKey<IExportForecastToFileSettings>("ExportForecastToFileSettings", new ExportForecastToFileSettings());
 					}
 				}
 
