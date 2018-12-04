@@ -76,6 +76,7 @@
                 return vm.settingInfo;
             return PlanGroupSettingService.getSetting({ id: filterId})
                 .$promise.then(function (result) {
+                	vm.planningGroupName = result.PlanningGroupName;
 					vm.settingInfo.Default = result.Default;
                     vm.settingInfo.Name = result.Name;
                     vm.settingInfo.Filters = result.Filters;
@@ -117,12 +118,12 @@
         }
 
         function removeSelectedFiltersInList(filters, selectedFilters) {
-            if (selectedFilters.length == 0 || filters.length == 0)
+            if (selectedFilters.length === 0 || filters.length === 0)
                 return filters;
             var result = angular.copy(filters);
             for (var i = filters.length - 1; i >= 0; i--) {
                 angular.forEach(selectedFilters, function (selectedItem) {
-                    if (filters[i].Id == selectedItem.Id) {
+                    if (filters[i].Id === selectedItem.Id) {
                         result.splice(i, 1);
                     }
                 });
