@@ -226,7 +226,7 @@
 	});
 
 	it('should apply correct data for adding absence from part of day to x day', function () {
-		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
+		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
 		scheduleManagement.resetSchedules(
 			[{
 				Date: '2018-08-01',
@@ -242,7 +242,9 @@
 		personSelection.updatePersonSelection(personSchedule);
 		
 		var result = setUp("2018-08-01", null);
+		result.container[0].querySelector('.fullDayAbsenceCheckBox').click();
 		result.container[0].querySelectorAll('.absence-selector md-option')[0].click();
+
 		var startDateEl = result.container[0].querySelector('.start-time team-schedule-datepicker input');
 		var endDateEl = result.container[0].querySelector('.end-time  team-schedule-datepicker input');
 		startDateEl.value = "8/1/18";
