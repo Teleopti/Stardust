@@ -28,8 +28,7 @@
 										ng-model="vm.selectedScenario"
 										ng-change="vm.changeScenario(vm.selectedScenario, true)"
 										placeholder="{{'Scenario' | translate}}"
-										ng-disabled="vm.changesMade || vm.savingToScenario || vm.isForecastRunning"
-									>
+										ng-disabled="vm.changesMade || vm.savingToScenario || vm.isForecastRunning">
 										<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{
 											scenario.Name
 										}}</md-option>
@@ -44,8 +43,7 @@
 										tabindex="0"
 										class="context-menu card-context"
 										ng-click="vm.periodModal = true"
-										ng-disabled="vm.savingToScenario || vm.isForecastRunning || vm.changesMade"
-									>
+										ng-disabled="vm.savingToScenario || vm.isForecastRunning || vm.changesMade">
 										<i class="mdi mdi-calendar"></i>
 										<md-tooltip>{{ 'SelectForecastPeriodIntro' | translate }}</md-tooltip>
 									</button>
@@ -62,8 +60,7 @@
 										tabindex="0"
 										class="context-menu card-context"
 										ng-click="vm.scenarioExportModal = true"
-										ng-disabled="vm.savingToScenario || vm.isForecastRunning"
-									>
+										ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 										<i class="mdi mdi-share"></i>
 										<md-tooltip>{{ 'SaveToOtherScenario' | translate }}</md-tooltip>
 									</button>
@@ -71,8 +68,7 @@
 										tabindex="0"
 										class="context-menu card-context"
 										ng-click="vm.exportModal = true"
-										ng-disabled="vm.savingToScenario || vm.isForecastRunning"
-									>
+										ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 										<i class="mdi mdi-file-excel"></i>
 										<md-tooltip>{{ 'ExportToFile' | translate }}</md-tooltip>
 									</button>
@@ -221,8 +217,7 @@
 						<button
 							class="wfm-btn wfm-btn-invis-primary"
 							ng-click="vm.forecastModal = true"
-							ng-if="vm.selectedWorkload.SkillType.DoDisplayData"
-						>
+							ng-if="vm.selectedWorkload.SkillType.DoDisplayData">
 							{{ 'ForecastDo' | translate }}
 						</button>
 					</div>
@@ -252,8 +247,7 @@
 						<div
 							tabindex="0"
 							ng-show="vm.selectedDayCount.length > 0"
-							class="grow-out context-menu card-context"
-						>
+							class="grow-out context-menu card-context">
 							<i class="mdi mdi-dots-vertical"></i>
 							<wfm-badge badge-model="vm.selectedDayCount.length" pulse="true" status="'notice-success'">
 							</wfm-badge>
@@ -322,8 +316,7 @@
 					<button
 						class="wfm-btn wfm-btn-invis-primary"
 						ng-if="vm.changesMade && vm.selectedWorkload.SkillType.DoDisplayData"
-						ng-click="vm.applyWipToScenario()"
-					>
+						ng-click="vm.applyWipToScenario(); vm.confirmDiscardDialog = false; vm.reforecastConfirmation=false; vm.closeConfirmation=false;">
 						{{ 'Save' | translate }}
 					</button>
 				</div>
@@ -355,8 +348,7 @@
 					<button
 						class="wfm-btn wfm-btn-invis-primary"
 						ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate"
-						ng-click="vm.changesMade=false; vm.forecastWorkload()"
-					>
+						ng-click="vm.changesMade=false; vm.forecastWorkload()">
 						{{ 'Apply' | translate }}
 					</button>
 				</aside>
@@ -388,8 +380,7 @@
 					<button
 						class="wfm-btn wfm-btn-invis-primary"
 						ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate"
-						ng-click="vm.getWorkloadForecastData(true)"
-					>
+						ng-click="vm.getWorkloadForecastData(true)">
 						{{ 'Apply' | translate }}
 					</button>
 				</aside>
@@ -412,11 +403,7 @@
 
 			<div class="modal-actions">
 				<aside>
-					<button
-						class="wfm-btn wfm-btn-invis-primary"
-						ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate"
-						ng-click="vm.exportToFile()"
-					>
+					<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.exportToFile()">
 						{{ 'Export' | translate }}
 					</button>
 				</aside>
@@ -444,11 +431,7 @@
 
 			<div class="modal-actions">
 				<aside>
-					<button
-						class="wfm-btn wfm-btn-invis-primary"
-						ng-disabled="!vm.targetScenario"
-						ng-click="vm.exportToScenario()"
-					>
+					<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.targetScenario" ng-click="vm.exportToScenario()">
 						{{ 'Save' | translate }}
 					</button>
 				</aside>
@@ -476,10 +459,9 @@
 								type="button"
 								focus-me="vm.closeConfirmation"
 								id="confirmDiscardButton"
-								ng-click="vm.changesMade=false; vm.confirmDiscardDialog = false; vm.getWorkloadForecastData(true);
+								ng-click="vm.changesMade=false; vm.closeConfirmation=false; vm.confirmDiscardDialog = false; vm.getWorkloadForecastData(true);
 									$event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-default"
-							>
+								class="wfm-btn wfm-btn-invis-default">
 								{{ 'Yes' | translate }}
 							</button>
 
@@ -487,8 +469,7 @@
 								type="button"
 								id="cancelDiscardButton"
 								ng-click="vm.confirmDiscardDialog=false; $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-primary"
-							>
+								class="wfm-btn wfm-btn-invis-primary">
 								{{ 'No' | translate }}
 							</button>
 						</aside>
@@ -516,8 +497,7 @@
 								focus-me="vm.closeConfirmation"
 								id="confirmExitButton"
 								ng-click="vm.changesMade=false; vm.exitConfigMode(); $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-default"
-							>
+								class="wfm-btn wfm-btn-invis-default">
 								{{ 'Yes' | translate }}
 							</button>
 
@@ -525,8 +505,7 @@
 								type="button"
 								id="cancelExitButton"
 								ng-click="vm.stateName=''; vm.closeConfirmation=false; $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-primary"
-							>
+								class="wfm-btn wfm-btn-invis-primary">
 								{{ 'No' | translate }}
 							</button>
 						</aside>
@@ -554,8 +533,7 @@
 								id="confirmExitOnForecastingButton"
 								ng-click="vm.isForecastRunning=false; vm.closeConfirmationOnForecasting=false; vm.exitConfigMode();
 								$event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-primary"
-							>
+								class="wfm-btn wfm-btn-invis-primary">
 								{{ 'Yes' | translate }}
 							</button>
 
@@ -563,8 +541,7 @@
 								type="button"
 								id="cancelExitOnForecastingButton"
 								ng-click="vm.stateName=''; vm.closeConfirmationOnForecasting=false; $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-default"
-							>
+								class="wfm-btn wfm-btn-invis-default">
 								{{ 'No' | translate }}
 							</button>
 						</aside>
@@ -590,17 +567,13 @@
 								type="button"
 								focus-me="vm.closeConfirmation"
 								id="confirmReforecastButton"
-								ng-click="vm.reforecastConfirmation=false; vm.forecastModal=true; $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-default"
-							>
+								ng-click="vm.reforecastConfirmation=false; vm.forecastModal=true; $event.stopPropagation();"class="wfm-btn wfm-btn-invis-default">
 								{{ 'Yes' | translate }}
 							</button>
 							<button
 								type="button"
 								id="cancelReforecastButton"
-								ng-click="vm.stateName=''; vm.reforecastConfirmation=false; $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-primary"
-							>
+								ng-click="vm.stateName=''; vm.reforecastConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-primary">
 								{{ 'No' | translate }}
 							</button>
 						</aside>
