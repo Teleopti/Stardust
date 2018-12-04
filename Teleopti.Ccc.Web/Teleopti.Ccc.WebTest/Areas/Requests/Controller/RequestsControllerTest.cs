@@ -23,6 +23,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		[Test]
 		public void ShouldGetShiftCategory()
 		{
-			var expactedDate = new DateTime(2018, 11, 26);
+			var expactedDate = new DateTime(2018, 11, 26, 0, 0, 0, DateTimeKind.Utc);
 			var input = setupData(expactedDate);
 
 			var result = Target.GetRequests(input);

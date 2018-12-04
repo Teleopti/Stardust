@@ -136,7 +136,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			foreach (var date in period.DayCollection())
 			{
 				var viewModel = getAgentScheduleViewModel(person, schedules.ScheduledDay(date));
-				viewModel.BelongsToDate = date.Date;
 				shiftViewModels.Add(viewModel);
 			}
 
