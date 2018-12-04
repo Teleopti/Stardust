@@ -244,7 +244,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Adherence", "T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adherence", "Adherence", "{38151FA3-872A-4F4A-8ACA-AC06E64FFD79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Intraday.UnitTest", "Teleopti.Ccc.Intraday.UnitTests\Teleopti.Ccc.Intraday.UnitTest.csproj", "{F26B3F93-6FE3-4962-B5DE-E27BC6583029}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Intraday.UnitTest", "Teleopti.Ccc.Intraday.UnitTest\Teleopti.Ccc.Intraday.UnitTest.csproj", "{F26B3F93-6FE3-4962-B5DE-E27BC6583029}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
