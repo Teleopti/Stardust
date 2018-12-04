@@ -446,6 +446,8 @@
 				event.preventDefault();
 				vm.stateName = next.name;
 				vm.closeConfirmation = true;
+				vm.confirmDiscardDialog = false;
+				vm.reforecastConfirmation = false;
 				return;
 			}
 
