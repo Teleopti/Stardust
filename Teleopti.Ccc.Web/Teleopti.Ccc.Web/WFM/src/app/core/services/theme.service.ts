@@ -43,14 +43,14 @@ export class ThemeService {
 		this.http.post('../api/Theme/Change', theme).subscribe();
 	}
 
-	applyTheme(themeToApply: ThemeType) {
+	async applyTheme(themeToApply: ThemeType) {
 		if (this.getCurrentTheme() !== themeToApply) {
-			const waitForThemes = Promise.all([
+			return Promise.all([
 				this.applyAngularMatrialTheme(themeToApply),
 				this.applyStyleguideTheme(themeToApply),
 				this.applyAntTheme(themeToApply)
 			]);
-		}
+		} else return Promise.resolve();
 	}
 
 	async applyAngularMatrialTheme(theme: ThemeType) {
@@ -65,15 +65,15 @@ export class ThemeService {
 		return;
 	}
 
-	applyStyleguideTheme(theme) {
+	async applyStyleguideTheme(theme) {
 		return this.replaceCssFile(`dist/styleguide_${theme}.css`, 'themeStyleguide', theme);
 	}
 
-	applyAntTheme(theme: ThemeType) {
+	async applyAntTheme(theme: ThemeType) {
 		return this.replaceCssFile(`dist/ant_${theme}.css`, 'themeAnt', theme);
 	}
 
-	replaceCssFile(path: string, id: string, theme: ThemeType) {
+	async replaceCssFile(path: string, id: string, theme: ThemeType) {
 		return new Promise((res, rej) => {
 			const oldNode = this.document.getElementById(id);
 			const newNode = this.document.createElement('link');
