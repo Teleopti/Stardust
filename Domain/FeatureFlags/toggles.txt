@@ -89,7 +89,7 @@ ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = true
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
-ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
+ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = RC
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = DEV
