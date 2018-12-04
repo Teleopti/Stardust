@@ -27,7 +27,6 @@
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.notAllowedNameListString = "";
-		vm.availableActivitiesLoaded = false;
 		vm.checkingCommand = false;
 		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 		vm.invalidAgents = [];
@@ -51,7 +50,6 @@
 
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.availableActivities = activities;
-			vm.availableActivitiesLoaded = true;
 		});
 
 		function decidePersonBelongsToDates(agents, targetTimeRange) {

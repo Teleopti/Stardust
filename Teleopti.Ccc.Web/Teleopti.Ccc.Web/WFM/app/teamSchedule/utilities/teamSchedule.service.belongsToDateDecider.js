@@ -1,11 +1,11 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').service('belongsToDateDecider', belongsToDateDecider);
 
-	belongsToDateDecider.$inject = ['$filter','serviceDateFormatHelper'];
+	belongsToDateDecider.$inject = ['serviceDateFormatHelper'];
 
-	function belongsToDateDecider($filter, serviceDateFormatHelper) {
+	function belongsToDateDecider(serviceDateFormatHelper) {
 
 		var self = this;
 
@@ -21,9 +21,9 @@
 
 			if (intersectedShiftDays.length > 0) return intersectedShiftDays[0].date;
 
-			var matchedDates = normalizedScheduleDataArray.filter(function(d) {
-				return d.timeRange.startTime <= targetTimeRange.startTime && targetTimeRange.startTime < d.timeRange.endTime;
-			}).map(function(d) {
+			var matchedDates = normalizedScheduleDataArray.filter(function (d) {
+				return d.timeRange.startTime.isSameOrBefore(targetTimeRange.startTime) && targetTimeRange.startTime.isBefore(d.timeRange.endTime);
+			}).map(function (d) {
 				return d.date;
 			});
 
@@ -31,30 +31,30 @@
 		}
 
 		function checkTimeRangeAllowedForIntradayAbsence(targetTimeRange, normalizedScheduleDataArray) {
-			return normalizedScheduleDataArray.some(function(day) {
+			return normalizedScheduleDataArray.some(function (day) {
 				return day.shiftRange &&
 					targetTimeRange.startTime.isSameOrAfter(day.shiftRange.startTime) &&
 					targetTimeRange.endTime.isSameOrBefore(day.shiftRange.endTime);
 			});
 		}
 
-		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {		
+		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {
 
-			var intersectedShiftDays = normalizedScheduleDataArray.filter(function(day) {
+			var intersectedShiftDays = normalizedScheduleDataArray.filter(function (day) {
 				return day.shiftRange && timeRangeIntersect(day.shiftRange, targetTimeRange);
 			});
 
 			if (intersectedShiftDays.length > 1) return null;
 			if (intersectedShiftDays.length === 1) {
-				if (mergedRangeIsNotTooLong(targetTimeRange, intersectedShiftDays[0].shiftRange) 
+				if (mergedRangeIsNotTooLong(targetTimeRange, intersectedShiftDays[0].shiftRange)
 					&& !rangeStartsBeforeDay(targetTimeRange, intersectedShiftDays[0].timeRange)) {
 					return intersectedShiftDays[0].date;
 				} else {
 					return null;
-				}				
+				}
 			}
 
-			var startInEmptyDays = normalizedScheduleDataArray.filter(function (day) {				
+			var startInEmptyDays = normalizedScheduleDataArray.filter(function (day) {
 				return day.date === currentDate && !day.shiftRange && targetTimeRange.startTime >= day.timeRange.startTime && targetTimeRange.startTime < day.timeRange.endTime;
 			});
 
@@ -71,7 +71,7 @@
 			var result = dates.map(function (date) {
 				var dayStart = moment.tz(date, personScheduleVm.Timezone.IanaId).startOf('day');
 				var dayEnd = moment.tz(date, personScheduleVm.Timezone.IanaId).add(24, 'hour');
-				
+
 				var timeRangeForDate = {
 					startTime: dayStart.tz(currentTimezone),
 					endTime: dayEnd.tz(currentTimezone)
@@ -99,7 +99,7 @@
 					}
 				});
 			}
-			return result;			
+			return result;
 		}
 
 		function mergedRangeIsNotTooLong(timeRangeA, timeRangeB) {
@@ -114,7 +114,7 @@
 		}
 
 		function timeRangeIntersect(timeRangeA, timeRangeB) {
-			return (timeRangeA.startTime.isSameOrBefore(timeRangeB.startTime, 'minute') && timeRangeA.endTime.isSameOrAfter( timeRangeB.startTime, 'minute')) ||
+			return (timeRangeA.startTime.isSameOrBefore(timeRangeB.startTime, 'minute') && timeRangeA.endTime.isSameOrAfter(timeRangeB.startTime, 'minute')) ||
 				(timeRangeB.startTime.isSameOrBefore(timeRangeA.startTime, 'minute') && timeRangeB.endTime.isSameOrAfter(timeRangeA.startTime, 'minute'));
 		}
 	}
