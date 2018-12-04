@@ -190,3 +190,22 @@ _:-ms-lang(x),
 		grid-template-columns: repeat(auto-fill, minmax(100%, auto)) !important;
 	}
 }
+
+// Replacing styles from bootstrap.css
+
+.label {
+	display: inline;
+	padding: 0.2em 0.6em 0.3em;
+	font-size: 75%;
+	font-weight: bold;
+	line-height: 1;
+	color: $white;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: 0.25em;
+}
+
+.label-info {
+	background-color: $teal-300;
+}
