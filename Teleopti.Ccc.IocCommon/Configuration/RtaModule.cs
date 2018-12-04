@@ -23,8 +23,9 @@ using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Infrastructure;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure.Service;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Infrastructure;
 using Teleopti.Wfm.Adherence.Tool;
 using Teleopti.Wfm.Adherence.Tracer;
 using Teleopti.Wfm.Adherence.Tracer.Infrastructure;
@@ -179,8 +180,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ActivityEventPublisher>().SingleInstance();
 			builder.RegisterType<RuleEventPublisher>().SingleInstance();
 			builder.RegisterType<LateForWorkEventPublisher>().SingleInstance();
-
-			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 
 			builder.RegisterType<ProperAlarm>().SingleInstance();
 

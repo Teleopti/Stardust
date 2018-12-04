@@ -1,5 +1,6 @@
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 {

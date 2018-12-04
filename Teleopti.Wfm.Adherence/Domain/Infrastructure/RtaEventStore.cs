@@ -10,8 +10,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 using Teleopti.Wfm.Adherence.Domain.Events;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure.Service;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Domain.Infrastructure
 {

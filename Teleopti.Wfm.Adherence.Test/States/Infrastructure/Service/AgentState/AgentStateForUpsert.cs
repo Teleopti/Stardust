@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 		}
 	}
 
-	public class AgentStateForUpsert : Domain.Service.AgentState
+	public class AgentStateForUpsert : Adherence.States.AgentState
 	{
 		public AgentStateForUpsert()
 		{
