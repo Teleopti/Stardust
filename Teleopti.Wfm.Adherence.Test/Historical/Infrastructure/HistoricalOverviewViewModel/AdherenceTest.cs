@@ -6,8 +6,9 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure.HistoricalOverviewViewModel
@@ -15,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure.HistoricalOvervi
 	[DatabaseTest]
 	public class AdherenceTest
 	{
-		public ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
+		public HistoricalOverviewViewModelBuilder Target;
 		public Database Database;
 		public MutableNow Now;
 		public IEventPublisher Publisher;

@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Monitor;
 using Teleopti.Wfm.Adherence.States;

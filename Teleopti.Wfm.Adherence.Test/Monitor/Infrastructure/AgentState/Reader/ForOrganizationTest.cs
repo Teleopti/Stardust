@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Monitor;
 using Teleopti.Wfm.Adherence.States;

@@ -10,7 +10,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {

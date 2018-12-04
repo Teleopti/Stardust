@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 	[FakePermissions]
 	public class PermissionTest : IIsolateSystem
 	{
-		public Adherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
+		public Adherence.Historical.HistoricalOverviewViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public FakeLoggedOnUser LoggedOnUser;

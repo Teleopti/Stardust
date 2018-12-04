@@ -26,10 +26,9 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure;
 using Teleopti.Wfm.Adherence.Configuration;
-using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
 

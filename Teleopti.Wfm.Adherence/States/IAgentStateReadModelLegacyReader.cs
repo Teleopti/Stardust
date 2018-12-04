@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Monitor;
 
 namespace Teleopti.Wfm.Adherence.States
