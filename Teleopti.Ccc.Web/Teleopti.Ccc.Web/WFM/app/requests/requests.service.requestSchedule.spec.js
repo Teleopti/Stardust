@@ -104,7 +104,7 @@ describe('requestScheduleService', function() {
 			BelongsToDate: '2018-11-23T00:00:00'
 		};
 
-		var shiftData = requestScheduleService.buildShiftData(shift, 'Asia/Amman', 'Europe/Berlin', true);
+		var shiftData = requestScheduleService.buildShiftData(shift, 'Europe/Berlin', 'Asia/Amman');
 
 		expect(shiftData).toBeTruthy();
 		expect(shiftData.Name).toBe('Ashley Andeen');
@@ -158,7 +158,7 @@ describe('requestScheduleService', function() {
 			BelongsToDate: '2018-11-30T00:00:00'
 		};
 
-		var shiftData = requestScheduleService.buildShiftData(shift, 'Asia/Amman', 'Europe/Berlin', false);
+		var shiftData = requestScheduleService.buildShiftData(shift, 'Europe/Berlin', 'Europe/Berlin');
 
 		expect(shiftData).toBeTruthy();
 		expect(shiftData.Name).toBe('Ashley Andeen');
