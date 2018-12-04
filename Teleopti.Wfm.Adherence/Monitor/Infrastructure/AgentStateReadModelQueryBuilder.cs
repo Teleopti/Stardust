@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
+namespace Teleopti.Wfm.Adherence.Monitor.Infrastructure
 {
 	public class Selection
 	{

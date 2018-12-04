@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Wfm.Adherence.Configuration;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.Monitor
 {
 	public class PhoneStateViewModel
 	{

@@ -5,9 +5,8 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
+namespace Teleopti.Wfm.Adherence.Monitor.Infrastructure
 {
 	public class OrganizationReader : IOrganizationReader
 	{

@@ -1,7 +1,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure
+namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class KeyValueStorePersister : IKeyValueStorePersister
 	{

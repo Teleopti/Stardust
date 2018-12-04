@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.Monitor.Infrastructure
 {
 	public class TeamCardModel
 	{

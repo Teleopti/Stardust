@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
+using Teleopti.Wfm.Adherence.Monitor;
 
 namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ViewModels
 {

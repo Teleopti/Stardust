@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.Monitor
 {
 	public class SiteCardViewModel
 	{

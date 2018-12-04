@@ -7,10 +7,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Domain.Events;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.Monitor
 {
 	// special event never ment to be used in a queue
 	public class AgentStateChangedEvent : IEvent

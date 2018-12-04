@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.Monitor.Infrastructure
 {
 	public interface IOrganizationReader
 	{

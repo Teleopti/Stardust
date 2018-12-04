@@ -4,9 +4,9 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
+using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels
+namespace Teleopti.Wfm.Adherence.Monitor
 {
 	public class OrganizationViewModelBuilder
 	{
