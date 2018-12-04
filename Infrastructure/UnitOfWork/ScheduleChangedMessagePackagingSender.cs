@@ -101,11 +101,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					return package;
 				});
 
-				ensurePackaging();
+				ensureSending();
 			}
 		}
 
-		private void ensurePackaging()
+		private void ensureSending()
 		{
 			if (_timer == null)
 			{
@@ -122,10 +122,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var shouldSend = _time.UtcDateTime() >= sendAt;
 			
 			if(shouldSend)
-				packageAndSend();
+				Send();
 		}
 
-		private void packageAndSend()
+		private void Send()
 		{
 			_packagedMessages.Keys.ForEach(k =>
 			{

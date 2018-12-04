@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithScenario(string name, bool @default)
 		{
-			var scenario = new Scenario(name) {DefaultScenario = false, EnableReporting = true};
+			var scenario = new Scenario(name) {DefaultScenario = @default, EnableReporting = true};
 			_scenario = scenario.Description.Name;
 			_scenarios.Add(scenario);
 			return this;
