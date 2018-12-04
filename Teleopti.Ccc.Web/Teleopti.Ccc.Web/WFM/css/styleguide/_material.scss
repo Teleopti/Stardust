@@ -209,3 +209,25 @@ _:-ms-lang(x),
 .label-info {
 	background-color: $teal-300;
 }
+
+.alert-error, .alert-success, .alert-warning {
+	color: $gray087;
+	padding: 8px 15px;
+	margin-bottom: 5px;
+	border-radius: 4px;
+}
+
+.alert-error {
+	background: $red-600;
+	border: 1px solid $red-700;
+}
+
+.alert-success {
+	background: $green-100;
+	border: 1px solid $green-300;
+}
+
+.alert-warning {
+	background: $orange-400;
+	border: 1px solid $orange-500;
+}
