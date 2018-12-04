@@ -13,18 +13,12 @@
 <div class="con-row">
 	<div class="con-flex">
 		<form name="form" class="wfm-form">
-		<card-panel-list>
-			<card-panel pre-open="true">
-				<card-panel-header>
-					<div class="header-flex">
-						<b>{{'GeneralSettingOfPlanGroupSchedulingSetting' | translate}}</b>
-					</div>
-				</card-panel-header>
-				<card-panel-content>
-					<div class="con-row demo-outline wfm-card-content">
+			<div class="con-row">
+				<div class="con-flex setting-group material-depth-1">
+					<div class="con-row">
 						<div class="con-flex">
 							<div class="form-input-wrap">
-								<label for="schedulingSettingName" translate>NameColon</label>
+								<label for="schedulingSettingName"><b translate>NameColon</b></label>
 								<input type="text" name="schedulingSettingName" id="schedulingSettingName" ng-disabled="vm.default" ng-model="vm.settingInfo.Name" class="pg-setting-name" required minlength="1" maxlength="100" autofocus
 								/>
 								<div ng-cloak class="animate-show"
@@ -35,15 +29,9 @@
 								</div>
 							</div>
 						</div>
-						<div class="con-flex" ng-if="vm.default">
-							<div class="form-input-wrap">
-								<label for="preferencePercent" translate>PreferenceFulfillmentPercentColon</label>
-								<input id="preferencePercent" type="number" ng-model="vm.settingInfo.PreferencePercent" placeholder="Preference Percentage" min="0" max="100" step="10"/>
-							</div>
-						</div>
 						<div class="con-flex" ng-hide="vm.default">
 							<div class="form-input-wrap">
-								<label for="filtersId" translate>Filter:</label>
+								<label for="filtersId"><b translate>Filter:</b></label>
 								<div name="filters" id="filtersId">
 									<md-autocomplete md-input-name="filters" md-no-cache="true" md-selected-item="vm.selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForDayOff'|translate}}"
 									 md-items="item in vm.inputFilterData()" md-item-text="vm.searchString" md-selected-item-change="vm.selectResultItem(vm.selectedItem)">
@@ -67,7 +55,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="con-row demo-outline wfm-card-content" ng-show="vm.settingInfo.Filters.length > 0">
+					<div class="con-row" ng-show="vm.settingInfo.Filters.length > 0">
 						<div class="con-flex">
 							<div translate>SelectedFiltersColon</div>
 							<div class="wfm-chip-wrap" ng-repeat="selected in vm.settingInfo.Filters">
@@ -80,29 +68,27 @@
 							</div>
 						</div>
 					</div>
-				</card-panel-content>
-			</card-panel>
-			<card-panel pre-open="true">
-				<card-panel-header>
+				</div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex setting-group material-depth-1">
 					<div class="header-flex">
 						<b translate>DayOffRuleSetting</b>
 					</div>
-				</card-panel-header>
-				<card-panel-content>
-					<div class="con-row demo-outline wfm-card-content">
+					<div class="con-row">
 						<div class="con-flex">
 							<div class="form-input-wrap wfm-options">
 								<div class="wfm-option-label" style="margin-top: 0;">
 									<div translate>DaysOffPerWeek</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MinDayOffsPerWeek" translate>MinColon </label>
 										<input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" name="MinDayOffsPerWeek" placeholder="0" min="0" id="MinDayOffsPerWeek"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MaxDayOffsPerWeek" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" id="MaxDayOffsPerWeek"
 										/>
@@ -113,13 +99,13 @@
 									<div translate>ConsecutiveDaysOff</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MinConsecutiveDayOffs" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinConsecutiveDayOffs" name="MinConsecutiveDayOffs" placeholder="0" min="0"
 										 id="MinConsecutiveDayOffs" />
 										<p class="text-danger" ng-show="!vm.isValidConsecDaysOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MaxConsecutiveDayOffs" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxConsecutiveDayOffs" name="MaxConsecutiveDayOffs" placeholder="0" min="0"
 										 id="MaxConsecutiveDayOffs" />
@@ -130,13 +116,13 @@
 									<div translate>ConsecutiveWorkDays</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MinConsecutiveWorkdays" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinConsecutiveWorkdays" name="MinConsecutiveWorkdays" placeholder="0" min="0"
 										 id="MinConsecutiveWorkdays" />
 										<p class="text-danger" ng-show="!vm.isValidConsecWorkDays()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MaxConsecutiveWorkdays" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxConsecutiveWorkdays" name="MaxConsecutiveWorkdays" placeholder="0" min="0"
 										 id="MaxConsecutiveWorkdays" />
@@ -147,13 +133,13 @@
 									<div translate>FullWeekEndsOff</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MinFullWeekEndsOff" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinFullWeekendsOff" name="MinFullWeekEndsOff" placeholder="0" min="0" id="MinFullWeekEndsOff"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidFullWeekEndsOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MaxFullWeekEndsOff" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxFullWeekendsOff" name="MaxFullWeekEndsOff" placeholder="0" min="0" id="MaxFullWeekEndsOff"
 										/>
@@ -164,13 +150,13 @@
 									<div translate>FullWeekEndDaysOff</div>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MinFullWeekEndDaysOff" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinWeekendDaysOff" name="MinFullWeekEndDaysOff" placeholder="0" min="0" id="MinFullWeekEndDaysOff"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidFullWeekEndDaysOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap">
+									<div class="wfm-option form-input-wrap con-flex">
 										<label for="MaxFullWeekEndDaysOff" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxWeekendDaysOff" name="MaxFullWeekEndDaysOff" placeholder="0" min="0" id="MaxFullWeekEndDaysOff"
 										/>
@@ -180,65 +166,35 @@
 							</div>
 						</div>
 					</div>
-				</card-panel-content>
-			</card-panel>
-			<card-panel pre-open="true">
-				<card-panel-header class="block-scheduling-panel">
+				</div>
+				<div class="con-flex setting-group material-depth-1">
 					<div class="header-flex">
-						<b>{{vm.selectedSchedulingMethod.Name}}</b>
-						<b ng-if="vm.selectedSchedulingMethod.Id == 'BlockScheduling' "> + {{vm.selectedType.Id | translate}} + {{vm.selectedOptionName | translate}}</b>
+						<b>{{'BlockScheduling' | translate}}</b>
 					</div>
-				</card-panel-header>
-				<card-panel-content>
-					<div class="con-row demo-outline pg-setting-card-content">
+					<div class="con-row">
 						<div class="con-flex">
-							<md-switch ng-model="vm.schedulingSettings[1].Selected" ng-change="vm.selectSchedulingSetting()">
-								<span ng-if="vm.schedulingSettings[1].Selected">Turn off {{vm.schedulingSettings[1].Id | translate}}</span>
-								<span ng-hide="vm.schedulingSettings[1].Selected">Turn on {{vm.schedulingSettings[1].Id | translate}}</span>
-							</md-switch>
-							<div class="con-row" ng-if="vm.schedulingSettings[1].Selected">
-								<div class="con-flex">
-									<div class="pg-setting-mini-card-wrapper">
-										<div class="con-row demo-outline">
-											<div class="con-flex">
-												<form name="autocomplete-form">
-													<md-autocomplete id="block_scheduling" md-no-cache="true" md-search-text="searchText" md-selected-item="vm.selectedType" md-select-on-match="true" md-selected-item-change="vm.setBlockSchedulingType(vm.selectedType)"
-													 md-items="item in vm.filterOptions(searchText)" md-item-text="item.Name" md-min-length="0" placeholder="{{ 'TextOfNoBlockScheduling' | translate}}">
-														<md-item-template ng-hide="item.Code == 0">
-															<span>{{item.Id | translate}}</span>
-														</md-item-template>
-														<md-not-found>
-															<p translate>noSearchResults</p>
-														</md-not-found>
-													</md-autocomplete>
-												</form>
-												<p class="text-danger" ng-show="!vm.isValidBlockScheduling()">
-													<span translate>Please select block scheduling method</span>
-												</p>
-											</div>
-											<div class="con-flex"></div>
-										</div>
-										<div class="con-row">
-											<div class="block-scheduling-wrapper">
-												<div class="form-input-wrap">
-													<form>
-														<md-radio-group ng-model="vm.selectedOptionName">
-															<md-radio-button ng-repeat="option in vm.schedulingSettings[1].Options" ng-value="option.Id" ng-click="vm.setBlockSchedulingOption($index)">
-																<span>{{ option.Id | translate}}</span>
-															</md-radio-button>
-														</md-radio-group>
-													</form>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							<md-radio-group ng-model="vm.blockFinderType">
+								<md-radio-button ng-repeat="option in vm.blockFinderTypeOptions" ng-value="option">
+									<span>{{ option | translate}}</span>
+								</md-radio-button>
+							</md-radio-group>
+						</div>
+						<div class="con-flex split-3-1" ng-if="vm.blockFinderType !== 'Off'">
+							<md-radio-group ng-model="vm.blockComparisonType">
+								<md-radio-button ng-repeat="option in vm.blockComparisonTypeOptions" ng-value="option">
+									<span>{{ option | translate}}</span>
+								</md-radio-button>
+							</md-radio-group>
 						</div>
 					</div>
-				</card-panel-content>
-			</card-panel>
-		</card-panel-list>
+					<div class="con-row" ng-if="vm.default">
+						<div class="form-input-wrap">
+							<label for="preferencePercent"><b translate>PreferenceFulfillmentPercentColon</b></label>
+							<input id="preferencePercent" type="number" ng-model="vm.settingInfo.PreferencePercent" placeholder="Preference Percentage" min="0" max="100" step="10"/>
+						</div>
+					</div>
+				</div>
+			</div>
 		<div class="wfm-toolbar material-depth-1">
 			<div class="con-row">
 				<div class="con-flex line-right">

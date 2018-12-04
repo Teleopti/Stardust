@@ -1,8 +1,6 @@
 <div class="view-header with-fab with-desc" ng-hide="vm.isDisable">
 	<div class="view-title">
-		<h1>
-			<i class="mdi mdi-calendar"></i> {{'PlanGroupScheduling' | translate}}</h1>
-		<p>{{vm.textManageSchedulingSetting}}</p>
+		<h1><i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroupName}} / {{'PlanGroupScheduling' | translate}}</h1>
 	</div>
 </div>
 <div class="con-row" ng-hide="vm.isDisable">
@@ -31,7 +29,7 @@
 <div class="con-row">
 	<div class="con-flex">
 		<card-panel-list>
-			<card-panel ng-class="" ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" pre-open="setting.Name"
+			<card-panel ng-class="" ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" pre-open="true"
 			 id="$index">
 				<card-panel-header>
 					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
@@ -136,23 +134,17 @@
 								<div class="con-flex">
 									<div class="pg-setting-mini-card-wrapper">
 										<div class="pg-setting-mini-card-title line-center">
-											<b>{{'BlockScheduling' | translate}}</b>
+											<b>{{'Restrictions' | translate}}</b>
 										</div>
 										<div class="pg-setting-card">
-											<div class="con-flex">{{setting.BlockSchedulingSetting}}</div>
-											<div class="con-flex" ng-if="setting.BlockFinderType > 0">{{setting.BlockSchedulingSettingType}}</div>
+											<div class="con-flex">
+												<b>{{'BlockScheduling' | translate}}</b>: {{setting.BlockSchedulingSetting}}
+											</div>
+											<div class="con-flex" ng-if="setting.Default">
+												<b>{{'PreferenceFulfillment' | translate}}</b>: {{vm.preferencePercentage}}%
+											</div>
 										</div>
 									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="con-row" ng-if="setting.Default">
-						<div class="con-flex">
-							<div class="line-right">
-								<div class="con-flex align-row-center">
-									<span>{{'PreferenceFulfillment' | translate}}: {{vm.preferencePercentage}}%</span>
 								</div>
 							</div>
 						</div>

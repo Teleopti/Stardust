@@ -1,5 +1,5 @@
 'use strict';
-describe('planningGroupSettingEditController', function () {
+fdescribe('planningGroupSettingEditController', function () {
     var $httpBackend,
         $controller,
         $state,
@@ -136,7 +136,6 @@ describe('planningGroupSettingEditController', function () {
 
 		expect(vm.settingInfo.PreferencePercent).toEqual(23);
 	});
-    
 
     it('should add one filter from filter results', function () {
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });

@@ -8,8 +8,8 @@
     <ProjectGuid>{F26B3F93-6FE3-4962-B5DE-E27BC6583029}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Teleopti.Ccc.DomainTest</RootNamespace>
-    <AssemblyName>Teleopti.Ccc.DomainTest</AssemblyName>
+    <RootNamespace>Teleopti.Ccc.Intraday.UnitTests</RootNamespace>
+    <AssemblyName>Teleopti.Ccc.Intraday.UnitTests</AssemblyName>
     <SignAssembly>false</SignAssembly>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MapFileExtensions>true</MapFileExtensions>

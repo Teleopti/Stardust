@@ -17,7 +17,7 @@
 		vm.selectedSchedulingSetting = {};
 		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
-		vm.textManageSchedulingSetting = $translate.instant('ManagePlanningGroupSchedulingSetting').replace("{0}", planningGroupInfo.Name);
+		vm.planningGroupName = planningGroupInfo.Name;
 		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", planningGroupInfo.Name);
 		vm.getSchedulingSettingInfo = getSchedulingSettingInfo;
 		vm.deleteSchedulingSetting = deleteSchedulingSetting;
@@ -48,9 +48,9 @@
 						type = $translate.instant('BlockSameShift');
 					}
 					if (item.BlockFinderType === 1) {
-						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeBetweenDayOff') + ' ( '+type+' )';
+						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeBetweenDayOff') + ' ('+type+')';
 					} else {
-						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeSchedulePeriod') + ' ( '+type+' )';
+						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeSchedulePeriod') + ' ('+type+')';
 					}
 					
 				} else {
@@ -179,7 +179,6 @@
 		var vm = this;
 
 		vm.schedulingSetting = [];
-		vm.textManageSchedulingSetting = $translate.instant('ManagePlanningGroupSchedulingSetting').replace("{0}", vm.planningGroup.Name);
 		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", vm.planningGroup.Name);
 		vm.color = {
 			render: 'linear',
