@@ -114,8 +114,12 @@
       if (!arr) {
         return true;
       }
-      return !arr.includes(name);
-    }
+      
+		if (arr.indexOf(name) >= 0) {
+			return false;
+		}
+		return true;
+	}
 
     function getItemBasedOnName(arr, name, prop) {
       for (var i = 0; i < arr.length; i++) {
