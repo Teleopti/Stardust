@@ -15,6 +15,10 @@ export class NavigationService {
 		this.openReport(report, 'edit');
 	}
 
+	public gotoInsights() {
+		this.navService.go('insights');
+	}
+
 	openReport(report, action) {
 		const parameters = {
 			report: report,

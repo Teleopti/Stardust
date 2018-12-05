@@ -6,16 +6,19 @@
       <nz-header>
         <div nz-row [nzGutter]="{ xs: 8, sm: 8, md: 8, lg: 8, xl: 8, xxl: 8 }" class="container">
           <div nz-col nz-left nzSpan="6">
-            <button nz-button nzType="primary"><i nz-icon type="left" theme="outline"></i> Back</button>
+            <button nz-button nzType="primary" onclick="window.history.back();"><i nz-icon type="left" theme="outline"></i> Back</button>
           </div>
-          <div nz-col nz-left nzSpan="6">
+          <div nz-col nz-left nzSpan="6" *ngIf="!inEditing">
             <button nz-button nzType="primary" (click)="nav.editReport(report)"><i nz-icon type="edit" theme="outline"></i> Edit</button>
           </div>
-          <div nz-col nz-left nzSpan="6">
+          <div nz-col nz-left nzSpan="6" *ngIf="!inEditing">
             <button nz-button nzType="primary"><i nz-icon type="copy" theme="outline"></i> Duplicate</button>
           </div>
-          <div nz-col nz-left nzSpan="6">
-            <button nz-button nzType="primary"><i nz-icon type="delete" theme="outline"></i> Delete</button>
+          <div nz-col nz-left nzSpan="6" *ngIf="!inEditing">
+            <button nz-button nzType="primary" nz-popconfirm nzTitle="Are you sure to delete this report?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteReport(report)"><i nz-icon type="delete" theme="outline"></i> Delete</button>
+          </div>
+          <div nz-col nz-left nzSpan="6" *ngIf="inEditing">
+            <button nz-button nzType="primary" (click)="nav.viewReport(report)"><i nz-icon type="undo" theme="outline"></i> Cancel</button>
           </div>
         </div>
       </nz-header>
