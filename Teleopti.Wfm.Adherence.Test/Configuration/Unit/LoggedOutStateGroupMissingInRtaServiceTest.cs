@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit

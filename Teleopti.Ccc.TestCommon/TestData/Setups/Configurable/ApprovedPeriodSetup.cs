@@ -2,7 +2,7 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {

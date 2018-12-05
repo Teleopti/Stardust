@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IEnumerable<IPersonAccess> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate, string searchword = "")
+		public IEnumerable<IPersonAccess> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate, string searchword)
 		{
 			var criteria = Session.CreateCriteria(typeof(PersonAccess), "personAccess")
 				.Add(Restrictions.Eq("ActionPerformedById", personId.Id.GetValueOrDefault()))

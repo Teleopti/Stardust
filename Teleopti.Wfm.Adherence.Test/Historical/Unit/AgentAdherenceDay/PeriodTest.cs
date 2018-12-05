@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 {
@@ -71,8 +71,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			History
 				.ShiftStart(person, "2018-11-06 09:00", "2018-11-06 17:00")
-				.RuleChanged(person, "2018-11-06 09:00", Domain.Configuration.Adherence.Out)
-				.RuleChanged(person, "2018-11-06 10:00", Domain.Configuration.Adherence.In)
+				.RuleChanged(person, "2018-11-06 09:00", Adherence.Configuration.Adherence.Out)
+				.RuleChanged(person, "2018-11-06 10:00", Adherence.Configuration.Adherence.In)
 				.ShiftStart(person, "2018-11-06 12:00", "2018-11-06 17:00")
 				;
 

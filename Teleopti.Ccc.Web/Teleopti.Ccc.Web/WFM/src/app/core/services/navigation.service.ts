@@ -8,8 +8,8 @@ type StateId = string;
 export class NavigationService {
 	constructor(@Inject(DOCUMENT) private document: Document, @Inject('$state') private $state: IStateService) {}
 
-	public go(state: StateId, resetScroll = true): void {
-		this.$state.go(state);
+	public go(state: StateId, params?: {}, resetScroll = true): void {
+		this.$state.go(state, params);
 		if (resetScroll) this.resetScroll();
 	}
 

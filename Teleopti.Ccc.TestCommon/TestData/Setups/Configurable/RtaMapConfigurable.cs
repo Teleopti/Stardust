@@ -6,8 +6,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
+using Teleopti.Wfm.Adherence.Configuration;
+using Teleopti.Wfm.Adherence.Configuration.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {

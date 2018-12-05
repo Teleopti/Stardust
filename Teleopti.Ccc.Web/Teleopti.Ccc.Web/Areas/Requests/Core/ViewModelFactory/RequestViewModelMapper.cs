@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -105,11 +106,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestViewModel.TypeText = request.Request.RequestTypeDescription;
 			requestViewModel.StatusText = request.StatusText;
 			requestViewModel.Status = getRequestStatus(request);
-			requestViewModel.IsNew = request.IsNew;
-			requestViewModel.IsPending = request.IsPending;
-			requestViewModel.IsApproved = request.IsApproved;
-			requestViewModel.IsWaitlisted = request.IsWaitlisted;
-			requestViewModel.IsDenied = request.IsDenied;
 			requestViewModel.Payload = request.Request.RequestPayloadDescription;
 			requestViewModel.Team = team?.SiteAndTeam;
 		}
@@ -239,16 +235,39 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		}
 
-		private static RequestStatus getRequestStatus(IPersonRequest request)
+		private static PersonRequestStatus getRequestStatus(IPersonRequest request)
 		{
-			//ROBTODO: review status - should we include waitlisted and cancelled in this ?
-			return request.IsApproved
-				? RequestStatus.Approved
-				: request.IsPending
-					? RequestStatus.Pending
-					: request.IsDenied
-						? RequestStatus.Denied
-						: RequestStatus.New;
+			if (request.IsApproved || request.IsAutoAproved)
+			{
+				return PersonRequestStatus.Approved;
+			}
+
+			if (request.IsPending)
+			{
+				return PersonRequestStatus.Pending;
+			}
+
+			if(request.IsWaitlisted)
+			{
+				return PersonRequestStatus.Waitlisted;
+			}
+
+			if(request.IsDenied)
+			{
+				return PersonRequestStatus.Denied;
+			}
+
+			if (request.IsAutoDenied)
+			{
+				return PersonRequestStatus.AutoDenied;
+			}
+
+			if (request.IsCancelled)
+			{
+				return PersonRequestStatus.Cancelled;
+			}
+
+			return PersonRequestStatus.New;
 		}
 
 		private static bool isFullDay(IPersonRequest request)

@@ -706,6 +706,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToWfmRequests();
 		}
 
+		[When(@"I view wfm gamification")]
+		public void WhenIViewWfmGamification()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToWfmGamification();
+		}
+
 		[When(@"I view wfm team schedules")]
 		public void WhenIViewWfmTeamSchedules()
 		{

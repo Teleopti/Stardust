@@ -19,6 +19,7 @@
 		'ShiftTradeGridConfiguration',
 		'UIGridUtilitiesService',
 		'REQUESTS_TAB_NAMES',
+		'REQUESTS_STATUS',
 		'requestCommandParamsHolder',
 		'uiGridFixService'
 	];
@@ -39,6 +40,7 @@
 		shiftTradeGridConfiguration,
 		uiGridUtilitiesService,
 		requestsTabNames,
+		requestsStatus,
 		requestCommandParamsHolder,
 		uiGridFixService
 	) {
@@ -173,7 +175,7 @@
 				if (subjectFilter) vm.subjectFilter = subjectFilter['Subject'];
 				if (messageFilter) vm.messageFilter = messageFilter['Message'];
 			} else {
-				vm.filters = [{ Status: '0' }];
+				vm.filters = [{ Status: requestsStatus.Pending.toString() }];
 			}
 
 			vm.allRequestStatuses = requestsDataService.getShiftTradeRequestsStatuses();

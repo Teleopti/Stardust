@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+				   assembly="Teleopti.Wfm.Adherence"
+				   namespace="Teleopti.Wfm.Adherence.Configuration"
+				   default-access="field.camelcase-underscore">
+
+	<class name="RtaStateGroup">
+		<id name="Id" access="nosetter.camelcase-underscore" unsaved-value="null">
+			<generator class="guid.comb"/>
+		</id>
+		<version name="Version" unsaved-value="null"/>
+		<property name="Name"/>
+		<property name="DefaultStateGroup"/>
+		<property name="IsLogOutState"/>
+		<property name="Available"/>
+		<bag name="StateCollection" cascade="all-delete-orphan" inverse="true">
+			<key column="Parent"/>
+			<one-to-many class="RtaState"/>
+		</bag>
+		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="nosetter.camelcase-underscore"/>
+		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
+	</class>
+</hibernate-mapping>

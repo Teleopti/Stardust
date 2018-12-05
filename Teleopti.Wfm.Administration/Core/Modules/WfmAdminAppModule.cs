@@ -20,8 +20,8 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Support.Security;
 using Teleopti.Support.Security.Library;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
+using Teleopti.Wfm.Adherence.Configuration;
+using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 

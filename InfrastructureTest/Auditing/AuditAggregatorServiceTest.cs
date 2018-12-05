@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);
 			CurrentUnitOfWork.Current().PersistAll();
-			var audits = Target.Load(person.Id.GetValueOrDefault(), startDate, endDate);
+			var audits = Target.Load(person.Id.GetValueOrDefault(), startDate, endDate,"");
 			audits.Count.Should().Be.EqualTo(1);
 		}
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);
 			CurrentUnitOfWork.Current().PersistAll();
-			var audits = Target.Load(singaporeUser.Id.GetValueOrDefault(), startDate, endDate);
+			var audits = Target.Load(singaporeUser.Id.GetValueOrDefault(), startDate, endDate, "");
 			audits.Count.Should().Be.EqualTo(1);
 			audits.First().TimeStamp.Should().Be.EqualTo(stockholmTime);
 		}
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			var startDate = new DateTime(2018, 10, 13);
 			var endDate = new DateTime(2018, 10, 15);
 			CurrentUnitOfWork.Current().PersistAll();
-			var audits = Target.Load(person.Id.GetValueOrDefault(), startDate, endDate);
+			var audits = Target.Load(person.Id.GetValueOrDefault(), startDate, endDate, "");
 			audits.Count.Should().Be.EqualTo(2);
 			audits.Count(f => f.Action == Resources.ResourceManager.GetString(staffingAudit.Action, UserCulture.GetCulture())).Should().Be(1);
 			audits.Count(f => f.Action == Resources.ResourceManager.GetString(personAccessAudit.Action, UserCulture.GetCulture())).Should().Be(1);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			insertSomePersonAccessAudits(now.AddDays(3), person, 1);
 			CurrentUnitOfWork.Current().PersistAll();
 
-			var audits = Target.Load(person.Id.GetValueOrDefault(), now.AddDays(-5), now.AddDays(+5));
+			var audits = Target.Load(person.Id.GetValueOrDefault(), now.AddDays(-5), now.AddDays(+5), "");
 			audits.Count.Should().Be(4);
 			audits[0].TimeStamp.Should().Be(now.AddDays(3));
 			audits[1].TimeStamp.Should().Be(now.AddDays(2));
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			insertSomePersonAccessAudits(now.AddDays(1), person,50);
 			CurrentUnitOfWork.Current().PersistAll();
 
-			var audits = Target.Load(person.Id.GetValueOrDefault(), now.AddDays(-20), now.AddDays(+20));
+			var audits = Target.Load(person.Id.GetValueOrDefault(), now.AddDays(-20), now.AddDays(+20),"");
 			audits.Count.Should().Be.EqualTo(ResultCountOfAggregatedAudits.Limit);
 			audits.Any(x=>x.TimeStamp==now.AddDays(-10)).Should().Be.False();
 

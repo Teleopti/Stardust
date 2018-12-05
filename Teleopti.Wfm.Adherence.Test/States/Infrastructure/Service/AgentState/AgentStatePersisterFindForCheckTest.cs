@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
@@ -39,7 +40,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 			{
 				PersonId = person,
 			}, DeadLockVictim.Yes);
-			Persister.Update(new Domain.Service.AgentState
+			Persister.Update(new Adherence.States.AgentState
 			{
 				PersonId = person,
 				ReceivedTime = "2016-10-26 12:00".Utc()
@@ -58,7 +59,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 			{
 				PersonId = person,
 			}, DeadLockVictim.Yes);
-			Persister.Update(new Domain.Service.AgentState
+			Persister.Update(new Adherence.States.AgentState
 			{
 				PersonId = person,
 				ReceivedTime = null
@@ -77,7 +78,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 			{
 				PersonId = person,
 			}, DeadLockVictim.Yes);
-			Persister.Update(new Domain.Service.AgentState
+			Persister.Update(new Adherence.States.AgentState
 			{
 				PersonId = person,
 				ReceivedTime = "2016-10-26 12:00".Utc(),

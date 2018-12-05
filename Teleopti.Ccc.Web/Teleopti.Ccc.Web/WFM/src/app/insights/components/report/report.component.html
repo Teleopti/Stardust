@@ -1,0 +1,28 @@
+<div class="workspace">
+    <h1>
+      <i class="mdi mdi-elevation-rise"></i>Insights - {{report.Name}}
+    </h1>
+    <nz-layout>
+      <nz-header>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 8, md: 8, lg: 8, xl: 8, xxl: 8 }" class="container">
+          <div nz-col nz-left nzSpan="6">
+            <button nz-button nzType="primary"><i nz-icon type="left" theme="outline"></i> Back</button>
+          </div>
+          <div nz-col nz-left nzSpan="6">
+            <button nz-button nzType="primary" (click)="nav.editReport(report)"><i nz-icon type="edit" theme="outline"></i> Edit</button>
+          </div>
+          <div nz-col nz-left nzSpan="6">
+            <button nz-button nzType="primary"><i nz-icon type="copy" theme="outline"></i> Duplicate</button>
+          </div>
+          <div nz-col nz-left nzSpan="6">
+            <button nz-button nzType="primary"><i nz-icon type="delete" theme="outline"></i> Delete</button>
+          </div>
+        </div>
+      </nz-header>
+      <nz-content>
+        <div class="panel con-flex material-depth-1">
+          <div id="reportContainer" style="height:850px;"></div>
+        </div>
+      </nz-content>
+    </nz-layout>
+</div>

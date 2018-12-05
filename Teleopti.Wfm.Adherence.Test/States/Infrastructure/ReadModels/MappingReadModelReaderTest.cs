@@ -12,8 +12,9 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
@@ -123,7 +124,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 				0,
 				1)
 			{
-				Adherence = Domain.Configuration.Adherence.In,
+				Adherence = Adherence.Configuration.Adherence.In,
 			};
 			WithUnitOfWork.Do(() =>
 			{
@@ -137,7 +138,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			mapping.RuleName.Should().Be("InAdherence");
 			mapping.DisplayColor.Should().Be(Color.Blue.ToArgb());
 			mapping.StaffingEffect.Should().Be(1);
-			mapping.Adherence.Should().Be(Domain.Configuration.Adherence.In);
+			mapping.Adherence.Should().Be(Adherence.Configuration.Adherence.In);
 		}
 
 		[Test]

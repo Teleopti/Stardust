@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {

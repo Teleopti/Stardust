@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel.StartTime
 {
@@ -26,7 +27,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel.St
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-15 8:00", "2015-12-15 9:00")
-				.WithMappedRule("phone", phone, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("phone", phone, 0, Adherence.Configuration.Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 			Now.Is("2015-12-15 8:00");
 
@@ -48,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel.St
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-15 8:00", "2015-12-15 9:00")
-				.WithMappedRule("phone", phone, 0, Domain.Configuration.Adherence.In);
+				.WithMappedRule("phone", phone, 0, Adherence.Configuration.Adherence.In);
 			Now.Is("2015-12-15 8:00");
 
 			Target.ProcessState(new StateForTest
