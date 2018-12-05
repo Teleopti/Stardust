@@ -11,7 +11,7 @@
 
 		var earlistStart = null;
 		schedules && schedules.forEach(function (schedule) {
-			var scheduleStart = schedule.ScheduleStartTimeMoment();
+			var scheduleStart = schedule.ScheduleStartTimeMoment().clone();
 			if (personIds.indexOf(schedule.PersonId) > -1 && (!earlistStart || scheduleStart < earlistStart)) {
 				earlistStart = scheduleStart;
 			}
@@ -25,7 +25,7 @@
 
 		var latestStart = null;
 		schedules && schedules.forEach(function (schedule) {
-			var scheduleStart = schedule.ScheduleStartTimeMoment();
+			var scheduleStart = schedule.ScheduleStartTimeMoment().clone();
 			if (personIds.indexOf(schedule.PersonId) > -1 && (!latestStart || scheduleStart > latestStart)) {
 				latestStart = scheduleStart;
 			}
@@ -52,7 +52,7 @@
 		previousDayShifts.forEach(function (shift) {
 			shift.Projections.forEach(function (projection) {
 				if (!latestEndTimeMoment || latestEndTimeMoment < projection.EndMoment)
-					latestEndTimeMoment = projection.EndMoment;
+					latestEndTimeMoment = projection.EndMoment.clone();
 			});
 		});
 
@@ -75,7 +75,7 @@
 		shifts.forEach(function (shift) {
 			if (shift.Projections) {
 				shift.Projections.forEach(function (projection) {
-					var scheduleStart = projection.StartMoment;
+					var scheduleStart = projection.StartMoment.clone();
 					if (projection.Selected && (latestStart === null || scheduleStart >= latestStart)) {
 						var exist = projection.ShiftLayerIds && projection.ShiftLayerIds.some(function (layerId) {
 							return projectionShiftLayerIds.indexOf(layerId) > -1;

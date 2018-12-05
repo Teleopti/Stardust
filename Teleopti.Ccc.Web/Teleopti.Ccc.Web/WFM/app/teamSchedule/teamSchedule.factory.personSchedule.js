@@ -258,7 +258,7 @@
 		PersonSchedule.prototype.ScheduleEndTimeMoment = function () {
 			var shift = this.Shifts[0];
 			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
-				return shift.Projections[shift.Projections.length - 1].EndMoment;
+				return shift.Projections[shift.Projections.length - 1].EndMoment.clone();
 			}
 			return moment.tz(this.Date + 'T23:59:00', this.Timezone.IanaId);
 		};
@@ -266,7 +266,7 @@
 		PersonSchedule.prototype.ScheduleStartTimeMoment = function () {
 			var shift = this.Shifts[0];
 			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
-				return shift.Projections[0].StartMoment;
+				return shift.Projections[0].StartMoment.clone();
 			}
 			return moment.tz(this.Date + 'T00:00:00', this.Timezone.IanaId);
 		};

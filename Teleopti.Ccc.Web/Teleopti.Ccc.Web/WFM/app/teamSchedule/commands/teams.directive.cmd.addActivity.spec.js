@@ -313,7 +313,6 @@
 	});
 
 	it('should set default start time to an hour from the start of selected days shift is after the end of yesterdays overnight shift ', function () {
-
 		scheduleManagement.resetSchedules(
 			[{
 				Date: '2018-08-01',
@@ -497,6 +496,93 @@
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(result.commandControl.trackId);
 		});
 
+		it('should add activity with correct person date when previous day has overnight shift and current day has no shift', function () {
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-08-02',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: []
+				},
+				{
+					Date: '2018-08-01',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: [{
+						StartInUtc: '2018-08-01 14:00',
+						EndInUtc: '2018-08-01 20:00'
+					}]
+				}]
+				, '2018-08-02', 'Asia/Hong_Kong');
+
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-08-02');
+			
+			var result = setUp('2018-08-02', 'Asia/Hong_Kong');
+			result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
+			setTime(result.container, 8, 9);
+
+			var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+			applyButton.triggerHandler('click');
+
+			result.scope.$apply();
+
+			var activityData = fakeActivityService.getAddActivityCalledWith();
+			expect(activityData).not.toBeNull();
+			expect(activityData.PersonDates).toEqual([{ Date: '2018-08-02', PersonId: 'agent1' }]);
+		});
+
+		it('should add activity to current date with default activity time when previous day has overnight shift and current day has no shift', function () {
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-08-02',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: []
+				},
+				{
+					Date: '2018-08-01',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: [{
+						StartInUtc: '2018-08-01 14:00',
+						EndInUtc: '2018-08-01 20:00'
+					}]
+				}]
+				, '2018-08-02', 'Asia/Hong_Kong');
+
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-08-02');
+
+			var result = setUp('2018-08-02', 'Asia/Hong_Kong');
+			result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
+
+			var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+			applyButton.triggerHandler('click');
+
+			result.scope.$apply();
+
+			var activityData = fakeActivityService.getAddActivityCalledWith();
+			expect(activityData).not.toBeNull();
+			expect(activityData.PersonDates).toEqual([{ Date: '2018-08-02', PersonId: 'agent1' }]);
+		});
+
 		it('should apply with correct time range when selected time zone is different from logon user time zone', function () {
 			scheduleManagement.resetSchedules(
 				[{
@@ -558,7 +644,7 @@
 			result.scope.$apply();
 			var activityData = fakeActivityService.getAddActivityCalledWith();
 			expect(activityData.activityType).toEqual('PersonalActivity');
-		
+
 		});
 	}
 

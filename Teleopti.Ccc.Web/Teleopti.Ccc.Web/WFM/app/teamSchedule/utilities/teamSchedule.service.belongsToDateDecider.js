@@ -79,8 +79,8 @@
 					if (!shift.ProjectionTimeRange) {
 						return;
 					}
-					var shiftStart = shift.ProjectionTimeRange.StartMoment;
-					var shiftEnd = shift.ProjectionTimeRange.EndMoment;
+					var shiftStart = shift.ProjectionTimeRange.StartMoment.clone();
+					var shiftEnd = shift.ProjectionTimeRange.EndMoment.clone();
 					var index = dates.indexOf(shift.Date);
 					if (index >= 0) {
 						result[index].shiftRange = {
@@ -105,8 +105,8 @@
 		}
 
 		function timeRangeIntersect(timeRangeA, timeRangeB) {
-			return (timeRangeA.startTime.isSameOrBefore(timeRangeB.startTime, 'minute') && timeRangeA.endTime.isSameOrAfter(timeRangeB.startTime, 'minute')) ||
-				(timeRangeB.startTime.isSameOrBefore(timeRangeA.startTime, 'minute') && timeRangeB.endTime.isSameOrAfter(timeRangeA.startTime, 'minute'));
+			return (timeRangeA.startTime.isSameOrBefore(timeRangeB.startTime) && timeRangeA.endTime.isSameOrAfter(timeRangeB.startTime)) ||
+				(timeRangeB.startTime.isSameOrBefore(timeRangeA.startTime) && timeRangeB.endTime.isSameOrAfter(timeRangeA.startTime));
 		}
 	}
 
