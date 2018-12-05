@@ -13,6 +13,7 @@ export class WorkspaceComponent implements OnInit {
 	@Input() isLoading: boolean;
 	@Input() hasViewPermission: boolean;
 	@Input() hasEditPermission: boolean;
+	@Input() reportNameCriteria: string;
 	public reports: Report[];
 
 	constructor(private reportSvc: ReportService,
