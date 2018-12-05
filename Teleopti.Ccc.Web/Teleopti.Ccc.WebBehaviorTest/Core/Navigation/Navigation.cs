@@ -558,6 +558,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/requests");
 		}
 
+		public static void GoToWfmGamification()
+		{
+			GoToPage("wfm/#/gamification.setting");
+		}
+
 		public static void GoToWfmTeams()
 		{
 			GoToPage("wfm/#/teams");

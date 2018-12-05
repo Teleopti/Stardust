@@ -139,6 +139,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Authentication.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\Gamification\GamificationSettings.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GamificationSettings.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\Gamification\GamificationStepDefinitions.cs" />
     <Compile Include="Wfm\Intraday\Intraday.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1172,6 +1178,10 @@
     <None Include="Wfm\Authentication\Authentication.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Authentication.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Gamification\GamificationSettings.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GamificationSettings.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Global\Global.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
