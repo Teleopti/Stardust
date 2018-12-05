@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				"PBI30532LoadTest", "Teleopti.Analytics.EtlServiceStarter", "SdkTestClientWin", "SdkTestWinGui",
 				"Teleopti.Ccc.Sdk.LoadTestClient", "Teleopti.Ccc.Sdk.Samples", "TeleoptiControls",
 				"Teleopti.Common.UI.OutlookControls", "Teleopti.Runtime.Environment", "Teleopti.Runtime.TestServer",
-				"Teleopti.Support.PreReqsCheck", "Teleopti.Ccc.Web", "ReplaceString", "Teleopti.Ccc.WebBehaviorTest"
+				"Teleopti.Support.PreReqsCheck", "Teleopti.Ccc.Web", "ReplaceString", "Teleopti.Ccc.WebBehaviorTest",
+				"Teleopti.Ccc.Intraday.TestCommon"
 			};
 
 			var folders = solutionDirectory().EnumerateFiles("AssemblyInfo.cs", SearchOption.AllDirectories)
