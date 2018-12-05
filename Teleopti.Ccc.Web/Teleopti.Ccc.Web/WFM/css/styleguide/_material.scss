@@ -231,3 +231,13 @@ _:-ms-lang(x),
 	background: $orange-400;
 	border: 1px solid $orange-500;
 }
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    min-width: 160px;
+    padding: 5px 0;
+    border: 1px solid $gray012;
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
