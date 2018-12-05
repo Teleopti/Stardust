@@ -84,13 +84,13 @@
 								<div class="con-row">
 									<div class="wfm-option con-flex">
 										<label for="MinDayOffsPerWeek" translate>MinColon</label>
-										<input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" name="MinDayOffsPerWeek" placeholder="0" min="0" id="MinDayOffsPerWeek"
+										<input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" name="MinDayOffsPerWeek" placeholder="0" min="0" max="7" id="MinDayOffsPerWeek"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()" translate>InvalidInput</p>
 									</div>
 									<div class="wfm-option con-flex">
 										<label for="MaxDayOffsPerWeek" translate>MaxColon</label>
-										<input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" id="MaxDayOffsPerWeek"
+										<input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" max="7" id="MaxDayOffsPerWeek"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()" translate>InvalidInput</p>
 									</div>
