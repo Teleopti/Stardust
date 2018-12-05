@@ -73,14 +73,15 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				// Generate Embed Configuration.
 				result.TokenType = "Embed";
 				result.AccessToken = token.Token;
-				result.ReportUrl = report.EmbedUrl;
 				result.ReportId = report.Id;
+				result.ReportName = report.Name;
+				result.ReportUrl = report.EmbedUrl;
 
 				return result;
 			}
 		}
 
-		public async Task<EmbedReportConfig> CloneReport(string reportId)
+		public async Task<EmbedReportConfig> CloneReport(string reportId, string newReportName)
 		{
 			var result = new EmbedReportConfig();
 
@@ -104,15 +105,19 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 					return result;
 				}
 
+				var targetReportName = string.IsNullOrEmpty(newReportName)
+					? report.Name + " - Copy"
+					: newReportName;
 				var newReport = client.Reports.CloneReportInGroup(groupId, reportId,
-					new CloneReportRequest(report.Name + " - Copy"));
+					new CloneReportRequest(targetReportName));
 
 				var accessToken = await generateAccessToken(client, newReport);
 
 				result.TokenType = "Embed";
 				result.AccessToken = accessToken.Token;
-				result.ReportUrl = newReport.EmbedUrl;
 				result.ReportId = newReport.Id;
+				result.ReportName = newReport.Name;
+				result.ReportUrl = newReport.EmbedUrl;
 
 				return result;
 			}

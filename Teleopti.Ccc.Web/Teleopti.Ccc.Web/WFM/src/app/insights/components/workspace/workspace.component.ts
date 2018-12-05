@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ReportService } from '../../core/report.service';
 import { NavigationService } from '../../core/navigation.service';
 import { Report } from '../../models/Report.model';
+import { NzModalService, NzModalRef } from 'ng-zorro-antd';
 
 @Component({
 	selector: 'app-insights-workspace',
@@ -14,9 +15,17 @@ export class WorkspaceComponent implements OnInit {
 	@Input() hasViewPermission: boolean;
 	@Input() hasEditPermission: boolean;
 	@Input() reportNameCriteria: string;
+
 	public reports: Report[];
+	public newReportName: string = undefined;
+	public messageForNewReportName = '';
+	public refNewReportNameModal: NzModalRef;
+
+	@ViewChild('newReportNameTemplate')
+	private newReportNameTempRef: TemplateRef<any>;
 
 	constructor(private reportSvc: ReportService,
+		private modalSvc: NzModalService,
 		public nav: NavigationService) {
 		this.initialized = false;
 	}
@@ -53,10 +62,36 @@ export class WorkspaceComponent implements OnInit {
 		return <HTMLElement>document.getElementById('reportContainer');
 	}
 
-	public cloneReport(report) {
+	cancelCloneReport(): void {
+		this.refNewReportNameModal.destroy();
+		this.newReportName = undefined;
+	}
+
+	cloneReport(report): boolean {
+		if (!this.newReportName || this.newReportName.trim().length === 0) {
+			return false;
+		}
+
+		if (this.refNewReportNameModal !== undefined) {
+			this.refNewReportNameModal.destroy();
+		}
+
 		this.isLoading = true;
-		this.reportSvc.cloneReport(report.Id).then(() => {
+		this.reportSvc.cloneReport(report.Id, this.newReportName).then(() => {
 			this.loadReportList();
+			return true;
+		});
+
+		this.newReportName = undefined;
+	}
+
+	public confirmCloneReport(report) {
+		this.messageForNewReportName = `Please input name for clone of report "${report.Name}":`;
+		this.refNewReportNameModal = this.modalSvc.create({
+			nzTitle: 'Clone report',
+			nzContent: this.newReportNameTempRef,
+			nzOnOk: () => this.cloneReport(report),
+			nzOnCancel: () => this.cancelCloneReport()
 		});
 	}
 

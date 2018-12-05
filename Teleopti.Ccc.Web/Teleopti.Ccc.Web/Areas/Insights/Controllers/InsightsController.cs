@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 		}
 
 		[HttpGet, Route("api/Insights/CloneReport")]
-		public virtual async Task<EmbedReportConfig> CloneReport(string reportId)
+		public virtual async Task<EmbedReportConfig> CloneReport(string reportId, string newReportName)
 		{
-			return await _reportProvider.CloneReport(reportId);
+			return await _reportProvider.CloneReport(reportId, newReportName);
 		}
 
 		[HttpGet, Route("api/Insights/DeleteReport")]

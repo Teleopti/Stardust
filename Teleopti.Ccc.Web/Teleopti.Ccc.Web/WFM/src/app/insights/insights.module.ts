@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DowngradeableComponent } from '@wfm/types';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { NgZorroAntdModule, NzModalService } from 'ng-zorro-antd';
 import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
 import { ReportService } from './core/report.service';
 import { WorkspaceComponent } from './components';
@@ -13,7 +13,7 @@ import { IStateParamsService } from 'angular-ui-router';
 @NgModule({
 	declarations: [WorkspaceComponent, ReportComponent],
 	imports: [CommonModule, FormsModule, NgZorroAntdModule, RouterModule],
-	providers: [ReportService,
+	providers: [ReportService, NzModalService,
 		{
 			provide: '$stateParams',
 			useFactory: (i: any): IStateParamsService => i.get('$stateParams'),
