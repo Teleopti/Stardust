@@ -374,18 +374,18 @@ describe('Requests - overtime controller tests', function() {
 	it('should select default status filter', function() {
 		compileUIGridHtml(scope, controller.gridOptions);
 
-		var status0 = '79';
-		var status1 = '86';
-		var status2 = '93';
+		var status0 = '1';
+		var status1 = '2';
+		var status2 = '3';
 		controller.filters = [{ Status: status0 + ' ' + status1 + ' ' + status2 }];
 		scope.$digest();
 
 		var selectedStatus = controller.selectedRequestStatuses;
 
 		expect(selectedStatus.length).toEqual(3);
-		expect(selectedStatus[0].Id).toEqual(status0.trim());
-		expect(selectedStatus[1].Id).toEqual(status1.trim());
-		expect(selectedStatus[2].Id).toEqual(status2.trim());
+		expect(selectedStatus[0].Value).toEqual(status0.trim());
+		expect(selectedStatus[1].Value).toEqual(status1.trim());
+		expect(selectedStatus[2].Value).toEqual(status2.trim());
 	});
 
 	it('should select types', function() {

@@ -185,7 +185,7 @@
 				requestFiltersMgr.setFilter('Status', defaultStatusFilter, tabName);
 				angular.forEach(defaultStatusFilter.split(' '), function(value) {
 					if (value.trim() !== '') {
-						selectedRequestStatuses.push({ Id: value.trim() });
+						selectedRequestStatuses.push({ Value: value.trim() });
 					}
 				});
 			}

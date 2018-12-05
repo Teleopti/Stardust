@@ -20,6 +20,7 @@
 		'UIGridUtilitiesService',
 		'REQUESTS_TAB_NAMES',
 		'REQUESTS_TYPES',
+		'REQUESTS_STATUS',
 		'requestCommandParamsHolder',
 		'uiGridFixService',
 		'requestScheduleService'
@@ -42,6 +43,7 @@
 		uiGridUtilitiesService,
 		requestsTabNames,
 		requestsTypes,
+		requestsStatus,
 		requestCommandParamsHolder,
 		uiGridFixService,
 		requestScheduleService
@@ -64,6 +66,7 @@
 		vm.absence = {};
 		vm.absenceRequestType = requestsTypes.AbsenceRequest;
 		vm.enableScheduleIcon = false;
+		vm.enabledRequestStausesForShowingScheduleIcon = [requestsStatus.Pending, requestsStatus.Waitlisted];
 		vm.showingAbsenceSchedules = false;
 
 		var onInitCallBack = undefined;
@@ -223,7 +226,7 @@
 				if (subjectFilter) vm.subjectFilter = subjectFilter['Subject'];
 				if (messageFilter) vm.messageFilter = messageFilter['Message'];
 			} else {
-				vm.filters = [{ Status: '0 5' }];
+				vm.filters = [{ Status: requestsStatus.Pending + ' ' + requestsStatus.Waitlisted }];
 			}
 
 			getRequestTypes();

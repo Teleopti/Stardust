@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetIsNewTrueForAbsenceRequest()
+		public void ShouldGetNewStatusForAbsenceRequest()
 		{
 			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
 			var workflowControlSet =
@@ -130,11 +130,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
-			result.ToList()[0].IsNew.Should().Be.True();
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.New);
 		}
 
 		[Test]
-		public void ShouldGetIsPendingTrueForAbsenceRequest()
+		public void ShouldGetPendingStatusForAbsenceRequest()
 		{
 			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
 			var workflowControlSet =
@@ -169,11 +169,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
-			result.ToList()[0].IsPending.Should().Be.True();
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.Pending);
 		}
 
 		[Test]
-		public void ShouldGetIsApprovedTrueForAbsenceRequest()
+		public void ShouldGetApprovedStatusForAbsenceRequest()
 		{
 			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
 			var workflowControlSet =
@@ -214,11 +214,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
-			result.ToList()[0].IsApproved.Should().Be.True();
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.Approved);
 		}
 
 		[Test]
-		public void ShouldGetIsWaitlistedTrueForAbsenceRequest()
+		public void ShouldGetWaitlistedStatusForAbsenceRequest()
 		{
 			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
 			var workflowControlSet =
@@ -255,11 +255,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
-			result.ToList()[0].IsWaitlisted.Should().Be.True();
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.Waitlisted);
 		}
 
 		[Test]
-		public void ShouldGetIsDeniedTrueForAbsenceRequest()
+		public void ShouldGetDeniedStatusForAbsenceRequest()
 		{
 			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
 			var workflowControlSet =
@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
-			result.ToList()[0].IsDenied.Should().Be.True();
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.Denied);
 		}
 
 		[Test]
