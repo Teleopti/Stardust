@@ -1,0 +1,113 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "nodejs environment",
+			"command": "../.node/UseNodeEnv.ps1",
+			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "powershell.exe",
+					"args": ["-ExecutionPolicy", "Bypass", "-NoExit"]
+				}
+			},
+			"problemMatcher": [],
+			"presentation": {
+				"echo": false,
+				"reveal": "always",
+				"focus": true,
+				"showReuseMessage": false,
+				"panel": "new"
+			}
+		},
+		{
+			"label": "restoretolocal",
+			"command": "\"Restore to Local.bat\"",
+			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "cmd.exe",
+					"args": ["/k", "/c"]
+				},
+				"env": { "IFFLOW": "y" },
+				"cwd": "${workspaceFolder}/../../../.debug-Setup/"
+			},
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "always"
+			}
+		},
+		{
+			"label": "dev:watch",
+			"command": "../.node/UseNodeEnv.ps1;npm run dev:watch",
+			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "powershell.exe",
+					"args": ["-ExecutionPolicy", "Bypass", "-NoProfile"]
+				}
+			},
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "prod:build",
+			"command": "../.node/UseNodeEnv.ps1;npm run prod:build",
+			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "powershell.exe",
+					"args": ["-ExecutionPolicy", "Bypass", "-NoProfile"]
+				}
+			},
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "test",
+			"command": "../.node/UseNodeEnv.ps1;npm run test",
+			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "powershell.exe",
+					"args": ["-ExecutionPolicy", "Bypass", "-NoProfile"]
+				}
+			},
+			"group": "test",
+			"problemMatcher": []
+		},
+		{
+			"label": "test:angular",
+			"command": "../.node/UseNodeEnv.ps1;npm run test:angular",
+			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "powershell.exe",
+					"args": ["-ExecutionPolicy", "Bypass", "-NoProfile"]
+				}
+			},
+			"group": "test",
+			"problemMatcher": []
+		},
+		{
+			"label": "iis:web",
+			"command": "c:/program files/iis express/iisexpress.exe",
+			"args": ["/config:.vs/config/applicationhost.config", "/site:Teleopti.Ccc.Web-Site"],
+			"options": {
+				"cwd": "${workspaceRoot}/../../../"
+			},
+			"problemMatcher": [],
+			"presentation": {
+				"echo": false
+			}
+		},
+		{
+			"label": "dev:watch + iis",
+			"dependsOn": ["iis:web", "dev:watch"],
+			"problemMatcher": []
+		}
+	]
+}
