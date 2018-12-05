@@ -12,7 +12,7 @@
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.moveActivity.html',
 			require: ['^teamscheduleCommandContainer', 'moveActivity'],
-			link: function (scope, elem, attrs, ctrls) {
+			link: function (scope, elem) {
 				scope.$on('teamSchedule.command.focus.default', function () {
 					var focusTarget = elem[0].querySelector('.focus-default input');
 					if (focusTarget) angular.element(focusTarget).focus();
@@ -28,9 +28,9 @@
 		};
 	}
 
-	moveActivityCtrl.$inject = ['$attrs', '$scope', '$locale', '$translate', 'ActivityService', 'PersonSelection', 'ScheduleHelper', 'teamScheduleNotificationService', 'ActivityValidator', 'CommandCheckService', 'serviceDateFormatHelper'];
+	moveActivityCtrl.$inject = ['$attrs', '$scope', '$translate', 'ActivityService', 'PersonSelection', 'ScheduleHelper', 'teamScheduleNotificationService', 'ActivityValidator', 'CommandCheckService', 'serviceDateFormatHelper'];
 
-	function moveActivityCtrl($attrs, $scope, $locale, $translate, activityService, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, validator, CommandCheckService, serviceDateFormatHelper) {
+	function moveActivityCtrl($attrs, $scope, $translate, activityService, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, validator, CommandCheckService, serviceDateFormatHelper) {
 		var vm = this;
 		vm.label = 'MoveActivity';
 		vm.tabindex = angular.isDefined($attrs.tabindex) ? $attrs.tabindex : 0;
@@ -46,14 +46,14 @@
 		vm.getActionCb = containerCtrl.getActionCb;
 		vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
 		vm.scheduleMgtSvc = containerCtrl.scheduleManagementSvc;
-		vm.getDefaultMoveToStartTime = getDefaultMoveToStartTime;
 
-		vm.moveToTime = vm.getDefaultMoveToStartTime();
-		vm.nextDay = serviceDateFormatHelper.getDateOnly(vm.getDefaultMoveToStartTime()) !== serviceDateFormatHelper.getDateOnly(vm.selectedDate());
+		var startTimeMoment = getDefaultMoveToStartTimeMoment();
+		vm.moveToTime = serviceDateFormatHelper.getDateTime(startTimeMoment);
+		vm.nextDay = serviceDateFormatHelper.getDateOnly(startTimeMoment) !== vm.selectedDate();
 
 		vm.getMoveToDate = function () {
 			return vm.nextDay ?
-				serviceDateFormatHelper.getDateOnly(moment(vm.selectedDate()).add(1, 'days')) : vm.selectedDate();
+				serviceDateFormatHelper.getDateOnly(moment.tz(vm.selectedDate(), vm.getCurrentTimezone()).add(1, 'days')) : vm.selectedDate();
 		}
 
 		vm.anyValidAgent = function () {
@@ -67,7 +67,7 @@
 		vm.updateInvalidAgents = function (isFormValid) {
 			if (!isFormValid) return;
 			var currentTimezone = vm.getCurrentTimezone();
-			validator.validateMoveToTime(vm.scheduleMgtSvc, moment(vm.moveToTime), currentTimezone);
+			validator.validateMoveToTime(vm.scheduleMgtSvc, moment.tz(vm.moveToTime, currentTimezone));
 			vm.invalidAgents = validator.getInvalidPeople();
 		};
 
@@ -85,7 +85,7 @@
 		}
 
 		function init() {
-			vm.updateInvalidAgents();
+			vm.updateInvalidAgents(true);
 		}
 		init();
 
@@ -155,19 +155,20 @@
 			return requestData;
 		}
 
-		function getDefaultMoveToStartTime() {
-			var curDateMoment = moment(vm.selectedDate());
+		function getDefaultMoveToStartTimeMoment() {
+			var currentTimezone = vm.getCurrentTimezone();
+			var curDate = vm.selectedDate();
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
-			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
+			var schedules = vm.scheduleMgtSvc.schedules();
+			
+			var selectedDateProjectionLatestStartMoment = scheduleHelper.getLatestStartTimeMomentOfSelectedProjections(schedules, personIds);
+			var previousDateProjectionLatestEndMoment = scheduleHelper.getLatestPreviousDayOvernightShiftEndMoment(schedules, curDate, personIds);
+			var timeMoment = moment.tz(curDate, currentTimezone);
 
-			var selectedDateProjectionLatestStart = scheduleHelper.getLatestStartTimeOfSelectedSchedulesProjections(schedules, curDateMoment, personIds);
-			var previousDateProjectionLatestEnd = scheduleHelper.getLatestPreviousDayOvernightShiftEnd(schedules, curDateMoment, personIds);
-			var time = new Date();
+			timeMoment = selectedDateProjectionLatestStartMoment || timeMoment;
+			timeMoment = previousDateProjectionLatestEndMoment != null && previousDateProjectionLatestEndMoment.isAfter(timeMoment) ? previousDateProjectionLatestEndMoment : timeMoment;
 
-			time = selectedDateProjectionLatestStart != null ? selectedDateProjectionLatestStart : time;
-			time = previousDateProjectionLatestEnd != null && previousDateProjectionLatestEnd > time ? previousDateProjectionLatestEnd : time;
-
-			return serviceDateFormatHelper.getDateTime(moment(time).add(1, 'hour'));
+			return timeMoment.add(1, 'hour');
 		}
 	}
 })();
