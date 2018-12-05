@@ -19,12 +19,7 @@
 		// Set to 08:00 for empty schedule or day off
 		return earlistStart || dateMoment.startOf('day').add(8, 'hour');
 	};
-
-	ScheduleHelperService.prototype.getEarliestStartOfSelectedSchedules = function (schedules, dateMoment, personIds) {
-		return this.getEarliestStartMomentOfSelectedSchedules(schedules, dateMoment, personIds).toDate();
-	};
-
-
+	
 	ScheduleHelperService.prototype.getLatestStartMomentOfSelectedSchedules = function (schedules, dateMoment, personIds) {
 		checkPersonIds(personIds);
 
@@ -36,11 +31,6 @@
 			}
 		});
 		return latestStart || dateMoment.startOf('day');
-	};
-
-	ScheduleHelperService.prototype.getLatestStartOfSelectedSchedules = function (schedules, dateMoment, personIds) {
-		var latestStart = this.getLatestStartMomentOfSelectedSchedules(schedules, dateMoment, personIds);
-		if (latestStart) return latestStart.toDate();
 	};
 
 	ScheduleHelperService.prototype.getLatestPreviousDayOvernightShiftEndMoment = function (schedules, date, personIds) {
@@ -67,12 +57,6 @@
 		});
 
 		return latestEndTimeMoment;
-	};
-
-	ScheduleHelperService.prototype.getLatestPreviousDayOvernightShiftEnd = function (schedules, dateMoment, personIds) {
-		var latestEndTimeMoment = this.getLatestPreviousDayOvernightShiftEndMoment(schedules, dateMoment, personIds);
-		if (latestEndTimeMoment)
-			return latestEndTimeMoment.toDate();
 	};
 
 	ScheduleHelperService.prototype.getLatestStartTimeMomentOfSelectedProjections = function (schedules, personIds) {
@@ -105,11 +89,6 @@
 			}
 		});
 		return latestStart;
-	};
-
-	ScheduleHelperService.prototype.getLatestStartTimeOfSelectedSchedulesProjections = function (schedules, dateMoment, personIds) {
-		var lastestStartTimeMoment = this.getLatestStartTimeMomentOfSelectedProjections(schedules, personIds);
-		if (lastestStartTimeMoment) return lastestStartTimeMoment.toDate();
 	};
 
 	function checkPersonIds(personIds) {

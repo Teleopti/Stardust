@@ -13,11 +13,9 @@
 		'TeamSchedule',
 		'PersonSelection',
 		'ScheduleManagement',
-		'NoticeService',
 		'ValidateRulesService',
 		'CommandCheckService',
 		'ScheduleNoteManagementService',
-		'Toggle',
 		'bootstrapCommon',
 		'groupPageService',
 		'TeamsStaffingConfigurationStorageService',
@@ -27,8 +25,8 @@
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $stateParams, $mdComponentRegistry, $document,
-		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
-		CommandCheckService, ScheduleNoteManagementService, toggleSvc, bootstrapCommon, groupPageService,
+		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc,  ValidateRulesService,
+		CommandCheckService, ScheduleNoteManagementService, bootstrapCommon, groupPageService,
 		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions) {
 		var mode = {
 			BusinessHierarchy: 'BusinessHierarchy',

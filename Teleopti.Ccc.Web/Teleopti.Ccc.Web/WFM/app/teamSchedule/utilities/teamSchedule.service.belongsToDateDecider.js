@@ -11,7 +11,6 @@
 
 		self.decideBelongsToDate = decideBelongsToDate;
 		self.normalizePersonScheduleVm = normalizePersonScheduleVm;
-		self.checkTimeRangeAllowedForIntradayAbsence = checkTimeRangeAllowedForIntradayAbsence;
 		self.decideBelongsToDateForOvertimeActivity = decideBelongsToDateForOvertimeActivity;
 
 		function decideBelongsToDateForOvertimeActivity(targetTimeRange, normalizedScheduleDataArray) {
@@ -28,14 +27,6 @@
 			});
 
 			return matchedDates[0];
-		}
-
-		function checkTimeRangeAllowedForIntradayAbsence(targetTimeRange, normalizedScheduleDataArray) {
-			return normalizedScheduleDataArray.some(function (day) {
-				return day.shiftRange &&
-					targetTimeRange.startTime.isSameOrAfter(day.shiftRange.startTime) &&
-					targetTimeRange.endTime.isSameOrBefore(day.shiftRange.endTime);
-			});
 		}
 
 		function decideBelongsToDate(targetTimeRange, normalizedScheduleDataArray, currentDate) {

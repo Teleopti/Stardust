@@ -3,7 +3,6 @@
 		'use strict';
 		var $rootScope,
 			$compile,
-			$document,
 			$q,
 			$httpBackend,
 			fakeDayOffService,
@@ -29,10 +28,9 @@
 				});
 		}));
 
-		beforeEach(inject(function (_$rootScope_, _$compile_, _$document_, _$q_, _$httpBackend_) {
+		beforeEach(inject(function (_$rootScope_, _$compile_, _$q_, _$httpBackend_) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
-			$document = _$document_;
 			$q = _$q_;
 			$httpBackend = _$httpBackend_;
 			$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');

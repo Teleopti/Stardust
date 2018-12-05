@@ -2132,8 +2132,6 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.notification.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.br.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.actionnoticeservice.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.actionnoticeservice.spec.js" />
     <Content Include="WFM\app\global\i18n\wfm.i18n.service.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.js" />
     <Content Include="WFM\app\intraday\intraday.controller.js" />

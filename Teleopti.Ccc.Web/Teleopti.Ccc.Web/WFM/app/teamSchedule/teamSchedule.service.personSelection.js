@@ -278,7 +278,6 @@
 
 		svc.syncProjectionSelection = syncProjectionSelection;
 
-
 		function SelectedAbsence(absenceId, date) {
 			this.absenceId = absenceId;
 			this.date = date;
@@ -297,7 +296,6 @@
 					serviceDateFormatHelper.getDateOnly(this.date) === serviceDateFormatHelper.getDateOnly(other.date);
 			}
 		}
-
 
 		function lookUpIndex(array, target) {
 			var index = -1;

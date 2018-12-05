@@ -176,7 +176,6 @@
 			return firstM;
 		}
 
-
 		function getNewScheduleStartMoment(scheduleDate, personSchedule, newStartMoment) {
 			var unselected = getProjectionsBySelectStatus(scheduleDate, personSchedule, false);
 			if (!unselected || unselected.length === 0) return newStartMoment;
