@@ -1,11 +1,10 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1>
+		<h1 style="display: inline">
 			<i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroup.Name}} /  {{vm.selectedPp.StartDate | amDateFormat:"LL"}} - {{vm.selectedPp.EndDate |
-			amDateFormat:"LL"}}</h1>
-		<div class="pp-sub-title">
-			<span ng-if="vm.isDisable()" ng-bind="vm.status" class="pp-status"></span>
-		</div>
+			amDateFormat:"LL"}}
+		</h1>
+		<span ng-if="vm.isDisable()" ng-bind="vm.status" class="pp-status"></span>
 	</div>
 </div>
 <div class="con-row">

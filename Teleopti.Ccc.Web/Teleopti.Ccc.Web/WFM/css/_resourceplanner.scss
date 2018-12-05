@@ -252,9 +252,10 @@ table.overview {
 }
 
 .pp-status {
-	padding: 6px;
-	background-color: $orange-500 ;
-	border-radius: 3px;
+  padding: 4px;
+  background-color: $orange-500 ;
+  border-radius: 3px;
+  margin-left: 10px;
 }
 
 .pp-modal>.modal-box .modalbg .dialog {
