@@ -72,23 +72,23 @@
 			</div>
 			<div class="con-row">
 				<div class="con-flex setting-group material-depth-1">
-					<div class="header-flex">
-						<b translate>DayOffRuleSetting</b>
+					<div class="con-flex">
+						<b>{{'DayOffRuleSetting' | translate}}:</b>
 					</div>
 					<div class="con-row">
 						<div class="con-flex">
-							<div class="form-input-wrap wfm-options">
-								<div class="wfm-option-label" style="margin-top: 0;">
-									<div translate>DaysOffPerWeek</div>
+							<div class="wfm-options">
+								<div class="wfm-option-label">
+									<b translate>DaysOffPerWeek</b>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
-										<label for="MinDayOffsPerWeek" translate>MinColon </label>
+									<div class="wfm-option con-flex">
+										<label for="MinDayOffsPerWeek" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" name="MinDayOffsPerWeek" placeholder="0" min="0" id="MinDayOffsPerWeek"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MaxDayOffsPerWeek" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" id="MaxDayOffsPerWeek"
 										/>
@@ -96,16 +96,16 @@
 									</div>
 								</div>
 								<div class="wfm-option-label">
-									<div translate>ConsecutiveDaysOff</div>
+									<b translate>ConsecutiveDaysOff</b>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MinConsecutiveDayOffs" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinConsecutiveDayOffs" name="MinConsecutiveDayOffs" placeholder="0" min="0"
 										 id="MinConsecutiveDayOffs" />
 										<p class="text-danger" ng-show="!vm.isValidConsecDaysOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MaxConsecutiveDayOffs" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxConsecutiveDayOffs" name="MaxConsecutiveDayOffs" placeholder="0" min="0"
 										 id="MaxConsecutiveDayOffs" />
@@ -113,16 +113,16 @@
 									</div>
 								</div>
 								<div class="wfm-option-label">
-									<div translate>ConsecutiveWorkDays</div>
+									<b translate>ConsecutiveWorkDays</b>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MinConsecutiveWorkdays" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinConsecutiveWorkdays" name="MinConsecutiveWorkdays" placeholder="0" min="0"
 										 id="MinConsecutiveWorkdays" />
 										<p class="text-danger" ng-show="!vm.isValidConsecWorkDays()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MaxConsecutiveWorkdays" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxConsecutiveWorkdays" name="MaxConsecutiveWorkdays" placeholder="0" min="0"
 										 id="MaxConsecutiveWorkdays" />
@@ -130,16 +130,16 @@
 									</div>
 								</div>
 								<div class="wfm-option-label">
-									<div translate>FullWeekEndsOff</div>
+									<b translate>FullWeekEndsOff</b>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MinFullWeekEndsOff" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinFullWeekendsOff" name="MinFullWeekEndsOff" placeholder="0" min="0" id="MinFullWeekEndsOff"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidFullWeekEndsOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MaxFullWeekEndsOff" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxFullWeekendsOff" name="MaxFullWeekEndsOff" placeholder="0" min="0" id="MaxFullWeekEndsOff"
 										/>
@@ -147,16 +147,16 @@
 									</div>
 								</div>
 								<div class="wfm-option-label">
-									<div translate>FullWeekEndDaysOff</div>
+									<b translate>FullWeekEndDaysOff</b>
 								</div>
 								<div class="con-row">
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MinFullWeekEndDaysOff" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinWeekendDaysOff" name="MinFullWeekEndDaysOff" placeholder="0" min="0" id="MinFullWeekEndDaysOff"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidFullWeekEndDaysOff()" translate>InvalidInput</p>
 									</div>
-									<div class="wfm-option form-input-wrap con-flex">
+									<div class="wfm-option con-flex">
 										<label for="MaxFullWeekEndDaysOff" translate>MaxColon</label>
 										<input type="number" ng-model="vm.settingInfo.MaxWeekendDaysOff" name="MaxFullWeekEndDaysOff" placeholder="0" min="0" id="MaxFullWeekEndDaysOff"
 										/>
@@ -168,10 +168,10 @@
 					</div>
 				</div>
 				<div class="con-flex setting-group material-depth-1">
-					<div class="header-flex">
-						<b>{{'BlockScheduling' | translate}}</b>
+					<div class="con-flex">
+						<b>{{'BlockScheduling' | translate}}:</b>
 					</div>
-					<div class="con-row">
+					<div class="con-row" style="padding-left: 5px">
 						<div class="con-flex">
 							<md-radio-group ng-model="vm.blockFinderType">
 								<md-radio-button ng-repeat="option in vm.blockFinderTypeOptions" ng-value="option">
@@ -187,8 +187,8 @@
 							</md-radio-group>
 						</div>
 					</div>
-					<div class="con-row" ng-if="vm.settingInfo.Default">
-						<div class="form-input-wrap">
+					<div class="con-row" style="padding-left: 5px" ng-if="vm.settingInfo.Default">
+						<div>
 							<label for="preferencePercent"><b translate>PreferenceFulfillmentPercentColon</b></label>
 							<input id="preferencePercent" type="number" ng-model="vm.settingInfo.PreferencePercent" placeholder="Preference Percentage" min="0" max="100" step="10"/>
 						</div>
