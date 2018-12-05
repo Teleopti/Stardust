@@ -16590,7 +16590,7 @@ Do you want to participate?</value>
     <comment>Scheduling Setting for web scheduling</comment>
   </data>
   <data name="SelectedFilters" xml:space="preserve">
-    <value>Seleted filters</value>
+    <value>Selected filters</value>
     <comment>selected filters of scheduling setting for web scheduling</comment>
   </data>
   <data name="SelectScheduleMethod" xml:space="preserve">
