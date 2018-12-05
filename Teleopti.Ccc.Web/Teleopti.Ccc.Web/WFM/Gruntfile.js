@@ -178,7 +178,6 @@ module.exports = function(grunt) {
 	const concatCssDependencies = {
 		src: [
 			'node_modules/c3/c3.min.css',
-			'node_modules/bootstrap/dist/css/bootstrap.css',
 			'node_modules/angular-resizable/src/angular-resizable.css',
 			'node_modules/angular-ui-tree/source/angular-ui-tree.css',
 			'node_modules/angular-ui-grid/ui-grid.css',
