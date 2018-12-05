@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -21,7 +20,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 {
@@ -142,11 +140,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillEmail", null, timeZone);
+			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillPhone", null, timeZone);
 			criticalUnderStaffingSkillPhone.SkillType = _phoneSkillType;
 			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
 
-			var criticalUnderStaffingSkillEmail = createSkill("criticalUnderStaffingSkillPhone", null, timeZone);
+			var criticalUnderStaffingSkillEmail = createSkill("criticalUnderStaffingSkillEmail", null, timeZone);
 			criticalUnderStaffingSkillEmail.SkillType = _emailSkillType;
 			criticalUnderStaffingSkillEmail.DefaultResolution = _emailIntervalInMinutes;
 
@@ -335,6 +333,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(phoneActivity.Id.GetValueOrDefault());
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period);
 		}
+
 		[Test]
 		public void ShouldAllowToAddDisconnnectedOvertimeActivity()
 		{
@@ -619,6 +618,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand.Should().Not.Be.Null();
 			addOvertimeActivityCommand?.Date.Should().Be.EqualTo(new DateOnly(todayShiftPeriod.StartDateTime));
 		}
+
 		[Test]
 		public void ShouldNotApproveWhenAgentSkillIsOutOfPersonPeriod()
 		{
@@ -854,7 +854,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return person;
 		}
 
-		private IPersonSkill createPersonSkill(IActivity activity, ISkill skill)
+		private static IPersonSkill createPersonSkill(IActivity activity, ISkill skill)
 		{
 			skill.Activity = activity;
 			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
