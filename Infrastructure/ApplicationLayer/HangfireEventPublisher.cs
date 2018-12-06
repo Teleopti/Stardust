@@ -14,15 +14,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly IHangfireEventClient _client;
 		private readonly ResolveEventHandlers _resolver;
 		private readonly ICurrentDataSource _dataSource;
+		private readonly HandlerTypeMapper _handlerTypeMapper;
 
 		public HangfireEventPublisher(
 			IHangfireEventClient client,
 			ResolveEventHandlers resolver,
-			ICurrentDataSource dataSource)
+			ICurrentDataSource dataSource,
+			HandlerTypeMapper handlerTypeMapper)
 		{
 			_client = client;
 			_resolver = resolver;
 			_dataSource = dataSource;
+			_handlerTypeMapper = handlerTypeMapper;
 		}
 
 		public void Publish(params IEvent[] events) =>
@@ -49,13 +52,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				.Select(x =>
 					{
 						var eventDisplayName = x.Event?.GetType().Name ?? "a package";
+						var handlerTypeName = _handlerTypeMapper.NameForPersistence(x.HandlerType);
 						return new HangfireEventJob
 						{
-							DisplayName = $"{x.HandlerType.Name} got {eventDisplayName} on {tenantDisplayName}",
+							DisplayName = $"{handlerTypeName} got {eventDisplayName} on {tenantDisplayName}",
 							Tenant = tenant,
 							Event = x.Event,
 							Package = x.Package,
-							HandlerTypeName = $"{x.HandlerType.FullName}, {x.HandlerType.Assembly.GetName().Name}",
+							HandlerTypeName = handlerTypeName,
 							QueueName = x.QueueName,
 							Attempts = x.Attempts,
 							AllowFailures = x.AllowFailures,
