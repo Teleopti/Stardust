@@ -21,7 +21,6 @@
 			module('wfm.teamSchedule');
 
 			module(function ($provide) {
-				$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 				$provide.service('$locale', setupMockLocale);
 				$provide.service('Toggle', setupMockAllTrueToggleService);
 				$provide.service('groupPageService', setUpMockGroupPagesService);
@@ -30,7 +29,7 @@
 		});
 
 		beforeEach(inject(function (_$q_, _$mdSidenav_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_,
-			_ScheduleManagement_, _TeamsStaffingConfigurationStorageService_, _ViewStateKeeper_, _$httpBackend_) {
+			_ScheduleManagement_, _TeamsStaffingConfigurationStorageService_, _ViewStateKeeper_, _$httpBackend_, CurrentUserInfo) {
 			$q = _$q_;
 			$mdSidenav = _$mdSidenav_;
 			$controller = _$controller_;
@@ -41,10 +40,17 @@
 			teamScheduleService = _TeamSchedule_;
 			viewStateKeeper = _ViewStateKeeper_;
 			$httpBackend = _$httpBackend_;
+			CurrentUserInfo.SetCurrentUserInfo({
+				DefaultTimeZone: "Etc/UTC",
+				DefaultTimeZoneName: "Etc/UTC",
+				DateFormatLocale: "en-GB"
+			});
 
 			staffingConfigStorageService = _TeamsStaffingConfigurationStorageService_;
 			staffingConfigStorageService.clearConfig();
 			controller = setUpController(_$controller_);
+
+			
 		}));
 
 		it("can display person selection status correctly when turning pages", inject(function () {
@@ -563,18 +569,6 @@
 
 		function setupMockAllTrueToggleService() {
 			return {};
-		}
-
-		function setupMockCurrentUserInfoService() {
-			return {
-				CurrentUserInfo: function () {
-					return {
-						DefaultTimeZone: "Etc/UTC",
-						DefaultTimeZoneName: "Etc/UTC",
-						DateFormatLocale: "en-GB"
-					};
-				}
-			};
 		}
 
 	});

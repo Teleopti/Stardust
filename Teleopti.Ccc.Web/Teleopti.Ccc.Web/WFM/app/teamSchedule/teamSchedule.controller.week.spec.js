@@ -15,7 +15,7 @@
 			module("wfm.teamSchedule");
 			module(function ($provide) {
 				initProvideService($provide);
-				$provide.service('CurrentUserInfo', fakeCurrentUserInfo);
+
 			});
 		});
 
@@ -27,13 +27,21 @@
 			_$controller_,
 			_PersonScheduleWeekViewCreator_,
 			_ViewStateKeeper_,
-			_serviceDateFormatHelper_) {
+			_serviceDateFormatHelper_,
+			CurrentUserInfo) {
 			$q = _$q_;
 			rootScope = _$rootScope_.$new();
 			weekViewCreator = _PersonScheduleWeekViewCreator_;
 			viewStateKeeper = _ViewStateKeeper_;
 			serviceDateFormatHelper = _serviceDateFormatHelper_;
 			$controller = _$controller_;
+
+			CurrentUserInfo.SetCurrentUserInfo({
+				FirstDayOfWeek: 1,
+				DateFormatLocale: 'sv-SE',
+				DefaultTimeZone: 'Europe/Berlin',
+				DayNames: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+			});
 		}));
 
 		it("should init all settings", function () {
@@ -120,23 +128,12 @@
 		it('should get group pages with correct period', function () {
 			viewStateKeeper.save({ selectedDate: '2018-07-01' });
 
-			var controller = setUpController();
+			setUpController();
 			expect(groupPageService.period.StartDate).toEqual('2018-06-25');
 			expect(groupPageService.period.EndDate).toEqual('2018-07-01');
 		});
 
-		function fakeCurrentUserInfo() {
-			return {
-				CurrentUserInfo: function () {
-					return {
-						FirstDayOfWeek: 1,
-						DateFormatLocale: 'sv-SE',
-						DefaultTimeZone: 'Europe/Berlin',
-						DayNames: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-					};
-				}
-			};
-		}
+
 
 	});
 	describe('#teamschedule week controller tests in ar-OM #', function () {
@@ -144,7 +141,6 @@
 			module("wfm.teamSchedule");
 			module(function ($provide) {
 				initProvideService($provide);
-				$provide.service('CurrentUserInfo', fakeCurrentUserInfo);
 			});
 		});
 
@@ -156,13 +152,20 @@
 			_$controller_,
 			_PersonScheduleWeekViewCreator_,
 			_ViewStateKeeper_,
-			_serviceDateFormatHelper_) {
+			_serviceDateFormatHelper_,
+			CurrentUserInfo) {
 			$q = _$q_;
 			rootScope = _$rootScope_.$new();
 			weekViewCreator = _PersonScheduleWeekViewCreator_;
 			viewStateKeeper = _ViewStateKeeper_;
 			serviceDateFormatHelper = _serviceDateFormatHelper_;
 			$controller = _$controller_;
+
+			CurrentUserInfo.SetCurrentUserInfo({
+				FirstDayOfWeek: 0,
+				DateFormatLocale: 'en-US',
+				DefaultTimeZone: 'Europe/Berlin'
+			});
 		}));
 
 		it('should get correct start of week and week days when start of week is changed', function () {
@@ -216,17 +219,6 @@
 			expect(groupPageService.period.EndDate).toEqual('2018-07-07');
 		});
 
-		function fakeCurrentUserInfo() {
-			return {
-				CurrentUserInfo: function () {
-					return {
-						FirstDayOfWeek: 0,
-						DateFormatLocale: 'en-US',
-						DefaultTimeZone: 'Europe/Berlin'
-					};
-				}
-			};
-		}
 	});
 	function initProvideService($provide) {
 		weekViewScheduleService = new WeekViewScheduleService();

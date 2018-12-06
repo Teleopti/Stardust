@@ -9,12 +9,6 @@
 		personSelection,
 		scheduleManagement;
 
-	var mockCurrentUserInfo = {
-		CurrentUserInfo: function () {
-			return { DefaultTimeZone: 'Asia/Hong_Kong' };
-		}
-	};
-
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
@@ -29,9 +23,6 @@
 			$provide.service('CommandCheckService', function () {
 				return fakeCommandCheckService;
 			});
-			$provide.service('CurrentUserInfo', function () {
-				return mockCurrentUserInfo;
-			});
 		});
 	});
 
@@ -40,13 +31,15 @@
 		_$httpBackend_,
 		_UtilityService_,
 		PersonSelection,
-		ScheduleManagement) {
+		ScheduleManagement,
+		CurrentUserInfo) {
 
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		utility = _UtilityService_;
 		personSelection = PersonSelection;
 		scheduleManagement = ScheduleManagement;
+		CurrentUserInfo.SetCurrentUserInfo({ DefaultTimeZone: 'Asia/Hong_Kong' });
 
 		_$httpBackend_.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
@@ -231,15 +224,14 @@
 		personSelection.updatePersonSelection(personSchedule);
 		personSelection.toggleAllPersonProjections(personSchedule, '2018-03-01');
 
-		utility.setNowDate(new Date("2018-03-01T10:00:00+01:00"));
+		utility.setNowDate("2018-03-01 09:00:00");
 
 		var result = setUp('2018-03-01', 'Europe/Stockholm');
 		expect(result.commandControl.timeRange.startTime).toBe("2018-03-01 10:15");
 	});
 
 	it('should set default start time to 8:00 when now is earlier than 8:00 on today', function () {
-		var date = new Date("2018-03-01T05:00:00+00:00");
-		utility.setNowDate(date);
+		utility.setNowDate("2018-03-01 05:00:00");
 
 		scheduleManagement.resetSchedules(
 			[{
@@ -262,8 +254,7 @@
 	});
 
 	it('should set default start time to next quarter when now is later than 8:00', function () {
-		var date = new Date("2018-03-01T09:10:00+00:00");
-		utility.setNowDate(date);
+		utility.setNowDate('2018-03-01 09:10:00');
 
 		scheduleManagement.resetSchedules(
 			[{
@@ -281,7 +272,7 @@
 		personSelection.updatePersonSelection(personSchedule);
 		personSelection.toggleAllPersonProjections(personSchedule, '2018-03-01');
 
-		var result = setUp(date, 'Etc/Utc');
+		var result = setUp('2018-03-01', 'Etc/Utc');
 		expect(result.commandControl.timeRange.startTime).toBe("2018-03-01 09:15");
 	});
 
@@ -352,8 +343,7 @@
 	});
 
 	it('should set default start time to next quarter when selected date is same with now and next quarter is later than an hour from the end of previous day over night shift', function () {
-		var date = new Date("2018-08-01T10:00:00+00:00");
-		utility.setNowDate(date);
+		utility.setNowDate("2018-08-01 10:00:00");
 
 		scheduleManagement.resetSchedules(
 			[{
@@ -395,8 +385,7 @@
 	});
 
 	it('should set default end time to an hour from default start time', function () {
-		var date = new Date("2018-03-01T05:00:00+00:00");
-		utility.setNowDate(date);
+		utility.setNowDate("2018-03-01 05:00:00");
 
 		scheduleManagement.resetSchedules(
 			[{
@@ -525,7 +514,7 @@
 			personSchedule.IsSelected = true;
 			personSelection.updatePersonSelection(personSchedule);
 			personSelection.toggleAllPersonProjections(personSchedule, '2018-08-02');
-			
+
 			var result = setUp('2018-08-02', 'Asia/Hong_Kong');
 			result.container[0].querySelectorAll('.activity-selector md-option')[0].click();
 			setTime(result.container, 8, 9);

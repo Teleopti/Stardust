@@ -61,7 +61,7 @@
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
-		vm.scheduleDate = Util.getFirstDayOfWeek(stateParams.selectedDate || serviceDateFormatHelper.getDateOnly(moment()));
+		vm.scheduleDate = Util.getFirstDayOfWeek(stateParams.selectedDate || Util.nowDateInUserTimezone());
 		vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 
 		vm.teamNameMap = stateParams.teamNameMap || {};
