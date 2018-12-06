@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -12,11 +11,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 {
 	[TestFixture]
 	[RealHangfireTest]
-	public class HangfireSerializeEventPublishingTest : IExtendSystem
+	public class HangfireEventRealPublishingTest : IExtendSystem
 	{
-		public Lazy<HangfireUtilities> Hangfire;
+		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
-		public IRecurringEventPublisher Recurring;
 		public TestHandler Handler;
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
@@ -29,38 +27,25 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Publisher.Publish(new TestEvent());
 
-			Hangfire.Value.EmulateWorkerIteration();
+			Hangfire.EmulateWorkerIteration();
 
-			Handler.GotEvent.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldReceiveEventData()
-		{
-			Publisher.Publish(new TestEvent {Data = "hello"});
-
-			Hangfire.Value.EmulateWorkerIteration();
-
-			Handler.GotEvent.Data.Should().Be("hello");
+			Handler.Received.Should().Be.OfType<TestEvent>();
 		}
 
 		public class TestEvent : IEvent
 		{
-			public string Data;
 		}
-		
+
 		public class TestHandler :
 			IHandleEvent<TestEvent>,
 			IRunOnHangfire
 		{
-
-			public TestEvent GotEvent;
+			public IEvent Received;
 
 			public void Handle(TestEvent @event)
 			{
-				GotEvent = @event;
+				Received = @event;
 			}
-
 		}
 	}
 }
