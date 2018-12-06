@@ -80,7 +80,7 @@
 							<div class="col-md-12" ng-if="!ctrl.frequencyType">
 								<div class="form-group">
 									<label class="form-check-label">Occur at:</label>
-									<input type="text" required ng-model="ctrl.form.DailyFrequencyStart" class="form-control" aria-describedby="emailHelp">
+									<input type="time" required ng-model="ctrl.form.DailyFrequencyStart" class="form-control" aria-describedby="emailHelp">
 								</div>
 							</div>
 							<div class="col-md-12" ng-if="ctrl.frequencyType">
@@ -98,7 +98,7 @@
 											<label class="form-check-label">
 												Starting at:
 											</label>
-											<input type="text" ng-min="ctrl.form.DailyFrequencyEnd" required ng-model="ctrl.form.DailyFrequencyStart" class="form-control" placeholder="Start time">
+											<input type="time" ng-min="ctrl.form.DailyFrequencyEnd" required ng-model="ctrl.form.DailyFrequencyStart" class="form-control" placeholder="Start time">
 										</div>
 									</div>
 									<div class="col-md-4">
@@ -106,7 +106,7 @@
 											<label class="form-check-label">
 												Ending at:
 											</label>
-											<input type="text" required ng-model="ctrl.form.DailyFrequencyEnd" class="form-control" placeholder="End time">
+											<input type="time" ng-max="ctrl.form.DailyFrequencyStart" required ng-model="ctrl.form.DailyFrequencyEnd" class="form-control" placeholder="End time">
 										</div>
 									</div>
 								</div>

@@ -88,7 +88,7 @@
 									</td>
 									<td>
 										<span ng-if="job.DailyFrequencyMinute">Occurs every {{job.DailyFrequencyMinute}} minute(s) between {{job.DailyFrequencyStart | date:'HH:mm'}} and {{job.DailyFrequencyEnd | date:'HH:mm'}}</span>
-										<span ng-if="!job.DailyFrequencyMinute">Occurs every day between {{job.DailyFrequencyStart  | date:'HH:mm'}} and {{job.DailyFrequencyEnd | date:'HH:mm'}}</span>
+										<span ng-if="!job.DailyFrequencyMinute">Occurs once a day at {{job.DailyFrequencyStart  | date:'HH:mm'}}</span>
 									</td>
 									<td>
 										<span ng-click="vm.toggleScheduleJob(job.ScheduleId)">

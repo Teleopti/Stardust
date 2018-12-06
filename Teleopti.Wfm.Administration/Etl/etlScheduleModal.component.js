@@ -61,7 +61,7 @@
           return;
         }
         ctrl.form = {
-          DailyFrequencyStart: moment().format("HH:mm")
+          DailyFrequencyStart: moment(new Date())
         };
 
         ctrl.selectedTenant = ctrl.tenants[0];
@@ -71,9 +71,9 @@
 
     function toggleFrequencyType(form) {
       if (ctrl.frequencyType) {
+        form.DailyFrequencyMinute = null;
         form.DailyFrequencyStart = null;
-        ctrl.form.DailyFrequencyStart = moment().format("HH:mm");
-        ctrl.form.DailyFrequencyEnd = moment().add(1, 'hours').format("HH:mm");
+        form.DailyFrequencyEnd = null;
       }
       else{
         form.DailyFrequencyMinute = null;
@@ -164,10 +164,10 @@
       ctrl.form.InitialPeriod =  getItemBasedOnName(ctrl.job.RelativePeriods, "Initial", 'JobCategoryName');
     }
 
-    function editHandler() {
+	  function editHandler() {
       ctrl.form = {
-        DailyFrequencyEnd: moment(ctrl.job.DailyFrequencyEnd).format("HH:mm"),
-        DailyFrequencyStart: moment(ctrl.job.DailyFrequencyStart).format("HH:mm"),
+        DailyFrequencyStart: new Date(ctrl.job.DailyFrequencyStart),
+		DailyFrequencyEnd: new Date(ctrl.job.DailyFrequencyEnd),
         Description: ctrl.job.Description,
         JobName: ctrl.job.jobName,
         LogDataSourceId: null,
