@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			JobHelper.SetSerializerSettings(NewtonsoftJsonSerializer.EventSettings);
 
 			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", TimeSpan.FromHours(1).TotalSeconds);
-			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", TimeSpan.FromSeconds(2).TotalSeconds);
+			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", TimeSpan.FromSeconds(5).TotalSeconds);
 			var jobExpirationCheck = _config.ReadValue("HangfireJobExpirationCheckIntervalSeconds", TimeSpan.FromMinutes(15).TotalSeconds);
 			var dashboardStatistics = _config.ReadValue("HangfireDashboardStatistics", false);
 			var dashboardCounters = _config.ReadValue("HangfireDashboardCounters", false);
