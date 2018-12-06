@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType)
+		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType, bool isExternal)
 		{
 			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
-				+ "from AgentBadge where BadgeType=:badgeType and Person in (:personIdList)";
+				+ "from AgentBadge where BadgeType=:badgeType and Person in (:personIdList) and IsExternal=:isExternal";
 			
 			var idList = personIdList.ToArray();
 			if (!idList.Any())

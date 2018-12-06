@@ -35,12 +35,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_agentBadges.Clear();
 		}
 
-		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType)
+		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType, bool isExternal)
 		{
 			return (from agentBadge in _agentBadges
 				from personId in personIdList
 				where personId == agentBadge.Person 
 					  && badgeType == agentBadge.BadgeType
+					  && isExternal == agentBadge.IsExternal
 				select agentBadge).ToList();
 		}
 

@@ -252,9 +252,10 @@ table.overview {
 }
 
 .pp-status {
-	padding: 6px;
-	background-color: $orange-500 ;
-	border-radius: 3px;
+  padding: 4px;
+  background-color: $orange-500 ;
+  border-radius: 3px;
+  margin-left: 10px;
 }
 
 .pp-modal>.modal-box .modalbg .dialog {
@@ -263,21 +264,9 @@ table.overview {
 		background: $blue-500;
 	}
 
-	.pp-create-modal {
-		padding: 0 16px;
-	}
-
 	.pp-calendar-wrapper {
-		display: table;
-		margin: 0 auto;
-	}
-
-	.pp-custom-input-wrapper {
-		margin: 10px 0px;
-	}
-
-	.pp-custom-buttons-wrapper {
-		margin: 0 20px;
+	  display: table;
+	  margin: 0 auto;
 	}
 }
 
@@ -415,11 +404,6 @@ card-panel-content {
 	.pg-setting-card-content {
 		background-color: $gray012;
 	}
-
-	.wfm-option-label{
-	  font-weight: bold;
-	  margin-top: 12px;
-	}
 }
 
 
@@ -427,12 +411,18 @@ card-panel-content {
 .setting-group{
   background: $white ;
 
-  .wfm-option-label{
-	margin-top: 10px;
-  }
-  .con-flex {
-	margin-top: 0;
-	margin-bottom: 0;
+  .dayoff-rules-setting{
+	margin-bottom: 15px;
+	
+	.wfm-option{
+	  padding-top: 0;
+	  padding-bottom: 0;
+	}
+
+	.con-flex {
+	  margin-top: 0;
+	  margin-bottom: 0;
+	}
   }
 }
 

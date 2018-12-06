@@ -81,16 +81,16 @@
 								<div class="wfm-option-label">
 									<b translate>DaysOffPerWeek</b>
 								</div>
-								<div class="con-row">
+								<div class="con-row dayoff-rules-setting">
 									<div class="wfm-option con-flex">
 										<label for="MinDayOffsPerWeek" translate>MinColon</label>
-										<input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" name="MinDayOffsPerWeek" placeholder="0" min="0" id="MinDayOffsPerWeek"
+										<input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" name="MinDayOffsPerWeek" placeholder="0" min="0" max="7" id="MinDayOffsPerWeek"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()" translate>InvalidInput</p>
 									</div>
 									<div class="wfm-option con-flex">
 										<label for="MaxDayOffsPerWeek" translate>MaxColon</label>
-										<input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" id="MaxDayOffsPerWeek"
+										<input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" name="MaxDayOffsPerWeek" placeholder="0" min="0" max="7" id="MaxDayOffsPerWeek"
 										/>
 										<p class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()" translate>InvalidInput</p>
 									</div>
@@ -98,7 +98,7 @@
 								<div class="wfm-option-label">
 									<b translate>ConsecutiveDaysOff</b>
 								</div>
-								<div class="con-row">
+								<div class="con-row dayoff-rules-setting">
 									<div class="wfm-option con-flex">
 										<label for="MinConsecutiveDayOffs" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinConsecutiveDayOffs" name="MinConsecutiveDayOffs" placeholder="0" min="0"
@@ -115,7 +115,7 @@
 								<div class="wfm-option-label">
 									<b translate>ConsecutiveWorkDays</b>
 								</div>
-								<div class="con-row">
+								<div class="con-row dayoff-rules-setting">
 									<div class="wfm-option con-flex">
 										<label for="MinConsecutiveWorkdays" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinConsecutiveWorkdays" name="MinConsecutiveWorkdays" placeholder="0" min="0"
@@ -132,7 +132,7 @@
 								<div class="wfm-option-label">
 									<b translate>FullWeekEndsOff</b>
 								</div>
-								<div class="con-row">
+								<div class="con-row dayoff-rules-setting">
 									<div class="wfm-option con-flex">
 										<label for="MinFullWeekEndsOff" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinFullWeekendsOff" name="MinFullWeekEndsOff" placeholder="0" min="0" id="MinFullWeekEndsOff"
@@ -149,7 +149,7 @@
 								<div class="wfm-option-label">
 									<b translate>FullWeekEndDaysOff</b>
 								</div>
-								<div class="con-row">
+								<div class="con-row dayoff-rules-setting">
 									<div class="wfm-option con-flex">
 										<label for="MinFullWeekEndDaysOff" translate>MinColon</label>
 										<input type="number" ng-model="vm.settingInfo.MinWeekendDaysOff" name="MinFullWeekEndDaysOff" placeholder="0" min="0" id="MinFullWeekEndDaysOff"

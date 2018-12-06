@@ -119,6 +119,7 @@
 		"pretest:rta": "grunt concat:concatJsDependencies",
 		"test:rta": "ng test --karma-config test/karma.conf.rta.js",
 		"test:teams": "ng test --karma-config test/karma.conf.teams.js",
+		"test:requests": "ng test --karma-config test/karma.conf.requests.js",
 		"test:angular": "ng test --karma-config test/karma.conf.angular.js",
 		"start": "run-p iis:web iis:admin iis:open:web dev:watch",
 		"iis:open:web": "start http://localhost:52858/TeleoptiWFM/Web/",

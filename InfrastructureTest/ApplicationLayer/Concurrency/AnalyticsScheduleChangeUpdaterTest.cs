@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		
 		[Test]
-		[Timeout(20000)]
+		[Timeout(30000)]
 		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 1, 5, 0,0,0,DateTimeKind.Utc);

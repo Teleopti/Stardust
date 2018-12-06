@@ -27,10 +27,11 @@ export class ReportService {
 			.catch(this.handleError);
 	}
 
-	async cloneReport(reportId: string): Promise<ReportConfig> {
+	async cloneReport(reportId: string, newReportName: string): Promise<ReportConfig> {
 		const parameters = {
 			params: {
-				reportId: reportId
+				reportId: reportId,
+				newReportName: newReportName
 			}
 		};
 

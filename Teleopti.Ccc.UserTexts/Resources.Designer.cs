@@ -31697,7 +31697,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Seleted filters.
+        ///   Looks up a localized string similar to Selected filters.
         /// </summary>
         public static string SelectedFilters {
             get {

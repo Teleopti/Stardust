@@ -181,8 +181,8 @@
 
 		this.getAbsenceAndTextRequestsStatuses = function() {
 			var statuses = [
-				{ Value: requestsStatus.Waitlisted, Name: $translate.instant('Waitlisted') },
-				{ Value: requestsStatus.Cancelled, Name: $translate.instant('Cancelled') }
+				{ Id: requestsStatus.Waitlisted, Name: $translate.instant('Waitlisted') },
+				{ Id: requestsStatus.Cancelled, Name: $translate.instant('Cancelled') }
 			];
 
 			return getBasicStatuses().concat(statuses);
@@ -198,9 +198,9 @@
 
 		function getBasicStatuses() {
 			var basicStatuses = [
-				{ Value: requestsStatus.Pending, Name: $translate.instant('Pending') },
-				{ Value: requestsStatus.Denied, Name: $translate.instant('Denied') },
-				{ Value: requestsStatus.Approved, Name: $translate.instant('Approved') }
+				{ Id: requestsStatus.Pending, Name: $translate.instant('Pending') },
+				{ Id: requestsStatus.Denied, Name: $translate.instant('Denied') },
+				{ Id: requestsStatus.Approved, Name: $translate.instant('Approved') }
 			];
 
 			return basicStatuses;

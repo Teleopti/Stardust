@@ -77,39 +77,27 @@
 	</div>
 </div>
 <div class="con-row">
-	<div class="con-flex pp-modal">
+	<div class="pp-modal">
 		<div class="modal-box" ng-show="vm.modifyLastPpModal">
 			<div class="modalbg">
 				<div class="dialog material-depth-1">
-					<h2 class="modal-title">{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
+					<h2 class="modal-title" style="margin-top: 10px">{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
 						| amDateFormat:"L"}}</h2>
 					<span class="modal-title" ng-if="vm.typeIsWrong"><i class="mdi mdi-information-outline" ></i> The planning period interval has wrong type.</span>
-					<md-content class="md-padding pp-create-modal" ng-hide="vm.typeIsWrong">
+					<md-content class="md-padding" ng-hide="vm.typeIsWrong">
 						<md-tabs md-dynamic-height md-border-bottom>
-							<md-tab label="By Customs">
+							<md-tab label="Custom">
 								<md-content class="md-padding">
 									<div class="con-row">
 										<label>
 											<i class="mdi mdi-information-outline"></i>Set up the period interval length<span ng-if="vm.planningPeriods.length <= 1"> and select start date</span>
 										</label>
 									</div>
-									<div class="con-row pp-custom-input-wrapper">
+									<div class="con-row">
+										<input type="number" style="margin: 5px;" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="WeekInterval" min="1" title="week/month"/>
 										<wfm-btn-group items="vm.types" selected="vm.intervalType" output="vm.typeChanged" btn-class="'wfm-btn-default'" selection-class="'wfm-btn-primary'"></wfm-btn-group>
-										<div class="con-flex pp-custom-buttons-wrapper">
-											<div class="wfm-option form-input-wrap con-flex" ng-if="vm.intervalType == 'Week'">
-												<label for="workMin" translate>Week</label>
-												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" ame="WeekInterval" placeholder="0" min="0"
-												/>
-												<p class="text-danger" ng-show="!vm.isValidMaxWeeks()" translate>InvalidInput</p>
-											</div>
-											<div class="wfm-option form-input-wrap con-flex" ng-if="vm.intervalType == 'Month'">
-												<label for="workMax" translate>Month</label>
-												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="MonthInterval" placeholder="0" min="0"
-												/>
-												<p class="text-danger" ng-show="!vm.isValidMaxMonths()" translate>InvalidInput</p>
-											</div>
-										</div>
 									</div>
+									<p class="text-danger" ng-show="!vm.isValidPeriod()" translate>InvalidInput</p>
 									<div class="con-row pp-calendar-wrapper">
 										<div class="con-flex" ng-if="vm.planningPeriods.length > 1">
 											<wfm-date-range-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="all"
@@ -143,14 +131,14 @@
 	</div>
 </div>
 <div class="con-row">
-	<div class="con-flex pp-modal">
+	<div class="pp-modal">
 		<div ng-cloak class="modal-box" ng-if="vm.openCreatePpModal">
 			<div class="modalbg">
 				<div class="dialog material-depth-1">
-					<h2 class="modal-title">{{'CreateFirstPlanningPeriod' | translate}}</h2>
-					<md-content class="md-padding pp-create-modal">
+					<h2 class="modal-title" style="margin-top: 10px;">{{'CreateFirstPlanningPeriod' | translate}}</h2>
+					<md-content class="md-padding">
 						<md-tabs md-dynamic-height md-border-bottom>
-							<md-tab label="By Suggestions">
+							<md-tab label="Suggestions">
 								<md-content class="md-padding">
 									<div class="con-row">
 										<label>
@@ -175,34 +163,20 @@
 									</div>
 								</md-content>
 							</md-tab>
-							<md-tab label="By Customs">
+							<md-tab label="Custom">
 								<md-content class="md-padding">
 									<div class="con-row">
 										<label>
 											<i class="mdi mdi-information-outline"></i>Set up the period interval length and select start date
 										</label>
 									</div>
-									<div class="con-row pp-custom-input-wrapper">
+									<div class="con-row">
+										<input type="number" style="margin: 5px;" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="WeekInterval" min="1" title="week/month"/>
 										<wfm-btn-group items="vm.types" selected="vm.intervalType" output="vm.typeChanged" btn-class="'wfm-btn-default'" selection-class="'wfm-btn-primary'"></wfm-btn-group>
-										<div class="con-flex pp-custom-buttons-wrapper" ng-if="vm.intervalType == 'Week'">
-											<div class="wfm-option form-input-wrap con-flex">
-												<label for="workMin" translate>Week</label>
-												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" ame="WeekInterval" placeholder="0" min="0"
-												/>
-											</div>
-											<p class="text-danger" ng-show="!vm.isValidMaxWeeks()" translate>InvalidInput</p>
-										</div>
-										<div class="con-flex pp-custom-buttons-wrapper" ng-if="vm.intervalType == 'Month'">
-											<div class="wfm-option form-input-wrap con-flex">
-												<label for="workMax" translate>Month</label>
-												<input type="number" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="MonthInterval" placeholder="0" min="0"
-												/>
-											</div>
-											<p class="text-danger" ng-show="!vm.isValidMaxMonths()" translate>InvalidInput</p>
-										</div>
 									</div>
+									<p class="text-danger" ng-show="!vm.isValidPeriod()" translate>InvalidInput</p>
 									<div class="con-row pp-calendar-wrapper">
-										<div class="con-flex ">
+										<div class="con-flex">
 											<wfm-date-range-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="end-date"
 											custom-validate="vm.intervalLengthValid()" ng-if="vm.intervalType == 'Week'"></wfm-date-range-picker>
 											<wfm-date-range-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="end-date"

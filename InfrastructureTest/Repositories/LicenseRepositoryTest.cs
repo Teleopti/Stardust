@@ -2,11 +2,15 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -23,7 +27,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// </summary>
         protected override void ConcreteSetup()
         {
-        }
+				
+		}
 
         /// <summary>
         /// Creates an aggregate using the Bu of logged in user.
@@ -95,11 +100,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
         #endregion
 
-		[Test]
-		public void ShouldLoadActiveAgents()
+		[TestCase(false, ExpectedResult = 1)]
+		[TestCase(true, ExpectedResult = 0)]
+		public int ShouldGetActiveAgents(bool deletedBusinessUnit)
 		{
-			ILicenseRepository licenseRepository = new LicenseRepository(UnitOfWork);
+			var licenseRepository = new LicenseRepository(UnitOfWork);
+			var person = PersonFactory.CreatePerson();
+			var team = TeamFactory.CreateSimpleTeam("_");
+			var site = SiteFactory.CreateSimpleSite();
+			site.AddTeam(team);
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
+			var scenario = new Scenario { DefaultScenario = true };
+			var activity = new Activity("_");
+			var shiftCategory = new ShiftCategory();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCategory);
+			if (deletedBusinessUnit)
+			{
+				((IDeleteTag)site.BusinessUnit).SetDeleted();
+			}
+			PersistAndRemoveFromUnitOfWork(site.BusinessUnit);
+			PersistAndRemoveFromUnitOfWork(personContract.Contract);
+			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
+			person.AddPersonPeriod(personPeriod);
+			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork(team);
+			PersistAndRemoveFromUnitOfWork(person);
+			PersistAndRemoveFromUnitOfWork(shiftCategory);
+			PersistAndRemoveFromUnitOfWork(scenario);
+			PersistAndRemoveFromUnitOfWork(activity);
+			PersistAndRemoveFromUnitOfWork(assignment);
+
 			var agents = licenseRepository.GetActiveAgents();
+
+			return agents.Count;
 		}
-    }
+	}
 }

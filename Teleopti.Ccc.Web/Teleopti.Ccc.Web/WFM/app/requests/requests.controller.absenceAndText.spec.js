@@ -395,9 +395,9 @@ describe('Requests - absence and text controller tests: ', function() {
 		var selectedStatus = controller.selectedRequestStatuses;
 
 		expect(selectedStatus.length).toEqual(3);
-		expect(selectedStatus[0].Value).toEqual(status0.trim());
-		expect(selectedStatus[1].Value).toEqual(status1.trim());
-		expect(selectedStatus[2].Value).toEqual(status2.trim());
+		expect(selectedStatus[0].Id).toEqual(status0.trim());
+		expect(selectedStatus[1].Id).toEqual(status1.trim());
+		expect(selectedStatus[2].Id).toEqual(status2.trim());
 	});
 
 	it('should select types', function() {
