@@ -5,9 +5,9 @@
         .module('wfm.resourceplanner')
         .controller('planningGroupSettingEditController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService', 'planningGroupInfo'];
 
-    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService) {
+    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService, planningGroupInfo) {
         var vm = this;
 
         var filterId = $stateParams.filterId ? $stateParams.filterId : null;
@@ -33,9 +33,7 @@
             Name: "",
             PlanningGroupId: $stateParams.groupId
         };
-        if(!vm.isEdit){
-			vm.planningGroupName = $stateParams.groupName;
-		}
+        vm.planningGroupName = planningGroupInfo.Name;
         
         vm.blockFinderTypeOptions = [
 			"Off",
@@ -76,7 +74,6 @@
                 return vm.settingInfo;
             return PlanGroupSettingService.getSetting({ id: filterId})
                 .$promise.then(function (result) {
-                	vm.planningGroupName = result.PlanningGroupName;
 					vm.settingInfo.Default = result.Default;
                     vm.settingInfo.Name = result.Name;
                     vm.settingInfo.Filters = result.Filters;

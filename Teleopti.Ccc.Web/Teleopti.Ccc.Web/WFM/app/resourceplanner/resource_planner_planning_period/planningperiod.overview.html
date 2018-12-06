@@ -1,7 +1,7 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
 		<h1 style="display: inline">
-			<i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroup.Name}} /  {{vm.selectedPp.StartDate | amDateFormat:"LL"}} - {{vm.selectedPp.EndDate |
+			<i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.planningGroup.Id}}/selectplanningperiod">{{vm.planningGroup.Name}}</a> /  {{vm.selectedPp.StartDate | amDateFormat:"LL"}} - {{vm.selectedPp.EndDate |
 			amDateFormat:"LL"}}
 		</h1>
 		<span ng-if="vm.isDisable()" ng-bind="vm.status" class="pp-status"></span>

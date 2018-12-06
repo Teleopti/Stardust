@@ -17,6 +17,7 @@
 		vm.selectedSchedulingSetting = {};
 		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
+		vm.planningGroupId = planningGroupInfo.Id;
 		vm.planningGroupName = planningGroupInfo.Name;
 		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", planningGroupInfo.Name);
 		vm.getSchedulingSettingInfo = getSchedulingSettingInfo;
@@ -98,9 +99,8 @@
 		}
 
 		function goCreateSchedulingSetting() {
-			$state.go('resourceplanner.newsetting', {
-				groupId: $stateParams.groupId,
-				groupName: vm.planningGroupName
+			$state.go('resourceplanner.editsetting', {
+				groupId: $stateParams.groupId
 			});
 		}
 

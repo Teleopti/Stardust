@@ -1,12 +1,12 @@
 <div class="view-header">
 	<div class="view-title" ng-if='vm.isEdit'>
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroupName}} / {{'PlanGroupScheduling' | translate}} / {{'Edit' | translate}}
+			<i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.settingInfo.PlanningGroupId}}/selectplanningperiod">{{vm.planningGroupName}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.settingInfo.PlanningGroupId}}/settings">{{'PlanGroupScheduling' | translate}}</a> / {{'Edit' | translate}}
 		</h1>
 	</div>
 	<div class="view-title" ng-if='!vm.isEdit'>
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroupName}} / {{'PlanGroupScheduling' | translate}} / {{'Create' | translate}}
+			<i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.settingInfo.PlanningGroupId}}/selectplanningperiod">{{vm.planningGroupName}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.settingInfo.PlanningGroupId}}/settings">{{'PlanGroupScheduling' | translate}}</a> / {{'Create' | translate}}
 		</h1>
 	</div>
 </div>
