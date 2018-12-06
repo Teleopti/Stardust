@@ -53,6 +53,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					Private = _isPrivate,
 					MaxAge = TimeSpan.FromMinutes(30)
 				};
+				if (!actionExecutedContext.Response.Headers.Contains("X-Server-Version"))
+				{
+					actionExecutedContext.Response.Headers.TryAddWithoutValidation("X-Server-Version", "");
+				}
 			}
 			base.OnActionExecuted(actionExecutedContext);
 		}
