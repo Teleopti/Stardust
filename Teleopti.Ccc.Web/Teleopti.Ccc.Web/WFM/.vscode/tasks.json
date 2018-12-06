@@ -4,6 +4,19 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "install",
+			"command": "../.node/UseNodeEnv.ps1;npm ci;../.node/CheckPackageJsonIsModifiedRefactor.ps1",
+			"type": "shell",
+			"options": {
+				"shell": {
+					"executable": "powershell.exe",
+					"args": ["-ExecutionPolicy", "Bypass", "-NoProfile"]
+				}
+			},
+			"group": "build",
+			"problemMatcher": []
+		},		
+		{
 			"label": "nodejs environment",
 			"command": "../.node/UseNodeEnv.ps1",
 			"type": "shell",
