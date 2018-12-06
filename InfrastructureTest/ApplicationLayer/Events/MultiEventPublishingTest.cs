@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Target.Publish(new EventWithBothHandlers());
 
-			Hangfire.HandlerTypes.Any(x => x.Contains(typeof (StardustEventHandler).Name)).Should().Be.False();
+			Hangfire.HandlerTypeNames.Any(x => x.Contains(typeof (StardustEventHandler).Name)).Should().Be.False();
 			Stardust.SentMessages.Should().Have.Count.EqualTo(1);
 		}
 

@@ -197,6 +197,7 @@
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
     <Compile Include="ApplicationLayer\CannotPublishToHangfire.cs" />
     <Compile Include="ApplicationLayer\CurrentEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\HandlerTypeMapper.cs" />
     <Compile Include="ApplicationLayer\HangfireAsSyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
