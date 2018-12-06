@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public IEnumerable<IEvent> Package;
 		public string HandlerTypeName;
 		public int RunInterval;
-		
+
 		public static string TenantPrefixForTenant(string tenant)
 		{
 			return tenant?.GetHashCode().ToString();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var tenant = Tenant ?? "";
 			if (tenant.Length > 15)
 				tenant = tenant.Substring(0, 15);
-			var handler = HandlerTypeName ?? "";
+			var handler = Type.GetType(HandlerTypeName)?.Name ?? "";
 			if (handler.Length > 15)
 				handler = handler.Substring(0, 15);
 			var @event = Event.GetType().Name;

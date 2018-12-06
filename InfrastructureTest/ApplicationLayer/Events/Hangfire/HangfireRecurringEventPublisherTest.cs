@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public IJsonSerializer Serializer;
 		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
-		public HandlerTypeMapper TypeMapper;
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -102,8 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Target.PublishHourly(new HangfireTestEvent());
 
-			var expected = TypeMapper.NameForPersistence(typeof(TestHandler));
-			JobClient.RecurringHandlerTypeNames.Single().Should().Be(expected);
+			JobClient.RecurringHandlerTypes.Single().Should().Be(typeof(TestHandler).FullName + ", " + typeof(TestHandler).Assembly.GetName().Name);
 		}
 
 		[Test]
@@ -119,11 +116,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Target.PublishHourly(new MultiHandlerTestEvent());
 
-			JobClient.RecurringHandlerTypeNames.Should().Have.Count.EqualTo(2);
-			var expected1 = TypeMapper.NameForPersistence(typeof(TestMultiHandler2));
-			JobClient.RecurringHandlerTypeNames.ElementAt(0).Should().Contain(expected1);
-			var expected2 = TypeMapper.NameForPersistence(typeof(TestMultiHandler1));
-			JobClient.RecurringHandlerTypeNames.ElementAt(1).Should().Contain(expected2);
+			JobClient.RecurringHandlerTypes.Should().Have.Count.EqualTo(2);
+			JobClient.RecurringHandlerTypes.ElementAt(0).Should().Contain(typeof(TestMultiHandler2).FullName);
+			JobClient.RecurringHandlerTypes.ElementAt(1).Should().Contain(typeof(TestMultiHandler1).FullName);
 		}
 
 		[Test]

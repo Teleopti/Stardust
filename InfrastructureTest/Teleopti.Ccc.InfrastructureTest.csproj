@@ -164,7 +164,6 @@
     <Compile Include="Aop\ValidationTest.cs" />
     <Compile Include="ApplicationLayer\AnalyticsPersonPeriodUpdaterIntegrationTests.cs" />
     <Compile Include="ApplicationLayer\AnalyticsScheduleMatchingPersonTest.cs" />
-    <Compile Include="ApplicationLayer\Events\Hangfire\HangfireEventRealPublishingTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\CopyScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\ImportScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\MoveTestCase.cs" />
@@ -186,7 +185,7 @@
     <Compile Include="ApplicationLayer\Events\Hangfire\HangfireRetryEventPublishingConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\Hangfire\HangfireRetryEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\Hangfire\HangfireSerializeEventPublishingTest.cs" />
-    <Compile Include="ApplicationLayer\Events\Hangfire\RealHangfireTestAttribute.cs" />
+    <Compile Include="ApplicationLayer\Events\Hangfire\HangfireTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Events\Hangfire\QueuingHandler.cs" />
     <Compile Include="ApplicationLayer\Events\SyncEventPackagePublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />

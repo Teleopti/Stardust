@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -41,7 +40,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterEventHandlers(
 				_config.Toggle,
-				EventHandlerLocations.Assemblies().ToArray()
+				typeof(IHandleEvent<>).Assembly,
+				typeof(Rta).Assembly
 			);
 
 			builder.RegisterType<ReadModelValidator>().As<IReadModelValidator>().SingleInstance();
