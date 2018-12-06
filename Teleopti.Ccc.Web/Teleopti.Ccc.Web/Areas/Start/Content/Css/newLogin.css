@@ -44,6 +44,7 @@ h1 {
 	border-radius: 22px;
 	color: #fff;
 	text-align: center;
+	margin: 0 10px;
 }
 
 .login-message .alert-warning,
@@ -54,7 +55,7 @@ h1 {
 	border-radius: 22px;
 	color: rgba(0, 0, 0, 0.8) !important;
 	text-align: center;
-	margin: 10px;
+	margin: 0 10px;
 }
 
 #Password-change-success,
@@ -171,6 +172,14 @@ h1 {
 	.con-flex {
 		flex: 1;
 	}
+
+	.wfm-checkbox {
+		text-align: left;
+	}
+
+	.signin_forgot_password {
+		text-align: right;
+	}
 }
 
 @media screen and (max-width: 728px) {
@@ -183,18 +192,19 @@ h1 {
 	.con-flex {
 		flex: 1 1 auto;
 	}
+
+	.signin_forgot_password {
+		margin-top: 10px;
+	}
 }
 
 @media screen and (max-height: 414px), screen and (max-width: 414px) and (max-height: 800px) {
-	.con-flex {
-		padding: 0;
-	}
 
 	.panel {
-		padding: 10px;
+		padding: 10px 20px;
 	}
 
 	.wfm-form .form-input-wrap {
-		padding: 5px;
+		padding: 5px 0;
 	}
 }
