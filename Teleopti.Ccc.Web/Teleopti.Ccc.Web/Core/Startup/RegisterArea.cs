@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			var context = new AreaRegistrationContext(registration.AreaName, RouteTable.Routes);
 			string ns = registration.GetType().Namespace;
 
-			if (ns != null) context.Namespaces.Add(string.Format("{0}.*", ns));
+			if (ns != null) context.Namespaces.Add($"{ns}.*");
 
 			registration.RegisterArea(context);
 		}
