@@ -47,10 +47,12 @@
 			endTime: serviceDateFormatHelper.getDateTime(defaultStartTimeMoment.add(1, 'hour'))
 		};
 
-
-		activityService.fetchAvailableActivities().then(function (activities) {
-			vm.availableActivities = activities;
-		});
+		function onInit() {
+			activityService.fetchAvailableActivities().then(function (activities) {
+				vm.availableActivities = activities;
+			});
+			updateInvalidAgents();
+		}
 
 		function decidePersonBelongsToDates(agents, targetTimeRange) {
 			return agents.map(function (selectedAgent) {
@@ -75,6 +77,7 @@
 		}
 
 		vm.anyValidAgent = function () {
+			
 			return vm.invalidAgents.length != vm.selectedAgents.length;
 		};
 
@@ -142,6 +145,7 @@
 				}
 			};
 		}
+
 		function getDateTimeInTimeZone(dateTime) {
 			return serviceDateFormatHelper.getDateTime(moment.tz(dateTime, vm.currentTimezone()));
 		}
@@ -184,5 +188,9 @@
 			}
 			return defaultStartMoment;
 		}
+
+		
+
+		onInit();
 	}
 })();
