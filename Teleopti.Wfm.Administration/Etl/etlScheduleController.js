@@ -2,11 +2,11 @@
 	"use strict";
 
 	angular
-	.module("adminApp")
-	.controller("etlScheduleController", etlScheduleController, [
-		"$http",
-		"$timeout"
-	]);
+		.module("adminApp")
+		.controller("etlScheduleController", etlScheduleController, [
+			"$http",
+			"$timeout"
+		]);
 
 	function etlScheduleController($http, tokenHeaderService, $timeout) {
 		var vm = this;
@@ -32,34 +32,34 @@
 		function getScheduledJobs() {
 			vm.schedules = null;
 			$http
-			.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.schedules = data;
-			});
+				.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
+				.success(function (data) {
+					vm.schedules = data;
+				});
 		}
 
 		function toggleScheduleJob(scheduleId) {
 			$http
-			.post("./Etl/ToggleScheduleJob",
-				JSON.stringify(scheduleId),
-				tokenHeaderService.getHeaders()
-			)
-			.success(function(data) {
-				console.log(data);
-				getScheduledJobs();
-			});
+				.post("./Etl/ToggleScheduleJob",
+					JSON.stringify(scheduleId),
+					tokenHeaderService.getHeaders()
+				)
+				.success(function (data) {
+					console.log(data);
+					getScheduledJobs();
+				});
 		}
 
 		function deleteScheduleJob(scheduleId) {
 			$http
-			.post("./Etl/DeleteScheduleJob",
-				JSON.stringify(scheduleId),
-				tokenHeaderService.getHeaders()
-			)
-			.success(function(data) {
-				console.log(data);
-				getScheduledJobs();
-			});
+				.post("./Etl/DeleteScheduleJob",
+					JSON.stringify(scheduleId),
+					tokenHeaderService.getHeaders()
+				)
+				.success(function (data) {
+					console.log(data);
+					getScheduledJobs();
+				});
 		}
 
 		function buildRelativePeriods(name, start, end, destination) {
@@ -70,7 +70,7 @@
 						Start: start,
 						End: end
 					}
-				)
+				);
 			} else {
 				return;
 			}
@@ -122,15 +122,15 @@
 			}
 
 			$http
-			.post(
-				"./Etl/ScheduleJob",
-				JSON.stringify(postObj),
-				tokenHeaderService.getHeaders()
-			)
-			.success(function(data) {
-				getScheduledJobs();
-				console.log(data);
-			});
+				.post(
+					"./Etl/ScheduleJob",
+					JSON.stringify(postObj),
+					tokenHeaderService.getHeaders()
+				)
+				.success(function (data) {
+					getScheduledJobs();
+					console.log(data);
+				});
 		}
 
 		function editScheduleJob(form) {
@@ -160,7 +160,7 @@
 			var logdataId;
 			if (form.LogDataSourceId) {
 				logdataId = form.LogDataSourceId.Id;
-			} else{
+			} else {
 				logdataId = null
 			}
 
@@ -179,15 +179,15 @@
 			}
 
 			$http
-			.post(
-				"./Etl/EditScheduleJob",
-				JSON.stringify(postObj),
-				tokenHeaderService.getHeaders()
-			)
-			.success(function(data) {
-				getScheduledJobs();
-				console.log(data);
-			});
+				.post(
+					"./Etl/EditScheduleJob",
+					JSON.stringify(postObj),
+					tokenHeaderService.getHeaders()
+				)
+				.success(function (data) {
+					getScheduledJobs();
+					console.log(data);
+				});
 		}
 	}
 })();
