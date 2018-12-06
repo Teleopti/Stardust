@@ -303,6 +303,46 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(planningGroup.Id.Value);
 			result.Content.First().State.Should().Be(PlanningPeriodState.IntradayOptimizationFailed.ToString());
 		}
+		
+		[Test]
+		public void ShouldBeStatusScheduledWhenScheduleFinishedOkLastJob()
+		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup());
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+
+			var periodStart = new DateOnly(2017, 04, 26);
+			var planningPeriod = PlanningPeriodRepository.Has(periodStart, 1, planningGroup);
+			var jobResult = new JobResult(JobCategory.WebSchedule, planningPeriod.Range, PersonFactory.CreatePerson(), DateTime.UtcNow)
+			{
+				FinishedOk = true
+			};
+			jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Whatever", DateTime.Now, null));
+			planningPeriod.JobResults.Add(jobResult);
+
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(planningGroup.Id.Value);
+			result.Content.First().State.Should().Be(PlanningPeriodState.Scheduled.ToString());
+		}
+		
+		[Test]
+		public void ShouldBeStatusScheduledWhenIntradayOptimizationFinishedOkLastJob()
+		{
+			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
+			var planningGroup = PlanningGroupRepository.Has(new PlanningGroup());
+			ExistingForecastRepository.CustomResult = new List<SkillMissingForecast>();
+
+			var periodStart = new DateOnly(2017, 04, 26);
+			var planningPeriod = PlanningPeriodRepository.Has(periodStart, 1, planningGroup);
+			var jobResult = new JobResult(JobCategory.WebIntradayOptimization, planningPeriod.Range, PersonFactory.CreatePerson(), DateTime.UtcNow)
+			{
+				FinishedOk = true
+			};
+			jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Whatever", DateTime.Now, null));
+			planningPeriod.JobResults.Add(jobResult);
+
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods(planningGroup.Id.Value);
+			result.Content.First().State.Should().Be(PlanningPeriodState.Scheduled.ToString());
+		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()
 		{

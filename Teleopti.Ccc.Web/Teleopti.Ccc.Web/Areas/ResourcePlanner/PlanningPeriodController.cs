@@ -313,6 +313,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				state = PlanningPeriodState.IntradayOptimizationFailed;
 			if (lastScheduleJobResult != null && lastScheduleJobResult.HasError())
 				state = PlanningPeriodState.ScheduleFailed;
+			if ((lastScheduleJobResult != null && lastScheduleJobResult.FinishedOk && !lastScheduleJobResult.HasError()) ||
+				(lastIntradayOptimizationResult != null && lastIntradayOptimizationResult.FinishedOk && !lastIntradayOptimizationResult.HasError()))
+				state = PlanningPeriodState.Scheduled;
 			return new PlanningPeriodModel
 			{
 				StartDate = planningPeriod.Range.StartDate.Date,
