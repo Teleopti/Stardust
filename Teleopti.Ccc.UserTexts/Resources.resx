@@ -17818,8 +17818,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Something went wrong. Please try again later.</value>
     <comment>If the there is some problem with the reset password request</comment>
   </data>
-  <data name="ViewInsightsReport" xml:space="preserve">
-    <value>View report</value>
+  <data name="DeleteInsightsReport" xml:space="preserve">
+    <value>Delete report</value>
     <comment>Label for permission item</comment>
   </data>
   <data name="EditInsightsReport" xml:space="preserve">

@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		{
 			return new InsightsPermission
 			{
-				CanViewReport = isPermitted(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport, date, person),
+				CanViewReport = isPermitted(DefinedRaptorApplicationFunctionPaths.Insights, date, person),
+				CanDeleteReport = isPermitted(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport, date, person),
 				CanEditReport = isPermitted(DefinedRaptorApplicationFunctionPaths.EditInsightsReport, date, person)
 			};
 		}

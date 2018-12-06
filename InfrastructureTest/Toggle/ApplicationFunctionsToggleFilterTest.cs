@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Gamification)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest)]
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[TestCase(DefinedRaptorApplicationFunctionPaths.BpoExchange)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
 		public void ShouldHideApplicationFunctionWithoutLicenseOption(string applicationFunctionPath)
 		{

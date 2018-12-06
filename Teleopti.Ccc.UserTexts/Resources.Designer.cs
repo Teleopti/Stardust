@@ -9623,6 +9623,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete report.
+        /// </summary>
+        public static string DeleteInsightsReport {
+            get {
+                return ResourceManager.GetString("DeleteInsightsReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Limitation.
         /// </summary>
         public static string DeleteLimitation {
@@ -39213,15 +39222,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ViewHistory {
             get {
                 return ResourceManager.GetString("ViewHistory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View report.
-        /// </summary>
-        public static string ViewInsightsReport {
-            get {
-                return ResourceManager.GetString("ViewInsightsReport", resourceCulture);
             }
         }
         

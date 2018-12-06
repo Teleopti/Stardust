@@ -42,10 +42,10 @@
 				</ng-template>
 			</nz-list>
 			<nz-alert
-				[hidden]="hasViewPermission || hasEditPermission" 
+				[hidden]="!initialized || hasViewPermission" 
 				nzType="error"
 				nzMessage="Error"
-				nzDescription="You have no permission to view or edit report."
+				nzDescription="You have no permission to view Insights report."
 				nzShowIcon>
 			</nz-alert>
 		</nz-content>
