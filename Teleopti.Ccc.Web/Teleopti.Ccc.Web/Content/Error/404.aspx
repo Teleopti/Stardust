@@ -1,5 +1,8 @@
-﻿<!doctype html>
+﻿<%@ Page Language="C#" %>
+<% Response.StatusCode = 404; %>
+<!doctype html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -9,7 +12,7 @@
 </head>
 <style>
 
-html, body{
+	html, body{
 	height: 100%;
 	overflow-x: hidden;
 }
@@ -60,6 +63,7 @@ h1{
 }
 
 </style>
+
 <body>
 
 	<div class="content center">
@@ -69,4 +73,5 @@ h1{
 	</div>
 
 </body>
+
 </html>
