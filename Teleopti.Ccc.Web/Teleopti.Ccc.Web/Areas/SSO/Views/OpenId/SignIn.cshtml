@@ -43,6 +43,9 @@
 	</script>
 }
 
+<div id="wave-background">
+	<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1920 160"><path fill="#fff" d="M1920 0s-115 144-432 144S844 0 465 0 0 144 0 144v16h1920V0z"></path></svg>
+</div>
 <section id="page-signin">
 	<div id="Login-container">
 		<div id="view" class="login-form"></div>
@@ -102,7 +105,6 @@
 				</div>
 				<div class="con-flex"></div>
 			</div>
-			<div class="con-row wave"></div>
 		</div>
 
 		<div id="changepassword">
@@ -149,11 +151,10 @@
 				</div>
 				<div class="con-flex"></div>
 			</div>
-			<div class="con-row wave"></div>
 		</div>
 
 		<div id="forgotpassword">
-			<div class="con-row" data-bind="visible: SuccessMessage().length === 0" style="margin-top: 2%;">
+			<div class="con-row" data-bind="visible: SuccessMessage().length === 0">
 				<div class="con-flex"></div>
 				<div class="con-flex split-1-2" >
 					<div class="panel material-depth-1 line-center">
@@ -174,19 +175,18 @@
 				</div>
 				<div class="con-flex"></div>
 			</div>
-			<div class="con-row" style="margin-top: 2%;">
+			<div class="con-row">
 				<div class="con-flex"></div>
 				<div class="con-flex split-1-2">
-					<div id="Password-change-success" style="text-align: center" class="alert alert-success formError material-depth-1" data-bind="visible: SuccessMessage().length > 0, text: '@Resources.ResetPasswordSuccess'">
+					<div id="Password-change-success" class="alert alert-success formError material-depth-1" data-bind="visible: SuccessMessage().length > 0, text: '@Resources.ResetPasswordSuccess'">
 					</div>
 
-					<div id="Password-change-error" style="text-align: center; background-color: #ffb974; color: #333333;" class="alert alert-info formError material-depth-1" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
-						 data-invalid="@Resources.ResetPasswordErrorMessage" data-techerror="@Resources.SomethingWentWrong" >
+					<div id="Password-change-error" class="alert alert-info formError material-depth-1" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
+						data-invalid="@Resources.ResetPasswordErrorMessage" data-techerror="@Resources.SomethingWentWrong" >
 					</div>
 				</div>
 				<div class="con-flex"></div>
 			</div>
-			<div class="con-row wave"></div>
 		</div>
 	</div>
 </section>
