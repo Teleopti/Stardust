@@ -1511,6 +1511,7 @@
     <Content Include="Areas\MyTime\Views\Requests\NewMultipleShiftTradeRequest.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequestWrapper.cshtml" />
     <Content Include=".node\UseNodeEnv.ps1" />
+    <Content Include="Content\Error\ErrorMasterPage.master" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
