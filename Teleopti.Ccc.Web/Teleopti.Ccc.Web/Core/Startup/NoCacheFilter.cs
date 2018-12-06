@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		{
 			if (actionExecutedContext.Request.Method == System.Net.Http.HttpMethod.Get && actionExecutedContext.Response != null)
 			{
-				if (!actionExecutedContext.ActionContext.ActionDescriptor.GetFilters()
-					.OfType<CacheFilterHttpAttribute>().Any())
+				if (!actionExecutedContext.ActionContext?.ActionDescriptor?.GetFilters()?
+					.OfType<CacheFilterHttpAttribute>().Any() ?? true)
 				{
 					actionExecutedContext.Response.Headers.CacheControl = new CacheControlHeaderValue
 					{
