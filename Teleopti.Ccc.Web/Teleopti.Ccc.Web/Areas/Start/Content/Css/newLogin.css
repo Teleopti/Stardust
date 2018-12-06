@@ -27,6 +27,10 @@ h1 {
 	font-weight: bold;
 }
 
+.con-flex {
+	padding: 0;
+}
+
 .panel {
 	padding: 20px 40px;
 	margin: 10px;
@@ -39,6 +43,7 @@ h1 {
 	border: none;
 	border-radius: 22px;
 	color: #fff;
+	text-align: center;
 }
 
 .login-message .alert-warning,
@@ -48,12 +53,13 @@ h1 {
 	border: none;
 	border-radius: 22px;
 	color: rgba(0, 0, 0, 0.8) !important;
+	text-align: center;
+	margin: 10px;
 }
 
 #Password-change-success,
 #Password-change-error {
 	margin-top: 20px;
-	text-align: center;
 }
 
 .login-form {
