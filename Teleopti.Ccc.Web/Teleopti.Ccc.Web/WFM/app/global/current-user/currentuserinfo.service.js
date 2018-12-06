@@ -1,11 +1,11 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('currentUserInfoService').service('CurrentUserInfo', CurrentUserInfo);
 
-	CurrentUserInfo.$inject = ['$http', '$q', 'wfmI18nService'];
+	CurrentUserInfo.$inject = ['$http', '$q', '$interval','wfmI18nService'];
 
-	function CurrentUserInfo($http, $q, wfmI18nService) {
+	function CurrentUserInfo($http, $q, $interval, wfmI18nService) {
 		var userName;
 		var defaultTimeZone;
 		var defaultTimeZoneName;
@@ -13,6 +13,7 @@
 		var dateFormatLocale;
 		var timeout;
 		var firstDayOfWeek, dayNames, dateTimeFormat;
+		var nowInUtc, nowInUtcInterval;
 
 		var isTeleoptiApplicationLogon;
 		this.SetCurrentUserInfo = SetCurrentUserInfo;
@@ -32,6 +33,7 @@
 			dayNames = data.DayNames;
 			dateTimeFormat = data.DateTimeFormat;
 			isTeleoptiApplicationLogon = data.IsTeleoptiApplicationLogon;
+			nowInUtc = data.NowInUtc;
 		}
 
 		function CurrentUserInfo() {
@@ -44,8 +46,20 @@
 				FirstDayOfWeek: firstDayOfWeek,
 				IsTeleoptiApplicationLogon: isTeleoptiApplicationLogon,
 				DayNames: dayNames || [],
-				DateTimeFormat: getDateTimeFormat()
-			};
+				DateTimeFormat: getDateTimeFormat(),
+				NowInUtc: function () {
+					return nowInUtc;
+				}
+			}
+		}
+
+		function updateNowInUtc() {
+			if (nowInUtcInterval)
+				nowInUtcInterval.cancel();
+
+			nowInUtcInterval =	$interval(function () {
+				nowInUtc = moment.tz(nowInUtc, 'etc/UTC').add(1, 'second').format("YYYY-MM-DD HH:mm:ss");
+			}, 1000);
 		}
 
 		function getDateTimeFormat() {
@@ -71,10 +85,11 @@
 			var deferred = $q.defer();
 			var context = getCurrentUserFromServer();
 
-			context.success(function(data) {
+			context.success(function (data) {
 				timeout = Date.now() + 90000;
 				wfmI18nService.setLocales(data);
 				SetCurrentUserInfo(data);
+				updateNowInUtc();
 				deferred.resolve(data);
 			});
 			return deferred.promise;
