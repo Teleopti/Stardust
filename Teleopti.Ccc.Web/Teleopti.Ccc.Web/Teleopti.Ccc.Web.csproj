@@ -1496,6 +1496,7 @@
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
     <Content Include="Content\botchat\botchat.css" />
     <Content Include="Content\botchat\botchat.js" />
+    <Content Include="Content\Error\404.aspx" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.dialog.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.slider.js" />
@@ -2828,7 +2829,6 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.css" />
-    <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MyTime\Content\Images\button_sprite.png" />
