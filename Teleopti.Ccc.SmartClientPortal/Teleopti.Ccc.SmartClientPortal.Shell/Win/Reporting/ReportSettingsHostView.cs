@@ -54,13 +54,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			_presenter.ShowSettings(reportDetail);   
 		}
 
-		//used when call from scheduler
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SetupFromScheduler(ReportDetail reportDetail)
-		{
-			_presenter.HideSettingsAndSetReportHeader(reportDetail);
-		}
-
 		public void Unfold()
 		{
 			Height = 700;
