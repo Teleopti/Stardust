@@ -332,19 +332,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyDeleteIsReturningListOfNewScheduleParts()
         {
-            _list = new List<IScheduleDay>{_part1, _part2};
+			var target = new DeleteSchedulePartService();
+			var date = new DateOnly(2018, 10, 1);
+			var scenario = new Scenario().WithId();
+			var activity = new Activity("_").WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var personAssignment1 = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(8, 17));
+			var personAssignment2 = new PersonAssignment(agent, scenario, date.AddDays(1)).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(8, 17));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, new[] { personAssignment1, personAssignment2 }, Enumerable.Empty<ISkillDay>());
+			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
+				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
-                Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
-				Expect.Call(() => _rollbackService.Modify(_part2));
-            }
+			var result = target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { Default = true }, rollBackService, new NoSchedulingProgress());
 
-            IList<IScheduleDay> ret = _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
-            Assert.AreEqual(2, ret.Count);
-        }
+			result.Count.Should().Be.EqualTo(2);
+		}
 
 
 		[Test]
