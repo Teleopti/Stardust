@@ -11,11 +11,12 @@ $(SupportTool)..\..\..\sitesroot\4\Teleopti.Ccc.SmartClientPortal.Shell.exe.conf
 $(SupportTool)..\..\..\sitesroot\5\Areas\MyTime\Views\web.config,$(BuildArtifacts)Web.MyTime.Web.config
 $(SupportTool)..\..\..\sitesroot\5\Areas\Start\Views\web.config,$(BuildArtifacts)Web.Start.Web.config
 $(SupportTool)..\..\..\sitesroot\5\Web.config,$(BuildArtifacts)Web.Root.Web.config
-$(SupportTool)..\..\..\sitesroot\5\ApplicationInsights.config,$(BuildArtifacts)WebApplicationInsights.config
+$(SupportTool)..\..\..\sitesroot\5\ApplicationInsights.config,$(BuildArtifacts)RTAApplicationInsights.config
 $(SupportTool)..\..\..\sitesroot\6\web.config,$(BuildArtifacts)Web.AuthenticationBridge.Web.config
-$(SupportTool)..\..\..\sitesroot\6\ApplicationInsights.config,$(BuildArtifacts)WebApplicationInsights.config
+$(SupportTool)..\..\..\sitesroot\6\ApplicationInsights.config,$(BuildArtifacts)AuthBridgeApplicationInsights.config
 $(SupportTool)..\..\..\sitesroot\7\web.config,$(BuildArtifacts)Web.WindowsIdentityProvider.Web.config
 $(SupportTool)..\..\..\sitesroot\8\web.config,$(BuildArtifacts)Web.Administration.Web.config
+$(SupportTool)..\..\..\sitesroot\8\ApplicationInsights.config,$(BuildArtifacts)AdminApplicationInsights.config
 $(SupportTool)..\..\..\sitesroot\9\web.config,$(BuildArtifacts)Web.Api.Web.config
 $(SupportTool)..\..\Web.config,$(BuildArtifacts)Web.StartPage.Web.config
 $(SupportTool)..\..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config,$(BuildArtifacts)AppETLService.config
