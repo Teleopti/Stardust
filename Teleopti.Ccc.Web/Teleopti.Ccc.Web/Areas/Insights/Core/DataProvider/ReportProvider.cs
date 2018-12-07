@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 {
 	public class ReportProvider : IReportProvider
 	{
+		private const string templateReportName = "__WFM_Insights_Report_Template__";
+		private const string usageReportName = "Report Usage Metrics Report";
 		private readonly IConfigReader _configReader;
 		private readonly IPowerBiClientFactory _powerBiClientFactory;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ReportProvider));
@@ -25,12 +27,14 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 
 		public async Task<ReportModel[]> GetReports()
 		{
+			var excludedReports = new[] {usageReportName, templateReportName};
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				var groupId = _configReader.AppConfig("PowerBIGroupId");
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
-				return reports.Value.OrderBy(r => r.Name)
+				return reports.Value.Where(r => !excludedReports.Contains(r.Name))
+					.OrderBy(r => r.Name)
 					.Select(x => new ReportModel
 					{
 						Id = x.Id,
@@ -76,6 +80,38 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				result.ReportId = report.Id;
 				result.ReportName = report.Name;
 				result.ReportUrl = report.EmbedUrl;
+
+				return result;
+			}
+		}
+
+		public async Task<EmbedReportConfig> CreateReport(string newReportName)
+		{
+			var result = new EmbedReportConfig();
+
+			// Create a Power BI Client object. It will be used to call Power BI APIs.
+			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
+			{
+				// Get a list of reports.
+				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
+
+				var templateReport = reports.Value.SingleOrDefault(r => r.Name == templateReportName);
+				if (templateReport == null) {
+					logger.Error($"Template report \"{templateReportName}\" not found.");
+					return result;
+				}
+				
+				var newReport = client.Reports.CloneReportInGroup(groupId, templateReport.Id,
+					new CloneReportRequest(newReportName));
+
+				var accessToken = await generateAccessToken(client, newReport);
+
+				result.TokenType = "Embed";
+				result.AccessToken = accessToken.Token;
+				result.ReportId = newReport.Id;
+				result.ReportName = newReport.Name;
+				result.ReportUrl = newReport.EmbedUrl;
 
 				return result;
 			}

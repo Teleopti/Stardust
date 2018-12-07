@@ -50,15 +50,12 @@ export class ReportComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.isConfirmingClone = false;
-
 		if (!this.report) {
 			return;
 		}
 
 		this.isLoading = true;
 		this.reportSvc.getPermission().then(permission => {
-			console.log(permission);
 			this.permission = permission;
 
 			if (this.permission.CanViewReport) {
