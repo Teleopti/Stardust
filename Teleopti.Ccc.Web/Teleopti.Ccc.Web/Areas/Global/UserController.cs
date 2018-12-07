@@ -1,11 +1,9 @@
 ﻿using Castle.Core.Internal;
-using System;
 using System.Globalization;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.Web.Areas.Global
@@ -52,8 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.Global
 					regionnal.Culture.DateTimeFormat.AMDesignator,
 					regionnal.Culture.DateTimeFormat.PMDesignator
 				},
-				IsTeleoptiApplicationLogon = sessionData?.IsTeleoptiApplicationLogon ?? false,
-				NowInUtc = DateTime.UtcNow.ToServiceDateFormat()
+				IsTeleoptiApplicationLogon = sessionData?.IsTeleoptiApplicationLogon ?? false
+				
 			};
 		}
 	}
