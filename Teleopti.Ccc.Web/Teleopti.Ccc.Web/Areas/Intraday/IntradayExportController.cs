@@ -6,7 +6,6 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
@@ -15,16 +14,16 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
 	public class IntradayExportController : ApiController
 	{
-		private readonly IIntradayPerformanceApplicationService _performanceApplicationService;
+		private readonly IntradayPerformanceApplicationService _performanceApplicationService;
 		private readonly IIntradaySkillProvider _intradaySkillProvider;
 		private readonly IntradayStaffingApplicationService _intradayStaffingApplicationService;
-		private readonly IIntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
+		private readonly IntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
 
 		public IntradayExportController(
-			IIntradayPerformanceApplicationService performanceApplicationService,
+			IntradayPerformanceApplicationService performanceApplicationService,
 			IIntradaySkillProvider intradaySkillProvider,
 			IntradayStaffingApplicationService intradayStaffingApplicationService,
-			IIntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService)
+			IntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService)
 		{
 			_intradaySkillProvider = intradaySkillProvider;
 			_intradayStaffingApplicationService = intradayStaffingApplicationService ?? throw new ArgumentNullException(nameof(intradayStaffingApplicationService));
@@ -64,15 +63,12 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		{
 			var skill = _intradaySkillProvider.GetSkillById(input.id);
 			var intradayExportDataToExcel = new IntradayExportCreator();
-			var staffingViewModel = new IntradayStaffingViewModel();
 
-			staffingViewModel = _intradayStaffingApplicationService.GenerateStaffingViewModel(new[] { input.id }, input.dayOffset);
+			var staffingViewModel = _intradayStaffingApplicationService.GenerateStaffingViewModel(new[] { input.id }, input.dayOffset);
 
-			var incomingTrafficViewModel = new IntradayIncomingViewModel();
-			incomingTrafficViewModel = _intradayIncomingTrafficApplicationService.GenerateIncomingTrafficViewModel(new[] { input.id }, input.dayOffset);
+			var incomingTrafficViewModel = _intradayIncomingTrafficApplicationService.GenerateIncomingTrafficViewModel(new[] { input.id }, input.dayOffset);
 
-			var performanceViewModel = new IntradayPerformanceViewModel();
-			performanceViewModel = _performanceApplicationService.GeneratePerformanceViewModel(new[] { input.id }, input.dayOffset);
+			var performanceViewModel = _performanceApplicationService.GeneratePerformanceViewModel(new[] { input.id }, input.dayOffset);
 
 			var data = intradayExportDataToExcel.ExportDataToExcel(
 				new IntradayExcelExport

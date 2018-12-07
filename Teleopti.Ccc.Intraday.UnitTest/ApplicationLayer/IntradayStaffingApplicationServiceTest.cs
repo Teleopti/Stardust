@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	public class IntradayStaffingApplicationServiceTest : IIsolateSystem, IConfigureToggleManager
+	public class IntradayStaffingApplicationServiceTest : IIsolateSystem, IConfigureToggleManager, IExtendSystem
 	{
 		private readonly bool _useErlangA;
 		public FakeScenarioRepository ScenarioRepository;
@@ -40,8 +41,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
-		private IntradayStaffingApplicationServiceTestHelper _staffingViewModelCreatorTestHelper;
-
+		public IntradayStaffingApplicationServiceTestHelper ViewModelCreatorTestHelper;
 		public IntradayStaffingApplicationService Target;
 
 		private const int minutesPerInterval = 15;
@@ -50,10 +50,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		{
 			_useErlangA = useErlangA;
 		}
-
-		public IntradayStaffingApplicationServiceTestHelper ViewModelCreatorTestHelper => _staffingViewModelCreatorTestHelper ?? (_staffingViewModelCreatorTestHelper =
-																							  new IntradayStaffingApplicationServiceTestHelper(StaffingCalculatorServiceFacade));
-
+		
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
@@ -1483,6 +1480,11 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			{
 				toggleManager.Disable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
 			}
+		}
+
+		public void Extend(IExtend extend, IocConfiguration configuration)
+		{
+			extend.AddService<IntradayStaffingApplicationServiceTestHelper>();
 		}
 	}
 }

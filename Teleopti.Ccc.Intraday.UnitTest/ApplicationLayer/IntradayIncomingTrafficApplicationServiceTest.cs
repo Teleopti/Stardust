@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 	[DomainTest]
 	public class IntradayIncomingTrafficApplicationServiceTest
 	{
-		public IIntradayIncomingTrafficApplicationService Target;
+		public IntradayIncomingTrafficApplicationService Target;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillRepository SkillRepository;

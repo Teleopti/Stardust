@@ -8,20 +8,12 @@ using Teleopti.Ccc.Domain.Intraday.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 {
-	public interface IIntradayIncomingTrafficApplicationService
-	{
-		IntradayIncomingViewModel GenerateIncomingTrafficViewModel(Guid[] skillIdList);
-		IntradayIncomingViewModel GenerateIncomingTrafficViewModel(Guid[] skillIdList, int dayOffset);
-		IntradayIncomingViewModel GenerateIncomingTrafficViewModel(Guid[] skillIdList, DateTime timeUtc);
-	}
-
-
-	public class IntradayIncomingTrafficApplicationService : IIntradayIncomingTrafficApplicationService
+	public class IntradayIncomingTrafficApplicationService
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly IIntradayStatisticsService _intradayStatisticsService;
+		private readonly IntradayStatisticsService _intradayStatisticsService;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
 
@@ -29,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			INow now, 
 			IUserTimeZone timeZone,
 			IIntervalLengthFetcher intervalLengthFetcher,
-			IIntradayStatisticsService intradayStatisticsService,
+			IntradayStatisticsService intradayStatisticsService,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
 			ISkillTypeInfoProvider skillTypeInfoProvider
 			)

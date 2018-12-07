@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IEmailBacklogProvider _emailBacklogProvider;
 
-		private readonly IIntradayReforecastingService _reforecastingService;
-		private readonly IIntradayForecastingService _forecastingService;
-		private readonly IIntradayStaffingService _staffingService;
+		private readonly IntradayReforecastingService _reforecastingService;
+		private readonly IntradayForecastingService _forecastingService;
+		private readonly IntradayStaffingService _staffingService;
 
 		public IntradayStaffingApplicationService(
 			INow now,
@@ -38,10 +38,9 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			ISkillDayLoadHelper skillDayLoadHelper,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
 			IEmailBacklogProvider emailBacklogProvider,
-
-			IIntradayForecastingService forecastingService,
-			IIntradayReforecastingService reforecastingService,
-			IIntradayStaffingService staffingService
+			IntradayForecastingService forecastingService,
+			IntradayReforecastingService reforecastingService,
+			IntradayStaffingService staffingService
 			)
 		{
 			_now = now;

@@ -8,24 +8,18 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday.Domain
 {
-	public interface IIntradayForecastingService
-	{
-		IList<IntradayForecastInterval> GenerateForecast(IEnumerable<ISkillDay> skillDays, DateTime startTimeUtc, DateTime endTimeUtc, TimeSpan resolution, bool useShrinkage);
-		IList<EslInterval> CalculateEstimatedServiceLevels(IEnumerable<ISkillDay> skillDays, DateTime startOfPeriodUtc, DateTime endOfPeriodUtc);
-	}
-
-	public class IntradayForecastingService : IIntradayForecastingService
+	public class IntradayForecastingService
 	{
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
 		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
-		private readonly IIntradayStaffingService _staffingService;
+		private readonly IntradayStaffingService _staffingService;
 
 		public IntradayForecastingService(
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IStaffingCalculatorServiceFacade staffingCalculatorService,
 			ISkillStaffingIntervalProvider skillStaffingIntervalProvider,
-			IIntradayStaffingService staffingService
+			IntradayStaffingService staffingService
 			)
 		{
 			_intervalLengthFetcher = intervalLengthFetcher ?? throw new ArgumentNullException(nameof(intervalLengthFetcher));

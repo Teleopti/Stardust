@@ -9,11 +9,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,10 +23,11 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 {
 	[DomainTest]
-
-	public class IntradayPerformanceApplicationServiceTest : IIsolateSystem
+	public class IntradayPerformanceApplicationServiceTest : IIsolateSystem, IExtendSystem
 	{
-		public IIntradayPerformanceApplicationService Target;
+		const int minutesPerInterval = 15;
+
+		public IntradayPerformanceApplicationService Target;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeScenarioRepository ScenarioRepository;
@@ -34,10 +35,9 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
-		const int minutesPerInterval = 15;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
 		public IStaffingCalculatorServiceFacade StaffingCalculatorService;
-		private IntradayStaffingApplicationServiceTestHelper _staffingViewModelCreatorTestHelper;
+		public IntradayStaffingApplicationServiceTestHelper StaffingViewModelCreatorTestHelper;
 
 		private readonly ServiceAgreement _slaTwoHours =
 			new ServiceAgreement(new ServiceLevel(new Percent(1), 7200), new Percent(0), new Percent(1));
@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			_staffingViewModelCreatorTestHelper = new IntradayStaffingApplicationServiceTestHelper(StaffingCalculatorService);
 		}
 
 		[Test]
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = IntradayStaffingApplicationServiceTestHelper.CreateEmailSkill(15, "skill", new TimePeriod(8, 0, 9, 0));
 
-			var skillDay = _staffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
 
 			var scheduledStaffingList = createScheduledStaffing(skillDay);
 
@@ -1028,6 +1027,11 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 				});
 				intervalStartTimeUtc = intervalStartTimeUtc.AddMinutes(minutesPerInterval);
 			}
+		}
+
+		public void Extend(IExtend extend, IocConfiguration configuration)
+		{
+			extend.AddService<IntradayStaffingApplicationServiceTestHelper>();
 		}
 	}
 }
