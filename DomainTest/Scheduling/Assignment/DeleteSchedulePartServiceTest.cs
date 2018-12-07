@@ -329,6 +329,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(2, ret.Count);
 		}
 
+		[Test]
+		public void ShouldDeleteWithSpecifiedRulesPoo()
+		{
+			var rules = NewBusinessRuleCollection.Minimum();
+			var target = new DeleteSchedulePartService();
+			var date = new DateOnly(2018, 10, 1);
+			var scenario = new Scenario().WithId();
+			var activity = new Activity("_").WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var personAssignment1 = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(8, 17));
+			var personAssignment2 = new PersonAssignment(agent, scenario, date.AddDays(1)).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(8, 17));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, new[] { personAssignment1, personAssignment2 }, Enumerable.Empty<ISkillDay>());
+			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
+				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
+
+			var result = target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { Default = true }, rollBackService, new NoSchedulingProgress(), rules);
+
+			result.Count.Should().Be.EqualTo(2);
+		}
+
         [Test]
         public void VerifyDeleteIsReturningListOfNewScheduleParts()
         {
