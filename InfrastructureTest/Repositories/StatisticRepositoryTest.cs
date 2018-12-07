@@ -184,13 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			target.LoadFactQueues();
 		}
-
-		[Test]
-		public void ShouldLoadSkillStatisticForSpecificDates()
-		{
-			target.LoadSkillStatisticForSpecificDates( new DateOnly(2006, 1, 1));
-		}
-
+		
 		protected override void SetupForRepositoryTest()
 		{
 			target = StatisticRepositoryFactory.Create();
