@@ -233,30 +233,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				throw new ConstraintViolationWrapperException(e);
 			}
 		}
-
-		public int GetFactScheduleRowCount(int personId)
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select count(1) from mart.fact_schedule WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
-				.SetInt32(nameof(personId), personId)
-				.UniqueResult<int>();
-		}
-
-		public int GetFactScheduleDayCountRowCount(int personId)
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select count(1) from mart.fact_schedule_day_count WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
-				.SetInt32(nameof(personId), personId)
-				.UniqueResult<int>();
-		}
-
-		public int GetFactScheduleDeviationRowCount(int personId)
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select count(1) from mart.fact_schedule_deviation WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
-				.SetInt32(nameof(personId), personId)
-				.UniqueResult<int>();
-		}
 		
 		public int ShiftLengthId(int shiftLength)
 		{

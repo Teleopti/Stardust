@@ -82,21 +82,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public int GetFactScheduleRowCount(int personId)
-		{
-			return FactScheduleRows.Count(x => x.PersonPart != null && x.PersonPart.PersonId == personId);
-		}
-
-		public int GetFactScheduleDayCountRowCount(int personId)
-		{
-			return FactScheduleDayCountRows.Count(x => x.PersonId == personId);
-		}
-
-		public int GetFactScheduleDeviationRowCount(int personId)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<IDateWithDuplicate> GetDuplicateDatesForPerson(Guid personCode)
 		{
 			//var periods = _personPeriodRepository.GetPersonPeriods(personCode);
