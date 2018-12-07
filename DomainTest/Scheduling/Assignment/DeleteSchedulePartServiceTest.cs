@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.TestCommon;
@@ -295,42 +296,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyStudentAvailabilityRestriction()
         {
-            _list = new List<IScheduleDay> { _part1 };
+			var target = new DeleteSchedulePartService();
+			var date = new DateOnly(2018, 10, 1);
+			var scenario = new Scenario().WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var studentAvailabilityRestriction = new StudentAvailabilityRestriction { StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), null), EndTimeLimitation = new EndTimeLimitation(null, TimeSpan.FromHours(20)) };
+			var studentAvailabilityDay = new StudentAvailabilityDay(agent, date, new IStudentAvailabilityRestriction[] { studentAvailabilityRestriction });
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, new[] { studentAvailabilityDay }, Enumerable.Empty<ISkillDay>());
+			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
+				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_part1.ReFetch()).Return(_part1).Repeat.AtLeastOnce();
-                Expect.Call(_part1.DeleteStudentAvailabilityRestriction).Repeat.Once();
-            	Expect.Call(() => _rollbackService.Modify(_part1));
-            }
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { StudentAvailability = true }, rollBackService, new NoSchedulingProgress());
 
-            using (_mocks.Playback())
-            {
-                _deleteOption.StudentAvailability = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
-            }
-        }
-
-		[Test]
-		public void ShouldDeleteWithSpecifiedRules()
-		{
-			_list = new List<IScheduleDay> { _part1, _part2 };
-			var rules = NewBusinessRuleCollection.Minimum();
-
-			using (_mocks.Record())
-			{
-				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(() => _rollbackService.Modify(_part3, rules)).Repeat.AtLeastOnce();
-				Expect.Call(() => _rollbackService.Modify(_part2, rules));
-			}
-
-			var ret = _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress, rules);
-			Assert.AreEqual(2, ret.Count);
+			stateHolder.Schedules[agent].ScheduledDay(date).PersonRestrictionCollection().Should().Be.Empty();
 		}
 
 		[Test]
-		public void ShouldDeleteWithSpecifiedRulesPoo()
+		public void ShouldDeleteWithSpecifiedRules()
 		{
 			var rules = NewBusinessRuleCollection.Minimum();
 			var target = new DeleteSchedulePartService();
