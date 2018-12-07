@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradaySkillProvider>().As<IIntradaySkillProvider>().SingleInstance();
 
 			// Intraday - application layer
-			builder.RegisterType<IntradayStaffingApplicationService>().As<IIntradayStaffingApplicationService>();
+			builder.RegisterType<IntradayStaffingApplicationService>();
 			builder.RegisterType<IntradayPerformanceApplicationService>().As<IIntradayPerformanceApplicationService>();
 			builder.RegisterType<IntradayIncomingTrafficApplicationService>().As<IIntradayIncomingTrafficApplicationService>();
 

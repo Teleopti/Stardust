@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
 		private IntradayStaffingApplicationServiceTestHelper _staffingViewModelCreatorTestHelper;
 
-		public IIntradayStaffingApplicationService Target;
+		public IntradayStaffingApplicationService Target;
 
 		private const int minutesPerInterval = 15;
 
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime.AddDays(1), scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval), 7, SkillCombinationResourceRepository);
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval), scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval * 2), 3, SkillCombinationResourceRepository);
 
-			var vm = Target.GenerateStaffingViewModel(new[] { skill.Id.GetValueOrDefault() }, userDateTimePeriod).ToList();
+			var vm = userDateTimePeriod.DayCollection().Select(x => Target.GenerateStaffingViewModel(new[] { skill.Id.GetValueOrDefault() }, x)).ToList();
 
 			var staffingIntervalsToday = skillDayToday.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
 			var staffingIntervalsTomorrow = skillDayTomorrow.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));

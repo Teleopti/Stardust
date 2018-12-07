@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public FakeIntradayQueueStatisticsLoader IntradayQueueStatisticsLoader;
 		private IntradayStaffingApplicationServiceTestHelper _staffingViewModelCreatorTestHelper;
 		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
-		public IIntradayStaffingApplicationService Target;
+		public IntradayStaffingApplicationService Target;
 
 		private int _skillResolution = 60;
 

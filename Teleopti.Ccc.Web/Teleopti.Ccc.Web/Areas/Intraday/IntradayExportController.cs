@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	{
 		private readonly IIntradayPerformanceApplicationService _performanceApplicationService;
 		private readonly IIntradaySkillProvider _intradaySkillProvider;
-		private readonly IIntradayStaffingApplicationService _intradayStaffingApplicationService;
+		private readonly IntradayStaffingApplicationService _intradayStaffingApplicationService;
 		private readonly IIntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
 
 		public IntradayExportController(
 			IIntradayPerformanceApplicationService performanceApplicationService,
 			IIntradaySkillProvider intradaySkillProvider,
-			IIntradayStaffingApplicationService intradayStaffingApplicationService,
+			IntradayStaffingApplicationService intradayStaffingApplicationService,
 			IIntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService)
 		{
 			_intradaySkillProvider = intradaySkillProvider;
@@ -39,17 +39,14 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			var skillIdList = skillArea?.Skills.Select(skill => skill.Id).ToArray() ?? new Guid[0];
 			var intradayExportDataToExcel = new IntradayExportCreator();
 
-			var staffingViewModel = new IntradayStaffingViewModel();
-			staffingViewModel = _intradayStaffingApplicationService.GenerateStaffingViewModel(skillIdList, input.dayOffset);
+			var staffingViewModel =  _intradayStaffingApplicationService.GenerateStaffingViewModel(skillIdList, input.dayOffset);
 
-			var incomingTrafficViewModel = new IntradayIncomingViewModel();
-			incomingTrafficViewModel = _intradayIncomingTrafficApplicationService.GenerateIncomingTrafficViewModel(skillIdList, input.dayOffset);
+			var incomingTrafficViewModel = _intradayIncomingTrafficApplicationService.GenerateIncomingTrafficViewModel(skillIdList, input.dayOffset);
 
-			var performanceViewModel = new IntradayPerformanceViewModel();
-			performanceViewModel = _performanceApplicationService.GeneratePerformanceViewModel(skillIdList, input.dayOffset);
+			var performanceViewModel = _performanceApplicationService.GeneratePerformanceViewModel(skillIdList, input.dayOffset);
 
 			var data = intradayExportDataToExcel.ExportDataToExcel(
-				new IntradayExcelExport()
+				new IntradayExcelExport
 				{
 					Date = DateTime.Now.AddDays(input.dayOffset),
 					SkillAreaName = skillArea?.Name ?? string.Empty,
