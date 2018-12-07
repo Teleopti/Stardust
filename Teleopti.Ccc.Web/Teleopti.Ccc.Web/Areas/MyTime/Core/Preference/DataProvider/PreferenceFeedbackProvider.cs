@@ -32,12 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return calculateWorkTimeMinMax(date, ruleSetBag, scheduleDay);
 		}
 
-		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date)
-		{
-			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(date.ToDateOnlyPeriod()) ?? new IScheduleDay[] { };
-			return WorkTimeMinMaxForDate(date, scheduleDay.SingleOrDefault());
-		}
-
 		public IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> WorkTimeMinMaxForPeriod(DateOnlyPeriod period)
 		{
 			var result = new Dictionary<DateOnly, WorkTimeMinMaxCalculationResult>();
