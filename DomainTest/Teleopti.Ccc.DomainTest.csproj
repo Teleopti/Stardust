@@ -499,7 +499,6 @@
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PersonTeamChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminalDateChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminatedTest.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodSkillsUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\Preference\Analytics\PreferenceFulfillmentChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\Preference\Analytics\AnalyticsPreferenceUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AcdLoginPersonMapTests.cs" />

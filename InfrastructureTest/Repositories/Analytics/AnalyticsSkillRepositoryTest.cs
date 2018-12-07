@@ -156,30 +156,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldReturnFactAgentSkills()
-		{
-			setUpData();
-
-			var result = Target.GetFactAgentSkillsForPerson(1);
-			result.Count.Should().Be.EqualTo(3);
-			result.Count(a => a.Active).Should().Be.EqualTo(2);
-			result.Count(a => !a.Active).Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldDeleteAgentSkillsForOnePerson()
-		{
-			setUpData();
-
-			Target.DeleteAgentSkillForPersonId(1);
-			var result = Target.GetFactAgentSkillsForPerson(1);
-			result.Count.Should().Be.EqualTo(0);
-
-			var result2 = Target.GetFactAgentSkillsForPerson(2);
-			result2.Count.Should().Be.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldAddBridgeSkillsetSkill()
 		{
 			setUpData();
