@@ -1193,7 +1193,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleRange.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleRestrictionStrategy.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleResultDailyValueCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleResultDataExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulerRangeToLoadCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleService.cs" />
@@ -2698,7 +2697,6 @@
     <Compile Include="Optimization\MatrixLockers\MatrixNoMainShiftLocker.cs" />
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractor.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractor.cs" />
-    <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixOvertimeLocker.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculator.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainer.cs" />

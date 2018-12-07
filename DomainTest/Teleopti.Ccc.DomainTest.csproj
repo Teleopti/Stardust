@@ -982,7 +982,6 @@
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractorTest.cs" />
     <Compile Include="Optimization\DailySkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\MatrixNoMainShiftLockerTest.cs" />
-    <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainerTest.cs" />
