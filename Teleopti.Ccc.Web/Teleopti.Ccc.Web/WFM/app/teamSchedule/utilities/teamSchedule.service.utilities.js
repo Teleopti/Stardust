@@ -16,36 +16,31 @@
 		self.getNextTickNoEarlierThanEight = getNextTickNoEarlierThanEight;
 		self.getNextTickMomentNoEarlierThanEight = getNextTickMomentNoEarlierThanEight;
 		self.nowInTimeZone = formattedNowInTimeZone;
-		self.setNowDate = setNowDate;
+		self.setNowDateInUtc = setNowDateInUtc;
 		self.getFirstDayOfWeek = getFirstDayOfWeek;
 		self.nowDateInUserTimezone = nowDateInUserTimezone;
 
 		var fakeNowDate;
 
-		function setNowDate(date) {
+		function setNowDateInUtc(date) {
 			fakeNowDate = date;
 		}
 
-		function now() {
-			if (fakeNowDate) return fakeNowDate;
-			return currentUserInfo.NowInUtc();
+		function nowMomentInUTC() {
+			if (fakeNowDate) return moment.tz(fakeNowDate,'etc/UTC');
+			return moment().tz('etc/UTC');
 		};
-
-		function nowMoment() {
-			return moment.tz(now(), 'etc/UTC');
-		}
 
 		function formattedNowInTimeZone(timezone) {
 			return format(nowInTimeZone(timezone));
 		}
 
-
 		function nowInTimeZone(timezone) {
-			return nowMoment().clone().tz(timezone);
+			return nowMomentInUTC().clone().tz(timezone);
 		}
 
 		function nowDateInUserTimezone() {
-			return serviceDateFormatHelper.getDateOnly(nowMoment().clone().tz(currentUserInfo.DefaultTimeZone));
+			return serviceDateFormatHelper.getDateOnly(nowMomentInUTC().clone().tz(currentUserInfo.DefaultTimeZone));
 		}
 
 

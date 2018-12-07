@@ -25,7 +25,7 @@
 
 		beforeEach(inject(function (_UtilityService_) {
 			target = _UtilityService_;
-			target.setNowDate('2018-02-26 07:00:00');
+			target.setNowDateInUtc('2018-02-26 07:00:00');
 		}));
 
 		commonTestsInDifferentLocale();
@@ -69,7 +69,7 @@
 
 		beforeEach(inject(function (_UtilityService_) {
 			target = _UtilityService_;
-			target.setNowDate('2018-02-26 07:00:00');
+			target.setNowDateInUtc('2018-02-26 07:00:00');
 		}));
 
 		commonTestsInDifferentLocale();
@@ -98,7 +98,7 @@
 
 		beforeEach(inject(function (_UtilityService_) {
 			target = _UtilityService_;
-			target.setNowDate('2018-02-26 07:00:00');
+			target.setNowDateInUtc('2018-02-26 07:00:00');
 		}));
 
 		beforeEach(function () {

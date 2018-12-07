@@ -224,14 +224,14 @@
 		personSelection.updatePersonSelection(personSchedule);
 		personSelection.toggleAllPersonProjections(personSchedule, '2018-03-01');
 
-		utility.setNowDate("2018-03-01 09:00:00");
+		utility.setNowDateInUtc("2018-03-01 09:00:00");
 
 		var result = setUp('2018-03-01', 'Europe/Stockholm');
 		expect(result.commandControl.timeRange.startTime).toBe("2018-03-01 10:15");
 	});
 
 	it('should set default start time to 8:00 when now is earlier than 8:00 on today', function () {
-		utility.setNowDate("2018-03-01 05:00:00");
+		utility.setNowDateInUtc("2018-03-01 05:00:00");
 
 		scheduleManagement.resetSchedules(
 			[{
@@ -254,7 +254,7 @@
 	});
 
 	it('should set default start time to next quarter when now is later than 8:00', function () {
-		utility.setNowDate('2018-03-01 09:10:00');
+		utility.setNowDateInUtc('2018-03-01 09:10:00');
 
 		scheduleManagement.resetSchedules(
 			[{
@@ -343,7 +343,7 @@
 	});
 
 	it('should set default start time to next quarter when selected date is same with now and next quarter is later than an hour from the end of previous day over night shift', function () {
-		utility.setNowDate("2018-08-01 10:00:00");
+		utility.setNowDateInUtc("2018-08-01 10:00:00");
 
 		scheduleManagement.resetSchedules(
 			[{
@@ -385,7 +385,7 @@
 	});
 
 	it('should set default end time to an hour from default start time', function () {
-		utility.setNowDate("2018-03-01 05:00:00");
+		utility.setNowDateInUtc("2018-03-01 05:00:00");
 
 		scheduleManagement.resetSchedules(
 			[{
