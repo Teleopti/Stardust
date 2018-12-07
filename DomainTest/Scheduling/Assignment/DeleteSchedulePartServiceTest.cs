@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
@@ -274,7 +275,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
         }
 
-        [Test]
+
+		[Test]
+		public void VerifyDeleteOvertimePoo()
+		{
+			var target = new DeleteSchedulePartService();
+			var date = new DateOnly(2018, 10, 1);
+			var scenario = new Scenario().WithId();
+			var activity = new Activity("_").WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var personAssignment = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_").WithId());
+			personAssignment.AddOvertimeActivity(activity, date.ToDateTimePeriod(new TimePeriod(8, 17), TimeZoneInfo.Utc), MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, new[] { personAssignment }, Enumerable.Empty<ISkillDay>());
+			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
+				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
+
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { Overtime = true}, rollBackService, new NoSchedulingProgress());
+
+			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().OvertimeActivities().Should().Be.Empty();
+		}
+
+		[Test]
         public void VerifyDeletePreference()
         {
 			var target = new DeleteSchedulePartService();
