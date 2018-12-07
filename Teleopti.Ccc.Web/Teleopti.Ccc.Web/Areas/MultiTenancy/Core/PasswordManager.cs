@@ -72,7 +72,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 					return true;
 				}
 
-				if (!_customerDb.TryGetEmailAddress(pi, out var userEmail))
+				var userEmail = _customerDb.TryGetEmailAddress(pi);
+
+				if (userEmail == null)
 				{
 					return false;
 				}

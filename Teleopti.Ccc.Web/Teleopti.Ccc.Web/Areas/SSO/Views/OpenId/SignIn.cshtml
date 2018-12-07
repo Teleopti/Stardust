@@ -75,7 +75,9 @@
 											<a href="#" data-bind="click: gotoForgotPassword">@Resources.ForgotYourPassword</a>
 										</div>
 									</div>
-
+									<div style="text-align: right;" class="con-flex" data-bind="visible: isToggleEnabled('Wfm_User_Password_Reset_74957')">
+										<a href="#" data-bind="click: gotoForgotPassword">@Resources.ForgotYourPassword</a>
+									</div>
 									<div class="con-row">
 										<div class="con-flex">
 											<button class="wfm-btn wfm-btn-primary" id="Signin-button" type="submit" data-bind="enable: Ajax.Inactive" style="margin-top: 10px">@Resources.SignIn</button>
@@ -162,7 +164,6 @@
 						<div class="con-row">
 							<div class="con-flex wfm-form">
 								<div class="form-group">
-									<input type="text" id="user-name" required placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate:'afterkeydown', event: {keypress: onEnterKey}"/>
 								</div>
 								<button class="wfm-btn wfm-btn-default" id="back-button" data-bind="click: BackToLogin">@Resources.Cancel</button>
 								<button class="wfm-btn wfm-btn-primary" id="send-forgot-password-mail-button" type="submit" data-bind="click: SendForgotPasswordMail">@Resources.Send</button>

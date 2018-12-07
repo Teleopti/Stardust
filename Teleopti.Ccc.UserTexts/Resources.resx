@@ -17811,6 +17811,26 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Success message of reset password request</comment>
   </data>
   <data name="ForgotYourPasswordInstruction" xml:space="preserve">
+    <value>Enter your email to get instructions on how to reset your password</value>
+    <comment>Instructions on forgot password page</comment>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Something went wrong. Please try again later.</value>
+    <comment>If the there is some problem with the reset password request</comment>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset password</value>
+    <comment>Title on the reset password button</comment>
+  </data>
+  <data name="ResetPasswordErrorMessage" xml:space="preserve">
+    <value>Please enter a valid email address</value>
+    <comment>Error message when a user enters an invalid e-mail address in the reset password field</comment>
+  </data>
+  <data name="ResetPasswordSuccess" xml:space="preserve">
+    <value>An email with instructions has been sent to you</value>
+    <comment>Success message of reset password request</comment>
+  </data>
+  <data name="ForgotYourPasswordInstruction" xml:space="preserve">
     <value>Enter your username to get instructions on how to reset your password</value>
     <comment>Instructions on forgot password page</comment>
   </data>

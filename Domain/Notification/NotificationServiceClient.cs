@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 				headers.ForEach(x => client.DefaultRequestHeaders.Add(x.Key, x.Value));
 
-				var response = client.SendAsync(req).GetAwaiter().GetResult();
+				var response = client.SendAsync(req).Result;
 				if (!response.IsSuccessStatusCode)
 				{
 					// Log -> response.ReasonPhrase

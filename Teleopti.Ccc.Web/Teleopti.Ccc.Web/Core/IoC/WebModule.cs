@@ -24,6 +24,7 @@ using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Areas.Insights.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
+using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
