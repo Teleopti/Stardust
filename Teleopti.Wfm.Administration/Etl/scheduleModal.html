@@ -1,220 +1,239 @@
 <form ng-submit="ctrl.callback(ctrl.form);" name="form">
-	<div class="modal-body">
-		<div class="row">
-			<div class="col-md-12">
-				<fieldset>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="form-check-label" for="scheduleName">
-									Name
-								</label>
-								<input type="text" autocomplete="off" required id="scheduleName" class="form-control" ng-model="ctrl.form.ScheduleName" aria-describedby="emailHelp" placeholder="Job name">
-							</div>
-						</div>
+<div class="modal-body">
+<div class="row">
+	<div class="col-md-12">
+		<fieldset>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label class="form-check-label" for="scheduleName">
+							Name
+						</label>
+						<input type="text" autocomplete="off" required id="scheduleName" class="form-control" ng-model="ctrl.form.ScheduleName" aria-describedby="emailHelp" placeholder="Job name">
 					</div>
-
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<div class="form-group">
-									<label for="tenantDropdown">Tenant</label>
-									<select class="form-control" required id="tenantDropdown" ng-options="tenant.TenantName for tenant in ctrl.tenants" ng-model="ctrl.form.Tenant" ng-change="ctrl.selectedTenantChanged(ctrl.form.Tenant)">
-										<option ng-show="!ctrl.form.Tenant" value="">- Select Tenant</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<div class="form-group">
-									<label for="jobDropdown">Job <span style="color:orange" ng-if="!ctrl.form.Tenant">&nbsp; No tenant selected</span></label>
-									<select ng-disabled="!ctrl.form.Tenant" class="form-control" required id="jobDropdown" ng-options="job.JobName for job in ctrl.jobs" ng-model="ctrl.form.JobName" ng-change="ctrl.selectedjobChanged(ctrl.form)">
-										<option ng-show="!ctrl.form.JobName" value="">- Select Job</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label class="form-check-label" for="scheduleDesc">
-									Description
-								</label>
-								<input type="text" autocomplete="off" required id="scheduleDesc" class="form-control" ng-model="ctrl.form.Description" aria-describedby="emailHelp" placeholder="Description">
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<label for="enabledBox">Enabled:</label>
-								<input id="enabledBox" type="checkbox" name="" ng-model="ctrl.form.Enabled" value="">
-							</div>
-						</div>
-					</div>
-
-				</fieldset>
+				</div>
 			</div>
-		</div>
 
-		<br/>
-
-		<div class="row">
-			<div class="col-md-12">
-				<fieldset>
-					<legend>Daily frequency</legend>
-					<div class="row">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
 						<div class="form-group">
-							<div class="col-md-12">
-								<div class="center-flex">
-									<input class="switch" ng-model="ctrl.frequencyType" ng-click="ctrl.toggleFrequencyType(ctrl.form)" type="checkbox">
-									&nbsp; Occurs &nbsp;
-									<span ng-if="!ctrl.frequencyType">once</span>
-									<span ng-if="ctrl.frequencyType">repeatedly</span>
-								</div>
-							</div>
-							<div class="col-md-12" ng-if="!ctrl.frequencyType">
-								<div class="form-group">
-									<label class="form-check-label">Occur at:</label>
-									<input type="time" required ng-model="ctrl.form.DailyFrequencyStart" class="form-control" aria-describedby="emailHelp">
-								</div>
-							</div>
-							<div class="col-md-12" ng-if="ctrl.frequencyType">
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="form-check-label">
-												Occurs every:
-											</label>
-											<input type="number" min="1" required ng-model="ctrl.form.DailyFrequencyMinute" class="form-control" placeholder="Minutes">
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="form-check-label">
-												Starting at:
-											</label>
-											<input type="time" ng-min="ctrl.form.DailyFrequencyEnd" required ng-model="ctrl.form.DailyFrequencyStart" class="form-control" placeholder="Start time">
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="form-check-label">
-												Ending at:
-											</label>
-											<input type="time" ng-max="ctrl.form.DailyFrequencyStart" required ng-model="ctrl.form.DailyFrequencyEnd" class="form-control" placeholder="End time">
-										</div>
-									</div>
-								</div>
-							</div>
-
+							<label for="tenantDropdown">Tenant</label>
+							<select class="form-control" required id="tenantDropdown" ng-options="tenant.TenantName for tenant in ctrl.tenants" ng-model="ctrl.form.Tenant" ng-change="ctrl.selectedTenantChanged(ctrl.form.Tenant)">
+								<option ng-show="!ctrl.form.Tenant" value="">- Select Tenant</option>
+							</select>
 						</div>
 					</div>
-				</fieldset>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-12">
-				<fieldset>
-					<legend>Job parameters <span style="color:orange" ng-if="!ctrl.form.JobName">&nbsp; No job selected</span></legend>
-					<br />
-					<div class="row">
-						<div class="col-md-12">
-							<div class="form-group">
-								<div class="form-group">
-									<label for="logData">Log data source</label>
-									<select required ng-disabled="!ctrl.form.JobName.NeedsParameterDataSource" class="form-control" id="logData" ng-options="log.Name for log in ctrl.tenantLogData" ng-model="ctrl.form.LogDataSourceId">
-										<option ng-show="!ctrl.form.JobName" value="">- Select log data source</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-md-4">
-									<fieldset>
-										<legend>Initial</legend>
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group">
-													<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.InitialPeriod.Start = 0; ctrl.form.InitialPeriod.End = 0;" name="button">Today</button>
-													<input required placeholder="Start" max="{{ctrl.form.InitialPeriod.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.InitialPeriod.Start" class="form-control">
-													<input required placeholder="End" min="ctrl.form.InitialPeriod.Start" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.InitialPeriod.End" class="form-control">
-												</div>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-								<div class="col-md-4">
-									<fieldset>
-										<legend>Queue statistics</legend>
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group">
-													<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.QueueStats.Start = 0; ctrl.form.QueueStats.End = 0;" name="button">Today</button>
-													<input required placeholder="Start" max="{{ctrl.form.QueueStats.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.QueueStats.Start" class="form-control">
-													<input required placeholder="End" min="{{ctrl.form.QueueStats.Start}}" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.QueueStats.End" class="form-control">
-												</div>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-								<div class="col-md-4">
-									<fieldset>
-										<legend>Agent statistics</legend>
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group">
-													<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.AgentStats.Start = 0; ctrl.form.AgentStats.End = 0;" name="button">Today</button>
-													<input required placeholder="Start" max="{{ctrl.form.AgentStats.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.AgentStats.Start" class="form-control">
-													<input required placeholder="End" min="{{ctrl.form.AgentStats.Start}}" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.AgentStats.End" class="form-control">
-												</div>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-4">
-									<fieldset>
-										<legend>Schedule</legend>
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group">
-													<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.Schedule.Start = 0; ctrl.form.Schedule.End = 0;" name="button">Today</button>
-													<input type="number" placeholder="Start" max="{{ctrl.form.Schedule.End}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Schedule.Start" class="form-control">
-													<input type="number" placeholder="End" min="{{ctrl.form.Schedule.Start}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Schedule.End" class="form-control">
-												</div>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-								<div class="col-md-4">
-									<fieldset>
-										<legend>Forecast</legend>
-										<div class="row">
-											<div class="col-md-12">
-												<div class="form-group">
-													<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.Forecast.Start = 0; ctrl.form.Forecast.End = 0;" name="button">Today</button>
-													<input type="number" placeholder="Start" max="{{ctrl.form.Forecast.End}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Forecast.Start" class="form-control">
-													<input type="number" placeholder="End"  min="{{ctrl.form.Forecast.Start}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Forecast.End" class="form-control">
-												</div>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-							</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<div class="form-group">
+							<label for="jobDropdown">Job <span style="color:orange" ng-if="!ctrl.form.Tenant">&nbsp; No tenant selected</span></label>
+							<select ng-disabled="!ctrl.form.Tenant" class="form-control" required id="jobDropdown" ng-options="job.JobName for job in ctrl.jobs" ng-model="ctrl.form.JobName" ng-change="ctrl.selectedjobChanged(ctrl.form)">
+								<option ng-show="!ctrl.form.JobName" value="">- Select Job</option>
+							</select>
 						</div>
 					</div>
-				</fieldset>
+				</div>
 			</div>
-		</div>
 
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label class="form-check-label" for="scheduleDesc">
+							Description
+						</label>
+						<input type="text" autocomplete="off" required id="scheduleDesc" class="form-control" ng-model="ctrl.form.Description" aria-describedby="emailHelp" placeholder="Description">
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="enabledBox">Enabled:</label>
+						<input id="enabledBox" type="checkbox" name="" ng-model="ctrl.form.Enabled" value="">
+					</div>
+				</div>
+			</div>
+
+		</fieldset>
 	</div>
+</div>
+
+<br/>
+
+<div class="row">
+	<div class="col-md-12">
+		<fieldset>
+			<legend>Daily frequency</legend>
+			<div class="row">
+				<div class="form-group">
+					<div class="col-md-12">
+						<div class="center-flex">
+							<input class="switch" ng-model="ctrl.frequencyType" ng-click="ctrl.toggleFrequencyType(ctrl.form)" type="checkbox">
+							&nbsp; Occurs &nbsp;
+							<span ng-if="!ctrl.frequencyType">once</span>
+							<span ng-if="ctrl.frequencyType">repeatedly</span>
+						</div>
+					</div>
+					<div class="col-md-12" ng-if="!ctrl.frequencyType">
+						<div class="form-group">
+							<label class="form-check-label">Occur at:</label>
+							<input type="text" name="dailyStart" ng-pattern="/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/" required ng-model="ctrl.form.DailyFrequencyStart" placeholder="HH:mm" class="form-control" aria-describedby="emailHelp">
+							<div ng-if="form.dailyStart.$error.pattern">
+								<span style="color:tomato;"  class="error">Invalid time format (24h HH:mm)</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12" ng-if="ctrl.frequencyType">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="form-check-label">
+										Occurs every:
+									</label>
+									<input type="number" min="1" required ng-model="ctrl.form.DailyFrequencyMinute" class="form-control" placeholder="Minutes">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="form-check-label">
+										Starting at:
+									</label>
+									<input type="text" name="frequencyStart" ng-pattern="/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/" required time-validation-max ng-model="ctrl.form.DailyFrequencyStart" class="form-control" placeholder="HH:mm">
+									<div ng-if="form.frequencyStart.$error.pattern">
+										<span style="color:tomato;"  class="error">Invalid time format (24h HH:mm)</span>
+									</div>
+									<div ng-if="form.frequencyEnd.$error.invalidStartTime">
+										<span style="color:tomato;" class="error">Start time must be earlier than end time</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="form-check-label">
+										Ending at:
+									</label>
+									<input type="text" name="frequencyEnd" ng-pattern="/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/" time-validation-min required ng-model="ctrl.form.DailyFrequencyEnd" class="form-control" placeholder="HH:mm">
+									<div ng-if="form.frequencyEnd.$error.pattern">
+										<span style="color:tomato;" class="error">Invalid time format (24h HH:mm)</span>
+									</div>
+									<div ng-if="form.frequencyEnd.$error.invalidEndTime">
+										<span style="color:tomato;" class="error">End time must be later than start time</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</fieldset>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<fieldset>
+			<legend>Job parameters <span style="color:orange" ng-if="!ctrl.form.JobName">&nbsp; No job selected</span></legend>
+			<br />
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<div class="form-group">
+							<label for="logData">Log data source</label>
+							<select required ng-disabled="!ctrl.form.JobName.NeedsParameterDataSource" class="form-control" id="logData" ng-options="log.Name for log in ctrl.tenantLogData" ng-model="ctrl.form.LogDataSourceId">
+								<option ng-show="!ctrl.form.JobName" value="">- Select log data source</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-4">
+							<fieldset>
+								<legend>Initial</legend>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.InitialPeriod.Start = 0; ctrl.form.InitialPeriod.End = 0;" name="button">Today</button>
+											<input name="initialStart" required placeholder="Start" max="{{ctrl.form.InitialPeriod.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.InitialPeriod.Start" class="form-control">
+											<input name="initialEnd" required placeholder="End" min="ctrl.form.InitialPeriod.Start" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.InitialPeriod.End" class="form-control">
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class="col-md-4">
+							<fieldset>
+								<legend>Queue statistics</legend>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.QueueStats.Start = 0; ctrl.form.QueueStats.End = 0;" name="button">Today</button>
+											<input required placeholder="Start" max="{{ctrl.form.QueueStats.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.QueueStats.Start" class="form-control">
+											<input required placeholder="End" min="{{ctrl.form.QueueStats.Start}}" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.QueueStats.End" class="form-control">
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class="col-md-4">
+							<fieldset>
+								<legend>Agent statistics</legend>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.AgentStats.Start = 0; ctrl.form.AgentStats.End = 0;" name="button">Today</button>
+											<input required placeholder="Start" max="{{ctrl.form.AgentStats.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.AgentStats.Start" class="form-control">
+											<input required placeholder="End" min="{{ctrl.form.AgentStats.Start}}" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.AgentStats.End" class="form-control">
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<fieldset>
+								<legend>Schedule</legend>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.Schedule.Start = 0; ctrl.form.Schedule.End = 0;" name="button">Today</button>
+											<input type="number" placeholder="Start" max="{{ctrl.form.Schedule.End}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Schedule.Start" class="form-control">
+											<input type="number" placeholder="End" min="{{ctrl.form.Schedule.Start}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Schedule.End" class="form-control">
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+						<div class="col-md-4">
+							<fieldset>
+								<legend>Forecast</legend>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.Forecast.Start = 0; ctrl.form.Forecast.End = 0;" name="button">Today</button>
+											<input type="number" placeholder="Start" max="{{ctrl.form.Forecast.End}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Forecast.Start" class="form-control">
+											<input type="number" placeholder="End"  min="{{ctrl.form.Forecast.Start}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Forecast.End" class="form-control">
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	</div>
+</div>
+
+</div>
+<div>{{form.$valid}}</div>
+<div>{{form.$error}}</div>
+<div>{{form.frequencyEnd.$error.invalidStartTime}}</div>
+<div>{{form.frequencyEnd.$error.invalidEndTime}}</div>
 	<div class="modal-footer">
 		<button type="submit" class="btn btn-primary">Ok</button>
 	</div>

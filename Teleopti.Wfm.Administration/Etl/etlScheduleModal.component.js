@@ -2,6 +2,68 @@
 	'use strict';
 
 	angular.module('adminApp')
+		.directive('timeValidationMax', function () {
+			return {
+				require: 'ngModel',
+				link: function (scope, element, attr, ctrl) {
+					function myValidation(value) {
+						scope.$watch('ctrl.form.DailyFrequencyEnd',
+							function (value) {
+								if (angular.isUndefined(ctrl.$error.pattern)) {
+									//no pattern error
+									if (angular.isDefined(value) && value !== null) {
+										var hour = value.split(":")[0];
+										var minutes = value.split(":")[1];
+
+										var endDate = new Date(2018, 12, 24, hour, minutes);
+
+										hour = ctrl.$viewValue.split(":")[0];
+										minutes = ctrl.$viewValue.split(":")[1];
+
+										var startDate = new Date(2018, 12, 24, hour, minutes);
+
+										ctrl.$setValidity('invalidStartTime', startDate < endDate);
+									}
+								}
+							});
+						
+						return value;
+					}
+					ctrl.$parsers.push(myValidation);
+				}
+			};
+		})
+		.directive('timeValidationMin', function () {
+			return {
+				require: 'ngModel',
+				link: function (scope, element, attr, ctrl) {
+					function myValidation(value) {
+						scope.$watch('ctrl.form.DailyFrequencyStart',
+							function (value) {
+								if (angular.isUndefined(ctrl.$error.pattern)) {
+									//no pattern error
+									if (angular.isDefined(value) && value !== null) {
+										var hour = value.split(":")[0];
+										var minutes = value.split(":")[1];
+
+										var startDate = new Date(2018, 12, 24, hour, minutes);
+
+										hour = ctrl.$viewValue.split(":")[0];
+										minutes = ctrl.$viewValue.split(":")[1];
+
+										var endDate = new Date(2018, 12, 24, hour, minutes);
+
+										ctrl.$setValidity('invalidEndTime', startDate < endDate);
+									}
+								}
+							});
+
+						return value;
+					}
+					ctrl.$parsers.push(myValidation);
+				}
+			};
+		})
 		.component('etlScheduleModal',
 			{
 				templateUrl: './Etl/scheduleModal.html',
@@ -13,6 +75,8 @@
 					callback: '='
 				}
 			});
+
+
 
 	function etlScheduleModal($http, tokenHeaderService) {
 		var ctrl = this;
@@ -64,7 +128,8 @@
 					}
 
 					ctrl.form = {
-						DailyFrequencyStart: moment(new Date())
+						DailyFrequencyStart: moment(new Date()).format("HH:mm"),
+						DailyFrequencyEnd: moment(new Date()).format("HH:mm")
 					};
 
 					ctrl.selectedTenant = ctrl.tenants[0];
@@ -74,13 +139,12 @@
 
 		function toggleFrequencyType(form) {
 			if (ctrl.frequencyType) {
-				form.DailyFrequencyMinute = null;
-				form.DailyFrequencyStart = null;
-				form.DailyFrequencyEnd = null;
+				form.DailyFrequencyStart = moment().format("HH:mm");
+				form.DailyFrequencyEnd = moment().add(1, 'hours').format("HH:mm");
 			}
 			else {
 				form.DailyFrequencyMinute = null;
-				form.DailyFrequencyStart = null;
+				//form.DailyFrequencyStart = null;
 				form.DailyFrequencyEnd = null;
 			}
 		}
@@ -169,8 +233,8 @@
 
 		function editHandler() {
 			ctrl.form = {
-				DailyFrequencyStart: new Date(ctrl.job.DailyFrequencyStart),
-				DailyFrequencyEnd: new Date(ctrl.job.DailyFrequencyEnd),
+				DailyFrequencyStart: moment(ctrl.job.DailyFrequencyStart).format("HH:mm"),
+				DailyFrequencyEnd: moment(ctrl.job.DailyFrequencyEnd).format("HH:mm"),
 				Description: ctrl.job.Description,
 				JobName: ctrl.job.jobName,
 				LogDataSourceId: null,
@@ -194,4 +258,5 @@
 		}
 
 	}
-})();
+}
+)();
