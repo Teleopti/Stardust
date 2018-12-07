@@ -77,11 +77,9 @@
 		}
 
 		vm.anyValidAgent = function () {
-			
+			updateInvalidAgents();
 			return vm.invalidAgents.length != vm.selectedAgents.length;
 		};
-
-		vm.updateInvalidAgents = updateInvalidAgents;
 
 		function updateInvalidAgents() {
 			if ($scope.newActivityForm && !$scope.newActivityForm.$valid) return;
