@@ -351,7 +351,6 @@
     <Compile Include="Transformer\Job\Steps\IntradayFactAgentJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayFactAgentQueueJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayFactQueueJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\JobBase.cs" />
     <Compile Include="Transformer\Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DelayedJobStep.cs" />
