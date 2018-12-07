@@ -47,12 +47,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 			return _searchRepository.FindPersonIdsInTeams(date, teamIds, searchCriteria);
 		}
 
-		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds,
-			IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			return _searchRepository.FindPersonIdsInTeamsBasedOnPersonPeriod(period, teamIds, searchCriteria);
-		}
-
 		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds,
 			IDictionary<PersonFinderField, string> searchCriteria)
 		{

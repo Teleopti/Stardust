@@ -248,17 +248,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return schedulePartCollection;
 		}
 
-		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
-			IDictionary<DateTimePeriod, IScheduleDictionary> dictionary)
-		{
-			var ret = new List<IScheduleDay>();
-			foreach (var key in dictionary)
-			{
-				ret.AddRange(GetSchedulePartPerPersonAndDate(key.Value));
-			}
-			return ret;
-		}
-
 		public IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario)
 		{
 			var period = new DateTimePeriod(DateTime.SpecifyKind(restrictionDate.Date, DateTimeKind.Utc), DateTime.SpecifyKind(restrictionDate.Date, DateTimeKind.Utc).AddDays(1).AddMilliseconds(-1));

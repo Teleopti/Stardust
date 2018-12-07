@@ -448,7 +448,6 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 		public void ShouldIgnoreSingleDash()
 		{
 			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
 			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,

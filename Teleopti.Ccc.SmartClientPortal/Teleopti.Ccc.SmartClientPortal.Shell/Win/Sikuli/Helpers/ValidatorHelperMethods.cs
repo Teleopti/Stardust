@@ -59,24 +59,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 			}
 		}
 
-		public static double? GetStandardDeviationForDay(ISchedulerStateHolder stateHolder, ISkill singleSkill, DateOnly requestedDay)
-		{
-			try
-			{
-				var dailyPeriods = getSkillStaffPeriodsOnDay(stateHolder, singleSkill, requestedDay);
-
-				double? result = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(new List<IEnumerable<ISkillStaffPeriod>> {dailyPeriods});
-				if (result.HasValue)
-					return Math.Round(result.Value, 3);
-				return null;
-			}
-			catch
-			{
-				return null;
-			}
-		}
-
-
 		public static double GetDailySumOfStandardDeviationsFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
 		{
 			double result = 0d;

@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.StartDate)
 				.ShiftCategory(new ShiftCategory()).WithLayer(new Activity(), new TimePeriod(1, 2)));
 
-			var schedulingHintError = Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, period, null, false))
+			var schedulingHintError = Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, period, new FixedBlockPreferenceProvider(new SchedulingOptions()), 1))
 				.InvalidResources.Single();
 			schedulingHintError.ResourceName.Should().Be.EqualTo(agent.Name.ToString());
 			schedulingHintError.ValidationErrors.Single(x => x.ResourceType == ValidationResourceType.Preferences).ErrorResource
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.StartDate.AddDays(5)).WithDayOff());
 			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.StartDate.AddDays(6)).WithDayOff());
 
-			var schedulingHintError = Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, period, null, false))
+			var schedulingHintError = Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, period, new FixedBlockPreferenceProvider(new SchedulingOptions()), 1))
 				.InvalidResources.Single();
 			schedulingHintError.ResourceName.Should().Be.EqualTo(agent.Name.ToString());
 			schedulingHintError.ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.Preferences).Should().Be.Null();
@@ -89,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.EndDate)
 				.ShiftCategory(new ShiftCategory()).WithLayer(new Activity(), new TimePeriod(1, 2)));
 
-			var schedulingHintError = Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, period, null, false))
+			var schedulingHintError = Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, period, new FixedBlockPreferenceProvider(new SchedulingOptions()), 1))
 				.InvalidResources.Single();
 			schedulingHintError.ResourceName.Should().Be.EqualTo(agent.Name.ToString());
 			schedulingHintError.ValidationErrors.Single(x => x.ResourceType == ValidationResourceType.Preferences).ErrorResource

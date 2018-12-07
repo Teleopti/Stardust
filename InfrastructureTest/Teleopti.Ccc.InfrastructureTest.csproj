@@ -281,7 +281,6 @@
     <Compile Include="MultiTenancy\Admin\CheckTenantConnectionstringsTest.cs" />
     <Compile Include="MultiTenancy\Admin\DeleteTenantTest.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllTenantsTest.cs" />
-    <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswordsTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTestAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\TenantExistsTest.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverterTest.cs" />

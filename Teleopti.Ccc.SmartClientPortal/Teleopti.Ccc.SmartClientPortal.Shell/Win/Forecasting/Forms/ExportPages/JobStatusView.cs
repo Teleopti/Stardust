@@ -71,11 +71,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 			toolTip1.SetToolTip(labelDetail, toolTip1.GetToolTip(labelDetail) + message + Environment.NewLine);
 		}
 
-		public void SetJobStatusId(Guid id)
-		{
-			Presenter.SetJobStatusId(id);
-		}
-
 		public void ChangeMaximumProgressValue(int percentage)
 		{
 			if (InvokeRequired)
@@ -145,21 +140,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 				_view = null;
 			}
 		}
-
-		public void SetJobStatusId(Guid id)
-		{
-			if(id == Guid.Empty)
-				_view.SetMessage(Resources.CommunicationErrorEndPoint);
-			else
-				_model.JobStatusId = id;
-		}
 	}
 
 	public interface IJobStatusView
 	{
 		void SetProgress(int percentage);
 		void SetMessage(string message);
-		void SetJobStatusId(Guid id);
 		void ChangeMaximumProgressValue(int percentage);
 	}
 

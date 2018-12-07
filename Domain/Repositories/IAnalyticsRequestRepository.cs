@@ -12,7 +12,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void Delete(IEnumerable<AnalyticsRequestedDay> analyticsRequestedDays);
 		void Delete(Guid requestId);
 		void UpdateUnlinkedPersonids(int[] personPeriodIds);
-		int GetFactRequestRowCount(int personPeriodId);
-		int GetFactRequestedDaysRowCount(int personPeriodId);
 	}
 }

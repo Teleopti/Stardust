@@ -113,7 +113,6 @@
     <Compile Include="SkillStaffingIntervalProviderTest.cs" />
     <Compile Include="SkillTypeInfoProviderTest.cs" />
     <Compile Include="SplitSkillStaffIntervalTest.cs" />
-    <Compile Include="StaffingViewModelCreatorTestHelper.cs" />
     <Compile Include="TimeSeriesProviderTest.cs" />
     <Compile Include="SkillSetupHelper.cs" />
   </ItemGroup>

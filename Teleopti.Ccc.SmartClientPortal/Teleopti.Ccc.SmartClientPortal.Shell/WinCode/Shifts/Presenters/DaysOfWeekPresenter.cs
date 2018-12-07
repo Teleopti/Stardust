@@ -25,10 +25,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
                 SetModelCollection(new ReadOnlyCollection<IDaysOfWeekViewModel>(modelList));
             }
         }
-
-        public void SetDaysOfWeekCollection(IList<IDaysOfWeekViewModel> value)
-        {
-            SetModelCollection(new ReadOnlyCollection<IDaysOfWeekViewModel>(value));
-        }
     }
 }

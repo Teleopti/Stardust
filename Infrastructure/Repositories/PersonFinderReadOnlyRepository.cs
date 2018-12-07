@@ -180,42 +180,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
-
-		public List<Guid> FindPersonIdsInTeamsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			var result = new List<Guid>();
-
-			if (teamIds.Length == 0)
-			{
-				return result;
-			}
-
-			foreach (var teamIdsBatch in teamIds.Batch(100))
-			{
-				var teamIdsString = string.Join(",", teamIdsBatch.Select(x => x.ToString()));
-				if (searchCriteria.Any())
-				{
-					var searchString = createSearchString(searchCriteria);
-					var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
-							"exec [ReadModel].[PersonFinderWithCriteriaAndTeamsSimplifiedBasedOnRecentPeriod] @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @team_ids=:team_ids")
-						.SetString("search_criterias", searchString)
-						.SetDateOnly("start_date", period.StartDate)
-						.SetDateOnly("end_date", period.EndDate)
-						.SetString("team_ids", teamIdsString)
-						.SetReadOnly(true)
-						.List<Guid>();
-
-					result.AddRange(batchResult);
-				}
-				else
-				{
-					result.AddRange(findPersonIdsInTeams(period, teamIdsString));
-				}
-			}
-
-			return result;
-		}
-
 		private IList<Guid> findPersonIdsInTeams(DateOnlyPeriod period, string teamIdsString)
 		{
 			return _currentUnitOfWork.Session()

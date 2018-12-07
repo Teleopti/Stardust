@@ -6,6 +6,5 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 	{
 		IScheduleDay SchedulePart { get; }
 		IVisualLayerCollection SchedulePartProjection { get; }
-		IVisualLayerCollection SchedulePartProjectionMerged { get; }
 	}
 }

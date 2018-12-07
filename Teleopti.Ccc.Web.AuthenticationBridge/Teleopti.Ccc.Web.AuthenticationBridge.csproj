@@ -380,7 +380,7 @@
   </Target>
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\BuildArtifacts\Web.AuthenticationBridge.Web.config" "$(ProjectDir)web.config"
-if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\BuildArtifacts\WebApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"
+if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\BuildArtifacts\AuthBridgeApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

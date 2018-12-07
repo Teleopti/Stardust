@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
 
 import { Report } from '../../models/Report.model';
+import { Permission } from '../../models/Permission.model';
 import { ReportService } from '../../core/report.service';
 import { NavigationService } from '../../core/navigation.service';
 
@@ -16,6 +17,7 @@ export class ReportComponent implements OnInit {
 
 	private action = 'view';
 
+	public initialized = false;
 	public isLoading = false;
 	public isProcessing = false;
 	public inEditing = false;
@@ -24,6 +26,7 @@ export class ReportComponent implements OnInit {
 	public newReportName: string = undefined;
 
 	public report: Report;
+	public permission: Permission;
 
 	constructor(
 		@Inject('$state') private $state: IStateService,
@@ -34,6 +37,10 @@ export class ReportComponent implements OnInit {
 		this.report = params.report;
 		this.action = params.action;
 		this.inEditing = this.action === 'edit';
+		this.permission = new Permission();
+		this.permission.CanViewReport = true;
+		this.permission.CanEditReport = false;
+		this.permission.CanDeleteReport = false;
 
 		this.pbiCoreService = new pbi.service.Service(
 			pbi.factories.hpmFactory,
@@ -48,8 +55,18 @@ export class ReportComponent implements OnInit {
 		}
 
 		this.isLoading = true;
-		this.reportSvc.getReportConfig(this.report.Id).then(config => {
-			this.loadReport(config);
+		this.reportSvc.getPermission().then(permission => {
+			this.permission = permission;
+
+			if (this.permission.CanViewReport) {
+				this.reportSvc.getReportConfig(this.report.Id).then(config => {
+					this.loadReport(config);
+				});
+			} else {
+				this.isLoading = false;
+			}
+
+			this.initialized = true;
 		});
 	}
 

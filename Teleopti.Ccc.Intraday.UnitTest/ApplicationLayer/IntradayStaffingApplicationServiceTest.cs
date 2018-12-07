@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	public class IntradayStaffingApplicationServiceTest : IIsolateSystem, IConfigureToggleManager
+	public class IntradayStaffingApplicationServiceTest : IIsolateSystem, IConfigureToggleManager, IExtendSystem
 	{
 		private readonly bool _useErlangA;
 		public FakeScenarioRepository ScenarioRepository;
@@ -40,9 +41,8 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
-		private IntradayStaffingApplicationServiceTestHelper _staffingViewModelCreatorTestHelper;
-
-		public IIntradayStaffingApplicationService Target;
+		public IntradayStaffingApplicationServiceTestHelper ViewModelCreatorTestHelper;
+		public IntradayStaffingApplicationService Target;
 
 		private const int minutesPerInterval = 15;
 
@@ -50,10 +50,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		{
 			_useErlangA = useErlangA;
 		}
-
-		public IntradayStaffingApplicationServiceTestHelper ViewModelCreatorTestHelper => _staffingViewModelCreatorTestHelper ?? (_staffingViewModelCreatorTestHelper =
-																							  new IntradayStaffingApplicationServiceTestHelper(StaffingCalculatorServiceFacade));
-
+		
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
@@ -112,7 +109,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime.AddDays(1), scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval), 7, SkillCombinationResourceRepository);
 			SkillSetupHelper.PopulateStaffingReadModels(skill, scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval), scheduledStartTime.AddDays(1).AddMinutes(minutesPerInterval * 2), 3, SkillCombinationResourceRepository);
 
-			var vm = Target.GenerateStaffingViewModel(new[] { skill.Id.GetValueOrDefault() }, userDateTimePeriod).ToList();
+			var vm = userDateTimePeriod.DayCollection().Select(x => Target.GenerateStaffingViewModel(new[] { skill.Id.GetValueOrDefault() }, x)).ToList();
 
 			var staffingIntervalsToday = skillDayToday.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
 			var staffingIntervalsTomorrow = skillDayTomorrow.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
@@ -1483,6 +1480,11 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			{
 				toggleManager.Disable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
 			}
+		}
+
+		public void Extend(IExtend extend, IocConfiguration configuration)
+		{
+			extend.AddService<IntradayStaffingApplicationServiceTestHelper>();
 		}
 	}
 }

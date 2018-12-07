@@ -87,7 +87,6 @@
     <Compile Include="FakeData\RepositoryFactory.cs" />
     <Compile Include="JobRunnerTest.cs" />
     <Compile Include="FakeBaseConfigurationRepository.cs" />
-    <Compile Include="JobSchedule\PBI41857.cs" />
     <Compile Include="JobSchedule\StageScheduleForecastSkillJobStepTest.cs" />
     <Compile Include="RunControllerTest.cs" />
     <Compile Include="Service\EtlJobScheduleCollectionForTest.cs" />
@@ -154,7 +153,6 @@
     <Compile Include="Transformer\Job\Steps\ForecastJobStepsTest.cs" />
     <Compile Include="Transformer\Job\Steps\IndexMaintenanceJobsTest.cs" />
     <Compile Include="Transformer\Job\Steps\InitialJobStepsTest.cs" />
-    <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayStageSchedulePreferenceJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\KpiJobStepsTest.cs" />
     <Compile Include="Transformer\Job\Steps\LicenseCheckJobStepTest.cs" />

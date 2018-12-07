@@ -13,15 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 	{
 		private readonly IPushMessageDialogueRepository _pushMessageDialogueRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IPushMessageRepository _pushMessageRepository;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public PushMessageDialoguePersister(IPushMessageDialogueRepository pushMessageDialogueRepository,ILoggedOnUser loggedOnUser,IPushMessageRepository pushMessageRepository, IPersonNameProvider personNameProvider, IUserTimeZone userTimeZone)
+		public PushMessageDialoguePersister(IPushMessageDialogueRepository pushMessageDialogueRepository,ILoggedOnUser loggedOnUser,IPersonNameProvider personNameProvider, IUserTimeZone userTimeZone)
 		{
 			_pushMessageDialogueRepository = pushMessageDialogueRepository;
 			_loggedOnUser = loggedOnUser;
-			_pushMessageRepository = pushMessageRepository;
 			_personNameProvider = personNameProvider;
 			_userTimeZone = userTimeZone;
 		}
@@ -52,11 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider
 				DialogueMessages = pushMessageDialogue.DialogueMessages.Select(d => new DialogueMessageViewModel {Created = TimeZoneInfo.ConvertTimeFromUtc(d.Created,_userTimeZone.TimeZone()).ToShortDateTimeString() ,Text = d.Text,Sender = _personNameProvider.BuildNameFromSetting(d.Sender.Name),SenderId = d.Sender.Id.GetValueOrDefault()}).ToArray(),
 				ReplyOptions = pushMessageDialogue.PushMessage.ReplyOptions.ToArray()
 			};
-		}
-		
-		public void SendNewPushMessageToLoggedOnUser(string title, string message)
-		{
-			SendPushMessageService.CreateConversation(title, message, false).To(_loggedOnUser.CurrentUser()).From(_loggedOnUser.CurrentUser()).AddReplyOption("OK").SendConversation(_pushMessageRepository,_pushMessageDialogueRepository);
 		}
 	}
 }

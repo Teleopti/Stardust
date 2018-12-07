@@ -23,6 +23,7 @@
 
 .modal-box .wfm-datepicker-popup-row {
 	z-index: 50;
+	min-width: 640px;
 }
 
 .start-date-indicator {
@@ -60,7 +61,7 @@
 	content: '»' !important;
 }
 
-.wfm-datepicker {
+.uib-datepicker, .wfm-datepicker {
 	padding: 5px;
 
 	table th {
@@ -71,6 +72,11 @@
 		border-color: transparent !important;
 		color: $text-color-standard;
 		background: $white;
+		padding: 6px 12px;
+	}
+
+	.btn-sm {
+		padding: 4px 8px;
 	}
 
 	.btn-info.active {
@@ -114,11 +120,6 @@
 	.pin-down {
 		background-color: $hover;
 		@extend .material-depth-1;
-	}
-
-	.popup-control {
-		height: 18px;
-		width: 18px;
 	}
 
 	.popup-control:hover {

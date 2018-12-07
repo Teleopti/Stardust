@@ -21,10 +21,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 		Percent MaxActiveAgentsGrace { get; }
 
-		bool IsThisTooManyActiveAgents(int activeAgents);
-
-		bool IsThisAlmostTooManyActiveAgents(int activeAgents);
-
 		IList<string> EnabledLicenseOptionPaths { get; }
 
 		int MaxSeats { get; }

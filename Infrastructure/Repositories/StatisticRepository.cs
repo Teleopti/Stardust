@@ -117,16 +117,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
-		{
-			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				IQuery query = createSkillIntervalStatisticQuery(uow, date);
-				query.SetTimeout(1200);
-				return query.SetResultTransformer(Transformers.AliasToBean(typeof(IntradayStatistics))).List<IIntradayStatistics>();
-			}
-		}
-
 		public DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
 		{
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

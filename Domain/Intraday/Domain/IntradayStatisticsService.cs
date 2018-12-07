@@ -7,22 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Intraday.Domain
 {
-	public interface IIntradayStatisticsService
-	{
-		IEnumerable<IncomingIntervalModel> GetIntervalsInUTC(Guid[] skillIdList, DateTime fromTimeInUTC, DateTime toTimeInUTC);
-
-		IntradayIncomingSummary GenerateStatisticsSummary(IEnumerable<IncomingIntervalModel> intervals,
-			bool abandonRateSupported);
-
-		IList<SkillIntervalStatistics> GetSkillDayStatistics(
-			IList<SkillDayStatsRange> skillDayStatsRange, 
-			ISkill skill,
-			DateOnly skillDayDate, 
-			List<SkillIntervalStatistics> actualStatsPerInterval, 
-			TimeSpan resolution);
-	}
-
-	public class IntradayStatisticsService : IIntradayStatisticsService
+	public class IntradayStatisticsService
 	{
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;

@@ -39,12 +39,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDateTime, int status) where T : Request
-		{
-			var requestForPeriod = createRequestForPeriodCriteria(startDateTime).Add(Restrictions.Eq("class", typeof(T)));
-			return findRequestsByRequestPeriod(person, requestForPeriod, status);
-		}
-
 		public IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status)
 		{
 			return Session.CreateCriteria<IShiftExchangeOffer>()

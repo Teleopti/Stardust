@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			currentSchedule.AddPersonAssignment(new PersonAssignment(agent, scenario, period.StartDate)
 				.ShiftCategory(new ShiftCategory()).WithLayer(new Activity(), new TimePeriod(1, 2)));
 
-			var result = Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, period, null, false));
+			var result = Target.Execute(new SchedulePostHintInput(currentSchedule, new[] { agent }, period, null, 0));
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PreferenceHint))
 				.Should().Be.False();

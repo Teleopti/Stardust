@@ -135,21 +135,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 				throw new NotImplementedException();
 			}
 
-			public int GetFactScheduleRowCount(int personId)
-			{
-				throw new NotImplementedException();
-			}
-
-			public int GetFactScheduleDayCountRowCount(int personId)
-			{
-				throw new NotImplementedException();
-			}
-
-			public int GetFactScheduleDeviationRowCount(int personId)
-			{
-				throw new NotImplementedException();
-			}
-
 			public IList<IDateWithDuplicate> GetDuplicateDatesForPerson(Guid personCode)
 			{
 				throw new NotImplementedException();

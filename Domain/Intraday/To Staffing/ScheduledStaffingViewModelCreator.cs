@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
 		private readonly IForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		
-		private readonly IIntradayStaffingApplicationService _intradayStaffingApplicationService;
+		private readonly IntradayStaffingApplicationService _intradayStaffingApplicationService;
 
 		public ScheduledStaffingViewModelCreator(
 			INow now,
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 			IForecastedStaffingToDataSeries forecastedStaffingToDataSeries,
-			IIntradayStaffingApplicationService intradayStaffingApplicationService
+			IntradayStaffingApplicationService intradayStaffingApplicationService
 		)
 		{
 			_now = now;

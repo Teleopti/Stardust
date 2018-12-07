@@ -36,12 +36,12 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IResourceCalculation _resourceCalculation;
-		private readonly IIntradayStatisticsService _intradayStatisticsService;
+		private readonly IntradayStatisticsService _intradayStatisticsService;
 
 		public IntradayStaffingService(
 			ICurrentScenario currentScenario,
 			IResourceCalculation resourceCalculation,
-			IIntradayStatisticsService intradayStatisticsService,
+			IntradayStatisticsService intradayStatisticsService,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, 
 			ISkillRepository skillRepository,
 			ISkillDayLoadHelper skillDayLoadHelper

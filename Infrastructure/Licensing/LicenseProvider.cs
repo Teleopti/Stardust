@@ -107,9 +107,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				licenseService.MaxActiveAgents,
 				licenseService.MaxSeats,
 				licenseService.LicenseType,
-				new Percent(licenseService.MaxActiveAgentsGrace),
-				LicenseActivator.IsThisAlmostTooManyActiveAgents,
-				LicenseActivator.IsThisTooManyActiveAgents, majorVersion);
+				new Percent(licenseService.MaxActiveAgentsGrace), 
+				majorVersion);
 
 			foreach (var optionPath in optionPaths.Where(optionPath => optionPath.Value))
 			{

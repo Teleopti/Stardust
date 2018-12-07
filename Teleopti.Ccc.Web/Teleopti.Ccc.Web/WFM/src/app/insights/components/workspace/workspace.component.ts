@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild, TemplateRef } from '@angular/core'
 import { ReportService } from '../../core/report.service';
 import { NavigationService } from '../../core/navigation.service';
 import { Report } from '../../models/Report.model';
+import { Permission } from '../../models/Permission.model';
 import { NzModalService, NzModalRef } from 'ng-zorro-antd';
 
 @Component({
@@ -10,14 +11,12 @@ import { NzModalService, NzModalRef } from 'ng-zorro-antd';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-	@Input() initialized: boolean;
-	@Input() isLoading: boolean;
-	@Input() hasViewPermission: boolean;
-	@Input() hasEditPermission: boolean;
-	@Input() hasDeletePermission: boolean;
-	@Input() reportNameCriteria: string;
+	public initialized: boolean;
+	public isLoading: boolean;
+	public reportNameCriteria: string;
 
 	public reports: Report[];
+	public permission: Permission;
 	public newReportName: string = undefined;
 	public messageForNewReportName = '';
 	public refNewReportNameModal: NzModalRef;
@@ -33,11 +32,9 @@ export class WorkspaceComponent implements OnInit {
 
 	ngOnInit() {
 		this.reportSvc.getPermission().then(permission => {
-			this.hasViewPermission = permission.CanViewReport;
-			this.hasEditPermission = permission.CanEditReport;
-			this.hasDeletePermission = permission.CanDeleteReport;
+			this.permission = permission;
 
-			if (this.hasViewPermission || this.hasEditPermission) {
+			if (this.permission.CanViewReport) {
 				this.loadReportList();
 			}
 
@@ -48,14 +45,7 @@ export class WorkspaceComponent implements OnInit {
 	loadReportList() {
 		this.isLoading = true;
 		this.reportSvc.getReports().then(reports => {
-			this.reports = [];
-			reports.forEach(report => {
-				if (report.Name.trim() !== 'Report Usage Metrics Report') {
-					this.reports.push(report);
-				}
-			});
-
-			this.reports = this.reports.sort();
+			this.reports = reports.sort();
 			this.isLoading = false;
 		});
 	}
@@ -64,8 +54,29 @@ export class WorkspaceComponent implements OnInit {
 		return <HTMLElement>document.getElementById('reportContainer');
 	}
 
-	cancelCloneReport(): void {
+	cancelCreateReport(): void {
 		this.refNewReportNameModal.destroy();
+		this.newReportName = undefined;
+	}
+
+	createReport(): boolean {
+		if (!this.newReportName || this.newReportName.trim().length === 0) {
+			return false;
+		}
+
+		if (this.refNewReportNameModal !== undefined) {
+			this.refNewReportNameModal.destroy();
+		}
+
+		this.isLoading = true;
+		this.reportSvc.createReport(this.newReportName).then((newReport) => {
+			this.nav.editReport({
+				Id: newReport.ReportId,
+				Name: newReport.ReportName,
+			});
+			return true;
+		});
+
 		this.newReportName = undefined;
 	}
 
@@ -87,13 +98,23 @@ export class WorkspaceComponent implements OnInit {
 		this.newReportName = undefined;
 	}
 
-	public confirmCloneReport(report) {
-		this.messageForNewReportName = `Please input name for clone of report "${report.Name}":`;
+	public confirmCreateReport(report) {
+		this.messageForNewReportName = `Please input name for new report:`;
 		this.refNewReportNameModal = this.modalSvc.create({
-			nzTitle: 'Clone report',
+			nzTitle: 'Create new report',
+			nzContent: this.newReportNameTempRef,
+			nzOnOk: () => this.createReport(),
+			nzOnCancel: () => this.cancelCreateReport()
+		});
+	}
+
+	public confirmCloneReport(report) {
+		this.messageForNewReportName = `Please input name for new copy of report "${report.Name}":`;
+		this.refNewReportNameModal = this.modalSvc.create({
+			nzTitle: 'Save as new report',
 			nzContent: this.newReportNameTempRef,
 			nzOnOk: () => this.cloneReport(report),
-			nzOnCancel: () => this.cancelCloneReport()
+			nzOnCancel: () => this.cancelCreateReport()
 		});
 	}
 

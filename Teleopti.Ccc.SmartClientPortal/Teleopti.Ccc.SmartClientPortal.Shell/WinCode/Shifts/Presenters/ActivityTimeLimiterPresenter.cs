@@ -70,11 +70,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
             }
         }
 
-        public void SetActivityTimeLimiterAdapters(IList<IActivityTimeLimiterViewModel> limiters)
-        {
-            SetModelCollection(new ReadOnlyCollection<IActivityTimeLimiterViewModel>(limiters));
-        }
-
         private static IEnumerable<IActivityTimeLimiterViewModel> parse(IWorkShiftRuleSet ruleSet, IEnumerable<IWorkShiftLimiter> entities)
         {
             IList<IActivityTimeLimiterViewModel> limiterViewCollection = new List<IActivityTimeLimiterViewModel>();

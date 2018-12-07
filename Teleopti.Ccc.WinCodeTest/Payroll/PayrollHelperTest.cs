@@ -91,18 +91,5 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
             Assert.AreEqual(0,_target.LoadMultiplicatorList().Count);
             _mockRepository.VerifyAll();
         }
-
-        [Test]
-        public void VerifyLoadMultiplicatorListByType()
-        {
-            IList<IMultiplicator> multiplicators = new List<IMultiplicator>();
-            IMultiplicatorRepository multiplicatorRepository = _mockRepository.StrictMock<IMultiplicatorRepository>();
-            Expect.Call(_repositoryFactory.CreateMultiplicatorRepository(_unitOfWork)).Return(multiplicatorRepository);
-            Expect.Call(multiplicatorRepository.LoadAllByTypeAndSortByName(MultiplicatorType.Overtime)).Return(multiplicators);
-
-            _mockRepository.ReplayAll();
-            Assert.AreEqual(0, _target.LoadMultiplicatorList(MultiplicatorType.Overtime).Count);
-            _mockRepository.VerifyAll();
-        }
     }
 }

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		[TestLog]
 		[UnitOfWork]
-		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, Guid planningPeriodId, bool usePreferences)
+		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period, null);
@@ -62,11 +62,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 					new ResourceCalculationData(resultStateHolder, false, false));
 			}
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(planningGroupSkills, resultStateHolder);
-			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), loadedSelectedAgents, 
-				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), loadedSelectedAgents, true);
 			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
+			var preferenceValue = planningPeriod.PlanningGroup.Settings.PreferenceValue.Value;
+			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), loadedSelectedAgents, 
+				new ScheduleDictionaryLoadOptions(preferenceValue > 0, false, preferenceValue > 0), period.ToDateTimePeriod(_userTimeZone.TimeZone()), loadedSelectedAgents, true);
 			var blockPreferenceProvider = new BlockPreferenceProviderUsingFilters(planningPeriod.PlanningGroup.Settings);
-			var validationResults = _checkScheduleHints.Execute(new SchedulePostHintInput(scheduleOfSelectedPeople, loadedSelectedAgents, period, blockPreferenceProvider, usePreferences)).InvalidResources;
+			var validationResults = _checkScheduleHints.Execute(new SchedulePostHintInput(scheduleOfSelectedPeople, loadedSelectedAgents, period, blockPreferenceProvider, preferenceValue)).InvalidResources;
 			var nonScheduledAgents = _agentsWithWhiteSpots.Execute(scheduleOfSelectedPeople, loadedSelectedAgents, period);
 			var result = new FullSchedulingResultModel
 			{

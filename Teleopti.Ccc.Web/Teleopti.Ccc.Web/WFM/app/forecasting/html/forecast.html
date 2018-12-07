@@ -14,21 +14,19 @@
 </section>
 
 <section>
-	<div class="material-depth-1 full-padding align-row-baseline">
+	<div class="material-depth-1 full-padding align-row-center con-row">
 		<div class="con-flex">
-			<div class="col-md-6">
-				<label for="SkillFilter" class="input-icon">
-					<i class="mdi mdi-filter-outline">
-						<input type="text" id="SkillFilter" ng-model="filter.Workload.Name" placeholder="{{'FilterThreeDots' | translate}}">
-						<md-tooltip>{{'Filter' | translate}}</md-tooltip>
-					</i>
-				</label>
-			</div>
-			<div class="col-md-6">
-				<a ui-sref="forecast-create-skill" class="wfm-btn wfm-btn-invis-default wfm-btn-forecast" ng-cloak>
-					<i class="mdi mdi-plus"></i>{{'NewSkill' | translate}}
-				</a>
-			</div>
+			<label for="SkillFilter" class="input-icon">
+				<i class="mdi mdi-filter-outline">
+					<input type="text" id="SkillFilter" ng-model="filter.Workload.Name" placeholder="{{'FilterThreeDots' | translate}}">
+					<md-tooltip>{{'Filter' | translate}}</md-tooltip>
+				</i>
+			</label>
+		</div>
+		<div class="con-flex">
+			<a ui-sref="forecast-create-skill" class="wfm-btn wfm-btn-invis-default wfm-btn-forecast" ng-cloak>
+				<i class="mdi mdi-plus"></i>{{'NewSkill' | translate}}
+			</a>
 		</div>
 
 		<div class="con-flex">

@@ -1,11 +1,8 @@
-﻿using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
-
-namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
 {
     public interface IReportSettingsHostView
     {
         void ShowSettings(ReportDetail reportDetail);
-        void SetupFromScheduler(ReportDetail reportDetail);
 	    void ShowSpinningProgress(bool show);
         void SetHeaderText(string text);
         void Unfold();

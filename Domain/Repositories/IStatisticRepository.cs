@@ -39,7 +39,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 			DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset);
 
 		DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources);
-
-		ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date);
 	}
 }

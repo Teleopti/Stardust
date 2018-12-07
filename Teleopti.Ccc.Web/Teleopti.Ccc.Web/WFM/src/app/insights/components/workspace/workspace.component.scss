@@ -18,6 +18,13 @@
 	}
 }
 
+.disabledLink {
+  color: currentColor;
+  cursor: not-allowed;
+  opacity: 0.5;
+  text-decoration: none;
+}
+
 :host ::ng-deep .ant-layout-header,
 :host ::ng-deep .ant-layout-footer {
   background: #fcfcfc;

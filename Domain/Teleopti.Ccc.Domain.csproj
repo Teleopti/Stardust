@@ -170,7 +170,6 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="Analytics\AnalyticsSite.cs" />
-    <Compile Include="Aop\AuditTrailAspect.cs" />
     <Compile Include="Aop\PostActionAuditAspect.cs" />
     <Compile Include="Aop\AuditTrailAttribute.cs" />
     <Compile Include="Aop\IHandleContextAction.cs" />
@@ -1194,7 +1193,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleRange.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleRestrictionStrategy.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleResultDailyValueCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleResultDataExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulerRangeToLoadCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleService.cs" />
@@ -1629,7 +1627,6 @@
     <Compile Include="ApplicationLayer\Scenario\AnalyticsScenarioUpdater.cs" />
     <Compile Include="ApplicationLayer\Absence\AnalyticsAbsenceUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForAllReportableScenariosFilter.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\MainShiftReplaceNotificationEvent.cs" />
     <Compile Include="ApplicationLayer\RequestFactory.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandler.cs" />
@@ -2053,7 +2050,6 @@
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadge.cs" />
-    <Compile Include="Common\BlockToken.cs" />
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ConfigurationManagerExtensions.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
@@ -2414,7 +2410,6 @@
     <Compile Include="Forecasting\Export\SkillExportSelection.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileDateTimeValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileDoubleValueValidator.cs" />
-    <Compile Include="Forecasting\ForecastsFile\ForecastsFileIntegerValueValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsRow.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileConstants.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileSkillNameValidator.cs" />
@@ -2702,7 +2697,6 @@
     <Compile Include="Optimization\MatrixLockers\MatrixNoMainShiftLocker.cs" />
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractor.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractor.cs" />
-    <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixOvertimeLocker.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculator.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainer.cs" />

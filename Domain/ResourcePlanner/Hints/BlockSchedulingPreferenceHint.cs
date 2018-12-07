@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 	{
 		public void FillResult(HintResult hintResult, SchedulePostHintInput input)
 		{
-			var usePreferenes = input.UsePreferences;
-			if (!usePreferenes)
+			var preferencesValue = input.PreferencesValue;
+			if (preferencesValue < 0.01)
 				return;
 			var people = input.People;
 			var period = input.Period;
