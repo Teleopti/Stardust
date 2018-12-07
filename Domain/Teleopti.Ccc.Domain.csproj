@@ -2411,7 +2411,6 @@
     <Compile Include="Forecasting\Export\SkillExportSelection.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileDateTimeValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileDoubleValueValidator.cs" />
-    <Compile Include="Forecasting\ForecastsFile\ForecastsFileIntegerValueValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsRow.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileConstants.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileSkillNameValidator.cs" />
