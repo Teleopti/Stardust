@@ -1,22 +1,19 @@
 <div class="con-row" ng-hide="vm.isDisable">
 	<div class="con-flex ">
-		<div class="wfm-toolbar material-depth-1">
-			<div class="con-row align-row-center">
-				<div class="con-flex">
-					<div class="plan-filter-container">
-						<label for="filter" class="input-icon">
-							<i class="mdi mdi-filter-outline">
-								<input type="text" id="filter" ng-model="vm.filterName.Name" placeholder="{{'FilterPlanGroupSchedulingSetting' | translate}}">
-								<md-tooltip>{{'FilterPlanGroupSchedulingSetting' | translate}}</md-tooltip>
-							</i>
-						</label>
-					</div>
+		<div class="con-row align-row-center">
+			<div class="con-flex">
+				<div class="plan-filter-container">
+					<label for="filter" class="input-icon">
+						<i class="mdi mdi-filter-outline">
+							<input type="text" id="filter" ng-model="vm.filterName.Name" placeholder="{{'FilterPlanGroupSchedulingSetting' | translate}}">
+							<md-tooltip>{{'FilterPlanGroupSchedulingSetting' | translate}}</md-tooltip>
+						</i>
+					</label>
 				</div>
-				<div class="con-flex x3 align-row-center">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateSchedulingSetting()">
-						<i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
-				</div>
-		
+			</div>
+			<div class="con-flex x3 align-row-center">
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateSchedulingSetting()">
+					<i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
 			</div>
 		</div>
 	</div>
