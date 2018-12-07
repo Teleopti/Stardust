@@ -117,6 +117,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.ForEach(a => isolate.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			isolate.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
 			isolate.UseTestDouble<EmptyStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<HandlerTypeMapperForTest>().For<HandlerTypeMapper>();
 			//
 
 			// Database stuff
