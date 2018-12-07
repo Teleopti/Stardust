@@ -1465,6 +1465,7 @@ Global
 		{906CD885-44E7-46B8-BECA-83FD20829532} = {38151FA3-872A-4F4A-8ACA-AC06E64FFD79}
 		{2DD2E616-8405-49DF-A07D-546A8C160117} = {38151FA3-872A-4F4A-8ACA-AC06E64FFD79}
 		{F26B3F93-6FE3-4962-B5DE-E27BC6583029} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
+		{68A028B6-864C-4969-8830-9C3C6BD56A98} = {3927D214-3A04-4289-8083-7F56FADC19FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		RESX_CodeReferences = {"Items":[{"Expression":"\\W($File.$Key)\\W","Extensions":".xaml,.cshtml","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"ResourceManager.GetString\\(\"$Key\"(,.*)?\\)|\\\"xx(x)?($Key)\\\"|StringResourceKey\\.($Key)","Extensions":".cs","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"typeof\\((\\w+\\.)*($File)\\).+\"($Key)\"|\"($Key)\".+typeof\\((\\w+\\.)*($File)\\)","Extensions":".cs12","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"\\W($Key)\\W","Extensions":".vb","IsCaseSensitive":false,"SingleLineComment":"'"},{"Expression":"\\W($File::$Key)\\W","Extensions":".cpp,.c,.hxx,.h","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"&lt;%\\$\\s+Resources:\\s*($File)\\s*,\\s*($Key)\\s*%&gt;","Extensions":".aspx,.ascx,.master","IsCaseSensitive":true,"SingleLineComment":null},{"Expression":"{{'$Key'[\\s]*\\|[\\s]*translate}}","Extensions":".html","IsCaseSensitive":false,"SingleLineComment":null}]}
