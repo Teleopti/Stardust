@@ -50,10 +50,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new System.NotImplementedException();
 		}
-
-		public int GetFactHourlyAvailabilityRowCount(int personPeriodId)
-		{
-			throw new System.NotImplementedException();
-		}
 	}
 }
