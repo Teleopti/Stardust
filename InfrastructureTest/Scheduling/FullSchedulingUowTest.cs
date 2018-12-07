@@ -130,6 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		}
 	}
 	
+	[TestFixture]
 	public class FullSchedulingUowTeamTest : FullSchedulingUowTest
 	{
 		public override void Isolate(IIsolate isolate)
