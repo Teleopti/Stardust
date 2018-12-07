@@ -4,6 +4,7 @@
             <card-panel color="vm.color" ng-show="vm.valData.preValidation.length > 0">
                 <card-panel-header>
                     <md-progress-linear ng-if="vm.valLoading" class="pp-validation-progress" md-mode="indeterminate"></md-progress-linear>
+					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                     <div class="header-flex">
                         <b>{{'PreSchedulingValidationIssues' | translate}} </b>
                     </div>
@@ -58,6 +59,7 @@
             </card-panel>
             <card-panel color="vm.color" ng-show="vm.valData.scheduleIssues.length > 0">
                 <card-panel-header>
+					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                     <div class="header-flex">
                         <b>{{'ScheduledIssues' | translate}}</b>
                     </div>

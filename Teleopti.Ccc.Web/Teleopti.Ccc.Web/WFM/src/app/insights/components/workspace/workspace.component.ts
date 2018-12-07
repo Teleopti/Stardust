@@ -14,6 +14,7 @@ export class WorkspaceComponent implements OnInit {
 	@Input() isLoading: boolean;
 	@Input() hasViewPermission: boolean;
 	@Input() hasEditPermission: boolean;
+	@Input() hasDeletePermission: boolean;
 	@Input() reportNameCriteria: string;
 
 	public reports: Report[];
@@ -34,6 +35,7 @@ export class WorkspaceComponent implements OnInit {
 		this.reportSvc.getPermission().then(permission => {
 			this.hasViewPermission = permission.CanViewReport;
 			this.hasEditPermission = permission.CanEditReport;
+			this.hasDeletePermission = permission.CanDeleteReport;
 
 			if (this.hasViewPermission || this.hasEditPermission) {
 				this.loadReportList();

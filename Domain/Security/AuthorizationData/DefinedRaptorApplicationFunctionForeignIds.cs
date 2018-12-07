@@ -183,7 +183,7 @@
 
 		// Insights
 		public const string Insights = "0163";
-		public const string ViewInsightsReport = "0164";
+		public const string DeleteInsightsReport = "0164";
 		public const string EditInsightsReport = "0165";
 	}
 }

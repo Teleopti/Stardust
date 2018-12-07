@@ -47,7 +47,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Hangfire
 
 			var result = Target.BuildStatistics().JobFailures;
 
-			result.Single().Type.Should().Be("TestHandler got TestEvent");
+			result.Single().Type.Should().Be("HangfireJobFailuresTest+TestHandler got TestEvent");
 			result.Single().Count.Should().Be(1);
 		}
 		

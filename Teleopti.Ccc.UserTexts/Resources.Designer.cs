@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -3781,6 +3781,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to General Audit Trail.
+        /// </summary>
+        public static string AuditTrailGeneralAuditTrailReport {
+            get {
+                return ResourceManager.GetString("AuditTrailGeneralAuditTrailReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import staffing.
         /// </summary>
         public static string AuditTrailImportStaffing {
@@ -3844,11 +3853,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audit Trail.
+        /// </summary>
+        public static string AuditTrailReportGroup {
+            get {
+                return ResourceManager.GetString("AuditTrailReportGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Role.
         /// </summary>
         public static string AuditTrailRole {
             get {
                 return ResourceManager.GetString("AuditTrailRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search filter.
+        /// </summary>
+        public static string AuditTrailSearchFilter {
+            get {
+                return ResourceManager.GetString("AuditTrailSearchFilter", resourceCulture);
             }
         }
         
@@ -9592,6 +9619,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DeleteGroupPage {
             get {
                 return ResourceManager.GetString("DeleteGroupPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete report.
+        /// </summary>
+        public static string DeleteInsightsReport {
+            get {
+                return ResourceManager.GetString("DeleteInsightsReport", resourceCulture);
             }
         }
         
@@ -39186,15 +39222,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ViewHistory {
             get {
                 return ResourceManager.GetString("ViewHistory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View report.
-        /// </summary>
-        public static string ViewInsightsReport {
-            get {
-                return ResourceManager.GetString("ViewInsightsReport", resourceCulture);
             }
         }
         

@@ -3,9 +3,7 @@
 
 	angular
 		.module('wfm.resourceplanner')
-		.controller('planningGroupSettingOverviewController', overviewController)
-		.controller('schedulingSettingDirectiveOverviewController', directiveController)
-		.directive('schedulingSetting', dayoffRulesDirective);
+		.controller('planningGroupSettingOverviewController', overviewController);
 
 	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'PlanGroupSettingService', 'planningGroupInfo', 'schedulingSettingInfo', 'localeLanguageSortingService'];
 
@@ -17,6 +15,7 @@
 		vm.selectedSchedulingSetting = {};
 		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
+		vm.planningGroupId = planningGroupInfo.Id;
 		vm.planningGroupName = planningGroupInfo.Name;
 		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", planningGroupInfo.Name);
 		vm.getSchedulingSettingInfo = getSchedulingSettingInfo;
@@ -60,10 +59,10 @@
 		}
 
 		function setColor(index) {
-			if (index == 0) {
-				var opacity = 0.05;
-			}
 			var opacity = 1 - index / vm.schedulingSetting.length;
+			if (index === 0) {
+				opacity = 0.05;
+			}
 			return {
 				'border-left': '10px solid rgba(156, 39, 176,' + opacity.toFixed(2) + ')'
 			}
@@ -76,7 +75,7 @@
 		}
 
 		function deleteSchedulingSetting() {
-			if (vm.selectedSchedulingSetting.Default == true || vm.requestSent)
+			if (vm.selectedSchedulingSetting.Default || vm.requestSent)
 				return;
 			if (!vm.requestSent) {
 				vm.requestSent = true;
@@ -98,14 +97,13 @@
 		}
 
 		function goCreateSchedulingSetting() {
-			$state.go('resourceplanner.newsetting', {
-				groupId: $stateParams.groupId,
-				groupName: vm.planningGroupName
+			$state.go('resourceplanner.editsetting', {
+				groupId: $stateParams.groupId
 			});
 		}
 
 		function setHigherPriority(setting, index) {
-			if (setting.Priority == vm.schedulingSetting[0].Priority)
+			if (setting.Priority === vm.schedulingSetting[0].Priority)
 				return;
 			addAnimate(index);
 			switchPrio(setting, vm.schedulingSetting[index - 1]);
@@ -144,9 +142,7 @@
 		}
 
 		function disableButton(index) {
-			if (index < vm.schedulingSetting.length - 2)
-				return false;
-			return true;
+			return index >= vm.schedulingSetting.length - 2;
 		}
 
 		function persist(setting) {
@@ -173,53 +169,5 @@
 				Priority: setting.Priority
 			});
 		}
-	}
-
-	function directiveController($state, $stateParams, $translate, PlanGroupSettingService, localeLanguageSortingService) {
-		var vm = this;
-
-		vm.schedulingSetting = [];
-		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", vm.planningGroup.Name);
-		vm.color = {
-			render: 'linear',
-			rgba: 'rgba(156, 39, 176, 1)'
-		}
-
-		getDayOffRules();
-
-		function getDayOffRules() {
-			return PlanGroupSettingService.getSettingsByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
-				vm.schedulingSetting = data.sort(localeLanguageSortingService.localeSort('-Priority', '-Default', '+Name'));
-				return getBlockSchedulingSetting();
-			});
-		}
-
-		function getBlockSchedulingSetting() {
-			return vm.schedulingSetting.forEach(function (item) {
-				if (item.BlockFinderType > 0) {
-					if (item.BlockFinderType == 1) {
-						item.BlockSchedulingSetting = $translate.instant('BlockScheduling') + " (" + $translate.instant('BlockFinderTypeBetweenDayOff') + ")";
-					} else {
-						item.BlockSchedulingSetting = $translate.instant('BlockScheduling') + " (" + $translate.instant('BlockFinderTypeSchedulePeriod') + ")";
-					}
-				} else {
-					item.BlockSchedulingSetting = $translate.instant('IndividualFlexible') + " (" + $translate.instant('Default') + ")";
-				}
-			});
-		}
-	}
-
-	function dayoffRulesDirective() {
-		var directive = {
-			restrict: 'EA',
-			scope: {
-				isDisable: '=',
-				planningGroup: '='
-			},
-			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',
-			controller: 'schedulingSettingDirectiveOverviewController as vm',
-			bindToController: true
-		};
-		return directive;
 	}
 })();

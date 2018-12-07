@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		{
 			hideIfNotLicensed(functions,
 				DefinedRaptorApplicationFunctionForeignIds.Insights,
-				DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport,
+				DefinedRaptorApplicationFunctionForeignIds.DeleteInsightsReport,
 				DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
 
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Insights_78059,
 				DefinedRaptorApplicationFunctionForeignIds.Insights,
-				DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport,
+				DefinedRaptorApplicationFunctionForeignIds.DeleteInsightsReport,
 				DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
 		}
 

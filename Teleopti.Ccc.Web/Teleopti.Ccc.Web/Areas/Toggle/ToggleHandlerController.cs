@@ -3,6 +3,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.Web.Areas.Toggle
 {
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]
 		/// ]]>
 		/// </summary>
-		[HttpGet, Route("ToggleHandler/IsEnabled")]
+		[HttpGet, Route("ToggleHandler/IsEnabled"), CacheFilterHttp]
 		public IHttpActionResult IsEnabled(Toggles toggle)
 		{
 			return Ok(new ToggleEnabledResult
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		/// [web]/ToggleHandler/AllToggles
 		/// ]]>
 		/// </summary>
-		[HttpGet, Route("ToggleHandler/AllToggles")]
+		[HttpGet, Route("ToggleHandler/AllToggles"), CacheFilterHttp]
 		public IHttpActionResult AllToggles()
 		{
 			var dic = _togglesActive.AllActiveToggles()

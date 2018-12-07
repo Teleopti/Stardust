@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			var typeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}";
 			if (!persistedNameForTypeName.TryGetValue(typeName, out var persistedName))
-				throw new ArgumentException($"{handlerType.FullName} is not mapped");
+				throw new ArgumentException($"{typeName} is not mapped");
 			return persistedName;
 
 			//return $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}";
@@ -563,23 +563,19 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			yield return new mappingSpec
 			{
 				CurrentPersistedName = "TestHandler9",
-				LegacyPersistedNames = new[]
-				{
-					"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AHandler, Teleopti.Ccc.InfrastructureTest",
-					"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AHandler, Teleopti.Ccc.InfrastructureTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
-				},
+				LegacyPersistedNames = new[]{"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AHandler, Teleopti.Ccc.InfrastructureTest"},
 				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AHandler, Teleopti.Ccc.InfrastructureTest"
 			};
 			yield return new mappingSpec
 			{
 				CurrentPersistedName = "TestHandler10",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AspectedHandler, Teleopti.Ccc.InfrastructureTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"},
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AspectedHandler, Teleopti.Ccc.InfrastructureTest"},
 				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AspectedHandler, Teleopti.Ccc.InfrastructureTest"
 			};
 			yield return new mappingSpec
 			{
 				CurrentPersistedName = "TestHandler11",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AnotherHandler, Teleopti.Ccc.InfrastructureTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"},
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AnotherHandler, Teleopti.Ccc.InfrastructureTest"},
 				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AnotherHandler, Teleopti.Ccc.InfrastructureTest"
 			};
 			yield return new mappingSpec
@@ -590,7 +586,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			yield return new mappingSpec
 			{
 				CurrentPersistedName = "TestHandler13",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventShortNameSerializationTest+FakeHandler, Teleopti.Ccc.InfrastructureTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"},
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventShortNameSerializationTest+FakeHandler, Teleopti.Ccc.InfrastructureTest"},
 				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventShortNameSerializationTest+FakeHandler, Teleopti.Ccc.InfrastructureTest"
 			};
 			yield return new mappingSpec
@@ -652,6 +648,23 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				CurrentPersistedName = "TestHandler23",
 				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireSerializeEventPublishingTest+TestHandler, Teleopti.Ccc.InfrastructureTest"
+			};
+			yield return new mappingSpec
+			{
+				CurrentPersistedName = "TestHandler24",
+				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.MultiEventPublishingTest+HangfireEventHandler, Teleopti.Ccc.InfrastructureTest"
+			};
+			
+			
+			yield return new mappingSpec
+			{
+				CurrentPersistedName = "HangfireJobFailuresTest+TestHandler",
+				CurrentTypeName = "Teleopti.Wfm.Administration.IntegrationTest.Hangfire.HangfireJobFailuresTest+TestHandler, Teleopti.Wfm.Administration.IntegrationTest"
+			};
+			yield return new mappingSpec
+			{
+				CurrentPersistedName = "HangfireJobPerformanceTest+TestHandler",
+				CurrentTypeName = "Teleopti.Wfm.Administration.IntegrationTest.Hangfire.HangfireJobPerformanceTest+TestHandler, Teleopti.Wfm.Administration.IntegrationTest"
 			};
 		}
 	}
