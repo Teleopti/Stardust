@@ -88,38 +88,18 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			Assert.That(result.DialogueMessages.First(m => m.Text.Equals("the reply")).SenderId, Is.EqualTo(_loggedOnUser.CurrentUser().Id));
 		}
 
-		[Test]
-		public void CanSendNewPushMessageToLoggedOnUser()
-		{
-			var title = "title of the message";
-			var body = "body of the message";
-			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
-			var target = CreateTarget(pushMessageDialogueRepository);
-			pushMessageDialogueRepository.Expect(pm => pm.Add(null)).IgnoreArguments().WhenCalled(p =>
-				                                                                   {
-					                                                                   var theDialogueThatHasBeenCreated = (IPushMessageDialogue) p.Arguments[0];
-																											 Assert.That(theDialogueThatHasBeenCreated.Receiver,Is.EqualTo(_loggedOnUser.CurrentUser()));
-																											 Assert.That(theDialogueThatHasBeenCreated.PushMessage.GetMessage(new NoFormatting()),Is.EqualTo(body));
-																											 Assert.That(theDialogueThatHasBeenCreated.PushMessage.GetTitle(new NoFormatting()),Is.EqualTo(title));
-																											 Assert.That(theDialogueThatHasBeenCreated.PushMessage.ReplyOptions,Is.Not.Empty);
-																										 }).Repeat.Once();
-
-			target.SendNewPushMessageToLoggedOnUser(title,body);
-			pushMessageDialogueRepository.VerifyAllExpectations();
-		}
-
 		private PushMessageDialoguePersister CreateTargetWithDialogueInRepository(IPushMessageDialogue dialogue)
 		{
 			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
 			pushMessageDialogueRepository.Stub(x => x.Get((Guid)dialogue.Id)).Return(dialogue);
-			return CreateTarget(pushMessageDialogueRepository, MockRepository.GenerateMock<IPushMessageRepository>());
+			return CreateTarget(pushMessageDialogueRepository);
 		}
 		
-		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository pushMessageDialogueRepository,IPushMessageRepository pushMessageRepository = null)
+		private PushMessageDialoguePersister CreateTarget(IPushMessageDialogueRepository pushMessageDialogueRepository)
 		{
 			var user = new Person().WithId();
 			_loggedOnUser = new FakeLoggedOnUser(user);
-			return new PushMessageDialoguePersister(pushMessageDialogueRepository, _loggedOnUser, pushMessageRepository ?? MockRepository.GenerateMock<IPushMessageRepository>(), _personNameProvider, new FakeUserTimeZone()); 
+			return new PushMessageDialoguePersister(pushMessageDialogueRepository, _loggedOnUser, _personNameProvider, new FakeUserTimeZone()); 
 		}
 	}
 }
