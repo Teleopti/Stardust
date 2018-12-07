@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var agent = new Person().WithId()
 				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(date);
-			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
+			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 0)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
  
 			result.Count().Should().Be.EqualTo(1);
 			
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 				.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(date);
 			
-			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
+			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 0)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
  
 			result.Count().Should().Be.EqualTo(0);
 		}
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					.WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null)
 				.WithSchedulePeriodOneWeek(date);
 			
-			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 0)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
 				.Should().Be.Empty();
 		}
 		
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			var result = Target
 				.Execute(new ScheduleHintInput(new[] {agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1),
-					false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
+					0)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)));
 			
 			HintsHelper.BuildErrorMessage(result.First().ValidationErrors.Single(x=>x.ErrorResource==nameof(Resources.ShiftsInShiftBagCanNotFulFillOverriddenTargetTime)), UserTimeZone.Make())
 				.Should()
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			shiftBag.SetDeleted();
 			
 			var agent = new Person().WithId().WithPersonPeriod(shiftBag, contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null).WithSchedulePeriodOneWeek(date);
-			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint))).Should().Be.Empty();
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 0)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint))).Should().Be.Empty();
  
 		}
 		
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId().WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null).WithSchedulePeriodOneWeek(date);
  
-			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint))).Should().Be.Empty();
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 0)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint))).Should().Be.Empty();
 		}
 		
 		[Test]
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId().WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), contract, new ContractScheduleWorkingMondayToFriday(),new PartTimePercentage("_") , null).WithSchedulePeriodOneWeek(date);
 			
-			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 0)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
 				.Should().Be.Empty();
 		}
 
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("_"), new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId().WithPersonPeriod(new RuleSetBag(ruleSet).WithId(), new Contract("_"), new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), null);
 
-			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), false)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
+			Target.Execute(new ScheduleHintInput(new[] { agent }, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 0)).InvalidResources.Where(x => x.ValidationTypes.Contains(typeof(PersonContractShiftBagHint)))
 				.Should().Be.Empty();
 		}
 

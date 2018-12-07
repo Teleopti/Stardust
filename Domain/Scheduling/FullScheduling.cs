@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly SchedulingCommandHandler _schedulingCommandHandler;
 		private readonly IPersonRepository _personRepository;
 		private readonly SchedulingInformationProvider _schedulingInformationProvider;
-		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_personRepository = personRepository;
 			_schedulingInformationProvider = schedulingInformationProvider;
-			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_fullSchedulingResult = fullSchedulingResult;
 		}
 
@@ -34,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public FullSchedulingResultModel DoSchedulingAndDO(Guid planningPeriodId, bool runDayOffOptimization = true)
 		{			
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
-			var schedulingOptions = _schedulingOptionsProvider.Fetch(null);
 			var agents = LoadAgents(schedulingInformation.Period, schedulingInformation.PersonIds).ToArray();
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
@@ -45,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				PlanningPeriodId = planningPeriodId,
 				RunDayOffOptimization = runDayOffOptimization
 			});
-			return _fullSchedulingResult.Create(schedulingInformation.Period, agents, planningPeriodId, schedulingOptions.UsePreferences);
+			return _fullSchedulingResult.Create(schedulingInformation.Period, agents, planningPeriodId);
 		}
 
 		[TestLog]
