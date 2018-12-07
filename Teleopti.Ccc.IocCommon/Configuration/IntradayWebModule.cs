@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayForecastingService>();
 			builder.RegisterType<IntradayReforecastingService>();
 			builder.RegisterType<IntradayStatisticsService>();
-			builder.RegisterType<IntradayStaffingService>();
+			builder.RegisterType<IntradayStaffingService>().As<IIntradayStaffingService>();
 		}
 	}
 }

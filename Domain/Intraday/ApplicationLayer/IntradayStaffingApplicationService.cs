@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 		private readonly IntradayReforecastingService _reforecastingService;
 		private readonly IntradayForecastingService _forecastingService;
-		private readonly IntradayStaffingService _staffingService;
+		private readonly IIntradayStaffingService _staffingService;
 
 		public IntradayStaffingApplicationService(
 			INow now,
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			IEmailBacklogProvider emailBacklogProvider,
 			IntradayForecastingService forecastingService,
 			IntradayReforecastingService reforecastingService,
-			IntradayStaffingService staffingService
+			IIntradayStaffingService staffingService
 			)
 		{
 			_now = now;

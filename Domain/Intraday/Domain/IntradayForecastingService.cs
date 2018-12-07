@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
 		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
-		private readonly IntradayStaffingService _staffingService;
+		private readonly IIntradayStaffingService _staffingService;
 
 		public IntradayForecastingService(
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IStaffingCalculatorServiceFacade staffingCalculatorService,
 			ISkillStaffingIntervalProvider skillStaffingIntervalProvider,
-			IntradayStaffingService staffingService
+			IIntradayStaffingService staffingService
 			)
 		{
 			_intervalLengthFetcher = intervalLengthFetcher ?? throw new ArgumentNullException(nameof(intervalLengthFetcher));

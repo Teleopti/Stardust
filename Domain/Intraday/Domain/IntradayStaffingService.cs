@@ -11,7 +11,25 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Intraday.Domain
 {
-	public class IntradayStaffingService
+	public interface IIntradayStaffingService
+	{
+		IList<SkillStaffingIntervalLightModel> GetScheduledStaffing(
+			Guid[] skillIdList, 
+			DateTime fromUtc, 
+			DateTime toUtc,
+			TimeSpan resolution, 
+			bool useShrinkage);
+
+		IList<StaffingInterval> GetRequiredStaffing(
+			IList<SkillIntervalStatistics> actualStatistics,
+			IList<ISkill> skills,
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
+			IList<StaffingInterval> forecastedStaffingIntervals,
+			TimeSpan resolution, IList<SkillDayStatsRange> skillDayStatsRange,
+			Dictionary<Guid, int> workloadBacklog);
+	}
+
+	public class IntradayStaffingService : IIntradayStaffingService
 	{
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
