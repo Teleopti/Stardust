@@ -20,7 +20,6 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private readonly IJsonEventSerializer _serializer;
 		private readonly IScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
-		private readonly ILog log = LogManager.GetLogger(typeof(AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency));
 
 		public AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency(
 			INow now,

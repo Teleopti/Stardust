@@ -72,8 +72,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			Thread.CurrentThread.CurrentUICulture = person.PermissionInformation.UICulture().FixPersianCulture();
 			Thread.CurrentThread.CurrentCulture = person.PermissionInformation.Culture().FixPersianCulture();
 
-			var toggleQuerier = new ToggleQuerier(ConfigurationManager.AppSettings["ReportServer"]);
-
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();

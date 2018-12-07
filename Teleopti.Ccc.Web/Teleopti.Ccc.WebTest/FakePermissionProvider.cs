@@ -54,11 +54,6 @@ namespace Teleopti.Ccc.WebTest
 							&& data.Date == date);
 		}
 
-		public bool HasNoPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person)
-		{
-			return false;
-		}
-
 		public bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team)
 		{
 			return true;

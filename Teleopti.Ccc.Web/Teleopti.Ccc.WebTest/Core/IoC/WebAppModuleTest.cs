@@ -88,13 +88,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 		}
 
-		private ILifetimeScope buildContainer(Toggles toggle, bool value)
-		{
-			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
-			return buildContainer(toggleManager);
-		}
-
 		private ILifetimeScope buildContainer()
 		{
 			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader())));
