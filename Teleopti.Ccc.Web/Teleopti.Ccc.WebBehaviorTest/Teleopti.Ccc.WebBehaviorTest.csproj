@@ -116,6 +116,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIResponseStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ApprovedPeriodsStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\QueueSourceDefinitions.cs" />
     <Compile Include="Bindings\Generic\RuleStepDefinitions.cs" />
@@ -132,6 +133,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequestViewShowingMultipleShifts.feature</DependentUpon>
+    </Compile>
+    <Compile Include="APIResponse.feature.cs">
+      <DependentUpon>APIResponse.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Wfm\Authentication\AuthenticationStepDefinition.cs" />
     <Compile Include="Wfm\Authentication\Authentication.feature.cs">
@@ -1085,6 +1091,10 @@
     <None Include="MyTime\TeamScheduleWithFilterAndPagingFunction.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamScheduleWithFilterAndPagingFunction.feature.cs</LastGenOutput>
+    </None>
+    <None Include="APIResponse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>APIResponse.feature.cs</LastGenOutput>
     </None>
     <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
