@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild, TemplateRef } from '@angular/core'
 import { ReportService } from '../../core/report.service';
 import { NavigationService } from '../../core/navigation.service';
 import { Report } from '../../models/Report.model';
+import { Permission } from '../../models/Permission.model';
 import { NzModalService, NzModalRef } from 'ng-zorro-antd';
 
 @Component({
@@ -10,14 +11,12 @@ import { NzModalService, NzModalRef } from 'ng-zorro-antd';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-	@Input() initialized: boolean;
-	@Input() isLoading: boolean;
-	@Input() hasViewPermission: boolean;
-	@Input() hasEditPermission: boolean;
-	@Input() hasDeletePermission: boolean;
-	@Input() reportNameCriteria: string;
+	public initialized: boolean;
+	public isLoading: boolean;
+	public reportNameCriteria: string;
 
 	public reports: Report[];
+	public permission: Permission;
 	public newReportName: string = undefined;
 	public messageForNewReportName = '';
 	public refNewReportNameModal: NzModalRef;
@@ -33,11 +32,9 @@ export class WorkspaceComponent implements OnInit {
 
 	ngOnInit() {
 		this.reportSvc.getPermission().then(permission => {
-			this.hasViewPermission = permission.CanViewReport;
-			this.hasEditPermission = permission.CanEditReport;
-			this.hasDeletePermission = permission.CanDeleteReport;
+			this.permission = permission;
 
-			if (this.hasViewPermission || this.hasEditPermission) {
+			if (this.permission.CanViewReport) {
 				this.loadReportList();
 			}
 
@@ -88,7 +85,7 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	public confirmCloneReport(report) {
-		this.messageForNewReportName = `Please input name for clone of report "${report.Name}":`;
+		this.messageForNewReportName = `Please input name for new copy of report "${report.Name}":`;
 		this.refNewReportNameModal = this.modalSvc.create({
 			nzTitle: 'Clone report',
 			nzContent: this.newReportNameTempRef,

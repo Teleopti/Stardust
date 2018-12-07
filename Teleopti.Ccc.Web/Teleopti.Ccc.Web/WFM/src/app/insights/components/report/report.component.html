@@ -8,21 +8,21 @@
           <div nz-col nz-left nzSpan="6">
             <button nz-button nzType="primary" onclick="window.history.back();"><i nz-icon type="left" theme="outline"></i> Back</button>
           </div>
-          <div nz-col nz-left nzSpan="6" *ngIf="!inEditing">
+          <div nz-col nz-left nzSpan="6" *ngIf="permission.CanEditReport && !inEditing">
             <button nz-button nzType="primary" (click)="nav.editReport(report)"><i nz-icon type="edit" theme="outline"></i> Edit</button>
           </div>
-          <div nz-col nz-left nzSpan="6" *ngIf="!inEditing">
-            <button nz-button nzType="primary" (click)="confirmCloneReport()"><i nz-icon type="copy" theme="outline"></i> Duplicate</button>
+          <div nz-col nz-left nzSpan="6" *ngIf="permission.CanEditReport && !inEditing">
+            <button nz-button nzType="primary" (click)="confirmCloneReport()"><i nz-icon type="copy" theme="outline"></i> Save as new...</button>
           </div>
-          <div nz-col nz-left nzSpan="6" *ngIf="!inEditing">
+          <div nz-col nz-left nzSpan="6" *ngIf="permission.CanDeleteReport && !inEditing">
             <button nz-button nzType="primary" nz-popconfirm nzPlacement="bottomRight" nzTitle="Are you sure to delete this report?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteReport(report)"><i nz-icon type="delete" theme="outline"></i> Delete</button>
           </div>
-          <div nz-col nz-left nzSpan="6" *ngIf="inEditing">
+          <div nz-col nz-left nzSpan="6" *ngIf="permission.CanEditReport && inEditing">
             <button nz-button nzType="primary" (click)="nav.viewReport(report)"><i nz-icon type="undo" theme="outline"></i> Cancel</button>
           </div>
           <nz-modal [(nzVisible)]="isConfirmingClone" nzTitle="Clone report"
                     (nzOnCancel)="cancelCloneReport()" (nzOnOk)="cloneReport(report)">
-            <h4><i nz-icon type="info-circle" theme="outline"></i>Please input name for clone of report "{{report.Name}}"</h4>
+            <p>Please input name for new copy of report "{{report.Name}}":</p>
             <div><input type="text" nz-input placeholder="New report name..." [(ngModel)]="newReportName"></div>
           </nz-modal>
         </div>
@@ -30,7 +30,7 @@
       <nz-content>
         <div style="text-align: center;"><nz-spin *ngIf="isProcessing"></nz-spin></div>
         <div class="panel con-flex material-depth-1">
-          <div id="reportContainer" style="height:850px;"></div>
+          <div id="reportContainer" style="height:75vh;"></div>
         </div>
       </nz-content>
     </nz-layout>

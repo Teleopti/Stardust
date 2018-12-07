@@ -24,25 +24,28 @@
 			<div style="text-align: center;"><nz-spin *ngIf="isLoading"></nz-spin></div>
 			<nz-list *ngIf="initialized" [nzDataSource]="this.reports" [nzRenderItem]="item" class="report-list">
 				<ng-template #item let-item>
-					<nz-list-item [nzContent]="viewAction" [nzActions]="[editAction,cloneAction,deleteAction]"></nz-list-item>
-					<ng-template #viewAction>
+					<nz-list-item [nzContent]="reportName" [nzActions]="[editAction,cloneAction,deleteAction]"></nz-list-item>
+					<ng-template #reportName>
 						<a (click)="nav.viewReport(item)"><strong>{{item.Name}}</strong></a>
 					</ng-template>
 					<ng-template #editAction>
-						<a (click)="nav.editReport(item)"><i nz-icon type="edit" theme="outline"></i> Edit</a>
+						<a (click)="nav.editReport(item)" *ngIf="permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i> Edit</a>
+						<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i> Edit</span>
 					</ng-template>
 					<ng-template #cloneAction>
-						<a (click)="confirmCloneReport(item)"><i nz-icon type="copy" theme="outline"></i> Duplicate</a>
+						<a (click)="confirmCloneReport(item)" *ngIf="permission.CanEditReport"><i nz-icon type="copy" theme="outline"></i> Save as new...</a>
+						<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="copy" theme="outline"></i> Save as new...</span>
 					</ng-template>
 					<ng-template #deleteAction>
-						<a nz-popconfirm nzTitle="Are you sure to delete this report?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteReport(item)">
+						<a nz-popconfirm nzTitle="Are you sure to delete this report?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteReport(item)" *ngIf="permission.CanDeleteReport">
 							<i nz-icon type="delete" theme="outline"></i> Delete
 						</a>
+						<span class="disabledLink" *ngIf="!permission.CanDeleteReport"><i nz-icon type="delete" theme="outline"></i> Delete</span>
 					</ng-template>
 				</ng-template>
 			</nz-list>
 			<nz-alert
-				[hidden]="!initialized || hasViewPermission" 
+				[hidden]="!initialized || permission.CanViewReport" 
 				nzType="error"
 				nzMessage="Error"
 				nzDescription="You have no permission to view Insights report."
