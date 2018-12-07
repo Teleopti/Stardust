@@ -2051,7 +2051,6 @@
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadge.cs" />
-    <Compile Include="Common\BlockToken.cs" />
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ConfigurationManagerExtensions.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
