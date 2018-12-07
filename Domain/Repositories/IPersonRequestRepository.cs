@@ -101,8 +101,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<IPersonRequest> Find(IEnumerable<Guid> id);
 
-		IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T: Request;
-
 		IPersonRequest FindPersonRequestByRequestId(Guid value);
 
 		IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status);
