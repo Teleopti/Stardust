@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
     {
         IList<DateOnly> DaysOffRemoved(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, bool considerWeekBefore);
         IList<DateOnly> DaysOffAdded(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, bool considerWeekBefore);
-        IList<DateOnly> DayOffChanges(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, bool considerWeekBefore);
     }
 
     public class LockableBitArrayChangesTracker : ILockableBitArrayChangesTracker
@@ -50,19 +49,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             }
 
             return movedDays;
-        }
-
-        public IList<DateOnly> DayOffChanges(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, bool considerWeekBefore)
-        {
-            var added = DaysOffAdded(workingBitArray, originalBitArray, matrix, considerWeekBefore);
-            var removed = DaysOffRemoved(workingBitArray, originalBitArray, matrix, considerWeekBefore);
-
-            foreach (var dateOnly in added)
-            {
-              removed.Add(dateOnly);  
-            }
-            
-            return removed;
         }
 
         public static IList<int> DayOffRemovedIndexChanges(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray)

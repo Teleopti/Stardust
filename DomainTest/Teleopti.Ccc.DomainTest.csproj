@@ -757,7 +757,6 @@
     <Compile Include="DayOffPlanning\FreeWeekendValidatorTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendDayValidatorTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendValidatorTest.cs" />
-    <Compile Include="DayOffPlanning\LockableBitArrayChangesTrackerTest.cs" />
     <Compile Include="DayOffPlanning\LockableBitArrayTest.cs" />
     <Compile Include="DayOffPlanning\MatrixRestrictionLockerTest.cs" />
     <Compile Include="DayOffPlanning\MoveOneDayOffDecisionMakerTest.cs" />
