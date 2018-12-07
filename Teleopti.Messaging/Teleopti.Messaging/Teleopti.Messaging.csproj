@@ -106,9 +106,6 @@
     <Compile Include="Exceptions\BrokerNotInstantiatedException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Exceptions\NotInterfaceTypeException.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Client\SignalR\SignalRSender.cs" />
     <Compile Include="Client\Composite\DoNotSend.cs" />
     <Compile Include="Client\SignalR\IStateAccessor.cs" />
