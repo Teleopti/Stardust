@@ -16,7 +16,7 @@
 					</ng-template>
 				</div>
 				<div nz-col nz-left nzSpan="16">
-					<button nz-button nzType="primary"><i nz-icon type="plus-circle" theme="outline"></i> New Report</button>
+					<button nz-button nzType="primary" *ngIf="initialized && permission.CanEditReport" (click)="confirmCreateReport()"><i nz-icon type="plus-circle" theme="outline"></i> New Report</button>
 				</div>
 			</div>
 		</nz-header>

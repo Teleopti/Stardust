@@ -45,14 +45,7 @@ export class WorkspaceComponent implements OnInit {
 	loadReportList() {
 		this.isLoading = true;
 		this.reportSvc.getReports().then(reports => {
-			this.reports = [];
-			reports.forEach(report => {
-				if (report.Name.trim() !== 'Report Usage Metrics Report') {
-					this.reports.push(report);
-				}
-			});
-
-			this.reports = this.reports.sort();
+			this.reports = reports.sort();
 			this.isLoading = false;
 		});
 	}
@@ -61,8 +54,29 @@ export class WorkspaceComponent implements OnInit {
 		return <HTMLElement>document.getElementById('reportContainer');
 	}
 
-	cancelCloneReport(): void {
+	cancelCreateReport(): void {
 		this.refNewReportNameModal.destroy();
+		this.newReportName = undefined;
+	}
+
+	createReport(): boolean {
+		if (!this.newReportName || this.newReportName.trim().length === 0) {
+			return false;
+		}
+
+		if (this.refNewReportNameModal !== undefined) {
+			this.refNewReportNameModal.destroy();
+		}
+
+		this.isLoading = true;
+		this.reportSvc.createReport(this.newReportName).then((newReport) => {
+			this.nav.editReport({
+				Id: newReport.ReportId,
+				Name: newReport.ReportName,
+			});
+			return true;
+		});
+
 		this.newReportName = undefined;
 	}
 
@@ -84,13 +98,23 @@ export class WorkspaceComponent implements OnInit {
 		this.newReportName = undefined;
 	}
 
+	public confirmCreateReport(report) {
+		this.messageForNewReportName = `Please input name for new report:`;
+		this.refNewReportNameModal = this.modalSvc.create({
+			nzTitle: 'Create new report',
+			nzContent: this.newReportNameTempRef,
+			nzOnOk: () => this.createReport(),
+			nzOnCancel: () => this.cancelCreateReport()
+		});
+	}
+
 	public confirmCloneReport(report) {
 		this.messageForNewReportName = `Please input name for new copy of report "${report.Name}":`;
 		this.refNewReportNameModal = this.modalSvc.create({
-			nzTitle: 'Clone report',
+			nzTitle: 'Save as new report',
 			nzContent: this.newReportNameTempRef,
 			nzOnOk: () => this.cloneReport(report),
-			nzOnCancel: () => this.cancelCloneReport()
+			nzOnCancel: () => this.cancelCreateReport()
 		});
 	}
 

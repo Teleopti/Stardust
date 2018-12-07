@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 	{
 		Task<ReportModel[]> GetReports();
 		Task<EmbedReportConfig> GetReportConfig(string reportId);
+		Task<EmbedReportConfig> CreateReport(string newReportName);
 		Task<EmbedReportConfig> CloneReport(string reportId, string newReportName);
 		Task<bool> DeleteReport(string reportId);
 	}
