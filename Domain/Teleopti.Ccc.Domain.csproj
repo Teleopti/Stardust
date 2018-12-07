@@ -170,7 +170,6 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="Analytics\AnalyticsSite.cs" />
-    <Compile Include="Aop\AuditTrailAspect.cs" />
     <Compile Include="Aop\PostActionAuditAspect.cs" />
     <Compile Include="Aop\AuditTrailAttribute.cs" />
     <Compile Include="Aop\IHandleContextAction.cs" />
