@@ -370,34 +370,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().LogonName.Should().Be.EqualTo(userCode);
 			result.First().MatchField.Should().Be.EqualTo(IdentityMatchField.ExternalLogon);
 		}
-
-		private ISkill[] createAndPersistSkills()
-		{
-			var type = SkillTypeFactory.CreateSkillType();
-			PersistAndRemoveFromUnitOfWork(type);
-
-			var activity = new Activity("test");
-			PersistAndRemoveFromUnitOfWork(activity);
-
-			var phone = SkillFactory.CreateSkill("Phone", type, 15);
-			phone.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
-			phone.Activity = activity;
-			PersistAndRemoveFromUnitOfWork(phone);
-
-			var chat = SkillFactory.CreateSkill("Chat", type, 15);
-			chat.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
-			chat.Activity = activity;
-			PersistAndRemoveFromUnitOfWork(chat);
-
-			var email = SkillFactory.CreateSkill("Email", type, 15);
-			email.TimeZone = TimeZoneInfo.GetSystemTimeZones()[1];
-			email.Activity = activity;
-			PersistAndRemoveFromUnitOfWork(email);
-
-
-			return new[] { phone, chat, email };
-		}
-
+		
 		private void createAndSaveReadModel()
 		{
 			var buid = CurrentBusinessUnit.Make().Current().Id.GetValueOrDefault();
