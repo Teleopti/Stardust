@@ -13,6 +13,9 @@
 </head>
 
 <body ontouchstart="">
+	<div id="wave-background">
+		<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1920 160"><path fill="#fff" d="M1920 0s-115 144-432 144S844 0 465 0 0 144 0 144v16h1920V0z"></path></svg>
+	</div>
 	<div id="main">
 		<asp:ContentPlaceHolder ID="MainContent" runat="server" />
 		<div id="footer">
