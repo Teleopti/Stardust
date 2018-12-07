@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 	public interface IPlanningPeriodSuggestions
 	{
 		SuggestedPlanningPeriod Default();
-		IEnumerable<SuggestedPlanningPeriod> SuggestedPeriods(DateOnlyPeriod forDate);
 		IEnumerable<SuggestedPlanningPeriod> SuggestedPeriods(DateOnly startDate);
 	}
 

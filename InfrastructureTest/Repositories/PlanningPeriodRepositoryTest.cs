@@ -111,63 +111,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldGetSuggestions()
-		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] { () => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1) });
-			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
-
-			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6),new DateOnly(2015, 4,12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void ShouldMergeSuggestionsWithSameResultingRangeAndPeriodDetails()
-		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
-			{
-				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(startDate.AddDays(7), SchedulePeriodType.Week, 1)
-			});
-			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
-
-			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void ShouldNotMergeSuggestionsWithSamePeriodDetailsWhenRangeDiffers()
-		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
-			{
-				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(startDate.AddDays(5), SchedulePeriodType.Week, 1)
-			});
-			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
-
-			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(6);
-		}
-
-		[Test]
-		public void ShouldReturnPlanningPeriodSuggestions()
-		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
-			{
-				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(startDate.AddDays(5), SchedulePeriodType.Week, 1)
-			});
-
-			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
-
-			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(6);
-		}
-
-		[Test]
 		public void ShouldReturnSuggestionsForAgentsWithFirstSchedulePeriodStartingLaterThanToday()
 		{
 			var addedPeople = SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
