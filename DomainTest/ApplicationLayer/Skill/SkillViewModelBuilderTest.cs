@@ -64,52 +64,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 
 			result.Select(x => x.Name).Should().Have.SameSequenceAs(new[] {"A", "Å", "Ä"});
 		}
-
-		[Test]
-		public void ShouldGetSkillsConnectedWithQueue()
-		{
-			var skill = SkillFactory.CreateSkill("Sales").WithId();
-			SkillRepository.Has(skill);
-
-			var result = Target.BuildSkillsConnectedWithQueue().Single();
-
-			result.Id.Should().Be(skill.Id.ToString());
-			result.Name.Should().Be("Sales");
-			result.IsMultisiteSkill.Should().Be.EqualTo(false);
-			result.SkillType.Should().Be.EqualTo(skill.SkillType.Description.Name);
-			result.DoDisplayData.Should().Be.EqualTo(true);
-
-		}
-
-		[Test]
-		public void ShouldSortSkillsConnectedWithQueueByName()
-		{
-			var skill1 = SkillFactory.CreateSkill("C").WithId();
-			var skill2 = SkillFactory.CreateSkill("A").WithId();
-			var skill3 = SkillFactory.CreateSkill("B").WithId();
-			SkillRepository.Has(skill1);
-			SkillRepository.Has(skill2);
-			SkillRepository.Has(skill3);
-
-			var result = Target.BuildSkillsConnectedWithQueue();
-
-			result.Select(x => x.Name).Should().Have.SameSequenceAs(new[] { "A", "B", "C" });
-		}
-
-		[Test]
-		public void ShouldSortSkillsConnectedWithQueueBySwedishName()
-		{
-			var skill1 = SkillFactory.CreateSkill("Ä").WithId();
-			var skill2 = SkillFactory.CreateSkill("A").WithId();
-			var skill3 = SkillFactory.CreateSkill("Å").WithId();
-			SkillRepository.Has(skill1);
-			SkillRepository.Has(skill2);
-			SkillRepository.Has(skill3);
-			UiCulture.IsSwedish();
-
-			var result = Target.BuildSkillsConnectedWithQueue();
-
-			result.Select(x => x.Name).Should().Have.SameSequenceAs(new[] { "A", "Å", "Ä" });
-		}
 	}
 }
