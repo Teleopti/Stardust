@@ -87,23 +87,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
         {
             return _repositoryFactory.CreateMultiplicatorDefinitionSetRepository(_unitOfWork);
         }
-
-        /// <summary>
-        /// Loads the multiplicators.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: VirajS
-        /// Created date: 2009-01-20
-        /// </remarks>
-        /// <remarks>
-        /// Created by: VirajS
-        /// Created date: 2009-01-20
-        /// </remarks>
-        IList<IMultiplicator> IPayrollHelper.LoadMultiplicatorList(MultiplicatorType multiplicatorType)
-        {
-            IMultiplicatorRepository multiplicatorRepository = _repositoryFactory.CreateMultiplicatorRepository(_unitOfWork);
-            return multiplicatorRepository.LoadAllByTypeAndSortByName(multiplicatorType);
-        }
     }
 }
