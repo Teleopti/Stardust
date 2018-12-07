@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public static class ReportHandler
 	{
-
 		public static ReportDetail CreateReportDetail(IApplicationFunction appFunctionReport)
 		{
 			var reportDetail = new ReportDetail
@@ -173,29 +172,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			return parameters;
 
 		}
-
-		private static void createScheduleTimePerActivityParameters(ScheduleViewBase scheduleViewBase, IScenario loadedScenario, IList<IReportDataParameter> parameters, CultureInfo culture)
-		{
-			parameters.Add(new ReportDataParameter("param_scenario", loadedScenario.Description.Name));
-
-			var names = new List<string>();
-			IEnumerable<IScheduleDay> selectedSchedules = scheduleViewBase.SelectedSchedules();
-			foreach (var person in scheduleViewBase.AllSelectedPersons(selectedSchedules))
-			{
-				names.Add(person.Name.ToString());
-			}
-			string agents = string.Join(", ", names.ToArray());
-			parameters.Add(new ReportDataParameter("param_agents", agents));
-			parameters.Add(new ReportDataParameter("param_activities", UserTexts.Resources.All));
-
-			var dates = selectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
-			DateOnly dateFrom = dates.FirstOrDefault();
-			DateOnly dateTo = dates.LastOrDefault();
-			
-			parameters.Add(new ReportDataParameter("param_date_from", dateFrom.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_date_to", dateTo.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_timezone", TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.StandardName));
-		}
-
 	}
 }
