@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			DefinedLicenseDataFactory.SetLicenseActivator("asdf",
 				new LicenseActivator(null, DateTime.MinValue, false, 0, 0, LicenseType.Agent,
-					new Percent(), null, null, "8"));
+					new Percent(), "8"));
 			requestContainer.Resolve<IPortalViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
