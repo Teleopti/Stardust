@@ -180,13 +180,9 @@
 		}
 
 		function setUp(inputDate) {
-			var date;
+			var date = inputDate || '2016-06-15';
 			var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 			var scope = $rootScope.$new();
-			if (inputDate == null)
-				date = moment('2016-06-15').toDate();
-			else
-				date = new Date(inputDate);
 
 			scope.curDate = date;
 

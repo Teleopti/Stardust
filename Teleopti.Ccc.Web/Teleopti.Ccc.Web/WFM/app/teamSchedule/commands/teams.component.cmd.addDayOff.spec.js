@@ -71,8 +71,8 @@
 			var date = "2018-01-09";
 			var panel = setUp(date);
 			var datePicker = panel[0].querySelectorAll('.teamschedule-datepicker');
-			expect(moment(new Date(datePicker[0].querySelector('input').value)).format("YYYY-MM-DD")).toEqual(date);
-			expect(moment(new Date(datePicker[1].querySelector('input').value)).format("YYYY-MM-DD")).toEqual(date);
+			expect(datePicker[0].querySelector('input').value).toEqual('1/9/18');
+			expect(datePicker[1].querySelector('input').value).toEqual('1/9/18');
 		});
 
 		it("should disable apply button unless without template", function () {
@@ -292,13 +292,10 @@
 		});
 
 		function setUp(inputDate) {
-			var date;
+			var date = inputDate || '2016-06-15';
+
 			var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 			var scope = $rootScope.$new();
-			if (inputDate == null)
-				date = moment('2016-06-15').toDate();
-			else
-				date = new Date(inputDate);
 
 			scope.curDate = date;
 

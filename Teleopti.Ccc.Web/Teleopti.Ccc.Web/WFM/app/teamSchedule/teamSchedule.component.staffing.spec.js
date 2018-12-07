@@ -182,7 +182,7 @@
 
 	it("should format date before call getStaffingByDate", function () {
 		var scope = $rootScope.$new();
-		scope.selectedDate = new Date("2018-02-11");
+		scope.selectedDate = "2018-02-11";
 		scope.preselectedSkills = { skillIds: ['XYZ'] };
 		setupComponent('selected-date="selectedDate" preselected-skills="preselectedSkills"', scope);
 		expect(_staffingInfoService.date).toEqual('2018-02-11');

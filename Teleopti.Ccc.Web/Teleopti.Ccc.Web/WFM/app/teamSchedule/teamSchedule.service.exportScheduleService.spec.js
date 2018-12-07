@@ -16,8 +16,8 @@
 				var response = null;
 				exportScheduleService.startExport({
 					period: {
-						startDate: new Date('2018-02-24'),
-						endDate: new Date('2018-02-24')
+						startDate: '2018-02-24',
+						endDate: '2018-02-24'
 					},
 					selectedGroups: { groupIds: undefined, groupPageId: 'group page' },
 					timezoneId: 'timezone',

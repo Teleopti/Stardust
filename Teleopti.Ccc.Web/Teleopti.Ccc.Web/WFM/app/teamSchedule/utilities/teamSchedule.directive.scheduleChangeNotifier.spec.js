@@ -27,7 +27,7 @@
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="cb"></schedule-change-notifier>';
 		var scope = $rootScope.$new();
 
-		scope.scheduleDate = new Date('2015-10-26');
+		scope.scheduleDate = '2015-10-26';
 		scope.commandId = '';
 
 		var cbWithPersonIds = [];
@@ -55,7 +55,7 @@
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="cb"></schedule-change-notifier>';
 		var scope = $rootScope.$new();
 
-		scope.scheduleDate = new Date('2015-10-26');
+		scope.scheduleDate = '2015-10-26';
 		scope.commandId = '';
 
 		var cbInvoked = false;
@@ -82,7 +82,7 @@
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="cb"></schedule-change-notifier>';
 		var scope = $rootScope.$new();
 
-		scope.scheduleDate = new Date('2015-10-29');
+		scope.scheduleDate = '2015-10-29';
 		scope.commandId = '';
 
 		var cbInvoked = false;
@@ -110,7 +110,7 @@
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="cb"></schedule-change-notifier>';
 		var scope = $rootScope.$new();
 
-		scope.scheduleDate = new Date('2015-10-25');
+		scope.scheduleDate = '2015-10-25';
 		scope.commandId = '';
 
 		var cbWithPersonIds = [];
@@ -139,7 +139,7 @@
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="cb"></schedule-change-notifier>';
 		var scope = $rootScope.$new();
 
-		scope.scheduleDate = new Date('2015-10-25');
+		scope.scheduleDate = '2015-10-25';
 		scope.commandId = '';
 
 		var cbWithPersonIds = [];
@@ -168,7 +168,7 @@
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="onNotification"></schedule-change-notifier>';
 		var scope = $rootScope.$new();
 
-		scope.scheduleDate = moment('2018-05-02').toDate();
+		scope.scheduleDate = '2018-05-02';
 		scope.commandId = '';
 		var relatedPersonIds = [];
 

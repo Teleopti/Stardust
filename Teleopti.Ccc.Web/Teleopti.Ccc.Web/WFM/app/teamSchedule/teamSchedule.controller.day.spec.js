@@ -53,8 +53,8 @@
 			
 		}));
 
-		it("can display person selection status correctly when turning pages", inject(function () {
-			controller.scheduleDate = new Date("2015-10-26");
+		it("can display person selection status correctly when turning pages", function () {
+			controller.scheduleDate = "2015-10-26";
 			rootScope.$digest();
 
 			personSelection.personInfo['person-emptySchedule'] = { Checked: true };
@@ -65,10 +65,10 @@
 			expect(schedules[2].IsSelected).toEqual(true);
 			expect(schedules[1].IsSelected).toEqual(false);
 			expect(schedules[0].IsSelected).toEqual(false);
-		}));
+		});
 
 		it("should be hide the select all people on every page link if the command panel is active", function () {
-			controller.scheduleDate = new Date("2018-04-10");
+			controller.scheduleDate = "2018-04-10";
 			rootScope.$digest();
 
 			personSelection.personInfo['person-emptySchedule'] = {
@@ -84,7 +84,7 @@
 		});
 
 		it("should keep the activity selection when schedule reloaded", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 			rootScope.$digest();
 			personSelection.personInfo['221B-Baker-SomeoneElse'] = {
 				SelectedActivities: [
@@ -103,7 +103,7 @@
 		});
 
 		it("should clear person selection when search text changed", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 
 			controller.loadSchedules();
 			controller.selectAllForAllPages();
@@ -122,7 +122,7 @@
 		});
 
 		it("should clear person selection when date changed", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 
 			controller.loadSchedules();
 			controller.selectAllForAllPages();
@@ -140,7 +140,7 @@
 		});
 
 		it("should clear person selection when selected teams changed", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 
 			controller.loadSchedules();
 			controller.selectAllForAllPages();
@@ -157,7 +157,7 @@
 		});
 
 		it("should clear person selection after click search button", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 
 			controller.loadSchedules();
 			controller.selectAllForAllPages();
@@ -174,7 +174,7 @@
 		});
 
 		it("should active search status after selected teams changed", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 
 			controller.searchOptions = {
 				focusingSearch: false
@@ -186,7 +186,7 @@
 		});
 
 		it("should deactive search status after selected date changed", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 
 			controller.searchOptions = {
 				focusingSearch: true
@@ -198,7 +198,7 @@
 		});
 
 		it("should deactive search status after search text changed", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 
 			controller.searchOptions = {
 				focusingSearch: true
@@ -210,7 +210,7 @@
 		});
 
 		it("should deactive search status after selected favorite changed", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 
 			controller.searchOptions = {
 				focusingSearch: true
@@ -226,7 +226,7 @@
 		});
 
 		it("should  set show only absence value correctly when click showOnlyAbsence", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 			controller.searchOptions = {
 				focusingSearch: true
 			};
@@ -240,7 +240,7 @@
 		});
 
 		it("should get warnings with correct data when validate warning is enabled", function () {
-			controller.scheduleDate = new Date("2018-11-02");
+			controller.scheduleDate = "2018-11-02";
 
 			controller.searchOptions = {
 				focusingSearch: true
@@ -258,7 +258,7 @@
 		});
 
 		it("should update warnings for the targets of a command with correct data", function () {
-			controller.scheduleDate = new Date("2018-11-02");
+			controller.scheduleDate = "2018-11-02";
 
 			controller.searchOptions = {
 				focusingSearch: true
@@ -277,7 +277,7 @@
 
 		it("should remember skill selection when skill changed",
 			function () {
-				controller.scheduleDate = new Date("2015-10-26");
+				controller.scheduleDate = "2015-10-26";
 				controller.staffingEnabled = true;
 
 				controller.onSelectedSkillChanged({ Id: 'XYZ' });
@@ -290,7 +290,7 @@
 
 		it("should read preselect skill when show staffing is enabled",
 			function () {
-				controller.scheduleDate = new Date("2015-10-26");
+				controller.scheduleDate = "2015-10-26";
 				staffingConfigStorageService.setSkill('mySkill');
 				controller.staffingEnabled = true;
 
@@ -303,7 +303,7 @@
 
 		it("should remember skill group selection when skill group changed",
 			function () {
-				controller.scheduleDate = new Date("2015-10-26");
+				controller.scheduleDate = "2015-10-26";
 				controller.staffingEnabled = true;
 
 				controller.onSelectedSkillChanged(null, { Id: 'skillGroup' });
@@ -316,7 +316,7 @@
 
 		it("should read preselect skill group when show staffing is enabled and there is valid config",
 			function () {
-				controller.scheduleDate = new Date("2015-10-26");
+				controller.scheduleDate = "2015-10-26";
 				staffingConfigStorageService.setSkill(null, 'skillGroup');
 				controller.staffingEnabled = true;
 
@@ -328,7 +328,7 @@
 
 		it("should read preselect skill group when show staffing is enabled and there is invalid config",
 			function () {
-				controller.scheduleDate = new Date("2015-10-26");
+				controller.scheduleDate = "2015-10-26";
 				controller.staffingEnabled = true;
 				controller.showStaffing();
 
@@ -337,7 +337,7 @@
 			});
 
 		it("should remember use shrinkage status when change the use shrinkage status", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 			controller.staffingEnabled = true;
 
 			controller.onUseShrinkageChanged(true);
@@ -356,12 +356,12 @@
 
 			controller = setUpController($controller);
 
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 			expect(controller.useShrinkage).toEqual(true);
 		});
 
 		it("should read prechecked status for use shrinkage when show staffing is enabled and there is invalid config", function () {
-			controller.scheduleDate = new Date("2015-10-26");
+			controller.scheduleDate = "2015-10-26";
 			controller.staffingEnabled = true;
 
 			controller.showStaffing();

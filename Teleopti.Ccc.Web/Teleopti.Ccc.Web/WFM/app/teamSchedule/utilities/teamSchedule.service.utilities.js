@@ -15,7 +15,7 @@
 		self.getWeekdays = getWeekDays;
 		self.getNextTickNoEarlierThanEight = getNextTickNoEarlierThanEight;
 		self.getNextTickMomentNoEarlierThanEight = getNextTickMomentNoEarlierThanEight;
-		self.nowInTimeZone = formattedNowInTimeZone;
+		self.nowInTimeZone = nowInTimeZone;
 		self.setNowDateInUtc = setNowDateInUtc;
 		self.getFirstDayOfWeek = getFirstDayOfWeek;
 		self.nowDateInUserTimezone = nowDateInUserTimezone;

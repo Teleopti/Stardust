@@ -41,7 +41,7 @@
 				it('should get available groups with correct dates',
 					function () {
 						var ctrl = $componentController('teamsExportSchedule', null, {});
-						ctrl.configuration.period = { startDate: new Date('2017-01-01'), endDate: new Date('2017-01-10') };
+						ctrl.configuration.period = { startDate: '2017-01-01', endDate: '2017-01-10' };
 						ctrl.onPeriodChanged();
 						var currentInputPeriod = groupPageService.currentPeriod();
 						expect(currentInputPeriod.startDate).toEqual('2017-01-01');

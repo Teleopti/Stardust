@@ -349,14 +349,13 @@
 			});
 			scope.vm = {
 				toggleCurrentSidenav: function () { },
-				selectedDate: new Date(date)
+				selectedDate: date
 			};
 			var element = $compile(html)(scope);
 			scope.$apply();
 
 			var menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
 			expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
-
 
 			var selectedAgents = [
 				{
@@ -384,8 +383,6 @@
 
 			menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
 			expect(menuListItemForRemovingDayOff[0].disabled).toEqual(false);
-
-
 		});
 	}
 
