@@ -3,21 +3,22 @@
 
 	angular
 		.module('wfm.resourceplanner')
-		.controller('planningGroupSettingOverviewController', overviewController);
+		.controller('planningGroupSettingOverviewController', overviewController)
+		.directive('planningGroupSetting', planningGroupSettingOverviewDirective);
 
-	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'PlanGroupSettingService', 'planningGroupInfo', 'schedulingSettingInfo', 'localeLanguageSortingService'];
+	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'PlanGroupSettingService', 'localeLanguageSortingService'];
 
-	function overviewController($state, $timeout, $stateParams, $translate, PlanGroupSettingService, planningGroupInfo, schedulingSettingInfo, localeLanguageSortingService) {
+	function overviewController($state, $timeout, $stateParams, $translate, PlanGroupSettingService, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.requestSent = false;
 		vm.test = false;
 		vm.selectedSchedulingSetting = {};
-		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
+		vm.schedulingSetting = vm.groupSettings.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
-		vm.planningGroupId = planningGroupInfo.Id;
-		vm.planningGroupName = planningGroupInfo.Name;
-		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", planningGroupInfo.Name);
+		vm.planningGroupId = vm.planningGroup.Id;
+		vm.planningGroupName = vm.planningGroup.Name;
+		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", vm.planningGroup.Name);
 		vm.getSchedulingSettingInfo = getSchedulingSettingInfo;
 		vm.deleteSchedulingSetting = deleteSchedulingSetting;
 		vm.goEditSchedulingSetting = goEditSchedulingSetting;
@@ -30,7 +31,7 @@
 			render: 'linear',
 			rgba: 'rgba(156, 39, 176, 1)'
 		};
-		vm.preferencePercentage = planningGroupInfo.PreferenceValue * 100;
+		vm.preferencePercentage = vm.planningGroup.PreferenceValue * 100;
 
 
 		getBlockSchedulingSetting();
@@ -169,5 +170,18 @@
 				Priority: setting.Priority
 			});
 		}
+	}
+
+	function planningGroupSettingOverviewDirective() {
+		return {
+			restrict: 'EA',
+			scope: {
+				planningGroup: '=',
+				groupSettings: '='
+			},
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',
+			controller: 'planningGroupSettingOverviewController as vm',
+			bindToController: true
+		};
 	}
 })();

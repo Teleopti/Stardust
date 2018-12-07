@@ -1,8 +1,3 @@
-<div class="view-header with-fab with-desc" ng-hide="vm.isDisable">
-	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.planningGroupId}}/selectplanningperiod">{{vm.planningGroupName}}</a> / {{'PlanGroupScheduling' | translate}}</h1>
-	</div>
-</div>
 <div class="con-row" ng-hide="vm.isDisable">
 	<div class="con-flex ">
 		<div class="wfm-toolbar material-depth-1">
@@ -29,7 +24,7 @@
 <div class="con-row">
 	<div class="con-flex">
 		<card-panel-list>
-			<card-panel ng-class="" ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" pre-open="true"
+			<card-panel ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" pre-open="true"
 			 id="$index">
 				<card-panel-header>
 					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>

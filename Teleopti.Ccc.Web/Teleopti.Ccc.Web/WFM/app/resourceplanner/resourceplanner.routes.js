@@ -39,6 +39,11 @@
 			resolve: {
 				editPlanningGroup: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
 					return planningGroupService.getPlanningGroupById({ id: $stateParams.groupId }).$promise;
+				}],
+				schedulingSettingInfo: ['PlanGroupSettingService', '$stateParams', function (PlanGroupSettingService, $stateParams) {
+					return PlanGroupSettingService.getSettingsByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+						return data;
+					});
 				}]
 			}
 		}).state('resourceplanner.selectplanningperiod', {
@@ -76,25 +81,6 @@
 				}],
 				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
 					return planningPeriodServiceNew.getPlanningGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
-						return data;
-					});
-				}]
-			}
-		}).state('resourceplanner.settingoverview', {
-			params: {
-				groupId: ''
-			},
-			url: '/planninggroup/:groupId/settings',
-			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',
-			controller: 'planningGroupSettingOverviewController as vm',
-			resolve: {
-				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
-					return planningPeriodServiceNew.getPlanningGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
-						return data;
-					});
-				}],
-				schedulingSettingInfo: ['PlanGroupSettingService', '$stateParams', function (PlanGroupSettingService, $stateParams) {
-					return PlanGroupSettingService.getSettingsByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}]

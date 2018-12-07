@@ -13,7 +13,6 @@
     vm.goForm = goForm;
     vm.goPlanningGroup = goPlanningGroup;
     vm.goEditPlanningGroup = goEditPlanningGroup;
-    vm.goDayOffRule = goDayOffRule;
     vm.planningGroups = planningGroups ? planningGroups.sort(localeLanguageSortingService.localeSort('+Name')) : [];
     vm.hasPg = hasPg;
 
@@ -35,12 +34,6 @@
     function goPlanningGroup(groupId) {
       if (groupId) {
         $state.go('resourceplanner.selectplanningperiod', { groupId: groupId });
-      }
-    }
-
-    function goDayOffRule(groupId) {
-      if (groupId) {
-        $state.go('resourceplanner.settingoverview', { groupId: groupId });
       }
     }
   }

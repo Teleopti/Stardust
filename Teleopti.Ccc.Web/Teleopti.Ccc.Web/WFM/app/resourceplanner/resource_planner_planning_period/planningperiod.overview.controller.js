@@ -43,7 +43,6 @@
 		vm.schedulingPerformed = false;
 		vm.optimizeRunning = false;
 		vm.dayNodes = undefined;
-		vm.isDisableDo = true;
 		vm.clearRunning = false;
 		vm.isScheduled = false;
 		vm.status = '';
