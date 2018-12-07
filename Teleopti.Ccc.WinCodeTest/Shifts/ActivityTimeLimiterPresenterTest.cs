@@ -116,22 +116,6 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             }
         }
 
-        [Test]
-        public void VerifySetAccessibilityDates()
-        {
-            ActivityTimeLimiter myLimiter = new ActivityTimeLimiter(ActivityFactory.CreateActivity("doWork"),
-                TimeSpan.FromHours(1),
-                OperatorLimiter.LessThen);
-
-            _target.SetActivityTimeLimiterAdapters(new ReadOnlyCollection<IActivityTimeLimiterViewModel>(
-                new List<IActivityTimeLimiterViewModel>
-                    {
-                    new ActivityTimeLimiterViewModel(_ruleSetCollection[0], myLimiter)
-                }
-            ));
-            Assert.AreEqual(1, _target.ModelCollection.Count);
-        }
-
 		[Test]
 	    public void ShouldClearModelWhenLoadingModelCollection()
 		{
