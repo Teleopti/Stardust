@@ -1,7 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 

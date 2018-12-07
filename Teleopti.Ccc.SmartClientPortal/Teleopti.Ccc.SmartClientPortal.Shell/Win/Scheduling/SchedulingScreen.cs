@@ -2990,8 +2990,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(_scenario);
-				methods.Add(new LoaderMethod(loadSchedulingScreenState, null));
+				
 				methods.Add(new LoaderMethod(loadCommonStateHolder, LanguageResourceHelper.Translate("XXLoadingDataTreeDots")));
+				methods.Add(new LoaderMethod(loadSchedulingScreenState, null));
 				methods.Add(new LoaderMethod(loadSkills, null));
 				methods.Add(new LoaderMethod(loadSettings, null));
 				methods.Add(new LoaderMethod(loadAuditingSettings, null));

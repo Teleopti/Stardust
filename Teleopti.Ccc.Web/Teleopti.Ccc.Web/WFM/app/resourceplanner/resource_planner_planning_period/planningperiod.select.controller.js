@@ -44,8 +44,7 @@
 		vm.changeDateForLastPp = changeDateForLastPp;
 		vm.getPpInfo = getPpInfo;
 		vm.deleteLastPp = deleteLastPp;
-		vm.isValidMaxWeeks = isValidMaxWeeks;
-		vm.isValidMaxMonths = isValidMaxMonths;
+		vm.isValidPeriod = isValidPeriod;
 
 		getSuggestionsForFirstPp();
 		getLastPp();
@@ -159,7 +158,7 @@
 		}
 
 		function checkSelectedIsValid() {
-			return !!(!!vm.selectedSuggestion.startDate && !!vm.selectedSuggestion.endDate && (isValidMaxWeeks() || isValidMaxMonths()));
+			return !!(!!vm.selectedSuggestion.startDate && !!vm.selectedSuggestion.endDate && (isValidPeriod()));
 		}
 
 		function changeDateForLastPp(pp) {
@@ -251,14 +250,10 @@
 			return angular.isNumber(value) && isFinite(value) && Math.floor(value) === value;
 		}
 
-		function isValidMaxWeeks() {
+		function isValidPeriod() {
 			if (vm.intervalType === 'Week') {
 				return isValidDaysNumber(vm.intervalRange, 8);
 			}
-			return false;
-		}
-
-		function isValidMaxMonths() {
 			if (vm.intervalType === 'Month') {
 				return isValidDaysNumber(vm.intervalRange, 2);
 			}

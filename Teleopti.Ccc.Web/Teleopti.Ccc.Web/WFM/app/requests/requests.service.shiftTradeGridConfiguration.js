@@ -307,7 +307,7 @@
 					minWidth: 100,
 					filterHeaderTemplate:
 						'<div class="ui-grid-filter-container" ng-repeat="colFilter in col.filters">' +
-						'<md-select ng-model-options="{trackBy: \'$value.Value\'}" md-on-close="grid.appScope.statusFilterClose()"' +
+						'<md-select ng-model-options="{trackBy: \'$value.Id\'}" md-on-close="grid.appScope.statusFilterClose()"' +
 						'multiple ng-model="grid.appScope.selectedRequestStatuses" placeholder="{{\'FilterColon\' | translate}} {{\'Status\' | translate}}" aria-label="{{\'Status\' | translate}}">' +
 						'<md-option ng-repeat="item in grid.appScope.allRequestStatuses" ng-value="item">' +
 						'<span>{{item.Name | translate}}</span>' +

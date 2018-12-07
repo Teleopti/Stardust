@@ -145,23 +145,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 
 		private void buttonAdvViewActive_Click(object sender, EventArgs e)
 		{
-			var rep = new LicenseRepository(new FromFactory(() => UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current()));
-			var arr = rep.GetActiveAgents();
-			
-			var strings = new string[arr.Count+1];
-			strings[0] = string.Join(",", Resources.BusinessUnit, Resources.FirstName, Resources.LastName, Resources.Email,
-									Resources.EmployeeNumber, Resources.Start, Resources.TerminalDate);
-			for (var i = 0; i < arr.Count; i++)
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var a = arr[i];
-				strings[i+1] = string.Join(",", a.BusinessUnit, a.FirstName, a.LastName, a.Email, a.EmploymentNumber, a.StartDate,
-										a.LeavingDate);
-			}
-			using (var agent = new ActiveAgents(strings))
-			{
-				agent.ShowDialog(this);
-			}
-        }
+				var rep = new LicenseRepository(uow);
+				var arr = rep.GetActiveAgents();
+				var strings = new string[arr.Count + 1];
+				strings[0] = string.Join(",", Resources.BusinessUnit, Resources.FirstName, Resources.LastName,
+					Resources.Email,
+					Resources.EmployeeNumber, Resources.Start, Resources.TerminalDate);
+				for (var i = 0; i < arr.Count; i++)
+				{
+					var a = arr[i];
+					strings[i + 1] = string.Join(",", a.BusinessUnit, a.FirstName, a.LastName, a.Email,
+						a.EmploymentNumber, a.StartDate,
+						a.LeavingDate);
+				}
 
+				using (var agent = new ActiveAgents(strings))
+				{
+					agent.ShowDialog(this);
+				}
+			}
+		}
     }
 }

@@ -10,10 +10,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.IocCommon.Toggle;
 
-namespace Teleopti.Ccc.IocCommon.Toggle
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public static class EventHandlerRegisterationExtensions
+	public static class EventHandlerRegistrationExtensions
 	{
 		public static void RegisterEventHandlers(this ContainerBuilder builder, Func<Toggles, bool> toggles, params Assembly[] assemblies)
 		{
@@ -53,15 +54,19 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			if (!t.HandleInterfaces().Any())
 				return false;
 
-			var runOnHangfire = typeof(IRunOnHangfire).IsAssignableFrom(t);
-			var runOnStardust = typeof(IRunOnStardust).IsAssignableFrom(t);
 			var runInSync = typeof(IRunInSync).IsAssignableFrom(t);
 			var runInSyncInFatClientProcess = typeof(IRunInSyncInFatClientProcess).IsAssignableFrom(t);
-			if (!(runOnHangfire ^ runOnStardust ^ runInSync ^ runInSyncInFatClientProcess))
+			if (!(t.RunsOnHangfire() ^ t.RunsOnStardust() ^ runInSync ^ runInSyncInFatClientProcess))
 				throw new Exception($"All event handlers need to implement an IRunOn* interface. {t.Name} does not.");
 
 			return true;
 		}
+
+		public static bool RunsOnHangfire(this Type t) =>
+			typeof(IRunOnHangfire).IsAssignableFrom(t);
+
+		public static bool RunsOnStardust(this Type t) =>
+			typeof(IRunOnStardust).IsAssignableFrom(t);
 
 		public static IEnumerable<HandlerInfo> HandleInterfaces(this Type t)
 		{
@@ -73,9 +78,10 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					yield return new HandlerInfo
 					{
 						Type = i,
-						Method = t.GetMethod("Handle", new[] { eventType })
+						Method = t.GetMethod("Handle", new[] {eventType})
 					};
 				}
+
 				if (i == typeof(IHandleEvents))
 				{
 					yield return new HandlerInfo
@@ -92,7 +98,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			public Type Type { get; set; }
 			public MethodInfo Method { get; set; }
 		}
-		
+
 		public static bool RegisterAsSingleton(this Type type)
 		{
 			return !type.GetCustomAttributes(false)
@@ -107,43 +113,5 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.Any();
 		}
 
-		public static bool EnabledByToggle(this Type type, IocConfiguration config) => type.EnabledByToggle(config.Toggle);
-
-		public static bool EnabledByToggle(this Type type, Func<Toggles, bool> toggles)
-		{
-			var attributes = type.GetCustomAttributes(false);
-			return innerEnabledByToggle(toggles, attributes);
-		}
-
-		public static bool EnabledByToggle(this MethodInfo method, Func<Toggles, bool> toggles)
-		{
-			var attributes = method.GetCustomAttributes(false);
-			return innerEnabledByToggle(toggles, attributes);
-		}
-
-		private static bool innerEnabledByToggle(Func<Toggles, bool> toggles, object[] attributes)
-		{
-			var attributesOn = attributes.OfType<EnabledBy>().FirstOrDefault();
-			var attributesOff = attributes.OfType<DisabledBy>().FirstOrDefault();
-
-			if (attributesOn == null && attributesOff == null) return true;
-
-			var resultOn = true;
-			var resultOff = true;
-
-			if (attributesOn != null)
-			{
-				var togglesOn = attributesOn.Toggles;
-				resultOn = togglesOn.All(toggles);
-			}
-
-			if (attributesOff != null)
-			{
-				var togglesOff = attributesOff.Toggles;
-				resultOff = !togglesOff.Any(toggles);
-			}
-
-			return resultOn && resultOff;
-		}
 	}
 }

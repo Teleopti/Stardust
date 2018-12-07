@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			var appFunctionPaths = new[]
 			{
 				DefinedRaptorApplicationFunctionPaths.Insights,
-				DefinedRaptorApplicationFunctionPaths.ViewInsightsReport,
+				DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport,
 				DefinedRaptorApplicationFunctionPaths.EditInsightsReport
 			};
 

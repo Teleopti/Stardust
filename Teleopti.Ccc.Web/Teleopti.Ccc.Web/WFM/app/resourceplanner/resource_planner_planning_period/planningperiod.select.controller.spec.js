@@ -210,7 +210,7 @@ describe('planningPeriodSelectController', function () {
         vm2.intervalType = "Week";
 
         expect(vm2.isNonePp()).toEqual(true);
-        expect(vm2.isValidMaxWeeks()).toEqual(true);
+        expect(vm2.isValidPeriod()).toEqual(true);
     });
 
     it('should be able to check invalid custom week type interval for creating first planning period', function () {
@@ -219,7 +219,7 @@ describe('planningPeriodSelectController', function () {
         vm2.intervalType = "Week";
 
         expect(vm2.isNonePp()).toEqual(true);
-        expect(vm2.isValidMaxWeeks()).toEqual(false);
+        expect(vm2.isValidPeriod()).toEqual(false);
     });
 
     it('should be able to check invalid custom month type interval for creating first planning period', function () {
@@ -228,7 +228,7 @@ describe('planningPeriodSelectController', function () {
         vm2.intervalType = "Month";
 
         expect(vm2.isNonePp()).toEqual(true);
-        expect(vm2.isValidMaxMonths()).toEqual(false);
+        expect(vm2.isValidPeriod()).toEqual(false);
     });
 
     it('should be able to post valid custom week type and create first planning period', function () {

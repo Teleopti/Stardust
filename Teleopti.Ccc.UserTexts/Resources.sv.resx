@@ -15829,9 +15829,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="AgentScheduledWithoutPreferences" xml:space="preserve">
     <value>Agenten schemalades utan önskemål</value>
   </data>
-  <data name="ViewInsightsReport" xml:space="preserve">
-    <value>Visa rapport</value>
-  </data>
   <data name="EditInsightsReport" xml:space="preserve">
     <value>Ändra rapport</value>
   </data>

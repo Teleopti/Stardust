@@ -17,6 +17,12 @@ export class ReportComponent implements OnInit {
 	private action = 'view';
 
 	public isLoading = false;
+	public isProcessing = false;
+	public inEditing = false;
+
+	public isConfirmingClone = false;
+	public newReportName: string = undefined;
+
 	public report: Report;
 
 	constructor(
@@ -27,6 +33,7 @@ export class ReportComponent implements OnInit {
 		const params = $state.params;
 		this.report = params.report;
 		this.action = params.action;
+		this.inEditing = this.action === 'edit';
 
 		this.pbiCoreService = new pbi.service.Service(
 			pbi.factories.hpmFactory,
@@ -82,6 +89,40 @@ export class ReportComponent implements OnInit {
 		// Report.on will add an event handler which prints to Log window.
 		report.on('loaded', function() {
 			this.isLoading = false;
+		});
+	}
+
+	public confirmCloneReport() {
+		this.isConfirmingClone = true;
+	}
+
+	public cancelCloneReport() {
+		this.isConfirmingClone = false;
+	}
+
+	public cloneReport(report) {
+		if (!this.newReportName || this.newReportName.trim().length === 0) return;
+
+		this.isConfirmingClone = false;
+		this.isProcessing = true;
+		this.reportSvc.cloneReport(report.Id, this.newReportName).then(newReport => {
+			this.isProcessing = false;
+			this.nav.editReport({
+				Id: newReport.ReportId,
+				Name: newReport.ReportName,
+			});
+		});
+	}
+
+	public deleteReport(report) {
+		this.isProcessing = true;
+		this.reportSvc.deleteReport(report.Id).then(deleted => {
+			this.isProcessing = false;
+			if (deleted) {
+				this.nav.gotoInsights();
+			} else {
+				console.log('Failed to delete report "' + report.Name + '"');
+			}
 		});
 	}
 }

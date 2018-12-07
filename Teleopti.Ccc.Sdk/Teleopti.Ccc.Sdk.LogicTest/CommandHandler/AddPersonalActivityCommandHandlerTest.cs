@@ -5,6 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -26,10 +28,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public FakeActivityRepository ActivityRepository;
 		public IScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeScheduleTagRepository ScheduleTagRepository;
 		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
 		public AddPersonalActivityCommandHandler Target;
+		public FullPermission Permission;
 
 		private IPerson _person;
 		private IActivity _activity;
@@ -80,6 +84,24 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
 			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(false, false),
 					_period, _scenario)[_person].ScheduledDay(_startDate).PersonAssignment().PersonalActivities().Count().Should().Be
+				.EqualTo(1);
+		}
+		
+		[Test]
+		public void ShouldAddPersonalActivityInTheDictionarySuccessfullyWhenNotVisibleSchedule()
+		{
+			_person.WorkflowControlSet = new WorkflowControlSet { SchedulePublishedToDate = _startDate.AddDays(-2).Date, PreferenceInputPeriod = _startDate.ToDateOnlyPeriod(), PreferencePeriod = _startDate.ToDateOnlyPeriod()};
+			Permission.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			ScheduleTagRepository.Add(_scheduleTag);
+			PersonRepository.Add(_person);
+			ScenarioRepository.Add(_scenario);
+			ActivityRepository.Add(_activity);
+			PersonAssignmentRepository.Has(_person,_scenario,_activity, _startDate.ToDateOnlyPeriod(), new TimePeriod(8,17));
+			
+			Target.Handle(_addPersonalActivityCommand);
+
+			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(false, false),
+					_period, _scenario)[_person].ScheduledDay(_startDate, true).PersonAssignment().PersonalActivities().Count().Should().Be
 				.EqualTo(1);
 		}
 

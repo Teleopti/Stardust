@@ -21,7 +21,8 @@
 			</div>
 		</nz-header>
 		<nz-content>
-			<nz-list [nzDataSource]="this.reports" [nzRenderItem]="item" class="report-list">
+			<div style="text-align: center;"><nz-spin *ngIf="isLoading"></nz-spin></div>
+			<nz-list *ngIf="initialized" [nzDataSource]="this.reports" [nzRenderItem]="item" class="report-list">
 				<ng-template #item let-item>
 					<nz-list-item [nzContent]="viewAction" [nzActions]="[editAction,cloneAction,deleteAction]"></nz-list-item>
 					<ng-template #viewAction>
@@ -31,7 +32,7 @@
 						<a (click)="nav.editReport(item)"><i nz-icon type="edit" theme="outline"></i> Edit</a>
 					</ng-template>
 					<ng-template #cloneAction>
-						<a (click)="cloneReport(item)"><i nz-icon type="copy" theme="outline"></i> Duplicate</a>
+						<a (click)="confirmCloneReport(item)"><i nz-icon type="copy" theme="outline"></i> Duplicate</a>
 					</ng-template>
 					<ng-template #deleteAction>
 						<a nz-popconfirm nzTitle="Are you sure to delete this report?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteReport(item)">
@@ -41,12 +42,16 @@
 				</ng-template>
 			</nz-list>
 			<nz-alert
-				[hidden]="hasViewPermission || hasEditPermission" 
+				[hidden]="!initialized || hasViewPermission" 
 				nzType="error"
 				nzMessage="Error"
-				nzDescription="You have no permission to view or edit report."
+				nzDescription="You have no permission to view Insights report."
 				nzShowIcon>
 			</nz-alert>
 		</nz-content>
 	</nz-layout>
+	<ng-template #newReportNameTemplate>
+	  <p>{{messageForNewReportName}}</p>
+	  <input type="text" nz-input placeholder="New report name..." [(ngModel)]="newReportName">
+	</ng-template>
 </div>

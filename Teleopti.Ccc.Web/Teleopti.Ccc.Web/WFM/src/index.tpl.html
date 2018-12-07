@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head lang="en">
@@ -7,8 +7,17 @@
 	<title>WFM</title>
 	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css" media="none" onload="if(media!=='all')media='all'">
 	<link href="vendor/open-sans/font.css" rel="stylesheet">
-	<meta name="theme-color" content="#0099FF" />
-	<link rel="manifest" href="manifest.webmanifest.json">
+	<link rel="apple-touch-icon" sizes="180x180" href="dist/ng2/assets/apple-touch-icon.png?v=1">
+	<link rel="icon" type="image/png" sizes="32x32" href="dist/ng2/assets/favicon-32x32.png?v=1">
+	<link rel="icon" type="image/png" sizes="16x16" href="dist/ng2/assets/favicon-16x16.png?v=1">
+	<link rel="manifest" href="dist/ng2/assets/site.webmanifest.json?v=1">
+	<link rel="mask-icon" href="dist/ng2/assets/safari-pinned-tab.svg?v=1" color="#128fff">
+	<link rel="shortcut icon" href="dist/ng2/assets/favicon.ico?v=1">
+	<meta name="apple-mobile-web-app-title" content="Teleopti WFM">
+	<meta name="application-name" content="Teleopti WFM">
+	<meta name="msapplication-TileColor" content="#2d89ef">
+	<meta name="msapplication-config" content="dist/ng2/assets/browserconfig.xml?v=1">
+	<meta name="theme-color" content="#ffffff">
 	<style>
 		.loader {
 			width: 75px;
@@ -50,10 +59,10 @@
 <body ng-app="wfm" ng-show="isAuthenticated" ng-cloak ng-controller="MainController as mainController">
 	<div class="backdrop" ng-if="!mainController.style.isFullyLoaded">
 		<div class="loader"></div>
-	</div>	
+	</div>
 	<ng2-top-navigation></ng2-top-navigation>
 	<div class="layout-container">
-			<ng2-side-menu></ng2-side-menu>
+		<ng2-side-menu></ng2-side-menu>
 		<div id="materialcontainer" class="container content">
 			<div ui-view></div>
 			<wfm-notice notices="$parent.wfmNotices"></wfm-notice>

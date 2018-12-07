@@ -42,18 +42,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 		}
 
 		[Test]
-		[Ignore("Started to fail when upgrading to NH5. Will look into it. Seems to be caused by set + many-to-many mapping. Not that common to us so let's upgrade anyway")]
-		public void MergeNoChangesShouldNotReturnAnyChanges()
-		{
-			setup();
-			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				groupPage = uow.Merge(groupPage);
-				uow.PersistAll().Should().Be.Empty();
-			}
-		}
-
-		[Test]
 		public void AddingPersonToRootGroupShouldGenerateOneChange()
 		{
 			setup();

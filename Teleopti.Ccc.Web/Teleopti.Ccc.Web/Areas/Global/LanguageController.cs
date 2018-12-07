@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Web.Http;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			_translatedTexts = translatedTexts;
 		}
 
-		[Route("api/Global/Language"), HttpGet]
+		[Route("api/Global/Language"), HttpGet, CacheFilterHttp]
 		public IDictionary<string, string> Language([FromUri]string lang)
 		{
 			var culture = CultureInfo.GetCultureInfoByIetfLanguageTag(lang);

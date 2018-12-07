@@ -1,6 +1,6 @@
 <div class="view-header with-fab with-desc" ng-hide="vm.isDisable">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{'Plans' | translate}} / {{vm.planningGroupName}} / {{'PlanGroupScheduling' | translate}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.planningGroupId}}/selectplanningperiod">{{vm.planningGroupName}}</a> / {{'PlanGroupScheduling' | translate}}</h1>
 	</div>
 </div>
 <div class="con-row" ng-hide="vm.isDisable">

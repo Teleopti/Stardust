@@ -5,7 +5,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 {
 	[RealHangfire]
-	public class HangfireTestAttribute : AnalyticsDatabaseTestAttribute
+	public class RealHangfireTestAttribute : AnalyticsDatabaseTestAttribute
 	{
 		public Lazy<HangfireUtilities> Hangfire;
 		

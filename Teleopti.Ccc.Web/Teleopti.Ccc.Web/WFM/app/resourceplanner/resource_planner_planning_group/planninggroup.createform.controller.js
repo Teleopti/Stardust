@@ -18,6 +18,7 @@
 		vm.cancel = returnToOverview;
 		vm.deletePlanningGroupText = '';
 		vm.editPlanningGroup = editPlanningGroup;
+		vm.planningGroupId = null;
 		vm.isEditGroup = !!editPlanningGroup;
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
@@ -35,6 +36,7 @@
 				return;
 			vm.deletePlanningGroupText = $translate.instant('AreYouSureYouWantToDeleteThePlanningGroup').replace("{0}", editPlanningGroup.Name);
 			vm.name = editPlanningGroup.Name;
+			vm.planningGroupId = editPlanningGroup.Id;
 			vm.selectedResults = editPlanningGroup.Filters.sort(localeLanguageSortingService.localeSort('+FilterType', '+Name'));
 		}
 

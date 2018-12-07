@@ -7,6 +7,10 @@ describe('planningGroupSettingEditController', function() {
 		PlanGroupSettingService,
 		debounceService,
 		stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
+		planningGroupInfo = {
+			Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+			Name: "Plan Group Test"
+		},
 		stateparamsForDefaultDo = {
 			groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
 			filterId: '33f52ff4-0314-4a9e-80fa-5c958c57c92f'
@@ -135,7 +139,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should call function with debounce 250', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo });
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -144,7 +148,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should get filter results', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo });
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -155,14 +159,14 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should display preference value', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo, planningGroupInfo: planningGroupInfo });
 		$httpBackend.flush();
 
 		expect(vm.settingInfo.PreferencePercent).toEqual(23);
 	});
 
 	it('should add one filter from filter results', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo });
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -174,7 +178,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should remove one filter from filter results', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo });
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -186,14 +190,14 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should not create scheduling setting when submit data is invalid', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo });
 		vm.persist();
 
 		expect($state.go).not.toHaveBeenCalledWith('resourceplanner.settingoverview');
 	});
 
 	it('should create new scheduling setting when submit data is valid', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo });
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -209,7 +213,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should load selected undefault scheduling setting', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo, planningGroupInfo: planningGroupInfo });
 		$httpBackend.flush();
 
 		expect(vm.settingInfo.Id).toEqual('8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb');
@@ -219,7 +223,7 @@ describe('planningGroupSettingEditController', function() {
 
 	it('should save new name for selected undefault scheduling setting', function() {
 		spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo, planningGroupInfo: planningGroupInfo });
 		$httpBackend.flush();
 
 		vm.settingInfo.Name = 'Scheduling setting 911';
@@ -235,7 +239,7 @@ describe('planningGroupSettingEditController', function() {
 
 	it('should save new setting for selected undefault scheduling setting', function() {
 		spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo, planningGroupInfo: planningGroupInfo });
 		$httpBackend.flush();
 
 		vm.settingInfo.BlockFinderType = 1;
@@ -263,7 +267,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should load default scheduling setting', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo, planningGroupInfo: planningGroupInfo });
 		$httpBackend.flush();
 
 		expect(vm.settingInfo.Id).toEqual('33f52ff4-0314-4a9e-80fa-5c958c57c92f');
@@ -273,7 +277,7 @@ describe('planningGroupSettingEditController', function() {
 
 	it('should save new setting for default scheduling setting', function() {
 		spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo, planningGroupInfo: planningGroupInfo });
 		$httpBackend.flush();
 
 		vm.settingInfo.BlockFinderType = 1;

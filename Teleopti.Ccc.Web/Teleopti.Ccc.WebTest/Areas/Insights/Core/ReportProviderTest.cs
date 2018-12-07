@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			var config = target.GetReportConfig(Guid.NewGuid().ToString()).GetAwaiter().GetResult();
 			config.ReportId.Should().Be.NullOrEmpty();
+			config.ReportName.Should().Be.NullOrEmpty();
 			config.ReportUrl.Should().Be.NullOrEmpty();
 			config.AccessToken.Should().Be.NullOrEmpty();
 			config.TokenType.Should().Be.NullOrEmpty();
@@ -65,6 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			var config = target.GetReportConfig(Guid.NewGuid().ToString()).GetAwaiter().GetResult();
 			config.ReportId.Should().Be.NullOrEmpty();
+			config.ReportName.Should().Be.NullOrEmpty();
 			config.ReportUrl.Should().Be.NullOrEmpty();
 			config.AccessToken.Should().Be.NullOrEmpty();
 			config.TokenType.Should().Be.NullOrEmpty();
@@ -89,6 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			var config = target.GetReportConfig(report.Id).GetAwaiter().GetResult();
 			config.ReportId.Should().Be(report.Id);
+			config.ReportName.Should().Be(report.Name);
 			config.AccessToken.Should().Be(token);
 		}
 
@@ -109,8 +112,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			var target = createReportProvider(reports, groupId);
 
-			var config = target.CloneReport(report.Id).GetAwaiter().GetResult();
+			const string newReportName = "New cloned report";
+			var config = target.CloneReport(report.Id, newReportName).GetAwaiter().GetResult();
 			config.ReportId.Should().Not.Be.Null();
+			config.ReportName.Should().Be(newReportName);
 			config.AccessToken.Should().Be(token);
 
 			var reportGroups = reports.ReportGroups;
@@ -118,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			reportGroups[groupId].Count.Should().Be(2);
 
 			reportGroups[groupId].Any(x=>x.Id == report.Id).Should().Be.True();
-			reportGroups[groupId].Any(x=>x.Id == config.ReportId && x.Name == report.Name + " - Copy").Should().Be.True();
+			reportGroups[groupId].Any(x=>x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
 		}
 
 		private FakeReports createReports(string groupId, params Report[] powerBiReports)

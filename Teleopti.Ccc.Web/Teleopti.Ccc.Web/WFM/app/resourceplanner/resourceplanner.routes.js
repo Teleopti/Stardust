@@ -99,14 +99,6 @@
 					});
 				}]
 			}
-		}).state('resourceplanner.newsetting', {
-			params: {
-				groupId: '',
-				groupName: ''
-			},
-			url: '/planninggroup/:groupId/settings',
-			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',
-			controller: 'planningGroupSettingEditController as vm'
 		}).state('resourceplanner.editsetting', {
 			params: {
 				filterId: '',
@@ -114,7 +106,14 @@
 			},
 			url: '/planninggroup/:groupId/setting/:filterId',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',
-			controller: 'planningGroupSettingEditController as vm'
+			controller: 'planningGroupSettingEditController as vm',
+			resolve: {
+				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
+					return planningPeriodServiceNew.getPlanningGroupById({planningGroupId: $stateParams.groupId}).$promise.then(function (data) {
+						return data;
+					});
+				}]
+			}
 		}).state('resourceplanner.copyschedule', {
 			url: '/copyschedule',
 			templateUrl: 'app/resourceplanner/manageschedule/manageschedule.html',

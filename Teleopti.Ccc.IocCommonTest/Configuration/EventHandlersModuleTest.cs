@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Castle.Components.DictionaryAdapter.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -16,26 +15,26 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	{
 		public ResolveEventHandlers Resolver;
 		public IResolve Resolve;
-		
+
 		[AllTogglesOff]
 		[Test]
 		public void ShouldResolveAllEventHandlersWhenTogglesDisabled()
 		{
-			Resolver.ResolveAllJobs(oneOfEachEvent());
+			Resolver.ResolveAllJobs(EventHandlerLocations.OneOfEachEvent());
 		}
 
 		[AllTogglesOn]
 		[Test]
 		public void ShouldResolveAllEventHandlersWhenTogglesEnabled()
 		{
-			Resolver.ResolveAllJobs(oneOfEachEvent());
+			Resolver.ResolveAllJobs(EventHandlerLocations.OneOfEachEvent());
 		}
 
 		[Test]
 		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldResolveSameInstanceOfHandlers()
 		{
-			Resolver.ResolveAllJobs(oneOfEachEvent())
+			Resolver.ResolveAllJobs(EventHandlerLocations.OneOfEachEvent())
 				.ForEach(x =>
 				{
 					var instance1 = Resolve.Resolve(x.HandlerType);
@@ -43,17 +42,5 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 					instance1.Should().Be.SameInstanceAs(instance2);
 				});
 		}
-
-		private static IEnumerable<IEvent> oneOfEachEvent()
-		{
-			var events = (
-				from type in typeof (Event).Assembly.GetTypes()
-				let isEvent = typeof (IEvent).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract
-				where isEvent
-				select Activator.CreateInstance(type) as IEvent
-				).ToArray();
-			return events;
-		}
 	}
-
 }

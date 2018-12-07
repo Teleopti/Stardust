@@ -14810,8 +14810,8 @@ Teleopti R&amp;D</value>
   <data name="WFMNewReleaseNotification" xml:space="preserve">
     <value>{0}已经发布！我们期待您的{1}反馈{2}！</value>
   </data>
-  <data name="ViewInsightsReport" xml:space="preserve">
-    <value>查看报表</value>
+  <data name="DeleteInsightsReport" xml:space="preserve">
+    <value>删除报表</value>
   </data>
   <data name="EditInsightsReport" xml:space="preserve">
     <value>编辑报表</value>

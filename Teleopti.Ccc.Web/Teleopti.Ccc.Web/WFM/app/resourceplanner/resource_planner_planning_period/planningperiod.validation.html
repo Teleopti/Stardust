@@ -4,6 +4,7 @@
             <card-panel color="vm.color" ng-show="vm.valData.preValidation.length > 0">
                 <card-panel-header>
                     <md-progress-linear ng-if="vm.valLoading" class="pp-validation-progress" md-mode="indeterminate"></md-progress-linear>
+					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                     <div class="header-flex">
                         <b>{{'PreSchedulingValidationIssues' | translate}} </b>
                     </div>
@@ -23,9 +24,9 @@
                         <div class="con-flex">
                             <div class="con-row">
                                 <div class="con-flex ">
-                                    <label for="filter" class="input-icon">
+                                    <label for="validationFilter" class="input-icon">
                                         <i class="mdi mdi-filter-outline">
-                                            <input type="text" id="filter" ng-model="vm.validationFilter" placeholder="{{'FilterValidationIssues' | translate}}">
+                                            <input type="text" id="validationFilter" ng-model="vm.validationFilter" placeholder="{{'FilterValidationIssues' | translate}}">
                                             <md-tooltip>{{'FilterValidationIssues' | translate}}</md-tooltip>
                                         </i>
                                     </label>
@@ -58,11 +59,12 @@
             </card-panel>
             <card-panel color="vm.color" ng-show="vm.valData.scheduleIssues.length > 0">
                 <card-panel-header>
+					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                     <div class="header-flex">
                         <b>{{'ScheduledIssues' | translate}}</b>
                     </div>
                     <div class="header-flex">
-                        <span class="pp-validation-number">{{vm.valData.totalLastValNum}} {{'IssuesText' | translate}}</span>
+                        <span class="pp-validation-number error">{{vm.valData.totalLastValNum}} {{'IssuesText' | translate}}</span>
                     </div>
                 </card-panel-header>
                 <card-panel-content>
@@ -70,9 +72,9 @@
                         <div class="con-flex">
                             <div class="con-row">
                                 <div class="con-flex ">
-                                    <label for="filter" class="input-icon">
+                                    <label for="scheduleIssuesFilter" class="input-icon">
                                         <i class="mdi mdi-filter-outline">
-                                            <input type="text" id="filter" ng-model="vm.scheduleIssuesFilter" placeholder="{{'FilterValidationIssues' | translate}}">
+                                            <input type="text" id="scheduleIssuesFilter" ng-model="vm.scheduleIssuesFilter" placeholder="{{'FilterValidationIssues' | translate}}">
                                             <md-tooltip>{{'FilterValidationIssues' | translate}}</md-tooltip>
                                         </i>
                                     </label>

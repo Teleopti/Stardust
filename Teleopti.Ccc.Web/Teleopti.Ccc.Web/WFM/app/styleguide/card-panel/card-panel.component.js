@@ -109,6 +109,7 @@
             function preOpen() {
                 if (attrs.preOpen == 'true') {
                     if (attrs.id !== '' && allCards[attrs.id].classList.contains('hidden')) {
+						allCards[attrs.id].previousElementSibling.classList.add('selected');
                         return allCards[attrs.id].classList.remove('hidden');
                     }
                     return toggleCard();

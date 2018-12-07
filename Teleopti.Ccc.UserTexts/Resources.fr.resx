@@ -13677,9 +13677,6 @@ L'application va maintenant se fermer.</value>
   <data name="ValidatedPhoneCalls" xml:space="preserve">
     <value>Appels validés</value>
   </data>
-  <data name="ViewInsightsReport" xml:space="preserve">
-    <value>Voir rapport</value>
-  </data>
   <data name="WithOvertime" xml:space="preserve">
     <value>Avec heures supplémentaires</value>
   </data>

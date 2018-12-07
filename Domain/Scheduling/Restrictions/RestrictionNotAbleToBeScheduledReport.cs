@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			foreach (var person in persons)
 			{
 				var firstDate = selectedPeriod.StartDate;
-				while (firstDate < selectedPeriod.EndDate)
+				while (firstDate <= selectedPeriod.EndDate)
 				{
 					var schedulePeriod = person.VirtualSchedulePeriod(firstDate);
 					if (!schedulePeriod.IsValid)
