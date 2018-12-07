@@ -374,11 +374,9 @@
     <Compile Include="MultiTenancy\Admin\DeleteTenant.cs" />
     <Compile Include="MultiTenancy\Admin\ILoadAllTenants.cs" />
     <Compile Include="MultiTenancy\Admin\ImportTenantResultModel.cs" />
-    <Compile Include="MultiTenancy\Admin\IRegenerateAllTenantPasswords.cs" />
     <Compile Include="MultiTenancy\Admin\ITenantExists.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllPersonInfos.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllTenants.cs" />
-    <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswords.cs" />
     <Compile Include="MultiTenancy\Admin\TenantAdminUser.cs" />
     <Compile Include="MultiTenancy\Admin\TenantExists.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
