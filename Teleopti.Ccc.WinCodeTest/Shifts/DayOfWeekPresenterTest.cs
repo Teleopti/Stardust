@@ -107,18 +107,6 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         }
 
         [Test]
-        public void VerifySetDaysOfWeekCollection()
-        {
-            _target.SetDaysOfWeekCollection(
-                new List<IDaysOfWeekViewModel>
-                    {
-                    new DaysOfWeekViewModel(_ruleSetCollection[0])
-                });
-
-            Assert.AreEqual(1, _target.ModelCollection.Count);
-        }
-
-        [Test]
         public void VerifyValidate()
         {
             Assert.IsTrue(_target.Validate());
