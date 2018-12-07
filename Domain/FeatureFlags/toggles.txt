@@ -66,6 +66,7 @@ Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_Authentication_ChangePasswordMenu_76666 = true
+Wfm_User_Password_Reset_74957 = DEV
 Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
 
 # China, can any of these be removed? #
