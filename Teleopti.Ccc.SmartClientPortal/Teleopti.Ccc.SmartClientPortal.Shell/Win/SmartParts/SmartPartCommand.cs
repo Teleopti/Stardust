@@ -27,19 +27,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
             _smartpartWorker.ShowSmartPart(smartPartInfo, parameters);
         }
 
-        /// <summary>
-        /// Refreshsmarts the part.
-        /// </summary>
-        /// <param name="smartPartId">The smart part id.</param>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-08-05
-        /// </remarks>
-        public void RefreshSmartPart(string smartPartId)
-        {
-            throw new NotImplementedException();
-        }
-
         public void ClearAllSmartParts()
         {
             _smartpartWorker.Workspace.RemoveAllSmartPart();
