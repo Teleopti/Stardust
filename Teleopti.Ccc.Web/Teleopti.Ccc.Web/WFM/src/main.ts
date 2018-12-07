@@ -32,56 +32,55 @@ if (environment.production) {
 
 const bootstrapFnAngularApp = (extraProviders: StaticProvider[]) =>
 	platformBrowserDynamic(extraProviders).bootstrapModule(AppModule);
-	const wfm = angular.module('wfm',
-		[
-		downgradeModule(bootstrapFnAngularApp),
-		'externalModules',
-			'supportEmailService',
-		'currentUserInfoService',
-		'toggleService',
-		'shortcutsService',
-		'wfm.versionService',
-		'wfm.http',
-		'wfm.exceptionHandler',
-		'wfm.permissions',
-		'wfm.peopleold',
-		'wfm.outbound',
-		'wfm.forecasting',
-		'wfm.resourceplanner',
-		'wfm.searching',
-		'wfm.seatMap',
-		'wfm.skillPrio',
-		'wfm.seatPlan',
-		'wfm.notifications',
-		'wfm.notice',
-		'wfm.areas',
-		'wfm.help',
-		'wfm.rtaShared',
-		'wfm.rta',
-		'wfm.rtaTool',
-		'wfm.rtaTracer',
-		'wfm.teapot',
-		'wfm.start',
-		'wfm.teamSchedule',
-		'wfm.intraday',
-		'wfm.requests',
-		'wfm.reports',
-		'wfm.signalR',
-		'wfm.datePicker',
-		'wfm.dateRangePicker',
-		'wfm.utilities',
-		'wfm.staffing',
-		'wfm.templates',
-		'wfm.badge',
-		'wfm.skillPicker',
-		'wfm.skillPickerOld',
-		'wfm.treePicker',
-		'wfm.card-panel',
-		'wfm.skillGroup',
-		'wfm.popup',
-		'wfm.gamification',
-		'wfm.btnGroup'
-	]);
+const wfm = angular.module('wfm', [
+	downgradeModule(bootstrapFnAngularApp),
+	'externalModules',
+	'supportEmailService',
+	'currentUserInfoService',
+	'toggleService',
+	'shortcutsService',
+	'wfm.versionService',
+	'wfm.http',
+	'wfm.exceptionHandler',
+	'wfm.permissions',
+	'wfm.peopleold',
+	'wfm.outbound',
+	'wfm.forecasting',
+	'wfm.resourceplanner',
+	'wfm.searching',
+	'wfm.seatMap',
+	'wfm.skillPrio',
+	'wfm.seatPlan',
+	'wfm.notifications',
+	'wfm.notice',
+	'wfm.areas',
+	'wfm.help',
+	'wfm.rtaShared',
+	'wfm.rta',
+	'wfm.rtaTool',
+	'wfm.rtaTracer',
+	'wfm.teapot',
+	'wfm.start',
+	'wfm.teamSchedule',
+	'wfm.intraday',
+	'wfm.requests',
+	'wfm.reports',
+	'wfm.signalR',
+	'wfm.datePicker',
+	'wfm.dateRangePicker',
+	'wfm.utilities',
+	'wfm.staffing',
+	'wfm.templates',
+	'wfm.badge',
+	'wfm.skillPicker',
+	'wfm.skillPickerOld',
+	'wfm.treePicker',
+	'wfm.card-panel',
+	'wfm.skillGroup',
+	'wfm.popup',
+	'wfm.gamification',
+	'wfm.btnGroup'
+]);
 
 wfm.controller('MainController', MainController);
 
@@ -102,15 +101,15 @@ const downgradeHelper = (downgradableComponents: DowngradeableComponent[] | Down
 
 // Use this to downgrade module components
 downgradeHelper(peopleComponents);
-	downgradeHelper(reportsComponents);
+downgradeHelper(reportsComponents);
 downgradeHelper(sharedComponents);
 downgradeHelper(authenticationComponents);
 downgradeHelper(apiAccessComponents);
 downgradeHelper(appComponents);
 downgradeHelper(menuComponents);
-	downgradeHelper(insightsComponents);
-	downgradeHelper(intradayComponents);
-	downgradeHelper(resetPasswordComponents);
+downgradeHelper(insightsComponents);
+downgradeHelper(intradayComponents);
+downgradeHelper(resetPasswordComponents);
 
 /**
  * Use this if your module is purely Angular and you want mount some routes
@@ -120,50 +119,48 @@ const routerHelper = (routerConfig: RouterConfigFunction) => {
 };
 
 routerHelper(peopleRouterConfig);
-	routerHelper(insightsRouterConfig);
+routerHelper(insightsRouterConfig);
 routerHelper(apiAccessRouterConfig);
 
-	if (!isResetPasswordPage()) {
-		wfm.config([
-			'$stateProvider',
-			'$urlRouterProvider',
-			'$translateProvider',
-			'$httpProvider',
-			'$mdGestureProvider',
-			'tmhDynamicLocaleProvider',
-			function(
-				$stateProvider: IStateProvider,
-				$urlRouterProvider: IUrlRouterProvider,
-				$translateProvider,
-				$httpProvider,
-				$mdGestureProvider,
-				tmhDynamicLocaleProvider
-			) {
-				$urlRouterProvider.otherwise('/#');
+if (!isResetPasswordPage()) {
+	wfm.config([
+		'$stateProvider',
+		'$urlRouterProvider',
+		'$translateProvider',
+		'$httpProvider',
+		'$mdGestureProvider',
+		'tmhDynamicLocaleProvider',
+		function(
+			$stateProvider: IStateProvider,
+			$urlRouterProvider: IUrlRouterProvider,
+			$translateProvider,
+			$httpProvider,
+			$mdGestureProvider,
+			tmhDynamicLocaleProvider
+		) {
+			$urlRouterProvider.otherwise('/#');
 
-				$stateProvider.state('main',
-					{
-						url: '/',
-						templateProvider: [
-							'$templateRequest',
-							function(templateRequest) {
-								return templateRequest('html/main.html');
-							}
-						]
-					});
+			$stateProvider.state('main', {
+				url: '/',
+				templateProvider: [
+					'$templateRequest',
+					function(templateRequest) {
+						return templateRequest('html/main.html');
+					}
+				]
+			});
 
-				$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
-				$translateProvider.useUrlLoader('../api/Global/Language');
+			$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+			$translateProvider.useUrlLoader('../api/Global/Language');
 
-				$translateProvider.preferredLanguage('en');
-				$httpProvider.interceptors.push('httpInterceptor');
-				$mdGestureProvider.skipClickHijack();
+			$translateProvider.preferredLanguage('en');
+			$httpProvider.interceptors.push('httpInterceptor');
+			$mdGestureProvider.skipClickHijack();
 
-				tmhDynamicLocaleProvider.localeLocationPattern('dist/angular-i18n/angular-locale_{{locale}}.js');
-		// tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
-			}
-		]);
+			tmhDynamicLocaleProvider.localeLocationPattern('dist/angular-i18n/angular-locale_{{locale}}.js');
+			// tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
+		}
+	]);
 
-		wfm.run(mainInitializer);
-	}
+	wfm.run(mainInitializer);
 }
