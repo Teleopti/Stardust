@@ -215,11 +215,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return people.Select(p => p.Id.Value).ToList();
 		}
 
-		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			throw new NotImplementedException();
-		}
-
 		private IEnumerable<IPerson> filterByRole(IDictionary<PersonFinderField, string> searchCriteria, IEnumerable<IPerson> people)
 		{
 			var roleName = searchCriteria[PersonFinderField.Role];
