@@ -277,23 +277,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyDeletePreference()
         {
-            _list = new List<IScheduleDay> { _part1 };
+			var target = new DeleteSchedulePartService();
+			var date = new DateOnly(2018, 10, 1);
+			var scenario = new Scenario().WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var absenceRestriction = new PreferenceRestriction { Absence = new Absence().WithId() };
+			var preferenceDay = new PreferenceDay(agent, date, absenceRestriction).WithId();
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_part1.ReFetch()).Return(_part1).Repeat.AtLeastOnce();
-                Expect.Call(_part1.DeletePreferenceRestriction).Repeat.Once();
-				Expect.Call(() => _rollbackService.Modify(_part1));
-            }
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, new[] { preferenceDay }, Enumerable.Empty<ISkillDay>());
+			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
+				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 
-            using (_mocks.Playback())
-            {
-                _deleteOption.Preference = true;
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
-            }
-        }
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { Preference = true }, rollBackService, new NoSchedulingProgress());
 
-        [Test]
+			stateHolder.Schedules[agent].ScheduledDay(date).PersonRestrictionCollection().Should().Be.Empty();
+		}
+
+		[Test]
         public void VerifyStudentAvailabilityRestriction()
         {
 			var target = new DeleteSchedulePartService();
