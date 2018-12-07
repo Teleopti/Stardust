@@ -22,39 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.AuthorizationEn
             Assert.IsNotNull(target.AvailableTeams);
 		}
 
-        [Test]
-        public void VerifyFindByApplicationRole()
-		{
-            IAvailableData availableData1 = new AvailableData();
-            availableData1.SetId(Guid.NewGuid());
-            IApplicationRole applicationRole1 = new ApplicationRole();
-            availableData1.ApplicationRole = applicationRole1;
-            
-            IAvailableData availableData2 = new AvailableData();
-            availableData2.SetId(Guid.NewGuid());
-            IApplicationRole applicationRole2 = new ApplicationRole();
-            availableData2.ApplicationRole = applicationRole2;
-
-            IList<IAvailableData> availableDataList = new List<IAvailableData>{ availableData1, availableData2 };
-
-            IAvailableData result = AvailableData.FindByApplicationRole(availableDataList, applicationRole2);
-            Assert.AreEqual(result, availableData2);
-        }
-
-		[Test]
-		public void VerifyFindByApplicationRoleReturnsNullWhenNotFoundInList()
-		{
-			IAvailableData availableData1 = new AvailableData();
-			availableData1.SetId(Guid.NewGuid());
-			IApplicationRole applicationRole1 = new ApplicationRole();
-			availableData1.ApplicationRole = applicationRole1;
-
-			IList<IAvailableData> availableDataList = new List<IAvailableData> { availableData1 };
-
-			var result = AvailableData.FindByApplicationRole(availableDataList, new ApplicationRole());
-			Assert.IsNull(result);
-		}
-
 	    [Test]
 		public void VerifyApplicationRole()
 		{
