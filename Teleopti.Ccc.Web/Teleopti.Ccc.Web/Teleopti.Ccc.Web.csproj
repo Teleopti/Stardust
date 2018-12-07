@@ -1858,6 +1858,7 @@
     <Content Include="WFM\app\styleguide\wfm-date-range-picker\wfm-date-range-picker.js" />
     <Content Include="WFM\app\styleguide\wfm-date-range-picker\_modules.js" />
     <Content Include="WFM\app\styleguide\wfm-helping-directives\wfm-helping-directives.js" />
+    <Content Include="WFM\app\styleguide\wfm-helping-directives\wfm-helping-directives.spec.js" />
     <Content Include="WFM\app\styleguide\wfm-multiple-search\wfm-multiple-search-input.directive.js" />
     <Content Include="WFM\app\styleguide\wfm-multiple-search\wfm-multiple-search-input.directive.spec.js" />
     <Content Include="WFM\app\styleguide\wfm-multiple-search\wfm-multiple-search-input.tpl.html" />
