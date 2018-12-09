@@ -1,4 +1,4 @@
-<form ng-submit="ctrl.callback(ctrl.form);" name="form">
+<form ng-submit="form.$valid && ctrl.callback(ctrl.form);" name="form">
 <div class="modal-body">
 <div class="row">
 	<div class="col-md-12">
@@ -157,8 +157,8 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.InitialPeriod.Start = 0; ctrl.form.InitialPeriod.End = 0;" name="button">Today</button>
-											<input name="initialStart" required placeholder="Start" max="{{ctrl.form.InitialPeriod.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.InitialPeriod.Start" class="form-control">
-											<input name="initialEnd" required placeholder="End" min="ctrl.form.InitialPeriod.Start" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.InitialPeriod.End" class="form-control">
+											<input ng-required="!ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" placeholder="Start" max="{{ctrl.form.InitialPeriod.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.InitialPeriod.Start" class="form-control">
+											<input ng-required="!ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" placeholder="End" min="ctrl.form.InitialPeriod.Start" ng-disabled="ctrl.isRelativePeriodNeeded('Initial', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.InitialPeriod.End" class="form-control">
 										</div>
 									</div>
 								</div>
@@ -171,8 +171,8 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.QueueStats.Start = 0; ctrl.form.QueueStats.End = 0;" name="button">Today</button>
-											<input required placeholder="Start" max="{{ctrl.form.QueueStats.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.QueueStats.Start" class="form-control">
-											<input required placeholder="End" min="{{ctrl.form.QueueStats.Start}}" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.QueueStats.End" class="form-control">
+											<input ng-required="!ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" placeholder="Start" max="{{ctrl.form.QueueStats.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.QueueStats.Start" class="form-control">
+											<input ng-required="!ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" placeholder="End" min="{{ctrl.form.QueueStats.Start}}" ng-disabled="ctrl.isRelativePeriodNeeded('QueueStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.QueueStats.End" class="form-control">
 										</div>
 									</div>
 								</div>
@@ -185,8 +185,8 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.AgentStats.Start = 0; ctrl.form.AgentStats.End = 0;" name="button">Today</button>
-											<input required placeholder="Start" max="{{ctrl.form.AgentStats.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.AgentStats.Start" class="form-control">
-											<input required placeholder="End" min="{{ctrl.form.AgentStats.Start}}" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.AgentStats.End" class="form-control">
+											<input ng-required="!ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" placeholder="Start" max="{{ctrl.form.AgentStats.End}}" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.AgentStats.Start" class="form-control">
+											<input ng-required="!ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" placeholder="End" min="{{ctrl.form.AgentStats.Start}}" ng-disabled="ctrl.isRelativePeriodNeeded('AgentStatistics', ctrl.form.JobName.NeededDatePeriod)" type="number" ng-model="ctrl.form.AgentStats.End" class="form-control">
 										</div>
 									</div>
 								</div>
@@ -201,8 +201,8 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.Schedule.Start = 0; ctrl.form.Schedule.End = 0;" name="button">Today</button>
-											<input type="number" placeholder="Start" max="{{ctrl.form.Schedule.End}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Schedule.Start" class="form-control">
-											<input type="number" placeholder="End" min="{{ctrl.form.Schedule.Start}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Schedule.End" class="form-control">
+											<input type="number" placeholder="Start" max="{{ctrl.form.Schedule.End}}" ng-required="!ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Schedule.Start" class="form-control">
+											<input type="number" placeholder="End" min="{{ctrl.form.Schedule.Start}}" ng-required="!ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-disabled="ctrl.isRelativePeriodNeeded('Schedule', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Schedule.End" class="form-control">
 										</div>
 									</div>
 								</div>
@@ -215,8 +215,8 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<button type="button" ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" class="btn btn-default" ng-click="ctrl.form.Forecast.Start = 0; ctrl.form.Forecast.End = 0;" name="button">Today</button>
-											<input type="number" placeholder="Start" max="{{ctrl.form.Forecast.End}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Forecast.Start" class="form-control">
-											<input type="number" placeholder="End"  min="{{ctrl.form.Forecast.Start}}" required ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Forecast.End" class="form-control">
+											<input type="number" placeholder="Start" max="{{ctrl.form.Forecast.End}}" ng-required="!ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Forecast.Start" class="form-control">
+											<input type="number" placeholder="End"  min="{{ctrl.form.Forecast.Start}}" ng-required="!ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-disabled="ctrl.isRelativePeriodNeeded('Forecast', ctrl.form.JobName.NeededDatePeriod)" ng-model="ctrl.form.Forecast.End" class="form-control">
 										</div>
 									</div>
 								</div>
@@ -228,12 +228,7 @@
 		</fieldset>
 	</div>
 </div>
-
 </div>
-<div>{{form.$valid}}</div>
-<div>{{form.$error}}</div>
-<div>{{form.frequencyEnd.$error.invalidStartTime}}</div>
-<div>{{form.frequencyEnd.$error.invalidEndTime}}</div>
 	<div class="modal-footer">
 		<button type="submit" class="btn btn-primary">Ok</button>
 	</div>
