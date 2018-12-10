@@ -1,6 +1,6 @@
 <div class="con-row rta-filters-container">
 	<span class="con-flex rta-multiple-selection-panel">
-				<div class="relative" outside-click="vm.goToAgents()">
+				<div class="relative">
 							<input type="text" placeholder="{{'DataFilterThreeDots'|translate}}"
 								   ng-style="vm.openPicker && {'visibility': 'hidden'}"
 								   ng-class="vm.defaultInputText ? 'rta-light-text' : ''"
@@ -8,7 +8,7 @@
 								   ng-model="vm.searchTerm"/>
 						<form ng-cloak name="form"
 							  class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate
-							  ng-show="vm.openPicker">
+							  ng-if="vm.openPicker" outside-click="vm.goToAgents()">
 							<div class="sub-header">
 								<div>
 								<label for="filter" class="input-icon">

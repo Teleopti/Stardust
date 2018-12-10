@@ -25,7 +25,7 @@
 	<md-progress-linear md-mode="indeterminate" ng-if="vm.loading()"></md-progress-linear>
 	<div class="panel material-depth-1 con-padding">
 		<div class="con-row">
-			<div class="con-flex wfm-form organization-picker" outside-click="vm.organizationPickerOpen = false">
+			<div class="con-flex wfm-form organization-picker">
 				<div class="form-input-wrap">
 					<input type="text"
 						   placeholder="{{'SelectSitesTeams'|translate}}"
@@ -36,7 +36,8 @@
 				<div style="position: relative">
 					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
 						 style="z-index: 999; position: absolute; width: 100%"
-						 ng-show="vm.organizationPickerOpen">
+						 ng-if="vm.organizationPickerOpen"
+						 outside-click="vm.organizationPickerOpen = false">
 
 						<div class="form-input-wrap filter">
 							<input type="text"
@@ -85,7 +86,7 @@
 			</div>
 			
 			<div class="con-flex">
-				<div class="wfm-form" outside-click="vm.skillPickerOpen = false">
+				<div class="wfm-form">
 					<div class="form-input-wrap">
 						<div style="position: relative">
 							<input type="text"
@@ -104,7 +105,8 @@
 					<div style="position: relative">
 						<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
 							 style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
-							 ng-show="vm.skillPickerOpen">
+							 ng-if="vm.skillPickerOpen"
+							 outside-click="vm.skillPickerOpen = false">
 							<ul>
 								<li ng-repeat="skill in vm.skills"
 									ng-click="vm.selectedSkill = skill"
@@ -121,7 +123,7 @@
 			</div>
 
 			<div class="con-flex">
-				<div class="wfm-form" outside-click="vm.skillGroupPickerOpen = false">
+				<div class="wfm-form">
 					<div class="form-input-wrap">
 						<div style="position: relative">
 							<input type="text"
@@ -139,7 +141,8 @@
 					<div style="position: relative">
 						<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
 							 style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
-							 ng-show="vm.skillGroupPickerOpen">
+							 ng-if="vm.skillGroupPickerOpen"
+							 outside-click="vm.skillGroupPickerOpen = false">
 							<ul>
 								<li ng-repeat="skillGroup in vm.skillGroups"
 									ng-click="vm.selectedSkillGroup = skillGroup"
@@ -173,7 +176,7 @@
 				</div>
 			</div>
 
-			<div class="con-flex wfm-form" outside-click="vm.open = false">
+			<div class="con-flex wfm-form">
 				<div class="form-input-wrap">
 					<input type="text"
 						   placeholder="{{'SelectStates'|translate}}"
@@ -184,7 +187,7 @@
 				<div class="relative">
 					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
 						 style="z-index: 999; position: absolute; width: 100%"
-						 ng-show="vm.open">
+						 ng-if="vm.open" outside-click="vm.open = false">
 						<md-checkbox
 								ng-repeat="state in vm.states"
 								aria-label="Checkbox"
