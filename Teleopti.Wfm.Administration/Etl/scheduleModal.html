@@ -29,7 +29,7 @@
 					<div class="form-group">
 						<div class="form-group">
 							<label for="jobDropdown">Job <span style="color:orange" ng-if="!ctrl.form.Tenant">&nbsp; No tenant selected</span></label>
-							<select ng-disabled="!ctrl.form.Tenant" class="form-control" required id="jobDropdown" ng-options="job.JobName for job in ctrl.jobs" ng-model="ctrl.form.JobName" ng-change="ctrl.selectedjobChanged(ctrl.form)">
+							<select ng-disabled="!ctrl.form.Tenant" class="form-control" ng-required="ctrl.form.Tenant" id="jobDropdown" ng-options="job.JobName for job in ctrl.jobs" ng-model="ctrl.form.JobName" ng-change="ctrl.selectedjobChanged(ctrl.form)">
 								<option ng-show="!ctrl.form.JobName" value="">- Select Job</option>
 							</select>
 						</div>
@@ -143,7 +143,7 @@
 					<div class="form-group">
 						<div class="form-group">
 							<label for="logData">Log data source</label>
-							<select required ng-disabled="!ctrl.form.JobName.NeedsParameterDataSource" class="form-control" id="logData" ng-options="log.Name for log in ctrl.tenantLogData" ng-model="ctrl.form.LogDataSourceId">
+							<select ng-required="ctrl.form.JobName.NeedsParameterDataSource" ng-disabled="!ctrl.form.JobName.NeedsParameterDataSource" class="form-control" id="logData" ng-options="log.Name for log in ctrl.tenantLogData" ng-model="ctrl.form.LogDataSourceId">
 								<option ng-show="!ctrl.form.JobName" value="">- Select log data source</option>
 							</select>
 						</div>
