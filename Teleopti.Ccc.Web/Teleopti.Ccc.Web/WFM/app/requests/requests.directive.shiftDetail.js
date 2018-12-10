@@ -1,10 +1,8 @@
 ﻿'use strict';
 
 (function() {
-	var requestsShiftDetailDirective = function(
-		teamScheduleSvc,
-		groupScheduleFactory,
-		currentUserInfo,
+	var requestsShiftDetailDirective = function (
+		shiftTradeScheduleService,
 		serviceDateFormatHelper
 	) {
 		return {
@@ -26,7 +24,7 @@
 
 			elem.bind('click', function(oEvent) {
 				var position = getShiftDetailDisplayPosition(oEvent);
-				updateShiftStatusForSelectedPerson(personIds, scheduleDate, targetTimezone, position, showShiftDetail);
+				updateShiftStatusForSelectedPerson(personIds[0], personIds[1], scheduleDate, targetTimezone, position, showShiftDetail);
 				oEvent.stopPropagation();
 			});
 		}
@@ -44,25 +42,19 @@
 		}
 
 		function updateShiftStatusForSelectedPerson(
-			personIds,
+			personFromId,
+			personToId,
 			scheduleDate,
-			targetTimezone,
+			_targetTimeZone,
 			position,
 			showShiftDetail
 		) {
-			if (personIds.length === 0) {
+			if (!personFromId || !personToId) {
 				return;
 			}
 
-			var currentUserTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
-
-			teamScheduleSvc.getSchedules(scheduleDate, personIds).then(function(result) {
-				var schedulesToDisplay = result.Schedules.filter(function(schedule) {
-					return schedule.Date === scheduleDate;
-				});
-				var schedules = groupScheduleFactory.Create(schedulesToDisplay, scheduleDate, targetTimezone, 48);
-				showShiftDetail &&
-					showShiftDetail({ params: { left: position.left, top: position.top, schedules: schedules } });
+			shiftTradeScheduleService.getSchedules(scheduleDate, personFromId, personToId).then(function(result) {
+				showShiftDetail && showShiftDetail({ params: { left: position.left, top: position.top, schedules: result, targetTimezone: _targetTimeZone } });
 			});
 		}
 	};
@@ -70,9 +62,7 @@
 	angular
 		.module('wfm.requests')
 		.directive('requestsShiftDetail', [
-			'TeamSchedule',
-			'GroupScheduleFactory',
-			'CurrentUserInfo',
+			'shiftTradeScheduleService',
 			'serviceDateFormatHelper',
 			requestsShiftDetailDirective
 		]);

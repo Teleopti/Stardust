@@ -1668,6 +1668,7 @@
     <Content Include="WFM\app\requests\requests.service.data.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.absenceAndText.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.overtime.spec.js" />
+    <Content Include="WFM\app\requests\requests.service.shiftTradeSchedule.js" />
     <Content Include="WFM\app\requests\requests.service.uigridUtilities.js" />
     <Content Include="WFM\app\requests\requests.directive.budgetAllowance.js" />
     <Content Include="WFM\app\requests\requests.directive.budgetAllowance.spec.js" />

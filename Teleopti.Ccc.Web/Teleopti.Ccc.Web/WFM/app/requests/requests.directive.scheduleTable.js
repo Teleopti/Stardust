@@ -9,12 +9,12 @@
 	function scheduleTableDirective() {
 		return {
 			scope: {
-				schedules: '='
+				shifts: '='
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
 			bindToController: true,
-			controller: 'requestsScheduleTableController',
+			controller: 'requestsScheduleTableController', 
 			templateUrl: 'app/requests/html/requests-schedule-table.html'
 		};
 	}

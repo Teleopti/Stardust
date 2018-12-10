@@ -21,7 +21,8 @@
 		'REQUESTS_TAB_NAMES',
 		'REQUESTS_STATUS',
 		'requestCommandParamsHolder',
-		'uiGridFixService'
+		'uiGridFixService',
+		'requestScheduleService'
 	];
 
 	function requestsShiftTradeController(
@@ -42,7 +43,8 @@
 		requestsTabNames,
 		requestsStatus,
 		requestCommandParamsHolder,
-		uiGridFixService
+		uiGridFixService,
+		requestScheduleService
 	) {
 		var vm = this;
 
@@ -121,12 +123,20 @@
 			vm.messageFilter = undefined;
 		};
 
-		vm.showShiftDetail = function(params) {
-			vm.schedules = params.schedules;
+		vm.showShiftDetail = function (params) {
+			vm.buildShifts(params.schedules, params.targetTimezone);
 			vm.shiftDetailTop = params.top;
 			vm.shiftDetailLeft = params.left;
 			vm.displayShiftDetail = true;
 		};
+
+		vm.buildShifts = function (schedules, _targetTimeZone) {
+			var shifts = [];
+			shifts.push(requestScheduleService.buildShiftData(schedules.PersonFromSchedule, vm.userTimeZone, _targetTimeZone));
+			shifts.push(requestScheduleService.buildShiftData(schedules.PersonToSchedule, vm.userTimeZone, _targetTimeZone));
+			vm.shifts = shifts;
+		}
+		
 
 		vm.hideShiftDetail = function() {
 			vm.displayShiftDetail = false;

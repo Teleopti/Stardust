@@ -1,37 +1,59 @@
-<table class="table" ng-if="vm.schedules.Schedules.length > 0">
+<table class="table" ng-if="vm.shifts && vm.shifts.length > 0">
 	<thead>
 		<tr class="person">
 			<th class="person-name person-name-column">
 				<div class="person-name nowrap">{{'AgentName' | translate}}</div>
 			</th>
 			<th id="time-line-container" class="schedule schedule-column">
-				<time-line ng-if="vm.schedules.Schedules.length > 0" times="vm.schedules.TimeLine.HourPoints" chedule-count="vm.schedules.Schedules.length"></time-line>
+				<time-line ng-if="vm.shifts && vm.shifts.length > 0" times="vm.schedules.TimeLine.HourPoints" chedule-count="vm.shifts.length"></time-line>
 			</th>
 			<th class="right-border-empty"></th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="personSchedule in vm.schedules.Schedules">
+		<tr ng-repeat="shift in vm.shifts">
 			<td class="person-name person-name-column">
-				<div class="person-name nowrap">{{personSchedule.Name}}</div>
+				<div class="person-name nowrap">{{shift.Name}}</div>
 			</td>
 			<td class="schedule schedule-column">
-				<div class="relative time-line-for">
-					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0"
-					 ng-style=" {left: dayOff.StartPosition + '%' , width: dayOff.Length + '%' }">
-						<md-tooltip md-z-index="1200" ng-if="dayOff.DayOffName !='' ">
-							{{dayOff.DayOffName}}
+				<div class="requests-shift-layer-container pull-left text-center inline-block relative">
+
+					<div class="dayoff cursor-pointer absolute" ng-if="shift.IsDayOff">
+						<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
+							<p>{{ shift.DayOffName }}</p>
 						</md-tooltip>
-					</span>
-					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
-						<div class="layer absolute floatleft selectable projection-layer" projection-name="{projection.Description}}"
-						 ng-repeat="projection in shift.Projections" ng-style=" {left: projection.StartPosition + '%' , width:
-						 projection.Length + '%' , backgroundColor: projection.Color}"
-						 ng-class="{'overtime-light': projection.IsOvertime && projection.UseLighterBorder, 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder, personAbsence: projection.ParentPersonAbsences !== null}">
-							<md-tooltip md-z-index="1200">{{projection.Description}}</md-tooltip>
-						</div>
+					</div>
+
+					<span ng-if="shift.IsNotScheduled">{{ 'NotScheduled' | translate }}</span>
+
+					<div class="layer absolute cursor-pointer"
+						 ng-repeat="projection in shift.Periods"
+						 ng-style=" {backgroundColor: projection.Color, left: projection.StartPositionPercentage * 100 + '%', width: (projection.EndPositionPercentage - projection.StartPositionPercentage) * 100 + '%', color: projection.TextColor}"
+						 ng-class="{'overtime-light': projection.IsOvertime && projection.TextColor == 'white', 'overtime-dark': projection.IsOvertime && projection.TextColor == 'black'}">
+						<i ng-if="projection.Meeting" class="mdi mdi-account absolute"></i>
+						<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
+							<p>{{ projection.Title }}</p>
+							<p>{{ projection.TimeSpan }}</p>
+
+							<div ng-if="projection.Meeting" class="text-left">
+								<p>
+									<span class="text-italic">{{ 'Title' | translate }}: </span>
+									{{ projection.Meeting.Title }}
+								</p>
+								<p>
+									<span class="text-italic">{{ 'Description' | translate }}: </span>
+									{{ projection.Meeting.Description }}
+								</p>
+								<p>
+									<span class="text-italic">{{ 'Location' | translate }}: </span>
+									{{ projection.Meeting.Location }}
+								</p>
+							</div>
+
+						</md-tooltip>
 					</div>
 				</div>
+
 			</td>
 		</tr>
 	</tbody>

@@ -6,6 +6,6 @@
 		<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 	</i>
 	<div outside-click="vm.hideShiftDetail()" ng-if="vm.displayShiftDetail" ng-style="vm.shiftDetailStyleJson()" class="schedule-container full-padding">
-		<requests-schedule-table schedules="vm.schedules" />
+		<requests-schedule-table shifts="vm.shifts" />
 	</div>
 </div>
