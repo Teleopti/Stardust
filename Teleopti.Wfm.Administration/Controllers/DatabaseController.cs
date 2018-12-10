@@ -18,6 +18,10 @@ using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
+	/// <summary>
+	/// Changes to this file may affect third party connections, i.e. Twillio, TalkDesk etc.
+	/// Please contact CloudOps when changes are required and made. 
+	/// </summary>
 	[TenantTokenAuthentication]
 	public class DatabaseController : ApiController
 	{
