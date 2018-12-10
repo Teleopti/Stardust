@@ -307,5 +307,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             return retobj;
         }
-    }
+
+		public virtual void ClearChildSkill(ChildSkill childSkill)
+		{
+			if (!_childSkills.Contains(childSkill)) return;
+			_childSkills.Remove(childSkill);
+		}
+	}
 }
