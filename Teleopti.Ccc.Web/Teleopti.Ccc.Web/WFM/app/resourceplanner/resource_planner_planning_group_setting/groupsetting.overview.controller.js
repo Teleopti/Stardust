@@ -6,15 +6,15 @@
 		.controller('planningGroupSettingOverviewController', overviewController)
 		.directive('planningGroupSettingsOverview', planningGroupSettingOverviewDirective);
 
-	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'PlanGroupSettingService', 'localeLanguageSortingService'];
+	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'localeLanguageSortingService'];
 
-	function overviewController($state, $timeout, $stateParams, $translate, PlanGroupSettingService, localeLanguageSortingService) {
+	function overviewController($state, $timeout, $stateParams, $translate, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.requestSent = false;
 		vm.test = false;
 		vm.selectedSchedulingSetting = {};
-		vm.schedulingSetting = vm.groupSettings.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
+		vm.schedulingSetting = vm.planningGroup.Settings.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
 		// vm.planningGroupId = vm.planningGroup.Id;
 		// vm.planningGroupName = vm.planningGroup.Name;

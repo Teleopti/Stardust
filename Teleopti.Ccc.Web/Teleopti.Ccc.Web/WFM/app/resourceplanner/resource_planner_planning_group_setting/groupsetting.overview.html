@@ -133,7 +133,7 @@
 												<b>{{'BlockScheduling' | translate}}</b>: {{setting.BlockSchedulingSetting}}
 											</div>
 											<div class="con-flex" ng-if="setting.Default">
-												<b>{{'PreferenceFulfillment' | translate}}</b>: {{vm.schedulingSetting.PreferencePercent}}%
+												<b>{{'PreferenceFulfillment' | translate}}</b>: {{setting.PreferencePercent}}%
 											</div>
 										</div>
 									</div>
@@ -141,7 +141,7 @@
 							</div>
 						</div>
 					</div>
-					<planning-group-setting planning-group-id="vm.planningGroup.Id" planning-group-setting-id="setting.Id" ng-show="setting.editing"></planning-group-setting>
+					<planning-group-setting setting-info="setting" ng-show="setting.editing"></planning-group-setting>
 				</card-panel-content>
 			</card-panel>
 		</card-panel-list>

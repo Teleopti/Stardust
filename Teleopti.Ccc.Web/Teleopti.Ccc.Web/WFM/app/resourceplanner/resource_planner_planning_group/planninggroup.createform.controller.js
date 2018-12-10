@@ -5,9 +5,9 @@
 		.module('wfm.resourceplanner')
 		.controller('planningGroupFormController', Controller);
 
-	Controller.$inject = ['$state', '$timeout', '$stateParams', 'planningGroupService', 'NoticeService', '$translate', 'debounceService', 'localeLanguageSortingService', 'editPlanningGroup', 'schedulingSettingInfo'];
+	Controller.$inject = ['$state', '$timeout', '$stateParams', 'planningGroupService', 'NoticeService', '$translate', 'debounceService', 'localeLanguageSortingService', 'editPlanningGroup'];
 
-	function Controller($state, $timeout, $stateParams, planningGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService, editPlanningGroup, schedulingSettingInfo) {
+	function Controller($state, $timeout, $stateParams, planningGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService, editPlanningGroup) {
 		var vm = this;
 
 		vm.requestSent = false;
@@ -18,7 +18,6 @@
 		vm.cancel = returnToOverview;
 		vm.deletePlanningGroupText = '';
 		vm.editPlanningGroup = editPlanningGroup;
-		vm.schedulingSettingInfo = schedulingSettingInfo;
 		vm.planningGroupId = null;
 		vm.isEditGroup = !!editPlanningGroup;
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);

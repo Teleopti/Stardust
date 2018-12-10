@@ -11,29 +11,31 @@
     function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService) {
         var vm = this;
 
-        var filterId = vm.planningGroupSettingId ? vm.planningGroupSettingId : null;
+        var filterId = vm.settingInfo ? vm.settingInfo.Id : null;
         vm.isEdit = !!filterId;
-        vm.settingInfo = {
-            BlockSameShift: false,
-            BlockSameShiftCategory: false,
-            BlockSameStartTime: false,
-            MinDayOffsPerWeek: 1,
-            MaxDayOffsPerWeek: 3,
-            MinConsecutiveWorkdays: 2,
-            MaxConsecutiveWorkdays: 6,
-            MinConsecutiveDayOffs: 1,
-            MaxConsecutiveDayOffs: 3,
-            MinFullWeekendsOff: 0,
-            MaxFullWeekendsOff: 8,
-            MinWeekendDaysOff: 0,
-            MaxWeekendDaysOff: 16,
-            Priority: null,
-            Id: filterId,
-            Filters: [],
-			Default: false,
-            Name: "",
-            PlanningGroupId: vm.planningGroupId
-        };
+        if(!vm.isEdit){
+			vm.settingInfo = {
+				BlockSameShift: false,
+				BlockSameShiftCategory: false,
+				BlockSameStartTime: false,
+				MinDayOffsPerWeek: 1,
+				MaxDayOffsPerWeek: 3,
+				MinConsecutiveWorkdays: 2,
+				MaxConsecutiveWorkdays: 6,
+				MinConsecutiveDayOffs: 1,
+				MaxConsecutiveDayOffs: 3,
+				MinFullWeekendsOff: 0,
+				MaxFullWeekendsOff: 8,
+				MinWeekendDaysOff: 0,
+				MaxWeekendDaysOff: 16,
+				Priority: null,
+				Id: filterId,
+				Filters: [],
+				Default: false,
+				Name: ""
+			};
+		}
+        
         
         vm.blockFinderTypeOptions = [
 			"Off",
@@ -72,38 +74,17 @@
         function checkIfEditDefaultRule() {
             if (!vm.isEdit)
                 return vm.settingInfo;
-            return PlanGroupSettingService.getSetting({ id: filterId})
-                .$promise.then(function (result) {
-					vm.settingInfo.Default = result.Default;
-                    vm.settingInfo.Name = result.Name;
-                    vm.settingInfo.Filters = result.Filters;
-                    vm.settingInfo.Priority = result.Priority;
-                    vm.settingInfo.BlockFinderType = result.BlockFinderType;
-                    vm.settingInfo.BlockSameShiftCategory = result.BlockSameShiftCategory;
-                    vm.settingInfo.BlockSameStartTime = result.BlockSameStartTime;
-                    vm.settingInfo.BlockSameShift = result.BlockSameShift;
-                    vm.settingInfo.MinDayOffsPerWeek = result.MinDayOffsPerWeek;
-                    vm.settingInfo.MaxDayOffsPerWeek = result.MaxDayOffsPerWeek;
-                    vm.settingInfo.MinConsecutiveWorkdays = result.MinConsecutiveWorkdays;
-                    vm.settingInfo.MaxConsecutiveWorkdays = result.MaxConsecutiveWorkdays;
-                    vm.settingInfo.MinConsecutiveDayOffs = result.MinConsecutiveDayOffs;
-                    vm.settingInfo.MaxConsecutiveDayOffs = result.MaxConsecutiveDayOffs;
-                    vm.settingInfo.MinFullWeekendsOff = result.MinFullWeekendsOff;
-                    vm.settingInfo.MaxFullWeekendsOff = result.MaxFullWeekendsOff;
-                    vm.settingInfo.MinWeekendDaysOff = result.MinWeekendDaysOff;
-                    vm.settingInfo.MaxWeekendDaysOff = result.MaxWeekendDaysOff;
-					vm.settingInfo.PreferencePercent = result.PreferencePercent;
-					vm.blockFinderType = vm.blockFinderTypeOptions[result.BlockFinderType];
-					if(result.BlockSameShiftCategory){
-						vm.blockComparisonType = vm.blockComparisonTypeOptions[0];
-					}
-					if(result.BlockSameStartTime){
-						vm.blockComparisonType = vm.blockComparisonTypeOptions[1];
-					}
-					if(result.BlockSameShift){
-						vm.blockComparisonType = vm.blockComparisonTypeOptions[2];
-					}
-                });
+            
+			vm.blockFinderType = vm.blockFinderTypeOptions[vm.settingInfo.BlockFinderType];
+			if(vm.settingInfo.BlockSameShiftCategory){
+				vm.blockComparisonType = vm.blockComparisonTypeOptions[0];
+			}
+			if(vm.settingInfo.BlockSameStartTime){
+				vm.blockComparisonType = vm.blockComparisonTypeOptions[1];
+			}
+			if(vm.settingInfo.BlockSameShift){
+				vm.blockComparisonType = vm.blockComparisonTypeOptions[2];
+			}
         }
 
         function inputFilterData() {
@@ -224,8 +205,7 @@
 		return {
 			restrict: 'EA',
 			scope: {
-				planningGroupId: '=',
-				planningGroupSettingId: '='
+				settingInfo: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',
 			controller: 'planningGroupSettingEditController as vm',

@@ -42,11 +42,6 @@
 			resolve: {
 				editPlanningGroup: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
 					return planningGroupService.getPlanningGroupById({ id: $stateParams.groupId }).$promise;
-				}],
-				schedulingSettingInfo: ['PlanGroupSettingService', '$stateParams', function (PlanGroupSettingService, $stateParams) {
-					return PlanGroupSettingService.getSettingsByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
-						return data;
-					});
 				}]
 			}
 		}).state('resourceplanner.selectplanningperiod', {
