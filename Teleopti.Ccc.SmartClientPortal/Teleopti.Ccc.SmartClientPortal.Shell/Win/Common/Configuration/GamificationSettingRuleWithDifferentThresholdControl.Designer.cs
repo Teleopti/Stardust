@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxGoldThresholdForAHT.Name = "timeSpanTextBoxGoldThresholdForAHT";
 			this.timeSpanTextBoxGoldThresholdForAHT.Size = new System.Drawing.Size(326, 33);
 			this.timeSpanTextBoxGoldThresholdForAHT.TabIndex = 6;
-			this.timeSpanTextBoxGoldThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxGoldThresholdForAHT.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxHeight = 20;
 			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxWidth = 65535;
 			this.timeSpanTextBoxGoldThresholdForAHT.Validating += new System.ComponentModel.CancelEventHandler(this.timeSpanTextBoxGoldThresholdsForAHT_Validating);
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxSilverThresholdForAHT.Name = "timeSpanTextBoxSilverThresholdForAHT";
 			this.timeSpanTextBoxSilverThresholdForAHT.Size = new System.Drawing.Size(326, 33);
 			this.timeSpanTextBoxSilverThresholdForAHT.TabIndex = 7;
-			this.timeSpanTextBoxSilverThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxSilverThresholdForAHT.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxHeight = 20;
 			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxWidth = 65535;
 			this.timeSpanTextBoxSilverThresholdForAHT.Validating += new System.ComponentModel.CancelEventHandler(this.timeSpanTextBoxSilverThresholdsForAHT_Validating);
@@ -380,7 +380,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxBronzeThresholdForAHT.Name = "timeSpanTextBoxBronzeThresholdForAHT";
 			this.timeSpanTextBoxBronzeThresholdForAHT.Size = new System.Drawing.Size(326, 33);
 			this.timeSpanTextBoxBronzeThresholdForAHT.TabIndex = 8;
-			this.timeSpanTextBoxBronzeThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
+			this.timeSpanTextBoxBronzeThresholdForAHT.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxHeight = 20;
 			this.timeSpanTextBoxBronzeThresholdForAHT.TimeSpanBoxWidth = 65535;
 			this.timeSpanTextBoxBronzeThresholdForAHT.Validated += new System.EventHandler(this.timeSpanTextBoxThresholdsForAHT_Validated);

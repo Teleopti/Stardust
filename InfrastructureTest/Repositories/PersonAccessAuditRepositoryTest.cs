@@ -2,11 +2,8 @@
 using SharpTestsEx;
 using System;
 using System.Linq;
-using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Staffing;
@@ -49,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personAccess2);
 
 			_personAccessAuditRepository.LoadAudits(LoggedOnPerson, new DateTime(2018, 10, 22), new DateTime(2018, 10, 22))
-				.Single().Should().Be(personAccess);
+			.Single().Should().Be(personAccess);
 		}
 
 		[Test]
@@ -88,12 +85,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personAccess1);
 			PersistAndRemoveFromUnitOfWork(personAccess2);
 			PersistAndRemoveFromUnitOfWork(personAccess3);
-			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow);
+			var audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow, "");
 			audits.Count().Should().Be(3);
 
 			rep.PurgeOldAudits(DateTime.UtcNow.AddDays(-60));
 
-			audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow);
+			audits = rep.LoadAudits(LoggedOnPerson, DateTime.UtcNow.AddDays(-200), DateTime.UtcNow, "").ToList();
 			audits.Count().Should().Be(2);
 		}
 
@@ -114,11 +111,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personAccess3.TimeStamp = new DateTime(2018, 10, 16, 12, 0, 0, DateTimeKind.Utc);
 			PersistAndRemoveFromUnitOfWork(personAccess3);
 
-			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5));
-			audits.Count().Should().Be(3);
-			audits.First().TimeStamp.Should().Be(personAccess2.TimeStamp);
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5), "").ToList();
+			audits.Count.Should().Be(3);
+			audits.First().TimeStamp.Should().Be(personAccess3.TimeStamp);
 			audits.Second().TimeStamp.Should().Be(personAccess1.TimeStamp);
-			audits.Third().TimeStamp.Should().Be(personAccess3.TimeStamp);
+			audits.Third().TimeStamp.Should().Be(personAccess2.TimeStamp);
 		}
 
 		[Test]
@@ -133,11 +130,56 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(personAccess);
 			}
 
-			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-200), now.AddDays(100));
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-200), now.AddDays(100), "");
 			audits.Count().Should().Be(100);
 		}
 
-		
+		[Test]
+		public void ShouldFilterOnRole()
+		{
+			var rep = new PersonAccessAuditRepository(CurrUnitOfWork);
+			var now = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			var personAccess1 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess1.TimeStamp = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			personAccess1.Data = "{RoleId: 'x', Name: 'y'}";
+			PersistAndRemoveFromUnitOfWork(personAccess1);
+
+			var personAccess2 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess2.TimeStamp = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			personAccess2.Data = "{RoleId: 'y', Name: 'x'}";
+			PersistAndRemoveFromUnitOfWork(personAccess2);
+
+			var personAccess3 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess3.TimeStamp = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			personAccess3.Data = "{RoleId: 'y', Name: 'y'}";
+			PersistAndRemoveFromUnitOfWork(personAccess3);
+
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5), "x").ToList();
+			audits.Count.Should().Be(2);
+			audits.Should().Contain(personAccess1);
+			audits.Should().Contain(personAccess2);
+		}
+
+		[Test]
+		public void ShouldFilterOnActionPerformedOn()
+		{
+			var rep = new PersonAccessAuditRepository(CurrUnitOfWork);
+			var now = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			var personAccess1 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess1.TimeStamp = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			personAccess1.ActionPerformedOn = "Kalle Anka";
+			PersistAndRemoveFromUnitOfWork(personAccess1);
+
+			var personAccess2 = CreateAggregateWithCorrectBusinessUnit();
+			personAccess2.TimeStamp = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
+			personAccess2.ActionPerformedOn = "Sven Duva";
+			PersistAndRemoveFromUnitOfWork(personAccess2);
+
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5), "Sven").ToList();
+			audits.Count().Should().Be(1);
+			audits.Should().Contain(personAccess2);
+		}
+
 		protected override IPersonAccess CreateAggregateWithCorrectBusinessUnit()
 		{
 			return new PersonAccess(
@@ -157,7 +199,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void VerifyAggregateGraphProperties(IPersonAccess loadedAggregateFromDatabase)
 		{
 			loadedAggregateFromDatabase.ActionPerformedById.Should().Be.EqualTo(LoggedOnPerson.Id.GetValueOrDefault());
+			loadedAggregateFromDatabase.ActionPerformedBy.Should().Be.EqualTo(_personAccessBase.ActionPerformedBy);
 			loadedAggregateFromDatabase.ActionPerformedOn.Should().Be.EqualTo(_personAccessBase.ActionPerformedOn);
+			loadedAggregateFromDatabase.ActionPerformedOnId.Should().Be.EqualTo(_personAccessBase.ActionPerformedOnId);
 			loadedAggregateFromDatabase.Action.Should().Be.EqualTo(_personAccessBase.Action);
 			loadedAggregateFromDatabase.ActionResult.Should().Be.EqualTo(_personAccessBase.ActionResult);
 			loadedAggregateFromDatabase.Data.Should().Be.EqualTo(_personAccessBase.Data);

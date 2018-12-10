@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
@@ -25,12 +24,12 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			_resultCountOfAggregatedAudits = resultCountOfAggregatedAudits;
 		}
 
-		public IList<AuditServiceModel> Load(Guid personId, DateTime startDate, DateTime endDate)
+		public IList<AuditServiceModel> Load(Guid personId, DateTime startDate, DateTime endDate, string searchword)
 		{
 			var aggregatedAudits = new List<AuditServiceModel>();
 
-			aggregatedAudits.AddRange(getStaffingAudits(personId, startDate, endDate));
-			aggregatedAudits.AddRange(getPersonAccessAudits(personId, startDate, endDate));
+			aggregatedAudits.AddRange(getStaffingAudits(personId, startDate, endDate, searchword));
+			aggregatedAudits.AddRange(getPersonAccessAudits(personId, startDate, endDate, searchword));
 
 			fixUserTimeZone(aggregatedAudits);
 
@@ -47,16 +46,16 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			});
 		}
 
-		private IEnumerable<AuditServiceModel> getStaffingAudits(Guid personId, DateTime startDate, DateTime endDate)
+		private IEnumerable<AuditServiceModel> getStaffingAudits(Guid personId, DateTime startDate, DateTime endDate, string searchword)
 		{
 			var person = _personRepository.Load(personId);
-			return _staffingContextReaderService.LoadAudits(person, startDate, endDate);
+			return _staffingContextReaderService.LoadAudits(person, startDate, endDate, searchword);
 		}
 
-		private IEnumerable<AuditServiceModel> getPersonAccessAudits(Guid personId, DateTime startDate, DateTime endDate)
+		private IEnumerable<AuditServiceModel> getPersonAccessAudits(Guid personId, DateTime startDate, DateTime endDate, string searchword)
 		{
 			var person = _personRepository.Load(personId);
-			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate);
+			return _personAccessContextReaderService.LoadAudits(person, startDate, endDate, searchword);
 		}
 
 	}

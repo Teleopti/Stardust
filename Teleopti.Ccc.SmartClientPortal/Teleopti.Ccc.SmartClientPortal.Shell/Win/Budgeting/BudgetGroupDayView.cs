@@ -9,6 +9,7 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting.Events;
@@ -20,7 +21,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 {

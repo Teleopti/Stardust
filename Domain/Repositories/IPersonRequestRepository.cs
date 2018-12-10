@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -30,18 +29,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2009-08-30
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person);
-
-		/// <summary>
-		/// Finds all requests from and to a person for given period.
-		/// </summary>
-		/// <param name="person">The person.</param>
-		/// <param name="period">The period to query.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2011-10-27
-		/// </remarks>
-		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
 
 		IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter, out int count, bool ignoreCount = false);
 
@@ -113,8 +100,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IPersonRequest Find(Guid id);
 
 		IList<IPersonRequest> Find(IEnumerable<Guid> id);
-
-		IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T: Request;
 
 		IPersonRequest FindPersonRequestByRequestId(Guid value);
 

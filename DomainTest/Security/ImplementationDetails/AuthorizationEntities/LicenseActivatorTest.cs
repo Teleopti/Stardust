@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.AuthorizationEntities
 {
@@ -21,8 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.AuthorizationEn
 		[SetUp]
 		public void Setup()
 		{
-			_target = new LicenseActivator(_customerName, _expirationDate, _showAsPerpetual, _maxActiveAgents, 100, LicenseType.Agent, _maxActiveAgentsGrace,
-							XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents, "8");
+			_target = new LicenseActivator(_customerName, _expirationDate, _showAsPerpetual, _maxActiveAgents, 100, LicenseType.Agent, _maxActiveAgentsGrace, "8");
 		}
 
 		[Test]
@@ -49,14 +49,6 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.AuthorizationEn
 			Assert.Less(0, maxActiveAgents);
 			Percent maxActiveAgentsGrace = _target.MaxActiveAgentsGrace;
 			Assert.Less(0.0, maxActiveAgentsGrace.Value);
-
-			Assert.IsFalse(_target.IsThisTooManyActiveAgents(0));
-			Assert.IsFalse(_target.IsThisTooManyActiveAgents(maxActiveAgents));
-			Assert.IsTrue(_target.IsThisTooManyActiveAgents((int)Math.Ceiling(maxActiveAgents * (1.0 + maxActiveAgentsGrace.Value)) + 1));
-
-			Assert.IsFalse(_target.IsThisAlmostTooManyActiveAgents(0));
-			Assert.IsFalse(_target.IsThisAlmostTooManyActiveAgents(maxActiveAgents - 1));
-			Assert.IsTrue(_target.IsThisAlmostTooManyActiveAgents(maxActiveAgents + 1));
 			_target.MajorVersion.Should().Be.EqualTo("8");
 		}
 

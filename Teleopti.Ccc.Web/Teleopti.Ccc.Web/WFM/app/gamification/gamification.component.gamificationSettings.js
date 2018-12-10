@@ -138,5 +138,24 @@
 				gamificationSettingService.resetBadge().then(function (response) { });
 			});
 		}
+
+		ctrl.confirmDeleteSetting = function name() {
+
+			var setting = ctrl.allSettings.find(function (item) {
+			 		return item.Id == ctrl.currentSettingId;
+			});
+
+			var confirm = $mdDialog.confirm()
+				.title($translate.instant('DeleteGamificationSetting'))
+				.textContent($translate.instant('AreYouSureYouWantToDeleteGamificationSetting').replace('{0}', setting.Name))
+				.ok($translate.instant('Ok'))
+				.cancel($translate.instant('Cancel'));
+
+			$mdDialog.show(confirm).then(function () {
+				ctrl.deleteSetting();
+			});
+		}
+
+
 	}
 })(angular);

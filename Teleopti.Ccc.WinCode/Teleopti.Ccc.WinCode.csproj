@@ -89,8 +89,6 @@
     <Compile Include="Common\IPortalSettings.cs" />
     <Compile Include="Scheduling\ISchedulingScreenSettings.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
-    <Compile Include="Reporting\ReportSettingsScheduleAuditing.cs" />
-    <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimeVersusTarget.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SchedulerSortCommandSetting.cs" />
@@ -123,10 +121,6 @@
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

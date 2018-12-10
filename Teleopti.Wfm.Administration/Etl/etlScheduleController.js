@@ -2,11 +2,11 @@
 	"use strict";
 
 	angular
-	.module("adminApp")
-	.controller("etlScheduleController", etlScheduleController, [
-		"$http",
-		"$timeout"
-	]);
+		.module("adminApp")
+		.controller("etlScheduleController", etlScheduleController, [
+			"$http",
+			"$timeout"
+		]);
 
 	function etlScheduleController($http, tokenHeaderService, $timeout) {
 		var vm = this;
@@ -32,32 +32,32 @@
 		function getScheduledJobs() {
 			vm.schedules = null;
 			$http
-			.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
+				.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
 				.then(function (response) {
 					vm.schedules = response.data;
-			});
+				});
 		}
 
 		function toggleScheduleJob(scheduleId) {
 			$http
-			.post("./Etl/ToggleScheduleJob",
-				JSON.stringify(scheduleId),
-				tokenHeaderService.getHeaders()
-			)
+				.post("./Etl/ToggleScheduleJob",
+					JSON.stringify(scheduleId),
+					tokenHeaderService.getHeaders()
+				)
 				.then(function (response) {
-				getScheduledJobs();
-			});
+					getScheduledJobs();
+				});
 		}
 
 		function deleteScheduleJob(scheduleId) {
 			$http
-			.post("./Etl/DeleteScheduleJob",
-				JSON.stringify(scheduleId),
-				tokenHeaderService.getHeaders()
-			)
+				.post("./Etl/DeleteScheduleJob",
+					JSON.stringify(scheduleId),
+					tokenHeaderService.getHeaders()
+				)
 				.then(function (response) {
-				getScheduledJobs();
-			});
+					getScheduledJobs();
+				});
 		}
 
 		function buildRelativePeriods(name, start, end, destination) {
@@ -68,7 +68,7 @@
 						Start: start,
 						End: end
 					}
-				)
+				);
 			} else {
 				return;
 			}
@@ -120,14 +120,14 @@
 			}
 
 			$http
-			.post(
-				"./Etl/ScheduleJob",
-				JSON.stringify(postObj),
-				tokenHeaderService.getHeaders()
-			)
+				.post(
+					"./Etl/ScheduleJob",
+					JSON.stringify(postObj),
+					tokenHeaderService.getHeaders()
+				)
 				.then(function (response) {
-				getScheduledJobs();
-			});
+					getScheduledJobs();
+				});
 		}
 
 		function editScheduleJob(form) {
@@ -157,7 +157,7 @@
 			var logdataId;
 			if (form.LogDataSourceId) {
 				logdataId = form.LogDataSourceId.Id;
-			} else{
+			} else {
 				logdataId = null
 			}
 
@@ -176,14 +176,14 @@
 			}
 
 			$http
-			.post(
-				"./Etl/EditScheduleJob",
-				JSON.stringify(postObj),
-				tokenHeaderService.getHeaders()
-			)
+				.post(
+					"./Etl/EditScheduleJob",
+					JSON.stringify(postObj),
+					tokenHeaderService.getHeaders()
+				)
 				.then(function (response) {
-				getScheduledJobs();
-			});
+					getScheduledJobs();
+				});
 		}
 	}
 })();

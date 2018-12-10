@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
@@ -247,6 +247,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => x.HasDayOffOrMainShiftLayer()).Should().Be.EqualTo(7);
+		}
+		
+		[Test]
+		public void ShouldNotReturnPreferenceHintIf50PercentIsAllowedAnd50PercentIsFulfilled()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2015, 10, 12); //mon;
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(date, date.AddDays(6)), 1)); 
+			var preferenceRestrictionNotFulfilled = new PreferenceRestriction {ShiftCategory = new ShiftCategory()};
+			var preferenceRestrictionFulfilled = new PreferenceRestriction {ShiftCategory = shiftCategory};
+			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date, preferenceRestrictionNotFulfilled));
+			PreferenceDayRepository.Add(new PreferenceDay(agentToSchedule, date.AddDays(1), preferenceRestrictionFulfilled));
+
+			planningPeriod.PlanningGroup.SetGlobalValues(new Percent(0.5));
+			
+			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value).BusinessRulesValidationResults;
+
+			if (result.Any())
+			{
+				result.First().ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.Preferences).Should().Be.Null();
+
+			}
 		}
 		
 		public SchedulingFulfillPreferencesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)

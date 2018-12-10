@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameStartTime = true
-					}), false)).InvalidResources;
+					}), 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}), false)).InvalidResources;
+					}), 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingNotMatchShiftBagHint));
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShift = true
-					}), false)).InvalidResources;
+					}), 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count(x => x.ErrorResource == nameof(Resources.ShiftNotMatchingShiftBag)).Should().Be.EqualTo(0);
 		}
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameShiftCategory = true
-					}), false)).InvalidResources;
+					}), 0)).InvalidResources;
 
 			result.Should().Not.Be.Null();
 		}
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					UseTeamBlockOption = true,
 					BlockTypeValue = BlockFinderType.BetweenDayOff,
 					UseBlockSameShiftCategory = true
-				}), false));
+				}), 0));
 		}
 
 		[Test]
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.BetweenDayOff,
 						UseBlockSameStartTime = true
-					}), false)).InvalidResources;
+					}), 0)).InvalidResources;
 
 			result.Count.Should().Be.EqualTo(0);
 		}

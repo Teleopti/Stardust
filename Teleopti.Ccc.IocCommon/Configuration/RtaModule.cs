@@ -12,19 +12,21 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence;
-using Teleopti.Wfm.Adherence.ApplicationLayer.Infrastructure;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
+using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
-using Teleopti.Wfm.Adherence.Domain.ApprovePeriodAsInAdherence;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Events;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure.Service;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Historical.Infrastructure;
+using Teleopti.Wfm.Adherence.Monitor;
+using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
+using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Infrastructure;
 using Teleopti.Wfm.Adherence.Tool;
 using Teleopti.Wfm.Adherence.Tracer;
 using Teleopti.Wfm.Adherence.Tracer.Infrastructure;
@@ -179,8 +181,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ActivityEventPublisher>().SingleInstance();
 			builder.RegisterType<RuleEventPublisher>().SingleInstance();
 			builder.RegisterType<LateForWorkEventPublisher>().SingleInstance();
-
-			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 
 			builder.RegisterType<ProperAlarm>().SingleInstance();
 

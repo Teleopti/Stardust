@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -58,19 +57,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Future<QueueSource>();
 			
             return skills.Distinct().ToList();
-        }
-
-        private static object wrapMultiCriteria(IMultiCriteria multi)
-        {
-            try
-            {
-                return multi.List()[0];
-            }
-            catch (Exception ex)
-            {
-                //temp fix until NH is upgraded - hack just for this very branch
-                throw new DataSourceException(ex.Message, ex);
-            }
         }
 
         /// <summary>
@@ -143,7 +129,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var taskPeriods = getTaskPeriods(templateIds);
             var skillDetail = getSkillDetail(skill);
             var multiCriteria = Session.CreateMultiCriteria().Add(workloads).Add(queues).Add(templates).Add(openhours).Add(taskPeriods).Add(skillDetail);
-            var fetchedSkill = CollectionHelper.ToDistinctGenericCollection<ISkill>(wrapMultiCriteria(multiCriteria)).FirstOrDefault();
+            var fetchedSkill = CollectionHelper.ToDistinctGenericCollection<ISkill>(multiCriteria.List()[0]).FirstOrDefault();
 
             return fetchedSkill;
         }
@@ -214,7 +200,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     Add(taskPeriods).Add(multisiteDayTemplates).Add(templateMultisitePeriods).Add(distributions).Add(
                         childSkills).Add(childSkillsDetail).Add(getSkillDetail(skill));
 
-            var fetchedSkill = CollectionHelper.ToDistinctGenericCollection<IMultisiteSkill>(wrapMultiCriteria(multiCriteria)).FirstOrDefault();
+            var fetchedSkill = CollectionHelper.ToDistinctGenericCollection<IMultisiteSkill>(multiCriteria.List()[0]).FirstOrDefault();
             return fetchedSkill;
         }
 

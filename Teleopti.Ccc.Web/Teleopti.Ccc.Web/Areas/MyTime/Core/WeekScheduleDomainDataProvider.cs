@@ -11,7 +11,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {

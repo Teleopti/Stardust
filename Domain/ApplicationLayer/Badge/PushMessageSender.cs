@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		public void SendMessage(IEnumerable<IAgentBadgeTransaction> agentBadgeTransactions, IBadgeSetting badgeSetting, DateOnly calculateDate, IGamificationSetting setting)
 		{
 			var existedBadges = (_badgeRepository.Find(agentBadgeTransactions.Select(x => x.Person.Id.GetValueOrDefault()),
-									 badgeSetting.QualityId) ?? new AgentBadge[0]).ToLookup(b => b.Person);
+									 badgeSetting.QualityId, true) ?? new AgentBadge[0]).ToLookup(b => b.Person);
 
 			foreach (var agentBadgeTransaction in agentBadgeTransactions)
 			{
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			var agentBadgeTransactions = newAwardedBadges as IList<IAgentBadgeTransaction> ?? newAwardedBadges.ToList();
 
 			var existedBadges = (_badgeRepository.Find(agentBadgeTransactions.Select(x => x.Person.Id.GetValueOrDefault()),
-				badgeType) ?? new AgentBadge[0]).ToLookup(b => b.Person);
+				badgeType, false) ?? new AgentBadge[0]).ToLookup(b => b.Person);
 			foreach (var badgeTransaction in agentBadgeTransactions)
 			{
 				var person = badgeTransaction.Person;

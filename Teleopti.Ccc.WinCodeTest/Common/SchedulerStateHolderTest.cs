@@ -20,7 +20,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {
@@ -102,12 +102,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void CanFilterPersonsOnPerson()
-		{
-			target.FilterPersons(new List<IPerson>());
-		}
-
-		[Test]
 		public void ShouldThrowExceptionOnNullScheduleRepository()
 		{
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
@@ -119,43 +113,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			target.ConsiderShortBreaks = true;
 			Assert.IsTrue(target.ConsiderShortBreaks);
-		}
-
-		[Test]
-		public void ShouldReturnIsFilteredOnAgentsWhenFilterCountNotEqualToAllPermittedCount()
-		{
-			target.FilterPersons(new List<IPerson>{_person1});
-			var result = target.AgentFilter();
-			Assert.IsTrue(result);
-		}
-
-		[Test]
-		public void ShouldReturnIsNotFilteredOnAgentsWhenFilterCountEqualToAllPermittedCount()
-		{
-			target.FilterPersons(new List<IPerson> { _person1, _person2 });
-			var result = target.AgentFilter();
-			Assert.IsFalse(result);	
-		}
-
-		[Test]
-		public void ShouldReturnCombinedFilterOnFilteredPersonDictionary()
-		{
-			target.FilterPersons(new List<IPerson>{_person1});
-			target.FilterPersonsOvertimeAvailability(new List<IPerson>{_person1, _person2});
-			target.FilterPersonsHourlyAvailability(new List<IPerson> { _person1, _person2, _person3 });
-			var filteredPersons = target.FilteredCombinedAgentsDictionary;
-
-			Assert.AreEqual(1, filteredPersons.Count);
-			Assert.IsTrue(filteredPersons.ContainsKey(_guid1));
-
-			target.FilterPersons(new List<IPerson> { _person1, _person3 });
-			target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1, _person2, _person3 });
-			target.FilterPersonsHourlyAvailability(new List<IPerson> { _person1, _person2, _person3 });
-			filteredPersons = target.FilteredCombinedAgentsDictionary;
-
-			Assert.AreEqual(2, filteredPersons.Count);
-			Assert.IsTrue(filteredPersons.ContainsKey(_guid1));
-			Assert.IsTrue(filteredPersons.ContainsKey(_guid3));
 		}
 	}
 }

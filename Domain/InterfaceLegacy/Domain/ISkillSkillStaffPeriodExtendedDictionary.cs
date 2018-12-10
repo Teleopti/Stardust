@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
 {

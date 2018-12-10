@@ -16,8 +16,9 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 
@@ -198,7 +199,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 				_externalLogOnRepository.Add(externalLogOn);
 				var person = new Person();
 				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-				var personPeriod = PersonPeriodFactory.CreatePersonPeriodFromDateTime(now.UtcDateTime(), new PersonContract(contract, partTimePercentage, contractSchedule), team);
+				var personPeriod = new PersonPeriod(new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(now.UtcDateTime()), new PersonContract(contract, partTimePercentage, contractSchedule), team);
 				personPeriod.AddExternalLogOn(externalLogOn);
 				person.AddPersonPeriod(personPeriod);
 				_personRepository.Add(person);

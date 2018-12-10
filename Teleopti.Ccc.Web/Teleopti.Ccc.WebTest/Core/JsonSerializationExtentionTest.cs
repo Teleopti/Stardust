@@ -1,8 +1,9 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using System.Runtime.Serialization;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Util;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Core
 {

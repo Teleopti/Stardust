@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
@@ -194,6 +194,40 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+		}
+
+		[Test]
+		public void ShouldHandleSelectedPeriodThatIsOneDayLong()
+		{
+			var period = new DateOnlyPeriod(2018, 4, 2, 2018, 4, 8);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId()));
+			var agent1 = new Person().WithId()
+				.WithPersonPeriod(period.StartDate, new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodOneWeek(period.StartDate);
+			agent1.Period(period.StartDate).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			var preferenceDays = new List<IPreferenceDay>();
+			for (int i = 0; i < 7; i++)
+			{
+				var date = new DateOnly(2018, 4, 2);
+				preferenceDays.Add(new PreferenceDay(agent1, date.AddDays(i),
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			}
+
+			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, preferenceDays, skillDays);
+
+			var result = Target.Create(new DateOnlyPeriod(period.StartDate, period.StartDate), new[] { agent1 }, new NoSchedulingProgress()).ToList();
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result[0].Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 2), new DateOnly(2018, 4, 2).AddDays(6)));
 		}
 
 		[Test]

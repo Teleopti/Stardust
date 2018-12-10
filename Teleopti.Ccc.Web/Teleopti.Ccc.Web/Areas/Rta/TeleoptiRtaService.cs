@@ -6,6 +6,7 @@ using System.ServiceModel.Activation;
 using log4net;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.Web.Areas.Rta
@@ -14,11 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 	public class TeleoptiRtaService : ITeleoptiRtaService
 	{
-		private readonly Wfm.Adherence.Domain.Service.Rta _rta;
+		private readonly Wfm.Adherence.States.Rta _rta;
 		private readonly IRtaTracer _tracer;
 		private readonly ILog log = LogManager.GetLogger(typeof(TeleoptiRtaService));
 
-		public TeleoptiRtaService(Wfm.Adherence.Domain.Service.Rta rta, IRtaTracer tracer)
+		public TeleoptiRtaService(Wfm.Adherence.States.Rta rta, IRtaTracer tracer)
 		{
 			_rta = rta;
 			_tracer = tracer;

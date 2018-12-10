@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 			return commonAgentNameSetting.BuildFor(personInfo);
 		}
 
-		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
+		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate, string searchword)
 		{
-			var staffingAudit = _staffingAuditRepository.LoadAudits(personId, startDate, endDate);
+			var staffingAudit = _staffingAuditRepository.LoadAudits(personId, startDate, endDate, searchword);
 
 			return getAuditServiceModel(staffingAudit);
 		}

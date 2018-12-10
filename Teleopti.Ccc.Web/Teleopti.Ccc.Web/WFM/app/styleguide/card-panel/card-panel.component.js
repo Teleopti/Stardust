@@ -109,6 +109,7 @@
             function preOpen() {
                 if (attrs.preOpen == 'true') {
                     if (attrs.id !== '' && allCards[attrs.id].classList.contains('hidden')) {
+						allCards[attrs.id].previousElementSibling.classList.add('selected');
                         return allCards[attrs.id].classList.remove('hidden');
                     }
                     return toggleCard();
@@ -143,10 +144,17 @@
             function toggleCard() {
                 var style = selectedCardContent.classList;
                 if (style.contains('hidden')) {
-                    return style.remove('hidden');
+                    style.remove('hidden');
                 } else {
-                    return style.add('hidden');
+                    style.add('hidden');
                 }
+
+				var elStyle = el.classList;
+				if (elStyle.contains('selected')) {
+					elStyle.remove('selected');
+				} else {
+					elStyle.add('selected');
+				}
             }
 
         }

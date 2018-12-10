@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -10,7 +11,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_target = new NotificationValidationCheck(_significantChangeChecker, _notifier);
 
 			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.Current().Name, new LicenseActivator("Test", DateTime.Today.AddDays(100), false, 1000, 1000,
-																			  LicenseType.Agent, new Percent(.10), null, null, "8"));
+																			  LicenseType.Agent, new Percent(.10), "8"));
 		}
 
 		private void setValidLicense()

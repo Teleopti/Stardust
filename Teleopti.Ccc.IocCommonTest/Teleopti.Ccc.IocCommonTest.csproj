@@ -95,6 +95,7 @@
     <Compile Include="Configuration\EventHandlersModuleTest.cs" />
     <Compile Include="Configuration\EventsPublisherModuleTest.cs" />
     <Compile Include="Configuration\ForecasterModuleTest.cs" />
+    <Compile Include="Configuration\HangfireHandlerTypeMappingTest.cs" />
     <Compile Include="Configuration\HangfireModuleTest.cs" />
     <Compile Include="Configuration\InitializeModuleTest.cs" />
     <Compile Include="Configuration\LogModuleTest.cs" />
@@ -144,10 +145,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>

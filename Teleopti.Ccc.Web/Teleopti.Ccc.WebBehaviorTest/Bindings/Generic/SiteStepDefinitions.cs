@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {

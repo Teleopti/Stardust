@@ -6,7 +6,7 @@ using Teleopti.Ccc.DomainTest.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {

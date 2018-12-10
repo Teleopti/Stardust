@@ -319,7 +319,11 @@ Teleopti.MyTimeWeb.Common = (function($) {
 		return '/' + fixedDate.split('-').join('/');
 	}
 
-	function _getTextColorBasedOnBackgroundColor(backgroundColor) {
+	function getTextColorBasedOnBackgroundColor(backgroundColor) {
+		//Note: for the unified look of the activity color and text in Web,
+		//please keep this color strategy synced with the one in WFM: colorUtils service
+		//which locates in \Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM\app\global\utilities\colorUtils.service.js
+
 		if (typeof backgroundColor != 'string' || backgroundColor.length == 0) return 'black';
 
 		if (backgroundColor.indexOf('#') > -1) {
@@ -330,22 +334,30 @@ Teleopti.MyTimeWeb.Common = (function($) {
 
 		var backgroundColorArr = backgroundColor.split(',');
 
-		var brightness = backgroundColorArr[0] * 0.299 + backgroundColorArr[1] * 0.587 + backgroundColorArr[2] * 0.114;
+		var brightness =
+			backgroundColorArr[0] * 0.299 + backgroundColorArr[1] * 0.587 + backgroundColorArr[2] * 0.114;
 
-		return brightness < 100 ? 'white' : 'black';
+		return brightness < 128 ? 'white' : 'black';
 	}
 
 	function _hexToRGB(hex) {
-		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		var result = /^#?([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})([a-f\d]{2}|[a-f\d]{1})$/i.exec(hex);
 		var rgb = result
 			? {
-					r: parseInt(result[1], 16),
-					g: parseInt(result[2], 16),
-					b: parseInt(result[3], 16)
-			  }
+					r: parseInt(_fillupDigits(result[1]), 16),
+					g: parseInt(_fillupDigits(result[2]), 16),
+					b: parseInt(_fillupDigits(result[3]), 16)
+				}
 			: null;
 		if (rgb) return 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
 		return rgb;
+	}
+
+	function _fillupDigits(hex) {
+		if (hex.length == 1) {
+			hex += '' + hex;
+		}
+		return hex;
 	}
 
 	function _rgbToHex(rgb) {
@@ -521,7 +533,7 @@ Teleopti.MyTimeWeb.Common = (function($) {
 			return moment.tz(dateTimeStr, 'UTC');
 		},
 		GetTextColorBasedOnBackgroundColor: function(backgroundColor) {
-			return _getTextColorBasedOnBackgroundColor(backgroundColor);
+			return getTextColorBasedOnBackgroundColor(backgroundColor);
 		},
 		RGBTohex: _rgbToHex,
 		IsRtl: function() {

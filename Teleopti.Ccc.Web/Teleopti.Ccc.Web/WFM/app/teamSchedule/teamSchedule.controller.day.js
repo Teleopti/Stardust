@@ -13,23 +13,22 @@
 		'TeamSchedule',
 		'PersonSelection',
 		'ScheduleManagement',
-		'NoticeService',
 		'ValidateRulesService',
 		'CommandCheckService',
 		'ScheduleNoteManagementService',
-		'Toggle',
 		'bootstrapCommon',
 		'groupPageService',
 		'TeamsStaffingConfigurationStorageService',
 		'serviceDateFormatHelper',
 		'ViewStateKeeper',
 		'teamsPermissions',
+		'UtilityService',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $stateParams, $mdComponentRegistry, $document,
-		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
-		CommandCheckService, ScheduleNoteManagementService, toggleSvc, bootstrapCommon, groupPageService,
-		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions) {
+		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc,  ValidateRulesService,
+		CommandCheckService, ScheduleNoteManagementService, bootstrapCommon, groupPageService,
+		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions, Utility) {
 		var mode = {
 			BusinessHierarchy: 'BusinessHierarchy',
 			GroupPages: 'GroupPages'
@@ -42,8 +41,9 @@
 		vm.scheduleFullyLoaded = false;
 	
 		vm.preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
-		vm.scheduleDate = $stateParams.selectedDate || viewState.selectedDate || new Date();
+		
 		vm.currentTimezone = viewState.timezone;
+		vm.scheduleDate = $stateParams.selectedDate || viewState.selectedDate || Utility.nowDateInUserTimezone();
 		vm.avaliableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = viewState.staffingEnabled;
@@ -587,37 +587,11 @@
 			});
 		};
 
-		vm.getSitesAndTeamsAsync = function () {
-			return $q(function (resolve, reject) {
-				var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
-				teamScheduleSvc.hierarchy(date)
-					.then(function (data) {
-						resolve(data);
-						vm.sitesAndTeams = data.Children;
-
-						angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
-
-						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-					});
-			});
-		};
-
 		vm.isResultTooMany = function () {
 			return vm.total > 500;
 		}
 		vm.warningMessageForTooManyResults = function () {
 			return $translate.instant('TooManyResultsForSearchKeywords').replace('{0}', 500);
-		}
-
-
-		function extractTeamNames(sites) {
-			var teamNameMap = {};
-			sites.forEach(function (site) {
-				site.Children.forEach(function (team) {
-					teamNameMap[team.Id] = team.Name;
-				});
-			});
-			return teamNameMap;
 		}
 
 		vm.searchPlaceholder = $translate.instant('Search');

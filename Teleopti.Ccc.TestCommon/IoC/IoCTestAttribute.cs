@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 	[Toggle(Domain.FeatureFlags.Toggles.MessageBroker_HttpSenderThrottleRequests_79140)]
 	[Toggle(Domain.FeatureFlags.Toggles.MessageBroker_VeganBurger_79140)]
+	[Toggle(Domain.FeatureFlags.Toggles.MessageBroker_ServerThrottleMessages_79140)]
+	[Toggle(Domain.FeatureFlags.Toggles.MessageBroker_ScheduleChangedMessagePackaging_79140)]
 	public class IoCTestAttribute : Attribute, ITestAction, IIoCTestContext
 	{
 		public ActionTargets Targets => ActionTargets.Test;

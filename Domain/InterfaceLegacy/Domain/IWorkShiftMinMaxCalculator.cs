@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -82,12 +82,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///</summary>
         void ResetCache();
 
-		/// <summary>
-		/// Possibles the min max work shift lengths.
-		/// </summary>
-		/// <param name="matrix">The matrix.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <returns></returns>
-		IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix,  SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary);
+		
+		// Possibles the min max work shift lengths.
+		IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix,  SchedulingOptions schedulingOptions, OpenHoursSkillResult openHoursSkillResult);
     }
 }

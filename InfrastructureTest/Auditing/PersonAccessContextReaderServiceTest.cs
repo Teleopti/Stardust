@@ -5,10 +5,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Audit;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -18,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 	[TestFixture]
 	[UnitOfWorkTest]
 	[AllTogglesOn]
-	public class PersonAccessContextReaderServiceTest
+	public class PersonAccessContextReaderServiceTest : IIsolateSystem
 	{
 		public IPersonAccessAuditRepository PersonAccessAuditRepository;
 		public PersonAccessContextReaderService Target;
@@ -26,14 +29,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public IPersonRepository PersonRepository;
 		public MutableNow Now;
+		public ICommonAgentNameProvider CommonAgentNameProvider;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+		}
 
 		[Test]
 		public void ShouldLoadPersonAccessAuditContext()
 		{
+			var fakeCommonAgentNameProvider = CommonAgentNameProvider as FakeCommonAgentNameProvider;
+			fakeCommonAgentNameProvider.Has(new CommonNameDescriptionSetting("{LastName} {FirstName}"));
+
 			var appRole = ApplicationRoleFactory.CreateRole("Superman", "The man");
 			ApplicationRoleRepository.Add(appRole);
 			dynamic role = new {RoleId = appRole.Id.GetValueOrDefault(), Name = appRole.Name};
-			var person = PersonFactory.CreatePerson();
+			var person = PersonFactory.CreatePerson(new Name("Kalle", "Anka"));
 			PersonRepository.Add(person);
 			CurrentUnitOfWork.Current().PersistAll();
 
@@ -44,9 +56,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					PersonAuditActionResult.Change.ToString(),
 					JsonConvert.SerializeObject(role)));
 			CurrentUnitOfWork.Current().PersistAll();
-			var model = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).Single();
+			var model = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now, "").Single();
 
-			model.Data.Should().Be.EqualTo("Person: arne arne, Role: Superman");
+			model.Data.Should().Be.EqualTo("Person: Anka Kalle, Role: Superman");
 		}
 	}
 }

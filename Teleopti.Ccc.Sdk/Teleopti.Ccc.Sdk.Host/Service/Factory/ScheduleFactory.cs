@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 {

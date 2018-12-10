@@ -38,13 +38,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces
         IList<IMultiplicator> LoadMultiplicatorList();
 
         /// <summary>
-        /// Loads the multiplicator list.
-        /// </summary>
-        /// <param name="multiplicatorType">Type of the multiplicator.</param>
-        /// <returns></returns>
-        IList<IMultiplicator> LoadMultiplicatorList(MultiplicatorType multiplicatorType);
-
-        /// <summary>
         /// Gets all definition sets.
         /// </summary>
         /// <returns></returns>

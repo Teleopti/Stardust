@@ -9,5 +9,6 @@ export interface SkillPickerItem {
 	Name: string;
 	Type: SkillPickerItemType;
 	Id: string;
+	Skill?: Skill;
 	Skills: Skill[];
 }

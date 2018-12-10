@@ -7,6 +7,7 @@ import { apiAccessComponents, apiAccessRouterConfig } from './app/api-access/api
 import { appComponents, AppModule } from './app/app.module';
 import { authenticationComponents } from './app/authentication/authentication.module';
 import { insightsComponents, insightsRouterConfig } from './app/insights/insights.module';
+import { intradayComponents } from './app/intraday/intraday.module';
 import { menuComponents } from './app/menu/menu.module';
 import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
 import { reportsComponents } from './app/reports/reports.module';
@@ -16,7 +17,6 @@ import { environment } from './environments/environment';
 import { MainController } from './main.controller';
 import { mainInitializer } from './main.initializer';
 import { DowngradeableComponent, RouterConfigFunction } from './types';
-import { intradayComponents } from './app/intraday/intraday.module';
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
@@ -35,6 +35,7 @@ const bootstrapFnAngularApp = (extraProviders: StaticProvider[]) =>
 const wfm = angular.module('wfm', [
 	downgradeModule(bootstrapFnAngularApp),
 	'externalModules',
+	'supportEmailService',
 	'currentUserInfoService',
 	'toggleService',
 	'shortcutsService',
@@ -157,7 +158,7 @@ if (!isResetPasswordPage()) {
 			$mdGestureProvider.skipClickHijack();
 
 			tmhDynamicLocaleProvider.localeLocationPattern('dist/angular-i18n/angular-locale_{{locale}}.js');
-			// 	tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
+			// tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
 		}
 	]);
 

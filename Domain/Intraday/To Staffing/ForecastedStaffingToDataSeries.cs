@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 					};
 				})
 				.OrderBy(o => o.StartTime)
-				.ToList();
+				.ToArray();
 
-			if (timeSeries.Length == forecastedStaffing.Count)
+			if (timeSeries.Length == forecastedStaffing.Length)
 				return forecastedStaffing.Select(x => (double?)x.Agents).ToArray();
 
 			var forecastedStaffings = forecastedStaffing.ToLookup(x => x.StartTime);

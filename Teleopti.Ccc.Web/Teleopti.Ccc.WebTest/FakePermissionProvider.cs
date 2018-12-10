@@ -3,7 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest
 {
@@ -52,11 +52,6 @@ namespace Teleopti.Ccc.WebTest
 					data => data.Person.Id == person.Id 
 							&& data.ApplicationFunctionPath == applicationFunctionPath 
 							&& data.Date == date);
-		}
-
-		public bool HasNoPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person)
-		{
-			return false;
 		}
 
 		public bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team)

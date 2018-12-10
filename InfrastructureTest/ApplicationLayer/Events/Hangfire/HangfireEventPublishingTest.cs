@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public IJsonDeserializer Deserializer;
 		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
+		public HandlerTypeMapper TypeMapper;
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -85,19 +86,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		}
 
 		[Test]
-		public void ShouldPassHandlerTypeShortName()
+		public void ShouldPassHandlerTypePersistedName()
 		{
 			Target.Publish(new HangfireTestEvent());
 
-			JobClient.HandlerType.Should().Be(typeof(TestHandler).FullName + ", " + typeof(TestHandler).Assembly.GetName().Name);
-		}
-
-		[Test]
-		public void ShouldNotPassInterceptedHandlerTypeAsProxy()
-		{
-			Target.Publish(new AspectedHandlerTestEvent());
-
-			JobClient.HandlerType.Should().Be(typeof(TestAspectedHandler).FullName + ", " + typeof(TestAspectedHandler).Assembly.GetName().Name);
+			var expected = TypeMapper.NameForPersistence(typeof(TestHandler));
+			JobClient.HandlerTypeName.Should().Be(expected);
 		}
 
 		[Test]
@@ -113,8 +107,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Target.Publish(new BothTestEvent());
 
-			JobClient.HandlerTypes.Should().Have.Count.EqualTo(1);
-			JobClient.HandlerTypes.ElementAt(0).Should().Contain(typeof(TestBothHangfireHandler).FullName);
+			JobClient.HandlerTypeNames.Should().Have.Count.EqualTo(1);
+			var expected = TypeMapper.NameForPersistence(typeof(TestBothHangfireHandler));
+			JobClient.HandlerTypeNames.ElementAt(0).Should().Contain(expected);
 		}
 
 		[Test]
@@ -122,9 +117,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Target.Publish(new MultiHandlerTestEvent());
 
-			JobClient.HandlerTypes.Should().Have.Count.EqualTo(2);
-			JobClient.HandlerTypes.ElementAt(0).Should().Contain(typeof (TestMultiHandler2).FullName);
-			JobClient.HandlerTypes.ElementAt(1).Should().Contain(typeof (TestMultiHandler1).FullName);
+			JobClient.HandlerTypeNames.Should().Have.Count.EqualTo(2);
+			var expected1 = TypeMapper.NameForPersistence(typeof(TestMultiHandler2));
+			JobClient.HandlerTypeNames.ElementAt(0).Should().Contain(expected1);
+			var expected2 = TypeMapper.NameForPersistence(typeof(TestMultiHandler1));
+			JobClient.HandlerTypeNames.ElementAt(1).Should().Contain(expected2);
 		}
 
 		[Test]

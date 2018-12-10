@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
 	public interface IPlanningPeriodSuggestions
 	{
 		SuggestedPlanningPeriod Default();
-		IEnumerable<SuggestedPlanningPeriod> SuggestedPeriods(DateOnlyPeriod forDate);
 		IEnumerable<SuggestedPlanningPeriod> SuggestedPeriods(DateOnly startDate);
 	}
 

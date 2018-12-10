@@ -27,7 +27,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {

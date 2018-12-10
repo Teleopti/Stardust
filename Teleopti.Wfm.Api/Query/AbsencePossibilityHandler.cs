@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Staffing;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Api.Query.Request;
 using Teleopti.Wfm.Api.Query.Response;
 

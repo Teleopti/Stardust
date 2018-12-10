@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {

@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 using DateTime = System.DateTime;
 
 namespace Teleopti.Ccc.DomainTest.Staffing

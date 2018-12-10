@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule
 {

@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		// Fact agent skill
 		void AddAgentSkill(int personId, int skillId, bool active, int businessUnitId);
 		void DeleteAgentSkillForPersonId(int personId);
-		IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId);
 		void AddOrUpdateSkill(AnalyticsSkill analyticsSkill);
 	}
 }

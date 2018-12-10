@@ -2,7 +2,7 @@ using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure.Service;
+using Teleopti.Wfm.Adherence.States.Infrastructure;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {

@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Insights.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 {
@@ -19,7 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		{
 			return new InsightsPermission
 			{
-				CanViewReport = isPermitted(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport, date, person),
+				CanViewReport = isPermitted(DefinedRaptorApplicationFunctionPaths.Insights, date, person),
+				CanDeleteReport = isPermitted(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport, date, person),
 				CanEditReport = isPermitted(DefinedRaptorApplicationFunctionPaths.EditInsightsReport, date, person)
 			};
 		}

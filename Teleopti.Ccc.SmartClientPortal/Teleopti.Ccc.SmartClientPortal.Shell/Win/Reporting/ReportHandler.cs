@@ -25,42 +25,21 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public static class ReportHandler
 	{
-		// This one is called only from SchedulingScreen
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static void ShowReport(ReportDetail reportDetail, ScheduleViewBase scheduleViewBase, IScenario loadedScenario, CultureInfo culture)
-		{
-			switch (reportDetail.FunctionPath)
-			{
-				case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-					showScheduleTimePerActivity(reportDetail, scheduleViewBase, loadedScenario, culture);
-					break;
-			}
-		}
-
 		public static ReportDetail CreateReportDetail(IApplicationFunction appFunctionReport)
 		{
-			var reportDetail = new ReportDetail {FunctionPath = appFunctionReport.FunctionPath, FunctionCode = appFunctionReport.FunctionCode};
-			switch (reportDetail.FunctionPath)
+			var reportDetail = new ReportDetail
 			{
-				case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-					reportDetail.File = "report_scheduled_time_per_activity.rdlc";
-					reportDetail.DisplayName = UserTexts.Resources.ScheduledTimePerActivity;
-					break;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
-					reportDetail.File = "report_auditing.rdlc";
-					reportDetail.DisplayName = UserTexts.Resources.ScheduleAuditTrailReport;
-					break;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-					reportDetail.File = "report_schedule_time_vs_target.rdlc";
-					reportDetail.DisplayName = UserTexts.Resources.ScheduledTimeVsTarget;
-					break;
-			}
+				FunctionPath = appFunctionReport.FunctionPath,
+				FunctionCode = appFunctionReport.FunctionCode,
+				File = "report_schedule_time_vs_target.rdlc",
+				DisplayName = UserTexts.Resources.ScheduledTimeVsTarget
+			};
 			return reportDetail;
 		}
 
@@ -86,22 +65,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			}
 
 			viewer.Show();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public static void CreateScheduleTimePerActivityData(IScheduleDictionary dictionary,
-																				ReportSettingsScheduledTimePerActivityModel model,
-																				Dictionary<string, IList<IReportData>> data)
-		{
-			IList<IPayload> payLoads = new List<IPayload>();
-			foreach(IActivity activity in model.Activities)
-			{
-				payLoads.Add(activity);
-			}
-
-			data.Add("DataSet1", ScheduledTimePerActivityModel.GetReportDataFromScheduleDictionary(dictionary, model.Persons,
-																											   model.Period.DayCollection(),
-																											   payLoads));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
@@ -190,22 +153,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()), persons, scheduleDictionaryLoadOptions, stateHolder.RequestedPeriod.Period());
 		}
 	
-		public static IList<IReportDataParameter> CreateScheduleAuditingParameters(ReportSettingsScheduleAuditingModel model, IFormatProvider culture)
-		{
-			if(model == null)
-				throw new ArgumentNullException(nameof(model));
-
-			IList<IReportDataParameter> parameters = new List<IReportDataParameter>();
-			parameters.Add(new ReportDataParameter("param_audit_owner", model.ModifiedByNameCommaSeparated()));
-			parameters.Add(new ReportDataParameter("param_change_date_from", model.ChangePeriodDisplay.StartDate.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_change_date_to", model.ChangePeriodDisplay.EndDate.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_date_from", model.SchedulePeriodDisplay.StartDate.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_date_to", model.SchedulePeriodDisplay.EndDate.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_agents", model.AgentsNameCommaSeparated()));
-
-			return parameters;
-		}
-
 		public static IList<IReportDataParameter> CreateScheduledTimeVersusTargetParameters(ReportSettingsScheduleTimeVersusTargetTimeModel model, IFormatProvider culture)
 		{
 			if(model == null)
@@ -224,86 +171,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			
 			return parameters;
 
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static IList<IReportDataParameter> CreateScheduleTimePerActivityParameters(ReportSettingsScheduledTimePerActivityModel model, IFormatProvider culture)
-		{
-			IList<IReportDataParameter> parameters = new List<IReportDataParameter>();
-			parameters.Add(new ReportDataParameter("param_scenario", model.Scenario.Description.Name));
-
-			var names = new List<string>();
-			foreach (var person in model.Persons)
-			{
-				names.Add(person.Name.ToString());
-			}
-			string agents = string.Join(", ", names.ToArray());
-			parameters.Add(new ReportDataParameter("param_agents", agents));
-
-			var activityList = new List<string>();
-			foreach (var activity in model.Activities)
-			{
-				activityList.Add(activity.Name);
-			}
-			string activityString = string.Join(", ", activityList.ToArray());
-			parameters.Add(new ReportDataParameter("param_activities", activityString));
-			parameters.Add(new ReportDataParameter("param_date_from", model.Period.StartDate.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_date_to", model.Period.EndDate.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_timezone", model.TimeZone.StandardName));
-
-			return parameters;
-		}
-
-		private static void createScheduleTimePerActivityParameters(ScheduleViewBase scheduleViewBase, IScenario loadedScenario, IList<IReportDataParameter> parameters, CultureInfo culture)
-		{
-			parameters.Add(new ReportDataParameter("param_scenario", loadedScenario.Description.Name));
-
-			var names = new List<string>();
-			IEnumerable<IScheduleDay> selectedSchedules = scheduleViewBase.SelectedSchedules();
-			foreach (var person in scheduleViewBase.AllSelectedPersons(selectedSchedules))
-			{
-				names.Add(person.Name.ToString());
-			}
-			string agents = string.Join(", ", names.ToArray());
-			parameters.Add(new ReportDataParameter("param_agents", agents));
-			parameters.Add(new ReportDataParameter("param_activities", UserTexts.Resources.All));
-
-			var dates = selectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
-			DateOnly dateFrom = dates.FirstOrDefault();
-			DateOnly dateTo = dates.LastOrDefault();
-			
-			parameters.Add(new ReportDataParameter("param_date_from", dateFrom.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_date_to", dateTo.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_timezone", TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.StandardName));
-		}
-
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static void RefreshScheduleTimePerActivity(SchedulerReportsViewer viewer, ReportDetail reportDetail, ScheduleViewBase scheduleViewBase, IScenario loadedScenario, CultureInfo culture)
-		{
-			var parameters = new List<IReportDataParameter>();
-			createScheduleTimePerActivityParameters(scheduleViewBase, loadedScenario, parameters, culture);
-
-			var data = new Dictionary<string, IList<IReportData>>();
-			data.Add("DataSet1", ScheduledTimePerActivityModel.GetReportDataFromScheduleParts(scheduleViewBase.SelectedSchedules()));
-
-			viewer.LoadScheduledTimePerActivityReport(reportDetail, data, parameters, scheduleViewBase, loadedScenario);      
-		}
-
-
-		// måste nog brytas isär lite om man ska ladda från ScheduleDictionary från trädet.
-		private static void showScheduleTimePerActivity(ReportDetail reportDetail, ScheduleViewBase scheduleViewBase, IScenario loadedScenario, CultureInfo culture)
-		{
-			var viewer = new SchedulerReportsViewer(new EventAggregator(), null, null);
-
-			var parameters = new List<IReportDataParameter>();
-			createScheduleTimePerActivityParameters(scheduleViewBase, loadedScenario, parameters, culture);
-   
-			var data = new Dictionary<string, IList<IReportData>>();
-			data.Add("DataSet1", ScheduledTimePerActivityModel.GetReportDataFromScheduleParts(scheduleViewBase.SelectedSchedules()));
-
-			viewer.LoadScheduledTimePerActivityReport(reportDetail, data, parameters, scheduleViewBase, loadedScenario);
-			viewer.Show();
 		}
 	}
 }

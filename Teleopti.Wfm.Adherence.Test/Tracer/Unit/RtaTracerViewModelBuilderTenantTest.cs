@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Wfm.Adherence.Test.Tracer.Unit

@@ -47,9 +47,13 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Historical.Infrastructure;
+using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
+using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Infrastructure;
 using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.TestCommon.IoC
@@ -113,6 +117,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.ForEach(a => isolate.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			isolate.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
 			isolate.UseTestDouble<EmptyStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<HandlerTypeMapperForTest>().For<HandlerTypeMapper>();
 			//
 
 			// Database stuff

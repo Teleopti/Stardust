@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 {
@@ -26,42 +26,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 		public IEnumerable<IAbsence> GetRequestableAbsences()
 		{
-			var absencesForRequest = new List<IAbsence>();
-
 			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446))
 			{
-				if (_loggedOnUser == null ||
-					_loggedOnUser.CurrentUser() == null ||
-					_loggedOnUser.CurrentUser().WorkflowControlSet == null ||
-					_loggedOnUser.CurrentUser().WorkflowControlSet.AbsenceRequestOpenPeriods == null)
+				var currentUser = _loggedOnUser?.CurrentUser();
+				if (currentUser?.WorkflowControlSet?.AbsenceRequestOpenPeriods == null)
 				{
 					return new List<IAbsence>();
 				}
-				var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+				var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
 				var agentToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
-				foreach (var openPeriod in _loggedOnUser.CurrentUser().WorkflowControlSet.AbsenceRequestOpenPeriods)
-				{
-					if (openPeriod.Absence.Requestable
-						&& openPeriod.OpenForRequestsPeriod.Contains(agentToday) 
-						&& !absencesForRequest.Contains(openPeriod.Absence) ) absencesForRequest.Add(openPeriod.Absence);
-				}
+				return currentUser.WorkflowControlSet.AbsenceRequestOpenPeriods.Where(openPeriod =>
+					openPeriod.Absence.Requestable
+					&& openPeriod.OpenForRequestsPeriod.Contains(agentToday)).Select(a => a.Absence).Distinct().ToList();
 			}
-			else absencesForRequest = _absenceRepository.LoadRequestableAbsence().ToList();
-
-			return absencesForRequest;
+			return _absenceRepository.LoadRequestableAbsence().ToList();
 		}
 
 		public IEnumerable<IAbsence> GetReportableAbsences()
 		{
-			if (_loggedOnUser == null ||
-				_loggedOnUser.CurrentUser() == null ||
-				_loggedOnUser.CurrentUser().WorkflowControlSet == null ||
-				_loggedOnUser.CurrentUser().WorkflowControlSet.AllowedAbsencesForReport == null)
+			var currentUser = _loggedOnUser?.CurrentUser();
+			if (currentUser?.WorkflowControlSet?.AllowedAbsencesForReport == null)
 			{
 				return new List<IAbsence>();
 			}
 
-			return _loggedOnUser.CurrentUser().WorkflowControlSet.AllowedAbsencesForReport;
+			return currentUser.WorkflowControlSet.AllowedAbsencesForReport;
 		}
 	}
 }

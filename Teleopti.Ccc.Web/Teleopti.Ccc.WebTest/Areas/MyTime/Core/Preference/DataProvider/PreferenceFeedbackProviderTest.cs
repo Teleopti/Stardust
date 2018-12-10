@@ -7,33 +7,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 {
 	[TestFixture]
 	public class PreferenceFeedbackProviderTest
 	{
-		[Test]
-		public void ShouldRetrieveScheduleDayForDate()
-		{
-			var workTimeMinMaxCalculator = MockRepository.GenerateMock<IWorkTimeMinMaxCalculator>();
-			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
-			var nightRestChecker = MockRepository.GenerateMock<IPreferenceNightRestChecker>();
-			var personRuleSetBagProvider = MockRepository.GenerateMock<IPersonRuleSetBagProvider>();
-			var bag = new RuleSetBag();
-
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] {scheduleDay});
-			personRuleSetBagProvider.Stub(x => x.ForDate(null, DateOnly.Today)).Return(bag);
-
-			var target = new PreferenceFeedbackProvider(workTimeMinMaxCalculator, MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider, nightRestChecker, personRuleSetBagProvider);
-
-			target.WorkTimeMinMaxForDate(DateOnly.Today);
-
-			workTimeMinMaxCalculator.AssertWasCalled(x => x.WorkTimeMinMax(DateOnly.Today, bag, scheduleDay));
-		}
-
 		[Test]
 		public void ShouldReturnWorkTimeMinMaxForScheduleDay()
 		{

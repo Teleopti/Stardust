@@ -8,9 +8,11 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Domain.Events
 {
@@ -116,16 +118,14 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 		{
 			var adherenceDay = _adherenceDayLoader.Load(personId, day);
 
-			var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
-			var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
-			var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
+			var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWorkMinutes.HasValue);
 
 			_readModels.Upsert(new HistoricalOverviewReadModel
 			{
 				PersonId = personId,
 				Date = day,
 				WasLateForWork = lateForWork != null,
-				MinutesLateForWork = minutesLateForWork,
+				MinutesLateForWork = lateForWork?.LateForWorkMinutes ?? 0,
 				SecondsInAdherence = adherenceDay.SecondsInAdherence(),
 				SecondsOutOfAdherence = adherenceDay.SecondsOutOfAdherence(),
 			});

@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -15,7 +16,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 {
@@ -29,11 +30,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		private readonly ITeamsProvider _teamsProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IOvertimeRequestAvailability _overtimeRequestLicense;
+		private readonly IShiftTradeRequestAvailability _shiftTradeRequestLicense;
 		private readonly IAuthorization _authorization;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			IRequestCommandHandlingProvider commandHandlingProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider, IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense, IAuthorization authorization)
+			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider, 
+			IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense, IShiftTradeRequestAvailability shiftTradeRequestLicense,
+			IAuthorization authorization)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
@@ -42,6 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			_teamsProvider = teamsProvider;
 			_toggleManager = toggleManager;
 			_overtimeRequestLicense = overtimeRequestLicense;
+			_shiftTradeRequestLicense = shiftTradeRequestLicense;
 			_authorization = authorization;
 		}
 
@@ -118,10 +123,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Requests/GetOvertimeRequestsLicenseAvailability")]
-		public virtual bool GetLicenseAvailability(IOvertimeRequestAvailability overtimeRequestLicense)
+		[UnitOfWork, HttpGet, Route("api/Requests/GetRequestsLicenseAvailability")]
+		public virtual RequestLicenseAndPermissionViewModel GetLicenseAvailability()
 		{
-			return _overtimeRequestLicense.IsEnabledInWebRequest();
+			return new RequestLicenseAndPermissionViewModel
+			{
+				IsOvertimeRequestEnabled = _overtimeRequestLicense.IsEnabledInWebRequest(),
+				IsShiftTradeRequestEnabled = _shiftTradeRequestLicense.IsEnabledInWebRequest()
+			};
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Requests/GetRequestsPermissions")]

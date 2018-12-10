@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		internal void ToolStripMenuItemAllFulFilledPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _restrictionExtractor, _parent.LockManager, _parent);
-			executer.AllFulfilledPreferences(e.Button);
+			executer.AllFulfilledAbsencePreferences(e.Button);
 		}
 
 		internal void ToolStripMenuItemAllAbsencePreferenceMouseUp(object sender, MouseEventArgs e)

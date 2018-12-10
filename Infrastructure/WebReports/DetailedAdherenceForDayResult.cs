@@ -1,5 +1,5 @@
 using System.Drawing;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.WebReports
 {

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -56,11 +56,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
 		{
 			return RequestRepository.Where(p => p.Person == person).ToList();
-		}
-
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period)
-		{
-			return RequestRepository;
 		}
 		
 		private IEnumerable<IPersonRequest> findAllRequests(RequestFilter filter, out int count)
@@ -174,11 +169,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPersonRequest Find(Guid id)
 		{
 			return RequestRepository.FirstOrDefault(x => x.Id == id);
-		}
-
-		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T : Request
-		{
-			throw new NotImplementedException();
 		}
 
 		public IPersonRequest FindPersonRequestByRequestId(Guid value)

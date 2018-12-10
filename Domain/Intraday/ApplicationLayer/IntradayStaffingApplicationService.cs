@@ -9,22 +9,10 @@ using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Intraday.Extensions;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 {
-	public interface IIntradayStaffingApplicationService
-	{
-		IntradayStaffingViewModel GenerateStaffingViewModel(Guid[] skillIdList, int dayOffset);
-		IEnumerable<IntradayStaffingViewModel> GenerateStaffingViewModel(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false);
-		IntradayStaffingViewModel GenerateStaffingViewModel(Guid[] skillIdList, DateOnly? dateInLocalTime = null, bool useShrinkage = false);
-
-		IEnumerable<IntradayForcastedStaffingIntervalDTO> GetForecastedStaffing(IList<Guid> skillIdList, DateTime fromTime, DateTime toTime, TimeSpan resolution, bool useShrinkage);
-
-		IList<IntradayScheduleStaffingIntervalDTO> GetScheduledStaffing(Guid[] skillIdList, DateTime fromUtc, DateTime toUtc, TimeSpan resolution, bool useShrinkage);
-	}
-
-	public class IntradayStaffingApplicationService : IIntradayStaffingApplicationService
+	public class IntradayStaffingApplicationService 
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
@@ -36,8 +24,8 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IEmailBacklogProvider _emailBacklogProvider;
 
-		private readonly IIntradayReforecastingService _reforecastingService;
-		private readonly IIntradayForecastingService _forecastingService;
+		private readonly IntradayReforecastingService _reforecastingService;
+		private readonly IntradayForecastingService _forecastingService;
 		private readonly IIntradayStaffingService _staffingService;
 
 		public IntradayStaffingApplicationService(
@@ -50,9 +38,8 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			ISkillDayLoadHelper skillDayLoadHelper,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
 			IEmailBacklogProvider emailBacklogProvider,
-
-			IIntradayForecastingService forecastingService,
-			IIntradayReforecastingService reforecastingService,
+			IntradayForecastingService forecastingService,
+			IntradayReforecastingService reforecastingService,
 			IIntradayStaffingService staffingService
 			)
 		{
@@ -76,19 +63,16 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			var localTimeWithOffset = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).AddDays(dayOffset);
 			return GenerateStaffingViewModel(skillIdList, new DateOnly(localTimeWithOffset));
 		}
-		public IEnumerable<IntradayStaffingViewModel> GenerateStaffingViewModel(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false)
-		{
-			return dateOnlyPeriod.DayCollection().Select(day => GenerateStaffingViewModel(skillIdList, day, useShrinkage)).ToList();
-		}
 
 		public IntradayStaffingViewModel GenerateStaffingViewModel(
 			Guid[] skillIdList, 
 			DateOnly? dateInLocalTime = null,
 			bool useShrinkage = false)
 		{
-			var startOfDayLocal = dateInLocalTime?.Date ?? TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
+			var timeZone = _timeZone.TimeZone();
+			var startOfDayLocal = dateInLocalTime?.Date ?? TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), timeZone).Date;
 
-			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, _timeZone.TimeZone());
+			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, timeZone);
 
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
@@ -166,36 +150,35 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 							StartTime = x.StartTime,
 							AverageHandleTime = x.AverageHandleTime,
 							Calls = x.Calls
-						}).ToList();
+						}).ToArray();
 
-					allSkillsReforecasted = _reforecastingService.ReforecastAllSkills(
+					allSkillsReforecasted.Clear();
+					allSkillsReforecasted.AddRange(_reforecastingService.ReforecastAllSkills(
 						forecastedStaffing,
 						forecastedVolume,
 						statisticsPerWorkloadInterval,
 						timesUtc,
-						//_now.UtcDateTime())
-						(_now.UtcDateTime() < latestStatisticsTimeUtc ? latestStatisticsTimeUtc : _now.UtcDateTime()))
-						.ToList();
+						(_now.UtcDateTime() < latestStatisticsTimeUtc ? latestStatisticsTimeUtc : _now.UtcDateTime())));
 				}
 
 				if (allSkillsReforecasted.Any())
 				{
 					var allSkillsReforecastedGroupedByTime = allSkillsReforecasted
-						.GroupBy(h => h.StartTime);
+						.ToLookup(h => h.StartTime);
 
 					updatedForecastedSeries = timesUtc
 						.OrderBy(x => x)
-						.Select(x => allSkillsReforecastedGroupedByTime
-							.Where(r => r.Key == x)
-							.Select(v => (double?)v.Sum(a => a.Agents))
-							.SingleOrDefault())
+						.Select(x => allSkillsReforecastedGroupedByTime[x].Any()
+							? allSkillsReforecastedGroupedByTime[x]
+								.Sum(v => (double?) v.Agents)
+							: null)
 						.ToArray();
 				}
 			}
 
 
-			var opensAtLocal = TimeZoneHelper.ConvertFromUtc(opensAtUtc, _timeZone.TimeZone());
-			var closeAtLocal = TimeZoneHelper.ConvertFromUtc(closeAtUtc, _timeZone.TimeZone());
+			var opensAtLocal = TimeZoneHelper.ConvertFromUtc(opensAtUtc, timeZone);
+			var closeAtLocal = TimeZoneHelper.ConvertFromUtc(closeAtUtc, timeZone);
 
 			var dataSeries = new StaffingDataSeries
 			{
@@ -279,9 +262,6 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			TimeSpan resolution, 
 			bool useShrinkage)
 		{
-			//var fromTimeUtc = TimeZoneInfo.ConvertTimeToUtc(fromTimeLocal, _timeZone.TimeZone());
-			//var toTimeUtc = TimeZoneInfo.ConvertTimeToUtc(toTimeLocal, _timeZone.TimeZone());
-
 			var scheduledStaffing = _staffingService.GetScheduledStaffing(skillIdList, fromTimeUtc, toTimeUtc, resolution, useShrinkage);
 			return scheduledStaffing.Select(x => new IntradayScheduleStaffingIntervalDTO
 				{

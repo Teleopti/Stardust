@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 {
@@ -58,24 +58,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 				return null;
 			}
 		}
-
-		public static double? GetStandardDeviationForDay(ISchedulerStateHolder stateHolder, ISkill singleSkill, DateOnly requestedDay)
-		{
-			try
-			{
-				var dailyPeriods = getSkillStaffPeriodsOnDay(stateHolder, singleSkill, requestedDay);
-
-				double? result = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(new List<IEnumerable<ISkillStaffPeriod>> {dailyPeriods});
-				if (result.HasValue)
-					return Math.Round(result.Value, 3);
-				return null;
-			}
-			catch
-			{
-				return null;
-			}
-		}
-
 
 		public static double GetDailySumOfStandardDeviationsFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
 		{

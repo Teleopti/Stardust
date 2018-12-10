@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Scheduling;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.TestCommon.IoC;
 using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;

@@ -9,17 +9,12 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public static class PersonAssignmentFactory
 	{
-		public static IPersonAssignment CreatePersonAssignmentFromDateTime(IPerson agent, IScenario scenario, DateTime date)
-		{
-			return new PersonAssignment(agent, scenario, new DateOnly(date));
-		}
-		
 		public static IPersonAssignment CreatePersonAssignment(IPerson agent)
 		{
 			return CreatePersonAssignment(agent, ScenarioFactory.CreateScenarioAggregate());

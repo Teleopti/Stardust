@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {

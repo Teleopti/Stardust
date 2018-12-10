@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl

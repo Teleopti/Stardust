@@ -12,7 +12,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {

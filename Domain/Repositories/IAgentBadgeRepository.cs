@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <param name="personIdList"></param>
 		/// <param name="badgeType"></param>
 		/// <returns></returns>
-		ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType);
+		ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType, bool isExternal);
 
 		/// <summary>
 		/// Find badge of specific persons

@@ -2,21 +2,16 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IPersonSelectorReadOnlyRepository
 	{
 		IList<IPersonSelectorOrganization> GetOrganization(DateOnlyPeriod dateOnlyPeriod, bool loadUsers);
-		IList<IPersonSelectorOrganization> GetOrganizationForWeb(DateOnlyPeriod dateOnlyPeriod);
 		IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnlyPeriod dateOnlyPeriod, PersonSelectorField loadType, Guid optionalColumnId);
 		IList<IPersonSelectorUserDefined> GetUserDefinedTab(DateOnly onDate, Guid value);
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IList<IUserDefinedTabLight> GetUserDefinedTabs();
-
 		IList<IUserDefinedTabLight> GetOptionalColumnTabs();
-
 	}
 
 	public enum PersonSelectorField

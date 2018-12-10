@@ -351,7 +351,6 @@
     <Compile Include="Transformer\Job\Steps\IntradayFactAgentJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayFactAgentQueueJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayFactQueueJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\JobBase.cs" />
     <Compile Include="Transformer\Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DelayedJobStep.cs" />
@@ -382,7 +381,6 @@
     <Compile Include="Transformer\Job\Steps\StageRequestJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageScenarioJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageScheduleDayOffCountJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\StageScheduleForecastSkillJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageScheduleForecastSkillJobStepWithBpo.cs" />
     <Compile Include="Transformer\Job\Steps\StageScheduleJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageSchedulePreferenceJobStep.cs" />
@@ -451,10 +449,6 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
       <Name>Teleopti.Ccc.UserTexts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4f4df171-4a56-4e0d-90cb-cb2afdea4411}</Project>

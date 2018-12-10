@@ -220,7 +220,7 @@
 				},
 				{
 					ShiftLayerIds: ['31678e5a-ac3f-4daa-9577-a83800e49625'],
-					Color: '#8080c0',
+					Color: '#808080',
 					Description: 'E-mail',
 					Start: '2018-05-28 10:00',
 					End: '2018-05-28 12:00',

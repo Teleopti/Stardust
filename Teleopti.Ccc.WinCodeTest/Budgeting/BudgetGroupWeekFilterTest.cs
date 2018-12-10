@@ -4,10 +4,11 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
 {

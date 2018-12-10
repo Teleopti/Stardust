@@ -13,7 +13,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.GridBinding;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {

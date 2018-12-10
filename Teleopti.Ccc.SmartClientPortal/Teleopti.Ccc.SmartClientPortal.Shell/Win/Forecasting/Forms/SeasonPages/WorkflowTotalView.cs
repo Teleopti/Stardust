@@ -14,7 +14,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 {

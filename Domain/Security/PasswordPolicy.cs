@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security
 {

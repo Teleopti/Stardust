@@ -48,6 +48,7 @@ describe('Requests - absence and text controller tests: ', function() {
 			$provide.service('Toggle', function() {
 				return {
 					Wfm_Requests_People_Search_36294: true,
+					WFM_Request_Show_Shift_for_Absence_Requests_79008: true,
 					togglesLoaded: {
 						then: function(cb) {
 							cb();
@@ -92,6 +93,19 @@ describe('Requests - absence and text controller tests: ', function() {
 
 		setUpTarget();
 	}));
+
+	beforeEach(function() {
+		period = {
+			startDate: moment().startOf('week')._d,
+			endDate: moment().endOf('week')._d
+		};
+	});
+
+	afterEach(function() {
+		scope = null;
+		controller = null;
+		requestsDataService.reset();
+	});
 
 	it('should see UI Grid', function() {
 		scope.requests = [
@@ -372,9 +386,9 @@ describe('Requests - absence and text controller tests: ', function() {
 	it('should select default status filter', function() {
 		compileUIGridHtml(scope, controller.gridOptions);
 
-		var status0 = '79';
-		var status1 = '86';
-		var status2 = '93';
+		var status0 = '1';
+		var status1 = '2';
+		var status2 = '3';
 		controller.filters = [{ Status: status0 + ' ' + status1 + ' ' + status2 }];
 		scope.$digest();
 
@@ -781,7 +795,7 @@ describe('Requests - absence and text controller tests: ', function() {
 						Name: 'Late',
 						DisplayColor: '#000000'
 					},
-					BelongsToDate: '2018-11-23T00:00:00'
+					BelongsToDate: '2018-11-23T08:00:00'
 				}
 			],
 			Subject: 'subject',
@@ -797,7 +811,7 @@ describe('Requests - absence and text controller tests: ', function() {
 			CreatedTime: '2018-11-23T05:37:58.21',
 			Type: 1,
 			TypeText: 'Absence',
-			Status: 1,
+			Status: 0,
 			StatusText: 'Pending',
 			Payload: {
 				Name: 'Holiday',
@@ -811,9 +825,9 @@ describe('Requests - absence and text controller tests: ', function() {
 		controller.toggleAbsenceSchedules(absence, clickEvent);
 
 		expect(controller.showingAbsenceSchedules).toEqual(true);
-		expect(controller.schedulesContainerStyle.width).toEqual('762px');
+		expect(controller.schedulesContainerStyle.width).toEqual('745px');
 		expect(controller.schedulesContainerStyle.height).toEqual('102px');
-		expect(controller.schedulesContainerStyle['max-height']).toEqual('230px');
+		expect(controller.schedulesContainerStyle['max-height']).toEqual('242px');
 	});
 
 	it('should get absence shift start and end time when toggled absence schedules', function() {
@@ -920,7 +934,7 @@ describe('Requests - absence and text controller tests: ', function() {
 						Name: 'Late',
 						DisplayColor: '#000000'
 					},
-					BelongsToDate: '2018-11-23T00:00:00'
+					BelongsToDate: '2018-11-23T08:00:00'
 				}
 			],
 			Subject: 'subject',
@@ -936,7 +950,7 @@ describe('Requests - absence and text controller tests: ', function() {
 			CreatedTime: '2018-11-23T05:37:58.21',
 			Type: 1,
 			TypeText: 'Absence',
-			Status: 1,
+			Status: 0,
 			StatusText: 'Pending',
 			Payload: {
 				Name: 'Holiday',
@@ -1057,7 +1071,7 @@ describe('Requests - absence and text controller tests: ', function() {
 						Name: 'Late',
 						DisplayColor: '#000000'
 					},
-					BelongsToDate: '2018-11-23T00:00:00'
+					BelongsToDate: '2018-11-23T19:00:00'
 				}
 			],
 			Subject: 'subject',
@@ -1073,7 +1087,7 @@ describe('Requests - absence and text controller tests: ', function() {
 			CreatedTime: '2018-11-23T05:37:58.21',
 			Type: 1,
 			TypeText: 'Absence',
-			Status: 1,
+			Status: 0,
 			StatusText: 'Pending',
 			Payload: {
 				Name: 'Holiday',
@@ -1090,14 +1104,14 @@ describe('Requests - absence and text controller tests: ', function() {
 		expect(controller.shifts[0].ShiftEndTime).toEqual('4:00 AM+1');
 	});
 
-	it('should convert the shift start and end time to selected timezone when toggled absence schedules', function() {
+	it('should not get shift end with +1 when start time and end time are in the same day in agent time zone after toggled absence schedules', function() {
 		var absence = {
-			IsFullDay: false,
+			IsFullDay: true,
 			PersonAccountSummaryViewModel: {
 				PersonAccountSummaryDetails: [
 					{
 						StartDate: '2017-01-01T02:00:00',
-						RemainingDescription: '19',
+						RemainingDescription: '15',
 						TrackingTypeDescription: 'Days',
 						EndDate: '2026-11-10T02:00:00'
 					}
@@ -1109,10 +1123,10 @@ describe('Requests - absence and text controller tests: ', function() {
 					Periods: [
 						{
 							Title: 'Social Media',
-							TimeSpan: '7:00 PM - 9:15 PM',
+							TimeSpan: '11:00 PM - 1:15 AM',
 							Color: '30,144,255',
-							StartTime: '2018-11-23T19:00:00',
-							EndTime: '2018-11-23T21:15:00',
+							StartTime: '2018-11-30T23:00:00',
+							EndTime: '2018-12-01T01:15:00',
 							IsOvertime: false,
 							StartPositionPercentage: 0.0,
 							EndPositionPercentage: 0.25,
@@ -1120,10 +1134,10 @@ describe('Requests - absence and text controller tests: ', function() {
 						},
 						{
 							Title: 'Short break',
-							TimeSpan: '9:15 PM - 9:30 PM',
+							TimeSpan: '1:15 AM - 1:30 AM',
 							Color: '255,0,0',
-							StartTime: '2018-11-23T21:15:00',
-							EndTime: '2018-11-23T21:30:00',
+							StartTime: '2018-12-01T01:15:00',
+							EndTime: '2018-12-01T01:30:00',
 							IsOvertime: false,
 							StartPositionPercentage: 0.25,
 							EndPositionPercentage: 0.2778,
@@ -1131,10 +1145,10 @@ describe('Requests - absence and text controller tests: ', function() {
 						},
 						{
 							Title: 'Social Media',
-							TimeSpan: '9:30 PM - 11:30 PM',
+							TimeSpan: '1:30 AM - 3:30 AM',
 							Color: '30,144,255',
-							StartTime: '2018-11-23T21:30:00',
-							EndTime: '2018-11-23T23:30:00',
+							StartTime: '2018-12-01T01:30:00',
+							EndTime: '2018-12-01T03:30:00',
 							IsOvertime: false,
 							StartPositionPercentage: 0.2778,
 							EndPositionPercentage: 0.5,
@@ -1142,10 +1156,10 @@ describe('Requests - absence and text controller tests: ', function() {
 						},
 						{
 							Title: 'Lunch',
-							TimeSpan: '11:30 PM - 12:30 AM',
+							TimeSpan: '3:30 AM - 4:30 AM',
 							Color: '255,255,0',
-							StartTime: '2018-11-23T23:30:00',
-							EndTime: '2018-11-24T00:30:00',
+							StartTime: '2018-12-01T03:30:00',
+							EndTime: '2018-12-01T04:30:00',
 							IsOvertime: false,
 							StartPositionPercentage: 0.5,
 							EndPositionPercentage: 0.6111,
@@ -1153,10 +1167,10 @@ describe('Requests - absence and text controller tests: ', function() {
 						},
 						{
 							Title: 'Social Media',
-							TimeSpan: '12:30 AM - 2:15 AM',
+							TimeSpan: '4:30 AM - 6:15 AM',
 							Color: '30,144,255',
-							StartTime: '2018-11-24T00:30:00',
-							EndTime: '2018-11-24T02:15:00',
+							StartTime: '2018-12-01T04:30:00',
+							EndTime: '2018-12-01T06:15:00',
 							IsOvertime: false,
 							StartPositionPercentage: 0.6111,
 							EndPositionPercentage: 0.8056,
@@ -1164,10 +1178,10 @@ describe('Requests - absence and text controller tests: ', function() {
 						},
 						{
 							Title: 'Short break',
-							TimeSpan: '2:15 AM - 2:30 AM',
+							TimeSpan: '6:15 AM - 6:30 AM',
 							Color: '255,0,0',
-							StartTime: '2018-11-24T02:15:00',
-							EndTime: '2018-11-24T02:30:00',
+							StartTime: '2018-12-01T06:15:00',
+							EndTime: '2018-12-01T06:30:00',
 							IsOvertime: false,
 							StartPositionPercentage: 0.8056,
 							EndPositionPercentage: 0.8333,
@@ -1175,10 +1189,10 @@ describe('Requests - absence and text controller tests: ', function() {
 						},
 						{
 							Title: 'Social Media',
-							TimeSpan: '2:30 AM - 4:00 AM',
+							TimeSpan: '6:30 AM - 8:00 AM',
 							Color: '30,144,255',
-							StartTime: '2018-11-24T02:30:00',
-							EndTime: '2018-11-24T04:00:00',
+							StartTime: '2018-12-01T06:30:00',
+							EndTime: '2018-12-01T08:00:00',
 							IsOvertime: false,
 							StartPositionPercentage: 0.8333,
 							EndPositionPercentage: 1.0,
@@ -1190,24 +1204,169 @@ describe('Requests - absence and text controller tests: ', function() {
 					IsNotScheduled: false,
 					ShiftCategory: {
 						Id: null,
-						ShortName: 'PM',
-						Name: 'Late',
-						DisplayColor: '#000000'
+						ShortName: 'AM',
+						Name: 'Early',
+						DisplayColor: '#80FFFF'
 					},
-					BelongsToDate: '2018-11-23T00:00:00'
+					BelongsToDate: '2018-11-30T23:00:00'
 				}
 			],
-			Subject: 'subject',
-			Message: '',
+			Subject: 'asdf',
+			Message: 'asdf',
 			AgentName: 'Ashley Andeen',
 			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
 			TimeZone: 'Asia/Amman',
-			Id: '7cfc4367-0fdd-4c31-981f-a9a1003bde07',
+			Id: '8c713b60-7208-4e58-8399-a9a80062c804',
 			Seniority: 23,
-			PeriodStartTime: '2018-11-23T19:00:00',
-			PeriodEndTime: '2018-11-24T04:00:00',
-			UpdatedTime: '2018-11-23T05:37:58.563',
-			CreatedTime: '2018-11-23T05:37:58.21',
+			PeriodStartTime: '2018-12-01T00:00:00',
+			PeriodEndTime: '2018-12-01T23:59:00',
+			UpdatedTime: '2018-11-30T07:59:39.133',
+			CreatedTime: '2018-11-30T07:59:39.107',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 0,
+			StatusText: 'Pending',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			IsNew: false,
+			IsPending: true,
+			IsApproved: false,
+			IsDenied: false,
+			IsWaitlisted: false,
+			DenyReason: ''
+		};
+		var clickEvent = new MouseEvent('click');
+
+		controller.isUsingRequestSubmitterTimeZone = true;
+		controller.userTimeZone = 'America/Los_Angeles';
+
+		controller.toggleAbsenceSchedules(absence, clickEvent);
+		expect(controller.shifts[0].Date).toEqual('12/1/18');
+		expect(controller.shifts[0].ShiftStartTime).toEqual('9:00 AM');
+		expect(controller.shifts[0].ShiftEndTime).toEqual('6:00 PM');
+	});
+
+	it('should convert the shift date, start and end time to selected timezone when toggled absence schedules', function() {
+		var absence = {
+			IsFullDay: true,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T01:00:00',
+						RemainingDescription: '15',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T01:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Invoice',
+							TimeSpan: '11:00 PM - 1:00 AM',
+							Color: '255,128,128',
+							StartTime: '2018-12-04T23:00:00',
+							EndTime: '2018-12-05T01:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.2222,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '1:00 AM - 1:15 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-05T01:00:00',
+							EndTime: '2018-12-05T01:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2222,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '1:15 AM - 3:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T01:15:00',
+							EndTime: '2018-12-05T03:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.4444,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '3:00 AM - 4:00 AM',
+							Color: '255,255,0',
+							StartTime: '2018-12-05T03:00:00',
+							EndTime: '2018-12-05T04:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.4444,
+							EndPositionPercentage: 0.5556,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '4:00 AM - 6:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T04:00:00',
+							EndTime: '2018-12-05T06:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5556,
+							EndPositionPercentage: 0.7778,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '6:00 AM - 6:15 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-05T06:00:00',
+							EndTime: '2018-12-05T06:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.7778,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '6:15 AM - 8:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T06:15:00',
+							EndTime: '2018-12-05T08:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'AM',
+						Name: 'Early',
+						DisplayColor: '#80FFFF'
+					},
+					BelongsToDate: '2018-12-04T23:00:00'
+				}
+			],
+			Subject: 'aaa',
+			Message: 'aaa',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Europe/Berlin',
+			Id: 'c1d28ba8-d21e-41b3-936a-a9ab0081f843',
+			Seniority: 23,
+			PeriodStartTime: '2018-12-05T00:00:00',
+			PeriodEndTime: '2018-12-05T23:59:00',
+			UpdatedTime: '2018-12-03T08:53:12.357',
+			CreatedTime: '2018-12-03T08:53:12.33',
 			Type: 1,
 			TypeText: 'Absence',
 			Status: 1,
@@ -1217,17 +1376,442 @@ describe('Requests - absence and text controller tests: ', function() {
 				ShortName: 'HO'
 			},
 			Team: 'London/Team Preferences',
+			IsNew: false,
+			IsPending: true,
+			IsApproved: false,
+			IsDenied: false,
+			IsWaitlisted: false,
 			DenyReason: ''
 		};
 		var clickEvent = new MouseEvent('click');
 
-		controller.isUsingRequestSubmitterTimeZone = true;
-		controller.userTimeZone = 'Europe/Berlin';
+		controller.isUsingRequestSubmitterTimeZone = false;
+		controller.userTimeZone = 'America/Chicago';
 
 		controller.toggleAbsenceSchedules(absence, clickEvent);
-		expect(controller.shifts[0].Date).toEqual('11/23/18');
-		expect(controller.shifts[0].ShiftStartTime).toEqual('8:00 PM');
-		expect(controller.shifts[0].ShiftEndTime).toEqual('5:00 AM+1');
+		expect(controller.shifts[0].Date).toEqual('12/4/18');
+		expect(controller.shifts[0].ShiftStartTime).toEqual('11:00 PM');
+		expect(controller.shifts[0].ShiftEndTime).toEqual('8:00 AM+1');
+	});
+
+	it('should show schedule icon for Pending absence request', function() {
+		var absence = {
+			IsFullDay: true,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T01:00:00',
+						RemainingDescription: '15',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T01:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Invoice',
+							TimeSpan: '11:00 PM - 1:00 AM',
+							Color: '255,128,128',
+							StartTime: '2018-12-04T23:00:00',
+							EndTime: '2018-12-05T01:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.2222,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '1:00 AM - 1:15 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-05T01:00:00',
+							EndTime: '2018-12-05T01:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2222,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '1:15 AM - 3:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T01:15:00',
+							EndTime: '2018-12-05T03:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.4444,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '3:00 AM - 4:00 AM',
+							Color: '255,255,0',
+							StartTime: '2018-12-05T03:00:00',
+							EndTime: '2018-12-05T04:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.4444,
+							EndPositionPercentage: 0.5556,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '4:00 AM - 6:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T04:00:00',
+							EndTime: '2018-12-05T06:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5556,
+							EndPositionPercentage: 0.7778,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '6:00 AM - 6:15 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-05T06:00:00',
+							EndTime: '2018-12-05T06:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.7778,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '6:15 AM - 8:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T06:15:00',
+							EndTime: '2018-12-05T08:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'AM',
+						Name: 'Early',
+						DisplayColor: '#80FFFF'
+					},
+					BelongsToDate: '2018-12-04T23:00:00'
+				}
+			],
+			Subject: 'aaa',
+			Message: 'aaa',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Europe/Berlin',
+			Id: 'c1d28ba8-d21e-41b3-936a-a9ab0081f843',
+			Seniority: 23,
+			PeriodStartTime: '2018-12-05T00:00:00',
+			PeriodEndTime: '2018-12-05T23:59:00',
+			UpdatedTime: '2018-12-03T08:53:12.357',
+			CreatedTime: '2018-12-03T08:53:12.33',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 0,
+			StatusText: 'Pending',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			DenyReason: ''
+		};
+		requestsDataService.setRequests([absence]);
+
+		params.selectedGroupIds = ['team'];
+		var element = compileUIGridHtml(scope, controller.gridOptions);
+		scope.$digest();
+
+		var nameCell = element[0].querySelectorAll('.request-absence-name-cell');
+		expect(nameCell.length).toEqual(1);
+		expect(nameCell[0].querySelector('.mdi-calendar').style.visibility).toEqual('visible');
+	});
+
+	it('should show schedule icon for Waitlisted absence request', function() {
+		var absence = {
+			IsFullDay: true,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T01:00:00',
+						RemainingDescription: '15',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T01:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Invoice',
+							TimeSpan: '11:00 PM - 1:00 AM',
+							Color: '255,128,128',
+							StartTime: '2018-12-04T23:00:00',
+							EndTime: '2018-12-05T01:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.2222,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '1:00 AM - 1:15 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-05T01:00:00',
+							EndTime: '2018-12-05T01:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2222,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '1:15 AM - 3:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T01:15:00',
+							EndTime: '2018-12-05T03:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.4444,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '3:00 AM - 4:00 AM',
+							Color: '255,255,0',
+							StartTime: '2018-12-05T03:00:00',
+							EndTime: '2018-12-05T04:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.4444,
+							EndPositionPercentage: 0.5556,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '4:00 AM - 6:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T04:00:00',
+							EndTime: '2018-12-05T06:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5556,
+							EndPositionPercentage: 0.7778,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '6:00 AM - 6:15 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-05T06:00:00',
+							EndTime: '2018-12-05T06:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.7778,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '6:15 AM - 8:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T06:15:00',
+							EndTime: '2018-12-05T08:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'AM',
+						Name: 'Early',
+						DisplayColor: '#80FFFF'
+					},
+					BelongsToDate: '2018-12-04T23:00:00'
+				}
+			],
+			Subject: 'aaa',
+			Message: 'aaa',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Europe/Berlin',
+			Id: 'c1d28ba8-d21e-41b3-936a-a9ab0081f843',
+			Seniority: 23,
+			PeriodStartTime: '2018-12-05T00:00:00',
+			PeriodEndTime: '2018-12-05T23:59:00',
+			UpdatedTime: '2018-12-03T08:53:12.357',
+			CreatedTime: '2018-12-03T08:53:12.33',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 5,
+			StatusText: 'Waitlisted',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			DenyReason: ''
+		};
+		requestsDataService.setRequests([absence]);
+
+		params.selectedGroupIds = ['team'];
+		var element = compileUIGridHtml(scope, controller.gridOptions);
+		scope.$digest();
+
+		var nameCell = element[0].querySelectorAll('.request-absence-name-cell');
+		expect(nameCell.length).toEqual(1);
+		expect(nameCell[0].querySelector('.mdi-calendar').style.visibility).toEqual('visible');
+	});
+
+	it('should hide schedule icon for Denied absence request', function() {
+		var absence = {
+			IsFullDay: true,
+			PersonAccountSummaryViewModel: {
+				PersonAccountSummaryDetails: [
+					{
+						StartDate: '2017-01-01T01:00:00',
+						RemainingDescription: '15',
+						TrackingTypeDescription: 'Days',
+						EndDate: '2026-11-10T01:00:00'
+					}
+				]
+			},
+			Shifts: [
+				{
+					Name: 'Ashley Andeen',
+					Periods: [
+						{
+							Title: 'Invoice',
+							TimeSpan: '11:00 PM - 1:00 AM',
+							Color: '255,128,128',
+							StartTime: '2018-12-04T23:00:00',
+							EndTime: '2018-12-05T01:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.0,
+							EndPositionPercentage: 0.2222,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '1:00 AM - 1:15 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-05T01:00:00',
+							EndTime: '2018-12-05T01:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.2222,
+							EndPositionPercentage: 0.25,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '1:15 AM - 3:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T01:15:00',
+							EndTime: '2018-12-05T03:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.25,
+							EndPositionPercentage: 0.4444,
+							Meeting: null
+						},
+						{
+							Title: 'Lunch',
+							TimeSpan: '3:00 AM - 4:00 AM',
+							Color: '255,255,0',
+							StartTime: '2018-12-05T03:00:00',
+							EndTime: '2018-12-05T04:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.4444,
+							EndPositionPercentage: 0.5556,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '4:00 AM - 6:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T04:00:00',
+							EndTime: '2018-12-05T06:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.5556,
+							EndPositionPercentage: 0.7778,
+							Meeting: null
+						},
+						{
+							Title: 'Short break',
+							TimeSpan: '6:00 AM - 6:15 AM',
+							Color: '255,0,0',
+							StartTime: '2018-12-05T06:00:00',
+							EndTime: '2018-12-05T06:15:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.7778,
+							EndPositionPercentage: 0.8056,
+							Meeting: null
+						},
+						{
+							Title: 'Phone',
+							TimeSpan: '6:15 AM - 8:00 AM',
+							Color: '128,255,128',
+							StartTime: '2018-12-05T06:15:00',
+							EndTime: '2018-12-05T08:00:00',
+							IsOvertime: false,
+							StartPositionPercentage: 0.8056,
+							EndPositionPercentage: 1.0,
+							Meeting: null
+						}
+					],
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					ShiftCategory: {
+						Id: null,
+						ShortName: 'AM',
+						Name: 'Early',
+						DisplayColor: '#80FFFF'
+					},
+					BelongsToDate: '2018-12-04T23:00:00'
+				}
+			],
+			Subject: 'aaa',
+			Message: 'aaa',
+			AgentName: 'Ashley Andeen',
+			PersonId: '11610fe4-0130-4568-97de-9b5e015b2564',
+			TimeZone: 'Europe/Berlin',
+			Id: 'c1d28ba8-d21e-41b3-936a-a9ab0081f843',
+			Seniority: 23,
+			PeriodStartTime: '2018-12-05T00:00:00',
+			PeriodEndTime: '2018-12-05T23:59:00',
+			UpdatedTime: '2018-12-03T08:53:12.357',
+			CreatedTime: '2018-12-03T08:53:12.33',
+			Type: 1,
+			TypeText: 'Absence',
+			Status: 1,
+			StatusText: 'Denied',
+			Payload: {
+				Name: 'Holiday',
+				ShortName: 'HO'
+			},
+			Team: 'London/Team Preferences',
+			DenyReason: ''
+		};
+		requestsDataService.setRequests([absence]);
+
+		params.selectedGroupIds = ['1234'];
+		var element = compileUIGridHtml(scope, controller.gridOptions);
+		scope.$digest();
+
+		var nameCell = element[0].querySelectorAll('.request-absence-name-cell');
+		expect(nameCell.length).toEqual(1);
+		expect(nameCell[0].querySelector('.mdi-calendar').style.visibility).toEqual('hidden');
 	});
 
 	function setUpTarget() {

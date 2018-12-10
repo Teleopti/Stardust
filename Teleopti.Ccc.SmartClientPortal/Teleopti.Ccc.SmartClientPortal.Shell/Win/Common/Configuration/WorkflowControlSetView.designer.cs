@@ -776,8 +776,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateSelectionFromToStudentAvailability.Size = new System.Drawing.Size(187, 116);
 			this.dateSelectionFromToStudentAvailability.TabIndex = 7;
 			this.dateSelectionFromToStudentAvailability.TodayButtonText = "xxToday";
-			this.dateSelectionFromToStudentAvailability.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodEnd")));
-			this.dateSelectionFromToStudentAvailability.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodStart")));
+			this.dateSelectionFromToStudentAvailability.WorkPeriodEnd = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodEnd"))).Date);
+			this.dateSelectionFromToStudentAvailability.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly(((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodStart"))).Date);
 			this.dateSelectionFromToStudentAvailability.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToStudentAvailability_Validating);
 			this.dateSelectionFromToStudentAvailability.Validated += new System.EventHandler(this.dateSelectionFromToStudentAvailability_Validated);
 			// 
@@ -798,8 +798,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateSelectionFromToIsOpenStudentAvailability.Size = new System.Drawing.Size(187, 116);
 			this.dateSelectionFromToIsOpenStudentAvailability.TabIndex = 8;
 			this.dateSelectionFromToIsOpenStudentAvailability.TodayButtonText = "xxToday";
-			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd")));
-			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart")));
+			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly( ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd"))).Date);
+			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly( ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart"))).Date);
 			this.dateSelectionFromToIsOpenStudentAvailability.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToIsOpenStudentAvailability_Validating);
 			this.dateSelectionFromToIsOpenStudentAvailability.Validated += new System.EventHandler(this.dateSelectionFromToIsOpenStudentAvailability_Validated);
 			// 
@@ -918,7 +918,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.dateOnlyPeriodsVisualizer1.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.dateOnlyPeriodsVisualizer1, 2);
-			this.dateOnlyPeriodsVisualizer1.ContainedPeriod = ((Teleopti.Interfaces.Domain.DateOnlyPeriod)(resources.GetObject("dateOnlyPeriodsVisualizer1.ContainedPeriod")));
+			//this.dateOnlyPeriodsVisualizer1.ContainedPeriod = ((Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnlyPeriod)(resources.GetObject("dateOnlyPeriodsVisualizer1.ContainedPeriod")));
 			this.dateOnlyPeriodsVisualizer1.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateOnlyPeriodsVisualizer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateOnlyPeriodsVisualizer1.Location = new System.Drawing.Point(0, 0);
@@ -1245,8 +1245,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateSelectionFromToPreferencePeriod.Size = new System.Drawing.Size(187, 115);
 			this.dateSelectionFromToPreferencePeriod.TabIndex = 7;
 			this.dateSelectionFromToPreferencePeriod.TodayButtonText = "xxToday";
-			this.dateSelectionFromToPreferencePeriod.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodEnd")));
-			this.dateSelectionFromToPreferencePeriod.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodStart")));
+			this.dateSelectionFromToPreferencePeriod.WorkPeriodEnd = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly( ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodEnd"))).Date);
+			this.dateSelectionFromToPreferencePeriod.WorkPeriodStart = new Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly( ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodStart"))).Date);
 			this.dateSelectionFromToPreferencePeriod.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToPreferencePeriod_Validating);
 			this.dateSelectionFromToPreferencePeriod.Validated += new System.EventHandler(this.dateSelectionFromToPreferencePeriod_Validated);
 			// 
@@ -1267,8 +1267,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateSelectionFromToIsOpen.Size = new System.Drawing.Size(187, 115);
 			this.dateSelectionFromToIsOpen.TabIndex = 8;
 			this.dateSelectionFromToIsOpen.TodayButtonText = "xxToday";
-			this.dateSelectionFromToIsOpen.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpen.WorkPeriodEnd")));
-			this.dateSelectionFromToIsOpen.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpen.WorkPeriodStart")));
+//			this.dateSelectionFromToIsOpen.WorkPeriodEnd = ((Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpen.WorkPeriodEnd")));
+//			this.dateSelectionFromToIsOpen.WorkPeriodStart = ((Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpen.WorkPeriodStart")));
 			this.dateSelectionFromToIsOpen.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToIsOpen_Validating);
 			this.dateSelectionFromToIsOpen.Validated += new System.EventHandler(this.dateSelectionFromToIsOpen_Validated);
 			// 
@@ -2016,7 +2016,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.Name = "timeSpanTextBoxOvertimeRequestMaximumTime";
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.Size = new System.Drawing.Size(80, 25);
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.TabIndex = 2;
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxWidth = 60;
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.Leave += timeSpanTextBoxOvertimeRequestMaximumTime_Leave;
@@ -2032,7 +2032,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Name = "timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime";
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Size = new System.Drawing.Size(80, 25);
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TabIndex = 5;
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxWidth = 60;
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Leave += timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime_Leave;
@@ -2048,7 +2048,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Name = "timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold";
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Size = new System.Drawing.Size(80, 25);
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TabIndex = 6;
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxWidth = 60;
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Leave += timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold_Leave;
@@ -2630,7 +2630,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBox1.Name = "timeSpanTextBox1";
 			this.timeSpanTextBox1.Size = new System.Drawing.Size(82, 32);
 			this.timeSpanTextBox1.TabIndex = 9;
-			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBox1.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 39;
 			this.timeSpanTextBox1.TimeSpanBoxWidth = 65535;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);

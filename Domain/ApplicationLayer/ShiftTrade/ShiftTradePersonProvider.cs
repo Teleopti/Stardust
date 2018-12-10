@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 {
@@ -16,28 +15,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private readonly IPersonRepository _personRepository;
 		private readonly IShiftTradeLightValidator _shiftTradeValidator;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IPersonForScheduleFinder _personForScheduleFinder;
 		private readonly IPeopleForShiftTradeFinder _peopleForShiftTradeFinder;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, IPersonForScheduleFinder personForScheduleFinder, ILoggedOnUser loggedOnUser, IPeopleForShiftTradeFinder peopleForShiftTradeFinder)
+		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser, IPeopleForShiftTradeFinder peopleForShiftTradeFinder)
 		{
 			_personRepository = personRepository;
 			_shiftTradeValidator = shiftTradeValidator;
 			_permissionProvider = permissionProvider;
-			_personForScheduleFinder = personForScheduleFinder;
 			_loggedOnUser = loggedOnUser;
 			_peopleForShiftTradeFinder = peopleForShiftTradeFinder;
-		}
-
-		public IEnumerable<IPerson> RetrievePersons(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
-			NameFormatSetting nameFormatSettings)
-		{
-			var personForShiftTradeList = _personForScheduleFinder.GetPersonFor(shiftTradeDate,
-				teamIds, personName,
-				nameFormatSettings);
-
-			return processShiftTradePeople(shiftTradeDate, personForShiftTradeList);
 		}
 
 		public IEnumerable<IPerson> RetrievePeopleOptimized(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
@@ -83,9 +70,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 	public interface IShiftTradePersonProvider
 	{
-		IEnumerable<IPerson> RetrievePersons(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
-			NameFormatSetting nameFormatSettings);
-
 		IEnumerable<IPerson> RetrievePeopleOptimized(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
 			NameFormatSetting nameFormatSettings);
 

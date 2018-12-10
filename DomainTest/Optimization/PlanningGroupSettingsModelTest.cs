@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
@@ -11,7 +12,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	{
 		public IFetchPlanningGroupSettingsModel Target;
 		public FakePlanningGroupRepository PlanningGroupRepository;
+
 
 		[Test]
 		public void ShouldIncludeContractFilterWhenFetching()
@@ -114,6 +116,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			PlanningGroupRepository.Has(planningGroup);
 			Target.Fetch(planningGroup.Settings.Single(x => x.Default).Id.Value).PreferencePercent
 				.Should().Be.EqualTo(22);
+		}
+		
+		[Test]
+		public void ShouldFetchPlanningGroupName()
+		{
+			var planningGroup = new PlanningGroup {Name = "pg1"};
+			PlanningGroupRepository.Has(planningGroup);
+			Target.Fetch(planningGroup.Settings.Single(x => x.Default).Id.Value).PlanningGroupName
+				.Should().Be.EqualTo(planningGroup.Name);
 		}
 
 		[Test]

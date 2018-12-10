@@ -16,7 +16,7 @@ using Teleopti.Ccc.Infrastructure.MachineLearning;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
+using Teleopti.Wfm.Adherence.Configuration.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {

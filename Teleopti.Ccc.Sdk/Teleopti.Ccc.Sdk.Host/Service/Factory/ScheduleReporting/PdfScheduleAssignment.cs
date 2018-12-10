@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory.ScheduleReporting
 
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString")]
         private float RenderPayLoad(IVisualLayer visualLayer, float top, TimeZoneInfo timeZoneInfo, IPerson agent)
         {
             Format.Alignment = PdfTextAlignment.Center;

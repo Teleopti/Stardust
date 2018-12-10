@@ -4,6 +4,8 @@ using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -14,8 +16,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {

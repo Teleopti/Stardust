@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
-using Teleopti.Interfaces.Domain;
+
 using Size = System.Drawing.Size;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting

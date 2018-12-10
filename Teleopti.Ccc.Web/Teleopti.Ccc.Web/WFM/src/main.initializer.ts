@@ -14,10 +14,10 @@ export const mainInitializer = [
 	'$translate',
 	'$locale',
 	'CurrentUserInfo',
+	'SupportEmailService',
 	'Toggle',
 	'areasService',
 	'NoticeService',
-	'TabShortCut',
 	'rtaDataService',
 	'$window',
 	'$http',
@@ -27,10 +27,10 @@ export const mainInitializer = [
 		$translate,
 		$locale,
 		currentUserInfo,
+		supportEmailService,
 		toggleService,
 		areasService,
 		noticeService,
-		TabShortCut,
 		rtaDataService,
 		$window
 	) {
@@ -56,6 +56,7 @@ export const mainInitializer = [
 			areasService.getAreasList(),
 			areasService.getAreasWithPermission(),
 			toggleService.togglesLoaded,
+			supportEmailService.init(),
 			currentUserInfo.initContext().then(userPreferences => $translate.use(userPreferences.Language))
 		]).then(([areasAvailable, permittedAreas]) => {
 			$rootScope.isAuthenticated = true;
@@ -71,6 +72,8 @@ export const mainInitializer = [
 		});
 
 		$rootScope.$on('$stateChangeStart', (event, next: IState, toParams) => {
+			console.log('main.initializer - event', event);
+
 			if (!preloadDone) {
 				preloadDone = true; // Why is this done!?
 				event.preventDefault();
@@ -82,10 +85,10 @@ export const mainInitializer = [
 		});
 
 		$rootScope.$on('$stateChangeSuccess', () => {
+			console.log('stateChangeSuccess');
+
 			if ($window.appInsights) $window.appInsights.trackPageView($state.current.name);
 		});
-
-		TabShortCut.unifyFocusStyle();
 	}
 ];
 

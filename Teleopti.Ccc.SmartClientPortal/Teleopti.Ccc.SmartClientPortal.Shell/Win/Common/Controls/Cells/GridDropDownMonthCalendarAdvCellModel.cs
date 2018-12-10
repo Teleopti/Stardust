@@ -9,7 +9,8 @@ using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {

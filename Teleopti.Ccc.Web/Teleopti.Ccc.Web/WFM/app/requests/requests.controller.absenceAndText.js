@@ -20,6 +20,7 @@
 		'UIGridUtilitiesService',
 		'REQUESTS_TAB_NAMES',
 		'REQUESTS_TYPES',
+		'REQUESTS_STATUS',
 		'requestCommandParamsHolder',
 		'uiGridFixService',
 		'requestScheduleService'
@@ -42,6 +43,7 @@
 		uiGridUtilitiesService,
 		requestsTabNames,
 		requestsTypes,
+		requestsStatus,
 		requestCommandParamsHolder,
 		uiGridFixService,
 		requestScheduleService
@@ -63,6 +65,8 @@
 		vm.initialized = false;
 		vm.absence = {};
 		vm.absenceRequestType = requestsTypes.AbsenceRequest;
+		vm.enableScheduleIcon = false;
+		vm.enabledRequestStausesForShowingScheduleIcon = [requestsStatus.Pending, requestsStatus.Waitlisted];
 		vm.showingAbsenceSchedules = false;
 
 		var onInitCallBack = undefined;
@@ -172,15 +176,12 @@
 			vm.showingScheduleAgentName = absence.AgentName;
 
 			var shifts = [];
+
 			absence.Shifts.forEach(function(s) {
-				shifts.push(
-					requestScheduleService.buildShiftData(
-						s,
-						absence.TimeZone,
-						vm.userTimeZone,
-						vm.isUsingRequestSubmitterTimeZone
-					)
-				);
+				var currentTimeZone = vm.userTimeZone;
+				var targetTimeZone = vm.isUsingRequestSubmitterTimeZone ? absence.TimeZone : vm.userTimeZone;
+
+				shifts.push(requestScheduleService.buildShiftData(s, currentTimeZone, targetTimeZone));
 			});
 
 			vm.shifts = shifts;
@@ -195,6 +196,7 @@
 		vm.init = function() {
 			vm.defaultStatusesLoaded = false;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			vm.enableScheduleIcon = toggleService.WFM_Request_Show_Shift_for_Absence_Requests_79008;
 
 			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(
 				requestGridStateService.getAbsenceAndTextSorting()
@@ -224,7 +226,7 @@
 				if (subjectFilter) vm.subjectFilter = subjectFilter['Subject'];
 				if (messageFilter) vm.messageFilter = messageFilter['Message'];
 			} else {
-				vm.filters = [{ Status: '0 5' }];
+				vm.filters = [{ Status: requestsStatus.Pending + ' ' + requestsStatus.Waitlisted }];
 			}
 
 			getRequestTypes();

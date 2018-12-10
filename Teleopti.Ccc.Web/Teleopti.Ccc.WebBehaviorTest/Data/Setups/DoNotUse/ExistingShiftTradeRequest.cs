@@ -12,7 +12,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 {

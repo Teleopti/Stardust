@@ -11,7 +11,7 @@ using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Gamification;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Core.Gamification
 {	

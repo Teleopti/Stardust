@@ -1,10 +1,12 @@
 ﻿using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling.ScheduleRangePersisterWithConflictSolve
 {
+	[TestFixture]
 	public class ShouldDeleteNoConflict : ScheduleRangePersisterWithConflictSolveBase
 	{
 		private PersonAssignment _personAssignment;

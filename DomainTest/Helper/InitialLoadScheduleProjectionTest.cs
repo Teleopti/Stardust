@@ -1,8 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Helper
 {

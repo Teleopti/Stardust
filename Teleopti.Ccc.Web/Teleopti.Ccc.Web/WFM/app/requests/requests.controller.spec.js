@@ -485,7 +485,7 @@ describe('Requests controller tests', function() {
 				resolve({ Children: [] });
 			});
 		};
-		this.getOvertimeLicense = function(successCallback) {
+		this.getRequestLicense = function(successCallback) {
 			return {
 				then: function() {
 					successCallback && successCallback();

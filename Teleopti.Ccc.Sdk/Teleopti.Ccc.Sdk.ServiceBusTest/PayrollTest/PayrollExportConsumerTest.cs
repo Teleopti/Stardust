@@ -17,7 +17,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
+using DateOnlyPeriod = Teleopti.Interfaces.Domain.DateOnlyPeriod;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {

@@ -13,7 +13,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
-		private readonly IToggleManager _toggleManager;
 		private readonly IUserUiCulture _userUiCulture;
 		private readonly IScheduleDayProvider _scheduleDayProvider;
 
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			ITeamScheduleShiftViewModelProvider shiftViewModelProvider,
 			IPeopleSearchProvider searchProvider,
 			IPersonRepository personRepository,
-			IToggleManager toggleManager,
 			IUserUiCulture userUiCulture,
 			IScheduleDayProvider scheduleDayProvider)
 		{
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_shiftViewModelProvider = shiftViewModelProvider;
 			_searchProvider = searchProvider;
 			_personRepository = personRepository;
-			_toggleManager = toggleManager;
 			_userUiCulture = userUiCulture;
 			_scheduleDayProvider = scheduleDayProvider;
 		}

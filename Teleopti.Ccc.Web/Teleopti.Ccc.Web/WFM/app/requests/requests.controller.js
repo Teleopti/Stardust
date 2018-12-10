@@ -48,6 +48,7 @@
 		vm.sitesAndTeams = [];
 		vm.isUsingRequestSubmitterTimeZone = false;
 		vm.overtimeRequestsLicenseAvailable = false;
+		vm.shiftTradeRequestsLicenseAvailable = false;
 		vm.teamNameMap = {};
 		vm.showFeedbackLink = toggleService.WFM_Request_Show_Feedback_Link_77733;
 
@@ -311,8 +312,9 @@
 			})
 			)
 			.then(
-			requestsDataService.getOvertimeLicense().then(function (result) {
-				vm.overtimeRequestsLicenseAvailable = result.data;
+			requestsDataService.getRequestLicense().then(function (result) {
+				vm.overtimeRequestsLicenseAvailable = result.data.IsOvertimeRequestEnabled;
+				vm.shiftTradeRequestsLicenseAvailable = result.data.IsShiftTradeRequestEnabled;
 			})
 			)
 			.then(
@@ -325,22 +327,6 @@
 
 		function forceRequestsReloadWithoutSelection() {
 			$scope.$broadcast('reload.requests.without.selection');
-		}
-
-		function getSitesAndTeamsAsync() {
-			var params = {};
-			params.startDate = moment(vm.period.startDate).format('YYYY-MM-DD');
-			params.endDate = moment(vm.period.endDate).format('YYYY-MM-DD');
-
-			return (vm._sitesAndTeamsPromise = $q(function (resolve, reject) {
-				requestsDataService.hierarchy(params).then(function (data) {
-					resolve(data);
-					vm.sitesAndTeams = data.Children;
-					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-
-					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
-				});
-			}));
 		}
 
 		function getGroupPagesAsync() {
@@ -423,16 +409,6 @@
 			from.forEach(function (x) {
 				to.push(x);
 			});
-		}
-
-		function extractTeamNames(sites) {
-			var teamNameMap = {};
-			sites.forEach(function (site) {
-				site.Children.forEach(function (team) {
-					teamNameMap[team.Id] = team.Name;
-				});
-			});
-			return teamNameMap;
 		}
 	}
 })();

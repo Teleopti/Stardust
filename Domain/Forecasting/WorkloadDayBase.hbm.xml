@@ -23,8 +23,8 @@
 			<key column ="Parent" foreign-key="FK_OpenHourList_WorkloadDayBase">
 				<column name="Parent" unique-key="openHourListUnique"/>
 			</key>
-			<composite-element class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces" >
-				<nested-composite-element class="Teleopti.Interfaces.Domain.MinMax`1[System.TimeSpan], Teleopti.Interfaces"
+			<composite-element class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriod, Teleopti.Ccc.Domain" >
+				<nested-composite-element class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.MinMax`1[System.TimeSpan], Teleopti.Ccc.Domain"
 										  name="period" access="field">
 					<property name="Minimum" 
 							unique-key="openHourListUnique"

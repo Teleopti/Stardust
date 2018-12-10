@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
@@ -467,7 +468,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxPlanningMax.Name = "timeSpanTextBoxPlanningMax";
 			this.timeSpanTextBoxPlanningMax.Size = new System.Drawing.Size(585, 25);
 			this.timeSpanTextBoxPlanningMax.TabIndex = 11;
-			this.timeSpanTextBoxPlanningMax.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxPlanningMax.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxPlanningMax.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxPlanningMax.TimeSpanBoxWidth = 4932;
 			// 
@@ -482,7 +483,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxPlanningMin.Name = "timeSpanTextBoxPlanningMin";
 			this.timeSpanTextBoxPlanningMin.Size = new System.Drawing.Size(585, 25);
 			this.timeSpanTextBoxPlanningMin.TabIndex = 10;
-			this.timeSpanTextBoxPlanningMin.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxPlanningMin.TimeFormat = TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxPlanningMin.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxPlanningMin.TimeSpanBoxWidth = 4932;
 			// 
@@ -631,7 +632,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.textBoxExtMaxTimePerWeek.Name = "textBoxExtMaxTimePerWeek";
 			this.textBoxExtMaxTimePerWeek.Size = new System.Drawing.Size(585, 25);
 			this.textBoxExtMaxTimePerWeek.TabIndex = 6;
-			this.textBoxExtMaxTimePerWeek.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.textBoxExtMaxTimePerWeek.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtMaxTimePerWeek.TimeSpanBoxHeight = 23;
 			this.textBoxExtMaxTimePerWeek.TimeSpanBoxWidth = 4932;
 			// 
@@ -646,7 +647,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.textBoxExtNightlyRestTime.Name = "textBoxExtNightlyRestTime";
 			this.textBoxExtNightlyRestTime.Size = new System.Drawing.Size(585, 25);
 			this.textBoxExtNightlyRestTime.TabIndex = 7;
-			this.textBoxExtNightlyRestTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.textBoxExtNightlyRestTime.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtNightlyRestTime.TimeSpanBoxHeight = 23;
 			this.textBoxExtNightlyRestTime.TimeSpanBoxWidth = 4932;
 			// 
@@ -661,7 +662,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.textBoxExtWeeklyRestTime.Name = "textBoxExtWeeklyRestTime";
 			this.textBoxExtWeeklyRestTime.Size = new System.Drawing.Size(585, 25);
 			this.textBoxExtWeeklyRestTime.TabIndex = 8;
-			this.textBoxExtWeeklyRestTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.textBoxExtWeeklyRestTime.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtWeeklyRestTime.TimeSpanBoxHeight = 23;
 			this.textBoxExtWeeklyRestTime.TimeSpanBoxWidth = 4932;
 			// 
@@ -676,7 +677,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.textBoxExMinTimeSchedulePeriod.Name = "textBoxExMinTimeSchedulePeriod";
 			this.textBoxExMinTimeSchedulePeriod.Size = new System.Drawing.Size(585, 25);
 			this.textBoxExMinTimeSchedulePeriod.TabIndex = 9;
-			this.textBoxExMinTimeSchedulePeriod.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.textBoxExMinTimeSchedulePeriod.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxHeight = 23;
 			this.textBoxExMinTimeSchedulePeriod.TimeSpanBoxWidth = 4932;
 			// 
@@ -711,7 +712,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxNegativeTolerance.Name = "timeSpanTextBoxNegativeTolerance";
 			this.timeSpanTextBoxNegativeTolerance.Size = new System.Drawing.Size(136, 25);
 			this.timeSpanTextBoxNegativeTolerance.TabIndex = 2;
-			this.timeSpanTextBoxNegativeTolerance.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxNegativeTolerance.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxNegativeTolerance.TimeSpanBoxWidth = 4932;
 			// 
@@ -727,7 +728,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxPositiveTolerance.Name = "timeSpanTextBoxPositiveTolerance";
 			this.timeSpanTextBoxPositiveTolerance.Size = new System.Drawing.Size(353, 25);
 			this.timeSpanTextBoxPositiveTolerance.TabIndex = 3;
-			this.timeSpanTextBoxPositiveTolerance.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxPositiveTolerance.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxPositiveTolerance.TimeSpanBoxWidth = 4932;
 			// 
@@ -831,7 +832,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.textBoxExtAvgWorkTimePerDay.Name = "textBoxExtAvgWorkTimePerDay";
 			this.textBoxExtAvgWorkTimePerDay.Size = new System.Drawing.Size(149, 26);
 			this.textBoxExtAvgWorkTimePerDay.TabIndex = 1;
-			this.textBoxExtAvgWorkTimePerDay.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.textBoxExtAvgWorkTimePerDay.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxHeight = 23;
 			this.textBoxExtAvgWorkTimePerDay.TimeSpanBoxWidth = 4932;
 			// 
@@ -912,7 +913,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.textBoxExtMinTimePerWeek.Name = "textBoxExtMinTimePerWeek";
 			this.textBoxExtMinTimePerWeek.Size = new System.Drawing.Size(585, 29);
 			this.textBoxExtMinTimePerWeek.TabIndex = 72;
-			this.textBoxExtMinTimePerWeek.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.textBoxExtMinTimePerWeek.TimeFormat = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimeFormatsType.HoursMinutes;
 			this.textBoxExtMinTimePerWeek.TimeSpanBoxHeight = 23;
 			this.textBoxExtMinTimePerWeek.TimeSpanBoxWidth = 4932;
 			// 

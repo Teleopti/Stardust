@@ -4,12 +4,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time;
-using Teleopti.Interfaces.Domain;
-using DateTimePeriod = Teleopti.Interfaces.Domain.DateTimePeriod;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         #region Fields & Properties
 
         private MinMax<DateTime> _minMax;
-        private DateTimePeriod _dateTimePeriod;
+        private Domain.InterfaceLegacy.Domain.DateTimePeriod _dateTimePeriod;
         private bool _sameDateUtc;
         private bool _sameDateLocal;
         private ObservableCollection<String> _selectableTimeSpans = new ObservableCollection<String>();
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         }
 
 
-        public DateTimePeriod DateTimePeriod
+        public Domain.InterfaceLegacy.Domain.DateTimePeriod DateTimePeriod
         {
             get { return _dateTimePeriod; }
             private set
@@ -311,7 +310,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                 var duration = model.End - model.Start;
                 if (duration.Minutes <= 0) duration = model.Interval;
                 if (model.End < newValue.Add(model.Interval)) model.End = model.Start.Add(duration);
-                if (e.NewValue != e.OldValue) model.DateTimePeriod = new DateTimePeriod(model.Start, model.End);
+                if (e.NewValue != e.OldValue) model.DateTimePeriod = new Domain.InterfaceLegacy.Domain.DateTimePeriod(model.Start, model.End);
             }
             UpdateIsValid(model);
         }
@@ -324,7 +323,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                 var duration = model.End - model.Start;
                 if (duration.Minutes <= 0) duration = model.Interval;
                 if (model.Start.Add(model.Interval) > newValue) model.Start = model.End.Subtract(duration);
-                if (e.NewValue != e.OldValue) model.DateTimePeriod = new DateTimePeriod(model.Start, model.End);
+                if (e.NewValue != e.OldValue) model.DateTimePeriod = new Domain.InterfaceLegacy.Domain.DateTimePeriod(model.Start, model.End);
             }
             UpdateIsValid(model);
         }
@@ -360,7 +359,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         /// </remarks>
         public DateTimePeriodViewModel()
         {
-            _dateTimePeriod = new DateTimePeriod(Start, End);
+            _dateTimePeriod = new Domain.InterfaceLegacy.Domain.DateTimePeriod(Start, End);
             StartDateTimeViewModel = new DateTimeViewModel(Start);
             EndDateTimeViewModel = new DateTimeViewModel(End);
             _minMax = new MinMax<DateTime>(Min, Max);

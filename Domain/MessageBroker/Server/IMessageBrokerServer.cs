@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		IEnumerable<Message> PopMessages(string route, string mailboxId);
 
 		void NotifyClients(Message message);
-		void NotifyClientsMultiple(IEnumerable<Message> notifications);
+		void NotifyClientsMultiple(IEnumerable<Message> messages);
 
 	}
 }

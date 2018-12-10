@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 {
@@ -26,9 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search);
 
 		List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria);
-
-		List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds,
-			IDictionary<PersonFinderField, string> searchCriteria);
 
 		List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds,
 			IDictionary<PersonFinderField, string> searchCriteria);

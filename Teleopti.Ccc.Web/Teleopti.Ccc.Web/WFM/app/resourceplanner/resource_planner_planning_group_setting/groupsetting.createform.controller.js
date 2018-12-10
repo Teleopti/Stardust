@@ -5,16 +5,14 @@
         .module('wfm.resourceplanner')
         .controller('planningGroupSettingEditController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService', 'planningGroupInfo'];
 
-    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService) {
+    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService, planningGroupInfo) {
         var vm = this;
 
         var filterId = $stateParams.filterId ? $stateParams.filterId : null;
-        vm.default = $stateParams.isDefault ? $stateParams.isDefault : false;
-        vm.isEdit = $stateParams.filterId ? true : false;
+        vm.isEdit = !!filterId;
         vm.settingInfo = {
-            BlockFinderType: 0,
             BlockSameShift: false,
             BlockSameShiftCategory: false,
             BlockSameStartTime: false,
@@ -30,31 +28,30 @@
             MaxWeekendDaysOff: 16,
             Priority: null,
             Id: filterId,
-            Default: vm.default,
             Filters: [],
-            Name: $stateParams.isDefault ? $translate.instant('Default') : "",
+			Default: false,
+            Name: "",
             PlanningGroupId: $stateParams.groupId
         };
-        vm.schedulingSettings = [
-            { Id: "IndividualFlexible", Selected: true, Name: $translate.instant('IndividualFlexible') + " (" + $translate.instant('Default') + ")" },
-            {
-                Id: "BlockScheduling", Selected: false, Name: $translate.instant('BlockScheduling'),
-                Types: [
-                    { Id: "BlockFinderTypeBetweenDayOff", Selected: false, Code: 1, Name: $translate.instant('BlockFinderTypeBetweenDayOff') },
-                    { Id: "BlockFinderTypeSchedulePeriod", Selected: false, Code: 2, Name: $translate.instant('BlockFinderTypeSchedulePeriod') }
-                ], Options: [
-                    { Id: "BlockSameShiftCategory", Selected: true },
-                    { Id: "BlockSameStartTime", Selected: false },
-                    { Id: "BlockSameShift", Selected: false },
-                ]
-            }
-        ];
+        vm.planningGroupName = planningGroupInfo.Name;
+        
+        vm.blockFinderTypeOptions = [
+			"Off",
+			"BlockFinderTypeBetweenDayOff",
+			"BlockFinderTypeSchedulePeriod"
+		];
+		vm.blockFinderType = vm.blockFinderTypeOptions[0];
+        
+        vm.blockComparisonTypeOptions = [
+        	"BlockSameShiftCategory",
+			"BlockSameStartTime",
+			"BlockSameShift"
+		];
+		vm.blockComparisonType = vm.blockComparisonTypeOptions[0];
+
         vm.requestSent = false;
         vm.selectedItem = undefined;
-        vm.selectedType = vm.schedulingSettings[1].Types[0];
-        vm.selectedOptionName = vm.schedulingSettings[1].Options[0].Id;
         vm.searchString = undefined;
-        vm.selectedSchedulingMethod = vm.schedulingSettings[0];
         vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
         vm.clearInput = clearInput;
         vm.isValid = isValid;
@@ -65,23 +62,19 @@
         vm.isValidFullWeekEndDaysOff = isValidFullWeekEndDaysOff;
         vm.isValidFilters = isValidFilters;
         vm.isValidName = isValidName;
-        vm.isValidBlockScheduling = isValidBlockScheduling;
         vm.selectResultItem = selectResultItem;
         vm.removeSelectedFilter = removeSelectedFilter;
         vm.cancelCreate = returnFromCreate;
-        vm.selectSchedulingSetting = selectSchedulingSetting;
-        vm.setBlockSchedulingType = setBlockSchedulingType;
-        vm.setBlockSchedulingOption = setBlockSchedulingOption;
         vm.persist = persist;
-        vm.filterOptions = filterOptions;
 
         checkIfEditDefaultRule();
 
         function checkIfEditDefaultRule() {
-            if (!filterId)
+            if (!vm.isEdit)
                 return vm.settingInfo;
-            return PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
+            return PlanGroupSettingService.getSetting({ id: filterId})
                 .$promise.then(function (result) {
+					vm.settingInfo.Default = result.Default;
                     vm.settingInfo.Name = result.Name;
                     vm.settingInfo.Filters = result.Filters;
                     vm.settingInfo.Priority = result.Priority;
@@ -100,80 +93,17 @@
                     vm.settingInfo.MinWeekendDaysOff = result.MinWeekendDaysOff;
                     vm.settingInfo.MaxWeekendDaysOff = result.MaxWeekendDaysOff;
 					vm.settingInfo.PreferencePercent = result.PreferencePercent;
-                    if (result.BlockFinderType > 0) {
-                        return setBlockSchedulingIsSelected(result);
-                    }
+					vm.blockFinderType = vm.blockFinderTypeOptions[result.BlockFinderType];
+					if(result.BlockSameShiftCategory){
+						vm.blockComparisonType = vm.blockComparisonTypeOptions[0];
+					}
+					if(result.BlockSameStartTime){
+						vm.blockComparisonType = vm.blockComparisonTypeOptions[1];
+					}
+					if(result.BlockSameShift){
+						vm.blockComparisonType = vm.blockComparisonTypeOptions[2];
+					}
                 });
-        }
-
-        function setBlockSchedulingIsSelected(result) {
-            vm.schedulingSettings[1].Options = [
-                { Id: "BlockSameShiftCategory", Selected: result.BlockSameShiftCategory },
-                { Id: "BlockSameStartTime", Selected: result.BlockSameStartTime },
-                { Id: "BlockSameShift", Selected: result.BlockSameShift },
-            ];
-            vm.selectedOptionName = vm.schedulingSettings[1].Options.find(function (option) {
-                return option.Selected == true;
-            }).Id;
-            return setBlockSchedulingDetail(result.BlockFinderType);
-        }
-
-        function setBlockSchedulingDetail(id) {
-            vm.schedulingSettings[0].Selected = false;
-            vm.schedulingSettings[1].Selected = true;
-            vm.selectedSchedulingMethod = vm.schedulingSettings[1];
-            vm.selectedType = vm.schedulingSettings[1].Types.find(function (type) {
-                return type.Code == id;
-            });
-        }
-
-        function setBlockSchedulingType(type) {
-            if (type)
-                return vm.settingInfo.BlockFinderType = type.Code;
-        }
-
-        function setBlockSchedulingOption(index) {
-            vm.schedulingSettings[1].Options.forEach(function (option, id) {
-                if (id == index) {
-                    option.Selected = true;
-                    return vm.settingInfo[option.Id] = true;
-                } else {
-                    option.Selected = false;
-                    return vm.settingInfo[option.Id] = false;
-                }
-            });
-        }
-
-        function selectSchedulingSetting() {
-            if (vm.schedulingSettings[1].Selected == true) {
-                vm.selectedSchedulingMethod = vm.schedulingSettings[1];
-                vm.schedulingSettings[0].Selected = false;
-                setBlockSchedulingSettingDataToDefault();
-            } else {
-                vm.selectedSchedulingMethod = vm.schedulingSettings[0];
-                vm.schedulingSettings[0].Selected = true;
-                clearBlockSchedulingSettingData();
-            }
-        }
-
-        function clearBlockSchedulingSettingData() {
-            vm.settingInfo.BlockFinderType = 0;
-            vm.settingInfo.BlockSameShift = false;
-            vm.settingInfo.BlockSameShiftCategory = false;
-            vm.settingInfo.BlockSameStartTime = false;
-        }
-
-        function setBlockSchedulingSettingDataToDefault() {
-            vm.settingInfo.BlockFinderType = 1;
-            vm.settingInfo.BlockSameShift = false;
-            vm.settingInfo.BlockSameShiftCategory = true;
-            vm.settingInfo.BlockSameStartTime = false;
-        }
-
-        function filterOptions(text) {
-            if (!!text)
-                return $filter('filter')(vm.schedulingSettings[1].Types, text);
-            return vm.schedulingSettings[1].Types;
         }
 
         function inputFilterData() {
@@ -185,12 +115,12 @@
         }
 
         function removeSelectedFiltersInList(filters, selectedFilters) {
-            if (selectedFilters.length == 0 || filters.length == 0)
+            if (selectedFilters.length === 0 || filters.length === 0)
                 return filters;
             var result = angular.copy(filters);
             for (var i = filters.length - 1; i >= 0; i--) {
                 angular.forEach(selectedFilters, function (selectedItem) {
-                    if (filters[i].Id == selectedItem.Id) {
+                    if (filters[i].Id === selectedItem.Id) {
                         result.splice(i, 1);
                     }
                 });
@@ -208,8 +138,7 @@
                 isValidFilters() &&
                 isValidName() &&
                 isValidFullWeekEndsOff() &&
-                isValidFullWeekEndDaysOff() &&
-                isValidBlockScheduling();
+                isValidFullWeekEndDaysOff()
         }
 
         function isValidDayOffsPerWeek() {
@@ -241,7 +170,7 @@
         }
 
         function isValidFilters() {
-            return vm.settingInfo.Filters.length > 0 || vm.default;
+            return vm.settingInfo.Filters.length > 0 || vm.settingInfo.Default;
         }
 
         function isValidName() {
@@ -269,21 +198,15 @@
             vm.settingInfo.Filters.splice(p, 1);
         }
 
-        function isValidBlockScheduling() {
-            if (vm.schedulingSettings[0].Selected == true)
-                return true;
-            return !!vm.selectedType &&
-                vm.schedulingSettings[1].Options.some(
-                    function (option) {
-                        return option.Selected == true;
-                    });
-        }
-
         function persist() {
             if (!vm.isValid())
                 return;
             if (!vm.requestSent) {
                 vm.requestSent = true;
+                vm.settingInfo.BlockFinderType = vm.blockFinderTypeOptions.indexOf(vm.blockFinderType);
+				for (var i = 0; i < vm.blockComparisonTypeOptions.length; i++) {
+					vm.settingInfo[vm.blockComparisonTypeOptions[i]] = (vm.blockComparisonType===vm.blockComparisonTypeOptions[i]);
+				} 
                 PlanGroupSettingService.saveSetting(vm.settingInfo).$promise.then(function () {
                     returnFromCreate();
                 });

@@ -32,19 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 				Name = x.Name
 			}).OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 		}
-
-		public IEnumerable<SkillViewModel> BuildSkillsConnectedWithQueue() {
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			var comparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
-			return skills.Select(skill => new SkillViewModel
-			{
-				Id = skill.Id.GetValueOrDefault().ToString(),
-				Name = skill.Name,
-				DoDisplayData = _supportedSkillsInIntradayProvider.CheckSupportedSkill(skill),
-				SkillType = skill.SkillType.Description.Name,
-				IsMultisiteSkill = skill is MultisiteSkill
-			}).OrderBy(x => x.Name, comparer).ToList();
-		}
 	}
 
 	public class SkillViewModel

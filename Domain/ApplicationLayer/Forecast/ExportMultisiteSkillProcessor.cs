@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {

@@ -8,13 +8,4 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		ShiftExchangeOffer,
 		OvertimeRequest
 	}
-
-	public enum RequestStatus
-	{
-		New,
-		Pending,
-		Approved,
-		Denied,
-		Referred
-	}
 }

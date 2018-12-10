@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
@@ -107,9 +107,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				licenseService.MaxActiveAgents,
 				licenseService.MaxSeats,
 				licenseService.LicenseType,
-				new Percent(licenseService.MaxActiveAgentsGrace),
-				LicenseActivator.IsThisAlmostTooManyActiveAgents,
-				LicenseActivator.IsThisTooManyActiveAgents, majorVersion);
+				new Percent(licenseService.MaxActiveAgentsGrace), 
+				majorVersion);
 
 			foreach (var optionPath in optionPaths.Where(optionPath => optionPath.Value))
 			{

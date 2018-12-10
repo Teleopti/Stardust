@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			}
 			if (result == DialogResult.Cancel)
 			{
-				_skill.RemoveChildSkill(childSkill);
+				_skill.ClearChildSkill(childSkill);
 			}
 			else
 			{

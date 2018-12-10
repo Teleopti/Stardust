@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 {
@@ -46,12 +45,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		public List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
 			return _searchRepository.FindPersonIdsInTeams(date, teamIds, searchCriteria);
-		}
-
-		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds,
-			IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			return _searchRepository.FindPersonIdsInTeamsBasedOnPersonPeriod(period, teamIds, searchCriteria);
 		}
 
 		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds,

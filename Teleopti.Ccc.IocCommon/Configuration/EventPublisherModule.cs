@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure;
+using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CannotSendDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 
 			builder.RegisterType<CommonEventProcessor>().ApplyAspects().SingleInstance();
-			builder.RegisterType<HangfireEventProcessor>().SingleInstance();
 
 			if (_configuration.Args().BehaviorTestServer)
 			{

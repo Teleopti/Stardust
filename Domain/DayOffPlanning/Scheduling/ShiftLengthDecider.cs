@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			_desiredShiftLengthCalculator = desiredShiftLengthCalculator;
 		}
 
-		public IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary)
+		public IList<ShiftProjectionCache> FilterList(IList<ShiftProjectionCache> shiftList, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, OpenHoursSkillResult openHoursSkillResult)
 		{
 			if (shiftList == null) return null;
 			if (!shiftList.Any()) return shiftList;
@@ -29,12 +28,21 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			if (!schedulingOptions.UseAverageShiftLengths && !usingTeamBlockAndSameShift)
 				return shiftList;
 
+			if (openHoursSkillResult != null)
+			{
+				shiftList = shiftList.Select(s => new { Period = s.MainShiftProjection().Period(), s })
+					.Where(s => s.Period.HasValue && s.Period?.ElapsedTime() <= openHoursSkillResult.ForCurrentDate())
+					.Select(s => s.s)
+					.ToList();
+			}
+
 			//ta reda på alla skiftlängder i _shiftList, som en lista
 			var contractTimes = shiftList.ToLookup(s => s.WorkShiftProjectionContractTime());
 			var resultingTimes = contractTimes.Select(x => x.Key).ToArray();
 			
 			//hämta önskad skiftlängd
-			TimeSpan shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix, schedulingOptions, maxWorkTimeDictionary);
+			var shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix, schedulingOptions, openHoursSkillResult);
+
 			//välj närmaste från listan
 			IList<TimeSpan> resultingList = new List<TimeSpan>(resultingTimes);
 			while (resultingList.Count > 0)

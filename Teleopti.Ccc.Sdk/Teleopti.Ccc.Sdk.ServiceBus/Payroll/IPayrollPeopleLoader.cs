@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
+using DateOnlyPeriod = Teleopti.Interfaces.Domain.DateOnlyPeriod;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {

@@ -126,7 +126,6 @@ seatmap-editor {
 	.group-icon {
 		position: relative;
 		display: inline-block;
-		top: 5px;
 		width: 18px;
 		height: 19px;
 		background: url(../app/seatManagement/images/group.svg);
@@ -136,7 +135,6 @@ seatmap-editor {
 	.ungroup-icon {
 		position: relative;
 		display: inline-block;
-		top: 5px;
 		width: 18px;
 		height: 19px;
 		background: url(../app/seatManagement/images/ungroup.svg);
@@ -266,9 +264,6 @@ people-selection-list > .panel {
 	padding-left: 10px;
 	box-shadow: none;
 
-	.col-md-4 {
-		width: 100%;
-	}
 	.split-3-1 {
 		display: none;
 	}

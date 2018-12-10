@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest
 {

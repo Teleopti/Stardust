@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 	[DefaultData]
 	public class TimelineTest
 	{
-		public Adherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
+		public Adherence.Historical.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

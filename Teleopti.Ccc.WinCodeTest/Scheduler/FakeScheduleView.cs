@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -31,11 +31,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		public void ShowInformationMessage(string text, string caption)
 		{
-		}
-
-		public DialogResult ShowOkCancelMessage(string text, string caption)
-		{
-			throw new NotImplementedException();
 		}
 
 		public DialogResult ShowWarningMessage(string text, string caption)

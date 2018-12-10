@@ -12,6 +12,7 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -23,7 +24,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -174,8 +175,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 					new Tenants(tenantUnitOfWorkManager,
 						new LoadAllTenants(tenantUnitOfWorkManager),
 						dsFactory,
-						new BaseConfigurationRepository(),
-						new TrueToggleManager())),
+						new BaseConfigurationRepository())),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 

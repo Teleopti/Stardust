@@ -10,7 +10,7 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
+
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 

@@ -3,7 +3,7 @@ using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 {
@@ -64,17 +64,6 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 		public void VerifyCannotHaveNegativeThresholdTime()
 		{
 			Assert.Throws<ArgumentOutOfRangeException>(() => _target.ThresholdTime = TimeSpan.FromSeconds(-20).Seconds);
-		}
-
-		[Test]
-		public void ShouldNotThrowWhenNoAdherence()
-		{
-			var target = new RtaRule();
-
-			Assert.DoesNotThrow(() =>
-			{
-				var action = target.AdherenceText;
-			});
 		}
 	}
 }

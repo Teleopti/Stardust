@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands
 {

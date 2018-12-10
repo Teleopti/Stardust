@@ -4,15 +4,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
-	public interface IMultiplicatorsetForPasteSpecialFilter
-	{
-		IEnumerable<IMultiplicatorDefinitionSet> FilterAvailableMultiplicatorSet(IEnumerable<IScheduleDay> scheduleDays);
-	}
-
 	/// <summary>
 	/// Remove items from the give IMultiplicatorDefinitionSet workingSets which are not in ALL scheduleDay
 	/// </summary>
-	public class MultiplicatorsetForPasteSpecialFilter : IMultiplicatorsetForPasteSpecialFilter
+	public class MultiplicatorsetForPasteSpecialFilter
 	{
 
 		public IEnumerable<IMultiplicatorDefinitionSet> FilterAvailableMultiplicatorSet(IEnumerable<IScheduleDay> scheduleDays)

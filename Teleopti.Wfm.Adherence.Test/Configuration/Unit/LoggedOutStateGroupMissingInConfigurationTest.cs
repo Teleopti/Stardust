@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 {
@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 			var result = Target.Validate();
 
 			result.Select(x => x.Resource)
-				.Should().Contain(nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInConfiguration));
+				.Should().Contain("LoggedOutStateGroupMissingInConfiguration");
 		}
 
 		[Test]
@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 			var result = Target.Validate();
 
 			result.Select(x => x.Resource)
-				.Should().Not.Contain(nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInConfiguration));
+				.Should().Not.Contain("LoggedOutStateGroupMissingInConfiguration");
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 			var result = Target.Validate();
 
 			result.Select(x => x.Resource)
-				.Should().Contain(nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInConfiguration));
+				.Should().Contain("LoggedOutStateGroupMissingInConfiguration");
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 
 			var result = Target.Validate();
 
-			var resource = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInConfiguration);
+			var resource = "LoggedOutStateGroupMissingInConfiguration";
 			result.FirstOrDefault(x => x.Resource == resource && x.Data.Single() == "invalid business unit 1")
 				.Should().Not.Be.Null();
 			result.FirstOrDefault(x => x.Resource == resource && x.Data.Single() == "invalid business unit 2")

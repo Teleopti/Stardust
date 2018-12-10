@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps

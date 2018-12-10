@@ -1,32 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface IValidSampleDayPickerFromTeamBlock
     {
-        IScheduleDay GetSampleScheduleDay(ITeamBlockInfo teamBlockInfo);
-	    IScheduleDay GetSampleScheduleDay(ITeamBlockInfo teamBlockInfo, IPerson person);
+        IScheduleDay GetSampleScheduleDay(ITeamBlockInfo teamBlockInfo, IPerson person);
     }
 
     public class ValidSampleDayPickerFromTeamBlock : IValidSampleDayPickerFromTeamBlock
     {
-        public IScheduleDay GetSampleScheduleDay(ITeamBlockInfo teamBlockInfo)
-        {
-            var dayList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
-            var matrixes = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dayList[0]).ToList();
-            foreach (var matrix in matrixes)
-            {
-	            var sample = sampleScheduleDay(matrix, dayList);
-	            if (sample != null)
-		            return sample;
-            }
-
-	        return null;
-        }
-
 	    private static IScheduleDay sampleScheduleDay(IScheduleMatrixPro matrix, IList<DateOnly> dayList)
 	    {
 		    var range = matrix.ActiveScheduleRange;

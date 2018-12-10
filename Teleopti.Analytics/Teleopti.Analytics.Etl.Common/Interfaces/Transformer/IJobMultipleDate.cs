@@ -10,8 +10,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		void Add(IJobMultipleDateItem jobMultipleDateItem, JobCategoryType jobCategoryType);
 		
 		IJobMultipleDateItem GetJobMultipleDateItem(JobCategoryType jobCategoryType);
-		
-		IJobMultipleDateItem MinMaxDatesLocal { get; }
 
 		IJobMultipleDateItem MinMaxDatesUtc { get; }
 
@@ -22,7 +20,5 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		ReadOnlyCollection<JobCategoryType> JobCategoryCollection { get; }
 
 		ReadOnlyCollection<IJobMultipleDateItem> AllDatePeriodCollection { get; }
-
-		
 	}
 }

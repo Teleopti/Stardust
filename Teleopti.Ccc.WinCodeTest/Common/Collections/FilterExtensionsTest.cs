@@ -52,12 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Collections
 
         private class SimpleSpecification : Specification<int>
         {
-            public IList<int> ApprovedInts { get; set; }
-
-            public SimpleSpecification()
-            {
-                ApprovedInts = new List<int>();
-            }
+            public IList<int> ApprovedInts { get; }
 
             public SimpleSpecification(IEnumerable<int> approved)
             {

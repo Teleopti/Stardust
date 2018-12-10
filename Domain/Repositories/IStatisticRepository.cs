@@ -5,7 +5,6 @@ using System.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -40,7 +39,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 			DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset);
 
 		DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources);
-
-		ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date);
 	}
 }

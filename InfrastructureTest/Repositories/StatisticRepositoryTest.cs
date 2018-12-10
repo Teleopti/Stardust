@@ -12,7 +12,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -184,13 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			target.LoadFactQueues();
 		}
-
-		[Test]
-		public void ShouldLoadSkillStatisticForSpecificDates()
-		{
-			target.LoadSkillStatisticForSpecificDates( new DateOnly(2006, 1, 1));
-		}
-
+		
 		protected override void SetupForRepositoryTest()
 		{
 			target = StatisticRepositoryFactory.Create();

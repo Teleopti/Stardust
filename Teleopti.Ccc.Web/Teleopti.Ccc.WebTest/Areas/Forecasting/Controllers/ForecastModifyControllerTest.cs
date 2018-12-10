@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Models;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -10,7 +11,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 {

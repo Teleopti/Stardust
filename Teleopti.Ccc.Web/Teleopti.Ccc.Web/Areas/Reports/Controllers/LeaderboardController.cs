@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Areas.Reports.Core;
 using Teleopti.Ccc.Web.Areas.Reports.Models;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 {

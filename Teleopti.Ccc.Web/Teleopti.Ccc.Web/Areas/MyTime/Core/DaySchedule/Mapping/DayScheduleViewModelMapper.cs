@@ -23,7 +23,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.DaySchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 {

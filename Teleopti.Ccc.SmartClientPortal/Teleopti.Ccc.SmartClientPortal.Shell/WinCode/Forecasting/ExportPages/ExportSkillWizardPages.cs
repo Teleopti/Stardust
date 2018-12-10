@@ -1,5 +1,6 @@
-﻿using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 {

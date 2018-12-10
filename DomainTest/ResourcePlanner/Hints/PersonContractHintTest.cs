@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -13,7 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var person = PersonFactory.CreatePerson().WithId();
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(startDate));
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, false)).InvalidResources
+			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, 0)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractHint)));
 
 			result.Should().Be.Empty();
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			((IDeleteTag)personPeriod.PersonContract.Contract).SetDeleted();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, false)).InvalidResources
+			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, 0)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractHint)));
 
 			result.Should().Not.Be.Empty();

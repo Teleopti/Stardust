@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				foundPerson.VerifyCanBeModifiedByCurrentUser(dateFrom);
 
-	            var accounts = _personAbsenceAccountRepository.Find(foundPerson);
+	            var accounts = _personAbsenceAccountRepository.Find(foundPerson, foundAbsence);
                 var personAccount = accounts.Find(foundAbsence, dateFrom);
                 if (personAccount != null)
                 {

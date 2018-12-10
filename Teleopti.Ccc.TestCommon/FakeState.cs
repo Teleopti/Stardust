@@ -1,5 +1,6 @@
-﻿using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Foundation;
+
 
 namespace Teleopti.Ccc.TestCommon
 {

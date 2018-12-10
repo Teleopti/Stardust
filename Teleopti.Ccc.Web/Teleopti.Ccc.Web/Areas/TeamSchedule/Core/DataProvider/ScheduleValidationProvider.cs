@@ -14,8 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
-using static Teleopti.Interfaces.Domain.DateHelper;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
@@ -232,7 +231,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var scenario = _currentScenario.Current();
 			var inflatedPeriod = dateOnlyPeriod.Inflate(1);
-			var personPeriods = people.Select(person => GetWeekPeriod(date, person.FirstDayOfWeek)).ToList();
+			var personPeriods = people.Select(person => DateHelper.GetWeekPeriod(date, person.FirstDayOfWeek)).ToList();
 			personPeriods.Add(inflatedPeriod);
 			var extendedPeriod = new DateOnlyPeriod(personPeriods.Min(p => p.StartDate), personPeriods.Max(p => p.EndDate));
 

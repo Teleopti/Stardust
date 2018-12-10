@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,7 +24,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 {
@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.True();
 		}
-
 
 		[Test]
 		public void ShouldDenyWhenThereIsNoUnderStaffingSkillWithShrinkage()
@@ -604,7 +603,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return activity;
 		}
 
-		private IPersonSkill createPersonSkill(IActivity activity, ISkill skill)
+		private static IPersonSkill createPersonSkill(IActivity activity, ISkill skill)
 		{
 			skill.Activity = activity;
 			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
@@ -715,7 +714,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return period;
 		}
 
-		private TimeSpan[] createIntervals()
+		private static TimeSpan[] createIntervals()
 		{
 			var intervals = new List<TimeSpan>();
 			for (var i = 00; i < 1440; i += 15)

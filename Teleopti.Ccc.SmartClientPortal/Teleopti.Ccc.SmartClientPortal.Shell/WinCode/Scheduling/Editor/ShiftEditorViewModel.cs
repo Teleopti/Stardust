@@ -15,7 +15,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor
 {

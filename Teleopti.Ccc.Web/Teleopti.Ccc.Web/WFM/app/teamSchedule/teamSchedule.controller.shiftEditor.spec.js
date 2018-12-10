@@ -3,7 +3,6 @@
 
 	var $rootScope,
 		$compile,
-		$document,
 		fakeActivityService,
 		fakeShiftEditorService,
 		fakeTeamSchedule,
@@ -16,16 +15,7 @@
 			$provide.service('Toggle', function () {
 				return { };
 			});
-			$provide.service('CurrentUserInfo', function () {
-				return {
-					CurrentUserInfo: function () {
-						return {
-							DefaultTimeZone: 'Europe/Berlin',
-							DateFormatLocale: 'sv-SE'
-						};
-					}
-				};
-			});
+			
 			$provide.service('TimezoneDataService', function () {
 				return {
 					getAll: function () {
@@ -71,10 +61,13 @@
 	);
 
 	beforeEach(
-		inject(function (_$rootScope_, _$compile_, _$document_) {
+		inject(function (_$rootScope_, _$compile_, CurrentUserInfo) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
-			$document = _$document_;
+			CurrentUserInfo.SetCurrentUserInfo({
+				DefaultTimeZone: 'Europe/Berlin',
+				DateFormatLocale: 'sv-SE'
+			});
 		})
 	);
 	beforeEach(function () {
@@ -481,7 +474,7 @@
 				},
 				{
 					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49623'],
-					Color: '#8080c0',
+					Color: '#303030',
 					Description: 'Phone',
 					Start: '2018-05-28 10:00',
 					Minutes: 120,

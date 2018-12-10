@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Models;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -12,7 +13,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 {
@@ -101,6 +102,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			forecastDayClosed.HasOverride.Should().Be.False();
 			forecastDayClosed.IsOpen.Should().Be.False();
 			forecastDayClosed.IsInModification.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnThatSkillDoesNotExistsInBusinessUnit()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay1);
+
+			var result = (OkNegotiatedContentResult<ForecastViewModel>)Target.LoadForecast(new ForecastResultInput()
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date,
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = Guid.NewGuid()
+			});
+			result.Content.IsSkillNotInBusinessUnit.Should().Be.EqualTo(true);
 		}
 
 		[Test]

@@ -15,6 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Measurement
@@ -71,11 +72,11 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 					dates.ForEach(date =>
 					{
 						var d = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
-						var assignment = PersonAssignmentFactory.CreatePersonAssignmentFromDateTime(person, scenario, d);
-						assignment.AddActivityFromTo(phone, d.AddHours(8), d.AddHours(17));
-						assignment.AddActivityFromTo(brejk, d.AddHours(10), d.AddHours(10).AddMinutes(15));
-						assignment.AddActivityFromTo(lunch, d.AddHours(12), d.AddHours(13));
-						assignment.AddActivityFromTo(brejk, d.AddHours(15), d.AddHours(15).AddMinutes(15));
+						var assignment = new PersonAssignment(person, scenario, new Ccc.Domain.InterfaceLegacy.Domain.DateOnly(d.Date));
+						assignment.AddActivity(phone, d.AddHours(8), d.AddHours(17));
+						assignment.AddActivity(brejk, d.AddHours(10), d.AddHours(10).AddMinutes(15));
+						assignment.AddActivity(lunch, d.AddHours(12), d.AddHours(13));
+						assignment.AddActivity(brejk, d.AddHours(15), d.AddHours(15).AddMinutes(15));
 						PersonAssignments.Add(assignment);
 					});
 				});

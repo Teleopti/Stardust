@@ -48,31 +48,23 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		{
 			hideIfNotLicensed(functions,
 				DefinedRaptorApplicationFunctionForeignIds.Insights,
-				DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport,
+				DefinedRaptorApplicationFunctionForeignIds.DeleteInsightsReport,
 				DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
 
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Insights_78059,
 				DefinedRaptorApplicationFunctionForeignIds.Insights,
-				DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport,
+				DefinedRaptorApplicationFunctionForeignIds.DeleteInsightsReport,
 				DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
 		}
 
 		private void hideRealTimeReports(AllFunctions functions)
 		{
-			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_AuditTrail_44006,
-				DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
 			hideAppFunctionWithToggleOff(functions, Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125,
 				DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
-			hideAppFunctionWithToggleOff(functions, Toggles.WFM_AuditTrail_44006,
-				DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
-			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
-				DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport);
 			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 				DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
 
-			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559)
-				&& _toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560)
-				&& _toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_AuditTrail_44006))
+			if (_toggleManager.IsEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559))
 			{
 				foreach (var function in functions.Functions)
 				{

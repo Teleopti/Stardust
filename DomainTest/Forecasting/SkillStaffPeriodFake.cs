@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			Server.AddSubscription(subscription, "connectionId");
 
 			SignalR.AddedConnection.Should().Be("connectionId");
-			SignalR.AddedConnectionToGroup.Should().Be(MessageBrokerServer.RouteToGroupName(subscription.Route()));
+			SignalR.AddedConnectionToGroup.Should().Be(RouteToGroupName.Convert(subscription.Route()));
 		}
 
 		[Test]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			Server.RemoveSubscription(route, "connectionId");
 
 			SignalR.RemovedConnection.Should().Be("connectionId");
-			SignalR.RemovedConnectionFromGroup.Should().Be(MessageBrokerServer.RouteToGroupName(route));
+			SignalR.RemovedConnectionFromGroup.Should().Be(RouteToGroupName.Convert(route));
 		}
 
 	}

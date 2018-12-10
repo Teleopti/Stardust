@@ -4,9 +4,10 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Audit;
 using Teleopti.Ccc.Domain.Exceptions;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Interfaces.Domain;
+
 
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers

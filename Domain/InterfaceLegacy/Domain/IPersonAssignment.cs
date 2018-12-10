@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -62,7 +61,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null);
 		bool AssignedWithDayOff(IDayOffTemplate template);
 		void FillWithDataFrom(IPersonAssignment personAssignmentSource, bool muteEvent = false);
-		void AddActivityFromTo(IActivity activity, DateTime start, DateTime end);
 		void AddActivity(IActivity activity, DateTime start, DateTime end);
 		void AddActivity(IActivity activity, DateTimePeriod period, bool muteEvent = false);
 		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false);

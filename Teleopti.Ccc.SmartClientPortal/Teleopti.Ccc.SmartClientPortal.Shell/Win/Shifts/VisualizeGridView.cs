@@ -9,7 +9,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
-    public partial class VisualizeGridView : BaseUserControl, IVisualizeView
+    public partial class VisualizeGridView : BaseUserControl
     {
         private readonly GridConstructor _gridConstructor;
 

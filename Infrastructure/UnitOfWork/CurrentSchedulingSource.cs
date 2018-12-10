@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading;
 using Teleopti.Ccc.Domain;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {

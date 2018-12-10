@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -32,11 +31,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
 		{
 			throw new NotImplementedException();
 		}

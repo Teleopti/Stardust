@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace Teleopti.Interfaces.Domain
@@ -41,47 +40,7 @@ namespace Teleopti.Interfaces.Domain
 		{
 
 		}
-
-		/// <summary>
-		/// Gets the year.
-		/// </summary>
-		/// <value>The year.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public int Year => _internalDateTime.Year;
-
-		/// <summary>
-		/// Gets the month.
-		/// </summary>
-		/// <value>The month.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public int Month => _internalDateTime.Month;
-
-		/// <summary>
-		/// Gets the day.
-		/// </summary>
-		/// <value>The day.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public int Day => _internalDateTime.Day;
-
-		/// <summary>
-		/// Days the of week.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public DayOfWeek DayOfWeek => _internalDateTime.DayOfWeek;
-
+		
 		/// <summary>
 		/// Gets the date.
 		/// </summary>
@@ -96,47 +55,7 @@ namespace Teleopti.Interfaces.Domain
 			get { return _internalDateTime.Date; }
 			set { _internalDateTime = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, value.Kind); }
 		}
-
-		public TimeSpan Subtract(DateOnly other)
-		{
-			return _internalDateTime.Subtract(other._internalDateTime);
-		}
-
-		public DateOnly AddMonths(Calendar calendar, int months)
-		{
-			return new DateOnly(calendar.AddMonths(_internalDateTime, months));
-		}
-
-		/// <summary>
-		/// Gets the max value.
-		/// </summary>
-		/// <value>The max value.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public static DateOnly MaxValue => new DateOnly(DateHelper.MaxSmallDateTime);
-
-		/// <summary>
-		/// Gets the min value.
-		/// </summary>
-		/// <value>The min value.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public static DateOnly MinValue => new DateOnly(DateHelper.MinSmallDateTime);
-
-		/// <summary>
-		/// Gets the today. HA HA !!1
-		/// </summary>
-		/// <value>The today.</value>
-		/// <remarks>
-		/// Created by: HenryG
-		/// Created date: 2010-04-20
-		/// </remarks>
-		public static DateOnly Today => new DateOnly(DateTime.Today);
-
+		
 		#region operators
 
 		/// <summary>
@@ -335,12 +254,7 @@ namespace Teleopti.Interfaces.Domain
 		{
 			return new DateOnly(_internalDateTime.AddDays(days));
 		}
-
-		public DateOnly AddWeeks(int weeks)
-		{
-			return AddDays(7*weeks);
-		}
-
+		
 		/// <summary>
 		/// Returns the fully qualified type name of this instance.
 		/// </summary>
@@ -355,20 +269,7 @@ namespace Teleopti.Interfaces.Domain
 		{
 			return _internalDateTime.ToString();
 		}
-
-		/// <summary>
-		/// Toes the short date string.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2009-03-21
-		/// </remarks>
-		public string ToShortDateString()
-		{
-			return _internalDateTime.ToShortDateString();
-		}
-
+		
 		/// <summary>
 		/// Toes the short date string using the given culture.
 		/// </summary>
@@ -381,28 +282,6 @@ namespace Teleopti.Interfaces.Domain
 		public string ToShortDateString(IFormatProvider cultureInfo)
 		{
 			return _internalDateTime.ToString("d", cultureInfo);
-		}
-
-		public DateOnly Add(TimeSpan timeSpan)
-		{
-			return new DateOnly(_internalDateTime.Add(timeSpan));
-		}
-
-		public DateTimePeriod ToDateTimePeriod(TimeZoneInfo timeZoneInfo)
-		{
-			return new DateTimePeriod(timeZoneInfo.SafeConvertTimeToUtc(Date),
-									  timeZoneInfo.SafeConvertTimeToUtc(Date.AddDays(1).Date));
-		}
-
-		public DateTimePeriod ToDateTimePeriod(TimePeriod period, TimeZoneInfo timeZoneInfo)
-		{
-			var dateTime = TimeZoneHelper.ConvertToUtc(Date, timeZoneInfo);
-			return new DateTimePeriod(dateTime.Add(period.StartTime), dateTime.Add(period.EndTime));
-		}
-
-		public DateOnlyPeriod ToDateOnlyPeriod()
-		{
-			return new DateOnlyPeriod(this, this);
 		}
 	}
 }

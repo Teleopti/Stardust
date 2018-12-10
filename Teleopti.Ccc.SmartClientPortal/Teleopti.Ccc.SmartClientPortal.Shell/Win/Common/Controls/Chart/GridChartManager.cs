@@ -14,7 +14,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
 {
@@ -36,13 +35,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart
                 _timeSpanAsMinutes = true;
             _andThenToHours = andThenToHours;
             _allowNegativeValues = allowNegativeValues;
-        }
-
-        
-        public bool AllowNegativeValues
-        {
-            get { return _allowNegativeValues; }
-            set { _allowNegativeValues = value; }
         }
 
         public ITaskOwnerGrid CurrentGrid

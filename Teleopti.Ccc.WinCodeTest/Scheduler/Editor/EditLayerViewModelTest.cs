@@ -11,7 +11,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Collections;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 {

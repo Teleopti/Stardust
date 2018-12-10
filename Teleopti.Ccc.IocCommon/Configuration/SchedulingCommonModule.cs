@@ -170,7 +170,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PeriodValueCalculatorProvider>().As<IPeriodValueCalculatorProvider>().SingleInstance();
 			builder.RegisterType<ResourceOptimizationHelperExtended>().As<IResourceOptimizationHelperExtended>().InstancePerLifetimeScope();
 			builder.RegisterType<RequiredScheduleHelper>().InstancePerLifetimeScope();
-			builder.RegisterType<CommonStateHolder>().As<ICommonStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<PeriodExtractorFromScheduleParts>().SingleInstance();
 
 			builder.RegisterModule<WeeklyRestSolverModule>();
@@ -296,11 +295,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))
 			{
-				builder.RegisterType<MaxWorkTimeFullWeekSkillExtractor>().As<IMaxWorkTimeFullWeekSkillExtractor>().SingleInstance();
+				builder.RegisterType<OpenHoursSkillExtractor>().As<IOpenHoursSkillExtractor>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<MaxWorkTimeFullWeekSkillExtractorDoNothing>().As<IMaxWorkTimeFullWeekSkillExtractor>().SingleInstance();
+				builder.RegisterType<OpenHoursSkillExtractorDoNothing>().As<IOpenHoursSkillExtractor>().SingleInstance();
 			}
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
@@ -660,7 +659,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
 		{
 			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>().SingleInstance();
-			builder.RegisterType<TeamDayOffModifier>().As<ITeamDayOffModifier>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamDayOffModifier>().InstancePerLifetimeScope();
 		}
 
 		private void registerWorkShiftSelector(ContainerBuilder builder)

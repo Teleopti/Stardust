@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {

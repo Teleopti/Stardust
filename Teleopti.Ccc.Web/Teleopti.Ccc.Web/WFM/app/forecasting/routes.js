@@ -10,7 +10,6 @@
 				template: "<div><section ui-view></section></div>",
 				controllerAs: "vm",
 				controller: function($state) {
-					// toggles.WFM_Forecaster_Refact_44480
 					$state.go("forecast");
 				}
 			})

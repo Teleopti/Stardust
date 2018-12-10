@@ -11,7 +11,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.Interfaces;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
 {

@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider

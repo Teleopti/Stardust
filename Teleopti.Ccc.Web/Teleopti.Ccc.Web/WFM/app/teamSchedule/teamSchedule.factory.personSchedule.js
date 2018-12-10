@@ -1,16 +1,11 @@
 ﻿(function () {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', [
-		'$filter',
-		'Toggle',
-		'teamsPermissions',
-		'serviceDateFormatHelper',
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['serviceDateFormatHelper', 'colorUtils',
 		personScheduleFactory]);
 
-	function personScheduleFactory($filter,
-		toggleSvc,
-		permissions,
-		serviceDateFormatHelper) {
+	function personScheduleFactory(
+		serviceDateFormatHelper,
+		colorUtils) {
 
 		var personScheduleFactory = {
 			Create: create
@@ -72,7 +67,7 @@
 			if (angular.isDefined(projectionVms)) personSchedule.Shifts = [shiftVm];
 
 			if (angular.isDefined(dayOffVm)) personSchedule.DayOffs = [dayOffVm];
-			
+
 			return personSchedule;
 		}
 
@@ -119,30 +114,6 @@
 
 			var dayOffVm = new DayOffViewModel(scheduleDate, dayOff.DayOffName, startPosition, length, personSchedule);
 			return dayOffVm;
-		}
-
-		function useLightColor(color) {
-			var getLumi = function (cstring) {
-				var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
-				if (!matched) return null;
-				return (299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) / 1000;
-			};
-			var lightColor = '#00ffff';
-			var darkColor = '#795548';
-			var lumi = getLumi(color);
-			if (!lumi) return false;
-			return Math.abs(lumi - getLumi(lightColor)) > Math.abs(lumi - getLumi(darkColor));
-		}
-
-		function getContrastColor(hexcolor) {
-			if (hexcolor[0] === '#') {
-				hexcolor = hexcolor.substring(1);
-			}
-			var r = parseInt(hexcolor.substr(0, 2), 16);
-			var g = parseInt(hexcolor.substr(2, 2), 16);
-			var b = parseInt(hexcolor.substr(4, 2), 16);
-			var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-			return (yiq >= 128) ? '#000000' : '#ffffff';
 		}
 
 		function createShiftProjectionViewModel(projection, timeLine, shiftVm) {
@@ -257,7 +228,7 @@
 		};
 
 		PersonSchedule.prototype.HasUnderlyingSchedules = function () {
-			return  !!this.UnderlyingScheduleSummary;
+			return !!this.UnderlyingScheduleSummary;
 		}
 
 		PersonSchedule.prototype.AbsenceCount = function () {
@@ -284,20 +255,20 @@
 
 		PersonSchedule.prototype.MergeExtra = mergeExtra;
 
-		PersonSchedule.prototype.ScheduleEndTime = function () {
+		PersonSchedule.prototype.ScheduleEndTimeMoment = function () {
 			var shift = this.Shifts[0];
 			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
-				return serviceDateFormatHelper.getDateByFormat(shift.Projections[shift.Projections.length - 1].EndMoment, 'YYYY-MM-DDTHH:mm:00');
+				return shift.Projections[shift.Projections.length - 1].EndMoment.clone();
 			}
-			return this.Date + 'T23:59:00';
+			return moment.tz(this.Date + 'T23:59:00', this.Timezone.IanaId);
 		};
 
-		PersonSchedule.prototype.ScheduleStartTime = function () {
+		PersonSchedule.prototype.ScheduleStartTimeMoment = function () {
 			var shift = this.Shifts[0];
 			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
-				return serviceDateFormatHelper.getDateByFormat(shift.Projections[0].StartMoment, 'YYYY-MM-DDTHH:mm:00');
+				return shift.Projections[0].StartMoment.clone();
 			}
-			return this.Date + 'T00:00:00';
+			return moment.tz(this.Date + 'T00:00:00', this.Timezone.IanaId);
 		};
 
 		PersonSchedule.prototype.HasHiddenScheduleAtStart = function () {
@@ -310,7 +281,7 @@
 		PersonSchedule.prototype.HasHiddenScheduleAtEnd = function () {
 			return !!this.Shifts.length
 				&& this.Shifts.some(function (shift) {
-				return shift.Projections.length && shift.ProjectionTimeRange.EndMoment.isAfter(this.ViewRange.endMoment);
+					return shift.Projections.length && shift.ProjectionTimeRange.EndMoment.isAfter(this.ViewRange.endMoment);
 				}, this);
 		}
 
@@ -327,7 +298,8 @@
 
 		function ProjectionViewModel(projection, shiftVm, length, startPosition) {
 			this.Color = projection.Color;
-			this.Description = projection.Description;
+			this.TextColor = colorUtils.getTextColorBasedOnBackgroundColor(projection.Color),
+				this.Description = projection.Description;
 			this.IsOvertime = projection.IsOvertime;
 			this.Length = length;
 			this.Parent = shiftVm;
@@ -338,7 +310,7 @@
 			this.StartMoment = projection.StartMoment;
 			this.EndMoment = projection.EndMoment;
 			this.StartPosition = startPosition;
-			this.UseLighterBorder = useLightColor(projection.Color);
+			this.UseLighterBorder = this.TextColor == 'white';
 			this.TimeSpan = projection.TimeSpan;
 			this.Minutes = projection.EndMoment.diff(projection.StartMoment, 'minutes');
 		}
@@ -376,7 +348,7 @@
 			this.Name = shiftCategory.Name;
 			this.ShortName = shiftCategory.ShortName;
 			this.DisplayColor = shiftCategory.DisplayColor;
-			this.ContrastColor = getContrastColor(this.DisplayColor);
+			this.TextColor = colorUtils.getTextColorBasedOnBackgroundColor(this.DisplayColor);
 		}
 
 		return personScheduleFactory;

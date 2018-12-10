@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 {
@@ -35,10 +35,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 	    IDictionary<DateOnly, IScheduleDictionary> GetSchedules(HashSet<IStudentAvailabilityDay> days,
 		    IScenario scenario);
 	    IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCache();
-
-	    IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
-		    IDictionary<DateTimePeriod, IScheduleDictionary> dictionary);
-
 	    IList<IPerson> PersonsWithIds(List<Guid> ids);
 		IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario);
 	    void SetThisTime(ILastChangedReadModel lastTime, string step);

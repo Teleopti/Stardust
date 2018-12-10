@@ -1,8 +1,9 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
@@ -21,8 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// <returns></returns>
         public static ILicenseActivator CreateDefaultLicenseActivatorForTest()
         {
-            ILicenseActivator licenseActivator = new LicenseActivator(CustomerName, ExpirationDate, false, MaxActiveAgents, 100, LicenseType.Agent, MaxActiveAgentsGrace,
-								XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents, "8");
+            ILicenseActivator licenseActivator = new LicenseActivator(CustomerName, ExpirationDate, false, MaxActiveAgents, 100, LicenseType.Agent, MaxActiveAgentsGrace, "8");
             licenseActivator.EnabledLicenseOptionPaths.Add(AllLicenseOption.FakeOptionPath);
             return licenseActivator;
         }
@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// <returns></returns>
 		public static ILicenseActivator CreateBaseLicenseActivatorForTest()
         {
-            ILicenseActivator licenseActivator = new LicenseActivator(CustomerName, ExpirationDate, false, MaxActiveAgents, 100, LicenseType.Agent, MaxActiveAgentsGrace,
-								XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents, "8");
+            ILicenseActivator licenseActivator = new LicenseActivator(CustomerName, ExpirationDate, false, MaxActiveAgents, 100, LicenseType.Agent, MaxActiveAgentsGrace, "8");
 			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccBase);
             return licenseActivator;
         }

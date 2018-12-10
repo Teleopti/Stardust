@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
@@ -168,12 +169,12 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             _possibleMinMaxWorkShiftLengthExtractor.ResetCache();
         }
 
-        public IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, IDictionary<DateOnly, TimeSpan> maxWorkTimeDictionary)
+        public IDictionary<DateOnly, MinMax<TimeSpan>> PossibleMinMaxWorkShiftLengths(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, OpenHoursSkillResult openHoursSkillResult)
         {
 	        return _possibleMinMaxWorkShiftLengthState ??
 				   (_possibleMinMaxWorkShiftLengthState =
 					   matrix.FullWeeksPeriodDays.ToDictionary(k => k.Day,
-						   v => _possibleMinMaxWorkShiftLengthExtractor.PossibleLengthsForDate(v.Day, matrix, schedulingOptions, maxWorkTimeDictionary)));
+						   v => _possibleMinMaxWorkShiftLengthExtractor.PossibleLengthsForDate(v.Day, matrix, schedulingOptions, openHoursSkillResult)));
         }
 
         private MinMax<TimeSpan> currentMinMax(DateOnly? dayToSchedule, IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)

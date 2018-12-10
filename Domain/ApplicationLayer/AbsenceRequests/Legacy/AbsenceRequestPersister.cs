@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 {
@@ -25,16 +24,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 		private readonly INow _now;
 		private readonly IAbsenceRequestSetting _absenceRequestSetting;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IAbsenceRepository _absenceRepository;
 
 		public AbsenceRequestPersister(
 			NewAbsenceRequestHandler newAbsenceRequestHandler,
 			ExistingAbsenceRequestHandler existingAbsenceRequestHandler,
-										IPersonRequestRepository personRequestRepository,
-									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator,
-									   IPersonRequestCheckAuthorization personRequestCheckAuthorization,
-									   IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, AbsenceRequestModelMapper mapper,
-									   IActivityRepository activityRepository,
-									   ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, INow now, IAbsenceRequestSetting absenceRequestSetting, IPermissionProvider permissionProvider)
+			IPersonRequestRepository personRequestRepository,
+			IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator,
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, AbsenceRequestModelMapper mapper,
+			IActivityRepository activityRepository,
+			ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter,
+			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, INow now,
+			IAbsenceRequestSetting absenceRequestSetting, IPermissionProvider permissionProvider,
+			IAbsenceRepository absenceRepository)
 		{
 			_newAbsenceRequestHandler = newAbsenceRequestHandler;
 			_existingAbsenceRequestHandler = existingAbsenceRequestHandler;
@@ -50,6 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 			_now = now;
 			_absenceRequestSetting = absenceRequestSetting;
 			_permissionProvider = permissionProvider;
+			_absenceRepository = absenceRepository;
 		}
 
 		public IPersonRequest Persist(AbsenceRequestModel model)
@@ -81,6 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 			{
 				_skillTypeRepository.LoadAll();
 				_activityRepository.LoadAll();
+				_absenceRepository.LoadAll();
 			}
 
 			_personRequestRepository.Add(personRequest);

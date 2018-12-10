@@ -30,17 +30,9 @@
 		vm.copy = copy;
 
 		(function init() {
-			checkToggle();
 			getTenants();
 			vm.getStatusRightNow();
 		})();
-
-		function checkToggle() {
-			$http.get("./Etl/ShouldTenantNameBeVisible", tokenHeaderService.getHeaders())
-				.then(function (response) {
-					vm.shouldShowTenantName = response.data;
-				});
-		}
 
 		function getTenants() {
 			vm.tenants = [];
@@ -151,7 +143,8 @@
 					tokenHeaderService.getHeaders()
 				)
 				.then(function (response) {
-					if (response.data.length < 1) {
+					vm.history = [];
+
 						vm.error = "No history found";
 					} else {
 						vm.history = response.data;

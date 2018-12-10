@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
@@ -104,18 +104,6 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
                 _target.LoadModelCollection();
                 Assert.AreEqual(1, _target.ModelCollection.Count);
             }
-        }
-
-        [Test]
-        public void VerifySetDaysOfWeekCollection()
-        {
-            _target.SetDaysOfWeekCollection(
-                new List<IDaysOfWeekViewModel>
-                    {
-                    new DaysOfWeekViewModel(_ruleSetCollection[0])
-                });
-
-            Assert.AreEqual(1, _target.ModelCollection.Count);
         }
 
         [Test]

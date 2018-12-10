@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 			var newReport = new Report
 			{
 				Id = newReportId,
-				Name = sourceReport.Name + " - Copy",
+				Name = requestParameters.Name,
 				DatasetId = sourceReport.DatasetId,
 				WebUrl = "NewWebUrl",
 				EmbedUrl = "NewEmbedUrl"

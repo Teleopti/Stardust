@@ -22,7 +22,7 @@ using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 {

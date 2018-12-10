@@ -3,16 +3,12 @@
 
 	angular.module('wfm.teamSchedule')
 		.service('ScheduleManagement',
-		['Toggle',
-			'$filter',
-			'TeamSchedule',
-			'GroupScheduleFactory',
-			'CurrentUserInfo',
-			'serviceDateFormatHelper',
-			'TeamScheduleTimeLineFactory',
-			ScheduleManagement]);
+			['TeamSchedule',
+				'GroupScheduleFactory',
+				'CurrentUserInfo',
+				ScheduleManagement]);
 
-	function ScheduleManagement(toggleSvc, $filter, teamScheduleSvc, groupScheduleFactory, CurrentUserInfo, serviceDateFormatHelper, timeLineFactory) {
+	function ScheduleManagement( teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
 
 		function ScheduleManagementService() {
 			var svc = this;
@@ -32,9 +28,10 @@
 			}
 
 			function findPersonScheduleVmForPersonId(personId) {
-				return svc.groupScheduleVm.Schedules.filter(function (vm) {
-					return vm.PersonId === personId;
-				})[0];
+				if (svc.groupScheduleVm.Schedules)
+					return svc.groupScheduleVm.Schedules.filter(function (vm) {
+						return vm.PersonId === personId;
+					})[0];
 			}
 
 			function recreateScheduleVm(queryDate, timezone) {

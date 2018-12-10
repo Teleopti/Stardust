@@ -8,15 +8,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class HangfireEventProcessor
 	{
 		private readonly CommonEventProcessor _processor;
+		private readonly HandlerTypeMapper _typeMapper;
 
-		public HangfireEventProcessor(CommonEventProcessor processor)
+		public HangfireEventProcessor(CommonEventProcessor processor, HandlerTypeMapper typeMapper)
 		{
 			_processor = processor;
+			_typeMapper = typeMapper;
 		}
 
-		public void Process(string displayName, string tenant, IEvent @event, IEnumerable<IEvent> package, string handlerType)
+		public void Process(string displayName, string tenant, IEvent @event, IEnumerable<IEvent> package, string handlerTypeName)
 		{
-			var handlerT = Type.GetType(handlerType, true);
+			var handlerT = _typeMapper.TypeForPersistedName(handlerTypeName);
 			Process(displayName, tenant, @event, package, handlerT);
 		}
 

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -112,11 +112,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var personList = _personList.Where(a =>
 				teamIds!=null && teamIds.Length > 0 && a.MyTeam(date)!=null? teamIds.ToList().Contains(a.MyTeam(date).Id.Value) : true);
 			return personList.Select(p => p.Id.GetValueOrDefault()).ToList();
-		}
-
-		public List<Guid> FindPersonIdsInTeamsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			return _personList.Select(p => p.Id.GetValueOrDefault()).ToList();
 		}
 
 		public List<Guid> FindPersonIdsInGroupsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)

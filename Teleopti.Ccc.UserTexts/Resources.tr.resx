@@ -10846,9 +10846,6 @@ Lütfen İnternet bağlantınızı kontrol edip tekrar deneyin.</value>
   <data name="ClearCampaign" xml:space="preserve">
     <value>Kampanyayı sil</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>Beni hatırla</value>
-  </data>
   <data name="AppliedFilters" xml:space="preserve">
     <value>Aktif filtreler</value>
   </data>

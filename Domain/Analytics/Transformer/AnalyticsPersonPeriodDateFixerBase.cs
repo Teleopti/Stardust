@@ -1,6 +1,6 @@
 using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public int GetValidToIntervalIdMaxDate(int validToIntervalId, int validToDateId)
 		{
-			// Samma som ValidToIntervalId om inte validToDateId ‰r eterntity dÂ ska det vara sista interval i dim_interval
+			// Samma som ValidToIntervalId om inte validToDateId √§r eterntity d√• ska det vara sista interval i dim_interval
 			return validToDateId != AnalyticsDate.Eternity.DateId ? validToIntervalId : AnalyticsIntervalRepository.MaxInterval().IntervalId;
 		}
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public int GetValidToDateIdMaxDate(DateTime validToDate, int validToDateId)
 		{
-			// Samma som ValidToDateId om inte eternity dÂ ska vara n‰st sista dagen i dim_date
+			// Samma som ValidToDateId om inte eternity d√• ska vara n√§st sista dagen i dim_date
 			return validToDate.Equals(AnalyticsDate.Eternity.DateDate)
 				? AnalyticsDateRepository.MaxDate().DateId - 1
 				: validToDateId;

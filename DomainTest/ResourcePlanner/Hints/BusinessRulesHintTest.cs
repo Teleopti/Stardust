@@ -19,7 +19,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate.AddDays(2), endDate.AddDays(-2)), null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate.AddDays(2), endDate.AddDays(-2)), null, 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate.AddDays(-1)).WithDayOff());
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate, startDate), null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate, startDate), null, 0)).InvalidResources;
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate.AddDays(-1)).WithDayOff());
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate.AddDays(4), startDate.AddDays(4)), null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate.AddDays(4), startDate.AddDays(4)), null, 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate.AddDays(-1)).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BusinessRulesHint));
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.Any(x => x.Name == nameof(BusinessRulesHint)).Should().Be.True();
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count(x=>x.ErrorResource == nameof(Resources.MissingShiftBagForPeriod)).Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(PersonShiftBagHint));
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent2, scenario, endDate).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, 0)).InvalidResources;
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().ResourceId.Should().Be.EqualTo(id);
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, planningPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(person, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory));
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { person }, planningPeriod, null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { person }, planningPeriod, null, 0)).InvalidResources;
 
 			result.Should().Be.Empty();
 		}
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate).WithDayOff());
 			scheduleDictionary.AddPersonAssignment(new PersonAssignment(agent, scenario, endDate.AddDays(-1)).WithDayOff());
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate, endDate), null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, new DateOnlyPeriod(startDate, endDate), null, 0)).InvalidResources;
 			
 			result.First().ValidationErrors.Count(x =>x.ErrorResource.Equals("TargetDayOffNotFulfilledMessage")).Should().Be.EqualTo(0);
 		}
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					: new PersonAssignment(agent, scenario, date.AddDays(i)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory));
 			}
 
-			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, false)).InvalidResources;
+			var result = Target.Execute(new SchedulePostHintInput(scheduleDictionary, new[] { agent }, planningPeriod, null, 0)).InvalidResources;
 
 			result.First().ValidationErrors.Count(x => x.ErrorResource.Equals("TargetScheduleTimeNotFullfilled")).Should().Be.EqualTo(1);
 			scheduleDictionary[agent].CalculatedTargetTimeHolder(totalPeriod).Should().Be.EqualTo(TimeSpan.FromHours(80));

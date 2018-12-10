@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 {

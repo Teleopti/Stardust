@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.OutboundSetting;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {

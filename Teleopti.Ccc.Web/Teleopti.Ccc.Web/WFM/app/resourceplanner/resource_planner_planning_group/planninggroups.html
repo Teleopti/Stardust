@@ -1,8 +1,6 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1>
-			<i class="mdi mdi-calendar"></i> {{'OpenPlansPage' | translate}}</h1>
-		<p ng-if="vm.hasPg()">{{'PlansPageSelectPlanningGroup' | translate}}</p>
+		<h1><i class="mdi mdi-calendar"></i> {{'Plans' | translate}}</h1>
 	</div>
 </div>
 <div class="con-row" ng-if="vm.hasPg()">
@@ -22,8 +20,6 @@
 				<div class="con-flex x3">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goForm()">
 						<i class="mdi mdi-plus"></i>{{'NewPlanningGroup' | translate}}</button>
-					<button class="wfm-btn wfm-btn-invis-disabled" ng-click="">
-						<i class="mdi mdi-information-outline"></i>{{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
 		</div>

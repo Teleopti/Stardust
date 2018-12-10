@@ -3,6 +3,7 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
@@ -11,7 +12,7 @@ using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
 {

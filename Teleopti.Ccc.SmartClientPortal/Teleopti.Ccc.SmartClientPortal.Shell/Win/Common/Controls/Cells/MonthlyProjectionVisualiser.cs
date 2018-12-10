@@ -6,8 +6,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {

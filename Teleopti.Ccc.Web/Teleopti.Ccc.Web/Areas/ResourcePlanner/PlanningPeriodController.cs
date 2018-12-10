@@ -14,7 +14,7 @@ using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
@@ -313,6 +313,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				state = PlanningPeriodState.IntradayOptimizationFailed;
 			if (lastScheduleJobResult != null && lastScheduleJobResult.HasError())
 				state = PlanningPeriodState.ScheduleFailed;
+			if ((lastScheduleJobResult != null && lastScheduleJobResult.FinishedOk && !lastScheduleJobResult.HasError()) ||
+				(lastIntradayOptimizationResult != null && lastIntradayOptimizationResult.FinishedOk && !lastIntradayOptimizationResult.HasError()))
+				state = PlanningPeriodState.Scheduled;
 			return new PlanningPeriodModel
 			{
 				StartDate = planningPeriod.Range.StartDate.Date,

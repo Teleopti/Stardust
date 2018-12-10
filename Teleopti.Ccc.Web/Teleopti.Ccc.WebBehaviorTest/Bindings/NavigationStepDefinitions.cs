@@ -561,6 +561,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
+			Thread.Sleep(500);
 		}
 
 		[When(@"I wait half second and refresh the request page")]
@@ -703,6 +704,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GoToWfmRequests();
+		}
+
+		[When(@"I view wfm gamification")]
+		public void WhenIViewWfmGamification()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToWfmGamification();
 		}
 
 		[When(@"I view wfm team schedules")]

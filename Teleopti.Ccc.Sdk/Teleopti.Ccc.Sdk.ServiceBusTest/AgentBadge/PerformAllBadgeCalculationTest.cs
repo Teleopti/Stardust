@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
@@ -256,6 +256,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
 				string.Format(Resources.YouGotANewBronzeBadge, _badgeSetting.Name, date));
+		}
+
+		[Test]
+		public void ShouldSendMessageForBothExternalAndInternalBadge()
+		{
+			createAgentAndTeam();
+			createGamificationSettingWithBothInternalAndExternalMeasures(GamificationSettingRuleSet.RuleWithRatioConvertor, new TimeSpan(0, 4, 0), 80);
+			addExternalPerformanceData(87);
+			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+			BadgeCalculationRepository.AddAht(_systemCalculateDate, new TimeSpan(0, 3, 0), _agent.Id.GetValueOrDefault());
+
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
+
+			PushMessageDialogueRepository.LoadAll().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -531,6 +545,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			TeamGamificationSettingRepository.Add(_teamGamificationSetting);
 		}
 
+		private void createGamificationSettingWithBothInternalAndExternalMeasures(GamificationSettingRuleSet rule, TimeSpan internalThreshold, double threshold)
+		{
+			_gamificationSetting = new GamificationSetting("GamificationSetting1")
+			{
+				GamificationSettingRuleSet = rule,
+				SilverToBronzeBadgeRate = 2,
+				GoldToSilverBadgeRate = 2,
+				AHTBadgeEnabled = true,
+				AHTThreshold = internalThreshold
+
+			};
+			_badgeSetting = new BadgeSetting
+			{
+				Name = "Performance1",
+				Enabled = true,
+				QualityId = 1,
+				GoldThreshold = 0,
+				SilverThreshold = 0,
+				BronzeThreshold = 0,
+				Threshold = threshold,
+				LargerIsBetter = true
+			};
+			_gamificationSetting.AddBadgeSetting(_badgeSetting);
+			setTeamGamificationSetting();
+		}
+
 		private void createGamificationSetting(GamificationSettingRuleSet rule, double gold, double silver, double bronze, double threshold = 0)
 		{
 			_gamificationSetting = new GamificationSetting("GamificationSetting1")
@@ -538,6 +578,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				GamificationSettingRuleSet = rule,
 				SilverToBronzeBadgeRate = 2,
 				GoldToSilverBadgeRate = 2,
+				AHTBadgeEnabled = true
 			};
 			_badgeSetting = new BadgeSetting
 			{
@@ -551,13 +592,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				LargerIsBetter = true
 			};
 			_gamificationSetting.AddBadgeSetting(_badgeSetting);
-
-			_teamGamificationSetting = new TeamGamificationSetting
-			{
-				Team = _team,
-				GamificationSetting = _gamificationSetting
-			};
-			TeamGamificationSettingRepository.Add(_teamGamificationSetting);
+			setTeamGamificationSetting();
 		}
 
 		private void addExternalPerformanceData(double score)

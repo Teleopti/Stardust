@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -14,9 +13,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void UpdateFindPerson(ICollection<Guid> ids);
 		void UpdateFindPersonData(ICollection<Guid> ids);
 		List<Guid> FindPersonIdsInTeams(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria);
-
-		List<Guid> FindPersonIdsInTeamsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] teamIds,
-			IDictionary<PersonFinderField, string> searchCriteria);
 
 		List<Guid> FindPersonIdsInGroupsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] groupIds,
 			IDictionary<PersonFinderField, string> searchCriteria);

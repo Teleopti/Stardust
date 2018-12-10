@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -23,11 +23,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public AHandler Handler;
 		public AnotherHandler Another;
 		public AspectedHandler Aspected;
-		public HangfireEventServer Target;
+		public HangfireEventServerForTest Target;
 		public FakeDataSourceForTenant DataSources;
-		
+
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
+			extend.AddService<HangfireEventServerForTest>();
 			extend.AddService<AHandler>();
 			extend.AddService<AnotherHandler>();
 			extend.AddService<AspectedHandler>();
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		[Test]
 		public void ShouldPublish()
 		{
-			Target.Process(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
+			Target.ProcessForTest(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
 
 			Handler.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		[Test]
 		public void ShouldDeserialize()
 		{
-			Target.Process(null, null, typeof(AnEvent).AssemblyQualifiedName, "{ Data: 'Hello' }", typeof(AHandler).AssemblyQualifiedName);
+			Target.ProcessForTest(null, null, typeof(AnEvent).AssemblyQualifiedName, "{ Data: 'Hello' }", typeof(AHandler).AssemblyQualifiedName);
 
 			Handler.HandledEvents.OfType<AnEvent>().Single().Data.Should().Be("Hello");
 		}
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		[Test]
 		public void ShouldPublishToSpecifiedHandlerOnly()
 		{
-			Target.Process(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AnotherHandler).AssemblyQualifiedName);
+			Target.ProcessForTest(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AnotherHandler).AssemblyQualifiedName);
 
 			Handler.HandledEvents.Should().Have.Count.EqualTo(0);
 			Another.HandledEvents.Single().Should().Be.OfType<AnEvent>();
@@ -66,11 +67,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		[Test]
 		public void ShouldPublishToInterceptedHandler()
 		{
-			Target.Process(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AspectedHandler).AssemblyQualifiedName);
+			Target.ProcessForTest(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AspectedHandler).AssemblyQualifiedName);
 
 			Aspected.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
-		
+
 		[Test]
 		public void ShouldAcceptTypeNameWithoutVersionCultureAndPublicKeyToken()
 		{
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			handlerType.Should().Not.Contain("Culture");
 			handlerType.Should().Not.Contain("PublicKeyToken");
 
-			Target.Process(null, null, eventType, "{}", handlerType);
+			Target.ProcessForTest(null, null, eventType, "{}", handlerType);
 
 			Handler.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
@@ -89,9 +90,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		[Test]
 		public void ShouldSetCurrentDataSourceFromJob()
 		{
-			DataSources.Has(new FakeDataSource { DataSourceName = "tenant" });
+			DataSources.Has(new FakeDataSource {DataSourceName = "tenant"});
 
-			Target.Process(null, "tenant", typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
+			Target.ProcessForTest(null, "tenant", typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
 
 			Handler.HandledOnDataSource.Should().Be("tenant");
 		}
@@ -138,8 +139,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 				HandledEvents.Add(@event);
 			}
 		}
-		
 	}
 #pragma warning restore 618
-
 }

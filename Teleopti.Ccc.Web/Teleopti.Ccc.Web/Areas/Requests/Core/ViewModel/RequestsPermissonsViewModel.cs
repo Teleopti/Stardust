@@ -15,4 +15,10 @@
 		public bool HasEditSiteOpenHoursPermission { get; set; }
 		public bool HasCancelPermission { get; set; }
 	}
+
+	public class RequestLicenseAndPermissionViewModel
+	{
+		public bool IsOvertimeRequestEnabled { get; set; }
+		public bool IsShiftTradeRequestEnabled { get; set; }
+	}
 }

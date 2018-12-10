@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 
 			var result = Target.Validate();
 
-			var expected = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInRtaService);
+			var expected = "LoggedOutStateGroupMissingInRtaService";
 			result.Single(x => x.Resource == expected)
 				.Should().Not.Be.Null();
 		}
@@ -39,7 +39,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 
 			var result = Target.Validate();
 
-			var expected = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInRtaService);
+			var expected = "LoggedOutStateGroupMissingInRtaService";
 			result.Select(x => x.Resource)
 				.Should().Not.Contain(expected);
 		}

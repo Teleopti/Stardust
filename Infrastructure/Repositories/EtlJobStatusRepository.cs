@@ -4,7 +4,8 @@ using System.Globalization;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {

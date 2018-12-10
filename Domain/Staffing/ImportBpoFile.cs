@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Staffing
@@ -30,8 +29,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private const string enddatetime = "enddatetime";
 		private const string resources = "agents";
 
-		private readonly IReadOnlyCollection<string> validFieldNames =
-			new List<string> { source, skillgroup, startdatetime, enddatetime, resources };
+		private readonly string[] validFieldNames =
+			new [] { source, skillgroup, startdatetime, enddatetime, resources };
 
 		private List<ISkill> _allSkills;
 

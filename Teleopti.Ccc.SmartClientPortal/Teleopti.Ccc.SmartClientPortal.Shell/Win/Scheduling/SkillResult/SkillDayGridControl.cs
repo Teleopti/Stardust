@@ -13,7 +13,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 {

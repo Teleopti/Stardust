@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public partial class SystemSettingControl : BaseUserControl, ISettingPage
 	{
-		private IToggleManager _toggleManager;
 		private DefaultSegment _defaultSegmentSetting;
 		private AdherenceReportSetting _adherenceReportSetting;
 		private StringSetting _supportEmailSetting;
@@ -26,10 +25,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TimeSpanSetting _fullDayAbsenceRequestStartTimeSetting;
 		private TimeSpanSetting _fullDayAbsenceRequestEndTimeSetting;
 
-		public SystemSettingControl(IToggleManager toggleManager)
+		public SystemSettingControl()
 		{
 			InitializeComponent();
-			_toggleManager = toggleManager;
 		}
 
 		public void InitializeDialogControl()

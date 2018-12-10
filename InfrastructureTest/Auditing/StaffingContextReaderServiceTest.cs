@@ -17,7 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 // ReSharper disable PossibleNullReferenceException
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			PersonRepository.Add(person);
 			StaffingAuditRepository.Add(new StaffingAudit(person, StaffingAuditActionConstants.ImportStaffing,  "BPO", "abc.txt", ""));
 			CurrentUnitOfWork.Current().PersistAll();
-			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).Should().Not.Be.Empty();
+			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now, "").Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					bpoName, clearBpoAction.StartDate,clearBpoAction.EndDate));
 			CurrentUnitOfWork.Current().PersistAll();
 
-			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
+			Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now, "").FirstOrDefault().Data.Should().Be.EqualTo(expectedResult);
 		}
 
 		private Guid addBpo(string bpoName)
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 			StaffingAuditRepository.Add(staffingAudit);
 			CurrentUnitOfWork.Current().PersistAll();
 
-			var list = Target.LoadAudits(loggedOnUser, DateTime.Now.AddDays(-100), DateTime.Now).ToList();
+			var list = Target.LoadAudits(loggedOnUser, DateTime.Now.AddDays(-100), DateTime.Now, "").ToList();
 
 			list.FirstOrDefault().TimeStamp.Should().Be.EqualTo(staffingAudit.TimeStamp);
 			list.FirstOrDefault().Action.Should().Be.EqualTo(Resources.AuditTrailImportStaffing);

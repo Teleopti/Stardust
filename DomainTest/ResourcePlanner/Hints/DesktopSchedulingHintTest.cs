@@ -3,12 +3,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var agent = new Person().WithPersonPeriod();
 			((IDeleteTag)agent.Period(DateOnly.Today).PersonContract.Contract).SetDeleted();
 			
-			var result = Target.Execute(new ScheduleHintInput(new[] {agent}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), false));
+			var result = Target.Execute(new ScheduleHintInput(new[] {agent}, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), 0));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PersonContractHint))
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var startDate = new DateOnly(2000,1,1);
 			var agent = new Person().WithSchedulePeriodOneMonth(startDate);
 
-			var result = Target.Execute(new ScheduleHintInput(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)), false));
+			var result = Target.Execute(new ScheduleHintInput(new[] {agent}, new DateOnlyPeriod(startDate, startDate.AddDays(1)), 0));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(PersonSchedulePeriodHint))
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		{
 			var agent = new Person();
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), false));
+			var result = Target.Execute(new ScheduleHintInput(new[] { agent }, new DateOnlyPeriod(2000, 1, 1, 2000, 2, 1), 0));
 
 			result.InvalidResources.SelectMany(x => x.ValidationTypes)
 				.Any(x => x == typeof(MissingForecastHint))

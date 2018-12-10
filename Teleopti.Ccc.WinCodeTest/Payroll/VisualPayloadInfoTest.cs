@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Payroll
 {

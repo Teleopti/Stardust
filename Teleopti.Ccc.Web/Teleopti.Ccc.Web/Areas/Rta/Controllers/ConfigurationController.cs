@@ -3,7 +3,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {

@@ -1,7 +1,7 @@
 using System.IO;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Wfm.Administration.IntegrationTest
 {

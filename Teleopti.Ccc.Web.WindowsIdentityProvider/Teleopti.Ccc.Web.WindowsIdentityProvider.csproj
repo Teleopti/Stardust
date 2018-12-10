@@ -182,10 +182,6 @@
       <Project>{3A34939D-16EC-4485-8931-ABE7105DDC15}</Project>
       <Name>Teleopti.Ccc.Web.Auth</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\OpenId\Redirect.cshtml" />

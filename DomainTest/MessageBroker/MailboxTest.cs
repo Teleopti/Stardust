@@ -16,16 +16,12 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
 	[MessagingTest]
-	public class MailboxTest : IIsolateSystem
+	[Setting("MessageBrokerMailboxExpirationInSeconds", 1000)]
+	public class MailboxTest
 	{
-		public IMessageBrokerServer Server;
+		public MessageBrokerServerTester Server;
 		public FakeMailboxRepository Mailboxes;
 		public MutableNow Now;
-
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble(new FakeConfigReader("MessageBrokerMailboxExpirationInSeconds", "1800")).For<IConfigReader>();
-		}
 
 		[Test]
 		public void ShouldAddMailbox()
@@ -148,4 +144,3 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		}
 	}
 }
-

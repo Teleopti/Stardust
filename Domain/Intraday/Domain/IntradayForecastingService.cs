@@ -5,17 +5,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday.Domain
 {
-	public interface IIntradayForecastingService
-	{
-		IList<IntradayForecastInterval> GenerateForecast(IEnumerable<ISkillDay> skillDays, DateTime startTimeUtc, DateTime endTimeUtc, TimeSpan resolution, bool useShrinkage);
-		IList<EslInterval> CalculateEstimatedServiceLevels(IEnumerable<ISkillDay> skillDays, DateTime startOfPeriodUtc, DateTime endOfPeriodUtc);
-	}
-
-	public class IntradayForecastingService : IIntradayForecastingService
+	public class IntradayForecastingService
 	{
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;

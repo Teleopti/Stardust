@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -23,16 +24,6 @@ namespace Teleopti.Ccc.TestCommon
 		public bool Perpetual { get; }
 		public int MaxActiveAgents { get; }
 		public Percent MaxActiveAgentsGrace { get; }
-		public bool IsThisTooManyActiveAgents(int activeAgents)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool IsThisAlmostTooManyActiveAgents(int activeAgents)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<string> EnabledLicenseOptionPaths { get; }
 		public int MaxSeats { get; }
 		public LicenseType LicenseType { get; }

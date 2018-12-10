@@ -11,7 +11,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {
@@ -68,13 +68,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var schedulePeriodInUtc = getSchedulePeriod(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel, 1)), data.ScheduleDate);
 
 			var timeLineHours = _timeLineViewModelFactory.CreateTimeLineHours(schedulePeriodInUtc, data.ScheduleDate);
-			var timezone = currentUser.PermissionInformation.DefaultTimeZone();
 
 			return new TeamScheduleViewModel
 			{
 				MySchedule = _teamScheduleAgentScheduleViewModelMapper
-					.Map(new[] { myScheduleViewModel }, schedulePeriodInUtc, timezone).FirstOrDefault(),
-				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, schedulePeriodInUtc, timezone)
+					.Map(new[] { myScheduleViewModel }, schedulePeriodInUtc).FirstOrDefault(),
+				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, schedulePeriodInUtc)
 					.ToArray(),
 				TimeLine = timeLineHours,
 				PageCount = pageCount,

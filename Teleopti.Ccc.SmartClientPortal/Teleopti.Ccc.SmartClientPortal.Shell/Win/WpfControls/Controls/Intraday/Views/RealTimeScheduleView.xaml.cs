@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers;
@@ -12,7 +13,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Time.Timelin
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Converters;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday.Views
 {

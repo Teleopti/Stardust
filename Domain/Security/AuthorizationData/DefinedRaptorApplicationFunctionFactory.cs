@@ -111,8 +111,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport, "xxViewPerformanceManagerReport", DefinedRaptorApplicationFunctionForeignIds.ViewPerformanceManagerReport);
 
 			// Online Reports
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport, "xxScheduledTimePerActivityReport", DefinedRaptorApplicationFunctionForeignIds.ScheduledTimePerActivityReport);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport, "xxScheduleAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailReport);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport, "xxScheduledTimeVsTarget", DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
 
 			// Reports
@@ -192,7 +190,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			// Insights
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Insights, "Insights", DefinedRaptorApplicationFunctionForeignIds.Insights);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.EditInsightsReport, "xxEditInsightsReport", DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport, "xxViewInsightsReport", DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport, "xxDeleteInsightsReport", DefinedRaptorApplicationFunctionForeignIds.DeleteInsightsReport);
 
 			return result.ToArray();
 		}

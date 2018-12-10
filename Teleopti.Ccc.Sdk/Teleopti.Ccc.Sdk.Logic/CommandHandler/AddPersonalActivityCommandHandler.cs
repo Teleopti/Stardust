@@ -1,13 +1,15 @@
+using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -22,8 +24,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleTagAssembler _scheduleTagAssembler;
 		private readonly IScheduleSaveHandler _scheduleSaveHandler;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-		public AddPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler, IScheduleSaveHandler scheduleSaveHandler)
+		public AddPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler, IScheduleSaveHandler scheduleSaveHandler, ICurrentAuthorization currentAuthorization)
 		{
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
 			_activityRepository = activityRepository;
@@ -34,6 +37,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_scheduleTagAssembler = scheduleTagAssembler;
 			_scheduleSaveHandler = scheduleSaveHandler;
+			_currentAuthorization = currentAuthorization;
 		}
 		
 		public void Handle(AddPersonalActivityCommandDto command)
@@ -43,13 +47,21 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var person = _personRepository.Load(command.PersonId);
 				var scenario = getDesiredScenario(command);
 				var startDate = command.Date.ToDateOnly();
+
+				if (!_currentAuthorization.Current().IsPermitted(
+					DefinedRaptorApplicationFunctionPaths.AddPersonalActivity,
+					startDate, person))
+				{
+					throw new FaultException("You are not permitted to perform this action");
+				}
+
 				var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 					person, new ScheduleDictionaryLoadOptions(false, false),
 					new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
-				var scheduleDay = scheduleRange.ScheduledDay(startDate);
+				var scheduleDay = scheduleRange.ScheduledDay(startDate, true);
 
 				var activity = _activityRepository.Load(command.ActivityId);
 				scheduleDay.CreateAndAddPersonalActivity(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period));

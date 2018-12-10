@@ -3,8 +3,9 @@ using System.Data;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {

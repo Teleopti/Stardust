@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 {
@@ -252,8 +253,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
-				.WithMappedRule("state1", phone, -1, Domain.Configuration.Adherence.Out)
-				.WithMappedRule("state2", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("state1", phone, -1, Adherence.Configuration.Adherence.Out)
+				.WithMappedRule("state2", phone, -1, Adherence.Configuration.Adherence.Out)
 				;
 
 			Now.Is("2016-05-30 09:00");
@@ -263,8 +264,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 				StateCode = "state1"
 			});
 			Database.ClearRuleMap()
-				.WithMappedRule("state1", phone, 0, Domain.Configuration.Adherence.In)
-				.WithMappedRule("state2", phone, -1, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("state1", phone, 0, Adherence.Configuration.Adherence.In)
+				.WithMappedRule("state2", phone, -1, Adherence.Configuration.Adherence.Out)
 				;
 			Now.Is("2016-05-30 09:01");
 			Target.ProcessState(new StateForTest

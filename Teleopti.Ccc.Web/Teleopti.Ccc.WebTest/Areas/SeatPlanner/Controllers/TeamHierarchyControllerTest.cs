@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository,
 				currentBusinessUnit, 
 				new Global.FakePermissionProvider(), 
-				loggedOnUser, new FakeGroupingReadOnlyRepository(), new FakePersonSelectorReadOnlyRepository(currentBusinessUnit), new FakeTeamRepository());
+				loggedOnUser, new FakeGroupingReadOnlyRepository());
 			target = new TeamHierarchyController(teamsProvider);
 
 			var result = target.Get() as dynamic;

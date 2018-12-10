@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Time
 {
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(new DateTime(2008, 10, 19), target.Date);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString"), Test]
+        [Test]
         public void VerifyToShortDateString()
         {
             target = new DateOnly(2008, 10, 19);

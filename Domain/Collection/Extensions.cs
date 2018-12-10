@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Interfaces.Domain;
 using System.Collections;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -228,12 +227,9 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		public static int IndexOf<T>(this IEnumerable<T> collection, T targetValue)
+		public static int IndexOf<T>(this T[] collection, T targetValue)
 		{
-			return collection.Select((value, index) => new {value, index})
-					   .Where(pair => pair.value.Equals(targetValue))
-					   .Select(pair => pair.index + 1)
-					   .FirstOrDefault() - 1;
+			return Array.IndexOf(collection, targetValue);
 		}
 
 		public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> instance)

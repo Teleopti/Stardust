@@ -1,16 +1,18 @@
 <nz-dropdown [nzTrigger]="'click'" [nzPlacement]="'bottomRight'" [nzClickHide]="false" [(nzVisible)]="visible" class="clickable">
-  <div tabindex="0" class="even-icon cower-area" data-test-nav-item-settings nz-dropdown>
-    <i class="mdi mdi-account-settings-variant text-color-white"></i>
-  </div>
-  <ul nz-menu>
-    <li nz-menu-item><label nz-checkbox [(ngModel)]="lowLightFilter" (ngModelChange)="toggleLightFilter($event)">{{'ToggleLowLightFilter'|translate}}</label></li>
-    <li nz-menu-item><label nz-checkbox [(ngModel)]="darkTheme" (ngModelChange)="toggleDarkTheme($event)">{{'ToggleDarkTheme'|translate}}</label></li>
-    <li *ngIf="changePasswordToggle && isTeleoptiApplicationLogon" nz-menu-item (click)="showChangePasswordDialog()"
-      data-test-change-password-button><i class="mdi mdi-key-variant"></i>
-      {{'ChangeYourPassword'|translate}}</li>
-    <li nz-menu-item (click)="logOut()"><i class="mdi mdi-logout"></i> {{'LogOut'|translate}}</li>
-  </ul>
+	<a tabindex="0" class="cower-area" data-test-nav-item-settings nz-dropdown>
+		<i nz-icon type="user" theme="outline" style="font-size: 20px"></i>
+	</a>
+	<ul nz-menu>
+		<li nz-menu-item class="profile-info">{{UserName}}</li>
+		<li nz-menu-divider></li>
+		<li nz-menu-item><label nz-checkbox [(ngModel)]="lowLightFilter" (ngModelChange)="toggleLightFilter($event)">{{'ToggleLowLightFilter'|translate}}</label></li>
+		<li nz-menu-item><label nz-checkbox [(ngModel)]="darkTheme" (ngModelChange)="toggleDarkTheme($event)">{{'ToggleDarkTheme'|translate}}</label></li>
+		<li *ngIf="changePasswordToggle && isTeleoptiApplicationLogon" nz-menu-item (click)="showChangePasswordDialog()"
+		 data-test-change-password-button><i nz-icon type="lock" theme="outline" style="font-size: 14px;"></i>
+			{{'ChangeYourPassword'|translate}}</li>
+		<li nz-menu-item (click)="logOut()"><i nz-icon type="logout" theme="outline" style="font-size: 14px;"></i>
+			{{'LogOut'|translate}}</li>
+	</ul>
 </nz-dropdown>
 
-<span *ngIf="lowLightFilter" class="animate-show warm-overlay"></span>
 <app-change-password #passwordModal></app-change-password>

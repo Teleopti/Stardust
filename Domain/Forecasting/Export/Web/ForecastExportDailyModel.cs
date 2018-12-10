@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 {

@@ -2,6 +2,7 @@ using System;
 using Microsoft.CSharp.RuntimeBinder;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence
 {

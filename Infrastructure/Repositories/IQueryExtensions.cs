@@ -1,6 +1,6 @@
 using System.Collections;
 using NHibernate;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {

@@ -82,9 +82,8 @@
 				 ng-class="{'has-selected': !!vm.selectedShiftLayers.length}">
 				<div class="shift-layer"
 					 ng-class="{
-					 'overtime': shiftLayer.IsOvertime,
-					 'overtime-light': vm.useLighterBorder(shiftLayer),
-					 'overtime-dark': !vm.useLighterBorder(shiftLayer),
+					 'overtime-light':shiftLayer.IsOvertime && vm.useLighterBorder(shiftLayer),
+					 'overtime-dark':shiftLayer.IsOvertime && !vm.useLighterBorder(shiftLayer),
 					 'selected': vm.isSelected(shiftLayer),
 					 'border-dark': !vm.useLighterBorder(shiftLayer),
 					 'border-light': vm.useLighterBorder(shiftLayer),

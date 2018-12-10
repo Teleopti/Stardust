@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.Domain.Common
 		DateOnlyPeriod DateOnlyPeriod { get; }
 		DateTimePeriod Period();
 		DateTimePeriod Period(TimeZoneInfo sourceTimeZone);
-		DateTimePeriod DateTimePeriodForDateOnly(DateOnly date);
 	}
 
 	public class DateOnlyPeriodAsDateTimePeriod : IDateOnlyPeriodAsDateTimePeriod
@@ -78,10 +76,5 @@ namespace Teleopti.Ccc.Domain.Common
             _period = _dateOnlyPeriod.ToDateTimePeriod(sourceTimeZone);
             return _period.Value;
         }
-
-		public DateTimePeriod DateTimePeriodForDateOnly(DateOnly date)
-		{
-			return new DateOnlyAsDateTimePeriod(date, _sourceTimeZone).Period();
-		}
 	}
 }

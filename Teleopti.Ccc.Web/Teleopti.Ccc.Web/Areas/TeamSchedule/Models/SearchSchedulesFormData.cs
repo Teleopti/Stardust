@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {

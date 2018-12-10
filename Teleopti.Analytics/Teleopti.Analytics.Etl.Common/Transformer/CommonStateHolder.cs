@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
@@ -246,17 +246,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 
 			return schedulePartCollection;
-		}
-
-		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
-			IDictionary<DateTimePeriod, IScheduleDictionary> dictionary)
-		{
-			var ret = new List<IScheduleDay>();
-			foreach (var key in dictionary)
-			{
-				ret.AddRange(GetSchedulePartPerPersonAndDate(key.Value));
-			}
-			return ret;
 		}
 
 		public IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario)

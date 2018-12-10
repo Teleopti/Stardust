@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -20,7 +21,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 {

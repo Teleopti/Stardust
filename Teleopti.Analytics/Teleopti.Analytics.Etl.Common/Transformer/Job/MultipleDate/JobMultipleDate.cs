@@ -36,29 +36,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate
 			return _jobMultiDateDictionary[jobCategoryType];
 		}
 
-		public IJobMultipleDateItem MinMaxDatesLocal
-		{
-			get
-			{
-				DateTime startDate = DateTime.MaxValue;
-				DateTime endDate = DateTime.MinValue;
-
-				foreach (IJobMultipleDateItem jobMultiDateItem in _jobMultiDateDictionary.Values)
-				{
-					if (jobMultiDateItem.StartDateLocal < startDate)
-					{
-						startDate = jobMultiDateItem.StartDateLocal;
-					}
-					if (jobMultiDateItem.EndDateLocal > endDate)
-					{
-						endDate = jobMultiDateItem.EndDateLocal;
-					}
-
-				}
-				return new JobMultipleDateItem(DateTimeKind.Local, startDate, endDate, _timeZone);
-			}
-		}
-
 		public IJobMultipleDateItem MinMaxDatesUtc
 		{
 			get

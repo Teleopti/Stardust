@@ -16,7 +16,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Chart;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 {

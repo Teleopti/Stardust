@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {

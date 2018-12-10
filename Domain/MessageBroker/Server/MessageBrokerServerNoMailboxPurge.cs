@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 
 			if (_logger.IsDebugEnabled)
 				_logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", connectionId, route,
-					RouteToGroupName(route));
+					RouteToGroupName.Convert(route));
 
-			_signalR.AddConnectionToGroup(RouteToGroupName(route), connectionId);
+			_signalR.AddConnectionToGroup(RouteToGroupName.Convert(route), connectionId);
 
 			_tracer.SubscriptionAdded(subscription, connectionId);
 
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		{
 			if (_logger.IsDebugEnabled)
 				_logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", connectionId, route,
-					RouteToGroupName(route));
+					RouteToGroupName.Convert(route));
 
-			_signalR.RemoveConnectionFromGroup(RouteToGroupName(route), connectionId);
+			_signalR.RemoveConnectionFromGroup(RouteToGroupName.Convert(route), connectionId);
 		}
 
 		[MessageBrokerUnitOfWork]
@@ -98,36 +98,24 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			if (_logger.IsDebugEnabled)
 				_logger.DebugFormat("New notification from client with (DomainUpdateType: {0}) (Routes: {1}) (Id: {2}).",
 					message.DomainUpdateType, string.Join(", ", routes),
-					string.Join(", ", routes.Select(RouteToGroupName)));
+					string.Join(", ", routes.Select(RouteToGroupName.Convert)));
 
 			_mailboxRepository.AddMessage(message);
 
 			foreach (var route in routes)
 			{
-				_signalR.CallOnEventMessage(RouteToGroupName(route), route, message);
+				_signalR.CallOnEventMessage(RouteToGroupName.Convert(route), route, message);
 			}
 
 			_tracer.ClientsNotified(message);
 		}
 		
-		public void NotifyClientsMultiple(IEnumerable<Message> notifications)
+		public void NotifyClientsMultiple(IEnumerable<Message> messages)
 		{
-			foreach (var notification in notifications)
+			foreach (var notification in messages)
 			{
 				NotifyClients(notification);
 			}
-		}
-
-		public static string RouteToGroupName(string route)
-		{
-			//gethashcode won't work in 100% of the cases...
-			UInt64 hashedValue = 3074457345618258791ul;
-			for (int i = 0; i < route.Length; i++)
-			{
-				hashedValue += route[i];
-				hashedValue *= 3074457345618258799ul;
-			}
-			return hashedValue.GetHashCode().ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }

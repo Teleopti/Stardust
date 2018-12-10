@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
@@ -142,12 +142,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldContainMatrixListForAllGroupMembers()
 		{
 			Assert.AreEqual(2, _target.MatrixesForGroup().Count());
-		}
-
-		[Test]
-		public void ShouldContainMatrixesForOneGroupMember()
-		{
-			Assert.AreEqual(2, _target.MatrixesForGroupMember(0).Count());
 		}
 
 		[Test]

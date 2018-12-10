@@ -4,8 +4,8 @@
 @section head {
 	@Styles.Render(BundleScripts.SignInCss)
 	@Scripts.Render(BundleScripts.SignInJs)
-	@Styles.Render("~/Areas/Start/Content/Css/main.min.css")
-	@Styles.Render("~/Areas/Start/Content/Css/newLogin.css")
+	@Styles.Render("~/Areas/SSO/Content/Css/main.min.css")
+	@Styles.Render("~/Areas/SSO/Content/Css/newLogin.css")
 
 
 	<script type="text/javascript">
@@ -26,6 +26,9 @@
 	}
 }
 
+<div id="wave-background">
+	<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1920 160"><path fill="#fff" d="M1920 0s-115 144-432 144S844 0 465 0 0 144 0 144v16h1920V0z"></path></svg>
+</div>
 <section id="page-signin">
 	<div id="Login-container">
 		<div id="Exception-div" class="alert alert-danger hide">
@@ -79,10 +82,7 @@
 				</li>
 			</ul>
 			<div data-bind="visible: Ajax.Active" class="loader"></div>
-
-</div>
-		
-		
+		</div>
 
 		<div id="menu">
 			<div data-bind="foreach: Applications" class="list-group">

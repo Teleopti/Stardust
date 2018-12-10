@@ -35,13 +35,6 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	}
 }
 
-.priority-color-bar {
-	text-align: center;
-    background: linear-gradient( 90deg, rgb(128,0,128), rgba(128,0,128,0.05) ) left bottom #f0f0f0 no-repeat;
-	background-size: 100% 6px;
-	margin-left: -10px;
-	padding:5px;
-}
 
 /*refactor me: heat map*/
 
@@ -252,9 +245,10 @@ table.overview {
 }
 
 .pp-status {
-	padding: 6px;
-	background-color: $orange-500 ;
-	border-radius: 3px;
+  padding: 4px;
+  background-color: $orange-500 ;
+  border-radius: 3px;
+  margin-left: 10px;
 }
 
 .pp-modal>.modal-box .modalbg .dialog {
@@ -263,21 +257,9 @@ table.overview {
 		background: $blue-500;
 	}
 
-	.pp-create-modal {
-		padding: 0 16px;
-	}
-
 	.pp-calendar-wrapper {
-		display: table;
-		margin: 0 auto;
-	}
-
-	.pp-custom-input-wrapper {
-		margin: 10px 0px;
-	}
-
-	.pp-custom-buttons-wrapper {
-		margin: 0 20px;
+	  display: table;
+	  margin: 0 auto;
 	}
 }
 
@@ -359,6 +341,16 @@ table.overview {
 	border-color: $red-600 !important;
 }
 
+.selected{
+  transition-property: width, height;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+  .chevron{
+	transition: $transition-timing;
+	transform:rotate(90deg);
+  }
+}
+
 card-panel-header {
 	.pp-validation-progress {
 		position: absolute;
@@ -405,27 +397,26 @@ card-panel-content {
 	.pg-setting-card-content {
 		background-color: $gray012;
 	}
+}
 
-	.fake-radio-button{
-		position: relative;
-		margin: 8px 0px;
-		i{
-			position: absolute;
-			top: -5px;
-			left: 0;
-			color: $gray026 ;
-		}
-		i.check {
-			color: $blue-300  ;
-		}
-		i:before {
-			font-size: 25px!important;
 
-		}
-		span{
-			margin-left: 30px;
-		}
+
+.setting-group{
+  background: $white ;
+
+  .dayoff-rules-setting{
+	margin-bottom: 15px;
+	
+	.wfm-option{
+	  padding-top: 0;
+	  padding-bottom: 0;
 	}
+
+	.con-flex {
+	  margin-top: 0;
+	  margin-bottom: 0;
+	}
+  }
 }
 
 .pg-setting-priority-scale {

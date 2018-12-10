@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
@@ -20,10 +20,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		int MaxActiveAgents { get; }
 
 		Percent MaxActiveAgentsGrace { get; }
-
-		bool IsThisTooManyActiveAgents(int activeAgents);
-
-		bool IsThisAlmostTooManyActiveAgents(int activeAgents);
 
 		IList<string> EnabledLicenseOptionPaths { get; }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -16,7 +17,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
@@ -32,9 +33,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly ICurrentScenario _currentScenario;
 		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly TeamScheduleAgentScheduleViewModelMapper _layerMapper;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider,
-			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,  TeamScheduleAgentScheduleViewModelMapper layerMapper, ITeamScheduleShiftViewModelProvider shiftViewModelProvider)
+			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,  TeamScheduleAgentScheduleViewModelMapper layerMapper, ITeamScheduleShiftViewModelProvider shiftViewModelProvider, ILoggedOnUser loggedOnUser)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_currentScenario = currentScenario;
 			_layerMapper = layerMapper;
 			_shiftViewModelProvider = shiftViewModelProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request,
@@ -129,7 +132,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			foreach (var date in period.DayCollection())
 			{
 				var viewModel = getAgentScheduleViewModel(person, schedules.ScheduledDay(date));
-				viewModel.BelongsToDate = date.Date;
 				shiftViewModels.Add(viewModel);
 			}
 
@@ -140,14 +142,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		{
 			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
 			var schedulePeriod = getScheduleMinMax(scheduleViewModel, person, scheduleDay.DateOnlyAsPeriod.DateOnly);
+			var isMySchedule = _loggedOnUser.CurrentUser().Equals(person);
 
-			return _layerMapper.Map( scheduleViewModel, schedulePeriod, person.PermissionInformation.DefaultTimeZone());
+			return _layerMapper.Map(scheduleViewModel, schedulePeriod, isMySchedule);
 		}
 
 		private DateTimePeriod getScheduleMinMax(AgentInTeamScheduleViewModel schedule, IPerson person, DateOnly date)
 		{
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-
+			
 			if (schedule.ScheduleLayers.IsNullOrEmpty()) {
 				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour), date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
 			}
@@ -155,7 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			var startTime = schedule.ScheduleLayers.First().Start;
 			var endTime = schedule.ScheduleLayers.Last().End;
 
-			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);
+			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 		}
 
 		private PersonAccountSummaryViewModel getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)
@@ -232,16 +235,39 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		}
 
-		private static RequestStatus getRequestStatus(IPersonRequest request)
+		private static PersonRequestStatus getRequestStatus(IPersonRequest request)
 		{
-			//ROBTODO: review status - should we include waitlisted and cancelled in this ?
-			return request.IsApproved
-				? RequestStatus.Approved
-				: request.IsPending
-					? RequestStatus.Pending
-					: request.IsDenied
-						? RequestStatus.Denied
-						: RequestStatus.New;
+			if (request.IsApproved || request.IsAutoAproved)
+			{
+				return PersonRequestStatus.Approved;
+			}
+
+			if (request.IsPending)
+			{
+				return PersonRequestStatus.Pending;
+			}
+
+			if(request.IsWaitlisted)
+			{
+				return PersonRequestStatus.Waitlisted;
+			}
+
+			if(request.IsDenied)
+			{
+				return PersonRequestStatus.Denied;
+			}
+
+			if (request.IsAutoDenied)
+			{
+				return PersonRequestStatus.AutoDenied;
+			}
+
+			if (request.IsCancelled)
+			{
+				return PersonRequestStatus.Cancelled;
+			}
+
+			return PersonRequestStatus.New;
 		}
 
 		private static bool isFullDay(IPersonRequest request)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.IocCommon;
@@ -10,7 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
@@ -195,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					Periods = new DateOnlyPeriod[] {}
 				}
 			};
-			Target.FillResult(validationResult,new ScheduleHintInput(new[]{person}, range, false));
+			Target.FillResult(validationResult,new ScheduleHintInput(new[]{person}, range, 0));
 
 			validationResult.InvalidResources.Single().ResourceName.Should().Be(skill.Name);
 		}

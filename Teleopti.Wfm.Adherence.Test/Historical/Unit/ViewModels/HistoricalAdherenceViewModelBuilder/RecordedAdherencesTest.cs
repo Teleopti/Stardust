@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 	[TestFixture]
 	public class RecordedAdherencesTest
 	{
-		public Adherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
+		public Adherence.Historical.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 
@@ -23,8 +23,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			Now.Is("2018-01-10 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithHistoricalStateChange(person, "2018-01-10 08:05", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange(person, "2018-01-10 08:15", Domain.Configuration.Adherence.In);
+				.WithHistoricalStateChange(person, "2018-01-10 08:05", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange(person, "2018-01-10 08:15", Adherence.Configuration.Adherence.In);
 
 			var data = Target.Build(person);
 
@@ -38,8 +38,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 			Now.Is("2018-02-13 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithHistoricalStateChange(person, "2018-02-13 08:05", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange(person, "2018-02-13 08:15", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange(person, "2018-02-13 08:05", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange(person, "2018-02-13 08:15", Adherence.Configuration.Adherence.In)
 				.WithApprovedPeriod(person, "2018-02-13 08:05", "2018-02-13 08:15");
 
 			var data = Target.Build(person);

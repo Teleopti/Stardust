@@ -102,10 +102,8 @@
     <Compile Include="Client\NoMessageSender.cs" />
     <Compile Include="Client\SignalR\DisabledSignalRClient.cs" />
     <Compile Include="Client\SignalR\InProcessMessageSender.cs" />
+    <Compile Include="Client\SignalR\InProcessMessageSenderNoThrottle.cs" />
     <Compile Include="Exceptions\BrokerNotInstantiatedException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Exceptions\NotInterfaceTypeException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Client\SignalR\SignalRSender.cs" />
@@ -132,10 +130,6 @@
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

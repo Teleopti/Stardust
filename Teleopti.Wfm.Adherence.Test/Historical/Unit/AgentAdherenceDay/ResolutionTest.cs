@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 {
@@ -27,8 +27,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-20 08:00", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-02-20 09:00:00.999", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-02-20 08:00", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 09:00:00.999", Adherence.Configuration.Adherence.In)
 				.WithApprovedPeriod("2018-02-20 08:00", "2018-02-20 09:00")
 				;
 
@@ -44,8 +44,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-20 08:00:00.777", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-02-20 09:00:00.888", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-02-20 08:00:00.777", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 09:00:00.888", Adherence.Configuration.Adherence.In)
 				;
 
 			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
@@ -61,7 +61,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-20 08:00", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 08:00", Adherence.Configuration.Adherence.Out)
 				;
 
 			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
@@ -80,10 +80,10 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2018-02-20")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2018-02-20 08:00", "2018-02-20 17:00:00")
-				.WithHistoricalStateChange("2018-02-20 08:00:00.999", Domain.Configuration.Adherence.Neutral)
-				.WithHistoricalStateChange("2018-02-20 16:59:50", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-02-20 16:59:55.001", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2018-02-20 16:59:56.999", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 08:00:00.999", Adherence.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2018-02-20 16:59:50", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 16:59:55.001", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-02-20 16:59:56.999", Adherence.Configuration.Adherence.Out)
 				;
 
 			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
@@ -101,10 +101,10 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignment(person, "2018-02-20")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2018-02-20 08:00", "2018-02-20 17:00:00")
-				.WithHistoricalStateChange("2018-02-20 08:00", Domain.Configuration.Adherence.Neutral)
-				.WithHistoricalStateChange("2018-02-20 16:59:55", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-02-20 16:59:56", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2018-02-20 16:59:57", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 08:00", Adherence.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2018-02-20 16:59:55", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 16:59:56", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-02-20 16:59:57", Adherence.Configuration.Adherence.Out)
 				;
 
 			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
@@ -119,8 +119,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-20 08:00:00.777", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-02-20 09:00:00.888", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-02-20 08:00:00.777", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 09:00:00.888", Adherence.Configuration.Adherence.In)
 				;
 
 			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
@@ -136,10 +136,10 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-20 08:00:00.000", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-02-20 08:00:00.100", Domain.Configuration.Adherence.In)
-				.WithHistoricalStateChange("2018-02-20 08:01:00.000", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-02-20 08:01:00.100", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-02-20 08:00:00.000", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 08:00:00.100", Adherence.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-02-20 08:01:00.000", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 08:01:00.100", Adherence.Configuration.Adherence.In)
 				;
 
 			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
@@ -154,7 +154,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-02-20 08:00:00", Domain.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-02-20 08:00:00", Adherence.Configuration.Adherence.Out)
 				;
 
 			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
@@ -169,8 +169,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-03-26 08:00:00", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-03-26 09:00:00.2706", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-03-26 08:00:00", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-03-26 09:00:00.2706", Adherence.Configuration.Adherence.In)
 				.WithApprovedPeriod(person, "2018-03-26 08:00:00", "2018-03-26 09:00:00")
 				;
 
@@ -186,10 +186,10 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person)
-				.WithHistoricalStateChange("2018-03-26 08:00:00", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-03-26 08:30:00.100", Domain.Configuration.Adherence.Neutral)
-				.WithHistoricalStateChange("2018-03-26 08:30:00.200", Domain.Configuration.Adherence.Out)
-				.WithHistoricalStateChange("2018-03-26 09:00:00", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2018-03-26 08:00:00", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-03-26 08:30:00.100", Adherence.Configuration.Adherence.Neutral)
+				.WithHistoricalStateChange("2018-03-26 08:30:00.200", Adherence.Configuration.Adherence.Out)
+				.WithHistoricalStateChange("2018-03-26 09:00:00", Adherence.Configuration.Adherence.In)
 				;
 
 			var result = Target.LoadUntilNow(person, "2018-03-26".Date());

@@ -12,7 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.Web.Core.Extensions;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;

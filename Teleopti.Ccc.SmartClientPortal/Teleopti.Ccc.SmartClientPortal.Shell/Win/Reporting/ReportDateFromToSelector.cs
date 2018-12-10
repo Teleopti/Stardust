@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
             if (!DesignMode && StateHolderReader.IsInitialized)
             {
-                DateOnlyPeriod minPeriod = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime),
-                                                          new DateOnly(DateHelper.MaxSmallDateTime));
+                Domain.InterfaceLegacy.Domain.DateOnlyPeriod minPeriod = new Domain.InterfaceLegacy.Domain.DateOnlyPeriod(new Domain.InterfaceLegacy.Domain.DateOnly(Domain.InterfaceLegacy.Domain.DateHelper.MinSmallDateTime),
+                                                          new Domain.InterfaceLegacy.Domain.DateOnly(Domain.InterfaceLegacy.Domain.DateHelper.MaxSmallDateTime));
                 dateTimePickerAdvWorkAStartDate.SetAvailableTimeSpan(minPeriod);
                 dateTimePickerAdvWorkEndPeriod.SetAvailableTimeSpan(minPeriod);
 
@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
         /// Created date: 2008-03-31
         /// </remarks>
         [Browsable(false)]
-        public DateOnly WorkPeriodStart
+        public Domain.InterfaceLegacy.Domain.DateOnly WorkPeriodStart
         {
-            get { return new DateOnly(dateTimePickerAdvWorkAStartDate.Value.Date); }
+            get { return new Domain.InterfaceLegacy.Domain.DateOnly(dateTimePickerAdvWorkAStartDate.Value.Date); }
             set
             {
                 dateTimePickerAdvWorkAStartDate.Value = value.Date;
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
         /// Created date: 2008-03-31
         /// </remarks>
         [Browsable(false)]
-        public DateOnly WorkPeriodEnd
+        public Domain.InterfaceLegacy.Domain.DateOnly WorkPeriodEnd
         {
-            get { return new DateOnly(dateTimePickerAdvWorkEndPeriod.Value.Date); }
+            get { return new Domain.InterfaceLegacy.Domain.DateOnly(dateTimePickerAdvWorkEndPeriod.Value.Date); }
             set { dateTimePickerAdvWorkEndPeriod.Value = value.Date; }
         }
 
@@ -168,8 +168,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
             
             base.OnLoad(e);
 
-            WorkPeriodStart = DateOnly.Today;
-            WorkPeriodEnd = DateOnly.Today;
+            WorkPeriodStart = Domain.InterfaceLegacy.Domain.DateOnly.Today;
+            WorkPeriodEnd = Domain.InterfaceLegacy.Domain.DateOnly.Today;
             
             dateTimePickerAdvWorkAStartDate.ValueChanged += dateTimePickerAdvWorkStartDate_ValueChanged;
             dateTimePickerAdvWorkEndPeriod.ValueChanged += dateTimePickerAdvWorkEndPeriod_ValueChanged;
@@ -185,14 +185,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
         /// Created date: 2008-06-02
         /// </remarks>
         [Browsable(false)]
-        public IList<DateOnlyPeriod> GetSelectedDates
+        public IList<Domain.InterfaceLegacy.Domain.DateOnlyPeriod> GetSelectedDates
         {
             get
             {
-                IList<DateOnlyPeriod> selectedDates = new List<DateOnlyPeriod>();
+                IList<Domain.InterfaceLegacy.Domain.DateOnlyPeriod> selectedDates = new List<Domain.InterfaceLegacy.Domain.DateOnlyPeriod>();
                 if (IsWorkPeriodValid)
                 {
-                    selectedDates.Add(new DateOnlyPeriod(WorkPeriodStart, WorkPeriodEnd));
+                    selectedDates.Add(new Domain.InterfaceLegacy.Domain.DateOnlyPeriod(WorkPeriodStart, WorkPeriodEnd));
                     return selectedDates;
                 }
 

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Layers
 {

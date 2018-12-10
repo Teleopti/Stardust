@@ -19,7 +19,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Core.IoC;
-using Teleopti.Interfaces.Domain;
+
 using Claim = System.IdentityModel.Claims.Claim;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory

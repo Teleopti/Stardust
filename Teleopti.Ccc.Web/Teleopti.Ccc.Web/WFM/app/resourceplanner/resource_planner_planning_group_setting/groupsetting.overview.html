@@ -1,8 +1,6 @@
 <div class="view-header with-fab with-desc" ng-hide="vm.isDisable">
 	<div class="view-title">
-		<h1>
-			<i class="mdi mdi-calendar"></i> {{'PlanGroupScheduling' | translate}}</h1>
-		<p>{{vm.textManageSchedulingSetting}}</p>
+		<h1><i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.planningGroupId}}/selectplanningperiod">{{vm.planningGroupName}}</a> / {{'PlanGroupScheduling' | translate}}</h1>
 	</div>
 </div>
 <div class="con-row" ng-hide="vm.isDisable">
@@ -31,14 +29,12 @@
 <div class="con-row">
 	<div class="con-flex">
 		<card-panel-list>
-			<card-panel ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" open="single" pre-open="setting.Name"
+			<card-panel ng-class="" ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" pre-open="true"
 			 id="$index">
 				<card-panel-header>
+					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
 					<div class="title header-flex">
 						<b class="scheduling-setting-name">{{setting.Name}}</b>
-					</div>
-					<div class="header-flex" ng-show="!setting.Default" ng-class="{'line-center': !vm.isDisable}">
-						<span>{{'SelectedFilters' | translate}}: {{setting.Filters.length}}</span>
 					</div>
 					<div class="line-right header-flex" ng-hide="vm.isDisable">
 						<div tabindex=0 class="context-menu card-context" ng-click="vm.setHigherPriority(setting, $index);$event.stopPropagation();"
@@ -51,6 +47,16 @@
 						 ng-hide="vm.disableButton($index)">
 							<i class=" mdi mdi-arrow-down-bold pointer">
 								<md-tooltip>{{'Set priority lower' | translate }}</md-tooltip>
+							</i>
+						</div>
+						<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(setting)">
+							<i class=" mdi mdi-pencil pointer">
+								<md-tooltip>{{'EditFilter' | translate }}</md-tooltip>
+							</i>
+						</div>
+						<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
+							<i class=" mdi mdi-delete pointer">
+								<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
 							</i>
 						</div>
 					</div>
@@ -128,50 +134,17 @@
 								<div class="con-flex">
 									<div class="pg-setting-mini-card-wrapper">
 										<div class="pg-setting-mini-card-title line-center">
-											<b>{{setting.BlockSchedulingSetting}}</b>
+											<b>{{'Restrictions' | translate}}</b>
 										</div>
-										<div class="pg-setting-card" ng-if="setting.BlockFinderType > 0">
-											<div class="fake-radio-button">
-												<i class="mdi mdi-checkbox-blank-circle" ng-class="{'check':setting.BlockSameShiftCategory}"></i>
-												<span>{{ 'BlockSameShiftCategory' | translate}}</span>
+										<div class="pg-setting-card">
+											<div class="con-flex">
+												<b>{{'BlockScheduling' | translate}}</b>: {{setting.BlockSchedulingSetting}}
 											</div>
-											<div class="fake-radio-button">
-												<i class="mdi mdi-checkbox-blank-circle" ng-class="{'check':setting.BlockSameStartTime}"></i>
-												<span>{{ 'BlockSameStartTime'| translate}}</span>
-											</div>
-											<div class="fake-radio-button">
-												<i class="mdi mdi-checkbox-blank-circle" ng-class="{'check':setting.BlockSameShift}"></i>
-												<span>{{ 'BlockSameShift' | translate}}</span>
+											<div class="con-flex" ng-if="setting.Default">
+												<b>{{'PreferenceFulfillment' | translate}}</b>: {{vm.preferencePercentage}}%
 											</div>
 										</div>
 									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="con-row" ng-if="setting.Default">
-						<div class="con-flex">
-							<div class="line-right">
-								<div class="con-flex align-row-center">
-									<span>{{'PreferenceFulfillment' | translate}}: {{vm.preferencePercentage}}%</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-					<div class="con-row" ng-hide="vm.isDisable">
-						<div class="con-flex">
-							<div class="line-right">
-								<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(setting)">
-									<i class=" mdi mdi-pencil pointer">
-										<md-tooltip>{{'EditFilter' | translate }}</md-tooltip>
-									</i>
-								</div>
-								<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
-									<i class=" mdi mdi-delete pointer">
-										<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
-									</i>
 								</div>
 							</div>
 						</div>

@@ -9,7 +9,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {

@@ -205,12 +205,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.ClickUsingJQuery("#applyActivity");
 		}
 
-		[When(@"I apply add personal activity")]
-		public void WhenIApplyAddPersonalActivity()
-		{
-			Browser.Interactions.ClickUsingJQuery("#applyPersonalActivity");
-		}
-
 		[Then(@"I should see agent '(.*)' in the table")]
 		public void ThenIShouldSeeAgentInTheTable(string agent)
 		{

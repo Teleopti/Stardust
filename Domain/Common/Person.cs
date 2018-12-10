@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -447,8 +446,6 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
-		public virtual IPersonPeriod Period(DateTime date) => Period(new DateOnly(date));
-		
 		public virtual IPersonPeriod Period(DateOnly date)
 		{
 			IPersonPeriod period = null;

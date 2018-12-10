@@ -1,0 +1,2 @@
+DELETE From ApplicationFunctionInRole where ApplicationFunction in  (select id from ApplicationFunction WHERE ForeignId IN ('0055', '0059'))
+DELETE From ApplicationFunction WHERE ForeignId IN ('0055', '0059')

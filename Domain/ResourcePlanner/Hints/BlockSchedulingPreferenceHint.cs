@@ -1,7 +1,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
@@ -9,8 +8,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 	{
 		public void FillResult(HintResult hintResult, SchedulePostHintInput input)
 		{
-			var usePreferenes = input.UsePreferences;
-			if (!usePreferenes)
+			var preferencesValue = input.PreferencesValue;
+			if (preferencesValue < 0.01)
 				return;
 			var people = input.People;
 			var period = input.Period;

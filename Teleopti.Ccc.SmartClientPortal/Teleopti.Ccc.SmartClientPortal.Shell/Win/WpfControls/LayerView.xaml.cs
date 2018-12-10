@@ -2,9 +2,10 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
-using Teleopti.Interfaces.Domain;
+
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls

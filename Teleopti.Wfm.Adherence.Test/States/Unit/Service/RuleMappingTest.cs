@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 {
@@ -28,7 +29,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
-				.WithMappedRule(null, phone, 0, Domain.Configuration.Adherence.Out)
+				.WithMappedRule(null, phone, 0, Adherence.Configuration.Adherence.Out)
 				;
 			Now.Is("2015-03-12 08:05");
 
@@ -68,8 +69,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2015-05-11 08:00", "2015-05-11 09:00")
-				.WithMappedRule("AUX1 " + platform1, phone, -1, Domain.Configuration.Adherence.Out)
-				.WithMappedRule("AUX1 " + platform2, phone, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("AUX1 " + platform1, phone, -1, Adherence.Configuration.Adherence.Out)
+				.WithMappedRule("AUX1 " + platform2, phone, 0, Adherence.Configuration.Adherence.In)
 				;
 			Now.Is("2015-05-11 08:00");
 
@@ -89,7 +90,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", person)
 				.WithMapWithStateGroupWithoutStateCodes()
-				.WithMappedRule(null, null, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule(null, null, 0, Adherence.Configuration.Adherence.In)
 				;
 
 			Target.CheckForActivityChanges(Database.TenantName());

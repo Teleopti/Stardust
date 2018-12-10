@@ -1,413 +1,423 @@
-@media all and (-ms-high-contrast: none), // Internet Explorer
-(-ms-high-contrast: active) {
+// Internet Explorer
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.rta-view {
+		.approve-form {
+			&.non-ie {
+				display: none !important;
+			}
 
-  .rta-view {
-	.approve-form {
-	  &.non-ie {
-		display: none !important;
-	  }
-	  &.ie {
-		display: inline !important;
-	  }
+			&.ie {
+				display: inline !important;
+			}
+		}
 	}
-
-  }
 }
 
 .rta-view {
-  padding: $full-padding;
-
-  $out-of-adherence-color: darkred;
-  $in-adherence-color: darkgreen;
-  $out-of-adherence-height: 4px;
-
-  .label-alert {
-	background-color: #FB8C00;
-  }
-
-  // con padding/margin reset
-  .con-row {
-	padding: 0;
-	margin: 0;
-  }
-  .con-flex {
-	padding: 0;
-	margin: 0;
-  }
-  .con-padding .con-flex {
 	padding: $full-padding;
-  }
-  @media screen and (min-width: 768px) {
-	.con-columns > .con-flex:not(:last-child) {
-	  margin-right: $full-padding;
-	}
-  }
 
-  @mixin container {
-	position: relative;
-  }
-  @mixin positioned {
-	position: absolute;
-  }
-  @mixin out-of-adherence-line {
-	@include positioned;
-	z-index: 20;
-	background-color: $out-of-adherence-color;
-	height: $out-of-adherence-height;
-	opacity: 0.6;
-	min-width: 1px;
-  }
-  @mixin activity-layer {
-	@include positioned;
-	z-index: 10;
-	height: 100%;
-  }
-  @mixin current-time-line {
-	@include positioned;
-	z-index: 30;
-	width: 2px;
-	height: 100%;
-	background-color: red;
-  }
+	$out-of-adherence-color: darkred;
+	$in-adherence-color: darkgreen;
+	$out-of-adherence-height: 4px;
 
-  .wfm-table {
-
-	th.blank-header {
-	  background-color: $white;
+	.label-alert {
+		background-color: #fb8c00;
 	}
 
-	td {
-	  overflow: hidden;
-	  white-space: nowrap;
-	  text-overflow: ellipsis;
-
-	  .label-alert {
-		margin-left: 10px;
-	  }
-	  &.shift-column {
-		border-right: none;
-		background-color: transparent;
-		padding: 0
-	  }
-	  &.label {
-		font-size: 12px;
-		font-weight: 100;
-		padding: 5px;
-	  }
-	  .mdi:before {
-		font-size: 14px !important;
-	  }
+	// con padding/margin reset
+	.con-row {
+		padding: 0;
+		margin: 0;
 	}
 
-	a.mdi {
-	  text-decoration: none;
-	}
-  }
-
-  .highlight > td {
-	background-color: $green-100;
-  }
-
-  md-checkbox.marked .md-icon {
-	background-color: #66c2ff;
-  }
-
-  &.agents {
-
-	.organization-picker {
-	  .filter {
-		padding-left: $full-padding;
-		padding-right: $full-padding;
-	  }
+	.con-flex {
+		padding: 0;
+		margin: 0;
 	}
 
-	.timeline {
-	  @include container;
-	  .time {
-		@include positioned;
-		top: 20%;
-		transform: translateX(-50%);
-	  }
-	}
-
-	.shift {
-	  @include container;
-
-	  .current-time {
-		@include current-time-line;
-	  }
-
-	  .out-of-adherence {
-		@include out-of-adherence-line;
-		top: 50%;
-		transform: translateY(-50%);
-	  }
-
-	  .activity {
-		@include activity-layer;
-	  }
-
-	}
-
-  }
-
-  &.historical {
-	overflow-x: hidden;
-
-	.adherence-percent-container {
-	  display: flex;
-	  justify-content: center;
-	  align-items: center;
-
-	  .huge {
-		font-size: 60px;
-		line-height: 1;
-		color: #1c94c4;
-	  }
-
-	  .sign {
-		font-size: 30px;
-		color: #1c94c4;
-		padding-left: 2px;
-		opacity: 0.4
-	  }
-
-	}
-
-	.twocolumns {
-	  display: flex;
-	  .left {
-		width: 200px;
+	.con-padding .con-flex {
 		padding: $full-padding;
-	  }
-	  .right {
-		flex-grow: 1;
-		padding: $full-padding;
-		.right-row:not(:last-child) {
-		  padding-bottom: $full-padding;
+	}
+
+	@media screen and (min-width: 768px) {
+		.con-columns > .con-flex:not(:last-child) {
+			margin-right: $full-padding;
 		}
-	  }
 	}
 
-	$shift-height: 40px;
-	$layer-row-height: 20px;
-	$diamond-size: 8px;
-
-	.approve-form {
-
-	  input {
-		margin-left: 10px;
-		margin-right: 30px;
-		width: 115px;
-		border: none;
-		border-bottom: 1px solid lightgrey;
-		background: transparent;
-		line-height: 20px;
-	  }
-
-	  &.non-ie {
-		display: inline;
-	  }
-
-	  &.ie {
-		display: none;
-	  }
-
+	@mixin container {
+		position: relative;
 	}
 
-	.timeline {
-	  @include container;
-	  height: 18px;
-	  .time {
-		@include positioned;
-		top: 10%;
-		transform: translateX(-50%);
-	  }
-	}
-
-	.late-for-work-row {
-	  @include container;
-	  height: 20px;
-	  .late-for-work {
-		@include positioned;
-		transform: translateX(-50%);
-		z-index: 40;
-		cursor: pointer;
-	  }
-	  .late-for-work-line {
-		transform: translateX(-1px);
+	@mixin positioned {
 		position: absolute;
-		z-index: 30;
-		top: 10px;
-		width: 2px;
-		height: 90px;
-		background-color: #FB8C00;
-	  }
 	}
 
-	.shift {
-	  @include container;
-	  height: $shift-height;
-
-	  .current-time {
-		@include current-time-line;
-	  }
-
-	  .out-of-adherence {
-		@include out-of-adherence-line;
-		top: ($shift-height - $out-of-adherence-height) / 2;
-	  }
-
-	  .activity {
-		@include activity-layer;
-	  }
-
-	}
-
-	.changes {
-	  @include container;
-	  height: $layer-row-height;
-
-	  .diamond {
+	@mixin out-of-adherence-line {
 		@include positioned;
-		z-index: 40;
-		top: ($layer-row-height - $diamond-size) / 2;
-		margin-left: ($diamond-size / 2) * -1;
-		transform: rotate(45deg);
-		cursor: pointer;
-		height: $diamond-size;
-		width: $diamond-size;
-		&.highlight {
-		  height: $diamond-size + 2;
-		  width: $diamond-size + 2;
-		  border-radius: 50%;
-		}
-		&.highlight:after {
-		  content: '';
-		  width: $diamond-size + 8;
-		  height: $diamond-size + 8;
-		  display: block;
-		  margin-top: -3px;
-		  margin-left: -3px;
-		  border-radius: 50%;
-		  border: 1px solid;
-		  border-color: inherit;
-		}
-	  }
-	}
-
-	@mixin adherence-layer($color) {
-	  @include positioned;
-	  background-color: $color;
-	  height: $layer-row-height;
-	  &.highlight {
-		outline: 1px solid $color;
-		outline-offset: 2px;
-	  }
-	}
-
-	.recorded-out-of-adherences {
-	  @include container;
-	  height: $layer-row-height;
-	  .recorded-out-of-adherence {
-		@include adherence-layer($out-of-adherence-color);
-		cursor: pointer;
-	  }
-	}
-
-	.approved-periods {
-	  @include container;
-	  height: $layer-row-height;
-	  .approved-period {
-		@include adherence-layer($in-adherence-color);
-		cursor: pointer;
 		z-index: 20;
-	  }
-	  .approve-period {
-		@include adherence-layer($in-adherence-color);
-		opacity: 0.5;
+		background-color: $out-of-adherence-color;
+		height: $out-of-adherence-height;
+		opacity: 0.6;
+		min-width: 1px;
+	}
+
+	@mixin activity-layer {
+		@include positioned;
 		z-index: 10;
-	  }
+		height: 100%;
 	}
 
-	.remove-approved-period {
-	  cursor: pointer;
-	  margin: 0 8px;
+	@mixin current-time-line {
+		@include positioned;
+		z-index: 30;
+		width: 2px;
+		height: 100%;
+		background-color: red;
 	}
-  }
-  
-  &.historical-overview {
-	.cell-header {
-	  text-align: center; 
-	  font-size: 9px; 
-	  max-width: 30px; 
-	  width: 30px; 
-	  padding-left:0; 
-	  padding-right:0;
-	}
-	
-	.cell {
-	  padding: 0;
-	  position: relative;
-	  max-width: 30px;
-	  width: 30px;
-	  overflow: hidden;
 
-	  .late-for-work-flag {
-		background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
-		position: absolute;
-		z-index: 1;
-		height: 7px;
-		width: 100%;
-	  }
-
-	  .square {
-		margin: 2px;
-		border-radius: .25em;
-		text-align: center;
-		padding: 3px 0px;
-		a {
-		  color: inherit;
+	.wfm-table {
+		th.blank-header {
+			background-color: $white;
 		}
-	  }
+
+		td {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+
+			.label-alert {
+				margin-left: 10px;
+			}
+
+			&.shift-column {
+				border-right: none;
+				background-color: transparent;
+				padding: 0;
+			}
+
+			&.label {
+				font-size: 12px;
+				font-weight: 100;
+				padding: 5px;
+			}
+
+			.mdi:before {
+				font-size: 14px !important;
+			}
+		}
+
+		a.mdi {
+			text-decoration: none;
+		}
 	}
 
-	.label.late-for-work{
-	  background-color: orange;
+	.highlight > td {
+		background-color: $green-100;
 	}
 
-	.panel.material-depth-1.card-panel{
-	  width: 900px;
+	md-checkbox.marked .md-icon {
+		background-color: #66c2ff;
 	}
 
-	@media screen and (max-width: 960px) {
-	  .panel.material-depth-1.card-panel {
-		width: 100%;
-	  }
+	&.agents {
+		.organization-picker {
+			.filter {
+				padding-left: $full-padding;
+				padding-right: $full-padding;
+			}
+		}
+
+		.timeline {
+			@include container;
+
+			.time {
+				@include positioned;
+				top: 20%;
+				transform: translateX(-50%);
+			}
+		}
+
+		.shift {
+			@include container;
+
+			.current-time {
+				@include current-time-line;
+			}
+
+			.out-of-adherence {
+				@include out-of-adherence-line;
+				top: 50%;
+				transform: translateY(-50%);
+			}
+
+			.activity {
+				@include activity-layer;
+			}
+		}
 	}
 
-	.card-panel-header-wrapper{
-	  &.left-border {
-		border-left: 10px solid #66c2ff;
-	  }
+	&.historical {
+		overflow-x: hidden;
+
+		.adherence-percent-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			.huge {
+				font-size: 60px;
+				line-height: 1;
+				color: #1c94c4;
+			}
+
+			.sign {
+				font-size: 30px;
+				color: #1c94c4;
+				padding-left: 2px;
+				opacity: 0.4;
+			}
+		}
+
+		.twocolumns {
+			display: flex;
+
+			.left {
+				width: 200px;
+				padding: $full-padding;
+			}
+
+			.right {
+				flex-grow: 1;
+				padding: $full-padding;
+
+				.right-row:not(:last-child) {
+					padding-bottom: $full-padding;
+				}
+			}
+		}
+
+		$shift-height: 40px;
+		$layer-row-height: 20px;
+		$diamond-size: 8px;
+
+		.approve-form {
+			input {
+				margin-left: 10px;
+				margin-right: 30px;
+				width: 115px;
+			}
+
+			&.non-ie {
+				display: inline;
+			}
+
+			&.ie {
+				display: none;
+			}
+		}
+
+		.timeline {
+			@include container;
+			height: 18px;
+
+			.time {
+				@include positioned;
+				top: 10%;
+				transform: translateX(-50%);
+			}
+		}
+
+		.late-for-work-row {
+			@include container;
+			height: 20px;
+
+			.late-for-work {
+				@include positioned;
+				transform: translateX(-50%);
+				z-index: 40;
+				cursor: pointer;
+			}
+
+			.late-for-work-line {
+				transform: translateX(-1px);
+				position: absolute;
+				z-index: 30;
+				top: 10px;
+				width: 2px;
+				height: 90px;
+				background-color: #fb8c00;
+			}
+		}
+
+		.shift {
+			@include container;
+			height: $shift-height;
+
+			.current-time {
+				@include current-time-line;
+			}
+
+			.out-of-adherence {
+				@include out-of-adherence-line;
+				top: ($shift-height - $out-of-adherence-height) / 2;
+			}
+
+			.activity {
+				@include activity-layer;
+			}
+		}
+
+		.changes {
+			@include container;
+			height: $layer-row-height;
+
+			.diamond {
+				@include positioned;
+				z-index: 40;
+				top: ($layer-row-height - $diamond-size) / 2;
+				margin-left: ($diamond-size / 2) * -1;
+				transform: rotate(45deg);
+				cursor: pointer;
+				height: $diamond-size;
+				width: $diamond-size;
+
+				&.highlight {
+					height: $diamond-size + 2;
+					width: $diamond-size + 2;
+					border-radius: 50%;
+				}
+
+				&.highlight:after {
+					content: '';
+					width: $diamond-size + 8;
+					height: $diamond-size + 8;
+					display: block;
+					margin-top: -3px;
+					margin-left: -3px;
+					border-radius: 50%;
+					border: 1px solid;
+					border-color: inherit;
+				}
+			}
+		}
+
+		@mixin adherence-layer($color) {
+			@include positioned;
+			background-color: $color;
+			height: $layer-row-height;
+
+			&.highlight {
+				outline: 1px solid $color;
+				outline-offset: 2px;
+			}
+		}
+
+		.recorded-out-of-adherences {
+			@include container;
+			height: $layer-row-height;
+
+			.recorded-out-of-adherence {
+				@include adherence-layer($out-of-adherence-color);
+				cursor: pointer;
+			}
+		}
+
+		.approved-periods {
+			@include container;
+			height: $layer-row-height;
+
+			.approved-period {
+				@include adherence-layer($in-adherence-color);
+				cursor: pointer;
+				z-index: 20;
+			}
+
+			.approve-period {
+				@include adherence-layer($in-adherence-color);
+				opacity: 0.5;
+				z-index: 10;
+			}
+		}
+
+		.remove-approved-period {
+			cursor: pointer;
+			margin: 0 8px;
+		}
 	}
 
-	.adherence-bar-container{
-	  background-color: #f1f1f1;
-	  float:left;
-	  margin-top:5px;
-	  width: 75%;
+	&.historical-overview {
+		.cell-header {
+			text-align: center;
+			font-size: 9px;
+			max-width: 30px;
+			width: 30px;
+			padding-left: 0;
+			padding-right: 0;
+		}
 
-	  .adherence-bar{
-		background-color:#3c9ee5;
-		height:10px;
-	  }
-	}
+		.cell {
+			padding: 0;
+			position: relative;
+			max-width: 30px;
+			width: 30px;
+			overflow: hidden;
 
-	.adherence-value{
-	  float:left;
-	  margin-left: 6px;
-	  width: 10%;
+			.late-for-work-flag {
+				background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
+				position: absolute;
+				z-index: 1;
+				height: 7px;
+				width: 100%;
+			}
+
+			.square {
+				margin: 2px;
+				border-radius: 0.25em;
+				text-align: center;
+				padding: 3px 0px;
+				a {
+					color: inherit;
+				}
+			}
+		}
+
+		.label.late-for-work {
+			background-color: orange;
+		}
+
+		.panel.material-depth-1.card-panel {
+			width: 900px;
+		}
+
+		@media screen and (max-width: 960px) {
+			.panel.material-depth-1.card-panel {
+				width: 100%;
+			}
+		}
+
+		.card-panel-header-wrapper {
+			&.left-border {
+				border-left: 10px solid #66c2ff;
+			}
+		}
+
+		.adherence-bar-container {
+			background-color: #f1f1f1;
+			float: left;
+			margin-top: 5px;
+			width: 75%;
+
+			.adherence-bar {
+				background-color: #3c9ee5;
+				height: 10px;
+			}
+		}
+
+		.adherence-value {
+			float: left;
+			margin-left: 6px;
+			width: 10%;
+		}
 	}
-  }
 }

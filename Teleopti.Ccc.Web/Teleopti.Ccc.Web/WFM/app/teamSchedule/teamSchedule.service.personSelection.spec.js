@@ -19,13 +19,7 @@ describe("teamschedule person selection tests", function () {
 		PersonId: personId1,
 		Date: scheduleDate,
 		Shifts: [],
-		AllowSwap: function () { return false; },
-		ScheduleStartTime: function () {
-			return "2016-03-20 08:00";
-		},
-		ScheduleEndTime: function () {
-			return "2016-03-20 18:00";
-		}
+		AllowSwap: function () { return false; }
 	};
 
 	var newSchedule1 = {
@@ -42,13 +36,7 @@ describe("teamschedule person selection tests", function () {
 				}
 			}
 		],
-		AllowSwap: function () { return false; },
-		ScheduleStartTime: function () {
-			return "2016-03-20 08:00";
-		},
-		ScheduleEndTime: function () {
-			return "2016-03-20 18:00";
-		}
+		AllowSwap: function () { return false; }
 	};
 
 	newSchedule1.Shifts.forEach(function (shift) {
@@ -59,13 +47,7 @@ describe("teamschedule person selection tests", function () {
 		PersonId: personId2,
 		Date: scheduleDate,
 		Shifts: [],
-		AllowSwap: function () { return true; },
-		ScheduleStartTime: function () {
-			return "2016-03-20 08:00";
-		},
-		ScheduleEndTime: function () {
-			return "2016-03-20 18:00";
-		}
+		AllowSwap: function () { return true; }
 	};
 
 	function commonTestsInDifferentLocale() {
@@ -184,7 +166,7 @@ describe("teamschedule person selection tests", function () {
 					'Name': 'Day',
 					'ShortName': 'DY',
 					'DisplayColor': '#FFC080',
-					'ContrastColor': 'black'
+					'TextColor': 'black'
 				},
 				'Shifts': [
 					{
@@ -205,7 +187,6 @@ describe("teamschedule person selection tests", function () {
 								'Start': '2018-02-03 08:00',
 								'StartPosition': 4.545454545454546,
 								'UseLighterBorder': false,
-								'ShowDividedLine': false,
 								'Selectable': function () { return true },
 								'ToggleSelection': function () { }
 							}

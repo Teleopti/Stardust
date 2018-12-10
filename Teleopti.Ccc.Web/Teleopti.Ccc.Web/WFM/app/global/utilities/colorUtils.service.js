@@ -4,6 +4,9 @@
 	angular.module('wfm.utilities').service('colorUtils', colorUtils);
 
 	function colorUtils() {
+		//Note: for the unified look of the activity color and text in Web,
+		//please keep this color strategy synced with the one in MyTime: Teleopti.MyTimeWeb.Common.js
+		//which locates in \Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Common.js
 		var svc = this;
 
 		svc.getTextColorBasedOnBackgroundColor = function(backgroundColor) {
@@ -20,7 +23,7 @@
 			var brightness =
 				backgroundColorArr[0] * 0.299 + backgroundColorArr[1] * 0.587 + backgroundColorArr[2] * 0.114;
 
-			return brightness < 100 ? 'white' : 'black';
+			return brightness < 128 ? 'white' : 'black';
 		};
 
 		svc.hexToRGB = function(hex) {
@@ -53,7 +56,7 @@
 			if (hex.length == 1) {
 				hex += '' + hex;
 			}
-			return parseInt(hex);
+			return hex;
 		}
 	}
 })();

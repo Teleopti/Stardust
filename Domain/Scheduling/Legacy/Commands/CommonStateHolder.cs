@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	/*
 	 *  PLEASE DONT ADD MORE STATE TO THIS TYPE!
 	 */
-    public class CommonStateHolder:ICommonStateHolder
+    public class CommonStateHolder
     {
 	    private readonly IDisableDeletedFilter _disableDeleteFilter;
 	    private readonly List<IAbsence> _absences = new List<IAbsence>();

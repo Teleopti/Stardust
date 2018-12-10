@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline
 {

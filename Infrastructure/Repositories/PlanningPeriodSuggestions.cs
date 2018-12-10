@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -112,65 +111,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Select(z => z.Key)
 					.ToArray();
 		}
-
-		public IEnumerable<SuggestedPlanningPeriod> SuggestedPeriods(DateOnlyPeriod range)
-		{
-			var result = new List<Tuple<int, SuggestedPlanningPeriod>>();
-			
-			var resultingRanges = _uniqueSchedulePeriods.SelectMany(uniqueSchedulePeriod => 
-			{
-				var innerResult = new List<Tuple<int,SuggestedPlanningPeriod>>();
-				var currentDate = range.StartDate;
-				while (currentDate <= range.EndDate)
-				{
-					var rangeForPeriod = new SchedulePeriodForRangeCalculation
-					{
-						Culture =
-							CultureInfo.GetCultureInfo(uniqueSchedulePeriod.Culture.GetValueOrDefault(CultureInfo.CurrentCulture.LCID)),
-						Number = uniqueSchedulePeriod.Number,
-						PeriodType = uniqueSchedulePeriod.PeriodType,
-						StartDate = new DateOnly(uniqueSchedulePeriod.DateFrom)
-					};
-					var singlePeriod = new Tuple<int,SuggestedPlanningPeriod>(uniqueSchedulePeriod.Priority,new SuggestedPlanningPeriod
-					{
-						PeriodType = uniqueSchedulePeriod.PeriodType,
-						Number = uniqueSchedulePeriod.Number,
-						Range = _schedulePeriodRangeCalculator.PeriodForType(currentDate, rangeForPeriod)
-					});
-
-					currentDate = singlePeriod.Item2.Range.EndDate.AddDays(1);
-					var rangeForDoublePeriod = new SchedulePeriodForRangeCalculation
-					{
-						Culture =
-							CultureInfo.GetCultureInfo(uniqueSchedulePeriod.Culture.GetValueOrDefault(CultureInfo.CurrentCulture.LCID)),
-						Number = uniqueSchedulePeriod.Number,
-						PeriodType = uniqueSchedulePeriod.PeriodType,
-						StartDate = new DateOnly(uniqueSchedulePeriod.DateFrom)
-					};
-					var doublePeriod =new Tuple<int, SuggestedPlanningPeriod>(uniqueSchedulePeriod.Priority, new SuggestedPlanningPeriod
-					{
-						PeriodType = uniqueSchedulePeriod.PeriodType,
-						Number = uniqueSchedulePeriod.Number*2,
-						Range = new DateOnlyPeriod(singlePeriod.Item2.Range.StartDate, _schedulePeriodRangeCalculator.PeriodForType(currentDate, rangeForDoublePeriod).EndDate)
-					});
-					innerResult.Add(singlePeriod);
-					innerResult.Add(doublePeriod);
-
-				}
-				return innerResult;
-			});
-
-			result.AddRange(resultingRanges);
-			return
-				result.Where(r => r.Item2.Range.StartDate > new DateOnly(_now.UtcDateTime()))
-					.GroupBy(i => i.Item2)
-					.Select(s => new {s.Key, Score = s.Sum(v => v.Item1)})
-					.OrderByDescending(x => x.Score)
-					.ThenBy(y => y.Key.Range.StartDate)
-					.Select(z => z.Key)
-					.ToArray();
-		}
-
 
 		private static SchedulePeriodForRangeCalculation rangeCalculation(AggregatedSchedulePeriod aggregatedSchedulePeriod)
 		{

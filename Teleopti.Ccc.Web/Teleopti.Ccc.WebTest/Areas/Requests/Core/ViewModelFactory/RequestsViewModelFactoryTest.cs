@@ -10,25 +10,29 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
@@ -42,12 +46,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IPersonRequestRepository PersonRequestRepository;
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakePeopleSearchProvider PeopleSearchProvider;
-		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeToggleManager ToggleManager;
 		public IUserCulture UserCulture;
 		public IApplicationRoleRepository ApplicationRoleRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+
+		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
+		public FullPermission Permission;
+		public ICurrentScenario Scenario;
+
+		public IMutateNow Now;
 
 
 		private IPerson[] people;
@@ -83,6 +93,210 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
 			result.ToList()[1].Shifts.Count().Should().Be.EqualTo(6);
+		}
+
+		[Test]
+		public void ShouldGetNewStatusForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.New);
+		}
+
+		[Test]
+		public void ShouldGetPendingStatusForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			personRequest.ForcePending();
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.Pending);
+		}
+
+		[Test]
+		public void ShouldGetApprovedStatusForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			personRequest.ForcePending();
+			personRequest.Approve(
+				new AbsenceRequestApprovalService(Scenario.Current(), new ScheduleDictionary(Scenario.Current(), new ScheduleDateTimePeriod(new DateTimePeriod(2015, 10, 1, 2015, 10, 10)), new PersistableScheduleDataPermissionChecker(new FullPermission()), new FullPermission()),
+					new FakeNewBusinessRuleCollection(), new DoNothingScheduleDayChangeCallBack(),
+					new FakeGlobalSettingDataRepository(),
+					new CheckingPersonalAccountDaysProvider(PersonAbsenceAccountRepository)),
+				new PersonRequestAuthorizationCheckerForTest(), true);
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.Approved);
+		}
+
+		[Test]
+		public void ShouldGetWaitlistedStatusForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			personRequest.ForcePending();
+			personRequest.Deny("waitlisted", new PersonRequestAuthorizationCheckerForTest(), null,
+				PersonRequestDenyOption.AutoDeny);
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.Waitlisted);
+		}
+
+		[Test]
+		public void ShouldGetDeniedStatusForAbsenceRequest()
+		{
+			Now.Is(new DateTime(2015, 10, 01, 00, 00, 00, DateTimeKind.Utc));
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), false);
+
+			var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				BetweenDays = new MinMax<int>(0, 10),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2015, 10, 01, 2015, 10, 30)
+			};
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
+
+			var person = PersonFactory.CreatePerson("test1").WithId();
+			person.WorkflowControlSet = workflowControlSet;
+			setUpPerson(person);
+
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 3));
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			personRequest.ForcePending();
+			personRequest.Deny("denied", new PersonRequestAuthorizationCheckerForTest(), null,
+				PersonRequestDenyOption.AutoDeny);
+
+			PersonRequestRepository.Add(personRequest);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.ToList()[0].Status.Should().Be.EqualTo(PersonRequestStatus.Denied);
 		}
 
 		[Test]

@@ -2,7 +2,8 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {

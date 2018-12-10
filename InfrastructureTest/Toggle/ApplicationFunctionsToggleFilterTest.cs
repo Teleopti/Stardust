@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 	public class ApplicationFunctionsToggleFilterTest
 	{
 		[Test]
-		[TestCase(Toggles.Report_Remove_Realtime_AuditTrail_44006, DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport)]
-		[TestCase(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560, DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport)]
 		[TestCase(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559, DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport)]
 		public void ShouldHideApplicationFunctionWithToggleOn(Toggles toggle, string applicationFunctionPath)
 		{
@@ -47,8 +45,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		{
 			var toggleManager = new FakeToggleManager();
 			toggleManager.Enable(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559);
-			toggleManager.Enable(Toggles.Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560);
-			toggleManager.Enable(Toggles.Report_Remove_Realtime_AuditTrail_44006);
 
 			var factory = new DefinedRaptorApplicationFunctionFactory();
 			var dataSource = new FakeCurrentDatasource("TestDataSource");
@@ -73,11 +69,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		}
 
 		[Test]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Gamification)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.WebApproveOrDenyRequest)]
@@ -110,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 		[TestCase(DefinedRaptorApplicationFunctionPaths.BpoExchange)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.ChatBot)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.Insights)]
-		[TestCase(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport)]
+		[TestCase(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport)]
 		[TestCase(DefinedRaptorApplicationFunctionPaths.EditInsightsReport)]
 		public void ShouldHideApplicationFunctionWithoutLicenseOption(string applicationFunctionPath)
 		{

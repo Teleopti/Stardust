@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 			this.outlierBox.Name = "outlierBox";
 			this.outlierBox.Size = new System.Drawing.Size(161, 110);
 			this.outlierBox.TabIndex = 0;
-			this.outlierBox.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Interfaces.Domain.DateOnly>>(this.outlierBox_AddOutlier);
+			this.outlierBox.AddOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly>>(this.outlierBox_AddOutlier);
 			this.outlierBox.DeleteOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<IOutlier>>(this.outlierBox_DeleteOutlier);
 			this.outlierBox.UpdateOutlier += new System.EventHandler<Teleopti.Ccc.Domain.Common.CustomEventArgs<IOutlier>>(this.outlierBox_UpdateOutlier);
 			// 

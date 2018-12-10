@@ -2,7 +2,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IPersonAbsenceAccount FetchPersonAbsenceAccount(IPerson person, IAbsence absence)
 		{
-			var personAccounts = _provider.Find(person);
+			var personAccounts = _provider.Find(person, absence);
 			return personAccounts.Find(absence);
 		}
 

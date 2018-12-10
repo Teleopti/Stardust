@@ -6,9 +6,9 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Forecasting.Template;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
-using TimePeriod = Teleopti.Interfaces.Domain.TimePeriod;
+using TimePeriod = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriod;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {

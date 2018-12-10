@@ -40,7 +40,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.QuickForecastPage
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 using Wizard = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard.Wizard;
 
@@ -1400,7 +1399,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 								var firstPageFromPages = (SelectExportType)pages.FirstPage;
 								if (b)
 								{
-									pages.ChangePages(PropertyPagesHelper.GetExportSkillToFilePages(firstPageFromPages));
+									pages.ChangePages(PropertyPagesHelper.GetExportSkillToFilePages(firstPageFromPages, _staffingCalculatorServiceFacade));
 								}
 								else
 								{
@@ -1408,7 +1407,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 										PropertyPagesHelper.GetExportAcrossBusinessUnitsPages(firstPageFromPages));
 								}
 							});
-					var exportToFilePages = PropertyPagesHelper.GetExportSkillToFilePages(firstPage);
+					var exportToFilePages = PropertyPagesHelper.GetExportSkillToFilePages(firstPage, _staffingCalculatorServiceFacade);
 
 					pages.Initialize(exportToFilePages);
 					using (var wizard = new WizardNoRoot<ExportSkillModel>(pages, _container))

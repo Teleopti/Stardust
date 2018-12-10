@@ -1,4 +1,0 @@
-namespace Teleopti.Ccc.TestCommon
-{
-
-}

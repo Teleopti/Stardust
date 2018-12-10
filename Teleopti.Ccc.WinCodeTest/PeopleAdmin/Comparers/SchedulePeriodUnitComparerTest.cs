@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCodeTest.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 #endregion
 

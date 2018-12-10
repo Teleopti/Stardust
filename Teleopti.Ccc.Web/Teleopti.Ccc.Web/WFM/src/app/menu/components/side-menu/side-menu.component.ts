@@ -31,14 +31,15 @@ const GROUPS: AreaGroup[] = [
 		{ InternalName: 'rta', icon: 'mdi mdi-alarm' }
 	],
 	[{ InternalName: 'seatPlan', icon: 'mdi mdi-tab-unselected' }, { InternalName: 'seatMap', icon: 'mdi mdi-tab' }],
-	[{ InternalName: 'reports', icon: 'mdi mdi-chart-bar' }, { InternalName: 'gamification', icon: 'mdi mdi-trophy' }],
 	[
-		{ InternalName: 'myTime', inNewTab: true, url: '../MyTime', icon: 'mdi mdi-calendar-clock' },
+		{ InternalName: 'reports', icon: 'mdi mdi-chart-bar' },
 		{
 			icon: 'mdi mdi-elevation-rise',
 			InternalName: 'insights'
-		}
-	]
+		},
+		{ InternalName: 'gamification', icon: 'mdi mdi-trophy' }
+	],
+	[{ InternalName: 'myTime', inNewTab: true, url: '../MyTime', icon: 'mdi mdi-calendar-clock' }]
 ];
 
 @Component({
@@ -92,9 +93,9 @@ export class SideMenuComponent implements OnInit {
 		if (!area.inNewTab) {
 			event.preventDefault();
 			if (area.CustomStateName) {
-				this.$state.go(area.CustomStateName);
+				this.$state.go(area.CustomStateName, {}, { reload: true });
 			} else {
-				this.$state.go(area.InternalName);
+				this.$state.go(area.InternalName, {}, { reload: true });
 			}
 		}
 	}

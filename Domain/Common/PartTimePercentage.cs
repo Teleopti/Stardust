@@ -1,8 +1,7 @@
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
-using Percent=Teleopti.Interfaces.Domain.Percent;
+using Percent=Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent;
 
 namespace Teleopti.Ccc.Domain.Common
 {

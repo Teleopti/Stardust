@@ -17,7 +17,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
+
 using Activity = Teleopti.Ccc.Domain.Scheduling.Activity;
 using Person = Teleopti.Ccc.Domain.Common.Person;
 using Scenario = Teleopti.Ccc.Domain.Common.Scenario;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		
 		[Test]
-		[Timeout(20000)]
+		[Timeout(30000)]
 		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 1, 5, 0,0,0,DateTimeKind.Utc);
@@ -131,21 +131,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 			}
 
 			public void UpdateUnlinkedPersonids(int[] personPeriodIds)
-			{
-				throw new NotImplementedException();
-			}
-
-			public int GetFactScheduleRowCount(int personId)
-			{
-				throw new NotImplementedException();
-			}
-
-			public int GetFactScheduleDayCountRowCount(int personId)
-			{
-				throw new NotImplementedException();
-			}
-
-			public int GetFactScheduleDeviationRowCount(int personId)
 			{
 				throw new NotImplementedException();
 			}

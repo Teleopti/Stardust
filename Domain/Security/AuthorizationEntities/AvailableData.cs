@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
@@ -26,17 +25,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             _availableSites = new List<ISite>();
             _availableBusinessUnits = new List<IBusinessUnit>();
         }
-
-	    /// <summary>
-        /// Finds the available data in the available data list by the contained application role.
-        /// </summary>
-        /// <param name="availableDataList">The available data list.</param>
-        /// <param name="applicationRole">The application role.</param>
-        /// <returns></returns>
-        public static IAvailableData FindByApplicationRole(IEnumerable<IAvailableData> availableDataList, IApplicationRole applicationRole)
-	    {
-		    return availableDataList.FirstOrDefault(availableData => availableData.ApplicationRole.Equals(applicationRole));
-	    }
 
 	    /// <summary>
         /// Gets or sets the application role.

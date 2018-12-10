@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAbsence entity)
 		{
+			if (!entity.Id.HasValue)
+				entity = entity.WithId();
 			_storage.Add(entity);
 		}
 

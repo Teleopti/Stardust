@@ -4,13 +4,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.DTOs;
-using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
@@ -23,7 +20,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly BacklogSkillTypesForecastCalculator _backlogSkillTypesForecastCalculator;
 		private readonly IUserTimeZone _userTimeZone;
 
-		private readonly IIntradayStaffingApplicationService _intradayStaffingApplicationService;
+		private readonly IntradayStaffingApplicationService _intradayStaffingApplicationService;
 
 		public SkillStaffingDataLoader(
 			IScheduledStaffingProvider scheduledStaffingProvider,
@@ -32,7 +29,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			ISkillDayLoadHelper skillDayLoadHelper, 
 			BacklogSkillTypesForecastCalculator backlogSkillTypesForecastCalculator, 
 			IUserTimeZone userTimeZone,
-			IIntradayStaffingApplicationService intradayStaffingApplicationService
+			IntradayStaffingApplicationService intradayStaffingApplicationService
 			)
 		{
 			_scheduledStaffingProvider = scheduledStaffingProvider;

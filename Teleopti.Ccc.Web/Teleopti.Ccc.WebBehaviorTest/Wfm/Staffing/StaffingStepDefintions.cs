@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 		[Given(@"there is a skill to monitor called '(.*)' with activity '(.*')")]
 		public void GivenThereIsASkillToMonitorCalled(string skillName, string activity)
 		{
-			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
-
 			DataMaker.Data().Apply(new ActivitySpec
 			{
 				Name = activity
@@ -77,8 +75,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 		[Given(@"there is a skill with name '(.*)' with activity '(.*)'")]
 		public void GivenThereIsASkillWithName(string skillName, string activity)
 		{
-			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
-
 			DataMaker.Data().Apply(new ActivitySpec
 			{
 				Name = activity

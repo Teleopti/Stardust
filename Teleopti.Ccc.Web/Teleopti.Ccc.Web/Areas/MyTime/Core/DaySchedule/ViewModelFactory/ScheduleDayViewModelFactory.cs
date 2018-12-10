@@ -6,7 +6,7 @@ using Teleopti.Ccc.Infrastructure.Staffing;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.DaySchedule;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 {

@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 {
@@ -170,7 +171,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 				.WithSchedule(personId, Guid.NewGuid(), "2018-10-19 10:00", "2018-10-19 11:00")
 				.WithStateGroup(state, "state")
 				.WithStateCode("statecode")
-				.WithMappedRule("statecode", null, 0, "rule", Domain.Configuration.Adherence.Out, Color.Pink)
+				.WithMappedRule("statecode", null, 0, "rule", Adherence.Configuration.Adherence.Out, Color.Pink)
 				;
 			Now.Is("2018-10-18 17:00");
 			Target.ProcessState(new StateForTest

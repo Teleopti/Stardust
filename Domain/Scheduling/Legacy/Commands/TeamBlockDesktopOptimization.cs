@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityD
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {

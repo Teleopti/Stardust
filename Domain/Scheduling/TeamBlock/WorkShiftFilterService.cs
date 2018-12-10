@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly DisallowedShiftProjectionCachesFilter _disallowedShiftProjectionCachesFilter;
 		private readonly ActivityRequiresSkillProjectionFilter _activityRequiresSkillProjectionFilter;
 		private readonly OpenHoursFilter _openHoursFilter;
-		private readonly IMaxWorkTimeFullWeekSkillExtractor _maxWorkTimeFullWeekSkillExtractor;
+		private readonly IOpenHoursSkillExtractor _openHoursSkillExtractor;
 
 		public WorkShiftFilterService(ActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			BusinessRulesShiftFilter businessRulesShiftFilter,
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			DisallowedShiftProjectionCachesFilter disallowedShiftProjectionCachesFilter,
 			ActivityRequiresSkillProjectionFilter activityRequiresSkillProjectionFilter,
 			OpenHoursFilter openHoursFilter,
-			IMaxWorkTimeFullWeekSkillExtractor maxWorkTimeFullWeekSkillExtractor)
+			IOpenHoursSkillExtractor openHoursSkillExtractor)
 		{
 			_activityRestrictionsShiftFilter = activityRestrictionsShiftFilter;
 			_businessRulesShiftFilter = businessRulesShiftFilter;
@@ -77,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_disallowedShiftProjectionCachesFilter = disallowedShiftProjectionCachesFilter;
 			_activityRequiresSkillProjectionFilter = activityRequiresSkillProjectionFilter;
 			_openHoursFilter = openHoursFilter;
-			_maxWorkTimeFullWeekSkillExtractor = maxWorkTimeFullWeekSkillExtractor;
+			_openHoursSkillExtractor = openHoursSkillExtractor;
 		}
 
 		public IList<ShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
@@ -179,8 +178,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	            var matrixForPerson = matrixList.FirstOrDefault(scheduleMatrixPro => scheduleMatrixPro.Person.Equals(person));
 	            if (matrixForPerson != null)
 	            {
-					var maxWorkTimeDictionary = _maxWorkTimeFullWeekSkillExtractor.Extract(matrixForPerson, teamBlockInfo, skillDays);
-					shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions, maxWorkTimeDictionary);
+					var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, skillDays, new DateOnlyPeriod(matrixForPerson.FullWeeksPeriodDays.Min(x => x.Day), matrixForPerson.FullWeeksPeriodDays.Max(x => x.Day)), dateOnly);
+					shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions, openHoursResult);
 				}
 			}
 

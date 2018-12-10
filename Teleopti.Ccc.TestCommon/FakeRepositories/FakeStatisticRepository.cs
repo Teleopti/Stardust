@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -124,11 +124,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 
 			return new DateOnlyPeriod(new DateOnly(stats.Min(x => x.Interval)), new DateOnly(stats.Max(x => x.Interval)));
-		}
-
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
-		{
-			return _intradayStat;
 		}
 
 		private readonly List<IIntradayStatistics> _intradayStat = new List<IIntradayStatistics>();

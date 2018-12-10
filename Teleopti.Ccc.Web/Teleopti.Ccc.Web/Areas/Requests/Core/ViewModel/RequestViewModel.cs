@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public DateTime? CreatedTime { get; set; }
 		public RequestType Type { get; set; }
 		public string TypeText { get; set; }
-		public RequestStatus Status { get; set; }
+		public PersonRequestStatus Status { get; set; }
 		public string StatusText { get; set; }
 		public Description Payload { get; set; }
 		public string Team { get; set; }

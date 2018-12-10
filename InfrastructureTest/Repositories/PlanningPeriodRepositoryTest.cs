@@ -17,7 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -108,63 +108,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var defaultRange = planningPeriodSuggestions.Default().Range;
 			defaultRange.StartDate.Should().Be.EqualTo(new DateOnly(2015, 5, 1));
 			defaultRange.EndDate.Should().Be.EqualTo(new DateOnly(2015, 5, 31));
-		}
-
-		[Test]
-		public void ShouldGetSuggestions()
-		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] { () => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1) });
-			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
-
-			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6),new DateOnly(2015, 4,12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void ShouldMergeSuggestionsWithSameResultingRangeAndPeriodDetails()
-		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
-			{
-				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(startDate.AddDays(7), SchedulePeriodType.Week, 1)
-			});
-			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
-
-			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void ShouldNotMergeSuggestionsWithSamePeriodDetailsWhenRangeDiffers()
-		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
-			{
-				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(startDate.AddDays(5), SchedulePeriodType.Week, 1)
-			});
-			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
-
-			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(6);
-		}
-
-		[Test]
-		public void ShouldReturnPlanningPeriodSuggestions()
-		{
-			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
-			{
-				() => new SchedulePeriod(startDate, SchedulePeriodType.Week, 1),
-				() => new SchedulePeriod(startDate.AddDays(5), SchedulePeriodType.Week, 1)
-			});
-
-			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
-
-			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(6);
 		}
 
 		[Test]

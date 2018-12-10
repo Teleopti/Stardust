@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 using BusinessUnit = Teleopti.Ccc.Domain.Common.BusinessUnit;
 using Person = Teleopti.Ccc.Domain.Common.Person;
 using Team = Teleopti.Ccc.Domain.AgentInfo.Team;

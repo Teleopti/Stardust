@@ -8,16 +8,13 @@ namespace Teleopti.Ccc.Web.Areas.Global
 	public class VersionController : ApiController
 	{
 		private readonly SystemVersion _version;
-		private readonly IToggleManager _toggles;
 
-		public VersionController(SystemVersion version, IToggleManager toggles)
+		public VersionController(SystemVersion version)
 		{
 			_version = version;
-			_toggles = toggles;
 		}
 
 		[Route("api/Global/Version"), HttpGet]
 		public string Version() => _version.Version();
-		
 	}
 }

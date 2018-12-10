@@ -6,12 +6,12 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SeasonPages
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Interfaces.Domain;
+
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;

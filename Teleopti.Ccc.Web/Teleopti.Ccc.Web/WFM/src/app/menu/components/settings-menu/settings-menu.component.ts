@@ -14,6 +14,7 @@ export class SettingsMenuComponent {
 	visible: boolean;
 	changePasswordToggle = false;
 	isTeleoptiApplicationLogon = false;
+	UserName = '';
 
 	@ViewChild('passwordModal')
 	passwordModal: ChangePasswordComponent;
@@ -24,17 +25,18 @@ export class SettingsMenuComponent {
 		public toggleService: TogglesService,
 		public userService: UserService
 	) {
-		this.toggleService.getToggles().subscribe({
+		this.toggleService.toggles$.subscribe({
 			next: toggles => {
 				this.changePasswordToggle = toggles.Wfm_Authentication_ChangePasswordMenu_76666;
 			}
 		});
-		this.userService.getPreferences().subscribe({
+		this.userService.preferences$.subscribe({
 			next: preferences => {
 				this.isTeleoptiApplicationLogon = preferences.IsTeleoptiApplicationLogon;
+				this.UserName = preferences.UserName;
 			}
 		});
-		this.themeService.getTheme().subscribe({
+		this.themeService.theme$.subscribe({
 			next: theme => {
 				this.lowLightFilter = theme.Overlay;
 				this.darkTheme = theme.Name === 'dark';

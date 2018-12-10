@@ -4,9 +4,10 @@ using System.Linq;
 using NHibernate.Exceptions;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -77,21 +78,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
-		{
-			throw new NotImplementedException();
-		}
-
-		public int GetFactScheduleRowCount(int personId)
-		{
-			return FactScheduleRows.Count(x => x.PersonPart != null && x.PersonPart.PersonId == personId);
-		}
-
-		public int GetFactScheduleDayCountRowCount(int personId)
-		{
-			return FactScheduleDayCountRows.Count(x => x.PersonId == personId);
-		}
-
-		public int GetFactScheduleDeviationRowCount(int personId)
 		{
 			throw new NotImplementedException();
 		}

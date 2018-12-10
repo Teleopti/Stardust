@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 11, 3, 0, 0, DateTimeKind.Utc));
 
-						_testPersonAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("Möte"), period2);
+						_testPersonAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("Mï¿½te"), period2);
 
             return _testPersonAssignment;
         }

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -342,12 +341,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				});
 			}
 		}
-
-		public virtual void AddActivityFromTo(IActivity activity, DateTime start, DateTime end)
-		{
-			AddActivity(activity, new DateTimePeriod(start, end), null);
-		}
-
+		
 		public virtual void AddActivity(IActivity activity, DateTime start, DateTime end)
 		{
 			AddActivity(activity, new DateTimePeriod(start, end), null);

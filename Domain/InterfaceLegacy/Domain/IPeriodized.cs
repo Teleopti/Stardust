@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Interface for periodized items, to make queries easier...

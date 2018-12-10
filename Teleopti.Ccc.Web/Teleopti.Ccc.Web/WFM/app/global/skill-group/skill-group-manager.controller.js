@@ -29,7 +29,8 @@
 		'$translate',
 		'skillIconService',
 		'$rootScope',
-		'Toggle'
+		'Toggle',
+		'$timeout'
 	];
 
 	function SkillGroupManagerController(
@@ -41,7 +42,8 @@
 		$translate,
 		skillIconService,
 		$rootScope,
-		toggleService
+		toggleService,
+		$timeout
 	) {
 		var _ = $rootScope._;
 		var originalGroups = [];
@@ -338,8 +340,10 @@
 		$scope.$on('$stateChangeStart', function(event, next, current) {
 			if (vm.canSave) {
 				event.preventDefault();
-				vm.stateName = next.name;
-				vm.closeConfirmation = true;
+				$timeout(function() {
+					vm.stateName = next.name;
+					vm.closeConfirmation = true;
+				}, 1);
 			}
 		});
 	}

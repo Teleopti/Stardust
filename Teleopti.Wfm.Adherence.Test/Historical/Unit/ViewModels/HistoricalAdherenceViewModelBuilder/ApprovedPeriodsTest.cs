@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 	[TestFixture]
 	public class ApprovedPeriodsTest
 	{
-		public Adherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
+		public Adherence.Historical.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakeUserTimeZone TimeZone;
 

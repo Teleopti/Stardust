@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces
 {

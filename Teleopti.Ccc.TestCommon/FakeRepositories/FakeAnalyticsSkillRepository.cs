@@ -87,11 +87,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakeFactAgentSkills.RemoveAll(a => a.PersonId == personId);
 		}
 
-		public IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId)
-		{
-			return fakeFactAgentSkills.Where(a => a.PersonId == personId).ToList();
-		}
-
 		public void AddOrUpdateSkill(AnalyticsSkill analyticsSkill)
 		{
 			var existings = fakeSkills.FirstOrDefault(x => x.SkillCode == analyticsSkill.SkillCode);

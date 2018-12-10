@@ -19,16 +19,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts
         void ShowSmartPart(SmartPartInformation smartPartInfo, IList<SmartPartParameter> parameters);
 
         /// <summary>
-        /// Refreshsmarts the part.
-        /// </summary>
-        /// <param name="smartPartId">The smart part id.</param>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-08-05
-        /// </remarks>
-        void RefreshSmartPart(string smartPartId);
-
-        /// <summary>
         /// Clears all smart parts.
         /// </summary>
         /// <remarks>

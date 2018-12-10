@@ -3,6 +3,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 

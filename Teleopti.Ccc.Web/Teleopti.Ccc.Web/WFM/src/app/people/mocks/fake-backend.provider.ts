@@ -14,6 +14,10 @@ import { LOGONS } from './logons';
 import { PEOPLE } from './people';
 import { ROLES } from './roles';
 
+/**
+ * This is not a preferred way of testing. Avoid this.
+ * @deprecated
+ */
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
 	constructor() {}

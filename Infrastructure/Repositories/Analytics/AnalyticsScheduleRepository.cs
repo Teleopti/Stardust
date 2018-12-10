@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
-using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics.Tables;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
@@ -234,30 +232,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			{
 				throw new ConstraintViolationWrapperException(e);
 			}
-		}
-
-		public int GetFactScheduleRowCount(int personId)
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select count(1) from mart.fact_schedule WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
-				.SetInt32(nameof(personId), personId)
-				.UniqueResult<int>();
-		}
-
-		public int GetFactScheduleDayCountRowCount(int personId)
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select count(1) from mart.fact_schedule_day_count WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
-				.SetInt32(nameof(personId), personId)
-				.UniqueResult<int>();
-		}
-
-		public int GetFactScheduleDeviationRowCount(int personId)
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select count(1) from mart.fact_schedule_deviation WITH (NOLOCK) WHERE person_id =:{nameof(personId)} ")
-				.SetInt32(nameof(personId), personId)
-				.UniqueResult<int>();
 		}
 		
 		public int ShiftLengthId(int shiftLength)

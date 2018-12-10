@@ -10731,9 +10731,6 @@ Teleopti R&amp;D</value>
   <data name="ClearCampaign" xml:space="preserve">
     <value>حذف کمپین</value>
   </data>
-  <data name="RememberMe" xml:space="preserve">
-    <value>من را بیاد داری؟</value>
-  </data>
   <data name="MyTeam" xml:space="preserve">
     <value>تیم من</value>
   </data>

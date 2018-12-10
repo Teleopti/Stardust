@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.IoC;
 

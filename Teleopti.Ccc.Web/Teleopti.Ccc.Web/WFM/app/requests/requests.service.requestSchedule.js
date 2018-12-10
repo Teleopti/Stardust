@@ -19,11 +19,11 @@
 		};
 
 		svc.buildScheduleContainerStyle = function(shiftsLength, $event) {
-			var containerWidth = 762;
+			var containerWidth = 745;
 			var headerHeight = 30 + 12;
 			var shiftRowHeight = 60;
 			var containerHeight = headerHeight + shiftsLength * shiftRowHeight;
-			var containerMaxHeight = 230;
+			var containerMaxHeight = 242;
 			var iconWidth = 20;
 
 			return {
@@ -44,13 +44,10 @@
 			};
 		};
 
-		svc.buildShiftData = function(shift, requestTimezone, userTimeZone, isUsingRequestSubmitterTimeZone) {
-			var currentTimeZone = userTimeZone;
-			var targetTimeZone = isUsingRequestSubmitterTimeZone ? requestTimezone : userTimeZone;
-
+		svc.buildShiftData = function(shift, currentTimeZone, targetTimeZone) {
 			return {
 				Name: shift.Name,
-				Date: $filter('date')(shift.BelongsToDate, $locale.DATETIME_FORMATS.shortDate),
+				Date: getShiftDate(shift.BelongsToDate, currentTimeZone, targetTimeZone),
 				Periods: buildPeriods(shift.Periods, currentTimeZone, targetTimeZone),
 				IsDayOff: shift.IsDayOff,
 				DayOffName: shift.DayOffName,
@@ -60,6 +57,16 @@
 				ShiftEndTime: getShiftEndTime(shift.Periods, currentTimeZone, targetTimeZone)
 			};
 		};
+
+		function getShiftDate(belongsToDate, currentTimeZone, targetTimeZone) {
+			return $filter('date')(
+				moment
+					.tz(belongsToDate, currentTimeZone)
+					.tz(targetTimeZone)
+					.format('YYYY-MM-DDTHH:mm:ss'),
+				$locale.DATETIME_FORMATS.shortDate
+			);
+		}
 
 		function getShiftStartTime(periods, currentTimeZone, targetTimeZone) {
 			if (!periods || periods.length == 0) return '';
@@ -71,7 +78,10 @@
 
 			var shiftEndTime = svc.formatTime(periods[periods.length - 1].EndTime, currentTimeZone, targetTimeZone);
 
-			if (moment(periods[0].StartTime).isBefore(moment(periods[periods.length - 1].EndTime), 'day')) {
+			var shiftStartDateTime = moment.tz(periods[0].StartTime, currentTimeZone).tz(targetTimeZone);
+			var shiftEndDateTime = moment.tz(periods[periods.length - 1].EndTime, currentTimeZone).tz(targetTimeZone);
+
+			if (moment.duration(shiftEndDateTime.startOf('day') - shiftStartDateTime.startOf('day')).days() == 1) {
 				shiftEndTime += '+1';
 			}
 
@@ -115,13 +125,17 @@
 		}
 
 		function buildShiftCategoryVisualData(category) {
-			return {
-				Id: category.Id,
-				ShortName: category.ShortName,
-				Name: category.Name,
-				DisplayColor: category.DisplayColor,
-				TextColor: colorUtils.getTextColorBasedOnBackgroundColor(category.DisplayColor)
-			};
+			if (category) {
+				return {
+					Id: category.Id,
+					ShortName: category.ShortName,
+					Name: category.Name,
+					DisplayColor: category.DisplayColor,
+					TextColor: colorUtils.getTextColorBasedOnBackgroundColor(category.DisplayColor)
+				};
+			}
+
+			return null;
 		}
 	}
 })();

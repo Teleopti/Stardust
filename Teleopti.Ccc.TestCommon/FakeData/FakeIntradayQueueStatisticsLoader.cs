@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
@@ -17,13 +17,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return _latestStatisticsTimeAndWorkload
 				.Where(x => x.StartTime >= startOfDayUtc)
-				.OrderBy(o => o.StartTime)
-				.ToList();
-		}
-
-		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<ISkill> skillList, TimeZoneInfo timeZone, DateOnly today)
-		{
-			return _latestStatisticsTimeAndWorkload
 				.OrderBy(o => o.StartTime)
 				.ToList();
 		}

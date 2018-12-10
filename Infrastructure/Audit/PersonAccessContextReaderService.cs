@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Infrastructure.Audit
 {
@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 
 		
 
-		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate)
+		public IEnumerable<AuditServiceModel> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate, string searchword)
 		{
-			var staffingAudit = _personAccessAuditRepository.LoadAudits(personId, startDate, endDate);
-			return getAuditServiceModel(staffingAudit);
+			var personAccessAudit = _personAccessAuditRepository.LoadAudits(personId, startDate, endDate, searchword);
+			return getAuditServiceModel(personAccessAudit);
 		}
 
 		

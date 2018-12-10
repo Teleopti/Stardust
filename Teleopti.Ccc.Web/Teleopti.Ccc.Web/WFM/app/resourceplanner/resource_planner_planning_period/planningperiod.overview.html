@@ -1,13 +1,10 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1>
-			<i class="mdi mdi-calendar"></i> {{'SchedulePlanningGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
-		<div class="pp-sub-title">
-			<span>{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"LL"}} - {{vm.selectedPp.EndDate |
-				amDateFormat:"LL"}}
-			</span>
-			<span ng-if="vm.isDisable()" ng-bind="vm.status" class="pp-status"></span>
-		</div>
+		<h1 style="display: inline">
+			<i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.planningGroup.Id}}/selectplanningperiod">{{vm.planningGroup.Name}}</a> /  {{vm.selectedPp.StartDate | amDateFormat:"LL"}} - {{vm.selectedPp.EndDate |
+			amDateFormat:"LL"}}
+		</h1>
+		<span ng-if="vm.isDisable()" ng-bind="vm.status" class="pp-status"></span>
 	</div>
 </div>
 <div class="con-row">
@@ -46,16 +43,11 @@
 						{{'Validation' | translate}}
 						<wfm-badge badge-model="vm.valData.totalValNum" status="'notice-error'"></wfm-badge>
 					</button>
-					<div class="wfm-btn wfm-btn-invis-default tabLink pp-setting-button" id="tabs3" ng-click="vm.showTab('tabs3')">
+					<div class="wfm-btn wfm-btn-invis-default tabLink pp-setting-button" id="tabs3" ng-click="vm.goDoRulesSetting()">
 						<i class="mdi mdi-settings"></i> {{'PlanGroupScheduling' | translate}}
-						<i class="mdi mdi-pencil pp-scheduling-setting-open" ng-click="vm.goDoRulesSetting();$event.stopPropagation();">
-							<md-tooltip>Edit scheduling setting</md-tooltip>
-						</i>
 					</div>
 					<button class="wfm-btn wfm-btn-invis-default tabLink" id="tabs4" ng-click="vm.showTab('tabs4')">
 						<i class="mdi mdi-information"></i> Planning Group Details</button>
-					<button class="wfm-btn wfm-btn-invis-disabled" ng-click="vm.goDoRulesSetting()">
-						<i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
 		</div>
@@ -153,7 +145,6 @@
 	</div>
 </div>
 <div class="pp-tabContent" id="tabs-2" pp-validation val-data="vm.valData" val-loading="vm.valLoading" val-number="vm.valNumber()"></div>
-<div class="con-row pp-tabContent" id="tabs-3" scheduling-setting is-disable="vm.isDisableDo" planning-group="vm.planningGroup"></div>
 <div class="con-row pp-tabContent" id="tabs-4" planninggroup-Detail planning-group="vm.planningGroup"></div>
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-show="vm.confirmModal">

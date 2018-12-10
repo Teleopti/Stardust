@@ -38,7 +38,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.Win.Forecasting;
 using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Interfaces.Domain;
 using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 using ToolStripItemClickedEventArgs = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs;
 

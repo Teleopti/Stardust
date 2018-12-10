@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -20,10 +19,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType)
+		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType, bool isExternal)
 		{
 			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
-				+ "from AgentBadge where BadgeType=:badgeType and Person in (:personIdList)";
+				+ "from AgentBadge where BadgeType=:badgeType and Person in (:personIdList) and IsExternal=:isExternal";
 			
 			var idList = personIdList.ToArray();
 			if (!idList.Any())

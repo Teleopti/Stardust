@@ -2,6 +2,68 @@
 	'use strict';
 
 	angular.module('adminApp')
+		.directive('timeValidationMax', function () {
+			return {
+				require: 'ngModel',
+				link: function (scope, element, attr, ctrl) {
+					function myValidation(value) {
+						scope.$watch('ctrl.form.DailyFrequencyEnd',
+							function (value) {
+								if (angular.isUndefined(ctrl.$error.pattern)) {
+									//no pattern error
+									if (angular.isDefined(value) && value !== null) {
+										var hour = value.split(":")[0];
+										var minutes = value.split(":")[1];
+
+										var endDate = new Date(2018, 12, 24, hour, minutes);
+
+										hour = ctrl.$viewValue.split(":")[0];
+										minutes = ctrl.$viewValue.split(":")[1];
+
+										var startDate = new Date(2018, 12, 24, hour, minutes);
+
+										ctrl.$setValidity('invalidStartTime', startDate < endDate);
+									}
+								}
+							});
+						
+						return value;
+					}
+					ctrl.$parsers.push(myValidation);
+				}
+			};
+		})
+		.directive('timeValidationMin', function () {
+			return {
+				require: 'ngModel',
+				link: function (scope, element, attr, ctrl) {
+					function myValidation(value) {
+						scope.$watch('ctrl.form.DailyFrequencyStart',
+							function (value) {
+								if (angular.isUndefined(ctrl.$error.pattern)) {
+									//no pattern error
+									if (angular.isDefined(value) && value !== null) {
+										var hour = value.split(":")[0];
+										var minutes = value.split(":")[1];
+
+										var startDate = new Date(2018, 12, 24, hour, minutes);
+
+										hour = ctrl.$viewValue.split(":")[0];
+										minutes = ctrl.$viewValue.split(":")[1];
+
+										var endDate = new Date(2018, 12, 24, hour, minutes);
+
+										ctrl.$setValidity('invalidEndTime', startDate < endDate);
+									}
+								}
+							});
+
+						return value;
+					}
+					ctrl.$parsers.push(myValidation);
+				}
+			};
+		})
 		.component('etlScheduleModal',
 			{
 				templateUrl: './Etl/scheduleModal.html',
@@ -13,6 +75,8 @@
 					callback: '='
 				}
 			});
+
+
 
 	function etlScheduleModal($http, tokenHeaderService) {
 		var ctrl = this;
@@ -37,6 +101,11 @@
 				)
 				.then(function (response) {
 					ctrl.jobs = response.data;
+			if (ctrl.form.hasOwnProperty('JobName') && angular.isDefined(ctrl.job)) {
+				  var jobDropdown = angular.element(document.querySelector('#jobDropdown'));
+				  var selectedJobName = jobDropdown[0].options[jobDropdown[0].selectedIndex].innerHTML;
+				  ctrl.form.JobName = getItemBasedOnName(ctrl.jobs, selectedJobName, 'JobName');
+			}
 				})
 				.catch(function (response) {
 					ctrl.jobs = [];
@@ -53,15 +122,19 @@
 							ctrl.tenants.push(response.data[i]);
 						}
 					}
+
 					ctrl.tenants.unshift({
 						TenantName: '<All>'
 					});
+
 					if (ctrl.job) {
 						editHandler();
 						return;
 					}
+
 					ctrl.form = {
-						DailyFrequencyStart: moment().format("HH:mm")
+						DailyFrequencyStart: moment().format("HH:mm"),
+						DailyFrequencyEnd: moment().format("HH:mm")
 					};
 
 					ctrl.selectedTenant = ctrl.tenants[0];
@@ -71,13 +144,11 @@
 
 		function toggleFrequencyType(form) {
 			if (ctrl.frequencyType) {
-				form.DailyFrequencyStart = null;
-				ctrl.form.DailyFrequencyStart = moment().format("HH:mm");
-				ctrl.form.DailyFrequencyEnd = moment().add(1, 'hours').format("HH:mm");
+				form.DailyFrequencyStart = moment().format("HH:mm");
+				form.DailyFrequencyEnd = moment().add(1, 'hours').format("HH:mm");
 			}
 			else {
 				form.DailyFrequencyMinute = null;
-				form.DailyFrequencyStart = null;
 				form.DailyFrequencyEnd = null;
 			}
 		}
@@ -114,7 +185,11 @@
 			if (!arr) {
 				return true;
 			}
-			return !arr.includes(name);
+
+			if (arr.indexOf(name) >= 0) {
+				return false;
+			}
+			return true;
 		}
 
 		function getItemBasedOnName(arr, name, prop) {
@@ -162,8 +237,8 @@
 
 		function editHandler() {
 			ctrl.form = {
-				DailyFrequencyEnd: moment(ctrl.job.DailyFrequencyEnd).format("HH:mm"),
 				DailyFrequencyStart: moment(ctrl.job.DailyFrequencyStart).format("HH:mm"),
+				DailyFrequencyEnd: moment(ctrl.job.DailyFrequencyEnd).format("HH:mm"),
 				Description: ctrl.job.Description,
 				JobName: ctrl.job.jobName,
 				LogDataSourceId: null,
@@ -174,8 +249,10 @@
 				InitialPeriod: {},
 				Forecast: {},
 				AgentStats: {}
-			}
+			};
+
 			handleDynamicEditValues();
+
 			if (ctrl.job.DailyFrequencyMinute) {
 				ctrl.form.DailyFrequencyMinute = angular.fromJson(ctrl.job.DailyFrequencyMinute);
 				ctrl.frequencyType = true;
@@ -185,4 +262,5 @@
 		}
 
 	}
-})();
+}
+)();

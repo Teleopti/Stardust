@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public interface IPersonAccessAuditRepository : IRepository<IPersonAccess>
 	{
-		IEnumerable<IPersonAccess> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate);
+		IEnumerable<IPersonAccess> LoadAudits(IPerson personId, DateTime startDate, DateTime endDate, string searchword = "");
 		void PurgeOldAudits(DateTime dateForPurging);
 	}
 }

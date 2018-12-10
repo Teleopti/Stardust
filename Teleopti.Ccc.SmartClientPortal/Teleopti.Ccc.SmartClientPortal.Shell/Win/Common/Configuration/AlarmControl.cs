@@ -13,8 +13,8 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
-using Teleopti.Wfm.Adherence.Domain.Infrastructure.Repositories;
+using Teleopti.Wfm.Adherence.Configuration;
+using Teleopti.Wfm.Adherence.Configuration.Repositories;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {

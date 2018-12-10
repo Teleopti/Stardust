@@ -1,30 +1,30 @@
 <div class="top-nav" role="navigation">
 
-  <div (click)="toggleMenuService.toggle()" tabindex="0" class="toggle-menu" role="button">
-    <i
-      class="mdi text-white"
-      [class.mdi-menu]="!(toggleMenuService.showMenu$ | async)"
-      [class.mdi-backburger]="toggleMenuService.showMenu$ | async"
-    ></i>
-  </div>
+	<div (click)="toggleMenuService.toggle()" tabindex="0" class="toggle-menu" role="button">
+		<i class="mdi text-white" [class.mdi-menu]="!(toggleMenuService.showMenu$ | async)" [class.mdi-backburger]="toggleMenuService.showMenu$ | async"></i>
+	</div>
 
-  <a [nzTitle]="'MainScreen' | translate" nzPlacement="bottom" nz-tooltip class="home" [href]="mainUrl" [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0">Teleopti WFM</a>
+	<a [nzTitle]="'MainScreen' | translate" nzPlacement="bottom" nz-tooltip class="home" [href]="mainUrl"
+	 [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0">Teleopti WFM</a>
 
-  <business-unit-selector [nzTitle]="'BusinessUnit'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0"></business-unit-selector>
+	<business-unit-selector [nzTitle]="'BusinessUnit'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5"
+	 [nzMouseLeaveDelay]="0"></business-unit-selector>
 
-  <div class="right-side">
-    <div class="feedback-wrapper-wrapper">
-			<a [nzTitle]="'Feedback'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank" rel="noopener">
-          <feedback></feedback>
-				</a>
-			</div>
-			
-			<a [href]="helpUrl$ | async" [nzTitle]="'HelpLabel'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" target="_blank" class="help-link" rel="noopener">
-				<i class="mdi mdi-help-circle"></i>
-    </a>
+	<div class="right-side">
+		<a class="feedback-wrapper-wrapper" [nzTitle]="'Feedback'|translate" nzPlacement="bottom" nz-tooltip
+		 [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank"
+		 rel="noopener">
+			<feedback></feedback>
+		</a>
 
-    <settings-menu class="settings-menu" [nzTitle]="'UserSettings'|translate" nzPlacement="bottom" nzOverlayClassName="tooltip" [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" nz-tooltip>      
-    </settings-menu>
-      
-  </div>
+		<a [href]="helpUrl$ | async" [nzTitle]="'HelpLabel'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5"
+		 [nzMouseLeaveDelay]="0" target="_blank" class="help-link" rel="noopener">
+			<i nz-icon type="question-circle" theme="outline" style="font-size: 18px"></i>
+		</a>
+
+		<settings-menu class="settings-menu" [nzTitle]="'UserSettings'|translate" nzPlacement="bottom" nzOverlayClassName="tooltip"
+		 [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" nz-tooltip>
+		</settings-menu>
+
+	</div>
 </div>

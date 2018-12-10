@@ -7,8 +7,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 {
 	public partial class ShiftCategoryDistributionControl : BaseUserControl, INeedShiftCategoryDistributionModel
 	{
-		private IShiftCategoryDistributionModel _model;
-
 		public ShiftCategoryDistributionControl()
 		{
 			InitializeComponent();
@@ -16,23 +14,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 				SetTexts();
 		}
 
+		public IShiftCategoryDistributionModel Model { get; private set; }
+
 		public void DisableViewShiftCategoryDistribution()
 		{
-			if(_model != null)
-				_model.ShouldUpdateViews = false;
+			if(Model != null)
+				Model.ShouldUpdateViews = false;
 		}
 
 		public void EnableViewShiftCategoryDistribution()
 		{
-			if (_model == null)
+			if (Model == null)
 				return;
-			_model.ShouldUpdateViews = true;
+			Model.ShouldUpdateViews = true;
 		}
 
 		public void SetModel(IShiftCategoryDistributionModel model)
 		{
-			_model = model;
-			_model.ShouldUpdateViews = true;
+			Model = model;
+			Model.ShouldUpdateViews = true;
 			foreach (var tabPage in tabControlShiftCategoryDistribution.TabPages)
 			{
 				var page = tabPage as TabPageAdv;

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 {
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 																							 s => (IResourceCalculationPeriod)s)));
 			var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 
-            using (getContext(combinationResources, skills, false))
+			using (getContext(combinationResources, skills, false))
 			{
 				var dateOnlyPeriod = ExtractSkillForecastIntervals.GetLongestPeriod(skills, periodUtc);
 				_resourceCalculation.ResourceCalculate(dateOnlyPeriod, resCalcData, () => getContext(combinationResources, skills, true));

@@ -170,7 +170,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Common\PermissionViewModelBuilderTest.cs" />
     <Compile Include="Configuration\Infrastructure\DatabaseTest.cs" />
     <Compile Include="Configuration\Infrastructure\RepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaMapRepositoryTest.cs" />
@@ -293,6 +292,7 @@
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderTest.cs" />
+    <Compile Include="PermissionViewModelBuilderTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\ExternalLogonReadModelPersisterTest.cs" />
@@ -413,10 +413,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
-      <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
-      <Name>Teleopti.Ccc.UserTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Adherence\Teleopti.Wfm.Adherence.csproj">
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>

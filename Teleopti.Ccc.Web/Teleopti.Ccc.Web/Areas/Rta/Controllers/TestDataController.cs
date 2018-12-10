@@ -16,10 +16,13 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 using Teleopti.Wfm.Adherence.Domain;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.Infrastructure;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {

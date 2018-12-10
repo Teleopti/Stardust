@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using SkillFactory = Teleopti.Ccc.TestCommon.FakeData.SkillFactory;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer

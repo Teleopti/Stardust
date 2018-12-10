@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WebTest.Areas.Global
 {
@@ -213,11 +213,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			}
 
 			return people.Select(p => p.Id.Value).ToList();
-		}
-
-		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			throw new NotImplementedException();
 		}
 
 		private IEnumerable<IPerson> filterByRole(IDictionary<PersonFinderField, string> searchCriteria, IEnumerable<IPerson> people)

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personRequest = createPersonRequest();
 			personRequest.Person.WorkflowControlSet
 				= WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
-			personRequest.Request = new AbsenceRequest(absence, new Interfaces.Domain.DateTimePeriod(2017, 8, 30, 8, 2017, 8, 30, 9));
+			personRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2017, 8, 30, 8, 2017, 8, 30, 9));
 			personRequest.Deny(string.Empty, Authorization, personRequestDenyOption: PersonRequestDenyOption.AutoDeny);
 
 			var command = new DenyRequestCommand

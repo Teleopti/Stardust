@@ -74,7 +74,6 @@
 				if (svc.personInfo[personId]) {
 					svc.personInfo[personId].OrderIndex = personSchedule.Index;
 					svc.personInfo[personId].Timezone = personSchedule.Timezone;
-					svc.personInfo[personId].ScheduleEndTime = personSchedule.ScheduleEndTime();
 					svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
 
 					personSchedule.Shifts.forEach(function (shift) {
@@ -240,8 +239,8 @@
 			}
 
 			var isBothAllowSwap = svc.personInfo[personIds[0]].AllowSwap && svc.personInfo[personIds[1]].AllowSwap;
-			var isOnlyTodaySchedules = serviceDateFormatHelper.getDateOnly(svc.personInfo[personIds[0]].ScheduleStartTime)
-				=== serviceDateFormatHelper.getDateOnly(svc.personInfo[personIds[1]].ScheduleStartTime);
+			var isOnlyTodaySchedules = svc.personInfo[personIds[0]].ScheduleDate
+				=== svc.personInfo[personIds[1]].ScheduleDate;
 			var isBothOnSameTimezone = svc.personInfo[personIds[0]].Timezone.IanaId === svc.personInfo[personIds[1]].Timezone.IanaId;
 			return isBothAllowSwap && isOnlyTodaySchedules && isBothOnSameTimezone;
 		};
@@ -279,7 +278,6 @@
 
 		svc.syncProjectionSelection = syncProjectionSelection;
 
-
 		function SelectedAbsence(absenceId, date) {
 			this.absenceId = absenceId;
 			this.date = date;
@@ -298,7 +296,6 @@
 					serviceDateFormatHelper.getDateOnly(this.date) === serviceDateFormatHelper.getDateOnly(other.date);
 			}
 		}
-
 
 		function lookUpIndex(array, target) {
 			var index = -1;
@@ -324,8 +321,8 @@
 				IsDayOff: isDayOff,
 				IsEmptyDay: isEmptyDay,
 				IsFullDayAbsence: personSchedule.IsFullDayAbsence,
-				ScheduleStartTime: personSchedule.ScheduleStartTime(),
-				ScheduleEndTime: personSchedule.ScheduleEndTime(),
+				ScheduleDate: personSchedule.Date,
+				ScheduleEndTimeMoment: personSchedule.ScheduleEndTimeMoment && personSchedule.ScheduleEndTimeMoment(),
 				SelectedAbsences: absences || [],
 				SelectedActivities: activities || [],
 				Timezone: personSchedule.Timezone,

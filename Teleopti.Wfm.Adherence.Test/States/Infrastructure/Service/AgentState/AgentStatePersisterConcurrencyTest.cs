@@ -12,6 +12,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
@@ -114,7 +115,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 				addOneTo(all);
 			}
 
-			private void addOneTo(IEnumerable<Domain.Service.AgentState> all)
+			private void addOneTo(IEnumerable<Adherence.States.AgentState> all)
 			{
 				all.ForEach(model =>
 				{
@@ -141,13 +142,13 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState
 			}
 
 			[UnitOfWork]
-			public virtual Domain.Service.AgentState Get(Guid personId)
+			public virtual Adherence.States.AgentState Get(Guid personId)
 			{
 				return _persister.ReadForTest(personId).Single();
 			}
 
 			[UnitOfWork]
-			public virtual IEnumerable<Domain.Service.AgentState> GetAll()
+			public virtual IEnumerable<Adherence.States.AgentState> GetAll()
 			{
 				return _persister.ReadForTest();
 			}

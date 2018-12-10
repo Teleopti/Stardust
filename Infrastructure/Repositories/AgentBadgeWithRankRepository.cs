@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 
 			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
-				+ "from AgentBadgeWithRank where BadgeType=:badgeType and Person in (:personIdList)";
+				+ "from AgentBadgeWithRank where BadgeType=:badgeType and Person in (:personIdList) and IsExternal = 0";
 			
 			var result = new List<IAgentBadgeWithRank>();
 			var batch = idList.Batch(1000);

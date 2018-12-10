@@ -11,7 +11,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
-using Teleopti.Interfaces.Domain;
+
 using Size = System.Drawing.Size;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting

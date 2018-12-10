@@ -6,7 +6,7 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
 {

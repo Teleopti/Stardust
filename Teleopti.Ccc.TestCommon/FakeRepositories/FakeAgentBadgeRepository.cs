@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -35,12 +35,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_agentBadges.Clear();
 		}
 
-		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType)
+		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType, bool isExternal)
 		{
 			return (from agentBadge in _agentBadges
 				from personId in personIdList
 				where personId == agentBadge.Person 
 					  && badgeType == agentBadge.BadgeType
+					  && isExternal == agentBadge.IsExternal
 				select agentBadge).ToList();
 		}
 

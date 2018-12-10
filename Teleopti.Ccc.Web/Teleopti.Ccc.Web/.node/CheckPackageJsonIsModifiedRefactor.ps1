@@ -36,8 +36,8 @@ function renewCheck([String]$FilePath, [String]$HashFilePath) {
     return $Status;
 } 
 
-$CheckWfm = renewCheck "..\WFM\Package.json" ".\WfmFileHash.txt"
-$CheckWfmNodeMoudle = checkNodeModules "..\WFM\node_modules"
+$CheckWfm = renewCheck "$PSScriptRoot\..\WFM\Package.json" "$PSScriptRoot\WfmFileHash.txt"
+$CheckWfmNodeMoudle = checkNodeModules "$PSScriptRoot\..\WFM\node_modules"
 
 if (($CheckWfm -eq "isChanged") -or ($CheckWfmNodeMoudle -eq $False)) {
     return "WFM"

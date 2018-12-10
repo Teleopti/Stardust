@@ -2,26 +2,10 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface ITeamDayOffModifier
-	{
-		void AddDayOffForTeamAndResourceCalculate(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-														   ITeamInfo teamInfo, DateOnly dateOnly, IDayOffTemplate dayOffTemplate);
-
-		void RemoveDayOffForTeam(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                                                      ITeamInfo teamInfo, DateOnly dateOnly);
-
-		void RemoveDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                                           IPerson person, DateOnly dateOnly);
-
-		void AddDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IPerson person,
-		                        DateOnly dateOnly, IDayOffTemplate dayOffTemplate, bool resourceCalculate);
-	}
-
-	public class TeamDayOffModifier : ITeamDayOffModifier
+	public class TeamDayOffModifier
 	{
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayForPerson> _scheduleDayForPerson;
@@ -70,7 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				RemoveDayOffForMember(schedulePartModifyAndRollbackService, person, dateOnly);
 			}
-
 		}
 
 		public void RemoveDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,

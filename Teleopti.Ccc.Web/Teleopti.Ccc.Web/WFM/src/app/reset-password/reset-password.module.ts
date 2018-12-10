@@ -37,7 +37,7 @@ import { ResetPasswordPageComponent } from './pages/reset-password.component';
 })
 export class ResetPasswordModule {
 	constructor(private translate: TranslateService, private interceptorOverrideService: InterceptorOverrideService) {
-		this.interceptorOverrideService.setIgnoreAll(true);
+		this.interceptorOverrideService.shouldIntercept = true;
 		this.translate.setDefaultLang(navigator.language);
 	}
 }

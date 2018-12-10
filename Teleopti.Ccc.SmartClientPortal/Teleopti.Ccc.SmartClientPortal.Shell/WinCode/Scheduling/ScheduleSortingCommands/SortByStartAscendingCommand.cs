@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands
 {
     public class SortByStartAscendingCommand : ScheduleSortCommandBase, IScheduleSortCommand
     {
-        public SortByStartAscendingCommand(ISchedulerStateHolder schedulerState):base(schedulerState)
+        public SortByStartAscendingCommand(SchedulingScreenState schedulerState):base(schedulerState)
         {}
 
         public void Execute(DateOnly dateToExecuteOn)

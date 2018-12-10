@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Ccc.DomainTest.Common
 {

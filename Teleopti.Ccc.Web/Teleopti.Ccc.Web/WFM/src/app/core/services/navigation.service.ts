@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
 
@@ -5,15 +6,15 @@ type StateId = string;
 
 @Injectable()
 export class NavigationService {
-	constructor(@Inject('$state') private $state: IStateService) {}
+	constructor(@Inject(DOCUMENT) private document: Document, @Inject('$state') private $state: IStateService) {}
 
-	public go(state: StateId, resetScroll = true): void {
-		this.$state.go(state);
+	public go(state: StateId, params?: {}, resetScroll = true): void {
+		this.$state.go(state, params);
 		if (resetScroll) this.resetScroll();
 	}
 
 	private resetScroll() {
-		const element = document.getElementById('materialcontainer');
+		const element = this.document.getElementById('materialcontainer');
 		if (element) element.scrollTop = 0;
 	}
 }

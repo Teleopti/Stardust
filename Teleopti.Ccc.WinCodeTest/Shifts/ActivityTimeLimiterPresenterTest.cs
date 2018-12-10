@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
@@ -114,22 +114,6 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
                 _target.DeleteLimiter(new ReadOnlyCollection<int>(new List<int> {0}));
                 Assert.AreEqual(0, _target.ModelCollection.Count);
             }
-        }
-
-        [Test]
-        public void VerifySetAccessibilityDates()
-        {
-            ActivityTimeLimiter myLimiter = new ActivityTimeLimiter(ActivityFactory.CreateActivity("doWork"),
-                TimeSpan.FromHours(1),
-                OperatorLimiter.LessThen);
-
-            _target.SetActivityTimeLimiterAdapters(new ReadOnlyCollection<IActivityTimeLimiterViewModel>(
-                new List<IActivityTimeLimiterViewModel>
-                    {
-                    new ActivityTimeLimiterViewModel(_ruleSetCollection[0], myLimiter)
-                }
-            ));
-            Assert.AreEqual(1, _target.ModelCollection.Count);
         }
 
 		[Test]

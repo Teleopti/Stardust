@@ -1,5 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {

@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class FilterHourlyAvailabilityView : BaseDialogForm
 	{
 		private readonly FilterHourlyAvailabilityPresenter _presenter;
-		public FilterHourlyAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
+		public FilterHourlyAvailabilityView(DateOnly defaultDate, SchedulingScreenState schedulerStateHolder)
 		{
 			InitializeComponent();
 			datePicker.Value = defaultDate.Date;

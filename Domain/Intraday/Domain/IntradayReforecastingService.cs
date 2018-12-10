@@ -5,23 +5,8 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Intraday.Domain
 {
-	public interface IIntradayReforecastingService
+	public class IntradayReforecastingService
 	{
-		IEnumerable<StaffingInterval> ReforecastAllSkills(
-			IEnumerable<StaffingInterval> forecastedAgents,
-			IEnumerable<SkillIntervalStatistics> forecastedVolume,
-			IEnumerable<SkillIntervalStatistics> actualVolume,
-			IEnumerable<DateTime> timeSeries,
-			DateTime startReforecastFromTimeUtc);
-	}
-
-	public class IntradayReforecastingService : IIntradayReforecastingService
-	{
-		public IntradayReforecastingService()
-		{
-
-		}
-
 		public IEnumerable<StaffingInterval> ReforecastAllSkills(
 			IEnumerable<StaffingInterval> forecastedAgents,
 			IEnumerable<SkillIntervalStatistics> forecastedVolume,

@@ -19,7 +19,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {

@@ -170,7 +170,6 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="Analytics\AnalyticsSite.cs" />
-    <Compile Include="Aop\AuditTrailAspect.cs" />
     <Compile Include="Aop\PostActionAuditAspect.cs" />
     <Compile Include="Aop\AuditTrailAttribute.cs" />
     <Compile Include="Aop\IHandleContextAction.cs" />
@@ -212,6 +211,7 @@
     <Compile Include="ApplicationLayer\Intraday\ISkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
+    <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestAvailability.cs" />
     <Compile Include="Auditing\ITenantAudit.cs" />
     <Compile Include="Auditing\PurgeAuditRunner.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
@@ -235,10 +235,41 @@
     <Compile Include="Infrastructure\Events\SharedMinuteTickEvent.cs" />
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
+    <Compile Include="InterfaceLegacy\Domain\DateHelper.cs" />
+    <Compile Include="InterfaceLegacy\Domain\DateOnly.cs" />
+    <Compile Include="InterfaceLegacy\Domain\DateOnlyPeriod.cs" />
+    <Compile Include="InterfaceLegacy\Domain\DateTimePeriod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InterfaceLegacy\Domain\DetailLevel.cs" />
+    <Compile Include="InterfaceLegacy\Domain\EmploymentType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="InterfaceLegacy\Domain\IApplicationData.cs" />
+    <Compile Include="InterfaceLegacy\Domain\ICurrentSchedulingSource.cs" />
+    <Compile Include="InterfaceLegacy\Domain\InParameter.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IntervalDefinition.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IPersonInfoModel.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IStateReader.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserCulture.cs" />
+    <Compile Include="InterfaceLegacy\Domain\MinMax.cs" />
+    <Compile Include="InterfaceLegacy\Domain\ParsedTimeOfDay.cs" />
+    <Compile Include="InterfaceLegacy\Domain\Percent.cs" />
     <Compile Include="InterfaceLegacy\Domain\PersonInfoForShiftTradeFilter.cs" />
+    <Compile Include="InterfaceLegacy\Domain\StateHolderReader.cs" />
+    <Compile Include="InterfaceLegacy\Domain\TeleoptiAuthenticationHeaderNames.cs" />
     <Compile Include="InterfaceLegacy\Domain\ThisCulture.cs" />
+    <Compile Include="InterfaceLegacy\Domain\TimeFormatsType.cs" />
     <Compile Include="InterfaceLegacy\Domain\TimeFormatter.cs" />
+    <Compile Include="InterfaceLegacy\Domain\TimeHelper.cs" />
+    <Compile Include="InterfaceLegacy\Domain\TimePeriod.cs" />
+    <Compile Include="InterfaceLegacy\Domain\TimeZoneHelper.cs" />
+    <Compile Include="InterfaceLegacy\Domain\TimeZoneInfoExtensions.cs" />
+    <Compile Include="InterfaceLegacy\Infrastructure\ILoadPasswordPolicyService.cs" />
+    <Compile Include="InterfaceLegacy\Infrastructure\IPasswordStrengthRule.cs" />
+    <Compile Include="InterfaceLegacy\Infrastructure\IPersonInfoCreator.cs" />
+    <Compile Include="InterfaceLegacy\Infrastructure\ISchedulingSourceScope.cs" />
+    <Compile Include="InterfaceLegacy\Infrastructure\ITenantPersonLogonQuerier.cs" />
     <Compile Include="InterfaceLegacy\PlanningPeriodState.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
@@ -292,6 +323,8 @@
     <Compile Include="Logon\SingleOwnedPerson.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerMailboxPurger.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerServerNoMailboxPurge.cs" />
+    <Compile Include="MessageBroker\Server\MessageBrokerServerThrottleMessages.cs" />
+    <Compile Include="MessageBroker\Server\RouteToGroupName.cs" />
     <Compile Include="MultiTenancy\ActiveTenants.cs" />
     <Compile Include="Notification\INotificationServiceClient.cs" />
     <Compile Include="Notification\NotificationServiceClient.cs" />
@@ -324,7 +357,7 @@
     <Compile Include="Scheduling\AgentsWithPreferences.cs" />
     <Compile Include="Scheduling\AgentsWithWhiteSpots.cs" />
     <Compile Include="Scheduling\AlreadyScheduledAgents.cs" />
-    <Compile Include="Scheduling\MaxWorkTimeFullWeekSkillExtractor.cs" />
+    <Compile Include="Scheduling\OpenHoursSkillExtractor.cs" />
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
     <Compile Include="Scheduling\RemoveNonPreferenceDaysOffs.cs" />
     <Compile Include="Scheduling\SchedulingInformation.cs" />
@@ -585,7 +618,6 @@
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
-    <Compile Include="Reports\ScheduleAnalysisProvider.cs" />
     <Compile Include="ResourceCalculation\AddBpoResourcesToContext.cs" />
     <Compile Include="ResourceCalculation\ExternalStaff.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFetcher.cs" />
@@ -1161,7 +1193,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleRange.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleRestrictionStrategy.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleResultDailyValueCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleResultDataExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulerRangeToLoadCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleService.cs" />
@@ -1596,7 +1627,6 @@
     <Compile Include="ApplicationLayer\Scenario\AnalyticsScenarioUpdater.cs" />
     <Compile Include="ApplicationLayer\Absence\AnalyticsAbsenceUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForAllReportableScenariosFilter.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\MainShiftReplaceNotificationEvent.cs" />
     <Compile Include="ApplicationLayer\RequestFactory.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandler.cs" />
@@ -2020,7 +2050,6 @@
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadge.cs" />
-    <Compile Include="Common\BlockToken.cs" />
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ConfigurationManagerExtensions.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
@@ -2381,7 +2410,6 @@
     <Compile Include="Forecasting\Export\SkillExportSelection.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileDateTimeValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileDoubleValueValidator.cs" />
-    <Compile Include="Forecasting\ForecastsFile\ForecastsFileIntegerValueValidator.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsRow.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileConstants.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileSkillNameValidator.cs" />
@@ -2611,7 +2639,6 @@
     <Compile Include="Scheduling\Legacy\Commands\GroupPageFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GroupPersonBuilderForOptimizationFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GroupScheduleGroupPageDataProvider.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ICommonStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IDisableDeletedFilter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupPageCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IGroupPageFactory.cs" />
@@ -2670,7 +2697,6 @@
     <Compile Include="Optimization\MatrixLockers\MatrixNoMainShiftLocker.cs" />
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractor.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractor.cs" />
-    <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixOvertimeLocker.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculator.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainer.cs" />
@@ -3709,10 +3735,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
       <Project>{98105BFE-6C3B-4C57-9141-6BD065C7E966}</Project>
       <Name>Teleopti.Ccc.UserTexts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

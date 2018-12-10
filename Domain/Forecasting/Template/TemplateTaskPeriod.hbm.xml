@@ -29,21 +29,21 @@
 		<component name="Campaign"
 					  class="Teleopti.Ccc.Domain.Forecasting.Campaign">
 			<component name="CampaignTasksPercent"
-				 class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+				 class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 				<property name="Value"
 							 type="double"
 							 not-null="true"
 							 column="CampaignTasks"/>
 			</component>
 			<component name="CampaignTaskTimePercent"
-				 class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+				 class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 				<property name="Value"
 							 type="double"
 							 not-null="true"
 							 column="CampaignTaskTime"/>
 			</component>
 			<component name="CampaignAfterTaskTimePercent"
-					  class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+					  class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain">
 				<property name="Value"
 							 type="double"
 							 not-null="true"
@@ -51,8 +51,8 @@
 			</component>
 		</component>
 		<component name="Period"
-					  class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
-			<component class ="Teleopti.Interfaces.Domain.MinMax`1[System.DateTime], Teleopti.Interfaces"
+					  class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateTimePeriod, Teleopti.Ccc.Domain">
+			<component class ="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.MinMax`1[System.DateTime], Teleopti.Ccc.Domain"
 									name="period" access="field">
 				<property name="Minimum"
 				  not-null="true"

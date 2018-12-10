@@ -64,6 +64,12 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					HttpContext.Current.Server.ClearError();
 				}
 			};
+			application.EndRequest += (s, e) =>
+			{
+				var error = HttpContext.Current.Server.GetLastError();
+				var response = HttpContext.Current.Response;
+				if (error != null) response.ContentType = "text/html; charset=utf-8";
+			};
 		}
 
 		private static IRequestContextInitializer _requestContextInitializer;
@@ -79,7 +85,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		{
 			var serverVersion = _systemVersion.Version();
 			var response = HttpContext.Current.Response;
-			response.AppendHeader("X-Server-Version", serverVersion);
+			response.AddOnSendingHeaders(context =>
+			{
+				if (context.Response.Headers["X-Server-Version"] == null)
+				{
+					context.Response.AppendHeader("X-Server-Version", serverVersion);
+				}
+			});
 		}
 
 		private static void setupPrincipal()

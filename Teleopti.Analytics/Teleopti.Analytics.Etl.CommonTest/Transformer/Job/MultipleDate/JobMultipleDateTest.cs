@@ -2,7 +2,8 @@
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.MultipleDate
 {
@@ -16,29 +17,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.MultipleDate
         public void Setup()
         {
             _target = new JobMultipleDate(_timeZone);
-        }
-
-
-        [Test]
-        public void VerifyMaxMinLocal()
-        {
-            var dt1 = new DateTime(2006, 1, 1);
-            var dt2 = new DateTime(2006, 3, 1);
-            var dt3 = new DateTime(2006, 2, 1);
-            var dt4 = new DateTime(2006, 4, 1);
-            
-            _target.Add(dt1, dt2, JobCategoryType.Forecast);
-            _target.Add(dt3, dt4, JobCategoryType.AgentStatistics);
-
-            Assert.AreEqual(dt1, _target.GetJobMultipleDateItem(JobCategoryType.Forecast).StartDateLocal);
-            Assert.AreEqual(dt2, _target.GetJobMultipleDateItem(JobCategoryType.Forecast).EndDateLocal);
-            Assert.AreEqual(dt3, _target.GetJobMultipleDateItem(JobCategoryType.AgentStatistics).StartDateLocal);
-            Assert.AreEqual(dt4, _target.GetJobMultipleDateItem(JobCategoryType.AgentStatistics).EndDateLocal);
-
-            IJobMultipleDateItem jobMultipleDateItem = _target.MinMaxDatesLocal;
-            Assert.AreEqual(dt1, jobMultipleDateItem.StartDateLocal);
-            Assert.AreEqual(dt4, jobMultipleDateItem.EndDateLocal);
-
         }
 
         [Test]

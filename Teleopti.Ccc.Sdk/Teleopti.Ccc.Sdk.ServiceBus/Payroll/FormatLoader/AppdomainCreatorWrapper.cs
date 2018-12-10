@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Ccc.Sdk.Logic;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 {
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			{ 
 				foreach (var payrollDetailData in payrollDetailsData)
 				{
-					serviceBusPayrollExportFeedback.AddPayrollResultDetail(new PayrollResultDetail(payrollDetailData.DetailLevel,
+					serviceBusPayrollExportFeedback.AddPayrollResultDetail(new PayrollResultDetail(payrollDetailData.DetailLevel.Convert(),
 						payrollDetailData.Message, payrollDetailData.TimeStamp, payrollDetailData.Exception));
 				}
 			}

@@ -3,7 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
@@ -30,12 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		{
 			var ruleSetBag = _ruleSetBagProvider.ForDate(_loggedOnUser.CurrentUser(), date);
 			return calculateWorkTimeMinMax(date, ruleSetBag, scheduleDay);
-		}
-
-		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date)
-		{
-			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(date.ToDateOnlyPeriod()) ?? new IScheduleDay[] { };
-			return WorkTimeMinMaxForDate(date, scheduleDay.SingleOrDefault());
 		}
 
 		public IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> WorkTimeMinMaxForPeriod(DateOnlyPeriod period)

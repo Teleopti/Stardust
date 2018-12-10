@@ -37,8 +37,8 @@
 					 not-null="true" foreign-key="FK_JobResult_Person_Owner"/>
 
     <component name="Period"
-                   class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
-      <component class ="Teleopti.Interfaces.Domain.MinMax`1[Teleopti.Interfaces.Domain.DateOnly, Teleopti.Interfaces], Teleopti.Interfaces"
+                   class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnlyPeriod, Teleopti.Ccc.Domain">
+      <component class ="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.MinMax`1[Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly, Teleopti.Ccc.Domain], Teleopti.Ccc.Domain"
                         name="period" access="field">
         <property name="Minimum"
           not-null="true"

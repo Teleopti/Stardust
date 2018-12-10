@@ -168,14 +168,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Parent = site2,
 				WeekDay = System.DayOfWeek.Monday,
-				TimePeriod = new Interfaces.Domain.TimePeriod(8, 17),
+				TimePeriod = new TimePeriod(8, 17),
 				IsClosed = false
 			};
 			var site2OpenHour2 = new SiteOpenHour
 			{
 				Parent = site2,
 				WeekDay = System.DayOfWeek.Tuesday,
-				TimePeriod = new Interfaces.Domain.TimePeriod(8, 17),
+				TimePeriod = new TimePeriod(8, 17),
 				IsClosed = false
 			};
 			PersistAndRemoveFromUnitOfWork(site2OpenHour1);

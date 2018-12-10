@@ -81,7 +81,7 @@
 		updateDateAndTimeFormat();
 		$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
 
-		
+
 
 		PersonAbsenceSvc.loadAbsences().then(function (absences) {
 			vm.availableAbsenceTypes = absences;
@@ -95,7 +95,6 @@
 		};
 
 		vm.isAbsenceTimeValid = function () {
-			var currentTimezone = vm.getCurrentTimezone();
 			var timeRangeInCurrentTimezone = getTimeRangeInCurrentTimezone();
 			var isStartTimeValid = serviceDateFormatHelper.getDateTime(timeRangeInCurrentTimezone.startTime) === vm.timeRange.startTime;
 			var isEndTimeValid = serviceDateFormatHelper.getDateTime(timeRangeInCurrentTimezone.endTime) === vm.timeRange.endTime;
@@ -115,9 +114,13 @@
 		};
 
 		function updateInvalidAgents() {
+			vm.invalidAgents = [];
 			if (vm.isFullDayAbsence) {
 				determineIsSameTimezoneForFullDayAbsence();
 			} 
+			else if (vm.isAbsenceTimeValid()) {
+				vm.invalidAgentNameListString = [];
+			}
 		};
 
 		function getTimeRangeInCurrentTimezone() {
@@ -129,18 +132,22 @@
 		}
 
 		function getDefaultAbsenceStartTime() {
-			var curDateMoment = moment(vm.selectedDate());
-			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
-			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
-			return serviceDateFormatHelper.getDateTime(scheduleHelper.getEarliestStartOfSelectedSchedules(schedules, curDateMoment, personIds));
+			return serviceDateFormatHelper.getDateTime(getDefaultAbsenceStartTimeMoment());
 		};
 
 		function getDefaultAbsenceEndTime() {
-			return serviceDateFormatHelper.getDateTime(moment(getDefaultAbsenceStartTime()).add(1, 'hour'));
+			return serviceDateFormatHelper.getDateTime(getDefaultAbsenceStartTimeMoment().add(1, 'hour'));
 		};
 
+		function getDefaultAbsenceStartTimeMoment() {
+			var currentTimezone = vm.getCurrentTimezone();
+			var curDateMoment = moment.tz(vm.selectedDate(), currentTimezone);
+			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
+			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
+			return scheduleHelper.getEarliestStartMomentOfSelectedSchedules(schedules, curDateMoment, personIds);
+		}
+
 		function determineIsSameTimezoneForFullDayAbsence() {
-			vm.invalidAgents = [];
 			var invalidAgentNameList = [];
 			vm.selectedAgents.forEach(function (agent) {
 				if (vm.getCurrentTimezone() !== vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
@@ -150,7 +157,7 @@
 			});
 			vm.invalidAgentNameListString = invalidAgentNameList.join(', ');
 		}
-		
+
 		vm.anyValidAgent = function () {
 			updateInvalidAgents();
 			return vm.invalidAgents.length !== vm.selectedAgents.length;

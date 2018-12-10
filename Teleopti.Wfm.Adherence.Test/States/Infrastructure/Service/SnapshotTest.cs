@@ -10,6 +10,8 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Monitor;
+using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
 
@@ -51,12 +53,12 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 				
 				.WithStateGroup("phone")
 				.WithStateCode("phone")
-				.WithRule("InAdherence", 0, Domain.Configuration.Adherence.In)
+				.WithRule("InAdherence", 0, Adherence.Configuration.Adherence.In)
 				.WithMapping("phone", "InAdherence")
 
 				.WithStateGroup(logOutBySnapshot, true, true)
 				.WithStateCode(logOutBySnapshot)
-				.WithRule("OutAdherence", -1, Domain.Configuration.Adherence.Out)
+				.WithRule("OutAdherence", -1, Adherence.Configuration.Adherence.Out)
 				.WithMapping(logOutBySnapshot, "OutAdherence")
 
 				.PublishRecurringEvents()

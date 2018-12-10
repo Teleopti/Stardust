@@ -497,10 +497,6 @@
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Support.Library\Teleopti.Support.Library.csproj">
       <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
       <Name>Teleopti.Support.Library</Name>
@@ -547,7 +543,7 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\BuildArtifacts\WebApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"
+    <PreBuildEvent>if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\BuildArtifacts\AdminApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"
 if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\BuildArtifacts\Web.Administration.Web.config" "$(ProjectDir)web.config"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
