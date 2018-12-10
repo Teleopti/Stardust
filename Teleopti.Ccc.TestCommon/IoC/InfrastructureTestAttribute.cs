@@ -97,6 +97,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Hangfire bus maybe? ;)
 			if (QueryAllAttributes<RealHangfireAttribute>().IsEmpty())
 				isolate.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+			isolate.UseTestDouble<HandlerTypeMapperForTest>().For<HandlerTypeMapper>();
 
 			// message broker
 			isolate.UseTestDouble(new FakeSignalR()).For<ISignalR>();

@@ -5,16 +5,23 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
 	[TestFixture]
 	[DomainTest]
-	public class HangfireHandlerTypeMappingTest
+	public class HangfireHandlerTypeMappingTest : ITestInterceptor
 	{
 		public HandlerTypeMapperForTest Mapper;
 
+		public void OnBefore()
+		{
+			Mapper.DynamicMappingsForTestProjects = false;
+			Mapper.StaticMappingsForTestProjects = false;
+		}
+		
 		[Test]
 		public void AllNewHandlersShouldBeMapped()
 		{
@@ -45,7 +52,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				throw new AggregateException(exceptions);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void AllMovedOrRemovedOrRenamedHandlersShouldBeConsidered()
 		{
 			Mapper.AllCurrentTypeNames()
@@ -66,12 +73,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				"Teleopti.Ccc.Domain.ApplicationLayer.TerminatePersonHandler, Teleopti.Ccc.Domain",
 				"Teleopti.Ccc.Domain.ApplicationLayer.ReadModelInitializeHandler, Teleopti.Ccc.Domain",
 				"Teleopti.Ccc.Domain.ApplicationLayer.PersonAssociationChangedEventPublisher, Teleopti.Ccc.Domain",
-				"Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle, Teleopti.Ccc.Domain",
-				"Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2, Teleopti.Ccc.Domain",
-				"Teleopti.Ccc.Domain.ApplicationLayer.HandlerDisabledByTestToggle, Teleopti.Ccc.Domain",
-				"Teleopti.Ccc.Domain.ApplicationLayer.HandlerMethodDisabledByTestToggle, Teleopti.Ccc.Domain",
-				"Teleopti.Ccc.Domain.ApplicationLayer.PackageHandlerEnabledByTestToggle, Teleopti.Ccc.Domain",
-				"Teleopti.Ccc.Domain.ApplicationLayer.SameHandlerEnabledByTestToggle, Teleopti.Ccc.Domain",
 				"Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers.UpdateFindPersonDataHandler, Teleopti.Ccc.Domain",
 				"Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers.BuildInGroupsAnalyticsUpdater, Teleopti.Ccc.Domain",
 				"Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers.GroupingReadModelDataUpdater, Teleopti.Ccc.Domain",
@@ -137,5 +138,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 			legacyTypes.ForEach(x => { Mapper.TypeForPersistedName(x); });
 		}
+
 	}
 }

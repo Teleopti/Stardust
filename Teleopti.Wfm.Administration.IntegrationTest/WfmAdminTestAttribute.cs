@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -48,6 +49,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			isolate.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 			isolate.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
 			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			isolate.UseTestDouble<HandlerTypeMapperForTest>().For<HandlerTypeMapper>();
 		}
 	}
 }

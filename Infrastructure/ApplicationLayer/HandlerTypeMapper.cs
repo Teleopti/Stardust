@@ -1,35 +1,33 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class HandlerTypeMapperForTest : HandlerTypeMapper
-	{
-		public IEnumerable<string> AllCurrentTypeNames() =>
-			Mappings.Select(x => x.CurrentTypeName);
-
-		protected override string ExceptionInfoFor(string typeName)
-		{
-			var persistedName = new Regex(@"\.([a-zA-Z]+)\,").Match(typeName).Groups[1];
-			return $@"
-yield return new mappingSpec
-{{
-	CurrentPersistedName = ""{persistedName}"",
-	CurrentTypeName = ""{typeName}""
-}};";
-		}
-	}
-
 	public class HandlerTypeMapper
 	{
+		private readonly Lazy<IDictionary<string, string>> persistedNameForTypeName;
+		private readonly Lazy<IDictionary<string, string>> typeNameForPersistedName;
+
+		public HandlerTypeMapper()
+		{
+			persistedNameForTypeName = new Lazy<IDictionary<string, string>>(makePersistedNameForTypeName);
+			typeNameForPersistedName = new Lazy<IDictionary<string, string>>(makeTypeNameForPersistedName);
+		}
+
 		public string NameForPersistence(Type handlerType)
 		{
 			var typeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}";
-			if (!persistedNameForTypeName.TryGetValue(typeName, out var persistedName))
+			var persistedName = PersistedNameForTypeName(typeName);
+			if (persistedName == null)
 				throw new ArgumentException($"{typeName} is not mapped. {ExceptionInfoFor(typeName)}");
+			return persistedName;
+		}
+
+		protected virtual string PersistedNameForTypeName(string typeName)
+		{
+			persistedNameForTypeName.Value.TryGetValue(typeName, out var persistedName);
 			return persistedName;
 		}
 
@@ -37,19 +35,24 @@ yield return new mappingSpec
 
 		public Type TypeForPersistedName(string persistedName)
 		{
-			if (!typeNameForPersistedName.TryGetValue(persistedName, out var typeName))
+			var typeName = TypeNameForPersistedName(persistedName);
+			if (typeName == null)
 				throw new ArgumentException($"{persistedName} is not mapped");
 			return Type.GetType(typeName, true);
 		}
 
-		protected static readonly IEnumerable<MappingSpec> Mappings = makeMappings();
+		protected virtual string TypeNameForPersistedName(string persistedName)
+		{
+			typeNameForPersistedName.Value.TryGetValue(persistedName, out var typeName);
+			return typeName;
+		}
 
-		private static readonly IDictionary<string, string> persistedNameForTypeName =
-			Mappings.ToDictionary(x => x.CurrentTypeName, x => x.CurrentPersistedName);
+		private Dictionary<string, string> makePersistedNameForTypeName() =>
+			Mappings().ToDictionary(x => x.CurrentTypeName, x => x.CurrentPersistedName);
 
-		private static readonly IDictionary<string, string> typeNameForPersistedName =
+		private Dictionary<string, string> makeTypeNameForPersistedName() =>
 			(
-				from m in Mappings
+				from m in Mappings()
 				let allPersistedNames = m.CurrentPersistedName.AsArray().Concat(m.LegacyPersistedNames)
 				from persistedName in allPersistedNames
 				select new
@@ -60,8 +63,7 @@ yield return new mappingSpec
 			)
 			.ToDictionary(x => x.persistedName, x => x.CurrentTypeName);
 
-
-		private static IEnumerable<MappingSpec> makeMappings()
+		protected virtual IEnumerable<MappingSpec> Mappings()
 		{
 			yield return new MappingSpec
 			{
@@ -116,42 +118,6 @@ yield return new mappingSpec
 				CurrentPersistedName = "PersonAssociationChangedEventPublisher",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.PersonAssociationChangedEventPublisher, Teleopti.Ccc.Domain"},
 				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.PersonAssociationChangedEventPublisher, Teleopti.Ccc.Domain"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "HandlerEnabledByTestToggle",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle, Teleopti.Ccc.Domain"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2, Teleopti.Ccc.Domain"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "HandlerDisabledByTestToggle",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.HandlerDisabledByTestToggle, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.HandlerDisabledByTestToggle, Teleopti.Ccc.Domain"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "HandlerMethodDisabledByTestToggle",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.HandlerMethodDisabledByTestToggle, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.HandlerMethodDisabledByTestToggle, Teleopti.Ccc.Domain"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "PackageHandlerEnabledByTestToggle",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.PackageHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.PackageHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "SameHandlerEnabledByTestToggle",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.SameHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.SameHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"
 			};
 			yield return new MappingSpec
 			{
@@ -525,149 +491,39 @@ yield return new mappingSpec
 
 			yield return new MappingSpec
 			{
-				CurrentPersistedName = "TestHandler1",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventRealPublishingTest+TestHandler, Teleopti.Ccc.InfrastructureTest"
+				CurrentPersistedName = "HandlerEnabledByTestToggle",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle, Teleopti.Ccc.Domain"
 			};
 			yield return new MappingSpec
 			{
-				CurrentPersistedName = "TestHandler2",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireAllowRecurringFailuresEventPublishingConcurrencyTest+FailingHandlerImpl, Teleopti.Ccc.InfrastructureTest"
+				CurrentPersistedName = "",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2, Teleopti.Ccc.Domain"
 			};
 			yield return new MappingSpec
 			{
-				CurrentPersistedName = "TestHandler3",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireAllowRecurringFailuresEventPublishingTest+FailingHandlerImpl, Teleopti.Ccc.InfrastructureTest"
+				CurrentPersistedName = "HandlerDisabledByTestToggle",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.HandlerDisabledByTestToggle, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.HandlerDisabledByTestToggle, Teleopti.Ccc.Domain"
 			};
 			yield return new MappingSpec
 			{
-				CurrentPersistedName = "TestHandler4",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventPackagePublishingTest+TestHandler, Teleopti.Ccc.InfrastructureTest"
+				CurrentPersistedName = "HandlerMethodDisabledByTestToggle",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.HandlerMethodDisabledByTestToggle, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.HandlerMethodDisabledByTestToggle, Teleopti.Ccc.Domain"
 			};
 			yield return new MappingSpec
 			{
-				CurrentPersistedName = "TestHandler5",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventPublishingTest+TestHandler, Teleopti.Ccc.InfrastructureTest"
+				CurrentPersistedName = "PackageHandlerEnabledByTestToggle",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.PackageHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.PackageHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"
 			};
 			yield return new MappingSpec
 			{
-				CurrentPersistedName = "TestHandler6",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireAllowRecurringFailuresEventPublishingTest+FailingHandlerImpl2, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler7",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventPublishingTest+TestMultiHandler2, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler8",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventPublishingTest+TestBothHangfireHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler9",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AHandler, Teleopti.Ccc.InfrastructureTest"},
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler10",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AspectedHandler, Teleopti.Ccc.InfrastructureTest"},
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AspectedHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler11",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AnotherHandler, Teleopti.Ccc.InfrastructureTest"},
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventServerTest+AnotherHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler12",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventPublishingTest+TestMultiHandler1, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler13",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventShortNameSerializationTest+FakeHandler, Teleopti.Ccc.InfrastructureTest"},
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireEventShortNameSerializationTest+FakeHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler14",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireQueueOrderTest+QueueScheduleChangesTodayHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler15",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireQueueOrderTest+QueueCriticalScheduleChangesTodayHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler16",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireQueueOrderTest+QueueDefaultHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler17",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.QueuingHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler18a",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireRecurringEventPublisherTest+TestMultiHandler1, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler18",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireRecurringEventPublisherTest+TestMultiHandler2, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler19",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireRecurringEventPublisherTest+TestHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler20a",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireRecurringEventPublisherTest+TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler20",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireRecurringEventPublisherTest+TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId2, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler21",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireRetryEventPublishingConcurrencyTest+FailingHandlerImpl, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler22",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireRetryEventPublishingTest+FailingHandlerImpl, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler23",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireSerializeEventPublishingTest+TestHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "TestHandler24",
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.MultiEventPublishingTest+HangfireEventHandler, Teleopti.Ccc.InfrastructureTest"
-			};
-
-
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "HangfireJobFailuresTest+TestHandler",
-				CurrentTypeName = "Teleopti.Wfm.Administration.IntegrationTest.Hangfire.HangfireJobFailuresTest+TestHandler, Teleopti.Wfm.Administration.IntegrationTest"
-			};
-			yield return new MappingSpec
-			{
-				CurrentPersistedName = "HangfireJobPerformanceTest+TestHandler",
-				CurrentTypeName = "Teleopti.Wfm.Administration.IntegrationTest.Hangfire.HangfireJobPerformanceTest+TestHandler, Teleopti.Wfm.Administration.IntegrationTest"
+				CurrentPersistedName = "SameHandlerEnabledByTestToggle",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.SameHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.SameHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"
 			};
 		}
 
