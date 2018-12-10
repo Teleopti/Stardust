@@ -1702,11 +1702,14 @@
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.ReviewHistoricalAdherence_74770.html" />
+    <Content Include="WFM\app\rta\rta\agents\rta-agents.rta-agents.RestrictModifySkillGroups_78568.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.noagentsmessage.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.restrictHistoricalOverviewWithPermission.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.restrictModifySkillGroups.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RestrictModifySkillGroups_78568.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.ReviewHistoricalAdherence_74770.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ImprovedStateGroupFilter_48724.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.selection.spec.js" />

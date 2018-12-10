@@ -1,0 +1,342 @@
+<div class="rta-view agents">
+	<div class="view-header with-fab with-desc" ng-cloak>
+		<div class="view-title">
+			<div class="pull-left">
+				<h1><i class="mdi mdi-alarm"></i> {{'Adherence'|translate}}</h1>
+			</div>
+			<div class="pull-left">
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'MonitorOrganization'|translate}}</button>
+				<button class="wfm-btn wfm-btn-primary non-pointer">{{'MonitorAgents'|translate}}</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.goToHistorical()" ng-if="vm.hasHistoricalOverviewPermission">{{'HistoricalOverview'|translate}}</button>
+				<span style="vertical-align: middle;" ng-if="vm.pausedAt">
+					{{'PausedAt'|translate}} {{vm.pausedAt}}
+				</span>
+			</div>
+		</div>
+		<div class="fab-wrapper pull-right">
+			<button class="wfm-fab material-depth-1" ng-click="vm.pause = !vm.pause">
+				<i ng-class="{'mdi mdi-play': vm.pause, 'mdi mdi-pause': !vm.pause}"></i>
+				<md-tooltip ng-if="vm.pause">{{'Play'|translate}}</md-tooltip>
+				<md-tooltip ng-if="!vm.pause">{{'Pause'|translate}}</md-tooltip>
+			</button>
+		</div>
+	</div>
+
+	<md-progress-linear md-mode="indeterminate" ng-if="vm.loading()"></md-progress-linear>
+	<div class="panel material-depth-1 con-padding">
+		<div class="con-row">
+			<div class="con-flex wfm-form organization-picker">
+				<div class="form-input-wrap">
+					<input type="text"
+						   placeholder="{{'SelectSitesTeams'|translate}}"
+						   ng-click="vm.organizationPickerOpen = !vm.organizationPickerOpen"
+						   ng-value="vm.organizationPickerSelectionText"/>
+				</div>
+
+				<div style="position: relative">
+					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+						 style="z-index: 999; position: absolute; width: 100%"
+						 ng-if="vm.organizationPickerOpen"
+						 outside-click="vm.organizationPickerOpen = false">
+
+						<div class="form-input-wrap filter">
+							<input type="text"
+								   placeholder="{{'DataFilterThreeDots'|translate}}"
+								   ng-model="vm.organizationPickerSearchTerm"/>
+						</div>
+
+						<div>
+							<button class="wfm-btn wfm-btn-invis-primary"
+									ng-class="vm.organizationPickerClearEnabled ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
+									ng-click="vm.clearOrganizationSelection()">{{'ClearAll'|translate}}
+							</button>
+							<button class="wfm-btn wfm-btn-invis-primary"
+									ng-class="wfm-btn-invis-primary"
+									ng-click="vm.organizationPickerOpen = false">{{'Close'|translate}}
+							</button>
+						</div>
+
+						<div ng-repeat="site in vm.sites | filter:vm.organizationPickerSearchTerm">
+							<div>
+								<span ng-click="site.isExpanded = !site.isExpanded">
+									<i class="mdi"
+									   ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
+								</span>
+								<md-checkbox style="display: inline-block"
+											 ng-checked="site.isChecked"
+											 aria-label="Checkbox"
+											 ng-class="site.isMarked ? 'marked' : ''"
+											 ng-click="site.toggle()">
+									<span>{{site.Name}}</span>
+								</md-checkbox>
+							</div>
+							<div style="margin-left: 50px"
+								 ng-show="site.isExpanded"
+								 ng-repeat="team in site.Teams">
+								<md-checkbox ng-checked="team.isChecked"
+											 aria-label="Checkbox"
+											 ng-click="team.toggle()">
+									<span>{{team.Name}}</span>
+								</md-checkbox>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			
+			<div class="con-flex">
+				<div class="wfm-form">
+					<div class="form-input-wrap">
+						<div style="position: relative">
+							<input type="text"
+								   placeholder="{{'SelectSkill'|translate}}"
+								   ng-click="vm.skillPickerOpen = !vm.skillPickerOpen"
+								   ng-model="vm.skillPickerText"
+							/>
+							<i class="mdi mdi-close pointer"
+							   ng-show="vm.selectedSkill"
+							   ng-click="vm.clearSkillSelection()"
+							   style="position: absolute; top: 3px; right: 10px;">
+								<md-tooltip>{{'Clear'|translate}}</md-tooltip>
+							</i>
+						</div>
+					</div>
+					<div style="position: relative">
+						<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+							 style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
+							 ng-if="vm.skillPickerOpen"
+							 outside-click="vm.skillPickerOpen = false">
+							<ul>
+								<li ng-repeat="skill in vm.skills"
+									ng-click="vm.selectedSkill = skill"
+									style="padding: 10px 0px; cursor: pointer">
+									{{skill.Name}}
+								</li>
+								<li ng-show="vm.displayNoSkillsMessage" style="padding: 10px 0px; cursor: pointer">
+									{{'RepViewerNoMoreMatches' | translate}}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="con-flex">
+				<div class="wfm-form">
+					<div class="form-input-wrap">
+						<div style="position: relative">
+							<input type="text"
+								   placeholder="{{'SelectSkillGroup'|translate}}"
+								   ng-click="vm.skillGroupPickerOpen = !vm.skillGroupPickerOpen"
+								   ng-model="vm.skillGroupPickerText"/>
+							<i class="mdi mdi-close pointer"
+							   ng-show="vm.selectedSkillGroup"
+							   ng-click="vm.clearSkillSelection()"
+							   style="position: absolute; top: 3px; right: 10px;">
+								<md-tooltip>{{'Clear'|translate}}</md-tooltip>
+							</i>
+						</div>
+					</div>
+					<div style="position: relative">
+						<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+							 style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
+							 ng-if="vm.skillGroupPickerOpen"
+							 outside-click="vm.skillGroupPickerOpen = false">
+							<ul>
+								<li ng-repeat="skillGroup in vm.skillGroups"
+									ng-click="vm.selectedSkillGroup = skillGroup"
+									style="padding: 10px 0px; cursor: pointer">
+									{{skillGroup.Name}}
+								</li>
+								<li ng-show="vm.displayNoSkillGroupsMessage" style="padding: 10px 0px; cursor: pointer">
+									{{'RepViewerNoMoreMatches' | translate}}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div style="min-width: 150px" ng-if="vm.hasModifySkillGroupPermission">
+				<a ui-sref="rta-skill-area-manager">
+					<skill-group-manager-button></skill-group-manager-button>
+				</a>
+			</div>
+
+		</div>
+
+		<div class="con-row">
+			<div class="con-flex wfm-form">
+				<div class="form-input-wrap">
+					<input type="text"
+						   ng-model="vm.filterText"
+						   placeholder="{{'FilterRtaShort'|translate}}"/>
+					<md-tooltip>{{'FilterRtaFull'|translate}}</md-tooltip>
+				</div>
+			</div>
+
+			<div class="con-flex wfm-form">
+				<div class="form-input-wrap">
+					<input type="text"
+						   placeholder="{{'SelectStates'|translate}}"
+						   ng-click="vm.open = !vm.open"
+						   ng-value="vm.statePickerSelectionText"/>
+				</div>
+
+				<div class="relative">
+					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+						 style="z-index: 999; position: absolute; width: 100%"
+						 ng-if="vm.open" outside-click="vm.open = false">
+						<md-checkbox
+								ng-repeat="state in vm.states"
+								aria-label="Checkbox"
+								ng-model="state.Selected">
+							{{state.Name}}
+						</md-checkbox>
+					</div>
+				</div>
+			</div>
+
+			<div class="con-flex">
+			</div>
+
+			<div style="min-width: 150px;">
+				<md-switch ng-model="vm.showInAlarm" aria-label="Switch" class="rta-agents-in-alarm-switch">
+					<span ng-if="vm.showInAlarm">{{'InAlarm'|translate}}</span>
+					<span ng-if="!vm.showInAlarm">{{'All'|translate}}</span>
+				</md-switch>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="con-row" ng-if="vm.displayNoAgentsMessage()">
+		<div class="con-flex">
+			<div class="panel material-depth-1 con-padding">
+				<div class="con-row">
+					<div class="con-flex">
+						{{'NoRealTimeAdherenceResultMessage'|translate}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel material-depth-1">
+		<div class="con-row">
+			<table class="wfm-table cursor-pointer">
+				<tr>
+					<th style="width: 8.5%" ng-click="vm.sort('Name')">
+						{{'Name'|translate}}
+						<i ng-show="vm.orderBy == 'Name'" class="mdi"
+						   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+					</th>
+					<th style="width: 10.5%" ng-click="vm.sort('SiteAndTeamName')">
+						{{'SiteTeam'|translate}}
+						<i ng-show="vm.orderBy == 'SiteAndTeamName'" class="mdi"
+						   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+					</th>
+					<th class="blank-header" style="border-right: none">
+						<div class="timeline" style="height: 20px">
+							<div class="label label-info time"
+								 ng-repeat="time in vm.timeline"
+								 ng-attr-style="left: {{time.Offset}};">
+								{{time.Time}}
+							</div>
+						</div>
+					</th>
+					<th class="blank-header" style="width: 3.5%; border-left: none;">
+					</th>
+					<th style="width: 8.5%" ng-click="vm.sort('Rule')">
+						{{'Rule'|translate}}
+						<i ng-show="vm.orderBy == 'Rule'" class="mdi"
+						   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+					</th>
+					<th style="width: 8.5%" ng-click="vm.sort('TimeOutOfAdherence')">
+						{{'TimeOOA'|translate}}
+						<i ng-show="vm.orderBy == 'TimeOutOfAdherence'" class="mdi"
+						   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+					</th>
+					<th style="width: 8.5%" ng-click="vm.sort('TimeInAlarm')">
+						{{'TimeInAlarm'|translate}}
+						<i ng-show="vm.orderBy == 'TimeInAlarm'" class="mdi"
+						   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+					</th>
+					<th style="width: 8.5%" ng-click="vm.sort('TimeInState')">
+						{{'TimeInState'|translate}}
+						<i ng-show="vm.orderBy == 'TimeInState'" class="mdi"
+						   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+					</th>
+					<th style="width: 8.5%" ng-click="vm.sort('State')">
+						{{'State'|translate}}
+						<i ng-show="vm.orderBy == 'State'" class="mdi"
+						   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
+					</th>
+
+				</tr>
+				<tr ng-repeat="agentState in vm.agentStates" ng-attr-agentid="{{agentState.PersonId}}">
+					<td>
+						{{agentState.Name}}
+					</td>
+					<td>
+						{{agentState.SiteAndTeamName}}
+					</td>
+					<td class="shift-column">
+						<div class="shift" style="height: 31px">
+							<div ng-repeat="outOfAdherence in agentState.OutOfAdherences"
+								 class="out-of-adherence"
+								 ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};">
+								<md-tooltip md-direction="top">
+									{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
+								</md-tooltip>
+							</div>
+
+							<div class="current-time" style="left: 25%"></div>
+
+							<div ng-repeat="activity in agentState.Shift"
+								 class="activity {{activity.Class}}"
+								 ng-attr-style="height: 25px; margin-top: 3px; width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}};"
+								 ng-attr-name="{{activity.Name}}">
+								<md-tooltip>
+									<div>{{activity.Name}}</div>
+									<div>{{activity.Time}}</div>
+								</md-tooltip>
+							</div>
+						</div>
+					</td>
+					<td style="border-left: none">
+						<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"
+						   style="margin-left: 6px;" class="mdi mdi-calendar-clock flex-1 change-schedule">
+							<md-tooltip>{{'ModifySchedule'|translate}}</md-tooltip>
+						</a>
+						<a href="{{vm.historicalAdherenceUrl(agentState.PersonId)}}" target="_blank"
+						   style="margin-left: 8px;" class="mdi mdi-history">
+							<md-tooltip>{{'AgentHistoricalAdherence'|translate}}</md-tooltip>
+						</a>
+					</td>
+					<td>
+						<div ng-if="agentState.Rule"
+							 class="label"
+							 ng-attr-style="background-color: {{agentState.Color}}">
+							{{agentState.Rule}}
+						</div>
+					</td>
+					<td>
+						{{agentState.TimeOutOfAdherence}}
+					</td>
+					<td>
+						{{agentState.TimeInAlarm}}
+					</td>
+					<td>
+						{{agentState.TimeInState}}
+					</td>
+					<td>
+						{{agentState.State}}
+					</td>
+				</tr>
+			</table>
+		</div>
+
+	</div>
+</div>
