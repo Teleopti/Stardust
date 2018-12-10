@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_columns.Add(ColumnHeader.StaffingEffect);
 			_columns.Add(ColumnHeader.Color);
 			_columns.Add(ColumnHeader.Time);
-			_columns.Add(ColumnHeader.UpdatedBy);
-			_columns.Add(ColumnHeader.UpdatedOn);
 
 			decorators.ForEach(d => d.Decorate(this));
 
@@ -49,8 +47,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			public static Column StaffingEffect = new Column { Text = Resources.StaffingEffect, Get = getStaffingEffect, Update = updateStaffingEffect };
 			public static Column Color = new Column { Text = Resources.Color, Get = getColor, Update = updateColor };
 			public static Column Time = new Column { Text = Resources.Time, Get = getTime, Update = updateTime };
-			public static Column UpdatedBy = new Column { Text = Resources.UpdatedBy, Get = getUpdatedBy };
-			public static Column UpdatedOn = new Column { Text = Resources.UpdatedOn, Get = getUpdatedOn };
 		}
 
 		public class Column
@@ -119,20 +115,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			e.Style.CellValue = rule.ThresholdTime;
 			e.Style.CellType = "NumericCell";
-		}
-
-		private static void getUpdatedBy(IRtaRule rule, GridQueryCellInfoEventArgs e)
-		{
-			e.Style.CellType = "Static";
-			if (rule.UpdatedBy != null)
-				e.Style.CellValue = rule.UpdatedBy.Name;
-		}
-
-		private static void getUpdatedOn(IRtaRule rule, GridQueryCellInfoEventArgs e)
-		{
-			e.Style.CellType = "Static";
-			if (rule.UpdatedOn.HasValue)
-				e.Style.CellValue = new LocalizedUpdateInfo().UpdatedTimeInUserPerspective(rule);
 		}
 
 		private void queryHeader(GridQueryCellInfoEventArgs e)

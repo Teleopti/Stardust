@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {
-	public interface IRtaRule : IPayload, IAggregateRootWithEvents
+	public interface IRtaRule : IAggregateRootWithEvents
     {
 	    Description Description { get; set; }
 	    Color DisplayColor { get; set; }

@@ -96,14 +96,6 @@ namespace Teleopti.Wfm.Adherence.Configuration
 		{
 			return DisplayColor;
 		}
-
-		public virtual bool InContractTime { get; set; }
-		public virtual ITracker Tracker { get; set; }
-
-		public virtual IPayload UnderlyingPayload
-		{
-			get { return this; }
-		}
 	}
 
 }
