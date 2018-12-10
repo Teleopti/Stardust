@@ -7,8 +7,8 @@
 			controllerAs: 'vm'
 		});
 
-	TeamsExportScheduleCtrl.$inject = ['$state', '$timeout', '$scope', '$translate', 'groupPageService', 'exportScheduleService', 'NoticeService', 'serviceDateFormatHelper'];
-	function TeamsExportScheduleCtrl($state, $timeout, $scope, $translate, groupPageService, exportScheduleService, NoticeService, serviceDateFormatHelper) {
+	TeamsExportScheduleCtrl.$inject = ['$state', '$q','$scope', '$translate', 'groupPageService', 'exportScheduleService', 'NoticeService', 'serviceDateFormatHelper'];
+	function TeamsExportScheduleCtrl($state, $q,  $scope, $translate, groupPageService, exportScheduleService, NoticeService, serviceDateFormatHelper) {
 		var vm = this;
 		vm.configuration = {
 			period: {
@@ -50,25 +50,20 @@
 		};
 
 		vm.onPeriodChanged = function () {
-			vm.getGroupPagesAsync();
+			$q.when(vm.getGroupPagesAsync()).then(function(data){
+				vm.availableGroups = data;
+			});
 		};
 
 		var lastPeriodRequested = {};
+
 		vm.getGroupPagesAsync = function () {
 			if (isDateValid()) {
 				var startDate = serviceDateFormatHelper.getDateOnly(vm.configuration.period.startDate);
 				var endDate = serviceDateFormatHelper.getDateOnly(vm.configuration.period.endDate);
 				if (lastPeriodRequested.startDate != startDate || lastPeriodRequested.endDate != endDate) {
 					lastPeriodRequested = { startDate: startDate, endDate: endDate };
-					groupPageService.fetchAvailableGroupPages(startDate, endDate).then(function (data) {
-						vm.availableGroups = data;
-						if (data.LogonUserTeamId) {
-							vm.configuration.selectedGroups = {
-								mode: 'BusinessHierarchy',
-								groupIds: [vm.availableGroups.LogonUserTeamId]
-							};
-						}
-					});
+					return groupPageService.fetchAvailableGroupPages(startDate, endDate);
 				}
 			}
 		};
@@ -112,12 +107,19 @@
 				else {
 					saveData(response.data);
 				}
-
 			});
 		}
 
 		vm.$onInit = function () {
-			vm.getGroupPagesAsync();
+			$q.when(vm.getGroupPagesAsync()).then(function (data) {
+				vm.availableGroups = data;
+				if (vm.availableGroups.LogonUserTeamId) {
+					vm.configuration.selectedGroups = {
+						mode: 'BusinessHierarchy',
+						groupIds: [vm.availableGroups.LogonUserTeamId]
+					};
+				}
+			});
 			vm.getScenariosAsync();
 			vm.getTimezonesAsync();
 			vm.getOptionalColumnsAsync();
