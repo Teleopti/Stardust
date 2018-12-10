@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IRuleSetBag> LoadAllWithRuleSets()
 		{
 			return Session.CreateCriteria(typeof (IRuleSetBag), "bag")
-				.SetFetchMode("RuleSetCollection", FetchMode.Join)
+				.Fetch("RuleSetCollection")
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.List<IRuleSetBag>();
 		}
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var mainCrit = DetachedCriteria.For<RuleSetBag>()
 				.Add(Restrictions.Eq("Id", id))
-				.SetFetchMode("RuleSetCollection", FetchMode.Join);
+				.Fetch("RuleSetCollection");
 
 			var subCrit = DetachedCriteria.For<RuleSetBag>("b")
 				.Add(Restrictions.Eq("b.Id", id))
@@ -48,19 +49,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var extCritTwo = DetachedCriteria.For<WorkShiftRuleSet>()
 				.Add(Subqueries.PropertyIn("Id", subCrit))
-				.SetFetchMode("AccessibilityDates", FetchMode.Join);
+				.Fetch("AccessibilityDates");
 
 			var extCritThree = DetachedCriteria.For<WorkShiftRuleSet>()
 				.Add(Subqueries.PropertyIn("Id", subCrit))
-				.SetFetchMode("AccessibilityDaysOfWeek", FetchMode.Join);
+				.Fetch("AccessibilityDaysOfWeek");
 
-			var res = Session.CreateMultiCriteria()
-				.Add(mainCrit)
-				.Add(extCritTwo)
-				.Add(extCritThree)
-				.List();
+			var res = Session.CreateQueryBatch()
+				.Add<RuleSetBag>(mainCrit)
+				.Add<WorkShiftRuleSet>(extCritTwo)
+				.Add<WorkShiftRuleSet>(extCritThree);
 
-			var ruleSetBags = CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res[0]);
+			var ruleSetBags = CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res.GetResult<RuleSetBag>(0));
 
 			return ruleSetBags.FirstOrDefault();
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var mainCrit = DetachedCriteria.For<RuleSetBag>()
 				.Add(Restrictions.In("Id", ruleBagIds))
-				.SetFetchMode("RuleSetCollection", FetchMode.Join);
+				.Fetch("RuleSetCollection");
 
 			var subCrit = DetachedCriteria.For<RuleSetBag>("b")
 				.Add(Restrictions.In("b.Id", ruleBagIds))
@@ -78,19 +78,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var extCritTwo = DetachedCriteria.For<WorkShiftRuleSet>()
 				.Add(Subqueries.PropertyIn("Id", subCrit))
-				.SetFetchMode("AccessibilityDates", FetchMode.Join);
+				.Fetch("AccessibilityDates");
 
 			var extCritThree = DetachedCriteria.For<WorkShiftRuleSet>()
 				.Add(Subqueries.PropertyIn("Id", subCrit))
-				.SetFetchMode("AccessibilityDaysOfWeek", FetchMode.Join);
+				.Fetch("AccessibilityDaysOfWeek");
 
-			var res = Session.CreateMultiCriteria()
-				.Add(mainCrit)
-				.Add(extCritTwo)
-				.Add(extCritThree)
-				.List();
+			var res = Session.CreateQueryBatch()
+				.Add<RuleSetBag>(mainCrit)
+				.Add<WorkShiftRuleSet>(extCritTwo)
+				.Add<WorkShiftRuleSet>(extCritThree);
 
-			var ruleSetBags = CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res[0]);
+			var ruleSetBags = CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res.GetResult<RuleSetBag>(0));
 
 			return ruleSetBags.ToArray();
 		}

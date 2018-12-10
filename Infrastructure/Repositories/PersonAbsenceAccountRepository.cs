@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IDictionary<IPerson, IPersonAccountCollection> LoadAllAccounts()
 		{
 			var result = Session.CreateCriteria(typeof (PersonAbsenceAccount))
-						.SetFetchMode("accountCollection", FetchMode.Join)
-						.SetFetchMode("Person",FetchMode.Join)
-						.SetFetchMode("Absence",FetchMode.Join)
+						.Fetch("accountCollection")
+						.Fetch("Person")
+						.Fetch("Absence")
 						.SetResultTransformer(Transformers.DistinctRootEntity)
 						.List<IPersonAbsenceAccount>();
 			return new dic(result.GroupBy(k => k.Person).ToDictionary(k => k.Key, v =>
@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var personBatch in persons.Batch(400))
 			{
 				result.AddRange(Session.CreateCriteria(typeof(PersonAbsenceAccount))
-					   .SetFetchMode("accountCollection", FetchMode.Join)
-					   .SetFetchMode("Person", FetchMode.Join)
-					   .SetFetchMode("Absence", FetchMode.Join)
+					   .Fetch("accountCollection")
+					   .Fetch("Person")
+					   .Fetch("Absence")
 					   .Add(Restrictions.InG("Person", personBatch.ToArray()))
 					   .SetResultTransformer(Transformers.DistinctRootEntity)
 					   .List<IPersonAbsenceAccount>());    
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var personBatch in persons.Batch(400))
 			{
 				result.AddRange(Session.CreateCriteria(typeof(PersonAbsenceAccount))
-					.SetFetchMode("accountCollection", FetchMode.Join)
+					.Fetch("accountCollection")
 					.Add(Restrictions.InG("Person", personBatch.ToArray()))
 					.SetResultTransformer(Transformers.DistinctRootEntity)
 					.List<IPersonAbsenceAccount>());
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IPersonAccountCollection Find(IPerson person)
 		{
 			var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
-						.SetFetchMode("accountCollection", FetchMode.Join)
+						.Fetch("accountCollection")
 						.Add(Restrictions.Eq("Person",person))
 						.SetResultTransformer(Transformers.DistinctRootEntity)
 						.List<IPersonAbsenceAccount>();
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IPersonAccountCollection Find(IPerson person, IAbsence absence)
 		{
 			var result = Session.CreateCriteria(typeof(PersonAbsenceAccount))
-						.SetFetchMode("accountCollection", FetchMode.Join)
+						.Fetch("accountCollection")
 						.Add(Restrictions.Eq("Person",person))
 						.Add(Restrictions.Eq("Absence",absence))
 						.SetResultTransformer(Transformers.DistinctRootEntity)

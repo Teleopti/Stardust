@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             foreach (var personBatch in persons.Batch(400))
             {
                 personRotations.AddRange(Session.CreateCriteria(typeof (PersonRotation))
-                                             .SetFetchMode("Rotation", FetchMode.Join)
+                                             .Fetch("Rotation")
                                              .Add(Restrictions.InG("Person", personBatch.ToArray()))
                                              .List<IPersonRotation>());
             }

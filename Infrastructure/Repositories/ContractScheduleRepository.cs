@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -37,16 +38,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public ICollection<IContractSchedule> LoadAllAggregate()
         {
             DetachedCriteria q1 = DetachedCriteria.For<ContractSchedule>()
-                        .SetFetchMode("ContractScheduleWeeks", FetchMode.Join);
+                        .Fetch("ContractScheduleWeeks");
             DetachedCriteria q2 = DetachedCriteria.For<ContractScheduleWeek>()
-                                    .SetFetchMode("workDays", FetchMode.Join);
+                                    .Fetch("workDays");
 
-            IList res = Session.CreateMultiCriteria()
-                                        .Add(q1)
-                                        .Add(q2)
-                                        .List();
+            var res = Session.CreateQueryBatch()
+                                        .Add<ContractSchedule>(q1)
+                                        .Add<ContractSchedule>(q2);
 
-            ICollection<IContractSchedule> retlist = CollectionHelper.ToDistinctGenericCollection<IContractSchedule>(res[0]);
+            ICollection<IContractSchedule> retlist = CollectionHelper.ToDistinctGenericCollection<IContractSchedule>(res.GetResult<ContractSchedule>(0));
             return retlist;
         }
     }

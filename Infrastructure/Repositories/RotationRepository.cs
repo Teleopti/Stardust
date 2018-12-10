@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
@@ -35,26 +36,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IRotation> LoadAllRotationsWithHierarchyData()
 		{
             DetachedCriteria rotation = DetachedCriteria.For<Rotation>("rotation")
-                .SetFetchMode("RotationDays", FetchMode.Join);
+                .Fetch("RotationDays");
 
 		    DetachedCriteria rotationDay = DetachedCriteria.For<RotationDay>("rotationDay")
-		        .SetFetchMode("RestrictionCollection", FetchMode.Join)
-		        .SetFetchMode("RestrictionCollection.ShiftCategory", FetchMode.Join)
-		        .SetFetchMode("RestrictionCollection.DayOff", FetchMode.Join);
+		        .Fetch("RestrictionCollection")
+		        .Fetch("RestrictionCollection.ShiftCategory")
+		        .Fetch("RestrictionCollection.DayOff");
 
-            IList result = Session.CreateMultiCriteria()
-                .Add(rotation)
-                .Add(rotationDay)
-                .List();
+            var result = Session.CreateQueryBatch()
+                .Add<Rotation>(rotation)
+                .Add<RotationDay>(rotationDay);
 
-            ICollection<IRotation> rotations = CollectionHelper.ToDistinctGenericCollection<IRotation>(result[0]);
+            ICollection<IRotation> rotations = CollectionHelper.ToDistinctGenericCollection<IRotation>(result.GetResult<Rotation>(0));
 			return rotations.ToList();
 		}
 
         public IList<IRotation> LoadAllRotationsWithDays()
         {
             IList<IRotation> retList = Session.CreateCriteria(typeof(Rotation))
-                .SetFetchMode("RotationDays", FetchMode.Join)
+                .Fetch("RotationDays")
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IRotation>();
 
@@ -81,10 +81,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IRotation LoadAggregate(Guid id)
 		{
 			IRotation ret = Session.CreateCriteria(typeof (Rotation))
-				.SetFetchMode("RotationDays", FetchMode.Join)
-				.SetFetchMode("RotationDays.RestrictionCollection", FetchMode.Join)
-				.SetFetchMode("RotationDays.RestrictionCollection.ShiftCategory", FetchMode.Join)
-				.SetFetchMode("RotationDays.RestrictionCollection.DayOff", FetchMode.Join)
+				.Fetch("RotationDays")
+				.Fetch("RotationDays.RestrictionCollection")
+				.Fetch("RotationDays.RestrictionCollection.ShiftCategory")
+				.Fetch("RotationDays.RestrictionCollection.DayOff")
 				.Add(Restrictions.Eq("Id", id))
 				.UniqueResult<IRotation>();
 			return ret;

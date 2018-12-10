@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				ICriteria crit = FilterByPeriod(period)
 					.Add(personCriterion(personList.ToArray()))
-					.SetFetchMode("Restriction", FetchMode.Join)
-					.SetFetchMode("Restriction.ActivityRestrictionCollection", FetchMode.Join)
+					.Fetch("Restriction")
+					.Fetch("Restriction.ActivityRestrictionCollection")
 					.SetResultTransformer(Transformers.DistinctRootEntity);
 				result.AddRange(crit.List<IPreferenceDay>());
 			}
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			ICriteria crit = Session.CreateCriteria(typeof(PreferenceDay))
 				.Add(Restrictions.Eq("RestrictionDate", dateOnly))
 				.Add(Restrictions.Eq("Person", person))
-				.SetFetchMode("Restriction", FetchMode.Join);
+				.Fetch("Restriction");
 			IList<IPreferenceDay> retList = crit.List<IPreferenceDay>();
 
 			InitializePreferenceDays(retList);
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("RestrictionDate", dateOnly))
 				.Add(Restrictions.Eq("Person", person))
 				.SetLockMode(LockMode.Upgrade)
-				.SetFetchMode("Restriction", FetchMode.Join);
+				.Fetch("Restriction");
 			IList<IPreferenceDay> retList = crit.List<IPreferenceDay>();
 
 			InitializePreferenceDays(retList);
@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			ICriteria crit = FilterByPeriod(period)
 				.Add(Restrictions.Eq("Person", person))
 				.SetLockMode(LockMode.Upgrade)
-				.SetFetchMode("Restriction", FetchMode.Join)
-				.SetFetchMode("Restriction.ActivityRestrictionCollection", FetchMode.Join)
+				.Fetch("Restriction")
+				.Fetch("Restriction.ActivityRestrictionCollection")
 				.SetResultTransformer(Transformers.DistinctRootEntity);
 			result.AddRange(crit.List<IPreferenceDay>());
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var crit = Session.CreateCriteria(typeof(PreferenceDay))
 				.Add(Restrictions.Gt("UpdatedOn", newerThan))
-				.SetFetchMode("Restriction", FetchMode.Join);
+				.Fetch("Restriction");
 			var retList = crit.List<IPreferenceDay>();
 
 			InitializePreferenceDays(retList);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			ICriteria crit = Session.CreateCriteria(typeof(PreferenceDay))
 				.Add(Restrictions.Eq("Id", preferenceId))
-				.SetFetchMode("Restriction", FetchMode.Join);
+				.Fetch("Restriction");
 			IList<IPreferenceDay> retList = crit.List<IPreferenceDay>();
 
 			InitializePreferenceDays(retList);

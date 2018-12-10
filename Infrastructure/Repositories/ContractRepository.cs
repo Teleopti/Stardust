@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public ICollection<IContract> FindAllContractByDescription()
         {
             ICollection<IContract> retList = Session.CreateCriteria(typeof (Contract))
-                .SetFetchMode("MultiplicatorDefinitionSetCollection", FetchMode.Join)
+                .Fetch("MultiplicatorDefinitionSetCollection")
                 .AddOrder(Order.Asc("Description"))
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IContract>();

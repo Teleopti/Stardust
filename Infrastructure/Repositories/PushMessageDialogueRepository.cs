@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPushMessageDialogue> Find(IPushMessage pushMessage)
 		{
 			return Session.CreateCriteria(typeof(PushMessageDialogue), "dialogue")
-			 .SetFetchMode("DialogueMessages", FetchMode.Join) 
-			 .SetFetchMode("Receiver", FetchMode.Join)
+			 .Fetch("DialogueMessages") 
+			 .Fetch("Receiver")
 			 .SetResultTransformer(Transformers.DistinctRootEntity) 
 			 .Add(Restrictions.Eq("PushMessage", pushMessage))
 			 .List<IPushMessageDialogue>();
@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPushMessageDialogue> FindAllPersonMessagesNotRepliedTo(IPerson person)
 		{
 			return Session.CreateCriteria(typeof(PushMessageDialogue), "dialogue")
-			 .SetFetchMode("DialogueMessages", FetchMode.Join)
-			 .SetFetchMode("Receiver", FetchMode.Join)
+			 .Fetch("DialogueMessages")
+			 .Fetch("Receiver")
 			 .SetResultTransformer(Transformers.DistinctRootEntity)
 			 .Add(Restrictions.Eq("Receiver", person))
 			 .Add(Restrictions.Eq("IsReplied", false))

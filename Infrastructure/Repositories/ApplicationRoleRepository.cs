@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public virtual IList<IApplicationRole> LoadAllApplicationRolesSortedByName()
         {
 	        var appRoles = Session.CreateCriteria(typeof (ApplicationRole))
-		        .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
+		        .Fetch("ApplicationFunctionCollection")
 		        .AddOrder(Order.Asc("Name"))
 		        .SetResultTransformer(new DistinctRootEntityResultTransformer())
 		        .List<IApplicationRole>()
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public virtual IList<IApplicationRole> LoadAllRolesByDescription(string role)
 	    {
 			 var appRoles = Session.CreateCriteria(typeof(ApplicationRole))
-				  .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
+				  .Fetch("ApplicationFunctionCollection")
 				  .AddOrder(Order.Asc("DescriptionText"))
 				  .SetResultTransformer(new DistinctRootEntityResultTransformer())
 				  .List<IApplicationRole>()

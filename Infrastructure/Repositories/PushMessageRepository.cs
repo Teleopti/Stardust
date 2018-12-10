@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Disjunction()
 						.Add(Restrictions.Eq("Sender", sender))
 						.Add(Restrictions.Eq("CreatedBy", sender) && Restrictions.IsNull("Sender")))
-				.SetFetchMode("ReplyOptions", FetchMode.Lazy)
+				.Fetch(SelectMode.Skip, "ReplyOptions")
 				.SetFirstResult(pagingDetail.Skip)
 				.SetMaxResults(pagingDetail.Take)
 				.Future<IPushMessage>();

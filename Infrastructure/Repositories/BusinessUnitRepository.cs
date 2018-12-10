@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             var sites = DetachedCriteria.For<BusinessUnit>()
                 .Add(Restrictions.Eq("Id", businessUnit.Id))
-                .SetFetchMode("SiteCollection", FetchMode.Join);
+                .Fetch("SiteCollection");
 
             var sitesForTeams = DetachedCriteria.For<BusinessUnit>()
                 .Add(Restrictions.Eq("Id", businessUnit.Id))
@@ -70,16 +71,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetProjection(Projections.Property("site.Id"));
             var teams = Session.CreateCriteria<Site>()
                 .Add(Subqueries.PropertyIn("Id", sitesForTeams))
-                .SetFetchMode("TeamCollection", FetchMode.Join);
+                .Fetch("TeamCollection");
 
             Session.DisableFilter("businessUnitFilter");
 
-            var result = Session.CreateMultiCriteria()
-                .Add(sites)
-                .Add(teams)
-                .SetResultTransformer(Transformers.DistinctRootEntity).List();
+            var result = Session.CreateQueryBatch()
+                .Add<BusinessUnit>(sites)
+                .Add<BusinessUnit>(teams);
 
-            var foundBueinessUnit = CollectionHelper.ToDistinctGenericCollection<BusinessUnit>(result[0]).First();
+            var foundBueinessUnit = CollectionHelper.ToDistinctGenericCollection<BusinessUnit>(result.GetResult<BusinessUnit>(0)).First();
             return foundBueinessUnit;
         }
 

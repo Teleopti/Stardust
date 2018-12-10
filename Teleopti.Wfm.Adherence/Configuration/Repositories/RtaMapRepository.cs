@@ -23,9 +23,9 @@ namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 		public IList<IRtaMap> LoadAllCompleteGraph()
 		{
 			return Session.CreateCriteria(typeof (RtaMap))
-				.SetFetchMode("Activity", FetchMode.Join)
-				.SetFetchMode("StateGroup", FetchMode.Join)
-				.SetFetchMode("RtaRule", FetchMode.Join)
+				.Fetch("Activity")
+				.Fetch("StateGroup")
+				.Fetch("RtaRule")
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.List<IRtaMap>();
 		}

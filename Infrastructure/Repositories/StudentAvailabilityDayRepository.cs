@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             foreach (var personList in persons.Batch(400))
             {
                 ICriteria crit = FilterByPeriod(period)
-                .SetFetchMode("RestrictionCollection", FetchMode.Join)
+                .Fetch("RestrictionCollection")
                 .Add(personCriterion(personList.ToArray()))
                 .SetResultTransformer(Transformers.DistinctRootEntity);
                 result.AddRange(crit.List<IStudentAvailabilityDay>());
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(personCriterion(person))
 				.AddOrder(Order.Desc("UpdatedOn"))
                 .SetResultTransformer(Transformers.DistinctRootEntity)
-                .SetFetchMode("Restriction", FetchMode.Join);
+                .Fetch("Restriction");
             IList<IStudentAvailabilityDay> retList = crit.List<IStudentAvailabilityDay>();
 
             InitializeStudentDays(retList);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var crit = Session.CreateCriteria(typeof(StudentAvailabilityDay))
 				.Add(Restrictions.Gt("UpdatedOn", newerThan))
-				.SetFetchMode("RestrictionCollection", FetchMode.Join);
+				.Fetch("RestrictionCollection");
 			var retList = crit.List<IStudentAvailabilityDay>();
 
 			InitializeStudentDays(retList);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IStudentAvailabilityDay LoadAggregate(Guid id)
         {
             IStudentAvailabilityDay ret = Session.CreateCriteria(typeof(StudentAvailabilityDay))
-                .SetFetchMode("RestrictionCollection", FetchMode.Join)
+                .Fetch("RestrictionCollection")
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .Add(Restrictions.Eq("Id", id))
                 .UniqueResult<IStudentAvailabilityDay>();

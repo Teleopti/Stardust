@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -43,23 +43,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             var customShrinkages = DetachedCriteria.For<BudgetDay>()
                .Add(Subqueries.PropertyIn("Id", foundBudgetDaysSubquery))
-               .SetFetchMode("CustomShrinkages", FetchMode.Join);
+               .Fetch("CustomShrinkages");
 
             var customEfficiencyShrinkages = DetachedCriteria.For<BudgetDay>()
                 .Add(Subqueries.PropertyIn("Id", foundBudgetDaysSubquery))
-                .SetFetchMode("CustomEfficiencyShrinkages", FetchMode.Join);
-	        IList result;
+                .Fetch("CustomEfficiencyShrinkages");
+	        IList<BudgetDay> result;
 	        if (noLock)
 	        {
 				using (Session.BeginTransaction(IsolationLevel.ReadUncommitted))
 				{
-					result = Session.CreateMultiCriteria().Add(customShrinkages).Add(customEfficiencyShrinkages).List();
+					result = Session.CreateQueryBatch().Add<BudgetDay>(customShrinkages).Add<BudgetDay>(customEfficiencyShrinkages).GetResult<BudgetDay>(0);
 				}
 			}else
-				result = Session.CreateMultiCriteria().Add(customShrinkages).Add(customEfficiencyShrinkages).List();
+				result = Session.CreateQueryBatch().Add<BudgetDay>(customShrinkages).Add<BudgetDay>(customEfficiencyShrinkages).GetResult<BudgetDay>(0);
 
 
-			var foundBudgetDays = CollectionHelper.ToDistinctGenericCollection<IBudgetDay>(result[0]).ToList();
+			var foundBudgetDays = CollectionHelper.ToDistinctGenericCollection<IBudgetDay>(result).ToList();
             return foundBudgetDays;
         }
     }

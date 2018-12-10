@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Adherence.Configuration.Repositories
         public IList<IRtaStateGroup> LoadAllCompleteGraph()
         {
             return Session.CreateCriteria(typeof (RtaStateGroup))
-                .SetFetchMode("StateCollection",FetchMode.Join)
+                .Fetch("StateCollection")
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IRtaStateGroup>();
         }

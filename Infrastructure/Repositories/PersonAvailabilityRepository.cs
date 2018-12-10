@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    foreach (var personBatch in persons.Batch(400))
 		    {
                 personAvailabilites.AddRange(Session.CreateCriteria(typeof(PersonAvailability))
-                    .SetFetchMode("Availability",FetchMode.Join)
+                    .Fetch("Availability")
                     .Add(Restrictions.InG("Person", personBatch.ToArray()))
                     .List<IPersonAvailability>());
 		    }

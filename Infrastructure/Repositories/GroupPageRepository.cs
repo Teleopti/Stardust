@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Multi;
 using NHibernate.SqlCommand;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -52,62 +53,55 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
 
             ICriteria groupPages = Session.CreateCriteria(typeof(GroupPage))
-                            .SetFetchMode("RootGroupCollection", FetchMode.Join)
+                            .Fetch("RootGroupCollection")
                             .AddOrder(Order.Asc("Description"));
 
             ICriteria rootGroupPages = Session.CreateCriteria(typeof (RootPersonGroup))
-                                        .SetFetchMode("ChildGroupCollection", FetchMode.Join);
+                                        .Fetch("ChildGroupCollection");
 
             ICriteria personColection = Session.CreateCriteria(typeof(RootPersonGroup))
-                                        .SetFetchMode("PersonCollection", FetchMode.Join);
+                                        .Fetch("PersonCollection");
 
             ICriteria childGroupPages = Session.CreateCriteria(typeof(ChildPersonGroup))
-                                        .SetFetchMode("ChildGroupCollection", FetchMode.Join);
+                                        .Fetch("ChildGroupCollection");
 
             ICriteria childPersonColection = Session.CreateCriteria(typeof(ChildPersonGroup))
-                                        .SetFetchMode("PersonCollection", FetchMode.Join);
+                                        .Fetch("PersonCollection");
             
-            IList mainQuery = Session.CreateMultiCriteria()
-                                        .Add(groupPages)
-                                        .Add(rootGroupPages)
-                                        .Add(personColection)
-                                        .Add(childGroupPages)
-                                        .Add(childPersonColection)
-                                        .List();
-            var retList = CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]).ToArray();
-            
-            return retList;
-
+            return CollectionHelper.ToDistinctGenericCollection<IGroupPage>(Session.CreateQueryBatch()
+                                        .Add<GroupPage>(groupPages)
+                                        .Add<RootPersonGroup>(rootGroupPages)
+                                        .Add<RootPersonGroup>(personColection)
+                                        .Add<ChildPersonGroup>(childGroupPages)
+                                        .Add<ChildPersonGroup>(childPersonColection)
+                                        .GetResult<GroupPage>(0)).ToList();
         }
 
 		public IList<IGroupPage> LoadGroupPagesByIds(IEnumerable<Guid> groupPageIds)
 		{
 			ICriteria groupPages = Session.CreateCriteria(typeof (GroupPage))
-				.SetFetchMode("RootGroupCollection", FetchMode.Join)
+				.Fetch("RootGroupCollection")
 				.Add(Restrictions.In("Id", groupPageIds.ToArray()));
 
 			ICriteria rootGroupPages = Session.CreateCriteria(typeof(RootPersonGroup))
-										.SetFetchMode("ChildGroupCollection", FetchMode.Join);
+										.Fetch("ChildGroupCollection");
 
 			ICriteria personColection = Session.CreateCriteria(typeof(RootPersonGroup))
-										.SetFetchMode("PersonCollection", FetchMode.Join);
+										.Fetch("PersonCollection");
 
 			ICriteria childGroupPages = Session.CreateCriteria(typeof(ChildPersonGroup))
-										.SetFetchMode("ChildGroupCollection", FetchMode.Join);
+										.Fetch("ChildGroupCollection");
 
 			ICriteria childPersonColection = Session.CreateCriteria(typeof(ChildPersonGroup))
-										.SetFetchMode("PersonCollection", FetchMode.Join);
+										.Fetch("PersonCollection");
 
-			IList mainQuery = Session.CreateMultiCriteria()
-										.Add(groupPages)
-										.Add(rootGroupPages)
-										.Add(personColection)
-										.Add(childGroupPages)
-										.Add(childPersonColection)
-										.List();
-			var retList = CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]).ToArray();
-
-			return retList;
+			return CollectionHelper.ToDistinctGenericCollection<IGroupPage>(Session.CreateQueryBatch()
+										.Add<GroupPage>(groupPages)
+										.Add<RootPersonGroup>(rootGroupPages)
+										.Add<RootPersonGroup>(personColection)
+										.Add<ChildPersonGroup>(childGroupPages)
+										.Add<ChildPersonGroup>(childPersonColection)
+										.GetResult<GroupPage>(0)).ToList();
 		}
 
 		public IList<IGroupPage> LoadAllGroupPageWhenPersonCollectionReAssociated()
@@ -115,27 +109,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             try
             {
                 ICriteria groupPages = Session.CreateCriteria(typeof (GroupPage))
-                    .SetFetchMode("RootGroupCollection", FetchMode.Join)
+                    .Fetch("RootGroupCollection")
                     .AddOrder(Order.Asc("Description"));
 
                 ICriteria rootGroupPages = Session.CreateCriteria(typeof (RootPersonGroup))
-                    .SetFetchMode("ChildGroupCollection", FetchMode.Join);
+                    .Fetch("ChildGroupCollection");
 
                 ICriteria childGroupPages = Session.CreateCriteria(typeof (ChildPersonGroup))
-                    .SetFetchMode("ChildGroupCollection", FetchMode.Join);
+                    .Fetch("ChildGroupCollection");
 
                 ICriteria persons = Session.CreateCriteria<RootPersonGroup>()
-                    .SetFetchMode("PersonCollection", FetchMode.Join);
+                    .Fetch("PersonCollection");
 
-                IList mainQuery = Session.CreateMultiCriteria()
-                    .Add(groupPages)
-                    .Add(rootGroupPages)
-                    .Add(childGroupPages)
-                    .Add(persons)
-                    .List();
-				var retList = CollectionHelper.ToDistinctGenericCollection<IGroupPage>(mainQuery[0]).ToArray();
+				var retList = CollectionHelper.ToDistinctGenericCollection<IGroupPage>(Session.CreateQueryBatch()
+                    .Add<GroupPage>(groupPages)
+                    .Add<RootPersonGroup>(rootGroupPages)
+                    .Add<ChildPersonGroup>(childGroupPages)
+                    .Add<RootPersonGroup>(persons)
+                    .GetResult<GroupPage>(0)).ToList();
 
-                var multiCriteria = Session.CreateMultiCriteria();
+                var multiCriteria = Session.CreateQueryBatch();
                 bool hasQuery = false;
                 foreach (IGroupPage groupPage in retList)
                 {
@@ -148,7 +141,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         }
                     }
                 }
-                if(hasQuery) multiCriteria.List();
+                if(hasQuery) multiCriteria.Execute();;
                 
                 return retList;
             }
@@ -162,22 +155,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 		    var result = new List<IGroupPage>();
 			var childGroupQuery = DetachedCriteria.For<ChildPersonGroup>()
-				.SetFetchMode("Parent", FetchMode.Join)
+				.Fetch("Parent")
 				.CreateCriteria("PersonCollection", JoinType.InnerJoin)
 				.Add(Restrictions.Where<Person>(x => x.Id == personId));
 
 		    var rootGroupQuery = DetachedCriteria.For<RootPersonGroup>()
-				.SetFetchMode("Parent", FetchMode.Join)
+				.Fetch("Parent")
 			    .CreateCriteria("PersonCollection", JoinType.InnerJoin)
 			    .Add(Restrictions.Where<Person>(x => x.Id == personId));
 
-			var mainQuery = Session.CreateMultiCriteria()
-			    .Add(childGroupQuery)
-			    .Add(rootGroupQuery)
-			    .List();
+			var mainQuery = Session.CreateQueryBatch()
+			    .Add<ChildPersonGroup>(childGroupQuery)
+			    .Add<RootPersonGroup>(rootGroupQuery);
 
-			var childGroups = CollectionHelper.ToDistinctGenericCollection<ChildPersonGroup>(mainQuery[0]).ToArray();
-			var rootGroups = CollectionHelper.ToDistinctGenericCollection<RootPersonGroup>(mainQuery[1]).ToArray();
+			var childGroups = CollectionHelper.ToDistinctGenericCollection<ChildPersonGroup>(mainQuery.GetResult<ChildPersonGroup>(0));
+			var rootGroups = CollectionHelper.ToDistinctGenericCollection<RootPersonGroup>(mainQuery.GetResult<RootPersonGroup>(1)).ToArray();
 
 			// Go through the recursive hierarchy until we find a parent that is not a persongroupbase, at which point we are at the grouppage level.
 			foreach (var childGroup in childGroups)
@@ -195,15 +187,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    return CollectionHelper.ToDistinctGenericCollection<IGroupPage>(result).Where(x=> !((IDeleteTag)x).IsDeleted).ToArray();
 	    }
 
-		private void initializeChildGroups(IChildPersonGroup childPersonGroup, IMultiCriteria multiCriteria)
+		private void initializeChildGroups(IChildPersonGroup childPersonGroup, IQueryBatch multiCriteria)
         {
             foreach (IChildPersonGroup choldChildGroup in childPersonGroup.ChildGroupCollection)
             {
                 initializeChildGroups(choldChildGroup, multiCriteria);
             }
-            multiCriteria.Add(Session.CreateCriteria<ChildPersonGroup>()
+            multiCriteria.Add<ChildPersonGroup>(Session.CreateCriteria<ChildPersonGroup>()
                                   .Add(Restrictions.Eq("Id", childPersonGroup.Id))
-                                  .SetFetchMode("PersonCollection", FetchMode.Join));
+                                  .Fetch("PersonCollection"));
         }
     }
 }

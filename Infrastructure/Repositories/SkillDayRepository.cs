@@ -60,14 +60,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("skillDay.Scenario", scenario))
 				.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
 				.Add(Restrictions.Eq("skillDay.Skill", skill))
-				.SetFetchMode("SkillDataPeriodCollection", FetchMode.Join)
+				.Fetch("SkillDataPeriodCollection")
 				.Future<SkillDay>();
 
 			Session.CreateCriteria<SkillDay>("skillDay")
 				.Add(Restrictions.Eq("skillDay.Scenario", scenario))
 				.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
 				.Add(Restrictions.Eq("skillDay.Skill", skill))
-				.SetFetchMode("WorkloadDayCollection", FetchMode.Join)
+				.Fetch("WorkloadDayCollection")
 				.Future<SkillDay>();
 
 			Session.CreateCriteria<Workload>("workload")
@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			Session.CreateCriteria<WorkloadDay>()
 				.Add(Subqueries.PropertyIn("Parent", skillDaySubquery))
-				.SetFetchMode("OpenHourList", FetchMode.Join)
-				.SetFetchMode("TaskPeriodList", FetchMode.Join)
+				.Fetch("OpenHourList")
+				.Fetch("TaskPeriodList")
 				.Future<WorkloadDay>();
 
 			var skillDays = days.OfType<ISkillDay>().ToList();
@@ -149,14 +149,14 @@ SELECT 0
 					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
 					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
 					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch))
-					.SetFetchMode("SkillDataPeriodCollection", FetchMode.Join)
+					.Fetch("SkillDataPeriodCollection")
 					.Future<SkillDay>();
 
 				Session.CreateCriteria<SkillDay>("skillDay")
 					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
 					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
 					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch))
-					.SetFetchMode("WorkloadDayCollection", FetchMode.Join)
+					.Fetch("WorkloadDayCollection")
 					.Future<SkillDay>();
 
 				Session.CreateCriteria<Workload>("workload")
@@ -165,8 +165,8 @@ SELECT 0
 
 				Session.CreateCriteria<WorkloadDay>()
 					.Add(Subqueries.PropertyIn("Parent", skillDaySubquery))
-					.SetFetchMode("OpenHourList", FetchMode.Join)
-					.SetFetchMode("TaskPeriodList", FetchMode.Join)
+					.Fetch("OpenHourList")
+					.Fetch("TaskPeriodList")
 					.Future<WorkloadDay>();
 
 				var grouped = days.GroupBy(d => d.Skill);
@@ -269,7 +269,7 @@ SELECT 0
 			return Session.CreateCriteria<SkillDay>("sd")
 				.Add(Restrictions.Eq("sd.Scenario", scenario))
 				.Add(Restrictions.Gt("sd.UpdatedOn",lastCheck))
-	            .SetFetchMode("sd.Skill", FetchMode.Join)
+	            .Fetch("sd.Skill")
 				.CreateAlias("sd.Skill","skill")
 				.Add(Restrictions.Not(Property.ForName("skill.class").Eq(typeof(ChildSkill))))
 				.List<ISkillDay>();

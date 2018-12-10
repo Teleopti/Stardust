@@ -40,11 +40,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Restrictions.Le("StartDate", new DateOnly(period.EndDateTime)))
                 .Add(Restrictions.Gt("EndDate", new DateOnly(period.StartDateTime)))
                 .Add(Restrictions.Eq("Scenario", scenario))
-                .SetFetchMode("MeetingPersons", FetchMode.Join)
-                .SetFetchMode("meetingRecurrenceOptions", FetchMode.Join)
-                .SetFetchMode("meetingRecurrenceOptions.WeekDays", FetchMode.Join)
-                .SetFetchMode("Activity", FetchMode.Join)
-                .SetFetchMode("Organizer", FetchMode.Join)
+                .Fetch("MeetingPersons")
+                .Fetch("meetingRecurrenceOptions")
+                .Fetch("meetingRecurrenceOptions.WeekDays")
+                .Fetch("Activity")
+                .Fetch("Organizer")
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IMeeting>();
 
@@ -76,11 +76,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     				.Add(Restrictions.Gt("EndDate", period.StartDate))
     				.Add(Restrictions.Eq("Scenario", scenario))
     				.Add(personRestriction)
-    				.SetFetchMode("MeetingPersons", FetchMode.Join)
-    				.SetFetchMode("meetingRecurrenceOptions", FetchMode.Join)
-    				.SetFetchMode("meetingRecurrenceOptions.WeekDays", FetchMode.Join)
-    				.SetFetchMode("Activity", FetchMode.Join)
-    				.SetFetchMode("Organizer", FetchMode.Join)
+    				.Fetch("MeetingPersons")
+    				.Fetch("meetingRecurrenceOptions")
+    				.Fetch("meetingRecurrenceOptions.WeekDays")
+    				.Fetch("Activity")
+    				.Fetch("Organizer")
     				.SetResultTransformer(Transformers.DistinctRootEntity)
     				.List<IMeeting>();
 

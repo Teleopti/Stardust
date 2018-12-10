@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -64,39 +65,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						))
 					.SetProjection(Projections.Property("personPeriod.Id"));
 
-				var list = Session.CreateMultiCriteria()
-					.Add(DetachedCriteria.For<Person>("users")
-						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+				var list = Session.CreateQueryBatch()
+					.Add<Person>(DetachedCriteria.For<Person>("users")
+						.Fetch("PersonPeriodCollection")
 						.Add(Restrictions.IsEmpty("PersonPeriodCollection"))
 						.Add(Restrictions.Disjunction()
 							.Add(Restrictions.IsNull("TerminalDate"))
 							.Add(Restrictions.Ge("TerminalDate", earliestTerminalDate)
 							)))
-					.Add(DetachedCriteria.For<Person>("per")
-						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+					.Add<Person>(DetachedCriteria.For<Person>("per")
+						.Fetch("PersonPeriodCollection")
 						.Add(Subqueries.PropertyIn("per.Id", personSubQuery))
 						.Add(Restrictions.Disjunction()
 							.Add(Restrictions.IsNull("TerminalDate"))
 							.Add(Restrictions.Ge("TerminalDate", earliestTerminalDate)
 							))
 						.SetResultTransformer(Transformers.DistinctRootEntity))
-					.Add(DetachedCriteria.For<PersonPeriod>()
-						.SetFetchMode("Team", FetchMode.Join)
-						.SetFetchMode("Team.Site", FetchMode.Join)
-						.SetFetchMode("Team.Site.BusinessUnit", FetchMode.Join)
+					.Add<PersonPeriod>(DetachedCriteria.For<PersonPeriod>()
+						.Fetch("Team")
+						.Fetch("Team.Site")
+						.Fetch("Team.Site.BusinessUnit")
 						.CreateAlias("Team", "team", JoinType.InnerJoin)
 						.CreateAlias("team.Site", "site", JoinType.InnerJoin)
 						.Add(Restrictions.Eq("site.BusinessUnit", businessUnit))
 						.SetResultTransformer(Transformers.DistinctRootEntity))
-					.Add(DetachedCriteria.For<PersonPeriod>("personPeriod")
+					.Add<PersonPeriod>(DetachedCriteria.For<PersonPeriod>("personPeriod")
 						.Add(Subqueries.PropertyIn("personPeriod.Id", personPeriodSubQuery))
-						.SetFetchMode("PersonSkillCollection", FetchMode.Join)
-						.SetResultTransformer(Transformers.DistinctRootEntity))
-					.List();
-
+						.Fetch("PersonSkillCollection")
+						.SetResultTransformer(Transformers.DistinctRootEntity));
+				list.Execute();
+				
 				var result = new List<IPerson>();
-				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[0]));
-				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[1]));
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list.GetResult<Person>(0)));
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list.GetResult<Person>(1)));
 
 				return result.OrderBy(p => p.Name.LastName).ThenBy(p => p.Name.FirstName).ToArray();
 			}
@@ -109,8 +110,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period)
 		{
 			ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person), "per")
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+				.Fetch("PersonPeriodCollection")
+				.Fetch("PersonPeriodCollection.Team")
 				.Add(Restrictions.Or(
 					Restrictions.IsNull("TerminalDate"),
 					Restrictions.Ge("TerminalDate", period.StartDate)
@@ -127,9 +128,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
 		{
 			ICollection<IPerson> tempList = Session.CreateCriteria(typeof(Person), "per")
-				.SetFetchMode("OptionalColumnValueCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+				.Fetch("OptionalColumnValueCollection")
+				.Fetch("PersonPeriodCollection")
+				.Fetch("PersonPeriodCollection.Team")
 				.Add(Restrictions.Or(
 					Restrictions.IsNull("TerminalDate"),
 					Restrictions.Ge("TerminalDate", period.StartDate)
@@ -186,21 +187,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current()))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
-				var criterias = Session.CreateMultiCriteria()
-					.Add(DetachedCriteria.For<Person>("users")
-						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+				var criterias = Session.CreateQueryBatch()
+					.Add<Person>(DetachedCriteria.For<Person>("users")
+						.Fetch("PersonPeriodCollection")
 						.Add(Restrictions.IsEmpty("PersonPeriodCollection"))
 					)
-					.Add(DetachedCriteria.For<Person>("per")
-						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+					.Add<Person>(DetachedCriteria.For<Person>("per")
+						.Fetch("PersonPeriodCollection")
 						.Add(Subqueries.PropertyIn("per.Id", personsubQuery))
 						.SetResultTransformer(Transformers.DistinctRootEntity));
 
-				var list = criterias.List();
-
 				var result = new List<IPerson>();
-				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[0]));
-				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[1]));
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(criterias.GetResult<Person>(0)));
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(criterias.GetResult<Person>(1)));
 
 
 				return new HashSet<IPerson>(result.OrderBy(p => p.Name.LastName).ThenBy(p => p.Name.FirstName));
@@ -221,27 +220,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current()))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
-				var criterias = Session.CreateMultiCriteria()
-					.Add(DetachedCriteria.For<Person>("users")
-						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+				var criterias = Session.CreateQueryBatch()
+					.Add<Person>(DetachedCriteria.For<Person>("users")
+						.Fetch("PersonPeriodCollection")
 						.Add(Restrictions.IsEmpty("PersonPeriodCollection"))
 					)
-					.Add(DetachedCriteria.For<Person>("per")
-						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+					.Add<Person>(DetachedCriteria.For<Person>("per")
+						.Fetch("PersonPeriodCollection")
 						.Add(Subqueries.PropertyIn("per.Id", personsubQuery))
 						.SetResultTransformer(Transformers.DistinctRootEntity));
 
-				criterias.Add(DetachedCriteria.For<Person>()
-					.SetFetchMode("PermissionInformation", FetchMode.Join)
-					.SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join));
-
-				var list = criterias.List();
-
+				criterias.Add<Person>(DetachedCriteria.For<Person>()
+					.Fetch("PermissionInformation")
+					.Fetch("PermissionInformation.personInApplicationRole"));
+				
 				var result = new List<IPerson>();
-				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[0]));
-				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[1]));
-
-				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[2]));
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(criterias.GetResult<Person>(0)));
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(criterias.GetResult<Person>(1)));
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(criterias.GetResult<Person>(2)));
 
 
 				return new HashSet<IPerson>(result.OrderBy(p => p.Name.LastName).ThenBy(p => p.Name.FirstName));
@@ -264,7 +260,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var personPeriods = DetachedCriteria.For<Person>()
 				.Add(Restrictions.Eq("Id", person.Id))
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join);
+				.Fetch("PersonPeriodCollection");
 
 			var teamSubquery = DetachedCriteria.For<PersonPeriod>("pp")
 				.Add(Restrictions.Eq("pp.Parent", person))
@@ -273,16 +269,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var teams = DetachedCriteria.For<Team>()
 				.Add(Subqueries.PropertyIn("Id", teamSubquery))
-				.SetFetchMode("Site", FetchMode.Join)
-				.SetFetchMode("Site.TeamCollection", FetchMode.Join);
+				.Fetch("Site")
+				.Fetch("Site.TeamCollection");
 
 			var bus = DetachedCriteria.For<Team>()
 				.Add(Subqueries.PropertyIn("Id", teamSubquery))
-				.SetFetchMode("BusinessUnitExplicit", FetchMode.Join);
+				.Fetch("BusinessUnitExplicit");
 
 			var roles = DetachedCriteria.For<Person>()
 				.Add(Restrictions.Eq("Id", person.Id))
-				.SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join);
+				.Fetch("PermissionInformation.personInApplicationRole");
 
 			var rolesSubquery = DetachedCriteria.For<Person>()
 				.Add(Restrictions.Eq("Id", person.Id))
@@ -291,15 +287,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var functions = DetachedCriteria.For<ApplicationRole>()
 				.Add(Subqueries.PropertyIn("Id", rolesSubquery))
-				.SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
-				.SetFetchMode("BusinessUnit", FetchMode.Join);
+				.Fetch("ApplicationFunctionCollection")
+				.Fetch("BusinessUnit");
 
 			Session.DisableFilter("businessUnitFilter");
 			using (UnitOfWork.DisableFilter(QueryFilter.Deleted))
 			{
 				var result =
-					Session.CreateMultiCriteria().Add(personPeriods).Add(teams).Add(bus).Add(roles).Add(functions).List();
-				var foundPerson = CollectionHelper.ToDistinctGenericCollection<Person>(result[0]).First();
+					Session.CreateQueryBatch().Add<Person>(personPeriods).Add<Team>(teams).Add<Team>(bus).Add<Person>(roles).Add<ApplicationRole>(functions);
+				var foundPerson = CollectionHelper.ToDistinctGenericCollection<Person>(result.GetResult<Person>(0)).First();
 
 				return foundPerson;
 			}
@@ -307,36 +303,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ICollection<IPerson> FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(DateOnlyPeriod period)
 		{
-			var multiCrit = Session.CreateMultiCriteria()
-				.Add(personPeriodsOnlyTeamAndSite(period))
-				.Add(personPeriodSkills(period))
-				.Add(personSchedule(period))
-				.Add(personWorkflowControlSet());
+			var multiCrit = Session.CreateQueryBatch()
+				.Add<Person>(personPeriodsOnlyTeamAndSite(period))
+				.Add<PersonPeriod>(personPeriodSkills(period))
+				.Add<Person>(personSchedule(period))
+				.Add<Person>(personWorkflowControlSet());
 
-			var res = multiCrit.List();
-			var persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(res[0]);
+			var persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(multiCrit.GetResult<Person>(0));
 
 			return persons;
 		}
 
 		public ICollection<IPerson> FindAllAgentsLight(DateOnlyPeriod period)
 		{
-			IMultiCriteria multiCrit = Session.CreateMultiCriteria()
-				.Add(personPeriodsOnlyTeamAndSite(period));
+			var multiCrit = Session.CreateQueryBatch()
+				.Add<Person>(personPeriodsOnlyTeamAndSite(period));
 
-			IList res = multiCrit.List();
-			ICollection<IPerson> persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(res[0]);
+			ICollection<IPerson> persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(multiCrit.GetResult<Person>(0));
 
 			return persons;
 		}
 
 		public ICollection<IPerson> FindAllAgentsQuiteLight(DateOnlyPeriod period)
 		{
-			IMultiCriteria multiCrit = Session.CreateMultiCriteria()
-				.Add(personPeriodsOnlyTeamAndSite(period)).Add(personSchedule(period)).Add(personPeriodSkills(period));
+			var multiCrit = Session.CreateQueryBatch()
+				.Add<Person>(personPeriodsOnlyTeamAndSite(period)).Add<Person>(personSchedule(period)).Add<PersonPeriod>(personPeriodSkills(period));
 
-			IList res = multiCrit.List();
-			ICollection<IPerson> persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(res[0]);
+			ICollection<IPerson> persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(multiCrit.GetResult<Person>(0));
 
 			return persons;
 		}
@@ -350,34 +343,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				DetachedCriteria person = DetachedCriteria.For<Person>("person")
 					.Add(Restrictions.InG("Id", currentBatchIds))
-					.SetFetchMode("OptionalColumnValueCollection", FetchMode.Join);
+					.Fetch("OptionalColumnValueCollection");
 
 				DetachedCriteria roles = DetachedCriteria.For<Person>("roles")
 					.Add(Restrictions.InG("Id", currentBatchIds))
-					.SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join);
+					.Fetch("PermissionInformation.personInApplicationRole");
 
 				DetachedCriteria personPeriod = DetachedCriteria.For<Person>("personPeriod")
 					.Add(Restrictions.InG("Id", currentBatchIds))
-					.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-					.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-					.SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
-					.SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join)
-					.SetFetchMode("PersonPeriodCollection.PersonSkillCollection", FetchMode.Join)
-					.SetFetchMode("PersonPeriodCollection.ExternalLogOnCollection", FetchMode.Join);
+					.Fetch("PersonPeriodCollection")
+					.Fetch("PersonPeriodCollection.Team")
+					.Fetch("PersonPeriodCollection.Team.Site")
+					.Fetch("PersonPeriodCollection.Team.Site.BusinessUnit")
+					.Fetch("PersonPeriodCollection.PersonSkillCollection")
+					.Fetch("PersonPeriodCollection.ExternalLogOnCollection");
 
 				DetachedCriteria schedulePeriod = DetachedCriteria.For<Person>("schedulePeriod")
 					.Add(Restrictions.InG("Id", currentBatchIds))
-					.SetFetchMode("PersonSchedulePeriodCollection", FetchMode.Join)
-					.SetFetchMode("PersonSchedulePeriodCollection.shiftCategoryLimitation", FetchMode.Join);
+					.Fetch("PersonSchedulePeriodCollection")
+					.Fetch("PersonSchedulePeriodCollection.shiftCategoryLimitation");
 
-				IList queryResult = Session.CreateMultiCriteria()
-					.Add(person)
-					.Add(roles)
-					.Add(personPeriod)
-					.Add(schedulePeriod)
-					.List();
+				var queryResult = Session.CreateQueryBatch()
+					.Add<Person>(person)
+					.Add<Person>(roles)
+					.Add<Person>(personPeriod)
+					.Add<Person>(schedulePeriod);
 
-				var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult[0]);
+				var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult.GetResult<Person>(0));
 				result.AddRange(foundPeople);
 			}
 
@@ -393,11 +385,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				DetachedCriteria person = DetachedCriteria.For<Person>("person")
 					.Add(Restrictions.InG("Id", currentBatchIds))
-					.SetFetchMode("OptionalColumnValueCollection", FetchMode.Join);
+					.Fetch("OptionalColumnValueCollection");
 
-				IList queryResult = Session.CreateMultiCriteria().Add(person).List();
+				var queryResult = Session.CreateQueryBatch().Add<Person>(person);
 
-				var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult[0]);
+				var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult.GetResult<Person>(0));
 				result.AddRange(foundPeople);
 			}
 
@@ -412,13 +404,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ICollection<IPerson> FindAllAgents(DateOnlyPeriod period, bool includeRuleSetData)
 		{
-			IMultiCriteria multiCrit = Session.CreateMultiCriteria()
-				.Add(personPeriodTeamAndSites(period))
-				.Add(personPeriodSkills(period))
-				.Add(personSchedule(period))
-				.Add(personPeriodLogOns(period))
-				.Add(personWorkflowControlSet());
-			personPeriodContract(period).ForEach(crit => multiCrit.Add(crit));
+			var multiCrit = Session.CreateQueryBatch()
+				.Add<Person>(personPeriodTeamAndSites(period))
+				.Add<PersonPeriod>(personPeriodSkills(period))
+				.Add<Person>(personSchedule(period))
+				.Add<PersonPeriod>(personPeriodLogOns(period))
+				.Add<Person>(personWorkflowControlSet());
+			personPeriodContract(period).ForEach(crit => multiCrit.Add<Person>(crit));
 
 			//gör detta smartare! 
 			if (includeRuleSetData)
@@ -427,14 +419,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					//Bryt ut till rätt klass (=annat rep)!
 					Session.CreateCriteria(typeof(RuleSetBag))
-						.SetFetchMode("RuleSetCollection", FetchMode.Join)
+						.Fetch("RuleSetCollection")
 						.List();
 					new WorkShiftRuleSetRepository(UnitOfWork).FindAllWithLimitersAndExtenders();
 				}
 			}
 
-			IList res = multiCrit.List();
-			ICollection<IPerson> persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(res[0]);
+			ICollection<IPerson> persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(multiCrit.GetResult<Person>(0));
 
 			//ta bort detta - gammalt blajj. ska inte behövas om frågorna gör rätt. Gör om, gör rätt!
 			//Ola: När man kör från PeopleLoader i Schedulern behövs inte detta nu. Vågar dock inte ta bort det för denna används från många ställen
@@ -464,7 +455,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static DetachedCriteria personWorkflowControlSet()
 		{
-			return DetachedCriteria.For<Person>("per").SetFetchMode("WorkflowControlSet", FetchMode.Join);
+			return DetachedCriteria.For<Person>("per").Fetch("WorkflowControlSet");
 		}
 
 		private static DetachedCriteria personSchedule(DateOnlyPeriod period)
@@ -474,8 +465,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Restrictions.IsNull("TerminalDate"),
 					Restrictions.Ge("TerminalDate", period.StartDate)
 				))
-				.SetFetchMode("PersonSchedulePeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonSchedulePeriodCollection.shiftCategoryLimitation", FetchMode.Join);
+				.Fetch("PersonSchedulePeriodCollection")
+				.Fetch("PersonSchedulePeriodCollection.shiftCategoryLimitation");
 		}
 
 		private static DetachedCriteria personPeriodTeamAndSites(DateOnlyPeriod period)
@@ -486,11 +477,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Restrictions.Ge("TerminalDate", period.StartDate)
 				))
 				.Add(Subqueries.Exists(findPeriodMatch(period)))
-				.SetFetchMode("OptionalColumnValueCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join);
+				.Fetch("OptionalColumnValueCollection")
+				.Fetch("PersonPeriodCollection")
+				.Fetch("PersonPeriodCollection.Team")
+				.Fetch("PersonPeriodCollection.Team.Site")
+				.Fetch("PersonPeriodCollection.Team.Site.BusinessUnit");
 		}
 
 		private static IEnumerable<DetachedCriteria> personPeriodContract(DateOnlyPeriod period)
@@ -502,20 +493,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Restrictions.Ge("TerminalDate", period.StartDate)
 				))
 				.Add(Subqueries.Exists(findPeriodMatch(period)))
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.PersonContract", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.PersonContract.ContractSchedule", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.PersonContract.ContractSchedule.ContractScheduleWeeks", FetchMode.Join);
+				.Fetch("PersonPeriodCollection")
+				.Fetch("PersonPeriodCollection.PersonContract")
+				.Fetch("PersonPeriodCollection.PersonContract.ContractSchedule")
+				.Fetch("PersonPeriodCollection.PersonContract.ContractSchedule.ContractScheduleWeeks");
 			ret[1] = DetachedCriteria.For<Person>("per")
 				.Add(Restrictions.Or(
 					Restrictions.IsNull("TerminalDate"),
 					Restrictions.Ge("TerminalDate", period.StartDate)
 				))
 				.Add(Subqueries.Exists(findPeriodMatch(period)))
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.PersonContract", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.PersonContract.PartTimePercentage", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.PersonContract.Contract", FetchMode.Join);
+				.Fetch("PersonPeriodCollection")
+				.Fetch("PersonPeriodCollection.PersonContract")
+				.Fetch("PersonPeriodCollection.PersonContract.PartTimePercentage")
+				.Fetch("PersonPeriodCollection.PersonContract.Contract");
 			return ret;
 		}
 
@@ -528,7 +519,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Restrictions.Ge("per.TerminalDate", period.StartDate)
 				))
 				.Add(Subqueries.Exists(findPeriodMatch(period)))
-				.SetFetchMode("PersonSkillCollection", FetchMode.Join);
+				.Fetch("PersonSkillCollection");
 		}
 
 		private static DetachedCriteria personPeriodLogOns(DateOnlyPeriod period)
@@ -540,7 +531,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Restrictions.Ge("per.TerminalDate", period.StartDate)
 				))
 				.Add(Subqueries.Exists(findPeriodMatch(period)))
-				.SetFetchMode("ExternalLogOnCollection", FetchMode.Join);
+				.Fetch("ExternalLogOnCollection");
 		}
 
 		private static DetachedCriteria personPeriodsOnlyTeamAndSite(DateOnlyPeriod period)
@@ -551,10 +542,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Restrictions.Ge("TerminalDate", period.StartDate)
 				))
 				.Add(Subqueries.Exists(findPeriodMatch(period)))
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join);
+				.Fetch("PersonPeriodCollection")
+				.Fetch("PersonPeriodCollection.Team")
+				.Fetch("PersonPeriodCollection.Team.Site")
+				.Fetch("PersonPeriodCollection.Team.Site.BusinessUnit");
 		}
 
 		private static DetachedCriteria findPeriodMatch(DateOnlyPeriod period)
@@ -618,8 +609,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return DetachedCriteria.For(typeof(PersonPeriod))
 				.SetProjection(Projections.Id())
-				.SetFetchMode("PersonContract", FetchMode.Join)
-				.SetFetchMode("PersonContract.Contract", FetchMode.Join)
+				.Fetch("PersonContract")
+				.Fetch("PersonContract.Contract")
 				.Add(Restrictions.Le("StartDate", dateOnlyPeriod.EndDate))
 				.Add(Restrictions.Ge("internalEndDate", dateOnlyPeriod.StartDate))
 				.Add(Restrictions.EqProperty("Parent", "per.Id"))
@@ -688,8 +679,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<Guid> FindPeopleIdsInPlanningGroup(PlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			var criteria = Session.CreateCriteria(typeof(Person), "per")
-				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
+				.Fetch("PersonPeriodCollection")
+				.Fetch("PersonPeriodCollection.Team")
 				.Add(Restrictions.Or(
 					Restrictions.IsNull("TerminalDate"),
 					Restrictions.Ge("TerminalDate", period.StartDate)
@@ -747,26 +738,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPerson> FindPersonsByKeywords(IEnumerable<string> keywords)
 		{
 			var allPersons = new List<IPerson>();
-			var multi = Session.CreateMultiCriteria();
+			var multi = Session.CreateQueryBatch();
 			foreach (var keyword in keywords)
 			{
-				var criteriaFirstName = Session.CreateCriteria(typeof(Person), "per")
-					.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"));
-				
-				multi.Add(criteriaFirstName);
-
-				var criteriaLastName = Session.CreateCriteria(typeof(Person), "per")
-					.Add(Restrictions.Like("Name.LastName", $"%{keyword}%"));
-				multi.Add(criteriaLastName);				
+				var criteria = Session.CreateCriteria(typeof(Person), "per")
+					.Add(Restrictions.Disjunction()
+						.Add(Restrictions.Like("Name.FirstName", $"%{keyword}%"))
+						.Add(Restrictions.Like("Name.LastName", $"%{keyword}%")));
+				multi.Add<Person>(criteria);				
 			}
 
-			var multiList = multi.List();
-
-			foreach (IList listOfPersons in multiList)
+			for (var i = 0; i < keywords.Count(); i++)
 			{
-				allPersons.AddRange(listOfPersons.OfType<IPerson>());
+				allPersons.AddRange(multi.GetResult<Person>(i));	
 			}
-
+			
 			var sortedPersons = allPersons.GroupBy(person => person.Name).OrderByDescending(group => group.Count()).Select(group => group.First());
 
 			return sortedPersons.ToList();

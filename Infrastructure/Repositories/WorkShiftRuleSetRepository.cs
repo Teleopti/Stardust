@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using NHibernate;
+using NHibernate.Multi;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -42,30 +43,30 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public ICollection<IWorkShiftRuleSet> FindAllWithLimitersAndExtenders()
         {
             DetachedCriteria mainCrit = DetachedCriteria.For<WorkShiftRuleSet>()
-                                .SetFetchMode("LimiterCollection", FetchMode.Join);
+                                .Fetch("LimiterCollection");
 
             DetachedCriteria extCrit = DetachedCriteria.For<WorkShiftRuleSet>()
-                                                        .SetFetchMode("ExtenderCollection", FetchMode.Join);
+                                                        .Fetch("ExtenderCollection");
 
             DetachedCriteria extCritTwo = DetachedCriteria.For<WorkShiftRuleSet>()
-                                                        .SetFetchMode("AccessibilityDates", FetchMode.Join);
+                                                        .Fetch("AccessibilityDates");
 
             DetachedCriteria extCritThree = DetachedCriteria.For<WorkShiftRuleSet>()
-                                                        .SetFetchMode("AccessibilityDaysOfWeek", FetchMode.Join);
+                                                        .Fetch("AccessibilityDaysOfWeek");
 
             DetachedCriteria extCritFour = DetachedCriteria.For<WorkShiftRuleSet>()
-                                                        .SetFetchMode("RuleSetBagCollection", FetchMode.Join);
+                                                        .Fetch("RuleSetBagCollection");
 
-            IList res = Session.CreateMultiCriteria()
-                                .Add(mainCrit)
-                                .Add(extCrit)
-                                .Add(extCritTwo)
-                                .Add(extCritThree)
-                                .Add(extCritFour)
-                                .List();
+            var res = Session.CreateQueryBatch()
+                                .Add<WorkShiftRuleSet>(mainCrit)
+                                .Add<WorkShiftRuleSet>(extCrit)
+                                .Add<WorkShiftRuleSet>(extCritTwo)
+                                .Add<WorkShiftRuleSet>(extCritThree)
+                                .Add<WorkShiftRuleSet>(extCritFour)
+                                .GetResult<WorkShiftRuleSet>(0);
 
             ICollection<IWorkShiftRuleSet> ruleSets =
-                CollectionHelper.ToDistinctGenericCollection<IWorkShiftRuleSet>(res[0]);
+                CollectionHelper.ToDistinctGenericCollection<IWorkShiftRuleSet>(res);
 
             initializeRoots(ruleSets);
 

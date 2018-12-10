@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    public IEnumerable<ISite> LoadAllWithFetchingOpenHours()
 	    {
 			return Session.CreateCriteria<Site>()
-				.SetFetchMode("OpenHourCollection", FetchMode.Join)
+				.Fetch("OpenHourCollection")
 				.List<ISite>();
 		}
 	}
