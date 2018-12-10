@@ -16,9 +16,9 @@
 		vm.selectedSchedulingSetting = {};
 		vm.schedulingSetting = vm.groupSettings.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
-		vm.planningGroupId = vm.planningGroup.Id;
-		vm.planningGroupName = vm.planningGroup.Name;
-		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", vm.planningGroup.Name);
+		// vm.planningGroupId = vm.planningGroup.Id;
+		// vm.planningGroupName = vm.planningGroup.Name;
+		// vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", vm.planningGroup.Name);
 		vm.getSchedulingSettingInfo = getSchedulingSettingInfo;
 		vm.deleteSchedulingSetting = deleteSchedulingSetting;
 		vm.goEditSchedulingSetting = goEditSchedulingSetting;
@@ -31,7 +31,7 @@
 			render: 'linear',
 			rgba: 'rgba(156, 39, 176, 1)'
 		};
-		vm.preferencePercentage = vm.planningGroup.PreferenceValue * 100;
+		// vm.preferencePercentage = vm.planningGroup.PreferenceValue * 100;
 
 
 		getBlockSchedulingSetting();
