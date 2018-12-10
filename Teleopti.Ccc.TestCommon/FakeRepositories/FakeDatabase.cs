@@ -591,7 +591,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		// rta stuff we want to remove
 		public AgentState StoredState => _agentStates.LockNLoad(_agentStates.FindForCheck().Select(x => x.PersonId), DeadLockVictim.Yes).AgentStates.SingleOrDefault();
 		public AgentState StoredStateFor(Guid personId) => _agentStates.ForPersonId(personId);
-		public IEnumerable<IRtaState> StateCodes => _stateGroups.LoadAll().Single().StateCollection;
 
 		public string TenantName()
 		{
