@@ -67,7 +67,7 @@
 			if (angular.isDefined(projectionVms)) personSchedule.Shifts = [shiftVm];
 
 			if (angular.isDefined(dayOffVm)) personSchedule.DayOffs = [dayOffVm];
-			
+
 			return personSchedule;
 		}
 
@@ -228,7 +228,7 @@
 		};
 
 		PersonSchedule.prototype.HasUnderlyingSchedules = function () {
-			return  !!this.UnderlyingScheduleSummary;
+			return !!this.UnderlyingScheduleSummary;
 		}
 
 		PersonSchedule.prototype.AbsenceCount = function () {
@@ -255,20 +255,20 @@
 
 		PersonSchedule.prototype.MergeExtra = mergeExtra;
 
-		PersonSchedule.prototype.ScheduleEndTime = function () {
+		PersonSchedule.prototype.ScheduleEndTimeMoment = function () {
 			var shift = this.Shifts[0];
 			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
-				return serviceDateFormatHelper.getDateByFormat(shift.Projections[shift.Projections.length - 1].EndMoment, 'YYYY-MM-DDTHH:mm:00');
+				return shift.Projections[shift.Projections.length - 1].EndMoment.clone();
 			}
-			return this.Date + 'T23:59:00';
+			return moment.tz(this.Date + 'T23:59:00', this.Timezone.IanaId);
 		};
 
-		PersonSchedule.prototype.ScheduleStartTime = function () {
+		PersonSchedule.prototype.ScheduleStartTimeMoment = function () {
 			var shift = this.Shifts[0];
 			if (shift && shift.Date === this.Date && !!shift.Projections.length) {
-				return serviceDateFormatHelper.getDateByFormat(shift.Projections[0].StartMoment, 'YYYY-MM-DDTHH:mm:00');
+				return shift.Projections[0].StartMoment.clone();
 			}
-			return this.Date + 'T00:00:00';
+			return moment.tz(this.Date + 'T00:00:00', this.Timezone.IanaId);
 		};
 
 		PersonSchedule.prototype.HasHiddenScheduleAtStart = function () {
@@ -281,7 +281,7 @@
 		PersonSchedule.prototype.HasHiddenScheduleAtEnd = function () {
 			return !!this.Shifts.length
 				&& this.Shifts.some(function (shift) {
-				return shift.Projections.length && shift.ProjectionTimeRange.EndMoment.isAfter(this.ViewRange.endMoment);
+					return shift.Projections.length && shift.ProjectionTimeRange.EndMoment.isAfter(this.ViewRange.endMoment);
 				}, this);
 		}
 
@@ -299,7 +299,7 @@
 		function ProjectionViewModel(projection, shiftVm, length, startPosition) {
 			this.Color = projection.Color;
 			this.TextColor = colorUtils.getTextColorBasedOnBackgroundColor(projection.Color),
-			this.Description = projection.Description;
+				this.Description = projection.Description;
 			this.IsOvertime = projection.IsOvertime;
 			this.Length = length;
 			this.Parent = shiftVm;

@@ -16,11 +16,11 @@
 			templateUrl: 'app/teamSchedule/html/teamsTimeRangePicker.tpl.html',
 		});
 
-	timeRangePickerCtrl.$inject = ['$element', '$attrs', '$locale', '$timeout', 'serviceDateFormatHelper'];
+	timeRangePickerCtrl.$inject = ['$element', '$attrs', '$timeout', 'serviceDateFormatHelper'];
 
-	function timeRangePickerCtrl($element, $attrs, $locale, $timeout, serviceDateFormatHelper) {
+	function timeRangePickerCtrl($element, $attrs, $timeout, serviceDateFormatHelper) {
 		var ctrl = this;
-	
+
 		ctrl.timeRange = ctrl.ngModel;
 		ctrl.startDate = moment(ctrl.date).isSame(ctrl.timeRange.startTime, 'day') ? ctrl.date : serviceDateFormatHelper.getDateOnly(ctrl.timeRange.startTime);
 		ctrl.endDate = moment(ctrl.date).isSame(ctrl.timeRange.endTime, 'day') ? ctrl.date : serviceDateFormatHelper.getDateOnly(ctrl.timeRange.endTime);
@@ -42,10 +42,10 @@
 				setDateRange();
 			}
 
-			$timeout(function () {
-				ctrl.timeRange = angular.copy(ctrl.timeRange);
-				ctrl.ngModelCtrl.$setViewValue(ctrl.timeRange);
-			});
+			//$timeout(function () {
+			ctrl.timeRange = angular.copy(ctrl.timeRange);
+			ctrl.ngModelCtrl.$setViewValue(ctrl.timeRange);
+			//});
 		}
 
 		ctrl.disableNextDay = endEarlierThanStartOnTimeOnly;

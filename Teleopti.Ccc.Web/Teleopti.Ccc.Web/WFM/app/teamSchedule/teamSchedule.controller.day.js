@@ -13,23 +13,22 @@
 		'TeamSchedule',
 		'PersonSelection',
 		'ScheduleManagement',
-		'NoticeService',
 		'ValidateRulesService',
 		'CommandCheckService',
 		'ScheduleNoteManagementService',
-		'Toggle',
 		'bootstrapCommon',
 		'groupPageService',
 		'TeamsStaffingConfigurationStorageService',
 		'serviceDateFormatHelper',
 		'ViewStateKeeper',
 		'teamsPermissions',
+		'UtilityService',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $stateParams, $mdComponentRegistry, $document,
-		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
-		CommandCheckService, ScheduleNoteManagementService, toggleSvc, bootstrapCommon, groupPageService,
-		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions) {
+		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc,  ValidateRulesService,
+		CommandCheckService, ScheduleNoteManagementService, bootstrapCommon, groupPageService,
+		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions, Utility) {
 		var mode = {
 			BusinessHierarchy: 'BusinessHierarchy',
 			GroupPages: 'GroupPages'
@@ -42,8 +41,9 @@
 		vm.scheduleFullyLoaded = false;
 	
 		vm.preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
-		vm.scheduleDate = $stateParams.selectedDate || viewState.selectedDate || new Date();
+		
 		vm.currentTimezone = viewState.timezone;
+		vm.scheduleDate = $stateParams.selectedDate || viewState.selectedDate || Utility.nowDateInUserTimezone();
 		vm.avaliableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = viewState.staffingEnabled;

@@ -4,14 +4,14 @@
 		<form name="newOvertimeActivityForm">
 			<h3>{{'Activity'|translate}}: </h3>
 			<div class="con-row">
-				<md-select class="activity-selector" ng-model="$ctrl.selectedActivityId" required placeholder="{{'SelectAnActivity'|translate}}" md-on-open="$ctrl.loadActivities()" md-autofocus="::$ctrl.containerCtrl.onReady()">
+				<md-select class="activity-selector" ng-model="$ctrl.selectedActivityId" required placeholder="{{'SelectAnActivity'|translate}}" md-autofocus="::$ctrl.containerCtrl.onReady()">
 					<md-option ng-repeat="activity in $ctrl.availableActivities | orderBy: 'Name'" ng-value="activity.Id">{{::activity.Name}}</md-option>
 				</md-select>
 			</div>
 
 			<h3>{{'MultiplicatorDefinitionSetColon'|translate}} </h3>
 			<div class="con-row">
-				<md-select class="" ng-model="$ctrl.selectedDefinitionSetId" ng-change="$ctrl.validateInput()" required placeholder="{{'SelectAMultiplicatorDefinitionSet'|translate}}" md-on-open="$ctrl.loadDefinitionSets()">
+				<md-select class="definition-selector" ng-model="$ctrl.selectedDefinitionSetId" ng-change="$ctrl.validateInput()" required placeholder="{{'SelectAMultiplicatorDefinitionSet'|translate}}">
 					<md-option ng-repeat="set in $ctrl.definitionSets | orderBy: 'Name'" ng-value="set.Id">{{::set.Name}}</md-option>
 				</md-select>
 			</div>

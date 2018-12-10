@@ -4,11 +4,9 @@
 	var $compile,
 		$rootScope,
 		$httpBackend,
-		utility,
 		fakeActivityService,
-		fakePersonSelectionService,
-		fakeScheduleManagementSvc,
-		scheduleHelper;
+		personSelection,
+		scheduleManagement;
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
@@ -21,21 +19,9 @@
 
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
-		fakePersonSelectionService = new FakePersonSelectionService();
-		fakeScheduleManagementSvc = new FakeScheduleManagementService();
-
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
 				return fakeActivityService;
-			});
-			$provide.service('ScheduleHelper', function () {
-				return scheduleHelper;
-			});
-			$provide.service('PersonSelection', function () {
-				return fakePersonSelectionService;
-			});
-			$provide.service('ScheduleManagement', function () {
-				return fakeScheduleManagementSvc;
 			});
 			$provide.service('CurrentUserInfo', function () {
 				return mockCurrentUserInfo;
@@ -43,204 +29,166 @@
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _UtilityService_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, PersonSelection, ScheduleManagement) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		utility = _UtilityService_;
+		personSelection = PersonSelection;
+		scheduleManagement = ScheduleManagement;
 
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
-	it('should use 1 hour for default overtime activity length', function () {
-		var personInfoList = [{
-			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-			Name: 'Bill',
-			Checked: true,
-			OrderIndex: 0,
-			AllowSwap: false,
-			IsDayOff: false,
-			IsEmptyDay: false,
-			IsFullDayAbsence: false,
-			ScheduleStartTime: '2018-01-23T08:00:00',
-			ScheduleEndTime: '2018-01-23T17:00:00',
-			SelectedAbsences: [],
-			SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
-			Timezone: {
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			},
-			SelectedDayOffs: []
-		}];
-
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
-		var result = setUp();
-
-		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
-		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 18:00:00').format('YYYY-MM-DD HH:mm'));
-	});
-
-	it('should get normal shift end time as default start time for one agent', function () {
-		var personInfoList = [{
-			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-			Name: 'Bill',
-			Checked: true,
-			OrderIndex: 0,
-			AllowSwap: false,
-			IsDayOff: false,
-			IsEmptyDay: false,
-			IsFullDayAbsence: false,
-			ScheduleStartTime: '2018-01-23T08:00:00',
-			ScheduleEndTime: '2018-01-23T17:00:00',
-			SelectedAbsences: [],
-			SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
-			Timezone: {
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			},
-			SelectedDayOffs: []
-		}];
-
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
-		var result = setUp();
-
-		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
-	});
-
-	it('should get default work time period when adding overtime activity on day offs', function () {
-		var personInfoList = [{
-			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-			Name: 'Bill',
-			Checked: true,
-			OrderIndex: 0,
-			AllowSwap: false,
-			IsDayOff: true,
-			IsEmptyDay: false,
-			IsFullDayAbsence: false,
-			ScheduleStartTime: '2018-01-23T00:00:00',
-			ScheduleEndTime: '2018-01-23T23:59:00',
-			SelectedAbsences: [],
-			SelectedActivities: [],
-			Timezone: {
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			},
-			SelectedDayOffs: [{
-				Date: '2018-01-23',
-				DayOffName: 'Day off',
-				Length: 100,
-				Parent: null,
-				StartPosition: 0
+	it('should set default start time to the end of schedule and use 1 hour for default overtime activity length', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-12-04',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Asia/Hong_Kong'
+				},
+				Projection: [{
+					ShiftLayerIds: ['layer1'],
+					StartInUtc: '2018-12-04 00:00',
+					EndInUtc: '2018-12-04 09:00',
+				}]
 			}]
-		}];
+			, '2018-12-04', 'Asia/Hong_Kong');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-12-04');
 
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
-		var result = setUp();
+		var result = setUp('2018-12-04', 'Asia/Hong_Kong');
 
-		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 08:00:00').format('YYYY-MM-DD HH:mm'));
-		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(result.commandControl.fromTime).toEqual('2018-12-04 17:00');
+		expect(result.commandControl.toTime).toEqual('2018-12-04 18:00');
 	});
 
-	it('should get default work time period when adding overtime activity on empty days', function () {
-		var personInfoList = [{
-			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-			Name: 'Bill',
-			Checked: true,
-			OrderIndex: 0,
-			AllowSwap: false,
-			IsDayOff: false,
-			IsEmptyDay: true,
-			IsFullDayAbsence: false,
-			ScheduleStartTime: '2018-01-23T00:00:00',
-			ScheduleEndTime: '2018-01-23T23:59:00',
-			SelectedAbsences: [],
-			SelectedActivities: [],
-			Timezone: {
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			},
-			SelectedDayOffs: []
-		}];
+	it('should set default start time to 8 and end time to 17 when adding overtime activity on day offs', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-12-04',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Asia/Hong_Kong'
+				},
+				Projection: [],
+				DayOff:
+				{
+					"DayOffName": "DayOff",
+					"StartInUtc": "2018-12-04 00:00",
+					"EndInUtc": "2018-12-04 23:59"
+				}
+			}]
+			, '2018-12-04', 'Asia/Hong_Kong');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-12-04');
 
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
-		var result = setUp();
+		var result = setUp('2018-12-04', 'Asia/Hong_Kong');
 
-		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 08:00:00').format('YYYY-MM-DD HH:mm'));
-		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(result.commandControl.fromTime).toEqual('2018-12-04 08:00');
+		expect(result.commandControl.toTime).toEqual('2018-12-04 17:00');
 	});
 
-	it('should get default work time period when adding overtime activity on full day absence day', function () {
-		var personInfoList = [{
-			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-			Name: 'Bill',
-			Checked: true,
-			OrderIndex: 0,
-			AllowSwap: false,
-			IsDayOff: false,
-			IsEmptyDay: false,
-			IsFullDayAbsence: true,
-			ScheduleStartTime: '2018-01-23T00:00:00',
-			ScheduleEndTime: '2018-01-23T23:59:00',
-			SelectedAbsences: ['8d97a1d1-45be-4447-96c6-9976e18c1664'],
-			SelectedActivities: [],
-			Timezone: {
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			},
-			SelectedDayOffs: []
-		}];
+	it('should set default start time to 8 and end time to 17 when adding overtime activity on empty days', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-12-04',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Asia/Hong_Kong'
+				},
+				Projection: [],
+			}]
+			, '2018-12-04', 'Asia/Hong_Kong');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-12-04');
 
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
-		var result = setUp();
+		var result = setUp('2018-12-04', 'Asia/Hong_Kong');
 
-		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 08:00:00').format('YYYY-MM-DD HH:mm'));
-		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(result.commandControl.fromTime).toEqual('2018-12-04 08:00');
+		expect(result.commandControl.toTime).toEqual('2018-12-04 17:00');
 	});
 
-	it('should get default overtime period based on the upper most agent\'s schedule', function () {
-		var personInfoList = [{
-			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-			Name: 'Bill',
-			Checked: true,
-			OrderIndex: 1,
-			AllowSwap: false,
-			IsDayOff: false,
-			IsEmptyDay: true,
-			IsFullDayAbsence: false,
-			ScheduleStartTime: '2018-01-23T00:00:00',
-			ScheduleEndTime: '2018-01-23T23:59:00',
-			SelectedAbsences: [],
-			SelectedActivities: [],
-			Timezone: {
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			},
-			SelectedDayOffs: []
-		}, {
-			PersonId: 'c1a6918a-94ea-415d-9e34-26d96e469bd9',
-			Name: 'Ashely',
-			Checked: true,
-			OrderIndex: 0,
-			AllowSwap: false,
-			IsDayOff: false,
-			IsEmptyDay: false,
-			IsFullDayAbsence: false,
-			ScheduleStartTime: '2018-01-23T08:00:00',
-			ScheduleEndTime: '2018-01-23T17:00:00',
-			SelectedAbsences: [],
-			SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
-			Timezone: {
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			},
-			SelectedDayOffs: []
-		}];
+	it('should set default start time to 8 and end time to 17 when adding overtime activity on full day absence day', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-12-04',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Asia/Hong_Kong'
+				},
+				IsFullDayAbsence: true,
+				Projection: [
+					{
+						ActivityId: "47d9292f-ead6-40b2-ac4f-9b5e015ab330",
+						ShiftLayerIds: null,
+						ParentPersonAbsences: ["bc63cf37-e243-4adc-8456-a97b0085c70a"],
+						Color: "#795548",
+						Description: "Phone",
+						StartInUtc: "2018-10-16 08:00",
+						EndInUtc: "2018-10-16 10:00",
+						IsOvertime: false
+					}
+				],
+			}]
+			, '2018-12-04', 'Asia/Hong_Kong');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2018-12-04');
 
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
-		var result = setUp();
+		var result = setUp('2018-12-04', 'Asia/Hong_Kong');
 
-		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
-		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 18:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(result.commandControl.fromTime).toEqual('2018-12-04 08:00');
+		expect(result.commandControl.toTime).toEqual('2018-12-04 17:00');
+	});
+
+	it('should get default overtime period based on the upper most agents schedule', function () {
+		scheduleManagement.resetSchedules(
+			[
+				{
+					Date: '2018-12-04',
+					PersonId: 'agent2',
+					Name: 'agent2',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: [{
+						ShiftLayerIds: ['layer2'],
+						StartInUtc: '2018-12-04 02:00',
+						EndInUtc: '2018-12-04 11:00',
+					}]
+				},
+				{
+					Date: '2018-12-04',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					Projection: []
+				}]
+			, '2018-12-04', 'Asia/Hong_Kong');
+		scheduleManagement.groupScheduleVm.Schedules.forEach(function (personSchedule) {
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-12-04');
+		});
+
+		var result = setUp('2018-12-04', 'Asia/Hong_Kong');
+
+		expect(result.commandControl.fromTime).toEqual('2018-12-04 19:00');
+		expect(result.commandControl.toTime).toEqual('2018-12-04 20:00');
 	});
 
 	commonTestsInDifferentLocale();
@@ -271,134 +219,83 @@
 
 	function commonTestsInDifferentLocale() {
 		it('should call add overtime when click apply with correct data', function () {
-			var personInfoList = [{
-				PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-				Name: 'Bill',
-				Checked: true,
-				OrderIndex: 1,
-				AllowSwap: false,
-				IsDayOff: false,
-				IsEmptyDay: true,
-				IsFullDayAbsence: false,
-				ScheduleStartTime: '2018-02-12T00:00:00',
-				ScheduleEndTime: '2018-02-12T23:59:00',
-				Schedules: [],
-				SelectedAbsences: [],
-				SelectedActivities: [],
-				Timezone: {
-					IanaId: "Asia/Shanghai",
-					DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-				},
-				SelectedDayOffs: []
-			}];
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-12-04',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					IsFullDayAbsence: true,
+					Projection: [],
+					MultiplicatorDefinitionSetIds: ['5c1409de-a0f1-4cd4-b383-9b5e015ab789']
+				}]
+				, '2018-12-04', 'Asia/Hong_Kong');
 
-			fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-12-04');
 
-			var date = "2018-02-12";
-			var result = setUp(date);
-			var scope = result.scope;
-			var ctrl = result.commandControl;
-			var panel = result.container;
+			var result = setUp('2018-12-04', 'Asia/Hong_Kong');
 
-			ctrl.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
-			ctrl.selectedDefinitionSetId = '5c1409de-a0f1-4cd4-b383-9b5e015ab789';
-			scope.$apply();
+			result.container[0].querySelector('.activity-selector md-option').click();
+			result.container[0].querySelectorAll('.definition-selector md-option')[0].click();
+			
+			setTime(result.container, "09", "10");
+			result.scope.$apply();
 
-			ctrl.fromTime = '2018-02-12T10:00:00';
-			ctrl.toTime = '2018-02-12T10:30:00';
-			var timezone1 = {
-				IanaId: "Asia/Hong_Kong",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			};
-			ctrl.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('7c25f4ae-96ea-409e-b959-2c02587c649e', {
-				Date: date,
-				PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-				Timezone: timezone1,
-				Shifts: [
-					{
-						Date: date,
-						Projections: [
-						],
-						ProjectionTimeRange: null
-					}]
-			});
+			var applyButton = result.container[0].querySelectorAll('#applyOvertime');
+			applyButton[0].click();
 
-			scope.$apply();
-
-			ctrl.addOvertime();
-
-			expect(fakeActivityService.lastAddedOvertimeActivity.PersonDates[0].PersonId).toEqual(personInfoList[0].PersonId);
-			expect(fakeActivityService.lastAddedOvertimeActivity.PersonDates[0].Date).toEqual(date);
+			expect(fakeActivityService.lastAddedOvertimeActivity.PersonDates[0].PersonId).toEqual('agent1');
+			expect(fakeActivityService.lastAddedOvertimeActivity.PersonDates[0].Date).toEqual('2018-12-04');
 			expect(fakeActivityService.lastAddedOvertimeActivity.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
-			expect(fakeActivityService.lastAddedOvertimeActivity.StartDateTime).toEqual('2018-02-12T10:00');
-			expect(fakeActivityService.lastAddedOvertimeActivity.EndDateTime).toEqual('2018-02-12T10:30');
+			expect(fakeActivityService.lastAddedOvertimeActivity.MultiplicatorDefinitionSetId).toEqual('5c1409de-a0f1-4cd4-b383-9b5e015ab789');
+			expect(fakeActivityService.lastAddedOvertimeActivity.StartDateTime).toEqual('2018-12-04T09:00');
+			expect(fakeActivityService.lastAddedOvertimeActivity.EndDateTime).toEqual('2018-12-04T10:00');
 		});
 
 		it('should apply with correct time range based on the selected time zone', function () {
-			var personInfoList = [{
-				PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-				Name: 'Bill',
-				Checked: true,
-				OrderIndex: 1,
-				AllowSwap: false,
-				IsDayOff: false,
-				IsEmptyDay: true,
-				IsFullDayAbsence: false,
-				ScheduleStartTime: '2018-03-25T00:00:00',
-				ScheduleEndTime: '2018-03-25T23:59:00',
-				Schedules: [],
-				SelectedAbsences: [],
-				SelectedActivities: [],
-				Timezone: {
-					IanaId: "Asia/Shanghai",
-					DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-				},
-				SelectedDayOffs: []
-			}];
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-12-04',
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Timezone: {
+						IanaId: 'Asia/Hong_Kong'
+					},
+					IsFullDayAbsence: true,
+					Projection: [],
+					MultiplicatorDefinitionSetIds: ['5c1409de-a0f1-4cd4-b383-9b5e015ab789']
+				}]
+				, '2018-12-04', 'Asia/Hong_Kong');
 
-			fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
+			var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-12-04');
 
-			var date = "2018-03-25";
-			var result = setUp(date);
-			var scope = result.scope;
-			var ctrl = result.commandControl;
-			var panel = result.container;
+			var result = setUp('2018-12-04', 'Etc/Utc');
 
-			ctrl.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
-			ctrl.selectedDefinitionSetId = '5c1409de-a0f1-4cd4-b383-9b5e015ab789';
-			scope.$apply();
+			result.container[0].querySelector('.activity-selector md-option').click();
+			result.container[0].querySelectorAll('.definition-selector md-option')[0].click();
 
-			ctrl.fromTime = '2018-03-25 01:00';
-			ctrl.toTime = '2018-03-25 02:00';
-			var timezone1 = {
-				IanaId: "Asia/Hong_Kong",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			};
-			ctrl.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('7c25f4ae-96ea-409e-b959-2c02587c649e', {
-				Date: date,
-				PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
-				Timezone: timezone1,
-				Shifts: [
-					{
-						Date: date,
-						Projections: [
-						],
-						ProjectionTimeRange: null
-					}]
-			});
+			setTime(result.container, "09", "10");
+			result.scope.$apply();
 
-			scope.$apply();
+			var applyButton = result.container[0].querySelectorAll('#applyOvertime');
+			applyButton[0].click();
 
-			ctrl.addOvertime();
-			
-			expect(fakeActivityService.lastAddedOvertimeActivity.StartDateTime).toEqual('2018-03-25T01:00');
-			expect(fakeActivityService.lastAddedOvertimeActivity.EndDateTime).toEqual('2018-03-25T02:00');
 
+			expect(fakeActivityService.lastAddedOvertimeActivity.StartDateTime).toEqual('2018-12-04T17:00');
+			expect(fakeActivityService.lastAddedOvertimeActivity.EndDateTime).toEqual('2018-12-04T18:00');
 		});
 
 	}
 
-	function setUp(inputDate) {
+	function setUp(inputDate, timezone) {
 		var date;
 		var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
@@ -409,7 +306,7 @@
 			date = inputDate;
 
 		scope.curDate = date;
-		scope.timezone = 'Asia/Shanghai';
+		scope.timezone = timezone || 'Asia/Shanghai';
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var container = $compile(html)(scope);
@@ -418,6 +315,7 @@
 		var containerVm = container.isolateScope().vm;
 		containerVm.setReady(true);
 		containerVm.setActiveCmd('AddOvertimeActivity');
+		containerVm.scheduleManagementSvc = scheduleManagement;
 		scope.$apply();
 
 		var commandControl = angular.element(container[0].querySelector('.add-overtime-activity')).scope().$ctrl;
@@ -427,6 +325,16 @@
 			commandControl: commandControl,
 			scope: scope
 		};
+	}
+
+	function setTime(container, startHour, endHour) {
+		var hoursEl = container[0].querySelectorAll('.uib-timepicker .hours input');
+		var startHourEl = hoursEl[0];
+		startHourEl.value = startHour;
+		angular.element(startHourEl).triggerHandler('change');
+		var endHourEl = hoursEl[1];
+		endHourEl.value = endHour;
+		angular.element(endHourEl).triggerHandler('change');
 	}
 
 	function getAvailableActivities() {
@@ -475,6 +383,7 @@
 				})
 			};
 		};
+
 		this.setAvailableActivities = function (activities) {
 			availableActivities = activities;
 		};
@@ -490,57 +399,4 @@
 			};
 		}
 	}
-
-	function FakePersonSelectionService() {
-		var fakePersonList = [];
-
-		this.setFakeCheckedPersonInfoList = function (input) {
-			fakePersonList = input;
-		};
-
-		this.getCheckedPersonInfoList = function () {
-			return fakePersonList;
-		};
-
-		this.getSelectedPersonInfoList = function () {
-			return fakePersonList;
-		};
-	}
-
-	function FakeScheduleManagementService() {
-		var savedPersonScheduleVm = {};
-
-		this.setPersonScheduleVm = function (personId, vm) {
-			savedPersonScheduleVm[personId] = vm;
-		}
-
-		this.findPersonScheduleVmForPersonId = function (personId) {
-			return savedPersonScheduleVm[personId];
-		}
-
-		this.schedules = function () {
-			return null;
-		};
-
-		this.newService = function () {
-			return new FakeScheduleManagementService();
-		};
-
-		function FakeScheduleManagementService() {
-			var savedPersonScheduleVm = {};
-
-			this.setPersonScheduleVm = function (personId, vm) {
-				savedPersonScheduleVm[personId] = vm;
-			}
-
-			this.findPersonScheduleVmForPersonId = function (personId) {
-				return savedPersonScheduleVm[personId];
-			}
-
-			this.schedules = function () {
-				return null;
-			};
-		}
-	}
-
 });

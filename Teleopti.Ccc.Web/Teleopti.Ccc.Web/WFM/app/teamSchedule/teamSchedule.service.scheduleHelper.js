@@ -1,125 +1,101 @@
-(function (angular, moment) {
-    'use strict';
+(function (angular) {
+	'use strict';
 
-    angular.module('wfm.teamSchedule')
-        .service('ScheduleHelper', ScheduleHelperService);
+	angular.module('wfm.teamSchedule')
+		.service('ScheduleHelper', ScheduleHelperService);
 
-    function ScheduleHelperService() {}
+	function ScheduleHelperService() { }
 
-    ScheduleHelperService.prototype.getEarliestStartOfSelectedSchedules = function (schedules, dateMoment, personIds) {
+	ScheduleHelperService.prototype.getEarliestStartMomentOfSelectedSchedules = function (schedules, dateMoment, personIds) {
+		checkPersonIds(personIds);
 
-        personIds.forEach(function (x) {
-            if (!angular.isString(x))
-                throw 'Invalid parameter.';
-        });
+		var earlistStart = null;
+		schedules && schedules.forEach(function (schedule) {
+			var scheduleStart = schedule.ScheduleStartTimeMoment().clone();
+			if (personIds.indexOf(schedule.PersonId) > -1 && (!earlistStart || scheduleStart < earlistStart)) {
+				earlistStart = scheduleStart;
+			}
+		});
+		// Set to 08:00 for empty schedule or day off
+		return earlistStart || dateMoment.startOf('day').add(8, 'hour');
+	};
+	
+	ScheduleHelperService.prototype.getLatestStartMomentOfSelectedSchedules = function (schedules, dateMoment, personIds) {
+		checkPersonIds(personIds);
 
-        var startUpdated = false;
-        var earlistStart = moment('2099-12-31');
+		var latestStart = null;
+		schedules && schedules.forEach(function (schedule) {
+			var scheduleStart = schedule.ScheduleStartTimeMoment().clone();
+			if (personIds.indexOf(schedule.PersonId) > -1 && (!latestStart || scheduleStart > latestStart)) {
+				latestStart = scheduleStart;
+			}
+		});
+		return latestStart || dateMoment.startOf('day');
+	};
 
-        schedules.forEach(function (schedule) {
-            var scheduleStart = moment(schedule.ScheduleStartTime());
+	ScheduleHelperService.prototype.getLatestPreviousDayOvernightShiftEndMoment = function (schedules, date, personIds) {
+		checkPersonIds(personIds);
 
-            if (personIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
-                startUpdated = true;
-                earlistStart = scheduleStart;
-            }
-        });
+		var previousDayShifts = [];
 
-        if (!startUpdated) {
-            // Set to 08:00 for empty schedule or day off
-            earlistStart = dateMoment.startOf('day').add(8, 'hour');
-        }
+		schedules && schedules.forEach(function (schedule) {
+			if (personIds.indexOf(schedule.PersonId) > -1) {
+				previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function (shift) {
+					return shift.Projections.length > 0 && date > shift.Date;
+				}));
+			}
+		});
 
-        return earlistStart.toDate();
-    };
+		if (previousDayShifts.length === 0) return null;
 
-    ScheduleHelperService.prototype.getLatestStartOfSelectedSchedules = function (schedules, dateMoment, personIds) {
-        personIds.forEach(function (x) {
-            if (!angular.isString(x))
-                throw 'Invalid parameter.';
-        });
+		var latestEndTimeMoment = null;
+		previousDayShifts.forEach(function (shift) {
+			shift.Projections.forEach(function (projection) {
+				if (!latestEndTimeMoment || latestEndTimeMoment < projection.EndMoment)
+					latestEndTimeMoment = projection.EndMoment.clone();
+			});
+		});
 
-        var startUpdated = false;
-        var latestStart = dateMoment.startOf('day');
+		return latestEndTimeMoment;
+	};
 
-        schedules.forEach(function (schedule) {
-            var scheduleStart = moment(schedule.ScheduleStartTime());
+	ScheduleHelperService.prototype.getLatestStartTimeMomentOfSelectedProjections = function (schedules, personIds) {
+		checkPersonIds(personIds);
 
-            if (personIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {
-                startUpdated = true;
-                latestStart = scheduleStart;
-            }
-        });
+		var latestStart = null;
+		var projectionShiftLayerIds = [];
+		var shifts = [];
 
-        return startUpdated ? latestStart.toDate() : null;
-    };
+		schedules && schedules.forEach(function (schedule) {
+			if (personIds.indexOf(schedule.PersonId) > -1) {
+				shifts = shifts.concat(schedule.Shifts);
+			}
+		});
 
-    ScheduleHelperService.prototype.getLatestPreviousDayOvernightShiftEnd = function (schedules, dateMoment, personIds) {
-        personIds.forEach(function (x) {
-            if (!angular.isString(x))
-                throw 'Invalid parameter.';
-        });
+		shifts.forEach(function (shift) {
+			if (shift.Projections) {
+				shift.Projections.forEach(function (projection) {
+					var scheduleStart = projection.StartMoment.clone();
+					if (projection.Selected && (latestStart === null || scheduleStart >= latestStart)) {
+						var exist = projection.ShiftLayerIds && projection.ShiftLayerIds.some(function (layerId) {
+							return projectionShiftLayerIds.indexOf(layerId) > -1;
+						});
+						if (exist) return;
 
-        var previousDayShifts = [];
+						latestStart = scheduleStart;
+						projectionShiftLayerIds = projectionShiftLayerIds.concat(projection.ShiftLayerIds);
+					}
+				});
+			}
+		});
+		return latestStart;
+	};
 
-        schedules.forEach(function (schedule) {
-            if (personIds.indexOf(schedule.PersonId) > -1) {
-                previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function (shift) {
-                    return shift.Projections.length > 0 &&
-                        dateMoment.isAfter(shift.Date);
-                }));
-            }
-        });
+	function checkPersonIds(personIds) {
+		personIds.forEach(function (x) {
+			if (!angular.isString(x))
+				throw 'Invalid parameter.';
+		});
+	}
 
-        if (previousDayShifts.length === 0) return null;
-
-        var latestEndTimeMoment = null;
-
-        previousDayShifts.forEach(function (shift) {
-            shift.Projections.forEach(function (projection) {
-                var projectionEndMoment = moment(projection.Start).add(projection.Minutes, 'minute');
-                if (latestEndTimeMoment === null || latestEndTimeMoment < projectionEndMoment)
-                    latestEndTimeMoment = projectionEndMoment;
-            });
-        });
-
-        return latestEndTimeMoment ? latestEndTimeMoment.toDate() : null;
-    };
-
-    ScheduleHelperService.prototype.getLatestStartTimeOfSelectedSchedulesProjections = function (schedules, dateMoment, personIds) {
-
-        personIds.forEach(function (x) {
-            if (!angular.isString(x))
-                throw 'Invalid parameter.';
-        });
-
-        var latestStart = null;
-        var projectionShiftLayerIds = [];
-        var shifts = [];
-
-        schedules.forEach(function (schedule) {
-            if (personIds.indexOf(schedule.PersonId) > -1) {
-                shifts = shifts.concat(schedule.Shifts);
-            }
-        });
-
-        shifts.forEach(function (shift) {
-            if (shift.Projections) {
-                shift.Projections.forEach(function (projection) {
-                    var scheduleStart = moment(projection.Start).toDate();
-                    if (projection.Selected && (latestStart === null || scheduleStart >= latestStart)) {
-                        var exist = projection.ShiftLayerIds && projection.ShiftLayerIds.some(function (layerId) {
-                            return projectionShiftLayerIds.indexOf(layerId) > -1;
-                        });
-                        if (exist) return;
-
-                        latestStart = scheduleStart;
-                        projectionShiftLayerIds = projectionShiftLayerIds.concat(projection.ShiftLayerIds);
-                    }
-                });
-            }
-        });
-        return latestStart;
-    };
-
-})(angular, moment);
+})(angular);

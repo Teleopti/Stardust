@@ -29,19 +29,15 @@
 		ctrl.$onInit = function () {
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
-			ctrl.fromTime = getDefaultStartTime();
-			ctrl.toTime = getEndTime();
+			ctrl.fromTime = serviceDateFormatHelper.getDateTime(getDefaultStartTimeMoment());
+			ctrl.toTime = serviceDateFormatHelper.getDateTime(getEndTimeMoment());
 			ctrl.timeRangeIsValid = true;
-		};
 
-		ctrl.loadActivities = function () {
-			return activityService.fetchAvailableActivities().then(function (activities) {
+			activityService.fetchAvailableActivities().then(function (activities) {
 				ctrl.availableActivities = activities;
 			});
-		};
 
-		ctrl.loadDefinitionSets = function () {
-			return activityService.fetchAvailableDefinitionSets()
+			activityService.fetchAvailableDefinitionSets()
 				.then(function (data) {
 					ctrl.definitionSets = data;
 				});
@@ -56,12 +52,13 @@
 		};
 
 		ctrl.validateInput = function () {
+			var timezone = ctrl.containerCtrl.getCurrentTimezone();
 			var timeRange = {
-				startTime: moment(ctrl.fromTime),
-				endTime: moment(ctrl.toTime)
+				startTime: moment.tz(ctrl.fromTime, timezone),
+				endTime: moment.tz(ctrl.toTime, timezone)
 			};
 
-			var timezone = ctrl.containerCtrl.getCurrentTimezone();
+			
 			ctrl.invalidAgents = activityValidator.validateInputForOvertime(ctrl.containerCtrl.scheduleManagementSvc, timeRange, ctrl.selectedDefinitionSetId, timezone);
 		};
 
@@ -105,20 +102,22 @@
 			}
 		};
 
-		function getDefaultStartTime() {
+		function getDefaultStartTimeMoment() {
 			var basedOnAgentInfo = getAgentInfoOnTheTop();
+			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
 			if (basedOnAgentInfo.IsDayOff || basedOnAgentInfo.IsEmptyDay || basedOnAgentInfo.IsFullDayAbsence) {
-				return serviceDateFormatHelper.getDateTime(moment(basedOnAgentInfo.ScheduleStartTime.split('T')[0]).hour(defaultWorkStartInHour));
+				return moment.tz(basedOnAgentInfo.ScheduleDate, currentTimezone).hour(defaultWorkStartInHour);
 			}
-			return serviceDateFormatHelper.getDateTime(basedOnAgentInfo.ScheduleEndTime);
+			return basedOnAgentInfo.ScheduleEndTimeMoment.clone();
 		}
 
-		function getEndTime() {
+		function getEndTimeMoment() {
 			var basedOnAgentInfo = getAgentInfoOnTheTop();
+			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
 			if (basedOnAgentInfo.IsDayOff || basedOnAgentInfo.IsEmptyDay || basedOnAgentInfo.IsFullDayAbsence) {
-				return serviceDateFormatHelper.getDateTime(moment(basedOnAgentInfo.ScheduleStartTime.split('T')[0]).hour(defaultWorkEndInHour));
+				return moment.tz(basedOnAgentInfo.ScheduleDate, currentTimezone).hour(defaultWorkEndInHour);
 			}
-			return serviceDateFormatHelper.getDateTime(moment(basedOnAgentInfo.ScheduleEndTime).add(1, 'hours'));
+			return basedOnAgentInfo.ScheduleEndTimeMoment.clone().add(1, 'hours');
 		}
 
 		function getAgentInfoOnTheTop() {
@@ -129,11 +128,12 @@
 
 		function prepareRequestData(validAgents) {
 			var timezone = ctrl.containerCtrl.getCurrentTimezone();
+			var timeRange = {
+				startTime: moment.tz(ctrl.fromTime, timezone),
+				endTime: moment.tz(ctrl.toTime, timezone)
+			};
+
 			var personDates = validAgents.map(function (agent) {
-				var timeRange = {
-					startTime: moment(ctrl.fromTime),
-					endTime: moment(ctrl.toTime)
-				};
 				var personSchedule = ctrl.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
 				var normalizedScheduleVm = belongsToDateDecider.normalizePersonScheduleVm(personSchedule, timezone);
 				var belongsToDate = belongsToDateDecider.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleVm);
@@ -147,8 +147,8 @@
 				PersonDates: personDates,
 				ActivityId: ctrl.selectedActivityId,
 				MultiplicatorDefinitionSetId: ctrl.selectedDefinitionSetId,
-				StartDateTime: getServiceTimeInCurrentUserTimezone(ctrl.fromTime),
-				EndDateTime: getServiceTimeInCurrentUserTimezone(ctrl.toTime),
+				StartDateTime: getServiceTimeInCurrentUserTimezone(timeRange.startTime),
+				EndDateTime: getServiceTimeInCurrentUserTimezone(timeRange.endTime),
 				TrackedCommandInfo: { TrackId: ctrl.trackId }
 			};
 
@@ -156,8 +156,7 @@
 		}
 
 		function getServiceTimeInCurrentUserTimezone(dateTime) {
-			var timezone = ctrl.containerCtrl.getCurrentTimezone();
-			return ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(moment.tz(dateTime, timezone));
+			return ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(dateTime);
 		}
 
 		function validateTimeRange(fromTime, toTime) {

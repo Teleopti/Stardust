@@ -31,11 +31,26 @@
 		};
 	}
 
-	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$element', '$scope', 'guidgenerator', 'teamsPermissions', 'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule','serviceDateFormatHelper'];
+	teamscheduleCommandContainerCtrl.$inject = ['$filter', '$translate', '$element', '$scope', 'guidgenerator', 'teamsPermissions', 'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule', 'serviceDateFormatHelper'];
 
-	function teamscheduleCommandContainerCtrl($q, $filter, $element, $scope, guidgenerator, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc, serviceDateFormatHelper) {
+	function teamscheduleCommandContainerCtrl($filter, $translate, $element, $scope, guidgenerator, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc, serviceDateFormatHelper) {
 		var vm = this;
-
+		vm.activityCommands = [
+			{
+				key: 'AddActivity',
+				activityType: 'Normal',
+				title: $translate.instant('AddActivity'),
+				successfulMessage: $translate.instant('SuccessfulMessageForAddingActivity'),
+				warningMessage: $translate.instant('PartialSuccessMessageForAddingActivity')
+			},
+			{
+				key: 'AddPersonalActivity',
+				activityType: 'PersonalActivity',
+				title: $translate.instant('AddPersonalActivity'),
+				successfulMessage: $translate.instant('SuccessfulMessageForAddingActivity'),
+				warningMessage: $translate.instant('PartialSuccessMessageForAddingActivity')
+			}
+		];
 		vm.scheduleManagementSvc = scheduleManagementSvc.newService();
 
 		vm.ready = false;

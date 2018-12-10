@@ -1,5 +1,6 @@
 ﻿(function () {
 	var target;
+	var serviceDateFormatHelper;
 
 	describe('#teamschedule UtilityService#', function () {
 		beforeEach(module('wfm.teamSchedule'));
@@ -23,9 +24,10 @@
 			moment.locale('en');
 		});
 
-		beforeEach(inject(function (_UtilityService_) {
+		beforeEach(inject(function (_UtilityService_, _serviceDateFormatHelper_) {
 			target = _UtilityService_;
-			target.setNowDate(new Date('2018-02-26T15:00:00+08:00'));
+			serviceDateFormatHelper = _serviceDateFormatHelper_;
+			target.setNowDateInUtc('2018-02-26 07:00:00');
 		}));
 
 		commonTestsInDifferentLocale();
@@ -67,9 +69,10 @@
 			moment.locale('en');
 		});
 
-		beforeEach(inject(function (_UtilityService_) {
+		beforeEach(inject(function (_UtilityService_, _serviceDateFormatHelper_) {
 			target = _UtilityService_;
-			target.setNowDate(new Date('2018-02-26T15:00:00+08:00'));
+			serviceDateFormatHelper = _serviceDateFormatHelper_;
+			target.setNowDateInUtc('2018-02-26 07:00:00');
 		}));
 
 		commonTestsInDifferentLocale();
@@ -96,9 +99,10 @@
 			});
 		}));
 
-		beforeEach(inject(function (_UtilityService_) {
+		beforeEach(inject(function (_UtilityService_, _serviceDateFormatHelper_) {
 			target = _UtilityService_;
-			target.setNowDate(new Date('2018-02-26T15:00:00+08:00'));
+			serviceDateFormatHelper = _serviceDateFormatHelper_;
+			target.setNowDateInUtc('2018-02-26 07:00:00');
 		}));
 
 		beforeEach(function () {
@@ -114,7 +118,7 @@
 
 	function commonTestsInDifferentLocale() {
 		it('should get correct now in user time zone', function () {
-			expect(target.nowInUserTimeZone()).toEqual('2018-02-26T15:00:00+08:00');
+			expect(serviceDateFormatHelper.getDateTime(target.nowInTimeZone('Asia/Hong_Kong'))).toEqual('2018-02-26 15:00');
 		});
 
 		it('should get correct next tick no earlier than eight', function () {

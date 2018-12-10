@@ -2083,7 +2083,6 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addAbsence.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addActivity.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsTimeRangePicker.tpl.html" />
-    <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addPersonalActivity.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.commandCheck.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.settings.html" />
     <Content Include="WFM\app\teamSchedule\html\dayViewSchedule.html" />
@@ -2105,8 +2104,6 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addAbsence.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addActivity.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addActivity.spec.js" />
-    <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addPersonalActivity.js" />
-    <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addPersonalActivity.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.commandCheck.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.moveActivity.js" />
@@ -2135,8 +2132,6 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.notification.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.filter.br.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.actionnoticeservice.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.actionnoticeservice.spec.js" />
     <Content Include="WFM\app\global\i18n\wfm.i18n.service.js" />
     <Content Include="WFM\app\global\current-user\currentuserinfo.service.js" />
     <Content Include="WFM\app\intraday\intraday.controller.js" />

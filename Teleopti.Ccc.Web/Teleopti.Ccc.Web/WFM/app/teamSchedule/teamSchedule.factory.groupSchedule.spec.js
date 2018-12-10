@@ -940,7 +940,7 @@
 			expect(personScheduleVm.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toEqual("10/16/2018 7:00 PM - 10/17/2018 2:00 AM");
 		});
 
-		it("should get correct schedule start time and end time", function () {
+		it("should get correct schedule start time moment and end time moment", function () {
 			var schedule = {
 				"PersonId": "221B-Baker-Street",
 				"Name": "Sherlock Holmes",
@@ -957,11 +957,11 @@
 			};
 			var personSchedule = target.Create([schedule], '2018-10-17', 'ETC/UTC').Schedules[0];
 
-			expect(personSchedule.ScheduleStartTime()).toEqual('2018-10-17T07:00:00');
-			expect(personSchedule.ScheduleEndTime()).toEqual("2018-10-17T08:00:00");
+			expect(personSchedule.ScheduleStartTimeMoment().format('YYYY-MM-DD HH:mm')).toEqual('2018-10-17 07:00');
+			expect(personSchedule.ScheduleEndTimeMoment().format('YYYY-MM-DD HH:mm')).toEqual("2018-10-17 08:00");
 		});
 
-		it("should get correct schedule start time and end time after timezone convertion", function () {
+		it("should get correct schedule start time moment and end time moment after timezone convertion", function () {
 			var schedule = {
 				"PersonId": "221B-Baker-Street",
 				"Name": "Sherlock Holmes",
@@ -983,8 +983,8 @@
 				"DayOff": null
 			};
 			var personSchedule = target.Create([schedule], '2018-10-17', 'Asia/Hong_Kong').Schedules[0];
-			expect(personSchedule.ScheduleStartTime()).toEqual("2018-10-17T15:00:00");
-			expect(personSchedule.ScheduleEndTime()).toEqual("2018-10-17T23:00:00");
+			expect(personSchedule.ScheduleStartTimeMoment().format('YYYY-MM-DD HH:mm')).toEqual('2018-10-17 15:00');
+			expect(personSchedule.ScheduleEndTimeMoment().format('YYYY-MM-DD HH:mm')).toEqual("2018-10-17 23:00");
 		});
 
 		it("should set hidden schedule start to true if yesterday's shift is overnight", function () {
