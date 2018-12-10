@@ -12,10 +12,10 @@ namespace Teleopti.Wfm.Administration.Core
 		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion, string tenant, int tenantId);
 		void AddSystemUser(string connectionToNewDb, Guid personId, string firstName, string lastName);
 		bool LoginExists(string connectionToNewDb, string login, SqlVersion sqlVersion);
-		void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion isAzure);
-		bool HasCreateDbPermission(string connectionString, SqlVersion sqlVersion);
-		bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion sqlVersion);
-		bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion, out string message);
+		void CreateLogin(string connectionToNewDb, string login, string password);
+		bool HasCreateDbPermission(string connectionString);
+		bool HasCreateViewAndLoginPermission(string connectionString);
+		bool LoginCanBeCreated(string connectionString, string login, string password, out string message);
 		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion);
 		SqlVersion Version(string connectionToNewDb);
 		void AddSystemUserToPersonInfo(string connectionToNewDb, Guid personId, string userName, string password, string tenantPassword);

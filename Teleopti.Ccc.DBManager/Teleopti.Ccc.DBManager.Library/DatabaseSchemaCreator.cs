@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library;
 using Teleopti.Support.Library.Folders;
@@ -29,14 +30,14 @@ namespace Teleopti.Ccc.DBManager.Library
 			_logger = logger;
 		}
 
-		public void Create(DatabaseType databaseType, SqlVersion isAzure)
+		public void Create(DatabaseType databaseType)
 		{
 			applyReleases(databaseType);
 			applyProgrammability(databaseType);
 			if (databaseType == DatabaseType.TeleoptiAnalytics)
 			{
 				_executeSql.Execute(c => new HangfireSchemaCreator().ApplyHangfire(c));
-				if(!isAzure.IsAzure)
+				if(!AzureCommon.IsAzure)
 					_executeSql.Execute(c => new SignalRSqlBackplaneSchemaCreator().ApplySignalRSqlBackplane(c));
 			}
 			addInstallLogRow();

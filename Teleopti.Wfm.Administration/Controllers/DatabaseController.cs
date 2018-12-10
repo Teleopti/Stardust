@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -89,11 +90,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));
 			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString(model));
-			if (!version.IsAzure)
+			if (!AzureCommon.IsAzure)
 				newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionString(model));
 			_persistTenant.Persist(newTenant);
 			
-			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
+			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword);
 			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
 
 			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
@@ -102,7 +103,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_createBusinessUnit.Create(newTenant, model.BusinessUnit);
 
 			_updateCrossDatabaseView.Execute(analyticsDbConnectionString,
-				version.IsAzure ? $"{model.Tenant}_TeleoptiAnalytics" : $"{model.Tenant}_TeleoptiAgg");
+				AzureCommon.IsAzure ? $"{model.Tenant}_TeleoptiAnalytics" : $"{model.Tenant}_TeleoptiAgg");
 
 			addSystemUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 
@@ -207,10 +208,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 
 			var version = _databaseHelperWrapper.Version(connectionString);
-			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, version))
+			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
-			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, version))
+			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
 			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
@@ -259,7 +260,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					};
 				}
 				string message;
-				if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, version, out message))
+				if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, out message))
 				{
 					return
 					new TenantResultModel

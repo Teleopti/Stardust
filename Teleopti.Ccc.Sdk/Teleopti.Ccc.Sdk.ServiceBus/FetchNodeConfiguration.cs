@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using Stardust.Node;
+using Teleopti.Ccc.Domain.Azure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			Uri managerLocation, Assembly handlerAssembly, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds,
 			bool enableGC)
 		{
-			if (isAzure())
+			if (AzureCommon.IsAzure)
 			{
 				var ipAddress = getIPAddress();
 				if (!string.IsNullOrEmpty(fixedNodeIp))
@@ -71,12 +72,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				sendDetailsToManagerMilliSeconds, enableGC
 			);
 
-		}
-
-		private bool isAzure()
-		{
-			var tennConn = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			return tennConn.DataSource.Contains("database.windows.net");
 		}
 
 		private string getIPAddress()

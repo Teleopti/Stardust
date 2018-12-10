@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Support.Library;
@@ -52,7 +53,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var analConnstring = builder.ConnectionString;
 			aggDB = builder.InitialCatalog;
 			// and agg to
-			if (!isAzure() && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
+			if (!AzureCommon.IsAzure && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
 			{
 				builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 				_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,
@@ -75,12 +76,6 @@ namespace Teleopti.Wfm.Administration.Core
 			_upgradeRunner.SetLogger(new TenantLogger(tenant.Name, tenant.Id));
 
 			_upgradeRunner.Upgrade(upgradeCommand, _tenantUnitOfWork, _currentTenantSession);
-		}
-
-		private bool isAzure()
-		{
-			var tennConn = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			return tennConn.DataSource.Contains("database.windows.net");
 		}
 	}
 }

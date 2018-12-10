@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Polly;
+using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library.Folders;
 
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				try
 				{
-					using (connectAndOpen(connectionStringAppLogOn(SqlVersion().IsAzure ? _command.DatabaseName : DatabaseHelper.MasterDatabaseName)))
+					using (connectAndOpen(connectionStringAppLogOn(AzureCommon.IsAzure ? _command.DatabaseName : DatabaseHelper.MasterDatabaseName)))
 					{
 					}
 
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 			}
 
-			if (!SqlVersion().IsAzure)
+			if (!AzureCommon.IsAzure)
 			{
 				return verifyWinGroup(_command.AppUserName);
 			}

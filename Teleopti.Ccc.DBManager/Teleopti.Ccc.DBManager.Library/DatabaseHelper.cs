@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Configuration;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library;
 using Teleopti.Support.Library.Folders;
@@ -26,8 +27,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			_usingMaster = new ExecuteSql(() =>
 			{
-				var isAzure = ConfigurationManager.AppSettings["AzurePattern"] != null && ConfigurationManager.AppSettings["AzurePattern"].Split(';').Any(d => dataSource.Contains(d.Trim()));
-				if (isAzure)
+				if (AzureCommon.IsAzure)
 					openConnection(forceMasterInAzure);
 				return openConnection(true);
 			}, Logger);
@@ -90,13 +90,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			azureStart.Apply(DatabaseType);
 		}
 
-		public bool LoginCanBeCreated(string login, string password, bool isAzure, out string message)
+		public bool LoginCanBeCreated(string login, string password, out string message)
 		{
 			try
 			{
 				var loginHandler = LoginTasks();
-				loginHandler.CreateLogin(login, password, false, _sqlVersion.Value);
-				loginHandler.DropLogin(login, isAzure);
+				loginHandler.CreateLogin(login, password, false);
+				loginHandler.DropLogin(login);
 				message = "";
 				return true;
 			}
@@ -119,19 +119,19 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _usingDatabase);
-			permissionsHandler.CreatePermissions(login, pwd, sqlVersion);
+			permissionsHandler.CreatePermissions(login, pwd);
 		}
 
-		public bool HasCreateDbPermission(SqlVersion sqlVersion)
+		public bool HasCreateDbPermission()
 		{
-			if (sqlVersion.IsAzure)
+			if (AzureCommon.IsAzure)
 				return true;
 			return Convert.ToBoolean(_usingDatabase.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));
 		}
 
 		public bool HasCreateViewAndLoginPermission()
 		{
-			if (_sqlVersion.Value.IsAzure)
+			if (AzureCommon.IsAzure)
 			{
 				const string pwd = "tT12@andSomeMore";
 				var login = Guid.NewGuid().ToString().Replace("-", "#");
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				_usingDatabase,
 				databaseFolder,
 				Logger);
-			schemaCreator.Create(DatabaseType, _sqlVersion.Value);
+			schemaCreator.Create(DatabaseType);
 		}
 
 		public int DatabaseVersion()
