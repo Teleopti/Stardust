@@ -30,7 +30,9 @@ function fnChangeAppPoolVersion ([System.Object]$site, [string]$ManagedRuntimeVe
 	$appPoolName = $site.ApplicationPoolName;
 	$apppoolobject = $iis.ApplicationPools[$appPoolName]
 	$apppoolobject.ManagedRuntimeVersion = $ManagedRuntimeVersion;
-	$apppoolobject.startMode = "alwaysrunning";
+	$apppoolobject.startMode = "AlwaysRunning";
+	$apppoolobject.autoStart = $True;
+	$apppoolobject.ProcessModel.IdleTimeout = New-TimeSpan;
 	$iis.CommitChanges();
 }
 
