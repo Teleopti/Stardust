@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IList<FilterModel> Filters { get; set; }
 		public int AgentCount { get; set; }
 		public double PreferenceValue { get; set; }
+		public IEnumerable<PlanningGroupSettingsModel> Settings { get; set; }
 	}
 }

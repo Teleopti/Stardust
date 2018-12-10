@@ -6,9 +6,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class PlanningGroupMapper
 	{
 		private readonly FilterMapper _filterMapper;
-		public PlanningGroupMapper(FilterMapper filterMapper)
+		private readonly PlanningGroupSettingsMapper _planningGroupSettingsMapper;
+
+		public PlanningGroupMapper(FilterMapper filterMapper, PlanningGroupSettingsMapper planningGroupSettingsMapper)
 		{
 			_filterMapper = filterMapper;
+			_planningGroupSettingsMapper = planningGroupSettingsMapper;
 		}
 
 		public PlanningGroupModel ToModel(PlanningGroup planningGroup, int agentCount)
@@ -21,7 +24,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Name = planningGroup.Name,
 				Filters = filterModels,
 				AgentCount = agentCount,
-				PreferenceValue = planningGroup.Settings.PreferenceValue.Value
+				PreferenceValue = planningGroup.Settings.PreferenceValue.Value,
+				Settings = planningGroup.Settings.Select(planningGroupSettings => _planningGroupSettingsMapper.ToModel(planningGroupSettings)).ToList()
 			};
 		}
 	}
