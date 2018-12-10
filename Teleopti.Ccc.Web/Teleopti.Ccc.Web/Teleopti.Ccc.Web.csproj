@@ -1741,10 +1741,13 @@
     <Content Include="WFM\app\rta\rta\overview\controller.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.nositesmessage.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.restrictHistoricalOverviewWithPermission.spec.js" />
+    <Content Include="WFM\app\rta\rta\overview\controller.restrictModifySkillGroups.spec.js" />
+    <Content Include="WFM\app\rta\rta\overview\controller.RestrictModifySkillGroups_78568.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.ReviewHistoricalAdherence_74770.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.RTA_ConfigurationValidationNotification_46933.js" />
     <Content Include="WFM\app\rta\rta\overview\view.ReviewHistoricalAdherence_74770.html" />
     <Content Include="WFM\app\rta\rta\overview\view.RTA_ModifySkillGroup_48191.html" />
+    <Content Include="WFM\app\rta\rta\overview\view.RestrictModifySkillGroups_78568.html" />
     <Content Include="WFM\app\rta\rta\rta.configuration.validator.service.js" />
     <Content Include="WFM\app\rta\rta\rta.data.service.js" />
     <Content Include="WFM\app\rta\shared\polling.service.js" />

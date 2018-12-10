@@ -298,7 +298,7 @@ var rtaTester = (function () {
 
 	function setupByDescription(description, tests) {
 		if (description === 'RtaOverviewController')
-			setup(tests, '', 'RtaOverviewController74770');
+			setup(tests, '', 'RtaOverviewController78568');
 		if (description === 'RtaAgentsController')
 			setup(tests, '', 'RtaAgentsController78568');
 		if (description === 'RtaHistoricalController')

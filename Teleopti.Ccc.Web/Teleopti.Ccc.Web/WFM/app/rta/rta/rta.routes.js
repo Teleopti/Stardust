@@ -33,12 +33,16 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
-				if (toggles.RTA_ReviewHistoricalAdherence_74770)
+				if (toggles.RTA_RestrictModifySkillGroups_78568)
+					return 'app/rta/rta/overview/view.RestrictModifySkillGroups_78568.html';
+				else if (toggles.RTA_ReviewHistoricalAdherence_74770)
 					return 'app/rta/rta/overview/view.ReviewHistoricalAdherence_74770.html';
 				return 'app/rta/rta/overview/view.RTA_ModifySkillGroup_48191.html';
 			},
 			controllerProvider: function () {
-				if (toggles.RTA_ReviewHistoricalAdherence_74770)
+				if (toggles.RTA_RestrictModifySkillGroups_78568)
+					return 'RtaOverviewController78568 as vm';
+				else if (toggles.RTA_ReviewHistoricalAdherence_74770)
 					return 'RtaOverviewController74770 as vm';
 				return 'RtaOverviewController46933 as vm';
 			}
