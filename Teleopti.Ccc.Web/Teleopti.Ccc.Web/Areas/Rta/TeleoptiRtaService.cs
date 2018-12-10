@@ -5,7 +5,6 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using log4net;
 using Teleopti.Ccc.Rta.WebService;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Tracer;
 

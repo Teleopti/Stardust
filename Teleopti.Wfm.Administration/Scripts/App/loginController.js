@@ -74,25 +74,26 @@
 
 		$scope.message = "något som jag vill visa";
 
-		$http.get("./HasNoUser").success(function (data) {
-			firstUser = data;
-			if (firstUser) {
-				vm.user = 'xxfirstxx';
-				window.location = "firstuser.html";
-			} else {
-				if (!token) {
-					$("#modal-login").dialog({
-						modal: true,
-						title: "Log in to access the admin site",
-						closeOnEscape: false,
-						draggable: false,
-						resizable: false
-					});
+		$http.get("./HasNoUser")
+			.then(function (response) {
+				firstUser = response.data;
+				if (firstUser) {
+					vm.user = 'xxfirstxx';
+					window.location = "firstuser.html";
+				} else {
+					if (!token) {
+						$("#modal-login").dialog({
+							modal: true,
+							title: "Log in to access the admin site",
+							closeOnEscape: false,
+							draggable: false,
+							resizable: false
+						});
+					}
 				}
-			}
-		}).error(function (xhr, ajaxOptions, thrownError) {
-			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-		});
+			}).catch(function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			});
 
 		function showError(jqXHR) {
 			vm.ErrorMessage = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
@@ -108,7 +109,7 @@
 			//lets do authentication in cookie
 			var today = new Date();
 			var expireDate = new Date(today.getTime() + 30 * 60000);
-			$cookies.putObject('WfmAdminAuth', {'tokenKey': data.AccessToken, 'user': data.UserName, 'id': data.Id}, {'expires': expireDate});
+			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'user': data.UserName, 'id': data.Id }, { 'expires': expireDate });
 		}
 
 		updateCookies();
@@ -125,7 +126,7 @@
 					var info = $cookies.getObject('WfmAdminAuth');
 					var today = new Date();
 					var newExpireDate = new Date(today.getTime() + 30 * 60000);
-					$cookies.putObject('WfmAdminAuth', info, {'expires': newExpireDate});
+					$cookies.putObject('WfmAdminAuth', info, { 'expires': newExpireDate });
 				}
 			});
 		}
@@ -142,21 +143,19 @@
 
 			$http.post('./Login',
 				loginData
-			).success(function (data) {
+			).then(function (response) {
 				$("#modal-login").toggleClass("wait");
 				//destory previous cookies
-				if (data.Success === false) {
-					//alert(data.Message);
-					vm.ErrorMessage = data.Message;
+				if (response.data.Success === false) {
+					vm.ErrorMessage = response.data.Message;
 					return;
 				} else {
-					createCookies(data);
+					createCookies(response.data);
 					document.location = "#/";
 					location.reload();
-					//$('#modal-login').dialog('close');
 				}
 
-			}).error(showError);
+			}).catch(showError);
 		};
 
 		vm.logout = function () {

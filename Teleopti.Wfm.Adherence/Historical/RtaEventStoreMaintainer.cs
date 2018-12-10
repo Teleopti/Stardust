@@ -4,10 +4,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.Historical
 {
 	public class RtaEventStoreMaintainer :
 		IHandleEvent<TenantDayTickEvent>,

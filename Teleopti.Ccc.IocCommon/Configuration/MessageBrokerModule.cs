@@ -12,7 +12,6 @@ using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Messaging.Client.Composite;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Ccc.IocCommon.Configuration

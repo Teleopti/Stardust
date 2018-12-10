@@ -32,8 +32,8 @@
 		var refreshPromise = $interval(pollNewData, refreshInterval);
 
 		$http.get("./Stardust/Types", tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.types = data;
+			.then(function (response) {
+				vm.types = response.data;
 			});
 
 		$scope.$on("$destroy",
@@ -42,13 +42,13 @@
 			});
 
 		$http.get("./AllTenants", tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.Tenants = data;
+			.then(function (response) {
+				vm.Tenants = response.data;
 			});
 
 		$http.get("./Stardust/OldestJob", tokenHeaderService.getHeaders())
-			.success(function (data) {
-				var oldestJob = data;
+			.then(function (response) {
+				var oldestJob = response.data;
 				vm.minFrom = new Date(oldestJob.Created);
 				vm.maxTo = new Date(new Date());
 				vm.selectedFromDate = vm.minFrom;
@@ -76,16 +76,15 @@
 
 			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType, "fromdate": vm.fromDateFilter, "todate": vm.toDateFilter};
 			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams(params))
-				.success(function (data) {
-					if (data.length < vm.resultsTo) {
+				.then(function (response) {
+					if (response.data.length < vm.resultsTo) {
 						vm.moreJobs = false;
 					} else {
 						vm.moreJobs = true;
 					}
-					vm.Jobs = data;
+					vm.Jobs = response.data;
 				})
-				.error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ": " + xhr.ExceptionMessage);
+				.catch(function (xhr, ajaxOptions, thrownError) {
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;

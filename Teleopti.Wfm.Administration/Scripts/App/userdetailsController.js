@@ -31,15 +31,13 @@
 
 		vm.LoadUser = function() {
 			$http.post('./User', vm.UserId, tokenHeaderService.getHeaders())
-				.success(function(data) {
-					vm.UserId = data.Id;
-					vm.Name = data.Name;
-					vm.OriginalName = data.Name;
-					vm.Email = data.Email;
+				.then(function (response) {
+					vm.UserId = response.data.Id;
+					vm.Name = response.data.Name;
+					vm.OriginalName = response.data.Name;
+					vm.Email = response.data.Email;
 					vm.CheckName();
 					vm.CheckEmail();
-				}).error(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 
@@ -74,9 +72,9 @@
 							Id: vm.UserId
 						},
 						tokenHeaderService.getHeaders())
-					.success(function(data) {
-						if (!data.Success) {
-							vm.EmailMessage = data.Message;
+					.then(function (response) {
+						if (!response.data.Success) {
+							vm.EmailMessage = response.data.Message;
 							vm.EmailOk = false;
 						} else {
 							vm.EmailMessage = "Email ok.";
@@ -84,10 +82,9 @@
 						}
 
 					})
-					.error(function(xhr, ajaxOptions, thrownError) {
+					.catch(function(xhr, ajaxOptions, thrownError) {
 						vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 						vm.Success = false;
-						console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					});
 			}
 			vm.CheckAll();
@@ -106,9 +103,9 @@
 						Email: vm.Email
 					},
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
-					if (!data.Success) {
-						vm.Message = data.Message;
+				.then(function (response) {
+					if (!response.data.Success) {
+						vm.Message = response.data.Message;
 						return;
 					}
 					if (vm.UserId === loggedOnId) {
@@ -122,19 +119,16 @@
 					}
 					window.location = "#users";
 				})
-				.error(function(xhr, ajaxOptions, thrownError) {
+				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 
 		vm.DeleteUser = function() {
 			$http.post('./DeleteUser', vm.UserId, tokenHeaderService.getHeaders())
-				.success(function(data) {
+				.then(function (response) {
 					window.location = "#users";
-				}).error(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 	}

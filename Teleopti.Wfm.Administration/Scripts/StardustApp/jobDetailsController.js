@@ -14,18 +14,13 @@
 		
 
 		$http.get("./Stardust/JobDetails/" + vm.JobId, tokenHeaderService.getHeaders())
-			.success(function(data) {
-				vm.JobDetails = data;
-			})
-			.error(function(xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			.then(function (response) {
+				vm.JobDetails = response.data;
 			});
+
 		$http.get("./Stardust/Job/" + vm.JobId, tokenHeaderService.getHeaders())
-			.success(function(data) {
-				vm.Job = data;
-			})
-			.error(function(xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			.then(function (response) {
+				vm.Job = response.data;
 			});
 
 		function preferedLogLevel() {
@@ -34,6 +29,6 @@
 
 		function back() {
 			window.history.back();
-		};
+		}
 	}
 })();

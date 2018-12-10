@@ -261,18 +261,6 @@ datepicker input {
 	vertical-align: middle;
 }
 
-
-.md-datepicker-triangle-button.md-button.md-icon-button {
-	display: none;
-}
-.md-datepicker-input {
-	border-bottom: 0 solid transparent !important;
-}
-.md-datepicker-input {
-	pointer-events: none !important;
-}
-
-
 .subrow {
 	padding-left: 25px;
 }

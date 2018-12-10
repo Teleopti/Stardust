@@ -18,16 +18,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class HangfireEventPublishingTest : IIsolateSystem, IExtendSystem
+	public class HangfireEventPublishingTest : IIsolateSystem, IExtendSystem, ITestInterceptor
 	{
 		public FakeHangfireEventClient JobClient;
 		public IEventPublisher Target;
 		public IJsonSerializer Serializer;
-		public IJsonDeserializer Deserializer;
 		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
-		public HandlerTypeMapper TypeMapper;
-		
+		public HandlerTypeMapperForTest TypeMapper;
+
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TestHandler>();
@@ -42,7 +41,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			isolate.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
 			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+		}
 
+		public void OnBefore()
+		{
+			TypeMapper.DynamicMappingsForTestProjects = false;
 		}
 
 		[Test]
@@ -144,9 +147,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 		}
 
-		public class TestHandler : 
-			IRunOnHangfire, 
-			IHandleEvent<HangfireTestEvent>, 
+		public class TestHandler :
+			IRunOnHangfire,
+			IHandleEvent<HangfireTestEvent>,
 			IHandleEvent<Event>
 		{
 			public void Handle(HangfireTestEvent @event)
@@ -162,8 +165,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 		}
 
-		public class TestMultiHandler1 : 
-			IRunOnHangfire, 
+		public class TestMultiHandler1 :
+			IRunOnHangfire,
 			IHandleEvent<MultiHandlerTestEvent>
 		{
 			public void Handle(MultiHandlerTestEvent @event)
@@ -171,8 +174,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			}
 		}
 
-		public class TestMultiHandler2 : 
-			IRunOnHangfire, 
+		public class TestMultiHandler2 :
+			IRunOnHangfire,
 			IHandleEvent<MultiHandlerTestEvent>
 		{
 			public void Handle(MultiHandlerTestEvent @event)
@@ -182,11 +185,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 
 		public class AspectedHandlerTestEvent : IEvent
 		{
-			
 		}
 
-		public class TestAspectedHandler : 
-			IRunOnHangfire, 
+		public class TestAspectedHandler :
+			IRunOnHangfire,
 			IHandleEvent<AspectedHandlerTestEvent>
 		{
 			public void Handle(AspectedHandlerTestEvent @event)
@@ -214,6 +216,5 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			{
 			}
 		}
-
 	}
 }

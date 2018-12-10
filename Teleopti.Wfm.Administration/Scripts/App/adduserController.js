@@ -24,9 +24,9 @@
 		vm.FirstUser = false;
 		vm.SaveEnabled = false;
 
-		$http.get("./HasNoUser").success(function(data) {
-			vm.FirstUser = data;
-		}).error(function(xhr, ajaxOptions, thrownError) {
+		$http.get("./HasNoUser").then(function (response) {
+			vm.FirstUser = response.data;
+		}).catch(function(xhr, ajaxOptions, thrownError) {
 			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
 
@@ -62,9 +62,9 @@
 							Email: vm.Email
 						},
 						tokenHeaderService.getHeaders())
-					.success(function(data) {
-						if (!data.Success) {
-							vm.EmailMessage = data.Message;
+					.then(function (response) {
+						if (!response.data.Success) {
+							vm.EmailMessage = response.data.Message;
 							vm.EmailOk = false;
 						} else {
 							vm.EmailMessage = "Email ok.";
@@ -72,10 +72,9 @@
 						}
 
 					})
-					.error(function(xhr, ajaxOptions, thrownError) {
+					.catch(function(xhr, ajaxOptions, thrownError) {
 						vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 						vm.Success = false;
-						console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					});
 			}
 			vm.CheckAll();
@@ -115,17 +114,16 @@
 						ConfirmPassword: vm.ConfirmPassword
 					},
 					tokenHeaderService.getHeaders())
-				.success(function(data) {
-					if (!data.Success) {
-						vm.ErrorMessage = data.Message;
+				.then(function (response) {
+					if (!response.data.Success) {
+						vm.ErrorMessage = response.data.Message;
 						return;
 					}
 					window.location = "#users";
 				})
-				.error(function(xhr, ajaxOptions, thrownError) {
+				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 
@@ -136,19 +134,17 @@
 						Email: vm.Email,
 						Password: vm.Password,
 						ConfirmPassword: vm.ConfirmPassword
-					}).success(function(data) {
-					if (!data.Success) {
-						vm.ErrorMessage = data.Message;
+				}).then(function (response) {
+					if (!response.data.Success) {
+						vm.ErrorMessage = response.data.Message;
 						return;
 					}
 					window.location = document.location.toString().replace("firstuser.html", "");
 				})
-				.error(function(xhr, ajaxOptions, thrownError) {
+				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 	}
-
 })();

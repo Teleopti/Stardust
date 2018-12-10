@@ -18,6 +18,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Historical;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -97,6 +98,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Hangfire bus maybe? ;)
 			if (QueryAllAttributes<RealHangfireAttribute>().IsEmpty())
 				isolate.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+			isolate.UseTestDouble<HandlerTypeMapperForTest>().For<HandlerTypeMapper>();
 
 			// message broker
 			isolate.UseTestDouble(new FakeSignalR()).For<ISignalR>();

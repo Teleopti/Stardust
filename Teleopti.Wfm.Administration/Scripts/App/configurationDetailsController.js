@@ -16,10 +16,8 @@
 
 		var loadConfiguration = function() {
 			$http.post('./Configuration', '"' + vm.Key + '"', tokenHeaderService.getHeaders())
-				.success(function(data) {
-					vm.Value = data;
-				}).error(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.Value = response.data;
 				});
 		};
 
@@ -40,19 +38,18 @@
 				Key: vm.Key,
 				Value: vm.Value
 			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
-					if (!data.Success) {
-						vm.Message = data.Message;
+				.then(function (response) {
+					if (!response.data.Success) {
+						vm.Message = response.data.Message;
 						return;
 					}
 
 					window.location = "#/";
 				})
-				.error(function (xhr, ajaxOptions, thrownError) {
+				.catch(function (xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 				});
 		};
 	}
-
 })();

@@ -99,15 +99,15 @@
 					JSON.stringify(tenant),
 					tokenHeaderService.getHeaders()
 				)
-				.success(function (data) {
-					ctrl.jobs = data;
+				.then(function (response) {
+					ctrl.jobs = response.data;
 			if (ctrl.form.hasOwnProperty('JobName') && angular.isDefined(ctrl.job)) {
 				  var jobDropdown = angular.element(document.querySelector('#jobDropdown'));
 				  var selectedJobName = jobDropdown[0].options[jobDropdown[0].selectedIndex].innerHTML;
 				  ctrl.form.JobName = getItemBasedOnName(ctrl.jobs, selectedJobName, 'JobName');
 			}
 				})
-				.error(function (data) {
+				.catch(function (response) {
 					ctrl.jobs = [];
 				});
 		}
@@ -116,10 +116,10 @@
 			ctrl.tenants = [];
 			$http
 				.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-				.success(function (data) {
-					for (var i = 0; i < data.length; i++) {
-						if (data[i].IsBaseConfigured) {
-							ctrl.tenants.push(data[i]);
+				.then(function (response) {
+					for (var i = 0; i < response.data.length; i++) {
+						if (response.data[i].IsBaseConfigured) {
+							ctrl.tenants.push(response.data[i]);
 						}
 					}
 
@@ -133,8 +133,8 @@
 					}
 
 					ctrl.form = {
-						DailyFrequencyStart: moment(new Date()).format("HH:mm"),
-						DailyFrequencyEnd: moment(new Date()).format("HH:mm")
+						DailyFrequencyStart: moment().format("HH:mm"),
+						DailyFrequencyEnd: moment().format("HH:mm")
 					};
 
 					ctrl.selectedTenant = ctrl.tenants[0];
@@ -149,7 +149,6 @@
 			}
 			else {
 				form.DailyFrequencyMinute = null;
-				//form.DailyFrequencyStart = null;
 				form.DailyFrequencyEnd = null;
 			}
 		}
@@ -162,8 +161,8 @@
 					JSON.stringify(tenant),
 					tokenHeaderService.getHeaders()
 				)
-				.success(function (data) {
-					ctrl.tenantLogData = data;
+				.then(function (response) {
+					ctrl.tenantLogData = response.data;
 				});
 		}
 
@@ -210,8 +209,8 @@
 					JSON.stringify(ctrl.form.Tenant.TenantName),
 					tokenHeaderService.getHeaders()
 				)
-				.success(function (data) {
-					ctrl.jobs = data;
+				.then(function (response) {
+					ctrl.jobs = response.data;
 					ctrl.form.JobName = getItemBasedOnName(ctrl.jobs, ctrl.job.JobName, 'JobName');
 				});
 
@@ -221,8 +220,8 @@
 					JSON.stringify(ctrl.form.Tenant.TenantName),
 					tokenHeaderService.getHeaders()
 				)
-				.success(function (data) {
-					ctrl.tenantLogData = data;
+				.then(function (response) {
+					ctrl.tenantLogData = response.data;
 					ctrl.form.LogDataSourceId = getItemBasedOnName(ctrl.tenantLogData, ctrl.job.LogDataSourceId, 'Id');
 					handleRelativePeriods();
 				});

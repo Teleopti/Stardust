@@ -39,12 +39,9 @@
 			};
 
 			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
-				.success(function(data) {
-					vm.NewUserOk = data.Success,
-						vm.NewUserOkMessage = data.Message;
-
-				}).error(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function(response) {
+					vm.NewUserOk = response.data.Success,
+						vm.NewUserOkMessage = response.data.Message;
 				});
 		};
 
@@ -56,17 +53,16 @@
 				UserName: vm.UserName,
 				Password: vm.Password
 			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
-					if (data.Success === false) {
-						vm.Message = data.Message;
+				.then(function (response) {
+					if (response.data.Success === false) {
+						vm.Message = response.data.Message;
 						return;
 					}
 					window.location = "#";
 				})
-				.error(function (xhr, ajaxOptions, thrownError) {
+				.catch(function (xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 

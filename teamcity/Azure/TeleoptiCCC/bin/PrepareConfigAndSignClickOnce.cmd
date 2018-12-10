@@ -22,10 +22,7 @@ powershell set-executionpolicy unrestricted
 ::execute
 powershell . .\%PROCESSNAME%.ps1 >> "%DIRECTORY%\StartupLog.txt" 2>&1
 set /A customError=%ERRORLEVEL%
-::execute custom powershell script
-if exist "%DIRECTORY%\CustomStartup.ps1" (
-powershell -file "%DIRECTORY%\CustomStartup.ps1" >"%DIRECTORY%\CustomStartup.log"
-)
+
 
 IF %ERRORLEVEL% EQU 0 (
   REM   The application installed without error. Create a file to indicate that the task

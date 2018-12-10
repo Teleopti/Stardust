@@ -10,16 +10,11 @@
 
 		vm.LoadUsers = function() {
 			$http.get('./Users', tokenHeaderService.getHeaders())
-				.success(function(data) {
-					vm.users = data;
-
-				}).error(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				.then(function (response) {
+					vm.users = response.data;
 				});
 		};
 
 		vm.LoadUsers();
-		
 	}
-
 })();

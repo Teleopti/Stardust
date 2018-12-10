@@ -4,7 +4,7 @@ using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.Historical
 {
 	public interface IRtaEventStoreAsyncSynchronizer
 	{

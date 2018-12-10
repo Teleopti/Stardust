@@ -1,9 +1,9 @@
-(function() {
+(function () {
 	"use strict";
 
 	angular
-	.module("adminApp")
-	.controller("etlController", etlController, ["$http", "$timeout", "$window"]);
+		.module("adminApp")
+		.controller("etlController", etlController, ["$http", "$timeout", "$window"]);
 
 	function etlController($http, tokenHeaderService, $timeout, $window) {
 		var vm = this;
@@ -49,7 +49,7 @@
 			EndDate: null
 		};
 
-		vm.applyToAll = function(param, input) {
+		vm.applyToAll = function (param, input) {
 			if (vm.selectedJob.Initial) {
 				vm.manualInitial[param] = input;
 			}
@@ -71,7 +71,7 @@
 			}
 		};
 
-		vm.getManualData = function() {
+		vm.getManualData = function () {
 			vm.getTenants();
 			vm.getConfigStatus();
 			vm.language = navigator.language || navigator.userLanguage;
@@ -123,65 +123,65 @@
 
 		function getJobs(tenant) {
 			$http
-			.post(
-				"./Etl/Jobs",
-				JSON.stringify(tenant),
-				tokenHeaderService.getHeaders()
-			)
-			.success(function(data) {
-				vm.jobs = data;
-			})
-			.error(function(data) {
-				vm.jobs = [];
-				console.log(data, "failed to get jobs");
-			});
+				.post(
+					"./Etl/Jobs",
+					JSON.stringify(tenant),
+					tokenHeaderService.getHeaders()
+				)
+				.then(function (response) {
+					vm.jobs = response.data;
+				})
+				.catch(function (response) {
+					vm.jobs = [];
+				});
 		}
 
 		function getTenants() {
 			vm.tenants = [];
 			$http
-			.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-			.success(function (data) {
-				for (var i = 0; i < data.length; i++) {
-					if (data[i].IsBaseConfigured) {
-						vm.tenants.push(data[i]);
-					} else {
-						vm.unconfigured = true;
+				.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
+				.then(function (response) {
+					for (var i = 0; i < response.data.length; i++) {
+						if (response.data[i].IsBaseConfigured) {
+							vm.tenants.push(response.data[i]);
+						} else {
+							vm.unconfigured = true;
+						}
 					}
-				}
-				vm.tenants.unshift({
-					TenantName: '<All>'
-				})
-				if (!$window.sessionStorage.tenant) {
-					vm.selectedTenant = vm.tenants[0];
-					selectedTenantChanged();
-				} else {
-					vm.selectedTenant = getItemBasedOnName(vm.tenants, $window.sessionStorage.tenant, "TenantName");
-					selectedTenantChanged();
-				}
-			});
+					vm.tenants.unshift({
+						TenantName: '<All>'
+					});
+
+					if (!$window.sessionStorage.tenant) {
+						vm.selectedTenant = vm.tenants[0];
+						selectedTenantChanged();
+					} else {
+						vm.selectedTenant = getItemBasedOnName(vm.tenants, $window.sessionStorage.tenant, "TenantName");
+						selectedTenantChanged();
+					}
+				});
 		}
 
 		function getItemBasedOnName(arr, name, prop) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i][prop] === name) {
-          return arr[i];
-        }
-      }
-    }
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i][prop] === name) {
+					return arr[i];
+				}
+			}
+		}
 
 		function getConfigStatus() {
 			$http
-			.get(
-				"./Etl/IsBaseConfigurationAvailable",
-				tokenHeaderService.getHeaders()
-			)
-			.success(function(data) {
-				vm.masterTenant = {
-					IsBaseConfigured: data.IsBaseConfigured,
-					TenantName: data.TenantName
-				};
-			});
+				.get(
+					"./Etl/IsBaseConfigurationAvailable",
+					tokenHeaderService.getHeaders()
+				)
+				.then(function (response) {
+					vm.masterTenant = {
+						IsBaseConfigured: response.data.IsBaseConfigured,
+						TenantName: response.data.TenantName
+					};
+				});
 		}
 
 		function selectedTenantChanged() {
@@ -193,14 +193,14 @@
 
 		function sendTenant(tenant) {
 			$http
-			.post(
-				"./Etl/TenantValidLogDataSources",
-				JSON.stringify(tenant),
-				tokenHeaderService.getHeaders()
-			)
-			.success(function(data) {
-				vm.dataSources = data;
-			});
+				.post(
+					"./Etl/TenantValidLogDataSources",
+					JSON.stringify(tenant),
+					tokenHeaderService.getHeaders()
+				)
+				.then(function (response) {
+					vm.dataSources = response.data;
+				});
 		}
 
 		function enqueueJob(job) {
@@ -252,19 +252,19 @@
 			}
 
 			$http
-			.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders())
-			.success(function() {
-				job.Status = "Job enqueued";
-				$timeout(function() {
-					job.Status = null;
-				}, 5000);
-			})
-			.error(function() {
-				job.Status = "Failed. Check inputs and network";
-				$timeout(function() {
-					job.Status = null;
-				}, 5000);
-			});
+				.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders())
+				.then(function () {
+					job.Status = "Job enqueued";
+					$timeout(function () {
+						job.Status = null;
+					}, 5000);
+				})
+				.catch(function () {
+					job.Status = "Failed. Check inputs and network";
+					$timeout(function () {
+						job.Status = null;
+					}, 5000);
+				});
 		}
 
 	}
