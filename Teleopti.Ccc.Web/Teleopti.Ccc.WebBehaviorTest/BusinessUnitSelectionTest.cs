@@ -69,12 +69,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.Click(".organization-picker");
 			Browser.Interactions.AssertAnyContains(".organization-picker .md-label", "site 1");
 			Browser.Interactions.AssertNoContains(".organization-picker", ".md-label", "site 2");
+			Browser.Interactions.Click(".outside-click-backdrop");
 
 			Browser.Interactions.Click("[data-test-bu-select]");
 			Browser.Interactions.ClickUsingJQuery("[data-test-bu-list] > li:contains(business unit 2)");
 			Browser.Interactions.Click(".organization-picker");
 			Browser.Interactions.AssertAnyContains(".organization-picker .md-label", "site 2");
 			Browser.Interactions.AssertNoContains(".organization-picker", ".md-label", "site 1");
+			Browser.Interactions.Click(".outside-click-backdrop");
 		}
 	}
 }
