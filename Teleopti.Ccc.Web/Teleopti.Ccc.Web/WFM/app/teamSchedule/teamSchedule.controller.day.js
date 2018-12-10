@@ -587,37 +587,11 @@
 			});
 		};
 
-		vm.getSitesAndTeamsAsync = function () {
-			return $q(function (resolve, reject) {
-				var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
-				teamScheduleSvc.hierarchy(date)
-					.then(function (data) {
-						resolve(data);
-						vm.sitesAndTeams = data.Children;
-
-						angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
-
-						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-					});
-			});
-		};
-
 		vm.isResultTooMany = function () {
 			return vm.total > 500;
 		}
 		vm.warningMessageForTooManyResults = function () {
 			return $translate.instant('TooManyResultsForSearchKeywords').replace('{0}', 500);
-		}
-
-
-		function extractTeamNames(sites) {
-			var teamNameMap = {};
-			sites.forEach(function (site) {
-				site.Children.forEach(function (team) {
-					teamNameMap[team.Id] = team.Name;
-				});
-			});
-			return teamNameMap;
 		}
 
 		vm.searchPlaceholder = $translate.instant('Search');
