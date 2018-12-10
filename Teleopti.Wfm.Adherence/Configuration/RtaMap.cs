@@ -4,7 +4,7 @@ using Teleopti.Wfm.Adherence.Configuration.Events;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {
-    public class RtaMap : VersionedAggregateRootWithBusinessUnit, IRtaMap
+    public class RtaMap : VersionedAggregateRootWithBusinessUnitWithoutChangeInfo, IRtaMap
 	{
         private readonly IRtaStateGroup _stateGroup;
         private readonly IActivity _activity;
