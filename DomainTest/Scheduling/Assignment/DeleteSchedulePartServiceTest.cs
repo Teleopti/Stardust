@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -24,84 +23,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[DomainTest]
     public class DeleteSchedulePartServiceTest
     {
-        private MockRepository _mocks;
-        private DeleteSchedulePartService _deleteService;
-        private IList<IScheduleDay> _list;
-        private IScheduleDay _part1;
-        private IScheduleDay _part2;
-        private IScheduleDay _part3;
-        private DeleteOption _deleteOption;
-    	private ISchedulePartModifyAndRollbackService _rollbackService;
-        private NoSchedulingProgress _schedulingProgress;
-
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public ITimeZoneGuard TimeZoneGuard;
-
-		[SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _deleteService = new DeleteSchedulePartService();
-        	_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_part1 = _mocks.StrictMock<IScheduleDay>();
-			_part2 = _mocks.StrictMock<IScheduleDay>();
-			_part3 = _mocks.StrictMock<IScheduleDay>();
-            _list = new List<IScheduleDay>{_part1, _part2};
-            _deleteOption = new DeleteOption();
-            _schedulingProgress = new NoSchedulingProgress();
-        }
-
-		[Test]
-        public void VerifyCanCreateObject()
-        {
-            Assert.IsNotNull(_deleteService);
-        }
-
-		[Test]
-		public void VerifyDeleteMainShiftSpecial()
-		{
-			using (_mocks.Record())
-			{
-				_part3.DeleteMainShiftSpecial();
-				_part3.DeleteMainShiftSpecial();
-
-				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
-			}
-
-			using (_mocks.Playback())
-			{
-				_deleteOption.MainShiftSpecial = true;
-				_deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
-			}
-		}
 
         [Test]
         public void ShouldNotDeleteDayOffUnderFullDayAbsence()
         {
-            using (_mocks.Record())
-            {
-            	Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.FullDayAbsence).Repeat.Twice();
+			var target = new DeleteSchedulePartService();
+			var date = new DateOnly(2018, 10, 1);
+			var scenario = new Scenario().WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance());
+			var personAssignment = new PersonAssignment(agent, scenario, date).WithDayOff().WithId();
+			var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence().WithId(), date.ToDateTimePeriod(new TimePeriod(0, 24), TimeZoneInfo.Utc)));
+			var data = new List<IPersistableScheduleData> { personAssignment, personAbsence };
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
+			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
+				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
+			var deleteOption = new DeleteOption { Default = true };
 
-                Expect.Call(() => _part3.DeleteFullDayAbsence(_part3)).Repeat.AtLeastOnce();
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, deleteOption, rollBackService, new NoSchedulingProgress());
 
-
-				Expect.Call(_part1.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(_part2.ReFetch()).Return(_part3).Repeat.AtLeastOnce();
-				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
-			}
-
-            using (_mocks.Playback())
-            {
-                _deleteOption.Default = true;
-
-                _deleteService.Delete(_list, _deleteOption, _rollbackService, _schedulingProgress);
-            }
-        }
+			stateHolder.Schedules[agent].ScheduledDay(date).HasDayOff().Should().Be.True();
+		}
 
 		[Test]
-		public void ShouldDeleteMainShift([Values(true, false)] bool useProgress, [Values(true, false)] bool useDefault)
+		public void ShouldDeleteMainShift([Values(true, false)] bool useProgress, [Values(true, false)] bool useDefault, [Values(true, false)] bool useMainShiftSpecial)
 		{
 			var target = new DeleteSchedulePartService();
 			var date = new DateOnly(2018, 10, 1);
@@ -112,9 +58,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, new[] { personAssignment }, Enumerable.Empty<ISkillDay>());
 			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
-			var deleteOption = new DeleteOption { Default = useDefault, MainShift = !useDefault };
+			var deleteOption = new DeleteOption { Default = useDefault, MainShift = !useDefault && !useMainShiftSpecial, MainShiftSpecial = !useDefault && useMainShiftSpecial};
 			if (useProgress)
-				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, deleteOption, rollBackService, new NoSchedulingProgress());
+				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date)}, deleteOption, rollBackService, new NoSchedulingProgress());
 			else
 				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date)}, rollBackService);
 			
@@ -137,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 			var deleteOption = new DeleteOption { Default = useDefault, Absence = !useDefault };
 			if (useProgress)
-				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, deleteOption, rollBackService, new NoSchedulingProgress());
+				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date)}, deleteOption, rollBackService, new NoSchedulingProgress());
 			else
 				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, rollBackService);
 
@@ -157,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 			var deleteOption = new DeleteOption { Default = useDefault, Absence = !useDefault };
 			if (useProgress)
-				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, deleteOption, rollBackService, new NoSchedulingProgress());
+				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, deleteOption, rollBackService, new NoSchedulingProgress());
 			else
 				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, rollBackService);
 
@@ -179,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 			var deleteOption = new DeleteOption { Default = useDefault, PersonalShift = !useDefault };
 			if (useProgress)
-				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, deleteOption, rollBackService, new NoSchedulingProgress());
+				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, deleteOption, rollBackService, new NoSchedulingProgress());
 			else
 				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, rollBackService);
 
@@ -193,14 +139,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var date = new DateOnly(2018, 10, 1);
 			var scenario = new Scenario().WithId();
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			var personAssignment = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_").WithId());
-			personAssignment.SetDayOff(new DayOffTemplate());
+			var personAssignment = new PersonAssignment(agent, scenario, date).WithDayOff().WithId();
 			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, new[] { personAssignment }, Enumerable.Empty<ISkillDay>());
 			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 			var deleteOption = new DeleteOption { Default = useDefault, DayOff = !useDefault };
 			if (useProgress)
-				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, deleteOption, rollBackService, new NoSchedulingProgress());
+				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, deleteOption, rollBackService, new NoSchedulingProgress());
 			else
 				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, rollBackService);
 
@@ -222,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 			var deleteOption = new DeleteOption{Default = useDefault, Overtime = !useDefault};
 			if (useProgress)
-				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, deleteOption, rollBackService, new NoSchedulingProgress());
+				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, deleteOption, rollBackService, new NoSchedulingProgress());
 			else
 				target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, rollBackService);
 
@@ -242,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 
-			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { Preference = true }, rollBackService, new NoSchedulingProgress());
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, new DeleteOption { Preference = true }, rollBackService, new NoSchedulingProgress());
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonRestrictionCollection().Should().Be.Empty();
 		}
@@ -260,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
 
-			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date), stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { StudentAvailability = true }, rollBackService, new NoSchedulingProgress());
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, new DeleteOption { StudentAvailability = true }, rollBackService, new NoSchedulingProgress());
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonRestrictionCollection().Should().Be.Empty();
 		}
@@ -303,7 +248,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			result.Count.Should().Be.EqualTo(2);
 		}
-
 
 		[Test]
 		public void ShouldNotDeleteAbsenceFromDayBefore()
