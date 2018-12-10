@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var serverVersion = Response.Headers.Get("X-Server-Version");
 			var statusCode = Response.StatusCode;
 			Assert.IsNotNull(serverVersion);
-			Assert.AreSame(HttpStatusCode.NotFound, statusCode);
+			Assert.AreEqual(HttpStatusCode.NotFound, statusCode);
 		}
 	}
 }
