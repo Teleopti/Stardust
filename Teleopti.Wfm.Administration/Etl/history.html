@@ -48,7 +48,7 @@
 							</div>
 							<div class="col-md-2">
 								<h5>Only errors:</h5>
-								<input class="switch" ng-model="vm.errorsOnly" type="checkbox">
+								<input ng-disabled="vm.loadingHistory" class="switch" ng-model="vm.errorsOnly" ng-change="vm.getHistoryForTenant()" type="checkbox">
 							</div>
 						</div>
 					</div>
