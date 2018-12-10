@@ -15986,4 +15986,37 @@ Applikationen kommer nu att stängas. </value>
   <data name="ClickToViewSchedules" xml:space="preserve">
     <value>Klicka för att se schema</value>
   </data>
+  <data name="SelectSkillOrGroup" xml:space="preserve">
+    <value>Välj en kompetens eller kompetensgrupp</value>
+  </data>
+  <data name="SelectToday" xml:space="preserve">
+    <value>Välj idag</value>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>Visa användare</value>
+  </data>
+  <data name="AuditTrailSearchFilter" xml:space="preserve">
+    <value>Sökfilter</value>
+  </data>
+  <data name="AuditTrailGeneralAuditTrailReport" xml:space="preserve">
+    <value>Generell ändringslogg</value>
+  </data>
+  <data name="AuditTrailReportGroup" xml:space="preserve">
+    <value>Ändringslogg</value>
+  </data>
+  <data name="DeleteInsightsReport" xml:space="preserve">
+    <value>Ta bort rapport</value>
+  </data>
+  <data name="FiltersColon" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="YouMustSelectAtLeastOneFilter" xml:space="preserve">
+    <value>Du måste välja minst ett filter</value>
+  </data>
+  <data name="SearchForSiteTeamSkillContract" xml:space="preserve">
+    <value>Sök efter: enhet / team / kompetens / kontrakt</value>
+  </data>
+  <data name="HelpCreatePlanningPeriod" xml:space="preserve">
+    <value>En planeringsperiod krävs för att schemalägga agenterna. </value>
+  </data>
 </root>
