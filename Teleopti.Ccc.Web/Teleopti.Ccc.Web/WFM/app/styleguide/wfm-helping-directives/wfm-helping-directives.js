@@ -13,7 +13,7 @@
 				outsideClickBackdrop.style.bottom = 0;
 				outsideClickBackdrop.style.left = 0;
 				outsideClickBackdrop.style.zIndex = '50';
-				outsideClickBackdrop.style.background = 'transparent';
+				outsideClickBackdrop.style.background = 'rgba(0,0,0,.16)';
 				outsideClickBackdrop.addEventListener('click', clickEventHandler);
 
 				document.body.appendChild(outsideClickBackdrop);
