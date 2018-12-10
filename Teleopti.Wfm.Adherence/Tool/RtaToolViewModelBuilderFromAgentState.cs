@@ -2,7 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Tool
 {
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.Tool
 						UserCode = externalLogOn.UserCode,
 						DataSource = dataSource
 					})
-				.ToArray().Take(50);
+				.Take(50).ToArray();
 		}
 
 		public IEnumerable<RtaToolViewModel> Build(RtaToolAgentStateFilter filter)
@@ -60,6 +60,8 @@ namespace Teleopti.Wfm.Adherence.Tool
 			var agentStates = _agentStates
 				.Read(externalLogOns.Select(x => x.PersonId))
 				.ToLookup(x => x.PersonId);
+			var siteIdArray = filter.SiteIds?.ToArray();
+			var teamIdArray = filter.TeamIds?.ToArray();
 
 			var vm = (
 					from externalLogOn in externalLogOns
@@ -77,12 +79,11 @@ namespace Teleopti.Wfm.Adherence.Tool
 						TeamId = state?.TeamId,
 						UserCode = externalLogOn.UserCode,
 						DataSource = dataSource
-					})
-				.ToArray();
+					});
 			return vm
-				.Where(v => (filter.SiteIds == null || filter.SiteIds.IndexOf(v.SiteId.GetValueOrDefault()) > -1)
+				.Where(v => (siteIdArray == null || siteIdArray.IndexOf(v.SiteId.GetValueOrDefault()) > -1)
 							&&
-							(filter.TeamIds == null || filter.TeamIds.IndexOf(v.TeamId.GetValueOrDefault()) > -1))
+							(teamIdArray == null || teamIdArray.IndexOf(v.TeamId.GetValueOrDefault()) > -1))
 				.Select(v => new RtaToolViewModel
 				{
 					Name = v.Name,
@@ -90,7 +91,7 @@ namespace Teleopti.Wfm.Adherence.Tool
 					TeamName = v.TeamName,
 					UserCode = v.UserCode,
 					DataSource = v.DataSource
-				}).Take(50);
+				}).Take(50).ToArray();
 		}
 	}
 

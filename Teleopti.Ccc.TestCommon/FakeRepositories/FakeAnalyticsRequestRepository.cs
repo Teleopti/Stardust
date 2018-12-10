@@ -46,15 +46,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-
-		public int GetFactRequestRowCount(int personPeriodId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public int GetFactRequestedDaysRowCount(int personPeriodId)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

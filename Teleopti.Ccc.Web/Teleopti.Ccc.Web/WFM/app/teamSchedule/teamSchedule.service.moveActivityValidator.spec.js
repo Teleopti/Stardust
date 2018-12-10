@@ -2,7 +2,7 @@
 	'use strict';
 
 	describe('teamschedule move activity validator tests: ', function () {
-		var target, personSelection, scheduleMgmt,  fakeTeamsPermissions;
+		var target, personSelection, scheduleMgmt, fakeTeamsPermissions;
 		var defaultUserTimeZone = 'Asia/Hong_Kong';  //UTC+8
 
 		var scheduleDate = "2016-05-12";
@@ -291,11 +291,12 @@
 					"DayOff": null
 				};
 
-				scheduleMgmt.resetSchedules([localSchedule], previousDay);
+				scheduleMgmt.resetSchedules([localSchedule], previousDay, 'Asia/Hong_Kong');
+
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[1].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);
-				var newStartMoment = moment(scheduleDate + " 00:00");
+				var newStartMoment = moment.tz(scheduleDate + " 00:00", 'Asia/Hong_Kong');
 
 				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 

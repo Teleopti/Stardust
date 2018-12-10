@@ -4,6 +4,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 	{
 		New,
 		Published,
+		Scheduled,
 		ScheduleFailed,
 		IntradayOptimizationFailed
 	}

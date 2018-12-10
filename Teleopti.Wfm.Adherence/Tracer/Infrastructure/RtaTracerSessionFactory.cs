@@ -1,6 +1,5 @@
 using System;
 using NHibernate;
-using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Config;
 
@@ -17,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Tracer.Infrastructure
 
 		private static ISessionFactory buildSessionFactory(string connectionString)
 		{
-			var configuration = new Configuration();
+			var configuration = new NHibernate.Cfg.Configuration();
 			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, connectionString);
 			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			return configuration.BuildSessionFactory();

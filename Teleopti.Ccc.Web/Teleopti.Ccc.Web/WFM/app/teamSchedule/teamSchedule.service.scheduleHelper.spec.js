@@ -71,8 +71,7 @@ describe('teamschedule ScheduleHelper Service tests', function () {
 				Color: '#80FF80',
 				Description: 'Email',
 				EndInUtc: scheduleDate + ' 05:00',
-				StartInUtc: yesterday + ' 21:00',
-				Minutes: 480
+				StartInUtc: yesterday + ' 21:00'
 			}
 
 		],
@@ -80,32 +79,48 @@ describe('teamschedule ScheduleHelper Service tests', function () {
 		DayOff: null
 	};
 
-	it('Should get latest shift start in given schedules', function () {
-		var schedules;
-
+	it('Should get latest shift start moment of selected schedules', function () {
 		scheduleManagementSvc.resetSchedules([schedule1, schedule2], scheduleDate);
-		schedules = scheduleManagementSvc.schedules();
-
-		expect(moment(target.getLatestStartOfSelectedSchedules(schedules, scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId])).format('HH:mm')).toEqual(moment(schedule2.Projection[0].StartInUtc).format('HH:mm'));
+		var schedules = scheduleManagementSvc.schedules();
+		var timeString = target.getLatestStartMomentOfSelectedSchedules(schedules, scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId])
+			.locale('en')
+			.format('YYYY-MM-DD HH:mm');
+		expect(timeString).toEqual('2016-01-02 12:00');
 	});
 
-	it('Should get latest previous day overnight shift end', function () {
-		var schedules;
-
+	it('Should get latest previous day overnight shift end moment', function () {
 		scheduleManagementSvc.resetSchedules([schedule1, schedule2, schedule3], scheduleDate);
-		schedules = scheduleManagementSvc.schedules();
-
-		expect(target.getLatestPreviousDayOvernightShiftEnd(schedules, scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId]).toTimeString()).toEqual(moment(schedule3.Projection[0].StartInUtc).add(schedule3.Projection[0].Minutes, 'minute').toDate().toTimeString());
+		var schedules = scheduleManagementSvc.schedules();
+		var timeString = target.getLatestPreviousDayOvernightShiftEndMoment(schedules, scheduleDate, [schedule1.PersonId, schedule2.PersonId])
+			.locale('en')
+			.format('YYYY-MM-DD HH:mm');
+		expect(timeString).toEqual('2016-01-02 05:00');
 	});
 
-	it('Should get latest shift start independent of timepart of schedule date', function () {
-		var schedules;
+	it('Should get earlist shift start moment of selected schedules', function () {
+		scheduleManagementSvc.resetSchedules([schedule1, schedule2, schedule3], scheduleDate);
+		var schedules = scheduleManagementSvc.schedules();
 
-		scheduleManagementSvc.resetSchedules([schedule1, schedule2], scheduleDate);
-		schedules = scheduleManagementSvc.schedules();
+		var timeString = target.getEarliestStartMomentOfSelectedSchedules(schedules, scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId])
+			.locale('en')
+			.format('YYYY-MM-DD HH:mm');
+		expect(timeString).toEqual('2016-01-02 11:00');
+	});
 
-		scheduleDateMoment.hour(17);
-		expect(moment(target.getLatestStartOfSelectedSchedules(schedules, scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId])).format('HH:mm')).toEqual(moment(schedule2.Projection[0].StartInUtc).format('HH:mm'));
+	it('Should get latest shift start moment of selected projections', function () {
+		scheduleManagementSvc.resetSchedules([schedule1, schedule2, schedule3], scheduleDate);
+		var schedules = scheduleManagementSvc.schedules();
+		schedules.forEach(function (schedule) {
+			schedule.Shifts.forEach(function (shift) {
+				shift.Projections.forEach(function (projection) {
+					projection.Selected = true;
+				});
+			});
+		});
+		var timeString = target.getLatestStartTimeMomentOfSelectedProjections(schedules, [schedule1.PersonId, schedule3.PersonId])
+			.locale('en')
+			.format('YYYY-MM-DD HH:mm');
+		expect(timeString).toEqual('2016-01-02 11:00');
 	});
 
 });

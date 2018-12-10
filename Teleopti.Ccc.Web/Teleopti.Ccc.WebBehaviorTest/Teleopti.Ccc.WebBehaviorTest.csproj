@@ -116,6 +116,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIResponseStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ApprovedPeriodsStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\QueueSourceDefinitions.cs" />
     <Compile Include="Bindings\Generic\RuleStepDefinitions.cs" />
@@ -133,12 +134,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequestViewShowingMultipleShifts.feature</DependentUpon>
     </Compile>
+    <Compile Include="APIResponse.feature.cs">
+      <DependentUpon>APIResponse.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\Authentication\AuthenticationStepDefinition.cs" />
     <Compile Include="Wfm\Authentication\Authentication.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Authentication.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\Gamification\GamificationSettings.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GamificationSettings.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\Gamification\GamificationStepDefinitions.cs" />
     <Compile Include="Wfm\Intraday\Intraday.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1080,6 +1092,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamScheduleWithFilterAndPagingFunction.feature.cs</LastGenOutput>
     </None>
+    <None Include="APIResponse.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>APIResponse.feature.cs</LastGenOutput>
+    </None>
     <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignOut.feature.cs</LastGenOutput>
@@ -1172,6 +1188,10 @@
     <None Include="Wfm\Authentication\Authentication.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Authentication.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Gamification\GamificationSettings.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GamificationSettings.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Global\Global.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

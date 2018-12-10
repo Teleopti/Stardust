@@ -9,10 +9,11 @@
 			'$translate',
 			'requestsDefinitions',
 			'Toggle',
+			'REQUESTS_STATUS',
 			requestsDataService
 		]);
 
-	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc) {
+	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc, requestsStatus) {
 		var listAbsenceAndTextRequestsUrl = '../api/Requests/requests';
 		var listOvertimeRequestsUrl = '../api/Requests/overtimeRequests';
 		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
@@ -180,8 +181,8 @@
 
 		this.getAbsenceAndTextRequestsStatuses = function() {
 			var statuses = [
-				{ Id: 5, Name: $translate.instant('Waitlisted') },
-				{ Id: 6, Name: $translate.instant('Cancelled') }
+				{ Id: requestsStatus.Waitlisted, Name: $translate.instant('Waitlisted') },
+				{ Id: requestsStatus.Cancelled, Name: $translate.instant('Cancelled') }
 			];
 
 			return getBasicStatuses().concat(statuses);
@@ -196,12 +197,10 @@
 		};
 
 		function getBasicStatuses() {
-			// TODO: Should get this list in a better way
-			// Refer to definition Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
 			var basicStatuses = [
-				{ Id: 0, Name: $translate.instant('Pending') },
-				{ Id: 1, Name: $translate.instant('Denied') },
-				{ Id: 2, Name: $translate.instant('Approved') }
+				{ Id: requestsStatus.Pending, Name: $translate.instant('Pending') },
+				{ Id: requestsStatus.Denied, Name: $translate.instant('Denied') },
+				{ Id: requestsStatus.Approved, Name: $translate.instant('Approved') }
 			];
 
 			return basicStatuses;

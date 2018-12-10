@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					PersonAuditActionResult.Change.ToString(),
 					JsonConvert.SerializeObject(role)));
 			CurrentUnitOfWork.Current().PersistAll();
-			var model = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now).Single();
+			var model = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now, "").Single();
 
 			model.Data.Should().Be.EqualTo("Person: Anka Kalle, Role: Superman");
 		}

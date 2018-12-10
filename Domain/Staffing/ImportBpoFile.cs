@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private const string enddatetime = "enddatetime";
 		private const string resources = "agents";
 
-		private readonly IReadOnlyCollection<string> validFieldNames =
-			new List<string> { source, skillgroup, startdatetime, enddatetime, resources };
+		private readonly string[] validFieldNames =
+			new [] { source, skillgroup, startdatetime, enddatetime, resources };
 
 		private List<ISkill> _allSkills;
 

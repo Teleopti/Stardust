@@ -499,7 +499,6 @@
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PersonTeamChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminalDateChangedTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\TerminatedTest.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodSkillsUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\Preference\Analytics\PreferenceFulfillmentChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\Preference\Analytics\AnalyticsPreferenceUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AcdLoginPersonMapTests.cs" />
@@ -757,7 +756,6 @@
     <Compile Include="DayOffPlanning\FreeWeekendValidatorTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendDayValidatorTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendValidatorTest.cs" />
-    <Compile Include="DayOffPlanning\LockableBitArrayChangesTrackerTest.cs" />
     <Compile Include="DayOffPlanning\LockableBitArrayTest.cs" />
     <Compile Include="DayOffPlanning\MatrixRestrictionLockerTest.cs" />
     <Compile Include="DayOffPlanning\MoveOneDayOffDecisionMakerTest.cs" />
@@ -983,7 +981,6 @@
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractorTest.cs" />
     <Compile Include="Optimization\DailySkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\MatrixNoMainShiftLockerTest.cs" />
-    <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainerTest.cs" />
@@ -1348,7 +1345,6 @@
     <Compile Include="Scheduling\TeamBlock\TeamMatrixCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftLengthValueCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftPeriodValueCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftSelectorTest.cs" />

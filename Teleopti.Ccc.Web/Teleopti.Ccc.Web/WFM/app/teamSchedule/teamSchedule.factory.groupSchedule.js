@@ -120,7 +120,7 @@ function GroupScheduleFactory(timeLineFactory, personSchedule, serviceDateFormat
 		if (schedule.Date < queryDate) {
 			if (schedule.Projection && schedule.Projection.length > 0) {
 				var endTimes = schedule.Projection.map(function (p) {
-					return p.EndMoment;
+					return p.EndMoment.clone();
 				});
 				return endTimes.reduce(function (prev, cur) {
 					if (!prev) return cur;
@@ -140,7 +140,7 @@ function GroupScheduleFactory(timeLineFactory, personSchedule, serviceDateFormat
 			}
 			if (schedule.Projection && schedule.Projection.length > 0) {
 				var startTimes = schedule.Projection.map(function (p) {
-					return p.StartMoment;
+					return p.StartMoment.clone();
 				});
 
 				return startTimes.reduce(function (prev, cur) {

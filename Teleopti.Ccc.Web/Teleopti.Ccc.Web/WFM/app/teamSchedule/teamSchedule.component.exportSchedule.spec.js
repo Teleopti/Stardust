@@ -37,11 +37,29 @@
 					expect(currentInputPeriod).toEqual(undefined);
 				});
 
+			it('should keep keep the selection of group page after date period was changed', function () {
+				var ctrl = $componentController('teamsExportSchedule', null, {});
+
+				ctrl.configuration.selectedGroups = {
+					mode: 'BusinessHierarchy',
+					groupIds: ['site2team1', 'site2team2'],
+					groupPageId: ''
+				};
+
+				ctrl.configuration.period = {
+					startDate: new Date(2018, 12, 9),
+					endDate: new Date(2018, 12, 30)
+				};
+				ctrl.onPeriodChanged();
+
+				expect(ctrl.configuration.selectedGroups.groupIds).toEqual(['site2team1', 'site2team2']);
+			});
+
 			function commonTestsInDifferentLocale() {
 				it('should get available groups with correct dates',
 					function () {
 						var ctrl = $componentController('teamsExportSchedule', null, {});
-						ctrl.configuration.period = { startDate: new Date('2017-01-01'), endDate: new Date('2017-01-10') };
+						ctrl.configuration.period = { startDate: '2017-01-01', endDate: '2017-01-10' };
 						ctrl.onPeriodChanged();
 						var currentInputPeriod = groupPageService.currentPeriod();
 						expect(currentInputPeriod.startDate).toEqual('2017-01-01');
@@ -96,21 +114,87 @@
 						}
 					];
 					return {
-						then: function(callback) {
+						then: function(callback){
 							callback(data);
 						}
 					}
 				};
 			}
+
 			function fakeGroupPageService() {
 				var currentPeriod;
 				this.currentPeriod = function () {
 					return currentPeriod;
 				}
 				this.fetchAvailableGroupPages = function (startDate, endDate) {
-					currentPeriod = {startDate:startDate, endDate:endDate};
+					currentPeriod = { startDate: startDate, endDate: endDate };
+					var data = {
+						BusinessHierarchy: [
+							{
+								Id: 'site1',
+								Name: 'site1',
+								Children: [
+									{
+										Id: 'site1team1',
+										Name: 'site1 team1'
+									},
+									{
+										Id: 'site1team2',
+										Name: 'site1 team2'
+									}
+								]
+							},
+							{
+								Id: 'site2',
+								Name: 'site2',
+								Children: [
+									{
+										Id: 'site2team1',
+										Name: 'site2 team1'
+									},
+									{
+										Id: 'site2team2',
+										Name: 'site2 team2'
+									}
+								]
+							}
+						],
+						GroupPages: [
+							{
+								Id: 'groupPage1',
+								Name: 'groupPage1',
+								Children: [
+									{
+										Id: 'childGroup1_1',
+										Name: 'childGroup1_1'
+									},
+									{
+										Id: 'childGroup1_2',
+										Name: 'childGroup1_2'
+									}
+								]
+							},
+							{
+								Id: 'groupPage2',
+								Name: 'groupPage2',
+								Children: [
+									{
+										Id: 'childGroup2_1',
+										Name: 'childGroup2_1'
+									},
+									{
+										Id: 'childGroup2_2',
+										Name: 'childGroup2_2'
+									}
+								]
+							}
+
+						],
+						LogonUserTeamId: 'site1team2'
+					};
 					return {
-						then:function (cb) {
+						then: function (cb) {
+							cb(data);
 					}
 					}
 				}

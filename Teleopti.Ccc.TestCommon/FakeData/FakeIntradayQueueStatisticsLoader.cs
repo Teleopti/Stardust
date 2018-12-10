@@ -21,13 +21,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				.ToList();
 		}
 
-		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<ISkill> skillList, TimeZoneInfo timeZone, DateOnly today)
-		{
-			return _latestStatisticsTimeAndWorkload
-				.OrderBy(o => o.StartTime)
-				.ToList();
-		}
-
 		public int LoadActualEmailBacklogForWorkload(Guid workloadId, DateTimePeriod closedPeriod)
 		{
 			if (_workloadBacklogDictionary.ContainsKey(workloadId))

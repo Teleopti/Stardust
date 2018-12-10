@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 {
@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Now.Is("2017-03-14 18:00");
 			var personId = Guid.NewGuid();
 			History
-				.RuleChanged(personId, "2017-03-14 18:00", "InCall", "phone", Color.Crimson, null, Color.DarkKhaki, Domain.Configuration.Adherence.In)
+				.RuleChanged(personId, "2017-03-14 18:00", "InCall", "phone", Color.Crimson, null, Color.DarkKhaki, Adherence.Configuration.Adherence.In)
 				;
 
 			var data = Target.LoadUntilNow(personId, "2017-03-14".Date());

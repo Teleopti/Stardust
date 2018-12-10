@@ -29,6 +29,10 @@ dd {
 	float: right;
 }
 
+.pull-left {
+	float: left;
+}
+
 .wfm-block {
 	padding: $full-padding;
 	width: 100%;
@@ -185,4 +189,55 @@ _:-ms-lang(x),
 	.con-fluid-row {
 		grid-template-columns: repeat(auto-fill, minmax(100%, auto)) !important;
 	}
+}
+
+// Replacing styles from bootstrap.css
+
+.label {
+	display: inline;
+	padding: 0.2em 0.6em 0.3em;
+	font-size: 75%;
+	font-weight: bold;
+	line-height: 1;
+	color: $white;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	border-radius: 0.25em;
+}
+
+.label-info {
+	background-color: $teal-300;
+}
+
+.alert-error, .alert-success, .alert-warning {
+	color: $gray087;
+	padding: 8px 15px;
+	margin-bottom: 5px;
+	border-radius: 4px;
+}
+
+.alert-error {
+	background: $red-600;
+	border: 1px solid $red-700;
+}
+
+.alert-success {
+	background: $green-100;
+	border: 1px solid $green-300;
+}
+
+.alert-warning {
+	background: $orange-400;
+	border: 1px solid $orange-500;
+}
+
+.dropdown-menu {
+    position: absolute;
+    z-index: 1000;
+    min-width: 160px;
+    padding: 5px 0;
+    border: 1px solid $gray012;
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }

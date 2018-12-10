@@ -6,12 +6,9 @@
 		fakeActivityService,
 		fakeCommandCheckService,
 		$httpBackend,
-		scheduleHelper,
-		fakePersonSelectionService,
 		fakeNoticeService,
-		utility,
-		fakeMoveActivityValidator,
-		serviceDateFormatHelper;
+		scheduleManagement,
+		personSelection;
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
@@ -25,9 +22,6 @@
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
 		fakeCommandCheckService = new FakeCommandCheckService();
-		scheduleHelper = new FakeScheduleHelper();
-		fakePersonSelectionService = new FakePersonSelectionService();
-		fakeMoveActivityValidator = new FakeMoveActivityValidator();
 		fakeNoticeService = new FakeNoticeService();
 
 		module(function ($provide) {
@@ -36,15 +30,6 @@
 			});
 			$provide.service('CommandCheckService', function () {
 				return fakeCommandCheckService;
-			});
-			$provide.service('ScheduleHelper', function () {
-				return scheduleHelper;
-			});
-			$provide.service('PersonSelection', function () {
-				return fakePersonSelectionService;
-			});
-			$provide.service('ActivityValidator', function () {
-				return fakeMoveActivityValidator;
 			});
 			$provide.service('CurrentUserInfo', function () {
 				return mockCurrentUserInfo;
@@ -56,120 +41,270 @@
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, UtilityService, _serviceDateFormatHelper_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_,PersonSelection, ScheduleManagement) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		utility = UtilityService;
-		serviceDateFormatHelper = _serviceDateFormatHelper_;
-
+		personSelection = PersonSelection;
+		scheduleManagement = ScheduleManagement;
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
-	it('move-activity should render correctly', function () {
-		var result = setUp();
-
-		expect(result.commandControl).not.toBeNull();
-	});
 
 	it('move-activity should get date from container', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2016-06-15',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2016-06-15 08:00',
+					EndInUtc: '2016-06-15 16:00',
+				}]
+			}]
+			, '2016-06-15', 'Etc/Utc');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2016-06-15');
+
 		var result = setUp();
-
-		expect(moment(result.commandControl.selectedDate()).format('YYYY-MM-DD')).toBe('2016-06-15');
-	});
-
-	it('should see a disabled button when no activity selected', function () {
-		var result = setUp();
-
-		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
-		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
-		expect(applyButton.attr('disabled')).toBe('disabled');
+		expect(result.commandControl.selectedDate()).toBe('2016-06-15');
 	});
 
 	it('should see a disabled button when default start time input is invalid', function () {
-		var result = setUp(moment('2016-06-15').toDate());
-
-		result.commandControl.moveToTime = new Date('2016-06-14');
-
-		result.scope.$apply();
-
-		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
-
-		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
-		expect(applyButton.attr('disabled')).toBe('disabled');
-	});
-
-	it('should see a disabled button when everyone in selected is not allowed to move activity to the given time', function () {
-		var result = setUp(moment('2016-06-15').toDate());
-
-		var vm = result.commandControl;
-
-		vm.nextDay = false;
-		vm.moveToTime = new Date('2016-06-16T09:00:00Z');
-
-		vm.selectedAgents = [
-			{
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2016-06-15',
 				PersonId: 'agent1',
 				Name: 'agent1',
-				ScheduleStartTime: '2016-06-15T08:00:00Z',
-				ScheduleEndTime: '2016-06-15T17:00:00Z',
-				SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
-			}, {
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleStartTime: '2016-06-15T19:00:00Z',
-				ScheduleEndTime: '2016-06-16T08:00:00Z',
-				SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
-			}];
-		fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
-		fakeMoveActivityValidator.setInvalidPeople([
-			{
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2016-06-15 23:00',
+					EndInUtc: '2016-06-16 00:00',
+					ShiftLayerIds: ['layer1']
+				}]
+			}]
+			, '2016-06-15', 'Etc/Utc');
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2016-06-15');
+
+		var result = setUp();
+		var applyButton = result.container[0].querySelector(".move-activity .form-submit");
+		expect(applyButton.disabled).toBe(true);
+	});
+
+	it('should not disable apply button and show error message for invalid agents when someone in selected is allowed to move activity to the given time', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2016-06-15',
 				PersonId: 'agent1',
-				Name: 'agent1'
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2016-06-15 23:00',
+					EndInUtc: '2016-06-16 00:00',
+					ShiftLayerIds: ['layer1']
+				}]
 			},
 			{
+				Date: '2016-06-15',
 				PersonId: 'agent2',
-				Name: 'agent2'
-			}
-		]);
-		vm.updateInvalidAgents();
-		result.scope.$apply();
-		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
+				Name: 'agent2',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2016-06-15 20:00',
+					EndInUtc: '2016-06-16 22:00',
+					ShiftLayerIds: ['layer2']
+				},
+				{
+					StartInUtc: '2016-06-15 22:00',
+					EndInUtc: '2016-06-16 02:00',
+					ShiftLayerIds: ['layer3']
+				}]
+			}]
+			, '2016-06-15', 'Etc/Utc');
 
-		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
-		expect(applyButton.attr('disabled')).toBe('disabled');
-		expect(vm.anyValidAgent()).toBe(false);
+		angular.forEach(scheduleManagement.groupScheduleVm.Schedules, function (personSchedule) {
+			personSchedule.Shifts[0].Projections[0].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], '2016-06-15');
+		});
+
+		var result = setUp();
+		var applyButton = result.container[0].querySelector(".move-activity .form-submit");
+		expect(applyButton.disabled).toBe(false);
+		expect(!!result.container[0].querySelector('.text-danger')).toBeTruthy();
+	});
+
+	it('should set default start time to later one hour than todays shift start', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2016-06-16',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [
+					{
+						StartInUtc: '2016-06-16 16:00',
+						EndInUtc: '2016-06-16 18:00',
+						ShiftLayerIds: ['layer2']
+					}]
+			}]
+			, '2016-06-16', 'Etc/Utc');
+
+		scheduleManagement.groupScheduleVm.Schedules.forEach(function (personSchedule) {
+			personSchedule.Shifts[0].Projections[0].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], '2016-06-16');
+		});
+
+		var result = setUp('2016-06-16');
+		var vm = result.commandControl;
+
+		expect(vm.moveToTime).toBe('2016-06-16 17:00');
+	});
+
+
+	it('should get correct move start time when switch next day', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2016-06-15',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [{
+					StartInUtc: '2016-06-15 08:00',
+					EndInUtc: '2016-06-15 18:00',
+					ShiftLayerIds: ['layer1']
+				}]
+			}]
+			, '2016-06-15', 'Etc/Utc');
+
+		angular.forEach(scheduleManagement.groupScheduleVm.Schedules, function (personSchedule) {
+			personSchedule.Shifts[0].Projections[0].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], '2016-06-15');
+		});
+
+		var result = setUp();
+		var vm = result.commandControl;
+
+		result.container[0].querySelector('md-switch').click();
+		setTime(result.container, 10);
+		result.scope.$apply();
+		expect(vm.moveToTime).toEqual('2016-06-16 10:00')
+
+		result.container[0].querySelector('md-switch').click();
+		result.scope.$apply();
+		expect(vm.moveToTime).toEqual('2016-06-15 10:00')
+	});
+
+	//TODO: review the validation of new start time
+	xit('should disable apply button when the end of previous days shift is larger than todays shift start', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2016-06-16',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [
+					{
+						StartInUtc: '2016-06-16 10:00',
+						EndInUtc: '2016-06-16 11:00',
+						ShiftLayerIds: ['layer2']
+					}]
+			},
+			{
+				Date: '2016-06-15',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [
+					{
+						StartInUtc: '2016-06-15 23:00',
+						EndInUtc: '2016-06-16 06:00',
+						ShiftLayerIds: ['layer1']
+					}]
+			}]
+			, '2016-06-16', 'Etc/Utc');
+
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.Shifts[0].Projections[0].Selected = true;
+		personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], '2016-06-16');
+
+		var result = setUp('2016-06-16');
+		setTime(result.container, 5);
+
+		var applyButton = result.container[0].querySelector(".move-activity .form-submit");
+		expect(applyButton.disabled).toBe(true);
 	});
 
 	it('should show warning and error message when move activity partially success', function () {
-		var result = setUp(moment('2018-07-23').toDate());
-		var vm = result.commandControl;
-		vm.nextDay = false;
-		vm.moveToTime = vm.getDefaultMoveToStartTime();
-
-		vm.selectedAgents = [
-			{
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-07-23',
 				PersonId: 'agent1',
 				Name: 'agent1',
-				ScheduleStartTime: '2018-07-23T08:00:00Z',
-				ScheduleEndTime: '2018-07-23T17:00:00Z',
-				SelectedActivities: [
-					{ shiftLayerId: "4b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" },
-					{ shiftLayerId: "5b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [
+					{
+						StartInUtc: '2018-07-23 16:00',
+						EndInUtc: '2018-07-23 18:00',
+						ShiftLayerIds: ['layer2']
+					},
+					{
+						StartInUtc: '2018-07-23 18:00',
+						EndInUtc: '2018-07-23 19:00',
+						ShiftLayerIds: ['layer3']
+					}]
 			},
-			{
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleStartTime: '2018-07-23T08:00:00Z',
-				ScheduleEndTime: '2018-07-23T17:00:00Z',
-				SelectedActivities: [{ shiftLayerId: "6b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
-			}];
+				{
+					Date: '2018-07-23',
+					PersonId: 'agent2',
+					Name: 'agent2',
+					Timezone: {
+						IanaId: 'Etc/Utc'
+					},
+					Projection: [
+						{
+							StartInUtc: '2018-07-23 16:00',
+							EndInUtc: '2018-07-23 18:00',
+							ShiftLayerIds: ['layer2']
+						}]
+				}]
+			, '2018-07-23', 'Etc/Utc');
 
-		result.scope.$apply();
+		scheduleManagement.groupScheduleVm.Schedules.forEach(function (personSchedule) {
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-07-23');
+		});
 
 		fakeActivityService.setSavingApplyResponseData([{
-			PersonId: vm.selectedAgents[0].PersonId, ErrorMessages: ['CanNotMoveMultipleActivitiesForSelectedAgents']
+			PersonId: 'agent1', ErrorMessages: ['CanNotMoveMultipleActivitiesForSelectedAgents']
 		}]);
+
+		var result = setUp('2018-07-23');
+
 		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
 		applyButton.triggerHandler('click');
 
@@ -180,9 +315,44 @@
 	});
 
 	it('should show success message and invoke action callback after move activity successfully', function () {
-		var date = moment('2018-07-23');
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2018-07-23',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [
+					{
+						StartInUtc: '2018-07-23 16:00',
+						EndInUtc: '2018-07-23 18:00',
+						ShiftLayerIds: ['layer2']
+					}]
+			},
+			{
+				Date: '2018-07-23',
+				PersonId: 'agent2',
+				Name: 'agent2',
+				Timezone: {
+					IanaId: 'Etc/Utc'
+				},
+				Projection: [
+					{
+						StartInUtc: '2018-07-23 16:00',
+						EndInUtc: '2018-07-23 18:00',
+						ShiftLayerIds: ['layer2']
+					}]
+			}]
+			, '2018-07-23', 'Etc/Utc');
 
-		var result = setUp(date.toDate());
+		scheduleManagement.groupScheduleVm.Schedules.forEach(function (personSchedule) {
+			personSchedule.IsSelected = true;
+			personSelection.updatePersonSelection(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, '2018-07-23');
+		});
+
+		var result = setUp('2018-07-23');
 
 		var cbMonitor = null;
 		function actionCb() {
@@ -190,29 +360,6 @@
 		}
 
 		result.container.isolateScope().vm.setActionCb('MoveActivity', actionCb);
-		var vm = result.commandControl;
-
-		var selectedActivities = ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'];
-
-		vm.nextDay = false;
-		vm.moveToTime = vm.getDefaultMoveToStartTime();
-
-		vm.selectedAgents = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				ScheduleStartTime: '2018-07-23T08:00:00Z',
-				ScheduleEndTime: '2018-07-23T17:00:00Z',
-				SelectedActivities: [{ shiftLayerId: "4b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
-			},
-			{
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleStartTime: '2018-07-23T08:00:00Z',
-				ScheduleEndTime: '2018-07-23T17:00:00Z',
-				SelectedActivities: [{ shiftLayerId: "6b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
-			}];
-
 		result.scope.$apply();
 
 		fakeActivityService.setSavingApplyResponseData([]);
@@ -226,127 +373,64 @@
 		expect(fakeNoticeService.successMessage).toEqual('SuccessfulMessageForMovingActivity');
 	});
 
-	it('should have later default start time than previous day over night shift end', function () {
-		var date = moment(utility.nowInUserTimeZone()).add(7, 'day');
-
-		scheduleHelper.setLatestEndTime(date.clone().hour(10).toDate());
-		scheduleHelper.setLatestStartTime(date.clone().hour(9).toDate());
-
-		var result = setUp(date.toDate());
-		var vm = result.commandControl;
-
-		var defaultMoveToStartTime = vm.getDefaultMoveToStartTime();
-
-		expect(moment(defaultMoveToStartTime).hours()).toBe(11);
-	});
-
-	it('should move activity with correct data', function () {
-		var result = setUp(moment('2018-07-23').toDate());
-		var vm = result.commandControl;
-		vm.nextDay = false;
-		vm.moveToTime = vm.getDefaultMoveToStartTime();
-
-		vm.selectedAgents = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				ScheduleStartTime: '2018-07-23T08:00:00Z',
-				ScheduleEndTime: '2018-07-23T17:00:00Z',
-				SelectedActivities: [{ shiftLayerId: "4b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" },
-				{ shiftLayerId: "5b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
-			},
-			{
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleStartTime: '2018-07-23T08:00:00Z',
-				ScheduleEndTime: '2018-07-23T17:00:00Z',
-				SelectedActivities: [{ shiftLayerId: "6b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
-			}];
-
-
-		result.scope.$apply();
-
-		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
-		applyButton.triggerHandler('click');
-
-		result.scope.$apply();
-
-		var requestData = fakeActivityService.getMoveActivityCalledWith();
-		expect(requestData.PersonActivities[0].Date).toEqual("2018-07-23");
-		expect(requestData.PersonActivities[0].PersonId).toEqual('agent1');
-		expect(requestData.PersonActivities[0].ShiftLayerIds).toEqual(['4b132007-41f8-4f05-85a9-a927001434a6', '5b132007-41f8-4f05-85a9-a927001434a6']);
-
-		expect(requestData.PersonActivities[1].Date).toEqual("2018-07-23");
-		expect(requestData.PersonActivities[1].PersonId).toEqual('agent2');
-		expect(requestData.PersonActivities[1].ShiftLayerIds).toEqual(['6b132007-41f8-4f05-85a9-a927001434a6']);
-
-		expect(requestData.TrackedCommandInfo.TrackId).toEqual(vm.trackId);
-	});
-
 	function commonTestsInDifferentLocale() {
-		it('should call move activity when click apply with correct data', function () {
-			var date = moment('2016-06-15');
-
-			var result = setUp(date.toDate());
-			var vm = result.commandControl;
-
-			var selectedActivities = {
-				date: '2016-06-15',
-				shiftLayerId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
-			};
-
-			scheduleHelper.setLatestStartTime(date.clone().hour(10).toDate());
-
-			vm.nextDay = false;
-			vm.moveToTime = vm.getDefaultMoveToStartTime();
-
-			vm.selectedAgents = [
-				{
+		it('should move activity with correct data', function () {
+			scheduleManagement.resetSchedules(
+				[{
+					Date: '2018-07-23',
 					PersonId: 'agent1',
 					Name: 'agent1',
-					ScheduleStartTime: '2016-06-15T08:00:00Z',
-					ScheduleEndTime: '2016-06-15T17:00:00Z',
-					SelectedActivities: [selectedActivities]
-				}, {
+					Timezone: {
+						IanaId: 'Etc/Utc'
+					},
+					Projection: [
+						{
+							StartInUtc: '2018-07-23 08:00',
+							EndInUtc: '2018-07-23 17:00',
+							ShiftLayerIds: ['layer1']
+						}]
+				},
+				{
+					Date: '2018-07-23',
 					PersonId: 'agent2',
 					Name: 'agent2',
-					ScheduleStartTime: '2016-06-15T09:00:00Z',
-					ScheduleEndTime: '2016-06-15T18:00:00Z',
-					SelectedActivities: [selectedActivities]
-				}];
+					Timezone: {
+						IanaId: 'Etc/Utc'
+					},
+					Projection: [
+						{
+							StartInUtc: '2018-07-23 08:00',
+							EndInUtc: '2018-07-23 17:00',
+							ShiftLayerIds: ['layer2']
+						}]
+				}]
+				, '2018-07-23', 'Etc/Utc');
 
-			fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
+			scheduleManagement.groupScheduleVm.Schedules.forEach(function (personSchedule) {
+				personSchedule.IsSelected = true;
+				personSelection.updatePersonSelection(personSchedule);
+				personSelection.toggleAllPersonProjections(personSchedule, '2018-07-23');
+			});
+
+			var result = setUp('2018-07-23');
+			result.scope.$apply();
 
 			var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
 			applyButton.triggerHandler('click');
 
 			result.scope.$apply();
 
-			var activityData = fakeActivityService.getMoveActivityCalledWith();
-			expect(activityData).not.toBeNull();
-			expect(activityData.PersonActivities.length).toEqual(vm.selectedAgents.length);
-			expect(activityData.StartTime).toEqual('2016-06-15T19:00');
-			expect(activityData.PersonActivities[0].Date).toEqual('2016-06-15');
-			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
-		});
+			var requestData = fakeActivityService.getMoveActivityCalledWith();
+			expect(requestData.StartTime).toEqual('2018-07-23T17:00');
+			expect(requestData.PersonActivities.length).toEqual(2);
+			expect(requestData.PersonActivities[0].Date).toEqual("2018-07-23");
+			expect(requestData.PersonActivities[0].PersonId).toEqual('agent1');
+			expect(requestData.PersonActivities[0].ShiftLayerIds).toEqual(['layer1']);
 
-		it('should get correct move start time when switch next day', function () {
-			var result = setUp('2018-03-05');
-			var timePickerCtrl = angular.element(result.commandElement[0].querySelector('teams-time-picker')).isolateScope().$ctrl;
-			var vm = result.commandControl;
-
-			timePickerCtrl.dateTimeObj = moment(timePickerCtrl.dateTimeObj).hours(10).minutes(30);
-			vm.nextDay = false;
-			result.scope.$apply();
-
-			var nextDayEl = result.container[0].querySelector('md-switch');
-			nextDayEl.click();
-			result.scope.$apply();
-			expect(vm.moveToTime).toEqual('2018-03-06 10:30')
-
-			nextDayEl.click();
-			result.scope.$apply();
-			expect(vm.moveToTime).toEqual('2018-03-05 10:30')
+			expect(requestData.PersonActivities[1].Date).toEqual("2018-07-23");
+			expect(requestData.PersonActivities[1].PersonId).toEqual('agent2');
+			expect(requestData.PersonActivities[1].ShiftLayerIds).toEqual(['layer2']);
+			expect(requestData.TrackedCommandInfo.TrackId).toEqual(result.commandControl.trackId);
 		});
 	}
 
@@ -395,6 +479,7 @@
 		var vm = container.isolateScope().vm;
 		vm.setReady(true);
 		vm.setActiveCmd('MoveActivity');
+		vm.scheduleManagementSvc = scheduleManagement;
 		scope.$apply();
 		var commandElement = angular.element(container[0].querySelector(".move-activity"));
 		var commandControl = commandElement.scope().vm;
@@ -409,25 +494,10 @@
 		return obj;
 	}
 
-	function FakeScheduleHelper() {
-		var latestEndTime = null;
-		var latestStartTime = null;
-
-		this.setLatestEndTime = function (date) {
-			latestEndTime = date;
-		}
-
-		this.setLatestStartTime = function (date) {
-			latestStartTime = date;
-		}
-
-		this.getLatestPreviousDayOvernightShiftEnd = function () {
-			return latestEndTime;
-		}
-
-		this.getLatestStartTimeOfSelectedSchedulesProjections = function () {
-			return latestStartTime;
-		}
+	function setTime(container, hour) {
+		var hourEl = container[0].querySelector('teams-time-picker .hours input');
+		hourEl.value = hour;
+		angular.element(hourEl).triggerHandler('change');
 	}
 
 	function FakeActivityService() {
@@ -454,17 +524,6 @@
 		};
 	}
 
-	function FakePersonSelectionService() {
-		var fakePersonList = [];
-
-		this.setFakeSelectedPersonInfoList = function (input) {
-			fakePersonList = input;
-		}
-
-		this.getSelectedPersonInfoList = function () {
-			return fakePersonList;
-		}
-	}
 	function FakeCommandCheckService() {
 		var fakeResponse = {
 			data: []
@@ -500,30 +559,7 @@
 			}
 		};
 	}
-	function FakeMoveActivityValidator() {
-		var validate = false;
-		var invalidPeople = [];
 
-		this.setInvalidPeople = function (input) {
-			return invalidPeople = input;
-		}
-
-		this.getInvalidPeople = function () {
-			return invalidPeople;
-		}
-
-		this.getInvalidPeopleNameList = function () {
-			return invalidPeople;
-		}
-
-		this.setValidateMoveToTime = function (input) {
-			return validate = input;
-		}
-
-		this.validateMoveToTime = function () {
-			return validate;
-		}
-	};
 	function FakeNoticeService() {
 		this.successMessage = '';
 		this.errorMessage = '';

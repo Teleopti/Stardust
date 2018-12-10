@@ -13,8 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
-
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -152,7 +151,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithScenario(string name, bool @default)
 		{
-			var scenario = new Scenario(name) {DefaultScenario = false, EnableReporting = true};
+			var scenario = new Scenario(name) {DefaultScenario = @default, EnableReporting = true};
 			_scenario = scenario.Description.Name;
 			_scenarios.Add(scenario);
 			return this;

@@ -5,15 +5,15 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class ScheduleHintInput
 	{
-		public ScheduleHintInput(IEnumerable<IPerson> people, DateOnlyPeriod period, bool usePreferences)
+		public ScheduleHintInput(IEnumerable<IPerson> people, DateOnlyPeriod period, double preferenceValueValue)
 		{
 			People = people;
 			Period = period;
-			UsePreferences = usePreferences;
+			PreferencesValue = preferenceValueValue;
 		}
 
 		public IEnumerable<IPerson> People { get; }
 		public DateOnlyPeriod Period { get; }
-		public bool UsePreferences { get; }
+		public double PreferencesValue { get; }
 	}
 }

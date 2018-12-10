@@ -10,7 +10,8 @@
 		'$state',
 		'$scope',
 		'skillIconService',
-		'SkillTypeService'
+		'SkillTypeService',
+		'$timeout'
 	];
 
 	function forecastModifyController(
@@ -20,7 +21,8 @@
 		$state,
 		$scope,
 		skillIconService,
-		skillTypeService
+		skillTypeService,
+		$timeout
 	) {
 		var vm = this;
 
@@ -430,18 +432,24 @@
 		$scope.$on('$stateChangeStart', function(event, next, current) {
 			if (vm.changesMade) {
 				event.preventDefault();
-				vm.stateName = next.name;
-				vm.closeConfirmation = true;
-				vm.confirmDiscardDialog = false;
-				vm.reforecastConfirmation = false;
-				return;
+				$timeout(function() {
+						vm.stateName = next.name;
+						vm.closeConfirmation = true;
+						vm.confirmDiscardDialog = false;
+						vm.reforecastConfirmation = false;
+						return;
+					},
+					1);
 			}
 
 			if (vm.isForecastRunning) {
 				event.preventDefault();
-				vm.stateName = next.name;
-				vm.closeConfirmationOnForecasting = true;
-				return;
+				$timeout(function() {
+						vm.stateName = next.name;
+						vm.closeConfirmationOnForecasting = true;
+						return;
+					},
+					1);
 			}
 		});
 	}

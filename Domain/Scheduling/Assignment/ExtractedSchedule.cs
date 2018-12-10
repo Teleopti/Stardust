@@ -468,8 +468,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						removeList.Clear();
 					}
 
-					if (Period.Intersect(personAbsence.Layer.Period))
+					if (Period.Contains(personAbsence.Layer.Period.StartDateTime))
 						removeList.Add(personAbsence);
+
 				}
 			}
 

@@ -36,38 +36,36 @@
 //
 
 .notice-error {
-	background-color:$red-600!important;
+	background-color: $red-600 !important;
 	border: none;
 	border-radius: 0;
 }
 
 .notice-warning {
-	background-color: $orange-400!important;
+	background-color: $orange-400 !important;
 	border: none;
 	border-radius: 0;
 }
 
 .notice-success {
-	background-color: $green-100!important;
+	background-color: $green-100 !important;
 	border: none;
 	border-radius: 0;
 }
 
 .notice-info {
-	background-color: $secondary!important;
+	background-color: $secondary !important;
 	border: none;
 	border-radius: 0;
 }
 
-
-
-.notice-spacer{
-	padding:10px 5px;
-	margin-bottom:5px;
+.notice-spacer {
+	padding: 8px 15px;
+	margin-bottom: 5px;
 }
 
-.notice-container{
-	width: 100%!important;
+.notice-container {
+	width: 100% !important;
 }
 
 .notice-container > .notice-item {
@@ -76,16 +74,16 @@
 	padding: 10px;
 	vertical-align: middle;
 	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
-  .mdi{
+	.mdi {
 		margin-right: 5px;
-    vertical-align: middle;
-		color:$text-color-standard;
-  }
+		vertical-align: middle;
+		color: $text-color-standard;
+	}
 }
 
 .notice-close {
-padding-left: $full-padding;
-cursor:pointer;
+	padding-left: $full-padding;
+	cursor: pointer;
 }
 
 .notice-container > .notice-item.ng-enter,
@@ -97,12 +95,18 @@ cursor:pointer;
 }
 
 @keyframes notice-enter {
-    from {opacity: 0; transform: translate(0,100%);}
-    to {opacity: 1; transform: translate(0px,0px);}
+	from {
+		opacity: 0;
+		transform: translate(0, 100%);
+	}
+	to {
+		opacity: 1;
+		transform: translate(0px, 0px);
+	}
 }
 
-.notice-item{
+.notice-item {
 	margin: 5px 0;
 	animation-name: notice-enter;
- animation-duration: 0.5s;
+	animation-duration: 0.5s;
 }

@@ -22,13 +22,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 	{
 		public FakeHangfireEventClient JobClient;
 		public IEventPublisher Publisher;
-		public HangfireEventServer Server;
+		public HangfireEventServerForTest Server;
 		public IJsonSerializer Serializer;
 		public IJsonDeserializer Deserializer;
 		public FakeHandler Handler;
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
+			extend.AddService<HangfireEventServerForTest>();
 			extend.AddService<FakeHandler>();
 		}
 
@@ -49,9 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		{
 			Publisher.Publish(new PersonStateChangedEvent {Timestamp = "2015-08-17 15:40".Utc()});
 
-#pragma warning disable 618
-			Server.Process(null, RandomName.Make(), typeof(PersonStateChangedEvent).AssemblyQualifiedName, JobClient.SerializedEvent, typeof(FakeHandler).AssemblyQualifiedName);
-#pragma warning restore 618
+			Server.ProcessForTest(null, RandomName.Make(), typeof(PersonStateChangedEvent).AssemblyQualifiedName, JobClient.SerializedEvent, typeof(FakeHandler).AssemblyQualifiedName);
 
 			Handler.GotEvent.Timestamp.Should().Be("2015-08-17 15:40".Utc());
 		}

@@ -8,8 +8,7 @@
 
 		<id name="Id"
 							type="guid"
-							access="nosetter.camelcase-underscore"
-							unsaved-value="null">
+							access="nosetter.camelcase-underscore">
 		</id>
 
 		<property name="Name"

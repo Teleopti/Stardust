@@ -80,30 +80,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.ForecastsFile
         }
 
         [Test]
-        public void ShouldValidateValidIntegerValue()
-        {
-            var target = new ForecastsFileIntegerValueValidator();
-
-            ForecastParseResult<int> parseResult;
-            var result = target.TryParse("1000", out parseResult);
-
-            Assert.That(result, Is.True);
-            Assert.That(parseResult.ErrorMessage, Is.Null);
-        }
-
-        [Test]
-        public void ShouldValidateInvalidIntegerValue()
-        {
-            var target = new ForecastsFileIntegerValueValidator();
-
-            ForecastParseResult<int> parseResult;
-            var result = target.TryParse("1000.1", out parseResult);
-
-            Assert.That(result, Is.False);
-            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
-        }
-
-        [Test]
         public void ShouldValidateValidDoubleValue()
         {
             var target = new ForecastsFileDoubleValueValidator();

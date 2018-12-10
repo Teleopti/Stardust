@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 {
@@ -30,8 +31,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2016-02-23 08:00", "2016-02-23 10:00")
-				.WithMappedRule("loggedout", phone, -1, Domain.Configuration.Adherence.Out)
-				.WithMappedRule("loggedout", null, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("loggedout", phone, -1, Adherence.Configuration.Adherence.Out)
+				.WithMappedRule("loggedout", null, 0, Adherence.Configuration.Adherence.In)
 				;
 
 			Now.Is("2016-02-23 08:05");

@@ -25,11 +25,22 @@
 			overtime: 'overtime'
 		})
 		.constant('REQUESTS_TYPES', {
+			//refer to \Domain\InterfaceLegacy\Domain\RequestType.cs
 			TextRequest: 0,
 			AbsenceRequest: 1,
 			ShiftTradeRequest: 2,
 			ShiftExchangeOffer: 3,
 			OvertimeRequest: 4
+		})
+		.constant('REQUESTS_STATUS', {
+			//refer to \Domain\AgentInfo\Requests\PersonRequestStatus.cs
+			Pending: 0,
+			Denied: 1,
+			Approved: 2,
+			New: 3,
+			AutoDenied: 4,
+			Waitlisted: 5,
+			Cancelled: 6
 		})
 		.run(moduleRun);
 

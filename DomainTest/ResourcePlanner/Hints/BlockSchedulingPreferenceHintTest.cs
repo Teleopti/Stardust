@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameShiftCategory = true
-					}), true)).InvalidResources;
+					}), 1)).InvalidResources;
 
 			result.First().ValidationErrors.Count.Should().Be.EqualTo(1);
 			result.First().ValidationTypes.First().Name.Should().Be.EqualTo(nameof(BlockSchedulingPreferenceHint));
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameShiftCategory = true
-					}), false)).InvalidResources;
+					}), 0)).InvalidResources;
 
 			result.First().ValidationTypes.Count(x => x.Name == nameof(BlockSchedulingPreferenceHint)).Should().Be.EqualTo(0);
 		}
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameShiftCategory = true
-					}), true)).InvalidResources;
+					}), 1)).InvalidResources;
 
 			result.First().ValidationTypes.Count(x => x.Name == nameof(BlockSchedulingPreferenceHint)).Should().Be.EqualTo(0);
 		}
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameShiftCategory = true
-					}), true)).InvalidResources;
+					}), 1)).InvalidResources;
 
 			result.First().ValidationTypes.Count(x => x.Name == nameof(BlockSchedulingPreferenceHint)).Should().Be.EqualTo(1);
 		}
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 						UseTeamBlockOption = true,
 						BlockTypeValue = BlockFinderType.SchedulePeriod,
 						UseBlockSameShiftCategory = true
-					}), true)).InvalidResources;
+					}), 1)).InvalidResources;
 
 			result.Count.Should().Be.EqualTo(0);
 		}

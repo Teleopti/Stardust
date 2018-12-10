@@ -396,11 +396,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			throw new NotImplementedException();
 		}
 
-		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(IDictionary<DateTimePeriod, IScheduleDictionary> dictionary)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<IPerson> PersonsWithIds(List<Guid> ids)
 		{
 			throw new NotImplementedException();

@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.Rta;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Wfm.Adherence.Domain.Configuration;
+using Teleopti.Wfm.Adherence.Configuration;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 {

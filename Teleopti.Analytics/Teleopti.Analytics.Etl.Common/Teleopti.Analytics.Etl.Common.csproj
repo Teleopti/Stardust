@@ -351,7 +351,6 @@
     <Compile Include="Transformer\Job\Steps\IntradayFactAgentJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayFactAgentQueueJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\IntradayFactQueueJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\JobBase.cs" />
     <Compile Include="Transformer\Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DelayedJobStep.cs" />
@@ -382,7 +381,6 @@
     <Compile Include="Transformer\Job\Steps\StageRequestJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageScenarioJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageScheduleDayOffCountJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\StageScheduleForecastSkillJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageScheduleForecastSkillJobStepWithBpo.cs" />
     <Compile Include="Transformer\Job\Steps\StageScheduleJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageSchedulePreferenceJobStep.cs" />

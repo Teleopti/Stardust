@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 {
 	[TestFixture]
-	[HangfireTest]
+	[RealHangfireTest]
 	public class HangfireQueueOrderTest :IExtendSystem	
 	{
 		public HangfireUtilities Hangfire;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -22,6 +23,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -39,8 +41,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterEventHandlers(
 				_config.Toggle,
-				typeof(IHandleEvent<>).Assembly,
-				typeof(Rta).Assembly
+				EventHandlerLocations.Assemblies().ToArray()
 			);
 
 			builder.RegisterType<ReadModelValidator>().As<IReadModelValidator>().SingleInstance();

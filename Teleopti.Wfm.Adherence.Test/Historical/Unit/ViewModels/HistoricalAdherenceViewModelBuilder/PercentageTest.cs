@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 	[TestFixture]
 	public class PercentageTest
 	{
-		public Adherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
+		public Adherence.Historical.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 
@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 17:00")
-				.WithHistoricalStateChange("2017-12-08 08:00", Domain.Configuration.Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.In)
 				;
 
 			var viewModel = Target.Build(person);

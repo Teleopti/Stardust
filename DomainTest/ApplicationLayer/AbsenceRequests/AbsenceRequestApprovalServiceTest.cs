@@ -5,9 +5,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -19,7 +17,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
-
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
@@ -178,7 +175,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.AreEqual(0, responses.Count());
 		}
-		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
+
+		private static PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			var personRequestFactory = new PersonRequestFactory() { Person = person };
 			var absenceRequest = personRequestFactory.CreateAbsenceRequest(absence, dateTimePeriod);
@@ -204,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 		}
 
-		private AccountDay createAccountDay(DateOnly startDate, TimeSpan? balance = null)
+		private static AccountDay createAccountDay(DateOnly startDate, TimeSpan? balance = null)
 		{
 			return new AccountDay(startDate)
 			{

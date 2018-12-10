@@ -5,6 +5,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Infrastructure;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
@@ -34,7 +36,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 					ActivityId = activity,
 					RuleId = rule,
 					RuleName = "phone",
-					Adherence = Domain.Configuration.Adherence.In,
+					Adherence = Adherence.Configuration.Adherence.In,
 					StaffingEffect = 0,
 					DisplayColor = Color.Green.ToArgb(),
 					IsAlarm = false,
@@ -51,7 +53,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			model.ActivityId.Should().Be(activity);
 			model.RuleId.Should().Be(rule);
 			model.RuleName.Should().Be("phone");
-			model.Adherence.Should().Be(Domain.Configuration.Adherence.In);
+			model.Adherence.Should().Be(Adherence.Configuration.Adherence.In);
 			model.StaffingEffect.Should().Be(0);
 			model.DisplayColor.Should().Be(Color.Green.ToArgb());
 			model.IsAlarm.Should().Be(false);

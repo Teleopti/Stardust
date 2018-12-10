@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			// Insights
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Insights, "Insights", DefinedRaptorApplicationFunctionForeignIds.Insights);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.EditInsightsReport, "xxEditInsightsReport", DefinedRaptorApplicationFunctionForeignIds.EditInsightsReport);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport, "xxViewInsightsReport", DefinedRaptorApplicationFunctionForeignIds.ViewInsightsReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport, "xxDeleteInsightsReport", DefinedRaptorApplicationFunctionForeignIds.DeleteInsightsReport);
 
 			return result.ToArray();
 		}

@@ -15,16 +15,7 @@
 			$provide.service('Toggle', function () {
 				return { };
 			});
-			$provide.service('CurrentUserInfo', function () {
-				return {
-					CurrentUserInfo: function () {
-						return {
-							DefaultTimeZone: 'Europe/Berlin',
-							DateFormatLocale: 'sv-SE'
-						};
-					}
-				};
-			});
+			
 			$provide.service('TimezoneDataService', function () {
 				return {
 					getAll: function () {
@@ -70,9 +61,13 @@
 	);
 
 	beforeEach(
-		inject(function (_$rootScope_, _$compile_) {
+		inject(function (_$rootScope_, _$compile_, CurrentUserInfo) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
+			CurrentUserInfo.SetCurrentUserInfo({
+				DefaultTimeZone: 'Europe/Berlin',
+				DateFormatLocale: 'sv-SE'
+			});
 		})
 	);
 	beforeEach(function () {

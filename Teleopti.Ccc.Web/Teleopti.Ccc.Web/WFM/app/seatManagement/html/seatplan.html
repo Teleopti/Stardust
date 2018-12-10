@@ -41,9 +41,9 @@
 
 	<div ng-show="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
 
-		<div class="row">
+		<div class="con-row">
 
-			<div class="col-sm-5 seatplan-calendar">
+			<div class="con-flex seatplan-calendar">
 
 				<div uib-datepicker seatplan-month-change-emitter ng-model="seatplan.selectedDate"
 					 ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
@@ -52,7 +52,7 @@
 
 			</div>
 
-			<div class="planning-day-detail col-sm-7" ng-if="seatplan.selectedDate!=null">
+			<div class="planning-day-detail con-flex" ng-if="seatplan.selectedDate!=null">
 
 				<h4>{{seatplan.selectedDate | date : "fullDate"}}</h4>
 				<md-divider md-insert></md-divider>
@@ -88,7 +88,7 @@
 
 			</div>
 		</div>
-		<div class="row">
+		<div class="con-row">
 			<div class="planning-period-button-bar">
 				<button id="view-seatbookings-button" class="wfm-btn wfm-btn-invis-primary"
 						ng-click="seatplan.showSeatmap()" ng-if="!seatplan.isLoadingCalendar">
@@ -101,8 +101,8 @@
 
 <div class="seatplan material-depth-1" ui-view ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened && !seatplan.usePlanningPeriods">
 
-	<div class="row">
-		<div class="col-sm-12 seatplan-planning-periods">
+	<div class="con-row">
+		<div class="con-flex seatplan-planning-periods">
 			<h3 class="planning-period-title">{{ 'PlanSeats' | translate }}</h3>
 
 			<md-divider md-insert></md-divider>

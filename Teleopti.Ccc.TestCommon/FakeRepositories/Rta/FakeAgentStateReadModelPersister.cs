@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ViewModels;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.Monitor;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {

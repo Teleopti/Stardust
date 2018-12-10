@@ -90,7 +90,7 @@
 		// Insights
 		public const string Insights = Anywhere + "/Insights";
 		public const string EditInsightsReport = Insights + "/EditInsightsReport";
-		public const string ViewInsightsReport = Insights + "/ViewInsightsReport";
+		public const string DeleteInsightsReport = Insights + "/DeleteInsightsReport";
 
 		// Online Reports
 		public const string ScheduleTimeVersusTargetTimeReport = "Raptor/OnlineReports/ScheduleTimeVersusTargetTimeReport";

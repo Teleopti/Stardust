@@ -27,17 +27,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         }
 
 	    /// <summary>
-        /// Finds the available data in the available data list by the contained application role.
-        /// </summary>
-        /// <param name="availableDataList">The available data list.</param>
-        /// <param name="applicationRole">The application role.</param>
-        /// <returns></returns>
-        public static IAvailableData FindByApplicationRole(IEnumerable<IAvailableData> availableDataList, IApplicationRole applicationRole)
-	    {
-		    return availableDataList.FirstOrDefault(availableData => availableData.ApplicationRole.Equals(applicationRole));
-	    }
-
-	    /// <summary>
         /// Gets or sets the application role.
         /// </summary>
         /// <value>The application role.</value>

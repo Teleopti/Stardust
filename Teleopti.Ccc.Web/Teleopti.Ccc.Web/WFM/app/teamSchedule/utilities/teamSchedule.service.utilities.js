@@ -14,41 +14,33 @@
 		self.getWeekdayNames = getWeekdayNames;
 		self.getWeekdays = getWeekDays;
 		self.getNextTickNoEarlierThanEight = getNextTickNoEarlierThanEight;
-		self.nowInUserTimeZone = formattedNowInUserTimeZone;
-		self.nowInSelectedTimeZone = formattedNowInSelectedTimeZone;
-		self.setNowDate = setNowDate;
-		self.now = now;
+		self.getNextTickMomentNoEarlierThanEight = getNextTickMomentNoEarlierThanEight;
+		self.nowInTimeZone = nowInTimeZone;
+		self.setNowDateInUtc = setNowDateInUtc;
 		self.getFirstDayOfWeek = getFirstDayOfWeek;
+		self.nowDateInUserTimezone = nowDateInUserTimezone;
 
 		var fakeNowDate;
 
-		function setNowDate(date) {
+		function setNowDateInUtc(date) {
 			fakeNowDate = date;
 		}
 
-		function now() {
-			if (fakeNowDate) return fakeNowDate;
-			return new Date();
+		function nowMomentInUTC() {
+			if (fakeNowDate) return moment.tz(fakeNowDate,'etc/UTC');
+			return moment().tz('etc/UTC');
 		};
 
-		function nowMoment() {
-			return moment(self.now());
+		function formattedNowInTimeZone(timezone) {
+			return format(nowInTimeZone(timezone));
 		}
 
-		function formattedNowInUserTimeZone() {
-			return format(nowInUserTimeZone());
+		function nowInTimeZone(timezone) {
+			return nowMomentInUTC().clone().tz(timezone);
 		}
 
-		function formattedNowInSelectedTimeZone(timezone) {
-			return format(nowInSelectedTimeZone(timezone));
-		}
-
-		function nowInUserTimeZone() {
-			return nowMoment().clone().tz(currentUserInfo.DefaultTimeZone);
-		}
-
-		function nowInSelectedTimeZone(timezone) {
-			return nowMoment().clone().tz(timezone);
+		function nowDateInUserTimezone() {
+			return serviceDateFormatHelper.getDateOnly(nowMomentInUTC().clone().tz(currentUserInfo.DefaultTimeZone));
 		}
 
 
@@ -87,18 +79,22 @@
 		}
 
 		function getNextTickNoEarlierThanEight(timezone) {
-			var nowInUserTimeZoneMoment = moment(nowInSelectedTimeZone(timezone).format('YYYY-MM-DD HH:mm'));
+			return format(getNextTickMomentNoEarlierThanEight(timezone));
+		}
+
+		function getNextTickMomentNoEarlierThanEight(timezone) {
+			var nowInUserTimeZoneMoment = nowInTimeZone(timezone);
 
 			var minutes = Math.ceil((nowInUserTimeZoneMoment.minute() + 1) / tick) * tick;
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
 
-			start.hours() < 8 && start.hours(8) && start.minutes(0);
+			if (start.hours() < 8)
+				start.hours(8).minutes(0);
 
-			return format(moment.tz(start.format('YYYY-MM-DD HH:mm'), timezone));
+			return start;
 		}
 
 		function format(dateMoment) {
-
 			return serviceDateFormatHelper.getDateByFormat(dateMoment, 'YYYY-MM-DDTHH:mm:ssZ');
 		}
 	}

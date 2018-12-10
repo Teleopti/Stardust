@@ -171,11 +171,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return RequestRepository.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T : Request
-		{
-			throw new NotImplementedException();
-		}
-
 		public IPersonRequest FindPersonRequestByRequestId(Guid value)
 		{
 			return RequestRepository.FirstOrDefault(x => x.Request.Id.GetValueOrDefault() == value);

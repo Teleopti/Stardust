@@ -12,17 +12,17 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	public class IntradayMonitorStatisticsController : ApiController
 	{
 		private readonly IIntradaySkillProvider _intradaySkillProvider;
-		private readonly IIntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
+		private readonly IntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
 
 		public IntradayMonitorStatisticsController(
 			IIntradaySkillProvider intradaySkillProvider,
-			IIntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService)
+			IntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService)
 		{
 			_intradaySkillProvider = intradaySkillProvider;
 			_intradayIncomingTrafficApplicationService = intradayIncomingTrafficApplicationService ?? throw new ArgumentNullException(nameof(intradayIncomingTrafficApplicationService));
 		}
 
-		[UnitOfWorkAttribute, HttpGetAttribute, Route("api/intraday/monitorskillareastatistics/{id}")]
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastatistics/{id}")]
 		public virtual IHttpActionResult MonitorSkillAreaStatistics(Guid id)
 		{
 			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillGroup(id);

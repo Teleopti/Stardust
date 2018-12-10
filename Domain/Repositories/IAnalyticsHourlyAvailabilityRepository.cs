@@ -8,6 +8,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void Delete(Guid personCode, int dateId, int scenarioId);
 		void AddOrUpdate(AnalyticsHourlyAvailability analyticsHourlyAvailability);
 		void UpdateUnlinkedPersonids(int[] personPeriodIds);
-		int GetFactHourlyAvailabilityRowCount(int personPeriodId);
 	}
 }

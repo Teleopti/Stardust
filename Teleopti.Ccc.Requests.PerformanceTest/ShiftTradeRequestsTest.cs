@@ -100,30 +100,30 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				Console.WriteLine("Processing and Validation of Shift Trade Requests took " + sw.Elapsed);
 			});
 
-			var expectedResults = new Dictionary<Guid, RequestStatus>();
-			var actualResults = new Dictionary<Guid, RequestStatus>();
+			var expectedResults = new Dictionary<Guid, PersonRequestStatus>();
+			var actualResults = new Dictionary<Guid, PersonRequestStatus>();
 
-			expectedResults.Add(personRequests[0].Id.Value, RequestStatus.Pending);
-			expectedResults.Add(personRequests[1].Id.Value, RequestStatus.Pending);
-			expectedResults.Add(personRequests[2].Id.Value, RequestStatus.Pending);
-			expectedResults.Add(personRequests[3].Id.Value, RequestStatus.Pending);
-			expectedResults.Add(personRequests[4].Id.Value, RequestStatus.Pending);
-			expectedResults.Add(personRequests[5].Id.Value, RequestStatus.Pending);
-			expectedResults.Add(personRequests[6].Id.Value, RequestStatus.Pending);
+			expectedResults.Add(personRequests[0].Id.Value, PersonRequestStatus.Pending);
+			expectedResults.Add(personRequests[1].Id.Value, PersonRequestStatus.Pending);
+			expectedResults.Add(personRequests[2].Id.Value, PersonRequestStatus.Pending);
+			expectedResults.Add(personRequests[3].Id.Value, PersonRequestStatus.Pending);
+			expectedResults.Add(personRequests[4].Id.Value, PersonRequestStatus.Pending);
+			expectedResults.Add(personRequests[5].Id.Value, PersonRequestStatus.Pending);
+			expectedResults.Add(personRequests[6].Id.Value, PersonRequestStatus.Pending);
 
 			WithUnitOfWork.Do(() =>
 		   {
 			   foreach (var req in personRequests)
 			   {
 				   var request = PersonRequestRepository.Get(req.Id.Value);
-				   var requestStatus = RequestStatus.New;
+				   var requestStatus = PersonRequestStatus.New;
 
 				   if (request.IsPending)
-					   requestStatus = RequestStatus.Pending;
+					   requestStatus = PersonRequestStatus.Pending;
 				   else if (request.IsDenied)
-					   requestStatus = RequestStatus.Denied;
+					   requestStatus = PersonRequestStatus.Denied;
 				   else if (request.IsApproved)
-					   requestStatus = RequestStatus.Approved;
+					   requestStatus = PersonRequestStatus.Approved;
 
 				   actualResults.Add(request.Id.Value, requestStatus);
 			   }

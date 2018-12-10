@@ -1685,7 +1685,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					var selectedPeriod = new DateOnlyPeriod(startDay.DateOnlyAsPeriod.DateOnly, endDay.DateOnlyAsPeriod.DateOnly);
 					var validationResult = _container.Resolve<CheckScheduleHints>()
 						.Execute(new SchedulePostHintInput(SchedulerState.SchedulerStateHolder.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()),
-							selectedPeriod, new FixedBlockPreferenceProvider(_schedulingOptions), _schedulingOptions.UsePreferences));
+							selectedPeriod, new FixedBlockPreferenceProvider(_schedulingOptions), _schedulingOptions.UsePreferences?1:0));
 
 					var specificTimeZone = new SpecificTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
 					foreach (var result in validationResult.InvalidResources)
@@ -2990,8 +2990,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(_scenario);
-				methods.Add(new LoaderMethod(loadSchedulingScreenState, null));
+				
 				methods.Add(new LoaderMethod(loadCommonStateHolder, LanguageResourceHelper.Translate("XXLoadingDataTreeDots")));
+				methods.Add(new LoaderMethod(loadSchedulingScreenState, null));
 				methods.Add(new LoaderMethod(loadSkills, null));
 				methods.Add(new LoaderMethod(loadSettings, null));
 				methods.Add(new LoaderMethod(loadAuditingSettings, null));
@@ -3057,25 +3058,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 
 				var workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
-				var shiftBags = new HashSet<IRuleSetBag>();
-				var ruleSets = new HashSet<IWorkShiftRuleSet>();
-				foreach (var person in SchedulerState.SchedulerStateHolder.ChoosenAgents)
-				{
-					if (person.Period(requestPeriod.StartDate) != null &&
-						person.Period(requestPeriod.StartDate).RuleSetBag != null)
-					{
-						shiftBags.Add(person.Period(requestPeriod.StartDate).RuleSetBag);
-					}
-				}
+				var shiftBags = SchedulerState.SchedulerStateHolder.ChoosenAgents
+					.Select(person => person.Period(requestPeriod.StartDate)?.RuleSetBag).Where(r => r != null)
+					.Distinct();
 
-				foreach (var ruleSetBag in shiftBags)
-				{
-					foreach (var workShiftRuleSet in ruleSetBag.RuleSetCollection)
-					{
-						ruleSets.Add(workShiftRuleSet);
-					}
-				}
-
+				var ruleSets = shiftBags.SelectMany(r => r.RuleSetCollection).Distinct();
 				foreach (var ruleSet in ruleSets)
 				{
 					workShiftWorkTime.CalculateMinMax(ruleSet, new EffectiveRestriction());
@@ -3124,16 +3111,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IScheduleRange range = SchedulerState.SchedulerStateHolder.SchedulingResultState.Schedules[person];
 			var rule = new NewPersonAccountRule(SchedulerState.SchedulerStateHolder.SchedulingResultState.Schedules,
 				SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts);
-			IList<IBusinessRuleResponse> toRemove = new List<IBusinessRuleResponse>();
 			IList<IBusinessRuleResponse> exposedBusinessRuleResponseCollection =
 				((ScheduleRange)range).ExposedBusinessRuleResponseCollection();
-			foreach (var businessRuleResponse in exposedBusinessRuleResponseCollection)
-			{
-				if (businessRuleResponse.TypeOfRule == rule.GetType())
-				{
-					toRemove.Add(businessRuleResponse);
-				}
-			}
+			var toRemove = exposedBusinessRuleResponseCollection.Where(businessRuleResponse => businessRuleResponse.TypeOfRule == rule.GetType()).ToArray();
 			foreach (var businessRuleResponse in toRemove)
 			{
 				exposedBusinessRuleResponseCollection.Remove(businessRuleResponse);
@@ -3141,8 +3121,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			DateOnlyPeriod reqPeriod = SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 			IEnumerable<IScheduleDay> allScheduleDays = range.ScheduledDayCollection(reqPeriod);
-			IDictionary<IPerson, IScheduleRange> dic = new Dictionary<IPerson, IScheduleRange>();
-			dic.Add(person, range);
+			var dic = new Dictionary<IPerson, IScheduleRange> {{person, range}};
 			//TODO need to make the call twice, ugly fix for now /MD
 			rule.Validate(dic, allScheduleDays);
 		}

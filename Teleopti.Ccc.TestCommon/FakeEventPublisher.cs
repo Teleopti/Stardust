@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon
 			_threadPrincipalContext = threadPrincipalContext;
 		}
 
-		public IEnumerable<IEvent> PublishedEvents => queuedEvents.ToArray();
+		public IEvent[] PublishedEvents => queuedEvents.ToArray();
 
 		public void Clear()
 		{

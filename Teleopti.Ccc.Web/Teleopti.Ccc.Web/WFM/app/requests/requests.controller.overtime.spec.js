@@ -374,9 +374,9 @@ describe('Requests - overtime controller tests', function() {
 	it('should select default status filter', function() {
 		compileUIGridHtml(scope, controller.gridOptions);
 
-		var status0 = '79';
-		var status1 = '86';
-		var status2 = '93';
+		var status0 = '1';
+		var status1 = '2';
+		var status2 = '3';
 		controller.filters = [{ Status: status0 + ' ' + status1 + ' ' + status2 }];
 		scope.$digest();
 

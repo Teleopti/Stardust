@@ -140,24 +140,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			query.ExecuteUpdate();
 		}
 
-		public IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId)
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT 
-						person_id {nameof(AnalyticsFactAgentSkill.PersonId)},
-						skill_id {nameof(AnalyticsFactAgentSkill.SkillId)},
-						has_skill {nameof(AnalyticsFactAgentSkill.HasSkill)},
-						active {nameof(AnalyticsFactAgentSkill.Active)},
-						business_unit_id {nameof(AnalyticsFactAgentSkill.BusinessUnitId)},
-						datasource_id {nameof(AnalyticsFactAgentSkill.DatasourceId)}
-                    FROM mart.fact_agent_skill WITH (NOLOCK)
-					WHERE person_id=:{nameof(personId)}")
-				.SetInt32(nameof(personId), personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsFactAgentSkill)))
-				.SetReadOnly(true)
-				.List<AnalyticsFactAgentSkill>();
-		}
-
 		public void AddOrUpdateSkill(AnalyticsSkill analyticsSkill)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(

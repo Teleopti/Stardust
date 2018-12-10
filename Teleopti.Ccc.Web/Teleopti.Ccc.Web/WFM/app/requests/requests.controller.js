@@ -329,22 +329,6 @@
 			$scope.$broadcast('reload.requests.without.selection');
 		}
 
-		function getSitesAndTeamsAsync() {
-			var params = {};
-			params.startDate = moment(vm.period.startDate).format('YYYY-MM-DD');
-			params.endDate = moment(vm.period.endDate).format('YYYY-MM-DD');
-
-			return (vm._sitesAndTeamsPromise = $q(function (resolve, reject) {
-				requestsDataService.hierarchy(params).then(function (data) {
-					resolve(data);
-					vm.sitesAndTeams = data.Children;
-					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-
-					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
-				});
-			}));
-		}
-
 		function getGroupPagesAsync() {
 			var startDateStr = moment(vm.period.startDate)
 				.locale('en')
@@ -425,16 +409,6 @@
 			from.forEach(function (x) {
 				to.push(x);
 			});
-		}
-
-		function extractTeamNames(sites) {
-			var teamNameMap = {};
-			sites.forEach(function (site) {
-				site.Children.forEach(function (team) {
-					teamNameMap[team.Id] = team.Name;
-				});
-			});
-			return teamNameMap;
 		}
 	}
 })();

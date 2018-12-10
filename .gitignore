@@ -50,7 +50,15 @@ npm-shrinkwrap.json
 
 # ide and tools
 .vs/
-.idea/
+.idea/*
+!.idea/config/
+.idea/config/*
+!.idea/config/vs-applicationhost.config
+!.idea/.idea.CruiseControl/
+.idea/.idea.CruiseControl/*
+!.idea/.idea.CruiseControl/.idea/
+.idea/.idea.CruiseControl/.idea/*
+!.idea/.idea.CruiseControl/.idea/runConfigurations/
 *resharper*
 _ReSharper*/
 [Bb]uild[Ll]og.*

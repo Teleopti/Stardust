@@ -149,6 +149,8 @@
     <Compile Include="Configuration\DataSourceModule.cs" />
     <Compile Include="Configuration\EqualNumberOfCategoryFairnessModule.cs" />
     <Compile Include="Configuration\ApplicationInsightsModule.cs" />
+    <Compile Include="Configuration\EventHandlerLocations.cs" />
+    <Compile Include="Configuration\EventHandlerRegistrationExtensions.cs" />
     <Compile Include="Configuration\ForecasterModule.cs" />
     <Compile Include="Configuration\GamificationAreaModule.cs" />
     <Compile Include="Configuration\HangfireModule.cs" />
@@ -202,13 +204,13 @@
     <Compile Include="SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule.cs" />
     <Compile Include="Toggle\FakeToggleManager.cs" />
     <Compile Include="Toggle\FalseToggleManager.cs" />
+    <Compile Include="Toggle\RegistrationByToggleExtensions.cs" />
     <Compile Include="Toggle\ToggleManagerModule.cs" />
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
     <Compile Include="Configuration\MbCacheModule.cs" />
     <Compile Include="Configuration\WebModule.cs" />
     <Compile Include="Toggle\ToggleRuntimeModule.cs" />
     <Compile Include="Toggle\TrueToggleManager.cs" />
-    <Compile Include="Toggle\EventHandlerRegisterationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

@@ -24,16 +24,6 @@ namespace Teleopti.Ccc.TestCommon
 		public bool Perpetual { get; }
 		public int MaxActiveAgents { get; }
 		public Percent MaxActiveAgentsGrace { get; }
-		public bool IsThisTooManyActiveAgents(int activeAgents)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool IsThisAlmostTooManyActiveAgents(int activeAgents)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<string> EnabledLicenseOptionPaths { get; }
 		public int MaxSeats { get; }
 		public LicenseType LicenseType { get; }

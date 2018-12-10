@@ -18,11 +18,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldCheckThatStoredsProcedureExists()
 		{
 			var target = new IntradayQueueStatisticsLoader();
-			var skill = SkillFactory.CreateSkillWithId("skill"); 
-			var actualWorkloadInSecondsPerSkillInterval = target.LoadActualCallPerSkillInterval(new List<ISkill>() { skill }, TimeZoneInfo.Utc, DateOnly.Today);
 			var emailBacklogWorkload = target.LoadActualEmailBacklogForWorkload(Guid.NewGuid(), new DateTimePeriod(DateTime.UtcNow.Date, DateTime.UtcNow.Date));
 
-			actualWorkloadInSecondsPerSkillInterval.Count.Should().Be.EqualTo(0);
 			emailBacklogWorkload.Should().Be.EqualTo(0);
 		}
 	}

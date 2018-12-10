@@ -41,7 +41,7 @@ RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
 RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
 RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
 RTA_StateQueueFloodPrevention_77710 = true
-RTA_ReviewHistoricalAdherence_74770 = RC
+RTA_ReviewHistoricalAdherence_74770 = true
 
 MessageBroker_HttpSenderThrottleRequests_79140 = true
 MessageBroker_VeganBurger_79140 = true
@@ -98,9 +98,9 @@ WFM_Intraday_Redesign_77214 = DEV
 WfmStaffing_AddOvertime_42524 = RC
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
 Wfm_Stardust_EnableScaleout_77366 = true
-Wfm_AuditTrail_StaffingAuditTrail_78125 = false
-Wfm_AuditTrail_GenericAuditTrail_74938 = false
-WFM_AbsenceRequest_ImproveThroughput_79139 = RC
+Wfm_AuditTrail_StaffingAuditTrail_78125 = RC
+Wfm_AuditTrail_GenericAuditTrail_74938 = RC
+WFM_AbsenceRequest_ImproveThroughput_79139 = true
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...

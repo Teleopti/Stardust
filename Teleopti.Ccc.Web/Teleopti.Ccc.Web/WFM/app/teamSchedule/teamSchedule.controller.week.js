@@ -8,7 +8,6 @@
 			'$window',
 			'$q',
 			'$translate',
-			'$filter',
 			'PersonScheduleWeekViewCreator',
 			'UtilityService',
 			'weekViewScheduleSvc',
@@ -19,14 +18,12 @@
 			'bootstrapCommon',
 			'groupPageService',
 			'serviceDateFormatHelper',
-			'ViewStateKeeper',
-			'CurrentUserInfo'];
+			'ViewStateKeeper'];
 
 	function TeamScheduleWeeklyController(
 		$window,
 		$q,
 		$translate,
-		$filter,
 		WeekViewCreator,
 		Util,
 		weekViewScheduleSvc,
@@ -37,8 +34,7 @@
 		bootstrapCommon,
 		groupPageService,
 		serviceDateFormatHelper,
-		ViewStateKeeper,
-		CurrentUserInfo) {
+		ViewStateKeeper) {
 		var vm = this;
 		var stateParams = ViewStateKeeper.get();
 		vm.searchOptions = {
@@ -61,7 +57,7 @@
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
-		vm.scheduleDate = Util.getFirstDayOfWeek(stateParams.selectedDate || serviceDateFormatHelper.getDateOnly(moment()));
+		vm.scheduleDate = Util.getFirstDayOfWeek(stateParams.selectedDate || Util.nowDateInUserTimezone());
 		vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 
 		vm.teamNameMap = stateParams.teamNameMap || {};
@@ -208,27 +204,7 @@
 			});
 		};
 
-		vm.getSitesAndTeamsAsync = function () {
-			return $q(function (resolve, reject) {
-				var date = serviceDateFormatHelper.getDateOnly(moment(vm.scheduleDate));
-				var startOfWeek = Util.getFirstDayOfWeek(date);
-				var endOfWeek = serviceDateFormatHelper.getDateOnly(moment(startOfWeek).add(6, 'days'));
-
-				teamScheduleSvc.hierarchyOverPeriod(startOfWeek, endOfWeek).then(function (data) {
-					resolve(data);
-					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-					vm.sitesAndTeams = data.Children;
-
-					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
-				});
-			});
-		};
-
 		vm.searchPlaceholder = $translate.instant('Search');
-
-		function getFormatDate(date) {
-			return serviceDateFormatHelper.getDateOnly(moment(date));
-		}
 
 		function resetFocus() {
 			$scope.$broadcast("resetFocus", "organizationPicker");
@@ -260,16 +236,6 @@
 
 		function scheduleChangedEventHandler() {
 			$scope.$evalAsync(vm.loadSchedules);
-		}
-
-		function extractTeamNames(sites) {
-			var teamNameMap = {};
-			sites.forEach(function (site) {
-				site.Children.forEach(function (team) {
-					teamNameMap[team.Id] = team.Name;
-				});
-			});
-			return teamNameMap;
 		}
 
 		function initSelectedGroups(mode, groupIds, groupPageId) {

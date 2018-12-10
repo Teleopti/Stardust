@@ -20,7 +20,7 @@
 	<md-progress-linear md-mode="indeterminate" ng-if="vm.loading"></md-progress-linear>
 	<div class="panel material-depth-1 con-padding">
 		<div class="con-row">
-			<div class="con-flex wfm-form organization-picker" outside-click="vm.closeOrganizationPicker()">
+			<div class="con-flex wfm-form organization-picker">
 				<div class="form-input-wrap">
 					<input type="text"
 						   placeholder="{{'SelectSitesTeams'|translate}}"
@@ -31,7 +31,7 @@
 				<div style="position: relative">
 					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
 						 style="z-index: 999; position: absolute; width: 100%"
-						 ng-show="vm.organizationPickerOpen">
+						 ng-if="vm.organizationPickerOpen" outside-click="vm.closeOrganizationPicker()">
 						<div class="form-input-wrap filter">
 							<input type="text"
 								   placeholder="{{'DataFilterThreeDots'|translate}}"

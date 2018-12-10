@@ -1,8 +1,7 @@
 ﻿<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
 	<div class="teamschedule-command-container">
 		<div ng-if="vm.ready" style="height: 100%;">
-			<add-personal-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddPersonalActivity'"></add-personal-activity>
-			<add-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddActivity'"></add-activity>
+			<add-activity ng-repeat="activityCommand in vm.activityCommands" command="activityCommand" ng-if="!vm.activeCommandCheck() && vm.activeCmd == activityCommand.key"></add-activity>
 			<add-overtime ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddOvertimeActivity'"></add-overtime>
 			<remove-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveActivity'"></remove-activity>
 			<swap-shifts ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'SwapShifts'"></swap-shifts>

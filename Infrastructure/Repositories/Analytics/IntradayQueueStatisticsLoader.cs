@@ -55,35 +55,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<ISkill> skills, TimeZoneInfo timeZone, DateOnly today)
-		{
-			var skillIdArray = skills.Select(x => x.Id.Value.ToString()).ToArray();
-
-			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				var skillIdString = String.Join(",", skillIdArray);
-
-			    var callsPerSkillInterval =
-			        uow.Session()
-			            .CreateSQLQuery(
-			                @"mart.web_intraday_calls_per_skill_interval @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
-			            .AddScalar("SkillId", NHibernateUtil.Guid)
-			            .AddScalar("WorkloadId", NHibernateUtil.Guid)
-			            .AddScalar("StartTime", NHibernateUtil.DateTime)
-			            .AddScalar("Calls", NHibernateUtil.Double)
-			            .AddScalar("AverageHandleTime", NHibernateUtil.Double)
-			            .AddScalar("AnsweredCalls", NHibernateUtil.Int32)
-			            .AddScalar("HandleTime", NHibernateUtil.Double)
-			            .SetString("TimeZone", timeZone.Id)
-			            .SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
-			            .SetParameter("SkillList", skillIdString, NHibernateUtil.StringClob)
-			            .SetResultTransformer(Transformers.AliasToBean(typeof(SkillIntervalStatistics)))
-			            .List<SkillIntervalStatistics>();
-
-				return callsPerSkillInterval;
-			}
-		}
-
 		public int LoadActualEmailBacklogForWorkload(Guid workloadId, DateTimePeriod closedPeriod)
 		{
 			var startDate = closedPeriod.StartDateTime.Date;

@@ -101,6 +101,11 @@
 				)
 				.success(function (data) {
 					ctrl.jobs = data;
+			if (ctrl.form.hasOwnProperty('JobName') && angular.isDefined(ctrl.job)) {
+				  var jobDropdown = angular.element(document.querySelector('#jobDropdown'));
+				  var selectedJobName = jobDropdown[0].options[jobDropdown[0].selectedIndex].innerHTML;
+				  ctrl.form.JobName = getItemBasedOnName(ctrl.jobs, selectedJobName, 'JobName');
+			}
 				})
 				.error(function (data) {
 					ctrl.jobs = [];

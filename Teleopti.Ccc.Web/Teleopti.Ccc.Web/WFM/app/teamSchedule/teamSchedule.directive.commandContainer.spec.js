@@ -107,7 +107,7 @@
 		it('should get correct date', function () {
 			var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
 			var scope = $rootScope.$new();
-			scope.curDate = new Date('2018-02-26');
+			scope.curDate = '2018-02-26';
 			var target = $compile(html)(scope);
 			scope.$apply();
 			var innerScope = angular.element(target[0].querySelector('.teamschedule-command-container')).scope();

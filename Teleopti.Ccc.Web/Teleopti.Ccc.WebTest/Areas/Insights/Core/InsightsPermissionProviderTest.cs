@@ -15,13 +15,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 		public void ShouldHaveInsightsPermissions()
 		{
 			var permissions = new FakePermissions();
-			permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewInsightsReport);
+			permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.Insights);
 			permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.EditInsightsReport);
+			permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.DeleteInsightsReport);
 			var target = new PermissionProvider(permissions);
 
 			var permission = target.GetInsightsPermission(null, null);
 			permission.CanViewReport.Should().Be.True();
 			permission.CanEditReport.Should().Be.True();
+			permission.CanDeleteReport.Should().Be.True();
 		}
 
 		[Test]
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var permission = target.GetInsightsPermission(null, null);
 			permission.CanViewReport.Should().Be.False();
 			permission.CanEditReport.Should().Be.False();
+			permission.CanDeleteReport.Should().Be.False();
 		}
 	}
 }

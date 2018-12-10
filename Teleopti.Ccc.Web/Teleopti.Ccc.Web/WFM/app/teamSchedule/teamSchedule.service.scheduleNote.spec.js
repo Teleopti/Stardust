@@ -50,7 +50,7 @@ describe("teamschedule schedule note management service tests", function () {
 		}));
 
 		it('should subimit note for person with correct data', function () {
-			target.submitNoteForPerson('personId', { internalNotes: ['internal note'], publicNotes: ['public note'] }, new Date('2018-02-26'));
+			target.submitNoteForPerson('personId', { internalNotes: ['internal note'], publicNotes: ['public note'] }, '2018-02-26');
 
 			$httpBackend.expect('POST', '../api/TeamScheduleCommand/EditScheduleNote', {
 				SelectedDate: '2018-02-26',

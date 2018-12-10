@@ -38,7 +38,7 @@
 				var dayViewModel = createDayViewModel(
 					dayIncrement,
 					startOfWeekIsoDay,
-					true,//don't need to convert time zone for title area
+					true, //don't need to convert time zone for title area
 					currentUserInfo.CurrentUserInfo().DefaultTimeZone
 				);
 				dayViewModel.leftOffset = getShiftTradeColumnLeftOffset(day, dayIncrement);

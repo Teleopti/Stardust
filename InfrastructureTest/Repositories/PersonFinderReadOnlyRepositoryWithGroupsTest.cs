@@ -157,16 +157,71 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 		}
 
+
+		[Test]
+		public void ShouldNotFindPersonIdsInGivenDynamicGroupWhenPersonIsLeft()
+		{
+			var scheduleDate = new DateOnly(2000, 1, 1);
+			var optionColumn = new OptionalColumn("Test")
+			{
+				TableName = "Person",
+				AvailableAsGroupPage = true
+			};
+
+			var personToTest = PersonFactory.CreatePerson(new Name("dummyAgent1", "dummy"));
+			personToTest.SetOptionalColumnValue(new OptionalColumnValue("test value"), optionColumn);
+			personToTest.TerminatePerson(scheduleDate.AddDays(-1), new PersonAccountUpdaterDummy());
+
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(scheduleDate,
+				personContract,
+				team);
+			personToTest.AddPersonPeriod(personPeriod);
+
+			WithUnitOfWork.Do(() =>
+			{
+				OptionalColumnRepository.Add(optionColumn);
+			});
+			WithUnitOfWork.Do(() =>
+			{
+
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+
+			});
+			WithUnitOfWork.Do(() =>
+			{
+				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			createAndSaveReadModel(PersonFinderField.FirstName, personToTest.Id.Value, personToTest.Name.FirstName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date, scheduleDate.Date.AddDays(-1));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(scheduleDate, scheduleDate), optionColumn.Id.Value, new[] { "test value" },
+					new Dictionary<PersonFinderField, string>());
+
+				result.Count.Should().Be.EqualTo(0);
+
+			});
+		}
 		private void createAndSaveReadModel(PersonFinderField searchType, Guid personId, string searchValue,
-			 Guid teamId, Guid siteId, Guid businessUnitId, DateTime startDateTime)
+			 Guid teamId, Guid siteId, Guid businessUnitId, DateTime startDateTime,DateTime? terminalDate = null)
 		{
 			WithUnitOfWork.Do(uow =>
 			{
 				uow.Current().FetchSession().CreateSQLQuery(
 			  "Insert into [ReadModel].[FindPerson] (PersonId,  FirstName,  LastName,  EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId                        ,SearchType        , TeamId, SiteId,BusinessUnitId, StartDateTime, EndDateTime)" +
-			  " Values (                            :personId, '', '',   '137545'           ,''  ,NULL ,  :searchValue,'11610FE4-0130-4568-97DE-9B5E015B2564',:searchType,:teamId, :siteId,:businessUnitId, :startDateTime, NULL)")
+			  " Values (                            :personId, '',          '',        '137545'        ,''  ,:terminalDate,:searchValue,'11610FE4-0130-4568-97DE-9B5E015B2564',:searchType,:teamId, :siteId,:businessUnitId, :startDateTime, NULL)")
 			  .SetString("searchType", searchType.ToString())
 			  .SetGuid("personId", personId)
+			  .SetDateTime("terminalDate", terminalDate ?? DateTime.MaxValue)
 			  .SetString("searchValue", searchValue)
 			  .SetDateTime("startDateTime", startDateTime)
 			  .SetGuid("businessUnitId", businessUnitId)

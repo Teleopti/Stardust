@@ -159,6 +159,50 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
+	it('should not view move activity command menu when no activity is selected', function () {
+		var html = '<teamschedule-command-menu  selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		var date = "2018-01-16";
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: new Date(date)
+		};
+		permissions.set({
+			HasMoveOvertimePermission: true
+		});
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: []
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		personSelectionSvc.setSelectedPersonAndProjectionCount({
+			CheckedPersonCount: 1,
+			SelectedActivityInfo: {
+				PersonCount: 0,
+				ActivityCount: 0
+			},
+			SelectedAbsenceInfo: {
+				PersonCount: 0,
+				AbsenceCount: 0
+			}
+		});
+
+		var element = $compile(html)(scope);
+
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemMoveActivity'));
+
+		expect(menu.length).toBe(1);
+		expect(menuListItem.length).toBe(1);
+		expect(menuListItem[0].disabled).toBe(true);
+	});
+
 	it('should view menu when swap shift is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
@@ -305,14 +349,13 @@
 			});
 			scope.vm = {
 				toggleCurrentSidenav: function () { },
-				selectedDate: new Date(date)
+				selectedDate: date
 			};
 			var element = $compile(html)(scope);
 			scope.$apply();
 
 			var menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
 			expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
-
 
 			var selectedAgents = [
 				{
@@ -340,8 +383,6 @@
 
 			menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
 			expect(menuListItemForRemovingDayOff[0].disabled).toEqual(false);
-
-
 		});
 	}
 
@@ -641,8 +682,6 @@
 		expect(menuListItemForRemoveShift[0].disabled).toEqual(false);
 	});
 
-
-
 	it('should view menu when move invalid overlapped activity is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
@@ -831,7 +870,6 @@
 		expect(menuListItem[0].disabled).toBe(true);
 	});
 
-
 	it("should undo menu item unclickable when schedule audit trail is disabled", function () {
 		bootstrapDataService.setScheduleAuditTrailSetting(false);
 		var date = "2018-01-16";
@@ -883,6 +921,8 @@
 		var menuListItemForUndo = angular.element(element[0].querySelector('.wfm-list #menuItemUndo'));
 		expect(menuListItemForUndo[0].disabled).toEqual(false);
 	});
+
+	
 
 	// Don't check this, as it performs badly when select all agents on every page is set.
 	xit('should make Move Invalid Overlapped Activity command menu clickable when there is none overlap warning', function () {

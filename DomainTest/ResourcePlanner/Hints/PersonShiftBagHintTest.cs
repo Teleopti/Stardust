@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			personPeriod.RuleSetBag = new RuleSetBag();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, false)).InvalidResources
+			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, 0)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagHint)));
 
 			result.Should().Be.Empty();
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2017, 01, 20)).WithId();
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, false)).InvalidResources
+			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, 0)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagHint)));
 
 			result.Should().Not.Be.Empty();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			personPeriod.RuleSetBag = new RuleSetBag();
 			person.AddPersonPeriod(personPeriod);
 
-			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, false)).InvalidResources
+			var result = Target.Execute(new ScheduleHintInput(new[] { person }, planningPeriod, 0)).InvalidResources
 				.Where(x => x.ValidationTypes.Contains(typeof(PersonShiftBagHint)));
 
 			result.Should().Not.Be.Empty();

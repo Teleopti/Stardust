@@ -5,14 +5,13 @@
         .module('wfm.resourceplanner')
         .controller('planningGroupSettingEditController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService', 'planningGroupInfo'];
 
-    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService) {
+    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService, planningGroupInfo) {
         var vm = this;
 
         var filterId = $stateParams.filterId ? $stateParams.filterId : null;
-        vm.default = $stateParams.isDefault ? $stateParams.isDefault : false;
-        vm.isEdit = $stateParams.filterId ? true : false;
+        vm.isEdit = !!filterId;
         vm.settingInfo = {
             BlockSameShift: false,
             BlockSameShiftCategory: false,
@@ -29,11 +28,12 @@
             MaxWeekendDaysOff: 16,
             Priority: null,
             Id: filterId,
-            Default: vm.default,
             Filters: [],
-            Name: $stateParams.isDefault ? $translate.instant('Default') : "",
+			Default: false,
+            Name: "",
             PlanningGroupId: $stateParams.groupId
         };
+        vm.planningGroupName = planningGroupInfo.Name;
         
         vm.blockFinderTypeOptions = [
 			"Off",
@@ -70,10 +70,11 @@
         checkIfEditDefaultRule();
 
         function checkIfEditDefaultRule() {
-            if (!filterId)
+            if (!vm.isEdit)
                 return vm.settingInfo;
-            return PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
+            return PlanGroupSettingService.getSetting({ id: filterId})
                 .$promise.then(function (result) {
+					vm.settingInfo.Default = result.Default;
                     vm.settingInfo.Name = result.Name;
                     vm.settingInfo.Filters = result.Filters;
                     vm.settingInfo.Priority = result.Priority;
@@ -114,12 +115,12 @@
         }
 
         function removeSelectedFiltersInList(filters, selectedFilters) {
-            if (selectedFilters.length == 0 || filters.length == 0)
+            if (selectedFilters.length === 0 || filters.length === 0)
                 return filters;
             var result = angular.copy(filters);
             for (var i = filters.length - 1; i >= 0; i--) {
                 angular.forEach(selectedFilters, function (selectedItem) {
-                    if (filters[i].Id == selectedItem.Id) {
+                    if (filters[i].Id === selectedItem.Id) {
                         result.splice(i, 1);
                     }
                 });
@@ -169,7 +170,7 @@
         }
 
         function isValidFilters() {
-            return vm.settingInfo.Filters.length > 0 || vm.default;
+            return vm.settingInfo.Filters.length > 0 || vm.settingInfo.Default;
         }
 
         function isValidName() {

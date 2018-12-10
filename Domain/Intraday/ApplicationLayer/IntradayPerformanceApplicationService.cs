@@ -10,23 +10,16 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 {
-	public interface IIntradayPerformanceApplicationService
-	{
-		IntradayPerformanceViewModel GeneratePerformanceViewModel(Guid[] skillIdList);
-		IntradayPerformanceViewModel GeneratePerformanceViewModel(Guid[] skillIdList, int dayOffset);
-		IntradayPerformanceViewModel GeneratePerformanceViewModel(Guid[] skillIdList, DateTime nowUtc);
-	}
-
-	public class IntradayPerformanceApplicationService : IIntradayPerformanceApplicationService
+	public class IntradayPerformanceApplicationService
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
-		private readonly IIntradayStatisticsService _statisticsService;
+		private readonly IntradayStatisticsService _statisticsService;
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IIntradayForecastingService _forecastingService;
+		private readonly IntradayForecastingService _forecastingService;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 
 		public IntradayPerformanceApplicationService(
@@ -35,10 +28,10 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			IIntervalLengthFetcher intervalLengthFetcher,
 			ISkillTypeInfoProvider skillTypeInfoProvider,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
-			IIntradayStatisticsService statisticsService,
+			IntradayStatisticsService statisticsService,
 			IScenarioRepository scenarioRepository,
 			ISkillDayLoadHelper skillDayLoadHelper,
-			IIntradayForecastingService forecastingService)
+			IntradayForecastingService forecastingService)
 		{
 			_now = now ?? throw new ArgumentNullException(nameof(now));
 			_timeZone = timeZone ?? throw new ArgumentNullException(nameof(timeZone));

@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LatestStatisticsTimeProvider>().As<ILatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ExtractSkillForecastIntervals>().SingleInstance();
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();
-			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
+			builder.RegisterType<SplitSkillStaffInterval>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
 
 			builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>()
@@ -61,14 +60,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradaySkillProvider>().As<IIntradaySkillProvider>().SingleInstance();
 
 			// Intraday - application layer
-			builder.RegisterType<IntradayStaffingApplicationService>().As<IIntradayStaffingApplicationService>();
-			builder.RegisterType<IntradayPerformanceApplicationService>().As<IIntradayPerformanceApplicationService>();
-			builder.RegisterType<IntradayIncomingTrafficApplicationService>().As<IIntradayIncomingTrafficApplicationService>();
+			builder.RegisterType<IntradayStaffingApplicationService>();
+			builder.RegisterType<IntradayPerformanceApplicationService>();
+			builder.RegisterType<IntradayIncomingTrafficApplicationService>();
 
 			// Intraday - domain layer
-			builder.RegisterType<IntradayForecastingService>().As<IIntradayForecastingService>();
-			builder.RegisterType<IntradayReforecastingService>().As<IIntradayReforecastingService>();
-			builder.RegisterType<IntradayStatisticsService>().As<IIntradayStatisticsService>();
+			builder.RegisterType<IntradayForecastingService>();
+			builder.RegisterType<IntradayReforecastingService>();
+			builder.RegisterType<IntradayStatisticsService>();
 			builder.RegisterType<IntradayStaffingService>().As<IIntradayStaffingService>();
 		}
 	}

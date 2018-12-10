@@ -37,12 +37,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly HangfireUtilities _hangfireUtilities;
 		private readonly IReadModelValidator _readModelValidator;
 		private readonly IStardustRepository _stardustRepository;
-		private readonly IIntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
+		private readonly IntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
 
 		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
 												  IStardustSender stardustSender, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator,
 												  IStardustRepository stardustRepository,
-			IIntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService)
+			IntradayIncomingTrafficApplicationService intradayIncomingTrafficApplicationService)
 		{
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;

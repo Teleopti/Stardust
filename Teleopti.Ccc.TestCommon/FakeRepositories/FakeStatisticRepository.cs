@@ -126,11 +126,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return new DateOnlyPeriod(new DateOnly(stats.Min(x => x.Interval)), new DateOnly(stats.Max(x => x.Interval)));
 		}
 
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
-		{
-			return _intradayStat;
-		}
-
 		private readonly List<IIntradayStatistics> _intradayStat = new List<IIntradayStatistics>();
 
 		public void AddIntradayStatistics(IList<IIntradayStatistics> intradayStat)

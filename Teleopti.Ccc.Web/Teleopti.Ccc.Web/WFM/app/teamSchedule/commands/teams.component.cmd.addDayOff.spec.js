@@ -3,7 +3,6 @@
 		'use strict';
 		var $rootScope,
 			$compile,
-			$document,
 			$q,
 			$httpBackend,
 			fakeDayOffService,
@@ -29,10 +28,9 @@
 				});
 		}));
 
-		beforeEach(inject(function (_$rootScope_, _$compile_, _$document_, _$q_, _$httpBackend_) {
+		beforeEach(inject(function (_$rootScope_, _$compile_, _$q_, _$httpBackend_) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
-			$document = _$document_;
 			$q = _$q_;
 			$httpBackend = _$httpBackend_;
 			$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
@@ -73,8 +71,8 @@
 			var date = "2018-01-09";
 			var panel = setUp(date);
 			var datePicker = panel[0].querySelectorAll('.teamschedule-datepicker');
-			expect(moment(new Date(datePicker[0].querySelector('input').value)).format("YYYY-MM-DD")).toEqual(date);
-			expect(moment(new Date(datePicker[1].querySelector('input').value)).format("YYYY-MM-DD")).toEqual(date);
+			expect(datePicker[0].querySelector('input').value).toEqual('1/9/18');
+			expect(datePicker[1].querySelector('input').value).toEqual('1/9/18');
 		});
 
 		it("should disable apply button unless without template", function () {
@@ -294,13 +292,10 @@
 		});
 
 		function setUp(inputDate) {
-			var date;
+			var date = inputDate || '2016-06-15';
+
 			var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 			var scope = $rootScope.$new();
-			if (inputDate == null)
-				date = moment('2016-06-15').toDate();
-			else
-				date = new Date(inputDate);
 
 			scope.curDate = date;
 

@@ -35,11 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			throw new NotImplementedException();
 		}
 
-		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)
-		{
-			throw new NotImplementedException();
-		}
-
 		public ICollection<MatrixReportInfo> LoadReports()
 		{
 			return null;

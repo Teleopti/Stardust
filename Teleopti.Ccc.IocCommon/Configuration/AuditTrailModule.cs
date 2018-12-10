@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As(t => t.GetInterfaces().Where(i => i == typeof(IPurgeAudit))).AsSelf().SingleInstance();
 			
 			builder.RegisterType<PurgeAuditRunner>().As<IPurgeAuditRunner>().AsSelf().SingleInstance();
+			builder.RegisterType<ResultCountOfAggregatedAudits>().SingleInstance();
 		}
 	}
 }

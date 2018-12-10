@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		public IBlockPreferenceProvider BlockPreferenceProvider { get; }
 
 		public SchedulePostHintInput(IScheduleDictionary schedules, IEnumerable<IPerson> people, DateOnlyPeriod period,
-			IBlockPreferenceProvider blockPreferenceProvider, bool usePreferences) : base(people, period, usePreferences)
+			IBlockPreferenceProvider blockPreferenceProvider, double preferenceValue) : base(people, period, preferenceValue)
 		{
 			Schedules = schedules;
 			BlockPreferenceProvider = blockPreferenceProvider;

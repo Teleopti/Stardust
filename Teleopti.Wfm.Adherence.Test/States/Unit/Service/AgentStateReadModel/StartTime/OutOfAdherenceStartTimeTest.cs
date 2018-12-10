@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel.StartTime
 {
@@ -27,7 +28,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel.St
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, admin, "2017-11-07 8:00", "2017-11-07 9:00")
-				.WithMappedRule("phone", admin, 0, Domain.Configuration.Adherence.Out)
+				.WithMappedRule("phone", admin, 0, Adherence.Configuration.Adherence.Out)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 
 			Now.Is("2017-11-07 8:00");
@@ -49,8 +50,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel.St
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2017-11-07 8:00", "2017-11-07 9:00")
-				.WithMappedRule("loggedoff", phone, 0, Domain.Configuration.Adherence.Out)
-				.WithMappedRule("phone", phone, 0, Domain.Configuration.Adherence.In)
+				.WithMappedRule("loggedoff", phone, 0, Adherence.Configuration.Adherence.Out)
+				.WithMappedRule("phone", phone, 0, Adherence.Configuration.Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 
 			Now.Is("2017-11-07 8:00");
@@ -78,8 +79,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service.AgentStateReadModel.St
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, admin, "2017-11-07 8:00", "2017-11-07 9:00")
-				.WithMappedRule("ready", admin, 0, Domain.Configuration.Adherence.Out)
-				.WithMappedRule("admin", admin, 0, Domain.Configuration.Adherence.Neutral)
+				.WithMappedRule("ready", admin, 0, Adherence.Configuration.Adherence.Out)
+				.WithMappedRule("admin", admin, 0, Adherence.Configuration.Adherence.Neutral)
 				.WithAlarm(TimeSpan.FromMinutes(5));
 
 			Now.Is("2017-11-07 8:00");

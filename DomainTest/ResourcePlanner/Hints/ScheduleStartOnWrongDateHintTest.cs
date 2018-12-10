@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		{
 			Assert.DoesNotThrow(() =>
 			{			
-				Target.Execute(new ScheduleHintInput(new[]{new Person(), }, DateOnly.Today.ToDateOnlyPeriod(), false));
+				Target.Execute(new ScheduleHintInput(new[]{new Person(), }, DateOnly.Today.ToDateOnlyPeriod(), 0));
 			});
 		}
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById(newTimezoneForAgent));
 			
-			return Target.Execute(new SchedulePostHintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, false))
+			return Target.Execute(new SchedulePostHintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, 0))
 				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateHint)));
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timezoneForAgent));
 			var state = StateHolder.Fill(scenario, date, agent);
 			
-			Target.Execute(new SchedulePostHintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, false))
+			Target.Execute(new SchedulePostHintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, 0))
 				.InvalidResources.Any(x => x.ValidationTypes.Contains(typeof(ScheduleStartOnWrongDateHint)))
 				.Should().Be.False();
 		}
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			var state = StateHolder.Fill(scenario, date, agent, ass);
 			
 			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
-			var result = Target.Execute(new SchedulePostHintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, false))
+			var result = Target.Execute(new SchedulePostHintInput(state.Schedules, new[] {agent}, date.ToDateOnlyPeriod(), null, 0))
 				.InvalidResources.Single();
 
 			result.ResourceId.Should().Be.EqualTo(agent.Id.Value);

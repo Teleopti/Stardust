@@ -10,17 +10,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	{
 		private readonly IVisualLayerCollection _projection;
 		private readonly IScheduleDay _schedulePart;
-		private readonly IVisualLayerCollection _schedulePartProjectionMerged;
 
 		public ScheduleProjection(IScheduleDay schedule, IVisualLayerCollection projection)
 		{
 			_schedulePart = schedule;
 			_projection = projection;
-
-			_schedulePartProjectionMerged = new VisualLayerCollection(projection.ToList(),
-												 new ProjectionIntersectingPeriodMerger());
 		}
-
 
 		public IScheduleDay SchedulePart
 		{
@@ -30,11 +25,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		public IVisualLayerCollection SchedulePartProjection
 		{
 			get { return _projection; }
-		}
-
-		public IVisualLayerCollection SchedulePartProjectionMerged
-		{
-			get { return _schedulePartProjectionMerged; }
 		}
 	}
 }

@@ -9,7 +9,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces
         void AddAndSaveLimiter();
 
         void DeleteLimiter(ReadOnlyCollection<int> selectedLimiters);
-
-        void SetActivityTimeLimiterAdapters(IList<IActivityTimeLimiterViewModel> limiters);
     }
 }

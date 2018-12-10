@@ -1,6 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ReportService } from '../../core/report.service';
+import { NavigationService } from '../../core/navigation.service';
 import { Report } from '../../models/Report.model';
+import { Permission } from '../../models/Permission.model';
+import { NzModalService, NzModalRef } from 'ng-zorro-antd';
 
 @Component({
 	selector: 'app-insights-workspace',
@@ -8,38 +11,30 @@ import { Report } from '../../models/Report.model';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-	@Input() initialized: boolean;
-	@Input() isLoading: boolean;
-	@Input() hasViewPermission: boolean;
-	@Input() hasEditPermission: boolean;
-	public canEditReport = false;
-	public enableFilter: boolean;
-	public enableNavContent: boolean;
+	public initialized: boolean;
+	public isLoading: boolean;
+	public reportNameCriteria: string;
+
 	public reports: Report[];
-	public selectedReport: string;
+	public permission: Permission;
+	public newReportName: string = undefined;
+	public messageForNewReportName = '';
+	public refNewReportNameModal: NzModalRef;
 
-	private pbiCoreService: any;
+	@ViewChild('newReportNameTemplate')
+	private newReportNameTempRef: TemplateRef<any>;
 
-	constructor(private reportSvc: ReportService) {
+	constructor(private reportSvc: ReportService,
+		private modalSvc: NzModalService,
+		public nav: NavigationService) {
 		this.initialized = false;
-
-		this.canEditReport = false;
-		this.enableFilter = true;
-		this.enableNavContent = true;
-
-		this.pbiCoreService = new pbi.service.Service(
-			pbi.factories.hpmFactory,
-			pbi.factories.wpmpFactory,
-			pbi.factories.routerFactory
-		);
 	}
 
 	ngOnInit() {
 		this.reportSvc.getPermission().then(permission => {
-			this.hasViewPermission = permission.CanViewReport;
-			this.hasEditPermission = permission.CanEditReport;
+			this.permission = permission;
 
-			if (this.hasViewPermission || this.hasEditPermission) {
+			if (this.permission.CanViewReport) {
 				this.loadReportList();
 			}
 
@@ -47,112 +42,91 @@ export class WorkspaceComponent implements OnInit {
 		});
 	}
 
-	onEmbedded() {}
-
 	loadReportList() {
 		this.isLoading = true;
 		this.reportSvc.getReports().then(reports => {
-			this.reports = [];
-			reports.forEach(report => {
-				if (report.Name.trim() !== 'Report Usage Metrics Report') {
-					this.reports.push(report);
-				}
-			});
-
-			this.reports = this.reports.sort();
+			this.reports = reports.sort();
 			this.isLoading = false;
 		});
-	}
-
-	loadReport(config) {
-		// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
-		const embedConfig = {
-			type: 'report',
-			tokenType: pbi.models.TokenType.Embed,
-			accessToken: config.AccessToken,
-			embedUrl: config.ReportUrl,
-			id: config.ReportId,
-			permissions: pbi.models.Permissions.All,
-			viewMode: this.canEditReport
-				? pbi.models.ViewMode.Edit
-				: pbi.models.ViewMode.View,
-			settings: {
-				filterPaneEnabled: this.enableFilter,
-				navContentPaneEnabled: this.enableNavContent,
-				localeSettings: {
-					language: 'en',
-					formatLocale: 'en'
-				}
-			}
-		};
-
-		// Embed the report and display it within the div container.
-		const reportContainer = this.getReportContainer();
-		const report = this.pbiCoreService.embed(reportContainer, embedConfig);
-
-		// Report.off removes a given event handler if it exists.
-		report.off('loaded');
-
-		// Report.on will add an event handler which prints to Log window.
-		report.on('loaded', function() {
-			// console.log('Report loaded');
-		});
-
-		this.isLoading = true;
-	}
-
-	loadSelectedReport(selectedReportId) {
-		this.pbiCoreService.reset(this.getReportContainer());
-		if (selectedReportId) {
-			this.isLoading = true;
-			this.reportSvc.getReportConfig(selectedReportId).then(config => {
-				this.loadReport(config);
-				this.isLoading = false;
-			});
-		}
 	}
 
 	getReportContainer() {
 		return <HTMLElement>document.getElementById('reportContainer');
 	}
 
-	public onReportSelected(selectedReportId) {
-		this.selectedReport = selectedReportId;
-		this.loadSelectedReport(this.selectedReport);
+	cancelCreateReport(): void {
+		this.refNewReportNameModal.destroy();
+		this.newReportName = undefined;
 	}
 
-	public reloadCurrentReport() {
-		this.loadSelectedReport(this.selectedReport);
-	}
+	createReport(): boolean {
+		if (!this.newReportName || this.newReportName.trim().length === 0) {
+			return false;
+		}
 
-	public cloneCurrentReport() {
+		if (this.refNewReportNameModal !== undefined) {
+			this.refNewReportNameModal.destroy();
+		}
+
 		this.isLoading = true;
-		this.reportSvc.cloneReport(this.selectedReport).then(config => {
+		this.reportSvc.createReport(this.newReportName).then((newReport) => {
+			this.nav.editReport({
+				Id: newReport.ReportId,
+				Name: newReport.ReportName,
+			});
+			return true;
+		});
+
+		this.newReportName = undefined;
+	}
+
+	cloneReport(report): boolean {
+		if (!this.newReportName || this.newReportName.trim().length === 0) {
+			return false;
+		}
+
+		if (this.refNewReportNameModal !== undefined) {
+			this.refNewReportNameModal.destroy();
+		}
+
+		this.isLoading = true;
+		this.reportSvc.cloneReport(report.Id, this.newReportName).then(() => {
 			this.loadReportList();
-			this.loadReport(config);
-			this.isLoading = false;
+			return true;
+		});
+
+		this.newReportName = undefined;
+	}
+
+	public confirmCreateReport(report) {
+		this.messageForNewReportName = `Please input name for new report:`;
+		this.refNewReportNameModal = this.modalSvc.create({
+			nzTitle: 'Create new report',
+			nzContent: this.newReportNameTempRef,
+			nzOnOk: () => this.createReport(),
+			nzOnCancel: () => this.cancelCreateReport()
 		});
 	}
 
-	public onCanEditReportChanged() {
-		this.canEditReport = !this.canEditReport;
-		if (this.canEditReport) {
-			this.enableFilter = true;
-			this.enableNavContent = true;
-		}
+	public confirmCloneReport(report) {
+		this.messageForNewReportName = `Please input name for new copy of report "${report.Name}":`;
+		this.refNewReportNameModal = this.modalSvc.create({
+			nzTitle: 'Save as new report',
+			nzContent: this.newReportNameTempRef,
+			nzOnOk: () => this.cloneReport(report),
+			nzOnCancel: () => this.cancelCreateReport()
+		});
 	}
 
-	public onEnableFilterChanged() {
-		this.enableFilter = !this.enableFilter;
-		if (!this.enableNavContent || !this.enableFilter) {
-			this.canEditReport = false;
-		}
-	}
-
-	public onEnableNavContentChanged() {
-		this.enableNavContent = !this.enableNavContent;
-		if (!this.enableNavContent || !this.enableFilter) {
-			this.canEditReport = false;
-		}
+	public deleteReport(report) {
+		this.isLoading = true;
+		this.reportSvc.deleteReport(report.Id).then(deleted => {
+			this.isLoading = false;
+			if (deleted) {
+				this.loadReportList();
+			} else {
+				console.log('Failed to delete report "' + report.Name + '"');
+			}
+		});
 	}
 }
