@@ -7,11 +7,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 		private readonly FilterMapper _filterMapper;
+		private readonly IPlanningGroupSettingsModelPersister _planningGroupSettingsModelPersister;
 
-		public PlanningGroupModelPersister(IPlanningGroupRepository planningGroupRepository, FilterMapper filterMapper)
+		public PlanningGroupModelPersister(IPlanningGroupRepository planningGroupRepository, FilterMapper filterMapper, IPlanningGroupSettingsModelPersister planningGroupSettingsModelPersister)
 		{
 			_planningGroupRepository = planningGroupRepository;
 			_filterMapper = filterMapper;
+			_planningGroupSettingsModelPersister = planningGroupSettingsModelPersister;
 		}
 
 		public void Persist(PlanningGroupModel planningGroupModel)
@@ -37,6 +39,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var filter in planningGroupModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))
 			{
 				planningGroup.AddFilter(filter);
+			}
+
+			foreach (var setting in planningGroupModel.Settings)
+			{
+				_planningGroupSettingsModelPersister.Persist(setting);
 			}
 		}
 
