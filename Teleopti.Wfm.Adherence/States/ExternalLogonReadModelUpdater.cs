@@ -9,9 +9,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.States;
 
-namespace Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels
+namespace Teleopti.Wfm.Adherence.States
 {
 	public class ExternalLogonReadModelUpdater : 
 		IRunOnHangfire,

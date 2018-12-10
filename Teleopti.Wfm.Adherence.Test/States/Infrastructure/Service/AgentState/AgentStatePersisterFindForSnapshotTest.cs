@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 

@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Code

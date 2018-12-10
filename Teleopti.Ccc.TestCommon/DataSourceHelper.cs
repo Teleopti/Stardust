@@ -15,7 +15,6 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Support.Library;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 using Environment = NHibernate.Cfg.Environment;
 using ServiceLocatorForLegacy = Teleopti.Ccc.Infrastructure.ServiceLocatorForLegacy;

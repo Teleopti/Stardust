@@ -449,43 +449,43 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				CurrentPersistedName = "AgentStateMaintainer",
 				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.Domain.Service.AgentStateMaintainer, Teleopti.Wfm.Adherence"},
-				CurrentTypeName = "Teleopti.Wfm.Adherence.Domain.Service.AgentStateMaintainer, Teleopti.Wfm.Adherence"
+				CurrentTypeName = "Teleopti.Wfm.Adherence.States.AgentStateMaintainer, Teleopti.Wfm.Adherence"
 			};
 			yield return new MappingSpec
 			{
 				CurrentPersistedName = "ScheduleChangeProcessor",
 				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.Domain.Service.ScheduleChangeProcessor, Teleopti.Wfm.Adherence"},
-				CurrentTypeName = "Teleopti.Wfm.Adherence.Domain.Service.ScheduleChangeProcessor, Teleopti.Wfm.Adherence"
+				CurrentTypeName = "Teleopti.Wfm.Adherence.States.ScheduleChangeProcessor, Teleopti.Wfm.Adherence"
 			};
 			yield return new MappingSpec
 			{
 				CurrentPersistedName = "AgentStateReadModelMaintainer",
 				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.AgentStateReadModelMaintainer, Teleopti.Wfm.Adherence"},
-				CurrentTypeName = "Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.AgentStateReadModelMaintainer, Teleopti.Wfm.Adherence"
+				CurrentTypeName = "Teleopti.Wfm.Adherence.Monitor.AgentStateReadModelMaintainer, Teleopti.Wfm.Adherence"
 			};
 			yield return new MappingSpec
 			{
 				CurrentPersistedName = "ExternalLogonReadModelUpdater",
 				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.ExternalLogonReadModelUpdater, Teleopti.Wfm.Adherence"},
-				CurrentTypeName = "Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.ExternalLogonReadModelUpdater, Teleopti.Wfm.Adherence"
+				CurrentTypeName = "Teleopti.Wfm.Adherence.States.ExternalLogonReadModelUpdater, Teleopti.Wfm.Adherence"
 			};
 			yield return new MappingSpec
 			{
 				CurrentPersistedName = "HistoricalOverviewReadModelMaintainer",
 				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.HistoricalOverviewReadModelMaintainer, Teleopti.Wfm.Adherence"},
-				CurrentTypeName = "Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.HistoricalOverviewReadModelMaintainer, Teleopti.Wfm.Adherence"
+				CurrentTypeName = "Teleopti.Wfm.Adherence.Historical.HistoricalOverviewReadModelMaintainer, Teleopti.Wfm.Adherence"
 			};
 			yield return new MappingSpec
 			{
 				CurrentPersistedName = "MappingReadModelUpdater",
 				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.MappingReadModelUpdater, Teleopti.Wfm.Adherence"},
-				CurrentTypeName = "Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.MappingReadModelUpdater, Teleopti.Wfm.Adherence"
+				CurrentTypeName = "Teleopti.Wfm.Adherence.States.MappingReadModelUpdater, Teleopti.Wfm.Adherence"
 			};
 			yield return new MappingSpec
 			{
 				CurrentPersistedName = "RtaEventStoreMaintainer",
 				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.RtaEventStoreMaintainer, Teleopti.Wfm.Adherence"},
-				CurrentTypeName = "Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.RtaEventStoreMaintainer, Teleopti.Wfm.Adherence"
+				CurrentTypeName = "Teleopti.Wfm.Adherence.Historical.RtaEventStoreMaintainer, Teleopti.Wfm.Adherence"
 			};
 
 

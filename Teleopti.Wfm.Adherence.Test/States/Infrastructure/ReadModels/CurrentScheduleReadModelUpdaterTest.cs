@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 

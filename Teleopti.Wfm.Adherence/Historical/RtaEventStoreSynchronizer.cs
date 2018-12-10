@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
-
-using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.Historical
 {
 	public interface IRtaEventStoreSynchronizer
 	{

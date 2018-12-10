@@ -13,8 +13,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.Service;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.PerformanceMeasurement
 {

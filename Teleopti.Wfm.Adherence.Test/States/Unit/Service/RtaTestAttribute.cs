@@ -3,8 +3,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.Monitor;
 using Teleopti.Wfm.Adherence.States;
 

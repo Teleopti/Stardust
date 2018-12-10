@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels;
-using Teleopti.Wfm.Adherence.Domain.Service;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.States.Infrastructure;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
