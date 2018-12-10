@@ -17,7 +17,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 
 namespace Teleopti.Ccc.TestCommon.IoC

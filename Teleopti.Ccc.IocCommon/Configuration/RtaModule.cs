@@ -11,12 +11,8 @@ using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Hangfire;
-
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Configuration;
-using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;

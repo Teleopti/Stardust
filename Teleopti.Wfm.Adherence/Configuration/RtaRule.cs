@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Configuration.Events;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {

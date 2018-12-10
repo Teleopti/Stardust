@@ -3,11 +3,10 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Historical;
 
-
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.States.Events
 {
-	[JsonObject(Id = "ShiftEnd")]
-	public class PersonShiftEndEvent : IEvent, IRtaStoredEvent
+	[JsonObject(Id = "ShiftStart")]
+	public class PersonShiftStartEvent : IEvent, IRtaStoredEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }
@@ -19,8 +18,8 @@ namespace Teleopti.Wfm.Adherence.Domain.Events
 			{
 				PersonId = PersonId,
 				BelongsToDate = BelongsToDate,
-				StartTime = ShiftEndTime,
-				EndTime = ShiftEndTime
+				StartTime = ShiftStartTime,
+				EndTime = ShiftStartTime
 			};
 	}
 }

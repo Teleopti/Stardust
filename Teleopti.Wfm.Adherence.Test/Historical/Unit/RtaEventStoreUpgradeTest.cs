@@ -2,15 +2,14 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.Events;
 using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 {

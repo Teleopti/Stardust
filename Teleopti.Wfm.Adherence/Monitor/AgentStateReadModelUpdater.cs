@@ -6,8 +6,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Monitor
 {

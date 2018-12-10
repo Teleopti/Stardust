@@ -3,8 +3,7 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Historical;
 
-
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.States.Events
 {
 	[JsonObject(Id = "StateChanged")]
 	public class PersonStateChangedEvent : IRtaStoredEvent, IEvent, ISolidProof

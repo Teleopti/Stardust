@@ -8,8 +8,8 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Events;
 using Teleopti.Wfm.Adherence.States.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical.Infrastructure

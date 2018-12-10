@@ -12,7 +12,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 {

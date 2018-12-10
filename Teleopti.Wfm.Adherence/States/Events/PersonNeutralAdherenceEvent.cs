@@ -1,10 +1,9 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.States.Events
 {
-	public class PersonOutOfAdherenceEvent : IEvent
+	public class PersonNeutralAdherenceEvent : IEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }

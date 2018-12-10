@@ -3,17 +3,15 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Events;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure

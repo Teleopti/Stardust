@@ -3,11 +3,10 @@ using System.Drawing;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Configuration;
-using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

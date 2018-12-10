@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Historical.Events;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {

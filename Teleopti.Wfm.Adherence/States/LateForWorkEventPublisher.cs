@@ -1,6 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.States
 {

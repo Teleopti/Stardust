@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.Configuration.Events
 {
 	public class RtaMapChangedEvent : EventWithLogOnContext
 	{

@@ -1,10 +1,8 @@
 using System;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Historical;
 
-
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.Historical.Events
 {
 	[JsonObject(Id = "ApprovedAsInAdherence")]
 	public class PeriodApprovedAsInAdherenceEvent : IRtaStoredEvent, IEvent

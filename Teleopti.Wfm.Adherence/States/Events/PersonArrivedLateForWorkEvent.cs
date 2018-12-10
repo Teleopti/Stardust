@@ -3,15 +3,17 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Historical;
 
-
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.States.Events
 {
-	[JsonObject(Id = "AdherenceDayStart")]
-	public class PersonAdherenceDayStartEvent : IEvent, ISolidProof, IRtaStoredEvent
+	[JsonObject(Id = "ArrivedLateForWork")]
+	public class PersonArrivedLateForWorkEvent : IRtaStoredEvent, IEvent, ISolidProof
 	{
 		public Guid PersonId { get; set; }
-		public DateTime Timestamp { get; set; }
 		public DateOnly? BelongsToDate { get; set; }
+
+		public DateTime Timestamp { get; set; }
+
+		public DateTime ShiftStart { get; set; }
 
 		public string StateName { get; set; }
 		public string ActivityName { get; set; }

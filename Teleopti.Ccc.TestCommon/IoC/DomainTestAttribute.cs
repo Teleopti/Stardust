@@ -47,7 +47,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Wfm.Adherence.Configuration;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.Monitor.Infrastructure;

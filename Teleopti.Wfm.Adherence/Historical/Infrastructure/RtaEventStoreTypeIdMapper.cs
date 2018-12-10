@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 {

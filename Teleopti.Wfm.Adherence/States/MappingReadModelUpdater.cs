@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Wfm.Adherence.Configuration;
-using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Configuration.Events;
 using Teleopti.Wfm.Adherence.States.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.States

@@ -1,13 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.States;

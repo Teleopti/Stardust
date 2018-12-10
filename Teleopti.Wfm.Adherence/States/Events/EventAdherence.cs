@@ -1,4 +1,4 @@
-namespace Teleopti.Wfm.Adherence.Domain.Events
+namespace Teleopti.Wfm.Adherence.States.Events
 {
 	public enum EventAdherence
 	{
