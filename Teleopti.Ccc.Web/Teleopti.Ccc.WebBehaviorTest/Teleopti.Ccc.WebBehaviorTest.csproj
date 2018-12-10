@@ -726,6 +726,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\RestrictModifySkillGroups_78568.feature.cs">
+      <DependentUpon>RestrictModifySkillGroups_78568.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\ReviewHistoricalAdherence_74770.feature.cs">
       <DependentUpon>ReviewHistoricalAdherence_74770.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1230,6 +1235,10 @@
     <None Include="Wfm\Permissions\PermissionsNew.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PermissionsNew.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\RestrictModifySkillGroups_78568.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Agents.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\ReviewHistoricalAdherence_74770.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -22,7 +22,7 @@
 		RTA_TooManyPersonAssociationChangedEvents_Packages_78669,
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
-		RTA_ManageSkillGroupPermission_78568,
+		RTA_RestrictModifySkillGroups_78568,
 		
 		
 		MessageBroker_HttpSenderThrottleRequests_79140,

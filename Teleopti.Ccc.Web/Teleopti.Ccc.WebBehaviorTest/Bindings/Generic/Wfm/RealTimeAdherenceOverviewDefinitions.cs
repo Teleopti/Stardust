@@ -67,5 +67,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.Click($"[name='{name}']");
 		}
+		
+		[Then(@"I should not be able to modify skill groups")]
+		public void ThenIShouldNotBeAbleToModifySkillGroups()
+		{
+			Browser.Interactions.AssertNotExists(".rta-filter-panel", "#manage_skill_group_button");
+		}
+		
+		[Then(@"I should be able to modify skill groups")]
+		public void ThenIShouldBeAbleToModifySkillGroups()
+		{
+			Browser.Interactions.AssertExists("#manage_skill_group_button");
+		}
 	}
 }
