@@ -23,7 +23,6 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 			var example = typeof(PersonStateChangedEvent);
 			return example.Assembly
 				.GetTypes()
-				.Where(x => x.Namespace == example.Namespace)
 				.Where(x => x.IsClass)
 				.Where(x => typeof(IRtaStoredEvent).IsAssignableFrom(x))
 				.ToDictionary(eventTypeId, x => x);
