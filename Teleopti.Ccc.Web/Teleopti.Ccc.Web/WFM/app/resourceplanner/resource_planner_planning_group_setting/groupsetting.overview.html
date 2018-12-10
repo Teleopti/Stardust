@@ -41,7 +41,7 @@
 								<md-tooltip>{{'Set priority lower' | translate }}</md-tooltip>
 							</i>
 						</div>
-						<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditSchedulingSetting(setting)">
+						<div tabindex=0 class="context-menu card-context" ng-show="!setting.editing" ng-click="setting.editing=true;$event.stopPropagation();">
 							<i class=" mdi mdi-pencil pointer">
 								<md-tooltip>{{'EditFilter' | translate }}</md-tooltip>
 							</i>
@@ -54,7 +54,7 @@
 					</div>
 				</card-panel-header>
 				<card-panel-content>
-					<div class="con-row demo-outline pg-setting-card-content">
+					<div class="con-row demo-outline pg-setting-card-content" ng-show="!setting.editing">
 						<div class="con-flex">
 							<div class="con-row">
 								<div class="con-flex" ng-show="!setting.Default">
@@ -141,6 +141,7 @@
 							</div>
 						</div>
 					</div>
+					<planning-group-setting planning-group-id="vm.planningGroup.Id" planning-group-setting-id="setting.Id" ng-show="setting.editing"></planning-group-setting>
 				</card-panel-content>
 			</card-panel>
 		</card-panel-list>

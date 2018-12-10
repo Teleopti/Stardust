@@ -1,15 +1,3 @@
-<div class="view-header">
-	<div class="view-title" ng-if='vm.isEdit'>
-		<h1>
-			<i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.settingInfo.PlanningGroupId}}/selectplanningperiod">{{vm.planningGroupName}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.settingInfo.PlanningGroupId}}/settings">{{'PlanGroupScheduling' | translate}}</a> / {{'Edit' | translate}}
-		</h1>
-	</div>
-	<div class="view-title" ng-if='!vm.isEdit'>
-		<h1>
-			<i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.settingInfo.PlanningGroupId}}/selectplanningperiod">{{vm.planningGroupName}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.settingInfo.PlanningGroupId}}/settings">{{'PlanGroupScheduling' | translate}}</a> / {{'Create' | translate}}
-		</h1>
-	</div>
-</div>
 <div class="con-row">
 	<div class="con-flex">
 		<form name="form" class="wfm-form">
@@ -195,15 +183,6 @@
 					</div>
 				</div>
 			</div>
-		<div class="wfm-toolbar material-depth-1">
-			<div class="con-row">
-				<div class="con-flex line-right">
-					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelCreate()" translate>Cancel</button>
-					<button class="wfm-btn save-scheduling-setting" ng-disabled="!vm.isValid() || vm.requestSent" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
-					 ng-click="vm.persist()" translate>Save</button>
-				</div>
-			</div>
-		</div>
 		</form>
 	</div>
 </div>

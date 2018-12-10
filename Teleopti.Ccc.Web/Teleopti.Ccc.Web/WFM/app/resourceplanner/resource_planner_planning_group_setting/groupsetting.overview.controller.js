@@ -4,7 +4,7 @@
 	angular
 		.module('wfm.resourceplanner')
 		.controller('planningGroupSettingOverviewController', overviewController)
-		.directive('planningGroupSetting', planningGroupSettingOverviewDirective);
+		.directive('planningGroupSettingsOverview', planningGroupSettingOverviewDirective);
 
 	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'PlanGroupSettingService', 'localeLanguageSortingService'];
 

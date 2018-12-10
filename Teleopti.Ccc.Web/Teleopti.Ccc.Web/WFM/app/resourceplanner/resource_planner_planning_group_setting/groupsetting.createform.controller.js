@@ -3,14 +3,15 @@
 
     angular
         .module('wfm.resourceplanner')
-        .controller('planningGroupSettingEditController', Controller);
+        .controller('planningGroupSettingEditController', Controller)
+		.directive('planningGroupSetting', planningGroupSettingDirective);
 
-    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService', 'planningGroupInfo'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
 
-    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService, planningGroupInfo) {
+    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService) {
         var vm = this;
 
-        var filterId = $stateParams.filterId ? $stateParams.filterId : null;
+        var filterId = vm.planningGroupSettingId ? vm.planningGroupSettingId : null;
         vm.isEdit = !!filterId;
         vm.settingInfo = {
             BlockSameShift: false,
@@ -31,9 +32,8 @@
             Filters: [],
 			Default: false,
             Name: "",
-            PlanningGroupId: $stateParams.groupId
+            PlanningGroupId: vm.planningGroupId
         };
-        vm.planningGroupName = planningGroupInfo.Name;
         
         vm.blockFinderTypeOptions = [
 			"Off",
@@ -219,4 +219,17 @@
             $state.go('resourceplanner.settingoverview', { groupId: $stateParams.groupId });
         }
     }
+
+	function planningGroupSettingDirective() {
+		return {
+			restrict: 'EA',
+			scope: {
+				planningGroupId: '=',
+				planningGroupSettingId: '='
+			},
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',
+			controller: 'planningGroupSettingEditController as vm',
+			bindToController: true
+		};
+	}
 })();
