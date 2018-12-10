@@ -107,16 +107,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRulesModel.Default.Should().Be.False();
 			dayOffRulesModel.Name.Should().Be.EqualTo(curr.Name);
 		}
-
-		[Test]
-		public void ShouldFetchPreferenceValue()
-		{
-			var planningGroup = new PlanningGroup();
-			planningGroup.SetGlobalValues(new Percent(0.22));
-			PlanningGroupRepository.Has(planningGroup);
-			Target.Fetch(planningGroup.Settings.Single(x => x.Default).Id.Value).PreferencePercent
-				.Should().Be.EqualTo(22);
-		}
 		
 		[Test]
 		public void ShouldFetchPlanningGroupName()

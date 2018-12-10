@@ -120,7 +120,9 @@
 				return planningGroupService.savePlanningGroup({
 					Id: editPlanningGroup ? editPlanningGroup.Id : null,
 					Name: vm.name,
-					Filters: vm.selectedResults
+					Filters: vm.selectedResults,
+					Settings: editPlanningGroup ? editPlanningGroup.Settings : [],
+					PreferencePercent: editPlanningGroup ? editPlanningGroup.PreferencePercent : 0
 				}).$promise.then(function () {
 					returnToOverview();
 				});

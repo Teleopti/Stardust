@@ -205,7 +205,8 @@
 		return {
 			restrict: 'EA',
 			scope: {
-				settingInfo: '='
+				settingInfo: '=',
+				preferencePercent: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',
 			controller: 'planningGroupSettingEditController as vm',

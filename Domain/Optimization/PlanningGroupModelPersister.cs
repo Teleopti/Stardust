@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private void setProperties(PlanningGroup planningGroup, PlanningGroupModel planningGroupModel)
 		{
 			planningGroup.Name = planningGroupModel.Name;
+			planningGroup.SetGlobalValues(new Percent(planningGroupModel.PreferencePercent / 100d));
 
 			planningGroup.ClearFilters();
 			foreach (var filter in planningGroupModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))

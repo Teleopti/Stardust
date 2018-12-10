@@ -57,13 +57,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Id = defaultSetting.Id.Value,
 				PlanningGroupId = planningGroup.Id.Value,
-				PreferencePercent = 24
 			};
 			
-			Target.Persist(new PlanningGroupModel()
+			Target.Persist(new PlanningGroupModel
 			{
 				Id = planningGroup.Id.Value,
-				Settings = new []{model}
+				Settings = new []{model},
+				PreferencePercent = 24
 			});
 			
 			PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.PreferenceValue.Should().Be.EqualTo(new Percent(0.24));
