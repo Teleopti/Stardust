@@ -95,7 +95,7 @@ Scenario: Should show command check after adding person activity on top of NOT A
 		| StartTime     | 2016-10-10 12:00 |
 		| EndTime       | 2016-10-10 13:00 |
 		| Is next day   | false            |
-	And I apply add personal activity
+	When I apply my new activity
 	Then I should be able to see command check
 
 
