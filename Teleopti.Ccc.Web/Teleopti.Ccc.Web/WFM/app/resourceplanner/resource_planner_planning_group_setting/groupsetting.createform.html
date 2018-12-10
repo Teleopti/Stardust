@@ -137,14 +137,14 @@
 					</div>
 					<div class="con-row" style="padding-left: 5px">
 						<div class="con-flex">
-							<md-radio-group ng-model="vm.blockFinderType">
+							<md-radio-group ng-model="vm.blockFinderType" ng-change="vm.blockFinderTypeOptionChanged()">
 								<md-radio-button ng-repeat="option in vm.blockFinderTypeOptions" ng-value="option">
 									<span>{{ option | translate}}</span>
 								</md-radio-button>
 							</md-radio-group>
 						</div>
 						<div class="con-flex split-3-1" ng-if="vm.blockFinderType !== 'Off'">
-							<md-radio-group ng-model="vm.blockComparisonType">
+							<md-radio-group ng-model="vm.blockComparisonType" ng-change="vm.blockComparisonTypeOptionChanged()">
 								<md-radio-button ng-repeat="option in vm.blockComparisonTypeOptions" ng-value="option">
 									<span>{{ option | translate}}</span>
 								</md-radio-button>

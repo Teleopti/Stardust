@@ -20,6 +20,7 @@
 		vm.editPlanningGroup = editPlanningGroup;
 		vm.planningGroupId = null;
 		vm.isEditGroup = !!editPlanningGroup;
+		vm.planningGroupSettings = [];
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;

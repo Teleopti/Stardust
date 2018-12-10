@@ -68,6 +68,8 @@
         vm.removeSelectedFilter = removeSelectedFilter;
         vm.cancelCreate = returnFromCreate;
         vm.persist = persist;
+        vm.blockFinderTypeOptionChanged = blockFinderTypeOptionChanged;
+        vm.blockComparisonTypeOptionChanged = blockComparisonTypeOptionChanged;
 
         checkIfEditDefaultRule();
 
@@ -199,6 +201,16 @@
                 return;
             $state.go('resourceplanner.settingoverview', { groupId: $stateParams.groupId });
         }
+        
+        function blockFinderTypeOptionChanged(){
+			vm.settingInfo.BlockFinderType = vm.blockFinderTypeOptions.indexOf(vm.blockFinderType);
+		}
+        
+        function blockComparisonTypeOptionChanged(){
+			for (var i = 0; i < vm.blockComparisonTypeOptions.length; i++) {
+				vm.settingInfo[vm.blockComparisonTypeOptions[i]] = (vm.blockComparisonType===vm.blockComparisonTypeOptions[i]);
+			}
+		}
     }
 
 	function planningGroupSettingDirective() {
