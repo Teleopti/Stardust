@@ -144,7 +144,7 @@
 				)
 				.then(function (response) {
 					vm.history = [];
-
+					if (response.data.length < 1) {
 						vm.error = "No history found";
 					} else {
 						vm.history = response.data;
