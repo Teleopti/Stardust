@@ -16,7 +16,7 @@
 				<div class="person-name nowrap">{{shift.Name}}</div>
 			</td>
 			<td class="schedule schedule-column">
-				<div class="requests-shift-layer-container pull-left text-center inline-block relative">
+				<div class="requests-shift-layer-container pull-left text-center inline-block relative" style="width: 100%;height: 30px;">
 
 					<div class="dayoff cursor-pointer absolute" ng-if="shift.IsDayOff">
 						<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
@@ -26,7 +26,7 @@
 
 					<span ng-if="shift.IsNotScheduled">{{ 'NotScheduled' | translate }}</span>
 
-					<div class="layer absolute cursor-pointer"
+					<div class="layer absolute cursor-pointer" style="height:100%"
 						 ng-repeat="projection in shift.Periods"
 						 ng-style=" {backgroundColor: projection.Color, left: projection.StartPositionPercentage * 100 + '%', width: (projection.EndPositionPercentage - projection.StartPositionPercentage) * 100 + '%', color: projection.TextColor}"
 						 ng-class="{'overtime-light': projection.IsOvertime && projection.TextColor == 'white', 'overtime-dark': projection.IsOvertime && projection.TextColor == 'black'}">
