@@ -3,32 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public class ScheduleStorageRepositoryWrapper : IScheduleStorageRepositoryWrapper
 	{
-		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-
 		private readonly IDictionary<Type, Func<object>> _mappings;
 
-		public ScheduleStorageRepositoryWrapper(IRepositoryFactory repositoryFactory, ICurrentUnitOfWork currentUnitOfWork)
+		public ScheduleStorageRepositoryWrapper(Func<IPersonAssignmentRepository> personAssignmentRepository,
+			Func<IPersonAbsenceRepository> personAbsenceRepository,
+			Func<IPreferenceDayRepository> preferenceDayRepository, Func<INoteRepository> noteRepository,
+			Func<IPublicNoteRepository> publicNoteRepository,
+			Func<IStudentAvailabilityDayRepository> studentAvailabilityDayRepository,
+			Func<IAgentDayScheduleTagRepository> agentDayScheduleTagRepository,
+			Func<IOvertimeAvailabilityRepository> overtimeAvailabilityRepository)
 		{
-			_repositoryFactory = repositoryFactory;
-			_currentUnitOfWork = currentUnitOfWork;
-
 			_mappings = new Dictionary<Type, Func<object>>
 			{
-				{typeof(IPersonAssignment), () => _repositoryFactory.CreatePersonAssignmentRepository(_currentUnitOfWork.Current())},
-				{typeof(IPersonAbsence), () => _repositoryFactory.CreatePersonAbsenceRepository(_currentUnitOfWork.Current())},
-				{typeof(IPreferenceDay), () => _repositoryFactory.CreatePreferenceDayRepository(_currentUnitOfWork.Current())},
-				{typeof(INote), () => _repositoryFactory.CreateNoteRepository(_currentUnitOfWork.Current())},
-				{typeof(IStudentAvailabilityDay), () => _repositoryFactory.CreateStudentAvailabilityDayRepository(_currentUnitOfWork.Current())},
-				{typeof(IPublicNote), () => _repositoryFactory.CreatePublicNoteRepository(_currentUnitOfWork.Current())},
-				{typeof(IAgentDayScheduleTag), () => _repositoryFactory.CreateAgentDayScheduleTagRepository(_currentUnitOfWork.Current())},
-				{typeof(IOvertimeAvailability), () => _repositoryFactory.CreateOvertimeAvailabilityRepository(_currentUnitOfWork.Current())}
+				{typeof(IPersonAssignment), personAssignmentRepository},
+				{typeof(IPersonAbsence), personAbsenceRepository},
+				{typeof(IPreferenceDay), preferenceDayRepository},
+				{typeof(INote), noteRepository},
+				{typeof(IStudentAvailabilityDay), studentAvailabilityDayRepository},
+				{typeof(IPublicNote), () => publicNoteRepository},
+				{typeof(IAgentDayScheduleTag), agentDayScheduleTagRepository},
+				{typeof(IOvertimeAvailability), overtimeAvailabilityRepository}
 			};
 		}
 

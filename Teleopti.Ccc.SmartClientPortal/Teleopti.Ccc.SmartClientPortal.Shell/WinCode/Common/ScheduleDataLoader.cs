@@ -26,9 +26,31 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		{
 			IList<IPerson> persons = new List<IPerson> { person };
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-			var repositoryFactory = new RepositoryFactory();
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make());
+			var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+			var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
+			var noteRepository = new NoteRepository(currentUnitOfWork);
+			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
+			var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
+			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
+			var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
+				personAssignmentRepository, personAbsenceRepository,
+				new MeetingRepository(currentUnitOfWork), agentDayScheduleTagRepository,
+				noteRepository, publicNoteRepository,
+				preferenceDayRepository, studentAvailabilityDayRepository,
+				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
+				overtimeAvailabilityRepository,
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+					() => personAbsenceRepository,
+					() => preferenceDayRepository, () => noteRepository,
+					() => publicNoteRepository,
+					() => studentAvailabilityDayRepository,
+					() => agentDayScheduleTagRepository,
+					() => overtimeAvailabilityRepository),
+				CurrentAuthorization.Make());
 			_schedulerStateHolder.LoadSchedules(scheduleRepository, persons, scheduleDictionaryLoadOptions, dateTimePeriod);
 		}
 	}

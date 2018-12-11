@@ -32,13 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			Assert.IsNotNull(new RepositoryFactory().CreatePersonRepository(uow));
 		}
-
-		[Test]
-		public void VerifyPersonAbsenceAccountRepositoryCanBeCreated()
-		{
-			Assert.IsNotNull(new RepositoryFactory().CreatePersonAbsenceAccountRepository(uow));
-		}
-
+		
 		/// <summary>
 		/// Verifies the skill repository can be created.
 		/// </summary>
@@ -63,19 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			Assert.IsNotNull(new RepositoryFactory().CreateBudgetGroupRepository(uow));
 		}
-
-		[Test]
-		public void VerifyCreatePersonAssignmentRepository()
-		{
-			Assert.IsNotNull(new RepositoryFactory().CreatePersonAssignmentRepository(uow));
-		}
-
-		[Test]
-		public void VerifyCreatePersonAbsenceRepository()
-		{
-			Assert.IsNotNull(new RepositoryFactory().CreatePersonAbsenceRepository(uow));
-		}
-
+		
 		[Test]
 		public void VerifyCreateScenarioRepository()
 		{
@@ -178,19 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			Assert.IsNotNull(new RepositoryFactory().CreateContractRepository(uow));
 		}
-
-		[Test]
-		public void VerifyCreatePersonRotationRepository()
-		{
-			Assert.IsNotNull(new RepositoryFactory().CreatePersonRotationRepository(uow));
-		}
-
-		[Test]
-		public void VerifyCreatePersonAvailabilityRepository()
-		{
-			Assert.IsNotNull(new RepositoryFactory().CreatePersonAvailabilityRepository(uow));
-		}
-
+		
 		[Test]
 		public void VerifyCreateDayOffRepository()
 		{
@@ -291,24 +261,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyCreateExtendedPreferenceTemplateRepository()
 		{
 			Assert.IsNotNull(new RepositoryFactory().CreateExtendedPreferenceTemplateRepository(uow));
-		}
-
-		[Test]
-		public void VerifyCreateNoteRepository()
-		{
-			Assert.IsNotNull(new RepositoryFactory().CreateNoteRepository(uow));
-		}
-
-		[Test]
-		public void VerifyCreatePublicNoteRepository()
-		{
-			Assert.IsNotNull(new RepositoryFactory().CreatePublicNoteRepository(uow));
-		}
-
-		[Test]
-		public void VerifyCreateAgentDayScheduleTagRepository()
-		{
-			Assert.IsNotNull(new RepositoryFactory().CreateAgentDayScheduleTagRepository(uow));
 		}
 	}
 }

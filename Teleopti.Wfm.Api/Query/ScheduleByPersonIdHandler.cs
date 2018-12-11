@@ -31,23 +31,28 @@ namespace Teleopti.Wfm.Api.Query
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false), period, _scenarioRepository.LoadDefaultScenario());
 			var scheduleDays = schedule[person].ScheduledDayCollection(period);
+			var currentUser = _loggedOnUser.CurrentUser();
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			return new QueryResultDto<ScheduleDto>
 			{
 				Successful = true,
-				Result = scheduleDays.Select(p => new ScheduleDto
+				Result = scheduleDays.Select(p =>
 				{
-					Date = p.DateOnlyAsPeriod.DateOnly.Date,
-					Shift = p.ProjectionService().CreateProjection().Select(l => new ShiftLayerDto
+					return new ScheduleDto
 					{
-						Name = l.Payload.ConfidentialDescription(_loggedOnUser.CurrentUser()).Name,
-						StartTime = l.Period.StartDateTime,
-						EndTime = l.Period.EndDateTime,
-						PayloadId = l.Payload.Id.GetValueOrDefault(),
-						IsAbsence = l.Payload is IAbsence,
-						DisplayColor = l.Payload.ConfidentialDisplayColor(_loggedOnUser.CurrentUser()).ToArgb()
-					}).ToArray(),
-					PersonId = person.Id.GetValueOrDefault(),
-					TimeZoneId = person.PermissionInformation.DefaultTimeZone().Id
+						Date = p.DateOnlyAsPeriod.DateOnly.Date,
+						Shift = p.ProjectionService().CreateProjection().Select(l => new ShiftLayerDto
+						{
+							Name = l.Payload.ConfidentialDescription(currentUser).Name,
+							StartTime = l.Period.StartDateTime,
+							EndTime = l.Period.EndDateTime,
+							PayloadId = l.Payload.Id.GetValueOrDefault(),
+							IsAbsence = l.Payload is IAbsence,
+							DisplayColor = l.Payload.ConfidentialDisplayColor(currentUser).ToArgb()
+						}).ToArray(),
+						PersonId = person.Id.GetValueOrDefault(),
+						TimeZoneId = timeZone.Id
+					};
 				}).ToArray()
 			};
 		}

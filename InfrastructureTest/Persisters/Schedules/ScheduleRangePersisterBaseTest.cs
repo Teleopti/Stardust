@@ -56,8 +56,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected virtual IScheduleRangePersister CreateTarget()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var repositoryFactory = new RepositoryFactory();
-			var scheduleRep = new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork), CurrentAuthorization.Make());
+			var personAssignmentRepository = new PersonAssignmentRepository(currUnitOfWork);
+			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
+			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
+			var noteRepository = new NoteRepository(currUnitOfWork);
+			var preferenceDayRepository = new PreferenceDayRepository(currUnitOfWork);
+			var publicNoteRepository = new PublicNoteRepository(currUnitOfWork);
+			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currUnitOfWork);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currUnitOfWork);
+			var scheduleRep = new ScheduleStorage(currUnitOfWork, personAssignmentRepository,
+				personAbsenceRepository, new MeetingRepository(currUnitOfWork),
+				agentDayScheduleTagRepository, noteRepository,
+				publicNoteRepository, preferenceDayRepository,
+				studentAvailabilityDayRepository,
+				new PersonAvailabilityRepository(currUnitOfWork), new PersonRotationRepository(currUnitOfWork),
+				overtimeAvailabilityRepository,
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+					() => personAbsenceRepository,
+					() => preferenceDayRepository, () => noteRepository,
+					() => publicNoteRepository,
+					() => studentAvailabilityDayRepository,
+					() => agentDayScheduleTagRepository,
+					() => overtimeAvailabilityRepository), CurrentAuthorization.Make());
 			return new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
@@ -89,8 +110,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
-				var repositoryFactory = new RepositoryFactory();
-				var scheduleStorage = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make());
+				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var noteRepository = new NoteRepository(currentUnitOfWork);
+				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
+				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
+				var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+				var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
+				var scheduleStorage = new ScheduleStorage(currentUnitOfWork,
+					personAssignmentRepository, personAbsenceRepository,
+					new MeetingRepository(currentUnitOfWork), agentDayScheduleTagRepository,
+					noteRepository, publicNoteRepository,
+					preferenceDayRepository,
+					studentAvailabilityDayRepository,
+					new PersonAvailabilityRepository(currentUnitOfWork),
+					new PersonRotationRepository(currentUnitOfWork),
+					overtimeAvailabilityRepository,
+					new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+					new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+						() => personAbsenceRepository,
+						() => preferenceDayRepository, () => noteRepository,
+						() => publicNoteRepository,
+						() => studentAvailabilityDayRepository,
+						() => agentDayScheduleTagRepository,
+						() => overtimeAvailabilityRepository), CurrentAuthorization.Make());
 				Given().ForEach(x =>
 				{
 					scheduleStorage.Add(x);
@@ -125,9 +169,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				ReassociateDataFor(Person);
-				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-				var rep = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(new FullPermission()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), new FullPermission());
+				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var noteRepository = new NoteRepository(currentUnitOfWork);
+				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
+				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
+				var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+				var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
+				var rep = new ScheduleStorage(currentUnitOfWork, personAssignmentRepository,
+					personAbsenceRepository, new MeetingRepository(currentUnitOfWork),
+					agentDayScheduleTagRepository, noteRepository,
+					publicNoteRepository, preferenceDayRepository,
+					studentAvailabilityDayRepository,
+					new PersonAvailabilityRepository(currentUnitOfWork),
+					new PersonRotationRepository(currentUnitOfWork),
+					overtimeAvailabilityRepository,
+					new PersistableScheduleDataPermissionChecker(new FullPermission()),
+					new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+						() => personAbsenceRepository,
+						() => preferenceDayRepository, () => noteRepository,
+						() => publicNoteRepository,
+						() => studentAvailabilityDayRepository,
+						() => agentDayScheduleTagRepository,
+						() => overtimeAvailabilityRepository), new FullPermission());
 				var dictionary = rep.FindSchedulesForPersons(Scenario,
 																								 new[] { Person },
 																								 new ScheduleDictionaryLoadOptions(true, true),
@@ -141,9 +207,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected virtual IScheduleRangeConflictCollector ConflictCollector()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var repositoryFactory = new RepositoryFactory();
-			var scheduleRep = new ScheduleStorage(currUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork), CurrentAuthorization.Make());
-			return new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper(), new DatabaseVersion(currUnitOfWork));
+			var personAssignmentRepository = new PersonAssignmentRepository(currUnitOfWork);
+			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
+			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
+			var noteRepository = new NoteRepository(currUnitOfWork);
+			var publicNoteRepository = new PublicNoteRepository(currUnitOfWork);
+			var preferenceDayRepository = new PreferenceDayRepository(currUnitOfWork);
+			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currUnitOfWork);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currUnitOfWork);
+			var scheduleRep = new ScheduleStorage(currUnitOfWork, personAssignmentRepository,
+				personAbsenceRepository, new MeetingRepository(currUnitOfWork),
+				agentDayScheduleTagRepository, noteRepository,
+				publicNoteRepository, preferenceDayRepository,
+				studentAvailabilityDayRepository, new PersonAvailabilityRepository(currUnitOfWork),
+				new PersonRotationRepository(currUnitOfWork), overtimeAvailabilityRepository,
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+					() => personAbsenceRepository,
+					() => preferenceDayRepository, () => noteRepository,
+					() => publicNoteRepository,
+					() => studentAvailabilityDayRepository,
+					() => agentDayScheduleTagRepository,
+					() => overtimeAvailabilityRepository), CurrentAuthorization.Make());
+			return new ScheduleRangeConflictCollector(scheduleRep, personAssignmentRepository, this, new LazyLoadingManagerWrapper(), new DatabaseVersion(currUnitOfWork));
 		}
 
 		public abstract void ReassociateDataForAllPeople();

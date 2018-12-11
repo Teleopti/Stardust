@@ -88,13 +88,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         private void loadPersonalAccounts(IUnitOfWork uow)
         {
-            var personAbsenceAccountRepository = _repositoryFactory.CreatePersonAbsenceAccountRepository(uow);
+            var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
             SchedulerState.SchedulingResultState.AllPersonAccounts = personAbsenceAccountRepository.LoadAllAccounts();
         }
 
         private void loadDefinitionSets(IUnitOfWork uow)
         {
-            IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository = _repositoryFactory.CreateMultiplicatorDefinitionSetRepository(uow);
+            IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(uow);
             MultiplicatorDefinitionSets = multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();
         }
 

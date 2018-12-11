@@ -1046,7 +1046,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			IScenario defaultScenario;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var personRepository = repositoryFactory.CreatePersonRepository(uow);
+				var currentUnitOfWork = new ThisUnitOfWork(uow);
+				var personRepository = new PersonRepository(currentUnitOfWork);
 				var person = personRepository.Get(personDto.Id.Value);
 				var schedulePublishedToDate = person.WorkflowControlSet.SchedulePublishedToDate ?? new DateTime(1900, 01, 01);
 
@@ -1057,7 +1058,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 					return adherenceInfoDtos;
 				}
 
-				defaultScenario = repositoryFactory.CreateScenarioRepository(uow).LoadDefaultScenario();
+				defaultScenario = new ScenarioRepository(uow).LoadDefaultScenario();
 			}
 			
 			IStatisticRepository repository = repositoryFactory.CreateStatisticRepository();
@@ -1845,9 +1846,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repositoryFactory = new RepositoryFactory();
-				var accRep = repositoryFactory.CreatePersonAbsenceAccountRepository(unitOfWork);
-				var perRep = repositoryFactory.CreatePersonRepository(unitOfWork);
+				var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
+				var accRep = new PersonAbsenceAccountRepository(currentUnitOfWork);
+				var perRep = new PersonRepository(currentUnitOfWork);
 				var loadedPerson = perRep.Load(person.Id.GetValueOrDefault());
 				var accounts = accRep.Find(loadedPerson);
 				var dateOnly = containingDate.ToDateOnly();

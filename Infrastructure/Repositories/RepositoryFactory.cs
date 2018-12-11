@@ -44,32 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new AbsenceRepository(unitOfWork);
 		}
-
-		/// <summary>
-		/// Creates the agent assignment repository.
-		/// </summary>
-		/// <param name="unitOfWork">The uow.</param>
-		/// <returns></returns>
-		public IPersonAssignmentRepository CreatePersonAssignmentRepository(IUnitOfWork unitOfWork)
-		{
-			return new PersonAssignmentRepository(unitOfWork);
-		}
-
-		/// <summary>
-		/// Creates the agent assignment repository.
-		/// </summary>
-		/// <param name="unitOfWork">The uow.</param>
-		/// <returns></returns>
-		public IPersonAbsenceRepository CreatePersonAbsenceRepository(IUnitOfWork unitOfWork)
-		{
-			return new PersonAbsenceRepository(new ThisUnitOfWork(unitOfWork));
-		}
-
-		public IPersonAbsenceAccountRepository CreatePersonAbsenceAccountRepository(IUnitOfWork unitOfWork)
-		{
-			return new PersonAbsenceAccountRepository(unitOfWork);
-		}
-
+		
 		/// <summary>
 		/// Creates the scenario repository.
 		/// </summary>
@@ -176,17 +151,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new ContractRepository(unitOfWork);
 		}
-
-		public IPersonRotationRepository CreatePersonRotationRepository(IUnitOfWork unitOfWork)
-		{
-			return new PersonRotationRepository(unitOfWork);
-		}
-
-		public IPersonAvailabilityRepository CreatePersonAvailabilityRepository(IUnitOfWork unitOfWork)
-		{
-			return new PersonAvailabilityRepository(unitOfWork);
-		}
-
+		
 		public IPreferenceDayRepository CreatePreferenceDayRepository(IUnitOfWork unitOfWork)
 		{
 			return new PreferenceDayRepository(new ThisUnitOfWork(unitOfWork));
@@ -196,12 +161,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new StudentAvailabilityDayRepository(unitOfWork);
 		}
-
-		public IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork)
-		{
-			return new OvertimeAvailabilityRepository(new ThisUnitOfWork(unitOfWork));
-		}
-
+		
 		public IWorkShiftRuleSetRepository CreateWorkShiftRuleSetRepository(IUnitOfWork unitOfWork)
 		{
 			return new WorkShiftRuleSetRepository(unitOfWork);
@@ -311,21 +271,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new MasterActivityRepository(unitOfWork);
 		}
-
-		public INoteRepository CreateNoteRepository(IUnitOfWork unitOfWork)
-		{
-			return new NoteRepository(new ThisUnitOfWork(unitOfWork));
-		}
-
-		public IPublicNoteRepository CreatePublicNoteRepository(IUnitOfWork unitOfWork)
-		{
-			return new PublicNoteRepository(unitOfWork);
-		}
-
-		public IScheduleTagRepository CreateScheduleTagRepository(IUnitOfWork unitOfWork)
-		{
-			return new ScheduleTagRepository(unitOfWork);
-		}
 		
 		public ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork)
 		{
@@ -341,12 +286,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new RequestHistoryReadOnlyRepository(unitOfWork);
 		}
-
-		public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
-		{
-			return new AgentDayScheduleTagRepository(unitOfWork);
-		}
-
+		
 		public IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork)
 		{
 			return new PersonScheduleDayReadModelFinder(unitOfWork);

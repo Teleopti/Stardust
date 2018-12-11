@@ -55,8 +55,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 			PersonRequest.TrySetMessage(message);
 			PersonRequest.Request = shiftTradeRequest;
-			var repositoryFactory = new RepositoryFactory();
-			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(new ScenarioRepository(uow)), new ScheduleStorage(uow, repositoryFactory, new PersistableScheduleDataPermissionChecker(new FullPermission()), new ScheduleStorageRepositoryWrapper(repositoryFactory, uow), new FullPermission()));
+			var currentAuthorization = new FullPermission();
+			var personAssignmentRepository = new PersonAssignmentRepository(uow);
+			var personAbsenceRepository = new PersonAbsenceRepository(uow);
+			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(uow);
+			var noteRepository = new NoteRepository(uow);
+			var publicNoteRepository = new PublicNoteRepository(uow);
+			var preferenceDayRepository = new PreferenceDayRepository(uow);
+			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(uow);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(uow);
+			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(
+				new DefaultScenarioFromRepository(new ScenarioRepository(uow)),
+				new ScheduleStorage(uow, personAssignmentRepository, personAbsenceRepository,
+					new MeetingRepository(uow), agentDayScheduleTagRepository, noteRepository,
+					publicNoteRepository, preferenceDayRepository,
+					studentAvailabilityDayRepository, new PersonAvailabilityRepository(uow),
+					new PersonRotationRepository(uow), overtimeAvailabilityRepository,
+					new PersistableScheduleDataPermissionChecker(currentAuthorization),
+					new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+						() => personAbsenceRepository,
+						() => preferenceDayRepository, () => noteRepository,
+						() => publicNoteRepository,
+						() => studentAvailabilityDayRepository,
+						() => agentDayScheduleTagRepository,
+						() => overtimeAvailabilityRepository), currentAuthorization));
 
 			setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest); 
 			var requestRepository = new PersonRequestRepository(uow);

@@ -54,22 +54,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var uowFactory = CurrentUnitOfWorkFactory.Make();
 			var currUnitOfWork = new CurrentUnitOfWork(uowFactory);
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
-			var repositoryFactory = new RepositoryFactory();
+			var personAssignmentRepository = new PersonAssignmentRepository(currUnitOfWork);
+			var personAbsenceRepository = new PersonAbsenceRepository(currUnitOfWork);
+			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currUnitOfWork);
+			var noteRepository = new NoteRepository(currUnitOfWork);
+			var publicNoteRepository = new PublicNoteRepository(currUnitOfWork);
+			var preferenceDayRepository = new PreferenceDayRepository(currUnitOfWork);
+			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currUnitOfWork);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currUnitOfWork);
 			Target = new PersonAccountPersister(
 				uowFactory,
 				rep,
-				new FakeInitiatorIdentifier(), 
+				new FakeInitiatorIdentifier(),
 				new PersonAccountConflictCollector(new DatabaseVersion(currUnitOfWork)),
 				new PersonAccountConflictResolver(
 					uowFactory,
 					new TraceableRefreshService(
 						new DefaultScenarioFromRepository(new ScenarioRepository(currUnitOfWork)),
 						new ScheduleStorage(
-							currUnitOfWork, 
-							repositoryFactory, 
+							currUnitOfWork,
+							personAssignmentRepository, personAbsenceRepository,
+							new MeetingRepository(currUnitOfWork), agentDayScheduleTagRepository,
+							noteRepository, publicNoteRepository,
+							preferenceDayRepository,
+							studentAvailabilityDayRepository,
+							new PersonAvailabilityRepository(currUnitOfWork),
+							new PersonRotationRepository(currUnitOfWork),
+							overtimeAvailabilityRepository,
 							new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
-							new ScheduleStorageRepositoryWrapper(repositoryFactory, currUnitOfWork), CurrentAuthorization.Make())),
-					new PersonAbsenceAccountRepository(currUnitOfWork)));
+							new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+								() => personAbsenceRepository,
+								() => preferenceDayRepository, () => noteRepository,
+								() => publicNoteRepository,
+								() => studentAvailabilityDayRepository,
+								() => agentDayScheduleTagRepository,
+								() => overtimeAvailabilityRepository), CurrentAuthorization.Make())), rep));
 		}
 
 		private void setupEntities()

@@ -4088,7 +4088,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
 			var currentAuthorization = CurrentAuthorization.Make();
-			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(),
+			var currentUnitOfWork = new FromFactory(() => uowFactory);
+			var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
+				new PersonAssignmentRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
+				new MeetingRepository(currentUnitOfWork), new AgentDayScheduleTagRepository(currentUnitOfWork),
+				new NoteRepository(currentUnitOfWork), new PublicNoteRepository(currentUnitOfWork),
+				new PreferenceDayRepository(currentUnitOfWork), new StudentAvailabilityDayRepository(currentUnitOfWork),
+				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
+				new OvertimeAvailabilityRepository(currentUnitOfWork),
 				new PersistableScheduleDataPermissionChecker(currentAuthorization),
 				_container.Resolve<IScheduleStorageRepositoryWrapper>(), currentAuthorization);
 			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
@@ -14,14 +13,12 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
@@ -148,9 +145,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			if (stateHolder == null) throw new ArgumentNullException(nameof(stateHolder));
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			unitOfWork.Reassociate(persons);
-			var repositoryFactory = new RepositoryFactory();
+
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()), persons, scheduleDictionaryLoadOptions, stateHolder.RequestedPeriod.Period());
+			var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+			var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
+			var noteRepository = new NoteRepository(currentUnitOfWork);
+			var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
+			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
+			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
+			stateHolder.LoadSchedules(
+				new ScheduleStorage(currentUnitOfWork, personAssignmentRepository,
+					personAbsenceRepository, new MeetingRepository(currentUnitOfWork),
+					agentDayScheduleTagRepository, noteRepository,
+					publicNoteRepository, preferenceDayRepository,
+					studentAvailabilityDayRepository,
+					new PersonAvailabilityRepository(currentUnitOfWork),
+					new PersonRotationRepository(currentUnitOfWork),
+					overtimeAvailabilityRepository,
+					new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+					new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+						() => personAbsenceRepository,
+						() => preferenceDayRepository, () => noteRepository,
+						() => publicNoteRepository,
+						() => studentAvailabilityDayRepository,
+						() => agentDayScheduleTagRepository,
+						() => overtimeAvailabilityRepository),
+					CurrentAuthorization.Make()), persons, scheduleDictionaryLoadOptions,
+				stateHolder.RequestedPeriod.Period());
 		}
 	
 		public static IList<IReportDataParameter> CreateScheduledTimeVersusTargetParameters(ReportSettingsScheduleTimeVersusTargetTimeModel model, IFormatProvider culture)
