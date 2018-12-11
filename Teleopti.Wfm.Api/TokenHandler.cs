@@ -22,27 +22,29 @@ namespace Teleopti.Wfm.Api
 			_authenticationQuerier = authenticationQuerier;
 		}
 
-		public override Task Invoke(IOwinContext context)
+		public override async Task Invoke(IOwinContext context)
 		{
 			var auth = context.Request.Headers["Authorization"];
 			if (string.IsNullOrEmpty(auth))
 			{
 				context.Response.StatusCode = 401;
-				return Task.FromResult(false);
+				return;
 			}
 
 			var token = auth.Replace("bearer", "").Replace("Bearer", "").Replace("BEARER", "").Replace(":", "").Trim();
-			if (!_tokenVerifier.TryGetUser(token, out var user))
+			var verified = await _tokenVerifier.TryGetUserAsync(token);
+			if (!verified.Item1)
 			{
 				context.Response.StatusCode = 401;
-				return Task.FromResult(false);
+				return;
 			}
 
+			var user = verified.Item2;
 			var result = _authenticationQuerier.TryLogon(new IdLogonClientModel {Id = user.UserId}, "API");
 			if (!result.Success)
 			{
 				context.Response.StatusCode = 401;
-				return Task.FromResult(false);
+				return;
 			}
 			
 			using (var uow = result.DataSource.Application.CreateAndOpenUnitOfWork())
@@ -54,7 +56,7 @@ namespace Teleopti.Wfm.Api
 			}
 			
 			// Call the next delegate/middleware in the pipeline
-			return Next.Invoke(context);
+			await Next.Invoke(context);
 		}
 	}
 }

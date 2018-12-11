@@ -9,14 +9,16 @@ namespace Teleopti.Wfm.Api
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<CommandDtoProvider>();
-			builder.RegisterType<QueryDtoProvider>();
-			builder.RegisterType<DtoProvider>();
-			builder.RegisterType<QueryHandlerProvider>();
-			builder.RegisterType<TokenVerifier>().As<ITokenVerifier>();
-			builder.RegisterApiControllers(typeof(Startup).Assembly);
-			builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsClosedTypesOf(typeof(IQueryHandler<,>)).ApplyAspects();
-			builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsClosedTypesOf(typeof(ICommandHandler<>)).ApplyAspects();
+			builder.RegisterType<CommandDtoProvider>().SingleInstance();
+			builder.RegisterType<QueryDtoProvider>().SingleInstance();
+			builder.RegisterType<DtoProvider>().SingleInstance();
+			builder.RegisterType<QueryHandlerProvider>().SingleInstance();
+			builder.RegisterType<TokenVerifier>().As<ITokenVerifier>().SingleInstance();
+
+			var assembly = typeof(Startup).Assembly;
+			builder.RegisterApiControllers(assembly);
+			builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(IQueryHandler<,>)).ApplyAspects();
+			builder.RegisterAssemblyTypes(assembly).AsClosedTypesOf(typeof(ICommandHandler<>)).ApplyAspects();
 		}
 	}
 }
