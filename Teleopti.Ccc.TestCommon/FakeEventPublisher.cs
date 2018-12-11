@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -64,16 +64,20 @@ namespace Teleopti.Ccc.TestCommon
 
 			var tenant = _dataSource.CurrentName();
 
-			onAnotherThread(() =>
+			var jobs = _resolver.ResolveAllJobs(events);
+			
+			// run in order of handlers added, sometimes the test is order dependent
+			_handlerTypes.ForEach(handlerType =>
 			{
-				_resolver.ResolveAllJobs(events)
+				jobs.Where(x => x.HandlerType == handlerType)
 					.ForEach(job =>
 					{
-						using (clearCurrentPrincipal())
+						//
+						onAnotherThread(() =>
 						{
-							if (_handlerTypes.Contains(job.HandlerType))
-								_processor.Process(tenant, job.Event, job.Package, job.HandlerType);								
-						}
+							//
+							_processor.Process(tenant, job.Event, job.Package, job.HandlerType);
+						});
 					});
 			});
 		}
@@ -83,13 +87,6 @@ namespace Teleopti.Ccc.TestCommon
 			var thread = new Thread(action.Invoke);
 			thread.Start();
 			thread.Join();
-		}
-
-		private IDisposable clearCurrentPrincipal()
-		{
-			var current = _threadPrincipalContext.Current();
-			_threadPrincipalContext.SetCurrentPrincipal(null);
-			return new GenericDisposable(() => _threadPrincipalContext.SetCurrentPrincipal(current));
 		}
 	}
 }
