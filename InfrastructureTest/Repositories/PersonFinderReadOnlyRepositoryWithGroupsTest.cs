@@ -122,21 +122,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				personContract,
 				team);
 			personToTest.AddPersonPeriod(personPeriod);
-			
+
 			WithUnitOfWork.Do(() =>
 			{
 				OptionalColumnRepository.Add(optionColumn);
 			});
 			WithUnitOfWork.Do(() =>
 			{
-				
+
 				SiteRepository.Add(team.Site);
 				TeamRepository.Add(team);
 				ContractRepository.Add(personContract.Contract);
 				ContractScheduleRepository.Add(personContract.ContractSchedule);
 				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
 				PersonRepository.Add(personToTest);
-				
+
 			});
 			WithUnitOfWork.Do(() =>
 			{
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			WithUnitOfWork.Do(() =>
 			{
-				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(scheduleDate, scheduleDate),optionColumn.Id.Value, new[] { "test value" },
+				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(scheduleDate, scheduleDate), optionColumn.Id.Value, new[] { "test value" },
 					new Dictionary<PersonFinderField, string> {
 						{ PersonFinderField.FirstName, "dummyAgent1"}
 					});
@@ -157,6 +157,64 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 		}
 
+		[Test]
+		public void ShouldNotFindPersonIdsInGivenDynamicGroupWhenGivenCriteriaIsNotMatchedInPeriod()
+		{
+			var scheduleDate = new DateOnly(2000, 1, 1);
+			var optionColumn = new OptionalColumn("Test")
+			{
+				TableName = "Person",
+				AvailableAsGroupPage = true
+			};
+
+			var personToTest = PersonFactory.CreatePerson(new Name("dummyAgent1", "dummy"));
+			personToTest.SetOptionalColumnValue(new OptionalColumnValue("test value"), optionColumn);
+
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+
+			var personContract = PersonContractFactory.CreatePersonContract("contract1", "contract schedule1", "1");
+			var personPeriod = new PersonPeriod(scheduleDate, personContract, team);
+			personToTest.AddPersonPeriod(personPeriod);
+
+			var anotherContract = PersonContractFactory.CreatePersonContract("contract2", "contract schedule2", "1");
+			var anotherPersonPeriod = new PersonPeriod(scheduleDate.AddDays(30), anotherContract, team);
+			personToTest.AddPersonPeriod(anotherPersonPeriod);
+
+			WithUnitOfWork.Do(() =>
+			{
+				OptionalColumnRepository.Add(optionColumn);
+			});
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				ContractRepository.Add(anotherContract.Contract);
+				ContractScheduleRepository.Add(anotherContract.ContractSchedule);
+				PartTimePercentageRepository.Add(anotherContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			createAndSaveReadModel(PersonFinderField.Contract, personToTest.Id.Value, "contract1", team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+			createAndSaveReadModel(PersonFinderField.Contract, personToTest.Id.Value, "contract2", team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.AddDays(30).Date);
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(scheduleDate, scheduleDate), optionColumn.Id.Value, new[] { "test value" },
+				new Dictionary<PersonFinderField, string> {
+						{ PersonFinderField.Contract, "contract2"}
+				});
+
+				result.Count.Should().Be.EqualTo(0);
+			});
+		}
 
 		[Test]
 		public void ShouldNotFindPersonIdsInGivenDynamicGroupWhenPersonIsLeft()
@@ -212,7 +270,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 		}
 		private void createAndSaveReadModel(PersonFinderField searchType, Guid personId, string searchValue,
-			 Guid teamId, Guid siteId, Guid businessUnitId, DateTime startDateTime,DateTime? terminalDate = null)
+			 Guid teamId, Guid siteId, Guid businessUnitId, DateTime startDateTime, DateTime? terminalDate = null)
 		{
 			WithUnitOfWork.Do(uow =>
 			{

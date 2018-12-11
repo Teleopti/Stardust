@@ -221,6 +221,9 @@ BEGIN
 			IF @searchType <> 'All'
 				SELECT @dynamicSQL = @dynamicSQL + ' AND (fp.SearchType = '''' OR fp.SearchType = '''+ @searchType + ''')'
 
+			--filter based on most recent period
+			SELECT @dynamicSQL = @dynamicSQL + ' AND (fp.StartDateTime IS NULL OR fp.StartDateTime <= ''' + @end_date_ISO + '''  ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >=  ''' + @start_date_ISO + ''')'
+
 				--add INTERSECT between each result set
 			IF @cursorCount <> @criteriaCount --But NOT on last condition, the syntax is different
 				SELECT @dynamicSQL = @dynamicSQL + CHAR(13)+CHAR(10) + ' INTERSECT ' + CHAR(13)+CHAR(10)
