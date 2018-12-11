@@ -37,7 +37,7 @@ export class ResetPasswordService {
 	}
 
 	reset(body: ResetRequest) {
-		return this.http.post('../ChangePassword/ValidateToken', body).pipe(
+		return this.http.post('../ChangePassword/RequestReset', body).pipe(
 			flatMap((res: GenericResponse) => {
 				if (res.success === true) return of(true);
 				else if (res.success === false) return throwError(false);
