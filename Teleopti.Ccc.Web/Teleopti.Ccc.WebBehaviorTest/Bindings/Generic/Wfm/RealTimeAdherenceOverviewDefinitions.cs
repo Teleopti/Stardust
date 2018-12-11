@@ -60,20 +60,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertNotExists("body", $"[name='{teamName}']");
 		}
 
-
-		[When(@"I click the site checkbox for '(.*)'")]
-		[When(@"I click the team checkbox for '(.*)'")]
-		public void WhenIClickTheCheckboxFor(string name)
-		{
-			Browser.Interactions.Click($"[name='{name}']");
-		}
-		
 		[Then(@"I should not be able to modify skill groups")]
 		public void ThenIShouldNotBeAbleToModifySkillGroups()
 		{
-			Browser.Interactions.AssertNotExists(".rta-filter-panel", "#manage_skill_group_button");
+			Browser.Interactions.AssertNotExists(".rta-filter-panel, .organization-picker", "#manage_skill_group_button");
 		}
-		
+
 		[Then(@"I should be able to modify skill groups")]
 		public void ThenIShouldBeAbleToModifySkillGroups()
 		{

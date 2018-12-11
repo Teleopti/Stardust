@@ -90,18 +90,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Browser.Interactions.ClickUsingJQuery(".agent-state:has(.agent-name:contains('" + person.Name + "')) .selectable-agent input");
 			}
 		}
-		
-		[Then(@"I should not be able to modify skill groups")]
-		public void ThenIShouldNotBeAbleToModifySkillGroups()
-		{
-			Browser.Interactions.AssertNotExists(".organization-picker", "#manage_skill_group_button");
-		}
-		
-		[Then(@"I should be able to modify skill groups")]
-		public void ThenIShouldBeAbleToModifySkillGroups()
-		{
-			Browser.Interactions.AssertExists("#manage_skill_group_button");
-		}
 
 		private static void assertAgentStatus(RealTimeAdherenceAgentState state)
 		{

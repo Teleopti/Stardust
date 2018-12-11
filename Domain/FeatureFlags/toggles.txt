@@ -42,7 +42,7 @@ RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
 RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
 RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
-RTA_RestrictModifySkillGroups_78568 = false
+RTA_RestrictModifySkillGroups_78568 = RC
 
 MessageBroker_HttpSenderThrottleRequests_79140 = true
 MessageBroker_VeganBurger_79140 = true
