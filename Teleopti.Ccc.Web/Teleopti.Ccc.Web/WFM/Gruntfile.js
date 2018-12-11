@@ -1,4 +1,28 @@
 const sassImplementation = require('node-sass');
+const glob = require('glob');
+const file = require('fs');
+const { join } = require('path');
+const { minify } = require('html-minifier');
+
+function templateCache() {
+	const readFile = path => file.readFileSync(path, { encoding: 'utf8' });
+	const writeFile = (path, data) => file.writeFileSync(path, data, { encoding: 'utf8' });
+	const files = glob.sync('@(html|app)/**/*.html');
+
+	const templates = files.map(filename => {
+		const html = readFile(join(__dirname, filename));
+		const minifiedHtml = minify(html, {
+			collapseWhitespace: true,
+			removeComments: true,
+			caseSensitive: true
+		});
+		const escapedHtml = minifiedHtml.replace(/(\"|\\.)/gm, '\\$1').replace(/(\r|\n)/gm, '\\n');
+		return `$templateCache.put("${filename}", "${escapedHtml}")`;
+	});
+
+	let templateCache = `angular.module('wfm.templates',[]).run(['$templateCache', function($templateCache) {${templates}}]);`.trim();
+	writeFile(join(__dirname, 'dist', 'templates.js'), templateCache);
+}
 
 module.exports = function(grunt) {
 	const isDev = grunt.option('development') || false;
@@ -11,7 +35,7 @@ module.exports = function(grunt) {
 		},
 		angularjsTemplates: {
 			files: ['src/index.tpl.html', 'app/**/*.html', 'html/**/*.html'],
-			tasks: ['ngtemplates']
+			tasks: ['templateCache']
 		},
 		angularjsCode: {
 			files: ['app/**/*.js'],
@@ -51,16 +75,6 @@ module.exports = function(grunt) {
 			files: {
 				'dist/styleguide_classic.css': 'css/styleguide/styleguide_classic.scss',
 				'dist/styleguide_dark.css': 'css/styleguide/styleguide_dark.scss'
-			}
-		}
-	};
-
-	const ngtemplates = {
-		'wfm.templates': {
-			src: ['html/**/*.html', 'app/**/*.html', 'app/**/html/*.html'],
-			dest: 'dist/templates.js',
-			options: {
-				standalone: true
 			}
 		}
 	};
@@ -196,12 +210,6 @@ module.exports = function(grunt) {
 		mangle: false
 	};
 	const uglify = {
-		templates: {
-			files: {
-				'dist/templates.js': ['dist/templates.js']
-			},
-			options: uglifyOptions
-		},
 		browser: {
 			files: {
 				'dist/main.js': [
@@ -230,7 +238,7 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		watch,
-		ngtemplates,
+		templateCache,
 		processhtml,
 		less,
 		sass,
@@ -352,9 +360,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-processhtml');
 
-	grunt.registerTask('devBuild', ['concat', 'copy', 'ngtemplates', 'less', 'sass', 'processhtml']);
+	grunt.registerTask('templateCache', templateCache);
+	grunt.registerTask('devBuild', ['concat', 'copy', 'templateCache', 'less', 'sass', 'processhtml']);
 	grunt.registerTask('devWatch', ['devBuild', 'watch']);
-	grunt.registerTask('prodBuild', ['concat', 'copy', 'ngtemplates', 'less', 'sass', 'processhtml', 'uglify']);
+	grunt.registerTask('prodBuild', ['concat', 'copy', 'templateCache', 'less', 'sass', 'processhtml', 'uglify']);
 
 	grunt.registerTask('default', ['devWatch']);
 
