@@ -33,12 +33,14 @@ export class IntradayChartComponent implements OnChanges {
 
 	private indicateLatestTime(ltd: IntradayLatestTimeData) {
 		if (ltd && this.chart) {
-			console.log('time', ltd);
-
-			const endTime = moment(ltd.EndTime);
+			const end = moment(ltd.EndTime);
+			const time = moment()
+				.hour(end.hour())
+				.minute(end.minute());
+			console.log('time', time);
 			this.chart.xgrids([
 				{
-					value: endTime.format('YYYY-MM-DD HH:mm'),
+					value: time.format('YYYY-MM-DD HH:mm'),
 					text: this.translate.instant('Latest data'),
 					class: 'time-line'
 				}
