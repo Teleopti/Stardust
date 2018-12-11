@@ -10,6 +10,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Reports;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
@@ -20,18 +21,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Matrix
 	public partial class MatrixNavigationView : BaseUserControl, IMatrixNavigationView
 	{
 		private readonly IComponentContext _componentContext;
+		private readonly IToggleManager _toggleManager;
 		private readonly MatrixNavigationPresenter _presenter;
 
-		public MatrixNavigationView(IReportNavigationModel model, IComponentContext componentContext, IReportUrl reportUrlConstructor)
+		public MatrixNavigationView(IReportNavigationModel model, IComponentContext componentContext, IReportUrl reportUrlConstructor, IToggleManager toggleManager)
 		{
 			_componentContext = componentContext;
+			_toggleManager = toggleManager;
 			InitializeComponent();
 			if (!DesignMode)
 			{
 				SetTexts();
 			}
 
-			_presenter = new MatrixNavigationPresenter(model, this, reportUrlConstructor);
+			_presenter = new MatrixNavigationPresenter(model, this, reportUrlConstructor, _toggleManager);
 			_presenter.Initialize();
 		}
 

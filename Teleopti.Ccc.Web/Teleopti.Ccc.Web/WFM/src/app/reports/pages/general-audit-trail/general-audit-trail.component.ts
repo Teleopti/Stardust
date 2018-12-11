@@ -1,9 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { UserService } from '../../../core/services';
-import { AuditEntry, Person } from '../../../shared/types';
 import { AuditTrailService } from '../../services';
+import { Person, AuditEntry } from '../../../shared/types';
+
+class AuditTrailValidator {
+	static INVALID_PERSON_ERROR = 'INVALID_PERSON_ERROR';
+	static INVALID_DATE_RANGE_ERROR = 'INVALID_DATE_RANGE_ERROR';
+	static validPerson: ValidatorFn = (control: AbstractControl): ValidationErrors => {
+		const person: Person = control.value;
+		if (person && person.Id) {
+			return {};
+		}
+		return { [AuditTrailValidator.INVALID_PERSON_ERROR]: true };
+	};
+
+	static validateDateRange: ValidatorFn = (control: AbstractControl): ValidationErrors => {
+		if (!control.value) {
+			return {};
+		}
+
+		const [dateFrom, dateTo] = control.value;
+		const numbersOfDaysBetween = moment(dateTo).diff(moment(dateFrom), 'days');
+
+		if (numbersOfDaysBetween > 7) {
+			return { [AuditTrailValidator.INVALID_DATE_RANGE_ERROR]: true };
+		}
+	};
+}
 
 @Component({
 	selector: 'general-audit-trail',
@@ -14,15 +39,45 @@ import { AuditTrailService } from '../../services';
 export class GeneralAuditTrailComponent implements OnInit {
 	locale = 'en-US';
 
-	person: Person;
 	personList: Array<Person>;
-	selectedPerson: Person;
 	auditTrailData: Array<AuditEntry>;
 	dateformat: Date;
+	today = new Date();
+	initialSearchDone = false;
+	generalError = false;
+
+	public get selectedPerson(): Person {
+		return this.searchForm.value.personPicker;
+	}
+
+	public get personPickerControl(): AbstractControl {
+		return this.searchForm.get('personPicker');
+	}
+
+	public get dateRangeControl(): AbstractControl {
+		return this.searchForm.get('dateRange');
+	}
+
+	public get searchwordControl(): AbstractControl {
+		return this.searchForm.get('searchword');
+	}
+
+	public get searchword(): string {
+		return this.searchwordControl.value;
+	}
+
+	public get fromDate(): string {
+		return moment(this.dateRangeControl.value[0]).format('YYYY-MM-DD');
+	}
+
+	public get toDate(): string {
+		return moment(this.dateRangeControl.value[1]).format('YYYY-MM-DD');
+	}
 
 	searchForm = this.fb.group({
-		personPicker: [''],
-		changedRange: [[new Date(), new Date()]]
+		personPicker: ['', [AuditTrailValidator.validPerson]],
+		dateRange: [[new Date(), new Date()], [AuditTrailValidator.validateDateRange]],
+		searchword: ['']
 	});
 
 	constructor(
@@ -39,9 +94,8 @@ export class GeneralAuditTrailComponent implements OnInit {
 
 	ngOnInit() {
 		this.auditTrailData = [];
-		this.searchForm
-			.get('personPicker')
-			.valueChanges.pipe(debounceTime(700))
+		this.personPickerControl.valueChanges
+			.pipe(debounceTime(700))
 			.subscribe(value => this.updatePersonPicker(value));
 	}
 
@@ -54,16 +108,12 @@ export class GeneralAuditTrailComponent implements OnInit {
 	}
 
 	getPersonByKeyword(keyword): void {
-		this.auditTrailService
-			.getPersonByKeyword(keyword)
-			.subscribe(
-				results => this.addPersonSearchToPersonList(results.Persons),
-				error => this.personSearchError(error)
-			);
-	}
-
-	personSearchError(error): string {
-		return 'test';
+		this.auditTrailService.getPersonByKeyword(keyword).subscribe(
+			results => this.addPersonSearchToPersonList(results.Persons),
+			error => {
+				this.generalError = true;
+			}
+		);
 	}
 
 	addPersonSearchToPersonList(persons): void {
@@ -71,7 +121,8 @@ export class GeneralAuditTrailComponent implements OnInit {
 	}
 
 	addAuditEntriesToTable(AuditEntries): void {
-		let parsedEntries = AuditEntries.map(row => {
+		this.initialSearchDone = true;
+		var parsedEntries = AuditEntries.map(row => {
 			return this.formatTimestampInRow(row);
 		});
 
@@ -86,20 +137,21 @@ export class GeneralAuditTrailComponent implements OnInit {
 	}
 
 	notValidFields(): boolean {
-		if (this.searchForm.value.personPicker.Id) {
-			return false;
-		} else {
-			return true;
-		}
+		return (
+			this.personPickerControl.hasError(AuditTrailValidator.INVALID_PERSON_ERROR) ||
+			this.dateRangeControl.hasError(AuditTrailValidator.INVALID_DATE_RANGE_ERROR)
+		);
 	}
 
 	submitForm(): void {
+		this.generalError = false;
 		this.auditTrailService
-			.getStaffingAuditTrail(
-				this.searchForm.value.personPicker.Id,
-				moment(this.searchForm.value.changedRange[0]).format('YYYY-MM-DD'),
-				moment(this.searchForm.value.changedRange[1]).format('YYYY-MM-DD')
-			)
-			.subscribe(results => this.addAuditEntriesToTable(results.AuditEntries));
+			.getStaffingAuditTrail(this.searchForm.value.personPicker.Id, this.fromDate, this.toDate, this.searchword)
+			.subscribe(
+				results => this.addAuditEntriesToTable(results.AuditEntries),
+				error => {
+					this.generalError = true;
+				}
+			);
 	}
 }

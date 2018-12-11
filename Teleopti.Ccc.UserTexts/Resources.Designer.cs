@@ -40363,15 +40363,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audit Trail.
-        /// </summary>
-        public static string xxGeneralAuditTrailWebReport {
-            get {
-                return ResourceManager.GetString("xxGeneralAuditTrailWebReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Modify writeprotected schedule.
         /// </summary>
         public static string xxx {

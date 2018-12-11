@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Reports
 		private readonly IEnumerable<IReportVisible> _reportVisibleList;
 		private readonly IScheduleAnalysisProvider _scheduleAnalysisProvider;
 
-		public ReportNavigationModel(IEnumerable<IReportVisible> reportVisibleList, IScheduleAnalysisProvider scheduleAnalysisProvider)
+		public ReportNavigationModel(IEnumerable<IReportVisible> reportVisibleList, IScheduleAnalysisProvider scheduleAnalysisProvider )
 		{
 			_reportVisibleList = reportVisibleList;
 			_scheduleAnalysisProvider = scheduleAnalysisProvider;
@@ -104,6 +104,11 @@ namespace Teleopti.Ccc.Domain.Reports
 									from a in PermittedReportFunctions
 									where new[] {"7F918C26-4044-4F6B-B0AE-7D27625D052E"}.Contains(a.ForeignId.ToUpper())
 									select a
+							},
+							new MatrixFunctionGroup
+							{
+								LocalizedDescription = Resources.AuditTrailReportGroup,
+								ApplicationFunctions = getAuditReports()
 							}
 					};
 				
@@ -111,6 +116,20 @@ namespace Teleopti.Ccc.Domain.Reports
 
 				return matrixFunctionGroups;
 			}
+		}
+
+		private IEnumerable<IApplicationFunction> getAuditReports()
+		{
+			var auditReports = new List<IApplicationFunction>();
+			var auditApplicationFunction = PrincipalAuthorization.Current().GrantedFunctions()
+				.FirstOrDefault(a => a.ForeignId == DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
+			
+			if (auditApplicationFunction != null)
+			{
+				auditApplicationFunction.IsWebReport = true;
+				auditReports.Add(auditApplicationFunction);
+			}
+			return auditReports;
 		}
 
 		public IEnumerable<IApplicationFunction> PermittedCustomReportFunctions

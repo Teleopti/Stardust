@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 	    public virtual bool IsWebReport { get; set; }
 
-	    /// <summary>
+		/// <summary>
         /// Sets or gets the local user text translator.
         /// </summary>
         /// <value>The user text translator.</value>

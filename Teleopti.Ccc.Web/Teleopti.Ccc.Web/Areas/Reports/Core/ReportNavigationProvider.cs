@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.Reports.Models;
 using Teleopti.Ccc.UserTexts;
@@ -18,14 +20,16 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 		private readonly IReportUrl _reportUrl;
 		private readonly IAuthorization _authorization;
 		private readonly IReportNavigationModel _reportNavigationModel;
+		private readonly IToggleManager _toggleManager;
 
 		public ReportNavigationProvider(IReportsProvider reportsProvider, IReportUrl reportUrl, IAuthorization authorization, 
-			IReportNavigationModel reportNavigationModel)
+			IReportNavigationModel reportNavigationModel, IToggleManager toggleManager)
 		{
 			_reportsProvider = reportsProvider;
 			_reportUrl = reportUrl;
 			_authorization = authorization;
 			_reportNavigationModel = reportNavigationModel;
+			_toggleManager = toggleManager;
 		}
 
 		public IList<ReportItemViewModel> GetNavigationItemViewModels()
@@ -36,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			{
 				Url = _reportUrl.Build(applicationFunction),
 				Name = applicationFunction.LocalizedFunctionDescription,
+				ForeignId = applicationFunction.ForeignId
 			}).ToList();
 
 			if (isPermittedLeaderBoardUnderReports())
@@ -55,7 +60,8 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 						Url = _reportUrl.Build(report),
 						Name = report.LocalizedFunctionDescription,
 						Category = reportCollection.LocalizedDescription,
-						IsWebReport = report.IsWebReport
+						IsWebReport = report.IsWebReport,
+						ForeignId = report.ForeignId
 					}))
 				.ToList();
 
@@ -63,6 +69,9 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			{
 				reportItems.Add(createLeaderBoardReportItem());
 			}
+
+			if (!_toggleManager.IsEnabled(Toggles.Wfm_AuditTrail_GenericAuditTrail_74938))
+				reportItems = reportItems.Where(i => i.ForeignId != DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport).ToList();
 
 			return reportItems;
 		}
@@ -74,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			{
 				Url = _reportUrl.Build(applicationFunction),
 				Title = applicationFunction.LocalizedFunctionDescription,
-				Id = new Guid(applicationFunction.ForeignId)
+				Id = new Guid(applicationFunction.ForeignId),
 			}).ToList();
 		}
 

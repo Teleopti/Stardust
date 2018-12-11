@@ -15902,9 +15902,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Något gick fel. Var god och försök igen senare. </value>
   </data>
-  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
-    <value>Ändringslogg</value>
-  </data>
   <data name="FilterTeamSchedules" xml:space="preserve">
     <value>Filtrera teamscheman</value>
   </data>

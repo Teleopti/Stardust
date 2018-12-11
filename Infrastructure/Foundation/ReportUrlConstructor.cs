@@ -3,6 +3,7 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -24,9 +25,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 			string url = null;
 			
-			if (applicationFunction.ForeignId == "0148")
+			if (applicationFunction.ForeignId == DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport)
 			{
-				url = applicationFunction.IsWebReport == true ? "auditTrail" : string.Format(CultureInfo.InvariantCulture, "{0}WFM/#/report/audit-trail",matrixWebsiteUrl);
+				url = applicationFunction.IsWebReport ? "auditTrail" : string.Format(CultureInfo.InvariantCulture, "{0}WFM/#/report/audit-trail",matrixWebsiteUrl);
+			}
+			else if (applicationFunction.ForeignId == DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport)
+			{
+				url = applicationFunction.IsWebReport ? "generalAuditTrail" : string.Format(CultureInfo.InvariantCulture, "{0}WFM/#/report/general-audit-trail", matrixWebsiteUrl);
 			}
 			else
 				url = string.Format(CultureInfo.InvariantCulture, "{0}Reporting/Report/{1}#{2}",

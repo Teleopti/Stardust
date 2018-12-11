@@ -6,6 +6,8 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Reports;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix;
 using Teleopti.Ccc.UserTexts;
 
@@ -19,6 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		private IReportNavigationModel _model;
 		private IMatrixNavigationView _view;
 		private IReportUrl _urlConstructor;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -27,7 +30,8 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			_model = MockRepository.GenerateMock<IReportNavigationModel>();
 			_view = MockRepository.GenerateMock<IMatrixNavigationView>();
 			_urlConstructor = MockRepository.GenerateMock<IReportUrl>();
-			_target = new MatrixNavigationPresenter(_model, _view, _urlConstructor);
+			_toggleManager = new FakeToggleManager();
+			_target = new MatrixNavigationPresenter(_model, _view, _urlConstructor, _toggleManager);
 		}
 
 		[Test]
