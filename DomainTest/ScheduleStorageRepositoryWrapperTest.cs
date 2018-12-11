@@ -114,16 +114,15 @@ namespace Teleopti.Ccc.DomainTest
 		public void ShouldBeAbleToHandlePublicNoteViaRepository()
 		{
 			var item = new PublicNote(new Person(), new DateOnly(), new Scenario("-"), "asd").WithId();
-			var repository = PublicNoteRepository;
-
+			
 			Target.Add(item);
-			repository.LoadAll().Count().Should().Be.EqualTo(1);
+			PublicNoteRepository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count().Should().Be.EqualTo(0);
+			PublicNoteRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]

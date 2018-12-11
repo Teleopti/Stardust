@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 				{typeof(IPreferenceDay), preferenceDayRepository},
 				{typeof(INote), noteRepository},
 				{typeof(IStudentAvailabilityDay), studentAvailabilityDayRepository},
-				{typeof(IPublicNote), () => publicNoteRepository},
+				{typeof(IPublicNote), publicNoteRepository},
 				{typeof(IAgentDayScheduleTag), agentDayScheduleTagRepository},
 				{typeof(IOvertimeAvailability), overtimeAvailabilityRepository}
 			};
