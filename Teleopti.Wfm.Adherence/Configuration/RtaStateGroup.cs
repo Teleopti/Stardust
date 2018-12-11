@@ -6,7 +6,7 @@ using Teleopti.Wfm.Adherence.Configuration.Events;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {
-	public class RtaStateGroup : VersionedAggregateRootWithBusinessUnitWithoutChangeInfo, IRtaStateGroup
+	public class RtaStateGroup : VersionedAggregateRootWithBusinessUnitIdWithoutChangeInfo, IRtaStateGroup
     {
         private readonly IList<IRtaState> _stateCollection = new List<IRtaState>();
         private bool _available;
@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.Adherence.Configuration
 
 		public virtual void SetBusinessUnit(IBusinessUnit businessUnit)
 	    {
-		    BusinessUnit = businessUnit;
+		    BusinessUnit = businessUnit.Id.Value;
 	    }
 
         public virtual string Name

@@ -83,8 +83,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (!string.IsNullOrEmpty(BusinessUnit))
 			{
 				var businessUnit = new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit);
-				if (stateGroup != null)
-					stateGroup.SetBusinessUnit(businessUnit);
+				stateGroup?.SetBusinessUnit(businessUnit);
 				rtaMap.SetBusinessUnit(businessUnit);
 			}
 

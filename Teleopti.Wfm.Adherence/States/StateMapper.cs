@@ -87,7 +87,7 @@ namespace Teleopti.Wfm.Adherence.States
 		{
 			var stateGroups = _stateGroups.LoadAll();
 			var defaultStateGroup =
-				stateGroups.SingleOrDefault(g => g.BusinessUnit.Id.Value == businessUnitId && g.DefaultStateGroup);
+				stateGroups.SingleOrDefault(g => g.BusinessUnit.Value == businessUnitId && g.DefaultStateGroup);
 			if (defaultStateGroup == null)
 				return null;
 			return new MappedState

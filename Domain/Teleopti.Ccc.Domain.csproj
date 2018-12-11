@@ -219,6 +219,14 @@
     <Compile Include="Budgeting\BudgetGroupState.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
+    <Compile Include="Common\EntityBaseTypes\Events.cs" />
+    <Compile Include="Common\EntityBaseTypes\EventsExtensions.cs" />
+    <Compile Include="Common\EntityBaseTypes\IEventsRoot.cs" />
+    <Compile Include="Common\EntityBaseTypes\NonversionedAggregateRootWithBusinessUnit.cs" />
+    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRoot.cs" />
+    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnit.cs" />
+    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitIdWithoutChangeInfo.cs" />
+    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\AccuracyModel.cs" />
@@ -246,6 +254,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InterfaceLegacy\Domain\IApplicationData.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IBelongsToBusinessUnitId.cs" />
     <Compile Include="InterfaceLegacy\Domain\ICurrentSchedulingSource.cs" />
     <Compile Include="InterfaceLegacy\Domain\InParameter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IntervalDefinition.cs" />

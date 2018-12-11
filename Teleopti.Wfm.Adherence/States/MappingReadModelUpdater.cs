@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.States
 		[AllBusinessUnitsUnitOfWork]
 		public virtual void Handle(UnknownStateCodeReceviedEvent @event)
 		{
-			var stateGroups = _stateGroups.LoadAll().ToLookup(g => g.BusinessUnit.Id.Value);
+			var stateGroups = _stateGroups.LoadAll().ToLookup(g => g.BusinessUnit);
 
 			var existingStateGroup = stateGroups[@event.BusinessUnitId].SingleOrDefault(g => g.StateCollection.Any(s => s.StateCode == @event.StateCode));
 			if (existingStateGroup != null)
@@ -134,7 +134,7 @@ namespace Teleopti.Wfm.Adherence.States
 				select new
 				{
 					g.Id,
-					BusinessUnitId = g.BusinessUnit.Id.Value,
+					BusinessUnitId = g.BusinessUnit.Value,
 					g.Name,
 					IsLoggedOut = g.IsLogOutState,
 					States = g.StateCollection.AsEnumerable()

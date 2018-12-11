@@ -182,7 +182,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 
 			WithReadModels.Get(() => Target.Read())
 				.Single(x => x.StateGroupId == group.Id.Value)
-				.BusinessUnitId.Should().Be(group.BusinessUnit.Id.Value);
+				.BusinessUnitId.Should().Be(group.BusinessUnit.Value);
 		}
 
 		private void ensureBusinessUnitInAnalytics()
