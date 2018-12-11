@@ -430,10 +430,11 @@
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
     <Compile Include="IoC\MustNotBeUsedException.cs" />
     <Compile Include="IoC\ServiceBusTestAttribute.cs" />
+    <Compile Include="IoC\ServiceLocatorForFakesModule.cs" />
     <Compile Include="IoC\SetupThrowingTestDoubles.cs" />
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />
-    <Compile Include="IoC\TestModule.cs" />
+    <Compile Include="IoC\DataFactoryModule.cs" />
     <Compile Include="IoC\ThrowIfRepositoriesAreUsedAttribute.cs" />
     <Compile Include="IoC\ThrowInterceptor.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
