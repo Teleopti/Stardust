@@ -54,6 +54,10 @@ export class ResetPasswordFormComponent {
 		return this.form.get('password');
 	}
 
+	get confirmPasswordControl(): AbstractControl {
+		return this.form.get('confirmPassword');
+	}
+
 	onSubmit(): void {
 		this.form.setErrors({ resetFailed: false });
 		for (const i in this.form.controls) {
