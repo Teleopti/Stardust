@@ -29,5 +29,21 @@ namespace Teleopti.Wfm.Adherence.Test
 			Target.Build(null, null)
 				.HistoricalOverview.Should().Be.False();
 		}
+		
+		[Test]
+		public void ShouldHaveModifySkillGroupPermission()
+		{
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup);
+
+			Target.Build(null, null)
+				.ModifySkillGroup.Should().Be.True();
+		}	
+		
+		[Test]
+		public void ShouldNotHaveModifySkillGroupPermission()
+		{
+			Target.Build(null, null)
+				.ModifySkillGroup.Should().Be.False();
+		}
 	}
 }
