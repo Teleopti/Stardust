@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.TestCommon
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 		private readonly ICurrentDataSource _dataSource;
-		private readonly IThreadPrincipalContext _threadPrincipalContext;
 		private readonly List<Type> _handlerTypes = new List<Type>();
 		private ConcurrentQueue<IEvent> queuedEvents = new ConcurrentQueue<IEvent>();
 
@@ -26,14 +25,12 @@ namespace Teleopti.Ccc.TestCommon
 			IRtaEventPublisher rtaPublisher,
 			ResolveEventHandlers resolver,
 			CommonEventProcessor processor,
-			ICurrentDataSource dataSource,
-			IThreadPrincipalContext threadPrincipalContext)
+			ICurrentDataSource dataSource)
 		{
 			_rtaPublisher = rtaPublisher;
 			_resolver = resolver;
 			_processor = processor;
 			_dataSource = dataSource;
-			_threadPrincipalContext = threadPrincipalContext;
 		}
 
 		public IEvent[] PublishedEvents => queuedEvents.ToArray();
