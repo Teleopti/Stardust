@@ -824,6 +824,7 @@
     <Compile Include="Core\Extensions\DateTimeFormatExtensions.cs" />
     <Compile Include="Core\IoC\LegacyRegistrationsFromAnywhere.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificCookieSettingsProvider.cs" />
+    <Compile Include="Core\AgentScheduleViewModelProvider.cs" />
     <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PublishStartupJobsTask.cs" />
     <Compile Include="Core\Startup\InitializeApplication\RequeueHangfireEventsTask.cs" />

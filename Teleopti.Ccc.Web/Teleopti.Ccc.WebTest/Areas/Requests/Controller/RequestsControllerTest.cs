@@ -56,6 +56,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		}
 
 		[Test]
+		public void ShouldGetShiftTradeScheduleViewModel()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupShiftTradeScheduleData(date);
+
+			var result = Target.GetShiftTradeSchedules(input);
+
+			result.PersonFromSchedule.Should().Not.Be.Null();
+			result.PersonToSchedule.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldGetLicenseAvailability()
 		{
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.WebOvertimeRequest);
@@ -318,6 +330,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			setUpLogonUser();
 
 			return getInputForm(teamId, requestStartTime, requestEndTime);
+		}
+
+		private ShiftTradeScheduleForm setupShiftTradeScheduleData(DateTime date)
+		{
+			var scenarioId = Guid.NewGuid();
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+
+			CurrentScenario.Current().WithId(scenarioId);
+
+			Database.WithPerson(personFromId)
+				.WithScenario(scenarioId)
+				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+				.WithPerson(personToId)
+				.WithScenario(scenarioId)
+				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
+
+			return new ShiftTradeScheduleForm
+			{
+				PersonFromId = personFromId,
+				PersonToId = personToId,
+				RequestDate = date
+			};
 		}
 
 		private AllRequestsFormData getInputForm(Guid teamId, DateTime start, DateTime? end)

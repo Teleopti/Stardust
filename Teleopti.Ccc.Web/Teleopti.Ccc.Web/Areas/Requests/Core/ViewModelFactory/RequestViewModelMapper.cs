@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -12,10 +11,8 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Core;
 
 
@@ -31,12 +28,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
-		private readonly TeamScheduleAgentScheduleViewModelMapper _layerMapper;
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IAgentScheduleViewModelProvider _agentScheduleViewModelProvider;
 
 		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider,
-			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,  TeamScheduleAgentScheduleViewModelMapper layerMapper, ITeamScheduleShiftViewModelProvider shiftViewModelProvider, ILoggedOnUser loggedOnUser)
+			IPersonAbsenceAccountProvider personAbsenceAccountProvider, IUserTimeZone userTimeZone, IScheduleStorage scheduleStorage, 
+			ICurrentScenario currentScenario, IAgentScheduleViewModelProvider agentScheduleViewModelProvider)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
@@ -44,9 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_userTimeZone = userTimeZone;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
-			_layerMapper = layerMapper;
-			_shiftViewModelProvider = shiftViewModelProvider;
-			_loggedOnUser = loggedOnUser;
+			_agentScheduleViewModelProvider = agentScheduleViewModelProvider;
 		}
 
 		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request,
@@ -131,34 +125,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			var shiftViewModels = new List<TeamScheduleAgentScheduleViewModel>();
 			foreach (var date in period.DayCollection())
 			{
-				var viewModel = getAgentScheduleViewModel(person, schedules.ScheduledDay(date));
+				var viewModel = _agentScheduleViewModelProvider.GetAgentScheduleViewModel(person, schedules.ScheduledDay(date));
 				shiftViewModels.Add(viewModel);
 			}
 
 			return shiftViewModels;
-		}
-
-		private TeamScheduleAgentScheduleViewModel getAgentScheduleViewModel(IPerson person, IScheduleDay scheduleDay)
-		{
-			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
-			var schedulePeriod = getScheduleMinMax(scheduleViewModel, person, scheduleDay.DateOnlyAsPeriod.DateOnly);
-			var isMySchedule = _loggedOnUser.CurrentUser().Equals(person);
-
-			return _layerMapper.Map(scheduleViewModel, schedulePeriod, isMySchedule);
-		}
-
-		private DateTimePeriod getScheduleMinMax(AgentInTeamScheduleViewModel schedule, IPerson person, DateOnly date)
-		{
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			
-			if (schedule.ScheduleLayers.IsNullOrEmpty()) {
-				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour), date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
-			}
-
-			var startTime = schedule.ScheduleLayers.First().Start;
-			var endTime = schedule.ScheduleLayers.Last().End;
-
-			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 		}
 
 		private PersonAccountSummaryViewModel getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)

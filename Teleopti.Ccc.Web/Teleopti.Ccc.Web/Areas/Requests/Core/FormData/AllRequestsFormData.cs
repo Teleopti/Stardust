@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -14,5 +15,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 		public IDictionary<RequestFilterField, string> Filters { get; set; }
 		public Paging Paging { get; set; }
 		
+	}
+
+	public class ShiftTradeScheduleForm
+	{
+		public Guid PersonFromId { get; set; }
+		public Guid PersonToId { get; set; }
+		public DateTime RequestDate { get; set; }
 	}
 }
