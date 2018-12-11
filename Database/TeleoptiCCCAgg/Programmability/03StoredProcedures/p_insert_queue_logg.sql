@@ -247,6 +247,7 @@ EXECUTE(@txt)
 
 
 
+
 delete from #tmp_queue_logg
 where 
                coalesce(offd_direct_call_cnt,0) = 0 and
@@ -265,6 +266,7 @@ where
 			   coalesce(wait_dur,0) = 0 and
                coalesce(aband_short_call_cnt,0) = 0 and
                coalesce(aband_within_sl_cnt,0) = 0
+
 
 
 
