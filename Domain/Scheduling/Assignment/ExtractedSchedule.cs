@@ -368,8 +368,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			foreach (var personAbsence in PersonAbsenceCollection())
 			{
-				if (Period.Intersect(personAbsence.Layer.Period))
+				if (SignificantPart() == SchedulePartView.FullDayAbsence && Period.Intersect(personAbsence.Layer.Period) || Period.Contains(personAbsence.Period.StartDateTime))
+				{
 					personAbsenceUpForDelete = personAbsence;
+				}
 
 				if (personAbsenceUpForDelete == null) continue;
 
