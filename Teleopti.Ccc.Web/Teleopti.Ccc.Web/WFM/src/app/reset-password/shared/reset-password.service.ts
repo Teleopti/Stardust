@@ -44,4 +44,13 @@ export class ResetPasswordService {
 			})
 		);
 	}
+
+	resetPassword(body: ResetRequest) {
+		return this.http.post('../ChangePassword/Reset', body).pipe(
+			flatMap((res: GenericResponse) => {
+				if (res.success === true) return of(true);
+				else if (res.success === false) return throwError(false);
+			})
+		);
+	}
 }

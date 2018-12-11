@@ -19,7 +19,7 @@ describe('ResetPasswordService', () => {
 		expect(httpClientSpy.post.calls.count()).toEqual(1);
 	});
 
-	it('should post a reset', () => {
+	it('should post a resetRequest', () => {
 		let response: Partial<GenericResponse> = { success: true };
 		httpClientSpy.post.and.returnValue(of(response));
 
@@ -29,6 +29,22 @@ describe('ResetPasswordService', () => {
 		};
 
 		resetPasswordService.reset(resetRequest).subscribe(response => {
+			expect(response).toBe(true);
+		});
+
+		expect(httpClientSpy.post.calls.count()).toEqual(1);
+	});
+
+	it('should post a reset password', () => {
+		let response: Partial<GenericResponse> = { success: true };
+		httpClientSpy.post.and.returnValue(of(response));
+
+		const resetRequest: ResetRequest = {
+			NewPassword: 'password',
+			ResetToken: 'token'
+		};
+
+		resetPasswordService.resetPassword(resetRequest).subscribe(response => {
 			expect(response).toBe(true);
 		});
 

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			var resetSuccess = _passwordManager.Reset(model?.NewPassword, model?.ResetToken);
 
 			var resultModel = new BaseResultModel();
-			if (resetSuccess == true || model == null)
+			if (!resetSuccess || model == null)
 			{
 				resultModel.Errors.Add(Error_RequestFailed);
 			}

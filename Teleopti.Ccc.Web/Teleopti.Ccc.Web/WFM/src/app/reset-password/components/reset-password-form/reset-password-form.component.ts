@@ -68,7 +68,7 @@ export class ResetPasswordFormComponent {
 		}
 		if (this.isFormValid) {
 			this.resetPasswordService
-				.reset({
+				.resetPassword({
 					ResetToken: this.token,
 					NewPassword: this.passwordControl.value
 				})
