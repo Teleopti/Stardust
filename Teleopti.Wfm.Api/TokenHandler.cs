@@ -49,10 +49,8 @@ namespace Teleopti.Wfm.Api
 			
 			using (var uow = result.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var personRep = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRep.Get(user.UserId);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).LoadAllBusinessUnitSortedByName().First();
-				_logOnOff.LogOn(result.DataSource, person, businessUnit);
+				_logOnOff.LogOn(result.DataSource, result.Person, businessUnit);
 			}
 			
 			// Call the next delegate/middleware in the pipeline
