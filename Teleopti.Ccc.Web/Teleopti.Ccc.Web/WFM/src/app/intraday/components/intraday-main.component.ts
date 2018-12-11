@@ -16,10 +16,12 @@ import {
 	IntradayPerformanceSummaryItem,
 	IntradayPerformanceSummaryData,
 	IntradayStaffingDataSeries,
+	IntradayLatestTimeData,
 	Skill,
 	SkillPickerItemType
 } from '../types';
 import { IntradayIconService } from '../services/intraday-icon.service';
+import { log } from 'util';
 
 @Component({
 	selector: 'app-intraday-main',
@@ -46,6 +48,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	displayDate: string = moment().format('LLLL');
 	intradayTabs: IntradayChartType;
 	chartData: c3.Data = this.trafficDataToC3Data(this.getEmptyTrafficData().DataSeries);
+	latestTime: IntradayLatestTimeData | undefined;
 	summaryData: IntradayTrafficSummaryItem[] | IntradayPerformanceSummaryItem[] = [];
 	loading = false;
 	exporting = false;
@@ -170,25 +173,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		this.exporting = false;
 	}
 
-	// getSelectedSkillOrGroup(): SkillPickerItem {
-	// 	console.log('selected');
-
-	// 	clearInterval(this.timer);
-	// 	if (!this.selectedSubSkillId || this.selectedSubSkillId === 'all') {
-	// 		this.timer = setInterval(this.updateData, 1000);
-	// 		return this.selectedSkillOrGroup;
-	// 	} else {
-	// 		const spi: SkillPickerItem = {
-	// 			Id: this.selectedSubSkillId,
-	// 			Name: '',
-	// 			Skills: [],
-	// 			Type: SkillPickerItemType.Skill
-	// 		};
-	// 		this.timer = setInterval(this.updateData, 1000);
-	// 		return spi;
-	// 	}
-	// }
-
 	onPickSubSkill() {
 		this.updateData(true);
 	}
@@ -215,17 +199,31 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getTrafficData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
-					this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
-					this.summaryData = this.trafficDataToSummaryData(data.Summary);
+					this.intradayDataService
+						.getLatestTimeForSkill(selectedSkill.Id)
+						.subscribe((time: IntradayLatestTimeData) => {
+							if (this.selectedOffset === 0) {
+								this.latestTime = time;
+							}
+							this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+							this.summaryData = this.trafficDataToSummaryData(data.Summary);
+						});
 					this.loading = false;
 				});
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
 				this.intradayDataService.getGroupTrafficData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
-					this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
-					this.summaryData = this.trafficDataToSummaryData(data.Summary);
-					this.loading = false;
+					this.intradayDataService
+						.getLatestTimeForSkill(selectedSkill.Id)
+						.subscribe((time: IntradayLatestTimeData) => {
+							if (this.selectedOffset === 0) {
+								this.latestTime = time;
+							}
+							this.loading = false;
+							this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+							this.summaryData = this.trafficDataToSummaryData(data.Summary);
+						});
 				});
 			}
 		}
@@ -234,8 +232,15 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.intradayDataService.getPerformanceData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
-					this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
-					this.summaryData = this.performanceDataToSummaryData(data.Summary);
+					this.intradayDataService
+						.getLatestTimeForSkill(selectedSkill.Id)
+						.subscribe((time: IntradayLatestTimeData) => {
+							this.latestTime = time;
+							if (this.selectedOffset === 0) {
+							}
+							this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+							this.summaryData = this.performanceDataToSummaryData(data.Summary);
+						});
 					this.loading = false;
 				});
 			}
@@ -244,8 +249,15 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				this.intradayDataService
 					.getGroupPerformanceData(selectedSkill.Id, this.selectedOffset)
 					.subscribe(data => {
-						this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
-						this.summaryData = this.performanceDataToSummaryData(data.Summary);
+						this.intradayDataService
+							.getLatestTimeForSkill(selectedSkill.Id)
+							.subscribe((time: IntradayLatestTimeData) => {
+								if (this.selectedOffset === 0) {
+									this.latestTime = time;
+								}
+								this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+								this.summaryData = this.performanceDataToSummaryData(data.Summary);
+							});
 						this.loading = false;
 					});
 			}
@@ -275,10 +287,14 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	private trafficDataToC3Data(input: IntradayTrafficDataSeries, columnsOnly: boolean = false): c3.Data {
 		if (input && input.Time !== null) {
-			const timeStamps = input.Time.map(item => moment(item).format('HH:mm'));
+			const timeStamps = input.Time.map(item => {
+				return moment(item).format('YYYY-MM-DD HH:mm');
+			});
+			if (!timeStamps || timeStamps.length === 0) return {};
 			if (columnsOnly) {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['Forcasted_calls'].concat(input.ForecastedCalls),
@@ -290,6 +306,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			} else {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['Forcasted_calls'].concat(input.ForecastedCalls),
@@ -350,10 +367,12 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	private performanceDataToC3Data(input: IntradayPerformanceDataSeries, columnsOnly: boolean = false): c3.Data {
 		if (input && input.Time !== null) {
-			const timeStamps = input.Time.map(item => moment(item).format('HH:mm'));
+			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
+			if (!timeStamps || timeStamps.length === 0) return {};
 			if (columnsOnly) {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['ASA'].concat(input.AverageSpeedOfAnswer),
@@ -365,6 +384,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			} else {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['ASA'].concat(input.AverageSpeedOfAnswer),
@@ -419,10 +439,12 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	private staffingDataToC3Data(input: IntradayStaffingDataSeries, columnsOnly: boolean = false): c3.Data {
 		if (input && input.Time !== null) {
-			const timeStamps = input.Time.map(item => moment(item).format('HH:mm'));
+			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
+			if (!timeStamps || timeStamps.length === 0) return {};
 			if (columnsOnly) {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['Forecasted_staffing'].concat(input.ForecastedStaffing),
@@ -434,6 +456,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			} else {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['Forecasted_staffing'].concat(input.ForecastedStaffing),

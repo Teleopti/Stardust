@@ -43,6 +43,7 @@
 						</div>
 						<div class="con-flex">
 							<button
+								[hidden]="!selectedSkillOrGroup"
 								style="display: flex; margin: 0 0 0 auto"
 								(click)="exportToExcel()"
 								[nzLoading]="exporting"
@@ -107,12 +108,16 @@
 					</div>
 				</div>
 			</div>
-			<div class="con-row" [hidden]="!selectedSkillOrGroup">
+			<div class="con-row" [hidden]="!selectedSkillOrGroup || loading">
 				<div class="con-flex">
-					<app-intraday-chart [chartData]="chartData" [chartType]="selectedChartType"></app-intraday-chart>
+					<app-intraday-chart
+						[chartData]="chartData"
+						[chartType]="selectedChartType"
+						[latestTime]="latestTime"
+					></app-intraday-chart>
 				</div>
 			</div>
-			<div class="con-row" [hidden]="!selectedSkillOrGroup">
+			<div class="con-row" [hidden]="!selectedSkillOrGroup || loading">
 				<div class="con-flex"></div>
 				<div class="con-flex">
 					<intraday-table [chartType]="selectedChartType" [tableData]="summaryData"></intraday-table>

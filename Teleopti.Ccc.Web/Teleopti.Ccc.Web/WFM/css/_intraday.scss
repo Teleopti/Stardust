@@ -1,14 +1,13 @@
-@media all and (-ms-high-contrast: none),
-(-ms-high-contrast: active) {
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 	.hide-on-ie {
-		display: none!important;
+		display: none !important;
 	}
-	#skill-area-id>md-autocomplete-wrap>button,
-	#skill-id>md-autocomplete-wrap>button {
-		display: none!important;
+	#skill-area-id > md-autocomplete-wrap > button,
+	#skill-id > md-autocomplete-wrap > button {
+		display: none !important;
 	}
 	.ie-cross {
-		display: inline!important;
+		display: inline !important;
 		float: right;
 		margin-top: -20px;
 	}
@@ -27,21 +26,21 @@
 	padding-bottom: 10px;
 }
 
-.c3-shapes-Current>path {
-	fill: $gray026!important;
+.c3-shapes-Current > path {
+	fill: $gray026 !important;
 }
 
 .c3-tooltip-name--Current,
 .c3-legend-item-Current {
-	display: none!important;
+	display: none !important;
 }
 
-.intraday-chart>svg {
+.intraday-chart > svg {
 	max-width: 100%;
 }
 
-#staffingChart>svg>g>.c3-axis-y2 {
-	opacity: 0!important;
+#staffingChart > svg > g > .c3-axis-y2 {
+	opacity: 0 !important;
 }
 
 // day-offset-picker, not in styleguide yet
@@ -55,16 +54,16 @@
 	.mini-active {
 		background: $blue-300;
 		color: $white;
-		box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .2);
+		box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 	}
 	.mini-success {
 		background: $green-100;
 		color: $text-color-standard;
-		box-shadow: 0 8px 17px 0 rgba(0, 0, 0, .2);
+		box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 	}
 	.work-day {
 		opacity: 1;
-		transition: all 0.5s cubic-bezier(.25, .8, .25, 1);
+		transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 	}
 	.inactive-work-day {
 		opacity: 0;
@@ -78,23 +77,43 @@
 	}
 	.uib-time {
 		.md-button {
-			margin: 0px!important;
+			margin: 0px !important;
 			&:hover {
-				background-color: #ececec!important;
+				background-color: #ececec !important;
 			}
 		}
 	}
-	@media screen and (max-width:768px) {
-		.day-row>.con-flex {
-			padding: 0!important;
+	@media screen and (max-width: 768px) {
+		.day-row > .con-flex {
+			padding: 0 !important;
 		}
 	}
 }
 
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
 	.con-row-wrap {
 		flex-direction: row;
 		flex-wrap: wrap;
 	}
 }
 //-------------------------------------------------------------------------------
+
+app-intraday-chart .c3-grid .time-line line {
+	stroke: $orange-600;
+}
+
+app-intraday-chart .c3-grid .time-line text {
+	fill: $orange-600;
+}
+
+app-intraday-chart text {
+	fill: $text-color-standard;
+}
+
+app-intraday-chart line {
+	stroke: $text-color-standard;
+}
+
+app-intraday-chart path {
+	stroke: $text-color-standard;
+}
