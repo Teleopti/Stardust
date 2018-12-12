@@ -361,6 +361,7 @@
     <Compile Include="Scheduling\ReducedSkillsProvider.cs" />
     <Compile Include="Scheduling\RemoveNonPreferenceDaysOffs.cs" />
     <Compile Include="Scheduling\SchedulingInformation.cs" />
+    <Compile Include="Scheduling\UserTimeZoneGuard.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />

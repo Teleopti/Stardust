@@ -182,7 +182,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IClearReferredShiftTradeRequests>()
 				.AsSelf()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<TimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<BudgetGroupState>().InstancePerLifetimeScope();
@@ -437,6 +436,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Args().IsFatClient)
 			{
+				builder.RegisterType<TimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 				builder.RegisterType<DesktopPeopleInOrganization>().As<IAllStaff>().SingleInstance();
 				builder.RegisterType<DesktopContextState>()
 					.As<IOptimizationPreferencesProvider>()
@@ -461,6 +461,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
+				builder.RegisterType<UserTimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 				builder.RegisterType<BlockPreferenceProviderForPlanningPeriod>().As<IBlockPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<DayOffOptimizationPreferenceProviderForPlanningPeriod>().As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<PersistSchedulesAfterIsland>().As<ISynchronizeSchedulesAfterIsland>().SingleInstance();
