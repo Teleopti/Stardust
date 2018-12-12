@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var person = schedule.Key;
 				if (!people.Contains(person)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
-				if (!blockOption.UseTeamBlockOption) continue;
+				if (blockOption.BlockTypeValue == BlockFinderType.SingleDay) continue;
 
 				var personPeriod = person.Period(period.StartDate);
 
