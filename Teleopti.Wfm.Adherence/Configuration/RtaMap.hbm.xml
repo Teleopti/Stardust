@@ -12,7 +12,7 @@
 		<many-to-one name="Activity" class="Teleopti.Ccc.Domain.Scheduling.Activity"/>
 		<many-to-one name="StateGroup" class="Teleopti.Wfm.Adherence.Configuration.RtaStateGroup"/>
 		<many-to-one name="RtaRule" class="Teleopti.Wfm.Adherence.Configuration.RtaRule"/>
-		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="nosetter.camelcase-underscore"/>
+		<property name="BusinessUnit" access="property"/>
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
 	</class>
 </hibernate-mapping>

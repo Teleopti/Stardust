@@ -197,7 +197,7 @@ namespace Teleopti.Wfm.Adherence.States
 				from c in codes
 				select new
 				{
-					Key = new Tuple<Guid,Guid?,String>(m.BusinessUnit.Id.Value,m.Activity?.Id,c.StateCode),
+					Key = new Tuple<Guid,Guid?,String>(m.BusinessUnit.Value,m.Activity?.Id,c.StateCode),
 					Rule = m.RtaRule
 				}).ToLookup(m => m.Key);
 

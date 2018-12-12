@@ -170,7 +170,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			WithUnitOfWork.Do(() => Maps.Add(mapping));
 
 			WithReadModels.Get(() => Target.Read())
-				.Single().BusinessUnitId.Should().Be(mapping.BusinessUnit.Id.Value);
+				.Single().BusinessUnitId.Should().Be(mapping.BusinessUnit.Value);
 		}
 
 		[Test]
