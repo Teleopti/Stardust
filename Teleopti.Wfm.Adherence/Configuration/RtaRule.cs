@@ -6,7 +6,7 @@ using Teleopti.Wfm.Adherence.Configuration.Events;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {
-	public class RtaRule : VersionedAggregateRootWithBusinessUnit, IRtaRule
+	public class RtaRule : VersionedAggregateRootWithBusinessUnitId, IRtaRule
 	{
 		private Description _description;
 		private Color _displayColor;

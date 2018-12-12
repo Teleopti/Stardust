@@ -225,6 +225,7 @@
     <Compile Include="Common\EntityBaseTypes\NonversionedAggregateRootWithBusinessUnit.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRoot.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnit.cs" />
+    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitId.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitIdWithoutChangeInfo.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
