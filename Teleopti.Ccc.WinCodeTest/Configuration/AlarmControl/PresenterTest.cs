@@ -47,11 +47,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             _createPerson.PermissionInformation.SetDefaultTimeZone((
                                                                        TimeZoneInfo.FindSystemTimeZoneById(
                                                                            "W. Europe Standard Time")));
-            foreach (RtaRule rule in alarms)
-            {
-                ReflectionHelper.SetUpdatedBy(rule, _createPerson);
-                ReflectionHelper.SetUpdatedOn(rule, _createDate.AddHours(1));
-            }
         }
 
         [Test]
