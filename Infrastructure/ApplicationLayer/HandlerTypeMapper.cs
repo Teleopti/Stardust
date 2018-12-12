@@ -454,7 +454,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			yield return new MappingSpec
 			{
 				CurrentPersistedName = "ScheduleChangeProcessor",
-				LegacyPersistedNames = new[] {"Teleopti.Wfm.Adherence.Domain.Service.ScheduleChangeProcessor, Teleopti.Wfm.Adherence"},
+				LegacyPersistedNames = new[]
+				{
+					"Teleopti.Wfm.Adherence.Domain.Service.ScheduleChangeProcessor, Teleopti.Wfm.Adherence",
+					"Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service.ScheduleChangeProcessor, Teleopti.Ccc.Domain"
+				},
 				CurrentTypeName = "Teleopti.Wfm.Adherence.States.ScheduleChangeProcessor, Teleopti.Wfm.Adherence"
 			};
 			yield return new MappingSpec
@@ -488,7 +492,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				CurrentTypeName = "Teleopti.Wfm.Adherence.Historical.RtaEventStoreMaintainer, Teleopti.Wfm.Adherence"
 			};
 
-
+			
 			yield return new MappingSpec
 			{
 				CurrentPersistedName = "HandlerEnabledByTestToggle",
