@@ -1210,15 +1210,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		// have to use Application.DoEvents(); here. Else the loop will continue for ever
 		private void cancelAllBackgroundWorkers()
 		{
-			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCancellingThreeDots");
-
-			cancelBackgroundWorker(_backgroundWorkerValidatePersons);
-			cancelBackgroundWorker(_backgroundWorkerResourceCalculator);
-			cancelBackgroundWorker(backgroundWorkerLoadData);
-			cancelBackgroundWorker(_backgroundWorkerDelete);
-			cancelBackgroundWorker(_backgroundWorkerScheduling);
-			cancelBackgroundWorker(_backgroundWorkerOvertimeScheduling);
-			cancelBackgroundWorker(_backgroundWorkerOptimization);
+			var bgwsToKill = new[]
+			{
+				_backgroundWorkerValidatePersons,
+				_backgroundWorkerResourceCalculator,
+				backgroundWorkerLoadData,
+				_backgroundWorkerDelete,
+				_backgroundWorkerScheduling,
+				_backgroundWorkerOvertimeScheduling,
+				_backgroundWorkerOptimization
+			};
+			for (var i = 0; i < bgwsToKill.Length; i++)
+			{
+				scheduleStatusBarUpdate($"{LanguageResourceHelper.Translate("XXCancellingThreeDots")} ({i + 1}/{bgwsToKill.Length})");
+				cancelBackgroundWorker(bgwsToKill[i]);
+			}
+			scheduleStatusBarUpdate(LanguageResourceHelper.Translate("XXCancellingThreeDots"));
 		}
 
 		private void cancelBackgroundWorker(BackgroundWorker worker)
