@@ -3,7 +3,10 @@
 (function() {
 	var requestsShiftDetailDirective = function (
 		shiftTradeScheduleService,
-		serviceDateFormatHelper
+		serviceDateFormatHelper,
+		toggleService,
+		teamScheduleSvc,
+		groupScheduleFactory
 	) {
 		return {
 			restrict: 'A',
@@ -24,7 +27,7 @@
 
 			elem.bind('click', function(oEvent) {
 				var position = getShiftDetailDisplayPosition(oEvent);
-				updateShiftStatusForSelectedPerson(personIds[0], personIds[1], scheduleDate, targetTimezone, position, showShiftDetail);
+				updateShiftStatusForSelectedPerson(personIds, scheduleDate, targetTimezone, position, showShiftDetail);
 				oEvent.stopPropagation();
 			});
 		}
@@ -42,20 +45,31 @@
 		}
 
 		function updateShiftStatusForSelectedPerson(
-			personFromId,
-			personToId,
+			personIds,
 			scheduleDate,
 			_targetTimeZone,
 			position,
 			showShiftDetail
 		) {
-			if (!personFromId || !personToId) {
+			if (personIds.length === 0) {
 				return;
 			}
-
-			shiftTradeScheduleService.getSchedules(scheduleDate, personFromId, personToId).then(function(result) {
-				showShiftDetail && showShiftDetail({ params: { left: position.left, top: position.top, schedules: result, targetTimezone: _targetTimeZone } });
-			});
+			if (toggleService.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412) {
+				shiftTradeScheduleService.getSchedules(scheduleDate, personIds[0], personIds[1]).then(function (result) {
+					showShiftDetail && showShiftDetail({ params: { left: position.left, top: position.top, schedules: result, targetTimezone: _targetTimeZone } });
+				});
+			}
+			else {
+				teamScheduleSvc.getSchedules(scheduleDate, personIds).then(function (result) {
+					var schedulesToDisplay = result.Schedules.filter(function (schedule) {
+						return schedule.Date === scheduleDate;
+					});
+					var schedules = groupScheduleFactory.Create(schedulesToDisplay, scheduleDate, _targetTimeZone, 48);
+					showShiftDetail &&
+						showShiftDetail({ params: { left: position.left, top: position.top, schedules: schedules } });
+				});
+			}
+			
 		}
 	};
 
@@ -64,6 +78,12 @@
 		.directive('requestsShiftDetail', [
 			'shiftTradeScheduleService',
 			'serviceDateFormatHelper',
+			'Toggle',
+			'TeamSchedule',
+			'GroupScheduleFactory',
 			requestsShiftDetailDirective
 		]);
 })();
+
+
+

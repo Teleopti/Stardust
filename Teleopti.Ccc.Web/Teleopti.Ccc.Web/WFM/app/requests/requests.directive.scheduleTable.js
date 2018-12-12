@@ -4,11 +4,12 @@
 	angular
 		.module('wfm.requests')
 		.directive('requestsScheduleTable', scheduleTableDirective)
-		.controller('requestsScheduleTableController', [requestsScheduleTableController]);
+		.controller('requestsScheduleTableController', ['Toggle',requestsScheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
 			scope: {
+				schedules: '=',
 				shifts: '=',
 				times:'='
 			},
@@ -19,5 +20,8 @@
 			templateUrl: 'app/requests/html/requests-schedule-table.html'
 		};
 	}
-	function requestsScheduleTableController() {}
+	function requestsScheduleTableController(toggleService) {
+		var vm = this;
+		vm.enableStory79412 = toggleService.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412;
+	}
 })();

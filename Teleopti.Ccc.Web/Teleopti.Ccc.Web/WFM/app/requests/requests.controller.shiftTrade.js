@@ -124,8 +124,13 @@
 		};
 
 		vm.showShiftDetail = function (params) {
-			vm.buildShifts(params.schedules, params.targetTimezone);
-			vm.timeLine = params.schedules.TimeLine;
+			if (toggleService.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412) {
+				vm.buildShifts(params.schedules, params.targetTimezone);
+				vm.timeLine = params.schedules.TimeLine;
+			}
+			else {
+				vm.schedules = params.schedules;
+			}
 			vm.shiftDetailTop = params.top;
 			vm.shiftDetailLeft = params.left;
 			vm.displayShiftDetail = true;
