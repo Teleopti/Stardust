@@ -129,9 +129,10 @@
 		}
 
 		vm.clickEditButton = function (personSchedule) {
-			scheduleInEditing = personSchedule;
+			if (scheduleInEditing !== personSchedule)
+				scheduleInEditing = personSchedule;
 		}
-		
+
 		vm.isScheduleEditing = function (personSchedule) {
 			return scheduleInEditing === personSchedule;
 		}

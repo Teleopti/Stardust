@@ -2,6 +2,7 @@
 	var $compile,
 		$rootScope,
 		$timeout,
+		mockSignalRBackendServer = {},
 		scheduleManagement;
 
 	describe("<shift-editor>", function () {
@@ -14,7 +15,8 @@
 				$provide.service('Toggle', function () {
 					return { WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978: true };
 				});
-				
+				$provide.service('signalRSVC', setupMockSignalRService);
+
 				$provide.service('ActivityService', function () {
 					fakeActivityService = new FakeActivityService();
 					return fakeActivityService;
@@ -39,8 +41,7 @@
 			scheduleManagement = ScheduleManagement;
 		}));
 
-
-		xit('should show shift editor view after click the edit button', function () {
+		it('should show shift editor view after click the edit button', function () {
 			var schedule = {
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -145,6 +146,17 @@
 						callback({ Schedules: self.schedules });
 					}
 				};
+			};
+		}
+		
+		function setupMockSignalRService() {
+			mockSignalRBackendServer.subscriptions = [];
+
+			return {
+				subscribeBatchMessage: function (options, messageHandler, timeout) {
+					mockSignalRBackendServer.subscriptions.push(options);
+					mockSignalRBackendServer.notifyClients = messageHandler;
+				}
 			};
 		}
 
