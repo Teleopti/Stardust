@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 		}
 
 
-		public IList<OccupancyViewModel> GetSeatBookingsForScheduleDays(List<IScheduleDay> scheduleDays)
+		public IList<OccupancyViewModel> GetSeatBookingsForScheduleDays(IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var bookings = new List<ISeatBooking>();
 

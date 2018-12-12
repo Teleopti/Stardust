@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual WeekScheduleViewModel FetchWeekData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
 		{
 			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var showForDate = date ?? new DateOnly(nowForUser.Date);
+			var showForDate = date ?? new DateOnly(nowForUser);
 			
 			return _scheduleViewModelFactory.CreateWeekViewModel(showForDate, staffingPossiblityType);
 		}
