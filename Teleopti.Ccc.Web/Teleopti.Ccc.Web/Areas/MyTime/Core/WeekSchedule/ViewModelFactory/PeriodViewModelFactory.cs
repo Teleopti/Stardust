@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public IEnumerable<OvertimeAvailabilityPeriodViewModel> CreateOvertimeAvailabilityPeriodViewModels(IOvertimeAvailability overtimeAvailability, IOvertimeAvailability overtimeAvailabilityYesterday, TimePeriod minMaxTime)
 		{
-			var overtimeAvailabilityPeriods = new List<OvertimeAvailabilityPeriodViewModel>();
+			var overtimeAvailabilityPeriods = new List<OvertimeAvailabilityPeriodViewModel>(2);
 			var diff = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
 			if (overtimeAvailability != null)
 			{

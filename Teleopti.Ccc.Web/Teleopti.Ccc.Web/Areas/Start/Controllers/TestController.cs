@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			};
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
 			_httpContext.Current().User = new ClaimsPrincipal(new[] {claimsIdentity});
-			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword, isPersistent, true);
+			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person, tenantPassword, isPersistent, true);
 
 			return View("Message", new TestMessageViewModel
 			{

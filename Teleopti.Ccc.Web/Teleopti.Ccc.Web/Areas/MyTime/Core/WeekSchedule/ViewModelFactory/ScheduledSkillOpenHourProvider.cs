@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly IOvertimeRequestOpenPeriodProvider _overtimeRequestOpenPeriodProvider;
+		private readonly PersonalSkills personalSkills = new PersonalSkills();
 
 		public ScheduledSkillOpenHourProvider(ILoggedOnUser loggedOnUser, IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider, ISkillTypeRepository skillTypeRepository, IOvertimeRequestOpenPeriodProvider overtimeRequestOpenPeriodProvider)
 		{
@@ -79,12 +80,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			{
 				foreach (var workload in skill.WorkloadCollection)
 				{
-					foreach (var templateWeek in workload.TemplateWeekCollection)
-					{
-						if (templateWeek.Value.DayOfWeek != date.DayOfWeek) continue;
-						openHourList.AddRange(templateWeek.Value.OpenHourList
-							.Select(openHourPeriod => toAgentTimeZonePeriod(date, openHourPeriod, skill.TimeZone, agentTimezone)));
-					}
+					var templateWeek = workload.TemplateWeekCollection[(int) date.DayOfWeek];
+					openHourList.AddRange(templateWeek.OpenHourList
+						.Select(openHourPeriod =>
+							toAgentTimeZonePeriod(date, openHourPeriod, skill.TimeZone, agentTimezone)));
 				}
 			}
 
@@ -102,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			if (!personPeriod.Any())
 				return null;
 
-			var personSkills = filterPersonSkills(personPeriod.SelectMany(p => new PersonalSkills().PersonSkills(p)), period);
+			var personSkills = filterPersonSkills(personPeriod.SelectMany(p => personalSkills.PersonSkills(p)), period);
 
 			if (!personSkills.Any())
 				return null;

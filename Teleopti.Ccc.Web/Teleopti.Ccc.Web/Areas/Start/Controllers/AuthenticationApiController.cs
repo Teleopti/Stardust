@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			try
 			{
-				_webLogon.LogOn(result.DataSource.DataSourceName, model.BusinessUnitId, result.Person.Id.Value,
+				_webLogon.LogOn(result.DataSource.DataSourceName, model.BusinessUnitId, result.Person,
 					result.TenantPassword, result.IsPersistent, model.IsLogonFromBrowser);
 			}
 			catch (PermissionException)

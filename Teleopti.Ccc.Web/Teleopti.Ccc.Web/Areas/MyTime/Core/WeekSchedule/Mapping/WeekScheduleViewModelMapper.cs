@@ -302,11 +302,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var periodViewModelFactory = _periodViewModelFactory;
 			var minMaxTime = adjustMinEndTime(s.MinMaxTime);
 
-			IEnumerable<PeriodViewModel> periodsViewModels;
-			periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForWeek(projectionList, minMaxTime, s.Date,
-				s.ScheduleDay?.TimeZone, s.ScheduleDay.Person);
-
-			periodsViewModels = periodsViewModels ?? new PeriodViewModel[0];
+			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForWeek(projectionList, minMaxTime, s.Date,
+				s.ScheduleDay?.TimeZone, s.ScheduleDay.Person) ?? new PeriodViewModel[0];
 
 			var overtimeAvailabilityPeriodViewModels =
 				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability,
