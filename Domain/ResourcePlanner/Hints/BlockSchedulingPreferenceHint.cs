@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var personPeriods = person.PersonPeriods(input.Period);
 				if (personPeriods.Any(x => x.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
-				if (!blockOption.UseTeamBlockOption) continue;
+				if (blockOption.BlockTypeValue == BlockFinderType.SingleDay) continue;
 				var scheduleForPerson = input.Schedules[person];
 
 				var scheduleDays = scheduleForPerson.ScheduledDayCollection(period);

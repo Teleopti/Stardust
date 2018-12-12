@@ -5,8 +5,10 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,6 +29,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakePreferenceDayRepository PreferenceDayRepository;
+		public FakePersonAssignmentRepository AssignmentRepository;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -395,6 +400,66 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.Find(new[] { agent}, date.ToDateOnlyPeriod(), scenario).Any(x => x.ShiftLayers.Any()).Should().Be.True();
+		}
+		
+		[Test]
+		public void ShouldNotShowBlockPreferenceHintIfBlockIsNotUsed()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var shiftCategoryRuleSet = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryRuleSet));
+
+			var agent = PersonRepository.Has(new Contract("_"), new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("_") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario,new DateOnlyPeriod(firstDay,firstDay.AddDays(6)),1));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay,SchedulePeriodType.Week, 1);
+			planningPeriod.PlanningGroup.Settings.First().BlockSameShiftCategory = true;
+			planningPeriod.PlanningGroup.Settings.First().BlockFinderType = BlockFinderType.SingleDay;
+			planningPeriod.PlanningGroup.SetGlobalValues(new Percent(1));
+			
+			PreferenceDayRepository.Add(new PreferenceDay(agent, firstDay, new PreferenceRestriction {ShiftCategory = new ShiftCategory()}));
+			
+			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value).BusinessRulesValidationResults;
+
+			if (result.Any())
+			{
+				result.First().ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.BlockScheduling).Should().Be.Null();
+
+			}
+		}
+		
+		[Test]
+		public void ShouldNotShowBlockHintIfBlockIsNotUsed()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var shiftCategoryRuleSet = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryRuleSet));
+
+			var agent = PersonRepository.Has(new Contract("_"), new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("_") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario,new DateOnlyPeriod(firstDay,firstDay.AddDays(6)),1));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay,SchedulePeriodType.Week, 1);
+			planningPeriod.PlanningGroup.Settings.First().BlockSameShiftCategory = true;
+			planningPeriod.PlanningGroup.Settings.First().BlockFinderType = BlockFinderType.SingleDay;
+
+			var shiftCategoryAssignment = new ShiftCategory("_").WithId();
+			AssignmentRepository.Has(agent,scenario,activity, shiftCategoryAssignment,firstDay,new TimePeriod(8,16));
+			
+			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value).BusinessRulesValidationResults;
+
+			if (result.Any())
+			{
+				result.First().ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.BlockScheduling).Should().Be.Null();
+
+			}
 		}
 		
 		public SchedulingBlockTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
