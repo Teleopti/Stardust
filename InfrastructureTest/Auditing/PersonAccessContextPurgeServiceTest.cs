@@ -47,13 +47,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					person,
 					PersonAuditActionType.GrantRole.ToString(),
 					PersonAuditActionResult.Change.ToString(),
-					JsonConvert.SerializeObject(role))
+					JsonConvert.SerializeObject(role), appRole.DescriptionText)
 			{ TimeStamp = Now.UtcDateTime() };
 			var personAccess2 = new PersonAccess(person,
 					person,
 					PersonAuditActionType.GrantRole.ToString(),
 					PersonAuditActionResult.Change.ToString(),
-					JsonConvert.SerializeObject(role))
+					JsonConvert.SerializeObject(role), appRole.DescriptionText)
 			{ TimeStamp = Now.UtcDateTime().AddMonths(-4) };
 			PersonAccessAuditRepository.Add(personAccess1);
 			PersonAccessAuditRepository.Add(personAccess2);

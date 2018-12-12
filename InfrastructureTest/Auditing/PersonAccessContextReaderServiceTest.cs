@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					person, 
 					PersonAuditActionType.GrantRole.ToString(), 
 					PersonAuditActionResult.Change.ToString(),
-					JsonConvert.SerializeObject(role)));
+					JsonConvert.SerializeObject(role),role.Name));
 			CurrentUnitOfWork.Current().PersistAll();
 			var model = Target.LoadAudits(person, DateTime.Now.AddDays(-100), DateTime.Now, "").Single();
 

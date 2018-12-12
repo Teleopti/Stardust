@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.Auditing
 		string ActionResult { get; set; }
 		string Data { get; set; }
 		Guid Correlation { get; set; }
+		string SearchKeys { get; set; }
 	}
 }

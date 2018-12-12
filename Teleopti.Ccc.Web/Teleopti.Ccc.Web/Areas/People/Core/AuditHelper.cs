@@ -94,7 +94,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			foreach (var role in rolesToUpdate)
 			{
 				var actionJsonData = Newtonsoft.Json.JsonConvert.SerializeObject(new { RoleId = role.Id, Name = role.DescriptionText });
-				var pa = new PersonAccess(actionBy, actionOn, actionType.ToString(), actionResult.ToString(), actionJsonData, correlationId);
+				//this will be a comma seperated values of searchable strings
+				var searchKeys = role.DescriptionText;
+				var pa = new PersonAccess(actionBy, actionOn, actionType.ToString(), actionResult.ToString(), actionJsonData, searchKeys, correlationId);
 				_personAccessRepository.Add(pa);
 			}
 		}

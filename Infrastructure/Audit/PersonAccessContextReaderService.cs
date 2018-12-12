@@ -17,15 +17,13 @@ namespace Teleopti.Ccc.Infrastructure.Audit
 	public class PersonAccessContextReaderService : IPersonAccessContextReaderService
 	{
 		private readonly IPersonAccessAuditRepository _personAccessAuditRepository;
-		private readonly IApplicationRoleRepository _applicationRoleRepository;
 		
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IUserCulture _userCulture;
 
-		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository, IApplicationRoleRepository applicationRoleRepository,  ICommonAgentNameProvider commonAgentNameProvider, IUserCulture userCulture)
+		public PersonAccessContextReaderService(IPersonAccessAuditRepository personAccessAuditRepository,  ICommonAgentNameProvider commonAgentNameProvider, IUserCulture userCulture)
 		{
 			_personAccessAuditRepository = personAccessAuditRepository;
-			_applicationRoleRepository = applicationRoleRepository;
 			_commonAgentNameProvider = commonAgentNameProvider;
 			_userCulture = userCulture;
 		}

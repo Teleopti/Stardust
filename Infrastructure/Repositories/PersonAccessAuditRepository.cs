@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (!string.IsNullOrEmpty(searchword))
 				criteria = criteria
 					.Add(Restrictions.Or(
-						Restrictions.Like("Data", $"%{searchword}%"),
+						Restrictions.Like("SearchKeys", $"%{searchword}%"),
 						Restrictions.Like("ActionPerformedOn", $"%{searchword}%")));
 
 			criteria.AddOrder(Order.Desc("TimeStamp")).SetMaxResults(100);
