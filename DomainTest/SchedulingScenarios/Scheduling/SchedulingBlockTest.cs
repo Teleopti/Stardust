@@ -29,9 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakePreferenceDayRepository PreferenceDayRepository;
-		public FakePersonAssignmentRepository AssignmentRepository;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -406,29 +404,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldNotShowBlockPreferenceHintIfBlockIsNotUsed()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
-			var firstDay = new DateOnly(2015, 10, 12);
+			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var shiftCategoryRuleSet = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryRuleSet));
-
-			var agent = PersonRepository.Has(new Contract("_"), new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("_") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario,new DateOnlyPeriod(firstDay,firstDay.AddDays(6)),1));
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay,SchedulePeriodType.Week, 1);
-			planningPeriod.PlanningGroup.Settings.First().BlockSameShiftCategory = true;
-			planningPeriod.PlanningGroup.Settings.First().BlockFinderType = BlockFinderType.SingleDay;
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = PersonRepository.Has(new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
+			var planningPeriod = PlanningPeriodRepository.Has(date,SchedulePeriodType.Week, 1);
+			planningPeriod.PlanningGroup.Settings.Single().BlockSameShiftCategory = true;
+			planningPeriod.PlanningGroup.Settings.Single().BlockFinderType = BlockFinderType.SingleDay;
 			planningPeriod.PlanningGroup.SetGlobalValues(new Percent(1));
-			
-			PreferenceDayRepository.Add(new PreferenceDay(agent, firstDay, new PreferenceRestriction {ShiftCategory = new ShiftCategory()}));
+			PreferenceDayRepository.Add(new PreferenceDay(agent, date, new PreferenceRestriction {ShiftCategory = new ShiftCategory()}));
 			
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value).BusinessRulesValidationResults;
 
 			if (result.Any())
 			{
-				result.First().ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.BlockScheduling).Should().Be.Null();
-
+				result.Single().ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.BlockScheduling).Should().Be.Null();
 			}
 		}
 		
@@ -436,29 +429,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldNotShowBlockHintIfBlockIsNotUsed()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
-			var firstDay = new DateOnly(2015, 10, 12);
+			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var shiftCategoryRuleSet = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryRuleSet));
-
-			var agent = PersonRepository.Has(new Contract("_"), new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("_") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario,new DateOnlyPeriod(firstDay,firstDay.AddDays(6)),1));
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay,SchedulePeriodType.Week, 1);
-			planningPeriod.PlanningGroup.Settings.First().BlockSameShiftCategory = true;
-			planningPeriod.PlanningGroup.Settings.First().BlockFinderType = BlockFinderType.SingleDay;
-
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = PersonRepository.Has(new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1),1));
+			var planningPeriod = PlanningPeriodRepository.Has(date,SchedulePeriodType.Week, 1);
+			planningPeriod.PlanningGroup.Settings.Single().BlockSameShiftCategory = true;
+			planningPeriod.PlanningGroup.Settings.Single().BlockFinderType = BlockFinderType.SingleDay;
 			var shiftCategoryAssignment = new ShiftCategory("_").WithId();
-			AssignmentRepository.Has(agent,scenario,activity, shiftCategoryAssignment,firstDay,new TimePeriod(8,16));
+			PersonAssignmentRepository.Has(agent,scenario,activity, shiftCategoryAssignment,date,new TimePeriod(8,16));
 			
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value).BusinessRulesValidationResults;
 
 			if (result.Any())
 			{
-				result.First().ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.BlockScheduling).Should().Be.Null();
-
+				result.Single().ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.BlockScheduling).Should().Be.Null();
 			}
 		}
 		
