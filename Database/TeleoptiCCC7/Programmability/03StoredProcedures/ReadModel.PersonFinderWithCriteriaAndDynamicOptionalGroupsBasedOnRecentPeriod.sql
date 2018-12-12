@@ -139,11 +139,7 @@ SELECT * FROM dbo.SplitStringString(@dynamic_values)
 
 INSERT INTO #IntermediatePersonId 
 SELECT DISTINCT Parent FROM dbo.OptionalColumnValue AS ocv
- INNER JOIN ReadModel.FindPerson fp with (nolock)  ON Parent = fp.PersonId
-WHERE (fp.StartDateTime IS NULL OR fp.StartDateTime <= @end_date_ISO  ) 
-AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >=   @start_date_ISO ) 
-AND ( fp.TerminalDate IS NULL OR fp.TerminalDate >= @start_date_ISO)
-AND EXISTS
+WHERE  EXISTS
 	(SELECT Value 
 		FROM #AllDynamicOptionalValues 
 		WHERE ocv.ReferenceId = @group_page_id
@@ -151,7 +147,10 @@ AND EXISTS
 
 IF @criteriaCount = 0 AND @dynamic_values <> ''
 BEGIN
-	SELECT @dynamicSQL = 'SELECT PersonId FROM #IntermediatePersonId'
+	SELECT @dynamicSQL = 'SELECT DISTINCT ip.PersonId FROM #IntermediatePersonId ip INNER JOIN ReadModel.FindPerson fp with (nolock)  ON ip.PersonId = fp.PersonId
+	 WHERE (fp.StartDateTime IS NULL OR fp.StartDateTime <= '''+@end_date_ISO +''' )' 
+	+'AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >= '''+   @start_date_ISO +''')' 
+	+'AND ( fp.TerminalDate IS NULL OR fp.TerminalDate >= '''+ @start_date_ISO+''')'
 END
 ELSE
 BEGIN
@@ -222,7 +221,10 @@ BEGIN
 				SELECT @dynamicSQL = @dynamicSQL + ' AND (fp.SearchType = '''' OR fp.SearchType = '''+ @searchType + ''')'
 
 			--filter based on most recent period
-			SELECT @dynamicSQL = @dynamicSQL + ' AND (fp.StartDateTime IS NULL OR fp.StartDateTime <= ''' + @end_date_ISO + '''  ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >=  ''' + @start_date_ISO + ''')'
+			SELECT @dynamicSQL = @dynamicSQL 
+			+ ' AND (fp.StartDateTime IS NULL OR fp.StartDateTime <= ''' + @end_date_ISO 
+			+ '''  ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >=  ''' + @start_date_ISO + ''')'
+			+'AND ( fp.TerminalDate IS NULL OR fp.TerminalDate >= '''+ @start_date_ISO+''')'
 
 				--add INTERSECT between each result set
 			IF @cursorCount <> @criteriaCount --But NOT on last condition, the syntax is different

@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 												personContract,
 												team);
 			personToTest.AddPersonPeriod(personPeriod);
+			personToTest.SetEmploymentNumber("137545");
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -60,7 +61,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
 			});
 
-			createAndSaveReadModel(PersonFinderField.FirstName, personToTest.Id.Value, personToTest.Name.FirstName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateFindPerson(new[] { personToTest.Id.Value });
+			});
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -73,9 +77,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				result.Single().Should().Be.EqualTo(personToTest.Id.Value);
 			});
 
-			personToTest.SetEmploymentNumber("137545");
-			createAndSaveReadModel(PersonFinderField.EmploymentNumber, personToTest.Id.Value, personToTest.EmploymentNumber, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
-
 			WithUnitOfWork.Do(() =>
 			{
 				var result = Target.FindPersonIdsInGroupsBasedOnPersonPeriod(new DateOnlyPeriod(scheduleDate, scheduleDate), new[] { personContract.Contract.Id.Value },
@@ -87,7 +88,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				result.Count.Should().Be.EqualTo(1);
 			});
 
-			createAndSaveReadModel(PersonFinderField.LastName, personToTest.Id.Value, personToTest.Name.LastName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateFindPerson(new[] { personToTest.Id.Value });
+			});
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -143,7 +147,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
 			});
 
-			createAndSaveReadModel(PersonFinderField.FirstName, personToTest.Id.Value, personToTest.Name.FirstName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateFindPerson(new[] { personToTest.Id.Value });
+			});
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -202,9 +209,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
 			});
 
-			createAndSaveReadModel(PersonFinderField.Contract, personToTest.Id.Value, "contract1", team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
-			createAndSaveReadModel(PersonFinderField.Contract, personToTest.Id.Value, "contract2", team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.AddDays(30).Date);
-
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateFindPerson(new[] { personToTest.Id.Value });
+			});
+			
 			WithUnitOfWork.Do(() =>
 			{
 				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(scheduleDate, scheduleDate), optionColumn.Id.Value, new[] { "test value" },
@@ -258,7 +267,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
 			});
 
-			createAndSaveReadModel(PersonFinderField.FirstName, personToTest.Id.Value, personToTest.Name.FirstName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date, scheduleDate.Date.AddDays(-1));
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateFindPerson(new[] { personToTest.Id.Value });
+			});
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -269,27 +281,58 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			});
 		}
-		private void createAndSaveReadModel(PersonFinderField searchType, Guid personId, string searchValue,
-			 Guid teamId, Guid siteId, Guid businessUnitId, DateTime startDateTime, DateTime? terminalDate = null)
+
+		[Test]
+		public void ShouldNotFindPersonWhenPersonsPeriodIsNotStart()
 		{
-			WithUnitOfWork.Do(uow =>
+			var personToTest = PersonFactory.CreatePerson("NotStartTest", "1");
+			var optionColumn = new OptionalColumn("Test")
 			{
-				uow.Current().FetchSession().CreateSQLQuery(
-			  "Insert into [ReadModel].[FindPerson] (PersonId,  FirstName,  LastName,  EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId                        ,SearchType        , TeamId, SiteId,BusinessUnitId, StartDateTime, EndDateTime)" +
-			  " Values (                            :personId, '',          '',        '137545'        ,''  ,:terminalDate,:searchValue,'11610FE4-0130-4568-97DE-9B5E015B2564',:searchType,:teamId, :siteId,:businessUnitId, :startDateTime, NULL)")
-			  .SetString("searchType", searchType.ToString())
-			  .SetGuid("personId", personId)
-			  .SetDateTime("terminalDate", terminalDate ?? DateTime.MaxValue)
-			  .SetString("searchValue", searchValue)
-			  .SetDateTime("startDateTime", startDateTime)
-			  .SetGuid("businessUnitId", businessUnitId)
-			  .SetGuid("teamId", teamId)
-			  .SetGuid("siteId", siteId)
-			  .ExecuteUpdate();
+				TableName = "Person",
+				AvailableAsGroupPage = true
+			};
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(new DateOnly(2011, 1, 1),
+				personContract,
+				team);
+			personToTest.AddPersonPeriod(personPeriod);
+
+			WithUnitOfWork.Do(() =>
+			{
+				OptionalColumnRepository.Add(optionColumn);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateFindPerson(new[] { personToTest.Id.Value });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1)), optionColumn.Id.Value, new[] { "test value" },
+					new Dictionary<PersonFinderField, string>());
+
+				result.Count.Should().Be.EqualTo(0);
+
 			});
 		}
-
-
 	}
 
 }
