@@ -34,40 +34,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Gui.DataSourceConfiguration
 		}
 
 		[Test]
-		public void ShouldReturnMessageInformationForEtlFirstTimeUse()
-		{
-			_generalFunctions.Stub(x => x.GetInitialLoadState()).Return(EtlToolStateType.FirstTimeUsed);
-
-			var messageBoxProperties = _target.CheckForFirstUse();
-
-			messageBoxProperties.Caption.Should().Be.EqualTo("Important");
-			messageBoxProperties.IsQuestion.Should().Be.True();
-			messageBoxProperties.Text.Should().Contain("This is the first time you are about to run this ETL Tool.");
-		}
-
-		[Test]
-		public void ShouldReturnMessageInformationForEtlInvalidState()
-		{
-			_generalFunctions.Stub(x => x.GetInitialLoadState()).Return(EtlToolStateType.Invalid);
-
-			var messageBoxProperties = _target.CheckForFirstUse();
-
-			messageBoxProperties.Caption.Should().Be.EqualTo("Invalid ETL Tool State");
-			messageBoxProperties.IsQuestion.Should().Be.False();
-			messageBoxProperties.Text.Should().Contain("The ETL Tool seems to be in an invalid state and can not run.");
-		}
-
-		[Test]
-		public void ShouldReturnNullToIndicateEtlStateIsValid()
-		{
-			_generalFunctions.Stub(x => x.GetInitialLoadState()).Return(EtlToolStateType.Valid);
-
-			var messageBoxProperties = _target.CheckForFirstUse();
-
-			messageBoxProperties.Should().Be.Null();
-		}
-
-		[Test]
 		public void ShouldInitializeViewState()
 		{
 			IDataSourceEtl etlDataSource = new DataSourceEtl(1, "name", 2, "UTC", 15, false);
