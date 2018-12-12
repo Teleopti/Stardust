@@ -1,10 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import c3 from 'c3';
-import { IntradayChartType } from '../../types/intraday-chart-type';
 import * as moment from 'moment';
 import { IntradayLatestTimeData } from '../../types';
-import { log } from 'util';
+import { IntradayChartType } from '../../types/intraday-chart-type';
 
 @Component({
 	selector: 'app-intraday-chart',

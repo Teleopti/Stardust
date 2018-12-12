@@ -1,27 +1,26 @@
-import { Component, OnInit, OnDestroy, AfterContentInit, OnChanges } from '@angular/core';
-import moment, { Moment } from 'moment';
-import { IntradayDataService } from '../services/intraday-data.service';
-import { IntradayPersistService } from '../services/intraday-persist.service';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { NzMessageService, NzTabComponent, NzTabChangeEvent } from 'ng-zorro-antd';
 import c3 from 'c3';
+import moment, { Moment } from 'moment';
+import { NzMessageService } from 'ng-zorro-antd';
+import { IntradayDataService } from '../services/intraday-data.service';
+import { IntradayIconService } from '../services/intraday-icon.service';
+import { IntradayPersistService } from '../services/intraday-persist.service';
 import {
-	SkillPickerItem,
 	IntradayChartType,
+	IntradayLatestTimeData,
+	IntradayPerformanceDataSeries,
+	IntradayPerformanceSummaryData,
+	IntradayPerformanceSummaryItem,
+	IntradayStaffingDataSeries,
 	IntradayTrafficData,
 	IntradayTrafficDataSeries,
-	IntradayTrafficSummaryItem,
 	IntradayTrafficSummaryData,
-	IntradayPerformanceDataSeries,
-	IntradayPerformanceSummaryItem,
-	IntradayPerformanceSummaryData,
-	IntradayStaffingDataSeries,
-	IntradayLatestTimeData,
+	IntradayTrafficSummaryItem,
 	Skill,
+	SkillPickerItem,
 	SkillPickerItemType
 } from '../types';
-import { IntradayIconService } from '../services/intraday-icon.service';
-import { log } from 'util';
 
 @Component({
 	selector: 'app-intraday-main',
@@ -54,6 +53,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	exporting = false;
 	timer: any;
 	showSkills = true;
+	showReforecastedWarning = false;
 
 	ngOnInit() {
 		this.startTimer();
@@ -186,6 +186,9 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
 		}
+
+		this.showReforecastedWarning = this.isSkillEmailOrBackoffice();
+
 		let selectedSkill = this.selectedSkillOrGroup;
 		if (this.selectedSubSkillId && this.selectedSubSkillId !== 'all') {
 			selectedSkill = {
@@ -490,6 +493,28 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			return {};
 		}
 	}
+
+	public getEmailOrBackofficeWarning = function() {
+		if (this.selectedTabIndex === 1) {
+			return this.translate.instant('NotShowingAbandonRate');
+		} else if (this.selectedTabIndex === 2) {
+			return this.translate.instant('NotShowingReforcastedAgents');
+		}
+	};
+
+	public isSkillEmailOrBackoffice = function() {
+		if (this.selectedSkillOrGroup.Skills && this.selectedSkillOrGroup.Skills.length > 0) {
+			return this.selectedSkillOrGroup.Skills.find(function(skill) {
+				return skill.SkillType === 'SkillTypeEmail' || skill.SkillType === 'SkillTypeBackoffice';
+			});
+		} else {
+			return (
+				this.selectedSkillOrGroup.Skill.SkillType === 'SkillTypeEmail' ||
+				this.selectedSkillOrGroup.Skill.SkillType === 'SkillTypeBackoffice'
+			);
+		}
+		return false;
+	};
 
 	getEmptyTrafficData(): IntradayTrafficData {
 		return {
