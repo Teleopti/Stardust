@@ -219,6 +219,7 @@
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ApprovedPeriodsTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\DateFormatTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\DateTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\DurationOfEventsTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\HistoricalAdherenceViewModelBuilderEx.cs" />
