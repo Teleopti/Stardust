@@ -13,12 +13,12 @@
 			<property name="Name"/>
 			<property name="ShortName"/>
 		</component>
-		<property name="DisplayColor" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"/>
+		<property name="DisplayColor" type="Teleopti.Wfm.Adherence.Configuration.ColorNumber, Teleopti.Wfm.Adherence"/>
 		<property name="ThresholdTime"/>
 		<property name="StaffingEffect"/>
 		<property name="Adherence"/>
 		<property name="IsAlarm"/>
-		<property name="AlarmColor" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"/>
+		<property name="AlarmColor" type="Teleopti.Wfm.Adherence.Configuration.ColorNumber, Teleopti.Wfm.Adherence"/>
 		<property name="BusinessUnit" access="property"/>
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
 	</class>

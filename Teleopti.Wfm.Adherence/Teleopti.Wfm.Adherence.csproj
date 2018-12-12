@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="BelongsToDateMapper.cs" />
     <Compile Include="Configuration\Adherence.cs" />
+    <Compile Include="Configuration\ColorNumber.cs" />
     <Compile Include="Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="Configuration\ConfigurationValidator.cs" />
     <Compile Include="Configuration\DefaultStateGroupException.cs" />
