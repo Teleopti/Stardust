@@ -51,31 +51,31 @@ END
 
 --select NEWID()
 INSERT [ReadModel].[FindPerson]
-SELECT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, p.FirstName, 'FirstName', NULL, NULL, NULL,'3474AF5E-4671-4A0F-9E12-0794EF922A47',pp.StartDate,  pp.EndDate, NULL 
+SELECT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, p.FirstName, 'FirstName', NULL, NULL, NULL,'3474AF5E-4671-4A0F-9E12-0794EF922A47',isnull(pp.StartDate,'19900101'),  pp.EndDate, NULL 
 FROM Person p WITH (NOLOCK) 
 INNER JOIN #ids ids ON p.Id = ids.person
-INNER JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
+LEFT JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
 WHERE IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
-SELECT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, p.LastName, 'LastName', NULL, NULL, NULL,'4F77EC99-883C-45FD-9CDD-E0CDFE16BCFD', pp.StartDate,  pp.EndDate, NULL
+SELECT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, p.LastName, 'LastName', NULL, NULL, NULL,'4F77EC99-883C-45FD-9CDD-E0CDFE16BCFD',isnull(pp.StartDate,'19900101'),  pp.EndDate, NULL
 FROM Person p WITH (NOLOCK) 
 INNER JOIN #ids ids ON p.Id = ids.person
-INNER JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
+LEFT JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
 WHERE IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
-SELECT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, p.Note, 'Note', NULL, NULL, NULL,'7D70F7C9-B4EF-4BF9-9BB2-CA2C483F3360', pp.StartDate,  pp.EndDate, NULL
+SELECT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, p.Note, 'Note', NULL, NULL, NULL,'7D70F7C9-B4EF-4BF9-9BB2-CA2C483F3360', isnull(pp.StartDate,'19900101'),  pp.EndDate, NULL
 FROM Person p WITH (NOLOCK) 
 INNER JOIN #ids ids ON p.Id = ids.person
-INNER JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
+LEFT JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
 WHERE IsDeleted = 0
 
 INSERT [ReadModel].[FindPerson]
-SELECT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, p.EmploymentNumber, 'EmploymentNumber', NULL, NULL, NULL, 'ABC2656E-A2E4-46A6-842A-6E731D611D8F', pp.StartDate,  pp.EndDate, NULL
+SELECT p.Id, p.FirstName, p.LastName, p.EmploymentNumber, p.Note, p.TerminalDate, p.EmploymentNumber, 'EmploymentNumber', NULL, NULL, NULL, 'ABC2656E-A2E4-46A6-842A-6E731D611D8F', isnull(pp.StartDate,'19900101'),  pp.EndDate, NULL
 FROM Person p WITH (NOLOCK) 
 INNER JOIN #ids ids ON p.Id = ids.person
-INNER JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
+LEFT JOIN PersonPeriod pp WITH (NOLOCK) ON p.Id = pp.Parent
 WHERE IsDeleted = 0
 
 
