@@ -155,10 +155,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 2)).Return(part);
 	                Expect.Call(part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
 	                Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
-	                Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
-	                Expect.Call(personAssignment.Period).Return(new DateTimePeriod(2013, 1, 1, 2013, 1, 1)).Repeat.AtLeastOnce();
 	                Expect.Call(pasteAction.PasteOptions).Return(new PasteOptions()).Repeat.AtLeastOnce();
-                }
+					Expect.Call(() => part.AdjustFullDayAbsenceNextDay(part));
+				}
 
                 using (mockRep.Playback())
                 {
