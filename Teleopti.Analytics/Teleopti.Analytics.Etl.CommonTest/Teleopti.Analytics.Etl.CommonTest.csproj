@@ -124,7 +124,6 @@
     <Compile Include="Transformer\GroupPagePersonTransformerTest.cs" />
     <Compile Include="Transformer\HourlyAvailabilityTransformerTest.cs" />
     <Compile Include="Transformer\IntervalTransformerTest.cs" />
-    <Compile Include="Transformer\IntradayAvailabilityTransformerTest.cs" />
     <Compile Include="Transformer\Job\JobBaseTest.cs" />
     <Compile Include="Transformer\Job\JobHelperForTest.cs" />
     <Compile Include="Transformer\Job\JobParametersTest.cs" />
