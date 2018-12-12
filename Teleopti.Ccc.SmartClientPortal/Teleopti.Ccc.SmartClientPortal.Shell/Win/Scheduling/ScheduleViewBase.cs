@@ -920,10 +920,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
             foreach (IPersonAbsence personAbsence in splitDay.PersonAbsenceCollection())
             {
-                IList<IPersonAbsence> splits = personAbsence.Split(splitDay.Period);
+				var period = splitDay.AbsenceSplitPeriod(splitDay);
+				if(personAbsence.Period.EndDateTime <= period.StartDateTime) continue;
+				var splits = personAbsence.Split(period);
 
-                //split long absences, will remove the long absence on splitday
-                foreach (IPersonAbsence personAbsenceSplitPart in splits)
+				//split long absences, will remove the long absence on splitday
+				foreach (IPersonAbsence personAbsenceSplitPart in splits)
                 {
 	                var dateOnly = personAbsenceSplitPart.Period.ToDateOnlyPeriod(splitDay.TimeZone).StartDate;
                     var splitPart = Presenter.SchedulerState.Schedules[personAbsence.Person].ScheduledDay(dateOnly);
