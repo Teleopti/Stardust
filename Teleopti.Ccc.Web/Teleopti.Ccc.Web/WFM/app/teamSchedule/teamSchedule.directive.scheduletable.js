@@ -26,6 +26,7 @@
 	ScheduleTableController.$inject = ['$scope', '$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper'];
 	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions, serviceDateFormatHelper) {
 		var vm = this;
+		var scheduleInEditing;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
@@ -128,16 +129,17 @@
 		}
 
 		vm.clickEditButton = function (personSchedule) {
-			$state.go('teams.shiftEditor', {
-				personId: personSchedule.PersonId,
-				timezone: vm.selectedTimezone,
-				date: serviceDateFormatHelper.getDateOnly(vm.selectedDate)
-			});
+			scheduleInEditing = personSchedule;
+		}
+		
+		vm.isScheduleEditing = function (personSchedule) {
+			return scheduleInEditing === personSchedule;
 		}
 
 		vm.isNotSameTimezone = function (personTimezone) {
 			return vm.selectedTimezone && personTimezone.IanaId !== vm.selectedTimezone;
 		}
+
 
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;

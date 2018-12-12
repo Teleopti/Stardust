@@ -1,34 +1,8 @@
 <div class="con-row progress-linear-container">
 	<md-progress-linear ng-if="vm.isSaving || vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 </div>
+
 <div class="con-row">
-	<div class="con-flex">
-		<span>
-			<span class="name">{{vm.scheduleVm.Name}}</span>
-			<span ng-if="vm.isInDifferentTimezone">
-				<i  class="mdi mdi-earth"></i>
-				<md-tooltip md-direction="right">
-					{{::vm.scheduleVm.TimezoneName}}
-				</md-tooltip>
-			</span>
-			
-		</span>
-		<span class="date">
-			<i class="mdi mdi-calendar"></i>
-			<span>{{vm.displayDate }}</span>
-		</span>
-
-		<span class="timezone">{{vm.timezoneName}}</span>
-		<span ng-if="vm.scheduleVm.HasUnderlyingSchedules">
-			<span class="underlying-info">
-				<i class="mdi mdi-information mdi-alert info"></i>
-			</span>
-			<md-tooltip class="multiline-tooltip" md-direction="right">
-				<underlying-schedule-info person-schedule="vm.scheduleVm" date="vm.date"></underlying-schedule-info>
-			</md-tooltip>
-		</span>
-	</div>
-
 	<div class="con-flex text-right">
 		<button type="button" class="context-menu card-context btn-refresh" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">
 			<i class="mdi mdi-refresh"></i>
@@ -37,7 +11,6 @@
 			</md-tooltip>
 		</button>
 	</div>
-
 </div>
 
 <div class="con-row activity-info">

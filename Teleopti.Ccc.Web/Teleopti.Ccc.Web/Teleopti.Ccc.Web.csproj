@@ -1896,14 +1896,13 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
-    <Content Include="WFM\app\teamSchedule\html\shiftEditorView.html" />
     <Content Include="WFM\app\teamSchedule\html\shiftEditor.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsTimePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\underlyingScheduleInfo.html" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.exportSchedule.spec.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.controller.shiftEditor.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.controller.shiftEditor.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.shiftEditor.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.shiftEditor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.exportSchedule.js" />
@@ -1912,6 +1911,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.week.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.scheduletable.shiftEditor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.groupSchedule.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.spec.js" />

@@ -2,16 +2,6 @@
 (function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').controller('ShiftEditorViewController', [
-		'$stateParams',
-		function ($stateParams) {
-			var vm = this;
-			vm.personId = $stateParams.personId;
-			vm.timezone = decodeURIComponent($stateParams.timezone);
-			vm.date = $stateParams.date;
-		}
-	]);
-
 	angular.module('wfm.teamSchedule').component('shiftEditor', {
 		controller: ShiftEditorController,
 		controllerAs: 'vm',
@@ -34,7 +24,6 @@
 		'TeamSchedule',
 		'serviceDateFormatHelper',
 		'ShiftEditorViewModelFactory',
-		'TimezoneListFactory',
 		'ActivityService',
 		'ShiftEditorService',
 		'CurrentUserInfo',
@@ -54,7 +43,6 @@
 		TeamSchedule,
 		serviceDateFormatHelper,
 		ShiftEditorViewModelFactory,
-		TimezoneListFactory,
 		ActivityService,
 		ShiftEditorService,
 		CurrentUserInfo,
@@ -88,11 +76,7 @@
 
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
-
-			TimezoneListFactory.Create().then(function (timezoneList) {
-				vm.timezoneName = timezoneList.GetShortName(vm.timezone);
-			});
-
+			
 			subscribeToScheduleChange();
 
 			bindResizeLayerEvent();
