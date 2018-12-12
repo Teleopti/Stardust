@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function() {
 	describe('<requests-shift-detail>', function() {
-		var $rootScope, $compile, fakeTeamSchedule, fakeCurrentUserInfo;
+		var $rootScope, $compile, fakeTeamSchedule, fakeCurrentUserInfo, fakeShiftTradeScheduleService, fakeToggleService;
 		beforeEach(function() {
 			module('wfm.templates');
 			module('wfm.requests');
@@ -10,13 +10,20 @@
 		beforeEach(function() {
 			fakeTeamSchedule = new FakeTeamSchedule();
 			fakeCurrentUserInfo = new FakeCurrentUserInfo();
+			fakeToggleService = new FakeToggleService();
+			fakeShiftTradeScheduleService = new FakeShiftTradeScheduleService();
 			module(function($provide) {
-				$provide.service('Toggle', function() {});
+				$provide.service('Toggle', function () {
+					return fakeToggleService;
+				});
 				$provide.service('TeamSchedule', function() {
 					return fakeTeamSchedule;
 				});
 				$provide.service('CurrentUserInfo', function() {
 					return fakeCurrentUserInfo;
+				});
+				$provide.service('shiftTradeScheduleService', function () {
+					return fakeShiftTradeScheduleService;
 				});
 			});
 		});
@@ -25,8 +32,8 @@
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
 		}));
-
-		it('should show the time of shift detail in current time zone', function() {
+		
+		it('should show the time of shift detail in current time zone', function () {
 			fakeTeamSchedule.setSchedules([
 				{
 					PersonId: 'agent1',
@@ -136,6 +143,39 @@
 			element[0].click();
 		});
 
+		it('should call ShiftTradeScheduleService when Toggle WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 is ON', function () {
+
+			fakeToggleService.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = true;
+
+			fakeShiftTradeScheduleService.setSchedules(
+				{
+					Name: 'agent3',
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					BelongsToDate: '2018-10-24'
+				},
+				{
+					Name: 'agent4',
+					IsDayOff: false,
+					DayOffName: null,
+					IsNotScheduled: false,
+					BelongsToDate: '2018-10-24'
+				},
+				null
+			);
+
+			var element = setUp(['agent3', 'agent4'], '2018-10-24', 'Europe/Berlin', function (params) {
+				var personFromSchedule = params.schedules.PersonFromSchedule;
+				expect(params.schedules.PersonFromSchedule.Name).toEqual('agent3');
+				expect(params.schedules.PersonToSchedule.Name).toEqual('agent4');
+			});
+
+			element[0].click();
+		});
+		
+
+
 		function setUp(personIds, date, targetTimezone, showShiftDetail) {
 			var scope = $rootScope.$new();
 			scope.personIds = personIds;
@@ -149,6 +189,10 @@
 			scope.$apply();
 
 			return element;
+		}
+
+		function FakeToggleService() {
+			this.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = false;
 		}
 
 		function FakeTeamSchedule() {
@@ -166,6 +210,26 @@
 				};
 			};
 		}
+
+		function FakeShiftTradeScheduleService() {
+			
+			var timeLine = [];
+			var personFromSchedule = {};
+			var personToSchedule = {};
+			this.setSchedules = function (_personFromSchedule, _personToSchedule, _timeLine) {
+				personFromSchedule = _personFromSchedule;
+				personToSchedule = _personToSchedule;
+				timeLine = _timeLine;
+			};
+			this.getSchedules = function (date, personFromId, personToId) {
+				return {
+					then: function (cb) {
+						cb({ TimeLine: timeLine, PersonFromSchedule: personFromSchedule, PersonToSchedule: personToSchedule });
+					}							  
+				};
+			}
+		}
+
 
 		function FakeCurrentUserInfo() {
 			this.CurrentUserInfo = function() {
