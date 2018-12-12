@@ -5,7 +5,7 @@
 				<div class="person-name nowrap">{{'AgentName' | translate}}</div>
 			</th>
 			<th id="time-line-container" class="schedule schedule-column">
-				<time-line ng-if="vm.shifts && vm.shifts.length > 0" times="vm.schedules.TimeLine.HourPoints" chedule-count="vm.shifts.length"></time-line>
+				<requests-schedule-timeline ng-if="vm.shifts && vm.shifts.length > 0" times="vm.times"></requests-schedule-timeline>
 			</th>
 			<th class="right-border-empty"></th>
 		</tr>

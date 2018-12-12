@@ -56,6 +56,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		}
 
 		[Test]
+		public void ShouldGetShiftTradeScheduleViewModelWithTimeLine()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupShiftTradeScheduleData(date);
+
+			var result = Target.GetShiftTradeSchedules(input);
+
+			result.TimeLine.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldGetShiftTradeScheduleViewModel()
 		{
 			var date = new DateTime(2018, 11, 21);

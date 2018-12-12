@@ -125,6 +125,7 @@
 
 		vm.showShiftDetail = function (params) {
 			vm.buildShifts(params.schedules, params.targetTimezone);
+			vm.timeLine = params.schedules.TimeLine;
 			vm.shiftDetailTop = params.top;
 			vm.shiftDetailLeft = params.left;
 			vm.displayShiftDetail = true;

@@ -9,7 +9,8 @@
 	function scheduleTableDirective() {
 		return {
 			scope: {
-				shifts: '='
+				shifts: '=',
+				times:'='
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
