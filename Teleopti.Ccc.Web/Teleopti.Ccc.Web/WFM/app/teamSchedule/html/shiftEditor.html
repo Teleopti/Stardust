@@ -1,18 +1,6 @@
 <div class="con-row progress-linear-container">
 	<md-progress-linear ng-if="vm.isSaving || vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 </div>
-
-<div class="con-row">
-	<div class="con-flex text-right">
-		<button type="button" class="context-menu card-context btn-refresh" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">
-			<i class="mdi mdi-refresh"></i>
-			<md-tooltip>
-				{{'Refresh' | translate}}
-			</md-tooltip>
-		</button>
-	</div>
-</div>
-
 <div class="con-row activity-info">
 	<div class="con-flex">
 		<div ng-if="!!vm.selectedShiftLayers.length">
@@ -27,9 +15,17 @@
 			</span>
 		</div>
 	</div>
+	<div class="con-flex text-right">
+		<button type="button" class="context-menu card-context btn-refresh" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">
+			<i class="mdi mdi-refresh"></i>
+			<md-tooltip>
+				{{'Refresh' | translate}}
+			</md-tooltip>
+		</button>
+	</div>
 </div>
 
-<div class="shift-container"  ng-class="{'tablet': !vm.isOnDesktop}">
+<div class="shift-container" ng-class="{'tablet': !vm.isOnDesktop}">
 	<div class="viewport-clip height-5em">
 		<div class="viewport">
 			<div class="timeline" tabindex="0" ng-style="{'width':vm.timelineVmWidth+'px'}">
@@ -75,18 +71,17 @@
 		</div>
 	</div>
 </div>
-
-
-<div class="con-row error-info">
-	<div class="con-flex text-right">
-		<div class="text-danger" ng-if="vm.showError">
-			<i class="mdi mdi-alert-octagon"></i>
-			<span>{{'scheduleChangedByOthers' | translate}}</span>
+<div class="con-footer">
+	<div class="con-row">
+		<div class="con-flex text-right error-info">
+			<div class="text-danger" ng-if="vm.showError">
+				<i class="mdi mdi-alert-octagon"></i>
+				<span>{{'scheduleChangedByOthers' | translate}}</span>
+			</div>
+		</div>
+		<div class="con-flex text-right">
+			<button type="button" class="wfm-btn wfm-btn-invis-default btn-back" ng-click="vm.gotoDayView()">{{ 'Back'|translate }}</button>
+			<button type="button" class="wfm-btn wfm-btn-invis-default btn-save" ng-click="vm.saveChanges()" ng-disabled="vm.isSaveButtonDisabled()">{{ 'Save'|translate }}</button>
 		</div>
 	</div>
-</div>
-
-<div class="con-footer">
-	<button type="button" class="wfm-btn wfm-btn-invis-default btn-back" ng-click="vm.gotoDayView()">{{ 'Back'|translate }}</button>
-	<button type="button" class="wfm-btn wfm-btn-invis-default btn-save" ng-click="vm.saveChanges()" ng-disabled="vm.isSaveButtonDisabled()">{{ 'Save'|translate }}</button>
 </div>

@@ -70,6 +70,33 @@
 			expect(!!container[0].querySelector('shift-editor')).toBeTruthy();
 		});
 
+		xit('shold hide shift editor view after click close button in editor view', function () {
+			var schedule = {
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2018-12-12',
+				WorkTimeMinutes: 240,
+				ContractTimeMinutes: 240,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'E-mail',
+						Start: '2018-12-12 08:00',
+						Minutes: 120,
+						IsOvertime: false
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			};
+			fakeTeamSchedule.has(schedule);
+
+			scheduleManagement.resetSchedules([schedule], '2018-12-12', 'Europe/Berlin');
+
+			var container = setUp('2018-12-12', 'Europe/Berlin');
+			container[0].querySelector('.editor').click();
+		});
+
 		function setUp(selectedDate, selectedTimezone) {
 			var html = '<schedule-table select-mode="true" selected-date="selectedDate" selected-timezone="selectedTimezone"></schedule-table>';
 			var scope = $rootScope.$new();

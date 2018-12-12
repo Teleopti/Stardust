@@ -1150,9 +1150,11 @@ teams-time-picker.ng-invalid-dst {
 	vertical-align: middle;
 }
 
-.shift-editor {
+shift-editor {
 	position: relative;
-
+	display:block;
+	background: $gray012;
+	
 	.progress-linear-container {
 		height: 15px;
 	}
@@ -1202,7 +1204,7 @@ teams-time-picker.ng-invalid-dst {
 	}
 
 	.shift-container {
-		height: 500px;
+		height: 100px;
 		-webkit-user-select: none;
 		-moz-user-select: -moz-none;
 		-ms-user-select: none;
