@@ -159,6 +159,7 @@
 		public const string RemoveDayOff = "0152";
 		public const string ExportSchedule = "0156";
 		public const string ViewCustomerCenter = "0169";
+		public const string SystemSetting = "0170";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";

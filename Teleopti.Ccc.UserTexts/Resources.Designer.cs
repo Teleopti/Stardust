@@ -35714,6 +35714,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to System Setting.
+        /// </summary>
+        public static string SystemSetting {
+            get {
+                return ResourceManager.GetString("SystemSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System Settings.
         /// </summary>
         public static string SystemSettings {

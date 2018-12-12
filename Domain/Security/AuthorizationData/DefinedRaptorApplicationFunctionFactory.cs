@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ChatBot, "xxChatBot", DefinedRaptorApplicationFunctionForeignIds.ChatBot);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExportSchedule, "xxExportSchedule", DefinedRaptorApplicationFunctionForeignIds.ExportSchedule);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewCustomerCenter, "xxViewCustomerCenter", DefinedRaptorApplicationFunctionForeignIds.ViewCustomerCenter);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SystemSetting, "xxSystemSetting", DefinedRaptorApplicationFunctionForeignIds.SystemSetting);
 
 			// Insights
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Insights, "Insights", DefinedRaptorApplicationFunctionForeignIds.Insights);

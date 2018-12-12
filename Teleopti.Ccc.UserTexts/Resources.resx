@@ -17992,4 +17992,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Search filter</value>
     <comment>Free text search filter used in general audit trail report</comment>
   </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>System Setting</value>
+  </data>
 </root>
