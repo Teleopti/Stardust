@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
 			IPersonRepository personRepository,
 			SchedulingInformationProvider schedulingInformationProvider,
-			ISchedulingOptionsProvider schedulingOptionsProvider, 
 			FullSchedulingResult fullSchedulingResult)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
