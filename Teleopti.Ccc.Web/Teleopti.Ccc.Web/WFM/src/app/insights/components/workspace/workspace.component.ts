@@ -99,7 +99,7 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	public confirmCreateReport(report) {
-		this.messageForNewReportName = `Please input name for new report:`;
+		this.messageForNewReportName = 'Please input name for new report:';
 		this.refNewReportNameModal = this.modalSvc.create({
 			nzTitle: 'Create new report',
 			nzContent: this.newReportNameTempRef,
