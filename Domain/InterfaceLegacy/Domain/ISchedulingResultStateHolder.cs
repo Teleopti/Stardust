@@ -78,15 +78,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created date: 2008-05-07
         /// </remarks>
         IList<ISkill> VisibleSkills { get; }
-
-       /// <summary>
-        /// Return SkillDays on the DateOnlys.
-        /// </summary>
-        /// <param name="theDateList">The DateOnlys.</param>
-        /// <returns></returns>
-        IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList);
-
-		
         /// <summary>
         /// Gets the skill staff period holder.
         /// </summary>
@@ -118,9 +109,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		/// <returns></returns>
 		INewBusinessRuleCollection GetRulesToRun();
-
-	    ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly);
-
 		ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
 		IEnumerable<ExternalStaff> ExternalStaff { get; set; }
 	    bool GuessResourceCalculationHasBeenMade();

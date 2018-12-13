@@ -871,7 +871,6 @@
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeamTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderWrapperTest.cs" />
-    <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssuesTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionCacheIntraIntervalValueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionIntraIntervalBestFitCalculatorTest.cs" />
@@ -902,7 +901,6 @@
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionForPersonsTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportServiceTest.cs" />
@@ -956,7 +954,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameTimeZoneValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FilterOutIntervalsAfterMidNightTest.cs" />
-    <Compile Include="Optimization\TeamBlock\LocateMissingIntervalsIfMidNightBreakTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\DayValueUnlockedIndexSorterTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeDescisionMakerTest.cs" />

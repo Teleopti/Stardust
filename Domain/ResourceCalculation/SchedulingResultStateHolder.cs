@@ -119,24 +119,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList)
-		{
-			return SkillDays == null ? 
-				Enumerable.Empty<ISkillDay>() : 
-				SkillDays.FilterOnDates(theDateList);
-		}
-
-		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
-		{
-			IEnumerable<ISkillDay> foundSkillDays;
-			if (SkillDays != null && SkillDays.TryGetValue(skill, out foundSkillDays))
-			{
-				return foundSkillDays.FirstOrDefault(s => s.CurrentDate == dateOnly);
-			}
-
-			return null;
-		}
-
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
 
 		public INewBusinessRuleCollection GetRulesToRun()
