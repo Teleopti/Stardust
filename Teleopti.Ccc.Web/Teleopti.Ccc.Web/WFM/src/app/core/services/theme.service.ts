@@ -45,11 +45,7 @@ export class ThemeService {
 
 	async applyTheme(themeToApply: ThemeType) {
 		if (this.getCurrentTheme() !== themeToApply) {
-			return Promise.all([
-				this.applyAngularMatrialTheme(themeToApply),
-				this.applyStyleguideTheme(themeToApply),
-				this.applyAntTheme(themeToApply)
-			]);
+			return Promise.all([this.applyAngularMatrialTheme(themeToApply), this.applyAntTheme(themeToApply)]);
 		} else return Promise.resolve();
 	}
 
@@ -63,10 +59,6 @@ export class ThemeService {
 			this.document.documentElement.classList.remove('angular-theme-dark');
 		}
 		return;
-	}
-
-	async applyStyleguideTheme(theme) {
-		return this.replaceCssFile(`dist/ng2/styleguide_${theme}.css`, 'themeStyleguide', theme);
 	}
 
 	async applyAntTheme(theme: ThemeType) {
