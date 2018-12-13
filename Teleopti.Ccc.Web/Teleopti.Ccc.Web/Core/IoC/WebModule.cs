@@ -67,9 +67,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterApiControllers(typeof(WebModule).Assembly).ApplyAspects();
-			builder.RegisterControllers(typeof(WebModule).Assembly).ApplyAspects();
-			builder.RegisterHubs(typeof(WebModule).Assembly);
+			var assembly = typeof(WebModule).Assembly;
+			builder.RegisterApiControllers(assembly).ApplyAspects();
+			builder.RegisterControllers(assembly).ApplyAspects();
+			builder.RegisterHubs(assembly);
 
 			builder.RegisterModule(new MessageBrokerWebModule(_configuration));
 

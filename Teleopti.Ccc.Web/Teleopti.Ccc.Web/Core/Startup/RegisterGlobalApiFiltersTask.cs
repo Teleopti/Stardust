@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Web.Http.Dispatcher;
 using System.Web.Http.ExceptionHandling;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -58,13 +61,28 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				}
 				c.Filters.Add(new NoCacheFilterHttp());
 				c.Services.Add(typeof (IExceptionLogger), new Log4NetWebApiLogger(_log4NetLogger));
-
+				
 				c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
 				c.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
 				c.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new DateOnlyConverter());
 			});
 			
 			return Task.FromResult(false);
+		}
+	}
+
+	public class SlimAssembliesResolver : IAssembliesResolver
+	{
+		private readonly Assembly _assembly;
+
+		public SlimAssembliesResolver(Assembly assembly)
+		{
+			_assembly = assembly;
+		}
+
+		public ICollection<Assembly> GetAssemblies()
+		{
+			return new []{ _assembly};
 		}
 	}
 }

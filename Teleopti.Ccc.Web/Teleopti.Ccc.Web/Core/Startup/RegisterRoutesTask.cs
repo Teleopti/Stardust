@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Owin;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private static void registerWebApiRoutes(HttpConfiguration config)
 		{
+			config.Services.Replace(typeof(IAssembliesResolver), new SlimAssembliesResolver(typeof(SlimAssembliesResolver).Assembly));
 			config.MapHttpAttributeRoutes();
 		}
 

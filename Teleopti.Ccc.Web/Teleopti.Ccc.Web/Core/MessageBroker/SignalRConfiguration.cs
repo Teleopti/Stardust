@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Broker
 			resolver.Register(typeof(IAssemblyLocator), () => new EnumerableOfAssemblyLocator(new[] { typeof(SignalRHubConfigurationExtensions).Assembly }));
 		}
 	}
-
+	
 	public class FakePerformanceCounterInitializer : IPerformanceCounterManager
 	{
 		private readonly fakePerformanceCounter _fakePerformanceCounter = new fakePerformanceCounter();
