@@ -68,8 +68,27 @@
 		}
 
 		function goCreateSchedulingSetting() {
-			$state.go('resourceplanner.editsetting', {
-				groupId: $stateParams.groupId
+			vm.settings.unshift({
+				BlockFinderType: 0,
+				BlockSameShift: false,
+				BlockSameShiftCategory: false,
+				BlockSameStartTime: false,
+				MinDayOffsPerWeek: 1,
+				MaxDayOffsPerWeek: 3,
+				MinConsecutiveWorkdays: 2,
+				MaxConsecutiveWorkdays: 6,
+				MinConsecutiveDayOffs: 1,
+				MaxConsecutiveDayOffs: 3,
+				MinFullWeekendsOff: 0,
+				MaxFullWeekendsOff: 8,
+				MinWeekendDaysOff: 0,
+				MaxWeekendDaysOff: 16,
+				Priority: null,
+				Id: null,
+				Filters: [],
+				Default: false,
+				Name: "",
+				PlanningGroupId: vm.planningGroupId
 			});
 		}
 
@@ -122,6 +141,7 @@
 			restrict: 'EA',
 			scope: {
 				settings: '=',
+				planningGroupId: '=',
 				preferencePercent: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',

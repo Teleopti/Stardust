@@ -11,31 +11,7 @@
     function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService) {
         var vm = this;
 
-        var filterId = vm.settingInfo ? vm.settingInfo.Id : null;
-        vm.isEdit = !!filterId;
-        if(!vm.isEdit){
-			vm.settingInfo = {
-				BlockSameShift: false,
-				BlockSameShiftCategory: false,
-				BlockSameStartTime: false,
-				MinDayOffsPerWeek: 1,
-				MaxDayOffsPerWeek: 3,
-				MinConsecutiveWorkdays: 2,
-				MaxConsecutiveWorkdays: 6,
-				MinConsecutiveDayOffs: 1,
-				MaxConsecutiveDayOffs: 3,
-				MinFullWeekendsOff: 0,
-				MaxFullWeekendsOff: 8,
-				MinWeekendDaysOff: 0,
-				MaxWeekendDaysOff: 16,
-				Priority: null,
-				Id: filterId,
-				Filters: [],
-				Default: false,
-				Name: ""
-			};
-		}
-        
+        vm.isEdit = !!vm.settingInfo;
         
         vm.blockFinderTypeOptions = [
 			"Off",
