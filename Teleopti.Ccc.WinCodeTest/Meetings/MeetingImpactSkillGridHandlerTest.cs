@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IMeetingViewModel _meetingViewModel;
         private ISkill _skill;
-        private ISkill[] _skills;
+        private ISet<ISkill> _skills;
         private ISkillTypePhone _skillTypePhone;
         private IScenario _scenario;
         private IPeopleAndSkillLoaderDecider _decider;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var startRequestedPeriod = new DateTime(2010, 11, 2, 23, 0, 0, DateTimeKind.Utc);
             _requestedPeriod = new DateTimePeriod(startRequestedPeriod, startRequestedPeriod.AddDays(20));
             _skill = _mocks.StrictMock<ISkill>();
-            _skills = new [] { _skill };
+            _skills = new HashSet<ISkill>{ _skill };
 
             _skillTypePhone = _mocks.StrictMock<ISkillTypePhone>();
             _scenario = new Scenario("scenario");

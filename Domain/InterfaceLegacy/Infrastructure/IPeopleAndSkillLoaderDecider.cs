@@ -44,6 +44,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 		/// </remarks>
 		int FilterPeople(ICollection<IPerson> people);
 
-		int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill);
+		int FilterSkills(IEnumerable<ISkill> skills, Action<ISkill> removeSkill, Action<ISkill> addSkill);
 	}
 }

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: zoet
         /// Created date: 2008-01-10
         /// </remarks>
-        ISkill[] Skills { get; }
+		ISet<ISkill> Skills { get; }
 
 			/// <summary>
         /// Gets the visible skills.

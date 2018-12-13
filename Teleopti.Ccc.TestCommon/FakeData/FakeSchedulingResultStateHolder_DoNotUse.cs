@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; set; }
 
 		public IScheduleDictionary Schedules { get; set; }
-		public ISkill[] Skills { get { return _skills.ToArray(); } }
+		public ISet<ISkill>  Skills { get { return new HashSet<ISkill>(_skills); } }
 
 		public IList<ISkill> VisibleSkills { get; private set; }
 		public IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList)

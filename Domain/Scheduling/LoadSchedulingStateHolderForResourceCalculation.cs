@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod).ToArray();
 			_workloadRepository.LoadAll();
+			//"set" istället tillsammans med nedan
 			schedulingResultStateHolder.AddSkills(skills);
 
 			schedulingResultStateHolder.LoadedAgents = optionalLoadOrganizationFunc != null ?

@@ -52,6 +52,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 						skillDaysDictionary);
 
 				schedulingResultStateHolder.ExternalStaff = externalStaff;
+				//"set" istället
 				schedulingResultStateHolder.AddSkills(skills.ToArray());
 
 

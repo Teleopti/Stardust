@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				tabSkillData.SelectedTab = _pinnedSkillHelper.PinnedPage();
 		}
 
-		public ISkill CreateSkillSummery(IList<ISkill> allSkills)
+		public ISkill CreateSkillSummery(IEnumerable<ISkill> allSkills)
 		{
 			using (var skillSummery = new SkillSummary(allSkills))
 			{
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return null;
 		}
 
-		private bool editSkillSummary(IList<ISkill> allSkills, ISkill skill, ToolStripMenuItem menuItem)
+		private bool editSkillSummary(IEnumerable<ISkill> allSkills, ISkill skill, ToolStripMenuItem menuItem)
 		{
 			var ret = false;
 			using (var skillSummery = new SkillSummary(skill, allSkills))

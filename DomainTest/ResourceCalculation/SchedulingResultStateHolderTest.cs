@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			target.SeniorityWorkDayRanks = new SeniorityWorkDayRanks();
             IList<ISkill> list = target.VisibleSkills;
             Assert.IsNotNull(list);
-            Assert.AreEqual(1, target.Skills.Length);
+            Assert.AreEqual(1, target.Skills.Count);
             Assert.IsNotNull(target.LoadedAgents);
             Assert.IsNotNull(target.Schedules);
             Assert.IsNotNull(target.SkillDays);

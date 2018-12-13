@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         private void filterSkills()
         {
+			//"set" baserat på förstaparam istället
             _deciderResult.FilterSkills(SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.RemoveSkill,s => SchedulerState.SchedulingResultState.AddSkills(s));
         }
 
@@ -143,6 +144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			    })
 			    .ToArray();
 
+			//"set" istället
 		    SchedulerState.SchedulingResultState.ClearSkills();
 		    SchedulerState.SchedulingResultState.AddSkills(skills);
 	    }

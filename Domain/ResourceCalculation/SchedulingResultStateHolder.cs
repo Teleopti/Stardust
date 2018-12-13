@@ -76,17 +76,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		/// <summary>
-		/// Gets the skills.
-		/// </summary>
-		/// <value>The skills.</value>
-		/// <remarks>
-		/// Created by: zoet
-		/// Created date: 2008-01-10
-		/// </remarks>
-		public ISkill[] Skills
+		public ISet<ISkill> Skills
 		{
-			get { return _skills.ToArray(); }
+			//dont know if a clone is necessary but it was so let's keep it that way 
+			get { return new HashSet<ISkill>(_skills);} 
 		}
 
 		public void AddSkills(params ISkill[] skills)

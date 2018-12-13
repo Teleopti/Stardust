@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -31,10 +32,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			    return 0;
 		    }
 
-			public int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill)
+			public int FilterSkills(IEnumerable<ISkill> skills, Action<ISkill> removeSkill, Action<ISkill> addSkill)
 		    {
 				skills.ForEach(removeSkill);
-				return skills.Length;
+				return skills.Count();
 		    }
 	    }
     }

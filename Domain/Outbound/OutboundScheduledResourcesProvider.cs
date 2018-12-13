@@ -75,8 +75,10 @@ namespace Teleopti.Ccc.Domain.Outbound
 			var stateHolder = schedulerStateHolder.SchedulingResultState;
 			stateHolder.LoadedAgents = people.AllPeople;
 			stateHolder.SkillDays = forecast;
+			//"set" istället
 			stateHolder.AddSkills(allSkills);
 			deciderResult.FilterSkills(allSkills,stateHolder.RemoveSkill,s => stateHolder.AddSkills(s));
+			//
 			
 			schedulerStateHolder.SetRequestedScenario(scenario);
 			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);

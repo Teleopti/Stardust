@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var skills = _schedulingResultStateHolder.Skills;
-			if (skills.Length == 0) return false;
+			if (skills.IsEmpty()) return false;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper,
 				schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder, _userTimeZone);
 

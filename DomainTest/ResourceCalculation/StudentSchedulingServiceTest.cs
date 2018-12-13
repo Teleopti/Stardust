@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, preferences)).Return(
 				  _effectiveRestriction).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
-				Expect.Call(_schedulingResultStateHolder.Skills).Return(new[] { _skill1 }).Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Skills).Return(new HashSet<ISkill> { _skill1 }).Repeat.AtLeastOnce();
 			}
 
 			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, preferences)).Return(
 			  _effectiveRestriction).IgnoreArguments().Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
-				Expect.Call(_schedulingResultStateHolder.Skills).Return(new[] { _skill1 });
+				Expect.Call(_schedulingResultStateHolder.Skills).Return(new HashSet<ISkill> { _skill1 });
 			}
 
 			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingResultStateHolder.Skills).Return(new ISkill[] { });
+				Expect.Call(_schedulingResultStateHolder.Skills).Return(new HashSet<ISkill>());
 			}
 
 			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
