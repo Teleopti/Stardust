@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				}.WithId();
 
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
+			SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>{skill};
 			var scenario = new Scenario("_");
 			var skillDaySuBefore = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(-1), TimeSpan.FromMinutes(60));
 			var skillDayMo = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));

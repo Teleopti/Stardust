@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: zoet
         /// Created date: 2008-01-10
         /// </remarks>
-		ISet<ISkill> Skills { get; }
+		ISet<ISkill> Skills { get; set; }
 
 			/// <summary>
         /// Gets the visible skills.
@@ -123,9 +123,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
 		IEnumerable<ExternalStaff> ExternalStaff { get; set; }
-		void AddSkills(params ISkill[] skills);
-	    void ClearSkills();
-	    void RemoveSkill(ISkill skill);
 	    bool GuessResourceCalculationHasBeenMade();
 	    ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
 	    int MinimumSkillIntervalLength();

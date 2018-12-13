@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SchedulingResultStateHolder : ISchedulingResultStateHolder
 	{
 		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
-		private readonly HashSet<ISkill> _skills = new HashSet<ISkill>();
+		private ISet<ISkill> _skills = new HashSet<ISkill>();
 
 		private Lazy<SkillStaffPeriodHolder> _skillStaffPeriodHolder =
 			new Lazy<SkillStaffPeriodHolder>(
@@ -78,26 +78,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public ISet<ISkill> Skills
 		{
-			//dont know if a clone is necessary but it was so let's keep it that way 
-			get { return new HashSet<ISkill>(_skills);} 
-		}
-
-		public void AddSkills(params ISkill[] skills)
-		{
-			skills.ForEach(s => _skills.Add(s));
-			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
-		}
-
-		public void ClearSkills()
-		{
-			_skills.Clear();
-			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
-		}
-
-		public void RemoveSkill(ISkill skill)
-		{
-			if (_skills.Remove(skill))
+			//dont know if a clone is necessary but it was before so let's keep it that way 
+			get => new HashSet<ISkill>(_skills);
+			set
 			{
+				_skills = value;
 				_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
 			}
 		}

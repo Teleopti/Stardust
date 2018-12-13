@@ -3209,10 +3209,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				SchedulerState.SchedulerStateHolder.ChoosenAgents.ForEach(peopleInOrg.Add);
 				SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents = peopleInOrg;
 				log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
-				var skills = stateHolder.SchedulerStateHolder.SchedulingResultState.Skills;
-				int orgSkills = skills.Count;
-				//"set" istället 
-				int removedSkills = result.FilterSkills(skills, stateHolder.SchedulerStateHolder.SchedulingResultState.RemoveSkill, s => stateHolder.SchedulerStateHolder.SchedulingResultState.AddSkills(s));
+				var skills = stateHolder.SchedulerStateHolder.SchedulingResultState.Skills.ToArray();
+				int orgSkills = skills.Length;
+				var removedSkills = stateHolder.SchedulerStateHolder.SchedulingResultState.SetSkills(result, skills);
 				log.Info("Removed " + removedSkills + " skill when filtering (original: " + orgSkills + ")");
 			}
 		}
@@ -3221,11 +3220,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var staffingCalculatorServiceFacade = _container.Resolve<IStaffingCalculatorServiceFacade>();
 			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			stateHolder.SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 			foreach (ISkill skill in skills)
 			{
 				skill.SkillType.StaffingCalculatorService = staffingCalculatorServiceFacade;
-				//"set" istället
-				stateHolder.SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
 			}
 		}
 

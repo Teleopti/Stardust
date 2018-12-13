@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; set; }
 
 		public IScheduleDictionary Schedules { get; set; }
-		public ISet<ISkill>  Skills { get { return new HashSet<ISkill>(_skills); } }
+		public ISet<ISkill> Skills { get => new HashSet<ISkill>(_skills);set{}}
 
 		public IList<ISkill> VisibleSkills { get; private set; }
 		public IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList)
@@ -53,21 +53,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			get { yield break; }
 			set {  }
-		}
-
-		public void AddSkills(params ISkill[] skills)
-		{
-			_skills.AddRange(skills);
-		}
-
-		public void ClearSkills()
-		{
-			_skills.Clear();
-		}
-
-		public void RemoveSkill(ISkill skill)
-		{
-			_skills.Remove(skill);
 		}
 
 		public bool GuessResourceCalculationHasBeenMade()

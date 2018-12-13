@@ -125,11 +125,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					var service = _repositoryFactory.CreateSkillRepository(uow);
 					var skills = service.FindAllWithSkillDays(period);
 
-					//"set" istället - skills är alltid tomt när man är här
 					foreach (var skill in skills)
 					{
 						LazyLoadingManager.Initialize(skill.SkillType);
-						_schedulerState.SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
+						var oldSkillsPlusNewSkill =
+							new HashSet<ISkill>(_schedulerState.SchedulerStateHolder.SchedulingResultState.Skills) {skill};
+						_schedulerState.SchedulerStateHolder.SchedulingResultState.Skills = oldSkillsPlusNewSkill;
 					}
 				}
 			}
@@ -203,10 +204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					service.FindAllWithSkillDays(_schedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod)
 						.ForEach(s => _lazyManager.Initialize(s.SkillType))
 						.ToArray();
-
-				//"set" istället
-				_schedulerState.SchedulerStateHolder.SchedulingResultState.ClearSkills();
-				_schedulerState.SchedulerStateHolder.SchedulingResultState.AddSkills(skills);
+				_schedulerState.SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 			}
 		}
 

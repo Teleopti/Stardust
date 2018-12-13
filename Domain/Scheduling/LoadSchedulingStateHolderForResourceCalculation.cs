@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -41,15 +42,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod).ToArray();
 			_workloadRepository.LoadAll();
-			//"set" istället tillsammans med nedan
-			schedulingResultStateHolder.AddSkills(skills);
-
+			
 			schedulingResultStateHolder.LoadedAgents = optionalLoadOrganizationFunc != null ?
 				optionalLoadOrganizationFunc(dateOnlyPeriod) : _personRepository.FindAllAgents(dateOnlyPeriod, false);
 
 			var result = _peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
 			result.FilterPeople(schedulingResultStateHolder.LoadedAgents);
-			result.FilterSkills(skills,schedulingResultStateHolder.RemoveSkill,s => schedulingResultStateHolder.AddSkills(s));
+			schedulingResultStateHolder.SetSkills(result, skills);
 
 			var personsToAdd = from p in requestedPersons
 							   where !schedulingResultStateHolder.LoadedAgents.Contains(p)

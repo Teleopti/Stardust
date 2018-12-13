@@ -128,8 +128,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         private void filterSkills()
         {
-			//"set" baserat på förstaparam istället
-            _deciderResult.FilterSkills(SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.RemoveSkill,s => SchedulerState.SchedulingResultState.AddSkills(s));
+			var allSkills = SchedulerState.SchedulingResultState.Skills.ToArray();
+			SchedulerState.SchedulingResultState.SetSkills(_deciderResult, allSkills);
         }
 
 	    private void initializeSkills(IUnitOfWork uow)
@@ -143,10 +143,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 					_lazyManager.Initialize(s.SkillType);
 			    })
 			    .ToArray();
-
-			//"set" istället
-		    SchedulerState.SchedulingResultState.ClearSkills();
-		    SchedulerState.SchedulingResultState.AddSkills(skills);
+			SchedulerState.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 	    }
 
 	    private void initializeSkillDays()

@@ -355,6 +355,7 @@
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
+    <Compile Include="ResourceCalculation\SchedulingResultStateHolderExtensions.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheExtensions.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFactory.cs" />
     <Compile Include="ResourceCalculation\SkillsOnAgentsProvider.cs" />
