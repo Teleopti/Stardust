@@ -372,5 +372,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			stateHolder.Schedules[agent].ScheduledDay(dateBefore).IsFullDayAbsence().Should().Be.True();
 			stateHolder.Schedules[agent].ScheduledDay(date).IsFullDayAbsence().Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldSplitAndDeleteFromFullDayAbsenceSpanningMultipleDaysWithDayOff()
+		{
+			var target = new DeleteSchedulePartService();
+			var dateBefore = new DateOnly(2018, 10, 1);
+			var date = dateBefore.AddDays(1);
+			var scenario = new Scenario().WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance());
+			var personAssignment = new PersonAssignment(agent, scenario, date).WithDayOff(new DayOffTemplate());
+			var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence().WithId(), dateBefore.ToDateTimePeriod(new TimePeriod(0, 48), TimeZoneInfo.Utc)));
+			var data = new List<IPersistableScheduleData> { personAssignment, personAbsence };
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateBefore, 1), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
+			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
+				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
+
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, new DeleteOption { Default = true }, rollBackService, new NoSchedulingProgress());
+
+			stateHolder.Schedules[agent].ScheduledDay(dateBefore).IsFullDayAbsence().Should().Be.True();
+			stateHolder.Schedules[agent].ScheduledDay(date).PersonAbsenceCollection().Should().Be.Empty();
+		}
 	}
 }

@@ -369,7 +369,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var personAbsence in PersonAbsenceCollection())
 			{
 				IPersonAbsence personAbsenceUpForDelete = null;
-				if (SignificantPart() == SchedulePartView.FullDayAbsence && Period.Intersect(personAbsence.Layer.Period) || Period.Contains(personAbsence.Period.StartDateTime))
+				if (SignificantPart() == SchedulePartView.FullDayAbsence || SignificantPartForDisplay() == SchedulePartView.ContractDayOff && Period.Intersect(personAbsence.Layer.Period) || Period.Contains(personAbsence.Period.StartDateTime))
 				{
 					personAbsenceUpForDelete = personAbsence;
 				}
@@ -393,6 +393,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var dayBefore = Owner[scheduleDay.Person].ScheduledDay(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(-1));
 			var endBefore = dayBefore.PersonAssignment(true).Period.EndDateTime;
 			var end = scheduleDay.PersonAssignment(true).Period.EndDateTime;
+			if (scheduleDay.HasDayOff())
+				end = scheduleDay.Period.EndDateTime;
 			var start = scheduleDay.Period.StartDateTime > endBefore ? scheduleDay.Period.StartDateTime : endBefore;
 			return new DateTimePeriod(start, end);
 		}
