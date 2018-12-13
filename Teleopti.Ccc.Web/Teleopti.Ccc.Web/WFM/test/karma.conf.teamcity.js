@@ -17,16 +17,9 @@ module.exports = function(config) {
 				pattern: 'node_modules/angular-i18n/angular-locale_*.js',
 				watched: false,
 				included: false
-			},
-
-			//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
-			{ pattern: 'app/seatManagement/images/*.svg', watched: false, included: false }
+			}
 		],
-		autoWatch: false,
-
-		proxies: {
-			'/app/seatManagement/images/': '/base/app/seatManagement/images/'
-		},
+		autoWatch: false
 
 		reporters: ['teamcity'],
 
