@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[Test]
 		[Ignore("#79787 Bug 2 be fixed")]
-		public void ShouldNotResultInDirtySnapshot()
+		public void ShouldNotResultInDirtySnapshotWhenHavingPAPlusAbsenceDayAfterScheduledDay()
 		{
 			var date = new DateOnly(2018, 9, 10);
 			var activity = new Activity().WithId();
