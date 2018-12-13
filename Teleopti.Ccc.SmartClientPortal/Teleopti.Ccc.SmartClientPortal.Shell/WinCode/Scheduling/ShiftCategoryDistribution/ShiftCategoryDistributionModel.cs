@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution
@@ -40,15 +41,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 		private readonly ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
 		private readonly ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private readonly DateOnlyPeriod _periodToMonitor;
-		private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly CommonNameDescriptionSetting _commonNameDescriptionSetting;
 
-		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder)
+		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, CommonNameDescriptionSetting commonNameDescriptionSetting)
 		{
 			_cachedShiftCategoryDistribution = cachedShiftCategoryDistribution;
 			_cachedNumberOfEachCategoryPerDate = cachedNumberOfEachCategoryPerDate;
 			_cachedNumberOfEachCategoryPerPerson = cachedNumberOfEachCategoryPerPerson;
 			_periodToMonitor = periodToMonitor;
-			_schedulerStateHolder = schedulerStateHolder;
+			_commonNameDescriptionSetting = commonNameDescriptionSetting;
 		}
 
 		public bool ShouldUpdateViews { get; set; }
@@ -183,7 +184,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 
 		public string CommonAgentName(IPerson person)
 		{
-			return _schedulerStateHolder.CommonNameDescription.BuildFor(person);
+			return _commonNameDescriptionSetting.BuildFor(person);
 		}
 
 		public virtual void OnResetNeeded()

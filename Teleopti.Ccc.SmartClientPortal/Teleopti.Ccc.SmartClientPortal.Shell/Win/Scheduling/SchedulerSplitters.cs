@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				cachedNumberOfEachCategoryPerDate,
 				cachedNumberOfEachCategoryPerPerson,
 				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
-				schedulerStateHolder);
+				schedulerStateHolder.CommonNameDescription);
 			shiftCategoryDistributionModel.SetFilteredPersons(schedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
 			shiftCategoryDistributionControl1.SetModel(shiftCategoryDistributionModel);
 			agentsNotPossibleToSchedule1.InitAgentsNotPossibleToSchedule(container.Resolve<RestrictionNotAbleToBeScheduledReport>(), this);
