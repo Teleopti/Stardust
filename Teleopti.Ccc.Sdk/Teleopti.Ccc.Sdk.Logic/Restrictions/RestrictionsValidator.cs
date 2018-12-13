@@ -12,14 +12,7 @@ using Teleopti.Ccc.Sdk.Logic.Assemblers;
 
 namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 {
-    public interface IRestrictionsValidator {
-        IList<ValidatedSchedulePartDto> ValidateSchedulePeriod(DateOnlyPeriod loadedPeriod, 
-            DateOnlyPeriod schedulePeriod, ISchedulingResultStateHolder stateHolder,
-            int periodTargetInMinutes, int periodNegativeTolerance, int periodPositiveTolerance, int periodDayOffsTarget, IPerson person, int mustHave,
-            int balancedPeriodTargetInMinutes, int balanceInInMinutes, int extraInMinutes, int balanceOutInMinutes, int numberOfDaysOff, double seasonality, bool useStudentAvailability);
-        }
-
-    public class RestrictionsValidator : IRestrictionsValidator
+    public class RestrictionsValidator
     {
         private readonly IIsEditablePredicate _isEditablePredicate;
         private readonly IAssembler<IPreferenceDay, PreferenceRestrictionDto> _preferenceDayAssembler;
