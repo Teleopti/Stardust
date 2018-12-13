@@ -1232,7 +1232,6 @@
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSetZeroValues.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolderTest.cs" />
-    <Compile Include="ResourceCalculation\StudentSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingOptionsTest.cs" />
