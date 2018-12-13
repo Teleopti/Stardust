@@ -27,7 +27,12 @@
                 "glob": "**/*",
                 "input": "./app/seatManagement/images/",
                 "output": "/assets/seatMap"
-              }
+							},
+							{
+                "glob": "**/angular-locale_*.js",
+                "input": "./node_modules/angular-i18n/",
+                "output": "/assets/angular-i18n"
+							}
             ],
             "styles": [
 							"node_modules/c3/c3.css",

@@ -157,7 +157,7 @@ if (!isResetPasswordPage()) {
 			$httpProvider.interceptors.push('httpInterceptor');
 			$mdGestureProvider.skipClickHijack();
 
-			tmhDynamicLocaleProvider.localeLocationPattern('dist/angular-i18n/angular-locale_{{locale}}.js');
+			tmhDynamicLocaleProvider.localeLocationPattern('dist/ng2/assets/angular-i18n/angular-locale_{{locale}}.js');
 			// tmhDynamicLocaleProvider.defaultLocale("en-gb");  -- causes problems with unit tests due to reinit of scope
 		}
 	]);
