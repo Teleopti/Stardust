@@ -286,17 +286,6 @@ module.exports = function(grunt) {
 						filter: 'isFile'
 					}
 				]
-			},
-			images: {
-				files: [
-					{
-						expand: true,
-						cwd: 'app/seatManagement/images',
-						src: ['*.svg', '*.jpg', '*.png'],
-						dest: 'dist/images',
-						filter: 'isFile'
-					}
-				]
 			}
 		}
 	});
@@ -307,7 +296,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-msbuild');
-	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-processhtml');
 
 	grunt.registerTask('templateCache', templateCache);
