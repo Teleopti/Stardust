@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			activity = new Activity("roger") { DisplayColor = Color.White };
 			PersistAndRemoveFromUnitOfWork(activity);
 
-            IRtaMap rtaMap = new RtaMap(stateGroup, activity);
+            IRtaMap rtaMap = new RtaMap{StateGroup = stateGroup, Activity = activity.Id.Value};
             rtaMap.RtaRule = _rtaRule;
             return rtaMap;
         }
@@ -52,7 +52,6 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
         protected override void VerifyAggregateGraphProperties(IRtaMap loadedAggregateFromDatabase)
         {
             IRtaMap org = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(org.Activity.Description.Name, loadedAggregateFromDatabase.Activity.Description.Name);
             Assert.AreEqual(org.RtaRule.Id, loadedAggregateFromDatabase.RtaRule.Id);
             Assert.AreEqual(org.StateGroup.Id, loadedAggregateFromDatabase.StateGroup.Id);
         }

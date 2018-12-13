@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				return false;
 			}
-			return rtaMap.Activity.Equals(activity);
+			return rtaMap.Activity.Equals(activity.Id.GetValueOrDefault());
 		}
 
 		/// <summary>
@@ -402,10 +402,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 			if (rtaMap == null)
 			{
-				var situation = new RtaMap(rtaStateGroup, activity)
-					{
-						RtaRule = _rtaRule
-					};
+				var situation = new RtaMap
+				{
+					StateGroup = rtaStateGroup,
+					Activity = activity.Id.Value,
+					RtaRule = _rtaRule
+				};
 				rtaMap = new RtaMapModel(situation);
 				_rtaMaps.Add(rtaMap);
 			}

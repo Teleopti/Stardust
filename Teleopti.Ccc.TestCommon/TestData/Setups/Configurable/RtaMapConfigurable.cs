@@ -78,8 +78,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (!Activity.IsNullOrEmpty())
 				activity = activityRepository.LoadAll().First(a => a.Name == Activity);
 
-			var rtaMap = new RtaMap(stateGroup, activity) { RtaRule = rule };
-
+			var rtaMap = new RtaMap
+			{
+				StateGroup = stateGroup,
+				Activity = activity?.Id.Value,
+				RtaRule = rule
+			};
 			if (!string.IsNullOrEmpty(BusinessUnit))
 			{
 				var businessUnit = new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit);

@@ -1,5 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Wfm.Adherence.Configuration;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
 	{
 		private IRtaMap _containedOriginalEntity;
 
-		public IActivity Activity {
+		public Guid? Activity {
 			get { return ContainedEntity.Activity; }
 		}
 		public IRtaStateGroup StateGroup

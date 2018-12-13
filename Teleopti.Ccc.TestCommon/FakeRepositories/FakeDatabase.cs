@@ -1278,7 +1278,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		[UnitOfWork]
 		public virtual FakeDatabase WithMapping()
 		{
-			var mapping = new RtaMap(_stateGroup, _activity) {RtaRule = _rule};
+			var mapping = new RtaMap
+			{
+				StateGroup = _stateGroup,
+				Activity = _activity?.Id.Value,
+				RtaRule = _rule
+			};
 			mapping.SetId(Guid.NewGuid());
 			mapping.SetBusinessUnit(_businessUnit);
 			_mappings.Add(mapping);
@@ -1292,7 +1297,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			stateGroup.SetBusinessUnit(_businessUnit);
 			_stateGroups.Add(stateGroup);
 
-			var mapping = new RtaMap(stateGroup, null) {RtaRule = _rule};
+			var mapping = new RtaMap
+			{
+				StateGroup = stateGroup,
+				Activity = null,
+				RtaRule = null
+			};
 			mapping.SetId(Guid.NewGuid());
 			mapping.SetBusinessUnit(_businessUnit);
 			_mappings.Add(mapping);
