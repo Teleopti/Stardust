@@ -253,19 +253,6 @@ module.exports = function(grunt) {
 		},
 
 		copy: {
-			sourceMaps: {
-				files: [
-					// includes files within path
-					{
-						expand: true,
-						cwd: 'vendor',
-						flatten: true,
-						src: ['*/*.map'],
-						dest: 'dist/resources',
-						filter: 'isFile'
-					}
-				]
-			},
 			extras: {
 				files: [
 					{
