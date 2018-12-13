@@ -20,5 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public string ProbabilityClass { get; set; }
 		public string ProbabilityText { get; set; }
 		public IList<OccupancyViewModel> SeatBookingInformation { get; set; }
+		public IPersonAssignment PersonAssignment { get; set; }
+		public SchedulePartView SignificantPartForDisplay { get; set; }
 	}
 }

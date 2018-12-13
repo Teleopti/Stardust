@@ -152,8 +152,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 		private DayViewModel createDayViewModel(WeekScheduleDayDomainData s, bool loadOpenHourPeriod = false)
 		{
-			var personAssignment = s.ScheduleDay?.PersonAssignment();
-			var significantPartForDisplay = s.ScheduleDay?.SignificantPartForDisplay();
+			var personAssignment = s.PersonAssignment;
+			var significantPartForDisplay = s.SignificantPartForDisplay;
 			var dayViewModel = new DayViewModel
 			{
 				Date = s.Date.ToShortDateString(),
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return _overtimeMapper.Map(s.OvertimeAvailability);
 			}
 
-			if (s.ScheduleDay?.SignificantPartForDisplay() != SchedulePartView.MainShift)
+			if (s.SignificantPartForDisplay != SchedulePartView.MainShift)
 			{
 				return new OvertimeAvailabilityViewModel
 				{
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				};
 			}
 
-			var personAssignment = s.ScheduleDay.PersonAssignment();
+			var personAssignment = s.PersonAssignment;
 			var endTime = personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime;
 			var endTimeTomorrow = endTime.Add(TimeSpan.FromHours(1));
 			return new OvertimeAvailabilityViewModel
@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				};
 			}
 
-			var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+			var significantPart = s.SignificantPartForDisplay;
 
 			switch (significantPart)
 			{
@@ -385,13 +385,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					{
 						return new PersonDayOffPeriodViewModel
 						{
-							Title = s.ScheduleDay?.PersonAssignment()?.DayOff()?.Description.Name,
+							Title = s.PersonAssignment?.DayOff()?.Description.Name,
 							StyleClassName = StyleClasses.DayOff + " " + StyleClasses.Striped
 						};
 					}
 				case SchedulePartView.MainShift:
 					{
-						var personAssignment = s.ScheduleDay?.PersonAssignment();
+						var personAssignment = s.PersonAssignment;
 						var shiftCategory = personAssignment?.ShiftCategory;
 						return new PersonAssignmentPeriodViewModel
 						{

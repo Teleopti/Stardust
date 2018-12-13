@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 
 		private ShiftViewModel shift(MonthScheduleDayDomainData s, bool mobileMonth = false)
 		{
-			var personAssignment = s.ScheduleDay.PersonAssignment();
+			var personAssignment = s.PersonAssignment;
 			var projection = _projectionProvider.Projection(s.ScheduleDay);
 
 			var isNullPersonAssignment = personAssignment == null;
@@ -87,14 +87,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 
 		private static bool isDayOff(MonthScheduleDayDomainData s)
 		{
-			var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+			var significantPart = s.SignificantPartForDisplay;
 			return significantPart == SchedulePartView.DayOff
 				   || significantPart == SchedulePartView.ContractDayOff;
 		}
 
 		private static AbsenceViewModel[] mapAbsences(MonthScheduleDayDomainData s)
 		{
-			var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+			var significantPart = s.SignificantPartForDisplay;
 			var absenceCollection = s.ScheduleDay.PersonAbsenceCollection();
 			if (absenceCollection.Any())
 			{
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 
 		private static OvertimeViewModel[] mapOvertimes(MonthScheduleDayDomainData s)
 		{
-			var personAssignment = s.ScheduleDay.PersonAssignment();
+			var personAssignment = s.PersonAssignment;
 			if (personAssignment == null) return null;
 			var overtimes = personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>();
 			if (!overtimes.Any()) return null;

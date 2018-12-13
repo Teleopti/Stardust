@@ -12,11 +12,10 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 
-
 namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 {
 	[TestFixture]
-	internal class SeatOccupancyProviderTest
+	public class SeatOccupancyProviderTest
 	{
 		private FakeSeatBookingRepository _seatBookingRepository;
 		private FakeSeatMapRepository _seatMapLocationRepository;
@@ -252,43 +251,12 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			scheduleDayTwoPerson1.Add(assignment2Person1);
 
 			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
-			var occupancyInformation = seatOccupancyProvider.GetSeatBookingsForScheduleDays(new List<IScheduleDay>() { scheduleDayOnePerson1, scheduleDayOnePerson2 });
+			var occupancyInformation = seatOccupancyProvider.GetSeatBookingsForScheduleDays(new DateOnlyPeriod(bookingDateStart,bookingDateEnd), _person);
 
 			Assert.AreEqual(2, occupancyInformation.Count);
 
 			Assert.AreEqual(_person.Id, occupancyInformation[0].PersonId);
-			Assert.AreEqual(person2.Id, occupancyInformation[1].PersonId);
-		}
-
-		[Test]
-		public void ShouldGetSeatOccupancyInformationForScheduleDayWithoutPersonAssignment()
-		{
-			var location = new SeatMapLocation { Name = "Location" };
-			location.SetId(Guid.NewGuid());
-
-			var seat = location.AddSeat("Seat", 1);
-			_seatMapLocationRepository.Add(location);
-
-			var bookingDateStart = new DateOnly(2015, 8, 7);
-			
-			var booking1ForPerson1 = SeatManagementProviderTestUtils.CreateSeatBooking(
-				_person,
-				bookingDateStart,
-				new DateTime(2015, 8, 7, 8, 0, 0, DateTimeKind.Utc),
-				new DateTime(2015, 8, 7, 18, 0, 0, DateTimeKind.Utc));
-
-			booking1ForPerson1.Book(seat);
-
-			_seatBookingRepository.Add(booking1ForPerson1);
-
-			var scenario = new Scenario("d");
-
-			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(bookingDateStart, _person, scenario);
-			
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
-			var occupancyInformation = seatOccupancyProvider.GetSeatBookingsForScheduleDays(new List<IScheduleDay> { scheduleDayOnePerson1 });
-
-			Assert.AreEqual(0, occupancyInformation.Count);
+			Assert.AreEqual(_person.Id, occupancyInformation[1].PersonId);
 		}
 	}
 }

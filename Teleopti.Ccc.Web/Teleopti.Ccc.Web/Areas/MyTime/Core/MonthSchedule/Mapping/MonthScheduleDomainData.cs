@@ -17,5 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 	{
 		public IScheduleDay ScheduleDay { get; set; }
 		public OccupancyViewModel[] SeatBookingInformation { get; set; }
+		public IPersonAssignment PersonAssignment { get; set; }
+		public SchedulePartView SignificantPartForDisplay { get; set; }
 	}
 }

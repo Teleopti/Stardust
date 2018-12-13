@@ -34,5 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 		public bool ViewPossibilityPermission { get; set; }
 		public bool ShiftTradeRequestPermission { get; set; }
 		public bool ShiftTradeBulletinBoardPermission { get; set; }
+		public IPersonAssignment PersonAssignment { get; set; }
+		public SchedulePartView SignificantPartForDisplay { get; set; }
 	}
 }

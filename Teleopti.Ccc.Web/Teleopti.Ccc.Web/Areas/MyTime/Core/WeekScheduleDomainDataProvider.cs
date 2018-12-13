@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private readonly IPersonRequestProvider _personRequestProvider;
 		private readonly ISeatOccupancyProvider _seatBookingProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
 		private readonly ILicenseAvailability _licenseAvailability;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			IPersonRequestProvider personRequestProvider,
 			ISeatOccupancyProvider seatBookingProvider,
 			IUserTimeZone userTimeZone,
+			ILoggedOnUser loggedOnUser,
 			IPermissionProvider permissionProvider,
 			INow now,
 			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider, ILicenseAvailability licenseAvailability)
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			_personRequestProvider = personRequestProvider;
 			_seatBookingProvider = seatBookingProvider;
 			_userTimeZone = userTimeZone;
+			_loggedOnUser = loggedOnUser;
 			_permissionProvider = permissionProvider;
 			_now = now;
 			_absenceRequestProbabilityProvider = absenceRequestProbabilityProvider;
@@ -71,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period).ToLookup(r => r.StartDateTimeLocal(timeZone).ToDateOnly());
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period).ToLookup(r => r.Date);
-			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays).ToLookup(b => b.BelongsToDate);
+			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(periodWithPreviousDay, _loggedOnUser.CurrentUser()).ToLookup(b => b.BelongsToDate);
 			var scheduleDaysAndProjections = scheduleDays.ToDictionary(day => day.DateOnlyAsPeriod.DateOnly,
 				day => new ScheduleDaysAndProjection
 				{
@@ -93,6 +96,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				if (scheduleDaysAndProjections.TryGetValue(day, out var theDay))
 				{
 					var scheduleDay = theDay.ScheduleDay;
+					scheduleDayDomainData.PersonAssignment = scheduleDay.PersonAssignment();
+					scheduleDayDomainData.SignificantPartForDisplay = scheduleDay.SignificantPartForDisplay();
 					scheduleDayDomainData.ScheduleDay = scheduleDay;
 					scheduleDayDomainData.Projection = theDay.Projection;
 					scheduleDayDomainData.OvertimeAvailability =

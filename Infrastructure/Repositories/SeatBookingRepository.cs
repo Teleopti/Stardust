@@ -22,11 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 		
-		public ISeatBooking LoadSeatBookingForPerson(DateOnly date, IPerson person)
+		public IList<ISeatBooking> LoadSeatBookingsForPerson(DateOnlyPeriod period, IPerson person)
 		{
 			return
 				Session.Query<ISeatBooking>()
-					.SingleOrDefault(booking => (booking.BelongsToDate == date && booking.Person == person));
+					.Where(booking => booking.BelongsToDate >= period.StartDate
+									  && booking.BelongsToDate <= period.EndDate && booking.Person == person).ToList();
 		}
 
 		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod(DateOnlyPeriod period)
@@ -70,10 +71,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void RemoveSeatBookingsForSeats(IEnumerable<ISeat> seats)
 		{
-			seats.ForEach(RemoveSeatBookingsForSeat);
+			seats.ForEach(removeSeatBookingsForSeat);
 		}
 
-		public void RemoveSeatBookingsForSeat(ISeat seat)
+		private void removeSeatBookingsForSeat(ISeat seat)
 		{
 			GetSeatBookingsForSeat(seat)
 				.ForEach(Remove);
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			};
 
 			var firstBooking = seatBookingReportModel.SeatBookings.FirstOrDefault();
-			seatBookingReportModel.RecordCount = firstBooking == null ? 0 : firstBooking.NumberOfRecords;
+			seatBookingReportModel.RecordCount = firstBooking?.NumberOfRecords ?? 0;
 
 			return seatBookingReportModel;
 		}
