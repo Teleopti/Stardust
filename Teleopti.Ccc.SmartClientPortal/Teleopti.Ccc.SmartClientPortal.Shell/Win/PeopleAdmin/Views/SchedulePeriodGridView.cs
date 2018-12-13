@@ -1720,10 +1720,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 					var timeZoneInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 					var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(schedulePeriodPrevious.DateFrom.Date, previousPeriodEndDate.Date, timeZoneInfo);
 					var dateOnlyPeriod = new DateOnlyPeriod(schedulePeriodPrevious.DateFrom, previousPeriodEndDate);
-					var schedulerStateHolder = new SchedulerStateHolder(defaultScenario, new DateOnlyPeriodAsDateTimePeriod(dateOnlyPeriod, timeZoneInfo), new List<IPerson> { selectedPerson }, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuard());
-					new ScheduleDataLoader(schedulerStateHolder).LoadSchedule(unitOfWork, dateTimePeriod, selectedPerson);
-					IScheduleContractTimeCalculator scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(schedulerStateHolder.Schedules, selectedPerson, dateOnlyPeriod);
-					IScheduleTargetTimeCalculator scheduleTargetTimeCalculator = new ScheduleTargetTimeCalculator(schedulerStateHolder.Schedules, selectedPerson, dateOnlyPeriod);
+					var schedules = new ScheduleDataLoader().LoadSchedule(unitOfWork, dateTimePeriod, selectedPerson, defaultScenario);
+					IScheduleContractTimeCalculator scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(schedules, selectedPerson, dateOnlyPeriod);
+					IScheduleTargetTimeCalculator scheduleTargetTimeCalculator = new ScheduleTargetTimeCalculator(schedules, selectedPerson, dateOnlyPeriod);
 					var schedulePeriodCloseCalculator = new SchedulePeriodCloseCalculator(scheduleContractTimeCalculator, scheduleTargetTimeCalculator, schedulePeriodPrevious, schedulePeriod);
 					schedulePeriodCloseCalculator.CalculateBalanceOut();
 				}
