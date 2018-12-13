@@ -6,9 +6,9 @@
 		.controller('planningGroupSettingOverviewController', overviewController)
 		.directive('planningGroupSettingsOverview', planningGroupSettingOverviewDirective);
 
-	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'localeLanguageSortingService'];
+	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'localeLanguageSortingService', 'PlanGroupSettingService'];
 
-	function overviewController($state, $timeout, $stateParams, $translate, localeLanguageSortingService) {
+	function overviewController($state, $timeout, $stateParams, $translate, localeLanguageSortingService, PlanGroupSettingService) {
 		var vm = this;
 
 		vm.requestSent = false;
@@ -100,7 +100,7 @@
 		}
 
 		function setLowerPriority(setting, index) {
-			if (setting.Priority < 2)
+			if (setting.Priority < 1)
 				return;
 			addAnimate(index);
 			switchPrio(setting, vm.settings[index + 1]);
@@ -132,6 +132,31 @@
 
 		function disableButton(index) {
 			return index >= vm.settings.length - 2;
+		}
+
+		function persist(setting) {
+			PlanGroupSettingService.saveSetting({
+				BlockFinderType: setting.BlockFinderType,
+				BlockSameShift: setting.BlockSameShift,
+				BlockSameShiftCategory: setting.BlockSameShiftCategory,
+				BlockSameStartTime: setting.BlockSameStartTime,
+				MinDayOffsPerWeek: setting.MinDayOffsPerWeek,
+				MaxDayOffsPerWeek: setting.MaxDayOffsPerWeek,
+				MinConsecutiveWorkdays: setting.MinConsecutiveWorkdays,
+				MaxConsecutiveWorkdays: setting.MaxConsecutiveWorkdays,
+				MinConsecutiveDayOffs: setting.MinConsecutiveDayOffs,
+				MaxConsecutiveDayOffs: setting.MaxConsecutiveDayOffs,
+				MinFullWeekendsOff: setting.MinFullWeekendsOff,
+				MaxFullWeekendsOff: setting.MaxFullWeekendsOff,
+				MinWeekendDaysOff: setting.MinWeekendDaysOff,
+				MaxWeekendDaysOff: setting.MaxWeekendDaysOff,
+				Id: setting.Id,
+				Name: setting.Name,
+				Default: setting.Default,
+				Filters: setting.Filters,
+				PlanningGroupId: $stateParams.groupId,
+				Priority: setting.Priority
+			});
 		}
 	}
 
