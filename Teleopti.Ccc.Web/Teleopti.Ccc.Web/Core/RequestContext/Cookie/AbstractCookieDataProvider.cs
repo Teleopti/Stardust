@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			var ticket = DecryptCookie(cookie);
 			ticket = makeTicket(ticket.Name, ticket.UserData, _now.ServerDateTime_DontUse().AddHours(-1));
 			cookie.HttpOnly = true;
+			cookie.Secure = _sessionSpecificCookieDataProviderSettings.AuthenticationRequireSsl;
 			cookie.Value = encryptTicket(ticket);
 			setCookie(cookie);
 		}
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public void RemoveCookie()
 		{
-			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.ServerDateTime_DontUse().AddYears(-2), HttpOnly = true };
+			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.ServerDateTime_DontUse().AddYears(-2), HttpOnly = true, Secure = _sessionSpecificCookieDataProviderSettings.AuthenticationRequireSsl};
 			setCookie(cookie);
 			RemoveAuthBridgeCookie();
 		}
@@ -169,6 +170,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			
 			var newTicket = makeTicket(ticket.Name, ticket.UserData, false, (ticket.Expiration - ticket.IssueDate).TotalMinutes);
 			cookie.Value = encryptTicket(newTicket);
+			cookie.Secure = _sessionSpecificCookieDataProviderSettings.AuthenticationRequireSsl;
 			cookie.HttpOnly = true;
 			setCookie(cookie);
 		}
