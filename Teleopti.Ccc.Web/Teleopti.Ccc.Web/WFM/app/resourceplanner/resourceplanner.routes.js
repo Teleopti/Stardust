@@ -27,9 +27,6 @@
 			resolve: {
 				editPlanningGroup: function() {
 					return null;
-				},
-				schedulingSettingInfo: function() {
-					return [{"MinDayOffsPerWeek":1,"MaxDayOffsPerWeek":3,"MinConsecutiveWorkdays":2,"MaxConsecutiveWorkdays":6,"MinConsecutiveDayOffs":1,"MaxConsecutiveDayOffs":3,"Id":"af99224e-12de-41eb-b12a-a9ad00e544c0","Default":true,"Filters":[],"Name":"Default","PlanningGroupId":"ff69a203-3956-45ab-a7bc-a9ad00e544c0","BlockFinderType":0,"BlockSameStartTime":false,"BlockSameShiftCategory":false,"BlockSameShift":false,"Priority":-1,"MinFullWeekendsOff":0,"MaxFullWeekendsOff":8,"MinWeekendDaysOff":0,"MaxWeekendDaysOff":16,"PreferencePercent":80,"PlanningGroupName":""}];
 				}
 			}
 		}).state('resourceplanner.editplanninggroup', {

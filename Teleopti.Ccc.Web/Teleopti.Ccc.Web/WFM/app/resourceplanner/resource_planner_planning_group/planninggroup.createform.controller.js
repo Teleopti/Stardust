@@ -17,9 +17,31 @@
 		vm.name = '';
 		vm.cancel = returnToOverview;
 		vm.deletePlanningGroupText = '';
-		vm.editPlanningGroup = editPlanningGroup;
-		vm.planningGroupId = null;
 		vm.isEditGroup = !!editPlanningGroup;
+		vm.editPlanningGroup = editPlanningGroup? editPlanningGroup:{
+			PreferencePercent: 80,
+			Settings:[{
+				BlockFinderType: 0,
+				BlockSameShift: false,
+				BlockSameShiftCategory: false,
+				BlockSameStartTime: false,
+				MinDayOffsPerWeek: 1,
+				MaxDayOffsPerWeek: 3,
+				MinConsecutiveWorkdays: 2,
+				MaxConsecutiveWorkdays: 6,
+				MinConsecutiveDayOffs: 1,
+				MaxConsecutiveDayOffs: 3,
+				MinFullWeekendsOff: 0,
+				MaxFullWeekendsOff: 8,
+				MinWeekendDaysOff: 0,
+				MaxWeekendDaysOff: 16,
+				Priority: -1,
+				Id: null,
+				Filters: [],
+				Default: true,
+				Name: $translate.instant('Default')
+			}]
+		};
 		vm.planningGroupSettings = [];
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
@@ -33,7 +55,7 @@
 		prepareEditInfo();
 
 		function prepareEditInfo() {
-			if (editPlanningGroup == null)
+			if (!vm.isEditGroup)
 				return;
 			vm.deletePlanningGroupText = $translate.instant('AreYouSureYouWantToDeleteThePlanningGroup').replace("{0}", editPlanningGroup.Name);
 			vm.name = editPlanningGroup.Name;
@@ -119,11 +141,11 @@
 			} else if (!vm.requestSent) {
 				vm.requestSent = true;
 				return planningGroupService.savePlanningGroup({
-					Id: editPlanningGroup ? editPlanningGroup.Id : null,
+					Id: vm.isEditGroup ? vm.editPlanningGroup.Id : null,
 					Name: vm.name,
 					Filters: vm.selectedResults,
-					Settings: editPlanningGroup ? editPlanningGroup.Settings : [],
-					PreferencePercent: editPlanningGroup ? editPlanningGroup.PreferencePercent : 0
+					Settings: vm.editPlanningGroup.Settings,
+					PreferencePercent: vm.editPlanningGroup.PreferencePercent
 				}).$promise.then(function () {
 					returnToOverview();
 				});
@@ -131,7 +153,7 @@
 		}
 
 		function removePlanningGroup() {
-			if (!editPlanningGroup) return;
+			if (!vm.isEditGroup) return;
 			if (!vm.requestSent) {
 				vm.requestSent = true;
 				return planningGroupService.removePlanningGroup({ id: editPlanningGroup.Id }).$promise.then(function () {

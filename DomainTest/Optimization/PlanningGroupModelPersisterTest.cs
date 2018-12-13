@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
@@ -233,6 +234,32 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			var onlyFilterInDb = (TeamFilter)PlanningGroupRepository.LoadAll().Single().Filters.Single();
 			onlyFilterInDb.Team.Id.Value.Should().Be.EqualTo(team.Id.Value);
+		}
+
+		[Test]
+		public void ShouldUpdateDefaultPlanningGroupSettingWhenCreatePlanningGroup()
+		{
+			var model = new PlanningGroupModel
+			{
+				Settings = new[]
+				{
+					new PlanningGroupSettingsModel
+					{
+						Default = true,
+						BlockFinderType = BlockFinderType.SchedulePeriod,
+						BlockSameShiftCategory = true,
+						MaxDayOffsPerWeek = 3
+					}
+				}
+			};
+
+			Target.Persist(model);
+
+			var inDb = PlanningGroupRepository.LoadAll().Single();
+			var planningGroupSettings = inDb.Settings.Single();
+			planningGroupSettings.BlockFinderType.Should().Be.EqualTo(BlockFinderType.SchedulePeriod);
+			planningGroupSettings.BlockSameShiftCategory.Should().Be.True();
+			planningGroupSettings.DayOffsPerWeek.Maximum.Should().Be.EqualTo(3);
 		}
 
 		[Test]

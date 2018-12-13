@@ -45,7 +45,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			foreach (var setting in planningGroupModel.Settings)
 			{
-				_planningGroupSettingsModelPersister.Persist(setting);
+				if (setting.Default)
+				{
+					_planningGroupSettingsModelPersister.UpdateDefaultSetting(planningGroup.Settings.Single(x => x.Default), setting);
+				}
+				else
+				{
+					_planningGroupSettingsModelPersister.Persist(setting);					
+				}
 			}
 		}
 
