@@ -121,7 +121,7 @@
 		};
 
 		vm.showEditButton = function (personSchedule) {
-			return toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978
+			return toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295
 				&& !personSchedule.IsFullDayAbsence
 				&& !(personSchedule.IsProtected && !vm.permissions.HasModifyWriteProtectedSchedulePermission)
 				&& !personSchedule.IsDayOff()

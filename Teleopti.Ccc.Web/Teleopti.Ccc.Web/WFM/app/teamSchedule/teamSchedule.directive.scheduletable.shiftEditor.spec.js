@@ -13,7 +13,7 @@
 		beforeEach(
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
-					return { WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978: true };
+					return { WfmTeamSchedule_ShiftEditorInDayView_78295: true };
 				});
 				$provide.service('signalRSVC', setupMockSignalRService);
 
