@@ -12,10 +12,15 @@
 			</th>
 
 			<th class="shift-category-cell-header"></th>
-			<th id="time-line-container" class="schedule schedule-column">
-				<time-line times="vm.scheduleVm.TimeLine.HourPoints"
-						   schedule-count="vm.scheduleVm.Schedules.length">
-				</time-line>
+			<th class="schedule schedule-column time-line-container">
+				<div class="time-line">
+					<div class="relative">
+						<span ng-repeat="hourPoint in vm.scheduleVm.TimeLine.HourPoints">
+							<span class="ruler absolute" ng-style="{left: (hourPoint.Position() + '%'), height: $ctrl.height + 'px'}"></span>
+							<span ng-show="hourPoint.IsLabelVisible" class="label label-info absolute" ng-style="{left: hourPoint.Position() + '%'}" ng-class="{notcurrentday: !hourPoint.IsCurrentDay}">{{::hourPoint.TimeLabel}}</span>
+						</span>
+					</div>
+				</div>
 			</th>
 			<th class="schedule-tool-column"></th>
 			<th class="schedule-tool-column"></th>
