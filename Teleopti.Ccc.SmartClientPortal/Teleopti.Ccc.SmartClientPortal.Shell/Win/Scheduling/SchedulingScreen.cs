@@ -5775,14 +5775,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripMenuItemSeniorityRankDescMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
-				_scheduleView.Sort(new SortBySeniorityRankingDescendingCommand(SchedulerState.SchedulerStateHolder,
+				_scheduleView.Sort(new SortBySeniorityRankingDescendingCommand(SchedulerState,
 					_container.Resolve<IRankedPersonBasedOnStartDate>()));
 		}
 
 		private void toolStripMenuItemSeniorityRankAscMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
-				_scheduleView.Sort(new SortBySeniorityRankingAscendingCommand(SchedulerState.SchedulerStateHolder,
+				_scheduleView.Sort(new SortBySeniorityRankingAscendingCommand(SchedulerState,
 					_container.Resolve<IRankedPersonBasedOnStartDate>()));
 		}
 

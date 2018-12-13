@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
     {
 	    private readonly IRankedPersonBasedOnStartDate _rankingCalculator;
 
-		public SortBySeniorityRankingDescendingCommand(ISchedulerStateHolder schedulerState, IRankedPersonBasedOnStartDate rankingCalculator)
+		public SortBySeniorityRankingDescendingCommand(SchedulingScreenState schedulerState, IRankedPersonBasedOnStartDate rankingCalculator)
 			:base(schedulerState)
 	    {
 		    _rankingCalculator = rankingCalculator;
