@@ -16016,4 +16016,7 @@ Applikationen kommer nu att stängas. </value>
   <data name="HelpCreatePlanningPeriod" xml:space="preserve">
     <value>En planeringsperiod krävs för att schemalägga agenterna. </value>
   </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>Systeminställningar</value>
+  </data>
 </root>
