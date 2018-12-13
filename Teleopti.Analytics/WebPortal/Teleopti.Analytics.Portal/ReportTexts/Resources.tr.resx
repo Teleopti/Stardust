@@ -519,9 +519,6 @@
   <data name="ResAgentsColon" xml:space="preserve">
     <value>Müşteri Temsilcisi:</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Müşteri Temsilcisi - Vardiyaya Uyum</value>
-  </data>
   <data name="ResAgentDate" xml:space="preserve">
     <value>Müşteri Temsilcisi / Tarih</value>
   </data>

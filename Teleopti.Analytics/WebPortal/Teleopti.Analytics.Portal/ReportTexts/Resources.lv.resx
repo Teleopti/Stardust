@@ -609,9 +609,6 @@
   <data name="ResShiftCategoryColon" xml:space="preserve">
     <value>Maiņu Kategorijas:</value>
   </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value> </value>
-  </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
     <value>Maiņu Kategorijas un Pilnas Dienas Prombūtnes pēc Operatoriem</value>
   </data>

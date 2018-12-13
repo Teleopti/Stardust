@@ -490,10 +490,6 @@
     <value>Palvelutason laskenta:</value>
     <comment>Service Level Calculation:</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agentin aikataulun noudattaminen</value>
-    <comment>Agent - Schedule Adherence</comment>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Lajitteluperuste:</value>
     <comment>Sort by:</comment>
@@ -1041,10 +1037,6 @@
   <data name="ResAgentColon" xml:space="preserve">
     <value>Agentti:</value>
     <comment>Agent:</comment>
-  </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value>Sisäänkirjautuminen onnistui</value>
-    <comment>Login succesfull</comment>
   </data>
   <data name="ResNoScorecardAvailable" xml:space="preserve">
     <value>Tuloskortti ei ole saatavilla</value>

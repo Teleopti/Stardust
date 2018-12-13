@@ -477,10 +477,6 @@
     <value>حساب مستوى الخدمة:</value>
     <comment>حساب مستوى الخدمة:</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>الوكيل - الالتزام بالجدولة</value>
-    <comment>الوكيل - الالتزام بالجدولة</comment>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>فرز حسب:</value>
     <comment>فرز حسب:</comment>
@@ -656,10 +652,6 @@
   <data name="ResScheduledOverTime" xml:space="preserve">
     <value>الوقت الإضافي المجدول (ق‏ق:س‏س)</value>
     <comment>الوقت الإضافي المجدول (ق‏ق:س‏س)</comment>
-  </data>
-  <data name="ResReportScheuduledTimePerAbsenceActivity" xml:space="preserve">
-    <value>الوقت المجدول لكل حالة غياب/نشاط</value>
-    <comment>الوقت المجدول لكل حالة غياب/نشاط</comment>
   </data>
   <data name="ResAbsenceColon" xml:space="preserve">
     <value>الغياب:</value>

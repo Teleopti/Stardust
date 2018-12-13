@@ -540,9 +540,6 @@
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
     <value>服务水平统计：</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>座席代表—遵时率</value>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>排序：</value>
   </data>
@@ -710,9 +707,6 @@
   </data>
   <data name="ResAbsencePaidTimeH" xml:space="preserve">
     <value>付薪时间</value>
-  </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value>登录成功</value>
   </data>
   <data name="ResAbsenceWorkTimeH" xml:space="preserve">
     <value>工作时间</value>

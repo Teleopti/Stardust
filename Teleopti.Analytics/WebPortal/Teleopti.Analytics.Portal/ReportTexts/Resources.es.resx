@@ -429,9 +429,6 @@
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
     <value>Cálculo del Nivel de Servicio</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agente - Adherencia Planificada</value>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Ordenar por:</value>
   </data>
@@ -1095,9 +1092,6 @@ por Contrato</value>
   </data>
   <data name="ResUnfulfilled" xml:space="preserve">
     <value>Incumplido</value>
-  </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value>Inicio de Sesión Exitoso</value>
   </data>
   <data name="RepViewerZoom" xml:space="preserve">
     <value>Zoom</value>

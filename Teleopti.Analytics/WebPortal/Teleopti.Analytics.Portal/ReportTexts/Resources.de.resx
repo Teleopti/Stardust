@@ -426,9 +426,6 @@
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
     <value>Servicelevelberechnung:</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agenten - Planeinhaltung</value>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Sortieren nach:</value>
   </data>
@@ -869,9 +866,6 @@
   </data>
   <data name="ResGroupPageColon" xml:space="preserve">
     <value>Gruppen Seite:</value>
-  </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value> </value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Agenten - Kennzahlen Queue</value>

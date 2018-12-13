@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -540,9 +540,6 @@
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
     <value>服務水準統計：</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>座席代表—遵時率</value>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>排序：</value>
   </data>
@@ -710,9 +707,6 @@
   </data>
   <data name="ResAbsencePaidTimeH" xml:space="preserve">
     <value>付薪時間</value>
-  </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value>登錄成功</value>
   </data>
   <data name="ResAbsenceWorkTimeH" xml:space="preserve">
     <value>工作時間</value>

@@ -1364,4 +1364,19 @@
   <data name="ResRequestTypeOvertime" xml:space="preserve">
     <value>Övertid</value>
   </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>Schemaföljsamhet (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>Schemaföljsamhetsberäkning:</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Schemaföljsamhet / Intervall (%)</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Följsamhet per agent</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Följsamhet per dag</value>
+  </data>
 </root>

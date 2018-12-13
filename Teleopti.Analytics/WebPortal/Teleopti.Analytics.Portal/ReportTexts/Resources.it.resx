@@ -936,9 +936,6 @@
   <data name="RedirectNow" xml:space="preserve">
     <value>Redirigi adesso</value>
   </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value> </value>
-  </data>
   <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
     <value>Ore previste incl. riduzioni (hh:mm)</value>
   </data>
