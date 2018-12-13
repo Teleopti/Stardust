@@ -27,7 +27,8 @@
             "styles": [
 							"src/styles.scss",
 							{ "input": "css/styleguide/styleguide_classic.scss", "lazy": true },
-							{ "input": "css/styleguide/styleguide_dark.scss", "lazy": true }
+							{ "input": "css/styleguide/styleguide_dark.scss", "lazy": true },
+							{ "input": "src/dependencies.scss", "lazy": true }
             ],
             "scripts": []
           },

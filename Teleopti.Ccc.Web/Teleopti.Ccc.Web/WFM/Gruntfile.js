@@ -168,23 +168,6 @@ module.exports = function(grunt) {
 		dest: 'dist/resources/d3.js'
 	};
 
-	// TODO: Add desktop concat
-
-	const concatCssDependencies = {
-		src: [
-			'node_modules/c3/c3.min.css',
-			'node_modules/angular-resizable/src/angular-resizable.css',
-			'node_modules/angular-ui-tree/source/angular-ui-tree.css',
-			'node_modules/angular-ui-grid/ui-grid.css',
-			'node_modules/angular-material/angular-material.css',
-			'node_modules/angular-gantt/assets/angular-gantt.css',
-			'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
-			'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
-			'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css'
-		],
-		dest: 'dist/dependencies.css'
-	};
-
 	const uglifyOptions = {
 		sourceMap: false,
 		beautify: false,
@@ -224,8 +207,7 @@ module.exports = function(grunt) {
 		less,
 		concat: {
 			concatJsDependencies,
-			concatJsWfm,
-			concatCssDependencies
+			concatJsWfm
 		},
 		uglify,
 		msbuild: {
