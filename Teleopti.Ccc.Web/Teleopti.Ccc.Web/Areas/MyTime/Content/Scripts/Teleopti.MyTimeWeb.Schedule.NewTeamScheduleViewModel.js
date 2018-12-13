@@ -436,7 +436,9 @@
 				timeLineOffset,
 				false,
 				timelineStart,
-				self.selectedDate()
+				self.selectedDate(),
+				null,
+				true
 			);
 
 			myLayerViewModel.showTitle = myLayerViewModel.height >= minPixelsToDisplayTitle;
@@ -474,11 +476,12 @@
 					timeLineOffset,
 					false,
 					timelineStart,
-					self.selectedDate()
+					self.selectedDate(),
+					null,
+					false
 				);
 				layerViewModel.isLastLayer = index === periods.length - 1;
 				layerViewModel.showTitle = layerViewModel.height >= minPixelsToDisplayTitle;
-
 				layers.push(layerViewModel);
 			});
 
