@@ -1723,7 +1723,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 					var schedulerStateHolder = new SchedulerStateHolder(defaultScenario, new DateOnlyPeriodAsDateTimePeriod(dateOnlyPeriod, timeZoneInfo), new List<IPerson> { selectedPerson }, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuard());
 					new ScheduleDataLoader(schedulerStateHolder).LoadSchedule(unitOfWork, dateTimePeriod, selectedPerson);
 					IScheduleContractTimeCalculator scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(schedulerStateHolder, selectedPerson, dateOnlyPeriod);
-					IScheduleTargetTimeCalculator scheduleTargetTimeCalculator = new ScheduleTargetTimeCalculator(schedulerStateHolder, selectedPerson, dateOnlyPeriod);
+					IScheduleTargetTimeCalculator scheduleTargetTimeCalculator = new ScheduleTargetTimeCalculator(schedulerStateHolder.Schedules, selectedPerson, dateOnlyPeriod);
 					var schedulePeriodCloseCalculator = new SchedulePeriodCloseCalculator(scheduleContractTimeCalculator, scheduleTargetTimeCalculator, schedulePeriodPrevious, schedulePeriod);
 					schedulePeriodCloseCalculator.CalculateBalanceOut();
 				}
