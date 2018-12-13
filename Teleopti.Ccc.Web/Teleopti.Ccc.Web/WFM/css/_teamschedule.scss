@@ -98,7 +98,27 @@
 		}
 	}
 
+	.hour-line {
+		width: 100%;
+		float: left;
+		position: absolute;
+
+		
+
+		> div {
+			position: absolute;
+			display: inline-block;
+			background: $gray012;
+			width: 1px;
+			height: 30px;
+			line-height: 1.5;
+		}
+	}
+	
 	.shift {
+		position: relative;
+		top: 4px;
+
 		.layer {
 			height: 22px;
 			text-align: center;
@@ -147,6 +167,10 @@
 		.layer.unselectable {
 			cursor: not-allowed;
 		}
+	}
+
+	.dayoff {
+		top: 4px;
 	}
 
 	.uib-timepicker {
@@ -248,7 +272,6 @@
 		color: $orange-500;
 	}
 }
-
 //Header
 .teamschedule-header {
 	padding: 0.8em 0.5em;
@@ -639,7 +662,7 @@ team-schedule-datepicker {
 		td {
 			padding: 5px 0 5px 0;
 			border-bottom: none;
-			line-height: 1.42857143;
+			line-height: 1.5;
 			vertical-align: top;
 		}
 		.person-name-column {
@@ -722,6 +745,10 @@ team-schedule-datepicker {
 				width: 20px;
 				display: inline-block;
 			}
+		}
+
+		td.schedule-column {
+			padding: 0px;
 		}
 		//Week view table
 		thead tr.weekview-thead {
@@ -982,7 +1009,6 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 		font-size: 12px !important;
 	}
 }
-
 // temp
 ._off-screen {
 	visibility: hidden;

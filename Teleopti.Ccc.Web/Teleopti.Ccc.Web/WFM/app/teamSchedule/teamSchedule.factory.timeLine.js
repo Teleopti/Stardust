@@ -171,6 +171,10 @@
 				var position = timeLineStartMinutes * percentPerMinute;
 				return position;
 			};
+			this.Width = function () {
+				return 60 * percentPerMinute;
+			}
+			
 		}
 
 		return timeLineFactory;

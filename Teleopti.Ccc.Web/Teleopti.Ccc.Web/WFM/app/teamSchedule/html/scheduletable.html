@@ -80,6 +80,9 @@
 				</md-tooltip>
 			</td>
 			<td class="schedule schedule-column">
+				<div class="hour-line relative">
+					<div ng-repeat="hourPoint in vm.scheduleVm.TimeLine.HourPoints" ng-style="{left:hourPoint.Position() + '%'}"></div>
+				</div>
 				<div class="relative time-line-for">
 					<span class="dayoff absolute" ng-repeat="dayOff in ::personSchedule.DayOffs"
 						  ng-if="personSchedule.DayOffs.length > 0 && dayOff.Length > 0"
@@ -87,7 +90,6 @@
 						<md-tooltip ng-if="dayOff.DayOffName !=''">{{::dayOff.DayOffName}}</md-tooltip>
 					</span>
 					<div class="shift" ng-repeat="shift in ::personSchedule.Shifts">
-
 						<div class="layer absolute floatleft selectable projection-layer"
 							 projection-name="{{::projection.Description}}"
 							 ng-repeat="projection in ::shift.Projections"
