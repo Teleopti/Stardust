@@ -100,7 +100,7 @@ export class GeneralAuditTrailComponent implements OnInit {
 	}
 
 	updatePersonPicker(value): void {
-		if (value.length > 1) {
+		if (value.length >= 1) {
 			this.getPersonByKeyword(value);
 		} else {
 			this.personList = [];
