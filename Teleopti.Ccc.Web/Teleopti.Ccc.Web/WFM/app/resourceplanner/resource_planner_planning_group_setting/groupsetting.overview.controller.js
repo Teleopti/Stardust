@@ -12,7 +12,6 @@
 		var vm = this;
 
 		vm.requestSent = false;
-		vm.test = false;
 		vm.selectedSchedulingSetting = {};
 		vm.settings = vm.settings.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
@@ -118,7 +117,7 @@
 		}
 
 		function addAnimate(id) {
-			if (id == null || vm.test)
+			if (id == null)
 				return;
 			var item = document.getElementById(id).parentElement.parentElement;
 			item.classList.remove("pg-list-card-animate");
