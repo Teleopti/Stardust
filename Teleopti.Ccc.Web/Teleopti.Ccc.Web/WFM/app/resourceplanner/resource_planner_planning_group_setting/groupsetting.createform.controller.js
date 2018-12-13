@@ -66,8 +66,6 @@
         vm.isValidName = isValidName;
         vm.selectResultItem = selectResultItem;
         vm.removeSelectedFilter = removeSelectedFilter;
-        vm.cancelCreate = returnFromCreate;
-        vm.persist = persist;
         vm.blockFinderTypeOptionChanged = blockFinderTypeOptionChanged;
         vm.blockComparisonTypeOptionChanged = blockComparisonTypeOptionChanged;
 
@@ -75,7 +73,7 @@
 
         function checkIfEditDefaultRule() {
             if (!vm.isEdit)
-                return vm.settingInfo;
+                return;
             
 			vm.blockFinderType = vm.blockFinderTypeOptions[vm.settingInfo.BlockFinderType];
 			if(vm.settingInfo.BlockSameShiftCategory){
@@ -179,27 +177,6 @@
         function removeSelectedFilter(node) {
             var p = vm.settingInfo.Filters.indexOf(node);
             vm.settingInfo.Filters.splice(p, 1);
-        }
-
-        function persist() {
-            if (!vm.isValid())
-                return;
-            if (!vm.requestSent) {
-                vm.requestSent = true;
-                vm.settingInfo.BlockFinderType = vm.blockFinderTypeOptions.indexOf(vm.blockFinderType);
-				for (var i = 0; i < vm.blockComparisonTypeOptions.length; i++) {
-					vm.settingInfo[vm.blockComparisonTypeOptions[i]] = (vm.blockComparisonType===vm.blockComparisonTypeOptions[i]);
-				} 
-                PlanGroupSettingService.saveSetting(vm.settingInfo).$promise.then(function () {
-                    returnFromCreate();
-                });
-            }
-        }
-
-        function returnFromCreate() {
-            if (!$stateParams.groupId)
-                return;
-            $state.go('resourceplanner.settingoverview', { groupId: $stateParams.groupId });
         }
         
         function blockFinderTypeOptionChanged(){

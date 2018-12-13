@@ -21,7 +21,7 @@
 <div class="con-row">
 	<div class="con-flex">
 		<card-panel-list>
-			<card-panel ng-repeat="setting in vm.schedulingSetting | filter:vm.filterName" color="vm.color" pre-open="true"
+			<card-panel ng-repeat="setting in vm.settings | filter:vm.filterName" color="vm.color" pre-open="true"
 			 id="$index">
 				<card-panel-header>
 					<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
@@ -41,7 +41,7 @@
 								<md-tooltip>{{'Set priority lower' | translate }}</md-tooltip>
 							</i>
 						</div>
-						<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.getSchedulingSettingInfo(setting)" ng-show="!setting.Default">
+						<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.showDeleteSchedulingSettingModal(setting)" ng-show="!setting.Default">
 							<i class=" mdi mdi-delete pointer">
 								<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
 							</i>
@@ -51,7 +51,7 @@
 				<card-panel-content>
 					<div class="con-row demo-outline pg-setting-card-content">
 						<div class="con-flex">
-							<planning-group-setting setting-info="setting" preference-percent="vm.planningGroup.PreferencePercent"></planning-group-setting>
+							<planning-group-setting setting-info="setting" preference-percent="vm.preferencePercent"></planning-group-setting>
 						</div>
 					</div>
 				</card-panel-content>
