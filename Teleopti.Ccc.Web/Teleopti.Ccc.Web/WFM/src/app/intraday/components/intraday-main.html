@@ -101,9 +101,10 @@
 							(nzSelectedIndexChange)="onClickTab($event)"
 							[nzSelectedIndex]="selectedTabIndex"
 						>
-							<nz-tab nzTitle="{{ translate.instant('IncomingTraffic') }}"> </nz-tab>
-							<nz-tab nzTitle="{{ translate.instant('Performance') }}"> </nz-tab>
-							<nz-tab nzTitle="{{ translate.instant('Staffing') }}"> </nz-tab>
+							<nz-tab nzTitle="{{ translate.instant('IncomingTraffic') }}" [nzDisabled]="loading">
+							</nz-tab>
+							<nz-tab nzTitle="{{ translate.instant('Performance') }}" [nzDisabled]="loading"> </nz-tab>
+							<nz-tab nzTitle="{{ translate.instant('Staffing') }}" [nzDisabled]="loading"> </nz-tab>
 						</nz-tabset>
 					</div>
 				</div>
