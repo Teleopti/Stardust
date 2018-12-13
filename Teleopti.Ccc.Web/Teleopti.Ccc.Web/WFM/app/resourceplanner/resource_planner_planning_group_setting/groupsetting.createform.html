@@ -6,8 +6,8 @@
 					<div class="con-row">
 						<div class="con-flex">
 							<div class="form-input-wrap">
-								<label for="schedulingSettingName"><b translate>NameColon</b></label>
-								<input type="text" name="schedulingSettingName" id="schedulingSettingName"
+								<label><b translate>NameColon</b></label>
+								<input type="text" name="schedulingSettingName"
 									   ng-disabled="vm.settingInfo.Default" ng-model="vm.settingInfo.Name"
 									   class="pg-setting-name" required minlength="1" maxlength="100" autofocus
 								/>
@@ -22,8 +22,8 @@
 						</div>
 						<div class="con-flex">
 							<div class="form-input-wrap" ng-hide="vm.settingInfo.Default">
-								<label for="filtersId"><b translate>Filter:</b></label>
-								<div name="filters" id="filtersId">
+								<label><b translate>Filter:</b></label>
+								<div name="filters">
 									<md-autocomplete md-input-name="filters" md-no-cache="true"
 													 md-selected-item="vm.selectedItem" md-search-text="vm.searchString"
 													 placeholder="{{'SearchForDayOff'|translate}}"
