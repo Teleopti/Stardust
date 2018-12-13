@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDays = skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1);
 			var absenceOnNextDay = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, date.AddDays(1).ToDateTimePeriod(new TimePeriod(2, 3), agent.PermissionInformation.DefaultTimeZone())));
 			var assNextDay = new PersonAssignment(agent, scenario, date.AddDays(1));
-			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date.ToDateOnlyPeriod(), agent, new IScheduleData[]{absenceOnNextDay, assNextDay}, skillDays);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), agent, new IScheduleData[]{absenceOnNextDay, assNextDay}, skillDays);
 			
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[]{agent}, date.ToDateOnlyPeriod());
 
