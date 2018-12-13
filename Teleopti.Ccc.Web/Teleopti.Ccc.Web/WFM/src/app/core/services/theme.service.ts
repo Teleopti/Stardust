@@ -66,7 +66,7 @@ export class ThemeService {
 	}
 
 	async applyStyleguideTheme(theme) {
-		return this.replaceCssFile(`dist/styleguide_${theme}.css`, 'themeStyleguide', theme);
+		return this.replaceCssFile(`dist/ng2/styleguide_${theme}.css`, 'themeStyleguide', theme);
 	}
 
 	async applyAntTheme(theme: ThemeType) {

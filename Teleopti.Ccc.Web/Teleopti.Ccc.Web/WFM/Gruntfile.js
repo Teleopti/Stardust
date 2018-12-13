@@ -1,4 +1,3 @@
-const sassImplementation = require('node-sass');
 const glob = require('glob');
 const file = require('fs');
 const { join } = require('path');
@@ -44,10 +43,6 @@ module.exports = function(grunt) {
 		antThemes: {
 			files: ['src/themes/*.less'],
 			tasks: ['less']
-		},
-		styleguideStyle: {
-			files: ['css/styleguide/**/*.scss'],
-			tasks: ['sass']
 		}
 	};
 
@@ -61,20 +56,6 @@ module.exports = function(grunt) {
 			files: {
 				'dist/ant_classic.css': 'src/themes/ant_classic.less',
 				'dist/ant_dark.css': 'src/themes/ant_dark.less'
-			}
-		}
-	};
-
-	const sass = {
-		themes: {
-			options: {
-				implementation: sassImplementation,
-				sourceMap: true,
-				outputStyle: isProd ? 'compressed' : 'nested'
-			},
-			files: {
-				'dist/styleguide_classic.css': 'css/styleguide/styleguide_classic.scss',
-				'dist/styleguide_dark.css': 'css/styleguide/styleguide_dark.scss'
 			}
 		}
 	};
@@ -241,7 +222,6 @@ module.exports = function(grunt) {
 		templateCache,
 		processhtml,
 		less,
-		sass,
 		concat: {
 			concatJsDependencies,
 			concatJsWfm,
@@ -355,15 +335,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-less');
-	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-msbuild');
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-processhtml');
 
 	grunt.registerTask('templateCache', templateCache);
-	grunt.registerTask('devBuild', ['concat', 'copy', 'templateCache', 'less', 'sass', 'processhtml']);
+	grunt.registerTask('devBuild', ['concat', 'copy', 'templateCache', 'less', 'processhtml']);
 	grunt.registerTask('devWatch', ['devBuild', 'watch']);
-	grunt.registerTask('prodBuild', ['concat', 'copy', 'templateCache', 'less', 'sass', 'processhtml', 'uglify']);
+	grunt.registerTask('prodBuild', ['concat', 'copy', 'templateCache', 'less', 'processhtml', 'uglify']);
 
 	grunt.registerTask('default', ['devWatch']);
 

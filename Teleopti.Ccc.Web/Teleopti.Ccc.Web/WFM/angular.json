@@ -25,7 +25,9 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+							"src/styles.scss",
+							{ "input": "css/styleguide/styleguide_classic.scss", "lazy": true },
+							{ "input": "css/styleguide/styleguide_dark.scss", "lazy": true }
             ],
             "scripts": []
           },
