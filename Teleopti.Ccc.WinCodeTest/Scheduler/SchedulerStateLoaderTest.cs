@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
     public class SchedulerStateLoaderTest
     {
         private SchedulerStateLoader _targetStateLoader;
-        private ISchedulerStateHolder _targetStateHolder;
+        private SchedulingScreenState _targetStateHolder;
         private IScenario _targetScenario;
         private readonly DateOnlyPeriod _targetPeriod = new DateOnlyPeriod(2008, 10, 20, 2008, 10, 21);
         private IList<IPerson> _permittedPeople;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var schedules = new ScheduleDictionary(_targetScenario, new ScheduleDateTimePeriod(_period), null, null);
 			var schedulingResultStateHolder = new SchedulingResultStateHolder() {Schedules = schedules};
 			_selectedSkill = SkillFactory.CreateSkill("Phone");
-			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>(), schedulingResultStateHolder, new TimeZoneGuard());
+			_targetStateHolder = new SchedulingScreenState(null, new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>(), schedulingResultStateHolder, new TimeZoneGuard()));
         	_lazyManager = MockRepository.GenerateMock<ILazyLoadingManager>();
         }
 		
@@ -83,14 +83,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _targetStateLoader = new SchedulerStateLoader(_targetStateHolder, _repositoryFactory, _unitOfWorkFactory, _lazyManager, _scheduleStorageFactory);
             var scheduleDateTimePeriod = new ScheduleDateTimePeriod(_period);
             _targetStateLoader.LoadSchedules(scheduleDateTimePeriod);
-            _targetStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+            _targetStateHolder.SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 			
 
 			_targetStateLoader.LoadSchedulingResultAsync(scheduleDateTimePeriod, uow, new BackgroundWorker(), new List<ISkill> { _selectedSkill }, new StaffingCalculatorServiceFacade());
 
-            Assert.IsTrue(_targetStateHolder.SchedulingResultState.Skills.Contains(_selectedSkill));
-            Assert.IsTrue(_targetStateHolder.ChoosenAgents.Contains(_permittedPeople[0]));
-            Assert.AreSame(scheduleDictionary, _targetStateHolder.SchedulingResultState.Schedules);
+            Assert.IsTrue(_targetStateHolder.SchedulerStateHolder.SchedulingResultState.Skills.Contains(_selectedSkill));
+            Assert.IsTrue(_targetStateHolder.SchedulerStateHolder.ChoosenAgents.Contains(_permittedPeople[0]));
+            Assert.AreSame(scheduleDictionary, _targetStateHolder.SchedulerStateHolder.SchedulingResultState.Schedules);
         }
     }
 }
