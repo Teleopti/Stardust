@@ -14,6 +14,10 @@ function applyBaseConfig(config) {
 			require('karma-ng-html2js-preprocessor')
 		],
 
+		proxies: {
+			'/dist/ng2/assets/': '/assets/'
+		},
+
 		captureTimeout: 210000,
 		browserDisconnectTolerance: 3,
 		browserDisconnectTimeout: 210000,

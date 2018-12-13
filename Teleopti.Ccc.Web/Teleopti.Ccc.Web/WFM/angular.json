@@ -22,6 +22,11 @@
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
+							},
+							{
+                "glob": "**/*",
+                "input": "./app/seatManagement/images/",
+                "output": "/assets/seatMap"
               }
             ],
             "styles": [
@@ -93,7 +98,12 @@
               "node_modules/c3/c3.min.css"
             ],
             "assets": [
-              "src/assets"
+							"src/assets",
+							{
+                "glob": "**/*",
+                "input": "./app/seatManagement/images/",
+                "output": "/assets/seatMap"
+              }
             ]
           }
         },
