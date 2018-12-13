@@ -122,24 +122,6 @@ seatmap-editor {
 		top: 10px;
 		left: 24px;
 	}
-
-	.group-icon {
-		position: relative;
-		display: inline-block;
-		width: 18px;
-		height: 19px;
-		background: url(../app/seatManagement/images/group.svg);
-		background-repeat: no-repeat;
-	}
-
-	.ungroup-icon {
-		position: relative;
-		display: inline-block;
-		width: 18px;
-		height: 19px;
-		background: url(../app/seatManagement/images/ungroup.svg);
-		background-repeat: no-repeat;
-	}
 }
 .quick-access-toolbar > button {
 	margin-top: 2px;
