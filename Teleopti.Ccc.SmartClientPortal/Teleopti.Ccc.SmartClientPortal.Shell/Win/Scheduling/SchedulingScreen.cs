@@ -3330,18 +3330,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				IPeopleLoader loader;
 				if (_teamLeaderMode)
 				{
-					loader = new PeopleLoaderForTeamLeaderMode(uow, SchedulerState.SchedulerStateHolder,
+					loader = new PeopleLoaderForTeamLeaderMode(uow, 
 						new SelectedEntitiesForPeriod(_temporarySelectedEntitiesFromTreeView,
 							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), new RepositoryFactory());
 				}
 				else
 				{
-					loader = new PeopleLoader(personRep, new ContractRepository(uow), SchedulerState.SchedulerStateHolder,
+					loader = new PeopleLoader(personRep, new ContractRepository(uow), 
 						new SelectedEntitiesForPeriod(_temporarySelectedEntitiesFromTreeView,
 							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), new SkillRepository(uow));
 				}
 
-				loader.Initialize();
+				loader.Initialize(SchedulerState.SchedulerStateHolder);
 
 				if(_container.Resolve<IToggleManager>().IsEnabled(Toggles.SchedulePeriod_HideChineseMonth_78424))
 				{

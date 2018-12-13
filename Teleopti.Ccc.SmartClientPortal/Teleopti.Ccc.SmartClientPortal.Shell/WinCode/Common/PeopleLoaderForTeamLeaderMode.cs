@@ -13,20 +13,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
     {
         private readonly Lazy<ICollection<IPerson>> _peopleInOrg;
         private readonly IUnitOfWork _unitOfWork;
-    	private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly ISelectedEntitiesForPeriod _selectedEntitiesForPeriod;
     	private readonly IRepositoryFactory _repositoryFactory;
 
-    	public PeopleLoaderForTeamLeaderMode(IUnitOfWork unitOfWork, ISchedulerStateHolder schedulerStateHolder, ISelectedEntitiesForPeriod selectedEntitiesForPeriod, IRepositoryFactory repositoryFactory)
+    	public PeopleLoaderForTeamLeaderMode(IUnitOfWork unitOfWork, ISelectedEntitiesForPeriod selectedEntitiesForPeriod, IRepositoryFactory repositoryFactory)
         {
             _unitOfWork = unitOfWork;
-        	_schedulerStateHolder = schedulerStateHolder;
             _selectedEntitiesForPeriod = selectedEntitiesForPeriod;
         	_repositoryFactory = repositoryFactory;
 			_peopleInOrg = new Lazy<ICollection<IPerson>>(loadPeople);
         }
 
-        public void Initialize()
+        public void Initialize(ISchedulerStateHolder stateHolder)
         {
 			using (_unitOfWork.DisableFilter(QueryFilter.Deleted))
             {
@@ -44,11 +42,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             foreach (IPerson person in _peopleInOrg.Value)
             {
                 if (person.TerminalDate == null || person.TerminalDate >= _selectedEntitiesForPeriod.SelectedPeriod.StartDate)
-                _schedulerStateHolder.ChoosenAgents.Add(person);
+                stateHolder.ChoosenAgents.Add(person);
             }
 
-            _schedulerStateHolder.SchedulingResultState.LoadedAgents = _schedulerStateHolder.ChoosenAgents;
-            _schedulerStateHolder.ResetFilteredPersons();
+            stateHolder.SchedulingResultState.LoadedAgents = stateHolder.ChoosenAgents;
+            stateHolder.ResetFilteredPersons();
         }
 
         private ICollection<IPerson> loadPeople()

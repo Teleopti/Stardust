@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday;
 
-
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public class PeopleLoader : IPeopleLoader
@@ -14,23 +13,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         private ICollection<IPerson> _peopleInOrg;
         private readonly IPersonRepository _personRepository;
         private readonly IContractRepository _contractRepository;
-        private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly ISelectedEntitiesForPeriod _selectedEntitiesForPeriod;
         private readonly ISkillRepository _skillRepository;
 
         public PeopleLoader(IPersonRepository personRepository, IContractRepository contractRepository, 
-            ISchedulerStateHolder schedulerStateHolder, ISelectedEntitiesForPeriod selectedEntitiesForPeriod, ISkillRepository skillRepository)
+            ISelectedEntitiesForPeriod selectedEntitiesForPeriod, ISkillRepository skillRepository)
         {
             _personRepository = personRepository;
             _contractRepository = contractRepository;
-            _schedulerStateHolder = schedulerStateHolder;
             _selectedEntitiesForPeriod = selectedEntitiesForPeriod;
             _skillRepository = skillRepository;
         }
 
-        public void Initialize()
+        public void Initialize(ISchedulerStateHolder stateHolder)
         {
-            filterPersonsInOrg();
+            filterPersonsInOrg(stateHolder);
         }
 
         public ICollection<IPerson> PeopleInOrg()
@@ -39,7 +36,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                     _personRepository.FindAllAgents(_selectedEntitiesForPeriod.SelectedPeriod, true));
         }
 
-        private void filterPersonsInOrg() 
+        private void filterPersonsInOrg(ISchedulerStateHolder stateHolder) 
         {
 #pragma warning disable 618
             using(_contractRepository.UnitOfWork.DisableFilter(QueryFilter.Deleted))
@@ -66,7 +63,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                 if (isPerson)
                 {
                     if (selectedEntities.Contains(person))
-                        _schedulerStateHolder.ChoosenAgents.Add(person);
+						stateHolder.ChoosenAgents.Add(person);
                 }
                 if (isTeam)
                 {
@@ -74,14 +71,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                     {
                         if (selectedEntities.Contains(team))
                         {
-                            _schedulerStateHolder.ChoosenAgents.Add(person);
+							stateHolder.ChoosenAgents.Add(person);
                             break;
                         }
                     }
                 }
             }
-            _schedulerStateHolder.SchedulingResultState.LoadedAgents = _peopleInOrg;
-            _schedulerStateHolder.ResetFilteredPersons();
+			stateHolder.SchedulingResultState.LoadedAgents = _peopleInOrg;
+			stateHolder.ResetFilteredPersons();
         }
 
         private ICollection<ITeam> PersonTeams(IPerson person)

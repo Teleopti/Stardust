@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             loadPersonalAccounts(unitOfWork);
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingPeopleTreeDots);
             initializeSkills(unitOfWork);
-			_peopleLoader.Initialize(); 
+			_peopleLoader.Initialize(SchedulerState); 
 			initializeDecider();
             filterSkills();
             initializePeopleInOrganization();
