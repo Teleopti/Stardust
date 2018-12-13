@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			_peopleInOrg = new Lazy<ICollection<IPerson>>(loadPeople);
         }
 
-        public ISchedulerStateHolder Initialize()
+        public void Initialize()
         {
 			using (_unitOfWork.DisableFilter(QueryFilter.Deleted))
             {
@@ -49,8 +49,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
             _schedulerStateHolder.SchedulingResultState.LoadedAgents = _schedulerStateHolder.ChoosenAgents;
             _schedulerStateHolder.ResetFilteredPersons();
-
-            return _schedulerStateHolder;
         }
 
         private ICollection<IPerson> loadPeople()

@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             _skillRepository = skillRepository;
         }
 
-        public ISchedulerStateHolder Initialize()
+        public void Initialize()
         {
-            return filterPersonsInOrg();
+            filterPersonsInOrg();
         }
 
         public ICollection<IPerson> PeopleInOrg()
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                     _personRepository.FindAllAgents(_selectedEntitiesForPeriod.SelectedPeriod, true));
         }
 
-        private ISchedulerStateHolder filterPersonsInOrg() 
+        private void filterPersonsInOrg() 
         {
 #pragma warning disable 618
             using(_contractRepository.UnitOfWork.DisableFilter(QueryFilter.Deleted))
@@ -82,8 +82,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             }
             _schedulerStateHolder.SchedulingResultState.LoadedAgents = _peopleInOrg;
             _schedulerStateHolder.ResetFilteredPersons();
-
-            return _schedulerStateHolder;
         }
 
         private ICollection<ITeam> PersonTeams(IPerson person)
