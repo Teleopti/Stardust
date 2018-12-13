@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
+using log4net;
 
 namespace Teleopti.Wfm.Api.Controllers
 {
@@ -12,6 +13,7 @@ namespace Teleopti.Wfm.Api.Controllers
 		private readonly DtoProvider dtoProvider;
 		private readonly QueryDtoProvider queryDtoProvider;
 		private readonly QueryHandlerProvider handlerProvider;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(WfmQueryController));
 
         public WfmQueryController(IComponentContext services, DtoProvider dtoProvider, QueryDtoProvider queryDtoProvider, QueryHandlerProvider handlerProvider)
         {
@@ -60,6 +62,7 @@ namespace Teleopti.Wfm.Api.Controllers
 				}
 				catch (Exception e)
 				{
+					Logger.Warn($"Error when performing query for {queryType} based on {query}.", e);
 					return Json(new ResultDto
 					{
 						Successful = false,
