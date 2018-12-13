@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static ScheduleMatrixPro Create(DateOnlyPeriod period, ISchedulingResultStateHolder stateHolder, IPerson person, IVirtualSchedulePeriod schedulePeriod)
         {
             IFullWeekOuterWeekPeriodCreator periodCreator = new FullWeekOuterWeekPeriodCreator(period, person);
-            return new ScheduleMatrixPro(stateHolder, periodCreator, schedulePeriod);
+            return new ScheduleMatrixPro(stateHolder.Schedules, periodCreator, schedulePeriod);
         }
     }
 }

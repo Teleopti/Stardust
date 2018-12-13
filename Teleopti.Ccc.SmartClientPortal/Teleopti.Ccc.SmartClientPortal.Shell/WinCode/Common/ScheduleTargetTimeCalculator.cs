@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             var fullWeekOuterWeekPeriodCreator = 
                 new FullWeekOuterWeekPeriodCreator(_dateOnlyPeriod, _person);
 			var matrix = 
-                new ScheduleMatrixPro(_schedulerStateHolder.SchedulingResultState, fullWeekOuterWeekPeriodCreator, virtualSchedulePeriod);
+                new ScheduleMatrixPro(_schedulerStateHolder.SchedulingResultState.Schedules, fullWeekOuterWeekPeriodCreator, virtualSchedulePeriod);
 			var schedulePeriodTargetCalculatorFactory = 
                 new NewSchedulePeriodTargetCalculatorFactory(matrix);
 			var schedulePeriodTargetCalculator = 

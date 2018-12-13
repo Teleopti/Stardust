@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 					IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
 						new FullWeekOuterWeekPeriodCreator(schedulePeriod.DateOnlyPeriod, person);
-					IScheduleMatrixPro scheduleMatrix = new ScheduleMatrixPro(stateHolder, fullWeekOuterWeekPeriodCreator, schedulePeriod);
+					IScheduleMatrixPro scheduleMatrix = new ScheduleMatrixPro(scheduleDictionary, fullWeekOuterWeekPeriodCreator, schedulePeriod);
 
 					ISchedulePeriodTargetTimeCalculator periodTargetTimeCalculator =
 						new SchedulePeriodTargetTimeCalculator();

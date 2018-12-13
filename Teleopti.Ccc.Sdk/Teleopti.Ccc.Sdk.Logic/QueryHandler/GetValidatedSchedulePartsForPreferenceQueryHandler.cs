@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					stateHolder.LoadedAgents = personList;
 
 					var fullWeekOuterWeekPeriodCreator = new FullWeekOuterWeekPeriodCreator(schedulePeriod.DateOnlyPeriod, person);
-					var scheduleMatrix = new ScheduleMatrixPro(stateHolder, fullWeekOuterWeekPeriodCreator, schedulePeriod);
+					var scheduleMatrix = new ScheduleMatrixPro(scheduleDictionary, fullWeekOuterWeekPeriodCreator, schedulePeriod);
 
 					var periodTargetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
 					var schedulePeriodTargetBalanced = periodTargetTimeCalculator.TargetTime(scheduleMatrix);
