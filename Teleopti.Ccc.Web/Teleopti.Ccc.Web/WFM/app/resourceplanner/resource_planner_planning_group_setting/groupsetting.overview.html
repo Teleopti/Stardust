@@ -41,7 +41,7 @@
 								<md-tooltip>{{'Set priority lower' | translate }}</md-tooltip>
 							</i>
 						</div>
-						<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.showDeleteSchedulingSettingModal(setting)" ng-show="!setting.Default">
+						<div tabindex=0 class="context-menu card-context delete-scheduling-setting" ng-click="vm.showDeleteSchedulingSettingModal(setting);$event.stopPropagation();" ng-show="!setting.Default">
 							<i class=" mdi mdi-delete pointer">
 								<md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip>
 							</i>

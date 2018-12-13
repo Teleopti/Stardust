@@ -14,7 +14,7 @@
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroups.html',
 			controller: 'planningGroupsController as vm',
 			resolve: {
-				planningGroups: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
+				planningGroups: ['planningGroupService', function (planningGroupService) {
 					return planningGroupService.getPlanningGroups().$promise.then(function (data) {
 						return data;
 					});

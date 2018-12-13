@@ -41,12 +41,17 @@
 		function showDeleteSchedulingSettingModal(setting) {
 			vm.confirmDeleteModal = true;
 			vm.textDeleteSchedulingSetting = $translate.instant('AreYouSureYouWantToDeleteSchedulingSetting').replace("{0}", setting.Name);
-			return vm.selectedSchedulingSetting = setting;
+			vm.selectedSchedulingSetting = setting;
 		}
 
 		function deleteSchedulingSetting() {
 			if (vm.selectedSchedulingSetting.Default || vm.requestSent)
 				return;
+			if(!vm.selectedSchedulingSetting.Id){
+				const index = vm.settings.indexOf(vm.selectedSchedulingSetting);
+				vm.settings.splice(index, 1);
+				return;
+			}
 			if (!vm.requestSent) {
 				vm.requestSent = true;
 				var deleteDayOffRule = PlanGroupSettingService.removeSetting({ id: vm.selectedSchedulingSetting.Id });
