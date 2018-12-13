@@ -631,7 +631,7 @@ team-schedule-datepicker {
 			border-bottom: 1px solid #dddddd;
 		}
 
-		tbody tr:hover {
+		tbody tr:not(.shift-editor-row):hover, tbody tr.in-editing {
 			background: $gray012;
 		}
 
@@ -1150,11 +1150,14 @@ teams-time-picker.ng-invalid-dst {
 	vertical-align: middle;
 }
 
+
 shift-editor {
 	position: relative;
-	display:block;
-	background: $gray012;
-	
+	display: block;
+	background: #ffffff;
+	box-shadow: 2px 2px 2px $gray-300, -2px 0 2px $gray-300;
+	margin: 0 8px;
+
 	.progress-linear-container {
 		height: 15px;
 	}
