@@ -5,22 +5,18 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ProTest")]
     [TestFixture]
     public class ScheduleMatrixProTest
     {
         private ScheduleMatrixPro _target;
-        private ISchedulingResultStateHolder _stateHolder;
         private IPerson _person;
         private DateOnlyPeriod _period;
         private IVirtualSchedulePeriod _schedulePeriod;
@@ -28,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [SetUp]
         public void Setup()
         {
-            _stateHolder = new SchedulingResultStateHolder();
 			_person = PersonFactory.CreatePerson("Testor");
 			_person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(1053));
 
@@ -43,12 +38,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             scheduleDictionary.AddTestItem(_person, range);
 
-            _stateHolder.Schedules = scheduleDictionary;
 
             _period = new DateOnlyPeriod(2010, 1, 8, 2010, 1, 14);
             var splitChecker = new VirtualSchedulePeriodSplitChecker(_person);
             _schedulePeriod = new VirtualSchedulePeriod(_person, _period.StartDate , splitChecker);
-            _target = ScheduleMatrixProFactory.Create(_period, _stateHolder, _person, _schedulePeriod);
+            _target = ScheduleMatrixProFactory.Create(_period, scheduleDictionary, _person, _schedulePeriod);
         }
 
         [Test]
