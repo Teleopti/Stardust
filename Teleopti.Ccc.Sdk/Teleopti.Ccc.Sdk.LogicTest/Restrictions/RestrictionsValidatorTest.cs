@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         private MockRepository _mocks;
         private DateOnlyPeriod _period;
         private IScheduleRange _range;
-        private ISchedulingResultStateHolder _stateHolder;
         private IScheduleDictionary _dictionary;
         private IScheduleDay _part;
         private IWorkflowControlSet _workflowControlSet;
@@ -62,7 +61,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             personPeriod.RuleSetBag = bag;
             _person.AddPersonPeriod(personPeriod);
             _range = _mocks.StrictMock<IScheduleRange>();
-            _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _dictionary = _mocks.StrictMock<IScheduleDictionary>();
             _part = _mocks.StrictMock<IScheduleDay>();
         }
@@ -76,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [Test]
         public void ShouldThrowIfPersonIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, false));
+            Assert.Throws<ArgumentNullException>(() => _target.ValidateSchedulePeriod(_period, _period, _dictionary, 160, 8, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, false));
         }
 
         [Test]
@@ -91,7 +89,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             {
                 _period.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsPreferenceEditable(d, _person)).Return(true));
                 _period.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsStudentAvailabilityEditable(d, _person)).Return(true));
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary).Repeat.AtLeastOnce();
                 Expect.Call(_dictionary[_person]).Return(_range).Repeat.AtLeastOnce();
                 Expect.Call(_range.ScheduledDay(new DateOnly())).IgnoreArguments().Repeat.AtLeastOnce().Return(_part);
                 Expect.Call(_part.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
@@ -113,7 +110,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             using(_mocks.Playback())
             {
-                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
+                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _dictionary, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                 Assert.IsNotNull(result);
                 Assert.AreNotEqual(0, result.Count);
             }
@@ -133,7 +130,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                    d => Expect.Call(_isEditablePredicate.IsPreferenceEditable(d, _person)).Return(true));
                _period.DayCollection().ForEach(
                    d => Expect.Call(_isEditablePredicate.IsStudentAvailabilityEditable(d, _person)).Return(true));
-               Expect.Call(_stateHolder.Schedules).Return(_dictionary).Repeat.AtLeastOnce();
                Expect.Call(_dictionary[_person]).Return(_range).Repeat.AtLeastOnce();
                Expect.Call(_range.ScheduledDay(new DateOnly())).IgnoreArguments().Repeat.AtLeastOnce().Return(partWithDayOff);
               
@@ -151,7 +147,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
            using (_mocks.Playback())
            {
-               IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
+               IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _dictionary, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                Assert.IsNotNull(result);
                Assert.AreNotEqual(0, result.Count);
            }
@@ -172,7 +168,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             {
                 _period.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsPreferenceEditable(d, _person)).Return(true));
                 _period.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsStudentAvailabilityEditable(d, _person)).Return(true));
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary).Repeat.AtLeastOnce();
                 Expect.Call(_dictionary[_person]).Return(_range).Repeat.AtLeastOnce();
                 Expect.Call(_range.ScheduledDay(new DateOnly())).IgnoreArguments().Repeat.AtLeastOnce().Return(partWithFullDayAbcence);
                 Expect.Call(partWithFullDayAbcence.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
@@ -190,7 +185,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             using (_mocks.Playback())
             {
-                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
+                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(_period, _period, _dictionary, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                 Assert.IsNotNull(result);
                 Assert.AreNotEqual(0, result.Count);
             }
@@ -223,7 +218,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             {
                 largePeriod.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsPreferenceEditable(d, _person)).Return(true));
                 largePeriod.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsStudentAvailabilityEditable(d, _person)).Return(true));
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary).Repeat.AtLeastOnce();
                 Expect.Call(_dictionary[_person]).Return(_range).Repeat.AtLeastOnce();
                 Expect.Call(_range.ScheduledDay(dateOnly)).IgnoreArguments().Repeat.AtLeastOnce().Return(_part);
 	            Expect.Call(_part.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.Any();
@@ -241,7 +235,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             }
             using (_mocks.Playback())
             {
-                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(largePeriod, largePeriod, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
+                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(largePeriod, largePeriod, _dictionary, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                 Assert.IsNotNull(result);
                 for (int i = 0; i < result.Count - 1; i++)
                 {
@@ -285,7 +279,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             {
                 largePeriod.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsPreferenceEditable(d, _person)).Return(true));
                 largePeriod.DayCollection().ForEach(d => Expect.Call(_isEditablePredicate.IsStudentAvailabilityEditable(d, _person)).Return(true));
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary).Repeat.AtLeastOnce();
                 Expect.Call(_dictionary[_person]).Return(_range).Repeat.AtLeastOnce();
                 Expect.Call(_range.ScheduledDay(new DateOnly())).IgnoreArguments().Repeat.AtLeastOnce().Return(_part);
                 Expect.Call(_part.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
@@ -304,7 +297,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             }
             using (_mocks.Playback())
             {
-                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(largePeriod, largePeriod, _stateHolder, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
+                IList<ValidatedSchedulePartDto> result = _target.ValidateSchedulePeriod(largePeriod, largePeriod, _dictionary, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
                 Assert.IsNotNull(result);
                 Assert.AreEqual("day", result[0].ScheduledItemName);
                 Assert.IsTrue(result[0].HasShift);

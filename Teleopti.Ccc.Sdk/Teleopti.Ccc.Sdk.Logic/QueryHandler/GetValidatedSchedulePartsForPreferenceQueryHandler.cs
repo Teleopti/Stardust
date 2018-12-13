@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 					const bool useStudentAvailability = false;
 					return restrictionValidator.ValidateSchedulePeriod(loadedPeriod,
-												realSchedulePeriod, stateHolder,
+												realSchedulePeriod, scheduleDictionary,
 												(int)periodTarget.TotalMinutes, (int)tolerance.StartTime.TotalMinutes, (int)tolerance.EndTime.TotalMinutes, daysOffTarget, person,
 												schedulePeriod.MustHavePreference, (int)schedulePeriodTargetBalanced.TotalMinutes, (int)schedulePeriod.BalanceIn.TotalMinutes,
 												(int)schedulePeriod.Extra.TotalMinutes, (int)schedulePeriod.BalanceOut.TotalMinutes, numberOfDaysOff, schedulePeriod.Seasonality.Value, useStudentAvailability);
