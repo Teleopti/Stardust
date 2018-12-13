@@ -129,7 +129,7 @@
 		"iis:pool": "c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /apppool:\"Clr4IntegratedAppPool\"",
 		"angular:e2e": "ng e2e",
 		"angular:lint": "ng lint",
-		"angular:dev:watch": "ng build --watch",
+		"angular:dev:watch": "ng build --watch --configuration development",
 		"angular:dev:build": "ng build",
 		"angular:prod:build": "ng build --configuration production",
 		"grunt:dev:watch": "grunt devWatch --development",
