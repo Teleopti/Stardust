@@ -109,11 +109,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				IScheduleDictionary scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(true, false), period.ToDateOnlyPeriod(timeZoneInfo), _scenarioRepository.Current());
 
-
-				var stateHolder = new SchedulingResultStateHolder();
-					stateHolder.Schedules = scheduleDictionary;
-					stateHolder.LoadedAgents = personList;
-
 					var fullWeekOuterWeekPeriodCreator = new FullWeekOuterWeekPeriodCreator(schedulePeriod.DateOnlyPeriod, person);
 					var scheduleMatrix = new ScheduleMatrixPro(scheduleDictionary, fullWeekOuterWeekPeriodCreator, schedulePeriod);
 
