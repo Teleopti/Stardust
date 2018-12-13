@@ -287,17 +287,6 @@ module.exports = function(grunt) {
 					}
 				]
 			},
-			bootstrap: {
-				files: [
-					{
-						expand: true,
-						cwd: 'node_modules/bootstrap/fonts',
-						src: ['*.ttf', '*.woff', '*.eot'],
-						dest: 'dist/fonts',
-						filter: 'isFile'
-					}
-				]
-			},
 			images: {
 				files: [
 					{
