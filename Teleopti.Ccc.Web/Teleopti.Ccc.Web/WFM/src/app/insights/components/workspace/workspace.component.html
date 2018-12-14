@@ -15,7 +15,7 @@
 					<ng-template #suffixTemplate><i nz-icon type="close-circle" (click)="reportNameCriteria=null" *ngIf="reportNameCriteria"></i>
 					</ng-template>
 				</div>
-				<div nz-col nz-left nzSpan="16">
+				<div nz-col nzSpan="16" style="text-align: right;">
 					<button nz-button nzType="primary" *ngIf="initialized && permission.CanEditReport" (click)="confirmCreateReport()"><i nz-icon type="plus-circle" theme="outline"></i> New Report</button>
 				</div>
 			</div>
