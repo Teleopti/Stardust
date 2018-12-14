@@ -114,7 +114,12 @@
 					<p><i nz-icon type="warning"></i> {{ getEmailOrBackofficeWarning() }}</p>
 				</div>
 			</div>
-			<div class="con-row" [hidden]="!selectedSkillOrGroup">
+			<div class="con-row" [hidden]="!error">
+				<div class="con-flex">
+					<p><i nz-icon type="warning"></i> {{ errorMessage }}</p>
+				</div>
+			</div>
+			<div class="con-row" [hidden]="!selectedSkillOrGroup || error">
 				<div class="con-flex">
 					<app-intraday-chart
 						[chartData]="chartData"
@@ -123,7 +128,7 @@
 					></app-intraday-chart>
 				</div>
 			</div>
-			<div class="con-row" [hidden]="!selectedSkillOrGroup || loading">
+			<div class="con-row" [hidden]="!selectedSkillOrGroup || loading || error">
 				<div class="con-flex"></div>
 				<div class="con-flex">
 					<intraday-table [chartType]="selectedChartType" [tableData]="summaryData"></intraday-table>

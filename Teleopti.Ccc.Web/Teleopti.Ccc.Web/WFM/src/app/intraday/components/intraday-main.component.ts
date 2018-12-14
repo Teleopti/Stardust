@@ -53,6 +53,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	latestTime: IntradayLatestTimeData | undefined;
 	summaryData: IntradayTrafficSummaryItem[] | IntradayPerformanceSummaryItem[] = [];
 	loading = false;
+	error = false;
+	errorMessage = '';
 	exporting = false;
 	timer: any;
 	showSkills = true;
@@ -205,43 +207,61 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			if (this.request) this.request.unsubscribe();
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
+				this.error = false;
 				this.request = this.intradayDataService
 					.getTrafficData(selectedSkill.Id, this.selectedOffset)
 					.pipe(
 						switchMap((data: IntradayTrafficData) =>
 							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
-								tap((time: IntradayLatestTimeData) => {
-									if (this.selectedOffset === 0) {
-										this.latestTime = time;
+								tap(
+									(time: IntradayLatestTimeData) => {
+										console.log('data', data);
+
+										if (this.selectedOffset === 0) {
+											this.latestTime = time;
+										}
+										this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+										this.summaryData = this.trafficDataToSummaryData(data.Summary);
+										this.loading = false;
+									},
+									err => {
+										this.handleError(err);
 									}
-									this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
-									this.summaryData = this.trafficDataToSummaryData(data.Summary);
-									this.loading = false;
-								})
+								)
 							)
 						)
 					)
-					.subscribe();
+					.subscribe(null, err => {
+						this.handleError(err);
+					});
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
+				this.error = false;
 				this.request = this.intradayDataService
 					.getGroupTrafficData(selectedSkill.Id, this.selectedOffset)
 					.pipe(
 						switchMap((data: IntradayTrafficData) =>
 							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
-								tap((time: IntradayLatestTimeData) => {
-									if (this.selectedOffset === 0) {
-										this.latestTime = time;
+								tap(
+									(time: IntradayLatestTimeData) => {
+										if (this.selectedOffset === 0) {
+											this.latestTime = time;
+										}
+										this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+										this.summaryData = this.trafficDataToSummaryData(data.Summary);
+										this.loading = false;
+									},
+									err => {
+										this.handleError(err);
 									}
-									this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
-									this.summaryData = this.trafficDataToSummaryData(data.Summary);
-									this.loading = false;
-								})
+								)
 							)
 						)
 					)
-					.subscribe();
+					.subscribe(null, err => {
+						this.handleError(err);
+					});
 			}
 		}
 
@@ -249,43 +269,59 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			if (this.request) this.request.unsubscribe();
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
+				this.error = false;
 				this.request = this.intradayDataService
 					.getPerformanceData(selectedSkill.Id, this.selectedOffset)
 					.pipe(
 						switchMap((data: IntradayPerformanceData) =>
 							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
-								tap((time: IntradayLatestTimeData) => {
-									this.latestTime = time;
-									if (this.selectedOffset === 0) {
+								tap(
+									(time: IntradayLatestTimeData) => {
+										this.latestTime = time;
+										if (this.selectedOffset === 0) {
+										}
+										this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+										this.summaryData = this.performanceDataToSummaryData(data.Summary);
+										this.loading = false;
+									},
+									err => {
+										this.handleError(err);
 									}
-									this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
-									this.summaryData = this.performanceDataToSummaryData(data.Summary);
-									this.loading = false;
-								})
+								)
 							)
 						)
 					)
-					.subscribe();
+					.subscribe(null, err => {
+						this.handleError(err);
+					});
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
+				this.error = false;
 				this.request = this.intradayDataService
 					.getGroupPerformanceData(selectedSkill.Id, this.selectedOffset)
 					.pipe(
 						switchMap((data: IntradayPerformanceData) =>
 							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
-								tap((time: IntradayLatestTimeData) => {
-									if (this.selectedOffset === 0) {
-										this.latestTime = time;
+								tap(
+									(time: IntradayLatestTimeData) => {
+										if (this.selectedOffset === 0) {
+											this.latestTime = time;
+										}
+										this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+										this.summaryData = this.performanceDataToSummaryData(data.Summary);
+										this.loading = false;
+									},
+									err => {
+										this.handleError(err);
 									}
-									this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
-									this.summaryData = this.performanceDataToSummaryData(data.Summary);
-									this.loading = false;
-								})
+								)
 							)
 						)
 					)
-					.subscribe();
+					.subscribe(null, err => {
+						this.handleError(err);
+					});
 			}
 		}
 
@@ -293,24 +329,46 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			if (this.request) this.request.unsubscribe();
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
+				this.error = false;
 				this.request = this.intradayDataService
 					.getStaffingData(selectedSkill.Id, this.selectedOffset)
-					.subscribe(data => {
-						this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
-						this.loading = false;
-					});
+					.subscribe(
+						data => {
+							this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
+							this.loading = false;
+						},
+						() => {
+							this.error = true;
+							this.errorMessage = this.translate.instant('NoDataAvailable');
+						}
+					);
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
+				this.error = false;
 				this.request = this.intradayDataService
 					.getGroupStaffingData(selectedSkill.Id, this.selectedOffset)
-					.subscribe(data => {
-						this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
-						this.loading = false;
-					});
+					.subscribe(
+						data => {
+							this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
+							this.loading = false;
+						},
+						() => {
+							this.error = true;
+							this.errorMessage = this.translate.instant('NoDataAvailable');
+						}
+					);
 			}
 		}
 	};
+
+	private handleError(err: any) {
+		console.warn('Http error', err);
+		this.error = true;
+		this.chartData = undefined;
+		this.errorMessage = this.translate.instant('NoDataAvailable');
+		this.loading = false;
+	}
 
 	goToGroupManager() {
 		location.hash = '#/intraday/skill-group-manager';

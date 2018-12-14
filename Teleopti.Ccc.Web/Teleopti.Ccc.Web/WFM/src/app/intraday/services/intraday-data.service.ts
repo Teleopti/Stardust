@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { map, shareReplay, catchError } from 'rxjs/operators';
 import { IntradayStaffingData } from '../types/intraday-staffing-data';
 import { IntradayTrafficData } from '../types/intraday-traffic-data';
 import { IntradayPerformanceData, IntradayLatestTimeData } from '../types/intraday-performance-data';
@@ -12,12 +12,9 @@ import { IntradayPerformanceData, IntradayLatestTimeData } from '../types/intrad
 export class IntradayDataService {
 	constructor(private httpClient: HttpClient) {}
 
-	getStaffingData(id: string, offset: number = 0): Observable<IntradayStaffingData> {
-		return this.httpClient.get<IntradayStaffingData>(`../api/intraday/monitorskillstaffing/${id}/${offset}`).pipe(
-			shareReplay(),
-			map((data): IntradayStaffingData => data as IntradayStaffingData)
-		);
-	}
+	getOptions = {
+		headers: new HttpHeaders({ timeout: `${2000}` })
+	};
 
 	getTrafficData(id: string, offset: number = 0): Observable<IntradayTrafficData> {
 		return this.httpClient.get(`../api/intraday/monitorskillstatistics/${id}/${offset}`).pipe(
@@ -33,11 +30,13 @@ export class IntradayDataService {
 		);
 	}
 
-	getGroupStaffingData(id: string, offset: number = 0): Observable<IntradayStaffingData> {
-		return this.httpClient.get(`../api/intraday/monitorskillareastaffing/${id}/${offset}`).pipe(
-			shareReplay(),
-			map((data): IntradayStaffingData => data as IntradayStaffingData)
-		);
+	getStaffingData(id: string, offset: number = 0): Observable<IntradayStaffingData> {
+		return this.httpClient
+			.get<IntradayStaffingData>(`../api/intraday/monitorskillstaffing/${id}/${offset}`, this.getOptions)
+			.pipe(
+				shareReplay(),
+				map((data): IntradayStaffingData => data as IntradayStaffingData)
+			);
 	}
 
 	getGroupTrafficData(id: string, offset: number = 0): Observable<IntradayTrafficData> {
@@ -50,6 +49,13 @@ export class IntradayDataService {
 	getGroupPerformanceData(id: string, offset: number = 0): Observable<IntradayPerformanceData> {
 		return this.httpClient.get<IntradayPerformanceData>(
 			`../api/intraday/monitorskillareaperformance/${id}/${offset}`
+		);
+	}
+
+	getGroupStaffingData(id: string, offset: number = 0): Observable<IntradayStaffingData> {
+		return this.httpClient.get(`../api/intraday/monitorskillareastaffing/${id}/${offset}`).pipe(
+			shareReplay(),
+			map((data): IntradayStaffingData => data as IntradayStaffingData)
 		);
 	}
 
