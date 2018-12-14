@@ -386,7 +386,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
-						['Forcasted_calls'].concat(input.ForecastedCalls),
+						['Forecasted_calls'].concat(input.ForecastedCalls),
 						['Calls'].concat(input.CalculatedCalls),
 						['Forecasted_AHT'].concat(input.ForecastedAverageHandleTime),
 						['AHT'].concat(input.AverageHandleTime)
@@ -398,15 +398,12 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
-						['Forcasted_calls'].concat(input.ForecastedCalls),
+						['Forecasted_calls'].concat(input.ForecastedCalls),
 						['Calls'].concat(input.CalculatedCalls),
 						['Forecasted_AHT'].concat(input.ForecastedAverageHandleTime),
 						['AHT'].concat(input.AverageHandleTime)
 					],
 					type: 'area-spline',
-					types: {
-						Current: 'bar'
-					},
 					colors: {
 						Forecasted_calls: '#99D6FF',
 						Calls: '#0099FF',
@@ -482,14 +479,11 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 						['ESL'].concat(input.EstimatedServiceLevels)
 					],
 					type: 'area-spline',
-					types: {
-						Current: 'bar'
-					},
 					colors: {
-						Forecasted_calls: '#99D6FF',
-						Calls: '#0099FF',
-						Forecasted_AHT: '#FFC285',
-						AHT: '#FB8C00'
+						ASA: '#99D6FF',
+						Abandoned_rate: '#0099FF',
+						Service_level: '#FFC285',
+						ESL: '#FB8C00'
 					},
 					names: {
 						ASA: this.translate.instant('AverageSpeedOfAnswer') + ' ←',
@@ -554,7 +548,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 						['Scheduled_staffing'].concat(input.ScheduledStaffing)
 					],
 					type: 'area-spline',
-					types: { Current: 'bar' },
 					colors: {
 						Forecasted_calls: '#99D6FF',
 						Calls: '#0099FF',
