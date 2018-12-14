@@ -26,9 +26,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeTeamRepository TeamRepository;
 		public FakeContractRepository ContractRepository;
 		public FakeSkillRepository SkillRepository;
-		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public IPlanningGroupModelPersister Target;
-
+		
 		[Test]
 		public void ShouldInsertContractFilter()
 		{

@@ -239,6 +239,7 @@
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerierTest.cs" />
     <Compile Include="Performance\NumberOfDbCallsTest.cs" />
     <Compile Include="Persisters\Account\PersonAccountConflictResolverTest.cs" />
+    <Compile Include="Persisters\Plans\PlanningGroupModelPersisterTest.cs" />
     <Compile Include="Persisters\Schedules\DeleteOneOfManyLayersTest.cs" />
     <Compile Include="Persisters\Schedules\HandleMovingOfLayersTest.cs" />
     <Compile Include="Persisters\Schedules\Performance\NoUnnecessaryUpdatesWhenAddingLayerTest.cs" />

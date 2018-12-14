@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -24,11 +25,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var planningGroup = new PlanningGroup();
 				setProperties(planningGroup, planningGroupModel);
 				_planningGroupRepository.Add(planningGroup);
+				setPlanningGroupSettings(planningGroup, planningGroupModel);
 			}
 			else
 			{
 				var planningGroup = _planningGroupRepository.Get(planningGroupModel.Id);
 				setProperties(planningGroup, planningGroupModel);
+				setPlanningGroupSettings(planningGroup, planningGroupModel);
 			}
 		}
 
@@ -42,16 +45,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				planningGroup.AddFilter(filter);
 			}
+		}
 
-			foreach (var setting in planningGroupModel.Settings)
+		private void setPlanningGroupSettings(PlanningGroup planningGroup, PlanningGroupModel planningGroupModel)
+		{
+			if (!planningGroupModel.Settings.IsNullOrEmpty())
 			{
-				if (setting.Default)
+				foreach (var setting in planningGroupModel.Settings)
 				{
-					_planningGroupSettingsModelPersister.UpdateDefaultSetting(planningGroup.Settings.Single(x => x.Default), setting);
-				}
-				else
-				{
-					_planningGroupSettingsModelPersister.Persist(setting);					
+					if (setting.Default)
+					{
+						_planningGroupSettingsModelPersister.UpdateDefaultSetting(planningGroup.Settings.Single(x => x.Default), setting);
+					}
+					else
+					{
+						setting.PlanningGroupId = planningGroup.Id.Value;
+						_planningGroupSettingsModelPersister.Persist(setting);
+					}
 				}
 			}
 		}
