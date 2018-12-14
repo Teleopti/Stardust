@@ -12,8 +12,9 @@
         var vm = this;
 
         vm.isEdit = !!vm.settingInfo;
-        
-        vm.blockFinderTypeOptions = [
+		vm.settingInfo.isValid = isValid;
+
+		vm.blockFinderTypeOptions = [
 			"Off",
 			"BlockFinderTypeBetweenDayOff",
 			"BlockFinderTypeSchedulePeriod"
@@ -32,7 +33,6 @@
         vm.searchString = undefined;
         vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
         vm.clearInput = clearInput;
-        vm.isValid = isValid;
         vm.isValidDayOffsPerWeek = isValidDayOffsPerWeek;
         vm.isValidConsecDaysOff = isValidConsecDaysOff;
         vm.isValidConsecWorkDays = isValidConsecWorkDays;
@@ -95,7 +95,7 @@
                 isValidFilters() &&
                 isValidName() &&
                 isValidFullWeekEndsOff() &&
-                isValidFullWeekEndDaysOff()
+                isValidFullWeekEndDaysOff();
         }
 
         function isValidDayOffsPerWeek() {

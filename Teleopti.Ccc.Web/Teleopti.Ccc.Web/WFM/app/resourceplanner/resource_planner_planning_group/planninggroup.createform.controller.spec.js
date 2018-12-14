@@ -3,6 +3,7 @@ describe('planningGroupFormController', function () {
 	var $httpBackend,
 		$controller,
 		$state,
+		$rootScope,
 		$injector,
 		planningGroupService,
 		debounceService,
@@ -36,12 +37,13 @@ describe('planningGroupFormController', function () {
 		module('localeLanguageSortingService');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _planningGroupService_, _debounceService_) {
+	beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _$rootScope_,_planningGroupService_, _debounceService_) {
 		$httpBackend = _$httpBackend_;
 		$controller = _$controller_;
 		planningGroupService = _planningGroupService_;
 		debounceService = _debounceService_;
 		$state = _$state_;
+		$rootScope = _$rootScope_;
 
 		spyOn($state, 'go');
 		spyOn(debounceService, 'debounce').and.callFake(function (cb) { return function () { cb(); } });
@@ -216,28 +218,4 @@ describe('planningGroupFormController', function () {
 
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.planningperiodoverview', {groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', ppId: 'a557210b-99cc-4128-8ae0-138d812974b6'});
 	});
-
-	//
-	// it('should not create scheduling setting when submit data is invalid', function() {
-	// 	var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo });
-	// 	vm.persist();
-	//
-	// 	expect($state.go).not.toHaveBeenCalledWith('resourceplanner.settingoverview');
-	// });
-
-	// it('should create new scheduling setting when submit data is valid', function() {
-	// 	var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo });
-	// 	vm.searchString = 'skill';
-	// 	vm.inputFilterData();
-	// 	$httpBackend.flush();
-	//
-	// 	vm.selectResultItem(vm.filterResults[0]);
-	// 	vm.settingInfo.Name = 'New scheduling setting';
-	// 	vm.persist();
-	// 	$httpBackend.flush();
-	//
-	// 	expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
-	// 		groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
-	// 	});
-	// });
 });

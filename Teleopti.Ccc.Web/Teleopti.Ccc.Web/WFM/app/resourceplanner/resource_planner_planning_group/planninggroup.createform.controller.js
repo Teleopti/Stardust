@@ -119,6 +119,11 @@
 		}
 
 		function isValid() {
+			for (var i = 0; i < vm.editPlanningGroup.Settings.length; i++) {
+				if(vm.editPlanningGroup.Settings[i].isValid && !vm.editPlanningGroup.Settings[i].isValid()){
+					return false;
+				}
+			}
 			if (isValidFilters() && isValidName())
 				return true;
 		}
