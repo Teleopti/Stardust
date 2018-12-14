@@ -3,22 +3,19 @@
 
 	angular
 		.module('wfm.resourceplanner')
-		.controller('planningGroupSettingOverviewController', overviewController);
+		.controller('planningGroupSettingOverviewController', overviewController)
+		.directive('planningGroupSettingsOverview', planningGroupSettingOverviewDirective);
 
-	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'PlanGroupSettingService', 'planningGroupInfo', 'schedulingSettingInfo', 'localeLanguageSortingService'];
+	overviewController.$inject = ['$state', '$timeout', '$stateParams', '$translate', 'localeLanguageSortingService', 'PlanGroupSettingService'];
 
-	function overviewController($state, $timeout, $stateParams, $translate, PlanGroupSettingService, planningGroupInfo, schedulingSettingInfo, localeLanguageSortingService) {
+	function overviewController($state, $timeout, $stateParams, $translate, localeLanguageSortingService, PlanGroupSettingService) {
 		var vm = this;
 
 		vm.requestSent = false;
-		vm.test = false;
 		vm.selectedSchedulingSetting = {};
-		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
+		vm.settings = vm.settings.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
-		vm.planningGroupId = planningGroupInfo.Id;
-		vm.planningGroupName = planningGroupInfo.Name;
-		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", planningGroupInfo.Name);
-		vm.getSchedulingSettingInfo = getSchedulingSettingInfo;
+		vm.showDeleteSchedulingSettingModal = showDeleteSchedulingSettingModal;
 		vm.deleteSchedulingSetting = deleteSchedulingSetting;
 		vm.goEditSchedulingSetting = goEditSchedulingSetting;
 		vm.goCreateSchedulingSetting = goCreateSchedulingSetting;
@@ -26,40 +23,14 @@
 		vm.setLowerPriority = setLowerPriority;
 		vm.disableButton = disableButton;
 		vm.setColor = setColor;
+		vm.test = false;
 		vm.color = {
 			render: 'linear',
 			rgba: 'rgba(156, 39, 176, 1)'
 		};
-		vm.preferencePercentage = planningGroupInfo.PreferenceValue * 100;
-
-
-		getBlockSchedulingSetting();
-
-		function getBlockSchedulingSetting() {
-			return vm.schedulingSetting.forEach(function (item) {
-				if (item.BlockFinderType > 0) {
-					var type = '';
-					if(item.BlockSameShiftCategory){
-						type = $translate.instant('BlockSameShiftCategory');
-					}else if(item.BlockSameStartTime){
-						type = $translate.instant('BlockSameStartTime');
-					}else if(item.BlockSameShift){
-						type = $translate.instant('BlockSameShift');
-					}
-					if (item.BlockFinderType === 1) {
-						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeBetweenDayOff') + ' ('+type+')';
-					} else {
-						item.BlockSchedulingSetting = $translate.instant('BlockFinderTypeSchedulePeriod') + ' ('+type+')';
-					}
-					
-				} else {
-					item.BlockSchedulingSetting = $translate.instant('Off');
-				}
-			});
-		}
 
 		function setColor(index) {
-			var opacity = 1 - index / vm.schedulingSetting.length;
+			var opacity = 1 - index / vm.settings.length;
 			if (index === 0) {
 				opacity = 0.05;
 			}
@@ -68,21 +39,26 @@
 			}
 		}
 
-		function getSchedulingSettingInfo(setting) {
+		function showDeleteSchedulingSettingModal(setting) {
 			vm.confirmDeleteModal = true;
 			vm.textDeleteSchedulingSetting = $translate.instant('AreYouSureYouWantToDeleteSchedulingSetting').replace("{0}", setting.Name);
-			return vm.selectedSchedulingSetting = setting;
+			vm.selectedSchedulingSetting = setting;
 		}
 
 		function deleteSchedulingSetting() {
 			if (vm.selectedSchedulingSetting.Default || vm.requestSent)
 				return;
+			if(!vm.selectedSchedulingSetting.Id){
+				var index = vm.settings.indexOf(vm.selectedSchedulingSetting);
+				vm.settings.splice(index, 1);
+				return;
+			}
 			if (!vm.requestSent) {
 				vm.requestSent = true;
 				var deleteDayOffRule = PlanGroupSettingService.removeSetting({ id: vm.selectedSchedulingSetting.Id });
 				return deleteDayOffRule.$promise.then(function () {
-					var index = vm.schedulingSetting.indexOf(vm.selectedSchedulingSetting);
-					vm.schedulingSetting.splice(index, 1);
+					var index = vm.settings.indexOf(vm.selectedSchedulingSetting);
+					vm.settings.splice(index, 1);
 					vm.confirmDeleteModal = false;
 					vm.requestSent = false;
 				});
@@ -97,25 +73,44 @@
 		}
 
 		function goCreateSchedulingSetting() {
-			$state.go('resourceplanner.editsetting', {
-				groupId: $stateParams.groupId
+			vm.settings.unshift({
+				BlockFinderType: 0,
+				BlockSameShift: false,
+				BlockSameShiftCategory: false,
+				BlockSameStartTime: false,
+				MinDayOffsPerWeek: 1,
+				MaxDayOffsPerWeek: 3,
+				MinConsecutiveWorkdays: 2,
+				MaxConsecutiveWorkdays: 6,
+				MinConsecutiveDayOffs: 1,
+				MaxConsecutiveDayOffs: 3,
+				MinFullWeekendsOff: 0,
+				MaxFullWeekendsOff: 8,
+				MinWeekendDaysOff: 0,
+				MaxWeekendDaysOff: 16,
+				Priority: null,
+				Id: null,
+				Filters: [],
+				Default: false,
+				Name: "",
+				PlanningGroupId: $stateParams.groupId
 			});
 		}
 
 		function setHigherPriority(setting, index) {
-			if (setting.Priority === vm.schedulingSetting[0].Priority)
+			if (setting.Priority === vm.settings[0].Priority)
 				return;
 			addAnimate(index);
-			switchPrio(setting, vm.schedulingSetting[index - 1]);
-			return resortDisplayOrder(vm.schedulingSetting);
+			switchPrio(setting, vm.settings[index - 1]);
+			return resortDisplayOrder(vm.settings);
 		}
 
 		function setLowerPriority(setting, index) {
-			if (setting.Priority < 2)
+			if (setting.Priority < 1)
 				return;
 			addAnimate(index);
-			switchPrio(setting, vm.schedulingSetting[index + 1]);
-			return resortDisplayOrder(vm.schedulingSetting);
+			switchPrio(setting, vm.settings[index + 1]);
+			return resortDisplayOrder(vm.settings);
 		}
 
 		function switchPrio(item1, item2) {
@@ -124,7 +119,7 @@
 			item2.Priority = temp;
 			persist(item1);
 			persist(item2);
-			return resortDisplayOrder(vm.schedulingSetting);
+			return resortDisplayOrder(vm.settings);
 		}
 
 		function addAnimate(id) {
@@ -142,7 +137,7 @@
 		}
 
 		function disableButton(index) {
-			return index >= vm.schedulingSetting.length - 2;
+			return index >= vm.settings.length - 2;
 		}
 
 		function persist(setting) {
@@ -169,5 +164,18 @@
 				Priority: setting.Priority
 			});
 		}
+	}
+
+	function planningGroupSettingOverviewDirective() {
+		return {
+			restrict: 'EA',
+			scope: {
+				settings: '=',
+				preferencePercent: '='
+			},
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',
+			controller: 'planningGroupSettingOverviewController as vm',
+			bindToController: true
+		};
 	}
 })();

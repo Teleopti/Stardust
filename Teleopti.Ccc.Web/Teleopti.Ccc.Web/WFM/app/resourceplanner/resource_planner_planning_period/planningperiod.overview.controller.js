@@ -43,7 +43,6 @@
 		vm.schedulingPerformed = false;
 		vm.optimizeRunning = false;
 		vm.dayNodes = undefined;
-		vm.isDisableDo = true;
 		vm.clearRunning = false;
 		vm.isScheduled = false;
 		vm.status = '';
@@ -384,8 +383,9 @@
 		}
 
 		function goDoRulesSetting() {
-			$state.go('resourceplanner.settingoverview', {
-				groupId: $stateParams.groupId
+			$state.go('resourceplanner.editplanninggroup', {
+				groupId: $stateParams.groupId,
+				planningPeriodId: $stateParams.ppId
 			});
 		}
 	}

@@ -6,5 +6,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		void Persist(PlanningGroupSettingsModel model);
 		void Delete(Guid id);
+
+		void UpdateDefaultSetting(PlanningGroupSettings planningGroupSettings,
+			PlanningGroupSettingsModel planningGroupSettingsModel);
 	}
 }

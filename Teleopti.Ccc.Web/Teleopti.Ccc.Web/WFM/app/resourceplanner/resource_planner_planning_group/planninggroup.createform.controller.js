@@ -15,11 +15,34 @@
 		vm.selectedResults = [];
 		vm.filterResults = [];
 		vm.name = '';
-		vm.cancel = returnToOverview;
+		vm.cancel = returnToPreviousView;
 		vm.deletePlanningGroupText = '';
-		vm.editPlanningGroup = editPlanningGroup;
-		vm.planningGroupId = null;
 		vm.isEditGroup = !!editPlanningGroup;
+		vm.editPlanningGroup = editPlanningGroup? editPlanningGroup:{
+			PreferencePercent: 80,
+			Settings:[{
+				BlockFinderType: 0,
+				BlockSameShift: false,
+				BlockSameShiftCategory: false,
+				BlockSameStartTime: false,
+				MinDayOffsPerWeek: 1,
+				MaxDayOffsPerWeek: 3,
+				MinConsecutiveWorkdays: 2,
+				MaxConsecutiveWorkdays: 6,
+				MinConsecutiveDayOffs: 1,
+				MaxConsecutiveDayOffs: 3,
+				MinFullWeekendsOff: 0,
+				MaxFullWeekendsOff: 8,
+				MinWeekendDaysOff: 0,
+				MaxWeekendDaysOff: 16,
+				Priority: -1,
+				Id: null,
+				Filters: [],
+				Default: true,
+				Name: $translate.instant('Default')
+			}]
+		};
+		vm.planningGroupSettings = [];
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
@@ -32,7 +55,7 @@
 		prepareEditInfo();
 
 		function prepareEditInfo() {
-			if (editPlanningGroup == null)
+			if (!vm.isEditGroup)
 				return;
 			vm.deletePlanningGroupText = $translate.instant('AreYouSureYouWantToDeleteThePlanningGroup').replace("{0}", editPlanningGroup.Name);
 			vm.name = editPlanningGroup.Name;
@@ -96,6 +119,11 @@
 		}
 
 		function isValid() {
+			for (var i = 0; i < vm.editPlanningGroup.Settings.length; i++) {
+				if(vm.editPlanningGroup.Settings[i].isValid && !vm.editPlanningGroup.Settings[i].isValid()){
+					return false;
+				}
+			}
 			if (isValidFilters() && isValidName())
 				return true;
 		}
@@ -106,6 +134,17 @@
 
 		function isValidName() {
 			return vm.name.length > 0 && vm.name.length <= 100;
+		}
+		
+		function returnToPreviousView(){
+			if($stateParams.planningPeriodId){
+				$state.go('resourceplanner.planningperiodoverview',{
+					groupId: $stateParams.groupId,
+					ppId: $stateParams.planningPeriodId
+				});
+			}else {
+				returnToOverview();
+			}
 		}
 
 		function returnToOverview() {
@@ -118,17 +157,19 @@
 			} else if (!vm.requestSent) {
 				vm.requestSent = true;
 				return planningGroupService.savePlanningGroup({
-					Id: editPlanningGroup ? editPlanningGroup.Id : null,
+					Id: vm.isEditGroup ? vm.editPlanningGroup.Id : null,
 					Name: vm.name,
-					Filters: vm.selectedResults
+					Filters: vm.selectedResults,
+					Settings: vm.editPlanningGroup.Settings,
+					PreferencePercent: vm.editPlanningGroup.PreferencePercent
 				}).$promise.then(function () {
-					returnToOverview();
+					returnToPreviousView();
 				});
 			}
 		}
 
 		function removePlanningGroup() {
-			if (!editPlanningGroup) return;
+			if (!vm.isEditGroup) return;
 			if (!vm.requestSent) {
 				vm.requestSent = true;
 				return planningGroupService.removePlanningGroup({ id: editPlanningGroup.Id }).$promise.then(function () {

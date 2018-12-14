@@ -14,7 +14,7 @@
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroups.html',
 			controller: 'planningGroupsController as vm',
 			resolve: {
-				planningGroups: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
+				planningGroups: ['planningGroupService', function (planningGroupService) {
 					return planningGroupService.getPlanningGroups().$promise.then(function (data) {
 						return data;
 					});
@@ -25,16 +25,17 @@
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroup.createform.html',
 			controller: 'planningGroupFormController as vm',
 			resolve: {
-				editPlanningGroup: function () {
+				editPlanningGroup: function() {
 					return null;
 				}
 			}
 		}).state('resourceplanner.editplanninggroup', {
-			url: '/planninggroup/:groupId/edit',
+			url: '/planninggroup/:groupId/edit/:planningPeriodId',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroup.createform.html',
 			controller: 'planningGroupFormController as vm',
 			params: {
-				groupId: ''
+				groupId: '',
+				planningPeriodId: ''
 			},
 			resolve: {
 				editPlanningGroup: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
@@ -76,25 +77,6 @@
 				}],
 				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
 					return planningPeriodServiceNew.getPlanningGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
-						return data;
-					});
-				}]
-			}
-		}).state('resourceplanner.settingoverview', {
-			params: {
-				groupId: ''
-			},
-			url: '/planninggroup/:groupId/settings',
-			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',
-			controller: 'planningGroupSettingOverviewController as vm',
-			resolve: {
-				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
-					return planningPeriodServiceNew.getPlanningGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
-						return data;
-					});
-				}],
-				schedulingSettingInfo: ['PlanGroupSettingService', '$stateParams', function (PlanGroupSettingService, $stateParams) {
-					return PlanGroupSettingService.getSettingsByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}]

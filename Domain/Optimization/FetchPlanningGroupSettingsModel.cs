@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningGroupSettings = planningGroup.Settings.SingleOrDefault(x => x.Id.HasValue && x.Id.Value == planningGroupSettingId);
 
 			var planningGroupSettingsModel = _planningGroupSettingsMapper.ToModel(planningGroupSettings);
-			planningGroupSettingsModel.PreferencePercent = (int)planningGroup.Settings.PreferenceValue.ValueAsPercent();
 			return planningGroupSettingsModel;
 		}
 
