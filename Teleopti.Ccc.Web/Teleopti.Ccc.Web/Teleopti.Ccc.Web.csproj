@@ -830,6 +830,7 @@
     <Compile Include="Core\Startup\InitializeApplication\RequeueHangfireEventsTask.cs" />
     <Compile Include="Core\Startup\NoCacheFilter.cs" />
     <Compile Include="Core\Startup\OriginHandlerPipelineModule.cs" />
+    <Compile Include="Core\Startup\SlimAssembliesResolver.cs" />
     <Compile Include="Core\Startup\TenantStartupTask.cs" />
     <Compile Include="Core\ThemeSettingProvider.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
