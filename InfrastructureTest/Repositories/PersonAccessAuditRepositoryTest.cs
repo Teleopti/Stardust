@@ -169,17 +169,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var now = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
 			var personAccess1 = CreateAggregateWithCorrectBusinessUnit();
 			personAccess1.TimeStamp = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
-			personAccess1.ActionPerformedOn = "Kalle Anka";
+			personAccess1.ActionPerformedOn = @"{'FirstName':'Kalle','LastName':'Anka','EmploymentNumber':'137542','Email':'Robert.Klashner @insurance.com'}";
+			personAccess1.SearchKeys = "Kalle Anka";
 			PersistAndRemoveFromUnitOfWork(personAccess1);
 
 			var personAccess2 = CreateAggregateWithCorrectBusinessUnit();
 			personAccess2.TimeStamp = new DateTime(2018, 10, 16, 10, 0, 0, DateTimeKind.Utc);
-			personAccess2.ActionPerformedOn = "Sven Duva";
+			personAccess2.ActionPerformedOn = @"{'FirstName':'Sven','LastName':'Duva','EmploymentNumber':'137542','Email':'Robert.Klashner @insurance.com'}";
+			personAccess2.SearchKeys = "Sven Duva";
 			PersistAndRemoveFromUnitOfWork(personAccess2);
 
-			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5), "Sven").ToList();
-			audits.Count().Should().Be(1);
-			audits.Should().Contain(personAccess2);
+			var audits = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5), "13").ToList();
+			var audits2 = rep.LoadAudits(LoggedOnPerson, now.AddDays(-5), now.AddDays(5), "Sven").ToList();
+			audits.Count().Should().Be(0);
+			audits2.Count().Should().Be(1);
+			audits2.Should().Contain(personAccess2);
 		}
 
 		protected override IPersonAccess CreateAggregateWithCorrectBusinessUnit()
