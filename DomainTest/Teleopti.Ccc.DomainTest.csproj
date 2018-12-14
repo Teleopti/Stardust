@@ -220,7 +220,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsUpdaterWithValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SendUpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerNoMocksTest.cs" />

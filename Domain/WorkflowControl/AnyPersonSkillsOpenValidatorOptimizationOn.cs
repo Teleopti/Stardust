@@ -80,18 +80,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			if (!openHoursForRequestDay.Any())
 				return false;
 
-			var utcDateTimeStart = new DateTime(requestDay.Date.Ticks).Add(openHoursForRequestDay.First().StartTime);
-			var utcDateTimeEnd = new DateTime(requestDay.Date.Ticks).Add(openHoursForRequestDay.First().EndTime);
+			var utcDateTimeStart = requestDay.Date.Add(openHoursForRequestDay.First().StartTime);
+			var utcDateTimeEnd = requestDay.Date.Add(openHoursForRequestDay.First().EndTime);
 
 			var workloadOpenPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(utcDateTimeStart, timeZone),
 				TimeZoneHelper.ConvertToUtc(utcDateTimeEnd, timeZone));
 
-			if (requestPeriod.Intersect(workloadOpenPeriod))
-			{
-				return true;
-			}
-
-			return false;
+			return requestPeriod.Intersect(workloadOpenPeriod);
 		}
 	}
 }

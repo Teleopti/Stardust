@@ -115,6 +115,7 @@
     <Compile Include="Query\UserByIdHandler.cs" />
     <Compile Include="Query\Response\UserDto.cs" />
     <Compile Include="ResultDto.cs" />
+    <Compile Include="SlimAssembliesResolver.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="CustomSwaggerMiddlewareExtensions.cs" />
     <Compile Include="CustomTokenMiddlewareExtensions.cs" />

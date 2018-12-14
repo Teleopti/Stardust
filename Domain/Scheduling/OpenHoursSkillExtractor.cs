@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -28,20 +29,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate)
 		{
-			var openHoursDictionary = new Dictionary<DateOnly, IEffectiveRestriction>();
 			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, skillDays, _groupPersonSkillAggregator, period);
-			foreach (var day in period.DayCollection())
+			var openHoursDictionary = period.DayCollection().ToDictionary(d => d, day =>
 			{
 				var openHours = _openHourForDate.OpenHours(day, skillIntervalDataPerDateAndActivity[day]);
 				var restriction = new EffectiveRestriction(
-							new StartTimeLimitation(null, null),
-							new EndTimeLimitation(null, null),
-							new WorkTimeLimitation(null, openHours?.SpanningTime()),
-							null, null, null,
-							new List<IActivityRestriction>());
+					new StartTimeLimitation(null, null),
+					new EndTimeLimitation(null, null),
+					new WorkTimeLimitation(null, openHours?.SpanningTime()),
+					null, null, null,
+					new List<IActivityRestriction>());
 
-				openHoursDictionary.Add(day, restriction);
-			}
+				return (IEffectiveRestriction)restriction;
+			});
 
 			return new OpenHoursSkillResult(openHoursDictionary, currentDate);
 		}

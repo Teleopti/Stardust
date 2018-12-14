@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using System.Xml.Linq;
 using Autofac;
 using log4net.Config;
@@ -67,6 +68,7 @@ namespace Teleopti.Wfm.Api
 			};
 
 			var httpConfiguration = new HttpConfiguration();
+			httpConfiguration.Services.Replace(typeof(IAssembliesResolver), new SlimAssembliesResolver(typeof(SlimAssembliesResolver).Assembly));
 			httpConfiguration.MapHttpAttributeRoutes();
 
 			app.UseCustomSwagger();

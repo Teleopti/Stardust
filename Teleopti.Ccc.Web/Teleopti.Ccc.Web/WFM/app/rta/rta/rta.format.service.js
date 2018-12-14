@@ -74,7 +74,7 @@
 			var timeline = function (time) {
 				var percent = timeToPercent(statesTime, time);
 				return {
-					Time: time.format('HH:mm'),
+					Time: time.format('LT'),
 					Offset: percent + "%"
 				};
 			};

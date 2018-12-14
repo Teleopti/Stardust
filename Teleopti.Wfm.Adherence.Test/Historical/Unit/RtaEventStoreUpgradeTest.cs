@@ -129,5 +129,17 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 
 			KeyValues.Get("RtaEventStoreVersion", 0).Should().Be(RtaEventStoreVersion.StoreVersion);
 		}
+		
+		[Test]
+		public void ShouldUpdateWhenNoStoreVersion()
+		{
+			var person = Guid.NewGuid();
+			Events.AddWithoutStoreVersion(new PersonStateChangedEvent {PersonId = person, Timestamp = "2018-12-13 08:00".Utc()}, DeadLockVictim.No);
+
+			Target.Upgrade();
+
+			Events.LoadForSynchronization(0).Events
+				.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-12-13".Date());
+		}		
 	}
 }

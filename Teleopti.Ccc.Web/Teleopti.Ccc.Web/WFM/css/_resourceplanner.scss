@@ -18,6 +18,11 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	margin:0;
 }
 
+.chip-text .mdi-close{
+	position: relative;
+	top: 2px;
+}
+
 .filter-boxes{
 	display:block;
 	width:auto;

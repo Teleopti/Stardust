@@ -74,7 +74,24 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 					.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-10-31".Date());
 			}
 		}
+		
+		[Test]
+		public void ShouldUpdateWhenNoStoreVersion()
+		{
+			var dataSource = DataSource.Current();
+			var person = Guid.NewGuid();
+			WithUnitOfWork.Do(() => { EventsT.AddWithoutStoreVersion(new PersonStateChangedEvent {PersonId = person, Timestamp = "2018-12-13 08:00".Utc()}, DeadLockVictim.No); });
+			Context.Logout();
 
+			using (DataSourceScope.OnThisThreadUse(dataSource))
+			{
+				Target.Upgrade();
+
+				WithUnitOfWork.Get(() => EventsT.LoadAllForTest())
+					.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-12-13".Date());
+			}
+		}		
+		
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
