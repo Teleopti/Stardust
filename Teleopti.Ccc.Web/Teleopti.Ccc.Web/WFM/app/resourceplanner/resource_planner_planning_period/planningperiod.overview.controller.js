@@ -384,7 +384,8 @@
 
 		function goDoRulesSetting() {
 			$state.go('resourceplanner.editplanninggroup', {
-				groupId: $stateParams.groupId
+				groupId: $stateParams.groupId,
+				planningPeriodId: $stateParams.ppId
 			});
 		}
 	}

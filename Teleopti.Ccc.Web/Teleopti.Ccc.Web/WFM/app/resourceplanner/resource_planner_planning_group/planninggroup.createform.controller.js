@@ -15,7 +15,7 @@
 		vm.selectedResults = [];
 		vm.filterResults = [];
 		vm.name = '';
-		vm.cancel = returnToOverview;
+		vm.cancel = returnToPreviousView;
 		vm.deletePlanningGroupText = '';
 		vm.isEditGroup = !!editPlanningGroup;
 		vm.editPlanningGroup = editPlanningGroup? editPlanningGroup:{
@@ -130,6 +130,17 @@
 		function isValidName() {
 			return vm.name.length > 0 && vm.name.length <= 100;
 		}
+		
+		function returnToPreviousView(){
+			if($stateParams.planningPeriodId){
+				$state.go('resourceplanner.planningperiodoverview',{
+					groupId: $stateParams.groupId,
+					ppId: $stateParams.planningPeriodId
+				});
+			}else {
+				returnToOverview();
+			}
+		}
 
 		function returnToOverview() {
 			$state.go('resourceplanner.overview');
@@ -147,7 +158,7 @@
 					Settings: vm.editPlanningGroup.Settings,
 					PreferencePercent: vm.editPlanningGroup.PreferencePercent
 				}).$promise.then(function () {
-					returnToOverview();
+					returnToPreviousView();
 				});
 			}
 		}

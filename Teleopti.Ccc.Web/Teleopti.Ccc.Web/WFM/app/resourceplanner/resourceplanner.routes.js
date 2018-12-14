@@ -30,11 +30,12 @@
 				}
 			}
 		}).state('resourceplanner.editplanninggroup', {
-			url: '/planninggroup/:groupId/edit',
+			url: '/planninggroup/:groupId/edit/:planningPeriodId',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroup.createform.html',
 			controller: 'planningGroupFormController as vm',
 			params: {
-				groupId: ''
+				groupId: '',
+				planningPeriodId: ''
 			},
 			resolve: {
 				editPlanningGroup: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
