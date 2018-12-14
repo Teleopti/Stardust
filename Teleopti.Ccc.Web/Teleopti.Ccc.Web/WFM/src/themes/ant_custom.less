@@ -37,3 +37,14 @@ a:focus {
 .ant-table > .ant-table-content > .ant-table-body table {
 	padding: 0 0;
 }
+
+// Make all normal inputs look like ant inputs
+input[type='text'],
+input[type='number'],
+input[type='password'],
+input[type='time'],
+select {
+	&:not([class*='ant']) {
+		.input();
+	}
+}
