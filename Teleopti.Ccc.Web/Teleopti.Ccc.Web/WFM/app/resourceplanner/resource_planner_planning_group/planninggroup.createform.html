@@ -9,8 +9,8 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<form name="form" class="wfm-form">
-			<div class="con-flex panel material-depth-1">
+		<form name="form" class="wfm-form material-depth-1">
+			<div class="con-flex panel" style="border-bottom: 1px solid rgba(0, 0, 0, 0.16);">
 				<div class="con-row">
 					<div class="con-flex">
 						<label for="planningGroupNameId"><b translate>NameColon</b></label>
@@ -62,7 +62,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="con-flex panel material-depth-1">
+			<div class="con-flex panel">
 				<label style="margin: 5px"><b>{{'PlanGroupScheduling' | translate}}:</b></label>
 				<planning-group-settings-overview settings="vm.editPlanningGroup.Settings" planning-group-id="vm.editPlanningGroup.Id" preference-percent="vm.editPlanningGroup.PreferencePercent"></planning-group-settings-overview>
 			</div>
