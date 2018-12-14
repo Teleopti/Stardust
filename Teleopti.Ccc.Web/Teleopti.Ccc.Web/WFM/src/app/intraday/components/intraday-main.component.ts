@@ -36,7 +36,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		public intradayDataService: IntradayDataService,
 		public translate: TranslateService,
 		private message: NzMessageService,
-		private persistData: IntradayPersistService
+		private persistData: IntradayPersistService,
+		private skillIcons: IntradayIconService
 	) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
@@ -436,7 +437,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					Heading: this.translate.instant('Volume'),
 					Forecasted: input.ForecastedCalls,
 					Actual: input.CalculatedCalls,
-					Difference: input.ForecastedActualHandleTimeDiff
+					Difference: input.ForecastedActualCallsDiff
 				},
 				{
 					Heading: this.translate.instant('AverageHandlingTime'),
@@ -509,8 +510,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			return [
 				{
 					Heading: this.translate.instant('Average'),
-					ServiceLevel: input.ServiceLevel,
-					EstimatedServiceLevel: input.EstimatedServiceLevel,
+					ServiceLevel: input.ServiceLevel * 100,
+					EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
 					AbandonRate: input.AbandonRate,
 					AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
 				}
