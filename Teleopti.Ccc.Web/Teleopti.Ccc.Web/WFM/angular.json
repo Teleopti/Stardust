@@ -93,10 +93,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/c3/c3.min.css"
-            ],
+            "styles": [],
             "assets": [
 							"src/assets",
 							{
