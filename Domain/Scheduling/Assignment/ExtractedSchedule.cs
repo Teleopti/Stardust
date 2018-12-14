@@ -564,7 +564,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
 			workingCopyOfAssignment.SetActivitiesAndShiftCategoryFromWithOffset(sourceAssignment, periodOffset);
 
-			var period = source.Period.MovePeriod(periodOffset);
 			if (PersonAssignment() == null && SignificantPart() == SchedulePartView.DayOff)
 			{
 				DeleteDayOff();
@@ -572,7 +571,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var currentAssignment = PersonAssignment(true);
 			currentAssignment.SetActivitiesAndShiftCategoryFrom(workingCopyOfAssignment);
-			if (splitAbsence) SplitAbsences(period);
+			if (splitAbsence)
+			{
+				var splitPeriod = AbsenceSplitPeriod(this);
+				SplitAbsences(splitPeriod);
+			}
 		}
 
 		public void SplitAbsences(DateTimePeriod period)
