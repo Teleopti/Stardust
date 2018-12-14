@@ -1,46 +1,41 @@
 'use strict';
 
-rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
-													$fakeBackend,
-													$controllerBuilder,
-													stateParams) {
+rtaTester.describe('RtaAgentsController', function (it, fit, xit) {
 	var vm;
 
 	[
 		{
 			time: "2016-05-26T00:30:00",
-			expect: ["00:00", "01:00", "02:00", "03:00"]
+			expect: ["2016-05-26T00:00:00", "2016-05-26T01:00:00", "2016-05-26T02:00:00", "2016-05-26T03:00:00"]
 		},
 		{
 			time: "2016-05-26T11:30:00",
-			expect: ["11:00", "12:00", "13:00", "14:00"]
+			expect: ["2016-05-26T11:00:00", "2016-05-26T12:00:00", "2016-05-26T13:00:00", "2016-05-26T14:00:00"]
 		},
 		{
 			time: "2016-05-26T15:30:00",
-			expect: ["15:00", "16:00", "17:00", "18:00"]
+			expect: ["2016-05-26T15:00:00", "2016-05-26T16:00:00", "2016-05-26T17:00:00", "2016-05-26T18:00:00"]
 		},
 		{
 			time: "2016-05-26T23:30:00",
-			expect: ["23:00", "00:00", "01:00", "02:00"]
+			expect: ["2016-05-26T23:00:00", "2016-05-27T00:00:00", "2016-05-27T01:00:00", "2016-05-27T02:00:00"]
 		}
 	].forEach(function (example) {
-
-		it('should display time line for ' + example.time, function () {
-			stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-			$fakeBackend
+		it('should display time line for ' + example.time, function (t) {
+			t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+			t.backend
 				.withTime(example.time)
 				.withAgentState({
 					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				});
 
-			var vm = $controllerBuilder.createController().vm;
+			var vm = t.createController();
 			expect(vm.timeline.length).toEqual(example.expect.length);
 			example.expect.forEach(function (e, i) {
-				expect(vm.timeline[i].Time).toEqual(e);
+				expect(vm.timeline[i].Time).toEqual(moment(e).format('LT'));
 			});
 		});
-
 	});
 
 	[
@@ -54,16 +49,16 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		}
 	].forEach(function (example) {
 
-		it('should position time line for ' + example.time, function () {
-			stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-			$fakeBackend
+		it('should position time line for ' + example.time, function (t) {
+			t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+			t.backend
 				.withTime(example.time)
 				.withAgentState({
 					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 				});
 
-			vm = $controllerBuilder.createController().vm;
+			vm = t.createController();
 
 			expect(vm.timeline.length).toEqual(example.expect.length);
 			example.expect.forEach(function (e, i) {
@@ -73,10 +68,10 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 	});
 
-	it('should display scheduled activity', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+	it('should display scheduled activity', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
-		$fakeBackend
+		t.backend
 			.withTime("2016-05-26T12:00:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -90,9 +85,8 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				}]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift.length).toEqual(1);
 		expect(vm.agentStates[0].Shift[0].Color).toEqual("#80FF80");
@@ -100,10 +94,10 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(vm.agentStates[0].Shift[0].Width).toEqual("50%");
 	});
 
-	it('should display all activities', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+	it('should display all activities', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 
-		$fakeBackend
+		t.backend
 			.withTime("2016-05-26T09:00:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -122,9 +116,8 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift.length).toEqual(2);
 		expect(vm.agentStates[0].Shift[0].Color).toEqual("#80FF80");
@@ -135,10 +128,9 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(vm.agentStates[0].Shift[1].Width).toEqual("50%");
 	});
 
-	it('should display all activities', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-
-		$fakeBackend
+	it('should display all activities', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		t.backend
 			.withTime("2014-01-21T12:45:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -157,16 +149,15 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift.length).toEqual(2);
 	});
 
-	it('should not display past activity before display window', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend
+	it('should not display past activity before display window', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		t.backend
 			.withTime("2016-05-30T13:00:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -179,16 +170,15 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				}]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift.length).toEqual(0);
 	});
 
-	it('should not display future activities outside of display window', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend
+	it('should not display future activities outside of display window', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		t.backend
 			.withTime("2016-05-30T08:00:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -201,16 +191,15 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				}]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift.length).toEqual(0);
 	});
 
-	it('should not display future activities outside of display window', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend
+	it('should not display future activities outside of display window', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		t.backend
 			.withTime("2016-05-30T08:00:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -235,16 +224,15 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift.length).toEqual(1);
 	});
 
-	it('should cut activities that are larger than display window', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend
+	it('should cut activities that are larger than display window', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		t.backend
 			.withTime("2016-05-30T11:00:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -257,17 +245,16 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				}]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift[0].Offset).toEqual('0%');
 		expect(vm.agentStates[0].Shift[0].Width).toEqual('100%');
 	});
 
-	it('should cut activities starting before display window', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend
+	it('should cut activities starting before display window', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		t.backend
 			.withTime("2016-05-30T15:00:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -280,17 +267,16 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				}]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift[0].Offset).toEqual('0%');
 		expect(vm.agentStates[0].Shift[0].Width).toEqual('75%');
 	});
 
-	it('should produce an activity name', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$fakeBackend
+	it('should produce an activity name', function (t) {
+		t.stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
+		t.backend
 			.withTime("2016-05-30T11:00:00")
 			.withAgentState({
 				Name: "Ashley Andeen",
@@ -303,9 +289,8 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				}]
 			});
 
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(vm.showInAlarm = false);
+		var vm = t.createController();
+		t.apply(vm.showInAlarm = false);
 
 		expect(vm.agentStates[0].Shift[0].Name).toEqual('Phone');
 	});
