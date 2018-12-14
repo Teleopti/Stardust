@@ -23,6 +23,7 @@
 		vm.setLowerPriority = setLowerPriority;
 		vm.disableButton = disableButton;
 		vm.setColor = setColor;
+		vm.test = false;
 		vm.color = {
 			render: 'linear',
 			rgba: 'rgba(156, 39, 176, 1)'
@@ -48,7 +49,7 @@
 			if (vm.selectedSchedulingSetting.Default || vm.requestSent)
 				return;
 			if(!vm.selectedSchedulingSetting.Id){
-				const index = vm.settings.indexOf(vm.selectedSchedulingSetting);
+				var index = vm.settings.indexOf(vm.selectedSchedulingSetting);
 				vm.settings.splice(index, 1);
 				return;
 			}
@@ -92,7 +93,7 @@
 				Filters: [],
 				Default: false,
 				Name: "",
-				PlanningGroupId: vm.planningGroupId
+				PlanningGroupId: $stateParams.groupId
 			});
 		}
 
@@ -122,7 +123,7 @@
 		}
 
 		function addAnimate(id) {
-			if (id == null)
+			if (id == null || vm.test)
 				return;
 			var item = document.getElementById(id).parentElement.parentElement;
 			item.classList.remove("pg-list-card-animate");
@@ -170,7 +171,6 @@
 			restrict: 'EA',
 			scope: {
 				settings: '=',
-				planningGroupId: '=',
 				preferencePercent: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',
