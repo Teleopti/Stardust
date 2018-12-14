@@ -22,7 +22,9 @@
             </button>
           </div>
           <div nz-col nzSpan="18" *ngIf="inEditing" class="report-action-panel">
-            <button nz-button nzType="primary" *ngIf="permission.CanEditReport" (click)="nav.viewReport(report)"><i nz-icon type="undo" theme="outline" class="report-ction"></i> Cancel</button>
+            <button nz-button nzType="primary" *ngIf="permission.CanEditReport" (click)="nav.viewReport(report)" class="report-ction">
+              <i nz-icon type="undo" theme="outline"></i> Back to view mode
+            </button>
           </div>
           <nz-modal [(nzVisible)]="isConfirmingClone" nzTitle="Clone report"
                     (nzOnCancel)="cancelCloneReport()" (nzOnOk)="cloneReport(report)">
