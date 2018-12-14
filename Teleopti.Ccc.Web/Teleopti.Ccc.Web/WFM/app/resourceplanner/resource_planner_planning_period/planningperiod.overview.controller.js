@@ -383,7 +383,7 @@
 		}
 
 		function goDoRulesSetting() {
-			$state.go('resourceplanner.settingoverview', {
+			$state.go('resourceplanner.editplanninggroup', {
 				groupId: $stateParams.groupId
 			});
 		}
