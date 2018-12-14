@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestStrategyProcessor>().As<IAbsenceRequestStrategyProcessor>().SingleInstance();
 			builder.RegisterType<DenyLongQueuedAbsenceRequests>().As<DenyLongQueuedAbsenceRequests>().SingleInstance();
 			builder.RegisterType<ArrangeRequestsByProcessOrder>().As<ArrangeRequestsByProcessOrder>().SingleInstance();
-			builder.RegisterType<IntradayRequestWithinOpenHourValidator>().As<IIntradayRequestWithinOpenHourValidator>().SingleInstance();
 			builder.RegisterType<AlreadyAbsentValidator>().As<IAlreadyAbsentValidator>();
 			builder.RegisterType<AbsenceRequestWorkflowControlSetValidator>()
 				.As<IAbsenceRequestWorkflowControlSetValidator>();
