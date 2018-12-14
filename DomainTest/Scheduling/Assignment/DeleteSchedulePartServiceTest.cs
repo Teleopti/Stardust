@@ -414,5 +414,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAbsenceCollection().Should().Be.Empty();
 			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)).IsFullDayAbsence().Should().Be.True();
 		}
+
+		[Test]
+		[Ignore("79693 to be fixed")]
+		public void ShouldNotCreateDuplicateLayersOnRollback()
+		{
+			var target = new DeleteSchedulePartService();
+			var date = new DateOnly(2018, 10, 1);
+			var scenario = new Scenario().WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance());
+			var period = date.ToDateTimePeriod(new TimePeriod(0, 48),TimeZoneInfo.Utc);
+			var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence().WithId(), period));
+			var data = new List<IPersistableScheduleData> { personAbsence };
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
+			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
+				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { Default = true }, rollBackService, new NoSchedulingProgress());
+
+			rollBackService.Rollback();
+
+			stateHolder.Schedules[agent].ScheduledDay(date).PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(period);
+			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)).PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(period);
+		}
 	}
 }
