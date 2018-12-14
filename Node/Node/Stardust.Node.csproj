@@ -120,6 +120,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="ReturnObjects\ExitApplication.cs" />
+    <Compile Include="SlimAssembliesResolver.cs" />
     <Compile Include="Timers\TimerExceptionLoggerStrategyHandler.cs" />
     <Compile Include="Timers\TrySendJobDetailToManagerTimer.cs">
       <SubType>Component</SubType>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
 using Autofac.Integration.WebApi;
@@ -51,7 +52,8 @@ namespace Stardust.Node
 					                    DependencyResolver = new AutofacWebApiDependencyResolver(container)
 				                    };
 
-				                    config.MapHttpAttributeRoutes();
+			                        config.Services.Replace(typeof(IAssembliesResolver), new SlimAssembliesResolver(typeof(SlimAssembliesResolver).Assembly));
+                                    config.MapHttpAttributeRoutes();
 				                    config.Services.Add(typeof (IExceptionLogger),
 				                                        new GlobalExceptionLogger());
 
@@ -73,5 +75,5 @@ namespace Stardust.Node
 				_quitEvent.WaitOne();
 			}
 		}
-	}
+    }
 }
