@@ -273,14 +273,47 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date,SchedulePeriodType.Week, 1);
 			planningPeriod.PlanningGroup.Settings.Single().BlockSameShiftCategory = true;
 			planningPeriod.PlanningGroup.Settings.Single().BlockFinderType = BlockFinderType.SingleDay;
-			var shiftCategoryAssignment = new ShiftCategory("_").WithId();
-			AssignmentRepository.Has(agent,scenario,activity, shiftCategoryAssignment,date,new TimePeriod(8,16));
+			AssignmentRepository.Has(agent,scenario,activity, new ShiftCategory("_").WithId(),date,new TimePeriod(8,16));
 			
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value).BusinessRulesValidationResults;
 
 			if (result.Any())
 			{
 				result.Single().ValidationErrors.SingleOrDefault(x => x.ResourceType == ValidationResourceType.BlockScheduling).Should().Be.Null();
+			}
+		}
+		
+		[Test]
+		public void ShouldNotShowBlockHintIfShiftCategoryExistsInShiftBagForCurrentPersonPeriod()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategoryInSecondShiftBag = new ShiftCategory("_").WithId();
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryInSecondShiftBag));
+			var agent = PersonRepository.Has(new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet1, skill);
+			var personPeriod2 = new PersonPeriod(date.AddDays(2),agent.PersonPeriodCollection.Single().PersonContract, agent.PersonPeriodCollection.Single().Team);
+			var ruleSetBag = new RuleSetBag();
+			ruleSetBag.AddRuleSet(ruleSet2);
+			personPeriod2.RuleSetBag = ruleSetBag;
+			agent.AddPersonPeriod(personPeriod2);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1),1));
+			var planningPeriod = PlanningPeriodRepository.Has(date,SchedulePeriodType.Week, 1);
+			planningPeriod.PlanningGroup.Settings.Single().BlockSameShiftCategory = true;
+			planningPeriod.PlanningGroup.Settings.Single().BlockFinderType = BlockFinderType.BetweenDayOff;
+			var dayOffTemplate = new DayOffTemplate();
+			AssignmentRepository.Has(agent, scenario, dayOffTemplate, date.AddDays(3)); 
+			AssignmentRepository.Has(agent, scenario, activity, shiftCategoryInSecondShiftBag,date.AddDays(4),new TimePeriod(8,16));
+			AssignmentRepository.Has(agent, scenario, dayOffTemplate,date.AddDays(6));
+			
+			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value).BusinessRulesValidationResults;
+
+			if (result.Any())
+			{
+				result.Single().ValidationErrors.SingleOrDefault(x => x.ErrorResource == "ShiftCategoryNotMatchingShiftBag").Should().Be.Null();
 			}
 		}
 		
