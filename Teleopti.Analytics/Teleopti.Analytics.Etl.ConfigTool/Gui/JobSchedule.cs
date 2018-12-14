@@ -16,8 +16,6 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 
@@ -89,7 +87,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private void fillDataSourceCombo()
 		{
 			var dataSourceCollection = (List<IDataSourceEtl>)new DataSourceValidCollection(true, ConfigurationManager.AppSettings["datamartConnectionString"]);
-			if (!_selectDataSourceIsPossible)
+			if (dataSourceCollection.Any() && !_selectDataSourceIsPossible)
 			{
 				var temp = dataSourceCollection.First();
 				dataSourceCollection.Clear();
@@ -98,17 +96,12 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			comboBoxDataSource.DataSource = dataSourceCollection;
 			comboBoxDataSource.DisplayMember = "DataSourceName";
 			comboBoxDataSource.ValueMember = "DataSourceId";
-			//if (dataSourceCollection.Count > 0)
-			//{
-			//    comboBoxDataSource.SelectedItem = dataSourceCollection[0];
-			//}
 		}
 
 		private void updateScheduleControls()
 		{
 			if (_isNewSchedule)
 			{
-				//Maybe set job default values
 				radioButtonOccursOnce.Checked = true;
 				radioButtonRelativePeriodInitial.Checked = true;
 			}

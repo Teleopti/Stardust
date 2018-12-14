@@ -56,7 +56,6 @@ CREATE TABLE #sys_datasource(
 			AND sd.time_zone_id IS NOT NULL
 			AND sd.inactive = 0
 
-		---------<All log Objects>-----------
 		IF @include_option_all = 1
 		BEGIN
 			--Prepare test for <All log Objects>
@@ -70,11 +69,7 @@ CREATE TABLE #sys_datasource(
 			SELECT @countActive = COUNT(*) FROM mart.sys_datasource sd WHERE datasource_id NOT IN (1,-1) AND inactive=0 AND time_zone_id IS NOT NULL
 			
 			--check that we do have log objects, they are active
-			IF	(
-					(@countTotal = @countActive) 
-					AND
-					@countTotal > 0
-				)
+			IF	(@countTotal = @countActive)
 			BEGIN
 				INSERT INTO #sys_datasource
 				SELECT
@@ -87,9 +82,7 @@ CREATE TABLE #sys_datasource(
 					0
 			END
 		END
-		---------<All log Objects>-----------
-					
-		--return
+				
 		SELECT
 			[datasource_id],
 			[datasource_name],
