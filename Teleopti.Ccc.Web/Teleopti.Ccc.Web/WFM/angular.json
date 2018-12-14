@@ -32,6 +32,11 @@
                 "glob": "**/angular-locale_*.js",
                 "input": "./node_modules/angular-i18n/",
                 "output": "/assets/angular-i18n"
+							},
+							{
+                "glob": "?(fonts|css)/*",
+                "input": "./node_modules/@mdi/font/",
+                "output": "/assets/mdi"
 							}
             ],
             "styles": [

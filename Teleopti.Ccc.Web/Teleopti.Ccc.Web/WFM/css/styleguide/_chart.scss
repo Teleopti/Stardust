@@ -1,4 +1,3 @@
-
 // Line chart
 //
 //A chart used to present complex data. We use <a href="http://c3js.org/gettingstarted.html">default C3</a> or the <a href="http://jettro.github.io/c3-angular-directive/#download">C3 chart directive</a> to get nice features like legends, zoom and period selection.
@@ -54,34 +53,28 @@
 //Styleguide 2.6
 //
 
-body > .c3 > svg {
-    position: absolute;
-    z-index: -10;
-    top: 0;
-		height:0px !important
-}
+.wfm-chart {
+	background-color: $white;
 
-.wfm-chart{
-	background-color:$white;
-
-	.c3-tooltip td>span {
+	.c3-tooltip td > span {
 		margin-left: 10px;
 		margin-top: 5px;
-		border:1px solid white;
+		border: 1px solid white;
 	}
 
-	.c3-tooltip td,.c3-tooltip th{
-		color:white;
-		background-color: $gray054!important;
+	.c3-tooltip td,
+	.c3-tooltip th {
+		color: white;
+		background-color: $gray054 !important;
 	}
 
 	.c3-brush .extent {
-		stroke: $primary!important;
-		fill: $primary!important;
+		stroke: $primary !important;
+		fill: $primary !important;
 	}
 
-	g.tick line{
-		display:none;
+	g.tick line {
+		display: none;
 	}
 
 	.c3-selected-circle {
@@ -90,7 +83,7 @@ body > .c3 > svg {
 
 	.c3-axis,
 	.c3-axis-x,
-	.c3-legend-item{
-		fill:$text-color-standard;
+	.c3-legend-item {
+		fill: $text-color-standard;
 	}
 }

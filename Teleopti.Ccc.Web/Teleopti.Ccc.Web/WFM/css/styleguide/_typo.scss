@@ -57,33 +57,6 @@
 //Styleguide 6.2
 //
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-family: inherit;
-    font-weight: 500;
-    line-height: 1.1;
-    color: inherit;
-}
-
-h1 {
-    font-size: 18px;
-}
-
-h2 {
-    font-size: 16px;
-}
-
-h3 {
-    font-size: $standard-font-size;
-    font-weight: bold;
-}
-
 // Colors for text
 //
 //Helper classes can be used if text needs to have a color association. Remember that this can cause problems for people who are color-blind so use with care.
@@ -99,23 +72,23 @@ h3 {
 //
 
 .text-muted {
-    color: $gray054;
+	color: $gray054;
 }
 
 .text-success {
-    color: $green-300;
+	color: $green-300;
 }
 
 .text-warning {
-    color: $orange-600;
+	color: $orange-600;
 }
 
 .text-danger {
-    color: $red-600;
+	color: $red-600;
 }
 
 .text-white {
-    color: $white;
+	color: $white;
 }
 
 // Other text helpers
@@ -130,24 +103,21 @@ h3 {
 //Styleguide 8.5
 //
 .sm-font-size {
-    font-size: $sm-font-size !important;
+	font-size: $sm-font-size !important;
 }
 
 .full-padding {
-    padding: $full-padding;
+	padding: $full-padding;
 }
 
 .padding-reset {
-    padding: 0 !important;
+	padding: 0 !important;
 }
 
 .caps:first-letter {
-    text-transform: uppercase;
+	text-transform: uppercase;
 }
 
 .unselectable {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+	user-select: none;
 }
