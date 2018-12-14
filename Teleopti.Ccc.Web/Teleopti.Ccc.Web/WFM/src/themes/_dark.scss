@@ -1,7 +1,5 @@
 .angular-theme-dark {
-	.use-styleguide {
-		@import '../../css/styleguide/styleguide_dark.scss';
-	}
+	@import '../../css/styleguide/styleguide_dark.scss';
 	@import '../../css/styleguide/darkvariables';
 	@import '../../css/main';
 	background-color: #303030;
