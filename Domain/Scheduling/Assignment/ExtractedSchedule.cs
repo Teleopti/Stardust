@@ -392,9 +392,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var dayBefore = Owner[scheduleDay.Person].ScheduledDay(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(-1));
 			var endBefore = dayBefore.PersonAssignment(true).Period.EndDateTime;
-			var end = scheduleDay.PersonAssignment(true).Period.EndDateTime;
-			if (scheduleDay.HasDayOff())
-				end = scheduleDay.Period.EndDateTime;
+			var assignmentEnd = scheduleDay.PersonAssignment(true).Period.EndDateTime;
+			var end = assignmentEnd < scheduleDay.Period.EndDateTime ? scheduleDay.Period.EndDateTime : assignmentEnd;
 			var start = scheduleDay.Period.StartDateTime > endBefore ? scheduleDay.Period.StartDateTime : endBefore;
 			return new DateTimePeriod(start, end);
 		}
