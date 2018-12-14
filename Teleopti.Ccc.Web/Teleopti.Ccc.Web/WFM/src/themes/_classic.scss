@@ -1,5 +1,8 @@
 .angular-theme-classic {
-	@import '../../css/styleguide/styleguide_classic.scss';
+	.use-styleguide {
+		@import '../../css/styleguide/styleguide_classic.scss';
+	}
+
 	@import '../../css/styleguide/classicvariables';
 	@import '../../css/main';
 	background-color: #fcfcfc;
