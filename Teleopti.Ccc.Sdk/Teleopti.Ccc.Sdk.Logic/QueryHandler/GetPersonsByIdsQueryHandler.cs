@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -12,13 +11,13 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetPersonsByIdsQueryHandler : IHandleQuery<GetPersonsByIdsQueryDto, ICollection<PersonDto>>
 	{
-		private readonly IAssembler<IPerson, PersonDto> _assembler;
+		private readonly PersonCredentialsAppender _credentialsAppender;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetPersonsByIdsQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public GetPersonsByIdsQueryHandler(PersonCredentialsAppender credentialsAppender, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
-			_assembler = assembler;
+			_credentialsAppender = credentialsAppender;
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
@@ -30,10 +29,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
-					var memberList = new List<IPerson>();
-					var foundPersons = _personRepository.FindPeopleSimplify(query.PersonIds);
-					memberList.AddRange(foundPersons);
-					return _assembler.DomainEntitiesToDtos(memberList).ToList();
+					var foundPersons = _personRepository.FindPeopleSimplify(query.PersonIds).ToArray();
+					return _credentialsAppender.Convert(foundPersons).ToList();
 				}
 			}
 		}
