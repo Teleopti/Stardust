@@ -210,7 +210,7 @@
 					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelApprove()">
 						{{'Cancel' | translate}}
 					</button>
-					<button type="submit" class="approve-adherence-submit wfm-btn wfm-btn-invis-primary"
+					<button type="submit" ng-disabled="vm.invalidTime" class="approve-adherence-submit wfm-btn wfm-btn-invis-primary"
 							ng-click="vm.submitApprove()">
 						{{'ApproveAsInAdherence' | translate}}
 					</button>
