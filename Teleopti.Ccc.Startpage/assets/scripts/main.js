@@ -34,13 +34,13 @@ window.onload = function () {
 						document.getElementById("webwfm").style.visibility = "visible";
 						document.getElementById("webwfm").style.display = "block";
 					} else {
-						console.log(result.IsEnabled, 'false');
+						if (console) console.log(result.IsEnabled, 'false');
 						document.getElementById("webwfm").style.display = "none";
 						document.getElementById("webwfm").style.visibility = "hidden";
 					}
 
 				} else {
-					console.log('fail', result);
+					if (console) console.log('fail', result);
 				}
 			}
 		}

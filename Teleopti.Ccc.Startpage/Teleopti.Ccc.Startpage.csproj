@@ -60,6 +60,7 @@
     <Content Include="assets\img\real-time.png" />
     <Content Include="assets\img\resource.png" />
     <Content Include="assets\img\teleopti_logo.png" />
+    <Content Include="assets\scripts\forecast.js" />
     <Content Include="assets\scripts\main.js" />
     <Content Include="assets\vendor\html5shiv\dist\html5shiv-printshiv.js" />
     <Content Include="assets\vendor\html5shiv\dist\html5shiv.js" />
