@@ -75,8 +75,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var result = Target.GetShiftTradeSchedules(input);
 
 			result.PersonFromSchedule.Periods.First().StartPositionPercentage.Should().Not.Be.EqualTo(0.0);
-
-			result.PersonToSchedule.Periods.First().StartPositionPercentage.Should().Not.Be.EqualTo(0.0);
 		}
 
 		[Test]
