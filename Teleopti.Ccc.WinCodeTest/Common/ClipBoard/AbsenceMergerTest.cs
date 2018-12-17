@@ -98,5 +98,30 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 
 			list.Single().PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(expectedPeriod);
 		}
+
+		[Test]
+		public void ShouldMergeAbsencesOnDayStart()
+		{
+			var date = new DateOnly(2018, 10, 1);
+			var scenario = new Scenario().WithId();
+			var activity = new Activity("_").WithId();
+			var absence = new Absence().WithId();
+			var expectedPeriod = date.ToDateTimePeriod(new TimePeriod(0, 4), TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance());
+			var personAssignment = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(8, 16));
+			var personAbsence1 = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, date.ToDateTimePeriod(new TimePeriod(0, 3), TimeZoneInfo.Utc)));
+			var personAbsence2 = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, date.ToDateTimePeriod(new TimePeriod(0, 4), TimeZoneInfo.Utc)));
+			var data = new List<IPersistableScheduleData> { personAssignment };
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(date);
+			scheduleDay.Add(personAbsence1);
+			scheduleDay.Add(personAbsence2);
+			var list = new List<IScheduleDay> { scheduleDay };
+			var absenceMerger = new AbsenceMerger(list);
+
+			absenceMerger.MergeOnDayStart();
+
+			list.Single().PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(expectedPeriod);
+		}
 	}
 }
