@@ -5,20 +5,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348)]
-	public interface IMatrixClosedDayLocker
-	{
-		void Execute(ILockableBitArray bitArray, IVirtualSchedulePeriod schedulePeriod, ISchedulingResultStateHolder schedulingResultStateHolder);
-	}
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348)]
-	public class MatrixClosedDaysLockerDoNothing : IMatrixClosedDayLocker
-	{
-		public void Execute(ILockableBitArray bitArray, IVirtualSchedulePeriod schedulePeriod, ISchedulingResultStateHolder schedulingResultStateHolder)
-		{}
-	}
-
-	public class MatrixClosedDayLocker : IMatrixClosedDayLocker
+	public class MatrixClosedDayLocker
 	{
 		public void Execute(ILockableBitArray bitArray, IVirtualSchedulePeriod schedulePeriod, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{

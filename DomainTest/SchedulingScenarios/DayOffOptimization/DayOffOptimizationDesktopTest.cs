@@ -563,22 +563,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			asses[6].SetDayOff(doTemplate); //sunday
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() }};
-
 			//locking saturday so sunday is the only day to remove to comply with DO rules
 			LockManager().AddLock(agent, firstDay.AddDays(5), LockType.Normal);
-
 			var doPrefs = new DaysOffPreferences() {UseWeekEndDaysOff = true, WeekEndDaysOffValue = new MinMax<int>(1, 1)};
 			
 			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(doPrefs), new NoOptimizationCallback());
 
-			if(_resourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348))
-			{
-				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//closed sunday should not move
-			}
-			else
-			{
-				stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.False();//old behavior
-			}
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff().Should().Be.True();//closed sunday should not move
 		}
 
 		public DayOffOptimizationDesktopTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
