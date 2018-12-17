@@ -23,7 +23,8 @@ function Hostsfile-Add-Cname {
     [string]$CName
     )
 	
-	$hostentry = "127.0.0.1 $CName"
+	$ipV4 = Test-Connection -ComputerName (hostname) -Count 1  | Select IPV4Address
+	$hostentry = "$($ipV4.IPV4Address.IPAddressToString) $CName"
     $hostsFile = "$($env:windir)\system32\Drivers\etc\hosts"
     If ((Get-Content "$hostsFile" ) -notcontains "$hostentry") {
         Add-Content -Encoding UTF8  "$hostsFile" "`r`n"
