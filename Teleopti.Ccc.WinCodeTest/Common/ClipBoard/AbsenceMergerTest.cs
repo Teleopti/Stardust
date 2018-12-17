@@ -70,5 +70,33 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 
 			scheduleDay.PersistableScheduleDataCollection().Should().Contain(personAbsenceBefore);
 		}
+
+		[Test]
+		public void ShouldMergeFullDayAbsenceInstersectingToOneAbsence()
+		{
+			var dateBefore = new DateOnly(2018, 10, 1);
+			var date = dateBefore.AddDays(1);
+			var scenario = new Scenario().WithId();
+			var activity = new Activity("_").WithId();
+			var absence = new Absence().WithId();
+			var expectedPeriod = dateBefore.ToDateTimePeriod(new TimePeriod(17, 27 + 24), TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance());
+			var personAssignment = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAssignmentBefore = new PersonAssignment(agent, scenario, dateBefore).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAbsenceBefore = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, dateBefore.ToDateTimePeriod(new TimePeriod(17, 27), TimeZoneInfo.Utc)));
+			var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, date.ToDateTimePeriod(new TimePeriod(2, 27), TimeZoneInfo.Utc)));
+			var data = new List<IPersistableScheduleData> { personAssignmentBefore, personAssignment };
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateBefore, 1), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
+			var scheduleDayBefore = stateHolder.Schedules[agent].ScheduledDay(dateBefore);
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(date);
+			scheduleDayBefore.Add(personAbsenceBefore);
+			scheduleDay.Add(personAbsence);
+			var list = new List<IScheduleDay> {scheduleDayBefore, scheduleDay};
+			var absenceMerger = new AbsenceMerger(list);
+
+			absenceMerger.MergeWithDayBefore();
+
+			list.Single().PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(expectedPeriod);
+		}
 	}
 }
