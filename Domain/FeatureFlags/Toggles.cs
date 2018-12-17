@@ -40,6 +40,7 @@
 		
 		WfmTeamSchedule_SuggestShiftCategory_152,
 		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
+		WfmTeamSchedule_DisableAutoRefreshSchedule_79826,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,

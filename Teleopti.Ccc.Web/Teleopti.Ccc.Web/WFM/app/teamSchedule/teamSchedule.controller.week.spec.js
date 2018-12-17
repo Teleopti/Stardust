@@ -1,35 +1,34 @@
 ﻿(function () {
 	'use strict';
-	var $q,
-		rootScope,
+	var rootScope,
 		$controller,
 		weekViewCreator,
 		viewStateKeeper,
 		serviceDateFormatHelper,
 		weekViewScheduleService,
 		groupPageService,
-		toggle;
+		getScheduleCalledTimes = 0,
+		mockSignalRBackendServer = {},
+
+		fakeToggle;
 
 	describe("#teamschedule week controller tests#", function () {
 		beforeEach(function () {
 			module("wfm.teamSchedule");
 			module(function ($provide) {
 				initProvideService($provide);
-
 			});
 		});
-
 		beforeEach(function () { moment.locale('sv'); });
 		afterEach(function () { moment.locale('en'); });
 
-		beforeEach(inject(function (_$q_,
+		beforeEach(inject(function (
 			_$rootScope_,
 			_$controller_,
 			_PersonScheduleWeekViewCreator_,
 			_ViewStateKeeper_,
 			_serviceDateFormatHelper_,
 			CurrentUserInfo) {
-			$q = _$q_;
 			rootScope = _$rootScope_.$new();
 			weekViewCreator = _PersonScheduleWeekViewCreator_;
 			viewStateKeeper = _ViewStateKeeper_;
@@ -133,7 +132,327 @@
 			expect(groupPageService.period.EndDate).toEqual('2018-07-01');
 		});
 
+		it("should not update schedule when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+			weekViewScheduleService.has({
+				"PersonWeekSchedules": [{
+					"PersonId": "b0e35119-4661-4a1b-8772-9b5e015b2564",
+					"Name": "Pierre Baldi",
+					"DaySchedules":
+						[
+							{
+								"Date": { "Date": "2018-12-17T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-18T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-19T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-20T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-21T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-22T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-23T00:00:00" }
+							}],
+					"ContractTimeMinutes": 2400.0
+				}],
+				"Total": 1,
+				"Keyword": ""
+			});
 
+			var controller = setUpController();
+			controller.scheduleDate = '2018-12-17';
+			controller.onScheduleDateChanged();
+
+			getScheduleCalledTimes = 0;
+			mockSignalRBackendServer.notifyClients([
+				{
+					DomainReferenceId: 'b0e35119-4661-4a1b-8772-9b5e015b2564',
+					StartDate: 'D2018-12-17T00:00:00',
+					EndDate: 'D2018-12-17T00:00:00',
+					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
+				}
+			]);
+
+			expect(getScheduleCalledTimes).toBe(0);
+		});
+
+		it("should update schedule when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is off", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = false;
+
+			weekViewScheduleService.has({
+				"PersonWeekSchedules": [{
+					"PersonId": "b0e35119-4661-4a1b-8772-9b5e015b2564",
+					"Name": "Pierre Baldi",
+					"DaySchedules":
+						[
+							{
+								"Date": { "Date": "2018-12-17T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-18T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-19T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-20T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-21T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-22T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-23T00:00:00" }
+							}],
+					"ContractTimeMinutes": 2400.0
+				}],
+				"Total": 1,
+				"Keyword": ""
+			});
+
+			var controller = setUpController();
+			controller.scheduleDate = '2018-12-17';
+			controller.onScheduleDateChanged();
+
+			getScheduleCalledTimes = 0;
+
+			mockSignalRBackendServer.notifyClients([
+				{
+					DomainReferenceId: 'b0e35119-4661-4a1b-8772-9b5e015b2564',
+					StartDate: 'D2018-12-17T00:00:00',
+					EndDate: 'D2018-12-17T00:00:00',
+					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
+				}
+			]);
+			expect(getScheduleCalledTimes).toBe(1);
+		});
+
+		it("should show refresh button and disable on init when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+
+			var controller = setUpController();
+			expect(controller.isRefreshButtonVisible).toBeTruthy();
+			expect(controller.havingScheduleChanged).toBeFalsy();
+		});
+
+		it("should enable refresh button after schedule was changed when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+			weekViewScheduleService.has({
+				"PersonWeekSchedules": [{
+					"PersonId": "b0e35119-4661-4a1b-8772-9b5e015b2564",
+					"Name": "Pierre Baldi",
+					"DaySchedules":
+						[
+							{
+								"Date": { "Date": "2018-12-17T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-18T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-19T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-20T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-21T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-22T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-23T00:00:00" }
+							}],
+					"ContractTimeMinutes": 2400.0
+				}],
+				"Total": 1,
+				"Keyword": ""
+			});
+
+			var controller = setUpController();
+			controller.scheduleDate = '2018-12-17';
+			controller.onScheduleDateChanged();
+
+			getScheduleCalledTimes = 0;
+
+			mockSignalRBackendServer.notifyClients([
+				{
+					DomainReferenceId: 'b0e35119-4661-4a1b-8772-9b5e015b2564',
+					StartDate: 'D2018-12-17T00:00:00',
+					EndDate: 'D2018-12-17T00:00:00',
+					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
+				}
+			]);
+
+			expect(controller.havingScheduleChanged).toBeTruthy();
+		});
+
+		it("should not enable refresh button when the date of schedule changes is not in view range and WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+			weekViewScheduleService.has({
+				"PersonWeekSchedules": [{
+					"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+					"Name": "Pierre Baldi",
+					"DaySchedules":
+						[
+							{
+								"Date": { "Date": "2018-12-17T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-18T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-19T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-20T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-21T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-22T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-23T00:00:00" }
+							}],
+					"ContractTimeMinutes": 2400.0
+				}],
+				"Total": 1,
+				"Keyword": ""
+			});
+
+			var controller = setUpController();
+			controller.scheduleDate = '2018-12-17';
+			controller.onScheduleDateChanged();
+			
+			mockSignalRBackendServer.notifyClients([
+				{
+					DomainReferenceId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+					StartDate: 'D2018-12-27T00:00:00',
+					EndDate: 'D2018-12-27T00:00:00',
+					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
+				}
+			]);
+
+			expect(controller.havingScheduleChanged).toBeFalsy();
+		});
+
+		it("should not enable refresh button when the person of schedule changes is not in view range and WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+			weekViewScheduleService.has({
+				"PersonWeekSchedules": [{
+					"PersonId": "b0e35119-4661-4a1b-8772-9b5e015b2564",
+					"Name": "Pierre Baldi",
+					"DaySchedules":
+						[
+							{
+								"Date": { "Date": "2018-12-17T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-18T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-19T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-20T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-21T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-22T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-23T00:00:00" }
+							}],
+					"ContractTimeMinutes": 2400.0
+				}],
+				"Total": 1,
+				"Keyword": ""
+			});
+
+			var controller = setUpController();
+			controller.scheduleDate = '2018-12-17';
+			controller.onScheduleDateChanged();
+
+			mockSignalRBackendServer.notifyClients([
+				{
+					DomainReferenceId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx',
+					StartDate: 'D2018-12-17T00:00:00',
+					EndDate: 'D2018-12-17T00:00:00',
+					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
+				}
+			]);
+
+			expect(controller.havingScheduleChanged).toBeFalsy();
+		});
+
+		it("should load schedule after clicking refresh button when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+			weekViewScheduleService.has({
+				"PersonWeekSchedules": [{
+					"PersonId": "b0e35119-4661-4a1b-8772-9b5e015b2564",
+					"Name": "Pierre Baldi",
+					"DaySchedules":
+						[
+							{
+								"Date": { "Date": "2018-12-17T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-18T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-19T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-20T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-21T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-22T00:00:00" }
+							},
+							{
+								"Date": { "Date": "2018-12-23T00:00:00" }
+							}],
+					"ContractTimeMinutes": 2400.0
+				}],
+				"Total": 1,
+				"Keyword": ""
+			});
+
+			var controller = setUpController();
+			controller.scheduleDate = '2018-12-17';
+			controller.onScheduleDateChanged();
+
+			getScheduleCalledTimes = 0;
+			mockSignalRBackendServer.notifyClients([
+				{
+					DomainReferenceId: 'b0e35119-4661-4a1b-8772-9b5e015b2564',
+					StartDate: 'D2018-12-17T00:00:00',
+					EndDate: 'D2018-12-17T00:00:00',
+					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
+				}
+			]);
+			controller.onRefreshButtonClicked();
+
+			expect(getScheduleCalledTimes).toBe(1);
+			expect(controller.havingScheduleChanged).toBeFalsy();
+		});
 
 	});
 	describe('#teamschedule week controller tests in ar-OM #', function () {
@@ -147,14 +466,13 @@
 		beforeEach(function () { moment.locale('ar-OM'); });
 		afterEach(function () { moment.locale('en'); });
 
-		beforeEach(inject(function (_$q_,
+		beforeEach(inject(function (
 			_$rootScope_,
 			_$controller_,
 			_PersonScheduleWeekViewCreator_,
 			_ViewStateKeeper_,
 			_serviceDateFormatHelper_,
 			CurrentUserInfo) {
-			$q = _$q_;
 			rootScope = _$rootScope_.$new();
 			weekViewCreator = _PersonScheduleWeekViewCreator_;
 			viewStateKeeper = _ViewStateKeeper_;
@@ -220,9 +538,11 @@
 		});
 
 	});
+
 	function initProvideService($provide) {
 		weekViewScheduleService = new WeekViewScheduleService();
 		groupPageService = new GroupPageService();
+		fakeToggle = {};
 
 		$provide.service('weekViewScheduleSvc', function () {
 			return weekViewScheduleService;
@@ -231,8 +551,9 @@
 			return groupPageService;
 		});
 		$provide.service('Toggle', function () {
-			return {};
+			return fakeToggle;
 		});
+		$provide.service('signalRSVC', setupMockSignalRService);
 	}
 
 	function setUpController() {
@@ -251,6 +572,7 @@
 		}
 		this.getSchedules = function () {
 			var response = { data: scheduleData };
+			getScheduleCalledTimes = getScheduleCalledTimes + 1;
 			return {
 				then: function (callback) {
 					callback(response.data);
@@ -270,8 +592,14 @@
 		}
 	}
 
-	function SignalRSVCService() {
-		this.subscribeBatchMessage = function (options, messageHandler, timeout) {
+	function setupMockSignalRService() {
+		mockSignalRBackendServer.subscriptions = [];
+
+		return {
+			subscribeBatchMessage: function (options, messageHandler, timeout) {
+				mockSignalRBackendServer.subscriptions.push(options);
+				mockSignalRBackendServer.notifyClients = messageHandler;
+			}
 		};
 	}
 })();
