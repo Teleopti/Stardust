@@ -415,7 +415,7 @@
 	z-index: 9;
 }
 .new-teamschedule-table::-webkit-scrollbar {
-	width: 5px;
+	width: 10px;
 }
 .new-teamschedule-table::-webkit-scrollbar-thumb {
 	border-radius: 10px;

@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		public Http()
 		{
-			_handler = new HttpClientHandler();
-			_handler.AllowAutoRedirect = false;
+			_handler = new HttpClientHandler {AllowAutoRedirect = false};
 			_client = new HttpClient(_handler);
 		}
 
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				Content = new StringContent(json, Encoding.UTF8, "application/json")
 			};
 			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var response = _client.SendAsync(request).GetAwaiter().GetResult();
+			var response = _client.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
 
 			if (new[] {HttpStatusCode.OK, HttpStatusCode.Created}
 				.Contains(response.StatusCode))
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				Method = HttpMethod.Get,
 			};
 			request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			var response = _client.SendAsync(request).GetAwaiter().GetResult();
+			var response = _client.SendAsync(request).ConfigureAwait(false).GetAwaiter().GetResult();
 
 			if (new[] {HttpStatusCode.OK}
 				.Contains(response.StatusCode))
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public void Get(string url)
 		{
 			var post = _client.GetAsync(uri(url));
-			var response = post.GetAwaiter().GetResult();
+			var response = post.ConfigureAwait(false).GetAwaiter().GetResult();
 			if (response.StatusCode != HttpStatusCode.OK)
 			{
 				var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();

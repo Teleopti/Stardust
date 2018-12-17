@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<NotificationModule>();
 			builder.RegisterModule(new AuditTrailModule(_configuration));
 			builder.RegisterModule<AbsenceModule>();
+			builder.RegisterModule<SystemSettingModel>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)

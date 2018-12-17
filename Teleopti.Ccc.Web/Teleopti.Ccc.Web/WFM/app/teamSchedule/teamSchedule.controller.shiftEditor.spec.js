@@ -5510,17 +5510,6 @@
 		};
 	}
 
-	function setupMockSignalRService() {
-		mockSignalRBackendServer.subscriptions = [];
-
-		return {
-			subscribeBatchMessage: function (options, messageHandler, timeout) {
-				mockSignalRBackendServer.subscriptions.push(options);
-				mockSignalRBackendServer.notifyClients = messageHandler;
-			}
-		};
-	}
-
 	function FakeNoticeService() {
 		this.successMessage = '';
 		this.errorMessage = '';

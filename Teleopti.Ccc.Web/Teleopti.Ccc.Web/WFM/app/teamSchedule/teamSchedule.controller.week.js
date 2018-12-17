@@ -56,6 +56,8 @@
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
+		vm.isRefreshButtonVisible = !!toggles.WfmTeamSchedule_DisableAutoRefreshSchedule_79826;
+		vm.havingScheduleChanged = false;
 
 		vm.scheduleDate = Util.getFirstDayOfWeek(stateParams.selectedDate || Util.nowDateInUserTimezone());
 		vm.weekDays = Util.getWeekdays(vm.scheduleDate);
@@ -206,6 +208,11 @@
 
 		vm.searchPlaceholder = $translate.instant('Search');
 
+		vm.onRefreshButtonClicked = function () {
+			vm.loadSchedules();
+			vm.havingScheduleChanged = false;
+		}
+
 		function resetFocus() {
 			$scope.$broadcast("resetFocus", "organizationPicker");
 		};
@@ -234,8 +241,36 @@
 			signalR.subscribeBatchMessage(options, scheduleChangedEventHandler, 300);
 		}
 
-		function scheduleChangedEventHandler() {
-			$scope.$evalAsync(vm.loadSchedules);
+		function scheduleChangedEventHandler(messages) {
+			if (!isMessagesNeedToBeHanlded(messages)) {
+				return;
+			}
+			if (!toggles.WfmTeamSchedule_DisableAutoRefreshSchedule_79826) {
+				vm.loadSchedules();
+			} else {
+				vm.havingScheduleChanged = true;
+			}
+		}
+
+		function isMessagesNeedToBeHanlded(messages) {
+			var viewRangeStart = moment(vm.weekDays[0].date);
+			var viewRangeEnd = moment(vm.weekDays[6].date);
+			var personIds = vm.groupWeeks.map(function (schedule) { return schedule.personId; });
+
+			for (var i = 0; i < messages.length; i++) {
+				var message = messages[i];
+				var startDate = moment(message.StartDate.substring(1, message.StartDate.length));
+				var endDate = moment(message.EndDate.substring(1, message.EndDate.length));
+
+				var isScheduleDateInMessageRange = startDate.isSameOrBefore(viewRangeEnd, 'day')
+					&& endDate.isSameOrAfter(viewRangeStart, 'day');
+				var isMessageInsidePeopleList = personIds.indexOf(message.DomainReferenceId) > -1;
+
+				if (isScheduleDateInMessageRange && isMessageInsidePeopleList) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		function initSelectedGroups(mode, groupIds, groupPageId) {
@@ -265,8 +300,9 @@
 					vm.selectedGroups.groupIds = [loggedonUsersTeamId].slice(0);
 				}
 				vm.resetSchedulePage();
-				monitorScheduleChanged();
 			});
+
+			monitorScheduleChanged();
 		}
 
 		init();

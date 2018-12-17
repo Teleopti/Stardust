@@ -220,6 +220,7 @@
     <Compile Include="Common\Chart\ChartManagerTest.cs" />
     <Compile Include="Common\Chart\ChartSeriesSettingTest.cs" />
     <Compile Include="Common\Chart\ChartSettingsTest.cs" />
+    <Compile Include="Common\Clipboard\AbsenceMergerTest.cs" />
     <Compile Include="Common\Clipboard\ClipboardSpecialPresenterTest.cs" />
     <Compile Include="Common\Clipboard\ClipHandlerTest.cs" />
     <Compile Include="Common\Clipboard\ClipTest.cs" />

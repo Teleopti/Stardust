@@ -157,7 +157,7 @@
     <value>Fecha:</value>
   </data>
   <data name="ResDateFromColon" xml:space="preserve">
-    <value>Fecha a partir de:</value>
+    <value>Fecha desde:</value>
   </data>
   <data name="ResDateToColon" xml:space="preserve">
     <value>Fecha hasta:</value>
@@ -187,22 +187,22 @@
     <value>Equipo:</value>
   </data>
   <data name="ResWorkloadColon" xml:space="preserve">
-    <value>Workload</value>
+    <value>Workload:</value>
   </data>
   <data name="ResShowReport" xml:space="preserve">
     <value>Mostrar Reporte</value>
   </data>
   <data name="ResIntervalFromColon" xml:space="preserve">
-    <value>Intervalo a partir de:</value>
+    <value>Intervalo desde:</value>
   </data>
   <data name="ResIntervalToColon" xml:space="preserve">
-    <value>Intervalo de:</value>
+    <value>Intervalo hasta:</value>
   </data>
   <data name="ResIntervalType" xml:space="preserve">
     <value>Tipo de Período:</value>
   </data>
   <data name="KpiAbsenteeism" xml:space="preserve">
-    <value>Absentismo (%)</value>
+    <value>Ausentismo (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
     <value>Adherencia (%)</value>
@@ -244,7 +244,7 @@
     <value>Log In</value>
   </data>
   <data name="LogInError" xml:space="preserve">
-    <value>Intento de acceso no válido. Por favor inténtelo de nuevo.</value>
+    <value>Su intento de acceso no fue exitoso. Por favor inténtelo de nuevo.</value>
   </data>
   <data name="LogInName" xml:space="preserve">
     <value>Nombre de usuario:</value>
@@ -322,7 +322,7 @@
     <value>ATT actual</value>
   </data>
   <data name="ResACW" xml:space="preserve">
-    <value>After Call Work (ACW)</value>
+    <value>Trabajo posterior a la llamada (ACW)</value>
   </data>
   <data name="ResATT" xml:space="preserve">
     <value>Tiempo promedio de conversación</value>
@@ -346,7 +346,7 @@
     <value>Número de</value>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
-    <value>Previsión vs. Worload Actual</value>
+    <value>Pronóstico vs Workload Actual</value>
   </data>
   <data name="ResAgentsReady" xml:space="preserve">
     <value>Agentes Disponibles</value>
@@ -370,13 +370,13 @@
     <value>Llamadas Ofrecidas / Agentes Disponibles Planificados</value>
   </data>
   <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
-    <value>Previsión vs. Horas Planificadas</value>
+    <value>Pronóstico vs Horas Planificadas</value>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
     <value>Nivel de Servicio y Agentes Disponibles</value>
   </data>
   <data name="ResScheduledReadyTime" xml:space="preserve">
-    <value>Tiempo de Disponibilidad Planificado</value>
+    <value>Tiempo Disponible Planificado</value>
   </data>
   <data name="ResScheduledvsReady" xml:space="preserve">
     <value>Planificado Vs Agentes Disponibles</value>
@@ -427,7 +427,10 @@
     <value>Nivel de servicio</value>
   </data>
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
-    <value>Cálculo del Nivel de Servicio</value>
+    <value>Cálculo de Nivel de Servicio</value>
+  </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>Agente - Adherencia Planificada</value>
   </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Ordenar por:</value>
@@ -523,10 +526,10 @@
     <value>Tiempo de Inactividad</value>
   </data>
   <data name="ResLoggedInTime" xml:space="preserve">
-    <value>Logados en Tiempo</value>
+    <value>Tiempo de Conexion</value>
   </data>
   <data name="ResNotReadyTime" xml:space="preserve">
-    <value>Tiempo no Disponible</value>
+    <value>Tiempo No Disponible</value>
   </data>
   <data name="ResDateInterval" xml:space="preserve">
     <value>Fecha / Intervalo</value>
@@ -535,10 +538,10 @@
     <value>Permiso Denegado</value>
   </data>
   <data name="ResOverflowInCalls" xml:space="preserve">
-    <value>Desbordamiento Entrante</value>
+    <value>Desborde de llamadas entrante</value>
   </data>
   <data name="ResOverflowOutCalls" xml:space="preserve">
-    <value>Desbordamiento Saliente</value>
+    <value>Desborde de llamadas saliente</value>
   </data>
   <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
     <value>Tiempo Previsto incl. Absentismo (hh:mm)</value>
@@ -574,7 +577,7 @@
     <value>Horas Planificadas (hh:mm)</value>
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
-    <value>Horas Previstas (absentismo) (hh:mm)</value>
+    <value>Horas Previstas (ausentismo) (hh:mm)</value>
   </data>
   <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
     <value>Diferencia Relativa incl. Absentismo (%)</value>
@@ -586,7 +589,7 @@
     <value>Categoría de Turno:</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>Categoría de Turno y Día Completo de Ausencia por Agente</value>
+    <value>Categoría de Turno y Ausencia de Día Completo por Agente</value>
   </data>
   <data name="ResDayOffColon" xml:space="preserve">
     <value>Día Libre:</value>
@@ -607,7 +610,7 @@
     <value>Llamadas Contestadas / Horas Disponibles</value>
   </data>
   <data name="ResContractAbsenceTimeH" xml:space="preserve">
-    <value>Tiempo de Ausencia Contratado (hh:mm)</value>
+    <value>Tiempo de Ausencia por Contrato (hh:mm)</value>
   </data>
   <data name="ResContractTimeH" xml:space="preserve">
     <value>Tiempo de Contrato (hh:mm)</value>
@@ -730,7 +733,7 @@
     <value>Cuando se utiliza la autenticación de Windows en la aplicación web no es posible utilizar la autenticación de Aplicación del lado del cliente</value>
   </data>
   <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
-    <value>Por favor use el login de la aplicación en su lugar</value>
+    <value>Por favor use sus credenciales de la aplicación</value>
   </data>
   <data name="PossibleSolution" xml:space="preserve">
     <value>Posible solución</value>
@@ -739,7 +742,7 @@
     <value>Asegúrese de que los permisos están sincronizados correctamente en el servicio ETL.</value>
   </data>
   <data name="PossibleSolution2" xml:space="preserve">
-    <value>O bien cierre el cliente y vuelva a iniciar la sesión utilizando la autenticación de Windows o un administrador del sistema puede cambiar la autenticación web a Formulario.</value>
+    <value>O bien cierre el cliente y vuelva a iniciar la sesión utilizando la autenticación de Windows o un administrador del sistema puede cambiar la autenticación web a Formularios.</value>
   </data>
   <data name="TechnicalInformation" xml:space="preserve">
     <value>Información Técnica</value>
@@ -799,7 +802,7 @@
     <value>No Definido</value>
   </data>
   <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Tiempo Disponible Vs Tiempo Contratado Planificado</value>
+    <value>Tiempo Disponible Vs Tiempo Planificado dentro del Contrato</value>
   </data>
   <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
     <value>Tiempo Disponible Vs Tiempo Planificado Disponible</value>
@@ -890,25 +893,25 @@ por Contrato</value>
     <value>Tiempo promedio de conversación</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Métricas del Agente y Cola</value>
+    <value>Métricas del Agente y Colas</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Tiempo en Actividad por Agente</value>
+    <value>Tiempo de Actividad por Agente</value>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
     <value>Tiempo extra (hh:mm)</value>
   </data>
   <data name="SessionExpiredText" xml:space="preserve">
-    <value>Su sesión ha expirado, debido a período de inactividad. En breve será redirigido a la página de entrada.</value>
+    <value>Su sesión ha expirado debido a un periodo prolongado de inactividad. En breve será redirigido a la página de inicio de sesión.</value>
   </data>
   <data name="SessionExpiredHeader" xml:space="preserve">
     <value>Sesión expirada</value>
   </data>
   <data name="RedirectNow" xml:space="preserve">
-    <value>Redirigir ahora.</value>
+    <value>Redirigir ahora</value>
   </data>
   <data name="ResRequestPeriod" xml:space="preserve">
-    <value>Pedir Período</value>
+    <value>Solicitar Periodo</value>
   </data>
   <data name="ResApplicationDate" xml:space="preserve">
     <value>Fecha de Solicitud</value>
@@ -917,13 +920,13 @@ por Contrato</value>
     <value>Tipo</value>
   </data>
   <data name="ResRequestTypeColon" xml:space="preserve">
-    <value>Tipo de petición:</value>
+    <value>Tipo de solicitud:</value>
   </data>
   <data name="ResRequestsStartDayCount" xml:space="preserve">
-    <value>Peticiones</value>
+    <value>Solicitudes</value>
   </data>
   <data name="ResRequestsDayCount" xml:space="preserve">
-    <value>Días pedidos</value>
+    <value>Días solicitados</value>
   </data>
   <data name="ResRequestStatus" xml:space="preserve">
     <value>Estado</value>
@@ -932,7 +935,7 @@ por Contrato</value>
     <value>Estado:</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Peticiones por Agente</value>
+    <value>Solicitudes por Agente</value>
   </data>
   <data name="ResRequestStatusPending" xml:space="preserve">
     <value>Pendiente</value>
@@ -944,10 +947,10 @@ por Contrato</value>
     <value>Aprobada</value>
   </data>
   <data name="ResRequestTypeShiftTrade" xml:space="preserve">
-    <value>Cambio de Turno</value>
+    <value>Intercambio de Turno</value>
   </data>
   <data name="ResRequestTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Texto</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
     <value>Categoría de Turno y Ausencia de día completo por Día</value>
@@ -1064,7 +1067,7 @@ por Contrato</value>
     <value>Utilización</value>
   </data>
   <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
-    <value>El timepo de conexión con la BBDD ha expirado, intente disminuir las condiciones de búsqueda.</value>
+    <value>El tiempo de conexión con la base de datos ha expirado, intente disminuir las condiciones de búsqueda.</value>
   </data>
   <data name="ResOnlyActiveSkill" xml:space="preserve">
     <value>Solo agentes activos</value>
@@ -1073,13 +1076,13 @@ por Contrato</value>
     <value>Skills de los Agentes</value>
   </data>
   <data name="ResOnlyActiveSkillColon" xml:space="preserve">
-    <value>Solo skills activas:</value>
+    <value>Solo skills activos:</value>
   </data>
   <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
     <value>Tiempo en el estado por Agente</value>
   </data>
   <data name="ResStateGroupColon" xml:space="preserve">
-    <value>Grupos de Esatdos:</value>
+    <value>Grupos de Estados:</value>
   </data>
   <data name="ResFulfilled" xml:space="preserve">
     <value>Cumplido</value>
@@ -1092,6 +1095,9 @@ por Contrato</value>
   </data>
   <data name="ResUnfulfilled" xml:space="preserve">
     <value>Incumplido</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value>Inicio de Sesión Exitoso</value>
   </data>
   <data name="RepViewerZoom" xml:space="preserve">
     <value>Zoom</value>
@@ -1119,5 +1125,20 @@ por Contrato</value>
   </data>
   <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
     <value>Actividades/ausencias múltiples</value>
+  </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>Adherencia (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>Cálculo de Adherencia:</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Adherencia / Intervalo (%)</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Adherencia por Agente</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Adherencia por Día</value>
   </data>
 </root>

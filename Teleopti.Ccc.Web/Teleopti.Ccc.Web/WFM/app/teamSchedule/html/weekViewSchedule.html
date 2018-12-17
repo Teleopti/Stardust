@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1 week-view" 
+<div class="team-schedule panel wfm-block material-depth-1 week-view"
 	 wait-for="vm.boostrap">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
@@ -33,6 +33,14 @@
 						  selected-sort-option="vm.sortOption"
 						  staffing-enabled="vm.staffingEnabled"
 						  timezone="vm.timezone"></view-changer>
+		</div>
+		<div class="rightside-part">
+			<button type="button" class="context-menu card-context" ng-if="vm.isRefreshButtonVisible" ng-disabled="!vm.havingScheduleChanged" ng-click="vm.onRefreshButtonClicked()">
+				<i class="mdi mdi-refresh"></i>
+				<md-tooltip>
+					{{'Refresh' | translate}}
+				</md-tooltip>
+			</button>
 		</div>
 	</div>
 

@@ -337,6 +337,14 @@
 		background: rgba(0, 0, 0, 0.06) !important;
 	}
 
+	button.context-menu {
+		background: none;
+
+		&:not(:disabled) {
+			color: $blue-500;
+		}
+	}
+
 	.view-navigator-container .wfm-btn {
 		padding: 5px;
 	}

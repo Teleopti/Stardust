@@ -23,12 +23,13 @@
 		'ViewStateKeeper',
 		'teamsPermissions',
 		'UtilityService',
+		'Toggle',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $stateParams, $mdComponentRegistry, $document,
-		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc,  ValidateRulesService,
+		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, bootstrapCommon, groupPageService,
-		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions, Utility) {
+		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions, Utility, toggleSvc) {
 		var mode = {
 			BusinessHierarchy: 'BusinessHierarchy',
 			GroupPages: 'GroupPages'
@@ -36,18 +37,22 @@
 
 		var vm = this;
 		var viewState = ViewStateKeeper.get();
+		var personIdsHavingScheduleChange = {};
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
-	
+
 		vm.preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
-		
+
 		vm.currentTimezone = viewState.timezone;
 		vm.scheduleDate = $stateParams.selectedDate || viewState.selectedDate || Utility.nowDateInUserTimezone();
 		vm.avaliableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = viewState.staffingEnabled;
 		vm.permissions = {};
+		vm.isRefreshButtonVisible = !!toggleSvc.WfmTeamSchedule_DisableAutoRefreshSchedule_79826;
+		vm.havingScheduleChanged = false;
+
 
 		initSelectedGroups(mode.BusinessHierarchy, [], '');
 		if (angular.isArray(viewState.selectedTeamIds) && viewState.selectedTeamIds.length > 0) {
@@ -412,7 +417,7 @@
 			var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
-				
+
 				teamScheduleSvc.searchSchedules(params).then(function (response) {
 					var result = response.data;
 					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
@@ -510,9 +515,23 @@
 		};
 
 		vm.onPersonScheduleChanged = function (personIds) {
-			vm.updateSchedules(personIds);
-			vm.checkValidationWarningForCommandTargets(personIds);
+			if (!toggleSvc.WfmTeamSchedule_DisableAutoRefreshSchedule_79826) {
+				vm.updateSchedules(personIds);
+				vm.checkValidationWarningForCommandTargets(personIds);
+			} else {
+				angular.forEach(personIds, function (personId) {
+					personIdsHavingScheduleChange[personId] = personId;
+				});
+				vm.havingScheduleChanged = true;
+			}
 		};
+
+		vm.onRefreshButtonClicked = function () {
+			vm.updateSchedules(Object.keys(personIdsHavingScheduleChange));
+			personIdsHavingScheduleChange = {};
+			vm.havingScheduleChanged = false;
+		}
+
 		vm.searchOptions = {
 			keyword: viewState.keyword || '',
 			searchKeywordChanged: false,

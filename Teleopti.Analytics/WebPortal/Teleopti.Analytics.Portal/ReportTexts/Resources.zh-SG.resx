@@ -540,6 +540,9 @@
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
     <value>服务水平统计：</value>
   </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>普通员工—遵时率</value>
+  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>排序：</value>
   </data>
@@ -707,6 +710,9 @@
   </data>
   <data name="ResAbsencePaidTimeH" xml:space="preserve">
     <value>付薪时间</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value>登录成功</value>
   </data>
   <data name="ResAbsenceWorkTimeH" xml:space="preserve">
     <value>工作时间</value>
@@ -1115,5 +1121,23 @@
   </data>
   <data name="ResESLPercent" xml:space="preserve">
     <value>预估服务水平(%)</value>
+  </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>遵时率 (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>遵时率计算：</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>按时段的遵时率 (%)</value>
+  </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>加班申请</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>按普通员工的遵时率</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>按天的遵时率</value>
   </data>
 </root>

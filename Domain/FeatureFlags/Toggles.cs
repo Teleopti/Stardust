@@ -23,7 +23,7 @@
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 		RTA_RestrictModifySkillGroups_78568,
-		
+		RTA_InputValidationForApprovingAdherencePeriods_77045,
 		
 		MessageBroker_HttpSenderThrottleRequests_79140,
 		MessageBroker_VeganBurger_79140,
@@ -40,6 +40,7 @@
 		
 		WfmTeamSchedule_SuggestShiftCategory_152,
 		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
+		WfmTeamSchedule_DisableAutoRefreshSchedule_79826,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,

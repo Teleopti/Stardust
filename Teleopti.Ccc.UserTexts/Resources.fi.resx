@@ -12473,7 +12473,7 @@ Seuraavat ominaisuudet ovat aktivoitu:
     <value>Muutokset ovat estetty ennalta määrätyiltä rooleilta. </value>
   </data>
   <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
-    <value>Hakusanojen tulos ylittää 500, rajoita hakua.</value>
+    <value>Hakusanojen tulos ylittää {0}, rajoita hakua.</value>
   </data>
   <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
     <value>Ylitys sekä kampanja on lisätty</value>
@@ -12569,10 +12569,10 @@ Seuraavat ominaisuudet ovat aktivoitu:
     <value>Poissaolon poistaminen onnistui. </value>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>Sinulla ei ole oikeuksia lisätä päivänsisäistä poissaoloa {0}:lle. </value>
+    <value>Sinulla ei ole oikeuksia lisätä päivänsisäistä poissaoloa agentille. </value>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>Sinulla ei ole oikeuksia lisätä kokopäivän poissaoloa {0}:lle. </value>
+    <value>Sinulla ei ole oikeuksia lisätä kokopäivän poissaoloa agentille. </value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>Palvelin on saavuttamaton!
@@ -12904,7 +12904,7 @@ Seuraavat ominaisuudet ovat aktivoitu:
     <value>Poista valinta</value>
   </data>
   <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
-    <value>Sinulla ei ole oikeuksia lisätä henkilökohtaista aktiviteettia {0}:lle. </value>
+    <value>Sinulla ei ole oikeuksia lisätä henkilökohtaista aktiviteettia. </value>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
     <value>Henkilökohtaista aktiviteettia ei voi lisätä, jos ei ole vuoroa</value>
@@ -13309,7 +13309,7 @@ Seuraavat ominaisuudet ovat aktivoitu:
     <value>Vuorot on siirretty valituille agenteille. </value>
   </data>
   <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
-    <value>Sinulla ei ole oikeuksia lisätä ylityöaikaa agentille {0}. </value>
+    <value>Sinulla ei ole oikeuksia lisätä ylityöaikaa agentille. </value>
   </data>
   <data name="ImportingConfirmationWithParameters" xml:space="preserve">
     <value>Olet yhdistämässä työvuorolistaa {0}-skenaariosta olemassa olevan työvuorolistan kanssa oletusskenaariossa jaksolle {1} - {2} valituille tiimeille. </value>
@@ -14665,7 +14665,7 @@ Applikaatio sulkeutuu. </value>
     <value>Vähimmäismäärä lepoaikaa: </value>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>Työvuoro päivämäärälle {0:d} ei vastaa työvuoroa päivämäärälle [1:d}. </value>
+    <value>Työvuoro päivämäärälle {0:d} ei vastaa työvuoroa päivämäärälle {1:d}. </value>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
     <value>Vuoroluokka {0} päivämäärälle {1} ei vastaa vuoroluokkaa {2} päivämäärälle {3}. </value>
@@ -15494,5 +15494,170 @@ Applikaatio sulkeutuu. </value>
   </data>
   <data name="NoRealTimeAdherenceResultMessage" xml:space="preserve">
     <value>Ei näytettävää kyseisillä organisaatio- ja taitovalinnoille, yhdessä oikeuksiesi kanssa. Huomioi, että tämä sivu näyttää tietoja perustuen agentteihin, jotka työskentelevät tällä hetkellä ja heille on annettu ulkoinen sisäänkirjautumistunnus.</value>
+  </data>
+  <data name="FiltersColon" xml:space="preserve">
+    <value>Lajittelu:</value>
+  </data>
+  <data name="YouMustSelectAtLeastOneFilter" xml:space="preserve">
+    <value>Valitse vähintään yksi filtteri</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Muista minut</value>
+  </data>
+  <data name="DoneCopyingForXPeopleDot" xml:space="preserve">
+    <value>{0} henkilön kopioiminen on valmis.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToCopyFromDot" xml:space="preserve">
+    <value>Valitse skenaario, josta kopioit.</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToCopyToDot" xml:space="preserve">
+    <value>Valitse skenaario, johon kopioit. </value>
+  </data>
+  <data name="SearchForSiteTeamSkillContract" xml:space="preserve">
+    <value>Hae toimipiste / tiimi / taito / sopimus</value>
+  </data>
+  <data name="HelpCreatePlanningPeriod" xml:space="preserve">
+    <value>Tarvitset suunnittelujakson luodaksesi työvuorolistan.</value>
+  </data>
+  <data name="ForgotYourPassword" xml:space="preserve">
+    <value>Unohditko salasanasi?</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Palauta salasanasi</value>
+  </data>
+  <data name="ResetPasswordErrorMessage" xml:space="preserve">
+    <value>Tarkista sähköpostiosoitteesi</value>
+  </data>
+  <data name="ResetPasswordSuccess" xml:space="preserve">
+    <value>Ohjeet on lähetetty sinulle sähköpostiisi</value>
+  </data>
+  <data name="ForgotYourPasswordInstruction" xml:space="preserve">
+    <value>Syötä käyttäjänimesi saadaksesi ohjeet salasanan palauttamiseen</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Jotain meni pieleen. Yritä myöhemmin uudestaan.</value>
+  </data>
+  <data name="ViewInsightsReport" xml:space="preserve">
+    <value>Näytä raportti</value>
+  </data>
+  <data name="EditInsightsReport" xml:space="preserve">
+    <value>Muokkaa raporttia</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
+    <value>Ei rajoitteita jaksossa</value>
+  </data>
+  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
+    <value>Audit Trail</value>
+  </data>
+  <data name="CopySchedule" xml:space="preserve">
+    <value>Kopio työvuorolista</value>
+  </data>
+  <data name="CopyScheduleDescription" xml:space="preserve">
+    <value>Kopioi työvuorolista mistä tahansa skenaariosta muihin kuin default skenaarioon, yliajaen edelliset työvuorot kyseiseltä ajanjaksolta kohdeskenaariossa. </value>
+  </data>
+  <data name="NoAbsenceTypesOpenForRequests" xml:space="preserve">
+    <value>Ei poissaoloja avoimena pyynnöille</value>
+  </data>
+  <data name="ShowOnlyNightShifts" xml:space="preserve">
+    <value>Näytä vain yövuorot</value>
+  </data>
+  <data name="ShiftsInShiftBagCanNotFulFillContractTime" xml:space="preserve">
+    <value>Vuorot vuoropussissa {0} eivät täytä sopimusaikaa sopimuksessa {1}</value>
+  </data>
+  <data name="FilterTeamSchedules" xml:space="preserve">
+    <value>Lajittele tiimin työvuorot</value>
+  </data>
+  <data name="ApproveOrDenyRequest" xml:space="preserve">
+    <value>Hyväksy/Hylkää Pyyntö</value>
+  </data>
+  <data name="EditSiteOpenHours" xml:space="preserve">
+    <value>Muokkaa Toimipisteen Aukioloaikoja</value>
+  </data>
+  <data name="ReplyRequest" xml:space="preserve">
+    <value>Vastaa Pyyntöön</value>
+  </data>
+  <data name="ShiftsInShiftBagCanNotFulFillOverriddenTargetTime" xml:space="preserve">
+    <value>Vuorot vuoropussissa {0} eivät täytä yliajettua sopimusaikaa.</value>
+  </data>
+  <data name="NoPermissionAddDayOff" xml:space="preserve">
+    <value>Ei oikeuksia lisätä vapaapäivää</value>
+  </data>
+  <data name="NoPermissionRemoveDayOff" xml:space="preserve">
+    <value>Ei oikeuksia poistaa vapaapäivää</value>
+  </data>
+  <data name="NoPermissionSwapShifts" xml:space="preserve">
+    <value>Ei oikeuksia vaihtaa vuoroja</value>
+  </data>
+  <data name="NoPermissionToViewSchedules" xml:space="preserve">
+    <value>Ei oikeuksia tarkastella työvuoroja</value>
+  </data>
+  <data name="TryTheNewForecasts" xml:space="preserve">
+    <value>Kokeile uutta Ennusteet -moduulia!</value>
+  </data>
+  <data name="ViewCustomerCenter" xml:space="preserve">
+    <value>Näytä asiakaskeskus</value>
+  </data>
+  <data name="AuditTrailAction" xml:space="preserve">
+    <value>Toimenpide</value>
+  </data>
+  <data name="AuditTrailBetween" xml:space="preserve">
+    <value>Välillä</value>
+  </data>
+  <data name="AuditTrailContext" xml:space="preserve">
+    <value>Konteksti</value>
+  </data>
+  <data name="AuditTrailClearStaffing" xml:space="preserve">
+    <value>Tyhjennä henkilöstö</value>
+  </data>
+  <data name="AuditTrailImportStaffing" xml:space="preserve">
+    <value>Tuo henkilöstö</value>
+  </data>
+  <data name="AuditTrailBpoName" xml:space="preserve">
+    <value>BPO nimi</value>
+  </data>
+  <data name="AuditTrailMultiGrantRole" xml:space="preserve">
+    <value>Myönnä rooli</value>
+  </data>
+  <data name="AuditTrailMultiRevokeRole" xml:space="preserve">
+    <value>Poista rooli</value>
+  </data>
+  <data name="AuditTrailPeriodEnd" xml:space="preserve">
+    <value>ja</value>
+  </data>
+  <data name="AuditTrailPeriodStart" xml:space="preserve">
+    <value>Jakso välillä</value>
+  </data>
+  <data name="AuditTrailPerson" xml:space="preserve">
+    <value>Henkilö</value>
+  </data>
+  <data name="AuditTrailPersonAccessContext" xml:space="preserve">
+    <value>Hallinnoi pääsyä Henkilöihin</value>
+  </data>
+  <data name="AuditTrailRole" xml:space="preserve">
+    <value>Rooli</value>
+  </data>
+  <data name="AuditTrailSingleGrantRole" xml:space="preserve">
+    <value>Myönnä rooli</value>
+  </data>
+  <data name="AuditTrailSingleRevokeRole" xml:space="preserve">
+    <value>Poista rooli</value>
+  </data>
+  <data name="AuditTrailStaffingContext" xml:space="preserve">
+    <value>Henkilöstö</value>
+  </data>
+  <data name="PreferenceFulfillmentPercentColon" xml:space="preserve">
+    <value>Hyväksytyt Työvuorotoiveet (%):</value>
+  </data>
+  <data name="ClickToViewSchedules" xml:space="preserve">
+    <value>Tarkastele työvuoroja</value>
+  </data>
+  <data name="SelectSkillOrGroup" xml:space="preserve">
+    <value>Valitse taito tai taitoryhmä</value>
+  </data>
+  <data name="SelectToday" xml:space="preserve">
+    <value>Valitse tänään</value>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>Tarkastele käyttäjiä</value>
   </data>
 </root>

@@ -275,6 +275,7 @@
     <Compile Include="InterfaceLegacy\Domain\TimePeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\TimeZoneHelper.cs" />
     <Compile Include="InterfaceLegacy\Domain\TimeZoneInfoExtensions.cs" />
+    <Compile Include="InterfaceLegacy\IBankHolidayCalendar.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IPasswordStrengthRule.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IPersonInfoCreator.cs" />
@@ -718,6 +719,7 @@
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
     <Compile Include="Staffing\ITenantAuditRepository.cs" />
     <Compile Include="Staffing\StaffingAudit.cs" />
+    <Compile Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayCalendar.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
@@ -4054,6 +4056,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayCalendar.hbm.xml" />
     <EmbeddedResource Include="Staffing\StaffingAudit.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

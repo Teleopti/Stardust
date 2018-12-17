@@ -26,6 +26,7 @@
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,6 +60,7 @@
     <Content Include="assets\img\real-time.png" />
     <Content Include="assets\img\resource.png" />
     <Content Include="assets\img\teleopti_logo.png" />
+    <Content Include="assets\scripts\main.js" />
     <Content Include="assets\vendor\html5shiv\dist\html5shiv-printshiv.js" />
     <Content Include="assets\vendor\html5shiv\dist\html5shiv.js" />
     <Content Include="assets\vendor\modernizr\feature-detects\a-download.js" />

@@ -43,6 +43,7 @@ RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
 RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
 RTA_RestrictModifySkillGroups_78568 = RC
+RTA_InputValidationForApprovingAdherencePeriods_77045 = DEV
 
 MessageBroker_HttpSenderThrottleRequests_79140 = true
 MessageBroker_VeganBurger_79140 = true
@@ -52,6 +53,7 @@ MessageBroker_ScheduleChangedMessagePackaging_79140 = true
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_SuggestShiftCategory_152 = RC
 WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = RC
+WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = RC
 
 # Code Monkeys, can any of these be removed? #
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready

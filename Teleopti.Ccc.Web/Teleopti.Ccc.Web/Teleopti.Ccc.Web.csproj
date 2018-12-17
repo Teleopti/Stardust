@@ -418,6 +418,10 @@
     <Compile Include="Areas\Insights\Controllers\InsightsController.cs" />
     <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Controller\BankHolidayCalendarController.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarPersister.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\IoC\BankHolidayAreaModule.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
@@ -1723,11 +1727,13 @@
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
+    <Content Include="WFM\app\rta\rta\historical\rta-historical.inputValidationForApprovingAdherencePeriods_77045.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.inputValidationForApprovingAdherencePeriods_77045.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.outOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.spec.js" />
