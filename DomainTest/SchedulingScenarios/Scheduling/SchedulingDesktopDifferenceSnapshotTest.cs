@@ -33,9 +33,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date);
 			var skillDays = skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1);
-			var absenceOnNextDay = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, date.AddDays(1).ToDateTimePeriod(new TimePeriod(2, 3), agent.PermissionInformation.DefaultTimeZone())));
-			var assNextDay = new PersonAssignment(agent, scenario, date.AddDays(1));
-			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), agent, new IScheduleData[]{absenceOnNextDay, assNextDay}, skillDays);
+			var absenceOnNextDay = new PersonAbsence(agent, scenario, new AbsenceLayer(absence, date.AddDays(1).ToDateTimePeriod(new TimePeriod(2, 3), agent.PermissionInformation.DefaultTimeZone()))).WithId();
+			var assNextDay = new PersonAssignment(agent, scenario, date.AddDays(1)).WithId();
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), agent, new IScheduleData[]
+			{
+				assNextDay, absenceOnNextDay
+			}, skillDays);
 			
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[]{agent}, date.ToDateOnlyPeriod());
 
