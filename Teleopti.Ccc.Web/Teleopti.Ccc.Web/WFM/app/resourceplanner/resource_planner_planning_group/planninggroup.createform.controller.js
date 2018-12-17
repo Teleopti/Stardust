@@ -13,6 +13,7 @@
 		vm.requestSent = false;
 		vm.searchString = '';
 		vm.selectedResults = [];
+		vm.filterResults = [];
 		vm.name = '';
 		vm.cancel = returnToPreviousView;
 		vm.deletePlanningGroupText = '';
@@ -64,7 +65,7 @@
 
 		function inputFilterData() {
 			return planningGroupService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
-				return removeSelectedFiltersInList(data, vm.selectedResults);
+				return vm.filterResults = removeSelectedFiltersInList(data, vm.selectedResults);
 			});
 		}
 
@@ -107,6 +108,7 @@
 
 		function clearInput() {
 			vm.searchString = '';
+			vm.results = [];
 		}
 
 		function removeSelectedFilter(node) {

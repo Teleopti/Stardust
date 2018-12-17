@@ -65,7 +65,7 @@
 
         function inputFilterData() {
 			return PlanGroupSettingService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
-				return removeSelectedFiltersInList(data, vm.settingInfo.Filters);
+				return vm.filterResults = removeSelectedFiltersInList(data, vm.settingInfo.Filters);
 			});
         }
 
@@ -144,7 +144,7 @@
         }
 
         function isValidUnit(item) {
-            return !vm.settingInfo.Filters.some(function(filter){ return filter.Id === item.Id; });
+            return !vm.settingInfo.Filters.some(function(filter){ return filter.Id == item.Id; });
         }
 
         function selectResultItem(item) {
