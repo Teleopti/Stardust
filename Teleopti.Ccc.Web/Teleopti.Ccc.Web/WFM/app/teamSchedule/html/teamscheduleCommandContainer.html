@@ -1,4 +1,4 @@
-﻿<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
+<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
 	<div class="teamschedule-command-container">
 		<div ng-if="vm.ready" style="height: 100%;">
 			<add-activity ng-repeat="activityCommand in vm.activityCommands" command="activityCommand" ng-if="!vm.activeCommandCheck() && vm.activeCmd == activityCommand.key"></add-activity>

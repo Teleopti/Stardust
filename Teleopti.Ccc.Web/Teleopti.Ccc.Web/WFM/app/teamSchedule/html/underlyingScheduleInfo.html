@@ -1,4 +1,4 @@
-﻿<div class="underlying-info">
+<div class="underlying-info">
 	<div ng-if="!!$ctrl.personSchedule.UnderlyingScheduleSummary.PersonalActivities && !!$ctrl.personSchedule.UnderlyingScheduleSummary.PersonalActivities.length">{{'PersonalActivity' | translate}}</div>
 	<div ng-repeat="info in $ctrl.personSchedule.UnderlyingScheduleSummary.PersonalActivities" style="margin-left:10px;">
 		{{ info.Description }}: {{ info.TimeSpan }}
