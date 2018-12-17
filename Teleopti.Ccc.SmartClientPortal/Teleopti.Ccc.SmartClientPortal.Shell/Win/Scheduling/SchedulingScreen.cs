@@ -1441,10 +1441,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void pasteFromClipboard(PasteOptions options)
 		{
-			_backgroundWorkerRunning = true;
-			_scheduleView.GridClipboardPaste(options, _undoRedo);
-			_backgroundWorkerRunning = false;
-			RecalculateResources();
+			if (Clipboard.ContainsData("PersistableScheduleData"))
+			{
+				_backgroundWorkerRunning = true;
+				_scheduleView.GridClipboardPaste(options, _undoRedo);
+				_backgroundWorkerRunning = false;
+				RecalculateResources();
+			}
 		}
 
 		#endregion
