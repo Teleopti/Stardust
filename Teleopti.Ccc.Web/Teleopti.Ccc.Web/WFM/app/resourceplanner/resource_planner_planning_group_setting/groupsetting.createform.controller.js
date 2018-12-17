@@ -64,11 +64,9 @@
         }
 
         function inputFilterData() {
-            if (!!vm.searchString)
-                return PlanGroupSettingService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
-                    return vm.filterResults = removeSelectedFiltersInList(data, vm.settingInfo.Filters);
-                });
-            return [];
+			return PlanGroupSettingService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+				return vm.filterResults = removeSelectedFiltersInList(data, vm.settingInfo.Filters);
+			});
         }
 
         function removeSelectedFiltersInList(filters, selectedFilters) {
@@ -86,7 +84,7 @@
         }
 
         function clearInput() {
-            vm.searchString = undefined;
+            vm.searchString = '';
         }
 
         function isValid() {

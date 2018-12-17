@@ -64,8 +64,6 @@
 		}
 
 		function inputFilterData() {
-			if (vm.searchString === '')
-				return [];
 			return planningGroupService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
 				return vm.filterResults = removeSelectedFiltersInList(data, vm.selectedResults);
 			});

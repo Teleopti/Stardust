@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Optimization.Filters
@@ -23,8 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 		public IEnumerable<FindFilterResult> Search(string searchString, int maxHits)
 		{
 			var results = new List<FindFilterResult>();
-			if (searchString.IsEmpty())
-				return results;
 			results = results.Union(searchContract(searchString, maxHits - results.Count)).ToList();
 			results = results.Union(searchSite(searchString, maxHits - results.Count)).ToList();
 			results = results.Union(searchTeam(searchString, maxHits - results.Count)).ToList();
@@ -70,8 +67,6 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 		public IEnumerable<FindFilterResult> SearchForPlanningGroup(string searchString, int maxHits)
 		{
 			var results = new List<FindFilterResult>();
-			if (searchString.IsEmpty())
-				return results;
 			results = results.Union(searchSite(searchString, maxHits - results.Count)).ToList();
 			results = results.Union(searchTeam(searchString, maxHits - results.Count)).ToList();
 			results = results.Union(searchContract(searchString, maxHits - results.Count)).ToList();

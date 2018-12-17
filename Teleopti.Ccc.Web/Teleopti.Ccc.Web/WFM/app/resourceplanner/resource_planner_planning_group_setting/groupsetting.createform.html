@@ -29,7 +29,7 @@
 													 placeholder="{{'SearchForDayOff'|translate}}"
 													 md-items="item in vm.inputFilterData()"
 													 md-item-text="vm.searchString"
-													 md-selected-item-change="vm.selectResultItem(vm.selectedItem)">
+													 md-selected-item-change="vm.selectResultItem(vm.selectedItem)" md-min-length="0">
 										<md-item-template>
 											<div class="wfm-chip-wrap">
 												<span class="wfm-chip">
