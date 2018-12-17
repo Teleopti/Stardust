@@ -413,7 +413,6 @@
 			expect(searchScheduleCalledTimes).toBe(0);
 		});
 
-
 		it("should update schedule when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is off", function () {
 			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = false;
 
