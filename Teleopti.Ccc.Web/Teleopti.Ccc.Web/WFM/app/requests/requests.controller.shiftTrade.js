@@ -123,37 +123,37 @@
 			vm.messageFilter = undefined;
 		};
 
-		vm.showShiftDetail = function (params) {
+		vm.showShiftDetail = function(params) {
 			if (toggleService.WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412) {
 				vm.buildShifts(params.schedules, params.targetTimezone);
 				vm.timeLine = params.schedules.TimeLine;
-			}
-			else {
+			} else {
 				vm.schedules = params.schedules;
 			}
-			vm.shiftDetailTop = params.top;
-			vm.shiftDetailLeft = params.left;
+
+			vm.shiftDetailStyleJson = {
+				width: params.width,
+				height: params.height,
+				top: params.top,
+				left: params.left,
+				position: 'fixed'
+			};
 			vm.displayShiftDetail = true;
 		};
 
-		vm.buildShifts = function (schedules, _targetTimeZone) {
+		vm.buildShifts = function(schedules, _targetTimeZone) {
 			var shifts = [];
-			shifts.push(requestScheduleService.buildShiftData(schedules.PersonFromSchedule, vm.userTimeZone, _targetTimeZone));
-			shifts.push(requestScheduleService.buildShiftData(schedules.PersonToSchedule, vm.userTimeZone, _targetTimeZone));
+			shifts.push(
+				requestScheduleService.buildShiftData(schedules.PersonFromSchedule, vm.userTimeZone, _targetTimeZone)
+			);
+			shifts.push(
+				requestScheduleService.buildShiftData(schedules.PersonToSchedule, vm.userTimeZone, _targetTimeZone)
+			);
 			vm.shifts = shifts;
-		}
-		
+		};
 
 		vm.hideShiftDetail = function() {
 			vm.displayShiftDetail = false;
-		};
-
-		vm.shiftDetailStyleJson = function() {
-			return {
-				top: vm.shiftDetailTop + 'px',
-				left: vm.shiftDetailLeft + 'px',
-				position: 'fixed'
-			};
 		};
 
 		vm.isDayOff = function(scheduleDayDetail) {

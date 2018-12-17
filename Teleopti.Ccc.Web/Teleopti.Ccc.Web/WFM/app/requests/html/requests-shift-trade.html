@@ -5,7 +5,7 @@
 	<i ng-if="!vm.isLoading" ng-show="vm.gridOptions.enableFiltering" ng-click="vm.clearAllFilters()" class="mdi mdi-block-helper clear-all-filters pointer">
 		<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 	</i>
-	<div outside-click="vm.hideShiftDetail()" ng-if="vm.displayShiftDetail" ng-style="vm.shiftDetailStyleJson()" class="schedule-container full-padding">
+	<div outside-click="vm.hideShiftDetail()" ng-if="vm.displayShiftDetail" ng-style="vm.shiftDetailStyleJson" class="requests-schedule-container full-padding">
 		<requests-schedule-table shifts="vm.shifts" times="vm.timeLine" schedules="vm.schedules"/>
 	</div>
 </div>

@@ -825,8 +825,8 @@ describe('Requests - absence and text controller tests: ', function() {
 		controller.toggleAbsenceSchedules(absence, clickEvent);
 
 		expect(controller.showingAbsenceSchedules).toEqual(true);
-		expect(controller.schedulesContainerStyle.width).toEqual('745px');
-		expect(controller.schedulesContainerStyle.height).toEqual('102px');
+		expect(controller.schedulesContainerStyle.width).toEqual('755px');
+		expect(controller.schedulesContainerStyle.height).toEqual('112px');
 		expect(controller.schedulesContainerStyle['max-height']).toEqual('242px');
 	});
 
