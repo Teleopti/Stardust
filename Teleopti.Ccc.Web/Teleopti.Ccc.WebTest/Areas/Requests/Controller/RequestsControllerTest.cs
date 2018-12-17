@@ -67,6 +67,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		}
 
 		[Test]
+		public void ShouldGetShiftTradeScheduleViewModelWithCorrectStartPositionPercentageInPeriods()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupShiftTradeScheduleData(date);
+
+			var result = Target.GetShiftTradeSchedules(input);
+
+			result.PersonFromSchedule.Periods.First().StartPositionPercentage.Should().Not.Be.EqualTo(0.0);
+
+			result.PersonToSchedule.Periods.First().StartPositionPercentage.Should().Not.Be.EqualTo(0.0);
+		}
+
+		[Test]
 		public void ShouldGetShiftTradeScheduleViewModel()
 		{
 			var date = new DateTime(2018, 11, 21);
@@ -353,12 +366,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 
 			Database.WithPerson(personFromId)
 				.WithScenario(scenarioId)
-				.WithPeriod(DateOnly.MinValue.ToString())
-				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+				.WithPeriod(date.ToDateOnly().ToString())
+				.WithSchedule(date.Date.AddHours(9).ToString(), date.Date.AddHours(18).ToString())
 				.WithPerson(personToId)
 				.WithScenario(scenarioId)
-				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithPeriod(date.ToDateOnly().ToString())
 				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
+
+			setUpPersonRelatedInfo(personFromId);
+			setUpLogonUser();
+
 
 			return new ShiftTradeScheduleForm
 			{

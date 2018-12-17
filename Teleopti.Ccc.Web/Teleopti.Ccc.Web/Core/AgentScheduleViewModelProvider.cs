@@ -41,26 +41,26 @@ namespace Teleopti.Ccc.Web.Core
 			_loggedOnUser = loggedOnUser;
 			_layerMapper = layerMapper;
 			_timeLineViewModelFactory = timeLineViewModelFactory;
-
 		}
 
-		private DateTimePeriod? getScheduleMinMax(IEnumerable<TeamScheduleAgentScheduleViewModel> agentSchedules)
+		private DateTimePeriod? getScheduleMinMax(IEnumerable<AgentInTeamScheduleViewModel> agentSchedules)
 		{
-			var schedulesWithoutEmptyLayerDays = agentSchedules.Where(s => !s.Periods.IsNullOrEmpty()).ToList();
+			var schedules = agentSchedules as IList<AgentInTeamScheduleViewModel> ?? agentSchedules.ToList();
+
+			var schedulesWithoutEmptyLayerDays = schedules.Where(s => !s.ScheduleLayers.IsNullOrEmpty()).ToList();
 
 			if (!schedulesWithoutEmptyLayerDays.Any())
 				return null;
 
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
-			var startTime = schedulesWithoutEmptyLayerDays.Min(s => s.Periods.First().StartTime);
-			var endTime = schedulesWithoutEmptyLayerDays.Max(l => l.Periods.Last().EndTime);
+			var startTime = schedulesWithoutEmptyLayerDays.Min(s => s.ScheduleLayers.First().Start);
+			var endTime = schedulesWithoutEmptyLayerDays.Max(l => l.ScheduleLayers.Last().End);
 
 			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);
 		}
 
-
-		private DateTimePeriod getSchedulePeriod(IEnumerable<TeamScheduleAgentScheduleViewModel>
+		private DateTimePeriod getSchedulePeriod(IEnumerable<AgentInTeamScheduleViewModel>
 			agentSchedules, DateOnly date)
 		{
 			var scheduleMinMaxPeriod = getScheduleMinMax(agentSchedules);
@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.Web.Core
 			return returnPeriodInUtc;
 		}
 
-
 		public ShiftTradeSchedulesViewModel GetShiftTradeSchedulesViewModel(ShiftTradeScheduleForm input)
 		{
 			var personFrom = _personRepository.Get(input.PersonFromId);
@@ -110,10 +109,10 @@ namespace Teleopti.Ccc.Web.Core
 			var fromScheduleDay = schedules[personFrom].ScheduledDay(input.RequestDate.ToDateOnly());
 			var toScheduleDay = schedules[personTo].ScheduledDay(input.RequestDate.ToDateOnly());
 
-			var personFromSchedule = GetAgentScheduleViewModel(personFrom, fromScheduleDay);
-			var personToSchedule = GetAgentScheduleViewModel(personTo, toScheduleDay);
+			var personFromSchedule = GetAgentInTeamScheduleViewModel(personFrom, fromScheduleDay);
+			var personToSchedule = GetAgentInTeamScheduleViewModel(personTo, toScheduleDay);
 
-			var agentSchedules = new List<TeamScheduleAgentScheduleViewModel> { personFromSchedule, personToSchedule };
+			var agentSchedules = new List<AgentInTeamScheduleViewModel> { personFromSchedule, personToSchedule };
 
 			var schedulePeriodInUtc = getSchedulePeriod(agentSchedules, input.RequestDate.ToDateOnly());
 
@@ -129,9 +128,21 @@ namespace Teleopti.Ccc.Web.Core
 			return new ShiftTradeSchedulesViewModel
 			{
 				TimeLine = timeLine,
-				PersonFromSchedule = personFromSchedule,
-				PersonToSchedule = personToSchedule
+				PersonFromSchedule = GetAgentScheduleViewModel(personFromSchedule, personFrom, schedulePeriodInUtc),
+				PersonToSchedule = GetAgentScheduleViewModel(personToSchedule,personTo, schedulePeriodInUtc)
 			};
+		}
+
+		private TeamScheduleAgentScheduleViewModel GetAgentScheduleViewModel(AgentInTeamScheduleViewModel scheduleViewModel, IPerson person, DateTimePeriod schedulePeriod)
+		{
+			var isMySchedule = _loggedOnUser.CurrentUser().Equals(person);
+			return _layerMapper.Map(scheduleViewModel, schedulePeriod, isMySchedule);
+		}
+
+		private AgentInTeamScheduleViewModel GetAgentInTeamScheduleViewModel(IPerson person, IScheduleDay scheduleDay)
+		{
+			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
+			return scheduleViewModel;
 		}
 
 		public TeamScheduleAgentScheduleViewModel GetAgentScheduleViewModel(IPerson person, IScheduleDay scheduleDay)
