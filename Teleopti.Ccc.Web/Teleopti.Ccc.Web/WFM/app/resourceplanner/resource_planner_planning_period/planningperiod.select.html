@@ -94,7 +94,7 @@
 										</label>
 									</div>
 									<div class="con-row">
-										<input type="number" style="margin: 5px;" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="WeekInterval" min="1" title="week/month"/>
+										<input type="number" style="margin: 5px; width: unset;" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="WeekInterval" min="1" title="week/month"/>
 										<wfm-btn-group items="vm.types" selected="vm.intervalType" output="vm.typeChanged" btn-class="'wfm-btn-default'" selection-class="'wfm-btn-primary'"></wfm-btn-group>
 									</div>
 									<p class="text-danger" ng-show="!vm.isValidPeriod()" translate>InvalidInput</p>
@@ -171,7 +171,7 @@
 										</label>
 									</div>
 									<div class="con-row">
-										<input type="number" style="margin: 5px;" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="WeekInterval" min="1" title="week/month"/>
+										<input type="number" style="margin: 5px; width: unset;" ng-model="vm.intervalRange" ng-change="vm.intervalChanged()" name="WeekInterval" min="1" title="week/month"/>
 										<wfm-btn-group items="vm.types" selected="vm.intervalType" output="vm.typeChanged" btn-class="'wfm-btn-default'" selection-class="'wfm-btn-primary'"></wfm-btn-group>
 									</div>
 									<p class="text-danger" ng-show="!vm.isValidPeriod()" translate>InvalidInput</p>
