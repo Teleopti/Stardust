@@ -23,7 +23,7 @@
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 		RTA_RestrictModifySkillGroups_78568,
-		
+		RTA_InputValidationForApprovingAdherencePeriods_77045,
 		
 		MessageBroker_HttpSenderThrottleRequests_79140,
 		MessageBroker_VeganBurger_79140,
