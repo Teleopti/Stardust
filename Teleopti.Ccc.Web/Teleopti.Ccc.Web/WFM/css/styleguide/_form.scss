@@ -164,6 +164,12 @@ md-autocomplete {
 		border-bottom: 5px solid red !important;
 	}
 
+	ul {
+		margin-bottom: 0;
+		list-style: none;
+		padding-left: 0;
+	}
+
 	.form-input-message {
 		opacity: 0;
 		height: 0;
