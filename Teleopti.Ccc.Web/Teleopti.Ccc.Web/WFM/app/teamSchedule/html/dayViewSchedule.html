@@ -59,6 +59,13 @@
 		</div>
 
 		<div class="rightside-part">
+			<button type="button" class="context-menu card-context" ng-if="vm.isRefreshButtonVisible" ng-disabled="!vm.havingScheduleChanged" ng-click="vm.onRefreshButtonClicked()">
+				<i class="mdi mdi-refresh"></i>
+				<md-tooltip>
+					{{'Refresh' | translate}}
+				</md-tooltip>
+			</button>
+
 			<div class="context-menu card-context"
 				 ng-if="vm.isExportScheduleEnabled()" ng-click="vm.openExportPanel()">
 				<i class="mdi mdi-file-excel">
@@ -108,7 +115,6 @@
 			<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">
 				<settings></settings>
 			</md-sidenav>
-
 		</div>
 
 		<div class="teamschedule-footer">
