@@ -344,6 +344,15 @@
 			cursor: pointer;
 			margin: 0 8px;
 		}
+	  
+	  	.time-picker-validation {
+		  z-index: 30;
+		  width: 360px;
+		  margin-top: 10px;
+		  position: absolute;
+		  left:12px;
+		  top:40px;
+		}
 	}
 
 	&.historical-overview {

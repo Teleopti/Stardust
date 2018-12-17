@@ -202,6 +202,11 @@
 						<input type="text" ng-model="vm.approveEndTimeString"/>
 						</label>
 					</span>
+					<div ng-if="vm.invalidTime"
+						 class="error-msg-container alert-error notice-spacer time-picker-validation">
+						<i class="mdi mdi-alert-octagon"></i>
+						<span>{{vm.invalidTimeMessage | translate}}</span>
+					</div>
 					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelApprove()">
 						{{'Cancel' | translate}}
 					</button>
