@@ -273,8 +273,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().SingleInstance();
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
-
-			builder.RegisterType<MatrixClosedDayLocker>().InstancePerLifetimeScope();
+			builder.RegisterType<MatrixClosedDayLocker>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941))
 			{
