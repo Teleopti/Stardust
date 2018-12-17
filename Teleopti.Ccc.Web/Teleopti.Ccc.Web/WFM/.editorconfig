@@ -1,0 +1,4 @@
+root = false
+
+[*.{html}]
+charset = utf-8
