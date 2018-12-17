@@ -19,7 +19,7 @@ module.exports = function(config) {
 				included: false
 			}
 		],
-		autoWatch: false
+		autoWatch: false,
 
 		reporters: ['teamcity'],
 
