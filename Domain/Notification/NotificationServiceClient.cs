@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.Domain.Notification
 {
 	public class NotificationServiceClient : INotificationServiceClient
 	{
-		public NotificationServiceClient()
+		private HttpClient client;
+		public NotificationServiceClient() : this(new HttpClient()) { }
+		public NotificationServiceClient(HttpClient client)
 		{
-			
+			this.client = client;
 		}
-
+		
 		public bool SendEmail(SGMailMessage msg, string apiUri, string apiKey)
 		{
 			// POST  https://apiteleoptitest.azure-api.net/notify/asbq   // header   "Ocp-Apim-Subscription-Key"  : 2f0405da85a749999e1fc3fd71b2cd58
@@ -21,8 +23,6 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				//var configUri = "https://apiteleoptitest.azure-api.net/notify/asbq";
 				//var configApiKey = "2f0405da85a749999e1fc3fd71b2cd58";
-				var client = new HttpClient();
-
 
 				var content = new StringContent(msg.ToJson(), Encoding.UTF8, msg.ContentType);
 
