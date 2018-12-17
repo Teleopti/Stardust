@@ -328,7 +328,6 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopDifferenceSnapshotTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferenceDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingHourlyDesktopTest.cs" />
