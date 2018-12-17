@@ -92,7 +92,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// stuff?
 			isolate.UseTestDouble<MutableNowWithEvents>().For<MutableNow, INow, IMutateNow>();
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
-			isolate.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
+
+			if (!QueryAllAttributes<UseRealPersonRequestPermissionCheckAttribute>().Any())
+			{
+				isolate.UseTestDouble<PersonRequestAuthorizationCheckerForTest>()
+					.For<IPersonRequestCheckAuthorization>();
+			}
+
 			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 
 			// Tenant (and datasource) stuff

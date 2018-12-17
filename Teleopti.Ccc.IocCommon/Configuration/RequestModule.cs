@@ -33,7 +33,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<RequestFactory>().As<IRequestFactory>();
-			builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
+
+			if (_configuration.Args().IsFatClient)
+			{
+				builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
+			}
+			else
+			{
+				builder.RegisterType<SlimPersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
+			}
+
 			builder.RegisterType<ConfigurableBusinessRuleProvider>().As<IBusinessRuleProvider>();
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();

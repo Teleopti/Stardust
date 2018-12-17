@@ -165,6 +165,7 @@
     <Compile Include="AgentInfo\Requests\ShiftStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\ShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\SkillOpenHourFilter.cs" />
+    <Compile Include="AgentInfo\Requests\SlimPersonRequestCheckAuthorization.cs" />
     <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />

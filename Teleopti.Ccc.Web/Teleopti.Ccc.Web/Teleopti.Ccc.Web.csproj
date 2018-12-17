@@ -1111,7 +1111,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\WebPersonRequestCheckAuthorization.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IRespondToShiftTrade.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\RespondToShiftTrade.cs" />
