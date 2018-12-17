@@ -418,6 +418,10 @@
     <Compile Include="Areas\Insights\Controllers\InsightsController.cs" />
     <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Controller\BankHolidayCalendarController.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarPersister.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\IoC\BankHolidayAreaModule.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
