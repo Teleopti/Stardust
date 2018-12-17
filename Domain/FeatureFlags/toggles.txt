@@ -88,7 +88,6 @@ ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true #AF: OK for me to
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true #AF: OK for me to remove
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production. Don't modify this line!
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true #AF: OK for me to remove
-ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348 = true #AF: OK for me to remove
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true #AF: OK for me to remove
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
