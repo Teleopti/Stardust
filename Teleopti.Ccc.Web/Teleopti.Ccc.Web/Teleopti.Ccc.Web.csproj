@@ -1493,12 +1493,10 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
-    <Content Include="Areas\SSO\Content\Images\bg.png" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordViewModel.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordView.js" />
     <Content Include="Areas\Start\Content\Css\newLogin.css" />
     <Content Include="Areas\Start\Content\Css\main.min.css" />
-    <Content Include="Areas\Start\Content\Images\bg.png" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
     <Content Include="Content\botchat\botchat-es5.js" />
     <Content Include="Content\botchat\botchat.css" />
