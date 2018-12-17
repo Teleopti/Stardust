@@ -10,12 +10,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPlans)]
 	public class PlanningGroupSettingsController : ApiController
 	{
-		private readonly IFetchPlanningGroupSettingsModel _fetchPlanningGroupSettingsModel;
 		private readonly IPlanningGroupSettingsModelPersister _planningGroupSettingsModelPersister;
 
-		public PlanningGroupSettingsController(IFetchPlanningGroupSettingsModel fetchPlanningGroupSettingsModel, IPlanningGroupSettingsModelPersister planningGroupSettingsModelPersister)
+		public PlanningGroupSettingsController(IPlanningGroupSettingsModelPersister planningGroupSettingsModelPersister)
 		{
-			_fetchPlanningGroupSettingsModel = fetchPlanningGroupSettingsModel;
 			_planningGroupSettingsModelPersister = planningGroupSettingsModelPersister;
 		}
 
