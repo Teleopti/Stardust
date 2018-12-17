@@ -95,6 +95,17 @@
                 isValidFullWeekEndsOff() &&
                 isValidFullWeekEndDaysOff();
         }
+        
+        vm.minChanged = function(min, max){
+            if(vm.settingInfo[min] > vm.settingInfo[max]){
+                vm.settingInfo[max] = vm.settingInfo[min];
+            }
+        };
+        vm.maxChanged = function(min, max){
+            if(vm.settingInfo[min] > vm.settingInfo[max]){
+                vm.settingInfo[min] = vm.settingInfo[max];
+            }
+        };
 
         function isValidDayOffsPerWeek() {
             return isValidDaysNumber(vm.settingInfo.MinDayOffsPerWeek, vm.settingInfo.MaxDayOffsPerWeek, 8);

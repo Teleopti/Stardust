@@ -86,9 +86,9 @@
 										<span class="text-danger" ng-show="!vm.isValidDayOffsPerWeek()">{{'InvalidInput'|translate}}</span>
 									</td>
 									<td><input type="number" ng-model="vm.settingInfo.MinDayOffsPerWeek" min="0" max="7"
-											   title="{{'MinDayOffsPerWeek'|translate}}"/></td>
+											   title="{{'MinDayOffsPerWeek'|translate}}" ng-change="vm.minChanged('MinDayOffsPerWeek', 'MaxDayOffsPerWeek')"/></td>
 									<td><input type="number" ng-model="vm.settingInfo.MaxDayOffsPerWeek" min="0" max="7"
-											   title="{{'MaxDayOffsPerWeek'|translate}}"/></td>
+											   title="{{'MaxDayOffsPerWeek'|translate}}" ng-change="vm.maxChanged('MinDayOffsPerWeek', 'MaxDayOffsPerWeek')"/></td>
 								</tr>
 								<tr>
 									<td colspan="2">{{'ConsecutiveWorkDays'|translate}}
