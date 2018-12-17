@@ -251,6 +251,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adherence", "Adherence", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Intraday.UnitTest", "Teleopti.Ccc.Intraday.UnitTest\Teleopti.Ccc.Intraday.UnitTest.csproj", "{F26B3F93-6FE3-4962-B5DE-E27BC6583029}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.AbsenceRequest.PerformanceTest", "Teleopti.Ccc.AbsenceRequest.PerformanceTest\Teleopti.Ccc.AbsenceRequest.PerformanceTest.csproj", "{82BB0AA2-C10B-4667-9680-46B1F60B017D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1421,6 +1423,22 @@ Global
 		{F26B3F93-6FE3-4962-B5DE-E27BC6583029}.Release|Mixed Platforms.Build.0 = Release|x86
 		{F26B3F93-6FE3-4962-B5DE-E27BC6583029}.Release|x86.ActiveCfg = Release|x86
 		{F26B3F93-6FE3-4962-B5DE-E27BC6583029}.Release|x86.Build.0 = Release|x86
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Debug|.NET.Build.0 = Debug|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Debug|x86.Build.0 = Debug|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Release|.NET.ActiveCfg = Release|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Release|.NET.Build.0 = Release|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Release|x86.ActiveCfg = Release|Any CPU
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1471,6 +1489,7 @@ Global
 		{906CD885-44E7-46B8-BECA-83FD20829532} = {38151FA3-872A-4F4A-8ACA-AC06E64FFD79}
 		{2DD2E616-8405-49DF-A07D-546A8C160117} = {38151FA3-872A-4F4A-8ACA-AC06E64FFD79}
 		{F26B3F93-6FE3-4962-B5DE-E27BC6583029} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
+		{82BB0AA2-C10B-4667-9680-46B1F60B017D} = {60EAE402-FE16-440F-897D-6222012A77F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		RESX_CodeReferences = {"Items":[{"Expression":"\\W($File.$Key)\\W","Extensions":".xaml,.cshtml","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"ResourceManager.GetString\\(\"$Key\"(,.*)?\\)|\\\"xx(x)?($Key)\\\"|StringResourceKey\\.($Key)","Extensions":".cs","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"typeof\\((\\w+\\.)*($File)\\).+\"($Key)\"|\"($Key)\".+typeof\\((\\w+\\.)*($File)\\)","Extensions":".cs12","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"\\W($Key)\\W","Extensions":".vb","IsCaseSensitive":false,"SingleLineComment":"'"},{"Expression":"\\W($File::$Key)\\W","Extensions":".cpp,.c,.hxx,.h","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"&lt;%\\$\\s+Resources:\\s*($File)\\s*,\\s*($Key)\\s*%&gt;","Extensions":".aspx,.ascx,.master","IsCaseSensitive":true,"SingleLineComment":null},{"Expression":"{{'$Key'[\\s]*\\|[\\s]*translate}}","Extensions":".html","IsCaseSensitive":false,"SingleLineComment":null}]}
