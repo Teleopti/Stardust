@@ -111,7 +111,6 @@ describe('planningGroupSettingOverviewController', function () {
 	});
 
 	it('should get day off rules by planning group id before controller is loaded', function () {
-		spyOn(PlanGroupSettingService, 'getSettingsByPlanningGroupId').and.callThrough();
 		var vm = $controller('planningGroupSettingOverviewController', {
 			$stateParams: stateparams
 		}, {

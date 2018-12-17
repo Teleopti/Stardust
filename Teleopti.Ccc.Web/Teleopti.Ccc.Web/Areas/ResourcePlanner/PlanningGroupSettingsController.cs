@@ -26,23 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup/{planningGroupId}/plangroupsetting")] 
-		public virtual IHttpActionResult FetchAllForPlanningGroup(Guid planningGroupId)
-		{
-			return Ok(_fetchPlanningGroupSettingsModel.FetchAllForPlanningGroup(planningGroupId));
-		}
-
 		[UnitOfWork, HttpDelete, Route("api/resourceplanner/plangroupsetting/{id}")] 
 		public virtual IHttpActionResult Delete(Guid id)
 		{
 			_planningGroupSettingsModelPersister.Delete(id);
 			return Ok();
-		}
-
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/plangroupsetting/{id}")] 
-		public virtual IHttpActionResult Fetch(Guid id)
-		{
-			return Ok(_fetchPlanningGroupSettingsModel.Fetch(id));
 		}
 	}
 }
