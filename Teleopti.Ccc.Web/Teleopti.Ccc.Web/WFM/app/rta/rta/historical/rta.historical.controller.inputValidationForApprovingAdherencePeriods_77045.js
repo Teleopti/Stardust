@@ -16,6 +16,7 @@
 		vm.openApprovedPeriods = $stateParams.open;
 		vm.openApproveForm = $stateParams.open;
 		vm.hasModifyAdherencePermission = false;
+		vm.invalidTime = false;
 
 		var calculate;
 		var timelineStart;
@@ -167,6 +168,8 @@
 			function (newValue, oldValue) {
 				if (timelineStart && timeChanged(newValue, oldValue))
 					vm.approveStartTime = adjustDate(newValue, timelineStart, timelineEnd);
+
+				validateTimeInput();
 				updateApprovePositioning();
 			}
 		);
@@ -180,9 +183,24 @@
 					newValue = adjustDate(newValue, vm.approveStartTime, timelineEnd);
 					vm.approveEndTime = newValue;
 				}
+
+				validateTimeInput();
 				updateApprovePositioning();
 			}
 		);
+
+		function validateTimeInput() {
+			vm.invalidTime = !(vm.approveStartTime && 
+				vm.approveEndTime &&
+				moment(vm.approveStartTime).isBefore(vm.approveEndTime));
+
+			if (!vm.approveStartTime || !vm.approveEndTime) 
+				vm.invalidTimeMessage = "IllegalTimeInput";
+			else if (moment(vm.approveStartTime).isAfter(vm.approveEndTime)) 
+				vm.invalidTimeMessage = "EndTimeMustBeGreaterOrEqualToStartTime";
+			else 
+				vm.invalidTimeMessage = undefined;
+		}
 
 		function updateApprovePositioning() {
 			if (vm.approveStartTime && vm.approveEndTime) {

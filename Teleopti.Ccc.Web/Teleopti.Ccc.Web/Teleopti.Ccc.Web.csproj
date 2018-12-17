@@ -1726,6 +1726,7 @@
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.inputValidationForApprovingAdherencePeriods_77045.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.inputValidationForApprovingAdherencePeriods_77045.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.js" />
