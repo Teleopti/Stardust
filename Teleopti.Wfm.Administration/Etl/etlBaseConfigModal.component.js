@@ -5,7 +5,7 @@
 		.component('etlModal',
 			{
 				templateUrl: './Etl/modal.html',
-				controller: ['$http', 'tokenHeaderService', '$window', ModalCtrl],
+				controller: ['$http', '$window', ModalCtrl],
 				controllerAs: 'ctrl',
 				bindings: {
 					tenant: '<',
@@ -14,7 +14,7 @@
 				}
 			});
 
-	function ModalCtrl($http, tokenHeaderService, $window) {
+	function ModalCtrl($http, $window) {
 		var ctrl = this;
 
 		ctrl.baseConfig = null;
@@ -39,7 +39,7 @@
 				if ($window.sessionStorage.configData) {
 					ctrl.configData = angular.fromJson($window.sessionStorage.configData);
 				} else {
-					$http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
+					$http.get("./Etl/GetConfigurationModel")
 						.then(function (response) {
 							ctrl.configData = response.data;
 							$window.sessionStorage.configData = angular.toJson(response.data);
@@ -58,7 +58,7 @@
 				}
 			};
 
-			$http.post("./Etl/SaveConfigurationForTenant", baseObj, tokenHeaderService.getHeaders())
+			$http.post("./Etl/SaveConfigurationForTenant", baseObj)
 				.then(function (response) {
 					ctrl.output = true;
 					ctrl.callback();

@@ -3,7 +3,7 @@
 
 	angular
         .module('adminApp')
-        .controller('hangfireController', hangfireController, ['tokenHeaderService'])
+        .controller('hangfireController', hangfireController)
 		.directive("jqTable", function () {
 			return function (scope, element, attrs) {
 				scope.$watch("HangfireUrl", function (value) {
@@ -16,8 +16,8 @@
 			};
 	});
 
-	function hangfireController($http, tokenHeaderService, $scope) {
-		$http.get("./Hangfire/GetUrl", tokenHeaderService.getHeaders())
+	function hangfireController($http, $scope) {
+		$http.get("./Hangfire/GetUrl")
 			.then(function (response) {
 				$scope.HangfireUrl = response.data;
 		});

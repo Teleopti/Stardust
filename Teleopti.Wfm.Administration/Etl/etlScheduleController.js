@@ -8,7 +8,7 @@
 			"$timeout"
 		]);
 
-	function etlScheduleController($http, tokenHeaderService, $timeout) {
+	function etlScheduleController($http, $timeout) {
 		var vm = this;
 
 		vm.schedules = null;
@@ -32,7 +32,7 @@
 		function getScheduledJobs() {
 			vm.schedules = null;
 			$http
-				.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
+				.get("./Etl/ScheduledJobs")
 				.then(function (response) {
 					vm.schedules = response.data;
 				});
@@ -41,8 +41,7 @@
 		function toggleScheduleJob(scheduleId) {
 			$http
 				.post("./Etl/ToggleScheduleJob",
-					JSON.stringify(scheduleId),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(scheduleId)
 				)
 				.then(function (response) {
 					getScheduledJobs();
@@ -52,8 +51,7 @@
 		function deleteScheduleJob(scheduleId) {
 			$http
 				.post("./Etl/DeleteScheduleJob",
-					JSON.stringify(scheduleId),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(scheduleId)
 				)
 				.then(function (response) {
 					getScheduledJobs();
@@ -122,8 +120,7 @@
 			$http
 				.post(
 					"./Etl/ScheduleJob",
-					JSON.stringify(postObj),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(postObj)
 				)
 				.then(function (response) {
 					getScheduledJobs();
@@ -178,8 +175,7 @@
 			$http
 				.post(
 					"./Etl/EditScheduleJob",
-					JSON.stringify(postObj),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(postObj)
 				)
 				.then(function (response) {
 					getScheduledJobs();

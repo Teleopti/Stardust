@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -82,6 +83,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 							var accessToken = _adminAccessTokenRepository.CreateNewToken(id, sqlConnection);
 
 							_hangfireCookie.SetHangfireAdminCookie(userName, model.UserName);
+							var valuesString = $"\"tokenKey\":\"{accessToken}\",\"user\":\"{userName}\",\"id\":{id}";
+							valuesString = "{" + valuesString + "}";
+							var cook = new HttpCookie("WfmAdminAuth", Uri.EscapeDataString(valuesString)) { HttpOnly = true };
+							
+							if (HttpContext.Current.Request.IsSecureConnection)
+							{
+								cook.Secure = true;
+							}
+							HttpContext.Current.Response.Cookies.Add(cook);
 							return Json(new LoginResult { Success = true, Id = id, UserName = userName, AccessToken = accessToken });
 						}
 					}
@@ -96,6 +106,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual IHttpActionResult Logout(LoginModel model)
 		{
 			_hangfireCookie.RemoveAdminCookie();
+			HttpContext.Current.Response.Cookies.Add(new HttpCookie("WfmAdminAuth"){Expires = DateTime.Now.AddDays(-1)});
+
 			return Ok();
 		}
 
@@ -369,6 +381,22 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			return Json(new UpdateUserResultModel { Success = true, Message = "Alright." });
 		}
+
+		[OverrideAuthentication]
+		[HttpGet]
+		[Route("LoggedInUser")]
+		public virtual JsonResult<UserModel> LoggedInUser()
+		{
+			if (HttpContext.Current.Request.Cookies.AllKeys.Contains("WfmAdminAuth"))
+			{
+				var cook = HttpContext.Current.Request.Cookies["WfmAdminAuth"];
+				var value = Uri.UnescapeDataString(cook.Value);
+				var obj = System.Web.Helpers.Json.Decode<cookieValues>(value);
+				return Json(new UserModel {Name = obj.user, Id = obj.id, Token = obj.tokenKey});
+			}
+
+			return Json(new UserModel());
+		}
 	}
 
 	public class ChangePasswordModel
@@ -403,5 +431,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		public bool Success { get; set; }
 		public string Message { get; set; }
+	}
+
+	public class UserModel
+	{
+		public int Id { get; set; }
+		public string Name { get; set; }
+		public string Token { get; set; }
 	}
 }

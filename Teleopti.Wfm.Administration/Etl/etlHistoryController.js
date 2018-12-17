@@ -5,7 +5,7 @@
 	.module("adminApp")
 	.controller("etlHistoryController", etlHistoryController, ["$http", "$window", "$timeout"]);
 
-	function etlHistoryController($http, tokenHeaderService, $window, $timeout) {
+	function etlHistoryController($http, $window, $timeout) {
 		var vm = this;
 
 		var date = new Date();
@@ -37,7 +37,7 @@
 		function getTenants() {
 			vm.tenants = [];
 			$http
-			.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
+			.get("./Etl/GetTenants")
 				.then(function (response) {
 					for (var i = 0; i < response.data.length; i++) {
 						if (response.data[i].IsBaseConfigured) {
@@ -71,8 +71,7 @@
 			$http
 			.post(
 				"./Etl/BusinessUnits",
-				JSON.stringify(tenant),
-				tokenHeaderService.getHeaders()
+				JSON.stringify(tenant)
 			)
 				.then(function (response) {
 					vm.businessUnits = response.data;
@@ -96,7 +95,7 @@
 			$timeout(function() {
 					if (window.location.hash === '#/ETL/history') {
 						$http
-							.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
+							.get("./Etl/GetjobRunning")
 							.then(function (response) {
 								vm.status = response.data;
 								if (vm.status !== null) {
@@ -111,7 +110,7 @@
 
 		function getStatusRightNow() {
 				$http
-				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
+				.get("./Etl/GetjobRunning")
 					.then(function (response) {
 						vm.status = response.data;
 					if (vm.status !== null) {
@@ -139,8 +138,7 @@
 			$http
 				.post(
 					"./Etl/GetJobHistory",
-					JSON.stringify(JobHistoryCriteria),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(JobHistoryCriteria)
 				)
 				.then(function (response) {
 					vm.history = [];

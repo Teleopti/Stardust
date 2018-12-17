@@ -5,7 +5,7 @@
 		.module("adminApp")
 		.controller("etlController", etlController, ["$http", "$timeout", "$window"]);
 
-	function etlController($http, tokenHeaderService, $timeout, $window) {
+	function etlController($http, $timeout, $window) {
 		var vm = this;
 
 		vm.state = null;
@@ -125,8 +125,7 @@
 			$http
 				.post(
 					"./Etl/Jobs",
-					JSON.stringify(tenant),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(tenant)
 				)
 				.then(function (response) {
 					vm.jobs = response.data;
@@ -139,7 +138,7 @@
 		function getTenants() {
 			vm.tenants = [];
 			$http
-				.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
+				.get("./Etl/GetTenants")
 				.then(function (response) {
 					for (var i = 0; i < response.data.length; i++) {
 						if (response.data[i].IsBaseConfigured) {
@@ -172,10 +171,7 @@
 
 		function getConfigStatus() {
 			$http
-				.get(
-					"./Etl/IsBaseConfigurationAvailable",
-					tokenHeaderService.getHeaders()
-				)
+				.get("./Etl/IsBaseConfigurationAvailable")
 				.then(function (response) {
 					vm.masterTenant = {
 						IsBaseConfigured: response.data.IsBaseConfigured,
@@ -195,8 +191,7 @@
 			$http
 				.post(
 					"./Etl/TenantValidLogDataSources",
-					JSON.stringify(tenant),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(tenant)
 				)
 				.then(function (response) {
 					vm.dataSources = response.data;
@@ -205,9 +200,9 @@
 
 		function enqueueJob(job) {
 
-			if (vm.selectDataSource == null && job.NeedsParameterDataSource) {
+			if (vm.selectDataSource === null && job.NeedsParameterDataSource) {
 				vm.selectDataSource = { Id: -2 };
-			} else if (vm.selectDataSource == null && !job.NeedsParameterDataSource) {
+			} else if (vm.selectDataSource === null && !job.NeedsParameterDataSource) {
 				vm.selectDataSource = { Id: null };
 			}
 
@@ -252,7 +247,7 @@
 			}
 
 			$http
-				.post("./Etl/EnqueueJob", data, tokenHeaderService.getHeaders())
+				.post("./Etl/EnqueueJob", data)
 				.then(function () {
 					job.Status = "Job enqueued";
 					$timeout(function () {

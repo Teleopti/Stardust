@@ -4,23 +4,23 @@
 
 	angular
 		.module('adminApp')
-		.controller('listController', listController, ['tokenHeaderService']);
+		.controller('listController', listController);
 
-	function listController($scope, $http, tokenHeaderService) {
+	function listController($scope, $http) {
 		var vm = this;
 
 		vm.ToggleNameToSave = "";
 		vm.ToggleValueToSave = "false";
 
 		var getAllOverrides = function () {
-			$http.get("./Toggle/AllOverrides", tokenHeaderService.getHeaders())
+			$http.get("./Toggle/AllOverrides")
 				.then(function (response) {
 					$scope.Overrides = response.data;
 				});
 		};
 
 		var getAllToggleNamesWithoutOverride = function () {
-			$http.get("./Toggle/AllToggleNamesWithoutOverrides", tokenHeaderService.getHeaders())
+			$http.get("./Toggle/AllToggleNamesWithoutOverrides")
 				.then(function (response) {
 					$scope.ToggleNames = response.data;
 					if (response.data.length > 0)
@@ -29,7 +29,7 @@
 		};
 
 		vm.DeleteOverride = function (override) {
-			$http.delete('./Toggle/DeleteOverride/' + override.Toggle, tokenHeaderService.getHeaders())
+			$http.delete('./Toggle/DeleteOverride/' + override.Toggle)
 				.then(function (response) {
 					getAllOverrides();
 					getAllToggleNamesWithoutOverride();
@@ -43,7 +43,7 @@
 		};
 
 		vm.SaveOverride = function () {
-			$http.post('./Toggle/SaveOverride', { toggle: vm.ToggleNameToSave, value: vm.ToggleValueToSave }, tokenHeaderService.getHeaders())
+			$http.post('./Toggle/SaveOverride', { toggle: vm.ToggleNameToSave, value: vm.ToggleValueToSave })
 				.then(function (response) {
 					getAllOverrides();
 					getAllToggleNamesWithoutOverride();
@@ -53,12 +53,12 @@
 				});
 		};
 
-		$http.get("./AllTenants", tokenHeaderService.getHeaders())
+		$http.get("./AllTenants")
 			.then(function (response) {
 				$scope.Tenants = response.data;
 			});
 
-		$http.get("./AllConfigurations", tokenHeaderService.getHeaders())
+		$http.get("./AllConfigurations")
 			.then(function (response) {
 				$scope.Configurations = response.data;
 			});

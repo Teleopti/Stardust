@@ -67,7 +67,7 @@
 		.component('etlScheduleModal',
 			{
 				templateUrl: './Etl/scheduleModal.html',
-				controller: ['$http', 'tokenHeaderService', etlScheduleModal],
+				controller: ['$http', etlScheduleModal],
 				controllerAs: 'ctrl',
 				bindings: {
 					job: '<',
@@ -78,7 +78,7 @@
 
 
 
-	function etlScheduleModal($http, tokenHeaderService) {
+	function etlScheduleModal($http) {
 		var ctrl = this;
 
 		ctrl.selectedTenantChanged = selectedTenantChanged;
@@ -96,8 +96,7 @@
 			$http
 				.post(
 					"./Etl/Jobs",
-					JSON.stringify(tenant),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(tenant)
 				)
 				.then(function (response) {
 					ctrl.jobs = response.data;
@@ -115,7 +114,7 @@
 		function getTenantsForModal() {
 			ctrl.tenants = [];
 			$http
-				.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
+				.get("./Etl/GetTenants")
 				.then(function (response) {
 					for (var i = 0; i < response.data.length; i++) {
 						if (response.data[i].IsBaseConfigured) {
@@ -158,8 +157,7 @@
 			$http
 				.post(
 					"./Etl/TenantAllLogDataSources",
-					JSON.stringify(tenant),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(tenant)
 				)
 				.then(function (response) {
 					ctrl.tenantLogData = response.data;
@@ -206,8 +204,7 @@
 			$http
 				.post(
 					"./Etl/Jobs",
-					JSON.stringify(ctrl.form.Tenant.TenantName),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(ctrl.form.Tenant.TenantName)
 				)
 				.then(function (response) {
 					ctrl.jobs = response.data;
@@ -217,8 +214,7 @@
 			$http
 				.post(
 					"./Etl/TenantAllLogDataSources",
-					JSON.stringify(ctrl.form.Tenant.TenantName),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(ctrl.form.Tenant.TenantName)
 				)
 				.then(function (response) {
 					ctrl.tenantLogData = response.data;

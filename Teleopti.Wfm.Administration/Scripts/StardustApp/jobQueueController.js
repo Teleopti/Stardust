@@ -3,9 +3,9 @@
 
 	angular
 		.module("adminApp")
-		.controller("jobQueueController", jobQueueController, ["tokenHeaderService"]);
+		.controller("jobQueueController", jobQueueController);
 
-	function jobQueueController($http, $interval, tokenHeaderService, $scope) {
+	function jobQueueController($http, $interval, $scope) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.title = "Stardust Queue";
@@ -44,12 +44,12 @@
 				$interval.cancel(refreshPromise);
 			});
 
-		$http.get("./Stardust/QueueTypes", tokenHeaderService.getHeaders())
+		$http.get("./Stardust/QueueTypes")
 			.then(function (response) {
 				vm.types = response.data;
 			});
 
-		$http.get("./AllTenants", tokenHeaderService.getHeaders())
+		$http.get("./AllTenants")
 			.then(function (response) {
 				vm.Tenants = response.data;
 			});
@@ -65,8 +65,7 @@
 				jobType = vm.jobTypeFilter;
 			}
 
-			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType };
-			$http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeadersAndParams(params))
+			$http.get("./Stardust/QueuedJobs", {params : { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType }})
 				.then(function (response) {
 					if (response.data.length < vm.resultsTo) {
 						vm.moreJobs = false;
@@ -96,7 +95,7 @@
 		function getNewFreshData() {
 			vm.resultsFrom += vm.limit;
 			vm.resultsTo += vm.limit;
-			getJobs(true);
+			getJobsByFilter();
 		}
 
 		function toggle(item, list) {
@@ -107,21 +106,21 @@
 			else {
 				list.push(item);
 			}
-		};
+		}
 
 		function exists(item, list) {
 			return list.indexOf(item) > -1;
-		};
+		}
 
 		function isIndeterminate() {
 			return (vm.selected.length !== 0 &&
 				vm.selected.length !== vm.Jobs.length);
-		};
+		}
 
 		function isChecked() {
 			if (vm.Jobs.length === 0) return false;
 			return vm.selected.length === vm.Jobs.length;
-		};
+		}
 
 		function toggleAll() {
 			if (vm.selected.length === vm.Jobs.length) {
@@ -132,15 +131,15 @@
 					vm.selected.push(job.JobId);
 				});
 			}
-		};
+		}
 
 		function deleteQueuedJobs() {
-			$http.post("./Stardust/DeleteQueuedJobs",vm.selected, tokenHeaderService.getHeaders())
+			$http.post("./Stardust/DeleteQueuedJobs", vm.selected)
 				.then(function (response) {
 					vm.selected = [];
 					vm.Jobs = [];
 					vm.resultsFrom = 1;
-					getJobs();
+					getJobsByFilter();
 				})
 				.catch(function (xhr, ajaxOptions, thrownError) {
 					vm.JobError = ajaxOptions;
@@ -148,7 +147,8 @@
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
 				});
-		};
+		}
+
 		function pollNewData() {
 			var tmpFrom = vm.resultsFrom;
 			vm.resultsFrom = 1;
@@ -158,7 +158,7 @@
 
 		function back() {
 			window.history.back();
-		};
+		}
 
 		function selectTenant(name) {
 			vm.selectedDataSource = name;

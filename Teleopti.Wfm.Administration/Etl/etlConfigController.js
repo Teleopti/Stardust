@@ -9,7 +9,7 @@
 			"$window"
 		]);
 
-	function etlConfigController($http, tokenHeaderService, $timeout, $window) {
+	function etlConfigController($http, $timeout, $window) {
 		var vm = this;
 
 		vm.tenants = [];
@@ -27,18 +27,12 @@
 
 		function getTenants() {
 			$http
-				.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
+				.get("./Etl/GetTenants")
 				.then(function (response) {
 					vm.tenants = response.data;
 					// addUrl();
 				});
 		}
-
-		// function addUrl() {
-		//   for (var i = 0; i < vm.tenants.length; i++) {
-		//     vm.tenants[i].Url = encodeURIComponent(vm.tenants[i].TenantName)
-		//   }
-		// }
 
 		function getLogDataForATenant(tenant) {
 			vm.selectedTenant = tenant;
@@ -46,8 +40,7 @@
 			$http
 				.post(
 					"./Etl/TenantLogDataSources",
-					JSON.stringify(tenant.TenantName),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(tenant.TenantName)
 				)
 				.then(function (response) {
 					vm.tenantLogData = response.data;
@@ -57,7 +50,7 @@
 						tenant.loading = null;
 						vm.showModal = true;
 					} else {
-						$http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
+						$http.get("./Etl/GetConfigurationModel")
 							.then(function (response) {
 								$window.sessionStorage.configData = angular.toJson(response.data)
 								var stringifiedConfigData = angular.fromJson($window.sessionStorage.configData);
@@ -79,8 +72,7 @@
 			$http
 				.post(
 					"./Etl/PersistDataSource",
-					JSON.stringify(logDataObject),
-					tokenHeaderService.getHeaders()
+					JSON.stringify(logDataObject)
 				)
 				.then(function (response) {
 					vm.tenantLogData = null;

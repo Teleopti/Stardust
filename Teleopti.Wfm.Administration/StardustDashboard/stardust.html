@@ -23,7 +23,6 @@
 					</div>
 				</div>
 			</div>
-			
 			<div ng-show="vm.showRefreshPayrollFormats" class="panel panel-default ">
 				<div class="panel-heading">Trigger payroll format load</div>
 				<div class="panel-body">
@@ -79,27 +78,27 @@
 		<div class="col-md-9">
 			<div class="panel panel-default ">
 				<div class="panel-heading">
-					Failures  <md-icon md-svg-src="Content/images/error_alert_24px.svg" ng-show="vm.showFailureAlert"></md-icon> 
+					Failures  <md-icon md-svg-src="Content/images/error_alert_24px.svg" ng-show="vm.showFailureAlert"></md-icon>
 				</div>
 				<div class="panel-body">
 					<table ng-show="vm.anyFailedJobs">
 						<thead>
-						<tr>
-							<th>Tenant</th>
-							<th>Event</th>
-							<th>Started (UTC)</th>
-							<th>Sent to</th>
-							<th>Result</th>
-						</tr>
+							<tr>
+								<th>Tenant</th>
+								<th>Event</th>
+								<th>Started (UTC)</th>
+								<th>Sent to</th>
+								<th>Result</th>
+							</tr>
 						</thead>
 						<tbody>
-						<tr ng-repeat="job in vm.FailedJobs">
-							<td>{{job.DataSource}}</td>
-							<td><a target="_blank" href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
-							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{job.SentToWorkerNodeUri}}</td>
-							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
-						</tr>
+							<tr ng-repeat="job in vm.FailedJobs">
+								<td>{{job.DataSource}}</td>
+								<td><a target="_blank" href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
+								<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+								<td>{{job.SentToWorkerNodeUri}}</td>
+								<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
+							</tr>
 						</tbody>
 					</table>
 					<p ng-show="!vm.anyFailedJobs">No job failures to show!</p>
@@ -113,18 +112,18 @@
 				<div class="panel-body">
 					<table ng-show="vm.anyQueuedJobs">
 						<thead>
-						<tr>
-							<th>Tenant</th>
-							<th>Event</th>
-							<th>Created (UTC)</th>
-						</tr>
+							<tr>
+								<th>Tenant</th>
+								<th>Event</th>
+								<th>Created (UTC)</th>
+							</tr>
 						</thead>
 						<tbody>
-						<tr ng-repeat="job in vm.QueuedJobs">
-							<td>{{job.DataSource}}</td>
-							<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Type}}</a></td>
-							<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-						</tr>
+							<tr ng-repeat="job in vm.QueuedJobs">
+								<td>{{job.DataSource}}</td>
+								<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Type}}</a></td>
+								<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							</tr>
 						</tbody>
 					</table>
 					<p ng-show="!vm.anyQueuedJobs">Job queue is empty!</p>
@@ -136,22 +135,22 @@
 				<div class="panel-body ">
 					<table ng-show="vm.anyHistory">
 						<thead>
-						<tr>
-							<th>Tenant</th>
-							<th>Event</th>
-							<th>Started (UTC)</th>
-							<th>Sent to</th>
-							<th>Result</th>
-						</tr>
+							<tr>
+								<th>Tenant</th>
+								<th>Event</th>
+								<th>Started (UTC)</th>
+								<th>Sent to</th>
+								<th>Result</th>
+							</tr>
 						</thead>
 						<tbody>
-						<tr ng-repeat="job in vm.RunningJobs">
-							<td>{{job.DataSource}}</td>
-							<td><a target="_blank"  href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
-							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{job.SentToWorkerNodeUri}}</td>
-							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
-						</tr>
+							<tr ng-repeat="job in vm.RunningJobs">
+								<td>{{job.DataSource}}</td>
+								<td><a target="_blank" href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
+								<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+								<td>{{job.SentToWorkerNodeUri}}</td>
+								<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
+							</tr>
 						</tbody>
 					</table>
 					<p ng-show="!vm.anyHistory"><md-icon md-svg-src="Content/images/error_alert_24px.svg" ng-show="vm.showHistoryAlert"></md-icon>   No job has been processed during the last 30 days!</p>
@@ -163,23 +162,23 @@
 				<div class="panel-body">
 					<table ng-show="vm.anyNodes">
 						<thead>
-						<tr>
-							<th>Url</th>
-							<th>Latest Heartbeat (UTC)</th>
-							<th>Working</th>
-							<th>Alive</th>
-						</tr>
+							<tr>
+								<th>Url</th>
+								<th>Latest Heartbeat (UTC)</th>
+								<th>Working</th>
+								<th>Alive</th>
+							</tr>
 						</thead>
 						<tbody>
-						<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
-							<td><a href="#StardustDashboard/nodes/{{node.Id}}">{{node.Url}}</a></td>
-							<td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{node.Running}}</td>
-							<td ng-class="node.Alive === true ? 'green' : 'red'">{{node.Alive}}</td>
-						</tr>
+							<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
+								<td><a href="#StardustDashboard/nodes/{{node.Id}}">{{node.Url}}</a></td>
+								<td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+								<td>{{node.Running}}</td>
+								<td ng-class="node.Alive === true ? 'green' : 'red'">{{node.Alive}}</td>
+							</tr>
 						</tbody>
 					</table>
-					<p  ng-show="!vm.anyNodes"><md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showNodesAlert}}"></md-icon>   No nodes are running. Run the health check to figure out why.</p>
+					<p ng-show="!vm.anyNodes"><md-icon md-svg-src="Content/images/error_alert_24px.svg" style="display:{{vm.showNodesAlert}}"></md-icon>   No nodes are running. Run the health check to figure out why.</p>
 				</div>
 			</div>
 		</div>

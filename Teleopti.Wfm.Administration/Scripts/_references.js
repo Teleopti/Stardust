@@ -17,7 +17,6 @@
 /// <reference path="app/importcontroller.js" />
 /// <reference path="app/listcontroller.js" />
 /// <reference path="app/logincontroller.js" />
-/// <reference path="app/tokenheaderservice.js" />
 /// <reference path="app/userdetailscontroller.js" />
 /// <reference path="app/userscontroller.js" />
 /// <reference path="bootstrap.min.js" />

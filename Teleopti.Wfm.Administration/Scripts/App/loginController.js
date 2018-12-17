@@ -3,7 +3,7 @@
 
 	angular
 		.module('adminApp')
-		.controller('loginController', loginController, ['$scope', '$http', '$window', '$cookies', '$rootScope'])
+		.controller('loginController', loginController, ['$scope', '$http'])
 		.directive('menuItem', function () {
 			return {
 				scope: {
@@ -30,23 +30,19 @@
 			};
 		});
 
-	function loginController($scope, $http, $cookies, $rootScope, tokenHeaderService) {
+	function loginController($scope, $http) {
 		var firstUser = false;
 		var isAzure = false;
 		var vm = this;
-		//checked if has cookie
-		var cookie = $cookies.getObject('WfmAdminAuth');
-		var token = cookie ? cookie.tokenKey : null;
+		vm.user = null;
+		vm.id = null;
 
 		vm.azureString = '';
-		vm.user = cookie ? cookie.user : null;
 		vm.shouldShowEtl = false;
 		vm.loginPassword = "";
 		vm.Message = '';
 		vm.ErrorMessage = '';
-
-		vm.Id = cookie ? cookie.id : null;
-
+		
 		$scope.state = {
 			selected: 1
 		};
@@ -74,16 +70,14 @@
 			}
 		];
 
-		$scope.message = "något som jag vill visa";
-
 		$http.get("./HasNoUser")
 			.then(function (response) {
 				firstUser = response.data;
 				if (firstUser) {
-					vm.user = 'xxfirstxx';
+					vm.user = '';
 					window.location = "firstuser.html";
 				} else {
-					if (!token) {
+					if (!vm.id) {
 						$("#modal-login").dialog({
 							modal: true,
 							title: "Log in to access the admin site",
@@ -107,44 +101,32 @@
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
 
+		$http.get("./LoggedInUser")
+			.then(function (response) {
+				if (response.data.Name !== '') {
+					vm.user = response.data.Name;
+					vm.id = response.data.Id;
+				} else {
+					vm.user = "";
+					vm.id = null;
+					window.location = "#/login";
+				}
+			}).catch(function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			});
+
 		function showError(jqXHR) {
 			vm.ErrorMessage = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}
 
-		function createCookies(data) {
+		function saveUser(data) {
 			vm.user = data.UserName;
-			vm.Id = data.Id;
+			vm.id = data.Id;
 			vm.Message = 'Successful log in...';
-			// Cache the username token in session storage.
-			vm.UserName = data.UserName;
-
-			//lets do authentication in cookie
-			var today = new Date();
-			var expireDate = new Date(today.getTime() + 30 * 60000);
-			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'user': data.UserName, 'id': data.Id }, { 'expires': expireDate });
-		}
-
-		updateCookies();
-
-		function updateCookies() {
-			//catch route chnaged : console.log("location changing to:" + next);
-			$rootScope.$on("$locationChangeStart", function (event, next, current) {
-				//check cookies
-				var checkedCookie = $cookies.getObject('WfmAdminAuth');
-				if (!checkedCookie) {
-					return;
-				} else {
-					//update cookies
-					var info = $cookies.getObject('WfmAdminAuth');
-					var today = new Date();
-					var newExpireDate = new Date(today.getTime() + 30 * 60000);
-					$cookies.putObject('WfmAdminAuth', info, { 'expires': newExpireDate });
-				}
-			});
 		}
 
 		vm.login = function () {
-			vm.Id = 0;
+			vm.id = null;
 			vm.ErrorMessage = '';
 			$("#modal-login").toggleClass("wait");
 			var loginData = {
@@ -157,12 +139,11 @@
 				loginData
 			).then(function (response) {
 				$("#modal-login").toggleClass("wait");
-				//destory previous cookies
 				if (response.data.Success === false) {
 					vm.ErrorMessage = response.data.Message;
 					return;
 				} else {
-					createCookies(response.data);
+					saveUser(response.data);
 					document.location = "#/";
 					location.reload();
 				}
@@ -171,9 +152,9 @@
 		};
 
 		vm.logout = function () {
-			$cookies.remove('WfmAdminAuth');
 			$http.post('./Logout');
-			vm.user = null;
+			vm.user = '';
+			vm.id = null;
 			document.location = "#/";
 			location.reload();
 		};

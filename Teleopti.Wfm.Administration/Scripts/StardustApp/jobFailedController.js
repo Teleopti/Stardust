@@ -3,9 +3,9 @@
 
 	angular
 		.module("adminApp")
-		.controller("jobFailedController", jobFailedController, ["tokenHeaderService"]);
+		.controller("jobFailedController", jobFailedController);
 
-	function jobFailedController($http, $interval, tokenHeaderService, $scope) {
+	function jobFailedController($http, $interval, $scope) {
 		/* jshint validthis:true */
 
 		var vm = this;
@@ -31,7 +31,7 @@
 
 		var refreshPromise = $interval(pollNewData, refreshInterval);
 
-		$http.get("./Stardust/Types", tokenHeaderService.getHeaders())
+		$http.get("./Stardust/Types")
 			.then(function (response) {
 				vm.types = response.data;
 			});
@@ -41,12 +41,12 @@
 				$interval.cancel(refreshPromise);
 			});
 
-		$http.get("./AllTenants", tokenHeaderService.getHeaders())
+		$http.get("./AllTenants")
 			.then(function (response) {
 				vm.Tenants = response.data;
 			});
 
-		$http.get("./Stardust/OldestJob", tokenHeaderService.getHeaders())
+		$http.get("./Stardust/OldestJob")
 			.then(function (response) {
 				var oldestJob = response.data;
 				vm.minFrom = new Date(oldestJob.Created);
@@ -74,8 +74,7 @@
 				jobType = vm.jobTypeFilter;
 			}
 
-			var params = { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType, "fromdate": vm.fromDateFilter, "todate": vm.toDateFilter};
-			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams(params))
+			$http.get("./Stardust/FailedJobs", {params : { "from": vm.resultsFrom, "to": vm.resultsTo, "dataSource": dataSource, "type": jobType, "fromdate": vm.fromDateFilter, "todate": vm.toDateFilter }})
 				.then(function (response) {
 					if (response.data.length < vm.resultsTo) {
 						vm.moreJobs = false;

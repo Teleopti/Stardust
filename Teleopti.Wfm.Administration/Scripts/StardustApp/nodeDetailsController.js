@@ -3,9 +3,9 @@
 
 	angular
 		.module('adminApp')
-		.controller('nodeDetailsController', nodeDetailsController, ['tokenHeaderService']);
+		.controller('nodeDetailsController', nodeDetailsController);
 
-	function nodeDetailsController($http, $routeParams, tokenHeaderService) {
+	function nodeDetailsController($http, $routeParams) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.back = back;
@@ -19,12 +19,12 @@
 		getJobs();
 
 		function getJobs(dataExists) {
-			$http.get("./Stardust/WorkerNode/" + vm.NodeId, tokenHeaderService.getHeaders())
+			$http.get("./Stardust/WorkerNode/" + vm.NodeId)
 				.then(function (response) {
 					vm.Node = response.data;
 				});
 
-			$http.get("./Stardust/JobsByNode/" + vm.NodeId + "/" + vm.resultsFrom + "/" + vm.resultsTo  , tokenHeaderService.getHeaders())
+			$http.get("./Stardust/JobsByNode/" + vm.NodeId + "/" + vm.resultsFrom + "/" + vm.resultsTo)
 				.then(function (response) {
 					if (response.data.length < vm.limit) {
 						vm.noMoreJobs = true;

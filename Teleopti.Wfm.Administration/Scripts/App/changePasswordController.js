@@ -3,9 +3,9 @@
 
 	angular
 		.module('adminApp')
-		.controller('changePasswordController', changePasswordController, ['tokenHeaderService']);
+		.controller('changePasswordController', changePasswordController);
 
-	function changePasswordController($http, $routeParams, tokenHeaderService) {
+	function changePasswordController($http, $routeParams) {
 		var vm = this;
 		vm.UserId = $routeParams.id;
 		vm.OldPassword = "";
@@ -49,7 +49,7 @@
 				OldPassword: vm.OldPassword,
 				NewPassword: vm.Password,
 				ConfirmNewPassword: vm.ConfirmPassword
-			}, tokenHeaderService.getHeaders())
+				})
 				.then(function (response) {
 					if (!response.data.Success) {
 						vm.ErrorMessage = response.data.Message;

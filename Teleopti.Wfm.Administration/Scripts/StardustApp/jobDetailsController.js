@@ -3,9 +3,9 @@
 
 	angular
 		.module('adminApp')
-		.controller('jobDetailsController', jobDetailsController, ['tokenHeaderService']);
+		.controller('jobDetailsController', jobDetailsController);
 
-	function jobDetailsController($http, $routeParams, tokenHeaderService) {
+	function jobDetailsController($http, $routeParams) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.back = back;
@@ -13,12 +13,12 @@
 		vm.quantity = preferedLogLevel();
 		
 
-		$http.get("./Stardust/JobDetails/" + vm.JobId, tokenHeaderService.getHeaders())
+		$http.get("./Stardust/JobDetails/" + vm.JobId)
 			.then(function (response) {
 				vm.JobDetails = response.data;
 			});
 
-		$http.get("./Stardust/Job/" + vm.JobId, tokenHeaderService.getHeaders())
+		$http.get("./Stardust/Job/" + vm.JobId)
 			.then(function (response) {
 				vm.Job = response.data;
 			});

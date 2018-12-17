@@ -3,9 +3,9 @@
 
 	angular
 		.module('adminApp')
-		.controller('adduserController', adduserController, ['tokenHeaderService']);
+		.controller('adduserController', adduserController);
 
-	function adduserController($http, tokenHeaderService) {
+	function adduserController($http) {
 		var vm = this;
 		
 		vm.Name = "";
@@ -60,8 +60,7 @@
 				$http.post("./CheckEmail",
 						{
 							Email: vm.Email
-						},
-						tokenHeaderService.getHeaders())
+						})
 					.then(function (response) {
 						if (!response.data.Success) {
 							vm.EmailMessage = response.data.Message;
@@ -112,8 +111,7 @@
 						Email: vm.Email,
 						Password: vm.Password,
 						ConfirmPassword: vm.ConfirmPassword
-					},
-					tokenHeaderService.getHeaders())
+					})
 				.then(function (response) {
 					if (!response.data.Success) {
 						vm.ErrorMessage = response.data.Message;

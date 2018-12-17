@@ -3,14 +3,14 @@
 
 	angular
 		.module('adminApp')
-		.controller('jobQueueDetailsController', jobQueueDetailsController, ['tokenHeaderService']);
+		.controller('jobQueueDetailsController', jobQueueDetailsController);
 
-	function jobQueueDetailsController($http, $routeParams, tokenHeaderService) {
+	function jobQueueDetailsController($http, $routeParams) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.back = back;
 		vm.JobId = $routeParams.jobId;
-		$http.get("./Stardust/QueuedJobs/" + vm.JobId, tokenHeaderService.getHeaders())
+		$http.get("./Stardust/QueuedJobs/" + vm.JobId)
 			.then(function (response) {
 				vm.Job = response.data;
 			});

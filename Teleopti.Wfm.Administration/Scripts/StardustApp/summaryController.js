@@ -3,9 +3,9 @@
 
 	angular
 		.module("adminApp")
-		.controller("summaryController", summaryController, ["tokenHeaderService"]);
+		.controller("summaryController", summaryController);
 
-	function summaryController($http, tokenHeaderService, $interval, $scope) {
+	function summaryController($http, $interval, $scope) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.title = "Stardust Summary";
@@ -34,18 +34,17 @@
 		$http.get("./Toggle/IsEnabled",
 				{
 					params: { toggle: "Wfm_Payroll_SupportMultiDllPayrolls_75959" }
-				},
-				tokenHeaderService.getHeaders())
+				})
 			.then(function(response) {
 				vm.showRefreshPayrollFormats = response.data;
 			});
 
-	$http.get("./AllTenants", tokenHeaderService.getHeaders())
+	$http.get("./AllTenants")
 		.then(function (response) {
 			vm.Tenants = response.data;
 			});
 
-		$http.get("./Stardust/ShowIntradayTool", tokenHeaderService.getHeaders())
+		$http.get("./Stardust/ShowIntradayTool")
 			.then(function (response) {
 				vm.showIntradayTool = response.data;
 			});
@@ -58,7 +57,7 @@
 		}
 
 		function refresh() {
-			$http.get("./Stardust/Jobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
+			$http.get("./Stardust/Jobs?from=1&to=5")
 				.then(function (response) {
 					vm.RunningJobs = response.data;
 					if (response.data.length > 0) {
@@ -77,7 +76,7 @@
 					cancelPollingAndShowExpiredDialog();
 				});
 
-			$http.get("./Stardust/FailedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5}))
+			$http.get("./Stardust/FailedJobs?from=1&to=5")
 				.then(function (response) {
 					vm.FailedJobs = response.data;
 					if (response.data.length > 0) {
@@ -96,7 +95,7 @@
 					cancelPollingAndShowExpiredDialog();
 				});
 
-			$http.get("./Stardust/QueuedJobs", tokenHeaderService.getHeadersAndParams({ "from": 1, "to": 5 }))
+			$http.get("./Stardust/QueuedJobs?from=1&to=5")
 				.then(function (response) {
 					vm.QueuedJobs = response.data;
 					if (response.data.length > 0) {
@@ -113,12 +112,12 @@
 					cancelPollingAndShowExpiredDialog();
 				});
 
-			$http.get("./Stardust/QueueCount", tokenHeaderService.getHeaders())
+			$http.get("./Stardust/QueueCount")
 				.then(function (response) {
 					vm.queueCount = response.data;
 				});
 
-			$http.get("./Stardust/AliveWorkerNodes", tokenHeaderService.getHeaders())
+			$http.get("./Stardust/AliveWorkerNodes")
 				.then(function (response) {
 					vm.WorkerNodes = response.data;
 					if (response.data.length > 0) {
@@ -148,8 +147,7 @@
 				{
 					"Tenant": vm.selectedTenantName,
 					"Days": 14
-				},
-				tokenHeaderService.getHeaders()
+				}
 			).then(function() {
 				refresh();
 			});
@@ -158,8 +156,7 @@
 		function healthCheck() {
 			vm.result = "Running...";
 			vm.showHealthAlert = false;
-			$http.get("./Stardust/HealthCheck",
-					tokenHeaderService.getHeaders())
+			$http.get("./Stardust/HealthCheck")
 				.then(function (response) {
 					vm.result = response.data;
 					if (response.data !== "Everything looks OK!")
@@ -177,21 +174,18 @@
 			$http.post("./Stardust/RefreshPayrollFormats",
 				{
 					"Tenant": vm.selectedTenantName
-				},
-				tokenHeaderService.getHeaders()
+				}
 			).then(function () {
 				refresh();
 			});
 		}
 
 		function intradayToolGoWithTheFlow() {
-			$http.get("./Stardust/IntradayToolGoWithTheFlow",
-				tokenHeaderService.getHeaders()
+			$http.get("./Stardust/IntradayToolGoWithTheFlow"   
 			).then(function () {
 				refresh();
 			});
 		}
 	}
-
 
 })();

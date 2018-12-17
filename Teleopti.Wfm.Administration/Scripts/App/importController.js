@@ -3,9 +3,9 @@
 
 	angular
 		.module('adminApp')
-		.controller('importController', importController, ['tokenHeaderService']);
+		.controller('importController', importController);
 
-	function importController($http, tokenHeaderService) {
+	function importController($http) {
 		var vm = this;
 		$("#loading").hide();
 		vm.Tenant = "";
@@ -48,7 +48,7 @@
 		};
 
 		vm.CheckTenantName = function() {
-			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
+			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"')
 				.then(function(response) {
 					vm.TenantMessage = response.data.Message;
 					vm.TenantOk = response.data.Success;
@@ -71,7 +71,7 @@
 				UseIntegratedSecurity: false
 			};
 
-			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
+			$http.post('./CheckImportAdmin', model)
 				.then(function(response) {
 					vm.SqlUserOk = response.data.Success,
 						vm.SqlUserOkMessage = response.data.Message;
@@ -98,7 +98,7 @@
 				Password: vm.Password
 			};
 
-			$http.post('./CheckAppLogin', model, tokenHeaderService.getHeaders())
+			$http.post('./CheckAppLogin', model)
 				.then(function(response) {
 					vm.AppLoginOk = response.data.Success,
 						vm.AppLoginMessage = response.data.Message;
@@ -115,8 +115,7 @@
 						Password: vm.Password,
 						Database: vm.AppDatabase,
 						DbType: 1
-					},
-					tokenHeaderService.getHeaders())
+					})
 				.then(function (response) {
 					vm.AppDbOk = response.data.Exists;
 					vm.AppDbCheckMessage = response.data.Message;
@@ -139,8 +138,7 @@
 						Password: vm.Password,
 						Database: vm.AnalyticsDatabase,
 						DbType: 2
-					},
-					tokenHeaderService.getHeaders())
+					})
 				.then(function (response) {
 					vm.AnalDbOk = response.data.Exists;
 					vm.AnalDbCheckMessage = response.data.Message;
@@ -164,8 +162,7 @@
 						Password: vm.Password,
 						Database: vm.AggDatabase,
 						DbType: 3
-					},
-					tokenHeaderService.getHeaders())
+					})
 				.then(function (response) {
 					vm.AggDbOk = response.data.Exists;
 					vm.AggDbCheckMessage = response.data.Message;
@@ -182,8 +179,7 @@
 						UserName: vm.UserName,
 						Password: vm.Password,
 						AppDatabase: vm.AppDatabase
-					},
-					tokenHeaderService.getHeaders())
+					})
 				.then(function(response) {
 					vm.HeadVersion = response.data.HeadVersion;
 					vm.ImportAppVersion = response.data.ImportAppVersion;
@@ -213,7 +209,7 @@
 				AggDatabase: vm.AggDatabase,
 				AdminUser: vm.CreateDbUser,
 				AdminPassword: vm.CreateDbPassword
-			}, tokenHeaderService.getHeaders())
+			})
 				.then(function (response) {
 					vm.Success = response.data.Success;
 					vm.Message = response.data.Message;
@@ -229,7 +225,7 @@
 		};
 
 		vm.GetImportLog = function() {
-			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders())
+			$http.post('./GetImportLog', vm.TenantId)
 				.then(function(response) {
 					vm.Log = response.data;
 				});

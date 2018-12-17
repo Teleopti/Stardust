@@ -3,13 +3,13 @@
 
 	angular
 		.module('adminApp')
-		.controller('usersController', usersController, ['tokenHeaderService']);
+		.controller('usersController', usersController);
 
-	function usersController($http, tokenHeaderService) {
+	function usersController($http) {
 		var vm = this;
 
 		vm.LoadUsers = function() {
-			$http.get('./Users', tokenHeaderService.getHeaders())
+			$http.get('./Users')
 				.then(function (response) {
 					vm.users = response.data;
 				});

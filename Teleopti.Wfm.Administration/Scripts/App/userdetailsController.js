@@ -1,12 +1,11 @@
 ﻿(function () {
 	'use strict';
-	var idKey = 'idToken';
-	var userKey = 'userToken';
+
 	angular
 		.module('adminApp')
-		.controller('userdetailsController', userdetailsController, ['tokenHeaderService']);
+		.controller('userdetailsController', userdetailsController);
 
-	function userdetailsController($http, $routeParams, $cookies, tokenHeaderService) {
+	function userdetailsController($http, $routeParams, $cookies) {
 		var vm = this;
 
 		vm.UserId = $routeParams.id;
@@ -30,7 +29,7 @@
 		};
 
 		vm.LoadUser = function() {
-			$http.post('./User', vm.UserId, tokenHeaderService.getHeaders())
+			$http.post('./User', vm.UserId)
 				.then(function (response) {
 					vm.UserId = response.data.Id;
 					vm.Name = response.data.Name;
@@ -67,11 +66,10 @@
 			}
 			if (vm.EmailOk) {
 				$http.post('./CheckEmail',
-						{
-							Email: vm.Email,
-							Id: vm.UserId
-						},
-						tokenHeaderService.getHeaders())
+					{
+						Email: vm.Email,
+						Id: vm.UserId
+					})
 					.then(function (response) {
 						if (!response.data.Success) {
 							vm.EmailMessage = response.data.Message;
@@ -101,8 +99,7 @@
 						Id: vm.UserId,
 						Name: vm.Name,
 						Email: vm.Email
-					},
-					tokenHeaderService.getHeaders())
+					})
 				.then(function (response) {
 					if (!response.data.Success) {
 						vm.Message = response.data.Message;
@@ -126,7 +123,7 @@
 		};
 
 		vm.DeleteUser = function() {
-			$http.post('./DeleteUser', vm.UserId, tokenHeaderService.getHeaders())
+			$http.post('./DeleteUser', vm.UserId)
 				.then(function (response) {
 					window.location = "#users";
 				});

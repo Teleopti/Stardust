@@ -3,9 +3,9 @@
 
 	angular
 		.module('adminApp')
-		.controller('createController', createController, ['tokenHeaderService']);
+		.controller('createController', createController);
 
-	function createController($http, tokenHeaderService) {
+	function createController($http) {
 		var vm = this;
 		$("#loading").hide();
 
@@ -53,7 +53,7 @@
 
 		vm.CheckTenantName = function() {
 			vm.Message = '';
-			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
+			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"')
 				.then(function(response) {
 					vm.TenantMessage = response.data.Message;
 					vm.TenantOk = response.data.Success;
@@ -71,7 +71,7 @@
 				CreateDbPassword: vm.CreateDbPassword
 			};
 
-			$http.post('./CheckCreateDb', model, tokenHeaderService.getHeaders())
+			$http.post('./CheckCreateDb', model)
 				.then(function(response) {
 					vm.SqlUserOk = response.data.Success,
 						vm.SqlUserOkMessage = response.data.Message;
@@ -99,7 +99,7 @@
 				AppPassword: vm.AppPassword
 			};
 
-			$http.post('./CheckLogin', model, tokenHeaderService.getHeaders())
+			$http.post('./CheckLogin', model)
 				.then(function(response) {
 					vm.UserOk = response.data.Success,
 						vm.UserOkMessage = response.data.Message;
@@ -122,7 +122,7 @@
 				BusinessUnit: vm.BusinessUnit
 			};
 
-			$http.post('./CreateTenant', model, tokenHeaderService.getHeaders())
+			$http.post('./CreateTenant', model)
 				.then(function (response) {
 					vm.Success = response.data.Success,
 						vm.Message = response.data.Message;
@@ -143,7 +143,7 @@
 				FirstUserPassword: vm.FirstUserPassword
 			};
 
-			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
+			$http.post('./CheckFirstUser', model)
 				.then(function(response) {
 					vm.FirstUserOk = response.data.Success,
 						vm.FirstUserOkMessage = response.data.Message;

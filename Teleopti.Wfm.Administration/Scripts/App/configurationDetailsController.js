@@ -2,9 +2,9 @@
 	'use strict';
 	angular
 		.module('adminApp')
-		.controller('configurationDetailsController', configurationDetailsController, ['tokenHeaderService']);
+		.controller('configurationDetailsController', configurationDetailsController);
 
-	function configurationDetailsController($http, $routeParams, tokenHeaderService) {
+	function configurationDetailsController($http, $routeParams) {
 		var vm = this;
 
 		vm.Key = $routeParams.key;
@@ -15,7 +15,7 @@
 		vm.Message = "";
 
 		var loadConfiguration = function() {
-			$http.post('./Configuration', '"' + vm.Key + '"', tokenHeaderService.getHeaders())
+			$http.post('./Configuration', '"' + vm.Key + '"')
 				.then(function(response) {
 					vm.Value = response.data;
 				});
@@ -37,7 +37,7 @@
 			$http.post('./SaveConfiguration', {
 				Key: vm.Key,
 				Value: vm.Value
-			}, tokenHeaderService.getHeaders())
+			})
 				.then(function (response) {
 					if (!response.data.Success) {
 						vm.Message = response.data.Message;

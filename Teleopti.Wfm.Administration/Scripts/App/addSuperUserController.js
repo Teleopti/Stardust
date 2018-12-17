@@ -3,9 +3,9 @@
 
 	angular
 		.module('adminApp')
-		.controller('addSuperUserController', addSuperUserController, ['tokenHeaderService']);
+		.controller('addSuperUserController', addSuperUserController);
 
-	function addSuperUserController($http, $routeParams, tokenHeaderService) {
+	function addSuperUserController($http, $routeParams) {
 		var vm = this;
 		vm.Tenant = $routeParams.tenant;
 		vm.FirstName = "";
@@ -38,7 +38,7 @@
 				FirstUserPassword: vm.Password
 			};
 
-			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
+			$http.post('./CheckFirstUser', model)
 				.then(function(response) {
 					vm.NewUserOk = response.data.Success,
 						vm.NewUserOkMessage = response.data.Message;
@@ -52,7 +52,7 @@
 				LastName: vm.LastName,
 				UserName: vm.UserName,
 				Password: vm.Password
-			}, tokenHeaderService.getHeaders())
+			})
 				.then(function (response) {
 					if (response.data.Success === false) {
 						vm.Message = response.data.Message;
