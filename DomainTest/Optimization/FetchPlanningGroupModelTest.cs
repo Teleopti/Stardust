@@ -143,7 +143,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			PlanningGroupRepository.Add(planningGroup);
 
 			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
-			planningGroupModel.PreferencePercent.Should().Be.EqualTo(planningGroup.Settings.PreferenceValue.Value);
+			planningGroupModel.PreferencePercent.Should().Be
+				.EqualTo(planningGroup.Settings.PreferenceValue.Value * 100);
 		}
 
 		[Test]
