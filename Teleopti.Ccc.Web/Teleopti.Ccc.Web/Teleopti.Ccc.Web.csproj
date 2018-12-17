@@ -1500,8 +1500,8 @@
     <Content Include="Areas\Start\Content\Css\main.min.css" />
     <Content Include="Areas\Start\Content\Images\bg.png" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
+    <Content Include="Content\botchat\botchat-es5.js" />
     <Content Include="Content\botchat\botchat.css" />
-    <Content Include="Content\botchat\botchat.js" />
     <Content Include="Content\Error\404.aspx" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.dialog.js" />
