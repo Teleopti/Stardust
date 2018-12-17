@@ -22,11 +22,12 @@ function Hostsfile-Add-Cname {
     param(
     [string]$CName
     )
-
+	
+	$hostentry = "127.0.0.1 $CName"
     $hostsFile = "$($env:windir)\system32\Drivers\etc\hosts"
-    If ((Get-Content "$hostsFile" ) -notcontains "localhost $CName") {
+    If ((Get-Content "$hostsFile" ) -notcontains "$hostentry") {
         Add-Content -Encoding UTF8  "$hostsFile" "`r`n"
-        Add-Content -Encoding UTF8  "$hostsFile" "localhost $CName"
+        Add-Content -Encoding UTF8  "$hostsFile" "$hostentry"
     }
 }
 
