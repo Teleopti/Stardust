@@ -15,8 +15,7 @@
 					<div class="con-flex">
 						<label for="planningGroupNameId"><b translate>NameColon</b></label>
 						<input type="text" maxlength="100" minlength="1" name="planningGroupName"
-							   id="planningGroupNameId" autofocus autocomplete="off" ng-model="vm.name"
-							   class="pg-setting-name" required=""/>
+							   id="planningGroupNameId" autofocus autocomplete="off" ng-model="vm.name" required/>
 						<div ng-cloak class="animate-show"
 							 ng-show="(form.$submitted || form.planningGroupName.$touched) && form.planningGroupName.$error.required">
 							<div class="form-input-message formInvalidInput">{{'YouCannotHaveABlankName' | translate }}

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I input scheduling setting name '(.*)'")]
 		public void WhenIInputschedulingSettingName(string planningGroupName)
 		{
-			Browser.Interactions.FillWith("input#schedulingSettingName", planningGroupName);
+			Browser.Interactions.FillWith("input.pg-setting-name", planningGroupName);
 		}
 
 		[When(@"I select the team")]
@@ -29,6 +29,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			foreach (var teamFilter in table.CreateSet<TeamFilter>())
 			{
 				searchAndSelect(teamFilter.Team, $"{teamFilter.Site}/{teamFilter.Team}");
+			}
+		}
+		
+		[When(@"I select the team for scheduling setting filter")]
+		public void WhenISelectTheTeamForSchedulingSettingFilter(Table table)
+		{
+			foreach (var teamFilter in table.CreateSet<TeamFilter>())
+			{
+				searchAndSelectForSchedulingSettingFilter(teamFilter.Team, $"{teamFilter.Site}/{teamFilter.Team}");
 			}
 		}
 
@@ -51,6 +60,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		public void WhenIOpenPanelForSchedulingSetting(string planningGroupSettingName)
 		{
 			Browser.Interactions.ClickContaining(".scheduling-setting-name", planningGroupSettingName);
+		}
+		
+		[When(@"I add new scheduling setting")]
+		public void WhenIAddNewSchedulingSetting()
+		{
+			Browser.Interactions.Click("#createSchedulingSetting");
 		}
 
 		[When(@"I click delete scheduling setting '(.*)'")]
@@ -145,6 +160,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		public void ThenIShouldNotSeeInTheSchedulingSettingList(string planningGroupSettingName)
 		{
 			Browser.Interactions.AssertNoContains("card-panel-list", ".scheduling-setting-name", planningGroupSettingName);
+		}
+		
+		private void searchAndSelectForSchedulingSettingFilter(string searchText, string selectItemText)
+		{
+			Browser.Interactions.FillWith(".scheduling-setting md-autocomplete md-autocomplete-wrap input", searchText);
+			Browser.Interactions.SetScopeValues(".scheduling-setting md-autocomplete md-autocomplete-wrap", new Dictionary<string, string> // Hack to show dropdown
+			{
+				{"$mdAutocompleteCtrl.hidden",  "false"}
+			});
+			Browser.Interactions.ClickContaining(".wfm-chip span.chip-text", selectItemText);
 		}
 
 		private void searchAndSelect(string searchText, string selectItemText)

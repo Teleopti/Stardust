@@ -96,13 +96,16 @@ Scenario: Add scheduling setting for planning group
 	| Field               | Value           |
 	| Planning group name | PlanningGroup 1 |
 	| Team                | Team 1          |
-	When I am viewing create scheduling setting page for planning group 'PlanningGroup 1'
+	When I am viewing planning group list page
+	And I click edit planning group 'PlanningGroup 1'
+	And I add new scheduling setting
 	And I input scheduling setting name 'PlanningGroupSetting 1'
-	And I select the team 
+	And I select the team for scheduling setting filter
 	 | Team   | Site   |
 	 | Team 1 | Site 1 |
 	 | Team 2 | Site 2 |
-	And I save scheduling setting
+    And I save planning group
+    And I click edit planning group 'PlanningGroup 1'
 	Then I should see 'PlanningGroupSetting 1' in the scheduling setting list
 
 Scenario: Add block scheduling setting for planning group
@@ -119,14 +122,17 @@ Scenario: Add block scheduling setting for planning group
 	| Field               | Value           |
 	| Planning group name | PlanningGroup 1 |
 	| Team                | Team 1          |
-	When I am viewing create scheduling setting page for planning group 'PlanningGroup 1'
+  	When I am viewing planning group list page
+  	And I click edit planning group 'PlanningGroup 1'
+	And I add new scheduling setting
 	And I input scheduling setting name 'PlanningGroupBlockSetting 1'
-	And I select the team 
-	 | Team   | Site   |
-	 | Team 1 | Site 1 |
-	 | Team 2 | Site 2 |
+	And I select the team for scheduling setting filter
+	| Team   | Site   |
+	| Team 1 | Site 1 |
+	| Team 2 | Site 2 |
 	And I turn on block scheduling setting
-	And I save scheduling setting
+	And I save planning group
+    And I click edit planning group 'PlanningGroup 1'
 	Then I should see 'PlanningGroupBlockSetting 1' in the scheduling setting list
 
 Scenario: Edit scheduling setting for planning group
@@ -144,11 +150,13 @@ Scenario: Edit scheduling setting for planning group
 	| Scheduling setting name | PlanningGroupSetting 1 |
 	| Planning group name	  | PlanningGroup 1        |
 	| Team                    | Team 1		           |   
-	| Block scheduling        | default		           |        
-	When I am viewing edit scheduling setting page for planning group 'PlanningGroup 1'
+	| Block scheduling        | default		           |
+	When I am viewing planning group list page
+	And I click edit planning group 'PlanningGroup 1'
 	And I input scheduling setting name 'PlanningGroupBlockSetting 1 Update'
 	And I turn off block scheduling setting
-	And I save scheduling setting
+    And I save planning group
+    And I click edit planning group 'PlanningGroup 1'
 	Then I should see 'PlanningGroupBlockSetting 1 Update' in the scheduling setting list
 
 Scenario: Delete scheduling setting for planning group
@@ -166,9 +174,9 @@ Scenario: Delete scheduling setting for planning group
 	| Scheduling setting name | PlanningGroupSetting 1 |
 	| Planning group name	  | PlanningGroup 1        |
 	| Team                    | Team 1		           |   
-	| Block scheduling        | default		           |        
-	When I am viewing scheduling setting page for planning group 'PlanningGroup 1'
-	And I open panel for scheduling setting 'PlanningGroupSetting 1' 
+	| Block scheduling        | default		           |
+	When I am viewing planning group list page
+	And I click edit planning group 'PlanningGroup 1'
 	And I click delete scheduling setting 'PlanningGroupSetting 1' 
 	And I confirm delete scheduling setting
 	Then I should not see 'PlanningGroupSetting 1' in the scheduling setting list
