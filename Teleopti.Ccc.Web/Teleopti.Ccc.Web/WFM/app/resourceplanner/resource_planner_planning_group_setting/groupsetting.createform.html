@@ -95,36 +95,36 @@
 										<span class="text-danger" ng-show="!vm.isValidConsecDaysOff()">{{'InvalidInput'|translate}}</span>
 									</td>
 									<td><input type="number" ng-model="vm.settingInfo.MinConsecutiveWorkdays" min="0"
-											   title="{{'MinConsecutiveWorkdays'|translate}}"/></td>
+											   title="{{'MinConsecutiveWorkdays'|translate}}" ng-change="vm.minChanged('MinConsecutiveWorkdays', 'MaxConsecutiveWorkdays')"/></td>
 									<td><input type="number" ng-model="vm.settingInfo.MaxConsecutiveWorkdays" min="0"
-											   title="{{'MaxConsecutiveWorkdays'|translate}}"/></td>
+											   title="{{'MaxConsecutiveWorkdays'|translate}}" ng-change="vm.maxChanged('MinConsecutiveWorkdays', 'MaxConsecutiveWorkdays')"/></td>
 								</tr>
 								<tr>
 									<td colspan="2">{{'ConsecutiveDaysOff'|translate}}
 										<span class="text-danger" ng-show="!vm.isValidConsecWorkDays()">{{'InvalidInput'|translate}}</span>
 									</td>
 									<td><input type="number" ng-model="vm.settingInfo.MinConsecutiveDayOffs" min="0"
-											   title="{{'MinConsecutiveDayOffs'|translate}}"/></td>
+											   title="{{'MinConsecutiveDayOffs'|translate}}" ng-change="vm.minChanged('MinConsecutiveDayOffs', 'MaxConsecutiveDayOffs')"/></td>
 									<td><input type="number" ng-model="vm.settingInfo.MaxConsecutiveDayOffs" min="0"
-											   title="{{'MaxConsecutiveDayOffs'|translate}}"/></td>
+											   title="{{'MaxConsecutiveDayOffs'|translate}}" ng-change="vm.maxChanged('MinConsecutiveDayOffs', 'MaxConsecutiveDayOffs')"/></td>
 								</tr>
 								<tr>
 									<td colspan="2">{{'FullWeekEndsOff'|translate}}
 										<span class="text-danger" ng-show="!vm.isValidFullWeekEndsOff()">{{'InvalidInput'|translate}}</span>
 									</td>
 									<td><input type="number" ng-model="vm.settingInfo.MinFullWeekendsOff" min="0"
-											   title="{{'MinFullWeekendsOff'|translate}}"/></td>
+											   title="{{'MinFullWeekendsOff'|translate}}" ng-change="vm.minChanged('MinFullWeekendsOff', 'MaxFullWeekendsOff')"/></td>
 									<td><input type="number" ng-model="vm.settingInfo.MaxFullWeekendsOff" min="0"
-											   title="{{'MaxFullWeekendsOff'|translate}}"/></td>
+											   title="{{'MaxFullWeekendsOff'|translate}}" ng-change="vm.maxChanged('MinFullWeekendsOff', 'MaxFullWeekendsOff')"/></td>
 								</tr>
 								<tr>
 									<td colspan="2">{{'FullWeekEndDaysOff'|translate}}
 										<span class="text-danger" ng-show="!vm.isValidFullWeekEndDaysOff()">{{'InvalidInput'|translate}}</span>
 									</td>
 									<td><input type="number" ng-model="vm.settingInfo.MinWeekendDaysOff" min="0"
-											   title="{{'MinWeekendDaysOff'|translate}}"/></td>
+											   title="{{'MinWeekendDaysOff'|translate}}" ng-change="vm.minChanged('MinWeekendDaysOff', 'MaxWeekendDaysOff')"/></td>
 									<td><input type="number" ng-model="vm.settingInfo.MaxWeekendDaysOff" min="0"
-											   title="{{'MaxWeekendDaysOff'|translate}}"/></td>
+											   title="{{'MaxWeekendDaysOff'|translate}}" ng-change="vm.maxChanged('MinWeekendDaysOff', 'MaxWeekendDaysOff')"/></td>
 								</tr>
 								</tbody>
 							</table>
