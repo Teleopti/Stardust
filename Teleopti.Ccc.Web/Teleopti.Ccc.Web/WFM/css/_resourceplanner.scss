@@ -478,12 +478,14 @@ card-panel-content {
   z-index: 40;
 }
 
-.plan-group{
+.plan-group:hover{
   cursor: pointer;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 }
 
-.plan-group-pp{
+.plan-group-pp:hover{
   cursor: pointer;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 }
 
 .wfm-form{
