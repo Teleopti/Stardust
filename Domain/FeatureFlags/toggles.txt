@@ -43,7 +43,7 @@ RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
 RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
 RTA_RestrictModifySkillGroups_78568 = RC
-RTA_InputValidationForApprovingAdherencePeriods_77045 = DEV
+RTA_InputValidationForApprovingAdherencePeriods_77045 = RC
 
 MessageBroker_HttpSenderThrottleRequests_79140 = true
 MessageBroker_VeganBurger_79140 = true
