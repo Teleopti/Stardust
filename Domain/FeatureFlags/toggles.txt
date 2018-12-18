@@ -130,7 +130,9 @@ MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
 WFM_Request_View_Permissions_77731 = true
 WFM_Request_Show_Feedback_Link_77733 = true
 WFM_Request_Show_Shift_for_Absence_Requests_79008 = RC
+WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = RC
 WFM_Setting_BankHolidayCalendar_Create_79297 = DEV
+
 
 # Tech #
 WFM_ChatBot_77547 = RC

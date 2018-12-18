@@ -19,8 +19,8 @@
 		};
 
 		svc.buildScheduleContainerStyle = function(shiftsLength, $event) {
-			var containerWidth = 745;
-			var headerHeight = 30 + 12;
+			var containerWidth = 755;
+			var headerHeight = 40 + 12;
 			var shiftRowHeight = 60;
 			var containerHeight = headerHeight + shiftsLength * shiftRowHeight;
 			var containerMaxHeight = 242;

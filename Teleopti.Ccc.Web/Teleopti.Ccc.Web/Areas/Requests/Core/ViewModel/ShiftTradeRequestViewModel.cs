@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 	{
 		public TeamScheduleAgentScheduleViewModel PersonFromSchedule{ get; set; }
 		public TeamScheduleAgentScheduleViewModel PersonToSchedule{ get; set; }
+		public IEnumerable<TeamScheduleTimeLineViewModel> TimeLine { get; set; }
 	}
 
 	public class ShiftTradeDayViewModel

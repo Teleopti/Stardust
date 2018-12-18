@@ -1,11 +1,15 @@
-<table class="table" ng-if="vm.schedules.Schedules.length > 0">
+<table class="table" ng-if="!vm.enableStory79412 && vm.schedules.Schedules.length > 0">
 	<thead>
 		<tr class="person">
 			<th class="person-name person-name-column">
-				<div class="person-name nowrap">{{'AgentName' | translate}}</div>
+				<div class="person-name nowrap">{{ 'AgentName' | translate }}</div>
 			</th>
-			<th id="time-line-container" class="schedule schedule-column">
-				<time-line ng-if="vm.schedules.Schedules.length > 0" times="vm.schedules.TimeLine.HourPoints" chedule-count="vm.schedules.Schedules.length"></time-line>
+			<th class="time-line-container" class="schedule schedule-column">
+				<time-line
+					ng-if="vm.schedules.Schedules.length > 0"
+					times="vm.schedules.TimeLine.HourPoints"
+					chedule-count="vm.schedules.Schedules.length"
+				></time-line>
 			</th>
 			<th class="right-border-empty"></th>
 		</tr>
@@ -13,22 +17,30 @@
 	<tbody>
 		<tr ng-repeat="personSchedule in vm.schedules.Schedules">
 			<td class="person-name person-name-column">
-				<div class="person-name nowrap">{{personSchedule.Name}}</div>
+				<div class="person-name nowrap">{{ personSchedule.Name }}</div>
 			</td>
 			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
-					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0"
-					 ng-style=" {left: dayOff.StartPosition + '%' , width: dayOff.Length + '%' }">
+					<span
+						class="dayoff absolute"
+						ng-repeat="dayOff in personSchedule.DayOffs"
+						ng-if="personSchedule.DayOffs.length > 0"
+						ng-style=" {left: dayOff.StartPosition + '%' , width: dayOff.Length + '%' }"
+					>
 						<md-tooltip md-z-index="1200" ng-if="dayOff.DayOffName !='' ">
-							{{dayOff.DayOffName}}
+							{{ dayOff.DayOffName }}
 						</md-tooltip>
 					</span>
 					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
-						<div class="layer absolute floatleft selectable projection-layer" projection-name="{projection.Description}}"
-						 ng-repeat="projection in shift.Projections" ng-style=" {left: projection.StartPosition + '%' , width:
+						<div
+							class="layer absolute floatleft selectable projection-layer"
+							projection-name="{projection.Description}}"
+							ng-repeat="projection in shift.Projections"
+							ng-style=" {left: projection.StartPosition + '%' , width:
 						 projection.Length + '%' , backgroundColor: projection.Color}"
-						 ng-class="{'overtime-light': projection.IsOvertime && projection.UseLighterBorder, 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder, personAbsence: projection.ParentPersonAbsences !== null}">
-							<md-tooltip md-z-index="1200">{{projection.Description}}</md-tooltip>
+							ng-class="{'overtime-light': projection.IsOvertime && projection.UseLighterBorder, 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder, personAbsence: projection.ParentPersonAbsences !== null}"
+						>
+							<md-tooltip md-z-index="1200">{{ projection.Description }}</md-tooltip>
 						</div>
 					</div>
 				</div>
@@ -36,3 +48,62 @@
 		</tr>
 	</tbody>
 </table>
+
+<div class="requests-shift-row" ng-if="vm.enableStory79412 && vm.shifts && vm.shifts.length > 0">
+	<div class="requests-shift-info pull-left inline-block text-nowrap-ellipsis text-center relative">
+		{{ 'AgentName' | translate }}
+	</div>
+	<span class="requests-shift-category-cell cursor-pointer"></span>
+	<requests-schedule-timeline class="time-line-container" times="vm.times"></requests-schedule-timeline>
+</div>
+
+<div class="requests-schedule-list relative" ng-if="vm.enableStory79412 && vm.shifts && vm.shifts.length > 0">
+	<div ng-repeat="shift in vm.shifts" class="requests-shift-row">
+		<div class="requests-shift-info pull-left inline-block text-nowrap-ellipsis text-center relative">
+			<span class="block">{{ shift.Name }}</span>
+		</div>
+		<span
+			ng-style="{visibility: shift.ShiftCategory ? 'visible': 'hidden', backgroundColor: shift.ShiftCategory.DisplayColor, color: shift.ShiftCategory.TextColor}"
+			class="requests-shift-category-cell cursor-pointer"
+		>
+			{{ shift.ShiftCategory.ShortName }}
+
+			<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
+				<p>{{ shift.ShiftCategory.Name }}</p>
+			</md-tooltip>
+		</span>
+		<div class="requests-shift-layer-container pull-left text-center inline-block relative">
+			<div class="dayoff cursor-pointer absolute" ng-if="shift.IsDayOff">
+				<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
+					<p>{{ shift.DayOffName }}</p>
+				</md-tooltip>
+			</div>
+			<span ng-if="shift.IsNotScheduled">{{ 'NotScheduled' | translate }}</span>
+			<div
+				class="layer absolute cursor-pointer"
+				ng-repeat="projection in shift.Periods"
+				ng-style=" {backgroundColor: projection.Color, left: projection.StartPositionPercentage * 100 + '%', width: (projection.EndPositionPercentage - projection.StartPositionPercentage) * 100 + '%', color: projection.TextColor}"
+				ng-class="{'overtime-light': projection.IsOvertime && projection.TextColor == 'white', 'overtime-dark': projection.IsOvertime && projection.TextColor == 'black'}"
+			>
+				<i ng-if="projection.Meeting" class="mdi mdi-account absolute"></i>
+				<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
+					<p>{{ projection.Title }}</p>
+					<p>{{ projection.TimeSpan }}</p>
+					<div ng-if="projection.Meeting" class="text-left">
+						<p>
+							<span class="text-italic">{{ 'Title' | translate }}: </span> {{ projection.Meeting.Title }}
+						</p>
+						<p>
+							<span class="text-italic">{{ 'Description' | translate }}: </span>
+							{{ projection.Meeting.Description }}
+						</p>
+						<p>
+							<span class="text-italic">{{ 'Location' | translate }}: </span>
+							{{ projection.Meeting.Location }}
+						</p>
+					</div>
+				</md-tooltip>
+			</div>
+		</div>
+	</div>
+</div>

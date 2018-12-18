@@ -92,6 +92,7 @@
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,
 		WFM_Request_Show_Shift_for_Absence_Requests_79008,
+		WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412,
 		WFM_Setting_BankHolidayCalendar_Create_79297,
 
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
