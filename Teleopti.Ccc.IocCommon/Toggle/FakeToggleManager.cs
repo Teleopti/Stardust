@@ -33,6 +33,18 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 		}
 
+		public void Set(Toggles toggle, bool value)
+		{
+			if(value)
+			{
+				_enabled.Add(toggle);
+			}
+			else
+			{
+				_enabled.Remove(toggle);
+			}
+		}
+
 		public void Enable(Toggles toggle)
 		{
 			_enabled.Add(toggle);
