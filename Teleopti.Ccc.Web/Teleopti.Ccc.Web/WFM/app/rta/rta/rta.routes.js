@@ -33,7 +33,9 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
-				if (toggles.RTA_RestrictModifySkillGroups_78568)
+				if (toggles.RTA_ImproveUsabilityExpandableCards_79025)
+					return 'app/rta/rta/overview/view.ImproveUsabilityExpandableCards_79025.html';
+				else if (toggles.RTA_RestrictModifySkillGroups_78568)
 					return 'app/rta/rta/overview/view.RestrictModifySkillGroups_78568.html';
 				else if (toggles.RTA_ReviewHistoricalAdherence_74770)
 					return 'app/rta/rta/overview/view.ReviewHistoricalAdherence_74770.html';
