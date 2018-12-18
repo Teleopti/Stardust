@@ -1960,8 +1960,6 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.detail.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.detail.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.service.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroups.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroups.html" />
