@@ -12,6 +12,7 @@ import { menuComponents } from './app/menu/menu.module';
 import { peopleComponents, peopleRouterConfig } from './app/people/people.module';
 import { reportsComponents } from './app/reports/reports.module';
 import { resetPasswordComponents } from './app/reset-password/reset-password.module';
+import { systemSettingsComponents, systemSettingsRouterConfig } from './app/system-settings/system-settings.module';
 import { sharedComponents } from './app/shared/shared.module';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
@@ -102,6 +103,7 @@ const downgradeHelper = (downgradableComponents: DowngradeableComponent[] | Down
 // Use this to downgrade module components
 downgradeHelper(peopleComponents);
 downgradeHelper(reportsComponents);
+downgradeHelper(systemSettingsComponents);
 downgradeHelper(sharedComponents);
 downgradeHelper(authenticationComponents);
 downgradeHelper(apiAccessComponents);
@@ -119,6 +121,7 @@ const routerHelper = (routerConfig: RouterConfigFunction) => {
 };
 
 routerHelper(peopleRouterConfig);
+routerHelper(systemSettingsRouterConfig);
 routerHelper(insightsRouterConfig);
 routerHelper(apiAccessRouterConfig);
 

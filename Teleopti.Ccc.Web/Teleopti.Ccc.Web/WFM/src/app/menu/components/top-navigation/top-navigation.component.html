@@ -18,7 +18,7 @@
 		</a>
 
 		<a class="system-settings-icon" *ngIf="isSystemSettingsVisible" [nzTitle]="'SystemSettings' | translate"
-			nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" rel="noopener">
+			nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" rel="noopener" (click)="goToSystemSettings()">
 			<i nz-icon type="setting" theme="outline"></i>
 		</a>
 

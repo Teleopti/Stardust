@@ -17,10 +17,11 @@ import { BusinessUnitService } from '../../shared/businessunit.service';
 import { FeedbackComponent } from '../feedback';
 import { SettingsMenuComponent } from '../settings-menu';
 import { ChangePasswordComponent } from 'src/app/authentication/components/change-password/change-password.component';
+import { AreaService } from '../../shared/area.service';
 
 class mockStateService implements Partial<IStateService> {
 	public current: {
-		name: 'generalSettings';
+		name: 'systemSettings';
 	};
 
 	public href() {
@@ -69,6 +70,7 @@ describe('TopNavigation', () => {
 				{ provide: ToggleMenuService, useClass: MockToggleMenuService },
 				TogglesService,
 				NavigationService,
+				AreaService,
 				BusinessUnitService,
 				ThemeService,
 				UserService,
@@ -88,7 +90,7 @@ describe('TopNavigation', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should show general settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is on', () => {
+	it('should show system settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is on', () => {
 		let toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: true });
 		fixture.detectChanges();
@@ -98,7 +100,7 @@ describe('TopNavigation', () => {
 		expect(systemSettingsIconElement.getElementsByTagName('i').length).toBe(1);
 	});
 
-	it('should not show general settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is off', () => {
+	it('should not show system settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is off', () => {
 		let toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: false });
 		fixture.detectChanges();
