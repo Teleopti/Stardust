@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		private PasteBehavior _targetStandard;
         private PasteBehaviorForTest _testPasteBehavior;
-        private MockRepository mockRep = new MockRepository();
 
         [SetUp]
         public void Setup()
@@ -192,12 +190,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 			var destination = ScheduleDayFactory.Create(new DateOnly(2000, 1, 1));
 			var part = ScheduleDayFactory.Create(new DateOnly(2000, 1, 1));
 			var period8To16 = new DateTimePeriod(new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 16, 0, 0, DateTimeKind.Utc));
-			var periodFullDay = new DateTimePeriod(2000,1,1,2000,1,2);
+			var periodFullDay = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(destination.Person, destination.Scenario, periodFullDay);
 			var personAbsenceFull = PersonAbsenceFactory.CreatePersonAbsence(part.Person, part.Scenario, periodFullDay);
-			var shiftOnDay = EditableShiftFactory.CreateEditorShift(new Activity("activity"), period8To16, new ShiftCategory("shiftCategory"));
-			var shift = EditableShiftFactory.CreateEditorShift(new Activity("activity"), period8To16, new ShiftCategory("shiftCategory"));
-			
+			var shiftOnDay = EditableShiftFactory.CreateEditorShift(new Activity(), period8To16, new ShiftCategory());
+			var shift = EditableShiftFactory.CreateEditorShift(new Activity(), period8To16, new ShiftCategory());
 			part.AddMainShift(shift);
 			part.Add(personAbsenceFull);
 			destination.AddMainShift(shiftOnDay);
@@ -209,28 +206,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 				gridControl.SetRowHeight(0, 100, 5);
 				gridControl.SetColWidth(0, 100, 5);
 				var handler = new ClipHandler<IScheduleDay>();
-
 				var rangeList = new GridRangeInfoList();
 				rangeList.Add(range);
-				var pasteAction = mockRep.StrictMock<IGridPasteAction<IScheduleDay>>();
+				var pasteAction = new SchedulePasteAction(new PasteOptions { Default = true }, new GridlockManager(), new SchedulePartFilter());
 				handler.AddClip(0, 0, part);
-				var clip = handler.ClipList[0];
 
-				using (mockRep.Record())
-				{
-					Expect.Call(pasteAction.PasteBehavior).Return(new NormalPasteBehavior());
-					Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(destination);
-					Expect.Call(pasteAction.PasteOptions).Return(new PasteOptions()).Repeat.AtLeastOnce();
-				}
+				pasteAction.PasteBehavior.DoPaste(gridControl, handler, pasteAction, rangeList);
 
-				using (mockRep.Playback())
-				{
-					pasteAction.PasteBehavior.DoPaste(gridControl, handler, pasteAction, rangeList);
-					Assert.AreEqual(destination.PersonAbsenceCollection()[0].Period, periodFullDay);
-				}
+				Assert.AreEqual(destination.PersonAbsenceCollection()[0].Period, periodFullDay);
 			}
 		}
-    }
+	}
 
 
     internal class PasteActionForTest<T> : IGridPasteAction<T>
