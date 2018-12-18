@@ -75,8 +75,9 @@
             </div>
             
             <rta-card-panel ng-repeat="card in vm.siteCards" open="card.isOpen" classes="card.ClassesOnSelection">
-                <rta-card-panel-header>
-                    <div class="rta-card-content-wrapper flex">
+                <rta-card-panel-header class="flex">
+                    <span class="chevron"><i class="mdi" ng-class="{'mdi-chevron-down': card.isOpen, 'mdi-chevron-right':!card.isOpen}"></i></span>
+                    <div class="rta-card-content-wrapper flex" style="margin-left: 20px">
                         <div class="rta-site-name-container">
                             <b ng-attr-data-max="{{card.AgentsCount}}" ng-attr-data-value="{{card.InAlarmCount}}">{{card.Name}}</b>
                         </div>
