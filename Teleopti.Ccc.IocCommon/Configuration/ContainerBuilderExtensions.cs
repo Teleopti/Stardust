@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		private static readonly ProxyFactory proxyFactory = new ProxyFactory();
 		
+		//TODO: remove toggleManager from here and grab it from container instead
 		public static void RegisterToggledTypeTest<TToggleOn, TToggleOff, IT>(
 			this ContainerBuilder builder, IToggleManager toggleManager, Toggles toggle)
 			where TToggleOn : IT 
