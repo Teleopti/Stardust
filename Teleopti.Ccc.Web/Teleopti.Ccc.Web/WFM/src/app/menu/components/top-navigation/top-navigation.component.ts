@@ -1,8 +1,7 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, ViewChild } from '@angular/core';
-import { BehaviorSubject, interval } from 'rxjs';
+import { Component, Inject } from '@angular/core';
+import { interval } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { NavigationService } from 'src/app/core/services';
+import { NavigationService, TogglesService } from 'src/app/core/services';
 import { ToggleMenuService } from '../../shared/toggle-menu.service';
 
 @Component({
@@ -18,10 +17,18 @@ export class TopNavigationComponent {
 	);
 
 	mainUrl = this.$state.href('main');
+	isGeneralSettingsVisible = false;
 
 	constructor(
 		@Inject('$state') private $state,
+		public toggleService: TogglesService,
 		public navigationService: NavigationService,
 		public toggleMenuService: ToggleMenuService
-	) {}
+	) {
+		toggleService.toggles$.subscribe({
+			next: toggles => {
+				this.isGeneralSettingsVisible = toggles.WFM_Setting_BankHolidayCalendar_Create_79297;
+			}
+		});
+	}
 }
