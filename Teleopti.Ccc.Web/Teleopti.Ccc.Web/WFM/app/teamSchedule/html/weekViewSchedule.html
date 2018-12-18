@@ -1,45 +1,66 @@
 <div class="view-header">
 	<div class="view-title">
-		<h1>
-			<i class="mdi mdi-account-multiple"></i>
-			<span translate>WeekView</span>
-		</h1>
+		<h1><i class="mdi mdi-account-multiple"></i> <span translate>WeekView</span></h1>
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1 week-view"
-	 wait-for="vm.boostrap">
+<div class="team-schedule panel wfm-block material-depth-1 week-view" wait-for="vm.boostrap">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
+			<favorite-search
+				current-favorite="vm.selectedFavorite"
+				apply-favorite="vm.applyFavorite(currentFavorite)"
+				get-search="vm.getSearch()"
+				on-init-async="(vm.onFavoriteSearchInitDefer)"
+			></favorite-search>
 
-			<favorite-search current-favorite="vm.selectedFavorite" apply-favorite="vm.applyFavorite(currentFavorite)" get-search="vm.getSearch()"
-							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
+			<group-page-picker
+				on-close="vm.onSelectedTeamsChanged()"
+				group-pages="vm.availableGroups"
+				selected-groups="vm.selectedGroups"
+			></group-page-picker>
 
-			<group-page-picker on-close="vm.onSelectedTeamsChanged()" group-pages="vm.availableGroups" selected-groups="vm.selectedGroups"></group-page-picker>
-
-			<div class="people-search-container inline-block" ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
-				<wfm-multiple-search-input search-options="vm.searchOptions" search-title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
+			<div
+				class="people-search-container inline-block"
+				ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}"
+			>
+				<wfm-multiple-search-input
+					search-options="vm.searchOptions"
+					search-title="vm.searchPlaceholder"
+					search-callback="vm.onKeyWordInSearchInputChanged"
+				></wfm-multiple-search-input>
 			</div>
 
 			<span class="datepicker-container" ng-click="$event.stopPropagation()">
-				<team-schedule-datepicker ng-model="vm.scheduleDate" update-value="vm.updateScheduleDate" ng-change="vm.onScheduleDateChanged()" step="7"></team-schedule-datepicker>
+				<team-schedule-datepicker
+					ng-model="vm.scheduleDate"
+					update-value="vm.updateScheduleDate"
+					ng-change="vm.onScheduleDateChanged()"
+					step="7"
+				></team-schedule-datepicker>
 			</span>
 
-			<view-changer selected-date="vm.scheduleDate"
-						  keyword="vm.searchOptions.keyword"
-						  team-name-map="vm.teamNameMap"
-						  selected-groups="vm.selectedGroups"
-						  selected-favorite="vm.selectedFavorite"
-						  selected-sort-option="vm.sortOption"
-						  staffing-enabled="vm.staffingEnabled"
-						  timezone="vm.timezone"></view-changer>
+			<view-changer
+				selected-date="vm.scheduleDate"
+				keyword="vm.searchOptions.keyword"
+				team-name-map="vm.teamNameMap"
+				selected-groups="vm.selectedGroups"
+				selected-favorite="vm.selectedFavorite"
+				selected-sort-option="vm.sortOption"
+				staffing-enabled="vm.staffingEnabled"
+				timezone="vm.timezone"
+			></view-changer>
 		</div>
 		<div class="rightside-part">
-			<button type="button" class="context-menu card-context" ng-if="vm.isRefreshButtonVisible" ng-disabled="!vm.havingScheduleChanged" ng-click="vm.onRefreshButtonClicked()">
+			<button
+				type="button"
+				class="context-menu card-context"
+				ng-if="vm.isRefreshButtonVisible"
+				ng-disabled="!vm.havingScheduleChanged"
+				ng-click="vm.onRefreshButtonClicked()"
+			>
 				<i class="mdi mdi-refresh"></i>
-				<md-tooltip>
-					{{'Refresh' | translate}}
-				</md-tooltip>
+				<md-tooltip> {{ 'Refresh' | translate }} </md-tooltip>
 			</button>
 		</div>
 	</div>
@@ -47,7 +68,7 @@
 	<div class="con-row teamschedule-body">
 		<div class="big-table-wrapper">
 			<div class="alert-warning notice-spacer" ng-if="vm.isResultTooMany()">
-				<i class='mdi mdi-alert'></i>{{vm.warningMessageForTooManyResuts()}}
+				<i class="mdi mdi-alert"></i> {{ vm.warningMessageForTooManyResuts() }}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 			<table ng-show="vm.scheduleFullyLoaded && !vm.isResultTooMany()">
@@ -55,23 +76,31 @@
 					<tr class="weekview-thead">
 						<th class="agent-name-colomn"></th>
 						<th class="date-header" ng-repeat="day in vm.weekDays">
-							<span translate>{{day.name}}</span>
-							<span class="date">{{day.date | date : 'dd'}}</span>
+							<span translate>{{ day.name }}</span> <span class="date">{{ day.date | date: 'dd' }}</span>
 						</th>
-						<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
+						<th class="contract-time-header contract-time-column">{{ 'ContractTime' | translate }}</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr class="weekview-tr" ng-repeat="person in vm.groupWeeks">
-						<td class="weekview-td weekview-person-name">{{person.name}}</td>
-						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.textColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
-							<div class="full-size" ng-click="vm.onCellClick(person.personId, day.date.Date)" ng-class="{'pointer': vm.enableClickableCell}">
-								<div class="summary" title="{{day.summeryTitle}}">{{day.summeryTitle}}</div>
-								<div>{{day.summeryTimeSpan}}</div>
+						<td class="weekview-td weekview-person-name">{{ person.name }}</td>
+						<td
+							class="weekview-td"
+							ng-repeat="day in person.days"
+							ng-style="{background: day.color, color: day.textColor}"
+							ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}"
+						>
+							<div
+								class="full-size"
+								ng-click="vm.onCellClick(person.personId, day.date.Date)"
+								ng-class="{'pointer': vm.enableClickableCell}"
+							>
+								<div class="summary" title="{{day.summeryTitle}}">{{ day.summeryTitle }}</div>
+								<div>{{ day.summeryTimeSpan }}</div>
 							</div>
 						</td>
-						<td class="contract-time contract-time-column">{{person.contractTime}}</td>
+						<td class="contract-time contract-time-column">{{ person.contractTime }}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -80,10 +109,18 @@
 
 	<div class="teamschedule-footer flex-end">
 		<div class="pagination-navigator" ng-if="vm.paginationOptions.totalPages > 0">
-			<md-select class="page-size-selector" ng-model="vm.paginationOptions.pageSize" ng-change="vm.selectorChanged()" aria-label="page size">
-				<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{option}}</md-option>
+			<md-select
+				class="page-size-selector"
+				ng-model="vm.paginationOptions.pageSize"
+				ng-change="vm.selectorChanged()"
+				aria-label="page size"
+			>
+				<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{ option }}</md-option>
 			</md-select>
-			<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+			<wfm-pagination
+				pagination-options="vm.paginationOptions"
+				get-data-for-page-callback="vm.loadSchedules"
+			></wfm-pagination>
 		</div>
 	</div>
 </div>

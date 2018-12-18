@@ -2,11 +2,14 @@
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="pull-left">
-				<h1><i class="mdi mdi-chart-line"></i>{{'Forecasts' | translate}}</h1>
+				<h1><i class="mdi mdi-chart-line"></i> {{ 'Forecasts' | translate }}</h1>
 			</div>
 			<div class="con-flex">
 				<div class="pull-right">
-					<ng2-feedback-message [feedback-type]="'newRelease'" [component-name]="'Forecasts' | translate"></ng2-feedback-message>
+					<ng2-feedback-message
+						[feedback-type]="'newRelease'"
+						[component-name]="'Forecasts' | translate"
+					></ng2-feedback-message>
 				</div>
 			</div>
 		</div>
@@ -18,24 +21,29 @@
 		<div class="con-flex">
 			<label for="SkillFilter" class="input-icon">
 				<i class="mdi mdi-filter-outline">
-					<input type="text" id="SkillFilter" ng-model="filter.Workload.Name" placeholder="{{'FilterThreeDots' | translate}}">
-					<md-tooltip>{{'Filter' | translate}}</md-tooltip>
+					<input
+						type="text"
+						id="SkillFilter"
+						ng-model="filter.Workload.Name"
+						placeholder="{{'FilterThreeDots' | translate}}"
+					/>
+					<md-tooltip>{{ 'Filter' | translate }}</md-tooltip>
 				</i>
 			</label>
 		</div>
 		<div class="con-flex">
 			<a ui-sref="forecast-create-skill" class="wfm-btn wfm-btn-invis-default wfm-btn-forecast" ng-cloak>
-				<i class="mdi mdi-plus"></i>{{'NewSkill' | translate}}
+				<i class="mdi mdi-plus"></i> {{ 'NewSkill' | translate }}
 			</a>
 		</div>
 
 		<div class="con-flex">
 			<div class="pull-right">
 				<md-select ng-model="filter.SkillType.SkillType" placeholder="{{'SkillTypeFilter' | translate }}">
-					<md-option ng-value="">{{'AllSelection' | translate}}</md-option>
-					<md-option ng-repeat="item in vm.skilltypes" ng-value="item">{{item | translate}}</md-option>
+					<md-option ng-value="">{{ 'AllSelection' | translate }}</md-option>
+					<md-option ng-repeat="item in vm.skilltypes" ng-value="item">{{ item | translate }}</md-option>
 				</md-select>
-				<md-tooltip>{{'SkillTypeFilter' | translate }}</md-tooltip>
+				<md-tooltip>{{ 'SkillTypeFilter' | translate }}</md-tooltip>
 			</div>
 		</div>
 	</div>
@@ -51,17 +59,29 @@
 							<h2 class="">
 								<i ng-class="vm.getSkillIcon(skill.SkillType)">
 									<md-tooltip>
-										<span ng-if="skill.SkillType.DoDisplayData">{{skill.SkillType.SkillType | translate}}</span>
-										<span ng-if="!skill.SkillType.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+										<span ng-if="skill.SkillType.DoDisplayData">{{
+											skill.SkillType.SkillType | translate
+										}}</span>
+										<span ng-if="!skill.SkillType.DoDisplayData">{{
+											'UnsupportedSkill' | translate
+										}}</span>
 									</md-tooltip>
 								</i>
-								<span class="overflow-wrap-forecast">{{skill.Workload.Name}}</span>
+								<span class="overflow-wrap-forecast">{{ skill.Workload.Name }}</span>
 							</h2>
 						</div>
 						<div class="card-footer con-row">
 							<span class="con-flex line-right card-footer-section">
-								<button ng-if="vm.showHistory" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToHistory(skill)">{{'OpenHistoricalData' | translate}}</button>
-								<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToModify(skill)">{{'Open' | translate}}</button>
+								<button
+									ng-if="vm.showHistory"
+									class="wfm-btn wfm-btn-invis-primary"
+									ng-click="vm.goToHistory(skill)"
+								>
+									{{ 'OpenHistoricalData' | translate }}
+								</button>
+								<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToModify(skill)">
+									{{ 'Open' | translate }}
+								</button>
 							</span>
 						</div>
 					</div>

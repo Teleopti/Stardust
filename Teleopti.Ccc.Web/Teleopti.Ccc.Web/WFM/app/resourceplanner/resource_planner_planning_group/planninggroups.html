@@ -1,6 +1,6 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{'Plans' | translate}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{ 'Plans' | translate }}</h1>
 	</div>
 </div>
 <div class="con-row" ng-if="vm.hasPg()">
@@ -11,15 +11,21 @@
 					<div class="plan-filter-container">
 						<label for="filter" class="input-icon">
 							<i class="mdi mdi-filter-outline">
-								<input type="text" id="filter" ng-model="vm.filterName.Name" placeholder="{{'FilterPlanningGroups' | translate}}">
-								<md-tooltip>{{'FilterPlanningGroups' | translate}}</md-tooltip>
+								<input
+									type="text"
+									id="filter"
+									ng-model="vm.filterName.Name"
+									placeholder="{{'FilterPlanningGroups' | translate}}"
+								/>
+								<md-tooltip>{{ 'FilterPlanningGroups' | translate }}</md-tooltip>
 							</i>
 						</label>
 					</div>
 				</div>
 				<div class="con-flex x3">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goForm()">
-						<i class="mdi mdi-plus"></i>{{'NewPlanningGroup' | translate}}</button>
+						<i class="mdi mdi-plus"></i> {{ 'NewPlanningGroup' | translate }}
+					</button>
 				</div>
 			</div>
 		</div>
@@ -29,25 +35,39 @@
 	<div class="con-flex">
 		<div class="line-center">
 			<i class="mdi mdi-information-outline huge-icon line-center"></i>
-			<h2>{{'HelpCreatePlanningGroup' | translate}}</h2>
-			<button class="wfm-btn wfm-btn-primary" style="margin-top: 30px;" ng-click="vm.goForm()">{{'CreatePlanningGroup' | translate}}</button>
+			<h2>{{ 'HelpCreatePlanningGroup' | translate }}</h2>
+			<button class="wfm-btn wfm-btn-primary" style="margin-top: 30px;" ng-click="vm.goForm()">
+				{{ 'CreatePlanningGroup' | translate }}
+			</button>
 		</div>
 	</div>
 </div>
 <div class="con-fluid-row">
-	<div class="con-fluid-flex planingperiod-container" ng-repeat="planningGroup in vm.planningGroups | filter:vm.filterName">
+	<div
+		class="con-fluid-flex planingperiod-container"
+		ng-repeat="planningGroup in vm.planningGroups | filter:vm.filterName"
+	>
 		<div class="list-content material-depth-1 plan-group" ng-click="vm.goPlanningGroup(planningGroup.Id)">
 			<div class="list-header">
-				<h2>{{planningGroup.Name }}</h2>
-				<div ng-show="planningGroup.AgentCount > 0" class="subtext">{{planningGroup.AgentCount}} {{'Agents' | translate}}</div>
+				<h2>{{ planningGroup.Name }}</h2>
+				<div ng-show="planningGroup.AgentCount > 0" class="subtext">
+					{{ planningGroup.AgentCount }} {{ 'Agents' | translate }}
+				</div>
 				<div ng-show="planningGroup.AgentCount == 0" class="subtext">
-					<p class="text-danger">{{'NoAgentsWithinPlanningGroup' | translate}}. Please review the filter setting of plan group {{planningGroup.Name }}</p>
+					<p class="text-danger">
+						{{ 'NoAgentsWithinPlanningGroup' | translate }}. Please review the filter setting of plan group
+						{{ planningGroup.Name }}
+					</p>
 				</div>
 			</div>
 			<div class="list-header-content">
-				<div tabindex=0 class="context-menu card-context edit-plan-group" ng-click="vm.goEditPlanningGroup(planningGroup.Id);$event.stopPropagation();">
+				<div
+					tabindex="0"
+					class="context-menu card-context edit-plan-group"
+					ng-click="vm.goEditPlanningGroup(planningGroup.Id);$event.stopPropagation();"
+				>
 					<i class="mdi mdi-pencil"></i>
-					<md-tooltip>{{'EditPlanningGroup' | translate}}</md-tooltip>
+					<md-tooltip>{{ 'EditPlanningGroup' | translate }}</md-tooltip>
 				</div>
 			</div>
 		</div>

@@ -1,96 +1,115 @@
 <div class="header" nz-row>
-    <div nz-col>
-		<h1>
-			<i class="mdi mdi-database-search"></i>{{'AuditTrailGeneralAuditTrailReport' | translate}}
-		</h1>
-    </div>
+	<div nz-col>
+		<h1><i class="mdi mdi-database-search"></i> {{ 'AuditTrailGeneralAuditTrailReport' | translate }}</h1>
+	</div>
 </div>
 <form class="search-form" nz-form nzLayout="inline" [formGroup]="searchForm" (ngSubmit)="submitForm()">
-    <nz-form-item>
-        <nz-form-label nzFor="personPicker">{{'AuditTrailBy' | translate}}</nz-form-label>
-        <nz-form-control>
-            <nz-input-group class="search-input" nzSize="medium" [nzSuffix]="suffixIcon">
-                <input placeholder="Select person" formControlName="personPicker" id="personPicker" nz-input [nzAutocomplete]="auto" />
-            </nz-input-group>
-            <ng-template #suffixIcon>
-                <i nz-icon type="search"></i>
-            </ng-template>
-            <nz-autocomplete #auto>
-                <nz-auto-option *ngFor="let person of personList" [nzLabel]="person.FirstName + ' ' + person.LastName" [nzValue]="person">
-                    <span>
-                        {{person.FirstName + " " + person.LastName}}
-                    </span>
-                </nz-auto-option>
-            </nz-autocomplete>
-        </nz-form-control>
-    </nz-form-item>
+	<nz-form-item>
+		<nz-form-label nzFor="personPicker">{{ 'AuditTrailBy' | translate }}</nz-form-label>
+		<nz-form-control>
+			<nz-input-group class="search-input" nzSize="medium" [nzSuffix]="suffixIcon">
+				<input
+					placeholder="Select person"
+					formControlName="personPicker"
+					id="personPicker"
+					nz-input
+					[nzAutocomplete]="auto"
+				/>
+			</nz-input-group>
+			<ng-template #suffixIcon> <i nz-icon type="search"></i> </ng-template>
+			<nz-autocomplete #auto>
+				<nz-auto-option
+					*ngFor="let person of personList"
+					[nzLabel]="person.FirstName + ' ' + person.LastName"
+					[nzValue]="person"
+				>
+					<span> {{ person.FirstName + ' ' + person.LastName }} </span>
+				</nz-auto-option>
+			</nz-autocomplete>
+		</nz-form-control>
+	</nz-form-item>
 
-    <nz-form-item>
-        <nz-form-label>{{'AuditTrailSearchFilter' | translate}}</nz-form-label>
-        <nz-form-control>
-            <input nz-input type="text" id="searchword" formControlName="searchword" placeholder="text">
-        </nz-form-control>
-    </nz-form-item>
+	<nz-form-item>
+		<nz-form-label>{{ 'AuditTrailSearchFilter' | translate }}</nz-form-label>
+		<nz-form-control>
+			<input nz-input type="text" id="searchword" formControlName="searchword" placeholder="text" />
+		</nz-form-control>
+	</nz-form-item>
 
-    <nz-form-item>
-        <nz-form-label nzFor="dateRange">
-            <span>
-                {{'AuditTrailBetween' | translate}}
-                <i nz-icon nz-tooltip nzTitle="Date range cannot be longer than 7 days" type="info-circle" theme="outline"></i>
-            </span>
-        </nz-form-label>
-        <nz-form-control>
-            <nz-range-picker [nzRenderExtraFooter]="rangeError" formControlName="dateRange" id="dateRange" [nzFormat]="dateformat"></nz-range-picker>
-            <nz-form-explain *ngIf="dateRangeControl.hasError('INVALID_DATE_RANGE_ERROR')">
-                Date range cannot be longer than 7 days
-            </nz-form-explain>
-        </nz-form-control>
-        <ng-template #rangeError>
-            <span><i class="anticon anticon-info-circle"></i> Date range cannot be longer than 7 days</span>
-        </ng-template>
-    </nz-form-item>
+	<nz-form-item>
+		<nz-form-label nzFor="dateRange">
+			<span>
+				{{ 'AuditTrailBetween' | translate }}
+				<i
+					nz-icon
+					nz-tooltip
+					nzTitle="Date range cannot be longer than 7 days"
+					type="info-circle"
+					theme="outline"
+				></i>
+			</span>
+		</nz-form-label>
+		<nz-form-control>
+			<nz-range-picker
+				[nzRenderExtraFooter]="rangeError"
+				formControlName="dateRange"
+				id="dateRange"
+				[nzFormat]="dateformat"
+			></nz-range-picker>
+			<nz-form-explain *ngIf="dateRangeControl.hasError('INVALID_DATE_RANGE_ERROR')">
+				Date range cannot be longer than 7 days
+			</nz-form-explain>
+		</nz-form-control>
+		<ng-template #rangeError>
+			<span><i class="anticon anticon-info-circle"></i> Date range cannot be longer than 7 days</span>
+		</ng-template>
+	</nz-form-item>
 
-    <nz-form-item>
-        <nz-form-control>
-            <button [disabled]="notValidFields()" type="submit" nz-button nzType="primary">
-                <i nz-icon type="search"></i>{{'Search' | translate}}</button>
-        </nz-form-control>
-    </nz-form-item>
+	<nz-form-item>
+		<nz-form-control>
+			<button [disabled]="notValidFields()" type="submit" nz-button nzType="primary">
+				<i nz-icon type="search"></i> {{ 'Search' | translate }}
+			</button>
+		</nz-form-control>
+	</nz-form-item>
 </form>
 
-<nz-table #auditTable nzSize="small" [nzData]="auditTrailData" nzPageSize="100" nzHideOnSinglePage [nzNoResult]="noDataTable">
-    <thead nzSingleSort>
-        <tr>
-            <th>{{'AuditTrailAt' | translate}}</th>
-            <th>{{'AuditTrailBy' | translate}}</th>
-            <th>{{'AuditTrailAction' | translate}}</th>
-            <th>{{'AuditTrailContext' | translate}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <ng-template ngFor let-data [ngForOf]="auditTable.data">
-            <tr class="table-data-row">
-                <td>{{data.TimeStamp}}</td>
-                <td>{{data.ActionPerformedBy}}</td>
-                <td>{{data.Action}}</td>
-                <td>{{data.Context}}</td>
-            </tr>
-            <tr class="table-data-row">
-                <td colspan="4">{{data.Data}}</td>
-            </tr>
-        </ng-template>
-    </tbody>
+<nz-table
+	#auditTable
+	nzSize="small"
+	[nzData]="auditTrailData"
+	nzPageSize="100"
+	nzHideOnSinglePage
+	[nzNoResult]="noDataTable"
+>
+	<thead nzSingleSort>
+		<tr>
+			<th>{{ 'AuditTrailAt' | translate }}</th>
+			<th>{{ 'AuditTrailBy' | translate }}</th>
+			<th>{{ 'AuditTrailAction' | translate }}</th>
+			<th>{{ 'AuditTrailContext' | translate }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<ng-template ngFor let-data [ngForOf]="auditTable.data">
+			<tr class="table-data-row">
+				<td>{{ data.TimeStamp }}</td>
+				<td>{{ data.ActionPerformedBy }}</td>
+				<td>{{ data.Action }}</td>
+				<td>{{ data.Context }}</td>
+			</tr>
+			<tr class="table-data-row">
+				<td colspan="4">{{ data.Data }}</td>
+			</tr>
+		</ng-template>
+	</tbody>
 </nz-table>
 
 <ng-template #noDataTable>
-    <ng-container *ngIf="selectedPerson && !generalError">
-            No data found for {{ selectedPerson.FirstName }} {{ selectedPerson.LastName }} for the period
-            {{fromDate}} - {{toDate}}
-    </ng-container>
-    <ng-container *ngIf="!selectedPerson && !generalError">
-            No data
-    </ng-container>
-    <ng-container *ngIf="generalError">
-        Something went wrong
-    </ng-container>
+	<ng-container *ngIf="selectedPerson && !generalError">
+		No data found for {{ selectedPerson.FirstName }} {{ selectedPerson.LastName }} for the period {{ fromDate }} -
+		{{ toDate }}
+	</ng-container>
+	<ng-container *ngIf="!selectedPerson && !generalError"> No data </ng-container>
+	<ng-container *ngIf="generalError"> Something went wrong </ng-container>
 </ng-template>
