@@ -24,6 +24,7 @@
 		RTA_ReviewHistoricalAdherence_74770,
 		RTA_RestrictModifySkillGroups_78568,
 		RTA_InputValidationForApprovingAdherencePeriods_77045,
+		RTA_ImproveUsabilityExpandableCards_79025,
 		
 		MessageBroker_HttpSenderThrottleRequests_79140,
 		MessageBroker_VeganBurger_79140,
