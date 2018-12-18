@@ -46,8 +46,9 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			var container = builder.Build();
 
 			var component = container.Resolve<IMyService>();
+			
+			component.Value.Should().Be.EqualTo("off");
 			toggleManager.Enable(Toggles.TestToggle);
-
 			component.Value.Should().Be.EqualTo("on");
 		}
 

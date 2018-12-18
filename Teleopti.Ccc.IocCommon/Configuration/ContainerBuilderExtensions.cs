@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public static class ContainerBuilderExtensions
 	{
-		private static ProxyFactory proxyFactory = new ProxyFactory();
+		private static readonly ProxyFactory proxyFactory = new ProxyFactory();
 		
 		public static void RegisterToggledTypeTest<TToggleOn, TToggleOff, IT>(
 			this ContainerBuilder builder, IToggleManager toggleManager, Toggles toggle)
@@ -17,19 +17,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<TToggleOn>().SingleInstance();
 			builder.RegisterType<TToggleOff>().SingleInstance();
-			var proxy = proxyFactory.CreateProxy<IT>(new toggledTypeInterceptor<TToggleOn, TToggleOff, IT>(builder, toggleManager, toggle));
+			var proxy = proxyFactory.CreateProxy<IT>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(builder, toggleManager, toggle));
 			builder.RegisterInstance(proxy);
 		}
 		
 		
-		private class toggledTypeInterceptor<TToggleOn, TToggleOff, IT> : IInterceptor
-			where TToggleOn : IT 
-			where TToggleOff : IT
+		private class toggledTypeInterceptor<TToggleOn, TToggleOff> : IInterceptor
 		{
 			private readonly IToggleManager _toggleManager;
 			private readonly Toggles _toggle;
-			private TToggleOn _onSvc;
-			private TToggleOff _offSvc;
+			private object _onSvc;
+			private object _offSvc;
 
 			public toggledTypeInterceptor(ContainerBuilder builder, IToggleManager toggleManager, Toggles toggle)
 			{
@@ -44,7 +42,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			public object Intercept(InvocationInfo info)
 			{
-				var svc = _toggleManager.IsEnabled(_toggle) ? (IT) _onSvc : _offSvc;
+				var svc = _toggleManager.IsEnabled(_toggle) ? _onSvc : _offSvc;
 				return info.TargetMethod.Invoke(svc, info.Arguments);
 			}
 		}
