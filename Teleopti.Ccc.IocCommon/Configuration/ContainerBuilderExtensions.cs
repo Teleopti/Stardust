@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if(toggleManager.IsEnabled(toggle))
 			{
-				builder.RegisterType<TToggleOn>().As<IT>();
+				builder.RegisterType<TToggleOn>().As<IT>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<TToggleOff>().As<IT>();
+				builder.RegisterType<TToggleOff>().As<IT>().SingleInstance();
 			}
 		}
 	}
