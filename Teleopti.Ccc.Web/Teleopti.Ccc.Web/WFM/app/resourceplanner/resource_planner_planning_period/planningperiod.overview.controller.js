@@ -61,7 +61,6 @@
 		vm.isDisable = isDisable;
 		vm.openModal = openModal;
 		vm.valNumber = getTotalValidationErrorsNumber;
-		vm.showTab = showTab;
 		vm.goDoRulesSetting = goDoRulesSetting;
 		vm.textForClearPp = $translate
 			.instant('AreYouSureYouWantToClearPlanningPeriodData')
@@ -74,22 +73,6 @@
 
 		checkState();
 		loadLastResult();
-
-		function showTab(tabId) {
-			var tabLinks = document.getElementsByClassName('tabLink');
-			for (var i = 0; i < tabLinks.length; i++) {
-				tabLinks[i].classList.remove('active');
-			}
-
-			var tabContents = document.getElementsByClassName('pp-tabContent');
-			for (var i = 0; i < tabContents.length; i++) {
-				tabContents[i].classList.remove('active');
-			}
-
-			var tabContentIdToShow = tabId.replace(/(\d)/g, '-$1');
-			document.getElementById(tabContentIdToShow).classList.add('active');
-			document.getElementById(tabId).classList.add('active');
-		}
 
 		function checkState(pp) {
 			checkProgress();

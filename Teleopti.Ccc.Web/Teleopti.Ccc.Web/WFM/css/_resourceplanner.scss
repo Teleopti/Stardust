@@ -327,7 +327,6 @@ table.overview {
 }
 
 .pp-tabContent {
-	display:none;
 	overflow:hidden;
 
 	.pp-overview-dashborad-header {
@@ -494,4 +493,9 @@ card-panel-content {
 
 .date-info-wrapper .disabled h1{
   color: $white !important;
+}
+
+.wfm-badge{
+	position: unset;
+	margin-left: 5px;
 }
