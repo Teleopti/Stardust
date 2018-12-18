@@ -89,7 +89,7 @@
 			<th>{{ 'AuditTrailBy' | translate }}</th>
 			<th>{{ 'AuditTrailAction' | translate }}</th>
 			<th>{{ 'AuditTrailContext' | translate }}</th>
-			<th> <telop-table-options-menu enableCsvExport [data]="auditTable.data"></telop-table-options-menu> </th>
+			
 		</tr>
 	</thead>
 	<tbody>
@@ -99,10 +99,10 @@
 				<td>{{ data.ActionPerformedBy }}</td>
 				<td>{{ data.Action }}</td>
 				<td>{{ data.Context }}</td>
-				<td></td>
+
 			</tr>
 			<tr class="table-data-row">
-				<td colspan="5">{{ data.Data }}</td>
+				<td colspan="4">{{ data.Data }}</td>
 			</tr>
 		</ng-template>
 	</tbody>
