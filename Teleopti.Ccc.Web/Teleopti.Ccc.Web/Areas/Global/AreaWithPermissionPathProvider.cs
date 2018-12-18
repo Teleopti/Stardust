@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, "API access",
 				"apiaccess");
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SystemSetting, Resources.SystemSetting,
-				"systemSetting");
+				"systemSettings");
 		}
 
 		public IEnumerable<object> GetAreasWithPermissions()

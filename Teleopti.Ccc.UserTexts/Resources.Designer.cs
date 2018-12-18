@@ -14250,15 +14250,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to General settings.
-        /// </summary>
-        public static string GeneralSettings {
-            get {
-                return ResourceManager.GetString("GeneralSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to General view.
         /// </summary>
         public static string GeneralView {
