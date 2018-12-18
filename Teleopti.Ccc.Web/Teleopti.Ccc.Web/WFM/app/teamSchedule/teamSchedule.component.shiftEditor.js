@@ -19,7 +19,7 @@
 		'$timeout',
 		'$window',
 		'$interval',
-		'$state',
+		'$wfmConfirmModal',
 		'$translate',
 		'TeamSchedule',
 		'serviceDateFormatHelper',
@@ -38,7 +38,7 @@
 		$timeout,
 		$window,
 		$interval,
-		$state,
+		$wfmConfirmModal,
 		$translate,
 		TeamSchedule,
 		serviceDateFormatHelper,
@@ -86,8 +86,18 @@
 			interact('.shift-layer').unset();
 		};
 
-		vm.gotoDayView = function () {
-			$state.go('teams.dayView');
+		vm.cancelEditing = function () {
+			if (hasChanges()) {
+				var message = $translate.instant('ConfirmMessageWhenCancelShiftEditing');
+				var title = $translate.instant('Confirm');
+				$wfmConfirmModal.confirm(message, title).then(function (result) {
+					if (result) {
+						$scope.$emit('teamSchedule.shiftEditor.cancel', {});
+					}
+				});
+			} else {
+				$scope.$emit('teamSchedule.shiftEditor.cancel', {});
+			}
 		};
 
 		vm.isSameDate = function (interval) {
@@ -401,6 +411,7 @@
 			vm.selectedShiftLayers = selectedLayers;
 			vm.scheduleVm.ShiftLayers = originalShiftLayers;
 		}
+
 		function isSameDate(dateTime) {
 			return serviceDateFormatHelper.getDateOnly(moment.tz(dateTime, vm.timezone).tz(vm.scheduleVm.Timezone)) === vm.date;
 		}

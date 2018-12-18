@@ -7245,6 +7245,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancelling this approved request will remove any related absences from your schedule.  Are you sure you wish to continue?.
         /// </summary>
         public static string ConfirmCancelRequest {
@@ -7322,6 +7331,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ConfirmGroupingDeletion {
             get {
                 return ResourceManager.GetString("ConfirmGroupingDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have modified this shift. Close and lose changes?.
+        /// </summary>
+        public static string ConfirmMessageWhenCancelShiftEditing {
+            get {
+                return ResourceManager.GetString("ConfirmMessageWhenCancelShiftEditing", resourceCulture);
             }
         }
         

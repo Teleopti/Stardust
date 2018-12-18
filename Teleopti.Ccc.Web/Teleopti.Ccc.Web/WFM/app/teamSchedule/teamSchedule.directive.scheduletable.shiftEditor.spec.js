@@ -51,10 +51,11 @@
 				Projection: [
 					{
 						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2',
 						Color: '#ffffff',
 						Description: 'E-mail',
-						Start: '2018-12-12 08:00',
-						Minutes: 120,
+						StartInUtc: '2018-12-12 08:00',
+						EndInUtc: '2018-12-12 10:00',
 						IsOvertime: false
 					}
 				],
@@ -75,8 +76,8 @@
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
 				Date: '2018-12-12',
-				WorkTimeMinutes: 240,
-				ContractTimeMinutes: 240,
+				WorkTimeMinutes: 60,
+				ContractTimeMinutes: 60,
 				Projection: [
 					{
 						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
@@ -99,9 +100,11 @@
 
 		function setUp(selectedDate, selectedTimezone) {
 			var html = '<schedule-table select-mode="true" selected-date="selectedDate" selected-timezone="selectedTimezone"></schedule-table>';
+
 			var scope = $rootScope.$new();
 			scope.selectedDate = selectedDate;
 			scope.selectedTimezone = selectedTimezone;
+
 			var container = $compile(html)(scope);
 			scope.$apply();
 			return container;

@@ -17995,4 +17995,14 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="SystemSetting" xml:space="preserve">
     <value>System Settings</value>
   </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>General settings</value>
+    <comment>General settings icon tooltip in WFM</comment>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
+    <value>You have modified this shift. Close and lose changes?</value>
+  </data>
 </root>
