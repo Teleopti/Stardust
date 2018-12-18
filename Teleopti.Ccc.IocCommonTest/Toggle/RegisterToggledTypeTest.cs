@@ -1,4 +1,3 @@
-using System;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -10,9 +9,9 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	public class RegisterToggledTypeTest
 	{
-		[TestCase(true, ExpectedResult = typeof(MyServiceOn))]
-		[TestCase(false, ExpectedResult = typeof(MyServiceOff))]
-		public Type ShouldReturnCorrectType(bool toggleValue)
+		[TestCase(true, ExpectedResult = "on")]
+		[TestCase(false, ExpectedResult = "off")]
+		public string ShouldReturnCorrectType(bool toggleValue)
 		{
 			var toggleManager = new FakeToggleManager();
 			toggleManager.Set(Toggles.TestToggle, toggleValue);
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(toggleManager, Toggles.TestToggle);
 			var container = builder.Build();
 
-			return container.Resolve<IMyService>().GetType();
+			return container.Resolve<IMyService>().Value;
 		}
 
 		[TestCase(true)]
@@ -37,16 +36,35 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 				.Should().Be.SameInstanceAs(container.Resolve<IMyService>());
 		}
 
+		[Test]
+		[Ignore("ToBeFixed 79699")]
+		public void ShouldBeAbleToChangeReturnedTypeOnTheFly()
+		{
+			var toggleManager = new FakeToggleManager();
+			toggleManager.Disable(Toggles.TestToggle);
+			var builder = new ContainerBuilder();
+			builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(toggleManager, Toggles.TestToggle);
+			var container = builder.Build();
+
+			var component = container.Resolve<IMyService>();
+			toggleManager.Enable(Toggles.TestToggle);
+
+			component.Value.Should().Be.EqualTo("on");
+		}
+
 		public class MyServiceOn : IMyService
 		{
+			public string Value { get; } = "on";
 		}
 
 		public class MyServiceOff : IMyService
 		{
+			public string Value { get; } = "off";
 		}
 		
 		public interface IMyService
 		{
+			string Value { get; }
 		}
 	}
 }
