@@ -93,9 +93,9 @@ describe('TopNavigation', () => {
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: true });
 		fixture.detectChanges();
 
-		var generalSetingsIconElement = document.getElementsByClassName('general-settings-icon')[0];
-		expect(generalSetingsIconElement).toBeTruthy();
-		expect(generalSetingsIconElement.getElementsByTagName('i').length).toBe(1);
+		var systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
+		expect(systemSettingsIconElement).toBeTruthy();
+		expect(systemSettingsIconElement.getElementsByTagName('i').length).toBe(1);
 	});
 
 	it('should not show general settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is off', () => {
@@ -103,7 +103,7 @@ describe('TopNavigation', () => {
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: false });
 		fixture.detectChanges();
 
-		var generalSetingsIconElement = document.getElementsByClassName('general-settings-icon')[0];
-		expect(generalSetingsIconElement).toBeFalsy();
+		var systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
+		expect(systemSettingsIconElement).toBeFalsy();
 	});
 });

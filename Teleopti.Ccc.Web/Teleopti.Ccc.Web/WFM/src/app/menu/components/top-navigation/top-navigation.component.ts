@@ -17,7 +17,7 @@ export class TopNavigationComponent {
 	);
 
 	mainUrl = this.$state.href('main');
-	isGeneralSettingsVisible = false;
+	isSystemSettingsVisible = false;
 
 	constructor(
 		@Inject('$state') private $state,
@@ -27,7 +27,7 @@ export class TopNavigationComponent {
 	) {
 		toggleService.toggles$.subscribe({
 			next: toggles => {
-				this.isGeneralSettingsVisible = toggles.WFM_Setting_BankHolidayCalendar_Create_79297;
+				this.isSystemSettingsVisible = toggles.WFM_Setting_BankHolidayCalendar_Create_79297;
 			}
 		});
 	}
