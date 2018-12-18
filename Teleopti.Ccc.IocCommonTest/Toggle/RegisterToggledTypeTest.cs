@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		}
 
 		[Test]
-		[Ignore("ToBeFixed 79699")]
 		public void ShouldBeAbleToChangeReturnedTypeOnTheFly()
 		{
 			var toggleManager = new FakeToggleManager();
