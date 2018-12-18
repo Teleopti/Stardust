@@ -147,6 +147,10 @@
 			-moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 		}
+
+		.layer.unselectable {
+			cursor: not-allowed;
+		}
 	}
 
 	.uib-timepicker {
@@ -231,10 +235,6 @@
 
 	.selectable {
 		cursor: pointer;
-	}
-
-	.unselectable {
-		cursor: not-allowed !important;
 	}
 
 	note-editor {
