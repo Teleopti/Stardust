@@ -168,6 +168,10 @@
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
 
 			vm.permissions = teamsPermissions.all();
+
+			$scope.$on('teamSchedule.shiftEditor.cancel', function () {
+				scheduleInEditing = null;
+			});
 		};
 
 		vm.init();
