@@ -5,12 +5,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 {
 	public class SiteViewModelFactory:ISiteViewModelFactory
 	{
-
 		private readonly ISiteProvider _siteProvider;
 
 		public SiteViewModelFactory(ISiteProvider siteProvider)
@@ -35,21 +33,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 
 		public IEnumerable<SelectOptionItem> GetTeams(List<Guid> siteIds, DateOnly date, string applicationFunctionPath)
 		{
-			var options = new List<SelectOptionItem>();
-
-			foreach (var siteId in siteIds)
+			return siteIds.SelectMany(siteId =>
 			{
 				var teams = _siteProvider.GetPermittedTeamsUnderSite(siteId, date, applicationFunctionPath).ToList();
-				var teamOptions = from t in teams
-										select new SelectOptionItem
-										{
-											id = t.Id.ToString(),
-											text = t.Description.Name
-										};
-				options.AddRange(teamOptions);
-			}
-
-			return options;
+				return teams.Select(t => new SelectOptionItem
+					{
+						id = t.Id.ToString(),
+						text = t.Description.Name
+					});
+			});
 		} 
 	}
 }

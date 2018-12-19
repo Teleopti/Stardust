@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 					PageName = gp.First().PageName
 				});
 
-			var actualOrgs = new List<SiteViewModelWithTeams>();
-
 			var orgsLookup = allAvailableGroups[Group.PageMainId].ToLookup(g => g.SiteId);
+			var actualOrgs = new List<SiteViewModelWithTeams>(orgsLookup.Count);
+
 			foreach (var siteLookUp in orgsLookup)
 			{
 				var permittedTeamGroups = siteLookUp
@@ -75,22 +75,24 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				});
 			}
 
-			var actualGroupPages = new List<GroupPageViewModel>();
-			foreach (var groupPage in allGroupPages.Where(gp => gp.PageId != Group.PageMainId))
+			var actualGroupPages = allGroupPages.Where(gp => gp.PageId != Group.PageMainId).Select(groupPage =>
 			{
 				var childGroups = allAvailableGroups[groupPage.PageId].ToLookup(g => g.GroupId);
-
-				actualGroupPages.Add(new GroupPageViewModel
+				return new GroupPageViewModel
 				{
 					Id = groupPage.PageId,
 					Name = _userTextTranslator.TranslateText(groupPage.PageName),
-					Children = childGroups.Select(g => new GroupViewModel
+					Children = childGroups.Select(g =>
 					{
-						Name = g.First().GroupName,
-						Id = g.First().GroupId.ToString()
+						var first = g.First();
+						return new GroupViewModel
+						{
+							Name = first.GroupName,
+							Id = first.GroupId.ToString()
+						};
 					}).OrderBy(c => c.Name, stringComparer).ToList()
-				});
-			}
+				};
+			}).ToList();
 
 			foreach (var optionalColumn in allDynamicOptionalColumns)
 			{
