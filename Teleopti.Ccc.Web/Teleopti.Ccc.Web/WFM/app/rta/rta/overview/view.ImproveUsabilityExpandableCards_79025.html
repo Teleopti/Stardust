@@ -74,7 +74,7 @@
 			</span>
             </div>
             
-            <rta-card-panel ng-repeat="card in vm.siteCards" open="card.isOpen" classes="card.ClassesOnSelection">
+            <rta-card-panel class="site" ng-repeat="card in vm.siteCards" open="card.isOpen" classes="card.ClassesOnSelection">
                 <rta-card-panel-header class="flex">
                     <span class="chevron"><i class="mdi" ng-class="{'mdi-chevron-down': card.isOpen, 'mdi-chevron-right':!card.isOpen}"></i></span>
                     <div class="rta-card-content-wrapper flex" style="margin-left: 20px">
