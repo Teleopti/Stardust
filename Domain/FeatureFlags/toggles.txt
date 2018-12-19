@@ -44,7 +44,7 @@ RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
 RTA_RestrictModifySkillGroups_78568 = RC
 RTA_InputValidationForApprovingAdherencePeriods_77045 = RC
-RTA_ImproveUsabilityExpandableCards_79025 = DEV
+RTA_ImproveUsabilityExpandableCards_79025 = RC
 
 MessageBroker_HttpSenderThrottleRequests_79140 = true
 MessageBroker_VeganBurger_79140 = true
