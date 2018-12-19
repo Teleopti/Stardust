@@ -2,54 +2,60 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
-	public class RegisterToggledTypeTest
+	[DomainTest]
+	public class RegisterToggledTypeTest : IExtendSystem
 	{
+		public FakeToggleManager ToggleManager;
+		public IMyService MyService;
+		public ILifetimeScope LifetimeScope;
+
+		private class extraComponentsInTest : Module
+		{
+			protected override void Load(ContainerBuilder builder)
+			{
+				builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(null, Toggles.TestToggle);
+			}
+		}
+		
+		public void Extend(IExtend extend, IocConfiguration configuration)
+		{
+			extend.AddModule(new extraComponentsInTest());
+		}
+		
 		[TestCase(true, ExpectedResult = "on")]
 		[TestCase(false, ExpectedResult = "off")]
 		public string ShouldReturnCorrectType(bool toggleValue)
 		{
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Set(Toggles.TestToggle, toggleValue);
-			var builder = new ContainerBuilder();
-			builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(toggleManager, Toggles.TestToggle);
-			var container = builder.Build();
+			ToggleManager.Set(Toggles.TestToggle, toggleValue);
 
-			return container.Resolve<IMyService>().Value;
+			return MyService.Value;
 		}
 
 		[TestCase(true)]
 		[TestCase(false)]
 		public void ShouldBeRegisteredAsSingleton(bool toggleValue)
 		{
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Set(Toggles.TestToggle, toggleValue);
-			var builder = new ContainerBuilder();
-			builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(toggleManager, Toggles.TestToggle);
-			var container = builder.Build();
-
-			container.Resolve<IMyService>()
-				.Should().Be.SameInstanceAs(container.Resolve<IMyService>());
+			ToggleManager.Set(Toggles.TestToggle, toggleValue);
+		
+			LifetimeScope.Resolve<IMyService>()
+				.Should().Be.SameInstanceAs(LifetimeScope.Resolve<IMyService>());
 		}
 
 		[Test]
 		public void ShouldBeAbleToChangeReturnedTypeOnTheFly()
 		{
-			var toggleManager = new FakeToggleManager();
-			toggleManager.Disable(Toggles.TestToggle);
-			var builder = new ContainerBuilder();
-			builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(toggleManager, Toggles.TestToggle);
-			var container = builder.Build();
-
-			var component = container.Resolve<IMyService>();
+			ToggleManager.Disable(Toggles.TestToggle);
+			MyService.Value.Should().Be.EqualTo("off");
 			
-			component.Value.Should().Be.EqualTo("off");
-			toggleManager.Enable(Toggles.TestToggle);
-			component.Value.Should().Be.EqualTo("on");
+			ToggleManager.Enable(Toggles.TestToggle);
+			MyService.Value.Should().Be.EqualTo("on");
 		}
 
 		public class MyServiceOn : IMyService

@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		private static readonly ProxyFactory proxyFactory = new ProxyFactory();
 		
-		//TODO: remove toggleManager from here and grab it from container instead
 		public static void RegisterToggledTypeTest<TToggleOn, TToggleOff, IT>(
 			this ContainerBuilder builder, IToggleManager toggleManager, Toggles toggle)
 			where TToggleOn : IT 
@@ -18,24 +17,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<TToggleOn>().SingleInstance();
 			builder.RegisterType<TToggleOff>().SingleInstance();
-			var proxy = proxyFactory.CreateProxy<IT>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(builder, toggleManager, toggle));
+			var proxy = proxyFactory.CreateProxy<IT>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(builder, toggle));
 			builder.RegisterInstance(proxy);
 		}
 		
 		
 		private class toggledTypeInterceptor<TToggleOn, TToggleOff> : IInterceptor
 		{
-			private readonly IToggleManager _toggleManager;
 			private readonly Toggles _toggle;
 			private object _onSvc;
 			private object _offSvc;
+			private IToggleManager _toggleManager;
 
-			public toggledTypeInterceptor(ContainerBuilder builder, IToggleManager toggleManager, Toggles toggle)
+			public toggledTypeInterceptor(ContainerBuilder builder, Toggles toggle)
 			{
-				_toggleManager = toggleManager;
 				_toggle = toggle;
-				builder.RegisterBuildCallback(container => 
-				{ 
+				builder.RegisterBuildCallback(container =>
+				{
+					_toggleManager = container.Resolve<IToggleManager>();
 					_onSvc = container.Resolve<TToggleOn>(); 
 					_offSvc = container.Resolve<TToggleOff>(); 
 				});
