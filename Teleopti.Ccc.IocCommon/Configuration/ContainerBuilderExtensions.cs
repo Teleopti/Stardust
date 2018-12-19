@@ -23,24 +23,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private class toggledTypeInterceptor<TToggleOn, TToggleOff> : IInterceptor
 		{
 			private readonly Toggles _toggle;
-			private object _onSvc;
-			private object _offSvc;
-			private IToggleManager _toggleManager;
+			private IContainer _container;
 
 			public toggledTypeInterceptor(ContainerBuilder builder, Toggles toggle)
 			{
 				_toggle = toggle;
 				builder.RegisterBuildCallback(container =>
 				{
-					_toggleManager = container.Resolve<IToggleManager>();
-					_onSvc = container.Resolve<TToggleOn>(); 
-					_offSvc = container.Resolve<TToggleOff>(); 
+					_container = container;
 				});
 			}
 
 			public object Intercept(InvocationInfo info)
 			{
-				var svc = _toggleManager.IsEnabled(_toggle) ? _onSvc : _offSvc;
+				var svc = _container.Resolve<IToggleManager>().IsEnabled(_toggle) ? 
+					(object)_container.Resolve<TToggleOn>() : 
+					_container.Resolve<TToggleOff>();
 				return info.TargetMethod.Invoke(svc, info.Arguments);
 			}
 		}
