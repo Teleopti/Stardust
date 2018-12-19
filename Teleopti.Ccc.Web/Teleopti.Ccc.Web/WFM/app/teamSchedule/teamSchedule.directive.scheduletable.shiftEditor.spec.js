@@ -71,7 +71,7 @@
 			expect(!!container[0].querySelector('shift-editor')).toBeTruthy();
 		});
 
-		it('shold hide shift editor view when receive cancel editing event', function () {
+		it('shold hide shift editor view when receive close editing event', function () {
 			var schedule = {
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -97,7 +97,7 @@
 			var container = setUp('2018-12-12', 'Europe/Berlin');
 			container[0].querySelector('.editor').click();
 
-			container.isolateScope().$emit('teamSchedule.shiftEditor.cancel');
+			container.isolateScope().$emit('teamSchedule.shiftEditor.close');
 			$rootScope.$apply();
 
 			expect(!!container[0].querySelector('shift-editor')).toBeFalsy();

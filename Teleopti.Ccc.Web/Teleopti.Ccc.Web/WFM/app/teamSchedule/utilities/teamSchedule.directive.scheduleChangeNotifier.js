@@ -47,7 +47,9 @@
 						|| !scheduleMgmtSvc.groupScheduleVm.Schedules.length)
 						return;
 
-					var personIds = messages.filter(isMessageNeedToBeHandled())
+					var messagesNeedToBeHandled = messages.filter(isMessageNeedToBeHandled());
+
+					var personIds = messagesNeedToBeHandled
 						.map(function (message) {
 							return message.DomainReferenceId;
 						});
@@ -58,7 +60,7 @@
 					});
 
 					if (uniquePersonIds.length !== 0) {
-						cb(uniquePersonIds);
+						cb(uniquePersonIds, messagesNeedToBeHandled);
 					}
 				}
 			}

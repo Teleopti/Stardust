@@ -76,7 +76,7 @@
 
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
-			
+
 			subscribeToScheduleChange();
 
 			bindResizeLayerEvent();
@@ -92,11 +92,11 @@
 				var title = $translate.instant('Confirm');
 				$wfmConfirmModal.confirm(message, title).then(function (result) {
 					if (result) {
-						$scope.$emit('teamSchedule.shiftEditor.cancel', {});
+						$scope.$emit('teamSchedule.shiftEditor.close', {});
 					}
 				});
 			} else {
-				$scope.$emit('teamSchedule.shiftEditor.cancel', {});
+				$scope.$emit('teamSchedule.shiftEditor.close', {});
 			}
 		};
 
@@ -163,13 +163,12 @@
 						showErrorNotice(errorMessages);
 						return;
 					}
-					getSchedule();
 					showSuccessNotice();
+					$scope.$emit('teamSchedule.shiftEditor.close', {});
 				},
 				function () {
 					vm.isSaving = false;
-				}
-				);
+				});
 		};
 
 		vm.isSaveButtonDisabled = function () {
@@ -583,29 +582,25 @@
 		}
 
 		function subscribeToScheduleChange() {
-			signalRSVC.subscribeBatchMessage(
-				{ DomainType: 'IScheduleChangedInDefaultScenario' },
-				function (messages) {
-					for (var i = 0; i < messages.length; i++) {
-						var message = messages[i];
-						if (
-							message.DomainReferenceId === vm.personId &&
-							moment(vm.date).isBetween(
-								getMomentDate(message.StartDate),
-								getMomentDate(message.EndDate),
-								'day',
-								'[]'
-							)
-						) {
-							if (vm.trackId !== message.TrackId) {
-								vm.scheduleChanged = true;
-							}
-							return;
+			$scope.$on('teamSchedule.shiftEditor.scheduleChanged', function (e, d) {
+				for (var i = 0; i < d.messages.length; i++) {
+					var message = d.messages[i];
+					if (
+						message.DomainReferenceId === vm.personId &&
+						moment(vm.date).isBetween(
+							getMomentDate(message.StartDate),
+							getMomentDate(message.EndDate),
+							'day',
+							'[]'
+						)
+					) {
+						if (vm.trackId !== message.TrackId) {
+							vm.scheduleChanged = true;
 						}
+						return;
 					}
-				},
-				300
-			);
+				}
+			});
 		}
 
 		function getMomentDate(date) {

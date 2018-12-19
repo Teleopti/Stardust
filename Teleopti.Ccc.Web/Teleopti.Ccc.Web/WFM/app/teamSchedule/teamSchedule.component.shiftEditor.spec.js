@@ -7,7 +7,6 @@
 		fakeActivityService,
 		fakeShiftEditorService,
 		fakeTeamSchedule,
-		mockSignalRBackendServer = {},
 		fakeNoticeService;
 
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
@@ -24,7 +23,6 @@
 				fakeShiftEditorService = new FakeShiftEditorService();
 				return fakeShiftEditorService;
 			});
-			$provide.service('signalRSVC', setupMockSignalRService);
 
 			fakeTeamSchedule = new FakeTeamSchedule();
 			$provide.service('TeamSchedule', function () {
@@ -39,7 +37,7 @@
 	);
 
 	beforeEach(
-		inject(function (_$rootScope_, _$compile_, CurrentUserInfo,_$document_) {
+		inject(function (_$rootScope_, _$compile_, CurrentUserInfo, _$document_) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
 			CurrentUserInfo.SetCurrentUserInfo({
@@ -87,7 +85,7 @@
 
 	describe('# cancel editing #', function () {
 
-		it('should emit cancel event if schedule without changes', function () {
+		it('should emit close event if schedule without changes', function () {
 			var schedule = {
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -108,19 +106,19 @@
 			};
 			fakeTeamSchedule.has(schedule);
 			var scope = $rootScope.$new();
-			var isCanceled = false;
-			scope.$on('teamSchedule.shiftEditor.cancel',
+			var isClosed = false;
+			scope.$on('teamSchedule.shiftEditor.close',
 				function (e, d) {
-					isCanceled = true;
+					isClosed = true;
 				});
 			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-12-18', 'Europe/Berlin', scope);
 			var element = panel[0];
 
 			element.querySelector('.btn-cancel').click();
-			expect(isCanceled).toBeTruthy();
+			expect(isClosed).toBeTruthy();
 		});
 
-		it('should show confirm dialog and emit cancel event unless confirmed when schedule with changes', function () {
+		it('should show confirm dialog and emit close event unless confirmed when schedule with changes', function () {
 			var schedule = {
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				Name: 'Annika Andersson',
@@ -144,15 +142,13 @@
 			fakeTeamSchedule.has(schedule);
 
 			var scope = $rootScope.$new();
-			var isCanceled = false;
-			scope.$on('teamSchedule.shiftEditor.cancel',
+			var isClosed = false;
+			scope.$on('teamSchedule.shiftEditor.close',
 				function (e, d) {
-					isCanceled = true;
+					isClosed = true;
 				});
 			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-12-18', 'Europe/Berlin', scope);
 			var element = panel[0];
-
-			var vm = panel.isolateScope().vm;
 
 			var shiftLayer = panel[0].querySelector('.shift-layer');
 			shiftLayer.click();
@@ -167,16 +163,17 @@
 			var dialogEl = $document[0].querySelector('.modal-box');
 			var btnCancel = dialogEl.querySelectorAll('button')[0];
 			btnCancel.click();
-			expect(isCanceled).toBeFalsy();
+			expect(isClosed).toBeFalsy();
 
 			element.querySelector('.btn-cancel').click();
 			dialogEl = $document[0].querySelector('.modal-box');
 			var btnApply = dialogEl.querySelectorAll('button')[1];
 			btnApply.click();
-			expect(isCanceled).toBeTruthy();
+			expect(isClosed).toBeTruthy();
 		});
 
 	});
+
 	it('should highlight the selected date time labels', function () {
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-05-28', 'Europe/Berlin');
 		var element = panel[0];
@@ -4427,7 +4424,7 @@
 		});
 	});
 
-	it('should save changes with correct data when change activity type for part of base activity and should reload schedule after saving changes', function () {
+	it('should save changes with correct data when change activity type for part of base activity', function () {
 		var date = '2018-06-15';
 		var personId = 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22';
 		fakeTeamSchedule.has({
@@ -4538,8 +4535,6 @@
 			],
 			TrackedCommandInfo: { TrackId: vm.trackId }
 		});
-
-		expect(vm.scheduleVm.ShiftLayers[0].ShiftLayerIds[0]).toEqual('xxxxxx-a0f1-4cd4-b383-9b5e015ab3c6');
 	});
 
 	it('should save changes with correct data when change activity type for part of an activity that has underlying layers', function () {
@@ -4965,14 +4960,16 @@
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-06-28', 'Europe/Berlin', scope);
 		scope.$apply();
 
-		mockSignalRBackendServer.notifyClients([
-			{
-				DomainReferenceId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
-				StartDate: 'D2018-06-28T00:00:00',
-				EndDate: 'D2018-06-28T00:00:00',
-				TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
-			}
-		]);
+		scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', {
+			messages: [
+				{
+					DomainReferenceId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+					StartDate: 'D2018-06-28T00:00:00',
+					EndDate: 'D2018-06-28T00:00:00',
+					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
+				}
+			]
+		});
 
 		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 		shiftLayers[0].click();
@@ -5018,14 +5015,17 @@
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-06', 'Europe/Berlin', scope);
 		scope.$apply();
 
-		mockSignalRBackendServer.notifyClients([
-			{
-				DomainReferenceId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
-				StartDate: 'D2018-08-05T20:00:00',
-				EndDate: 'D2018-08-06T10:00:00',
-				TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
-			}
-		]);
+		scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', {
+			messages: [
+				{
+					DomainReferenceId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+					StartDate: 'D2018-08-05T20:00:00',
+					EndDate: 'D2018-08-06T10:00:00',
+					TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
+				}
+			]
+		});
+
 		scope.$apply();
 
 		var refreshButton = panel[0].querySelector('.btn-refresh');
@@ -5089,14 +5089,15 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		};
 		fakeTeamSchedule.has(newSchedule);
-		mockSignalRBackendServer.notifyClients([
-			{
+
+		scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', {
+			messages: [{
 				DomainReferenceId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				StartDate: 'D2018-06-28T00:00:00',
 				EndDate: 'D2018-06-28T00:00:00',
 				TrackId: vm.trackId
-			}
-		]);
+			}]
+		});
 		scope.$apply();
 
 		shiftLayers = panel[0].querySelectorAll('.shift-layer');
@@ -5170,16 +5171,15 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		};
 		fakeTeamSchedule.has(newSchedule);
-
-		var vm = panel.isolateScope().vm;
-		mockSignalRBackendServer.notifyClients([
-			{
+		
+		scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', {
+			messages: [{
 				DomainReferenceId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				StartDate: 'D2018-06-28T00:00:00',
 				EndDate: 'D2018-06-28T00:00:00',
 				TrackId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx'
-			}
-		]);
+			}]
+		});
 		scope.$apply();
 
 		var saveButton = panel[0].querySelector('.btn-save');
@@ -5232,7 +5232,6 @@
 		});
 
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-06-15', 'Europe/Berlin');
-		var vm = panel.isolateScope().vm;
 
 		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
 		shiftLayers[0].click();
@@ -5292,6 +5291,50 @@
 		expect(vm.scheduleVm.ShiftLayers[0].Current.ActivityId).toEqual('5c1409de-a0f1-4cd4-b383-9b5e015ab3c6');
 		expect(!!fakeNoticeService.successMessage).toEqual(false);
 		expect(fakeNoticeService.errorMessage).toEqual('Error happens');
+	});
+
+	it('should emit closed event when changes saving changes successfully', function () {
+		var date = '2018-06-15';
+		var personId = 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22';
+		fakeTeamSchedule.has({
+			PersonId: personId,
+			Name: 'Annika Andersson',
+			Date: date,
+			WorkTimeMinutes: 240,
+			ContractTimeMinutes: 240,
+			Projection: [
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-06-15 08:00',
+					End: '2018-06-15 09:00',
+					Minutes: 60,
+					IsOvertime: false,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				}
+			],
+			Timezone: { IanaId: 'Europe/Berlin' }
+		});
+
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-06-15', 'Europe/Berlin');
+		var vm = panel.isolateScope().vm;
+
+		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+		shiftLayers[0].click();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
+
+		var isClosed = false;
+		$rootScope.$on('teamSchedule.shiftEditor.close', function (e, d) {
+			isClosed = true;
+		});
+
+		var saveButton = panel[0].querySelector('.btn-save');
+		saveButton.click();
+
+		expect(isClosed).toBeTruthy();
 	});
 
 	describe('in locale en-UK', function () {
@@ -5474,17 +5517,6 @@
 		};
 	}
 
-	function setupMockSignalRService() {
-		mockSignalRBackendServer.subscriptions = [];
-
-		return {
-			subscribeBatchMessage: function (options, messageHandler, timeout) {
-				mockSignalRBackendServer.subscriptions.push(options);
-				mockSignalRBackendServer.notifyClients = messageHandler;
-			}
-		};
-	}
-
 	function FakeTeamSchedule() {
 		var self = this;
 		self.schedules = [];
@@ -5499,7 +5531,6 @@
 			};
 		};
 	}
-
 
 	function FakeNoticeService() {
 		this.successMessage = '';

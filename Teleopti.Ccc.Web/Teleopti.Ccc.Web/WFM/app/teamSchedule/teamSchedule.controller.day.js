@@ -519,7 +519,7 @@
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
 
-		vm.onPersonScheduleChanged = function (personIds) {
+		vm.onPersonScheduleChanged = function (personIds, messages) {
 			if (!toggleSvc.WfmTeamSchedule_DisableAutoRefreshSchedule_79826) {
 				vm.updateSchedules(personIds);
 				vm.checkValidationWarningForCommandTargets(personIds);
@@ -529,6 +529,8 @@
 				});
 				vm.havingScheduleChanged = true;
 			}
+			$scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', { messages: messages});
+			
 		};
 
 		vm.onRefreshButtonClicked = function () {

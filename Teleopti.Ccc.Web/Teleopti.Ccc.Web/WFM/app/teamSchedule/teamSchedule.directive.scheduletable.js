@@ -169,7 +169,7 @@
 
 			vm.permissions = teamsPermissions.all();
 
-			$scope.$on('teamSchedule.shiftEditor.cancel', function () {
+			$scope.$on('teamSchedule.shiftEditor.close', function () {
 				scheduleInEditing = null;
 			});
 		};
