@@ -38,9 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual ViewResult Index()
 		{
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
-			var rollingPeriodSet = GamificationRollingPeriodSet.OnGoing;
-			if (_gamificationSettingProvider.GetGamificationSetting() != null)
-				rollingPeriodSet = _gamificationSettingProvider.GetGamificationSetting().RollingPeriodSet;
+			var rollingPeriodSet = _gamificationSettingProvider.GetGamificationSetting()?.RollingPeriodSet ?? GamificationRollingPeriodSet.OnGoing;
 			ViewBag.DatePickerFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper();
 			ViewBag.GamificationRollingPeriodSet = (int)rollingPeriodSet;
 			return View("BadgeLeaderBoardReportPartial");
