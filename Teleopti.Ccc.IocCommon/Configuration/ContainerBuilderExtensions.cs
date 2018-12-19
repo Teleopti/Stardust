@@ -2,6 +2,8 @@ using Autofac;
 using LinFu.DynamicProxy;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Aop;
+using InvocationInfo = LinFu.DynamicProxy.InvocationInfo;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -14,8 +16,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			where TToggleOff : IT
 			where IT : class
 		{
-			builder.RegisterType<TToggleOn>().SingleInstance();
-			builder.RegisterType<TToggleOff>().SingleInstance();
+			builder.RegisterType<TToggleOn>().SingleInstance().ApplyAspects();
+			builder.RegisterType<TToggleOff>().SingleInstance().ApplyAspects();
 			var proxy = proxyFactory.CreateProxy<IT>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(builder, toggle));
 			builder.RegisterInstance(proxy);
 		}

@@ -1,6 +1,8 @@
+using System;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			protected override void Load(ContainerBuilder builder)
 			{
 				builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(Toggles.TestToggle);
+				builder.RegisterType<MyAspect>().As<IAspect>().SingleInstance();
 			}
 		}
 		
@@ -68,17 +71,38 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			MyService.Value.Should().Be.EqualTo("on");
 		}
 
+		public static bool aspectWasCalled;
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldHandleOurAspects(bool toggleValue)
+		{
+			ToggleManager.Set(Toggles.TestToggle, toggleValue);
+			aspectWasCalled = false;
+			
+			MyService.AspectMethod();
+			
+			aspectWasCalled.Should().Be.True();
+		}
+
 		public class MyServiceOn : IMyService
 		{
 			private int _counter;
 			public int Counter => _counter++;
 			public string Value { get; } = "on";
+			[MyAspect]
+			public virtual void AspectMethod()
+			{
+			}
 		}
 
 		public class MyServiceOff : IMyService
 		{
 			private int _counter;
 			public int Counter => _counter++;
+			[MyAspect]
+			public virtual void AspectMethod()
+			{
+			}
 			public string Value { get; } = "off";
 		}
 		
@@ -86,6 +110,26 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			string Value { get; }
 			int Counter { get; }
+			void AspectMethod();
+		}
+
+		public class MyAspectAttribute : AspectAttribute
+		{
+			public MyAspectAttribute() : base(typeof(MyAspect))
+			{
+			}
+		}
+
+		private class MyAspect : IAspect
+		{
+			public void OnBeforeInvocation(IInvocationInfo invocation)
+			{
+				aspectWasCalled = true;
+			}
+
+			public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
+			{
+			}
 		}
 	}
 }
