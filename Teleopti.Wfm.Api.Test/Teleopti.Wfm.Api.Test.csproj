@@ -151,6 +151,10 @@
       <Project>{98a1ceaf-a22c-4e04-8a5e-9969ceea7776}</Project>
       <Name>Teleopti.Wfm.Api</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

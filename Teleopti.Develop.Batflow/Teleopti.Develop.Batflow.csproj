@@ -97,6 +97,10 @@
       <Project>{930F7DED-B1F3-48A1-A966-B0156B3BF2AE}</Project>
       <Name>Teleopti.Support.Security.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

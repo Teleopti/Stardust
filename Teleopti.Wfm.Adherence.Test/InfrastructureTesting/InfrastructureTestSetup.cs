@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
+//using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -70,9 +70,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 		private static int createDatabase()
 		{
 			var builder = new ContainerBuilder();
-			var toggles = new FakeToggleManager();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"}, toggles)));
-			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 			var container = builder.Build();
@@ -110,7 +108,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 		public static void Login(IPerson person)
 		{
 			var principalContext = SelectivePrincipalContext.Make();
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(new PersonAndBusinessUnit(person, BusinessUnitFactory.BusinessUnitUsedInTest), DataSource, null);
+			var principal = TeleoptiPrincipalFactory.Make().MakePrincipal(new PersonAndBusinessUnit(person, BusinessUnitFactory.BusinessUnitUsedInTest), DataSource, null);
 			principalContext.SetCurrentPrincipal(principal);
 		}
 

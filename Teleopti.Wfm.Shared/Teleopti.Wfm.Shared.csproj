@@ -40,9 +40,17 @@
       <HintPath>..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
       <HintPath>..\packages\NHibernate.5.2.3\lib\net461\NHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Polly, Version=5.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Polly.5.9.0\lib\net45\Polly.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b">
@@ -57,25 +65,123 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\..\..\WINDOWS\Microsoft.Net\assembly\GAC_64\System.Web\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ICurrentReadModelUnitOfWork.cs" />
-    <Compile Include="IEvent.cs" />
-    <Compile Include="IEventPublisher.cs" />
-    <Compile Include="IHaveSession.cs" />
+    <Compile Include="Aspects\AspectAttribute.cs" />
+    <Compile Include="Aspects\IAspect.cs" />
+    <Compile Include="Aspects\IInvocationInfo.cs" />
+    <Compile Include="Configuration\ConfigReaderExtensions.cs" />
+    <Compile Include="Configuration\IConfigReader.cs" />
+    <Compile Include="ConstraintViolationException.cs" />
+    <Compile Include="DataSourceException.cs" />
+    <Compile Include="Events\AllowFailuresAttribute.cs" />
+    <Compile Include="Events\AttemptsAttribute.cs" />
+    <Compile Include="Events\CommonEventProcessor.cs" />
+    <Compile Include="Events\HandlerTypeMapper.cs" />
+    <Compile Include="Events\HangfireAsSyncEventPublisher.cs" />
+    <Compile Include="Events\HangfireEventJob.cs" />
+    <Compile Include="Events\HangfireEventProcessor.cs" />
+    <Compile Include="Events\ICommandIdentifier.cs" />
+    <Compile Include="Events\IEvent.cs" />
+    <Compile Include="Events\IEventPublisher.cs" />
+    <Compile Include="Events\IHandleEvent.cs" />
+    <Compile Include="Events\IHangfireEventClient.cs" />
+    <Compile Include="Events\IInitiatorContext.cs" />
+    <Compile Include="Events\IInitiatorIdentifier.cs" />
+    <Compile Include="Events\IInitiatorIdentifierScope.cs" />
+    <Compile Include="Events\ILogOnContext.cs" />
+    <Compile Include="Events\InitiatorIdentifier.cs" />
+    <Compile Include="Events\IResolve.cs" />
+    <Compile Include="Events\IRtaEventPublisher.cs" />
+    <Compile Include="Events\IRunOnInterfaces.cs" />
+    <Compile Include="Events\ISyncEventPublisherExceptionHandler.cs" />
+    <Compile Include="Events\ITrackingMessageSender.cs" />
+    <Compile Include="Events\ResolveEventHandlers.cs" />
+    <Compile Include="Events\RunIntervalAttribute.cs" />
+    <Compile Include="Events\SyncAllEventPublisher.cs" />
+    <Compile Include="Events\SyncEventPublisher.cs" />
+    <Compile Include="Events\TrackingMessage.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="GenericDisposable.cs" />
     <Compile Include="IJsonEventDeserializer.cs" />
     <Compile Include="IJsonEventSerializer.cs" />
-    <Compile Include="ILiteUnitOfWork.cs" />
-    <Compile Include="IRtaEventPublisher.cs" />
+    <Compile Include="IRetryHandle.cs" />
+    <Compile Include="Principal\AppDomainPrincipalContext.cs" />
+    <Compile Include="Principal\CurrentProcess.cs" />
+    <Compile Include="Principal\CurrentTeleoptiPrincipal.cs" />
+    <Compile Include="Principal\ICurrentPrincipalContext.cs" />
+    <Compile Include="Principal\ICurrentTeleoptiPrincipal.cs" />
+    <Compile Include="Principal\IMakeOrganisationMembershipFromPerson.cs" />
+    <Compile Include="Principal\IOrganisationMembership.cs" />
+    <Compile Include="Principal\IPrincipalFactory.cs" />
+    <Compile Include="Principal\IRegional.cs" />
+    <Compile Include="Principal\ITeleoptiIdentity.cs" />
+    <Compile Include="Principal\ITeleoptiPrincipal.cs" />
+    <Compile Include="Principal\ITeleoptiPrincipalWithUnsafePerson.cs" />
+    <Compile Include="Principal\OrganisationMembership.cs" />
+    <Compile Include="Principal\OrganisationMembershipExtensions.cs" />
+    <Compile Include="Principal\PersianCultureHelper.cs" />
+    <Compile Include="Principal\PersonNotFoundException.cs" />
+    <Compile Include="Principal\Regional.cs" />
+    <Compile Include="Principal\SelectivePrincipalContext.cs" />
+    <Compile Include="Principal\TeleoptiIdentity.cs" />
+    <Compile Include="Principal\TeleoptiPrincipal.cs" />
+    <Compile Include="Principal\TeleoptiPrincipalFactory.cs" />
+    <Compile Include="Principal\TeleoptiPrincipalInternalsFactory.cs" />
+    <Compile Include="Principal\ThreadPrincipalContext.cs" />
+    <Compile Include="Principal\WebRequestPrincipalContext.cs" />
+    <Compile Include="Retry.cs" />
+    <Compile Include="Tenant\DataSourceConfiguration.cs" />
+    <Compile Include="Tenant\DataSourceForTenant.cs" />
+    <Compile Include="Tenant\ICurrentDataSource.cs" />
+    <Compile Include="Tenant\IDataSource.cs" />
+    <Compile Include="Tenant\IDataSourceForTenant.cs" />
+    <Compile Include="Tenant\IDataSourceScope.cs" />
+    <Compile Include="Tenant\IDataSourcesFactory.cs" />
+    <Compile Include="Tenant\IFindTenantByNameWithEnsuredTransaction.cs" />
+    <Compile Include="Tenant\IInitializeLicenseServiceForTenant.cs" />
+    <Compile Include="Tenant\ILicenseFeedback.cs" />
+    <Compile Include="Tenant\Tenant.cs" />
+    <Compile Include="Tenant\TenantApplicationConfigKey.cs" />
+    <Compile Include="Tenant\TenantFromArguments.cs" />
+    <Compile Include="Tenant\TenantScopeAspect.cs" />
+    <Compile Include="Tenant\TenantScopeAttribute.cs" />
+    <Compile Include="UnitOfWork\DomainUpdateType.cs" />
+    <Compile Include="UnitOfWork\IAggregateRoot.cs" />
+    <Compile Include="UnitOfWork\IAnalyticsUnitOfWorkFactory.cs" />
+    <Compile Include="UnitOfWork\IAuditSetter.cs" />
+    <Compile Include="UnitOfWork\IAuditSetting.cs" />
+    <Compile Include="UnitOfWork\ICurrentReadModelUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\IEntity.cs" />
+    <Compile Include="UnitOfWork\IHaveSession.cs" />
+    <Compile Include="UnitOfWork\ILiteUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\IQueryFilter.cs" />
+    <Compile Include="UnitOfWork\IReadModelUnitOfWorkFactory.cs" />
+    <Compile Include="UnitOfWork\IRootChangeInfo.cs" />
+    <Compile Include="UnitOfWork\IStatelessUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWorkFactory.cs" />
+    <Compile Include="UnitOfWork\LazyLoadingManager.cs" />
+    <Compile Include="Web\CurrentHttpContext.cs" />
+    <Compile Include="Web\ICurrentHttpContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Tenant\Tenant.dbconf.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

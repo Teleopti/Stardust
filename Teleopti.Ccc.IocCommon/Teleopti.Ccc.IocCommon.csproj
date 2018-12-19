@@ -183,7 +183,6 @@
     <Compile Include="IocArgs.cs" />
     <Compile Include="Configuration\MessageBrokerModule.cs" />
     <Compile Include="Configuration\ResourceHandlerModule.cs" />
-    <Compile Include="Configuration\AuthenticationCachedModule.cs" />
     <Compile Include="Configuration\AuthenticationModule.cs" />
     <Compile Include="Configuration\CommandDispatcherModule.cs" />
     <Compile Include="Configuration\CommandHandlersModule.cs" />

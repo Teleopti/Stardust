@@ -229,7 +229,6 @@
     <Compile Include="Foundation\BulkWriterTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="Foundation\DatabaseVersionTest.cs" />
-    <Compile Include="Foundation\DataSourceExceptionTest.cs" />
     <Compile Include="Foundation\InitializeMessageBrokerTest.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalFactoryTest.cs" />
     <Compile Include="Hangfire\HangfireRetryEnqueuingTest.cs" />

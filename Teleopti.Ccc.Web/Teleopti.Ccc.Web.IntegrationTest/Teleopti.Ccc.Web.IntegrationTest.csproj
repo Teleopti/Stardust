@@ -114,6 +114,10 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.csproj">
       <Project>{0A5EBAA1-BDC2-4997-873F-4FA43E3BC275}</Project>
       <Name>Teleopti.Ccc.Web</Name>

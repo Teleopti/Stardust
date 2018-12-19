@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HandlerTypeMapper>().SingleInstance().ApplyAspects();
 
 			builder.Register(c => JobStorage.Current).SingleInstance();
-			builder.Register(c => new BackgroundJobClient(c.Resolve<JobStorage>()))
+			builder.Register(c =>
+				{
+					return new BackgroundJobClient(c.Resolve<JobStorage>());
+				})
 				.As<IBackgroundJobClient>()
 				.SingleInstance();
 			builder.Register(c => new RecurringJobManager(c.Resolve<JobStorage>()))

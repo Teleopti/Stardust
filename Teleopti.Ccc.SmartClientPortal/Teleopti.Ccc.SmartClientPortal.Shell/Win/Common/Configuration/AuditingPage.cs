@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Drawing;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				if (checkBoxAdvIsRunning.Checked)
 				{
-					_auditSetting.TurnOnScheduleAuditing(Repository, UnitOfWorkFactory.Current.AuditSetting);
+					(_auditSetting as AuditSetting).TurnOnScheduleAuditing(Repository, UnitOfWorkFactory.Current.AuditSetting);
 				}
 				else
 				{

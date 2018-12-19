@@ -408,10 +408,6 @@
       <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
-      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
-      <Name>Teleopti.Ccc.Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>

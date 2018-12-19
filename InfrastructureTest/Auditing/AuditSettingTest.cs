@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 	[TestFixture]
 	public class AuditSettingTest
 	{
-		private IAuditSetting target;
+		private AuditSetting target;
 		private IAuditSetter auditSettingProvider;
 			
 		[SetUp]

@@ -199,23 +199,16 @@
     <Compile Include="ApplicationLayer\AutofacResolve.cs" />
     <Compile Include="ApplicationLayer\CannotPublishToHangfire.cs" />
     <Compile Include="ApplicationLayer\CurrentEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\HandlerTypeMapper.cs" />
-    <Compile Include="ApplicationLayer\HangfireAsSyncEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\ISyncEventPublisherExceptionHandler.cs" />
     <Compile Include="ApplicationLayer\KeyValueStorePersister.cs" />
     <Compile Include="ApplicationLayer\SyncAllEventPublisherWithStardust.cs" />
-    <Compile Include="ApplicationLayer\SyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MultiEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncInFatClientProcessEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ReadModelValidationResultPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="ApplicationLayer\StardustEventPublisher.cs" />
     <Compile Include="ApplicationLayer\StardustSender.cs" />
-    <Compile Include="ApplicationLayer\SyncAllEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\RecurringEventPublishingUpdater.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
@@ -248,19 +241,16 @@
     <Compile Include="Foundation\InitializeMessageBroker.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
     <Compile Include="Foundation\JsonExtensions.cs" />
+    <Compile Include="Foundation\LazyLoadingManager.cs" />
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\ReportUrlConstructor.cs" />
-    <Compile Include="Foundation\SelectivePrincipalContext.cs" />
     <Compile Include="Foundation\StardustJobFeedback.cs" />
-    <Compile Include="Foundation\TeleoptiPrincipalFactory.cs" />
     <Compile Include="Foundation\TokenIdentityProvider.cs" />
     <Compile Include="Foundation\DatabaseConnectionLostException.cs" />
-    <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
     <Compile Include="Hangfire\AllowFailuresFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\HangfireClientStarter.cs" />
     <Compile Include="Hangfire\HangfireDashboardStarter.cs" />
     <Compile Include="Hangfire\HangfireEventClient.cs" />
-    <Compile Include="Hangfire\HangfireEventJob.cs" />
     <Compile Include="Hangfire\HangfireEventServer.cs" />
     <Compile Include="Hangfire\HangfireServerStarter.cs" />
     <Compile Include="Hangfire\HangfireStarter.cs" />
@@ -368,7 +358,6 @@
     <Compile Include="Repositories\JobStartTimeRepository.cs" />
     <Compile Include="Intraday\PersonProviderForOvertime.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />
-    <Compile Include="Licensing\IInitializeLicenseServiceForTenant.cs" />
     <Compile Include="Licensing\InitializeLicenseServiceForTenant.cs" />
     <Compile Include="Licensing\NoLicenseServiceInitialization.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\ICurrentMessageBrokerUnitOfWork.cs" />
@@ -408,11 +397,8 @@
     <Compile Include="MultiTenancy\Client\TenantCredentials.cs" />
     <Compile Include="MultiTenancy\Client\TenantLogonDataManagerClient.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
-    <Compile Include="MultiTenancy\DataSourceForTenant.cs" />
-    <Compile Include="MultiTenancy\Server\DataSourceConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameWithEnsuredTransaction.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameWithEnsuredTransactionFake.cs" />
-    <Compile Include="MultiTenancy\Server\IFindTenantByNameWithEnsuredTransaction.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\WithTenantUnitOfWork.cs" />
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
@@ -467,7 +453,6 @@
     <Compile Include="MultiTenancy\Server\ApplicationLogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\Client\PostHttpRequest.cs" />
-    <Compile Include="MultiTenancy\Server\Tenant.cs" />
     <Compile Include="MultiTenancy\Client\TenantDataManagerClient.cs" />
     <Compile Include="MultiTenancy\Server\TenantAuthenticationFake.cs" />
     <Compile Include="NHibernateConfiguration\AnalyticsUnitOfWorkContext.cs" />
@@ -575,9 +560,7 @@
     <Compile Include="Licensing\LicenseActivatorProvider.cs" />
     <Compile Include="Licensing\XmlLicenseServiceFactory.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />
-    <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
     <Compile Include="Foundation\PurgeApplicationData.cs" />
-    <Compile Include="Foundation\TeleoptiPrincipalInternalsFactory.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalForLegacyFactory.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />
     <Compile Include="Licensing\Agreements\LicenseAgreement.cs" />
@@ -588,7 +571,6 @@
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\ForeignKeyException.cs" />
     <Compile Include="Foundation\IInitializeApplication.cs" />
-    <Compile Include="Licensing\ILicenseFeedback.cs" />
     <Compile Include="Licensing\ILicenseVerifier.cs" />
     <Compile Include="Licensing\ILicenseVerifierFactory.cs" />
     <Compile Include="Licensing\LicenseVerifierFactory.cs" />
@@ -605,9 +587,7 @@
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriver.cs" />
     <Compile Include="NHibernateConfiguration\NHibernateConfigurationExtensions.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />
-    <Compile Include="Foundation\ConstraintViolationException.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingType.cs" />
-    <Compile Include="Foundation\LazyLoadingManager.cs" />
     <Compile Include="Foundation\InitializeApplication.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -810,7 +790,6 @@
     <Compile Include="UnitOfWork\DisabledFilterCounter.cs" />
     <Compile Include="UnitOfWork\ITransactionHook.cs" />
     <Compile Include="UnitOfWork\NHibernateFilterManager.cs" />
-    <Compile Include="UnitOfWork\IDataSourcesFactory.cs" />
     <Compile Include="UnitOfWork\NHibernateStatelessUnitOfWork.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWork.cs" />
@@ -836,8 +815,6 @@
     <Compile Include="WebReports\DetailedAdherenceForDayResult.cs" />
     <Compile Include="WebReports\IDailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\IDetailedAdherenceForDayQuery.cs" />
-    <Compile Include="Web\CurrentHttpContext.cs" />
-    <Compile Include="Web\ICurrentHttpContext.cs" />
     <Compile Include="MultiTenancy\Client\SharedSettingsTenantClient.cs" />
     <Compile Include="MultiTenancy\Client\SharedSettingsTenantClientForNoWeb.cs" />
   </ItemGroup>
@@ -897,9 +874,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.dbconf.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MultiTenancy\Server\Tenant.dbconf.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_De_De_St.txt" />

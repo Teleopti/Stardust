@@ -32,11 +32,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			initializeFromPerson();
 		}
 
-		public void ChangePrincipal(TeleoptiPrincipalWithUnsafePerson principal)
+		public void ChangePrincipal(ITeleoptiPrincipalWithUnsafePerson principal)
 		{
-			_person = principal._person;
-			_claimsOwner = principal._claimsOwner;
-			_identity = principal.Identity;
+			var source = principal as TeleoptiPrincipalWithUnsafePerson;
+			_person = source._person;
+			_claimsOwner = source._claimsOwner;
+			_identity = source.Identity;
 			initializeFromPerson();
 		}
 

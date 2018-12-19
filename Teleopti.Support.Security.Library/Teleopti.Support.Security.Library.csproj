@@ -76,6 +76,10 @@
       <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
       <Name>Teleopti.Analytics.ReportTexts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -1,6 +1,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -9,10 +10,14 @@ namespace Teleopti.Ccc.IocCommon
 		private readonly IocArgs _args;
 		private readonly IToggleManager _toggleManager;
 
+		public IocConfiguration(IocArgs args) : this(args, null)
+		{
+		}
+		
 		public IocConfiguration(IocArgs args, IToggleManager toggleManager)
 		{
 			_args = args;
-			_toggleManager = toggleManager;
+			_toggleManager = toggleManager ?? new FalseToggleManager();
 		}
 
 		protected IocConfiguration()

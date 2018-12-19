@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public EventsMessageSender(
 			IEventPopulatingPublisher publisher,
 			INow now
-			)
+		)
 		{
 			_publisher = publisher;
 			_now = now;
@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				})
 				.ToArray();
 
-			_publisher.Publish(events);
+			if (events.Length > 0)
+				_publisher.Publish(events);
 		}
-		
 	}
 }
