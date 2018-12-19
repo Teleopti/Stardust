@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		private static readonly ProxyFactory proxyFactory = new ProxyFactory();
 		
-		public static void RegisterToggledTypeTest<TToggleOn, TToggleOff, IT>(this ContainerBuilder builder, Toggles toggle)
-			where TToggleOn : IT 
-			where TToggleOff : IT
-			where IT : class
+		public static void RegisterToggledComponent<TToggleOn, TToggleOff, TInterface>(this ContainerBuilder builder, Toggles toggle)
+			where TToggleOn : TInterface 
+			where TToggleOff : TInterface
+			where TInterface : class
 		{
 			builder.RegisterType<TToggleOn>().SingleInstance().ApplyAspects();
 			builder.RegisterType<TToggleOff>().SingleInstance().ApplyAspects();
-			var proxy = proxyFactory.CreateProxy<IT>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(builder, toggle));
+			var proxy = proxyFactory.CreateProxy<TInterface>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(builder, toggle));
 			builder.RegisterInstance(proxy);
 		}
 		

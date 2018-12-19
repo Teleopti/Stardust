@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	[DomainTest]
-	public class RegisterToggledTypeTest : IExtendSystem
+	public class RegisterToggledComponentTest : IExtendSystem
 	{
 		public FakeToggleManager ToggleManager;
 		public IMyService MyService;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			protected override void Load(ContainerBuilder builder)
 			{
-				builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(Toggles.TestToggle);
+				builder.RegisterToggledComponent<MyServiceOn, MyServiceOff, IMyService>(Toggles.TestToggle);
 				builder.RegisterType<MyAspect>().As<IAspect>().SingleInstance();
 			}
 		}

@@ -117,7 +117,7 @@
     <Compile Include="Toggle\EnabledOrDisabledByToggleEventPackageHandlerTest.cs" />
     <Compile Include="Toggle\EnabledOrDisabledByToggleEventSameHandlerTest.cs" />
     <Compile Include="Toggle\GeneralTest.cs" />
-    <Compile Include="Toggle\RegisterToggledTypeTest.cs" />
+    <Compile Include="Toggle\RegisterToggledComponentTest.cs" />
     <Compile Include="Toggle\UseNotOnToggleTest.cs" />
     <Compile Include="Toggle\UseOnAndNotOnToggleTest.cs" />
     <Compile Include="Toggle\EnabledOrDisabledByToggleEventHandlerTest.cs" />
