@@ -532,8 +532,13 @@
 		};
 
 		vm.onRefreshButtonClicked = function () {
-			vm.updateSchedules(Object.keys(personIdsHavingScheduleChange));
+			var personIds = Object.keys(personIdsHavingScheduleChange);
+			vm.updateSchedules(personIds);
+			vm.checkValidationWarningForCommandTargets(personIds);
 			resetHavingScheduleChange();
+			if (vm.staffingEnabled) {
+				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
+			}
 		}
 
 		function resetHavingScheduleChange(personIds) {
