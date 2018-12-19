@@ -12,7 +12,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.Web.Core.Extensions;
-
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
@@ -218,8 +217,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					.Select(personAbsence => new Summary
 					{
 						Description = !canViewConfidential && (personAbsence.Layer.Payload as IAbsence).Confidential ? ConfidentialPayloadValues.Description.Name : personAbsence.Layer.Payload.Description.Name,
-						Start = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
-						End = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+						Start = personAbsence.Period.StartDateTimeLocal(timezone).ToServiceDateTimeFormat(),
+						End = personAbsence.Period.EndDateTimeLocal(timezone).ToServiceDateTimeFormat(),
 						StartInUtc = personAbsence.Period.StartDateTime.ToServiceDateTimeFormat(),
 						EndInUtc = personAbsence.Period.EndDateTime.ToServiceDateTimeFormat()
 					})
@@ -230,8 +229,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(personalActivity => new Summary
 				{
 					Description = personalActivity.Payload.Description.Name,
-					Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
-					End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+					Start = personalActivity.Period.StartDateTimeLocal(timezone).ToServiceDateTimeFormat(),
+					End = personalActivity.Period.EndDateTimeLocal(timezone).ToServiceDateTimeFormat(),
 					StartInUtc = personalActivity.Period.StartDateTime.ToServiceDateTimeFormat(),
 					EndInUtc = personalActivity.Period.EndDateTime.ToServiceDateTimeFormat()
 				})
@@ -241,8 +240,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(personMeeting => new Summary
 				{
 					Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
-					Start = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
-					End = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+					Start = personMeeting.Period.StartDateTimeLocal(timezone).ToServiceDateTimeFormat(),
+					End = personMeeting.Period.EndDateTimeLocal(timezone).ToServiceDateTimeFormat(),
 					StartInUtc = personMeeting.Period.StartDateTime.ToServiceDateTimeFormat(),
 					EndInUtc = personMeeting.Period.EndDateTime.ToServiceDateTimeFormat()
 				})

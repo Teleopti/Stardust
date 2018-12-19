@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly IPersonNameProvider _personNameProvider;
+		private static readonly NoFormatting textFormatting = new NoFormatting();
 
 		public RequestsViewModelMapper(IUserTimeZone userTimeZone,
 			ILinkProvider linkProvider,
@@ -50,13 +51,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					href = s.Id.HasValue ? _linkProvider.RequestDetailLink(s.Id.Value) : null,
 					Methods = getAvailableMethods(s)
 				},
-				Subject = s.GetSubject(new NoFormatting()),
+				Subject = s.GetSubject(textFormatting),
 				DateTimeFrom = localDateFrom.FormatDateTimeToIso8601String(),
 				DateTimeTo = localDateTo.FormatDateTimeToIso8601String(),
 				Status = getStatusText(s),
 				IsNextDay = isNextDay(s),
 				IsReferred = isReferred(s),
-				Text = s.GetMessage(new NoFormatting()),
+				Text = s.GetMessage(textFormatting),
 				Type = s.Request.RequestTypeDescription,
 				TypeEnum = s.Request.RequestType,
 				UpdatedOnDateTime =
@@ -98,10 +99,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private string getAvailableMethods(IPersonRequest personRequest)
 		{
-			var request = personRequest.Request as ShiftExchangeOffer;
-			if (request != null)
+			if (personRequest.Request is ShiftExchangeOffer offer)
 			{
-				var offer = (IShiftExchangeOffer) personRequest.Request;
 				var isRealPending = (offer.Status == ShiftExchangeOfferStatus.Pending) && !offer.IsExpired();
 				return isRealPending ? "GET, DELETE, PUT" : "GET, DELETE";
 			}
@@ -152,8 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var ret = s.StatusText;
 			if (s.IsPending)
 			{
-				var shiftTradeRequest = s.Request as IShiftTradeRequest;
-				if (shiftTradeRequest != null)
+				if (s.Request is IShiftTradeRequest shiftTradeRequest)
 				{
 					ret += ", " +
 						   shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)
@@ -230,16 +228,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			if (!s.IsPending) return false;
 
-			var shiftTradeRequest = s.Request as IShiftTradeRequest;
-			return shiftTradeRequest != null &&
+			return s.Request is IShiftTradeRequest shiftTradeRequest &&
 				   shiftTradeRequest.GetShiftTradeStatus(
 					   _shiftTradeRequestStatusChecker) == ShiftTradeStatus.Referred;
 		}
 
 		private bool isNextDay(IPersonRequest s)
 		{
-			var shiftExchangeOffer = s.Request as IShiftExchangeOffer;
-			if (shiftExchangeOffer != null)
+			if (s.Request is IShiftExchangeOffer shiftExchangeOffer)
 			{
 				var timeZone = _userTimeZone.TimeZone();
 				return shiftExchangeOffer.Period.ToDateOnlyPeriod(timeZone).DayCount() > 1;

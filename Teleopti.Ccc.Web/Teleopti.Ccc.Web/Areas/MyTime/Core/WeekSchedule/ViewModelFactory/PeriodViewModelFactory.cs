@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		private static TimePeriod getVisualLayerTimePeriod(VisualLayerForWebDisplay visualLayer, DateOnly localDate, TimeZoneInfo timezone)
 		{
-			var timePeriodStart = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.StartDateTime, timezone);
-			var timePeriodEnd = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.EndDateTime, timezone);
+			var timePeriodStart = visualLayer.VisualPeriod.StartDateTimeLocal(timezone);
+			var timePeriodEnd = visualLayer.VisualPeriod.EndDateTimeLocal(timezone);
 
 			var timeSpanStart = timePeriodStart.TimeOfDay;
 			var timeSpanEnd = timePeriodEnd.TimeOfDay;
