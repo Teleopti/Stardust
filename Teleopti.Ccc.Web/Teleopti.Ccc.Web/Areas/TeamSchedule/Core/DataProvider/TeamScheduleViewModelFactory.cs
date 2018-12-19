@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var scheduleDayLookup = scheduleDays.ToLookup(s => s.Person);
 
 			var personScheduleDaysToSort = permittedPersons
-				.Select(p => new Tuple<IPerson, IScheduleDay>(p, scheduleDayLookup.Contains(p) ? scheduleDayLookup[p].FirstOrDefault() : null)).ToArray();
+				.Select(p => new Tuple<IPerson, IScheduleDay>(p, scheduleDayLookup[p].FirstOrDefault())).ToArray();
 			personScheduleDaysToSort = sortSchedules(personScheduleDaysToSort, input.SortOption, peopleCanViewUnpublishedFor.ToArray());
 
 			var personScheduleDayPairsForCurrentPage = input.PageSize > 0
