@@ -42,7 +42,7 @@
 			"options": {
 				"shell": {
 					"executable": "cmd.exe",
-					"args": ["/k", "/c"]
+					"args": ["/c"]
 				},
 				"env": { "IFFLOW": "y" },
 				"cwd": "${workspaceFolder}/../../../.debug-Setup/"
