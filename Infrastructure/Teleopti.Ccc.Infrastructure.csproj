@@ -203,8 +203,7 @@
     <Compile Include="ApplicationLayer\HangfireAsSyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\IRtaEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\ISyncEventProcessingExceptionHandler.cs" />
+    <Compile Include="ApplicationLayer\ISyncEventPublisherExceptionHandler.cs" />
     <Compile Include="ApplicationLayer\KeyValueStorePersister.cs" />
     <Compile Include="ApplicationLayer\SyncAllEventPublisherWithStardust.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisher.cs" />
@@ -242,8 +241,6 @@
     <Compile Include="DistributedLock\DistributedLockException.cs" />
     <Compile Include="DistributedLock\SqlMonitor.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />
-    <Compile Include="ApplicationLayer\IJsonEventDeserializer.cs" />
-    <Compile Include="ApplicationLayer\IJsonEventSerializer.cs" />
     <Compile Include="Foundation\BusinessUnitIdIdForRequest.cs" />
     <Compile Include="Foundation\DatabaseVersion.cs" />
     <Compile Include="Foundation\HelperFunctions.cs" />
@@ -361,8 +358,6 @@
     <Compile Include="Licensing\NoLicenseServiceInitialization.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\ICurrentMessageBrokerUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\IMessageBrokerUnitOfWorkScope.cs" />
-    <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ICurrentReadModelUnitOfWork.cs" />
-    <Compile Include="LiteUnitOfWork\ILiteUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\LiteUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkState.cs" />
@@ -854,6 +849,10 @@
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
