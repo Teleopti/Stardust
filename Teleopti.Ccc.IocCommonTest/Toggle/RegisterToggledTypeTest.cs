@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		{
 			protected override void Load(ContainerBuilder builder)
 			{
-				builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(null, Toggles.TestToggle);
+				builder.RegisterToggledTypeTest<MyServiceOn, MyServiceOff, IMyService>(Toggles.TestToggle);
 			}
 		}
 		

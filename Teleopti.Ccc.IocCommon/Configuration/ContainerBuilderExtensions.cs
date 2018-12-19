@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		private static readonly ProxyFactory proxyFactory = new ProxyFactory();
 		
-		public static void RegisterToggledTypeTest<TToggleOn, TToggleOff, IT>(
-			this ContainerBuilder builder, IToggleManager toggleManager, Toggles toggle)
+		public static void RegisterToggledTypeTest<TToggleOn, TToggleOff, IT>(this ContainerBuilder builder, Toggles toggle)
 			where TToggleOn : IT 
 			where TToggleOff : IT
 			where IT : class
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			var proxy = proxyFactory.CreateProxy<IT>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(builder, toggle));
 			builder.RegisterInstance(proxy);
 		}
-		
 		
 		private class toggledTypeInterceptor<TToggleOn, TToggleOff> : IInterceptor
 		{
