@@ -282,10 +282,13 @@
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
-			personIds && vm.updateSchedules(personIds);
-			vm.checkValidationWarningForCommandTargets(personIds);
-			if (vm.staffingEnabled) {
-				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
+			if (personIds) {
+				vm.updateSchedules(personIds);
+				resetHavingScheduleChange(personIds);
+				vm.checkValidationWarningForCommandTargets(personIds);
+				if (vm.staffingEnabled) {
+					$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
+				}
 			}
 		};
 
@@ -413,6 +416,8 @@
 
 		vm.loadSchedules = function () {
 			closeAllCommandSidenav();
+			resetHavingScheduleChange();
+
 			vm.isLoading = true;
 			var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 			if (vm.searchEnabled) {
@@ -528,8 +533,19 @@
 
 		vm.onRefreshButtonClicked = function () {
 			vm.updateSchedules(Object.keys(personIdsHavingScheduleChange));
-			personIdsHavingScheduleChange = {};
-			vm.havingScheduleChanged = false;
+			resetHavingScheduleChange();
+		}
+
+		function resetHavingScheduleChange(personIds) {
+			if (personIds) {
+				personIds.forEach(function (personId) {
+					if (personIdsHavingScheduleChange[personId])
+						delete personIdsHavingScheduleChange[personId];
+				});
+			} else {
+				personIdsHavingScheduleChange = {};
+			}
+			vm.havingScheduleChanged = !!Object.keys(personIdsHavingScheduleChange).length;
 		}
 
 		vm.searchOptions = {

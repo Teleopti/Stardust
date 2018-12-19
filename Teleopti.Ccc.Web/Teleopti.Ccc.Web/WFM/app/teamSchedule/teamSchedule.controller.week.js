@@ -124,6 +124,7 @@
 
 		vm.loadSchedules = function () {
 			vm.isLoading = true;
+			vm.havingScheduleChanged = false;
 			var inputForm = getParamsForLoadingSchedules();
 
 			weekViewScheduleSvc.getSchedules(inputForm).then(function (data) {
