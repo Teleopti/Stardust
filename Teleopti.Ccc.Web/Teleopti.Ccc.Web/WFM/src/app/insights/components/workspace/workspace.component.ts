@@ -116,7 +116,7 @@ export class WorkspaceComponent implements OnInit {
 
 	public confirmCreateReport() {
 		this.modalType = 'create';
-		this.isVisible = true;
+		this.modalIsVisible = true;
 		this.messageForNewReportName = '';
 		this.modalTitle = 'Create new report';
 	}
@@ -124,7 +124,7 @@ export class WorkspaceComponent implements OnInit {
 	public confirmCloneReport(report) {
 		this.modalType = 'clone';
 		this.messageForNewReportName = `Please input name for new copy of report "${report.Name}":`;
-		this.isVisible = true;
+		this.modalIsVisible = true;
 		this.modalTitle = 'Save as new report';
 		this.modalReport = report;
 	}
