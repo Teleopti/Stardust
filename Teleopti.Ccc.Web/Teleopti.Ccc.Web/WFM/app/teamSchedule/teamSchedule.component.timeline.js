@@ -30,7 +30,7 @@
 
 		function updateRulerHeight() {
 			$timeout(function () {
-				ctrl.height = (ctrl.scheduleCount * 32.5) + 50 - 5;
+				ctrl.height = (ctrl.scheduleCount * 32.5) + 40 - 5;
 			});
 		}
 

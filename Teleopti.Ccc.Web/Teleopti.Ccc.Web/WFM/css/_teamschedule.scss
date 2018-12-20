@@ -6,10 +6,6 @@
 	padding-bottom: 0;
 	margin-bottom: 0;
 
-	schedule-table thead {
-		height: 50px;
-	}
-
 	md-sidenav {
 		background: $white;
 
@@ -628,6 +624,7 @@ team-schedule-datepicker {
 
 		thead {
 			width: calc(100% - 17px);
+			height: 40px;
 		}
 
 		tbody tr:last-child {
@@ -645,7 +642,6 @@ team-schedule-datepicker {
 			line-height: 1.42857143;
 			vertical-align: top;
 		}
-
 		.person-name-column {
 			width: 25%;
 			white-space: nowrap;
