@@ -36,11 +36,9 @@
 		vm.targetScenario = null;
 		vm.forecastPeriod = {
 			startDate: moment()
-				.utc()
 				.add(1, 'days')
 				.toDate(),
 			endDate: moment()
-				.utc()
 				.add(6, 'months')
 				.toDate()
 		};

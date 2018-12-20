@@ -69,7 +69,6 @@ describe("ForecastModifyController", function () {
 
 	it("should get workload with days", inject(function ($controller) {
 		var tomorrow = moment()
-			.utc()
 			.add(1, "days");
 		forecastDays = [
 			{
@@ -95,7 +94,6 @@ describe("ForecastModifyController", function () {
 
 	it("should set forecasting period to min and max of forecasted days", inject(function ($controller) {
 		var tomorrow = moment()
-			.utc()
 			.add(1, "days");
 		forecastDays = [
 			{
@@ -123,24 +121,18 @@ describe("ForecastModifyController", function () {
 		fakeBackend.withForecastData(forecastDays);
 		$httpBackend.flush();
 
-		var testStartDate = moment(vm.forecastPeriod.startDate)
-			.utc()
-			.format("MMM Do YY");
-		var testEndDate = moment(vm.forecastPeriod.endDate)
-			.utc()
-			.format("MMM Do YY");
+		var testStartDate = moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD');
+		var testEndDate = moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD');
 		expect(testStartDate).toEqual(tomorrow
-			.format("MMM Do YY"));
+			.format('YYYY-MM-DD'));
 		expect(testEndDate).toEqual(moment()
-			.utc()
 			.add(3, "days")
-			.format("MMM Do YY")
+			.format('YYYY-MM-DD')
 		);
 	}));
 	
 	it("should set forecasting period to next 6 months when no forecast", inject(function ($controller) {
 		var tomorrow = moment()
-			.utc()
 			.add(1, "days");
 		forecastDays = [];
 		fakeBackend.withSkill(skill);
@@ -149,25 +141,19 @@ describe("ForecastModifyController", function () {
 		fakeBackend.withForecastData(forecastDays);
 		$httpBackend.flush();
 
-		var testStartDate = moment(vm.forecastPeriod.startDate)
-			.utc()
-			.format("MMM Do YY");
-		var testEndDate = moment(vm.forecastPeriod.endDate)
-			.utc()
-			.format("MMM Do YY");
+		var testStartDate = moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD');
+		var testEndDate = moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD');
 		expect(testStartDate).toEqual(
 			tomorrow
-			.format("MMM Do YY"));
+				.format('YYYY-MM-DD'));
 		expect(testEndDate).toEqual(moment()
-			.utc()
 			.add(6, "months")
-			.format("MMM Do YY")
+			.format('YYYY-MM-DD')
 		);
 	}));
 
 	it("should keep user selected forecasting period", inject(function ($controller) {
 		var tomorrow = moment()
-			.utc()
 			.add(1, "days");
 		forecastDays = [
 			{
