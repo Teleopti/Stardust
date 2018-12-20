@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
+import { IStateProvider } from 'angular-ui-router';
 
+import { DowngradeableComponent } from '@wfm/types';
 import { SharedModule } from '../shared/shared.module';
 import { SystemSettingsComponent } from './pages';
-import { DowngradeableComponent } from '@wfm/types';
+import { BankHolidayCalendarComponent } from './components/bank-holiday-calendar';
+import { BankCalendarDataService } from './shared/bank-calendar-data.service';
 
 @NgModule({
-	declarations: [SystemSettingsComponent],
+	declarations: [SystemSettingsComponent, BankHolidayCalendarComponent],
 	imports: [SharedModule, TranslateModule.forChild()],
-	providers: [TranslateModule],
+	providers: [TranslateModule, BankCalendarDataService],
 	exports: [],
 	entryComponents: [SystemSettingsComponent]
 })

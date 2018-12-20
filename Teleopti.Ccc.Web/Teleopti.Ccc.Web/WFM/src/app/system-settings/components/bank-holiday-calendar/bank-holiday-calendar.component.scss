@@ -1,0 +1,68 @@
+.bank-holiday-settings {
+	margin: 0;
+	min-height: 100px;
+
+	& > h2 {
+		min-height: 40px;
+		padding: 10px 0;
+	}
+}
+
+.add-bank-holiday-calendar-icon {
+	margin: -10px 10px 10px 10px;
+	i {
+		font-size: 20px;
+	}
+}
+
+.add-new-bank-holiday-calendar {
+	nz-year-picker,
+	input {
+		width: 180px;
+	}
+
+	nz-year-picker.existing {
+		border-color: orange;
+	}
+
+	button {
+		margin: 10px;
+	}
+
+	.con-flex > div > span.inline-block {
+		min-width: 80px;
+	}
+}
+
+.add-new-bank-holiday-calendar,
+.bank-holiday-calendar-list {
+	max-height: calc(100vh - 186px);
+	overflow: auto;
+}
+
+.bank-holiday-calendar-list-date > span {
+	margin: 0 10px;
+
+	& > span {
+		font-weight: bold;
+		padding: 0 5px;
+		border-radius: 4px;
+	}
+}
+
+.operation-buttons {
+	justify-content: flex-end;
+
+	button {
+		margin: 5px;
+	}
+}
+
+.con-row {
+	align-items: center;
+}
+
+nz-alert,
+nz-divider {
+	margin: 5px 0;
+}

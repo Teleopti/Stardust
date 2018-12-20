@@ -1,0 +1,188 @@
+<div class="bank-holiday-settings panel material-depth-1 full-padding">
+	<h2>
+		<i nz-icon type="calendar" theme="outline"></i> {{ 'BankHolidayCalendars' | translate }}
+		<button
+			nz-button
+			*ngIf="!isAddingNewCalendar"
+			nzType="primary"
+			nzShape="circle"
+			nzSize="large"
+			(click)="startAddNewBankCalender()"
+			class="add-bank-holiday-calendar-icon pull-right"
+		>
+			<i nz-icon type="plus" theme="outline"></i>
+		</button>
+	</h2>
+
+	<nz-divider></nz-divider>
+
+	<div *ngIf="isAddingNewCalendar" class="add-new-bank-holiday-calendar">
+		<div class="con-row">
+			<div class="con-flex">
+				<div>
+					<span class="inline-block">{{ 'Name' | translate }} :</span>
+					<input
+						nz-input
+						[placeholder]="'Name' | translate"
+						[(ngModel)]="newCalendarName"
+						(blur)="checkNewCalendarName()"
+					/>
+					<nz-alert
+						*ngIf="nameAlreadyExisting"
+						nzType="error"
+						[nzMessage]="'NameAlreadyExisting' | translate"
+					></nz-alert>
+				</div>
+
+				<div>
+					<span class="inline-block">{{ 'Year' | translate }} :</span>
+					<nz-year-picker
+						[(ngModel)]="newCalendarYear"
+						(ngModelChange)="onChange($event)"
+						[nzPlaceHolder]="'Year' | translate"
+					></nz-year-picker>
+					<button
+						nz-button
+						nz-tooltip
+						nzType="default"
+						nzShape="circle"
+						[nzTitle]="'AddYear' | translate"
+						(click)="newYearTab()"
+					>
+						<i nz-icon type="plus" theme="outline"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<nz-tabset [nzSelectedIndex]="newCalendarTabIndex" *ngIf="newCalendarYears.length > 0">
+			<nz-tab *ngFor="let year of newCalendarYears" [nzTitle]="year.Year">
+				<div class="con-row">
+					<button nz-tooltip nz-button nzType="danger" (click)="deleteYearTab(year)">
+						{{ 'DeleteThisYear' | translate }}
+					</button>
+					<button nz-tooltip nz-button nzType="primary" (click)="addNewDateForYear(year)">
+						{{ 'AddNewDate' | translate }}
+					</button>
+				</div>
+
+				<nz-list [nzDataSource]="year.Dates" [nzRenderItem]="date">
+					<ng-template #date let-date>
+						<nz-list-item class="bank-holiday-calendar-list-date">
+							<span class="inline-block">
+								{{ 'Date' | translate }} :
+
+								<nz-date-picker
+									[(ngModel)]="date.Date"
+									(ngModelChange)="onChange($event)"
+								></nz-date-picker>
+							</span>
+							<span class="inline-block">
+								{{ 'Description' | translate }} :
+
+								<input
+									nz-input
+									[placeholder]="'Description' | translate"
+									[(ngModel)]="date.Description"
+								/>
+							</span>
+							<button
+								nz-tooltip
+								nz-button
+								nzSize="small"
+								nzType="danger"
+								nzShape="circle"
+								(click)="removeDateOfYear(year, date)"
+							>
+								<i nz-icon type="close" theme="outline"></i>
+							</button>
+						</nz-list-item>
+					</ng-template>
+				</nz-list>
+			</nz-tab>
+		</nz-tabset>
+
+		<nz-divider></nz-divider>
+
+		<div class="con-row operation-buttons">
+			<button nz-button nzType="default" (click)="cancelAddNewBankCalendar()">{{ 'Cancel' | translate }}</button>
+			<button
+				nz-button
+				nzType="primary"
+				[disabled]="newCalendarYears.length == 0 || nameAlreadyExisting"
+				(click)="saveNewBankCalendar()"
+			>
+				{{ 'Save' | translate }}
+			</button>
+		</div>
+	</div>
+
+	<div *ngIf="isEditingCalendar" class="bank-holiday-calendar-list">
+		<nz-collapse *ngIf="editingCalendar">
+			<nz-collapse-panel [nzHeader]="editingCalendar.Name">
+				<nz-tabset [(nzSelectedIndex)]="editingCalendar.SelectedTabIndex">
+					<nz-tab [nzTitle]="year.Year" *ngFor="let year of editingCalendar.Years">
+						<nz-list [nzDataSource]="year.Dates" [nzRenderItem]="date">
+							<ng-template #date let-date>
+								<nz-list-item class="bank-holiday-calendar-list-date">
+									<span class="inline-block">
+										{{ 'Date' | translate }} : <span class="inline-block"> {{ date.Date }} </span>
+									</span>
+									<span class="inline-block">
+										{{ 'Description' | translate }} :
+										<span class="inline-block">{{ date.Description }} </span>
+									</span>
+								</nz-list-item>
+							</ng-template>
+						</nz-list>
+					</nz-tab>
+				</nz-tabset>
+
+				<div class="con-row operation-buttons">
+					<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar(calendar)">
+						{{ 'Delete' | translate }}
+					</button>
+					<button nz-button nzType="primary" (click)="editHolidayCanlendar(calendar)">
+						{{ 'Edit' | translate }}
+					</button>
+				</div>
+			</nz-collapse-panel>
+		</nz-collapse>
+	</div>
+
+	<div *ngIf="!isAddingNewCalendar && !isEditingCalendar" class="bank-holiday-calendar-list">
+		<nz-collapse *ngIf="bankHolidayCalendarsList.length > 0">
+			<nz-collapse-panel
+				*ngFor="let calendar of bankHolidayCalendarsList; index as calendarIndex"
+				[nzHeader]="calendar.Name"
+			>
+				<nz-tabset [(nzSelectedIndex)]="calendar.SelectedTabIndex">
+					<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">
+						<nz-list [nzDataSource]="year.Dates" [nzRenderItem]="date">
+							<ng-template #date let-date>
+								<nz-list-item class="bank-holiday-calendar-list-date">
+									<span class="inline-block">
+										{{ 'Date' | translate }} : <span class="inline-block"> {{ date.Date }} </span>
+									</span>
+									<span class="inline-block">
+										{{ 'Description' | translate }} :
+										<span class="inline-block">{{ date.Description }} </span>
+									</span>
+								</nz-list-item>
+							</ng-template>
+						</nz-list>
+					</nz-tab>
+				</nz-tabset>
+
+				<div class="con-row operation-buttons">
+					<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar(calendar)">
+						{{ 'Delete' | translate }}
+					</button>
+					<button nz-button nzType="primary" (click)="editHolidayCanlendar(calendar)">
+						{{ 'Edit' | translate }}
+					</button>
+				</div>
+			</nz-collapse-panel>
+		</nz-collapse>
+	</div>
+</div>
