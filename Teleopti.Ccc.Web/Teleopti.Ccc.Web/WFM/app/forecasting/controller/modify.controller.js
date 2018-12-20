@@ -266,8 +266,8 @@
 			vm.scenarioNotForecasted = false;
 
 			var wl = {
-				ForecastStart: moment(vm.forecastPeriod.startDate).format(),
-				ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
+				ForecastStart: moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD'),
+				ForecastEnd: moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD'),
 				WorkloadId: vm.selectedWorkload.Workload.Id,
 				ScenarioId: vm.selectedScenario.Id,
 				HasUserSelectedPeriod: keepSelectedPeriod
@@ -279,12 +279,8 @@
 					vm.selectedWorkload.Days = data.ForecastDays;
 					if (!keepSelectedPeriod && vm.selectedWorkload.Days.length > 0) {
 						vm.forecastPeriod = {
-							startDate: moment(data.ForecastDays[0].Date)
-								.utc()
-								.toDate(),
-							endDate: moment(data.ForecastDays[vm.selectedWorkload.Days.length - 1].Date)
-								.utc()
-								.toDate()
+							startDate: moment(data.ForecastDays[0].Date).format('YYYY-MM-DD'),
+							endDate: moment(data.ForecastDays[vm.selectedWorkload.Days.length - 1].Date).format('YYYY-MM-DD')
 						};
 					}
 					vm.isForecastRunning = false;
@@ -307,8 +303,8 @@
 
 			forecastingService.forecast(
 				{
-					ForecastStart: moment(vm.forecastPeriod.startDate).format(),
-					ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
+					ForecastStart: moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD'),
+					ForecastEnd: moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD'),
 					WorkloadId: vm.selectedWorkload.Workload.Id,
 					ScenarioId: vm.selectedScenario.Id
 				},
@@ -403,7 +399,7 @@
 					SkillId: vm.selectedWorkload.SkillId,
 					WorkloadId: vm.selectedWorkload.Workload.Id
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config){
 					var blob = new Blob([data], {
 						type: headers['content-type']
 					});
