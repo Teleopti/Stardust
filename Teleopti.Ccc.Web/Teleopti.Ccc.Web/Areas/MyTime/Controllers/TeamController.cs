@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult SitesForShiftTrade(DateOnly? date)
 		{
 			if (!date.HasValue) date = _now.ServerDate_DontUse();
-			return Json( _siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb), JsonRequestBehavior.AllowGet);
+			return Json( _siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb).ToArray(), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]
