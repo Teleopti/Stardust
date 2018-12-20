@@ -95,7 +95,7 @@ ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
 ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = RC
 
 # DeBockers #
-WFM_Intraday_Redesign_77214 = DEV
+WFM_Intraday_Redesign_77214 = RC
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
