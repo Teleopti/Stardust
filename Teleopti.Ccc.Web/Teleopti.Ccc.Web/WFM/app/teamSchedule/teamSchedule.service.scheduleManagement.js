@@ -8,7 +8,7 @@
 				'CurrentUserInfo',
 				ScheduleManagement]);
 
-	function ScheduleManagement( teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
+	function ScheduleManagement(teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
 
 		function ScheduleManagementService() {
 			var svc = this;
@@ -34,9 +34,19 @@
 					})[0];
 			}
 
-			function recreateScheduleVm(queryDate, timezone) {
+			function recreateScheduleVm(queryDate, timezone, personIds) {
 				timezone = timezone || CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
-				svc.groupScheduleVm = groupScheduleFactory.Create(svc.rawSchedules, queryDate, timezone);
+				var createdGroupScheduleVm = groupScheduleFactory.Create(svc.rawSchedules, queryDate, timezone);
+				if (!personIds) {
+					svc.groupScheduleVm = createdGroupScheduleVm;
+					return;
+				}
+				createdGroupScheduleVm.Schedules.forEach(function (schedule,i) {
+					if (personIds.indexOf(schedule.PersonId) > -1) {
+						svc.groupScheduleVm.Schedules[i] = schedule;
+					}
+				});
+				svc.groupScheduleVm.TimeLine = createdGroupScheduleVm.TimeLine;
 			}
 
 			function resetSchedules(schedules, queryDate, timezone) {
@@ -56,7 +66,7 @@
 							}
 						}
 					});
-					recreateScheduleVm(queryDate, timezone);
+					recreateScheduleVm(queryDate, timezone, personIdList);
 					afterLoading && afterLoading();
 				});
 			}

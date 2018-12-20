@@ -166,15 +166,13 @@
 		vm.init = function () {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
-
 			vm.permissions = teamsPermissions.all();
-
-			$scope.$on('teamSchedule.shiftEditor.close', function () {
-				scheduleInEditing = null;
-			});
 		};
-
 		vm.init();
+
+		$scope.$on('teamSchedule.shiftEditor.close', function () {
+			scheduleInEditing = null;
+		});
 
 		$scope.$watchCollection(function () {
 			return angular.isDefined(ScheduleMgmt.groupScheduleVm) ? ScheduleMgmt.groupScheduleVm.Schedules : [];
