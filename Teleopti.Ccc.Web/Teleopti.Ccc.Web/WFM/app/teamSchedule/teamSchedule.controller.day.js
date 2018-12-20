@@ -38,6 +38,7 @@
 		var vm = this;
 		var viewState = ViewStateKeeper.get();
 		var personIdsHavingScheduleChange = {};
+		var personIdInEditing;
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
@@ -249,6 +250,14 @@
 			}
 			vm.chartHeight = chartHeight;
 
+		});
+
+		$scope.$on('teamSchedule.shiftEditor.editing', function (e, d) {
+			personIdInEditing = d.personId;
+		});
+
+		$scope.$on('teamSchedule.shiftEditor.close', function (e, d) {
+			personIdInEditing = null;
 		});
 
 		function getSkillsRowHeight() {
@@ -521,6 +530,10 @@
 
 		vm.onPersonScheduleChanged = function (personIds, messages) {
 			if (!toggleSvc.WfmTeamSchedule_DisableAutoRefreshSchedule_79826) {
+				var pIndex;
+				if (personIdInEditing && (pIndex = personIds.indexOf(personIdInEditing)) > -1) {
+					personIds.splice(pIndex, 1);
+				}
 				vm.updateSchedules(personIds);
 				vm.checkValidationWarningForCommandTargets(personIds);
 			} else {
@@ -529,8 +542,8 @@
 				});
 				vm.havingScheduleChanged = true;
 			}
-			$scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', { messages: messages});
-			
+			$scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', { messages: messages });
+
 		};
 
 		vm.onRefreshButtonClicked = function () {

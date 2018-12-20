@@ -28,7 +28,6 @@
 		'ShiftEditorService',
 		'CurrentUserInfo',
 		'guidgenerator',
-		'signalRSVC',
 		'NoticeService'
 	];
 
@@ -47,7 +46,6 @@
 		ShiftEditorService,
 		CurrentUserInfo,
 		guidgenerator,
-		signalRSVC,
 		NoticeService
 	) {
 		var doNotToggleSelectionAfterResizeEnd = false;

@@ -129,8 +129,10 @@
 		}
 
 		vm.clickEditButton = function (personSchedule) {
-			if (scheduleInEditing !== personSchedule)
+			if (scheduleInEditing !== personSchedule) {
+				$scope.$emit('teamSchedule.shiftEditor.editing', { personId: personSchedule.PersonId });
 				scheduleInEditing = personSchedule;
+			}
 		}
 
 		vm.isScheduleEditing = function (personSchedule) {
