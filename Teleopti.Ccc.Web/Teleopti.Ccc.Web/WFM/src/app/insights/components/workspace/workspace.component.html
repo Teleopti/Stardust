@@ -47,8 +47,9 @@
 		nzDescription="You have no permission to view Insights report."
 		nzShowIcon>
 	</nz-alert>
-	<ng-template #newReportNameTemplate>
-	  <p>{{messageForNewReportName}}</p>
-	  <input type="text" nz-input placeholder="New report name..." [(ngModel)]="newReportName">
-	</ng-template>
+
+    <nz-modal [(nzVisible)]="modalIsVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+		<p>{{messageForNewReportName}}</p>
+		<input type="text" nz-input placeholder="New report name..." [(ngModel)]="newReportName">
+	  </nz-modal>	
 </div>
