@@ -34,8 +34,10 @@ properties {
 	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
 	$AzurePackagePath_XLarge = "$WorkingDir\TeleoptiWFM_XLarge.cspkg"
 	
-	$IndexMSBuildFile = "$WorkingDir\StartPage\index.html"
+	$IndexHtmlFile = "$WorkingDir\StartPage\index.html"
+	$MainJsFile = "$WorkingDir\StartPage\assets\scripts\main.js"
 	$ForecastHtmlFile = "$WorkingDir\StartPage\forecast.html"
+	$ForecastJsFile = "$WorkingDir\StartPage\assets\scripts\forecast.js"
 	$CSPackEXE = "$env:AzureSDK_2_9_Path\bin\cspack.exe"
 	
 }
@@ -135,23 +137,30 @@ function global:PrepareCopyFiles {
 
 function global:CorrectingURLinHTML {
 	
-	## Obsolete solution ##
-	#Add Msbuild to env path temporary
-    #$env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\14.0\bin\amd64"
-	#Compile UpdateIndexHtml.msbuild
-    #exec { msbuild $IndexMSBuildFile /p:WorkingDirectory=$WorkingDir /toolsversion:14.0 }
 	$word = "/TeleoptiWFM/"
 	$replacement = "/"
 	
-	$path = $IndexMSBuildFile
+	$path = $IndexHtmlFile
 	$text = get-content $path 
-	Write-Host "Updating $IndexMSBuildFile..."
+	Write-Host "Updating $IndexHtmlFile..."
+	Write-Host "Replacing: $word  with: $replacement"
+	$newText = $text -replace $word,$replacement | Out-File $Path -Encoding UTF8
+	
+	$path = $MainJsFile
+	$text = get-content $path 
+	Write-Host "Updating $MainJsFile..."
 	Write-Host "Replacing: $word  with: $replacement"
 	$newText = $text -replace $word,$replacement | Out-File $Path -Encoding UTF8
 	
 	$path = $ForecastHtmlFile
 	$text = get-content $path
 	Write-Host "Updating $ForecastHtmlFile..."
+	Write-Host "Replacing: $word  with: $replacement"
+	$newText = $text -replace $word,$replacement | Out-File $Path -Encoding UTF8
+	
+	$path = $ForecastJsFile
+	$text = get-content $path
+	Write-Host "Updating $ForecastJsFile..."
 	Write-Host "Replacing: $word  with: $replacement"
 	$newText = $text -replace $word,$replacement | Out-File $Path -Encoding UTF8
 }
