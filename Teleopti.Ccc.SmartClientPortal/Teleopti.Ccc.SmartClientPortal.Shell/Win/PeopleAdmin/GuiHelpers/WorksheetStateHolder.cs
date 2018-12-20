@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			IPerson newPerson = new Person();
 			newPerson.SetName(new Name("<" + UserTexts.Resources.FirstName + ">", "<" + UserTexts.Resources.LastName + ">"));
 			newPerson.PermissionInformation.SetDefaultTimeZone(
-					 TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					 TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
 			filteredPeopleHolder.FilteredPersonCollection.Insert(rowIndex, newPerson);
 
 			filteredPeopleHolder.MarkForInsert(newPerson);
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			{
 				IPerson person = new Person();
 				person.PermissionInformation.SetDefaultTimeZone(
-					 TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					 TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
 				persons.Add(person);
 
 				filteredPeopleHolder.FilteredPersonCollection.Insert(rowIndex, person);

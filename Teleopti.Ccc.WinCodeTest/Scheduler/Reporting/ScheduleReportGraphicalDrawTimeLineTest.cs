@@ -148,8 +148,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         [Test]
         public void ShouldUseDefaultPeriodOnNoLayers()
         {
-            var dateTimeExpectedStart = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 8, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-            var dateTimeExpectedEnd = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 17, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+            var dateTimeExpectedStart = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 8, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
+            var dateTimeExpectedEnd = TimeZoneHelper.ConvertToUtc(new DateTime(2011, 1, 1, 17, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
             var dateOnly = new DateOnly(2011, 1, 1);
             var expectedPeriod = new DateTimePeriod(dateTimeExpectedStart, dateTimeExpectedEnd);
 

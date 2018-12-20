@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		public CultureInfo Culture()
 		{
 
-			if (TeleoptiPrincipal.CurrentPrincipal == null || !TeleoptiPrincipal.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
+			if (TeleoptiPrincipalForLegacy.CurrentPrincipal == null || !TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
 			{
 				if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
 
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		public CultureInfo UICulture()
 		{
 
-			if (TeleoptiPrincipal.CurrentPrincipal == null || !TeleoptiPrincipal.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
+			if (TeleoptiPrincipalForLegacy.CurrentPrincipal == null || !TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
 			{
 				if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
 

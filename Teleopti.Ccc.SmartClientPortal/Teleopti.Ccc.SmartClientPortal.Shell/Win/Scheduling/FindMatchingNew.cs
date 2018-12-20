@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxFind"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
 		private void FindMatching_Load(object sender, EventArgs e)
 		{
-			Text = "xxFind replacement candidates for " + _sourcePerson.Name + " at " + _dateOnly.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+			Text = "xxFind replacement candidates for " + _sourcePerson.Name + " at " + _dateOnly.ToShortDateString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
 			IList<AvailableHourlyEmployeeFinderResult> result = _finder.Find();
 			foreach (AvailableHourlyEmployeeFinderResult item in result)
 			{

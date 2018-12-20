@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			setupFieldsForExternalPerson();
 			
 			testData s = WithUnitOfWork.Get(() =>
-				PersonalSettingData.FindValueByKeyAndOwnerPerson("rätt", TeleoptiPrincipal.CurrentPrincipal.GetPerson(Persons), new testData()));
+				PersonalSettingData.FindValueByKeyAndOwnerPerson("rätt", Persons.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId), new testData()));
 			var result1 = WithUnitOfWork.Get(() => PersonalSettingData.PersistSettingValue(s));
 			Assert.AreEqual(((ISettingValue)s).BelongsTo, result1);
 			var result2 = WithUnitOfWork.Get(() => PersonalSettingData.FindValueByKey("rätt", defaultValue).Data);
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			setupFieldsForExternalPerson();
 			
 			testData s = WithUnitOfWork.Get(() => 
-				PersonalSettingData.FindValueByKeyAndOwnerPerson("idonotexist", TeleoptiPrincipal.CurrentPrincipal.GetPerson(Persons), new testData { Data = -1 }));
+				PersonalSettingData.FindValueByKeyAndOwnerPerson("idonotexist", Persons.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId), new testData { Data = -1 }));
 
 			s.Data.Should().Be.EqualTo(-1);
 		}
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private void setupFieldsForExternalPerson()
 		{
-			var person = WithUnitOfWork.Get(() => TeleoptiPrincipal.CurrentPrincipal.GetPerson(Persons));
+			var person = WithUnitOfWork.Get(() => Persons.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId));
 			ISettingData personalSettingData = new PersonalSettingData("rätt", person);
 			personalSettingData.SetValue(new testData { Data = 44 });
 			WithUnitOfWork.Do(() => Rep.PersistSettingValue(personalSettingData.GetValue(defaultValue)));

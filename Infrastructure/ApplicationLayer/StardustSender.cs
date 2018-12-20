@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var userName = "Stardust";
 			if (_updatedBy.Person() != null)
 				userName = _updatedBy.Person().Name.ToString();
-			else if(TeleoptiPrincipal.CurrentPrincipal != null && ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person != null)
-				userName = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name.ToString();
 
 			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();

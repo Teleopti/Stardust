@@ -210,10 +210,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 				using (var dataSource1 = factory.Create("One", InfraTestConfigReader.ConnectionString, null))
 				using (var dataSource2 = factory.Create("Two", InfraTestConfigReader.AnalyticsConnectionString, null))
 				{
-					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null, null), null));
+					Principal.Fake(new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("", dataSource1, null, null, null), null));
 					TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
-					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null, null), null));
+					Principal.Fake(new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("", dataSource2, null, null, null), null));
 					TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
 					TestTable.Values("TestTable", InfraTestConfigReader.ConnectionString).Count().Should().Be(1);

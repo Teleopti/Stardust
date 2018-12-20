@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				return;
 			}
 
-			_workflowControlSets.Sort((contrlSet1, contrlSet2) => String.Compare(contrlSet1.Name, contrlSet2.Name, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, CompareOptions.None));
+			_workflowControlSets.Sort((contrlSet1, contrlSet2) => String.Compare(contrlSet1.Name, contrlSet2.Name, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture, CompareOptions.None));
 
 			_view.SetDate(_dateOnly);
 			_view.SetWorkflowControlSets(_workflowControlSets);

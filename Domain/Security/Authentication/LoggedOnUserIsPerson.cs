@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		{
 			_principal = principal;
 		}
+		
 		public bool IsPerson(IPerson person)
 		{
 			var pricipal = _principal.Current();

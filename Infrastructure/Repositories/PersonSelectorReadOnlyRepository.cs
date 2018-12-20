@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPersonSelectorOrganization> GetOrganization(DateOnlyPeriod dateOnlyPeriod, bool loadUsers)
 		{
-			int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			int cultureId = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture.LCID;
 			return _unitOfWork.Session().CreateSQLQuery(
 					  "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture, @optionalColumnId=:optionalColumnId")
 					  .SetString("type", "Organization")
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnlyPeriod dateOnlyPeriod, PersonSelectorField loadType, Guid optionalColumnId)
 		{
-			int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			int cultureId = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture.LCID;
 			return _unitOfWork.Session().CreateSQLQuery(
 					  "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture, @optionalColumnId=:optionalColumnId")
 					  .SetString("type", loadType.ToString())
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPersonSelectorUserDefined> GetUserDefinedTab(DateOnly onDate, Guid value)
 		{
-			int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			int cultureId = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture.LCID;
 			return _unitOfWork.Session().CreateSQLQuery(
 					  "exec ReadModel.LoadUserDefinedTab @tabid=:tabid, @bu=:bu,  @ondate=:ondate, @culture=:culture")
 					  .SetGuid("tabid", value)

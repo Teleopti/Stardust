@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 
 				if (!_schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.Contains(_currentPeriod) || _schedulerStateHolder.Schedules==null)
 				{
-					var period = _currentPeriod.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					var period = _currentPeriod.ToDateTimePeriod(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
 					var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period,
 																							  _schedulerStateHolder.SchedulingResultState.
 																								LoadedAgents,

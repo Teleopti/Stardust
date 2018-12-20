@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
 				var stateHolder = inner.Resolve<ISchedulerStateHolder>();
 				stateHolder.SetRequestedScenario(intradayMainModel.Scenario);
-                stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(intradayMainModel.Period,TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+                stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(intradayMainModel.Period,TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
 
 				var intraday = inner.Resolve<IIntradayView>();
 				intraday.Scenario = scenario;

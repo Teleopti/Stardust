@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			if (!gridControlSchedules.CellModels.ContainsKey("TimeLineHeaderCell"))
 				gridControlSchedules.CellModels.Add("TimeLineHeaderCell",
 													new VisualProjectionColumnHeaderCellModel(gridControlSchedules.Model,
-																							  TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
+																							  TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone));
 			if (!gridControlSchedules.CellModels.ContainsKey("ScheduleCell"))
 				gridControlSchedules.CellModels.Add("ScheduleCell", new ScheduleCellModel(gridControlSchedules.Model));
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 
 			monthCalendarAdvDateSelection.Culture = CultureInfo.CurrentCulture;
 			var stateHolderLoader = new SchedulerStateLoader(schedulingScreenState, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory());
-			var meetingMover = new MeetingMover(this, meetingViewModel, schedulingScreenState.DefaultSegmentLength, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
+			var meetingMover = new MeetingMover(this, meetingViewModel, schedulingScreenState.DefaultSegmentLength, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			var meetingMousePositionDecider = new MeetingMousePositionDecider(this);
 			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulingScreenState.SchedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(UserTimeZone.Make()), meetingMover, meetingMousePositionDecider);
 

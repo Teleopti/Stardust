@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			var args = new IocArgs(new ConfigOverrider(new ConfigReader(), new Dictionary<string, string> {{"FCM", "key=AAAANvMkWNA:APA91bG1pR8ZVsp-S98uWsFUE5lnQiC8UnsQL3DgN6Vyw5HyaKuqVt86kdeurfLfQkWt_7kZTgXcTuAaxvcVUkjtE8jFo72loTy6UYrLrVbYnqCXVI4mWCYhvLQnU3Sv0sIfW1k-eZCu"}}))
 			{
 				FeatureToggle = featureTogglePath,
-				DataSourceApplicationName = DataSourceApplicationName.ForWeb()
+				DataSourceApplicationName = DataSourceApplicationName.ForWeb(),
+				TeleoptiPrincipalForLegacy = false
 			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 			builder.RegisterModule(new WebAppModule(configuration, httpConfiguration));

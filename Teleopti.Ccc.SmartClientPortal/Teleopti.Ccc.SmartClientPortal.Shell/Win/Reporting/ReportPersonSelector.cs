@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
         }
     	private void updateComboWithSelectedAgents()
         {
-            CultureInfo currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+            CultureInfo currentCultureInfo = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
 
             var builder = new StringBuilder();
 

@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 				item.SubItems.Add(translated);
 				item.SubItems.Add(
-					restrictionsAbleToBeScheduledResult.Period.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
+					restrictionsAbleToBeScheduledResult.Period.ToShortDateString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture));
 				listViewResult.Items.Add(item);
 			}
 
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 					item.SubItems.Add(translated);
 					item.SubItems.Add(
-						result[i].Period.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
+						result[i].Period.ToShortDateString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture));
 					listViewResult.Items.Add(item);
 				}
 			}

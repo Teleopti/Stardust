@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
 			_layerWithPayload = new OvertimeShiftLayer(_payload, _period, new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime));
 			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)).Repeat.Any();
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
 			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null, new FullPermission());

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
 
 		    _calculator =
 			    new DailyBoostedSkillForecastAndScheduledValueCalculator(
-				    () => _rowManager.SchedulerStateHolder.SchedulingResultState, skillPriorityProvider, new SpecificTimeZone(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
+				    () => _rowManager.SchedulerStateHolder.SchedulingResultState, skillPriorityProvider, new SpecificTimeZone(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone));
 	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

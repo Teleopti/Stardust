@@ -296,7 +296,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public override bool IsSatisfiedBy(IEnumerable<ClaimSet> obj)
 		{
-			var principal = TeleoptiPrincipal.CurrentPrincipal;
+			var principal = TeleoptiPrincipalForLegacy.CurrentPrincipal;
 			var identity = (ITeleoptiIdentity) principal.Identity;
 
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         /// Created by: micke
         /// Created date: 2009-03-21
         /// </remarks>
-        public virtual TimeZoneInfo TimeZoneInfo => TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+        public virtual TimeZoneInfo TimeZoneInfo => TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone;
 
 		/// <summary>
         /// Gets the grid.

@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		{
 			_schedulerStateHolder.SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(reportDateFromToSelector1.GetSelectedDates[0],
-					TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
 		}
 
 		private SchedulerStateHolder createStateHolder()
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 				var persons = rep.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(period);
 
 				var dateTimePeriod =
-					new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
 				var filter = new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork));
 				var schedulingResultStateHolder = new SchedulingResultStateHolder {LoadedAgents = persons};
 				return new SchedulerStateHolder(Scenario, dateTimePeriod, persons, filter, schedulingResultStateHolder,

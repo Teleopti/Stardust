@@ -1717,7 +1717,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 					if (schedulePeriodPrevious == null || schedulePeriodPrevious.RealDateTo() != previousPeriodEndDate) continue;
 
-					var timeZoneInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+					var timeZoneInfo = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone;
 					var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(schedulePeriodPrevious.DateFrom.Date, previousPeriodEndDate.Date, timeZoneInfo);
 					var dateOnlyPeriod = new DateOnlyPeriod(schedulePeriodPrevious.DateFrom, previousPeriodEndDate);
 					var schedules = new ScheduleDataLoader().LoadSchedule(unitOfWork, dateTimePeriod, selectedPerson, defaultScenario);

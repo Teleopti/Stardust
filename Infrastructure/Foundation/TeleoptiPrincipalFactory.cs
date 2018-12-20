@@ -7,15 +7,40 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class TeleoptiPrincipalFactory : IPrincipalFactory
 	{
+		private readonly IMakeRegionalFromPerson _makeRegionalFromPerson;
+		private readonly IMakeOrganisationMembershipFromPerson _makeOrganisationMembershipFromPerson;
+		private readonly IRetrievePersonNameForPerson _retrievePersonNameForPerson;
+
+		public TeleoptiPrincipalFactory(
+			IMakeRegionalFromPerson makeRegionalFromPerson, 
+			IMakeOrganisationMembershipFromPerson makeOrganisationMembershipFromPerson,
+			IRetrievePersonNameForPerson retrievePersonNameForPerson
+			)
+		{
+			_makeRegionalFromPerson = makeRegionalFromPerson;
+			_makeOrganisationMembershipFromPerson = makeOrganisationMembershipFromPerson;
+			_retrievePersonNameForPerson = retrievePersonNameForPerson;
+		}
+		
+		public static TeleoptiPrincipalFactory Make()
+		{
+			var internalsFactory = new TeleoptiPrincipalInternalsFactory();
+			return new TeleoptiPrincipalFactory(internalsFactory, internalsFactory, internalsFactory);
+		}
+		
 		public ITeleoptiPrincipal MakePrincipal(IPerson person, IDataSource dataSource, IBusinessUnit businessUnit, string tokenIdentity)
 		{
 			var identity = new TeleoptiIdentity(
-				person?.Name.ToString() ?? string.Empty,
-				dataSource,
-				businessUnit,
+				_retrievePersonNameForPerson.NameForPerson(person),
+				dataSource, businessUnit,
 				WindowsIdentity.GetCurrent(),
-				tokenIdentity);
-			return new TeleoptiPrincipal(identity, person);
+				tokenIdentity
+				);
+			var principal = TeleoptiPrincipal.Make(identity, person);
+			principal.Regional = _makeRegionalFromPerson.MakeRegionalFromPerson(person);
+			principal.Organisation = _makeOrganisationMembershipFromPerson.MakeOrganisationMembership(person);
+			return principal;
 		}
+
 	}
 }

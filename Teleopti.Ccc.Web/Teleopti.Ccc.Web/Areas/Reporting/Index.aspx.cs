@@ -62,21 +62,23 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					return;
 				Response.Redirect($"~/Reporting/Report/{ReportId}#{ReportId}");
 			}
-			var princip = (TeleoptiPrincipalCacheable)Thread.CurrentPrincipal;
+			var princip = (TeleoptiPrincipal)Thread.CurrentPrincipal;
 			var teleoptiIdentity = (TeleoptiIdentity)princip.Identity;
-			var person = princip.Person;
-			var id = person.Id;
+			var culture = princip.Regional.Culture;
+			var uiCulture = princip.Regional.UICulture;
+			var timeZone = princip.Regional.TimeZone;
+			Guid? id = princip.PersonId;
 			var dataSource = teleoptiIdentity.DataSource;
 			var bu = teleoptiIdentity.BusinessUnit.Id;
 
-			Thread.CurrentThread.CurrentUICulture = person.PermissionInformation.UICulture().FixPersianCulture();
-			Thread.CurrentThread.CurrentCulture = person.PermissionInformation.Culture().FixPersianCulture();
+			Thread.CurrentThread.CurrentUICulture = uiCulture.FixPersianCulture();
+			Thread.CurrentThread.CurrentCulture = culture.FixPersianCulture();
 
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
-			ParameterSelector.LanguageId = princip.Person.PermissionInformation.UICulture().LCID;
-			ParameterSelector.UserTimeZone = person.PermissionInformation.DefaultTimeZone();
+			ParameterSelector.LanguageId = uiCulture.LCID;
+			ParameterSelector.UserTimeZone = timeZone;
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 			{
 				ParameterSelector.DbTimeout = commonReports.DbTimeout;

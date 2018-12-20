@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             _targetControl = targetControl;
             if (StateHolderReader.IsInitialized)
             {
-                if (Thread.CurrentPrincipal is TeleoptiPrincipal)
+                if (Thread.CurrentPrincipal is TeleoptiPrincipalForLegacy)
                 {
                     _targetControl.RightToLeft =
-                        (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay)
+                        (((ITeleoptiPrincipalForLegacy)TeleoptiPrincipalForLegacy.CurrentPrincipal).UnsafePerson.PermissionInformation.RightToLeftDisplay)
                             ? RightToLeft.Yes
                             : RightToLeft.No;
 
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			string resourceText = UserTexts.Resources.ResourceManager.GetString(translatedString);
 	        if (toUpper && !resourceText.IsNullOrEmpty() && StateHolderReader.IsInitialized)
 	        {
-		        if (Thread.CurrentPrincipal is TeleoptiPrincipal)
+		        if (Thread.CurrentPrincipal is TeleoptiPrincipalForLegacy)
 		        {
-			        var cultureInfo = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.UICulture();
+			        var cultureInfo = ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipalForLegacy.CurrentPrincipal).UnsafePerson.PermissionInformation.UICulture();
 			        resourceText = resourceText.ToUpper(cultureInfo);
 		        }
 	        }

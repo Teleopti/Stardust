@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.Payload.ConfidentialDescription(scheduleDisplayRow.ScheduleDay.Person) + "  " +
-                                                      layer.Period.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
+                                                      layer.Period.TimePeriod(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.Payload.ConfidentialDescription(scheduleDisplayRow.ScheduleDayBefore.Person) + "  " +
-                                                      period.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
+                                                      period.TimePeriod(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.Payload.ConfidentialDescription(scheduleDisplayRow.ScheduleDayAfter.Person) + "  " +
-                                                      period.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
+                                                      period.TimePeriod(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 

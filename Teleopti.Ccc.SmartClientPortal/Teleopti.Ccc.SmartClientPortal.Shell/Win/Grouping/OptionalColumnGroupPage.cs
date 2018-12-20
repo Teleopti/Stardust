@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
         {
             if (groupPageOptions == null) throw new ArgumentNullException("groupPageOptions");
             IGroupPage groupPage = null;
-			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var cultureInfo = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {

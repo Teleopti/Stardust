@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.IocCommon
 		public IConfigReader ConfigReader { get; }
 		public bool IsFatClient { get; set; }
 		public IocCache Cache { get; } = new IocCache();
+		public bool TeleoptiPrincipalForLegacy { get; set; }
 
 		public IocArgs(IConfigReader configReader)
 		{
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.IocCommon
 			DataSourceApplicationName = Infrastructure.NHibernateConfiguration.DataSourceApplicationName.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 			MessageBrokerUrl = configReader.AppConfig("MessageBroker");
+			TeleoptiPrincipalForLegacy = true;
 		}
 	}
 }

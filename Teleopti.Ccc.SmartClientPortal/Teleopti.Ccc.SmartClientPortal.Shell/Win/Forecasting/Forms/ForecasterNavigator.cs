@@ -1160,7 +1160,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		private void createMultisiteSkill(skillTypeModel skillTypeModel)
 		{
-			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
 			var skillType = getInitializedSkillType(skillTypeModel);
 
 			IMultisiteSkill skill = new MultisiteSkill(
@@ -1286,7 +1286,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 							var period = new DateOnlyPeriod(new DateOnly(message.TargetPeriodStart), new DateOnly(message.TargetPeriodEnd));
 							var jobResultRep = new JobResultRepository(new ThisUnitOfWork(uow));
 							var jobResult = new JobResult(JobCategory.QuickForecast, period,
-											  ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+											  ((ITeleoptiPrincipalForLegacy)TeleoptiPrincipalForLegacy.CurrentPrincipal).UnsafePerson, DateTime.UtcNow);
 							jobResultRep.Add(jobResult);
 							var jobId = jobResult.Id.GetValueOrDefault();
 							uow.PersistAll();
@@ -1429,7 +1429,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 									var jobResultRep = new JobResultRepository(new ThisUnitOfWork(uow));
 									var period = new DateOnlyPeriod(new DateOnly(message.PeriodStart), new DateOnly(message.PeriodEnd));
 									var jobResult = new JobResult(JobCategory.MultisiteExport, period,
-																			((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+																			((ITeleoptiPrincipalForLegacy)TeleoptiPrincipalForLegacy.CurrentPrincipal).UnsafePerson, DateTime.UtcNow);
 									jobResultRep.Add(jobResult);
 									message.JobId = jobResult.Id.GetValueOrDefault();
 									uow.PersistAll();

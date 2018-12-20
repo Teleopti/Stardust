@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			Cursor = Cursors.WaitCursor;
 			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
 			_mainStatusStrip.Refresh();
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity;
 			var loggedOnBu = identity.BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 
@@ -695,7 +695,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					return TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
+					return new PersonRepository(new ThisUnitOfWork(unitOfWork))
+						.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId);
 				}
 			}
 		}

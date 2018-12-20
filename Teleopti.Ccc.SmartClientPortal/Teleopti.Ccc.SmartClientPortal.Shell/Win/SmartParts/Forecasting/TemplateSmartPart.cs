@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 
 				 string updatedOn = string.Empty;
 				 if (workloadDetail.LastUpdate.HasValue)
-					 updatedOn = workloadDetail.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+					 updatedOn = workloadDetail.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
 				 
 				 string updatedBy = string.Empty;
 				 if (workloadDetail.Name.HasValue) updatedBy = workloadDetail.Name.Value.ToString();

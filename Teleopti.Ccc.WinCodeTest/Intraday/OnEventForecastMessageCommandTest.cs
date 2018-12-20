@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
 			_persons = new List<IPerson> { PersonFactory.CreatePersonWithId() };
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone), _persons, mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
 
 			_scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
 			_unitOfWork = mocks.DynamicMock<IUnitOfWork>();

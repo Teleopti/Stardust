@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
             _meetingRepository = meetingRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _model = model;
-            _userTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+            _userTimeZone = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone;
         }
 		
         public IList<IMeeting> GetMeetings(DateOnlyPeriod dateOnlyPeriod)

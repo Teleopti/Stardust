@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             {
                 _view.SetHandCursor();
                 MeetingMousePosition = MeetingMousePosition.OverStartAndEnd;
-                var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _view.IsRightToLeft), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+                var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _view.IsRightToLeft), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
                 var time = dateTime.AddTicks(-(dateTime.Ticks % TimeSpan.TicksPerSecond));
                 DiffStart = time.TimeOfDay.Subtract(startTime);
 

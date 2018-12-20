@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					{
 						Name =
 							UserTexts.Resources.NextPlanningPeriod + " " +
-							currentPplanningPeriodRange.StartDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture) +
+							currentPplanningPeriodRange.StartDate.ToShortDateString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture) +
 							"-" +
-							currentPplanningPeriodRange.EndDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture),
+							currentPplanningPeriodRange.EndDate.ToShortDateString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture),
 						Url = "resourceplanner.planningperiod",
 						SearchGroup = "Planning Period",
 						Id = _planningPeriodProvider.Current(null).Id

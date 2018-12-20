@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool MainShiftBasicEquals(IEditableShift original, IEditableShift current)
 		{
-			return MainShiftBasicEquals(original, current, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			return MainShiftBasicEquals(original, current, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
 		}
 
 		public bool MainShiftBasicEquals(IEditableShift original, IEditableShift current, TimeZoneInfo timeZone)

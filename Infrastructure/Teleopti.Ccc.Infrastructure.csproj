@@ -255,7 +255,7 @@
     <Compile Include="Foundation\ReportUrlConstructor.cs" />
     <Compile Include="Foundation\SelectivePrincipalContext.cs" />
     <Compile Include="Foundation\StardustJobFeedback.cs" />
-    <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
+    <Compile Include="Foundation\TeleoptiPrincipalFactory.cs" />
     <Compile Include="Foundation\TokenIdentityProvider.cs" />
     <Compile Include="Foundation\DatabaseConnectionLostException.cs" />
     <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
@@ -578,7 +578,7 @@
     <Compile Include="Foundation\IRetrievePersonNameForPerson.cs" />
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalInternalsFactory.cs" />
-    <Compile Include="Foundation\TeleoptiPrincipalFactory.cs" />
+    <Compile Include="Foundation\TeleoptiPrincipalForLegacyFactory.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />
     <Compile Include="Licensing\Agreements\LicenseAgreement.cs" />
     <Compile Include="Licensing\LicenseStatusRepositories.cs" />

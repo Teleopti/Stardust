@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
 			{
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 				  .Return(DialogResult.No);
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
 			{
@@ -96,6 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 				  .Return(DialogResult.No);
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
 			{
@@ -122,6 +125,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null, null)).IgnoreArguments();
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
 
 			using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
 			{

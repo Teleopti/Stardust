@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		  {
 				InitializeComponent();
 				SetTexts();
-			dateTimePickerAdv1.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+			dateTimePickerAdv1.SetCultureInfoSafe(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
 			  dateTimePickerAdv1.Value = dateOnly.Date;
 				dateTimePickerAdv1.Calendar.TodayButton.Text = Resources.Today;
 				listView1.ListViewItemSorter = new ListViewColumnSorter();

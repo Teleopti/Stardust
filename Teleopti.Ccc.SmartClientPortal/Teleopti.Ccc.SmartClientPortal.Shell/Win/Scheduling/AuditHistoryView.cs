@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			grid.SelectionChanged += gridSelectionChanged;
 
 			if (!grid.CellModels.ContainsKey("RevisionChangedByCell")) grid.CellModels.Add("RevisionChangedByCell", new RevisionChangedByHeaderCellModel(grid.Model));
-			if (!grid.CellModels.ContainsKey("TimeLineHeaderCell"))grid.CellModels.Add("TimeLineHeaderCell", new VisualProjectionColumnHeaderCellModel(grid.Model, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)); //get from presenter
+			if (!grid.CellModels.ContainsKey("TimeLineHeaderCell"))grid.CellModels.Add("TimeLineHeaderCell", new VisualProjectionColumnHeaderCellModel(grid.Model, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone)); //get from presenter
 			if (!grid.CellModels.ContainsKey("RevisionChangeCell")) grid.CellModels.Add("RevisionChangeCell", new RevisionChangeCellModel(grid.Model));
 		}
 

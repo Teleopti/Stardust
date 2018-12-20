@@ -8,16 +8,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 {
     public static class LogOn
     {
-        public static void RunAsPeterWestlinJunior()
+		public static Person loggedOnPerson;
+
+		public static void RunAsPeterWestlinJunior()
         {
             var state = new FakeState();
 	        var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
             var applicationData = StateHolderProxyHelper.CreateApplicationData(null);
             var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
             
-            var per = new Person().WithName(new Name("Peter", "Westlin Junior")).WithId();
+            loggedOnPerson = new Person().WithName(new Name("Peter", "Westlin Junior")).WithId();
             
-            StateHolderProxyHelper.ClearAndSetStateHolder(per, businessUnit, applicationData, ds, state);
+            StateHolderProxyHelper.ClearAndSetStateHolder(loggedOnPerson, businessUnit, applicationData, ds, state);
         }
     }
 }

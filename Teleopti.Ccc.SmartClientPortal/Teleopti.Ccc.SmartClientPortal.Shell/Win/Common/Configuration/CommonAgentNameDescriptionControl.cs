@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private static string getDisplayString(string settingKey)
 		{
 			// Gets the UI culture
-			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+			var culture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture;
 			// Sets the new display text
 			return string.Format(culture, "{0}{1}{2}", "{", settingKey, "}");
 		}

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.Sdk.LogicTest.OldTests;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -40,7 +41,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_jobResultRepository = MockRepository.GenerateStrictMock<IJobResultRepository>();
 			_currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			_stardustSender = MockRepository.GenerateMock<IStardustSender>();
-			_target = new ImportForecastsFileCommandHandler(_currentUnitOfWorkFactory, _jobResultRepository, _currentBu, _stardustSender);
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(LogOn.loggedOnPerson);
+			_target = new ImportForecastsFileCommandHandler(_currentUnitOfWorkFactory, _jobResultRepository, _currentBu, _stardustSender, loggedOnUser);
 
 			_person = PersonFactory.CreatePerson("test").WithId();
 			_targetSkill = SkillFactory.CreateSkill("Test Skills").WithId();

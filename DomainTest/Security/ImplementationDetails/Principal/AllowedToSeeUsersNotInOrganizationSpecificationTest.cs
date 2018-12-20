@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         public void ShouldAllowClaimWithCurrentBusinessUnitToSeePeople()
         {
             var availableData = new AvailableData();
-            availableData.AddAvailableBusinessUnit(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
+            availableData.AddAvailableBusinessUnit(((ITeleoptiIdentity)TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity).BusinessUnit);
             var claimSet = PrepareClaimSet(AuthorizeExternalAvailableData.Create(availableData));
             target.IsSatisfiedBy(new[] { claimSet }).Should().Be.True();
         }

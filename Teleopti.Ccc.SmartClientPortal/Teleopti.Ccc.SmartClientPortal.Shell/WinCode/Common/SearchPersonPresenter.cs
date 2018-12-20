@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         public ICollection<IPerson> Search(string searchText)
         {
-            CultureInfo cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+            CultureInfo cultureInfo = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
             string lowerSearchText = searchText.ToLower(cultureInfo);
             ICollection<IPerson> personQuery =
                     (from

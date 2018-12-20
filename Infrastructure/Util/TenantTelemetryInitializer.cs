@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 				return dataSource.DataSourceName;
 			}
 
-			var principal = TeleoptiPrincipal.CurrentPrincipal;
+			var principal = TeleoptiPrincipalForLegacy.CurrentPrincipal;
 			return !(principal?.Identity is ITeleoptiIdentity identity) ? "N/A" : identity.DataSource.DataSourceName;
 		}
 	}

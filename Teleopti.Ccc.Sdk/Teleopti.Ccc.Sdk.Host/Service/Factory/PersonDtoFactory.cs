@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 			// Remove logged person
 			if (excludeLoggedOnPerson)
 			{
-				memberList.Remove(TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository));
+				memberList.Remove(_personRepository.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId));
 			}
 
 			return _credentialsAppender.Convert(memberList.ToArray());
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
 		public PersonDto GetLoggedOnPerson()
 		{
-			IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository);
+			IPerson currentPerson = _personRepository.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId);
 			return _credentialsAppender.Convert(currentPerson).FirstOrDefault();
 		}
 		

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             if (!DesignMode)
                 SetTexts();
 
-			var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var timeZone = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone;
             foreach (IPersonMeeting meeting in meetings)
             {
                 TupleItem comboItem = new TupleItem();

@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+			var identity = ((ITeleoptiIdentity)TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity);
 			return identity.DataSource.Analytics;
 		}
 	}

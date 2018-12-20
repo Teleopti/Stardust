@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 						retDto.Id = entity.Id;
 						retDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
 						retDto.Anchor = dayOff.Anchor;
-						retDto.AnchorTime = dayOff.AnchorLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).TimeOfDay;
+						retDto.AnchorTime = dayOff.AnchorLocal(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone).TimeOfDay;
 						retDto.Color = new ColorDto(dayOff.DisplayColor);
 						retDto.Length = dayOff.TargetLength;
 						retDto.Flexibility = dayOff.Flexibility;
