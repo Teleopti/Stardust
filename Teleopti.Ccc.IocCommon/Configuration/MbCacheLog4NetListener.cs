@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if (log.IsDebugEnabled)
 			{
-				log.DebugFormat(cacheHitLogMessage, cachedItem.CachedMethod);
+				log.DebugFormat(cacheHitLogMessage, cachedItem.CachedMethod.Name);
 			}
 		}
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if (log.IsDebugEnabled)
 			{
-				log.DebugFormat(deleteMessage, cachedItem.CachedMethod);
+				log.DebugFormat(deleteMessage, cachedItem.CachedMethod.Name);
 			}
 		}
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if (log.IsDebugEnabled)
 			{
-				log.DebugFormat(putMessage, cachedItem.CachedValue, cachedItem.CachedMethod);
+				log.DebugFormat(putMessage, cachedItem.CachedValue, cachedItem.CachedMethod.Name);
 			}
 		}
 	}
