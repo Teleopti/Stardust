@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private const string putMessage = "Adding cache value {0} for {1}";
 		private const string deleteMessage = "Removing cache entries for {0}";
 		private const string cacheHitLogMessage = "Cache hit for {0}";
-		private const string nullReplacer = "[all methods]";
 
 		private static readonly ILog log = LogManager.GetLogger("Teleopti.MbCache");
 
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if (log.IsDebugEnabled)
 			{
-				log.DebugFormat(cacheHitLogMessage, cachedItem.CachedMethodInformation.Method?.ToString() ?? nullReplacer);
+				log.DebugFormat(cacheHitLogMessage, cachedItem.CachedMethod);
 			}
 		}
 
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if (log.IsDebugEnabled)
 			{
-				log.DebugFormat(deleteMessage, cachedItem.CachedMethodInformation.Method?.ToString() ?? nullReplacer);
+				log.DebugFormat(deleteMessage, cachedItem.CachedMethod);
 			}
 		}
 
@@ -33,13 +32,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			if (log.IsDebugEnabled)
 			{
-				log.DebugFormat(putMessage, cachedItem.CachedValue, cachedItem.CachedMethodInformation.Method?.ToString() ?? nullReplacer);
+				log.DebugFormat(putMessage, cachedItem.CachedValue, cachedItem.CachedMethod);
 			}
-		}
-
-		public void Warning(string warnMessage)
-		{
-			log.Warn(warnMessage);
 		}
 	}
 }

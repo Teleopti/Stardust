@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>().SingleInstance();
 
-			_config.Args().Cache.This<IAnalyticsDateRepository>((c, b) => b.CacheMethod(x => x.Date(new DateTime())).CacheKey(c.Resolve<CachePerDataSource>()));
+			_config.Args().Cache.This<IAnalyticsDateRepository>((c, b) => b.CacheMethod(x => x.Date(new DateTime())).OverrideCacheKey(c.Resolve<CachePerDataSource>()));
 			builder.RegisterType<AnalyticsPersonPeriodDateFixer>().As<IAnalyticsPersonPeriodDateFixer>().SingleInstance();
 			builder.RegisterType<PersonPeriodFilterForDateCreation>().As<IPersonPeriodFilter>().SingleInstance();
 			builder.CacheByInterfaceProxy<AnalyticsDateRepositoryWithCreation, IAnalyticsDateRepository>();
