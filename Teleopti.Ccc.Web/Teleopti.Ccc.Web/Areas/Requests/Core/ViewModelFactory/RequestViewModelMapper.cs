@@ -123,10 +123,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		private IEnumerable<TeamScheduleAgentScheduleViewModel> getSchedules(IScheduleRange schedules, IPerson person, DateOnlyPeriod period)
 		{
-			var shiftViewModels = period.DayCollection().Select(date => _agentScheduleViewModelProvider.GetAgentScheduleViewModel(person,
-				schedules.ScheduledDay(date)));
-
-			return shiftViewModels;
+			var scheduleDays = schedules.ScheduledDayCollection(period);
+			return scheduleDays.Select(date => _agentScheduleViewModelProvider.GetAgentScheduleViewModel(person, date));
 		}
 
 		private PersonAccountSummaryViewModel getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)
@@ -237,7 +235,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		private static bool isFullDay(IPersonRequest request)
 		{
-			// ref: Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.TextRequestFormMappingProfile
 			var timeZone = request.Person.PermissionInformation.DefaultTimeZone();
 			var startTime = request.Request.Period.StartDateTimeLocal(timeZone);
 			if (startTime.Hour != 0 || startTime.Minute != 0 || startTime.Second != 0) return false;
