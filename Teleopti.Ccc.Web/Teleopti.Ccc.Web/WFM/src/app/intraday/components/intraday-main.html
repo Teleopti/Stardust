@@ -64,7 +64,7 @@
 						<nz-collapse nzAccordion>
 							<nz-collapse-panel
 								id="skill-panel"
-								nzHeader="{{translate.instant('Skills') }}"
+								nzHeader="{{ translate.instant('Skills') }}"
 								[nzActive]="showSkills"
 								(click)="onShowHideSkills()"
 							>
@@ -79,7 +79,7 @@
 									<label
 										*ngFor="let skill of selectedSkillOrGroup.Skills"
 										nz-radio-button
-										nzValue="{{skill.Id}}"
+										nzValue="{{ skill.Id }}"
 										(click)="onSubSkillClick($event)"
 									>
 										<i nz-icon type="{{ skillIcons.getIcon(skill) }}" theme="outline"></i>

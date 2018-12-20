@@ -1,10 +1,10 @@
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { map, shareReplay, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+import { IntradayLatestTimeData, IntradayPerformanceData } from '../types/intraday-performance-data';
 import { IntradayStaffingData } from '../types/intraday-staffing-data';
 import { IntradayTrafficData } from '../types/intraday-traffic-data';
-import { IntradayPerformanceData, IntradayLatestTimeData } from '../types/intraday-performance-data';
 
 // TODO: Send cancel to backend as the old one does! //Anders Sjöberg - 2018-12-10 10:45:17
 

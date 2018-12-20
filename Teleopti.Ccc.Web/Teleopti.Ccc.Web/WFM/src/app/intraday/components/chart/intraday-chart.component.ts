@@ -24,7 +24,18 @@ export class IntradayChartComponent implements OnChanges {
 	@Input()
 	latestTime: IntradayLatestTimeData | undefined;
 
+	emptyChart = {
+		x: 'x',
+		xFormat: '%Y-%m-%d %H:%M',
+		type: 'area-spline',
+		columns: [],
+		empty: { label: { text: 'No Data Available' } }
+	};
+
 	ngOnChanges(changes: SimpleChanges) {
+		if (this.isEmptyObject(this.chartData)) {
+			this.initChart(this.emptyChart);
+		}
 		if (changes.chartData && (changes.chartData.currentValue as c3.Data).x) {
 			this.loadChart();
 		}
@@ -32,11 +43,10 @@ export class IntradayChartComponent implements OnChanges {
 
 	private indicateLatestTime(ltd: IntradayLatestTimeData) {
 		if (ltd && this.chart) {
-			const end = moment(ltd.EndTime);
+			const end = moment(ltd.StartTime);
 			const time = moment()
 				.hour(end.hour())
 				.minute(end.minute());
-			console.log('time', time);
 			this.chart.xgrids([
 				{
 					value: time.format('YYYY-MM-DD HH:mm'),
@@ -142,6 +152,10 @@ export class IntradayChartComponent implements OnChanges {
 		} else {
 			this.chart.load({ unload: true });
 		}
+	}
+
+	private isEmptyObject(data: any) {
+		return Object.keys(data).length === 0 && data.constructor === Object;
 	}
 
 	toggleData(id) {

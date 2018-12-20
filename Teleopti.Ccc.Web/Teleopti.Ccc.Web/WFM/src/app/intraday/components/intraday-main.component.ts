@@ -1,14 +1,17 @@
-import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import c3 from 'c3';
 import moment, { Moment } from 'moment';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Subscription } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { IntradayDataService } from '../services/intraday-data.service';
 import { IntradayIconService } from '../services/intraday-icon.service';
 import { IntradayPersistService } from '../services/intraday-persist.service';
-import { TranslateService } from '@ngx-translate/core';
-import { NzMessageService } from 'ng-zorro-antd';
-import c3 from 'c3';
 import {
 	IntradayChartType,
 	IntradayLatestTimeData,
+	IntradayPerformanceData,
 	IntradayPerformanceDataSeries,
 	IntradayPerformanceSummaryData,
 	IntradayPerformanceSummaryItem,
@@ -18,12 +21,9 @@ import {
 	IntradayTrafficSummaryData,
 	IntradayTrafficSummaryItem,
 	Skill,
-	SkillPickerItemType,
-	IntradayPerformanceData,
-	SkillPickerItem
+	SkillPickerItem,
+	SkillPickerItemType
 } from '../types';
-import { switchMap, tap } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-intraday-main',
@@ -37,7 +37,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		public translate: TranslateService,
 		private message: NzMessageService,
 		private persistData: IntradayPersistService,
-		private skillIcons: IntradayIconService
+		public skillIcons: IntradayIconService
 	) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
@@ -193,7 +193,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			return;
 		}
 
-		this.showReforecastedWarning = this.isSkillEmailOrBackoffice();
+		this.showReforecastedWarning = this.isWarningableTab() && this.isSkillEmailOrBackoffice();
 
 		let selectedSkill = this.selectedSkillOrGroup;
 		if (this.selectedSubSkillId && this.selectedSubSkillId !== 'all') {
@@ -216,12 +216,14 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
 								tap(
 									(time: IntradayLatestTimeData) => {
-										console.log('data', data);
-
 										if (this.selectedOffset === 0) {
 											this.latestTime = time;
 										}
-										this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+										if (data.IncomingTrafficHasData) {
+											this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+										} else {
+											this.chartData = {};
+										}
 										this.summaryData = this.trafficDataToSummaryData(data.Summary);
 										this.loading = false;
 									},
@@ -249,7 +251,11 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 										if (this.selectedOffset === 0) {
 											this.latestTime = time;
 										}
-										this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+										if (data.IncomingTrafficHasData) {
+											this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+										} else {
+											this.chartData = {};
+										}
 										this.summaryData = this.trafficDataToSummaryData(data.Summary);
 										this.loading = false;
 									},
@@ -278,10 +284,14 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
 								tap(
 									(time: IntradayLatestTimeData) => {
-										this.latestTime = time;
 										if (this.selectedOffset === 0) {
+											this.latestTime = time;
 										}
-										this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+										if (data.PerformanceHasData) {
+											this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+										} else {
+											this.chartData = {};
+										}
 										this.summaryData = this.performanceDataToSummaryData(data.Summary);
 										this.loading = false;
 									},
@@ -594,6 +604,13 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			);
 		}
 		return false;
+	};
+
+	public isWarningableTab = function() {
+		if (this.selectedTabIndex === 0) {
+			return false;
+		}
+		return true;
 	};
 
 	getEmptyTrafficData(): IntradayTrafficData {
