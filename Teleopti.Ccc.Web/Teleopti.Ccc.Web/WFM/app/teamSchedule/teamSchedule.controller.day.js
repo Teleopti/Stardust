@@ -260,6 +260,11 @@
 			personIdInEditing = null;
 		});
 
+		$scope.$on('teamSchedule.updateSchedule', function (a, d) {
+			scheduleMgmtSvc.updateSchedulesByRawData(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, [d.personId], d.rawSchedules);
+			resetHavingScheduleChange([d.personId]);
+		});
+
 		function getSkillsRowHeight() {
 			var skillsRow = $document[0].querySelector('.skills-row-wrapper');
 			return skillsRow ? skillsRow.offsetHeight : 0;

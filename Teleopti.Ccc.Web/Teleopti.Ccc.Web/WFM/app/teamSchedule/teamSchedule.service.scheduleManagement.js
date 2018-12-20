@@ -22,6 +22,7 @@
 			svc.resetSchedules = resetSchedules;
 			svc.updateScheduleForPeoples = updateScheduleForPeoples;
 			svc.resetSchedulesForPeople = resetSchedulesForPeople;
+			svc.updateSchedulesByRawData = updateSchedulesByRawData;
 
 			function getSchedules() {
 				return svc.groupScheduleVm.Schedules;
@@ -41,7 +42,7 @@
 					svc.groupScheduleVm = createdGroupScheduleVm;
 					return;
 				}
-				createdGroupScheduleVm.Schedules.forEach(function (schedule,i) {
+				createdGroupScheduleVm.Schedules.forEach(function (schedule, i) {
 					if (personIds.indexOf(schedule.PersonId) > -1) {
 						svc.groupScheduleVm.Schedules[i] = schedule;
 					}
@@ -55,20 +56,23 @@
 			}
 
 			function updateScheduleForPeoples(personIdList, queryDate, timezone, afterLoading) {
-
 				teamScheduleSvc.getSchedules(queryDate, personIdList).then(function (result) {
-					angular.forEach(result.Schedules, function (schedule) {
-						for (var i = 0; i < svc.rawSchedules.length; i++) {
-							if (schedule.PersonId === svc.rawSchedules[i].PersonId
-								&& svc.rawSchedules[i].Date === schedule.Date) {
-								svc.rawSchedules[i] = schedule;
-								break;
-							}
-						}
-					});
-					recreateScheduleVm(queryDate, timezone, personIdList);
+					updateSchedulesByRawData(queryDate, timezone, personIdList, result.Schedules);
 					afterLoading && afterLoading();
 				});
+			}
+
+			function updateSchedulesByRawData(queryDate, timezone, personIdList, rawSchedules) {
+				angular.forEach(rawSchedules, function (schedule) {
+					for (var i = 0; i < svc.rawSchedules.length; i++) {
+						if (schedule.PersonId === svc.rawSchedules[i].PersonId
+							&& svc.rawSchedules[i].Date === schedule.Date) {
+							svc.rawSchedules[i] = schedule;
+							break;
+						}
+					}
+				});
+				recreateScheduleVm(queryDate, timezone, personIdList);
 			}
 
 			function resetSchedulesForPeople(personIds) {

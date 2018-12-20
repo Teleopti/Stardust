@@ -136,7 +136,7 @@
 		}
 
 		vm.isScheduleEditing = function (personSchedule) {
-			return scheduleInEditing === personSchedule;
+			return scheduleInEditing && scheduleInEditing.PersonId === personSchedule.PersonId;
 		}
 
 		vm.isNotSameTimezone = function (personTimezone) {

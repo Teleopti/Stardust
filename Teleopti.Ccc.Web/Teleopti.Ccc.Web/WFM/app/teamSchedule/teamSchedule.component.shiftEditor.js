@@ -179,7 +179,9 @@
 
 		vm.refreshData = function () {
 			if (vm.scheduleChanged) {
-				getSchedule();
+				getSchedule(function (schedules) {
+					$scope.$emit('teamSchedule.updateSchedule', { personId: vm.personId, rawSchedules: schedules });
+				});
 			}
 		};
 
@@ -542,11 +544,12 @@
 			return errorMessages;
 		}
 
-		function getSchedule() {
+		function getSchedule(callback) {
 			initScheduleState();
 
 			vm.isLoading = true;
 			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
+				callback && callback(data.Schedules);
 				vm.isLoading = false;
 
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, data.Schedules[0]);
