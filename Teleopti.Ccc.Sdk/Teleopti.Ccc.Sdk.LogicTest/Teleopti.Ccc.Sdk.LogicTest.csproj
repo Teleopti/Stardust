@@ -292,10 +292,6 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
-      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
-      <Name>Teleopti.Wfm.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
       <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
       <Name>Teleopti.Ccc.Sdk.Common</Name>

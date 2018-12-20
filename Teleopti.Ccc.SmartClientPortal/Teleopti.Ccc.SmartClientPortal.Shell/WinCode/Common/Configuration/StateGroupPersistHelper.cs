@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var stateGroupRepository = new RtaStateGroupRepository(new ThisUnitOfWork(uow));
-				var alarmMappingRepository = new RtaMapRepository(new ThisUnitOfWork(uow));
+				var alarmMappingRepository = new RtaMapRepository(uow);
 				foreach (var removedGroup in removedGroups.Where(x => x.Id.HasValue))
 				{
 					removeGroupActivityAlarmMappingsWithGroup(removedGroup, alarmMappingRepository);

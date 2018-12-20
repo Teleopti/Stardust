@@ -18,6 +18,11 @@ using TransactionException = NHibernate.TransactionException;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
+	public interface IHaveSession
+	{
+		ISession GetSession();
+	}
+	
 	public class NHibernateUnitOfWork : IUnitOfWork, IHaveSession
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));

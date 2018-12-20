@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void loadMappings()
 		{
-			_rtaMapRepository = new RtaMapRepository(new ThisUnitOfWork(_uow));
+			_rtaMapRepository = new RtaMapRepository(_uow);
 			_rtaMaps.Clear();
 			_rtaMaps.AddRange(_rtaMapRepository.LoadAll());
 		}

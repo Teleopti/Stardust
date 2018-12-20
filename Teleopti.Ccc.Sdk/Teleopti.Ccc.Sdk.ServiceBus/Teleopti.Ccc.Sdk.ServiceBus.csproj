@@ -278,10 +278,6 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
-      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
-      <Name>Teleopti.Wfm.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
       <Project>{6116FC80-2475-447E-A90A-14B4DB59E2A7}</Project>
       <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>

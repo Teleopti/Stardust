@@ -4,8 +4,8 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
@@ -67,7 +67,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             var rtaMap = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(rtaMap);
 
-            var result = new RtaMapRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
+            var result = new RtaMapRepository(UnitOfWork).LoadAllCompleteGraph();
             Assert.AreEqual(1, result.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].Activity));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].StateGroup));

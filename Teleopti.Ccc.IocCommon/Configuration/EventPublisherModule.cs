@@ -29,13 +29,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<SyncInFatClientProcessEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncEventPublisher>().SingleInstance();
-			builder.RegisterType<LogExceptionsFromSyncEventPublisher>().As<ISyncEventPublisherExceptionHandler>().SingleInstance();
 			builder.RegisterType<SyncAllEventPublisher>().SingleInstance();
 			builder.RegisterType<HangfireAsSyncEventPublisher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StardustEventPublisher>().SingleInstance();
+			
 			builder.RegisterType<RtaEventPublisher>().As<IRtaEventPublisher>().SingleInstance().ApplyAspects();
-			builder.RegisterType<LogExceptionsFromRtaEventPublisher>().As<IRtaEventPublisherExceptionHandler>().SingleInstance();
 			builder.RegisterType<MultiEventPublisher>().As<IEventPublisher>().AsSelf().SingleInstance();
+			builder.RegisterType<LogExceptions>().As<ISyncEventProcessingExceptionHandler>().SingleInstance();
 
 			builder.RegisterType<CurrentEventPublisher>()
 				.As<ICurrentEventPublisher>()
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.Register(c => c.Resolve<MultiEventPublisher>()).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
-				builder.RegisterType<ThrowExceptionsFromSyncEventPublisher>().As<ISyncEventPublisherExceptionHandler>().SingleInstance();
+				builder.RegisterType<ThrowExceptions>().As<ISyncEventProcessingExceptionHandler>().SingleInstance();
 			}
 
 			if (_configuration.Args().AllEventPublishingsAsSync)

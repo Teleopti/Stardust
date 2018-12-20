@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Optimization;
@@ -113,8 +114,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Event stuff
 			isolate.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			isolate.UseTestDouble<ThrowExceptionsFromSyncEventPublisher>().For<ISyncEventPublisherExceptionHandler>();
-			isolate.UseTestDouble<ThrowExceptionsFromRtaEventPublisher>().For<IRtaEventPublisherExceptionHandler>();
+			isolate.UseTestDouble<ThrowExceptions>().For<ISyncEventProcessingExceptionHandler>();
 			isolate.UseTestDouble<RunSynchronouslyAndThrow>().For<IRtaEventStoreAsyncSynchronizerStrategy>();
 			isolate.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreUpgradeWriter>();
 			QueryAllAttributes<UseEventPublisherAttribute>()

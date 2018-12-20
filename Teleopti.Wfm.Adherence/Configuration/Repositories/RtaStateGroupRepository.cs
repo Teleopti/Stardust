@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 {

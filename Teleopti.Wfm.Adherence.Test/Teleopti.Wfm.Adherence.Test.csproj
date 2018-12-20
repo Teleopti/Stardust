@@ -419,10 +419,6 @@
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
       <Name>Teleopti.Wfm.Adherence</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
-      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
-      <Name>Teleopti.Wfm.Shared</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

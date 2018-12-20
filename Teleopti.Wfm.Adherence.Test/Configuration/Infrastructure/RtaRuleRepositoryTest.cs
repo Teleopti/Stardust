@@ -5,8 +5,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
+using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 {

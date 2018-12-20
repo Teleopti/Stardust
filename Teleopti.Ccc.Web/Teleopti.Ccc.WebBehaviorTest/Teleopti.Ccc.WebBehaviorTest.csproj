@@ -1610,10 +1610,6 @@
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
       <Name>Teleopti.Wfm.Adherence</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
-      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
-      <Name>Teleopti.Wfm.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin\Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin.csproj">
       <Project>{d164065c-2f33-431b-80a4-a4f59ce77486}</Project>
       <Name>Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin</Name>

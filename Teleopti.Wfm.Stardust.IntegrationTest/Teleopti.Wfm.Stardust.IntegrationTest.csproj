@@ -178,10 +178,6 @@
       <Project>{4f4df171-4a56-4e0d-90cb-cb2afdea4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
-      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
-      <Name>Teleopti.Wfm.Shared</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
