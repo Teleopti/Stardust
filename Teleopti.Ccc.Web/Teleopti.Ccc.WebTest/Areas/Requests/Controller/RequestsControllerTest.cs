@@ -141,11 +141,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 
 			var result = Target.GetRequests(input);
-			result.Requests.First().Shifts.Count().Should().Be.EqualTo(1);
-			result.Requests.First().Shifts.First().Periods.First().StartTime.Should().Be.EqualTo(date.AddHours(1));
-			result.Requests.First().Shifts.First().Periods.First().EndTime.Should().Be.EqualTo(date.AddHours(10));
-			result.Requests.First().Shifts.First().Periods.First().StartPositionPercentage.Should().Be.EqualTo(0.0);
-			result.Requests.First().Shifts.First().Periods.First().EndPositionPercentage.Should().Be.EqualTo(1.0);
+
+			var teamScheduleAgentScheduleViewModels = result.Requests.First().Shifts;
+			teamScheduleAgentScheduleViewModels.Count().Should().Be.EqualTo(1);
+
+			var teamScheduleAgentScheduleLayerViewModel = teamScheduleAgentScheduleViewModels.First().Periods.First();
+			teamScheduleAgentScheduleLayerViewModel.StartTime.Should().Be.EqualTo(date.AddHours(1));
+			teamScheduleAgentScheduleLayerViewModel.EndTime.Should().Be.EqualTo(date.AddHours(10));
+			teamScheduleAgentScheduleLayerViewModel.StartPositionPercentage.Should().Be.EqualTo(0.0);
+			teamScheduleAgentScheduleLayerViewModel.EndPositionPercentage.Should().Be.EqualTo(1.0);
 		}
 
 		[Test]
