@@ -29,7 +29,7 @@ export class IntradayChartComponent implements OnChanges {
 		xFormat: '%Y-%m-%d %H:%M',
 		type: 'area-spline',
 		columns: [],
-		empty: { label: { text: 'No Data Available' } }
+		empty: { label: { text: this.translate.instant('NoDataAvailable') } }
 	};
 
 	ngOnChanges(changes: SimpleChanges) {
