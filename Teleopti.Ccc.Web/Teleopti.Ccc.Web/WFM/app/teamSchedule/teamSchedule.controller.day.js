@@ -545,8 +545,10 @@
 					personIds.splice(pIndex, 1);
 					hasScheduleUpdatedInEditor = false;
 				}
-				vm.updateSchedules(personIds);
-				vm.checkValidationWarningForCommandTargets(personIds);
+				if (!!personIds.length) {
+					vm.updateSchedules(personIds);
+					vm.checkValidationWarningForCommandTargets(personIds);
+				}
 			} else {
 				angular.forEach(personIds, function (personId) {
 					personIdsHavingScheduleChange[personId] = personId;
