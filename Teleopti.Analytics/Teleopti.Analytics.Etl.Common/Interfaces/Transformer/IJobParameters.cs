@@ -26,6 +26,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		ITenantLogonInfoLoader TenantLogonInfoLoader { get; }
 		DateTime? NowForTestPurpose { get; set; }
 		bool RunIndexMaintenance { get; }
+		bool InsightsLicensed { get; }
+		InsightsConfiguration InsightsConfig { get; }
 
 		void SetTenantBaseConfigValues(IBaseConfiguration baseConfiguration);
 		IContainerHolder ContainerHolder { get; set; }

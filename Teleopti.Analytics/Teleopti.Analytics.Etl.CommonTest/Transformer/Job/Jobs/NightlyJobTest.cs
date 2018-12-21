@@ -10,21 +10,14 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Jobs
 {
+	[Ignore("TODO-xinfli: Flaky")]
 	[TestFixture]
-	public class JobListTest
+	public class NightlyJobTest
 	{
-		private const string insightsJob = "Insights data refresh";
+		private const string insightsJobStepName = "Trigger Insights data refresh";
 
 		[Test]
-		public void VerifyGetJobList()
-		{
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
-			Assert.Greater(new JobCollection(jobParameters).Count, 0);
-		}
-		
-		[Ignore("TODO-xinfli: Flaky")]
-		[Test]
-		public void ShouldIncludeInsightsJobOnlyIfLicensedAndToggleEnabled()
+		public void ShouldIncludeInsightsJobStepOnlyIfLicensedAndToggleEnabled()
 		{
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 
@@ -35,10 +28,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Jobs
 			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
 			DefinedLicenseDataFactory.SetLicenseActivator(UnitOfWorkFactory.Current.Name, licenseActivator);
 
-			new JobCollection(jobParameters).Any(x=>x.Name == insightsJob).Should().Be.True();
+			new NightlyJobCollection(jobParameters).Any(x=>x.Name == insightsJobStepName).Should().Be.True();
 		}
-		
-		[Ignore("TODO-xinfli: Flaky")]
+
 		[Test]
 		public void ShouldExcludeInsightsJobIfNotLicensed()
 		{
@@ -46,10 +38,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Jobs
 			((JobParametersFactory.FakeContainerHolder) jobParameters.ContainerHolder).EnableToggle(
 				Toggles.WFM_Insights_78059);
 			
-			new JobCollection(jobParameters).Any(x=>x.Name == insightsJob).Should().Be.False();
+			new NightlyJobCollection(jobParameters).Any(x=>x.Name == insightsJobStepName).Should().Be.False();
 		}
-		
-		[Ignore("TODO-xinfli: Flaky")]
+
 		[Test]
 		public void ShouldExcludeInsightsJobOnlyIfToggleNotEnabled()
 		{
@@ -58,8 +49,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Jobs
 			var licenseActivator = new FakeLicenseActivator("test customer");
 			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
 			DefinedLicenseDataFactory.SetLicenseActivator(UnitOfWorkFactory.Current.Name, licenseActivator);
-
-			new JobCollection(jobParameters).Any(x=>x.Name == insightsJob).Should().Be.False();
+			
+			new NightlyJobCollection(jobParameters).Any(x=>x.Name == insightsJobStepName).Should().Be.False();
 		}
 	}
 }

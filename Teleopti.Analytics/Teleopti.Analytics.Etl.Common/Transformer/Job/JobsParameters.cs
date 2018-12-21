@@ -5,8 +5,10 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 {
@@ -17,7 +19,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			int intervalLengthMinutes, string cubeConnectionString,
 			string pmInstall, CultureInfo currentCulture,
 			IContainerHolder containerHolder, bool runIndexMaintenance
-			)
+		)
 		{
 			DataSource = dataSource;
 			CurrentCulture = currentCulture;
@@ -32,7 +34,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			ToggleManager = containerHolder.ToggleManager;
 			TenantLogonInfoLoader = containerHolder.TenantLogonInfoLoader;
 
-
 			RunIndexMaintenance = runIndexMaintenance;
 		}
 
@@ -46,7 +47,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			IntervalsPerDay = 1440 / baseConfiguration.IntervalLength.Value;
 			RunIndexMaintenance = baseConfiguration.RunIndexMaintenance;
 			CurrentCulture = CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value).FixPersianCulture();
+			InsightsConfig = baseConfiguration.InsightsConfig;
 		}
+
 		public IJobHelper Helper { get; set; }
 
 		public TimeZoneInfo DefaultTimeZone { get; private set; }
@@ -63,7 +66,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 		public DateTime? NowForTestPurpose { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage",
+			"CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<TimeZoneInfo> TimeZonesUsedByDataSources { get; set; }
 
 		public bool IsPmInstalled { get; private set; }
@@ -76,22 +80,35 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 		public bool RunIndexMaintenance { get; private set; }
 
+		public bool InsightsLicensed
+		{
+			get
+			{
+				var dataSourceName = UnitOfWorkFactory.Current.Name;
+				var licenseActivator = DefinedLicenseDataFactory.GetLicenseActivator(dataSourceName);
+				var insightsLicensed = licenseActivator?.EnabledLicenseOptionPaths
+					.Contains(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
+				return insightsLicensed ?? false;
+			}
+		}
+
+		public InsightsConfiguration InsightsConfig { get; private set; }
+
 		private void setOlapServerAndDatabase(string cubeConnectionsString)
 		{
-			if (!string.IsNullOrEmpty(cubeConnectionsString))
+			if (string.IsNullOrEmpty(cubeConnectionsString)) return;
+
+			var splittedString1 = cubeConnectionsString.Split(";".ToCharArray());
+			foreach (var stringPart in splittedString1)
 			{
-				string[] splittedString1 = cubeConnectionsString.Split(";".ToCharArray());
-				foreach (string stringPart in splittedString1)
+				var splittedString2 = stringPart.Split("=".ToCharArray());
+				if ("DATA SOURCE".Equals(splittedString2[0], StringComparison.InvariantCultureIgnoreCase))
 				{
-					string[] splittedString2 = stringPart.Split("=".ToCharArray());
-					if ("DATA SOURCE".Equals(splittedString2[0], StringComparison.InvariantCultureIgnoreCase))
-					{
-						OlapServer = splittedString2[1];
-					}
-					if ("INITIAL CATALOG".Equals(splittedString2[0], StringComparison.InvariantCultureIgnoreCase))
-					{
-						OlapDatabase = splittedString2[1];
-					}
+					OlapServer = splittedString2[1];
+				}
+				if ("INITIAL CATALOG".Equals(splittedString2[0], StringComparison.InvariantCultureIgnoreCase))
+				{
+					OlapDatabase = splittedString2[1];
 				}
 			}
 		}
