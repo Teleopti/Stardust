@@ -46,7 +46,6 @@
 	}
 
 
-
 	.time-line {
 		min-width: 300px;
 		height: 100%;
@@ -675,6 +674,7 @@ team-schedule-datepicker {
 			line-height: 1.5;
 			vertical-align: top;
 		}
+
 		.person-name-column {
 			width: 25%;
 			white-space: nowrap;
@@ -1227,6 +1227,7 @@ shift-editor {
 
 	.activity-info {
 		height: 50px;
+		white-space: nowrap;
 
 		.timespan {
 			background-color: $gray-300;

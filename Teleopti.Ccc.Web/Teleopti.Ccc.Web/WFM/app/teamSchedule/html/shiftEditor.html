@@ -2,18 +2,16 @@
 	<md-progress-linear ng-if="vm.isSaving || vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 </div>
 <div class="con-row activity-info">
-	<div class="con-flex">
-		<div ng-if="!!vm.selectedShiftLayers.length">
-			<span class="timespan">{{ vm.getSelectionTimeSpan()  }}</span>
-			<span>
-				<md-select class="activity-selector" ng-model="vm.selectedActivitiyId" ng-change="vm.changeActivityType()" required placeholder="{{'SelectAnActivity'|translate}}">
+	<div class="con-flex" ng-if="!!vm.selectedShiftLayers.length">
+		<span class="timespan">{{ vm.getSelectionTimeSpan()  }}</span>
+		<span>
+			<md-select class="activity-selector" ng-model="vm.selectedActivitiyId" ng-change="vm.changeActivityType()" required placeholder="{{'SelectAnActivity'|translate}}">
 					<md-option ng-repeat="activity in vm.availableActivities" ng-value="activity.Id">
 						<span class="type-color" ng-style="{'background-color': activity.Color}"></span>
 						<span class="type-name"> {{activity.Name}}</span>
 					</md-option>
 				</md-select>
-			</span>
-		</div>
+		</span>
 	</div>
 	<div class="con-flex text-right">
 		<button type="button" class="context-menu card-context btn-refresh" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">
@@ -47,10 +45,10 @@
 	<div class="viewport-clip height-4em">
 		<div class="viewport  no-scroll">
 			<div class="shift"
-				 ng-style="{'width':vm.timelineVmWidth+'px'}"
-				 ng-class="{'has-selected': !!vm.selectedShiftLayers.length}">
+				ng-style="{'width':vm.timelineVmWidth+'px'}"
+				ng-class="{'has-selected': !!vm.selectedShiftLayers.length}">
 				<div class="shift-layer"
-					 ng-class="{
+					ng-class="{
 					 'overtime-light':shiftLayer.IsOvertime && vm.useLighterBorder(shiftLayer),
 					 'overtime-dark':shiftLayer.IsOvertime && !vm.useLighterBorder(shiftLayer),
 					 'selected': vm.isSelected(shiftLayer),
@@ -60,13 +58,14 @@
 					 'disabled': vm.isNotAllowedToChange(shiftLayer),
 					 'non-resizable': vm.isNotResizable(shiftLayer),
 					 'float-top': vm.getMergedShiftLayer(shiftLayer).FloatOnTop}"
-					 ng-attr-index="{{vm.scheduleVm.ShiftLayers.indexOf(shiftLayer)}}"
-					 ng-style="{'width': vm.getMergedShiftLayer(shiftLayer).Width +'px',
+					ng-attr-index="{{vm.scheduleVm.ShiftLayers.indexOf(shiftLayer)}}"
+					ng-style="{'width': vm.getMergedShiftLayer(shiftLayer).Width +'px',
 					 'background-color': vm.getMergedShiftLayer(shiftLayer).Color,
 					 'left': vm.getMergedShiftLayer(shiftLayer).Left + 'px',
 					 'transform': 'translate('+ (vm.getMergedShiftLayer(shiftLayer).TranslateX || 0)+'px, 0px)'}"
-					 ng-click="vm.toggleSelection(shiftLayer, $event)"
-					 ng-repeat="shiftLayer in vm.scheduleVm.ShiftLayers"></div>
+					ng-click="vm.toggleSelection(shiftLayer, $event)"
+					ng-repeat="shiftLayer in vm.scheduleVm.ShiftLayers">
+				</div>
 			</div>
 		</div>
 	</div>

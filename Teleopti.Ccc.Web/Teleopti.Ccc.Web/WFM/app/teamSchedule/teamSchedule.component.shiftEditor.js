@@ -88,7 +88,8 @@
 			if (hasChanges()) {
 				var message = $translate.instant('ConfirmMessageWhenCancelShiftEditing');
 				var title = $translate.instant('Confirm');
-				$wfmConfirmModal.confirm(message, title).then(function (result) {
+				var buttonTexts = [$translate.instant('Ok'), $translate.instant('Cancel')];
+				$wfmConfirmModal.confirm(message, title, buttonTexts).then(function (result) {
 					if (result) {
 						$scope.$emit('teamSchedule.shiftEditor.close', {});
 					}

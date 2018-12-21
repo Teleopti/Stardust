@@ -39,7 +39,7 @@
 		var viewState = ViewStateKeeper.get();
 		var personIdsHavingScheduleChange = {};
 		var personIdInEditing;
-		var hasScheduleUpdatedInEditor;
+		var hasScheduleUpdatedInEditor = null; // init it to null because of only if it's false then need to update schedule after shift editor closed
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
@@ -258,7 +258,7 @@
 		});
 
 		$scope.$on('teamSchedule.shiftEditor.close', function (e, d) {
-			if (!hasScheduleUpdatedInEditor) {
+			if (hasScheduleUpdatedInEditor === false) {
 				vm.updateSchedules([personIdInEditing]);
 			}
 			personIdInEditing = null;
