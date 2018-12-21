@@ -76,8 +76,6 @@
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
 
 			subscribeToScheduleChange();
-
-			bindResizeLayerEvent();
 		};
 
 		vm.$onDestroy = function () {
@@ -563,6 +561,7 @@
 					});
 
 					initAndBindScrollEvent();
+					bindResizeLayerEvent();
 				}
 			});
 		}
