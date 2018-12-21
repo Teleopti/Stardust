@@ -586,15 +586,8 @@
 			$scope.$on('teamSchedule.shiftEditor.scheduleChanged', function (e, d) {
 				for (var i = 0; i < d.messages.length; i++) {
 					var message = d.messages[i];
-					if (
-						message.DomainReferenceId === vm.personId &&
-						moment(vm.date).isBetween(
-							getMomentDate(message.StartDate),
-							getMomentDate(message.EndDate),
-							'day',
-							'[]'
-						)
-					) {
+					if (message.DomainReferenceId === vm.personId
+						&& moment(vm.date).isBetween(getMomentDate(message.StartDate), getMomentDate(message.EndDate), 'day', '[]')) {
 						if (vm.trackId !== message.TrackId) {
 							vm.scheduleChanged = true;
 						}

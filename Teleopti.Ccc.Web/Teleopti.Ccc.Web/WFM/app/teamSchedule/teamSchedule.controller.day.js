@@ -39,6 +39,7 @@
 		var viewState = ViewStateKeeper.get();
 		var personIdsHavingScheduleChange = {};
 		var personIdInEditing;
+		var hasScheduleUpdatedInEditor;
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
@@ -257,10 +258,14 @@
 		});
 
 		$scope.$on('teamSchedule.shiftEditor.close', function (e, d) {
+			if (!hasScheduleUpdatedInEditor) {
+				vm.updateSchedules([personIdInEditing]);
+			}
 			personIdInEditing = null;
 		});
 
 		$scope.$on('teamSchedule.updateSchedule', function (a, d) {
+			hasScheduleUpdatedInEditor = true;
 			scheduleMgmtSvc.updateSchedulesByRawData(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, [d.personId], d.rawSchedules);
 			resetHavingScheduleChange([d.personId]);
 		});
@@ -538,6 +543,7 @@
 				var pIndex;
 				if (personIdInEditing && (pIndex = personIds.indexOf(personIdInEditing)) > -1) {
 					personIds.splice(pIndex, 1);
+					hasScheduleUpdatedInEditor = false;
 				}
 				vm.updateSchedules(personIds);
 				vm.checkValidationWarningForCommandTargets(personIds);
@@ -548,7 +554,6 @@
 				vm.havingScheduleChanged = true;
 			}
 			$scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', { messages: messages });
-
 		};
 
 		vm.onRefreshButtonClicked = function () {
