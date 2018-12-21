@@ -23,6 +23,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 {
@@ -119,6 +120,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 
 			var result = Target.GetRequests(input);
 			result.Requests.First().Shifts.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetShiftsInitialized()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupData(date);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.GetType().Should().Be.EqualTo(typeof(TeamScheduleAgentScheduleViewModel[]));
 		}
 
 		[Test]
