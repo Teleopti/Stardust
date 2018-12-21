@@ -84,7 +84,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		{
 			get
 			{
-				var dataSourceName = UnitOfWorkFactory.Current.Name;
+				var dataSourceName = UnitOfWorkFactory.Current?.Name;
+				if (dataSourceName == null) return false;
+
 				var licenseActivator = DefinedLicenseDataFactory.GetLicenseActivator(dataSourceName);
 				var insightsLicensed = licenseActivator?.EnabledLicenseOptionPaths
 					.Contains(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
