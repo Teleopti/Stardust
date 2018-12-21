@@ -1,8 +1,6 @@
-﻿<div class="time-line relative">
-	<span ng-repeat="time in vm.times">
-		<span class="ruler absolute" ng-style="{left: time.PositionPercentage * 100 + '%'}"></span>
-		<span class="label label-info absolute" ng-style="{left: time.PositionPercentage * 100 + '%'}">{{
-			time.TimeLineDisplay
-		}}</span>
+<div class="time-line relative">
+	<span ng-repeat="time in vm.times" class="absolute" ng-style="{left: time.PositionPercentage * 100 + '%'}">
+		<span class="ruler inline-block absolute"></span>
+		<span class="label label-info absolute">{{ time.TimeLineDisplay }}</span>
 	</span>
 </div>
