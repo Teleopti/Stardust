@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				requestViewModel.IsFullDay = isFullDay(request);
 				var scheduleRange = schedules[absenceRequest.Person];
 
-				requestViewModel.Shifts = getSchedules(scheduleRange, absenceRequest.Person, absenceRequest.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone()));
+				requestViewModel.Shifts = getSchedules(scheduleRange, absenceRequest.Person, absenceRequest.Period.ToDateOnlyPeriod(request.Person.PermissionInformation.DefaultTimeZone())).ToArray();
 			}
 		}
 
