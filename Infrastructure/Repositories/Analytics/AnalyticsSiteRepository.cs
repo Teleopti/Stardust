@@ -19,8 +19,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void UpdateName(Guid siteCode, string name)
 		{
-			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"UPDATE mart.dim_site SET site_name=:{nameof(name)} WHERE site_code=:{nameof(siteCode)}")
+			var utcDate = DateTime.UtcNow;
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"UPDATE mart.dim_site SET site_name=:{nameof(name)}, update_date=:{nameof(utcDate)}, datasource_update_date=:{nameof(utcDate)} WHERE site_code=:{nameof(siteCode)}")
 				.SetString(nameof(name), name)
+				.SetDateTime(nameof(utcDate), utcDate)
 				.SetGuid(nameof(siteCode),siteCode)
 				.ExecuteUpdate();
 		}
@@ -29,7 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"select 
 					site_code {nameof(AnalyticsSite.SiteCode)},
-					site_name {nameof(AnalyticsSite.Name)}
+					site_name {nameof(AnalyticsSite.Name)},
+                    datasource_update_date {nameof(AnalyticsSite.DataSourceUpdateDate)}
 					from mart.dim_site WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean<AnalyticsSite>())
 				.List<AnalyticsSite>();

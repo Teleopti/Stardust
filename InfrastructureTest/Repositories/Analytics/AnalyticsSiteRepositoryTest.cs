@@ -51,6 +51,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
+		public void ShouldUpdateDataSourceUpdateDate()
+		{
+			siteId = WithAnalyticsUnitOfWork.Get(() => AnalyticsPersonPeriodRepository.GetOrCreateSite(Guid.NewGuid(), "SiteName", businessUnit.BusinessUnitId));
+			var site = WithAnalyticsUnitOfWork.Get(() => Target.GetSites().First());
+
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateName(site.SiteCode, "NewSiteName"));
+
+			var updatedSite = WithAnalyticsUnitOfWork.Get(() => Target.GetSites().First());
+
+			updatedSite.DataSourceUpdateDate.Should().Not.Be(null);
+		}
+
+		[Test]
 		public void GetAll_ShouldReturnAllTeams()
 		{
 			var siteGuid1 = Guid.NewGuid();
