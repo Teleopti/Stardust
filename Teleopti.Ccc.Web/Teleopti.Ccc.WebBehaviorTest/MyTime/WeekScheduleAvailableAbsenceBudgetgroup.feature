@@ -406,26 +406,6 @@ Scenario: Show the user a yellow indication when left absence is more than one f
 	When I view my week schedule for date '2023-04-01'
 	Then I should see an 'yellow' indication for chance of absence request on '2023-04-01'
 
-@OnlyRunIfDisabled('MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640')
-Scenario: Show the user a red indication when allowance exceeds used absence but the date has passed
-	Given the time is '2030-01-01'
-	And there is a budgetday
-	| Field						| Value					|
-	| BudgetGroup				| TheBudgetGroup		|
-	| Date						| 2013-04-01			|
-	| Allowance					| 3 					|
-	| FulltimeEquivalentHours	| 8						|
-	And I have the role 'Full access to mytime'
-	And I have absence time for
-	| Field			| Value					|
-	| Date			| 2013-04-01			|
-	| Hours			| 3						|
-	| BudgetGroup	| NameOfTheBudgetGroup	|
-	| Absence		| holiday				|
-	And I have the workflow control set 'Open absence period'
-	When I view my week schedule for date '2013-04-01'
-	Then I should see an 'red' indication for chance of absence request on '2013-04-01'
-
 # The following tests are replicates with a new 'traffic light' icon
 # Please delete the above tests after toggle MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 is set to true for a period of time
 
