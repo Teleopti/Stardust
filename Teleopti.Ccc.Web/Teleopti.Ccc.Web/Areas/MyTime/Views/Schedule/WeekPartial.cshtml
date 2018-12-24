@@ -193,8 +193,7 @@ Layout = null;
 						<div class="small-circle" data-bind="style: {background: absenceChanceColor}"></div>
 					</div>
 					<!-- /ko -->
-
-					<!--ko if: $parent.newTrafficLightIconEnabled && absenceRequestPermission && trafficLightClass.length > 0 -->
+					<!--ko if: $parent.newTrafficLightIconEnabled && absenceRequestPermission && trafficLightClass.length > 0  && notPastTime-->
 					<div class="holiday-agents progress traffic-light-progress" data-bind="tooltip: { title: holidayChanceText, html: true}, css: trafficLightClass">
 						<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
 							<span class="sr-only">60% Complete</span>
