@@ -151,6 +151,7 @@
 
 		vm.triggerCommand = function (command, needToOpenSidePanel) {
 			closeSettingsSidenav();
+			closeShiftEditor();
 			if ($mdSidenav(commandContainerId).isOpen()) {
 				$mdSidenav(commandContainerId).close().then(function () {
 					initCommand(command, needToOpenSidePanel);
@@ -337,6 +338,10 @@
 			$mdSidenav(settingsContainerId).isOpen() && $mdSidenav(settingsContainerId).close();
 		}
 
+		function closeShiftEditor() {
+			$scope.$broadcast('teamSchedule.shiftEditor.close');
+		}
+
 		vm.onPageSizeSelectorChange = function () {
 			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
 				vm.resetSchedulePage();
@@ -429,6 +434,7 @@
 		}
 
 		vm.changeTimezone = function () {
+			closeShiftEditor();
 			scheduleMgmtSvc.recreateScheduleVm(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone);
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.schedules());
 		};
@@ -436,6 +442,7 @@
 		vm.loadSchedules = function () {
 			closeAllCommandSidenav();
 			resetHavingScheduleChange();
+			closeShiftEditor();
 
 			vm.isLoading = true;
 			var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
