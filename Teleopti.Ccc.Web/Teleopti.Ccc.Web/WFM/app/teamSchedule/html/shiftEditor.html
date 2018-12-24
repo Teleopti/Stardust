@@ -14,7 +14,7 @@
 		</span>
 	</div>
 	<div class="con-flex text-right">
-		<button type="button" class="context-menu card-context btn-refresh" disabled ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">
+		<button type="button" class="context-menu card-context btn-refresh" disabled ng-disabled="!vm.isChangedByOthers" ng-click="vm.refreshData()">
 			<i class="mdi mdi-refresh"></i>
 			<md-tooltip>
 				{{'Refresh' | translate}}

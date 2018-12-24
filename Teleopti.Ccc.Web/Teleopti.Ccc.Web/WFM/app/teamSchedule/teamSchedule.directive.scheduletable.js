@@ -147,6 +147,10 @@
 			return angular.copy(vm.scheduleVm.TimeLine.HourPoints).splice(0, pointsCount - 2);
 		}
 
+		vm.getRawSchedule = function (personId) {
+			return ScheduleMgmt.getRawScheduleByPersonId(vm.selectedDate, personId);
+		}
+
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;

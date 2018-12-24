@@ -23,6 +23,7 @@
 			svc.updateScheduleForPeoples = updateScheduleForPeoples;
 			svc.resetSchedulesForPeople = resetSchedulesForPeople;
 			svc.updateSchedulesByRawData = updateSchedulesByRawData;
+			svc.getRawScheduleByPersonId = getRawScheduleByPersonId;
 
 			function getSchedules() {
 				return svc.groupScheduleVm.Schedules;
@@ -53,6 +54,15 @@
 			function resetSchedules(schedules, queryDate, timezone) {
 				svc.rawSchedules = schedules;
 				recreateScheduleVm(queryDate, timezone);
+			}
+
+			function getRawScheduleByPersonId(queryDate, personId) {
+				for (var i = 0; i < svc.rawSchedules.length; i++) {
+					if (personId === svc.rawSchedules[i].PersonId
+						&& svc.rawSchedules[i].Date === queryDate) {
+						return svc.rawSchedules[i];
+					}
+				};
 			}
 
 			function updateScheduleForPeoples(personIdList, queryDate, timezone, afterLoading) {

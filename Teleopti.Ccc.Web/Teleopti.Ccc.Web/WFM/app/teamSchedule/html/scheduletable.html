@@ -129,7 +129,7 @@
 		</tr>
 		<tr class="shift-editor-row" ng-repeat-end ng-if="vm.isScheduleEditing(personSchedule)">
 			<td colspan="6">
-				<shift-editor date="vm.selectedDate" timezone="vm.selectedTimezone" person-id="personSchedule.PersonId"></shift-editor>
+				<shift-editor date="vm.selectedDate" timezone="vm.selectedTimezone" person-id="personSchedule.PersonId" raw-schedule="vm.getRawSchedule(personSchedule.PersonId)"></shift-editor>
 			</td>
 		</tr>
 

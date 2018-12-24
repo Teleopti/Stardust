@@ -256,6 +256,9 @@
 
 		$scope.$on('teamSchedule.shiftEditor.editing', function (e, d) {
 			personIdInEditing = d.personId;
+			if (!!personIdsHavingScheduleChange[personIdInEditing]) {
+				$scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', { isStaleSchedule: true });
+			}
 			vm.lastCommandTrackId = d.trackId;
 		});
 

@@ -9,7 +9,8 @@
 		bindings: {
 			personId: '<',
 			date: '<',
-			timezone: '<'
+			timezone: '<',
+			rawSchedule: '<'
 		}
 	});
 
@@ -67,7 +68,7 @@
 
 		vm.$onInit = function () {
 			$scope.$emit('teamSchedule.shiftEditor.editing', { personId: vm.personId, trackId: vm.trackId });
-			getSchedule();
+			createScheduleVm(vm.rawSchedule);
 
 			ActivityService.fetchAvailableActivities().then(function (data) {
 				vm.availableActivities = data;
@@ -76,7 +77,7 @@
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
 
-			subscribeToScheduleChange();
+
 		};
 
 		vm.$onDestroy = function () {
@@ -146,7 +147,7 @@
 		};
 
 		vm.saveChanges = function () {
-			if (vm.scheduleChanged) {
+			if (vm.isChangedByOthers) {
 				vm.showError = true;
 				return;
 			}
@@ -178,8 +179,8 @@
 		}
 
 		vm.refreshData = function () {
-			if (vm.scheduleChanged) {
-				getSchedule(function (schedules) {
+			if (vm.isChangedByOthers) {
+				reloadSchedule(function (schedules) {
 					$scope.$emit('teamSchedule.updateSchedule', { personId: vm.personId, rawSchedules: schedules });
 				});
 			}
@@ -544,7 +545,7 @@
 			return errorMessages;
 		}
 
-		function getSchedule(callback) {
+		function reloadSchedule(callback) {
 			initScheduleState();
 
 			vm.isLoading = true;
@@ -552,19 +553,23 @@
 				callback && callback(data.Schedules);
 				vm.isLoading = false;
 
-				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, data.Schedules[0]);
-				vm.isInDifferentTimezone = vm.scheduleVm.Timezone !== vm.timezone;
-
-				if (!!vm.scheduleVm.ShiftLayers) {
-					vm.scheduleVm.ShiftLayers.forEach(function (layer) {
-						layer.Width = getShiftLayerWidth(layer);
-						layer.Left = getShiftLayerLeft(layer);
-					});
-
-					initAndBindScrollEvent();
-					bindResizeLayerEvent();
-				}
+				createScheduleVm(data.Schedules[0]);
 			});
+		}
+
+		function createScheduleVm(rawSchedule) {
+			vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, rawSchedule);
+			vm.isInDifferentTimezone = vm.scheduleVm.Timezone !== vm.timezone;
+
+			if (!!vm.scheduleVm.ShiftLayers) {
+				vm.scheduleVm.ShiftLayers.forEach(function (layer) {
+					layer.Width = getShiftLayerWidth(layer);
+					layer.Left = getShiftLayerLeft(layer);
+				});
+
+				initAndBindScrollEvent();
+				bindResizeLayerEvent();
+			}
 		}
 
 		function getShiftLayerWidth(layer) {
@@ -577,26 +582,30 @@
 		}
 
 		function initScheduleState() {
-			vm.scheduleChanged = false;
+			vm.isChangedByOthers = false;
 			vm.selectedShiftLayers = [];
 			vm.selectedActivitiyId = null;
 			vm.showError = false;
 		}
 
-		function subscribeToScheduleChange() {
-			$scope.$on('teamSchedule.shiftEditor.scheduleChanged', function (e, d) {
-				for (var i = 0; i < d.messages.length; i++) {
-					var message = d.messages[i];
-					if (message.DomainReferenceId === vm.personId
-						&& moment(vm.date).isBetween(getMomentDate(message.StartDate), getMomentDate(message.EndDate), 'day', '[]')) {
-						if (vm.trackId !== message.TrackId) {
-							vm.scheduleChanged = true;
-						}
-						return;
+
+		$scope.$on('teamSchedule.shiftEditor.scheduleChanged', function (e, d) {
+			if (d.isStaleSchedule) {
+				vm.isChangedByOthers = true;
+				return;
+			}
+			for (var i = 0; i < d.messages.length; i++) {
+				var message = d.messages[i];
+				if (message.DomainReferenceId === vm.personId
+					&& moment(vm.date).isBetween(getMomentDate(message.StartDate), getMomentDate(message.EndDate), 'day', '[]')) {
+					if (vm.trackId !== message.TrackId) {
+						vm.isChangedByOthers = true;
 					}
+					return;
 				}
-			});
-		}
+			}
+		});
+
 
 		function getMomentDate(date) {
 			return moment(serviceDateFormatHelper.getDateOnly(date.substring(1, date.length)));
