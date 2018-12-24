@@ -1401,6 +1401,7 @@ shift-editor {
 					opacity: 1;
 					border: 1px dashed;
 					z-index: 990;
+					transition-duration: 0s;
 
 					&.float-top {
 						z-index: 990;
