@@ -256,10 +256,11 @@
 
 		$scope.$on('teamSchedule.shiftEditor.editing', function (e, d) {
 			personIdInEditing = d.personId;
+			vm.lastCommandTrackId = d.trackId;
 		});
 
 		$scope.$on('teamSchedule.shiftEditor.close', function (e, d) {
-			if (hasScheduleUpdatedInEditor === false) {
+			if (hasScheduleUpdatedInEditor === false || (d && d.needToUpdateSchedule)) {
 				vm.updateSchedules([personIdInEditing]);
 			}
 			personIdInEditing = null;
@@ -304,7 +305,6 @@
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
 			if (personIds) {
 				vm.updateSchedules(personIds);
-				resetHavingScheduleChange(personIds);
 				vm.checkValidationWarningForCommandTargets(personIds);
 				if (vm.staffingEnabled) {
 					$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
@@ -509,6 +509,7 @@
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
+			resetHavingScheduleChange(personIdList);
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, function () {
 				personSelectionSvc.clearPersonInfo();
 				vm.isLoading = false;
@@ -569,7 +570,6 @@
 			var personIds = Object.keys(personIdsHavingScheduleChange);
 			vm.updateSchedules(personIds);
 			vm.checkValidationWarningForCommandTargets(personIds);
-			resetHavingScheduleChange();
 			if (vm.staffingEnabled) {
 				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
 			}

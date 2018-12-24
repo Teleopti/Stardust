@@ -66,6 +66,7 @@
 		vm.selectedShiftLayers = [];
 
 		vm.$onInit = function () {
+			$scope.$emit('teamSchedule.shiftEditor.editing', { personId: vm.personId, trackId: vm.trackId });
 			getSchedule();
 
 			ActivityService.fetchAvailableActivities().then(function (data) {
@@ -161,7 +162,7 @@
 						return;
 					}
 					showSuccessNotice();
-					$scope.$emit('teamSchedule.shiftEditor.close', {});
+					$scope.$emit('teamSchedule.shiftEditor.close', { needToUpdateSchedule: true });
 				},
 				function () {
 					vm.isSaving = false;
