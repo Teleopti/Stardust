@@ -72,13 +72,11 @@
 </div>
 <div class="con-footer">
 	<div class="con-row">
-		<div class="con-flex text-right error-info">
-			<div class="text-danger" ng-if="vm.showError">
+		<div class="con-flex text-right">
+			<div class="text-danger error-info" ng-if="vm.showError">
 				<i class="mdi mdi-alert-octagon"></i>
 				<span>{{'scheduleChangedByOthers' | translate}}</span>
 			</div>
-		</div>
-		<div class="con-flex text-right">
 			<button type="button" class="wfm-btn wfm-btn-invis-default btn-cancel" ng-click="vm.cancelEditing()">{{ 'Cancel'|translate }}</button>
 			<button type="button" class="wfm-btn wfm-btn-invis-default btn-save" ng-click="vm.saveChanges()" ng-disabled="vm.isSaveButtonDisabled()">{{ 'Save'|translate }}</button>
 		</div>
