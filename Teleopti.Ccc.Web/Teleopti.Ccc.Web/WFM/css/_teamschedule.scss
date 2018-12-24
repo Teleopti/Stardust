@@ -1373,7 +1373,7 @@ shift-editor {
 				display: inline-block;
 				height: 30px;
 				background-color: gainsboro;
-				z-index: 900;
+				z-index: 10;
 				cursor: pointer;
 
 				&:first-of-type {
@@ -1400,11 +1400,11 @@ shift-editor {
 				&.selected {
 					opacity: 1;
 					border: 1px dashed;
-					z-index: 990;
+					z-index: 11;
 					transition-duration: 0s;
 
 					&.float-top {
-						z-index: 990;
+						z-index: 11;
 					}
 
 					&.border-light {
@@ -1421,7 +1421,7 @@ shift-editor {
 				}
 
 				&.float-top {
-					z-index: 999;
+					z-index: 12;
 				}
 			}
 		}
