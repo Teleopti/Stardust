@@ -16,3 +16,14 @@ export interface BankHolidayCalendarDate {
 	Description: string;
 	IsDeleted?: boolean;
 }
+
+export interface BankHolidayCalendarListItem extends BankHolidayCalendar {
+	SelectedTabIndex: number;
+}
+
+export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
+	Active: boolean;
+	DisabledDate: Function;
+	YearDate: Date;
+	SelectedDates: number[];
+}

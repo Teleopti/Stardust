@@ -18,6 +18,12 @@
 
 	<nz-divider></nz-divider>
 
+	<bank-holiday-calendar-add
+		*ngIf="isAddingNewCalendar"
+		[bankHolidayCalendarsList]="bankHolidayCalendarsList"
+		[cancelAddNewBankCalendar]="cancelAddNewBankCalendar"
+	></bank-holiday-calendar-add>
+
 	<div *ngIf="!isAddingNewCalendar && !isEdittingCalendar" class="bank-holiday-calendar-list">
 		<nz-collapse *ngIf="bankHolidayCalendarsList.length > 0">
 			<nz-collapse-panel

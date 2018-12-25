@@ -4,24 +4,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { IStateService } from 'angular-ui-router';
 
 import { configureTestSuite } from '@wfm/test';
-import { UserService } from 'src/app/core/services';
-import { PasswordService } from 'src/app/authentication/services/password.service';
 import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.component';
 
-class mockStateService implements Partial<IStateService> {
-	public current: {
-		name: 'systemSettings';
-	};
-
-	public href() {
-		return '';
-	}
-}
-
-describe('BankHolidayCalendarAddComponent', () => {
+fdescribe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
 	let document: Document;
 	let component: BankHolidayCalendarAddComponent;
@@ -38,25 +25,36 @@ describe('BankHolidayCalendarAddComponent', () => {
 				ReactiveFormsModule,
 				HttpClientTestingModule
 			],
-			providers: [
-				{
-					provide: '$state',
-					useClass: mockStateService
-				},
-				UserService,
-				PasswordService,
-				TranslateService
-			]
+			providers: [TranslateService]
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(BankHolidayCalendarAddComponent);
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
-	});
+		fixture.autoDetectChanges(true);
+	}));
 
 	it('should create component', () => {
 		expect(component).toBeTruthy();
+	});
+
+	it('should render name and year input box', () => {
+		var addBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+
+		expect(addBankHolidayCalendarPanel).toBeTruthy();
+		expect(addBankHolidayCalendarPanel.getElementsByClassName('ant-input').length).toBe(2);
+		expect(addBankHolidayCalendarPanel.getElementsByTagName('nz-year-picker').length).toBe(1);
+	});
+
+	it('should render cancel and save button', () => {
+		var addBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+
+		expect(addBankHolidayCalendarPanel.getElementsByClassName('ant-btn').length).toBe(2);
+		expect(
+			addBankHolidayCalendarPanel.getElementsByClassName('ant-btn')[0].getElementsByTagName('span')[0].innerText
+		).toBe('Cancel');
+		expect(
+			addBankHolidayCalendarPanel.getElementsByClassName('ant-btn')[1].getElementsByTagName('span')[0].innerText
+		).toBe('Save');
 	});
 });

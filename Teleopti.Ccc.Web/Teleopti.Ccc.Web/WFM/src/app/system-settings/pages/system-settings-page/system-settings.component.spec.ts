@@ -10,6 +10,8 @@ import { configureTestSuite } from '@wfm/test';
 import { UserService } from 'src/app/core/services';
 import { PasswordService } from 'src/app/authentication/services/password.service';
 import { SystemSettingsComponent } from './system-settings.component';
+import { BankHolidayCalendarComponent } from '../../components/bank-holiday-calendar';
+import { BankHolidayCalendarAddComponent } from '../../components/bank-holiday-calendar-add';
 
 class mockStateService implements Partial<IStateService> {
 	public current: {
@@ -30,7 +32,7 @@ describe('SystemSettings page', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [SystemSettingsComponent],
+			declarations: [SystemSettingsComponent, BankHolidayCalendarComponent, BankHolidayCalendarAddComponent],
 			imports: [
 				TranslateModule.forRoot(),
 				NgZorroAntdModule.forRoot(),
@@ -48,21 +50,18 @@ describe('SystemSettings page', () => {
 				TranslateService
 			]
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(SystemSettingsComponent);
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
-	});
+		fixture.autoDetectChanges(true);
+	}));
 
 	it('should create component', () => {
 		expect(component).toBeTruthy();
 	});
 
 	it('should show header title', () => {
-		fixture.detectChanges();
-
 		var titleEle = document.getElementsByTagName('h1')[0];
 		expect(titleEle).toBeTruthy();
 		expect(titleEle.getElementsByTagName('i').length).toBe(1);

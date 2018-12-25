@@ -1,17 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { BankHolidayCalendar, BankHolidayCalendarYear, BankHolidayCalendarDate } from '../../interface';
+import {
+	BankHolidayCalendar,
+	BankHolidayCalendarYear,
+	BankHolidayCalendarDate,
+	BankHolidayCalendarYearItem,
+	BankHolidayCalendarListItem
+} from '../../interface';
 import { BankCalendarDataService } from '../../shared';
-
-export interface BankHolidayCalendarListItem extends BankHolidayCalendar {
-	SelectedTabIndex: number;
-}
-
-export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
-	AddingDate: boolean;
-	YearDate: Date;
-}
 
 @Component({
 	selector: 'bank-holiday-calendar-add',
@@ -20,6 +16,9 @@ export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
 	providers: [BankCalendarDataService]
 })
 export class BankHolidayCalendarAddComponent implements OnInit {
+	@Input() bankHolidayCalendarsList: BankHolidayCalendarListItem[];
+	@Input() cancelAddNewBankCalendar: Function;
+
 	yearFormat: string = 'YYYY';
 	dateFormat: string = 'YYYY-MM-DD';
 
@@ -28,30 +27,18 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 	newCalendarYears: BankHolidayCalendarYearItem[] = [];
 	nameAlreadyExisting: boolean = false;
 	newDateForYear: Date;
-	addingDate: boolean;
-
 	newCalendarTabIndex: number;
-	bankHolidayCalendarsList: any;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
-		private modalService: NzModalService,
-		private translate: TranslateService
+		private translate: TranslateService,
+		private changeDetectorRef: ChangeDetectorRef
 	) {}
 
 	ngOnInit(): void {}
 
-	confirmDeleteHolidayCanlendar(calendar: BankHolidayCalendarListItem) {
-		this.modalService.confirm({
-			nzTitle: this.translate.instant('AreYouSureToDeleteThisBankHolidayCalendar'),
-			nzContent: this.translate.instant('Name') + ': ' + calendar.Name,
-			nzOkType: 'danger',
-			nzOkText: this.translate.instant('Delete'),
-			nzCancelText: this.translate.instant('Cancel'),
-			nzOnOk: () => {
-				this.deleteHolidayCanlendar(calendar);
-			}
-		});
+	ngAfterViewInit(): void {
+		this.changeDetectorRef.detectChanges();
 	}
 
 	checkNewCalendarName() {
@@ -59,23 +46,27 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 	}
 
 	newYearTab(date: Date): void {
-		this.newDateForYear = new Date(
+		let newCalendarYearDate = new Date(
 			moment(date)
 				.startOf('year')
 				.format(this.dateFormat)
 		);
-		let yearStr = moment(this.newCalendarYear).format(this.yearFormat);
+		let yearStr = moment(newCalendarYearDate).format(this.yearFormat);
 		if (this.newCalendarYears.some(y => y.Year == yearStr)) {
 			return;
 		}
 
-		this.newCalendarYears.forEach(y => (y.AddingDate = false));
+		this.newCalendarYears.forEach(y => (y.Active = false));
 
-		let newYear: BankHolidayCalendarYearItem = {
+		let newYear = {
 			Year: yearStr,
-			YearDate: this.newDateForYear,
-			AddingDate: true,
-			Dates: []
+			YearDate: newCalendarYearDate,
+			DisabledDate: date => {
+				return moment(date) < moment(yearStr).startOf('year') || moment(date) > moment(yearStr).endOf('year');
+			},
+			Active: true,
+			Dates: [],
+			SelectedDates: []
 		};
 		this.newCalendarYears.push(newYear);
 		this.newCalendarTabIndex = this.newCalendarYears.length - 1;
@@ -85,23 +76,46 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 		this.newCalendarYears.splice(this.newCalendarYears.indexOf(year), 1);
 	}
 
-	addNewDateForYear(date: Date, year: BankHolidayCalendarYear) {
+	formatDate(date: Date): string {
+		return moment(date).format(this.dateFormat);
+	}
+
+	addNewDateForYear(date: Date, year: BankHolidayCalendarYearItem) {
+		if (year.SelectedDates.indexOf(date.getTime()) > -1) return;
+
 		let newDate: BankHolidayCalendarDate = {
 			Date: moment(date).format(this.dateFormat),
 			Description: this.translate.instant('BankHoliday')
 		};
-		year.Dates = year.Dates.concat([newDate]);
+
+		year.Dates.push(newDate);
+		year.Dates.sort((c, n) => {
+			return moment(c.Date) < moment(n.Date) ? -1 : 1;
+		});
+		year.Dates = [...year.Dates];
+
+		year.SelectedDates.push(date.getTime());
+		year.SelectedDates.sort((c, n) => {
+			return moment(c) < moment(n) ? -1 : 1;
+		});
+		year.SelectedDates = [...year.SelectedDates];
 	}
 
-	removeDateOfYear(year: BankHolidayCalendarYear, date: BankHolidayCalendarDate) {
+	removeDateOfYear(year: BankHolidayCalendarYearItem, date: BankHolidayCalendarDate) {
 		year.Dates.splice(year.Dates.indexOf(date), 1);
+		year.SelectedDates.splice(year.Dates.indexOf(date), 1);
 	}
 
-	disabledDate(date: Date): boolean {
-		return (
-			moment(date) < moment(this.newCalendarYear).startOf('year') ||
-			moment(date) > moment(this.newCalendarYear).endOf('year')
-		);
+	selectTab(year: BankHolidayCalendarYearItem) {
+		setTimeout(() => {
+			year.Active = true;
+		}, 0);
+	}
+
+	deselectTab(year: BankHolidayCalendarYearItem) {
+		setTimeout(() => {
+			year.Active = false;
+		}, 0);
 	}
 
 	onChange(selectedDate: Date) {}
@@ -151,9 +165,5 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 		this.newCalendarName = null;
 		this.newCalendarYear = null;
 		this.newCalendarYears = [];
-	}
-
-	deleteHolidayCanlendar(calendar: BankHolidayCalendarListItem) {
-		this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
 	}
 }

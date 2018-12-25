@@ -4,22 +4,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { IStateService } from 'angular-ui-router';
 
 import { configureTestSuite } from '@wfm/test';
-import { UserService } from 'src/app/core/services';
-import { PasswordService } from 'src/app/authentication/services/password.service';
 import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component';
-
-class mockStateService implements Partial<IStateService> {
-	public current: {
-		name: 'systemSettings';
-	};
-
-	public href() {
-		return '';
-	}
-}
+import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
 
 describe('BankHolidayCalendarComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarComponent>;
@@ -27,10 +15,9 @@ describe('BankHolidayCalendarComponent', () => {
 	let component: BankHolidayCalendarComponent;
 
 	configureTestSuite();
-
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [BankHolidayCalendarComponent],
+			declarations: [BankHolidayCalendarComponent, BankHolidayCalendarAddComponent],
 			imports: [
 				TranslateModule.forRoot(),
 				NgZorroAntdModule.forRoot(),
@@ -38,25 +25,34 @@ describe('BankHolidayCalendarComponent', () => {
 				ReactiveFormsModule,
 				HttpClientTestingModule
 			],
-			providers: [
-				{
-					provide: '$state',
-					useClass: mockStateService
-				},
-				UserService,
-				PasswordService,
-				TranslateService
-			]
+			providers: [TranslateService]
 		}).compileComponents();
-	}));
 
-	beforeEach(() => {
 		fixture = TestBed.createComponent(BankHolidayCalendarComponent);
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
-	});
+		fixture.autoDetectChanges(true);
+	}));
 
 	it('should create component', () => {
 		expect(component).toBeTruthy();
+	});
+
+	it('should render title', () => {
+		var bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+
+		expect(bankHolidayCalendarSettings).toBeTruthy();
+		expect(bankHolidayCalendarSettings.getElementsByTagName('h2').length).toBe(1);
+		expect(
+			bankHolidayCalendarSettings.getElementsByTagName('h2')[0].innerHTML.indexOf('BankHolidayCalendars') > -1
+		).toBeTruthy();
+	});
+
+	it('should show add new bank holiday calendar panel after clicking plus icon', () => {
+		document.getElementsByClassName('add-bank-holiday-calendar-icon')[0].dispatchEvent(new Event('click'));
+
+		var addCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+
+		expect(addCalendarPanel).toBeTruthy();
 	});
 });
