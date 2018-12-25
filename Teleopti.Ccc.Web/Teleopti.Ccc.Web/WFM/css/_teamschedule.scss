@@ -104,20 +104,6 @@
 		}
 	}
 
-	.hour-line {
-		width: 100%;
-		float: left;
-
-		> div {
-			position: absolute;
-			display: inline-block;
-			background: $gray012;
-			width: 1px;
-			height: 30px;
-			line-height: 1.5;
-		}
-	}
-
 	.shift {
 		position: relative;
 		top: 4px;
