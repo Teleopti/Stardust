@@ -6,10 +6,17 @@ import { DowngradeableComponent } from '@wfm/types';
 import { SharedModule } from '../shared/shared.module';
 import { SystemSettingsComponent } from './pages';
 import { BankHolidayCalendarComponent } from './components/bank-holiday-calendar';
+import { BankHolidayCalendarAddComponent } from './components/bank-holiday-calendar-add';
+import { BankHolidayCalendarEditComponent } from './components/bank-holiday-calendar-edit';
 import { BankCalendarDataService } from './shared/bank-calendar-data.service';
 
 @NgModule({
-	declarations: [SystemSettingsComponent, BankHolidayCalendarComponent],
+	declarations: [
+		SystemSettingsComponent,
+		BankHolidayCalendarComponent,
+		BankHolidayCalendarAddComponent,
+		BankHolidayCalendarEditComponent
+	],
 	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [TranslateModule, BankCalendarDataService],
 	exports: [],

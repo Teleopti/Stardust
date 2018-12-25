@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BankHolidayCalendar } from '../components/bank-holiday-calendar';
+import { BankHolidayCalendar } from '../interface';
 import { Observable, of } from 'rxjs';
 
 @Injectable()

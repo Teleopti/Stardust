@@ -15,50 +15,9 @@
 	}
 }
 
-.ant-layout {
-	background: transparent;
-}
-
-.ant-layout-header,
-.ant-layout-sider {
-	padding: 10px;
-	background: transparent;
-}
-.ant-layout-sider {
-	min-height: 420px;
-}
-.ant-layout-sider-children {
-	display: none;
-}
-
-.add-new-bank-holiday-calendar,
-.editting-bank-holiday-calendar {
-	nz-year-picker,
-	input {
-		width: 180px;
-	}
-
-	nz-year-picker.existing {
-		border-color: orange;
-	}
-
-	.con-flex > div > span.inline-block {
-		min-width: 80px;
-	}
-}
-
-.add-new-bank-holiday-calendar,
-.editting-bank-holiday-calendar,
 .bank-holiday-calendar-list {
 	max-height: calc(100vh - 186px);
 	overflow: auto;
-}
-
-.add-new-bank-holiday-calendar {
-	nz-content {
-		max-height: calc(100vh - 470px);
-		overflow: auto;
-	}
 }
 
 .bank-holiday-calendar-list-date > span {
