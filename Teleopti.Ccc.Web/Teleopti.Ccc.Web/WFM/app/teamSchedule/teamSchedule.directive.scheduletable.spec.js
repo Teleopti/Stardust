@@ -495,20 +495,20 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(controller.toggleAllInCurrentPage).toBeFalsy();
 	}));
 
-	it('should show edit button unless toggle WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 is on and agent has activities', function () {
+	it('should show edit button unless toggle WfmTeamSchedule_ShiftEditorInDayView_78295 is on and agent has activities', function () {
 		var schedules = [createSchedule('personId1', '2018-05-15', null, [{ startHour: 8, endHour: 16 }])];
 		scheduleManagement.groupScheduleVm = { Schedules: schedules };
 		controller.init();
 
-		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295 = true;
 		expect(controller.showEditButton(schedules[0])).toBeTruthy();
 
-		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = false;
+		toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295 = false;
 		expect(controller.showEditButton(schedules[0])).toBeFalsy();
 	});
 
 	it('should not show edit button if schedule is empty ', function () {
-		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295 = true;
 		var schedules = [createSchedule('personId1', '2018-05-15', null, [])];
 		scheduleManagement.groupScheduleVm = { Schedules: schedules };
 
@@ -518,7 +518,7 @@ describe('teamschedule schedule table controller tests', function () {
 	});
 
 	it('should not show edit button if schedule has full day absence ', function () {
-		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295 = true;
 		var schedules = [createSchedule('personId1', '2018-05-15', null, [{ startHour: 8, endHour: 16 }], null, true)];
 		scheduleManagement.groupScheduleVm = { Schedules: schedules };
 
@@ -528,7 +528,7 @@ describe('teamschedule schedule table controller tests', function () {
 	});
 
 	it('should not show edit button unless the schedule of current day is day off ', function () {
-		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295 = true;
 		var schedules = [createSchedule('personId1', '2018-05-15', true, null, null)];
 		scheduleManagement.groupScheduleVm = { Schedules: schedules };
 
@@ -552,7 +552,7 @@ describe('teamschedule schedule table controller tests', function () {
 	});
 
 	it('should not show edit button if schedule is protected and logon user does not have the permission', function () {
-		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295 = true;
 		permissions.set({ HasModifyWriteProtectedSchedulePermission: false });
 
 		var schedules = [createSchedule('personId1', '2018-05-15', null, [{ startHour: 8, endHour: 16 }], null, false, true)];
@@ -563,7 +563,7 @@ describe('teamschedule schedule table controller tests', function () {
 	});
 
 	it('should show edit button if schedule is protected and logon user have the permission', function () {
-		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295 = true;
 		permissions.set({ HasModifyWriteProtectedSchedulePermission: true });
 
 		var schedules = [createSchedule('personId1', '2018-05-15', null, [{ startHour: 8, endHour: 16 }], null, false, true)];

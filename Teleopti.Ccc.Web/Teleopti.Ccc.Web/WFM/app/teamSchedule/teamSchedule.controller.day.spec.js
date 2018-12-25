@@ -461,6 +461,13 @@
 			expect(controller.havingScheduleChanged).toBeFalsy();
 		});
 
+		xit("should disable the favorite button when editing shift editor", function () {
+			controller = setUpController($controller);
+			controller.scheduleDate = "2018-12-19";
+
+
+		});
+
 		function setUpController($controller) {
 			return $controller("TeamScheduleController", {
 				$scope: rootScope,

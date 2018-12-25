@@ -40,7 +40,7 @@
 		Wfm_WebPlan_Pilot_46815,
 		
 		WfmTeamSchedule_SuggestShiftCategory_152,
-		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
+		WfmTeamSchedule_ShiftEditorInDayView_78295,
 		WfmTeamSchedule_DisableAutoRefreshSchedule_79826,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,

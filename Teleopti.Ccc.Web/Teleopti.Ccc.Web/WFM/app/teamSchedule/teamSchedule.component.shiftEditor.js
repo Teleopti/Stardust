@@ -2,16 +2,6 @@
 (function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').controller('ShiftEditorViewController', [
-		'$stateParams',
-		function ($stateParams) {
-			var vm = this;
-			vm.personId = $stateParams.personId;
-			vm.timezone = decodeURIComponent($stateParams.timezone);
-			vm.date = $stateParams.date;
-		}
-	]);
-
 	angular.module('wfm.teamSchedule').component('shiftEditor', {
 		controller: ShiftEditorController,
 		controllerAs: 'vm',
@@ -19,7 +9,8 @@
 		bindings: {
 			personId: '<',
 			date: '<',
-			timezone: '<'
+			timezone: '<',
+			rawSchedule: '<'
 		}
 	});
 
@@ -29,17 +20,15 @@
 		'$timeout',
 		'$window',
 		'$interval',
-		'$state',
+		'$wfmConfirmModal',
 		'$translate',
 		'TeamSchedule',
 		'serviceDateFormatHelper',
 		'ShiftEditorViewModelFactory',
-		'TimezoneListFactory',
 		'ActivityService',
 		'ShiftEditorService',
 		'CurrentUserInfo',
 		'guidgenerator',
-		'signalRSVC',
 		'NoticeService'
 	];
 
@@ -49,17 +38,15 @@
 		$timeout,
 		$window,
 		$interval,
-		$state,
+		$wfmConfirmModal,
 		$translate,
 		TeamSchedule,
 		serviceDateFormatHelper,
 		ShiftEditorViewModelFactory,
-		TimezoneListFactory,
 		ActivityService,
 		ShiftEditorService,
 		CurrentUserInfo,
 		guidgenerator,
-		signalRSVC,
 		NoticeService
 	) {
 		var doNotToggleSelectionAfterResizeEnd = false;
@@ -72,7 +59,6 @@
 
 		vm.showScrollLeftButton = false;
 		vm.showScrollRightButton = false;
-		vm.isInDifferentTimezone = false;
 		vm.displayDate = moment(vm.date).format('L');
 		vm.availableActivities = [];
 		vm.trackId = guidgenerator.newGuid();
@@ -80,7 +66,8 @@
 		vm.selectedShiftLayers = [];
 
 		vm.$onInit = function () {
-			getSchedule();
+			$scope.$emit('teamSchedule.shiftEditor.editing', { personId: vm.personId, trackId: vm.trackId });
+			createScheduleVm(vm.rawSchedule);
 
 			ActivityService.fetchAvailableActivities().then(function (data) {
 				vm.availableActivities = data;
@@ -89,21 +76,26 @@
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
 
-			TimezoneListFactory.Create().then(function (timezoneList) {
-				vm.timezoneName = timezoneList.GetShortName(vm.timezone);
-			});
 
-			subscribeToScheduleChange();
-
-			bindResizeLayerEvent();
 		};
 
 		vm.$onDestroy = function () {
 			interact('.shift-layer').unset();
 		};
 
-		vm.gotoDayView = function () {
-			$state.go('teams.dayView');
+		vm.cancelEditing = function () {
+			if (hasChanges()) {
+				var message = $translate.instant('ConfirmMessageWhenCancelShiftEditing');
+				var title = $translate.instant('Confirm');
+				var buttonTexts = [$translate.instant('Ok'), $translate.instant('Cancel')];
+				$wfmConfirmModal.confirm(message, title, buttonTexts).then(function (result) {
+					if (result) {
+						$scope.$emit('teamSchedule.shiftEditor.close', {});
+					}
+				});
+			} else {
+				$scope.$emit('teamSchedule.shiftEditor.close', {});
+			}
 		};
 
 		vm.isSameDate = function (interval) {
@@ -154,7 +146,7 @@
 		};
 
 		vm.saveChanges = function () {
-			if (vm.scheduleChanged) {
+			if (vm.isChangedByOthers) {
 				vm.showError = true;
 				return;
 			}
@@ -169,13 +161,12 @@
 						showErrorNotice(errorMessages);
 						return;
 					}
-					getSchedule();
 					showSuccessNotice();
+					$scope.$emit('teamSchedule.shiftEditor.close', { needToUpdateSchedule: true });
 				},
 				function () {
 					vm.isSaving = false;
-				}
-				);
+				});
 		};
 
 		vm.isSaveButtonDisabled = function () {
@@ -187,8 +178,10 @@
 		}
 
 		vm.refreshData = function () {
-			if (vm.scheduleChanged) {
-				getSchedule();
+			if (vm.isChangedByOthers) {
+				reloadSchedule(function (schedules) {
+					$scope.$emit('teamSchedule.updateSchedule', { personId: vm.personId, rawSchedules: schedules });
+				});
 			}
 		};
 
@@ -417,6 +410,7 @@
 			vm.selectedShiftLayers = selectedLayers;
 			vm.scheduleVm.ShiftLayers = originalShiftLayers;
 		}
+
 		function isSameDate(dateTime) {
 			return serviceDateFormatHelper.getDateOnly(moment.tz(dateTime, vm.timezone).tz(vm.scheduleVm.Timezone)) === vm.date;
 		}
@@ -550,25 +544,30 @@
 			return errorMessages;
 		}
 
-		function getSchedule() {
+		function reloadSchedule(callback) {
 			initScheduleState();
 
 			vm.isLoading = true;
 			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
+				callback && callback(data.Schedules);
 				vm.isLoading = false;
 
-				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, data.Schedules[0]);
-				vm.isInDifferentTimezone = vm.scheduleVm.Timezone !== vm.timezone;
-
-				if (!!vm.scheduleVm.ShiftLayers) {
-					vm.scheduleVm.ShiftLayers.forEach(function (layer) {
-						layer.Width = getShiftLayerWidth(layer);
-						layer.Left = getShiftLayerLeft(layer);
-					});
-
-					initAndBindScrollEvent();
-				}
+				createScheduleVm(data.Schedules[0]);
 			});
+		}
+
+		function createScheduleVm(rawSchedule) {
+			vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, rawSchedule);
+
+			if (!!vm.scheduleVm.ShiftLayers) {
+				vm.scheduleVm.ShiftLayers.forEach(function (layer) {
+					layer.Width = getShiftLayerWidth(layer);
+					layer.Left = getShiftLayerLeft(layer);
+				});
+
+				initAndBindScrollEvent();
+				bindResizeLayerEvent();
+			}
 		}
 
 		function getShiftLayerWidth(layer) {
@@ -581,37 +580,30 @@
 		}
 
 		function initScheduleState() {
-			vm.scheduleChanged = false;
+			vm.isChangedByOthers = false;
 			vm.selectedShiftLayers = [];
 			vm.selectedActivitiyId = null;
 			vm.showError = false;
 		}
 
-		function subscribeToScheduleChange() {
-			signalRSVC.subscribeBatchMessage(
-				{ DomainType: 'IScheduleChangedInDefaultScenario' },
-				function (messages) {
-					for (var i = 0; i < messages.length; i++) {
-						var message = messages[i];
-						if (
-							message.DomainReferenceId === vm.personId &&
-							moment(vm.date).isBetween(
-								getMomentDate(message.StartDate),
-								getMomentDate(message.EndDate),
-								'day',
-								'[]'
-							)
-						) {
-							if (vm.trackId !== message.TrackId) {
-								vm.scheduleChanged = true;
-							}
-							return;
-						}
+
+		$scope.$on('teamSchedule.shiftEditor.scheduleChanged', function (e, d) {
+			if (d.isStaleSchedule) {
+				vm.isChangedByOthers = true;
+				return;
+			}
+			for (var i = 0; i < d.messages.length; i++) {
+				var message = d.messages[i];
+				if (message.DomainReferenceId === vm.personId
+					&& moment(vm.date).isBetween(getMomentDate(message.StartDate), getMomentDate(message.EndDate), 'day', '[]')) {
+					if (vm.trackId !== message.TrackId) {
+						vm.isChangedByOthers = true;
 					}
-				},
-				300
-			);
-		}
+					return;
+				}
+			}
+		});
+
 
 		function getMomentDate(date) {
 			return moment(serviceDateFormatHelper.getDateOnly(date.substring(1, date.length)));
