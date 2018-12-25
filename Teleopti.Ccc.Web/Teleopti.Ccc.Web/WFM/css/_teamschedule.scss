@@ -667,8 +667,11 @@ team-schedule-datepicker {
 			background: $gray012;
 		}
 
-		th,
-		td {
+		tbody .shift-editor-row td{
+			padding: 0;
+		}
+			
+			th, td {
 			padding: 5px 0 5px 0;
 			border-bottom: none;
 			line-height: 1.5;
@@ -1192,7 +1195,6 @@ shift-editor {
 	display: block;
 	background: #ffffff;
 	box-shadow: 2px 2px 2px $gray-300, -2px 0 2px $gray-300;
-	margin: 0 8px;
 
 	.progress-linear-container {
 		height: 15px;

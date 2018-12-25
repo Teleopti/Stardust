@@ -10,17 +10,12 @@
 				<div ng-hide="::vm.selectMode" class="wfm-checkbox-label nowrap">{{'AgentName' | translate}}</div>
 				<sort-agent ng-model="vm.selectedSortOption" class="pull-right sort-agent"></sort-agent>
 			</th>
-
 			<th class="shift-category-cell-header"></th>
-			<th class="schedule schedule-column time-line-container">
-				<div class="time-line">
-					<div class="relative">
-						<span ng-repeat="hourPoint in vm.scheduleVm.TimeLine.HourPoints">
-							<span class="ruler absolute" ng-style="{left: (hourPoint.Position() + '%'), height: $ctrl.height + 'px'}"></span>
-							<span ng-show="hourPoint.IsLabelVisible" class="label label-info absolute" ng-style="{left: hourPoint.Position() + '%'}" ng-class="{notcurrentday: !hourPoint.IsCurrentDay}">{{::hourPoint.TimeLabel}}</span>
-						</span>
-					</div>
-				</div>
+			<th id="time-line-container" class="schedule schedule-column">
+				<time-line times="vm.scheduleVm.TimeLine.HourPoints"
+						   schedule-count="vm.scheduleVm.Schedules.length"
+						   is-schedule-in-editing="!!vm.scheduleInEditing">
+				</time-line>
 			</th>
 			<th class="schedule-tool-column"></th>
 			<th class="schedule-tool-column"></th>
@@ -85,9 +80,6 @@
 				</md-tooltip>
 			</td>
 			<td class="schedule schedule-column">
-				<div class="hour-line relative">
-					<div ng-repeat="hourPoint in vm.scheduleVm.TimeLine.HourPoints" ng-style="{left:hourPoint.Position() + '%'}"></div>
-				</div>
 				<div class="relative time-line-for">
 					<span class="dayoff absolute" ng-repeat="dayOff in ::personSchedule.DayOffs"
 						  ng-if="personSchedule.DayOffs.length > 0 && dayOff.Length > 0"

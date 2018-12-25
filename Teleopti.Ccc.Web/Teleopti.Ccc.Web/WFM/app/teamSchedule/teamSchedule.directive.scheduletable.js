@@ -26,7 +26,7 @@
 	ScheduleTableController.$inject = ['$scope', '$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper'];
 	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions, serviceDateFormatHelper) {
 		var vm = this;
-		var scheduleInEditing;
+		vm.scheduleInEditing = null;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
@@ -129,13 +129,13 @@
 		}
 
 		vm.clickEditButton = function (personSchedule) {
-			if (scheduleInEditing !== personSchedule) {
-				scheduleInEditing = personSchedule;
+			if (vm.scheduleInEditing !== personSchedule) {
+				vm.scheduleInEditing = personSchedule;
 			}
 		}
 
 		vm.isScheduleInEditing = function (personSchedule) {
-			return scheduleInEditing && scheduleInEditing.PersonId === personSchedule.PersonId;
+			return vm.scheduleInEditing && vm.scheduleInEditing.PersonId === personSchedule.PersonId;
 		}
 
 		vm.isNotSameTimezone = function (personTimezone) {
@@ -176,7 +176,7 @@
 		vm.init();
 
 		$scope.$on('teamSchedule.shiftEditor.close', function () {
-			scheduleInEditing = null;
+			vm.scheduleInEditing = null;
 		});
 
 		$scope.$watchCollection(function () {
