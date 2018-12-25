@@ -8,7 +8,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '@wfm/test';
 import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.component';
 
-fdescribe('BankHolidayCalendarAddComponent', () => {
+describe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
 	let document: Document;
 	let component: BankHolidayCalendarAddComponent;
@@ -56,5 +56,14 @@ fdescribe('BankHolidayCalendarAddComponent', () => {
 		expect(
 			addBankHolidayCalendarPanel.getElementsByClassName('ant-btn')[1].getElementsByTagName('span')[0].innerText
 		).toBe('Save');
+	});
+
+	it('should not add duplicated date', () => {
+		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
+
+		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+
+		expect(component.newCalendarYears[0].Dates.length).toBe(1);
 	});
 });

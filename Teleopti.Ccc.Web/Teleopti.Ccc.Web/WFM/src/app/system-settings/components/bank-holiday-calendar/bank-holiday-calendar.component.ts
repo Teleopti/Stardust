@@ -58,7 +58,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 		this.isAddingNewCalendar = true;
 	}
 
-	cancelAddNewBankCalendar = () => {
+	exitAddNewBankCalendar = () => {
 		this.isAddingNewCalendar = false;
 	};
 }

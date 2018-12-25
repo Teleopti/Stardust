@@ -17,7 +17,7 @@
 			</div>
 
 			<div class="full-padding">
-				<span class="inline-block">{{ 'Year' | translate }} :</span>
+				<span class="inline-block">{{ 'Years' | translate }} :</span>
 				<nz-year-picker
 					nzAllowClear="false"
 					[(ngModel)]="newCalendarYear"
@@ -36,13 +36,15 @@
 			(nzDeselect)="deselectTab(year)"
 		>
 			<nz-layout>
-				<nz-header>
-					<div class="con-row">
-						<button nz-tooltip nz-button nzType="danger" (click)="deleteYearTab(year)">
-							{{ 'DeleteThisYear' | translate }}
-						</button>
-					</div>
-				</nz-header>
+				<nz-layout>
+					<nz-header>
+						<div class="con-row">
+							<button nz-tooltip nz-button nzType="danger" (click)="deleteYearTab(year)">
+								{{ 'DeleteThisYear' | translate }}
+							</button>
+						</div>
+					</nz-header>
+				</nz-layout>
 				<nz-layout>
 					<nz-sider nzWidth="300">
 						<nz-date-picker
@@ -65,10 +67,14 @@
 							</div>
 						</ng-template>
 					</nz-sider>
+
 					<nz-content>
 						<nz-list [nzDataSource]="year.Dates" [nzRenderItem]="date">
 							<ng-template #date let-date>
-								<nz-list-item class="bank-holiday-calendar-list-date">
+								<nz-list-item class="bank-holiday-calendar-list-date relative">
+									<span class="date-indicator absolute" [hidden]="!date.IsLastAdded">
+										<!-- <i nz-icon type="right" theme="outline"></i> -->
+									</span>
 									<span class="inline-block">
 										{{ 'Date' | translate }} :
 
@@ -90,7 +96,7 @@
 										nzType="danger"
 										nzShape="circle"
 										(click)="removeDateOfYear(year, date)"
-										class="holiday-remove-date-icon"
+										class="remove-date-icon"
 									>
 										<i nz-icon type="close" theme="outline"></i>
 									</button>
@@ -104,7 +110,7 @@
 	</nz-tabset>
 
 	<div class="con-row operation-buttons">
-		<button nz-button nzType="default" (click)="cancelAddNewBankCalendar()">{{ 'Cancel' | translate }}</button>
+		<button nz-button nzType="default" (click)="exitAddNewBankCalendar()">{{ 'Cancel' | translate }}</button>
 		<button
 			nz-button
 			nzType="primary"

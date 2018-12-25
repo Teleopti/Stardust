@@ -7,7 +7,7 @@ export interface BankHolidayCalendar {
 export interface BankHolidayCalendarYear {
 	Id?: string;
 	Year: string;
-	Dates: BankHolidayCalendarDate[];
+	Dates: BankHolidayCalendarDateItem[];
 }
 
 export interface BankHolidayCalendarDate {
@@ -23,7 +23,11 @@ export interface BankHolidayCalendarListItem extends BankHolidayCalendar {
 
 export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
 	Active: boolean;
-	DisabledDate: Function;
+	DisabledDate?: Function;
 	YearDate: Date;
 	SelectedDates: number[];
+}
+
+export interface BankHolidayCalendarDateItem extends BankHolidayCalendarDate {
+	IsLastAdded: boolean;
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd';
 import { TranslateService } from '@ngx-translate/core';
 
-import { BankHolidayCalendar, BankHolidayCalendarYear, BankHolidayCalendarDate } from '../../interface';
+import { BankHolidayCalendar, BankHolidayCalendarYear, BankHolidayCalendarDateItem } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 
 export interface BankHolidayCalendarListItem extends BankHolidayCalendar {
@@ -87,14 +87,15 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	}
 
 	addNewDateForYear(date: Date, year: BankHolidayCalendarYear) {
-		let newDate: BankHolidayCalendarDate = {
+		let newDate: BankHolidayCalendarDateItem = {
+			IsLastAdded: true,
 			Date: moment(date).format(this.dateFormat),
 			Description: this.translate.instant('BankHoliday')
 		};
 		year.Dates = year.Dates.concat([newDate]);
 	}
 
-	removeDateOfYear(year: BankHolidayCalendarYear, date: BankHolidayCalendarDate) {
+	removeDateOfYear(year: BankHolidayCalendarYear, date: BankHolidayCalendarDateItem) {
 		year.Dates.splice(year.Dates.indexOf(date), 1);
 	}
 
