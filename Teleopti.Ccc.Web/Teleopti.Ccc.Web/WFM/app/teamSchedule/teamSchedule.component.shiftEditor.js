@@ -59,7 +59,6 @@
 
 		vm.showScrollLeftButton = false;
 		vm.showScrollRightButton = false;
-		vm.isInDifferentTimezone = false;
 		vm.displayDate = moment(vm.date).format('L');
 		vm.availableActivities = [];
 		vm.trackId = guidgenerator.newGuid();
@@ -559,7 +558,6 @@
 
 		function createScheduleVm(rawSchedule) {
 			vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, rawSchedule);
-			vm.isInDifferentTimezone = vm.scheduleVm.Timezone !== vm.timezone;
 
 			if (!!vm.scheduleVm.ShiftLayers) {
 				vm.scheduleVm.ShiftLayers.forEach(function (layer) {
