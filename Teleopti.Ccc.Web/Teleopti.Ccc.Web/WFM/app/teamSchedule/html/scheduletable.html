@@ -28,7 +28,7 @@
 		</tr>
 	</thead>
 	<tbody ng-style="vm.tableStyle">
-		<tr ng-class="{'in-editing': vm.isScheduleEditing(personSchedule)}" ng-repeat-start="personSchedule in vm.scheduleVm.Schedules" ng-click="vm.togglePerson(personSchedule, $event)">
+		<tr ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}" ng-repeat-start="personSchedule in vm.scheduleVm.Schedules" ng-click="vm.togglePerson(personSchedule, $event)">
 			<td class="person-name-column">
 				<div ng-show="::vm.selectMode" class="inline-block">
 					<label>
@@ -127,7 +127,7 @@
 			</td>
 			<td class="contract-time contract-time-column">{{::personSchedule.ContractTime}}</td>
 		</tr>
-		<tr class="shift-editor-row" ng-repeat-end ng-if="vm.isScheduleEditing(personSchedule)">
+		<tr class="shift-editor-row" ng-repeat-end ng-if="vm.isScheduleInEditing(personSchedule)">
 			<td colspan="6">
 				<shift-editor date="vm.selectedDate" timezone="vm.selectedTimezone" person-id="personSchedule.PersonId" raw-schedule="vm.getRawSchedule(personSchedule.PersonId)"></shift-editor>
 			</td>

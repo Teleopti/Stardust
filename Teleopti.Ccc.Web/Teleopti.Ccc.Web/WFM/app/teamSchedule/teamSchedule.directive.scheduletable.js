@@ -134,7 +134,7 @@
 			}
 		}
 
-		vm.isScheduleEditing = function (personSchedule) {
+		vm.isScheduleInEditing = function (personSchedule) {
 			return scheduleInEditing && scheduleInEditing.PersonId === personSchedule.PersonId;
 		}
 
