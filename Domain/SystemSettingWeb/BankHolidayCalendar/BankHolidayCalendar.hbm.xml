@@ -18,7 +18,8 @@
 				  length="250"
 				  not-null="true"/>
 
-		<bag name="Dates" where="IsDeleted = 0" lazy="false" inverse="true" >
+
+		<bag name="Dates" where="IsDeleted = 0"  inverse="true">
 			<key column="CalendarId" />
 			<one-to-many class="Teleopti.Ccc.Domain.SystemSettingWeb.BankHolidayDate"/>
 		</bag>
@@ -27,7 +28,7 @@
 		class="Teleopti.Ccc.Domain.Common.BusinessUnit"
 		access="nosetter.camelcase-underscore"
 		not-null="true" foreign-key="FK_BankHolidayCalendar_BusinessUnit"/>
-		
+
 		<many-to-one name="UpdatedBy"
                    class="Teleopti.Ccc.Domain.Common.Person"
                    not-null="true"
