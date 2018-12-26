@@ -215,14 +215,14 @@ Layout = null;
 						<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
 							<div data-bind="visible: showTitle">
 								<strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
+								<span class="weekview-day-schedule-layer-time fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 								<!-- ko if: hasMeeting -->
-								<div class="meeting floatright">
+								<div class="meeting mt5">
 									<i class="meeting-icon icon-user mr10">
 										<i class="glyphicon glyphicon-user ml10"></i>
 									</i>
 								</div>
 								<!-- /ko -->
-								<span class="weekview-day-schedule-layer-time fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 							</div>
 						</div>
 						<!-- /ko -->
