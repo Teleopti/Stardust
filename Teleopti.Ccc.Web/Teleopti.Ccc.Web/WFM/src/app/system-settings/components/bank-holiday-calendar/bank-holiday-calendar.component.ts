@@ -52,7 +52,11 @@ export class BankHolidayCalendarComponent implements OnInit {
 	}
 
 	deleteHolidayCalendar(calendar: BankHolidayCalendarListItem) {
-		this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
+		this.bankCalendarDataService.deleteBankHolidayCalendar(calendar.Id).subscribe(result => {
+			if (result) {
+				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
+			}
+		});
 	}
 
 	startAddNewBankCalender() {

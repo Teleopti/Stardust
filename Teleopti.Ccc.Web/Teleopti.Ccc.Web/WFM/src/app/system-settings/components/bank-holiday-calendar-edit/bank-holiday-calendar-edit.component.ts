@@ -2,17 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd';
 import { TranslateService } from '@ngx-translate/core';
 
-import { BankHolidayCalendar, BankHolidayCalendarYear, BankHolidayCalendarDateItem } from '../../interface';
+import {
+	BankHolidayCalendarListItem,
+	BankHolidayCalendarYear,
+	BankHolidayCalendarYearItem,
+	BankHolidayCalendarDateItem,
+	BankHolidayCalendar
+} from '../../interface';
 import { BankCalendarDataService } from '../../shared';
-
-export interface BankHolidayCalendarListItem extends BankHolidayCalendar {
-	SelectedTabIndex: number;
-}
-
-export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
-	AddingDate: boolean;
-	YearDate: Date;
-}
 
 @Component({
 	selector: 'bank-holiday-calendar-edit',
@@ -72,13 +69,14 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			return;
 		}
 
-		this.newCalendarYears.forEach(y => (y.AddingDate = false));
+		this.newCalendarYears.forEach(y => (y.Active = false));
 
 		let newYear: BankHolidayCalendarYearItem = {
 			Year: yearStr,
 			YearDate: this.newDateForYear,
-			AddingDate: true,
-			Dates: []
+			Active: true,
+			Dates: [],
+			SelectedDates: []
 		};
 		this.newCalendarYears.push(newYear);
 		this.newCalendarTabIndex = this.newCalendarYears.length - 1;
@@ -90,9 +88,9 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	addNewDateForYear(date: Date, year: BankHolidayCalendarYear) {
 		let newDate: BankHolidayCalendarDateItem = {
-			IsLastAdded: true,
 			Date: moment(date).format(this.dateFormat),
-			Description: this.translate.instant('BankHoliday')
+			Description: this.translate.instant('BankHoliday'),
+			IsLastAdded: true
 		};
 		year.Dates = year.Dates.concat([newDate]);
 	}
@@ -111,33 +109,23 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	onChange(selectedDate: Date) {}
 
 	saveNewBankCalendar() {
-		this.newCalendarYears.forEach(y => {
-			let hash = {},
-				dates = [];
-
-			y.Dates.forEach(d => {
-				d.Date = moment(d.Date).format(this.dateFormat);
-
-				if (!hash[d.Date]) {
-					hash[d.Date] = true;
-					dates.push(d);
-				}
-			});
-			y.Dates = dates.sort((c, n) => {
-				return moment(c.Date) < moment(n.Date) ? -1 : 1;
-			});
-		});
-
 		this.newCalendarYears.sort((c, n) => {
 			return moment(c.Year) < moment(n.Year) ? -1 : 1;
 		});
 
+		this.newCalendarYears.forEach(y => {
+			delete y.YearDate;
+			delete y.DisabledDate;
+			delete y.SelectedDates;
+			delete y.Active;
+		});
+
 		let bankHolidayCalendar: BankHolidayCalendar = {
 			Name: this.newCalendarName,
-			Years: this.newCalendarYears
+			Years: this.newCalendarYears as BankHolidayCalendarYear[]
 		};
 
-		this.bankCalendarDataService.saveNewHolidayCalendar(bankHolidayCalendar).subscribe(result => {
+		this.bankCalendarDataService.saveExistingHolidayCalendar(bankHolidayCalendar).subscribe(result => {
 			let item: BankHolidayCalendarListItem = {
 				Id: result.Id,
 				Name: result.Name,

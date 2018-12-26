@@ -66,4 +66,18 @@ describe('BankHolidayCalendarAddComponent', () => {
 
 		expect(component.newCalendarYears[0].Dates.length).toBe(1);
 	});
+
+	it('should focus to another year after deleting one year tab', () => {
+		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
+		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+
+		component.newYearTab(new Date('2016-01-10T00:00:00.000Z'));
+		component.addNewDateForYear(new Date('2016-01-10T00:00:00.000Z'), component.newCalendarYears[1]);
+
+		component.deleteYearTab(component.newCalendarYears[1]);
+
+		expect(component.newCalendarTabIndex).toBe(0);
+		expect(component.newCalendarYears.length).toBe(1);
+		expect(component.newCalendarYears[0].Active).toBe(true);
+	});
 });

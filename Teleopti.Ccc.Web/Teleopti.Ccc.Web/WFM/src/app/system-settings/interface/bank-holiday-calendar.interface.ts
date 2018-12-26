@@ -4,10 +4,20 @@ export interface BankHolidayCalendar {
 	Years: BankHolidayCalendarYear[];
 }
 
+export interface BankHolidayCalendarListItem extends BankHolidayCalendar {
+	SelectedTabIndex: number;
+}
+
 export interface BankHolidayCalendarYear {
-	Id?: string;
 	Year: string;
 	Dates: BankHolidayCalendarDateItem[];
+}
+
+export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
+	YearDate: Date;
+	DisabledDate?: Function;
+	SelectedDates: number[];
+	Active: boolean;
 }
 
 export interface BankHolidayCalendarDate {
@@ -15,17 +25,6 @@ export interface BankHolidayCalendarDate {
 	Date: string;
 	Description: string;
 	IsDeleted?: boolean;
-}
-
-export interface BankHolidayCalendarListItem extends BankHolidayCalendar {
-	SelectedTabIndex: number;
-}
-
-export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
-	Active: boolean;
-	DisabledDate?: Function;
-	YearDate: Date;
-	SelectedDates: number[];
 }
 
 export interface BankHolidayCalendarDateItem extends BankHolidayCalendarDate {

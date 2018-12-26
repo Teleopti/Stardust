@@ -1,34 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BankHolidayCalendar } from '../interface';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { BankHolidayCalendarListItem, BankHolidayCalendar } from '../interface';
 
 @Injectable()
 export class BankCalendarDataService {
-	fakeResult: BankHolidayCalendar[] = [];
-
 	constructor(private http: HttpClient) {}
 
-	getBankHolidayCalendars(): Observable<BankHolidayCalendar[]> {
-		return of(this.fakeResult);
+	getBankHolidayCalendars(): Observable<BankHolidayCalendarListItem[]> {
+		return this.http.get('../api/BankHolidayCalendars') as Observable<BankHolidayCalendarListItem[]>;
 	}
 
-	saveNewHolidayCalendar(calendar: BankHolidayCalendar): Observable<BankHolidayCalendar> {
-		//return this.http.post('../api/BankHolidayCalendar/Create', calendar) as Observable<BankHolidayCalendar>;
-		calendar.Id == 'e6c0ac98-93ee-4cb5-bf32-e890c084135b';
-		this.fakeResult.push(calendar);
-
-		return of(calendar);
+	saveNewBankHolidayCalendar(calendar: BankHolidayCalendar): Observable<BankHolidayCalendarListItem> {
+		return this.http.post('../api/BankHolidayCalendars/Save', calendar) as Observable<BankHolidayCalendarListItem>;
 	}
 
-	saveExistingHolidayCalendar(calendar: BankHolidayCalendar): Observable<BankHolidayCalendar> {
-		//return this.http.post('../api/BankHolidayCalendar/Create', calendar) as Observable<BankHolidayCalendar>;
-		this.fakeResult.forEach(f => {
-			if (f.Id == calendar.Id) {
-				f = calendar;
-			}
-		});
+	saveExistingHolidayCalendar(calendar: BankHolidayCalendar): Observable<BankHolidayCalendarListItem> {
+		return this.http.post('../api/BankHolidayCalendars/Save', calendar) as Observable<BankHolidayCalendarListItem>;
+	}
 
-		return of(calendar);
+	deleteBankHolidayCalendar(id: string): any {
+		return this.http.delete('../api/BankHolidayCalendars/' + id) as Observable<BankHolidayCalendarListItem>;
 	}
 }

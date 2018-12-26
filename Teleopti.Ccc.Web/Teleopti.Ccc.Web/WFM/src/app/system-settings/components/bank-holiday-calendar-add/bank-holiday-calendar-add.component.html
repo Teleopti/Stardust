@@ -20,7 +20,7 @@
 				<span class="inline-block">{{ 'Years' | translate }} :</span>
 				<nz-year-picker
 					nzAllowClear="false"
-					[(ngModel)]="newCalendarYear"
+					[(ngModel)]="selectedYear"
 					(ngModelChange)="newYearTab($event)"
 					[nzPlaceHolder]="'AddYear' | translate"
 				></nz-year-picker>

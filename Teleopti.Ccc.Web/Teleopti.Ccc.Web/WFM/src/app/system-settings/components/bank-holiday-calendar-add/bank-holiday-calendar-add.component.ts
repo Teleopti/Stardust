@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
-	BankHolidayCalendar,
 	BankHolidayCalendarDateItem,
 	BankHolidayCalendarYearItem,
-	BankHolidayCalendarListItem
+	BankHolidayCalendarListItem,
+	BankHolidayCalendar,
+	BankHolidayCalendarYear
 } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 
@@ -23,7 +24,7 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 
 	newCalendarName: string = '';
 	nameAlreadyExisting: boolean = false;
-	newCalendarYear: Date;
+	selectedYear: Date;
 	newCalendarYears: BankHolidayCalendarYearItem[] = [];
 	newCalendarTabIndex: number;
 
@@ -64,6 +65,8 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 
 	deleteYearTab(year: BankHolidayCalendarYearItem): void {
 		this.newCalendarYears.splice(this.newCalendarYears.indexOf(year), 1);
+		this.newCalendarTabIndex = this.newCalendarYears.length - 1;
+		this.newCalendarYears[this.newCalendarTabIndex].Active = true;
 	}
 
 	addNewDateForYear(date: Date, year: BankHolidayCalendarYearItem) {
@@ -114,20 +117,14 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 
 		let bankHolidayCalendar: BankHolidayCalendar = {
 			Name: this.newCalendarName,
-			Years: this.newCalendarYears
+			Years: this.newCalendarYears as BankHolidayCalendarYear[]
 		};
 
-		this.bankCalendarDataService.saveNewHolidayCalendar(bankHolidayCalendar).subscribe(result => {
-			let item: BankHolidayCalendarListItem = {
-				Id: result.Id,
-				Name: result.Name,
-				Years: result.Years,
-				SelectedTabIndex: 0
-			};
-			//fake operation
-			this.bankHolidayCalendarsList.push(item);
-
-			this.exitAddNewBankCalendar();
+		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(result => {
+			if (result.Id.length > 0) {
+				this.bankHolidayCalendarsList.unshift(result);
+				this.exitAddNewBankCalendar();
+			}
 		});
 	}
 }
