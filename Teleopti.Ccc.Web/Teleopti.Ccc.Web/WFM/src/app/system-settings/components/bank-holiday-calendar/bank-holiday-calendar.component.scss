@@ -1,0 +1,47 @@
+.bank-holiday-settings {
+	margin: 0;
+	min-height: 100px;
+
+	& > h2 {
+		min-height: 40px;
+		padding: 10px 0;
+	}
+}
+
+.add-bank-holiday-calendar-icon {
+	margin: -10px 10px 10px 10px;
+	i {
+		font-size: 20px;
+	}
+}
+
+.bank-holiday-calendar-list {
+	max-height: calc(100vh - 186px);
+	overflow: auto;
+}
+
+.bank-holiday-calendar-list-date > span {
+	margin: 0 10px;
+
+	& > span {
+		font-weight: bold;
+		padding: 0 5px;
+		border-radius: 4px;
+	}
+}
+
+.operation-buttons {
+	justify-content: flex-end;
+
+	button {
+		margin: 5px;
+	}
+}
+
+.con-row {
+	align-items: center;
+}
+
+nz-divider {
+	margin: 5px 0;
+}

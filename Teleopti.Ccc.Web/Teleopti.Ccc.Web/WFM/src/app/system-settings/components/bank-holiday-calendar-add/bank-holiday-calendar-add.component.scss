@@ -1,0 +1,82 @@
+.add-new-bank-holiday-calendar {
+	max-height: calc(100vh - 186px);
+	overflow: auto;
+
+	nz-year-picker,
+	input {
+		width: 180px;
+	}
+	.con-row {
+		align-items: center;
+		.con-flex > div > span.inline-block {
+			min-width: 80px;
+		}
+	}
+	nz-content {
+		max-height: calc(100vh - 470px);
+		overflow: auto;
+		padding-right: 10px;
+	}
+}
+.ant-tabs-bar {
+	margin: 0;
+}
+.ant-layout {
+	background: transparent;
+}
+.ant-layout-sider {
+	padding: 10px;
+	background: inherit;
+}
+.ant-layout-header {
+	padding: 10px;
+	background: inherit;
+	.con-row {
+		justify-content: center;
+	}
+}
+.ant-layout-sider {
+	min-height: 420px;
+}
+.bank-holiday-calendar-list-date {
+	padding-left: 6px;
+
+	& > span.inline-block {
+		margin: 0 10px;
+
+		& > span {
+			font-weight: bold;
+			padding: 0 5px;
+			border-radius: 4px;
+		}
+	}
+}
+.remove-date-icon {
+	min-width: 24px;
+	max-width: 24px;
+}
+.date-indicator {
+	background: #09f;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	left: 0;
+	margin: 0;
+}
+.operation-buttons {
+	justify-content: flex-end;
+
+	button {
+		margin: 5px;
+	}
+}
+nz-tabset {
+	border: 1px solid #ddd;
+}
+nz-alert {
+	margin: 5px 0;
+}
+.border {
+	border: 1px solid #1890ff;
+	border-radius: 50%;
+}

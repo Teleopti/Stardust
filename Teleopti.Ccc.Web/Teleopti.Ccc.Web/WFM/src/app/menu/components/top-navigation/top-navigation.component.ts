@@ -3,6 +3,7 @@ import { interval } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NavigationService, TogglesService } from 'src/app/core/services';
 import { ToggleMenuService } from '../../shared/toggle-menu.service';
+import { Area, AreaService } from '../../shared/area.service';
 
 @Component({
 	selector: 'top-navigation',
@@ -17,18 +18,28 @@ export class TopNavigationComponent {
 	);
 
 	mainUrl = this.$state.href('main');
+	systemSettingArea = null;
 	isSystemSettingsVisible = false;
 
 	constructor(
 		@Inject('$state') private $state,
 		public toggleService: TogglesService,
 		public navigationService: NavigationService,
-		public toggleMenuService: ToggleMenuService
+		public toggleMenuService: ToggleMenuService,
+		public areaService: AreaService
 	) {
 		toggleService.toggles$.subscribe({
 			next: toggles => {
 				this.isSystemSettingsVisible = toggles.WFM_Setting_BankHolidayCalendar_Create_79297;
 			}
 		});
+
+		areaService.getAreas().subscribe(areas => {
+			this.systemSettingArea = areas.filter(a => a.InternalName == 'systemSettings')[0];
+		});
+	}
+
+	goToSystemSettings() {
+		this.$state.go(this.systemSettingArea.InternalName, {}, { reload: true });
 	}
 }
