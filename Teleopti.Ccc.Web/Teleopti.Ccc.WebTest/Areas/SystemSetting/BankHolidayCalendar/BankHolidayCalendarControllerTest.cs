@@ -55,9 +55,14 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			var input = new BankHolidayCalendarForm
 			{
 				Name = "ChinaBankHoliday",
-				Dates = new List<BankHolidayDateForm> {
-					new BankHolidayDateForm { Date=_nationalDay,Description="National Day" },
-					new BankHolidayDateForm{ Date=_newYear,Description="New Year" }
+				Years = new List<BankHolidayYearForm>{
+					new BankHolidayYearForm {
+						Dates = new List<BankHolidayDateForm>
+						{
+							new BankHolidayDateForm { Date=_nationalDay,Description="National Day" },
+							new BankHolidayDateForm{ Date=_newYear,Description="New Year" }
+						}
+					}
 				}
 			};
 
@@ -110,9 +115,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			var input = new BankHolidayCalendarForm
 			{
 				Id = calendar.Id.Value,
+				Years = new List<BankHolidayYearForm>{
+					new BankHolidayYearForm {
 				Dates = new List<BankHolidayDateForm> {
 					new BankHolidayDateForm { Date=new DateTime(2020,3,8),Description="Women Day" }
-				}
+				} } }
 			};
 
 
@@ -138,9 +145,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			var input = new BankHolidayCalendarForm
 			{
 				Id = calendar.Id.Value,
+				Years = new List<BankHolidayYearForm>{
+					new BankHolidayYearForm {
 				Dates = new List<BankHolidayDateForm> {
 					new BankHolidayDateForm { Id=dateId, Date=_nationalDay.AddDays(1),Description="National Day2" }
-				}
+				} } }
 			};
 
 
@@ -168,9 +177,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			var input = new BankHolidayCalendarForm
 			{
 				Id = calendar.Id.Value,
+				Years = new List<BankHolidayYearForm>{
+					new BankHolidayYearForm {
 				Dates = new List<BankHolidayDateForm> {
 					new BankHolidayDateForm { Id=dateId, IsDeleted=true }
-				}
+				} } }
 			};
 
 
@@ -198,11 +209,13 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			var input = new BankHolidayCalendarForm
 			{
 				Id = calendar.Id.Value,
+				Years = new List<BankHolidayYearForm>{
+					new BankHolidayYearForm {
 				Dates = new List<BankHolidayDateForm> {
 					new BankHolidayDateForm { Id=dateDeletedId, IsDeleted=true },
 					new BankHolidayDateForm{ Date=new DateTime(2020,3,8),Description="Women Day" },
 					new BankHolidayDateForm{ Id=dateUpdatedId,Description="Chinese New Year",Date=_springFestival }
-				}
+				} } }
 			};
 
 

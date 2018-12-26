@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		public virtual BankHolidayCalendarViewModel Persist(BankHolidayCalendarForm input)
 		{
 			var calendar = PersistCalendar(input);
-			PersistDates(calendar, input.Dates);
+			PersistDates(calendar, input.Years?.SelectMany(y => y.Dates));
 			return _bankHolidayModelMapper.MapModelChanged(calendar, input);
 		}
 

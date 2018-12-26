@@ -8,6 +8,12 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models
 	{
 		public Guid? Id { get; set; }
 		public string Name { get; set; }
+		public IEnumerable<BankHolidayYearForm> Years { get; set; }
+	}
+
+	public class BankHolidayYearForm
+	{
+		public int Year { get; set; }
 		public IEnumerable<BankHolidayDateForm> Dates { get; set; }
 	}
 

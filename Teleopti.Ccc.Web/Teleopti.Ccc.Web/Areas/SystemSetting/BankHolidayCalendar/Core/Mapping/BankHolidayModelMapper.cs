@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping
 
 			var _dates = calendar.Dates.ToList();
 
-			input?.Dates?.ToList().ForEach(
+			input?.Years?.SelectMany(y=>y.Dates).ToList().ForEach(
 				d =>
 				{
 					if (d.Id.HasValue)
