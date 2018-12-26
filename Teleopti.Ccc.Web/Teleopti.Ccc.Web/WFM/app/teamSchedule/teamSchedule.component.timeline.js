@@ -32,7 +32,7 @@
 
 		function updateRulerHeight() {
 			$timeout(function () {
-				var editingHeight = ctrl.isScheduleInEditing ? 210 : 0;
+				var editingHeight = ctrl.isScheduleInEditing ? 260 : 0;
 				ctrl.height = (ctrl.scheduleCount * 32.5) + 40 - 5 + editingHeight;
 			});
 		}
