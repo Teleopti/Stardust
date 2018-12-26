@@ -26,11 +26,8 @@
 
 	<div *ngIf="!isAddingNewCalendar && !isEdittingCalendar" class="bank-holiday-calendar-list">
 		<nz-collapse *ngIf="bankHolidayCalendarsList.length > 0">
-			<nz-collapse-panel
-				*ngFor="let calendar of bankHolidayCalendarsList; index as calendarIndex"
-				[nzHeader]="calendar.Name"
-			>
-				<nz-tabset [(nzSelectedIndex)]="calendar.SelectedTabIndex">
+			<nz-collapse-panel *ngFor="let calendar of bankHolidayCalendarsList" [nzHeader]="calendar.Name">
+				<nz-tabset>
 					<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">
 						<nz-list [nzDataSource]="year.Dates" [nzRenderItem]="date">
 							<ng-template #date let-date>

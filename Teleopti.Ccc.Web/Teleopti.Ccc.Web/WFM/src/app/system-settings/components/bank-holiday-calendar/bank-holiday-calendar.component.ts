@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BankCalendarDataService } from '../../shared/bank-calendar-data.service';
-import { BankHolidayCalendarListItem } from '../../interface';
+import { BankHolidayCalendar } from '../../interface';
 import { NzModalService } from 'ng-zorro-antd';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -14,7 +14,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 	yearFormat: string = 'YYYY';
 	dateFormat: string = 'YYYY-MM-DD';
 
-	bankHolidayCalendarsList: BankHolidayCalendarListItem[] = [];
+	bankHolidayCalendarsList: BankHolidayCalendar[] = [];
 	isAddingNewCalendar: boolean = false;
 	isEdittingCalendar: boolean = false;
 
@@ -26,19 +26,13 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.bankCalendarDataService.getBankHolidayCalendars().subscribe(calendars => {
-			this.bankHolidayCalendarsList = calendars.map(c => {
-				let item: BankHolidayCalendarListItem = {
-					Id: c.Id,
-					Name: c.Name,
-					Years: c.Years,
-					SelectedTabIndex: 0
-				};
-				return item;
+			this.bankHolidayCalendarsList = calendars.sort((c, n) => {
+				return c.Name.localeCompare(n.Name);
 			});
 		});
 	}
 
-	confirmDeleteHolidayCanlendar(calendar: BankHolidayCalendarListItem) {
+	confirmDeleteHolidayCanlendar(calendar: BankHolidayCalendar) {
 		this.modalService.confirm({
 			nzTitle: this.translate.instant('AreYouSureToDeleteThisBankHolidayCalendar'),
 			nzContent: this.translate.instant('Name') + ': ' + calendar.Name,
@@ -51,7 +45,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 		});
 	}
 
-	deleteHolidayCalendar(calendar: BankHolidayCalendarListItem) {
+	deleteHolidayCalendar(calendar: BankHolidayCalendar) {
 		this.bankCalendarDataService.deleteBankHolidayCalendar(calendar.Id).subscribe(result => {
 			if (result) {
 				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);

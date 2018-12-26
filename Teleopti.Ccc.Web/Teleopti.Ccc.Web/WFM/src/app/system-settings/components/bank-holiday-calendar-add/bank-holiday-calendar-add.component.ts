@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
-	BankHolidayCalendarDateItem,
-	BankHolidayCalendarYearItem,
-	BankHolidayCalendarListItem,
 	BankHolidayCalendar,
-	BankHolidayCalendarYear
+	BankHolidayCalendarYear,
+	BankHolidayCalendarYearItem,
+	BankHolidayCalendarDateItem
 } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 
@@ -16,7 +15,7 @@ import { BankCalendarDataService } from '../../shared';
 	providers: [BankCalendarDataService]
 })
 export class BankHolidayCalendarAddComponent implements OnInit {
-	@Input() bankHolidayCalendarsList: BankHolidayCalendarListItem[];
+	@Input() bankHolidayCalendarsList: BankHolidayCalendar[];
 	@Input() exitAddNewBankCalendar: Function;
 
 	yearFormat: string = 'YYYY';
@@ -113,6 +112,13 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 	saveNewBankCalendar() {
 		this.newCalendarYears.sort((c, n) => {
 			return moment(c.Year) < moment(n.Year) ? -1 : 1;
+		});
+
+		this.newCalendarYears.forEach(y => {
+			delete y.YearDate;
+			delete y.DisabledDate;
+			delete y.SelectedDates;
+			delete y.Active;
 		});
 
 		let bankHolidayCalendar: BankHolidayCalendar = {

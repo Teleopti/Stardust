@@ -40,7 +40,7 @@
 				</div>
 			</div>
 
-			<nz-tabset [(nzSelectedIndex)]="edittingCalendar.SelectedTabIndex">
+			<nz-tabset>
 				<nz-tab [nzTitle]="year.Year" *ngFor="let year of edittingCalendar.Years">
 					<div class="con-row">
 						<button nz-tooltip nz-button nzType="danger" (click)="deleteYearTab(year)">

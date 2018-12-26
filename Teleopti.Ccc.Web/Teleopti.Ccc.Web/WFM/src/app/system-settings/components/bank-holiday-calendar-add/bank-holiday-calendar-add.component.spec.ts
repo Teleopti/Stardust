@@ -1,11 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { configureTestSuite } from '@wfm/test';
+import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.component';
 
 describe('BankHolidayCalendarAddComponent', () => {
@@ -25,7 +26,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 				ReactiveFormsModule,
 				HttpClientTestingModule
 			],
-			providers: [TranslateService]
+			providers: [TranslateService, UserService]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BankHolidayCalendarAddComponent);
@@ -51,10 +52,16 @@ describe('BankHolidayCalendarAddComponent', () => {
 
 		expect(addBankHolidayCalendarPanel.getElementsByClassName('ant-btn').length).toBe(2);
 		expect(
-			addBankHolidayCalendarPanel.getElementsByClassName('ant-btn')[0].getElementsByTagName('span')[0].innerText
+			addBankHolidayCalendarPanel
+				.getElementsByClassName('ant-btn')[0]
+				.getElementsByTagName('span')[0]
+				.innerText.trim()
 		).toBe('Cancel');
 		expect(
-			addBankHolidayCalendarPanel.getElementsByClassName('ant-btn')[1].getElementsByTagName('span')[0].innerText
+			addBankHolidayCalendarPanel
+				.getElementsByClassName('ant-btn')[1]
+				.getElementsByTagName('span')[0]
+				.innerText.trim()
 		).toBe('Save');
 	});
 

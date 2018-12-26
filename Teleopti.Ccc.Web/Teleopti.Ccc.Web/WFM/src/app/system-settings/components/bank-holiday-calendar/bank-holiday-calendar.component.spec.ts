@@ -1,11 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { configureTestSuite } from '@wfm/test';
+import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component';
 import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
 
@@ -25,13 +26,15 @@ describe('BankHolidayCalendarComponent', () => {
 				ReactiveFormsModule,
 				HttpClientTestingModule
 			],
-			providers: [TranslateService]
+			providers: [TranslateService, UserService]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BankHolidayCalendarComponent);
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
 		fixture.autoDetectChanges(true);
+
+		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 	}));
 
 	it('should create component', () => {
