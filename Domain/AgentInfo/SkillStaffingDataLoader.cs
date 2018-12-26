@@ -73,6 +73,37 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return skillStaffingList;
 		}
 
+		public IList<SkillStaffingData> Load(IList<ISkill> skills, DateOnlyPeriod period, Dictionary<DateOnly, bool> useShrinkageDic, Func<DateOnly, bool> dayFilter = null)
+		{
+			var skillStaffingList = new List<SkillStaffingData>();
+			if (!skills.Any()) return skillStaffingList;
+
+			var resolution = skills.Min(s => s.DefaultResolution);
+			var skillDays = _skillDayLoadHelper
+				.LoadSchedulerSkillDaysFlat(period.Inflate(1), skills, _scenarioRepository.Current())
+				.ToArray();
+
+			var timeZoneInfo = _userTimeZone.TimeZone();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				var dateOnlyPeriod = dateOnly.ToDateOnlyPeriod();
+				var extendedPeriod = dateOnlyPeriod.Inflate(1);
+				var skillDaysInDay = skillDays.Where(s => extendedPeriod.Contains(s.CurrentDate)).ToArray();
+				var skillSkillDayDictionary = skillDaysInDay.GroupBy(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
+
+				var useShrinkage = useShrinkageDic[dateOnly];
+
+				_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(skillSkillDayDictionary, dateOnly, timeZoneInfo, useShrinkage);
+
+				var skillStaffingDatas = createSkillStaffingDatas(dateOnlyPeriod, skills, resolution, useShrinkage,
+					skillDaysInDay, dayFilter);
+
+				skillStaffingList.AddRange(skillStaffingDatas);
+			}
+
+			return skillStaffingList;
+		}
+
 		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills,
 			int resolution, bool useShrinkage, IList<ISkillDay> skillDays, Func<DateOnly, bool> dayFilter)
 		{

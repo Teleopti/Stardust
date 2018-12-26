@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.WorkflowControl;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
@@ -41,10 +40,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var scheduleDictionary = loadScheduleDictionary(person, period);
 			var skills = getSupportedPersonSkills(person, period).Select(s => s.Skill).ToArray();
-			var useShrinkage = isShrinkageValidatorEnabled(person);
-
+			var useShrinkageDic = getShrinkageStatusAccordingToPeriods(person, period);
 			var workflowControlSet = person.WorkflowControlSet;
-			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkage, date =>
+			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date =>
 				workflowControlSet?.AbsenceRequestOpenPeriods != null &&
 				workflowControlSet.AbsenceRequestOpenPeriods.Any() &&
 				workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), date));
@@ -52,13 +50,22 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return calculatePossibilities(person, skillStaffingData, scheduleDictionary);
 		}
 
-		private bool isShrinkageValidatorEnabled(IPerson person)
+		private Dictionary<DateOnly, bool> getShrinkageStatusAccordingToPeriods(IPerson person, DateOnlyPeriod period)
 		{
-			if (person.WorkflowControlSet?.AbsenceRequestOpenPeriods == null)
-				return false;
+			var useShrinkageDic = new Dictionary<DateOnly, bool>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (person.WorkflowControlSet?.AbsenceRequestOpenPeriods == null)
+				{
+					useShrinkageDic[dateOnly] = false;
+				}
+				else
+				{
+					useShrinkageDic[dateOnly] = person.WorkflowControlSet.IsAbsenceRequestCheckStaffingByIntradayWithShrinkage(_now.ServerDate_DontUse(), dateOnly);
+				}
+			}
 
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			return person.WorkflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(timeZone);
+			return useShrinkageDic;
 		}
 
 		private IScheduleDictionary loadScheduleDictionary(IPerson person, DateOnlyPeriod period)
