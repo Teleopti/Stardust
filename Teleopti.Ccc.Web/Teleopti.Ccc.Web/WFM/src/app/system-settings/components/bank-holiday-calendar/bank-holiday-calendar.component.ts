@@ -16,6 +16,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	bankHolidayCalendarsList: BankHolidayCalendarListItem[] = [];
 	isAddingNewCalendar: boolean = false;
+	isEdittingCalendar: boolean = false;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
