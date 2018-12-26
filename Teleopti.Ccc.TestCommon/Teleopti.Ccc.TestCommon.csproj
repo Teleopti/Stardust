@@ -224,6 +224,7 @@
     <Compile Include="FakeRepositories\FakeASMScheduleChangeTimeRepository.cs" />
     <Compile Include="FakeRepositories\FakeBadgeCalculationRepository.cs" />
     <Compile Include="FakeRepositories\FakeBankHolidayCalendarRepository.cs" />
+    <Compile Include="FakeRepositories\FakeBankHolidayDateRepository.cs" />
     <Compile Include="FakeRepositories\FakeExtensiveLogRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />

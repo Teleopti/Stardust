@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.SystemSettingWeb.BankHolidayCalendar
+namespace Teleopti.Ccc.Domain.SystemSettingWeb
 {
-	public class BankHolidayCalendar: NonversionedAggregateRootWithBusinessUnit, IBankHolidayCalendar
+	public class BankHolidayCalendar : NonversionedAggregateRootWithBusinessUnit, IBankHolidayCalendar, IAggregateRootWithEvents
 	{
-		private string _name;
-		private ICollection<DateTime> _dates = new List<DateTime>();
+
+		protected BankHolidayCalendar()
+		{
+			_dates = new List<IBankHolidayDate>();
+		}
+
+		public BankHolidayCalendar(string name)
+			: this()
+		{
+			_name = name;
+		}
+
 		private bool _isDeleted;
-
-		public virtual string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
-
-		public virtual ICollection<DateTime> Dates
-		{
-			get { return _dates; }
-			set { _dates = value; }
-		}
 
 		public virtual bool IsDeleted
 		{
@@ -33,19 +33,48 @@ namespace Teleopti.Ccc.Domain.SystemSettingWeb.BankHolidayCalendar
 			_isDeleted = true;
 		}
 
-		public virtual object Clone()
+		public virtual void AddDate(IBankHolidayDate date)
 		{
-			throw new NotImplementedException();
+			InParameter.NotNull(nameof(date), date);
+			if (!_dates.Contains(date))
+			{
+				_dates.Add(date);
+				date.Calendar = this;
+			}
 		}
 
-		public virtual IBankHolidayCalendar NoneEntityClone()
+		public virtual void DeleteDate(Guid Id)
 		{
-			throw new NotImplementedException();
+			InParameter.NotNull(nameof(Id), Id);
+			IBankHolidayDate date;
+			if ((date = _dates.ToList().Find(d => d.Id.Value == Id)) != null)
+			{
+				date.Calendar = this;
+				date.SetDeleted();
+			}
 		}
 
-		public virtual IBankHolidayCalendar EntityClone()
+		public virtual void UpdateDate(IBankHolidayDate date)
 		{
-			throw new NotImplementedException();
+			InParameter.NotNull(nameof(date), date);
+			if (_dates.Contains(date))
+			{
+				_dates.Remove(date);
+				_dates.Add(date);
+				date.Calendar = this;
+			}
 		}
+
+		private string _name;
+
+		public virtual string Name
+		{
+			get { return _name; }
+			set { _name = value; }
+		}
+
+		private readonly IList<IBankHolidayDate> _dates;
+
+		public virtual ReadOnlyCollection<IBankHolidayDate> Dates => new ReadOnlyCollection<IBankHolidayDate>(_dates.Where(d=>!d.IsDeleted).OrderBy(d => d.Date).ToList());
 	}
 }

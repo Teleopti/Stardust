@@ -4,9 +4,9 @@ using Teleopti.Ccc.Domain.SystemSettingWeb;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class BankHolidayCalendarRepository : Repository<IBankHolidayCalendar>, IBankHolidayCalendarRepository
+	public class BankHolidayDateRepository : Repository<IBankHolidayDate>, IBankHolidayDateRepository
 	{
-		public BankHolidayCalendarRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public BankHolidayDateRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
 	}

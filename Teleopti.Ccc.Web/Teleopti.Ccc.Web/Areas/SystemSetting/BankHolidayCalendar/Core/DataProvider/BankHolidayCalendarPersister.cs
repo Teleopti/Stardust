@@ -1,38 +1,103 @@
-﻿using System;
+﻿using log4net;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSettingWeb;
+using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
 
 namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider
 {
-	public interface IBankHolidayCalendarPersister
-	{
-		BankHolidayViewModel Persist(BankHolidayForm input);
-	}
-	public class BankHolidayCalendarPersister: IBankHolidayCalendarPersister
+
+	public class BankHolidayCalendarPersister : IBankHolidayCalendarPersister
 	{
 		private readonly IBankHolidayCalendarRepository _bankHolidayCalendarRepository;
+		private readonly IBankHolidayModelMapper _bankHolidayModelMapper;
+		private readonly IBankHolidayDateRepository _bankHolidayDateRepository;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(BankHolidayCalendarPersister));
 
-		public BankHolidayCalendarPersister(IBankHolidayCalendarRepository bankHolidayCalendarRepository)
+		public BankHolidayCalendarPersister(IBankHolidayCalendarRepository bankHolidayCalendarRepository, IBankHolidayModelMapper bankHolidayModelMapper, IBankHolidayDateRepository bankHolidayDateRepository
+			)
 		{
 			_bankHolidayCalendarRepository = bankHolidayCalendarRepository;
+			_bankHolidayModelMapper = bankHolidayModelMapper;
+			_bankHolidayDateRepository = bankHolidayDateRepository;
 		}
 
-		public virtual BankHolidayViewModel Persist(BankHolidayForm input)
+		private IBankHolidayCalendar PersistCalendar(BankHolidayCalendarForm input)
 		{
-			var bankHoliday = new Domain.SystemSettingWeb.BankHolidayCalendar.BankHolidayCalendar
-			{
-				Name = input.Name,
-				Dates = input.Dates.ToList()
-			};
-			_bankHolidayCalendarRepository.Add(bankHoliday);
+			IBankHolidayCalendar calendar;
 
-			return new BankHolidayViewModel
+			if (input.Id.HasValue)
 			{
-				Id = bankHoliday.Id.GetValueOrDefault(),
-				Dates = bankHoliday.Dates,
-				Name = bankHoliday.Name
-			};
+				calendar = _bankHolidayCalendarRepository.Load(input.Id.Value);
+				if (!string.IsNullOrWhiteSpace(input.Name))
+				{
+					calendar.Name = input.Name;
+					_bankHolidayCalendarRepository.Add(calendar);
+				}
+			}
+			else
+			{
+				string name = string.IsNullOrWhiteSpace(input.Name) ? "Unknow Calendar" : input.Name;
+				calendar = new Domain.SystemSettingWeb.BankHolidayCalendar(name);
+				_bankHolidayCalendarRepository.Add(calendar);
+			}
+
+			return calendar;
 		}
+
+		private void PersistDates(IBankHolidayCalendar calendar, IEnumerable<BankHolidayDateForm> dates)
+		{
+			dates?.ToList().ForEach(d =>
+			{
+				var _d = _bankHolidayModelMapper.Map(d);
+				switch (d.Action)
+				{
+					case BankHolidayDateAction.CREATE:
+						calendar.AddDate(_d);
+						break;
+					case BankHolidayDateAction.DELETE:
+						calendar.DeleteDate(_d.Id.Value);
+						break;
+					case BankHolidayDateAction.UPDATE:
+						calendar.UpdateDate(_d);
+						break;
+				}
+				_bankHolidayDateRepository.Add(_d);
+			});
+
+		}
+
+		public virtual BankHolidayCalendarViewModel Persist(BankHolidayCalendarForm input)
+		{
+			var calendar = PersistCalendar(input);
+			PersistDates(calendar, input.Dates);
+			return _bankHolidayModelMapper.MapModelChanged(calendar, input);
+		}
+
+		public virtual bool Delete(Guid Id)
+		{
+			try
+			{
+				var calendar = _bankHolidayCalendarRepository.Load(Id);
+				calendar.SetDeleted();
+				_bankHolidayCalendarRepository.Add(calendar);
+				calendar.Dates?.ToList().ForEach(d =>
+				{
+					calendar.DeleteDate(d.Id.Value);
+					_bankHolidayDateRepository.Add(d);
+				});
+			}
+			catch (Exception ex)
+			{
+				logger.Error("Delete Calendar failed.", ex);
+				return false;
+			}
+
+			return true;
+		}
+
 	}
 }

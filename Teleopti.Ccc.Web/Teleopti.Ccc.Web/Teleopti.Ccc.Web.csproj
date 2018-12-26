@@ -420,7 +420,13 @@
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Controller\BankHolidayCalendarController.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarPersister.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarPersister.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarProvider.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\IoC\BankHolidayAreaModule.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\BankHolidayModelMapper.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\IBankHolidayModelMapper.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayDateAction.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />

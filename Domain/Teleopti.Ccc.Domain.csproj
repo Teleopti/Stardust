@@ -276,7 +276,11 @@
     <Compile Include="InterfaceLegacy\Domain\TimePeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\TimeZoneHelper.cs" />
     <Compile Include="InterfaceLegacy\Domain\TimeZoneInfoExtensions.cs" />
-    <Compile Include="InterfaceLegacy\IBankHolidayCalendar.cs" />
+    <Compile Include="Repositories\IBankHolidayCalendarRepository.cs" />
+    <Compile Include="Repositories\IBankHolidayDateRepository.cs" />
+    <Compile Include="Staffing\IStaffingAudit.cs" />
+    <Compile Include="SystemSettingWeb\BankHolidayCalendar\IBankHolidayCalendar.cs" />
+    <Compile Include="SystemSettingWeb\BankHolidayCalendar\IBankHolidayDate.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IPasswordStrengthRule.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IPersonInfoCreator.cs" />
@@ -716,11 +720,11 @@
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="Staffing\ISkillCombinationBpoTimeLineReader.cs" />
     <Compile Include="Staffing\IPersonAccessAuditRepository.cs" />
-    <Compile Include="Staffing\IStaffingAudit.cs" />
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
     <Compile Include="Staffing\ITenantAuditRepository.cs" />
     <Compile Include="Staffing\StaffingAudit.cs" />
     <Compile Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayCalendar.cs" />
+    <Compile Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayDate.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
@@ -4057,7 +4061,12 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayCalendar.hbm.xml" />
+    <EmbeddedResource Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayDate.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayCalendar.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Staffing\StaffingAudit.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -4116,7 +4125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SeatPlanning\SeatBooking.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\Seat.hbm.xml" />
-    <EmbeddedResource Include="SeatPlanning\Location.hbm.xml" />
+    <EmbeddedResource Include="SeatPlanning\Location.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDayRanks.hbm.xml" />
     <EmbeddedResource Include="Common\AgentBadgeTransaction.hbm.xml">
       <SubType>Designer</SubType>

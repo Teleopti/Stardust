@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSettingWeb;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeBankHolidayCalendarRepository: IBankHolidayCalendarRepository
+	public class FakeBankHolidayCalendarRepository : IBankHolidayCalendarRepository
 	{
 		private IList<IBankHolidayCalendar> _bankHolidayCalendars = new List<IBankHolidayCalendar>();
+		
 
 		public void Add(IBankHolidayCalendar obj)
 		{
-			if(!obj.Id.HasValue) obj.SetId(Guid.NewGuid());
+			if (!obj.Id.HasValue)
+				obj.SetId(Guid.NewGuid());
 			_bankHolidayCalendars.Add(obj);
+
 		}
 
 		public void Remove(IBankHolidayCalendar root)
@@ -33,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IBankHolidayCalendar> LoadAll()
 		{
-			return _bankHolidayCalendars;
+			return _bankHolidayCalendars.Where(c=>!c.IsDeleted);
 		}
 	}
 }
