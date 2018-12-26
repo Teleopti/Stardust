@@ -301,31 +301,20 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		}
 
 		[Test]
-		public void ShouldDeleteBankHolidayCalendarById()
-		{
-			var calendar=PrepareData();
-
-			var result = Target.DeleteBankHolidayCalendarById(calendar.Id.Value);
-
-			result.Should().Be.EqualTo(true);
-
-			var calendars=BankHolidayCalendarRepository.LoadAll();
-			calendars.Count().Should().Be.EqualTo(0);
-		}
-
-		[Test]
 		public void ShouldDeleteBankHolidayDatesWhenDeletingBankHolidayCalendar()
 		{
 			var calendar = PrepareData();
 
-			var result = Target.DeleteBankHolidayCalendarById(calendar.Id.Value);
+			var Id = calendar.Id.Value;
+
+			var result = Target.DeleteBankHolidayCalendarById(Id);
 
 			result.Should().Be.EqualTo(true);
 
-			var calendars = BankHolidayCalendarRepository.LoadAll();
+			var calendars = BankHolidayCalendarRepository.LoadAll().Where(c => c.Id.Value == Id);
 			calendars.Count().Should().Be.EqualTo(0);
 
-			var dates = BankHolidayDateRepository.LoadAll();
+			var dates = BankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == Id);
 			dates.Count().Should().Be.EqualTo(0);
 		}
 	}

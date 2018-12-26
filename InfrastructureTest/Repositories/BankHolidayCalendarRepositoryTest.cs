@@ -182,41 +182,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldDeleteBankHolidayCalendar()
-		{
-			var calendar = CreateAggregateWithCorrectBusinessUnit();
-			calendar.SetDeleted();
-			PersistAndRemoveFromUnitOfWork(calendar);
-
-			var repository = new BankHolidayCalendarRepository(CurrUnitOfWork);
-			var result = repository.LoadAll();
-
-			result.Count().Should().Be.EqualTo(0);
-		}
-
-		[Test]
 		public void ShouldDeleteBankHolidayDatesWhenDeletingBankHolidayCalendar()
 		{
 			var calendar = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(calendar);
 			PersistAndRemoveFromUnitOfWork(calendar.Dates);
 
-			calendar.SetDeleted();
-			PersistAndRemoveFromUnitOfWork(calendar);
-
-			var date = calendar.Dates.First();
-			calendar.DeleteDate(date.Id.Value);
-			PersistAndRemoveFromUnitOfWork(date);
-
-			calendar.Dates.Count().Should().Be.EqualTo(0);
+			var Id = calendar.Id.Value;
 
 			var repository = new BankHolidayCalendarRepository(CurrUnitOfWork);
-			var result = repository.LoadAll();
+
+			repository.Delete(Id);
+
+			var result = repository.LoadAll().Where(c=>c.Id.Value == Id);
 
 			result.Count().Should().Be.EqualTo(0);
 
 			var _repository = new BankHolidayDateRepository(CurrUnitOfWork);
-			var _result = _repository.LoadAll();
+			var _result = _repository.LoadAll().Where(d=>d.Calendar.Id== Id);
 
 			_result.Count().Should().Be.EqualTo(0);
 		}

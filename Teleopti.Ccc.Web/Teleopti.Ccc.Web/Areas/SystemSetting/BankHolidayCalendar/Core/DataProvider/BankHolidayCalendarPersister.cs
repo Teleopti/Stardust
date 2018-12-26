@@ -81,14 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		{
 			try
 			{
-				var calendar = _bankHolidayCalendarRepository.Load(Id);
-				calendar.SetDeleted();
-				_bankHolidayCalendarRepository.Add(calendar);
-				calendar.Dates?.ToList().ForEach(d =>
-				{
-					calendar.DeleteDate(d.Id.Value);
-					_bankHolidayDateRepository.Add(d);
-				});
+				_bankHolidayCalendarRepository.Delete(Id);
 			}
 			catch (Exception ex)
 			{

@@ -26,11 +26,7 @@ namespace Teleopti.Ccc.Domain.SystemSettingWeb
 		public virtual bool IsDeleted
 		{
 			get { return _isDeleted; }
-		}
-
-		public virtual void SetDeleted()
-		{
-			_isDeleted = true;
+			set { _isDeleted = value; }
 		}
 
 		public virtual void AddDate(IBankHolidayDate date)
