@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Domain.SystemSettingWeb
 			}
 			set
 			{
+				value.AddDate(this);
 				_calendar = value;
 			}
 		}

@@ -4,7 +4,7 @@
 		<button
 			nz-button
 			nz-tooltip
-			*ngIf="!isAddingNewCalendar && !isEdittingCalendar"
+			*ngIf="!isAddingNewCalendar"
 			nzType="primary"
 			nzShape="circle"
 			nzSize="large"
@@ -23,14 +23,6 @@
 		[bankHolidayCalendarsList]="bankHolidayCalendarsList"
 		[exitAddNewBankCalendar]="exitAddNewBankCalendar"
 	></bank-holiday-calendar-add>
-
-	<bank-holiday-calendar-edit
-		*ngIf="isEdittingCalendar"
-		[edittingCalendar]="edittingCalendar"
-		[bankHolidayCalendarsList]="bankHolidayCalendarsList"
-		[exitEdittingBankCalendar]="exitEdittingBankCalendar"
-	>
-	</bank-holiday-calendar-edit>
 
 	<div *ngIf="!isAddingNewCalendar && !isEdittingCalendar" class="bank-holiday-calendar-list">
 		<nz-collapse *ngIf="bankHolidayCalendarsList.length > 0">
@@ -57,7 +49,7 @@
 					<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar(calendar)">
 						{{ 'Delete' | translate }}
 					</button>
-					<button nz-button nzType="primary" (click)="startEditBankCalendar(calendar)">
+					<button nz-button nzType="primary" (click)="editHolidayCanlendar(calendar)">
 						{{ 'Edit' | translate }}
 					</button>
 				</div>

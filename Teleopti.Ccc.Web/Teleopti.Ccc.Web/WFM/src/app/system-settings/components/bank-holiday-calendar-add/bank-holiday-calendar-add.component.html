@@ -72,7 +72,9 @@
 						<nz-list [nzDataSource]="year.Dates" [nzRenderItem]="date">
 							<ng-template #date let-date>
 								<nz-list-item class="bank-holiday-calendar-list-date relative">
-									<span class="date-indicator absolute" [hidden]="!date.IsLastAdded"></span>
+									<span class="date-indicator absolute" [hidden]="!date.IsLastAdded">
+										<!-- <i nz-icon type="right" theme="outline"></i> -->
+									</span>
 									<span class="inline-block">
 										{{ 'Date' | translate }} :
 

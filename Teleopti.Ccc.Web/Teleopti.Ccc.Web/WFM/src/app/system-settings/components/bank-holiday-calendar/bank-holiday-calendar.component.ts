@@ -17,7 +17,6 @@ export class BankHolidayCalendarComponent implements OnInit {
 	bankHolidayCalendarsList: BankHolidayCalendar[] = [];
 	isAddingNewCalendar: boolean = false;
 	isEdittingCalendar: boolean = false;
-	edittingCalendar: BankHolidayCalendar;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
@@ -27,14 +26,6 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.bankCalendarDataService.getBankHolidayCalendars().subscribe(calendars => {
-			calendars.forEach(c => {
-				c.Years.forEach(y => {
-					y.Dates.forEach(d => {
-						d.Date = moment(d.Date).format(this.dateFormat);
-					});
-				});
-			});
-
 			this.bankHolidayCalendarsList = calendars.sort((c, n) => {
 				return c.Name.localeCompare(n.Name);
 			});
@@ -68,14 +59,5 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	exitAddNewBankCalendar = () => {
 		this.isAddingNewCalendar = false;
-	};
-
-	startEditBankCalendar(calendar: BankHolidayCalendar) {
-		this.edittingCalendar = calendar;
-		this.isEdittingCalendar = true;
-	}
-
-	exitEdittingBankCalendar = () => {
-		this.isEdittingCalendar = false;
 	};
 }

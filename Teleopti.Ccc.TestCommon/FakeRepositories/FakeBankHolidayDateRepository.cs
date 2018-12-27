@@ -13,21 +13,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Add(IBankHolidayDate obj)
 		{
 			if (!obj.Id.HasValue)
-			{
 				obj.SetId(Guid.NewGuid());
-				_bankHolidayDates.Add(obj);
-			}
-				
-			else
-			{
-				var date = _bankHolidayDates.ToList().Find(_d => _d.Id.Value == obj.Id.Value);
-				_bankHolidayDates.Remove(date);
-				date.Date = obj.Date;
-				date.Description = obj.Description;
-				if (obj.IsDeleted)
-					date.SetDeleted();
-				_bankHolidayDates.Add(date);
-			}
+			_bankHolidayDates.Add(obj);
 		}
 
 		public IBankHolidayDate Get(Guid id)
@@ -42,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IBankHolidayDate> LoadAll()
 		{
-			return _bankHolidayDates.Where(d => !d.IsDeleted);
+			return _bankHolidayDates.Where(d=>!d.IsDeleted);
 		}
 
 		public void Remove(IBankHolidayDate root)
