@@ -80,7 +80,8 @@ describe('ChangePasswordComponent', () => {
 	it('should check for wrong password', () => {
 		const authFailedResponse = {
 			IsSuccessful: true,
-			IsAuthenticationSuccessful: false
+			IsAuthenticationSuccessful: false,
+			ErrorCode: null
 		};
 		spyOn(passwordService, 'setPassword').and.returnValue(of(authFailedResponse));
 
@@ -93,7 +94,6 @@ describe('ChangePasswordComponent', () => {
 		page.okButton.nativeElement.click();
 
 		fixture.detectChanges();
-
 		expect(component.currentPasswordControl.hasError(component.INVALID_PASSWORD_ERROR)).toEqual(true);
 	});
 
