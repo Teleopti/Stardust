@@ -7,13 +7,14 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping
 {
 	public class BankHolidayModelMapper : IBankHolidayModelMapper
 	{
-		public IBankHolidayDate Map(BankHolidayDateForm date)
+		public IBankHolidayDate Map(IBankHolidayCalendar calendar, BankHolidayDateForm date)
 		{
 			var _date = new BankHolidayDate() { Date = date.Date, Description = date.Description };
 			if (date.Id.HasValue)
 				_date.SetId(date.Id.Value);
 			if (date.IsDeleted)
 				_date.SetDeleted();
+			_date.Calendar = calendar;
 			return _date;
 		}
 

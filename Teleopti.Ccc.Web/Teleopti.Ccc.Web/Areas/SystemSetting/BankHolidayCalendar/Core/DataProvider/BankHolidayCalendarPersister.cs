@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		{
 			dates?.ToList().ForEach(d =>
 			{
-				var _d = _bankHolidayModelMapper.Map(d);
+				var _d = _bankHolidayModelMapper.Map(calendar,d);
 				switch (d.Action)
 				{
 					case BankHolidayDateAction.CREATE:
@@ -60,9 +60,6 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 						break;
 					case BankHolidayDateAction.DELETE:
 						calendar.DeleteDate(_d.Id.Value);
-						break;
-					case BankHolidayDateAction.UPDATE:
-						calendar.UpdateDate(_d);
 						break;
 				}
 				_bankHolidayDateRepository.Add(_d);

@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.SystemSettingWeb
 			if (!_dates.Contains(date))
 			{
 				_dates.Add(date);
-				date.Calendar = this;
 			}
 		}
 
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.Domain.SystemSettingWeb
 			IBankHolidayDate date;
 			if ((date = _dates.ToList().Find(d => d.Id.Value == Id)) != null)
 			{
-				date.Calendar = this;
 				date.SetDeleted();
 			}
 		}
@@ -53,11 +51,13 @@ namespace Teleopti.Ccc.Domain.SystemSettingWeb
 		public virtual void UpdateDate(IBankHolidayDate date)
 		{
 			InParameter.NotNull(nameof(date), date);
-			if (_dates.Contains(date))
+			IBankHolidayDate _date;
+			if ((_date = _dates.ToList().Find(d => d.Id.Value == date.Id.Value)) != null)
 			{
-				_dates.Remove(date);
-				_dates.Add(date);
-				date.Calendar = this;
+				_dates.Remove(_date);
+				_date.Date = date.Date;
+				_date.Description = date.Description;
+				_dates.Add(_date);
 			}
 		}
 
