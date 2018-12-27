@@ -11,6 +11,7 @@ export interface ChangePasswordRequest {
 export interface ChangePasswordResultInfo {
 	IsSuccessful: boolean;
 	IsAuthenticationSuccessful: boolean;
+	ErrorCode: string;
 }
 
 @Injectable()

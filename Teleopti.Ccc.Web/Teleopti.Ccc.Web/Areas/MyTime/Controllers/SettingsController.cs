@@ -112,6 +112,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				{
 					ret.IsAuthenticationSuccessful = false;
 				}
+				else if (httpException.GetHttpCode() == 400)
+				{
+					ret.IsAuthenticationSuccessful = false;
+
+					if (httpException.InnerException != null 
+						&& httpException.InnerException.GetType() == typeof(PasswordStrengthException))
+					{
+						ret.ErrorCode = "Error_Policy";
+					}					
+				}
 			}
 			return Json(ret);
 		}

@@ -24840,6 +24840,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password policy error.
+        /// </summary>
+        public static string PasswordPolicyError {
+            get {
+                return ResourceManager.GetString("PasswordPolicyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to invalid password;.
         /// </summary>
         public static string PasswordPolicyErrorMsgSemicolon {

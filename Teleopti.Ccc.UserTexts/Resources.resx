@@ -18005,4 +18005,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
     <value>You have modified this shift. Close and lose changes?</value>
   </data>
+  <data name="PasswordPolicyError" xml:space="preserve">
+    <value>Password policy error</value>
+    <comment>Title of the password policy error box</comment>
+  </data>
 </root>

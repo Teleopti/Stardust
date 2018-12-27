@@ -38,7 +38,7 @@ export class EnsurePasswordIsNewValidation {
 })
 export class ChangePasswordComponent {
 	readonly INVALID_PASSWORD_ERROR = 'InvalidPassword';
-	readonly POLICY_ERROR = 'MeetsPolicy';
+	readonly POLICY_ERROR = 'Error_Policy';
 	readonly ENSURE_PASSWORD_NEW_ERROR = 'IsNewPassword';
 	readonly MATCHING_PASSWORDS = 'MatchPassword';
 	isVisible = false;
@@ -91,10 +91,10 @@ export class ChangePasswordComponent {
 					NewPassword: this.changePasswordForm.get('newPassword').value
 				})
 				.subscribe({
-					next: ({ IsSuccessful, IsAuthenticationSuccessful }) => {
-						if (!IsAuthenticationSuccessful) {
+					next: ({ IsSuccessful, IsAuthenticationSuccessful, ErrorCode }) => {
+						if (!IsAuthenticationSuccessful && ErrorCode === null) {
 							this.currentPasswordControl.setErrors({ [this.INVALID_PASSWORD_ERROR]: true });
-						} else if (!IsSuccessful) {
+						} else if (!IsSuccessful && ErrorCode === this.POLICY_ERROR) {
 							this.newPasswordControl.setErrors({ [this.POLICY_ERROR]: true });
 						} else {
 							this.close();

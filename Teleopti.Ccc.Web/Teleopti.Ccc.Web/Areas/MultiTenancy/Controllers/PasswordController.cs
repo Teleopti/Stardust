@@ -1,10 +1,12 @@
-﻿using System.Web.Http;
+﻿using System.Web;
+using System.Web.Http;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
+using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
@@ -13,6 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		private readonly IPasswordManager _passwordManager;
 		private const string Error_TokenInvalid = "Error_TokenInvalid";
 		private const string Error_RequestFailed = "Error_RequestFailed";
+		private const string Error_Policy = "Error_Policy";
+
+
 
 		public PasswordController(IPasswordManager passwordManager)
 		{
@@ -33,14 +38,27 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[NoTenantAuthentication]
 		public virtual IHttpActionResult Reset([FromBody]PasswordResetModel model)
 		{
-			var resetSuccess = _passwordManager.Reset(model?.NewPassword, model?.ResetToken);
-
 			var resultModel = new BaseResultModel();
-			if (!resetSuccess || model == null)
+			try
 			{
-				resultModel.Errors.Add(Error_RequestFailed);
+				var resetSuccess = _passwordManager.Reset(model?.NewPassword, model?.ResetToken);
+				if (!resetSuccess || model == null)
+				{
+					resultModel.Errors.Add(Error_RequestFailed);
+				}
 			}
-
+			catch (HttpException httpException)
+			{
+				if (httpException.GetHttpCode() == 400)
+				{
+					if (httpException.InnerException != null
+						&& httpException.InnerException.GetType() == typeof(PasswordStrengthException))
+					{
+						resultModel.Errors.Add(Error_Policy);
+					}
+				}				
+			}
+			
 			return Ok(resultModel);
 		}
 

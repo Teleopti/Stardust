@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 					var personInfo = _findPersonInfo.GetById(personId);
 					personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfo.ApplicationLogonInfo.LogonName, newPassword, _currentHashFunction);
 				}
-				catch (PasswordStrengthException)
+				catch (PasswordStrengthException exception)
 				{
-					throw new HttpException(400, "The new password does not follow the password policy.");
+					throw new HttpException(400, "The new password does not follow the password policy.", exception);
 				}
 				return true;
 			}
@@ -151,9 +151,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			{
 				personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfo.ApplicationLogonInfo.LogonName, newPassword, _currentHashFunction);
 			}
-			catch (PasswordStrengthException)
+			catch (PasswordStrengthException passwordStrength)
 			{
-				throw new HttpException(400, "The new password does not follow the password policy.");
+				throw new HttpException(400, "The new password does not follow the password policy.", passwordStrength);
 			}
 		}
 
