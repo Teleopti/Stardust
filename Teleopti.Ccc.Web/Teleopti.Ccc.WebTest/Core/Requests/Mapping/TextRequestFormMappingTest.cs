@@ -144,7 +144,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
 			userTimeZone.Is(timeZone);
-			var form = new TextRequestForm { FullDay = true };
+			var form = new TextRequestForm { FullDay = true,
+				Period = new DateTimePeriodForm
+				{
+					StartDate = new DateOnly(new DateTime(2012, 5, 11)),
+					StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+					EndDate = new DateOnly(new DateTime(2012, 5, 11)),
+					EndTime = new TimeOfDay(TimeSpan.FromHours(23).Add(TimeSpan.FromSeconds(59)))
+				},
+			};
 
 			var result = target.Map(form);
 
@@ -153,6 +161,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var expected = new DateTimePeriod(startTime, endTime);
 
+			result.Request.Period.Should().Be(expected);
+		}
+
+		[Test]
+		public void ShouldMapCorrectPeriodWithFullDay()
+		{
+			var timeZone = TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(11), "", "");
+			userTimeZone.Is(timeZone);
+			var form = new TextRequestForm
+			{
+				Period = new DateTimePeriodForm
+				{
+					StartDate = DateOnly.Today,
+					StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+					EndDate = DateOnly.Today,
+					EndTime = new TimeOfDay(TimeSpan.FromHours(23).Add(TimeSpan.FromSeconds(59)))
+				},
+				FullDay = true
+			};
+			var result = target.Map(form);
+
+			var startTime = TimeZoneHelper.ConvertToUtc(DateOnly.Today.Date, timeZone);
+			var endTime = TimeZoneHelper.ConvertToUtc(DateOnly.Today.Date.AddDays(1).AddMinutes(-1), timeZone);
+
+			var expected = new DateTimePeriod(startTime, endTime);
 			result.Request.Period.Should().Be(expected);
 		}
 	}

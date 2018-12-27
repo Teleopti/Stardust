@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (source.FullDay)
 			{
 				var sourceTimeZone = _userTimeZone.TimeZone();
-				var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 0, 0, 0), sourceTimeZone);
-				var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 23, 59, 0), sourceTimeZone);
+				var startTime = TimeZoneHelper.ConvertToUtc(source.Period.StartDate.Date, sourceTimeZone);
+				var endTime = TimeZoneHelper.ConvertToUtc(source.Period.StartDate.Date.AddDays(1).AddMinutes(-1), sourceTimeZone);
 				period = new DateTimePeriod(startTime, endTime);
 			}
 			else
