@@ -33,15 +33,13 @@ describe('BankHolidayCalendarComponent', () => {
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
 		fixture.autoDetectChanges(true);
-
-		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 	}));
 
-	it('should create component', () => {
+	it('should create component', async(() => {
 		expect(component).toBeTruthy();
-	});
+	}));
 
-	it('should render title', () => {
+	it('should render title', async(() => {
 		var bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
 
 		expect(bankHolidayCalendarSettings).toBeTruthy();
@@ -49,13 +47,13 @@ describe('BankHolidayCalendarComponent', () => {
 		expect(
 			bankHolidayCalendarSettings.getElementsByTagName('h2')[0].innerHTML.indexOf('BankHolidayCalendars') > -1
 		).toBeTruthy();
-	});
+	}));
 
-	it('should show add new bank holiday calendar panel after clicking plus icon', () => {
+	it('should show add new bank holiday calendar panel after clicking plus icon', async(() => {
 		document.getElementsByClassName('add-bank-holiday-calendar-icon')[0].dispatchEvent(new Event('click'));
 
 		var addCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
 
 		expect(addCalendarPanel).toBeTruthy();
-	});
+	}));
 });
