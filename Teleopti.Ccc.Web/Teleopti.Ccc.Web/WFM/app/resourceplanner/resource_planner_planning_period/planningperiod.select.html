@@ -48,7 +48,7 @@
 <div class="con-fluid-row">
 	<div
 		class="con-fluid-flex planingperiod-container"
-		ng-repeat="p in vm.planningPeriods track by p.Id | filter: vm.filterTime "
+		ng-repeat="p in vm.planningPeriods | filter: {PeriodString: vm.filterTime} track by p.Id" ng-init="p.PeriodString= (p.StartDate | amDateFormat:'LL') + ' - ' + (p.EndDate | amDateFormat:'LL')"
 	>
 		<div class="list-content material-depth-1 plan-group-pp" ng-click="vm.selectPp(p)">
 			<div
