@@ -179,7 +179,7 @@
 		var timeLabels = element.querySelectorAll('.interval .label');
 		expect(timeLabels[0].className.indexOf('highlight') >= 0).toBeFalsy();
 		expect(timeLabels[25].className.indexOf('highlight') >= 0).toBeTruthy();
-		expect(timeLabels[49].className.indexOf('highlight') >= 0).toBeFalsy();
+		expect(timeLabels[48].className.indexOf('highlight') >= 0).toBeFalsy();
 	});
 
 	it('should show schedule correctly', function () {
@@ -217,9 +217,9 @@
 
 		var shiftLayers = element.querySelectorAll('.shift-layer');
 		expect(shiftLayers[0].style.width).toEqual('120px');
-		expect(shiftLayers[0].style.left).toEqual((24 + 8) * 60 + 45 + 'px');
+		expect(shiftLayers[0].style.left).toEqual((12 + 8) * 60 + 45 + 'px');
 		expect(shiftLayers[1].style.width).toEqual('15px');
-		expect(shiftLayers[1].style.left).toEqual((24 + 10) * 60 + 45 + 'px');
+		expect(shiftLayers[1].style.left).toEqual((12 + 10) * 60 + 45 + 'px');
 	});
 
 	it('should show schedule correctly on DST', function () {
@@ -256,9 +256,9 @@
 
 		var shiftLayers = element.querySelectorAll('.shift-layer');
 		expect(shiftLayers[0].style.width).toEqual('60px');
-		expect(shiftLayers[0].style.left).toEqual((24 + 1) * 60 + 'px');
+		expect(shiftLayers[0].style.left).toEqual((12 + 1) * 60 + 'px');
 		expect(shiftLayers[1].style.width).toEqual('120px');
-		expect(shiftLayers[1].style.left).toEqual((24 + 2) * 60 + 'px');
+		expect(shiftLayers[1].style.left).toEqual((12 + 2) * 60 + 'px');
 	});
 
 	it('should able to select an activity', function () {
@@ -5032,7 +5032,7 @@
 		refreshButton.click();
 
 		scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', {
-			isStaleSchedule:true
+			isStaleSchedule: true
 		});
 
 		scope.$apply();
