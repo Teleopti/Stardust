@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService, NzNotificationService } from 'ng-zorro-antd';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
@@ -17,8 +17,8 @@ import { BankCalendarDataService } from '../../shared';
 	providers: [BankCalendarDataService]
 })
 export class BankHolidayCalendarEditComponent implements OnInit {
-	@Input() bankHolidayCalendarsList: BankHolidayCalendar[];
 	@Input() edittingCalendar: BankHolidayCalendar;
+	@Input() bankHolidayCalendarsList: BankHolidayCalendar[];
 	@Input() exitEdittingBankCalendar: Function;
 
 	yearFormat: string = 'YYYY';
@@ -33,7 +33,8 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
 		private modalService: NzModalService,
-		private translate: TranslateService
+		private translate: TranslateService,
+		private noticeService: NzNotificationService
 	) {}
 
 	ngOnInit(): void {
@@ -59,19 +60,6 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 		});
 
 		this.edittingCalendarYears[0].Active = true;
-	}
-
-	confirmDeleteHolidayCanlendar(calendar: BankHolidayCalendar) {
-		this.modalService.confirm({
-			nzTitle: this.translate.instant('AreYouSureToDeleteThisBankHolidayCalendar'),
-			nzContent: this.translate.instant('Name') + ': ' + calendar.Name,
-			nzOkType: 'danger',
-			nzOkText: this.translate.instant('Delete'),
-			nzCancelText: this.translate.instant('Cancel'),
-			nzOnOk: () => {
-				this.deleteHolidayCanlendar(calendar);
-			}
-		});
 	}
 
 	checkNewCalendarName() {
@@ -186,10 +174,29 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 		this.edittingCalendarYears = [];
 	}
 
+	confirmDeleteHolidayCanlendar(calendar: BankHolidayCalendar) {
+		this.modalService.confirm({
+			nzTitle: this.translate.instant('AreYouSureToDeleteThisBankHolidayCalendar'),
+			nzContent: this.translate.instant('Name') + ': ' + calendar.Name,
+			nzOkType: 'danger',
+			nzOkText: this.translate.instant('Delete'),
+			nzCancelText: this.translate.instant('Cancel'),
+			nzOnOk: () => {
+				this.deleteHolidayCanlendar(calendar);
+			}
+		});
+	}
+
 	deleteHolidayCanlendar(calendar: BankHolidayCalendar) {
-		this.bankCalendarDataService.deleteBankHolidayCalendar(this.edittingCalendar.Id).subscribe(result => {
-			if (result) {
-				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(this.edittingCalendar), 1);
+		this.bankCalendarDataService.deleteBankHolidayCalendar(calendar.Id).subscribe(result => {
+			if (result === true) {
+				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
+				this.noticeService.success(
+					this.translate.instant('Success'),
+					this.translate
+						.instant('BankHolidayCalendarHasBeenSuccessfullyDeleted')
+						.replace('{0}', this.edittingCalendar.Name)
+				);
 				this.exitEdittingBankCalendar();
 			}
 		});

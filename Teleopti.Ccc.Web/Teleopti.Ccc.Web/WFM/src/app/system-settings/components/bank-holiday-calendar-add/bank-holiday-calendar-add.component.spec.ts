@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -24,7 +25,8 @@ describe('BankHolidayCalendarAddComponent', () => {
 				NgZorroAntdModule.forRoot(),
 				FormsModule,
 				ReactiveFormsModule,
-				HttpClientTestingModule
+				HttpClientTestingModule,
+				BrowserAnimationsModule
 			],
 			providers: [TranslateService, UserService]
 		}).compileComponents();

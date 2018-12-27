@@ -24,5 +24,5 @@ export interface BankHolidayCalendarDate {
 }
 
 export interface BankHolidayCalendarDateItem extends BankHolidayCalendarDate {
-	IsLastAdded: boolean;
+	IsLastAdded?: boolean;
 }
