@@ -154,11 +154,12 @@
 			};
 		}
 
-		function IntervalViewModel(datetime, isTheEnd) {
+		function IntervalViewModel(date, timezone, datetime, isTheEnd) {
 			return {
 				Label: datetime.format('LT'),
 				Time: datetime,
-				Ticks: getTicks(datetime, isTheEnd)
+				Ticks: getTicks(datetime, isTheEnd),
+				IsSameDate: moment.tz(date, timezone).isSame(datetime, 'days')
 			};
 		}
 
@@ -179,7 +180,7 @@
 			var startTime = timeRange.Start.clone();
 			var endTime = timeRange.End.clone();
 			while (startTime <= endTime) {
-				intervals.push(new IntervalViewModel(startTime.clone(), startTime.isSame(endTime)));
+				intervals.push(new IntervalViewModel(date, timezone, startTime.clone(), startTime.isSame(endTime)));
 				startTime = startTime.add(1, 'hours');
 			}
 			return intervals;

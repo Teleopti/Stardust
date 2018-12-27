@@ -31,14 +31,7 @@
 					<span class="left-scroll" ng-show="vm.showScrollLeftButton" ng-click="vm.scroll(-60)"><i class="mdi mdi-chevron-left"></i></span>
 					<span class="right-scroll" ng-show="vm.showScrollRightButton" ng-click="vm.scroll(60)"><i class="mdi mdi-chevron-right"></i></span>
 				</div>
-				<div ng-repeat="interval in vm.timelineVm.Intervals" class="interval">
-					<div class="time-label">
-						<span class="label label-info" ng-class="{'highlight': vm.isSameDate(interval)}">{{ interval.Label}}</span>
-					</div>
-					<div class="ticks">
-						<span ng-repeat="tick in interval.Ticks" class="tick" ng-class="{'half-hour': tick.IsHalfHour, 'hour':tick.IsHour}"></span>
-					</div>
-				</div>
+				<div ng-bind-html="vm.timelineHtml"></div>
 			</div>
 		</div>
 	</div>

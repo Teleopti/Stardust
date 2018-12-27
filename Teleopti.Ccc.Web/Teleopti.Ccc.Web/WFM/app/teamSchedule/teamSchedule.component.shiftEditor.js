@@ -22,6 +22,7 @@
 		'$interval',
 		'$wfmConfirmModal',
 		'$translate',
+		'$sce',
 		'TeamSchedule',
 		'serviceDateFormatHelper',
 		'ShiftEditorViewModelFactory',
@@ -40,6 +41,7 @@
 		$interval,
 		$wfmConfirmModal,
 		$translate,
+		$sce,
 		TeamSchedule,
 		serviceDateFormatHelper,
 		ShiftEditorViewModelFactory,
@@ -72,9 +74,28 @@
 			ActivityService.fetchAvailableActivities().then(function (data) {
 				vm.availableActivities = data;
 			});
-
-			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
+			
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
+			var intervals = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange).Intervals;
+			vm.timelineHtml = getTimelineHtml(intervals)
+		};
+
+		function getTimelineHtml(intervals) {
+			var html = '';
+			intervals.forEach(function (interval) {
+				html += '<div class="interval">'
+					+ '<div class="time-label">'
+					+ '<span class="label label-info' + (interval.IsSameDate ? ' highlight' : '') + '">' + interval.Label + '</span>'
+					+ '</div>'
+					+ '<div class="ticks">';
+				interval.Ticks.forEach(function (tick) {
+					html += '<span class="tick' + (tick.IsHalfHour ? ' half-hour' : (tick.IsHour ? ' hour' : '')) + '"></span>'
+				});
+
+				html += '</div>'
+					+ '</div>';
+			});
+			return $sce.trustAsHtml(html);
 		};
 
 		vm.cancelEditing = function () {
