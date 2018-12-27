@@ -75,12 +75,6 @@
 
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
-
-
-		};
-
-		vm.$onDestroy = function () {
-			interact('.shift-layer').unset();
 		};
 
 		vm.cancelEditing = function () {
@@ -260,6 +254,7 @@
 		}
 
 		function bindResizeLayerEvent() {
+			interact('.shift-layer').unset();
 			interact('.shift-layer')
 				.resizable({
 					allowFrom: '.selected:not(.non-resizable)',
