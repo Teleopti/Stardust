@@ -20,19 +20,12 @@
 			var currentTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var layers = createShiftLayers(schedule.Projection, date, timezone, currentTimezone);
 
-			var hasUnderlyingSchedules = !!schedule.UnderlyingScheduleSummary;
-			var underlyingScheduleSummary = hasUnderlyingSchedules
-				? getUnderlyingSummarySchedule(schedule.UnderlyingScheduleSummary, date, timezone, currentTimezone)
-				: null;
-
 			this.Date = date;
 			this.Name = schedule.Name;
 			this.Timezone = schedule.Timezone.IanaId;
 			this.TimezoneName = schedule.Timezone.DisplayName;
 			this.ProjectionTimeRange = getProjectionTimeRange(layers);
 			this.ShiftLayers = layers;
-			this.HasUnderlyingSchedules = hasUnderlyingSchedules;
-			this.UnderlyingScheduleSummary = underlyingScheduleSummary;
 		}
 
 		function copyToNewLayer(layer, startTime, endTime) {
@@ -58,51 +51,7 @@
 
 			return layers;
 		}
-
-		function getUnderlyingSummarySchedule(underlyingScheduleSummary, date, timezone, currentTimezone) {
-			return {
-				PersonalActivities: getUnderlyingSummaryViewModel(
-					underlyingScheduleSummary.PersonalActivities,
-					date,
-					timezone,
-					currentTimezone
-				),
-				PersonPartTimeAbsences: getUnderlyingSummaryViewModel(
-					underlyingScheduleSummary.PersonPartTimeAbsences,
-					date,
-					timezone,
-					currentTimezone
-				),
-				PersonMeetings: getUnderlyingSummaryViewModel(
-					underlyingScheduleSummary.PersonMeetings,
-					date,
-					timezone,
-					currentTimezone
-				)
-			};
-		}
-
-		function getUnderlyingSummaryViewModel(items, date, timezone, currentTimezone) {
-			var result = [];
-			if (items && items.length) {
-				result = items.map(function (item) {
-					var startInToTimezone = moment
-						.tz(item.Start, currentTimezone)
-						.clone()
-						.tz(timezone);
-					var endInToTimezone = moment
-						.tz(item.End, currentTimezone)
-						.clone()
-						.tz(timezone);
-					var timeSpan = getTimeSpan(startInToTimezone, endInToTimezone);
-					return {
-						TimeSpan: timeSpan,
-						Description: item.Description
-					};
-				});
-			}
-			return result;
-		}
+		
 
 		function getProjectionTimeRange(layers) {
 			if (!layers.length) {
