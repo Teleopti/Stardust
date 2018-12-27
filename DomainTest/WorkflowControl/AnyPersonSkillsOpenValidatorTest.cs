@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 		public void ShouldHandleMultiplePersonSkills()
 		{
-			var skill2 = SkillFactory.CreateSkill("Mail");
+			var skill2 = SkillFactory.CreateSkill("Mail").WithId();
 			setupOpenHours(_skill);
 			setupOpenHours(skill2, true);
 			_person.AddSkill(skill2, new DateOnly(2016, 4, 1));

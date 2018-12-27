@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[SetUp]
 		public void Setup()
 		{
-			_skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+			_skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 
 			var date = new DateOnly(2016, 4, 1);
 			_person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
