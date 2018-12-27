@@ -1,34 +1,36 @@
+using System.Text;
+
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {
 	public static class DatePatternConverter
 	{
 		public static string TojQueryPattern(string dotNetPattern)
 		{
-			var jQueryPatter = dotNetPattern;
+			var jQueryPattern = new StringBuilder(dotNetPattern);
+			
+			jQueryPattern = jQueryPattern.Replace("dddd", "DD");
+			jQueryPattern = jQueryPattern.Replace("ddd", "D");
 
-			jQueryPatter = jQueryPatter.Replace("dddd", "DD");
-			jQueryPatter = jQueryPatter.Replace("ddd", "D");
-
-			if (jQueryPatter.Contains("MMMM"))
+			if (dotNetPattern.Contains("MMMM"))
 			{
-				jQueryPatter = jQueryPatter.Replace("MMMM", "MM");
+				jQueryPattern = jQueryPattern.Replace("MMMM", "MM");
 			}
-			else if (jQueryPatter.Contains("MMM"))
+			else if (dotNetPattern.Contains("MMM"))
 			{
-				jQueryPatter = jQueryPatter.Replace("MMM", "M");
+				jQueryPattern = jQueryPattern.Replace("MMM", "M");
 			}
-			else if (jQueryPatter.Contains("MM"))
+			else if (dotNetPattern.Contains("MM"))
 			{
-				jQueryPatter = jQueryPatter.Replace("MM", "mm");
+				jQueryPattern = jQueryPattern.Replace("MM", "mm");
 			}
 			else
 			{
-				jQueryPatter = jQueryPatter.Replace("M", "m");
+				jQueryPattern = jQueryPattern.Replace("M", "m");
 			}
 
-			jQueryPatter = jQueryPatter.Contains("yyyy") ? jQueryPatter.Replace("yyyy", "yy") : jQueryPatter;
+			jQueryPattern = dotNetPattern.Contains("yyyy") ? jQueryPattern.Replace("yyyy", "yy") : jQueryPattern;
 
-			return jQueryPatter;
+			return jQueryPattern.ToString();
 		}
 	}
 }
