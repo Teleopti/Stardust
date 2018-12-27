@@ -104,6 +104,7 @@ Wfm_Stardust_EnableScaleout_77366 = true
 Wfm_AuditTrail_StaffingAuditTrail_78125 = RC
 Wfm_AuditTrail_GenericAuditTrail_74938 = RC
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
+WFM_ProbabilityView_ImproveResponseTime_80040 = RC
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...

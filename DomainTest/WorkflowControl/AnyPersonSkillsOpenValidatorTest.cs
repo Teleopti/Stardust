@@ -16,15 +16,15 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	[DomainTest]
 	[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
 	public class AnyPersonSkillsOpenValidatorTestOpt
 	{
-		public readonly IAnyPersonSkillsOpenValidator Target;
+		public IAnyPersonSkillsOpenValidator Target;
 		public FakeSkillRepository SkillRepository;
+
 		private IPerson _person;
 		private Absence _absence;
 		private ISkill _skill;
@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void Setup2()
 		{
 			_skill = SkillFactory.CreateSkill("Phone").WithId();
+			
 			var date = new DateOnly(2016, 4, 1);
 			_person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
 			_person.AddSkill(_skill, date);
@@ -176,37 +177,32 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 		private void setupOpenHours(ISkill skill, bool openWeekend = false)
 		{
-			if (SkillRepository.OpenHoursList == null)
-				SkillRepository.OpenHoursList = new List<SkillOpenHoursLight>();
-			var openHours = new List<SkillOpenHoursLight>()
-			{
-				new SkillOpenHoursLight{WeekdayIndex = 1,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id},
-				new SkillOpenHoursLight{WeekdayIndex = 2,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id},
-				new SkillOpenHoursLight{WeekdayIndex = 3,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id},
-				new SkillOpenHoursLight{WeekdayIndex = 4,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id},
-				new SkillOpenHoursLight{WeekdayIndex = 5,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id}
-			};
+			var timePeriod = new TimePeriod(TimeSpan.FromTicks(288000000000), TimeSpan.FromTicks(648000000000));
 			if (openWeekend)
 			{
-				openHours.Add(new SkillOpenHoursLight
-				{
-					WeekdayIndex = 0,
-					SkillId = skill.Id.GetValueOrDefault(),
-					StartTimeTicks = 288000000000,
-					EndTimeTicks = 648000000000,
-					TimeZoneId = skill.TimeZone.Id
-				});
-				openHours.Add(new SkillOpenHoursLight
-				{
-					WeekdayIndex = 6,
-					SkillId = skill.Id.GetValueOrDefault(),
-					StartTimeTicks = 288000000000,
-					EndTimeTicks = 648000000000,
-					TimeZoneId = skill.TimeZone.Id
-				});
-
+				skill.IsOpen(new Dictionary<DayOfWeek, TimePeriod>
+					{
+						{ DayOfWeek.Friday, timePeriod},
+						{ DayOfWeek.Monday, timePeriod},
+						{ DayOfWeek.Tuesday, timePeriod},
+						{ DayOfWeek.Wednesday, timePeriod},
+						{ DayOfWeek.Thursday, timePeriod},
+						{ DayOfWeek.Sunday, timePeriod},
+						{ DayOfWeek.Saturday, timePeriod}
+					});
 			}
-			SkillRepository.OpenHoursList.AddRange(openHours);
+			else
+			{
+				skill.IsOpen(new Dictionary<DayOfWeek, TimePeriod>
+				{
+					{ DayOfWeek.Friday, timePeriod},
+					{ DayOfWeek.Monday, timePeriod},
+					{ DayOfWeek.Tuesday, timePeriod},
+					{ DayOfWeek.Wednesday, timePeriod},
+					{ DayOfWeek.Thursday, timePeriod}
+				});
+			}
+			SkillRepository.Add(skill);
 		}
 	}
 

@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,27 +14,28 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	[DomainTest]
 	[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
 	public class AnyPersonSkillsOpenValidatorNoSkillActivityOptimizationOnTest
 	{
-		public readonly IAnyPersonSkillsOpenValidator Target;
-		private IPerson _person;
-		private Absence _absence;
-		private ISkill _skill;
+		public IAnyPersonSkillsOpenValidator Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillRepository SkillRepository;
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario Scenario;
 		public FakeScenarioRepository ScenarioRepository;
 
+		private IPerson _person;
+		private Absence _absence;
+		private ISkill _skill;
+
 		[SetUp]
 		public void Setup()
 		{
-			_skill = SkillFactory.CreateSkill("Phone");
+			_skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+
 			var date = new DateOnly(2016, 4, 1);
 			_person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -80,37 +80,32 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 		private void setupOpenHours(ISkill skill, bool openWeekend = false)
 		{
-			if (SkillRepository.OpenHoursList == null)
-				SkillRepository.OpenHoursList = new List<SkillOpenHoursLight>();
-			var openHours = new List<SkillOpenHoursLight>()
-			{
-				new SkillOpenHoursLight{WeekdayIndex = 1,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id},
-				new SkillOpenHoursLight{WeekdayIndex = 2,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id},
-				new SkillOpenHoursLight{WeekdayIndex = 3,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id},
-				new SkillOpenHoursLight{WeekdayIndex = 4,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id},
-				new SkillOpenHoursLight{WeekdayIndex = 5,SkillId = skill.Id.GetValueOrDefault(),StartTimeTicks = 288000000000, EndTimeTicks = 648000000000, TimeZoneId = skill.TimeZone.Id}
-			};
+			var timePeriod = new TimePeriod(TimeSpan.FromTicks(288000000000), TimeSpan.FromTicks(648000000000));
 			if (openWeekend)
 			{
-				openHours.Add(new SkillOpenHoursLight
+				skill.IsOpen(new Dictionary<DayOfWeek, TimePeriod>
 				{
-					WeekdayIndex = 0,
-					SkillId = skill.Id.GetValueOrDefault(),
-					StartTimeTicks = 288000000000,
-					EndTimeTicks = 648000000000,
-					TimeZoneId = skill.TimeZone.Id
+					{ DayOfWeek.Friday, timePeriod},
+					{ DayOfWeek.Monday, timePeriod},
+					{ DayOfWeek.Tuesday, timePeriod},
+					{ DayOfWeek.Wednesday, timePeriod},
+					{ DayOfWeek.Thursday, timePeriod},
+					{ DayOfWeek.Sunday, timePeriod},
+					{ DayOfWeek.Saturday, timePeriod}
 				});
-				openHours.Add(new SkillOpenHoursLight
-				{
-					WeekdayIndex = 6,
-					SkillId = skill.Id.GetValueOrDefault(),
-					StartTimeTicks = 288000000000,
-					EndTimeTicks = 648000000000,
-					TimeZoneId = skill.TimeZone.Id
-				});
-
 			}
-			SkillRepository.OpenHoursList.AddRange(openHours);
+			else
+			{
+				skill.IsOpen(new Dictionary<DayOfWeek, TimePeriod>
+				{
+					{ DayOfWeek.Friday, timePeriod},
+					{ DayOfWeek.Monday, timePeriod},
+					{ DayOfWeek.Tuesday, timePeriod},
+					{ DayOfWeek.Wednesday, timePeriod},
+					{ DayOfWeek.Thursday, timePeriod}
+				});
+			}
+			SkillRepository.Add(skill);
 		}
 	}
 

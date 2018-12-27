@@ -91,18 +91,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			workload.Name = "name from factory";
 			for (var i = 0; i < workload.TemplateWeekCollection.Count; i++)
 			{
-				var open = false;
-				foreach (var day in days)
+				var template = workload.TemplateWeekCollection[i];
+				if (!Enum.IsDefined(typeof(DayOfWeek), i)) continue;
+
+				var item = (DayOfWeek) i;
+				if (days.TryGetValue(item, out var openHour))
 				{
-					var weekDay = (int)day.Key;
-					if (!weekDay.Equals(i)) continue;
-					workload.TemplateWeekCollection[i].ChangeOpenHours(new[] { day.Value });
-					open = true;
-					break;
+					template.ChangeOpenHours(new[] { openHour });
 				}
-				if (!open)
+				else
 				{
-					workload.TemplateWeekCollection[i].Close();
+					template.Close();
 				}
 			}
 

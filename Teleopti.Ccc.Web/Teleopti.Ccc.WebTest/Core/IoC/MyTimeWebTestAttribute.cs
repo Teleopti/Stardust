@@ -104,6 +104,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			isolate.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
 			isolate.UseTestDouble<StaffingDataAvailablePeriodProvider>().For<IStaffingDataAvailablePeriodProvider>();
 			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>(); 
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>(); 
+			isolate.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>(); 
+			isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>(); 
 			isolate.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>(); 
 			isolate.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
 			isolate.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();

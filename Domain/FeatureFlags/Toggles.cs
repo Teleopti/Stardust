@@ -116,7 +116,8 @@
 		Wfm_AuditTrail_GenericAuditTrail_74938,
 		WFM_Connect_NewLandingPage_Remove_GDPR_78132,
 		WFM_Connect_NewLandingPage_WEB_78578,
-		WFM_AbsenceRequest_ImproveThroughput_79139
+		WFM_AbsenceRequest_ImproveThroughput_79139,
+		WFM_ProbabilityView_ImproveResponseTime_80040
 		// ReSharper restore InconsistentNaming
 	}
 }

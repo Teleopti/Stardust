@@ -22,25 +22,24 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.WebTest.Core.IoC;
-
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
-	[TestFixture]
+	[TestFixture(true)]
+	[TestFixture(false)]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerFetchWeekDataTest : IIsolateSystem
+	public class ScheduleApiControllerFetchWeekDataTest : IIsolateSystem, IConfigureToggleManager
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -57,12 +56,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 
-		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+		private readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
 			.WithId();
+
+		private readonly Action<FakeToggleManager> _configure;
+
+		public ScheduleApiControllerFetchWeekDataTest(bool optimizedEnabled)
+		{
+			_configure = t => t.Set(Toggles.WFM_ProbabilityView_ImproveResponseTime_80040, optimizedEnabled);
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			_configure.Invoke(toggleManager);
+		}
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			var person = PersonFactory.CreatePersonWithId();
 			var skill = new Skill("test1").WithId();
 			skill.SkillType = skillType;
@@ -75,10 +85,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			person.WorkflowControlSet = workflowControlSet;
 
+			var skillRepository = new FakeSkillRepository();
+			skillRepository.Has(skill);
+			isolate.UseTestDouble(skillRepository).For<ISkillRepository>();
 			isolate.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
-
 			isolate.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
-
 		}
 
 		[Test]
@@ -1226,6 +1237,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					});
 				}
 			}
+
+			SkillRepository.Has(skill);
 			return skill;
 		}
 
