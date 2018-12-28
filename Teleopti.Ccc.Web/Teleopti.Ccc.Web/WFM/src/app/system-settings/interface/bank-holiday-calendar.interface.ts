@@ -10,6 +10,7 @@ export interface BankHolidayCalendarYear {
 }
 
 export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
+	ModifiedDates?: BankHolidayCalendarDateItem[];
 	YearDate: Date;
 	DisabledDate?: Function;
 	SelectedDates: number[];
@@ -24,5 +25,5 @@ export interface BankHolidayCalendarDate {
 }
 
 export interface BankHolidayCalendarDateItem extends BankHolidayCalendarDate {
-	IsLastAdded: boolean;
+	IsLastAdded?: boolean;
 }

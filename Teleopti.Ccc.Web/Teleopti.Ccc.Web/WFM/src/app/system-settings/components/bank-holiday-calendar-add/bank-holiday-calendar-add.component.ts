@@ -129,6 +129,9 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(result => {
 			if (result.Id.length > 0) {
 				this.bankHolidayCalendarsList.unshift(result);
+				this.bankHolidayCalendarsList.sort((c, n) => {
+					return c.Name.localeCompare(n.Name);
+				});
 				this.exitAddNewBankCalendar();
 			}
 		});

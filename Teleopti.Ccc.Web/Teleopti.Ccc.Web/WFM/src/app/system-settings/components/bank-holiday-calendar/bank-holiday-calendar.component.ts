@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BankCalendarDataService } from '../../shared/bank-calendar-data.service';
 import { BankHolidayCalendar } from '../../interface';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService, NzNotificationService } from 'ng-zorro-antd';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -17,15 +17,25 @@ export class BankHolidayCalendarComponent implements OnInit {
 	bankHolidayCalendarsList: BankHolidayCalendar[] = [];
 	isAddingNewCalendar: boolean = false;
 	isEdittingCalendar: boolean = false;
+	edittingCalendar: BankHolidayCalendar;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
 		private modalService: NzModalService,
-		private translate: TranslateService
+		private translate: TranslateService,
+		private noticeService: NzNotificationService
 	) {}
 
 	ngOnInit(): void {
 		this.bankCalendarDataService.getBankHolidayCalendars().subscribe(calendars => {
+			calendars.forEach(c => {
+				c.Years.forEach(y => {
+					y.Dates.forEach(d => {
+						d.Date = moment(d.Date).format(this.dateFormat);
+					});
+				});
+			});
+
 			this.bankHolidayCalendarsList = calendars.sort((c, n) => {
 				return c.Name.localeCompare(n.Name);
 			});
@@ -47,8 +57,15 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	deleteHolidayCalendar(calendar: BankHolidayCalendar) {
 		this.bankCalendarDataService.deleteBankHolidayCalendar(calendar.Id).subscribe(result => {
-			if (result) {
+			if (result === true) {
 				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
+
+				this.noticeService.success(
+					this.translate.instant('Success'),
+					this.translate
+						.instant('BankHolidayCalendarHasBeenSuccessfullyDeleted')
+						.replace('{0}', calendar.Name)
+				);
 			}
 		});
 	}
@@ -59,5 +76,14 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	exitAddNewBankCalendar = () => {
 		this.isAddingNewCalendar = false;
+	};
+
+	startEditBankCalendar(calendar: BankHolidayCalendar) {
+		this.edittingCalendar = calendar;
+		this.isEdittingCalendar = true;
+	}
+
+	exitEdittingBankCalendar = () => {
+		this.isEdittingCalendar = false;
 	};
 }

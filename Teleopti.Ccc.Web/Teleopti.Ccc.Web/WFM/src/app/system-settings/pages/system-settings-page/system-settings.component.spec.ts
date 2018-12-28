@@ -12,6 +12,7 @@ import { PasswordService } from 'src/app/authentication/services/password.servic
 import { SystemSettingsComponent } from './system-settings.component';
 import { BankHolidayCalendarComponent } from '../../components/bank-holiday-calendar';
 import { BankHolidayCalendarAddComponent } from '../../components/bank-holiday-calendar-add';
+import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-calendar-edit';
 
 class mockStateService implements Partial<IStateService> {
 	public current: {
@@ -32,7 +33,12 @@ describe('SystemSettings page', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [SystemSettingsComponent, BankHolidayCalendarComponent, BankHolidayCalendarAddComponent],
+			declarations: [
+				SystemSettingsComponent,
+				BankHolidayCalendarComponent,
+				BankHolidayCalendarAddComponent,
+				BankHolidayCalendarEditComponent
+			],
 			imports: [
 				TranslateModule.forRoot(),
 				NgZorroAntdModule.forRoot(),
