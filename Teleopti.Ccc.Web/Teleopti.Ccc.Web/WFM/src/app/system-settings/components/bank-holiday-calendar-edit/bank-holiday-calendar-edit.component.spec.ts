@@ -163,7 +163,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(dateRows[1].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
 	});
 
-	it('should be able to remove a date', () => {
+	it('should set IsDeleted to true when removing a date', () => {
 		component.edittingCalendar = {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
@@ -195,10 +195,56 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(dateRows.length).toBe(2);
 		expect(component.edittingCalendarYears[0].Dates.length).toBe(2);
 
-		document.getElementsByClassName('remove-date-icon')[1].dispatchEvent(new Event('click'));
+		dateRows[1].getElementsByClassName('remove-date-icon')[0].dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
 		expect(dateRows.length).toBe(1);
 		expect(component.edittingCalendarYears[0].Dates.length).toBe(1);
+		expect(component.edittingCalendarYears[0].ModifiedDates[0].IsDeleted).toBe(true);
+	});
+
+	it('should be able to change date description', () => {
+		component.edittingCalendar = {
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'Bank holiday calendar',
+			Years: [
+				{
+					Year: '2013',
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2013-01-09',
+							Description: 'BankHoliday 1',
+							IsDeleted: false
+						},
+						{
+							Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+							Date: '2013-01-10',
+							Description: 'BankHoliday 2',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		};
+		fixture.detectChanges();
+
+		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		let dateRows = editBankHolidayCalendarPanel.getElementsByTagName('nz-list-item');
+
+		expect(dateRows.length).toBe(2);
+		expect(component.edittingCalendarYears[0].Dates.length).toBe(2);
+
+		component.edittingCalendarYears[0].Dates[1].Description = 'new description';
+		component.updateDateDescription(
+			component.edittingCalendarYears[0].Dates[1],
+			component.edittingCalendarYears[0]
+		);
+		fixture.detectChanges();
+
+		expect(dateRows.length).toBe(2);
+		expect(component.edittingCalendarYears[0].Dates.length).toBe(2);
+		expect(component.edittingCalendarYears[0].ModifiedDates[0].IsDeleted).toBe(false);
+		expect(component.edittingCalendarYears[0].ModifiedDates[0].Description).toBe('new description');
 	});
 });

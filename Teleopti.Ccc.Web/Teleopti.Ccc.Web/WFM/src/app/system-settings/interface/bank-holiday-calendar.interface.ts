@@ -10,6 +10,7 @@ export interface BankHolidayCalendarYear {
 }
 
 export interface BankHolidayCalendarYearItem extends BankHolidayCalendarYear {
+	ModifiedDates?: BankHolidayCalendarDateItem[];
 	YearDate: Date;
 	DisabledDate?: Function;
 	SelectedDates: number[];

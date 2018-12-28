@@ -45,6 +45,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 				Year: y.Year,
 				YearDate: new Date(y.Year.toString()),
 				Dates: y.Dates,
+				ModifiedDates: [],
 				DisabledDate: date => {
 					return (
 						moment(date) < moment(year.YearDate).startOf('year') ||
@@ -89,6 +90,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			},
 			Active: true,
 			Dates: [],
+			ModifiedDates: [],
 			SelectedDates: []
 		};
 
@@ -124,11 +126,34 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			return moment(c) < moment(n) ? -1 : 1;
 		});
 		year.SelectedDates = [...year.SelectedDates];
+		year.ModifiedDates.push(newDate);
 	}
 
 	removeDateOfYear(date: BankHolidayCalendarDateItem, year: BankHolidayCalendarYearItem) {
-		year.Dates.splice(year.Dates.indexOf(date), 1);
-		year.SelectedDates.splice(year.Dates.indexOf(date), 1);
+		let index = year.Dates.indexOf(date);
+
+		year.ModifiedDates = year.ModifiedDates.concat(year.Dates.splice(index, 1));
+		year.ModifiedDates.forEach(d => {
+			if (date.Id && date.Id === d.Id) d.IsDeleted = true;
+		});
+		year.SelectedDates.splice(index, 1);
+	}
+
+	updateDateDescription(date: BankHolidayCalendarDateItem, year: BankHolidayCalendarYearItem) {
+		if (
+			year.ModifiedDates.some(d => {
+				return d.Date === date.Date;
+			})
+		) {
+			year.ModifiedDates.forEach(d => {
+				if (date.Date === d.Date) {
+					d.Id = date.Id;
+					d.Description = date.Description;
+				}
+			});
+		} else {
+			year.ModifiedDates.push(date);
+		}
 	}
 
 	selectTab(year: BankHolidayCalendarYearItem) {
@@ -153,6 +178,13 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			delete y.DisabledDate;
 			delete y.SelectedDates;
 			delete y.Active;
+
+			y.ModifiedDates.forEach(d => {
+				delete d.IsLastAdded;
+			});
+
+			y.Dates = [...y.ModifiedDates];
+			delete y.ModifiedDates;
 		});
 
 		let bankHolidayCalendar: BankHolidayCalendar = {
