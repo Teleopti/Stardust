@@ -166,11 +166,11 @@ namespace Teleopti.Ccc.Infrastructure.Config
 				new XDeclaration("1.0", "utf-8", "yes"),
 				new XComment("Default config data"),
 				new XElement("PasswordPolicy",
-					new XAttribute("MaxNumberOfAttempts", _defaultMaxNumberOfAttempts),
-					new XAttribute("InvalidAttemptWindow", _defaultInvalidAttemptWindow),
-					new XAttribute("PasswordValidForDayCount", _defaultPasswordValidForDayCount),
-					new XAttribute("PasswordExpireWarningDayCount", _defaultPasswordExpireWarningDayCount),
-					new XElement("Rule", new XAttribute("MinAccepted", _defaultMinAccepted),
+					new XAttribute("MaxNumberOfAttempts", 3),
+					new XAttribute("InvalidAttemptWindow", 30),
+					new XAttribute("PasswordValidForDayCount", 30),
+					new XAttribute("PasswordExpireWarningDayCount", 3),
+					new XElement("Rule", new XAttribute("MinAccepted", 1),
 						new XElement("PasswordStrengthRule", new XAttribute("RegEx", ".{8,}"))
 					))
 			);
