@@ -50,9 +50,13 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 		private void PersistDates(IBankHolidayCalendar calendar, IEnumerable<BankHolidayDateForm> dates)
 		{
-			dates?.ToList().ForEach(d =>
+			if (dates == null)
+				return;
+			foreach (var d in dates)
 			{
-				var _d = CreateBankHolidayDate(d);
+				var _d = CreateBankHolidayDate(calendar, d);
+				if (_d == null)
+					continue;
 				switch (d.Action)
 				{
 					case BankHolidayDateAction.CREATE:
@@ -66,16 +70,15 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 						break;
 				}
 				_bankHolidayDateRepository.Add(_d);
-			});
-
+			}
 		}
 
-		private IBankHolidayDate CreateBankHolidayDate(BankHolidayDateForm input)
+		private IBankHolidayDate CreateBankHolidayDate(IBankHolidayCalendar calendar, BankHolidayDateForm input)
 		{
-			IBankHolidayDate date;
+			IBankHolidayDate date = null;
 			var _date = input.Date;
 			var des = input.Description;
-			
+
 			if (input.Id.HasValue)
 			{
 				date = _bankHolidayDateRepository.Load(input.Id.Value);
@@ -86,7 +89,8 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			}
 			else
 			{
-				date = new BankHolidayDate() { Date = _date, Description = des };
+				if (calendar.Dates.ToList().Find(d => d.Date == _date) == null)
+					date = new BankHolidayDate() { Date = _date, Description = des };
 			}
 			return date;
 		}

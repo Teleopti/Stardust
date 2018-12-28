@@ -115,6 +115,32 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		}
 
 		[Test]
+		public void ShouldNotSaveCalendarDatesExistedForBankHolidayCalendar()
+		{
+			var calendar = PrepareData();
+
+			var input = new BankHolidayCalendarForm
+			{
+				Id = calendar.Id.Value,
+				Years = new List<BankHolidayYearForm>{
+					new BankHolidayYearForm {
+				Dates = new List<BankHolidayDateForm> {
+					new BankHolidayDateForm { Date=_springFestival,Description="Chinese New Year" }
+				} } }
+			};
+
+
+			var result = Target.SaveBankHolidayCalendar(input);
+
+			result.Years.Count().Should().Be.EqualTo(2);
+			result.Years.Last().Dates.Last().Date.Should().Be.EqualTo(_springFestival);
+			result.Years.Last().Dates.Last().Description.Should().Be.EqualTo("Spring Festival");
+
+			var count=BankHolidayDateRepository.LoadAll().Where(d => d.Date == _springFestival && d.Calendar.Id.Value == calendar.Id.Value).Count();
+			count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldSaveBankHolidayCalendarWithUpdatingCalendarDates()
 		{
 			var calendar = PrepareData();
