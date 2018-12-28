@@ -29,6 +29,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	edittingCalendarName: string;
 	edittingCalendarYears: BankHolidayCalendarYearItem[] = [];
 	editingCalendarTabIndex: number;
+	deletedYears: BankHolidayCalendarYearItem[] = [];
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
@@ -39,6 +40,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.edittingCalendarName = this.edittingCalendar.Name;
+		if (this.edittingCalendar.Years.length == 0) return;
 
 		this.edittingCalendar.Years.forEach(y => {
 			let year: BankHolidayCalendarYearItem = {
@@ -98,16 +100,45 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 		this.editingCalendarTabIndex = this.edittingCalendarYears.length - 1;
 	}
 
-	deleteYearTab(year: BankHolidayCalendarYearItem): void {
+	confirmDeleteYearTab(year: BankHolidayCalendarYearItem) {
+		setTimeout(() => {
+			year.Active = false;
+
+			this.modalService.confirm({
+				nzTitle: this.translate.instant('AreYouSureToRemoveYear').replace('{0}', year.Year.toString()),
+				nzOkType: 'danger',
+				nzOkText: this.translate.instant('Remove'),
+				nzCancelText: this.translate.instant('Cancel'),
+				nzOnOk: () => {
+					this.deleteYearTab(year);
+				},
+				nzOnCancel: () => {
+					setTimeout(() => {
+						year.Active = true;
+					}, 0);
+				}
+			});
+		}, 0);
+	}
+
+	deleteYearTab(year: BankHolidayCalendarYearItem) {
+		year.Dates.forEach(d => (d.IsDeleted = true));
+		year.ModifiedDates = year.Dates;
+		this.deletedYears.push(year);
+
 		this.edittingCalendarYears.splice(this.edittingCalendarYears.indexOf(year), 1);
 		this.editingCalendarTabIndex = this.edittingCalendarYears.length - 1;
-		this.edittingCalendarYears[this.editingCalendarTabIndex].Active = true;
+		if (this.editingCalendarTabIndex >= 0) this.edittingCalendarYears[this.editingCalendarTabIndex].Active = true;
 	}
 
 	addNewDateForYear(date: Date, year: BankHolidayCalendarYearItem) {
-		if (year.SelectedDates.indexOf(date.getTime()) > -1) return;
-
 		year.Dates.forEach(d => (d.IsLastAdded = false));
+		let index = year.SelectedDates.indexOf(date.getTime());
+
+		if (index > -1) {
+			year.Dates[index].IsLastAdded = true;
+			return;
+		}
 
 		let newDate: BankHolidayCalendarDateItem = {
 			Date: moment(date).format(this.dateFormat),
@@ -173,7 +204,32 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			return moment(c.Year) < moment(n.Year) ? -1 : 1;
 		});
 
-		this.edittingCalendarYears.forEach(y => {
+		this.removeExtraAttributesOfYears(this.edittingCalendarYears);
+		this.removeExtraAttributesOfYears(this.deletedYears);
+
+		let bankHolidayCalendar: BankHolidayCalendar = {
+			Id: this.edittingCalendar.Id,
+			Name: this.edittingCalendarName,
+			Years: this.edittingCalendarYears
+				.filter(y => y.Dates.length > 0)
+				.concat(this.deletedYears) as BankHolidayCalendarYear[]
+		};
+
+		this.bankCalendarDataService.saveExistingHolidayCalendar(bankHolidayCalendar).subscribe(result => {
+			result.Years.forEach(y => {
+				y.Dates.forEach(d => {
+					d.Date = moment(d.Date).format(this.dateFormat);
+				});
+			});
+
+			this.bankHolidayCalendarsList[this.bankHolidayCalendarsList.indexOf(this.edittingCalendar)] = result;
+			this.resetEditSpace();
+			this.exitEdittingBankCalendar();
+		});
+	}
+
+	removeExtraAttributesOfYears(years: BankHolidayCalendarYearItem[]) {
+		years.forEach(y => {
 			delete y.YearDate;
 			delete y.DisabledDate;
 			delete y.SelectedDates;
@@ -185,18 +241,6 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 			y.Dates = [...y.ModifiedDates];
 			delete y.ModifiedDates;
-		});
-
-		let bankHolidayCalendar: BankHolidayCalendar = {
-			Id: this.edittingCalendar.Id,
-			Name: this.edittingCalendar.Name,
-			Years: this.edittingCalendarYears as BankHolidayCalendarYear[]
-		};
-
-		this.bankCalendarDataService.saveExistingHolidayCalendar(bankHolidayCalendar).subscribe(result => {
-			this.bankHolidayCalendarsList[this.bankHolidayCalendarsList.indexOf(this.edittingCalendar)] = result;
-			this.resetEditSpace();
-			this.exitEdittingBankCalendar();
 		});
 	}
 

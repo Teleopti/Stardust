@@ -35,25 +35,34 @@
 	<div *ngIf="!isAddingNewCalendar && !isEdittingCalendar" class="bank-holiday-calendar-list">
 		<nz-collapse *ngIf="bankHolidayCalendarsList.length > 0">
 			<nz-collapse-panel *ngFor="let calendar of bankHolidayCalendarsList" [nzHeader]="calendar.Name">
-				<nz-tabset>
+				<nz-tabset *ngIf="calendar.Years.length > 0">
 					<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">
 						<nz-list [nzDataSource]="year.Dates" [nzRenderItem]="date">
 							<ng-template #date let-date>
 								<nz-list-item class="bank-holiday-calendar-list-date">
-									<span class="inline-block">
-										{{ 'Date' | translate }} : <span class="inline-block"> {{ date.Date }} </span>
-									</span>
-									<span class="inline-block">
-										{{ 'Description' | translate }} :
-										<span class="inline-block">{{ date.Description }} </span>
-									</span>
+									<div class="relative">
+										<span class="inline-block">
+											{{ 'Date' | translate }} :
+											<span class="bank-holiday-date-text"> {{ date.Date }} </span>
+										</span>
+										<span class="inline-block">
+											{{ 'Description' | translate }} :
+											<span class="bank-holiday-description">{{ date.Description }} </span>
+										</span>
+									</div>
 								</nz-list-item>
 							</ng-template>
 						</nz-list>
 					</nz-tab>
 				</nz-tabset>
 
-				<div class="con-row operation-buttons">
+				<nz-alert
+					*ngIf="calendar.Years.length == 0"
+					nzType="warning"
+					[nzMessage]="'ThisCalendarHasNoDatesAdded' | translate"
+				></nz-alert>
+
+				<div class="con-flex operation-buttons">
 					<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar(calendar)">
 						{{ 'Delete' | translate }}
 					</button>

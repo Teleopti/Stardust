@@ -12,21 +12,33 @@
 			min-width: 80px;
 		}
 	}
-	nz-content {
+	nz-content.bank-holiday-year-content {
 		max-height: calc(100vh - 470px);
 		overflow: auto;
-		padding-right: 10px;
+		padding: 0 10px 0 0;
 	}
 }
 .ant-tabs-bar {
 	margin: 0;
 }
-.ant-layout {
+.ant-layout,
+.ant-layout-footer {
 	background: transparent;
 }
 .ant-layout-sider {
-	padding: 10px;
+	padding: 20px;
 	background: inherit;
+	min-height: 400px;
+	.ant-layout {
+		min-height: 400px;
+	}
+	.ant-layout-footer {
+		display: flex;
+		justify-content: center;
+	}
+	nz-date-picker {
+		visibility: hidden;
+	}
 }
 .ant-layout-header {
 	padding: 10px;
@@ -35,35 +47,40 @@
 		justify-content: center;
 	}
 }
-.ant-layout-sider {
-	min-height: 420px;
-}
-.bank-holiday-calendar-list-date {
-	padding-left: 6px;
 
-	& > span.inline-block {
-		margin: 0 10px;
+.bank-holiday-calendar-list-date {
+	span.inline-block {
+		margin: 0 15px;
+		min-width: 100px;
 
 		& > span {
 			font-weight: bold;
-			padding: 0 5px;
 			border-radius: 4px;
 		}
+		input,
+		.bank-holiday-description {
+			width: 220px;
+		}
 	}
+}
+.bank-holiday-date-text {
+	white-space: nowrap;
 }
 .remove-date-icon {
 	min-width: 24px;
 	max-width: 24px;
+	margin: 0 15px;
 }
 .date-indicator {
 	background: #09f;
-	width: 6px;
-	height: 6px;
+	width: 10px;
+	height: 10px;
 	border-radius: 50%;
 	left: 0;
 	margin: 0;
 }
 .operation-buttons {
+	display: flex;
 	justify-content: flex-end;
 
 	button {

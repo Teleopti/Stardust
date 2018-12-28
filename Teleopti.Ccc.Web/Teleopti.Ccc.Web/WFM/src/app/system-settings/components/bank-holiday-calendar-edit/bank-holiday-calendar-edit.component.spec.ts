@@ -117,7 +117,9 @@ describe('BankHolidayCalendarEditComponent', () => {
 		fixture.detectChanges();
 
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let dateRows = editBankHolidayCalendarPanel.getElementsByTagName('nz-list-item');
+		let dateRows = editBankHolidayCalendarPanel
+			.getElementsByClassName('bank-holiday-calendar-list')[0]
+			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(2);
 		expect(dateRows[0].innerHTML.indexOf('2013-01-09') > -1).toBeTruthy();
@@ -147,7 +149,9 @@ describe('BankHolidayCalendarEditComponent', () => {
 		fixture.detectChanges();
 
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let dateRows = editBankHolidayCalendarPanel.getElementsByTagName('nz-list-item');
+		let dateRows = editBankHolidayCalendarPanel
+			.getElementsByClassName('bank-holiday-calendar-list')[0]
+			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(1);
 		expect(component.edittingCalendarYears[0].Dates.length).toBe(1);
@@ -190,7 +194,9 @@ describe('BankHolidayCalendarEditComponent', () => {
 		fixture.detectChanges();
 
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let dateRows = editBankHolidayCalendarPanel.getElementsByTagName('nz-list-item');
+		let dateRows = editBankHolidayCalendarPanel
+			.getElementsByClassName('bank-holiday-calendar-list')[0]
+			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(2);
 		expect(component.edittingCalendarYears[0].Dates.length).toBe(2);
@@ -230,7 +236,9 @@ describe('BankHolidayCalendarEditComponent', () => {
 		fixture.detectChanges();
 
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let dateRows = editBankHolidayCalendarPanel.getElementsByTagName('nz-list-item');
+		let dateRows = editBankHolidayCalendarPanel
+			.getElementsByClassName('bank-holiday-calendar-list')[0]
+			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(2);
 		expect(component.edittingCalendarYears[0].Dates.length).toBe(2);

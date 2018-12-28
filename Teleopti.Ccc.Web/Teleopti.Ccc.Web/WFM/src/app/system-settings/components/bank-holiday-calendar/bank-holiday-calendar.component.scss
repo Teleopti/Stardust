@@ -20,17 +20,28 @@
 	overflow: auto;
 }
 
-.bank-holiday-calendar-list-date > span {
-	margin: 0 10px;
+.bank-holiday-calendar-list-date {
+	span.inline-block {
+		margin: 0 15px;
+		min-width: 100px;
 
-	& > span {
-		font-weight: bold;
-		padding: 0 5px;
-		border-radius: 4px;
+		& > span {
+			font-weight: bold;
+			border-radius: 4px;
+		}
+		input,
+		.bank-holiday-description {
+			width: 220px;
+		}
 	}
 }
 
+.bank-holiday-date-text {
+	white-space: nowrap;
+}
+
 .operation-buttons {
+	display: flex;
 	justify-content: flex-end;
 
 	button {

@@ -45,7 +45,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 	confirmDeleteHolidayCanlendar(calendar: BankHolidayCalendar) {
 		this.modalService.confirm({
 			nzTitle: this.translate.instant('AreYouSureToDeleteThisBankHolidayCalendar'),
-			nzContent: this.translate.instant('Name') + ': ' + calendar.Name,
+			nzContent: calendar.Name,
 			nzOkType: 'danger',
 			nzOkText: this.translate.instant('Delete'),
 			nzCancelText: this.translate.instant('Cancel'),
