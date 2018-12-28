@@ -15,6 +15,9 @@
         angular.forEach(periods, function (period) {
             period.PeriodString = moment(period.StartDate).format('LL')+' - '+moment(period.EndDate).format('LL');
         });
+        if(periods.length>0){
+            periods[0].isLast = true;
+        }
         vm.planningPeriods = periods;
 		vm.suggestions = [];
 		vm.types = ['Week', 'Month'];
@@ -104,8 +107,10 @@
 				schedulePeriodType: vm.intervalType,
 				lengthOfThePeriodType: vm.intervalRange
 			});
-			return firstPp.$promise.then(function(data) {
-				vm.planningPeriods.push(data);
+			return firstPp.$promise.then(function(period) {
+                period.PeriodString = moment(period.StartDate).format('LL')+' - '+moment(period.EndDate).format('LL');
+                period.isLast = true;
+				vm.planningPeriods.push(period);
 				return vm.planningPeriods;
 			});
 		}
@@ -190,6 +195,9 @@
                 angular.forEach(periods, function (period) {
                     period.PeriodString = moment(period.StartDate).format('LL')+' - '+moment(period.EndDate).format('LL');
                 });
+                if(periods.length>0){
+                    periods[0].isLast = true;
+                }
                 vm.planningPeriods = periods;
 				vm.selectedIsValid = undefined;
 				return getLastPp();
@@ -217,6 +225,9 @@
                 angular.forEach(periods, function (period) {
                     period.PeriodString = moment(period.StartDate).format('LL')+' - '+moment(period.EndDate).format('LL');
                 });
+                if(periods.length>0){
+                    periods[0].isLast = true;
+                }
 				return vm.planningPeriods = periods;
 			});
 		}
@@ -225,9 +236,13 @@
 			if (planningGroupId == null)
 				return;
 			var nextPlanningPeriod = planningPeriodServiceNew.nextPlanningPeriod({ planningGroupId: planningGroupId });
-			return nextPlanningPeriod.$promise.then(function(data) {
-                data.PeriodString= moment(data.StartDate).format('LL')+' - '+moment(data.EndDate).format('LL');
-				vm.planningPeriods.splice(0, 0, data);
+			return nextPlanningPeriod.$promise.then(function(period) {
+                period.PeriodString= moment(period.StartDate).format('LL')+' - '+moment(period.EndDate).format('LL');
+                period.isLast = true;
+                if(vm.planningPeriods.length>0){
+                    vm.planningPeriods[0].isLast = false;
+                }
+				vm.planningPeriods.splice(0, 0, period);
 				return getLastPp();
 			});
 		}

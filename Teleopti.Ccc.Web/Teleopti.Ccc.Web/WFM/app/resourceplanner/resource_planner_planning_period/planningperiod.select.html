@@ -62,7 +62,7 @@
 				<div
 					tabindex="0"
 					class="context-menu card-context"
-					ng-if="$first"
+					ng-if="p.isLast"
 					ng-click="vm.openModifyModal(p.Type);$event.stopPropagation();"
 				>
 					<i class="mdi mdi-pencil"></i>
@@ -71,7 +71,7 @@
 				<div
 					tabindex="0"
 					class="context-menu card-context"
-					ng-if="$first && vm.planningPeriods.length > 1"
+					ng-if="p.isLast && vm.planningPeriods.length > 1"
 					ng-click="vm.getPpInfo(p);$event.stopPropagation();"
 				>
 					<i class="mdi mdi-delete"></i>
