@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -97,8 +98,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_version.Reset();
 
 			((IdentityProviderProvider) _identityProviderProvider).SetDefaultProvider(defaultProvider);
-			_loadPasswordPolicyService.ClearFile();
-			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "" : _settings.ConfigurationFilesPath());
+			
+			if (_loadPasswordPolicyService is LoadPasswordPolicyService passwordPolicyService)
+			{
+				passwordPolicyService.Reset();
+				if (usePasswordPolicy) passwordPolicyService.UseMinLengthRule();
+			}
 
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 

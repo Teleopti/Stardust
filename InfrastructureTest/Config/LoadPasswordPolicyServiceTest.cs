@@ -60,8 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Config
             IList<IPasswordStrengthRule> result = _target.LoadPasswordStrengthRules();
             Assert.AreEqual(2, result.Count, "There are two rules in the xml-file");
         }
-
-
+		
         [Test]
         public void VerifyCanLoadPasswordValidForDayCount()
         {
@@ -87,7 +86,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Config
 				_target.LoadPasswordStrengthRules().First().VerifyPasswordStrength("").Should().Be.False();
 				_target.LoadPasswordStrengthRules().First().VerifyPasswordStrength("a").Should().Be.True();
             File.Move("PasswordPolicy.xml.notinuse", "PasswordPolicy.xml");
-			  
         }
 
         [Test]
@@ -112,18 +110,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Config
 
             _target = new LoadPasswordPolicyService(AddBadRule(TestDocument()));
             Assert.AreEqual(0, _target.LoadPasswordStrengthRules().Count, "Rule that cannot be created does not get added");
-
         }
+
         [Test]
         public void VerifyDoesNotAddAnyRuleIfAnyXmlIsIncorrect()
         {
-
             _target = new LoadPasswordPolicyService(AddOkRule(AddBadRule(TestDocument())));
             Assert.AreEqual(0, _target.LoadPasswordStrengthRules().Count, "If any of the rules are wrong, dont add any rules at all for now");
-
         }
 
-        [Test]
+		[Test]
+		public void VerifyCanUseMinLengthForBehaviorTest()
+		{
+			_target = new LoadPasswordPolicyService(string.Empty);
+			_target.UseMinLengthRule();
+
+			_target.LoadPasswordStrengthRules()[0].VerifyPasswordStrength("1234567").Should().Be.False();
+
+			_target.Reset();
+
+			_target.LoadPasswordStrengthRules()[0].VerifyPasswordStrength("1234567").Should().Be.True();
+		}
+
+		[Test]
+		public void UsingResetWithoutUseMinLengthRuleShouldWork()
+		{
+			_target = new LoadPasswordPolicyService(string.Empty);
+			
+			_target.Reset();
+
+			_target.LoadPasswordStrengthRules()[0].VerifyPasswordStrength("1234567").Should().Be.True();
+		}
+
+		[Test]
         public void VerifyDoesNotGoBoomIfPasswordStrengthRuleNotValid()
         {
             //Just checks that we dont get a crash if there is something wrong with the PasswordStrength tabs
@@ -143,25 +162,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Config
             Assert.IsNotNull(_target.LoadPasswordStrengthRules()); 
         }
 
-        [Test]
-        public void ShouldGetSetPath()
-        {
-            _target.Path = "path";
-            Assert.AreEqual("path", _target.Path);
-        }
-
-		//[Test]
-		//public void ShouldClearFile()
-		//{
-		//	_target = new LoadPasswordPolicyService(AddOkRule(TestDocument()));
-		//		Assert.AreEqual(1, _target.LoadPasswordStrengthRules().Count, "Just to check that a rule gets added");
-		//	_target.ClearFile();
-		//	_target.Path = "notExist";
-		//	Assert.AreEqual(0, _target.LoadPasswordStrengthRules().Count, "Should clear _file");
-		//}
-
-        #region createXml
-        private static XDocument DocWithBadMaxAttemptCount()
+		private static XDocument DocWithBadMaxAttemptCount()
         {
             XDocument ret = TestDocument();
             XElement element = ret.Element("PasswordPolicy");
@@ -202,21 +203,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Config
 
             return ret;
         }
-
-
-
+		
         private static XDocument TestDocument()
         {
             return new XDocument(
              new XDeclaration("1.0", "utf-8", "yes"),
              new XComment("Default config data"),
              new XElement("PasswordPolicy", new XAttribute("MaxNumberOfAttempts", "12"), new XAttribute("InvalidAttemptWindow", "5"))
-
              );
-
-
-
-
         }
 
         private  XDocument createCompleteTestDocument()
@@ -245,10 +239,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Config
           
             return d;
         }
-
-        #endregion //createXml
-
-
-
-    }
+	}
 }

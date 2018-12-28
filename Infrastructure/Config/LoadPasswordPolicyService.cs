@@ -11,17 +11,16 @@ namespace Teleopti.Ccc.Infrastructure.Config
 {
     public class LoadPasswordPolicyService : ILoadPasswordPolicyService
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public string FileName => "PasswordPolicy.xml";
+        public string FileName {get;} = "PasswordPolicy.xml";
 
-		private string _path = string.Empty;
-        private XDocument _file;
+		private XDocument _file;
     	private const int _defaultMaxNumberOfAttempts = 3;
     	private const int _defaultInvalidAttemptWindow = 0;
     	private const int _defaultPasswordValidForDayCount = int.MaxValue;
     	private const int _defaultPasswordExpireWarningDayCount = 0;
     	private readonly ILog _logger = LogManager.GetLogger(typeof(LoadPasswordPolicyService));
 	    private const int _defaultMinAccepted = 1;
+		private Action _reset = null;
 
 	    public XDocument File => LoadFile();
 
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Config
 
         public LoadPasswordPolicyService(string path)
         {
-            _path = path;
+            Path = path;
         }
 
         public TimeSpan LoadInvalidAttemptWindow()
@@ -92,13 +91,9 @@ namespace Teleopti.Ccc.Infrastructure.Config
 
         }
 
-        public string Path
-        {
-            get { return _path; }
-            set { _path = value; }
-        }
+        public string Path { get; } = string.Empty;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private int GetValueFromPasswordPolicyDocument(string xPath, int defaultValue)
         {
             try
@@ -122,7 +117,7 @@ namespace Teleopti.Ccc.Infrastructure.Config
             {
                 try
                 {
-	                var policy = System.IO.Path.Combine(_path, FileName);
+	                var policy = System.IO.Path.Combine(Path, FileName);
 					var exists = System.IO.File.Exists(policy);
 					_logger.DebugFormat("Policy exists at {1}: {0}",exists,policy);
 					_file = exists ? XDocument.Load(policy) : defaultXDocument();
@@ -138,10 +133,11 @@ namespace Teleopti.Ccc.Infrastructure.Config
             return _file;
         }
 
-	    public void ClearFile()
+	    public void Reset()
 	    {
-		    _file = null;
-	    }
+		    _reset?.Invoke();
+			_reset = null;
+		}
 
 	    public string DocumentAsString => File.ToString();
 
@@ -159,6 +155,25 @@ namespace Teleopti.Ccc.Infrastructure.Config
 					 new XElement("PasswordStrengthRule",  new XAttribute("RegEx" ,".{1,}" ))
 				 ))
 			  );
+		}
+
+		public void UseMinLengthRule()
+		{
+			var currentFile = _file;
+			_reset = () => _file = currentFile;
+
+			_file = new XDocument(
+				new XDeclaration("1.0", "utf-8", "yes"),
+				new XComment("Default config data"),
+				new XElement("PasswordPolicy",
+					new XAttribute("MaxNumberOfAttempts", _defaultMaxNumberOfAttempts),
+					new XAttribute("InvalidAttemptWindow", _defaultInvalidAttemptWindow),
+					new XAttribute("PasswordValidForDayCount", _defaultPasswordValidForDayCount),
+					new XAttribute("PasswordExpireWarningDayCount", _defaultPasswordExpireWarningDayCount),
+					new XElement("Rule", new XAttribute("MinAccepted", _defaultMinAccepted),
+						new XElement("PasswordStrengthRule", new XAttribute("RegEx", ".{8,}"))
+					))
+			);
 		}
     }
 }
