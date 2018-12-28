@@ -112,13 +112,11 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -666,7 +664,7 @@
     <Compile Include="Security\DataTokenManager.cs" />
     <Compile Include="Security\IDataTokenManager.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiWfmChatBotLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiWfmGrantLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmInsightsLicenseOption.cs" />
     <Compile Include="Security\SignedArgument.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />

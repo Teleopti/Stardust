@@ -6,9 +6,9 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 {
-	public class TeleoptiWfmChatBotLicenseOption : LicenseOption
+	public class TeleoptiWfmGrantLicenseOption : LicenseOption
 	{
-		public TeleoptiWfmChatBotLicenseOption() : base(DefinedLicenseOptionPaths.TeleoptiWfmChatBot, DefinedLicenseOptionNames.TeleoptiWfmVNextPilot)
+		public TeleoptiWfmGrantLicenseOption() : base(DefinedLicenseOptionPaths.TeleoptiWfmGrant, DefinedLicenseOptionNames.TeleoptiWfmVNextPilot)
 		{
 		}
 

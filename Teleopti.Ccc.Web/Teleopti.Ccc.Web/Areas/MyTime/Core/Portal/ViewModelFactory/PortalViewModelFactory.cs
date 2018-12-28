@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		private bool isGrantBotAvailable()
 		{
-			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmChatBot) &&
+			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmGrant) &&
 				   _toggleManager.IsEnabled(Toggles.WFM_ChatBot_77547) &&
 				   _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ChatBot);
 		}

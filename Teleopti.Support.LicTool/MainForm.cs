@@ -237,7 +237,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("OvertimeRequests")) chkOvertimeRequests.Checked = true;
 						if (options.Contains("SeatPlanner")) chkSeatPlanner.Checked = true;
 						if (options.Contains("BPOExchange")) chkBPOExchange.Checked = true;
-						if (options.Contains("ChatBot")) chkChatBot.Checked = true;
+						if (options.Contains("Grant")) chkChatBot.Checked = true;
 						if (options.Contains("Insights")) chkInsights.Checked = true;
 						
 						//Freemium
@@ -334,7 +334,7 @@ namespace Teleopti.Support.LicTool
 				if (chkBPOExchange.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("BPOExchange")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkChatBot.Checked)
-					elmOptions.AppendChild(xdoc.CreateElement("ChatBot")).AppendChild(xdoc.CreateTextNode("true"));
+					elmOptions.AppendChild(xdoc.CreateElement("Grant")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkInsights.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("Insights")).AppendChild(xdoc.CreateTextNode("true"));
 

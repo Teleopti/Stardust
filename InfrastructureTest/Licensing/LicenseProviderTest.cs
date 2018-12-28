@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
-			public bool TeleoptiWFMChatBotEnabled { get; }
+			public bool TeleoptiWFMGrantEnabled { get; }
 			public bool TeleoptiWFMInsightsEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			  public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 			  public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			  public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
-			  public bool TeleoptiWFMChatBotEnabled { get; }
+			  public bool TeleoptiWFMGrantEnabled { get; }
 			  public bool TeleoptiWFMInsightsEnabled { get; }
 			  public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 			  public int MaxSeats { get; private set; }
@@ -362,27 +362,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 	        public bool TeleoptiCccCalendarLinkEnabled { get; private set; }
 			public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
-			public bool TeleoptiWFMChatBotEnabled { get; }
+			public bool TeleoptiWFMGrantEnabled { get; }
 			public bool TeleoptiWFMInsightsEnabled { get; }
 
 			public bool TeleoptiCccFreemiumForecastsEnabled { get; private set; }
 
-        	public int MaxSeats
-        	{
-        		get { return 10; }
-        	}
+        	public int MaxSeats { get; } = 10;
 
-        	public LicenseType LicenseType
-        	{
-        		get { return LicenseType.Agent; }
-        	}
+			public LicenseType LicenseType { get; } = LicenseType.Agent;
 
-        	public decimal Ratio
-        	{
-        		get { throw new NotImplementedException(); }
-        	}
+			public decimal Ratio => throw new NotImplementedException();
 
-	        public bool TeleoptiWFMVacationPlannerEnabled { get; private set; }
+			public bool TeleoptiWFMVacationPlannerEnabled { get; private set; }
 	        public bool TeleoptiWFMShiftTraderEnabled { get; private set; }
 	        public bool TeleoptiWFMLifestyleEnabled { get; private set; }
 	        public bool TeleoptiWFMOvertimeAvailabilityEnabled { get; private set; }
