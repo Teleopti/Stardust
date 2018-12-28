@@ -11,7 +11,11 @@
 		var vm = this;
 		var planningGroupId = $stateParams.groupId ? $stateParams.groupId : null;
 		vm.planningGroup = planningGroupInfo;
-		vm.planningPeriods = planningPeriods.sort(localeLanguageSortingService.localeSort('-EndDate'));
+        var periods = planningPeriods.sort(localeLanguageSortingService.localeSort('-EndDate'));
+        angular.forEach(periods, function (period) {
+            period.PeriodString = moment(period.StartDate).format('LL')+' - '+moment(period.EndDate).format('LL');
+        });
+        vm.planningPeriods = periods;
 		vm.suggestions = [];
 		vm.types = ['Week', 'Month'];
 		vm.intervalRange = 0;
@@ -164,49 +168,36 @@
 		function changeDateForLastPp(pp) {
 			vm.modifyLastPpModal = false;
 			if (vm.planningPeriods.length === 1) {
-				changeDateForPp(pp);
+				changeDateForPp(moment(pp.startDate).format('YYYY-MM-DD'), moment(pp.endDate).format('YYYY-MM-DD'));
 			} else {
-				changeEndDateForLastPp(pp);
+				changeEndDateForLastPp(moment(pp.endDate).format('YYYY-MM-DD'));
 			}
 		}
 
-		function changeDateForPp(pp) {
+		function changeDateForPp(startDate, endDate) {
 			if (planningGroupId == null)
 				return;
 			vm.planningPeriods = [];
-			var startDate = moment(pp.startDate).format('YYYY-MM-DD');
-			var newEndDate = moment(pp.endDate).format('YYYY-MM-DD');
 			var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({
 				planningGroupId: planningGroupId,
 				startDate: startDate,
 				schedulePeriodType: vm.intervalType,
 				lengthOfThePeriodType: vm.intervalRange,
-				endDate: newEndDate
+				endDate: endDate
 			});
 			return changeEndDateForLastPlanningPeriod.$promise.then(function(data) {
-				vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
+                var periods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
+                angular.forEach(periods, function (period) {
+                    period.PeriodString = moment(period.StartDate).format('LL')+' - '+moment(period.EndDate).format('LL');
+                });
+                vm.planningPeriods = periods;
 				vm.selectedIsValid = undefined;
 				return getLastPp();
 			});
 		}
 
-		function changeEndDateForLastPp(pp) {
-			if (planningGroupId == null)
-				return;
-			vm.planningPeriods = [];
-			var newEndDate = moment(pp.endDate).format('YYYY-MM-DD');
-			var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({
-				planningGroupId: planningGroupId,
-				startDate: null,
-				schedulePeriodType: vm.intervalType,
-				lengthOfThePeriodType: vm.intervalRange,
-				endDate: newEndDate
-			});
-			return changeEndDateForLastPlanningPeriod.$promise.then(function(data) {
-				vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
-				vm.selectedIsValid = undefined;
-				return getLastPp();
-			});
+		function changeEndDateForLastPp(endDate) {
+		    return changeDateForPp(null, endDate);
 		}
 
 		function getPpInfo(p) {
@@ -222,7 +213,11 @@
 			vm.confirmDeletePpModal = false;
 			var deletePlanningPeriod = planningPeriodServiceNew.deleteLastPlanningPeriod({ planningGroupId: planningGroupId });
 			return deletePlanningPeriod.$promise.then(function(data) {
-				return vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
+			    var periods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
+                angular.forEach(periods, function (period) {
+                    period.PeriodString = moment(period.StartDate).format('LL')+' - '+moment(period.EndDate).format('LL');
+                });
+				return vm.planningPeriods = periods;
 			});
 		}
 
@@ -231,6 +226,7 @@
 				return;
 			var nextPlanningPeriod = planningPeriodServiceNew.nextPlanningPeriod({ planningGroupId: planningGroupId });
 			return nextPlanningPeriod.$promise.then(function(data) {
+                data.PeriodString= moment(data.StartDate).format('LL')+' - '+moment(data.EndDate).format('LL');
 				vm.planningPeriods.splice(0, 0, data);
 				return getLastPp();
 			});

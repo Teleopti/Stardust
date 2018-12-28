@@ -48,14 +48,14 @@
 <div class="con-fluid-row">
 	<div
 		class="con-fluid-flex planingperiod-container"
-		ng-repeat="p in vm.planningPeriods | filter: {PeriodString: vm.filterTime} track by p.Id" ng-init="p.PeriodString= (p.StartDate | amDateFormat:'LL') + ' - ' + (p.EndDate | amDateFormat:'LL')"
+		ng-repeat="p in vm.planningPeriods | filter: {PeriodString: vm.filterTime} track by p.Id"
 	>
 		<div class="list-content material-depth-1 plan-group-pp" ng-click="vm.selectPp(p)">
 			<div
 				class="list-header"
 				ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}"
 			>
-				<h2>{{ p.StartDate | amDateFormat: 'LL' }} - {{ p.EndDate | amDateFormat: 'LL' }}</h2>
+				<h2>{{ p.PeriodString }}</h2>
 				<div class="subtext">{{ p.Number }} {{ p.Type | translate }}</div>
 			</div>
 			<div class="list-header-content">

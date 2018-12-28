@@ -164,6 +164,11 @@ describe('planningPeriodSelectController', function () {
         expect(vm.planningPeriods.length).toEqual(2);
     });
 
+    it('should have the correct period format displayed', function () {
+        $httpBackend.flush();
+        expect(vm.planningPeriods[0].PeriodString).toEqual('July 16, 2018 - August 5, 2018');
+    });
+
     it('should get next planning period', function () {
         vm.startNextPlanningPeriod();
         $httpBackend.flush();
