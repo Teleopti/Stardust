@@ -28,7 +28,7 @@
 		</div>
 	</div>
 
-	<nz-tabset [nzSelectedIndex]="newCalendarTabIndex" *ngIf="edittingCalendarYears.length > 0" nzAnimated="false">
+	<nz-tabset [nzSelectedIndex]="editingCalendarTabIndex" *ngIf="edittingCalendarYears.length > 0" nzAnimated="false">
 		<nz-tab
 			*ngFor="let year of edittingCalendarYears"
 			[nzTitle]="year.Year"
