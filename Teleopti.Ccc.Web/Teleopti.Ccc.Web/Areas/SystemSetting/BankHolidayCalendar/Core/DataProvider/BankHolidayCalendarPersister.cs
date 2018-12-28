@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		{
 			dates?.ToList().ForEach(d =>
 			{
-				var _d = _bankHolidayModelMapper.Map(d);
+				var _d = CreateBankHolidayDate(d);
 				switch (d.Action)
 				{
 					case BankHolidayDateAction.CREATE:
@@ -70,11 +70,32 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 		}
 
+		private IBankHolidayDate CreateBankHolidayDate(BankHolidayDateForm input)
+		{
+			IBankHolidayDate date;
+			var _date = input.Date;
+			var des = input.Description;
+			
+			if (input.Id.HasValue)
+			{
+				date = _bankHolidayDateRepository.Load(input.Id.Value);
+				date.Date = _date;
+				date.Description = des;
+				if (input.IsDeleted)
+					date.SetDeleted();
+			}
+			else
+			{
+				date = new BankHolidayDate() { Date = _date, Description = des };
+			}
+			return date;
+		}
+
 		public virtual BankHolidayCalendarViewModel Persist(BankHolidayCalendarForm input)
 		{
 			var calendar = PersistCalendar(input);
 			PersistDates(calendar, input.Years?.SelectMany(y => y.Dates));
-			return _bankHolidayModelMapper.MapModelChanged(calendar, input);
+			return _bankHolidayModelMapper.Map(calendar);
 		}
 
 		public virtual bool Delete(Guid Id)

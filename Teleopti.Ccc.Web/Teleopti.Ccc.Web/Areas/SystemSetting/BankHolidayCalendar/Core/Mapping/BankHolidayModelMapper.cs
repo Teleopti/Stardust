@@ -7,16 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping
 {
 	public class BankHolidayModelMapper : IBankHolidayModelMapper
 	{
-		public IBankHolidayDate Map(BankHolidayDateForm date)
-		{
-			var _date = new BankHolidayDate() { Date = date.Date, Description = date.Description };
-			if (date.Id.HasValue)
-				_date.SetId(date.Id.Value);
-			if (date.IsDeleted)
-				_date.SetDeleted();
-			return _date;
-		}
-
 		public BankHolidayCalendarViewModel Map(IBankHolidayCalendar calendar)
 		{
 
@@ -55,41 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping
 			model.Years = years;
 
 			return model;
-		}
-
-		public BankHolidayCalendarViewModel MapModelChanged(IBankHolidayCalendar calendar, BankHolidayCalendarForm input)
-		{
-			var dates = new List<BankHolidayDateViewModel>();
-
-			var _dates = calendar.Dates.ToList();
-
-			input?.Years?.SelectMany(y=>y.Dates).ToList().ForEach(
-				d =>
-				{
-					if (d.Id.HasValue)
-					{
-						dates.Add(new BankHolidayDateViewModel
-						{
-							Id = d.Id.Value,
-							Description = d.Description,
-							IsDeleted = d.IsDeleted,
-							Date = d.Date
-						});
-					}
-					else
-					{
-						var dx = _dates.Find(_d => _d.Date == d.Date);
-						dates.Add(new BankHolidayDateViewModel
-						{
-							Id = dx.Id.Value,
-							Description = dx.Description,
-							IsDeleted = dx.IsDeleted,
-							Date = dx.Date
-						});
-					}
-				});
-
-			return MapBankHolidayCalendar(calendar, dates);
 		}
 
 		public IEnumerable<BankHolidayCalendarViewModel> Map(IEnumerable<IBankHolidayCalendar> calendars)

@@ -66,23 +66,14 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 				}
 			};
 
-			var vm = Target.SaveBankHolidayCalendar(input);
-
-			vm.Name.Should().Be.EqualTo(input.Name);
-			vm.Years.Count().Should().Be.EqualTo(2);
-			vm.Years.First().Dates.First().Date.Should().Be.EqualTo(_nationalDay);
-			vm.Years.First().Dates.First().Description.Should().Be.EqualTo("National Day");
-			vm.Years.Last().Dates.First().Date.Should().Be.EqualTo(_newYear);
-			vm.Years.Last().Dates.First().Description.Should().Be.EqualTo("New Year");
-
-			var result = BankHolidayCalendarRepository.Load(vm.Id);
+			var result = Target.SaveBankHolidayCalendar(input);
 
 			result.Name.Should().Be.EqualTo(input.Name);
-			result.Dates.Count().Should().Be.EqualTo(2);
-			result.Dates.First().Date.Should().Be.EqualTo(_nationalDay);
-			result.Dates.First().Description.Should().Be.EqualTo("National Day");
-			result.Dates.Last().Date.Should().Be.EqualTo(_newYear);
-			result.Dates.Last().Description.Should().Be.EqualTo("New Year");
+			result.Years.Count().Should().Be.EqualTo(2);
+			result.Years.First().Dates.First().Date.Should().Be.EqualTo(_nationalDay);
+			result.Years.First().Dates.First().Description.Should().Be.EqualTo("National Day");
+			result.Years.Last().Dates.First().Date.Should().Be.EqualTo(_newYear);
+			result.Years.Last().Dates.First().Description.Should().Be.EqualTo("New Year");
 		}
 
 		[Test]
@@ -97,14 +88,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			};
 
 
-			var vm = Target.SaveBankHolidayCalendar(input);
-			vm.Name.Should().Be.EqualTo("New Calendar Name");
-			vm.Years.Count().Should().Be.EqualTo(0);
-
-			var result = BankHolidayCalendarRepository.Load(vm.Id);
+			var result = Target.SaveBankHolidayCalendar(input);
 			result.Name.Should().Be.EqualTo("New Calendar Name");
-			result.Dates.Count().Should().Be.EqualTo(3);
-
 		}
 
 		[Test]
@@ -123,16 +108,10 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			};
 
 
-			var vm = Target.SaveBankHolidayCalendar(input);
+			var result = Target.SaveBankHolidayCalendar(input);
 
-			vm.Years.Count().Should().Be.EqualTo(1);
-			vm.Years.First().Dates.First().Date.Should().Be.EqualTo(new DateTime(2020, 3, 8));
-
-			var result = BankHolidayCalendarRepository.Load(calendar.Id.Value);
-			result.Name.Should().Be.EqualTo("ChinaBankHoliday");
-			result.Dates.Count().Should().Be.EqualTo(4);
-			result.Dates.Last().Date.Should().Be.EqualTo(new DateTime(2020, 3, 8));
-			result.Dates.Last().Description.Should().Be.EqualTo("Women Day");
+			result.Years.Count().Should().Be.EqualTo(3);
+			result.Years.Last().Dates.First().Date.Should().Be.EqualTo(new DateTime(2020, 3, 8));
 		}
 
 		[Test]
@@ -153,18 +132,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			};
 
 
-			var vm = Target.SaveBankHolidayCalendar(input);
-			vm.Years.Count().Should().Be.EqualTo(1);
-			vm.Years.First().Dates.First().Id.Should().Be.EqualTo(dateId);
-			vm.Years.First().Dates.First().Date.Should().Be.EqualTo(_nationalDay.AddDays(1));
-			vm.Years.First().Dates.First().Description.Should().Be.EqualTo("National Day2");
-
-			var result = BankHolidayCalendarRepository.Load(calendar.Id.Value);
-
-			result.Name.Should().Be.EqualTo("ChinaBankHoliday");
-			result.Dates.Count().Should().Be.EqualTo(3);
-			result.Dates.First().Date.Should().Be.EqualTo(_nationalDay.AddDays(1));
-			result.Dates.First().Description.Should().Be.EqualTo("National Day2");
+			var result = Target.SaveBankHolidayCalendar(input);
+			result.Years.Count().Should().Be.EqualTo(2);
+			result.Years.First().Dates.First().Id.Should().Be.EqualTo(dateId);
+			result.Years.First().Dates.First().Date.Should().Be.EqualTo(_nationalDay.AddDays(1));
+			result.Years.First().Dates.First().Description.Should().Be.EqualTo("National Day2");
 		}
 
 		[Test]
@@ -185,17 +157,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			};
 
 
-			var vm = Target.SaveBankHolidayCalendar(input);
-			vm.Years.Count().Should().Be.EqualTo(1);
-			vm.Years.First().Dates.First().Id.Should().Be.EqualTo(dateId);
-			vm.Years.First().Dates.First().IsDeleted.Should().Be.EqualTo(true);
-
-			var result = BankHolidayCalendarRepository.Load(calendar.Id.Value);
-
-			result.Name.Should().Be.EqualTo("ChinaBankHoliday");
-			result.Dates.Count().Should().Be.EqualTo(2);
-			result.Dates.First().Date.Should().Be.EqualTo(_newYear);
-			result.Dates.First().Description.Should().Be.EqualTo("New Year");
+			var result = Target.SaveBankHolidayCalendar(input);
+			result.Years.Count().Should().Be.EqualTo(1);
+			result.Years.First().Dates.First().Date.Should().Be.EqualTo(_newYear);
 		}
 
 		[Test]
@@ -219,17 +183,14 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			};
 
 
-			var vm = Target.SaveBankHolidayCalendar(input);
-			vm.Years.Count().Should().Be.EqualTo(3);
-			vm.Years.Last().Dates.First().Date.Should().Be.EqualTo(new DateTime(2020, 3, 8));
-			vm.Years.Last().Dates.First().Description.Should().Be.EqualTo("Women Day");
+			var result = Target.SaveBankHolidayCalendar(input);
+			result.Years.Count().Should().Be.EqualTo(2);
+			result.Years.Last().Dates.First().Date.Should().Be.EqualTo(new DateTime(2020, 3, 8));
+			result.Years.Last().Dates.First().Description.Should().Be.EqualTo("Women Day");
 
-			var result = BankHolidayCalendarRepository.Load(calendar.Id.Value);
-
-			result.Name.Should().Be.EqualTo("ChinaBankHoliday");
-			result.Dates.Count().Should().Be.EqualTo(3);
-			result.Dates.Skip(1).Take(1).First().Date.Should().Be.EqualTo(_springFestival);
-			result.Dates.Skip(1).Take(1).First().Description.Should().Be.EqualTo("Chinese New Year");
+			
+			result.Years.First().Dates.Last().Date.Should().Be.EqualTo(_springFestival);
+			result.Years.First().Dates.Last().Description.Should().Be.EqualTo("Chinese New Year");
 		}
 
 		[Test]
