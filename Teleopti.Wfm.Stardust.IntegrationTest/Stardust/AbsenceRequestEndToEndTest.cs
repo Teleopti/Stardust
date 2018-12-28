@@ -73,7 +73,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			TestLog.Debug("Starting service bus");
 			var host = new ServiceBusRunner(i => { }, ConfigReader);
 			host.Start();
-			Thread.Sleep(2000);
+			Thread.Sleep(2019);
 			EventPublisher.Publish(new TenantMinuteTickEvent());
 
 			TestLog.Debug("Performing Tier1 assertion");
