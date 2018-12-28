@@ -1275,6 +1275,7 @@ shift-editor {
 			width: 100%;
 			cursor: pointer;
 			height: 10em;
+			margin-left:15px;
 
 			.scroll-toolbar {
 				display: none;
@@ -1371,6 +1372,7 @@ shift-editor {
 				background-color: gainsboro;
 				z-index: 10;
 				cursor: pointer;
+				margin-left:15px;
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
