@@ -485,8 +485,6 @@
     <Compile Include="Areas\Intraday\IntradayMonitorStaffingController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\IPasswordManager.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\PasswordManager.cs" />
     <Compile Include="Areas\MultiTenancy\Controllers\ExternalApplicationAccessController.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\BaseResultModel.cs" />

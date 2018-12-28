@@ -1,21 +1,20 @@
-﻿using System;
+﻿using Castle.Core.Internal;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Hosting;
-using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Security;
 
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class PasswordManager : IPasswordManager
 	{
@@ -32,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 		private readonly IEnumerable<IHashFunction> _hashFunctions;
 		private readonly IHashFunction _currentHashFunction;
+		private readonly ITokenGenerator _tokenGenerator;
 
 		public PasswordManager(
 			SignatureCreator signatureCreator, 
@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			IFindPersonInfo findPersonInfo,
 			ICheckPasswordStrength checkPasswordStrength,
 			IEnumerable<IHashFunction> hashFunctions,
-			IHashFunction currentHashFunction)
+			IHashFunction currentHashFunction,
+			ITokenGenerator tokenGenerator)
 		{
 			_signatureCreator = signatureCreator;
 			_notification = notificationClient;
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			_checkPasswordStrength = checkPasswordStrength;
 			_hashFunctions = hashFunctions;
 			_currentHashFunction = currentHashFunction;
+			_tokenGenerator = tokenGenerator;
 		}
 
 		public bool SendResetPasswordRequest(string userIdentifier, string baseUri)
@@ -77,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 					return false;
 				}
 
-				var securityToken = CreateSecurityToken(pi.Id, pi.ApplicationLogonInfo.LogonPassword);
+				var securityToken = _tokenGenerator.CreateSecurityToken(pi.Id, pi.ApplicationLogonInfo.LogonPassword);
 
 				var resetLink = $"{baseUri}/WFM/reset_password.html?t={securityToken}";
 
@@ -162,15 +164,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			return TryValidateResetToken(resetToken, _tokenLifeSpan, out var _);
 		}
 
-		private string CreateSecurityToken(Guid userId, string currentPwHash)
-		{
-			var timeStamp = DateTime.UtcNow;
-			var securityStamp = _signatureCreator.Create($"{userId}|{currentPwHash}");
-			var tokenString = $"{timeStamp}|{userId}|{securityStamp}";
-			var securityToken = Encryption.EncryptStringToBase64(tokenString, EncryptionConstants.Image1, EncryptionConstants.Image2);
-			return securityToken;
-		}
-
 		private bool TryValidateResetToken(string tokenString, TimeSpan tokenLifeSpan, out Guid personId)
 		{
 			personId = Guid.Empty;
@@ -193,6 +186,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				}
 
 				var pi = _idUserQuery.FindUserData(tokenUserId);
+				
 				var currentPwHash = pi.ApplicationLogonInfo.LogonPassword;
 				var securityStampIsValid = _signatureCreator.Verify($"{tokenUserId}|{currentPwHash}", tokenSecurityStamp);
 
@@ -207,6 +201,30 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			}
 
 			return true;
+		}
+	}
+
+	public interface ITokenGenerator
+	{
+		string CreateSecurityToken(Guid userId, string currentPwHash);
+	}
+
+	public class TokenGenerator : ITokenGenerator
+	{
+		private readonly SignatureCreator _signatureCreator;
+
+		public TokenGenerator(SignatureCreator signatureCreator)
+		{
+			_signatureCreator = signatureCreator;
+		}
+
+		public string CreateSecurityToken(Guid userId, string currentPwHash)
+		{
+			var timeStamp = DateTime.UtcNow;
+			var securityStamp = _signatureCreator.Create($"{userId}|{currentPwHash}");
+			var tokenString = $"{timeStamp}|{userId}|{securityStamp}";
+			var securityToken = Encryption.EncryptStringToBase64(tokenString, EncryptionConstants.Image1, EncryptionConstants.Image2);
+			return securityToken;
 		}
 	}
 }

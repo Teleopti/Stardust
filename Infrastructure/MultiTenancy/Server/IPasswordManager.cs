@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public interface IPasswordManager
 	{

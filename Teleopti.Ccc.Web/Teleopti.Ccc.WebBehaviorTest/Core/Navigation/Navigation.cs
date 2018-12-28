@@ -638,5 +638,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage($"wfm/#/rta/historical-overview?teamIds={teamId}");
 		}
+
+		public static void GoToResetPassword(string token)
+		{
+			GoToPage($"wfm/reset_password.html?t={token}");
+		}
 	}
 }

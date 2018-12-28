@@ -280,6 +280,8 @@
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAttribute.cs" />
     <Compile Include="MultiTenancy\Server\CustomerDbConnector.cs" />
+    <Compile Include="MultiTenancy\Server\IPasswordManager.cs" />
+    <Compile Include="MultiTenancy\Server\PasswordManager.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoWithAuditTrail.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAccessAuditContext.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditActions.cs" />

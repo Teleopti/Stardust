@@ -3,6 +3,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -35,7 +37,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleProjectionHelper>().As<IScheduleProjectionHelper>().SingleInstance();
 			builder.RegisterType<OrganizationSelectionProvider>().SingleInstance();
 
-			builder.RegisterType<HttpRequestHandler>().As<IHttpRequestHandler>();
+			builder.RegisterType<HttpRequestHandler>().As<IHttpRequestHandler>();			
+			builder.RegisterType<TokenGenerator>().As<ITokenGenerator>().SingleInstance();
+			builder.RegisterType<SignatureCreator>().SingleInstance();
 		}
 	}
 }
