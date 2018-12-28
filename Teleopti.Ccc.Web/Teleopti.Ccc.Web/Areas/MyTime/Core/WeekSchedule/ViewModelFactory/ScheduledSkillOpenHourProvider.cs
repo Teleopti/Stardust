@@ -127,8 +127,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private HashSet<ISkillType> getSkillTypesInRequestOpenPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var permissionInformation = person.PermissionInformation;
-			var personTimeZone = permissionInformation.DefaultTimeZone();
 
 			var skillTypes = new HashSet<ISkillType>();
 			var phoneSkillType = _skillTypeRepository.LoadAll()
@@ -137,8 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			
 			foreach (var day in days)
 			{
-				var skillTypesInPeriod = _overtimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
-						day.ToDateTimePeriod(personTimeZone)).Select(o => o.SkillType ?? phoneSkillType);
+				var skillTypesInPeriod = _overtimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person, day).Select(o => o.SkillType ?? phoneSkillType);
 				skillTypes.AddRange(skillTypesInPeriod);
 			}
 
@@ -272,15 +269,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private HashSet<ISkillType> getSkillTypesInRequestOpenPeriod(DateOnly date)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var permissionInformation = person.PermissionInformation;
-			var personTimeZone = permissionInformation.DefaultTimeZone();
 
 			var skillTypes = new HashSet<ISkillType>();
 			var phoneSkillType = _skillTypeRepository.LoadAll()
 				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
 
-			var skillTypesInPeriod = _overtimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
-				date.ToDateTimePeriod(personTimeZone)).Select(o => o.SkillType ?? phoneSkillType);
+			var skillTypesInPeriod = _overtimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person, date).Select(o => o.SkillType ?? phoneSkillType);
 			skillTypes.AddRange(skillTypesInPeriod);
 
 			return skillTypes;
