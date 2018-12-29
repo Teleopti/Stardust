@@ -14,6 +14,7 @@
 	}
 	nz-content .bank-holiday-calendar-date-list {
 		max-height: calc(100vh - 440px);
+		min-width: 420px;
 		overflow: auto;
 		padding: 0 10px 0 0;
 	}
