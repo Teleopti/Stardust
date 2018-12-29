@@ -622,7 +622,7 @@
 
 
 		function getMomentDate(date) {
-			return moment(serviceDateFormatHelper.getDateOnly(date.substring(1, date.length)));
+			return moment(serviceDateFormatHelper.getDateOnly(moment.tz(date.substring(1, date.length),'Etc/Utc').tz(vm.scheduleVm.Timezone)));
 		}
 
 		function getChangedLayers() {
