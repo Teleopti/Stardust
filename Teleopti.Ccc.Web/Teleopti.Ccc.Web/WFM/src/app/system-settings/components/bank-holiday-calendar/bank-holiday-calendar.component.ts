@@ -56,18 +56,26 @@ export class BankHolidayCalendarComponent implements OnInit {
 	}
 
 	deleteHolidayCalendar(calendar: BankHolidayCalendar) {
-		this.bankCalendarDataService.deleteBankHolidayCalendar(calendar.Id).subscribe(result => {
-			if (result === true) {
-				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
+		this.bankCalendarDataService.deleteBankHolidayCalendar(calendar.Id).subscribe(
+			result => {
+				if (result === true) {
+					this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
 
-				this.noticeService.success(
-					this.translate.instant('Success'),
-					this.translate
-						.instant('BankHolidayCalendarHasBeenSuccessfullyDeleted')
-						.replace('{0}', calendar.Name)
+					this.noticeService.success(
+						this.translate.instant('Success'),
+						this.translate
+							.instant('BankHolidayCalendarHasBeenSuccessfullyDeleted')
+							.replace('{0}', calendar.Name)
+					);
+				}
+			},
+			error => {
+				this.noticeService.error(
+					this.translate.instant('Error'),
+					this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
 				);
 			}
-		});
+		);
 	}
 
 	startAddNewBankCalender() {

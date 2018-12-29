@@ -109,10 +109,17 @@ describe('BankHolidayCalendarComponent', () => {
 		expect(list.length).toBe(1);
 
 		list[0].getElementsByClassName('ant-collapse-header')[0].dispatchEvent(new Event('click'));
-		expect(list[0].getElementsByTagName('nz-list-item').length).toBe(2);
+		expect(
+			list[0].getElementsByClassName('bank-holiday-calendar-date-list')[0].getElementsByTagName('nz-list-item')
+				.length
+		).toBe(2);
 
-		let firstRow = list[0].getElementsByTagName('nz-list-item')[0];
-		let secondRow = list[0].getElementsByTagName('nz-list-item')[1];
+		let firstRow = list[0]
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item')[0];
+		let secondRow = list[0]
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item')[1];
 
 		expect(firstRow.innerHTML.indexOf('2013-01-09') > -1).toBeTruthy();
 		expect(firstRow.innerHTML.indexOf('BankHoliday1') > -1).toBeTruthy();

@@ -18009,4 +18009,60 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Password policy error</value>
     <comment>Title of the password policy error box</comment>
   </data>
+  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>Are you sure to delete this bank holiday calendar?</value>
+    <comment>Are you sure to delete this bank holiday calendar?</comment>
+  </data>
+  <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
+    <value>Are you sure to delete year {0} from calendar {1}?</value>
+    <comment>Are you sure to delete year {0} from calendar {1}?</comment>
+  </data>
+  <data name="BankHolidayCalendarHasBeenSuccessfullyDeleted" xml:space="preserve">
+    <value>Bank holiday calendar {0} has been successfully deleted.</value>
+    <comment>Bank holiday calendar {0} has been successfully deleted.</comment>
+  </data>
+  <data name="BankHolidayCalendars" xml:space="preserve">
+    <value>Bank holiday calendars</value>
+    <comment>Title of bank holiday calendars in WFM</comment>
+  </data>
+  <data name="DeleteThisYear" xml:space="preserve">
+    <value>Delete this year</value>
+    <comment>Delete this year </comment>
+  </data>
+  <data name="NameAlreadyExisting" xml:space="preserve">
+    <value>Name already existing</value>
+    <comment>Name already existing tip for duplicated name </comment>
+  </data>
+  <data name="NewCalendarName" xml:space="preserve">
+    <value>New calendar name</value>
+    <comment>New calendar name input tooltip on creating bank holiday calendar page</comment>
+  </data>
+  <data name="AddANewYear" xml:space="preserve">
+    <value>Add a new year</value>
+    <comment>Add a new year - input tip of bank holiday calendar editing or creating</comment>
+  </data>
+  <data name="ThisCalendarHasNoDatesAdded" xml:space="preserve">
+    <value>This calendar has no dates added</value>
+    <comment>This calendar has no dates added</comment>
+  </data>
+  <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">
+    <value>There are no bank holidays defined for this year. Select a day in the calendar to create a new holiday.</value>
+    <comment>There are no bank holidays defined for this year. Select a day in the calendar to create a new holiday.</comment>
+  </data>
+  <data name="BankHoliday" xml:space="preserve">
+    <value>Bank holiday</value>
+    <comment>Default description for a bank holiday</comment>
+  </data>
+  <data name="NoBankHolidays" xml:space="preserve">
+    <value>No bank holidays</value>
+    <comment>No bank holidays</comment>
+  </data>
+  <data name="AddNewBankHolidayCalendar" xml:space="preserve">
+    <value>Add new bank holiday calendar</value>
+    <comment>Add new bank holiday calendar tooltip</comment>
+  </data>
+  <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
+    <value>An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator.</value>
+    <comment>An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator.</comment>
+  </data>
 </root>

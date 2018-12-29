@@ -22,7 +22,7 @@
 					nzAllowClear="false"
 					[(ngModel)]="selectedYear"
 					(ngModelChange)="newYearTab($event)"
-					[nzPlaceHolder]="'AddYear' | translate"
+					[nzPlaceHolder]="'AddANewYear' | translate"
 				></nz-year-picker>
 			</div>
 		</div>
@@ -70,7 +70,7 @@
 
 				<nz-content class="bank-holiday-year-content">
 					<nz-list *ngIf="year.Dates.length > 0">
-						<nz-list-item class="bank-holiday-calendar-list-date relative">
+						<nz-list-item class="bank-holiday-calendar-date-item relative">
 							<span class="inline-block">{{ 'Date' | translate }}</span>
 							<span class="inline-block">{{ 'Description' | translate }}</span>
 						</nz-list-item>
@@ -80,11 +80,11 @@
 						*ngIf="year.Dates.length > 0"
 						[nzDataSource]="year.Dates"
 						[nzRenderItem]="date"
-						class="bank-holiday-calendar-list"
+						class="bank-holiday-calendar-date-list"
 					>
 						<ng-template #date let-date>
-							<nz-list-item class="bank-holiday-calendar-list-date relative">
-								<span class="date-indicator absolute" [hidden]="!date.IsLastAdded"></span>
+							<nz-list-item class="bank-holiday-calendar-date-item relative">
+								<span class="selected-date-indicator absolute" [hidden]="!date.IsLastAdded"></span>
 								<span class="inline-block">
 									<span class="bank-holiday-date-text">{{ date.Date }}</span>
 								</span>
@@ -114,8 +114,15 @@
 					<nz-alert
 						*ngIf="year.Dates.length == 0"
 						nzType="info"
-						[nzMessage]="'ClickOnCalendarToAddDates' | translate"
-					></nz-alert>
+						class="bank-holiday-no-date-tip"
+						[nzMessage]="'NoBankHolidays' | translate"
+						[nzDescription]="
+							'ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday'
+								| translate
+						"
+						nzShowIcon
+					>
+					</nz-alert>
 				</nz-content>
 			</nz-layout>
 		</nz-tab>

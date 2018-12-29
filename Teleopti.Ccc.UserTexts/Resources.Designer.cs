@@ -943,6 +943,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a new year.
+        /// </summary>
+        public static string AddANewYear {
+            get {
+                return ResourceManager.GetString("AddANewYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Another Level.
         /// </summary>
         public static string AddAnotherLevel {
@@ -1200,6 +1209,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AddNew {
             get {
                 return ResourceManager.GetString("AddNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new bank holiday calendar.
+        /// </summary>
+        public static string AddNewBankHolidayCalendar {
+            get {
+                return ResourceManager.GetString("AddNewBankHolidayCalendar", resourceCulture);
             }
         }
         
@@ -2699,6 +2717,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator..
+        /// </summary>
+        public static string AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain {
+            get {
+                return ResourceManager.GetString("AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred. Please try again..
         /// </summary>
         public static string AnErrorOccurredPleaseTryAgain {
@@ -3228,6 +3255,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AreYouSure {
             get {
                 return ResourceManager.GetString("AreYouSure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete this bank holiday calendar?.
+        /// </summary>
+        public static string AreYouSureToDeleteThisBankHolidayCalendar {
+            get {
+                return ResourceManager.GetString("AreYouSureToDeleteThisBankHolidayCalendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete year {0} from calendar {1}?.
+        /// </summary>
+        public static string AreYouSureToDeleteYearFromCalendar {
+            get {
+                return ResourceManager.GetString("AreYouSureToDeleteYearFromCalendar", resourceCulture);
             }
         }
         
@@ -4598,6 +4643,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BallonTipScheduleChange {
             get {
                 return ResourceManager.GetString("BallonTipScheduleChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank holiday.
+        /// </summary>
+        public static string BankHoliday {
+            get {
+                return ResourceManager.GetString("BankHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank holiday calendar {0} has been successfully deleted..
+        /// </summary>
+        public static string BankHolidayCalendarHasBeenSuccessfullyDeleted {
+            get {
+                return ResourceManager.GetString("BankHolidayCalendarHasBeenSuccessfullyDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank holiday calendars.
+        /// </summary>
+        public static string BankHolidayCalendars {
+            get {
+                return ResourceManager.GetString("BankHolidayCalendars", resourceCulture);
             }
         }
         
@@ -9902,6 +9974,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete this year.
+        /// </summary>
+        public static string DeleteThisYear {
+            get {
+                return ResourceManager.GetString("DeleteThisYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleting {0} schedule(s).
         /// </summary>
         public static string DeletingSchedules {
@@ -14264,6 +14345,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string GeneralSettingOfPlanGroupSchedulingSetting {
             get {
                 return ResourceManager.GetString("GeneralSettingOfPlanGroupSchedulingSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to General settings.
+        /// </summary>
+        public static string GeneralSettings {
+            get {
+                return ResourceManager.GetString("GeneralSettings", resourceCulture);
             }
         }
         
@@ -20507,6 +20597,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name already existing.
+        /// </summary>
+        public static string NameAlreadyExisting {
+            get {
+                return ResourceManager.GetString("NameAlreadyExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The name already exists.
         /// </summary>
         public static string NameAlreadyExists {
@@ -20755,6 +20854,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewBudgetGroupThreeDots {
             get {
                 return ResourceManager.GetString("NewBudgetGroupThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New calendar name.
+        /// </summary>
+        public static string NewCalendarName {
+            get {
+                return ResourceManager.GetString("NewCalendarName", resourceCulture);
             }
         }
         
@@ -21658,6 +21766,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoAvailableShifts {
             get {
                 return ResourceManager.GetString("NoAvailableShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No bank holidays.
+        /// </summary>
+        public static string NoBankHolidays {
+            get {
+                return ResourceManager.GetString("NoBankHolidays", resourceCulture);
             }
         }
         
@@ -36652,6 +36769,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no bank holidays defined for this year. Select a day in the calendar to create a new holiday..
+        /// </summary>
+        public static string ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday {
+            get {
+                return ResourceManager.GetString("ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHolida" +
+                        "y", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are teams assigned underneath.
         /// </summary>
         public static string ThereAreTeamsAssignedUnderneath {
@@ -36774,6 +36901,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping {
             get {
                 return ResourceManager.GetString("ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This calendar has no dates added.
+        /// </summary>
+        public static string ThisCalendarHasNoDatesAdded {
+            get {
+                return ResourceManager.GetString("ThisCalendarHasNoDatesAdded", resourceCulture);
             }
         }
         

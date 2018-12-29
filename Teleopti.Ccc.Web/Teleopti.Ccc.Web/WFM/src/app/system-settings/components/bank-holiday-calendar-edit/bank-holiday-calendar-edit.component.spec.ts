@@ -118,7 +118,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 		let dateRows = editBankHolidayCalendarPanel
-			.getElementsByClassName('bank-holiday-calendar-list')[0]
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(2);
@@ -150,7 +150,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 		let dateRows = editBankHolidayCalendarPanel
-			.getElementsByClassName('bank-holiday-calendar-list')[0]
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(1);
@@ -195,7 +195,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 		let dateRows = editBankHolidayCalendarPanel
-			.getElementsByClassName('bank-holiday-calendar-list')[0]
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(2);
@@ -237,7 +237,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 		let dateRows = editBankHolidayCalendarPanel
-			.getElementsByClassName('bank-holiday-calendar-list')[0]
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
 		expect(dateRows.length).toBe(2);

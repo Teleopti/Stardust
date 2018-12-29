@@ -105,9 +105,12 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			year.Active = false;
 
 			this.modalService.confirm({
-				nzTitle: this.translate.instant('AreYouSureToRemoveYear').replace('{0}', year.Year.toString()),
+				nzTitle: this.translate
+					.instant('AreYouSureToDeleteYearFromCalendar')
+					.replace('{0}', year.Year.toString())
+					.replace('{1}', this.edittingCalendarName),
 				nzOkType: 'danger',
-				nzOkText: this.translate.instant('Remove'),
+				nzOkText: this.translate.instant('Delete'),
 				nzCancelText: this.translate.instant('Cancel'),
 				nzOnOk: () => {
 					this.deleteYearTab(year);
@@ -204,44 +207,47 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			return moment(c.Year) < moment(n.Year) ? -1 : 1;
 		});
 
-		this.removeExtraAttributesOfYears(this.edittingCalendarYears);
-		this.removeExtraAttributesOfYears(this.deletedYears);
-
 		let bankHolidayCalendar: BankHolidayCalendar = {
 			Id: this.edittingCalendar.Id,
 			Name: this.edittingCalendarName,
-			Years: this.edittingCalendarYears
-				.filter(y => y.Dates.length > 0)
-				.concat(this.deletedYears) as BankHolidayCalendarYear[]
+			Years: this.buildYearsForPost(this.edittingCalendarYears.concat(this.deletedYears))
 		};
 
-		this.bankCalendarDataService.saveExistingHolidayCalendar(bankHolidayCalendar).subscribe(result => {
-			result.Years.forEach(y => {
-				y.Dates.forEach(d => {
-					d.Date = moment(d.Date).format(this.dateFormat);
+		this.bankCalendarDataService.saveExistingHolidayCalendar(bankHolidayCalendar).subscribe(
+			result => {
+				result.Years.forEach(y => {
+					y.Dates.forEach(d => {
+						d.Date = moment(d.Date).format(this.dateFormat);
+					});
 				});
-			});
 
-			this.bankHolidayCalendarsList[this.bankHolidayCalendarsList.indexOf(this.edittingCalendar)] = result;
-			this.resetEditSpace();
-			this.exitEdittingBankCalendar();
-		});
+				this.bankHolidayCalendarsList[this.bankHolidayCalendarsList.indexOf(this.edittingCalendar)] = result;
+				this.resetEditSpace();
+				this.exitEdittingBankCalendar();
+			},
+			error => {
+				this.noticeService.error(
+					this.translate.instant('Error'),
+					this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
+				);
+			}
+		);
 	}
 
-	removeExtraAttributesOfYears(years: BankHolidayCalendarYearItem[]) {
+	buildYearsForPost(years: BankHolidayCalendarYearItem[]): BankHolidayCalendarYear[] {
+		let result: BankHolidayCalendarYear[] = [];
 		years.forEach(y => {
-			delete y.YearDate;
-			delete y.DisabledDate;
-			delete y.SelectedDates;
-			delete y.Active;
-
-			y.ModifiedDates.forEach(d => {
+			let dates = [...y.ModifiedDates];
+			dates.forEach(d => {
 				delete d.IsLastAdded;
 			});
 
-			y.Dates = [...y.ModifiedDates];
-			delete y.ModifiedDates;
+			result.push({
+				Year: y.Year,
+				Dates: dates
+			});
 		});
+		return result.filter(y => y.Dates.length > 0);
 	}
 
 	resetEditSpace() {
@@ -264,17 +270,25 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	}
 
 	deleteHolidayCanlendar(calendar: BankHolidayCalendar) {
-		this.bankCalendarDataService.deleteBankHolidayCalendar(calendar.Id).subscribe(result => {
-			if (result === true) {
-				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
-				this.noticeService.success(
-					this.translate.instant('Success'),
-					this.translate
-						.instant('BankHolidayCalendarHasBeenSuccessfullyDeleted')
-						.replace('{0}', this.edittingCalendar.Name)
+		this.bankCalendarDataService.deleteBankHolidayCalendar(calendar.Id).subscribe(
+			result => {
+				if (result === true) {
+					this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(calendar), 1);
+					this.noticeService.success(
+						this.translate.instant('Success'),
+						this.translate
+							.instant('BankHolidayCalendarHasBeenSuccessfullyDeleted')
+							.replace('{0}', this.edittingCalendar.Name)
+					);
+					this.exitEdittingBankCalendar();
+				}
+			},
+			error => {
+				this.noticeService.error(
+					this.translate.instant('Error'),
+					this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
 				);
-				this.exitEdittingBankCalendar();
 			}
-		});
+		);
 	}
 }

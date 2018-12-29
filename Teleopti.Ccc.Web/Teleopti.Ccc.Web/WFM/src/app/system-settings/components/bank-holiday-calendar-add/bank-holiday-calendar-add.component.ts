@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { NzModalService, NzNotificationService } from 'ng-zorro-antd';
 import {
 	BankHolidayCalendar,
 	BankHolidayCalendarYear,
@@ -7,7 +8,6 @@ import {
 	BankHolidayCalendarDateItem
 } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
-import { NzModalService } from 'ng-zorro-antd';
 
 @Component({
 	selector: 'bank-holiday-calendar-add',
@@ -31,7 +31,8 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
 		private translate: TranslateService,
-		private modalService: NzModalService
+		private modalService: NzModalService,
+		private noticeService: NzNotificationService
 	) {}
 
 	ngOnInit(): void {}
@@ -72,9 +73,12 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 			year.Active = false;
 
 			this.modalService.confirm({
-				nzTitle: this.translate.instant('AreYouSureToRemoveYear').replace('{0}', year.Year.toString()),
+				nzTitle: this.translate
+					.instant('AreYouSureToDeleteYearFromCalendar')
+					.replace('{0}', year.Year.toString())
+					.replace('{1}', this.newCalendarName),
 				nzOkType: 'danger',
-				nzOkText: this.translate.instant('Remove'),
+				nzOkText: this.translate.instant('Delete'),
 				nzCancelText: this.translate.instant('Cancel'),
 				nzOnOk: () => {
 					this.deleteYearTab(year);
@@ -145,37 +149,49 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 			return moment(c.Year) < moment(n.Year) ? -1 : 1;
 		});
 
-		this.removeExtraAttributesOfYears(this.newCalendarYears);
-
 		let bankHolidayCalendar: BankHolidayCalendar = {
 			Name: this.newCalendarName,
-			Years: this.newCalendarYears.filter(y => y.Dates.length > 0) as BankHolidayCalendarYear[]
+			Years: this.buildYearsForPost(this.newCalendarYears)
 		};
 
-		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(result => {
-			if (result.Id.length > 0) {
-				result.Years.forEach(y => {
-					y.Dates.forEach(d => {
-						d.Date = moment(d.Date).format(this.dateFormat);
+		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(
+			result => {
+				if (result.Id.length > 0) {
+					result.Years.forEach(y => {
+						y.Dates.forEach(d => {
+							d.Date = moment(d.Date).format(this.dateFormat);
+						});
 					});
-				});
 
-				this.bankHolidayCalendarsList.unshift(result);
-				this.bankHolidayCalendarsList.sort((c, n) => {
-					return c.Name.localeCompare(n.Name);
-				});
-				this.exitAddNewBankCalendar();
+					this.bankHolidayCalendarsList.unshift(result);
+					this.bankHolidayCalendarsList.sort((c, n) => {
+						return c.Name.localeCompare(n.Name);
+					});
+					this.exitAddNewBankCalendar();
+				}
+			},
+			error => {
+				this.noticeService.error(
+					this.translate.instant('Error'),
+					this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
+				);
 			}
-		});
+		);
 	}
 
-	removeExtraAttributesOfYears(years: BankHolidayCalendarYearItem[]) {
+	buildYearsForPost(years: BankHolidayCalendarYearItem[]): BankHolidayCalendarYear[] {
+		let result: BankHolidayCalendarYear[] = [];
 		years.forEach(y => {
-			delete y.YearDate;
-			delete y.DisabledDate;
-			delete y.SelectedDates;
-			delete y.Active;
-			delete y.ModifiedDates;
+			let dates = [...y.Dates];
+			dates.forEach(d => {
+				delete d.IsLastAdded;
+			});
+
+			result.push({
+				Year: y.Year,
+				Dates: dates
+			});
 		});
+		return result.filter(y => y.Dates.length > 0);
 	}
 }
