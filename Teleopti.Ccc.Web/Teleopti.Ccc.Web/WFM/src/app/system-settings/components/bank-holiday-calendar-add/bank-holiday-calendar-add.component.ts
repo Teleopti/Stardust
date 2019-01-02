@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { NzModalService, NzNotificationService } from 'ng-zorro-antd';
+import { NzNotificationService } from 'ng-zorro-antd';
 import {
 	BankHolidayCalendar,
 	BankHolidayCalendarYear,
@@ -24,14 +24,15 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 
 	newCalendarName: string = '';
 	nameAlreadyExisting: boolean = false;
-	selectedYear: Date;
+	selectedYearDate: Date;
 	newCalendarYears: BankHolidayCalendarYearItem[] = [];
 	newCalendarTabIndex: number;
+	isDeleteYearModalVisible: boolean = false;
+	activedYearTab: BankHolidayCalendarYearItem;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
 		private translate: TranslateService,
-		private modalService: NzModalService,
 		private noticeService: NzNotificationService
 	) {}
 
@@ -69,30 +70,16 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 	}
 
 	confirmDeleteYearTab(year: BankHolidayCalendarYearItem) {
-		setTimeout(() => {
-			year.Active = false;
-
-			this.modalService.confirm({
-				nzTitle: this.translate
-					.instant('AreYouSureToDeleteYearFromCalendar')
-					.replace('{0}', year.Year.toString())
-					.replace('{1}', this.newCalendarName),
-				nzOkType: 'danger',
-				nzOkText: this.translate.instant('Delete'),
-				nzCancelText: this.translate.instant('Cancel'),
-				nzOnOk: () => {
-					this.deleteYearTab(year);
-				},
-				nzOnCancel: () => {
-					setTimeout(() => {
-						year.Active = true;
-					}, 0);
-				}
-			});
-		}, 0);
+		this.activedYearTab = year;
+		this.isDeleteYearModalVisible = true;
 	}
 
+	closeDeleteYearTabModal = () => {
+		this.isDeleteYearModalVisible = false;
+	};
+
 	deleteYearTab(year: BankHolidayCalendarYearItem) {
+		this.isDeleteYearModalVisible = false;
 		this.newCalendarYears.splice(this.newCalendarYears.indexOf(year), 1);
 		this.newCalendarTabIndex = this.newCalendarYears.length - 1;
 		this.newCalendarYears[this.newCalendarTabIndex].Active = true;

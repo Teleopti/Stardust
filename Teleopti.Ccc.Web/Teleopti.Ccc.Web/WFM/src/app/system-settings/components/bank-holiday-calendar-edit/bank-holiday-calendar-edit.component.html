@@ -20,7 +20,7 @@
 				<span class="inline-block">{{ 'Years' | translate }} :</span>
 				<nz-year-picker
 					nzAllowClear="false"
-					[(ngModel)]="selectedYear"
+					[(ngModel)]="selectedYearDate"
 					(ngModelChange)="newYearTab($event)"
 					[nzPlaceHolder]="'AddANewYear' | translate"
 				></nz-year-picker>
@@ -129,9 +129,7 @@
 	</nz-tabset>
 
 	<div class="con-flex operation-buttons">
-		<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar(edittingCalendar)">
-			{{ 'Delete' | translate }}
-		</button>
+		<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar()">{{ 'Delete' | translate }}</button>
 		<button nz-button nzType="default" (click)="exitEdittingBankCalendar()">{{ 'Cancel' | translate }}</button>
 		<button
 			nz-button
@@ -142,4 +140,31 @@
 			{{ 'Save' | translate }}
 		</button>
 	</div>
+
+	<nz-modal
+		*ngIf="isDeleteYearModalVisible && activedYearTab"
+		[(nzVisible)]="isDeleteYearModalVisible"
+		[nzTitle]="
+			('AreYouSureToDeleteYearFromCalendar' | translate)
+				.replace('{0}', activedYearTab.Year.toString())
+				.replace('{1}', this.edittingCalendarName)
+		"
+		[nzOkText]="'Delete' | translate"
+		nzOkType="danger"
+		[nzCancelText]="'Cancel' | translate"
+		(nzOnOk)="deleteYearTab(activedYearTab)"
+		(nzOnCancel)="closeDeleteYearTabModal()"
+	></nz-modal>
+
+	<nz-modal
+		*ngIf="isDeleteCalendarModalVisible && edittingCalendar"
+		[(nzVisible)]="isDeleteCalendarModalVisible"
+		[nzTitle]="'AreYouSureToDeleteThisBankHolidayCalendar' | translate"
+		[nzContent]="edittingCalendar.Name"
+		[nzOkText]="'Delete' | translate"
+		nzOkType="danger"
+		[nzCancelText]="'Cancel' | translate"
+		(nzOnOk)="deleteHolidayCalendar(edittingCalendar)"
+		(nzOnCancel)="closeDeleteCalendarModal()"
+	></nz-modal>
 </div>

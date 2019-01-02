@@ -79,4 +79,16 @@
 			</nz-collapse-panel>
 		</nz-collapse>
 	</div>
+
+	<nz-modal
+		*ngIf="isDeleteCalendarModalVisible && selectedCalendar"
+		[(nzVisible)]="isDeleteCalendarModalVisible"
+		[nzTitle]="'AreYouSureToDeleteThisBankHolidayCalendar' | translate"
+		[nzContent]="selectedCalendar.Name"
+		[nzOkText]="'Delete' | translate"
+		nzOkType="danger"
+		[nzCancelText]="'Cancel' | translate"
+		(nzOnOk)="deleteHolidayCalendar()"
+		(nzOnCancel)="closeDeleteHolidayCalendarModal()"
+	></nz-modal>
 </div>

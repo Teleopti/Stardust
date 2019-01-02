@@ -20,7 +20,7 @@
 				<span class="inline-block">{{ 'Years' | translate }} :</span>
 				<nz-year-picker
 					nzAllowClear="false"
-					[(ngModel)]="selectedYear"
+					[(ngModel)]="selectedYearDate"
 					(ngModelChange)="newYearTab($event)"
 					[nzPlaceHolder]="'AddANewYear' | translate"
 				></nz-year-picker>
@@ -37,29 +37,35 @@
 		>
 			<nz-layout>
 				<nz-sider nzWidth="320">
-					<nz-date-picker
-						*ngIf="year.Active"
-						nzOpen="true"
-						nzShowToday="false"
-						nzAllowClear="false"
-						[nzDisabledDate]="year.DisabledDate"
-						[(ngModel)]="year.YearDate"
-						(ngModelChange)="addNewDateForYear($event, year)"
-						[nzDateRender]="dateRender"
-					></nz-date-picker>
+					<nz-layout>
+						<nz-content>
+							<nz-date-picker
+								*ngIf="year.Active"
+								nzOpen="true"
+								nzShowToday="false"
+								nzAllowClear="false"
+								[nzDisabledDate]="year.DisabledDate"
+								[(ngModel)]="year.YearDate"
+								(ngModelChange)="addNewDateForYear($event, year)"
+								[nzDateRender]="dateRender"
+							></nz-date-picker>
 
-					<ng-template #dateRender let-currentDate>
-						<div
-							class="ant-calendar-date"
-							[class.border]="year.SelectedDates.indexOf(currentDate.getTime()) > -1"
-						>
-							{{ currentDate.getDate() }}
-						</div>
-					</ng-template>
+							<ng-template #dateRender let-currentDate>
+								<div
+									class="ant-calendar-date"
+									[class.border]="year.SelectedDates.indexOf(currentDate.getTime()) > -1"
+								>
+									{{ currentDate.getDate() }}
+								</div>
+							</ng-template>
+						</nz-content>
 
-					<button (click)="confirmDeleteYearTab(year)" nz-button nzType="danger" *ngIf="year.Active">
-						{{ 'DeleteThisYear' | translate }}
-					</button>
+						<nz-footer>
+							<button (click)="confirmDeleteYearTab(year)" nz-button nzType="danger" *ngIf="year.Active">
+								{{ 'DeleteThisYear' | translate }}
+							</button>
+						</nz-footer>
+					</nz-layout>
 				</nz-sider>
 
 				<nz-content class="bank-holiday-year-content">
@@ -132,4 +138,19 @@
 			{{ 'Save' | translate }}
 		</button>
 	</div>
+
+	<nz-modal
+		*ngIf="isDeleteYearModalVisible && activedYearTab"
+		[(nzVisible)]="isDeleteYearModalVisible"
+		[nzTitle]="
+			('AreYouSureToDeleteYearFromCalendar' | translate)
+				.replace('{0}', activedYearTab.Year.toString())
+				.replace('{1}', this.newCalendarName)
+		"
+		[nzOkText]="'Delete' | translate"
+		nzOkType="danger"
+		[nzCancelText]="'Cancel' | translate"
+		(nzOnOk)="deleteYearTab(activedYearTab)"
+		(nzOnCancel)="closeDeleteYearTabModal()"
+	></nz-modal>
 </div>

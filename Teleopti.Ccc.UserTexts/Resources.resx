@@ -18042,7 +18042,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Add a new year - input tip of bank holiday calendar editing or creating</comment>
   </data>
   <data name="ThisCalendarHasNoDatesAdded" xml:space="preserve">
-    <value>This calendar has no dates added</value>
+    <value>This calendar has no dates added.</value>
     <comment>This calendar has no dates added</comment>
   </data>
   <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">

@@ -36905,7 +36905,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This calendar has no dates added.
+        ///   Looks up a localized string similar to This calendar has no dates added..
         /// </summary>
         public static string ThisCalendarHasNoDatesAdded {
             get {
