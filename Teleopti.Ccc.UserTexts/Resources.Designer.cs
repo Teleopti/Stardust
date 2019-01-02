@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -2717,7 +2717,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator..
+        ///   Looks up a localized string similar to An error occurred. Please check the network connection and try again. If this continues to happen, please contact your administrator..
         /// </summary>
         public static string AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain {
             get {
@@ -7407,7 +7407,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have modified this shift. Close and lose changes?.
+        ///   Looks up a localized string similar to You have modified this shift. Do you want to close and lose changes?.
         /// </summary>
         public static string ConfirmMessageWhenCancelShiftEditing {
             get {
@@ -9061,6 +9061,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DayOffRules {
             get {
                 return ResourceManager.GetString("DayOffRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day off rules:.
+        /// </summary>
+        public static string DayOffRulesColon {
+            get {
+                return ResourceManager.GetString("DayOffRulesColon", resourceCulture);
             }
         }
         
@@ -11099,7 +11108,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Planning Group.
+        ///   Looks up a localized string similar to Edit planning group.
         /// </summary>
         public static string EditPlanningGroup {
             get {
@@ -23084,6 +23093,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} agents.
+        /// </summary>
+        public static string NumberOfAgents {
+            get {
+                return ResourceManager.GetString("NumberOfAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of cells.
         /// </summary>
         public static string NumberOfMembers {
@@ -23242,6 +23260,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OnAvailableAgentsOnly {
             get {
                 return ResourceManager.GetString("OnAvailableAgentsOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 agent.
+        /// </summary>
+        public static string OneAgent {
+            get {
+                return ResourceManager.GetString("OneAgent", resourceCulture);
             }
         }
         
@@ -31222,7 +31249,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search site / team / contract.
+        ///   Looks up a localized string similar to Search for: site / team / contract.
         /// </summary>
         public static string SearchForDayOff {
             get {
@@ -31886,7 +31913,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected Filters:.
+        ///   Looks up a localized string similar to Selected filters:.
         /// </summary>
         public static string SelectedFiltersColon {
             get {
@@ -36769,7 +36796,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no bank holidays defined for this year. Select a day in the calendar to create a new holiday..
+        ///   Looks up a localized string similar to There are no bank holidays defined for this year. Select a day in the calendar to add a bank holiday..
         /// </summary>
         public static string ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday {
             get {

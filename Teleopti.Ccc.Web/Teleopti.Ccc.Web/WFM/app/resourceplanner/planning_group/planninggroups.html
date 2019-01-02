@@ -50,8 +50,11 @@
 		<div class="list-content material-depth-1 plan-group" ng-click="vm.goPlanningGroup(planningGroup.Id)">
 			<div class="list-header">
 				<h2>{{ planningGroup.Name }}</h2>
-				<div ng-show="planningGroup.AgentCount > 0" class="subtext">
-					{{ planningGroup.AgentCount }} {{ 'Agents' | translate }}
+				<div ng-show="planningGroup.AgentCount > 1" class="subtext">
+					{{ ('NumberOfAgents' | translate).replace("{0}", planningGroup.AgentCount) }}
+				</div>
+				<div ng-show="planningGroup.AgentCount == 1" class="subtext">
+					{{ 'OneAgent' | translate }}
 				</div>
 				<div ng-show="planningGroup.AgentCount == 0" class="subtext">
 					<p class="text-danger">

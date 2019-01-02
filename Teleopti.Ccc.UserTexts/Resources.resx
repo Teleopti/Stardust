@@ -13830,7 +13830,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Set of planning periods</comment>
   </data>
   <data name="SelectedFiltersColon" xml:space="preserve">
-    <value>Selected Filters:</value>
+    <value>Selected filters:</value>
     <comment>Selected Filters:</comment>
   </data>
   <data name="StartNext" xml:space="preserve">
@@ -16003,7 +16003,7 @@ Do you want to participate?</value>
     <comment>Delete planning period</comment>
   </data>
   <data name="EditPlanningGroup" xml:space="preserve">
-    <value>Edit Planning Group</value>
+    <value>Edit planning group</value>
     <comment>text for edit planning group</comment>
   </data>
   <data name="FilterValidationIssues" xml:space="preserve">
@@ -16079,7 +16079,7 @@ Do you want to participate?</value>
     <comment>used for creating planning group</comment>
   </data>
   <data name="SearchForDayOff" xml:space="preserve">
-    <value>Search site / team / contract</value>
+    <value>Search for: site / team / contract</value>
     <comment>SearchForDayOff</comment>
   </data>
   <data name="SelectedPlanningPeriod" xml:space="preserve">
@@ -18064,5 +18064,17 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
     <value>An error occurred. Please check the network connection and try again. If this continues to happen, please contact your administrator.</value>
     <comment>An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator.</comment>
+  </data>
+  <data name="NumberOfAgents" xml:space="preserve">
+	<value>{0} agents</value>
+	<comment>Number of agents, used in plans to display number of agents in a planning group</comment>
+  </data>
+  <data name="OneAgent" xml:space="preserve">
+	<value>1 agent</value>
+	<comment>1 agent, used in plans to display number of agents in a planning group</comment>
+  </data>
+	<data name="DayOffRulesColon" xml:space="preserve">
+    <value>Day off rules:</value>
+    <comment>Page header for day off rules/filter web</comment>
   </data>
 </root>
