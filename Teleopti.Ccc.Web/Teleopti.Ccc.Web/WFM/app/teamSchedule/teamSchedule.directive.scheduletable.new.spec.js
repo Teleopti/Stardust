@@ -41,6 +41,49 @@
 			scheduleManagement = ScheduleManagement;
 		}));
 
+		it('should not select agent when select a projection of yesterdays shift and todays shift is day off', function () {
+			var yesterdaySchedule = {
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2019-01-01',
+				WorkTimeMinutes: 240,
+				ContractTimeMinutes: 240,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						Color: '#ffffff',
+						Description: 'E-mail',
+						StartInUtc: '2019-01-01 23:00',
+						EndInUtc: '2019-01-02 10:00',
+						IsOvertime: false
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			};
+			fakeTeamSchedule.has(yesterdaySchedule);
+			var todaySchedule = {
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2019-01-02',
+				WorkTimeMinutes: 240,
+				ContractTimeMinutes: 240,
+				Projection: [],
+				DayOff: {
+					StartInUtc: "2019-01-02 08:00",
+					EndInUtc: "2019-01-03 08:00"
+				},
+				Timezone: { IanaId: 'Europe/Berlin' }
+			};
+			fakeTeamSchedule.has(todaySchedule);
+
+			scheduleManagement.resetSchedules([todaySchedule, yesterdaySchedule], '2019-01-02', 'Europe/Berlin');
+			var container = setUp('2018-12-12', 'Europe/Berlin');
+			container[0].querySelector('.layer').click();
+
+			expect(!!container[0].querySelector('.md-checked')).toBeFalsy();
+		});
+
 		it('should show shift editor view after click the edit button', function () {
 			var schedule = {
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',

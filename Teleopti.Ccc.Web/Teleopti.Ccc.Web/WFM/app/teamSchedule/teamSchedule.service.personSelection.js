@@ -113,7 +113,6 @@
 						return true;
 					});
 				}
-				return true;
 			});
 		}
 
