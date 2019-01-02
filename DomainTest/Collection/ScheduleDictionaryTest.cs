@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 				errors.Count.Should().Be.EqualTo(0);
 				target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(2);
+				target.AnyDifferenceSinceSnapshotInVisiblePeriod().Should().Be.True();
 			}
 		}
 
@@ -125,6 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				target.UsePermissions(false);
 				target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
 				target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(0);
+				target.AnyDifferenceSinceSnapshotInVisiblePeriod().Should().Be.False();
 			}
 		}
 	}

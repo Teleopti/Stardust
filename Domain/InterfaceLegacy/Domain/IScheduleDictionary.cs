@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
 		IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot();
 
+		bool AnyDifferenceSinceSnapshotInVisiblePeriod();
+
         /// <summary>
         /// Extracts all schedule data.
         /// </summary>
