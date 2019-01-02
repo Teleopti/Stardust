@@ -259,13 +259,13 @@
 			if (!!personIdsHavingScheduleChange[personIdInEditing]) {
 				$scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', { isStaleSchedule: true });
 			}
-			vm.lastCommandTrackId = d.trackId;
 		});
 
 		$scope.$on('teamSchedule.shiftEditor.close', function (e, d) {
 			if (hasScheduleUpdatedInEditor === false || (d && d.needToUpdateSchedule)) {
 				vm.updateSchedules([personIdInEditing]);
 			}
+			if (d && d.trackId) vm.lastCommandTrackId = d.trackId;
 			personIdInEditing = null;
 		});
 

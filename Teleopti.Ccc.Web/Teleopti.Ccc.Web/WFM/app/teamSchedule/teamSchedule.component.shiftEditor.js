@@ -177,7 +177,7 @@
 						return;
 					}
 					showSuccessNotice();
-					$scope.$emit('teamSchedule.shiftEditor.close', { needToUpdateSchedule: true });
+					$scope.$emit('teamSchedule.shiftEditor.close', { needToUpdateSchedule: true, trackId: vm.trackId });
 				},
 				function () {
 					vm.isSaving = false;
