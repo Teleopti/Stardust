@@ -74,7 +74,7 @@
 				<div style="float: right;">
 					<button class="wfm-btn wfm-btn-invis-default"
 							ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
-					<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid || vm.requestSent"
+					<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid() || vm.requestSent"
 							ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
 							ng-click="vm.persist()">
 						{{'Save'|translate}}
