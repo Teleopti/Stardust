@@ -5402,7 +5402,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripButtonShowEditorClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowEditor.Checked = !toolStripButtonShowEditor.Checked;
-			schedulerSplitters1.ShowEditor(true);
+			schedulerSplitters1.ShowEditor(toolStripButtonShowEditor.Checked);
 			_showEditor = toolStripButtonShowEditor.Checked;
 			updateShiftEditor();
 		}
