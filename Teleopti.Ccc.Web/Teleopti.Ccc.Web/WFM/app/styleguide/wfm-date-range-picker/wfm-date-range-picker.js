@@ -436,7 +436,7 @@
 			for (var i = 0; i < keys.length; i++) {
 				if (dateRangeText[keys[i]] > 0) {
 					var unitKey = keys[i];
-					if(dateRangeText[keys[i]]==='1'){
+					if(dateRangeText[keys[i]]==='1'||dateRangeText[keys[i]]===1){
                         unitKey = keys[i].substring(0, keys[i].length - 1);
 					}
 					text += dateRangeText[keys[i]] + ' ' + $translate.instant(unitKey+'LowerCase') + '   ';
