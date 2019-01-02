@@ -1690,9 +1690,9 @@
     <Content Include="WFM\app\requests\requests.service.requestSchedule.spec.js" />
     <Content Include="WFM\app\requests\_modules.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.js" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.service.js" />
+    <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.controller.js" />
+    <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.controller.spec.js" />
+    <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.service.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\cardPanel.demo.controller.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\demo.html" />
     <Content Include="WFM\app\resourceplanner\tree_data\main.controller.js" />
