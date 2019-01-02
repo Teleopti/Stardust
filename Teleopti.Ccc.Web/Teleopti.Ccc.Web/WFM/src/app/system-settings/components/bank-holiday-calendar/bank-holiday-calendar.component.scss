@@ -16,6 +16,7 @@
 }
 
 .bank-holiday-calendar-list {
+	min-height: 80px;
 	max-height: calc(100vh - 195px);
 	overflow: auto;
 }

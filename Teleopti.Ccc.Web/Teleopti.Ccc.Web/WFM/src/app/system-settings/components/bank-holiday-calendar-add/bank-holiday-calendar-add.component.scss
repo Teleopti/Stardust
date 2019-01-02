@@ -1,6 +1,6 @@
 .add-new-bank-holiday-calendar {
 	max-height: calc(100vh - 186px);
-	overflow: auto;
+	overflow: hidden;
 
 	nz-year-picker,
 	input {
@@ -32,6 +32,9 @@
 	min-height: 400px;
 	.ant-layout {
 		min-height: 400px;
+	}
+	.ant-layout-content {
+		min-height: 320px;
 	}
 	.ant-layout-footer {
 		display: flex;
