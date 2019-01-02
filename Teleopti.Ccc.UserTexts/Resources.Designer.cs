@@ -8993,6 +8993,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to day.
+        /// </summary>
+        public static string DayLowerCase {
+            get {
+                return ResourceManager.GetString("DayLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Day Off.
         /// </summary>
         public static string DayOff {
@@ -9250,6 +9259,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DaysAreSelectedFrom {
             get {
                 return ResourceManager.GetString("DaysAreSelectedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to days.
+        /// </summary>
+        public static string DaysLowerCase {
+            get {
+                return ResourceManager.GetString("DaysLowerCase", resourceCulture);
             }
         }
         
@@ -19805,6 +19823,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to month.
+        /// </summary>
+        public static string MonthLowerCase {
+            get {
+                return ResourceManager.GetString("MonthLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Monthly.
         /// </summary>
         public static string Monthly {
@@ -19846,6 +19873,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MonthSchedule {
             get {
                 return ResourceManager.GetString("MonthSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to months.
+        /// </summary>
+        public static string MonthsLowerCase {
+            get {
+                return ResourceManager.GetString("MonthsLowerCase", resourceCulture);
             }
         }
         
@@ -39848,6 +39884,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to week.
+        /// </summary>
+        public static string WeekLowerCase {
+            get {
+                return ResourceManager.GetString("WeekLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Weekly.
         /// </summary>
         public static string Weekly {
@@ -39988,6 +40033,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WeeksColon {
             get {
                 return ResourceManager.GetString("WeeksColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to weeks.
+        /// </summary>
+        public static string WeeksLowerCase {
+            get {
+                return ResourceManager.GetString("WeeksLowerCase", resourceCulture);
             }
         }
         
@@ -40598,6 +40652,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to year.
+        /// </summary>
+        public static string YearLowerCase {
+            get {
+                return ResourceManager.GetString("YearLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yearly trend.
         /// </summary>
         public static string YearlyTrend {
@@ -40612,6 +40675,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Years {
             get {
                 return ResourceManager.GetString("Years", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to years.
+        /// </summary>
+        public static string YearsLowerCase {
+            get {
+                return ResourceManager.GetString("YearsLowerCase", resourceCulture);
             }
         }
         

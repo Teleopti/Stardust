@@ -2257,6 +2257,38 @@ Periods</comment>
     <value>Week</value>
     <comment>Week</comment>
   </data>
+  <data name="WeekLowerCase" xml:space="preserve">
+    <value>week</value>
+    <comment>week</comment>
+  </data>
+  <data name="WeeksLowerCase" xml:space="preserve">
+    <value>weeks</value>
+    <comment>weeks</comment>
+  </data>
+  <data name="MonthLowerCase" xml:space="preserve">
+    <value>month</value>
+    <comment>month</comment>
+  </data>
+  <data name="MonthsLowerCase" xml:space="preserve">
+    <value>months</value>
+    <comment>months</comment>
+  </data>
+  <data name="DayLowerCase" xml:space="preserve">
+    <value>day</value>
+    <comment>day</comment>
+  </data>
+  <data name="DaysLowerCase" xml:space="preserve">
+    <value>days</value>
+    <comment>days</comment>
+  </data>	
+  <data name="YearLowerCase" xml:space="preserve">
+    <value>year</value>
+    <comment>year</comment>
+  </data>
+  <data name="YearsLowerCase" xml:space="preserve">
+    <value>years</value>
+    <comment>years</comment>
+  </data>
   <data name="WeekWithNumber" xml:space="preserve">
     <value>Week {0}</value>
     <comment>Week with week number</comment>

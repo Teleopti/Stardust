@@ -56,7 +56,7 @@
 				ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}"
 			>
 				<h2>{{ p.PeriodString }}</h2>
-				<div class="subtext">{{ p.Number }} {{ p.Type | translate }}</div>
+				<div class="subtext">{{ p.Number===1? ('1 '+((p.Type==='Week'?'WeekLowerCase':'MonthLowerCase') | translate)):(p.Number+' '+((p.Type==='Week'?'WeeksLowerCase':'MonthsLowerCase') | translate)) }}</div>
 			</div>
 			<div class="list-header-content">
 				<div
