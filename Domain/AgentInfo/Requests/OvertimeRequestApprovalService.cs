@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			if (_validatedSkillDictionary != null && _validatedSkillDictionary.Count > 0)
 			{
-				addOvertimeActivities(_validatedSkillDictionary, overtimeRequest);
+				mergeAndAddOvertimeActivities(_validatedSkillDictionary, overtimeRequest);
 				return new List<IBusinessRuleResponse>();
 			}
 
@@ -66,20 +66,50 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 			else
 			{
-				addOvertimeActivities(seriousUnderstaffingSkillDictionary, overtimeRequest);
+				mergeAndAddOvertimeActivities(seriousUnderstaffingSkillDictionary, overtimeRequest);
 			}
 
 			return new List<IBusinessRuleResponse>();
 		}
 
-		private void addOvertimeActivities(IDictionary<DateTimePeriod, IList<ISkill>> seriousUnderstaffingSkillDictionary,
+		private void mergeAndAddOvertimeActivities(IDictionary<DateTimePeriod, IList<ISkill>> seriousUnderstaffingSkillDictionary,
 			IOvertimeRequest overtimeRequest)
 		{
+			IDictionary<DateTimePeriod, Guid> dictionary = new Dictionary<DateTimePeriod, Guid>();
+			DateTimePeriod? lastPeriod = null;
+			Guid? lastActivityId = null;
 			foreach (var seriousUnderstaffingSkillItem in seriousUnderstaffingSkillDictionary)
 			{
 				if (seriousUnderstaffingSkillItem.Value.Any())
-					addOvertimeActivity(seriousUnderstaffingSkillItem.Value.First().Activity.Id.GetValueOrDefault(),
-						seriousUnderstaffingSkillItem.Key, overtimeRequest);
+				{
+					var currentActivityId = seriousUnderstaffingSkillItem.Value.First().Activity.Id.GetValueOrDefault();
+					var currentPeriod = seriousUnderstaffingSkillItem.Key;
+					if (!lastPeriod.HasValue)
+					{
+						lastPeriod = seriousUnderstaffingSkillItem.Key;
+						lastActivityId = currentActivityId;
+						dictionary.Add(lastPeriod.Value,lastActivityId.Value);
+					}
+					else
+					{
+						if (lastActivityId.Value == currentActivityId &&
+							lastPeriod.Value.EndDateTime.Equals(currentPeriod.StartDateTime))
+						{
+							dictionary.Remove(lastPeriod.Value);
+							lastPeriod = lastPeriod.Value.ChangeEndTime(currentPeriod.ElapsedTime());
+							dictionary.Add(lastPeriod.Value, lastActivityId.Value);
+						}
+						else
+						{
+							dictionary.Add(currentPeriod, currentActivityId);
+						}
+					}
+				}
+			}
+
+			foreach (var dic in dictionary)
+			{
+				addOvertimeActivity(dic.Value,dic.Key, overtimeRequest);
 			}
 		}
 
