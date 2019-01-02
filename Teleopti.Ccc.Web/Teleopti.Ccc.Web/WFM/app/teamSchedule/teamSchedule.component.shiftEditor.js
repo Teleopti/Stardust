@@ -56,7 +56,7 @@
 		var vm = this;
 		var timeLineTimeRange = {
 			Start: moment.tz(vm.date, vm.timezone).hour(0).add(-12, 'hours'),
-			End: moment.tz(vm.date, vm.timezone).hour(0).add(36, 'hours')
+			End: moment.tz(vm.date, vm.timezone).hour(0).add(48, 'hours')
 		};
 
 		vm.showScrollLeftButton = false;
