@@ -18003,7 +18003,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Confirm</value>
   </data>
   <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
-    <value>You have modified this shift. Close and lose changes?</value>
+    <value>You have modified this shift. Do you want to close and lose changes?</value>
   </data>
   <data name="PasswordPolicyError" xml:space="preserve">
     <value>Password policy error</value>
@@ -18046,7 +18046,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>This calendar has no dates added</comment>
   </data>
   <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">
-    <value>There are no bank holidays defined for this year. Select a day in the calendar to create a new holiday.</value>
+    <value>There are no bank holidays defined for this year. Select a day in the calendar to add a bank holiday.</value>
     <comment>There are no bank holidays defined for this year. Select a day in the calendar to create a new holiday.</comment>
   </data>
   <data name="BankHoliday" xml:space="preserve">
@@ -18062,7 +18062,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Add new bank holiday calendar tooltip</comment>
   </data>
   <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
-    <value>An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator.</value>
+    <value>An error occurred. Please check the network connection and try again. If this continues to happen, please contact your administrator.</value>
     <comment>An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator.</comment>
   </data>
 </root>

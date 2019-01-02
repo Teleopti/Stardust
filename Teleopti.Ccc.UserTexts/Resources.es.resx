@@ -13514,9 +13514,6 @@ La aplicación ahora se cerrará.</value>
   <data name="ShiftChangedByOthers" xml:space="preserve">
     <value>No se guardaron los cambios, el turno ha sido cambiado por alguien mas.</value>
   </data>
-  <data name="ViewInsightsReport" xml:space="preserve">
-    <value>Ver reporte</value>
-  </data>
   <data name="EditInsightsReport" xml:space="preserve">
     <value>Editar reporte</value>
   </data>
@@ -13528,9 +13525,6 @@ La aplicación ahora se cerrará.</value>
   </data>
   <data name="ForgotYourPasswordInstruction" xml:space="preserve">
     <value>Ingrese su usuario para recibir instrucciones de como reiniciar su contraseña.</value>
-  </data>
-  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
-    <value>Auditoria</value>
   </data>
   <data name="CopySchedule" xml:space="preserve">
     <value>Copiar horario</value>

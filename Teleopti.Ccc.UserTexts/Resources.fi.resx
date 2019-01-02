@@ -15537,17 +15537,11 @@ Applikaatio sulkeutuu. </value>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Jotain meni pieleen. Yritä myöhemmin uudestaan.</value>
   </data>
-  <data name="ViewInsightsReport" xml:space="preserve">
-    <value>Näytä raportti</value>
-  </data>
   <data name="EditInsightsReport" xml:space="preserve">
     <value>Muokkaa raporttia</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
     <value>Ei rajoitteita jaksossa</value>
-  </data>
-  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
-    <value>Audit Trail</value>
   </data>
   <data name="CopySchedule" xml:space="preserve">
     <value>Kopio työvuorolista</value>

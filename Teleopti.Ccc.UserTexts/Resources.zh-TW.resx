@@ -15008,17 +15008,11 @@ Teleopti R&amp;D</value>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>出現了一些問題。請稍後重試。</value>
   </data>
-  <data name="ViewInsightsReport" xml:space="preserve">
-    <value>查看報表</value>
-  </data>
   <data name="EditInsightsReport" xml:space="preserve">
     <value>編輯報表</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNoRestrictions" xml:space="preserve">
     <value>週期內沒有限制。</value>
-  </data>
-  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
-    <value>審核跟蹤</value>
   </data>
   <data name="CopySchedule" xml:space="preserve">
     <value>複製班表</value>
