@@ -30591,6 +30591,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduled agents.
+        /// </summary>
+        public static string ScheduledAgents {
+            get {
+                return ResourceManager.GetString("ScheduledAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scheduled agents after OT.
         /// </summary>
         public static string ScheduledAgentsAfterOT {
@@ -39281,6 +39290,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validation issues.
+        /// </summary>
+        public static string ValidationIssues {
+            get {
+                return ResourceManager.GetString("ValidationIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation period.
         /// </summary>
         public static string ValidationPeriod {
@@ -39295,6 +39313,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Validations {
             get {
                 return ResourceManager.GetString("Validations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation are loading.
+        /// </summary>
+        public static string ValidationsAreLoading {
+            get {
+                return ResourceManager.GetString("ValidationsAreLoading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation are loading, this might take a few minutes.
+        /// </summary>
+        public static string ValidationsAreLoadingTooltip {
+            get {
+                return ResourceManager.GetString("ValidationsAreLoadingTooltip", resourceCulture);
             }
         }
         

@@ -62,34 +62,26 @@
                                             <span class="chip-handle chip-error">
                                                 ...
                                             </span>
-                                            <span class="chip-text">Validation is loading</span>
+                                            <span class="chip-text">{{'ValidationsAreLoading'|translate}}</span>
                                         </span>
-                                            <md-tooltip>Validation is loading, it might takes few minute.</md-tooltip>
+                                            <md-tooltip>{{'ValidationsAreLoadingTooltip'|translate}}</md-tooltip>
                                         </div>
                                         <div class="wfm-chip-wrap" ng-if="!vm.valLoading && vm.valData.totalValNum > 0"
                                              ng-click="vm.activeTab=1">
-                                        <span class="wfm-chip">
-                                            <span class="chip-handle chip-error">
-                                                {{vm.valData.totalValNum}}
+                                            <span class="wfm-chip">
+                                                <span class="chip-handle chip-error">
+                                                    {{vm.valData.totalValNum}}
+                                                </span>
+                                                <span class="chip-text">{{'ValidationIssues'|translate}}</span>
                                             </span>
-                                            <span class="chip-text">Validation Issues</span>
-                                        </span>
-                                            <md-tooltip>Validation Issues might have effects to the scheduled results
-                                            </md-tooltip>
                                         </div>
                                         <div class="wfm-chip-wrap">
-                                        <span class="wfm-chip">
-                                            <span class="chip-handle scheduled-agents">
-                                                {{vm.scheduledAgents}}/{{vm.totalAgents}}
+                                            <span class="wfm-chip">
+                                                <span class="chip-handle scheduled-agents">
+                                                    {{vm.scheduledAgents}}/{{vm.totalAgents}}
+                                                </span>
+                                                <span class="chip-text">{{'ScheduledAgents'|translate}}</span>
                                             </span>
-                                            <span class="chip-text">Scheduled Agents</span>
-                                        </span>
-                                            <md-tooltip ng-show="vm.dayNodes">{{vm.scheduledAgents}}/{{vm.totalAgents}}
-                                                {{'AgentsSuccessfullyScheduled'|translate}}
-                                            </md-tooltip>
-                                            <md-tooltip ng-hide="vm.dayNodes">{{vm.scheduledAgents}}/{{vm.totalAgents}}
-                                                {{'AgentsHaveScheduled'|translate}}
-                                            </md-tooltip>
                                         </div>
                                     </div>
                                     <div class="con-row">

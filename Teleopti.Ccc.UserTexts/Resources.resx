@@ -18117,4 +18117,20 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Day off rules:</value>
     <comment>Page header for day off rules/filter web</comment>
   </data>
+  <data name="ScheduledAgents" xml:space="preserve">
+    <value>Scheduled agents</value>
+    <comment>Number of successfully scheduled agents. Shown in planning period overview in Plans</comment>
+  </data>
+  <data name="ValidationIssues" xml:space="preserve">
+    <value>Validation issues</value>
+    <comment>Shown in planning period overview in Plans</comment>
+  </data>
+	<data name="ValidationsAreLoading" xml:space="preserve">
+    <value>Validation are loading</value>
+    <comment>Shown in planning period overview in Plans</comment>
+  </data>
+	<data name="ValidationsAreLoadingTooltip" xml:space="preserve">
+    <value>Validation are loading, this might take a few minutes</value>
+    <comment>Shown in planning period overview in Plans</comment>
+  </data>
 </root>
