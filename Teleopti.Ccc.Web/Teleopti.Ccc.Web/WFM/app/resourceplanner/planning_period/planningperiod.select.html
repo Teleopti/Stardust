@@ -1,0 +1,351 @@
+<div class="view-header with-fab with-desc">
+	<div class="view-title">
+		<h1>
+			<i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{ 'Plans' | translate }}</a> /
+			{{ vm.planningGroup.Name }}
+		</h1>
+	</div>
+</div>
+<div class="con-row" ng-if="!vm.isNonePp()">
+	<div class="con-flex">
+		<div class="wfm-toolbar material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					<div class="plan-filter-container">
+						<label for="filter" class="input-icon">
+							<i class="mdi mdi-filter-outline">
+								<input
+									type="text"
+									id="filter"
+									ng-model="vm.filterTime"
+									placeholder="{{'FilterPlanningPeriods' | translate}}"
+								/>
+								<md-tooltip>{{ 'FilterPlanningPeriods' | translate }} </md-tooltip>
+							</i>
+						</label>
+					</div>
+				</div>
+				<div class="con-flex x3">
+					<button
+						class="wfm-btn wfm-btn-invis-default create-next-planning-period"
+						ng-click="vm.startNextPlanningPeriod()"
+					>
+						<i class="mdi mdi-plus"></i> {{ 'CreateNextPp' | translate }}
+					</button>
+					<span class="pp-label">
+						<i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>
+						{{ 'SchedulingSucceeded' | translate }}</span
+					>
+					<span class="pp-label">
+						<i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>
+						{{ 'SchedulingFailed' | translate }}</span
+					>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="con-fluid-row">
+	<div
+		class="con-fluid-flex planingperiod-container"
+		ng-repeat="p in vm.planningPeriods | filter: {PeriodString: vm.filterTime} track by p.Id"
+	>
+		<div class="list-content material-depth-1 plan-group-pp" ng-click="vm.selectPp(p)">
+			<div
+				class="list-header"
+				ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}"
+			>
+				<h2>{{ p.PeriodString }}</h2>
+				<div class="subtext">{{ p.Number }} {{ p.Type | translate }}</div>
+			</div>
+			<div class="list-header-content">
+				<div
+					tabindex="0"
+					class="context-menu card-context"
+					ng-if="p.isLast"
+					ng-click="vm.openModifyModal(p.Type);$event.stopPropagation();"
+				>
+					<i class="mdi mdi-pencil"></i>
+					<md-tooltip>{{ 'ChangePlanningDuration' | translate }}</md-tooltip>
+				</div>
+				<div
+					tabindex="0"
+					class="context-menu card-context"
+					ng-if="p.isLast && vm.planningPeriods.length > 1"
+					ng-click="vm.getPpInfo(p);$event.stopPropagation();"
+				>
+					<i class="mdi mdi-delete"></i>
+					<md-tooltip>{{ 'DeletePlanningPeriod' | translate }}</md-tooltip>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-box" ng-show="vm.confirmDeletePpModal">
+	<div class="modalbg">
+		<div class="dialog-mini material-depth-1">
+			<div class="modal-inner-content">
+				<h3>{{ 'DeletePlanningPeriod' | translate }}</h3>
+				{{ vm.textForDeletePp }}
+			</div>
+			<div class="modal-actions">
+				<aside>
+					<button ng-click="vm.confirmDeletePpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
+						Cancel
+					</button>
+					<button
+						ng-click="vm.deleteLastPp(vm.planGroup.Id);"
+						class="wfm-btn wfm-btn-invis-primary"
+						translate
+					>
+						Delete
+					</button>
+				</aside>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="con-row" ng-if="vm.isNonePp()">
+	<div class="con-flex">
+		<div class="line-center">
+			<i class="mdi mdi-information-outline huge-icon line-center"></i>
+			<h2>{{ 'HelpCreatePlanningPeriod' | translate }}</h2>
+			<button
+				class="wfm-btn wfm-btn-primary create-planning-period"
+				style="margin-top: 30px;"
+				ng-click="vm.openCreatePpModal = true;"
+			>
+				{{ 'CreatePlanningPeriod' | translate }}
+			</button>
+		</div>
+	</div>
+</div>
+<div class="con-row">
+	<div class="pp-modal">
+		<div class="modal-box" ng-show="vm.modifyLastPpModal">
+			<div class="modalbg">
+				<div class="dialog material-depth-1">
+					<h2 class="modal-title" style="margin-top: 10px">
+						{{ 'ChangePlanningPeriodDurationColon' | translate }}
+						{{ vm.originLastPp.startDate | amDateFormat: 'L' }} -
+						{{ vm.originLastPp.endDate | amDateFormat: 'L' }}
+					</h2>
+					<span class="modal-title" ng-if="vm.typeIsWrong"
+						><i class="mdi mdi-information-outline"></i> The planning period interval has wrong type.</span
+					>
+					<md-content class="md-padding" ng-hide="vm.typeIsWrong">
+						<md-tabs md-dynamic-height md-border-bottom>
+							<md-tab label="Custom">
+								<md-content class="md-padding">
+									<div class="con-row">
+										<label>
+											<i class="mdi mdi-information-outline"></i>Set up the period interval
+											length<span ng-if="vm.planningPeriods.length <= 1">
+												and select start date</span
+											>
+										</label>
+									</div>
+									<div class="con-row">
+										<input
+											type="number"
+											style="margin: 5px; width: unset;"
+											ng-model="vm.intervalRange"
+											ng-change="vm.intervalChanged()"
+											name="WeekInterval"
+											min="1"
+											title="week/month"
+										/>
+										<wfm-btn-group
+											items="vm.types"
+											selected="vm.intervalType"
+											output="vm.typeChanged"
+											btn-class="'wfm-btn-default'"
+											selection-class="'wfm-btn-primary'"
+										></wfm-btn-group>
+									</div>
+									<p class="text-danger" ng-show="!vm.isValidPeriod()" translate>InvalidInput</p>
+									<div class="con-row pp-calendar-wrapper">
+										<div class="con-flex" ng-if="vm.planningPeriods.length > 1">
+											<wfm-date-range-picker
+												ng-model="vm.selectedSuggestion"
+												ng-change="vm.isSelectedChanged()"
+												interval-rule="week"
+												disable="all"
+												custom-validate="vm.intervalLengthValid()"
+												ng-show="vm.intervalType == 'Week'"
+											></wfm-date-range-picker>
+											<wfm-date-range-picker
+												ng-model="vm.selectedSuggestion"
+												ng-change="vm.isSelectedChanged()"
+												interval-rule="month"
+												disable="all"
+												custom-validate="vm.intervalLengthValid()"
+												ng-show="vm.intervalType == 'Month'"
+											></wfm-date-range-picker>
+										</div>
+										<div class="con-flex" ng-if="vm.planningPeriods.length == 1">
+											<wfm-date-range-picker
+												ng-model="vm.selectedSuggestion"
+												ng-change="vm.isSelectedChanged()"
+												interval-rule="week"
+												disable="end-date"
+												custom-validate="vm.intervalLengthValid()"
+												ng-show="vm.intervalType == 'Week'"
+											></wfm-date-range-picker>
+											<wfm-date-range-picker
+												ng-model="vm.selectedSuggestion"
+												ng-change="vm.isSelectedChanged()"
+												interval-rule="month"
+												disable="end-date"
+												custom-validate="vm.intervalLengthValid()"
+												ng-show="vm.intervalType == 'Month'"
+											></wfm-date-range-picker>
+										</div>
+									</div>
+								</md-content>
+							</md-tab>
+						</md-tabs>
+					</md-content>
+					<aside>
+						<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
+							Cancel
+						</button>
+						<button
+							ng-class="{'wfm-btn-invis-primary':vm.selectedIsValid, 'wfm-btn-invis-disabled': !vm.selectedIsValid}"
+							ng-disabled="!vm.selectedIsValid"
+							ng-click="vm.changeDateForLastPp(vm.selectedSuggestion);"
+							class="wfm-btn save-planning-period"
+							translate
+						>
+							Apply
+						</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="con-row">
+	<div class="pp-modal">
+		<div ng-cloak class="modal-box" ng-if="vm.openCreatePpModal">
+			<div class="modalbg">
+				<div class="dialog material-depth-1">
+					<h2 class="modal-title" style="margin-top: 10px;">{{ 'CreateFirstPlanningPeriod' | translate }}</h2>
+					<md-content class="md-padding">
+						<md-tabs md-dynamic-height md-border-bottom>
+							<md-tab label="Suggestions">
+								<md-content class="md-padding">
+									<div class="con-row">
+										<label>
+											<i class="mdi mdi-information-outline"></i>Select a suggested period to work
+											with
+										</label>
+									</div>
+									<div class="con-row">
+										<div class="con-flex">
+											<div
+												class="wfm-chip-wrap planning-period-suggesions"
+												ng-repeat="s in vm.suggestions | limitTo: 10"
+											>
+												<span class="wfm-chip" ng-click="vm.setSelectedDate(s)">
+													<span class="chip-handle"
+														>{{ s.Number }}&nbsp;{{ s.PeriodType }}</span
+													>
+													<span class="chip-text"
+														>{{ s.StartDate | amDateFormat: 'LL' }} -
+														{{ s.EndDate | amDateFormat: 'LL' }}</span
+													>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="con-row pp-calendar-wrapper">
+										<div class="con-flex ">
+											<wfm-date-range-picker
+												custom-validate="vm.intervalLengthValid()"
+												disable="all"
+												ng-model="vm.selectedSuggestion"
+												interval-rule="week"
+												ng-if="vm.intervalType == 'Week'"
+											></wfm-date-range-picker>
+											<wfm-date-range-picker
+												custom-validate="vm.intervalLengthValid()"
+												disable="all"
+												ng-model="vm.selectedSuggestion"
+												interval-rule="month"
+												ng-if="vm.intervalType == 'Month'"
+											></wfm-date-range-picker>
+										</div>
+									</div>
+								</md-content>
+							</md-tab>
+							<md-tab label="Custom">
+								<md-content class="md-padding">
+									<div class="con-row">
+										<label>
+											<i class="mdi mdi-information-outline"></i>Set up the period interval length
+											and select start date
+										</label>
+									</div>
+									<div class="con-row">
+										<input
+											type="number"
+											style="margin: 5px; width: unset;"
+											ng-model="vm.intervalRange"
+											ng-change="vm.intervalChanged()"
+											name="WeekInterval"
+											min="1"
+											title="week/month"
+										/>
+										<wfm-btn-group
+											items="vm.types"
+											selected="vm.intervalType"
+											output="vm.typeChanged"
+											btn-class="'wfm-btn-default'"
+											selection-class="'wfm-btn-primary'"
+										></wfm-btn-group>
+									</div>
+									<p class="text-danger" ng-show="!vm.isValidPeriod()" translate>InvalidInput</p>
+									<div class="con-row pp-calendar-wrapper">
+										<div class="con-flex">
+											<wfm-date-range-picker
+												ng-model="vm.selectedSuggestion"
+												ng-change="vm.isSelectedChanged()"
+												interval-rule="week"
+												disable="end-date"
+												custom-validate="vm.intervalLengthValid()"
+												ng-if="vm.intervalType == 'Week'"
+											></wfm-date-range-picker>
+											<wfm-date-range-picker
+												ng-model="vm.selectedSuggestion"
+												ng-change="vm.isSelectedChanged()"
+												interval-rule="month"
+												disable="end-date"
+												custom-validate="vm.intervalLengthValid()"
+												ng-if="vm.intervalType == 'Month'"
+											></wfm-date-range-picker>
+										</div>
+									</div>
+								</md-content>
+							</md-tab>
+						</md-tabs>
+					</md-content>
+					<aside>
+						<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.resetSelectedSuggestion()" translate>
+							Cancel
+						</button>
+						<button
+							class="wfm-btn apply-planning-period"
+							ng-class="{'wfm-btn-invis-primary':vm.selectedIsValid, 'wfm-btn-invis-disabled': !vm.selectedIsValid}"
+							ng-disabled="!vm.selectedIsValid"
+							ng-click="vm.createFirstPp()"
+							translate
+						>
+							Apply
+						</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
