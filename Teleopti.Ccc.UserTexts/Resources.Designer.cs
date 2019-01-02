@@ -19823,6 +19823,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Month(s).
+        /// </summary>
+        public static string MonthOrMonths {
+            get {
+                return ResourceManager.GetString("MonthOrMonths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Months.
         /// </summary>
         public static string Months {
@@ -39952,6 +39961,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WeekOfMonth {
             get {
                 return ResourceManager.GetString("WeekOfMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Week(s).
+        /// </summary>
+        public static string WeekOrWeeks {
+            get {
+                return ResourceManager.GetString("WeekOrWeeks", resourceCulture);
             }
         }
         

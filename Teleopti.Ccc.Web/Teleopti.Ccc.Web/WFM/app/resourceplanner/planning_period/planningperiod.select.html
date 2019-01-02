@@ -155,13 +155,13 @@
 											min="1"
 											title="week/month"
 										/>
-										<wfm-btn-group
+										<wfm-week-month-group
 											items="vm.types"
 											selected="vm.intervalType"
 											output="vm.typeChanged"
 											btn-class="'wfm-btn-default'"
 											selection-class="'wfm-btn-primary'"
-										></wfm-btn-group>
+										></wfm-week-month-group>
 									</div>
 									<p class="text-danger" ng-show="!vm.isValidPeriod()" translate>InvalidInput</p>
 									<div class="con-row pp-calendar-wrapper">
@@ -249,7 +249,7 @@
 											>
 												<span class="wfm-chip" ng-click="vm.setSelectedDate(s)">
 													<span class="chip-handle"
-														>{{ s.Number }}&nbsp;{{ s.PeriodType }}</span
+														>{{ s.Number===1? ('1 '+((s.PeriodType==='Week'?'Week':'Month') | translate)):(s.Number+' '+((s.PeriodType==='Week'?'Weeks':'Months') | translate)) }}</span
 													>
 													<span class="chip-text"
 														>{{ s.StartDate | amDateFormat: 'LL' }} -
@@ -297,13 +297,13 @@
 											min="1"
 											title="week/month"
 										/>
-										<wfm-btn-group
+										<wfm-week-month-group
 											items="vm.types"
 											selected="vm.intervalType"
 											output="vm.typeChanged"
 											btn-class="'wfm-btn-default'"
 											selection-class="'wfm-btn-primary'"
-										></wfm-btn-group>
+										></wfm-week-month-group>
 									</div>
 									<p class="text-danger" ng-show="!vm.isValidPeriod()" translate>InvalidInput</p>
 									<div class="con-row pp-calendar-wrapper">

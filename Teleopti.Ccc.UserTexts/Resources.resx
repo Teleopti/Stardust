@@ -1173,6 +1173,10 @@ Date</value>
     <value>Months</value>
     <comment>Months</comment>
   </data>
+  <data name="MonthOrMonths" xml:space="preserve">
+    <value>Month(s)</value>
+    <comment>Month(s)</comment>
+  </data>
   <data name="MonthView" xml:space="preserve">
     <value>Month View</value>
     <comment>Month view</comment>
@@ -2273,6 +2277,10 @@ Periods</comment>
     <value>Weeks</value>
     <comment>Weeks</comment>
   </data>
+  <data name="WeekOrWeeks" xml:space="preserve">
+    <value>Week(s)</value>
+    <comment>Week(s)</comment>
+  </data>	
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
     <comment>Welcome</comment>
