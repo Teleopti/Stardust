@@ -15,6 +15,7 @@ import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component';
 import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
 import { BankHolidayCalendarEditComponent } from '../bank-holiday-calendar-edit';
+import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
 
 describe('BankHolidayCalendarComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarComponent>;
@@ -41,7 +42,16 @@ describe('BankHolidayCalendarComponent', () => {
 				HttpClientTestingModule,
 				BrowserAnimationsModule
 			],
-			providers: [TranslateService, UserService]
+			providers: [
+				TranslateService,
+				UserService,
+				{
+					provide: ToggleMenuService,
+					useValue: new ToggleMenuService({
+						innerWidth: 1200
+					} as Window)
+				}
+			]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BankHolidayCalendarComponent);

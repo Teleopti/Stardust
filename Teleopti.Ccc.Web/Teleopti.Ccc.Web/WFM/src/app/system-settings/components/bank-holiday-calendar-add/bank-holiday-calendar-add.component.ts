@@ -8,6 +8,7 @@ import {
 	BankHolidayCalendarDateItem
 } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
+import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
 
 @Component({
 	selector: 'bank-holiday-calendar-add',
@@ -33,10 +34,22 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
 		private translate: TranslateService,
-		private noticeService: NzNotificationService
+		private noticeService: NzNotificationService,
+		private menuService: ToggleMenuService
 	) {}
 
-	ngOnInit(): void {}
+	ngOnInit(): void {
+		this.menuService.showMenu$.subscribe(isMenuVisible => {
+			if (this.activedYearTab) {
+				this.activedYearTab.Active = false;
+			}
+			setTimeout(() => {
+				if (this.activedYearTab) {
+					this.activedYearTab.Active = true;
+				}
+			});
+		});
+	}
 
 	checkNewCalendarName() {
 		this.nameAlreadyExisting = this.bankHolidayCalendarsList.some(c => c.Name === this.newCalendarName);
@@ -65,6 +78,7 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 			Dates: [],
 			SelectedDates: []
 		};
+		this.activedYearTab = newYear;
 		this.newCalendarYears.push(newYear);
 		this.newCalendarTabIndex = this.newCalendarYears.length - 1;
 	}

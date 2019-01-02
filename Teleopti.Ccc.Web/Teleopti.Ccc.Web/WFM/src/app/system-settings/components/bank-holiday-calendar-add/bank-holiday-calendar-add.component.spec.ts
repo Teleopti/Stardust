@@ -9,6 +9,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '@wfm/test';
 import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.component';
+import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
 
 describe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
@@ -28,7 +29,16 @@ describe('BankHolidayCalendarAddComponent', () => {
 				HttpClientTestingModule,
 				BrowserAnimationsModule
 			],
-			providers: [TranslateService, UserService]
+			providers: [
+				TranslateService,
+				UserService,
+				{
+					provide: ToggleMenuService,
+					useValue: new ToggleMenuService({
+						innerWidth: 1200
+					} as Window)
+				}
+			]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BankHolidayCalendarAddComponent);
