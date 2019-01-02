@@ -22,22 +22,7 @@
 		vm.setHigherPriority = setHigherPriority;
 		vm.setLowerPriority = setLowerPriority;
 		vm.disableButton = disableButton;
-		vm.setColor = setColor;
 		vm.test = false;
-		vm.color = {
-			render: 'linear',
-			rgba: 'rgba(156, 39, 176, 1)'
-		};
-
-		function setColor(index) {
-			var opacity = 1 - index / vm.settings.length;
-			if (index === 0) {
-				opacity = 0.05;
-			}
-			return {
-				'border-left': '10px solid rgba(156, 39, 176,' + opacity.toFixed(2) + ')'
-			}
-		}
 
 		function showDeleteSchedulingSettingModal(setting) {
 			vm.confirmDeleteModal = true;
