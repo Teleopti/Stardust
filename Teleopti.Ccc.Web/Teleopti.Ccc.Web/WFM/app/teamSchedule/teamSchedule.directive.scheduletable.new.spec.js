@@ -84,6 +84,83 @@
 			expect(!!container[0].querySelector('.md-checked')).toBeFalsy();
 		});
 
+		it('should select whole same activities for previous day when select part of it', function () {
+			var yesterdaySchedule = {
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2019-01-01',
+				WorkTimeMinutes: 240,
+				ContractTimeMinutes: 240,
+				Projection: [
+					{
+						ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
+						ActivityId: '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6',
+						Color: '#FF0000',
+						Description: 'Invoice',
+						StartInUtc: '2019-01-01 22:00',
+						EndInUtc: '2019-01-02 02:00',
+						IsOvertime: false
+					},
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						Color: '#ffffff',
+						Description: 'Phone',
+						StartInUtc: '2019-01-02 02:00',
+						EndInUtc: '2019-01-02 03:00',
+						IsOvertime: false
+					},
+					{
+						ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
+						ActivityId: '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6',
+						Color: '#FF0000',
+						Description: 'Invoice',
+						StartInUtc: '2019-01-01 03:00',
+						EndInUtc: '2019-01-02 04:00',
+						IsOvertime: false
+					},
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						Color: '#ffffff',
+						Description: 'Phone',
+						StartInUtc: '2019-01-02 04:00',
+						EndInUtc: '2019-01-02 06:00',
+						IsOvertime: false
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			};
+			fakeTeamSchedule.has(yesterdaySchedule);
+			var todaySchedule = {
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2019-01-02',
+				WorkTimeMinutes: 240,
+				ContractTimeMinutes: 240,
+				Projection: [{
+					ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+					ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6',
+					Color: '#FFa2a2',
+					Description: 'E-mail',
+					StartInUtc: '2019-01-02 08:00',
+					EndInUtc: '2019-01-02 17:00',
+					IsOvertime: false
+				}],
+				DayOff: null,
+				Timezone: { IanaId: 'Europe/Berlin' }
+			};
+			fakeTeamSchedule.has(todaySchedule);
+
+			scheduleManagement.resetSchedules([todaySchedule, yesterdaySchedule], '2019-01-02', 'Europe/Berlin');
+			var container = setUp('2019-01-02', 'Europe/Berlin');
+
+			var layers = container[0].querySelectorAll('.layer');
+			layers[2].click();
+
+			expect(container[0].querySelectorAll('.layer.selected').length).toBe(2);
+		});
+
 		it('should show shift editor view after click the edit button', function () {
 			var schedule = {
 				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
@@ -145,6 +222,7 @@
 
 			expect(!!container[0].querySelector('shift-editor')).toBeFalsy();
 		});
+
 
 		function setUp(selectedDate, selectedTimezone) {
 			var html = '<schedule-table select-mode="true" selected-date="selectedDate" selected-timezone="selectedTimezone"></schedule-table>';
