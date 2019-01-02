@@ -78,7 +78,7 @@
 			fakeTeamSchedule.has(todaySchedule);
 
 			scheduleManagement.resetSchedules([todaySchedule, yesterdaySchedule], '2019-01-02', 'Europe/Berlin');
-			var container = setUp('2018-12-12', 'Europe/Berlin');
+			var container = setUp('2019-01-02', 'Europe/Berlin');
 			container[0].querySelector('.layer').click();
 
 			expect(!!container[0].querySelector('.md-checked')).toBeFalsy();

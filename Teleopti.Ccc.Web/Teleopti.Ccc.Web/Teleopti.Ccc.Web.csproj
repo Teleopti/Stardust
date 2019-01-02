@@ -1913,7 +1913,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.week.spec.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.scheduletable.shiftEditor.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.scheduletable.new.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.groupSchedule.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.spec.js" />
