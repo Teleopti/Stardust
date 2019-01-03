@@ -580,4 +580,31 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 		expect(vm.siteCards[0].teams[1].InAlarmCount).toEqual(2);
 	});
+
+    it('should have href for team when new site and team (#79991)', function (t) {
+        t.backend
+            .withSiteAdherence({
+                Id: 'londonId'
+            })
+            .withTeamAdherence({
+                SiteId: 'londonId',
+                Id: 'greenId'
+            });
+        var vm = t.createController();
+        t.backend
+            .withSiteAdherence({
+                Id: 'parisId'
+            })
+            .withTeamAdherence({
+                SiteId: 'parisId',
+                Id: 'redId'
+            });
+        t.wait(5000);
+
+        t.apply(function () {
+            vm.siteCards[1].isOpen = true;
+        });
+
+        expect(vm.siteCards[1].teams[0].href).toBe(t.href('rta-agents', {siteIds: ['parisId']}));
+    });
 });

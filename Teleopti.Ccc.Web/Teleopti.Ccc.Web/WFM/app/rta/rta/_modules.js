@@ -20,6 +20,8 @@
 
 				$rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
 					$injector.invoke(function (rtaDataService, rtaStateService) {
+                        if (toState.name == 'rta-agents')
+                            rtaDataService.reload();
 						if (fromState.name == 'rta-skill-area-manager')
 							rtaDataService.reload();
 						if (toState.name == 'rta' && fromState.name != 'rta')

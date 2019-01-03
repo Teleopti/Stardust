@@ -130,7 +130,7 @@
 							rtaStateService.selectTeam(team.Id, newValue);
 						},
 						AgentsCount: team.AgentsCount,
-						href: rtaStateService.agentsHrefForTeam(team.SiteId, team.Id)
+                        href: rtaStateService.agentsHrefForTeam(teams.length, team.SiteId, team.Id)
 					};
 					siteCard.teams.push(teamCard);
 				}
