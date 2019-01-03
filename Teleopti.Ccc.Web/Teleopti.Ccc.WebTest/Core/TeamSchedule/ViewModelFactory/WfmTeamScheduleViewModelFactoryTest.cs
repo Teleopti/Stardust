@@ -1276,6 +1276,46 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.Total.Should().Be(0);
 		}
 
+		[Test, SetCulture("sv-SE")]
+		public void ShouldReturnScheduleForPermittedTeamMembers()
+		{
+			var scheduleDate = new DateTime(2018, 10, 30, 00, 00, 00, DateTimeKind.Utc);
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+
+			var secondScheduleDate = new DateTime(2018, 10, 31, 00, 00, 00, DateTimeKind.Utc);
+			var secondScheduleDateOnly = new DateOnly(secondScheduleDate);
+
+			setUpPersonAndCulture();
+
+			PeopleSearchProvider.EnableDateFilter();
+			PeopleSearchProvider.Add(secondScheduleDateOnly,personInUtc);
+			PermissionProvider.Enable();
+			PermissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules,
+				secondScheduleDateOnly, team);
+
+			var scenario = CurrentScenario.Has("Default");
+
+			var activity = new Activity("activity1");
+			var personAssignment1 = new PersonAssignment(personInUtc, scenario, scheduleDateOnly);
+			personAssignment1.AddActivity(activity, new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
+			PersonAssignmentRepository.Add(personAssignment1);
+
+			var personAssignment2 = new PersonAssignment(personInUtc, scenario, secondScheduleDateOnly);
+			personAssignment2.AddActivity(activity, new DateTimePeriod(secondScheduleDate.AddHours(7), secondScheduleDate.AddHours(18)));
+			PersonAssignmentRepository.Add(personAssignment2);
+
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
+			{
+				DateInUserTimeZone = scheduleDateOnly,
+				CurrentPageIndex = 0,
+				CriteriaDictionary = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, personInUtc.Name.FirstName} },
+				GroupIds = new[] {team.Id.GetValueOrDefault()}
+			});
+
+			result.PersonWeekSchedules[0].DaySchedules[1].ContractTimeMinutes.Should().Be.EqualTo(0);
+			result.PersonWeekSchedules[0].DaySchedules[2].ContractTimeMinutes.Should().Be.GreaterThan(0);
+		}
+
 		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDayScheduleSummaryForWorkingDay()
 		{

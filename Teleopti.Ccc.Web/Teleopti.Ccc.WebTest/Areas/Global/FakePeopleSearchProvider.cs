@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
-
 
 namespace Teleopti.Ccc.WebTest.Areas.Global
 {
@@ -83,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			if (_enableDateFilter)
 			{
-				return !_permittedPeopleByDate.ContainsKey(currentDate) ? new List<IPerson>() : _permittedPeopleByDate[currentDate].ToList();
+				return !_permittedPeopleByDate.TryGetValue(currentDate, out var permitted) ? new List<IPerson>() : permitted.ToList();
 			}
 			return function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
 				? _peopleWithConfidentialAbsencePermission
@@ -96,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var date = search.BelongsToDate;
 			if (_enableDateFilter)
 			{
-				people = !_permittedPeopleByDate.ContainsKey(date) ? new List<IPerson>() : _permittedPeopleByDate[date].ToList();
+				people = !_permittedPeopleByDate.TryGetValue(date, out var permitted) ? new List<IPerson>() : permitted.ToList();
 			}
 			else
 			{
@@ -117,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			IEnumerable<IPerson> people;
 			if (_enableDateFilter)
 			{
-				people = !_permittedPeopleByDate.ContainsKey(date) ? new List<IPerson>() : _permittedPeopleByDate[date];
+				people = !_permittedPeopleByDate.TryGetValue(date, out var permitted) ? new List<IPerson>() : permitted;
 			}
 			else
 			{
@@ -157,9 +155,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public void Add(DateOnly date, params IPerson[] persons)
 		{
-			if (_permittedPeopleByDate.ContainsKey(date))
+			if (_permittedPeopleByDate.TryGetValue(date, out var permitted))
 			{
-				_permittedPeopleByDate[date].AddRange(persons);
+				permitted.AddRange(persons);
 			}
 			else
 			{
@@ -221,7 +219,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			roleName = Regex.Match(roleName, quotePattern).Value;
 			people =
 				people.Where(
-					p => _personApplicationRoleDictionary.ContainsKey(p) && _personApplicationRoleDictionary[p] == roleName);
+					p => _personApplicationRoleDictionary.TryGetValue(p, out var role) && role == roleName);
 			return people;
 		}
 
