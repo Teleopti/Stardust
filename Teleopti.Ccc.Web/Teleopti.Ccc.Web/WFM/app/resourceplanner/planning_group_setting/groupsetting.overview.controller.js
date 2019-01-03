@@ -87,7 +87,7 @@
 				return;
 			addAnimate(index);
 			switchPrio(setting, vm.settings[index - 1]);
-			return resortDisplayOrder(vm.settings);
+			resortDisplayOrder(vm.settings);
 		}
 
 		function setLowerPriority(setting, index) {
@@ -95,7 +95,7 @@
 				return;
 			addAnimate(index);
 			switchPrio(setting, vm.settings[index + 1]);
-			return resortDisplayOrder(vm.settings);
+			resortDisplayOrder(vm.settings);
 		}
 
 		function switchPrio(item1, item2) {
@@ -104,7 +104,7 @@
 			item2.Priority = temp;
 			persist(item1);
 			persist(item2);
-			return resortDisplayOrder(vm.settings);
+			resortDisplayOrder(vm.settings);
 		}
 
 		function addAnimate(id) {
