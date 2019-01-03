@@ -53,7 +53,7 @@ MessageBroker_ScheduleChangedMessagePackaging_79140 = true
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_SuggestShiftCategory_152 = RC
-WfmTeamSchedule_ShiftEditorInDayView_78295 = DEV
+WfmTeamSchedule_ShiftEditorInDayView_78295 = RC
 WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = RC
 
 # Code Monkeys, can any of these be removed? #
