@@ -12303,7 +12303,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>No team option in team scheduling /optimization</comment>
   </data>
   <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
-    <value>Schedule Period</value>
+    <value>Schedule period</value>
   </data>
   <data name="Desktop" xml:space="preserve">
     <value>Desktop</value>

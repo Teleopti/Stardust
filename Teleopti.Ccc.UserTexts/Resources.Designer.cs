@@ -4782,7 +4782,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Schedule Period.
+        ///   Looks up a localized string similar to Schedule period.
         /// </summary>
         public static string BlockFinderTypeSchedulePeriod {
             get {
