@@ -16429,7 +16429,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optimize Intraday.
+        ///   Looks up a localized string similar to Optimize intraday.
         /// </summary>
         public static string IntraOptimize {
             get {
@@ -27236,6 +27236,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PublishSchedule {
             get {
                 return ResourceManager.GetString("PublishSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publish schedule.
+        /// </summary>
+        public static string PublishSchedulePlans {
+            get {
+                return ResourceManager.GetString("PublishSchedulePlans", resourceCulture);
             }
         }
         

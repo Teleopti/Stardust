@@ -12815,6 +12815,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Publish Schedule</value>
     <comment>Publish Schedule</comment>
   </data>
+  <data name="PublishSchedulePlans" xml:space="preserve">
+    <value>Publish schedule</value>
+    <comment>Publish schedule, used in plans</comment>
+  </data>
   <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
     <value>Start time should be earlier than end time</value>
   </data>
@@ -14204,7 +14208,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Seat property information title of seatmap right panel</comment>
   </data>
   <data name="IntraOptimize" xml:space="preserve">
-    <value>Optimize Intraday</value>
+    <value>Optimize intraday</value>
     <comment>describing action for starting intraday optimization on selected schedule</comment>
   </data>
   <data name="ShowErrors" xml:space="preserve">
