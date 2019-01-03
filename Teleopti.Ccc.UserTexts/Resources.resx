@@ -18133,12 +18133,16 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Validation issues</value>
     <comment>Shown in planning period overview in Plans</comment>
   </data>
-	<data name="ValidationsAreLoading" xml:space="preserve">
+  <data name="ValidationsAreLoading" xml:space="preserve">
     <value>Validation are loading</value>
     <comment>Shown in planning period overview in Plans</comment>
   </data>
-	<data name="ValidationsAreLoadingTooltip" xml:space="preserve">
+  <data name="ValidationsAreLoadingTooltip" xml:space="preserve">
     <value>Validation are loading, this might take a few minutes</value>
     <comment>Shown in planning period overview in Plans</comment>
+  </data>
+  <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
+    <value>There are no agents in this planning group. Please review the filters. </value>
+    <comment>Used in Plans when a planning group has been created and no agents match the filters</comment>
   </data>
 </root>
