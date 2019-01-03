@@ -12,7 +12,7 @@
 									   class="pg-setting-name" required minlength="1" maxlength="100"
 								/>
 								<div ng-cloak class="animate-show"
-									 ng-show="(form.$submitted || form.schedulingSettingName.$touched) && form.schedulingSettingName.$error.required">
+									 ng-show="(vm.settingInfo.submitted || form.schedulingSettingName.$touched) && form.schedulingSettingName.$error.required">
 									<div class="form-input-message formInvalidInput">{{'YouCannotHaveABlankName' |
 										translate
 										}}
@@ -44,7 +44,7 @@
 									</md-autocomplete>
 								</div>
 								<div ng-cloak
-									 ng-show="(form.$submitted || form.filters.$touched) && !vm.isValidFilters()">
+									 ng-show="(vm.settingInfo.submitted || form.filters.$touched) && !vm.isValidFilters()">
 									<span class="form-input-message formInvalidInput" translate>YouMustSelectAtLeastOneFilter</span>
 								</div>
 							</div>

@@ -119,6 +119,7 @@
 		function isValid() {
 			for (var i = 0; i < vm.editPlanningGroup.Settings.length; i++) {
 				if(vm.editPlanningGroup.Settings[i].isValid && !vm.editPlanningGroup.Settings[i].isValid()){
+                    vm.editPlanningGroup.Settings[i].submitted = true;
 					return false;
 				}
 			}
@@ -150,6 +151,7 @@
 		}
 
 		function persist() {
+            vm.submitted = true;
 			if (!isValid()) {
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 			} else if (!vm.requestSent) {

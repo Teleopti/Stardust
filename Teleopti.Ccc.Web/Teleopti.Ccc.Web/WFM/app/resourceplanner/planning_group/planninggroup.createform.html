@@ -9,7 +9,7 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<form name="form" class="wfm-form material-depth-1">
+		<ng-form name="form" class="wfm-form material-depth-1">
 			<div class="con-flex panel" style="border-bottom: 1px solid rgba(0, 0, 0, 0.16);">
 				<div class="con-row">
 					<div class="con-flex">
@@ -17,7 +17,7 @@
 						<input type="text" maxlength="100" minlength="1" name="planningGroupName"
 							   id="planningGroupNameId" autofocus autocomplete="off" ng-model="vm.name" required/>
 						<div ng-cloak class="animate-show"
-							 ng-show="(form.$submitted || form.planningGroupName.$touched) && form.planningGroupName.$error.required">
+							 ng-show="(vm.submitted|| form.planningGroupName.$touched) && form.planningGroupName.$error.required">
 							<div class="form-input-message formInvalidInput">{{'YouCannotHaveABlankName' | translate }}
 							</div>
 						</div>
@@ -44,7 +44,7 @@
 							</md-autocomplete>
 						</div>
 						<div ng-cloak
-							 ng-show="(form.$submitted || form.filters.$touched) && !vm.isValidFilters()">
+							 ng-show="(vm.submitted || form.filters.$touched) && !vm.isValidFilters()">
 							<span class="form-input-message formInvalidInput" translate>YouMustSelectAtLeastOneFilter</span>
 						</div>
 					</div>
@@ -74,9 +74,7 @@
 				<div style="float: right;">
 					<button class="wfm-btn wfm-btn-invis-default"
 							ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
-					<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid() || vm.requestSent"
-							ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
-							ng-click="vm.persist()">
+					<button type="submit" class="wfm-btn save-plan-group wfm-btn-invis-primary" ng-disabled="vm.requestSent" ng-click="vm.persist()">
 						{{'Save'|translate}}
 					</button>
 				</div>
@@ -104,6 +102,6 @@
 					</div>
 				</div>
 			</div>
-		</form>
+		</ng-form>
 	</div>
 </div>
