@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private bool validateRequestStartTime(DateTime requestStartTime, TimeZoneInfo timeZone, int expiredThreshold)
 		{
 			var now = _now.UtcDateTime();
-			var localNowForTimeZone = now.Add(timeZone.GetUtcOffset(now));
+			var localNowForTimeZone = TimeZoneHelper.ConvertFromUtc(now, timeZone);
 			var localTimeForRequestStartTime = TimeZoneHelper.ConvertFromUtc(requestStartTime, timeZone);
 			var minimumRequestStartTime = localNowForTimeZone.AddMinutes(expiredThreshold);
 			return localTimeForRequestStartTime.CompareTo(minimumRequestStartTime) >= 0;

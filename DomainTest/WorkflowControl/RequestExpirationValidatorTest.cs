@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
-
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_person = createPerson(15);
 			_timeZone = _person.PermissionInformation.DefaultTimeZone();
 			_now = new DateTime(2016, 10, 14, 8, 0, 0);
-			_utcNow = _now.Subtract(_timeZone.GetUtcOffset(_now));
+			_utcNow = TimeZoneHelper.ConvertToUtc(_now, _timeZone);
 
 			setDefaultStartTimeEndTime(8, 17);
 		}
