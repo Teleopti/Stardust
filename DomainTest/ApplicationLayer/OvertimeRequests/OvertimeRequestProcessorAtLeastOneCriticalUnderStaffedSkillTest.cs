@@ -4,12 +4,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 
 
@@ -48,39 +46,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldDenyWhenOnlyUnderStaffingButNoCriticalSkillAndToggle74944IsOn()
-		{
-			setupPerson();
-
-			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 24)
-			});
-			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
-
-			var activity1 = createActivity("activity1");
-			var activity2 = createActivity("activity2");
-			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var notUnderStaffingSkill = createSkill("notUnderStaffingSkill", null, timeZone);
-			var underStaffedButNotCriticalSkill = createSkill("criticalUnderStaffingSkill", null, timeZone);
-
-			var personSkill1 = createPersonSkill(activity1, notUnderStaffingSkill);
-			var personSkill2 = createPersonSkill(activity2, underStaffedButNotCriticalSkill);
-
-			setupIntradayStaffingForSkill(notUnderStaffingSkill, 10d, 20d);
-			setupIntradayStaffingForSkill(underStaffedButNotCriticalSkill, 10d, 15d);
-
-			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
-
-			var personRequest = createOvertimeRequest(11, 1);
-			getTarget().Process(personRequest);
-
-			personRequest.IsDenied.Should().Be.True();
 		}
 
 		[Test]

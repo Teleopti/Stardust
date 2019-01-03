@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestFourteenDaySetting>().As<IAbsenceRequestSetting>().SingleInstance();
 
 
-			builder.RegisterType<OvertimeRequestUnderStaffingSkillProviderToggle74944On>().As<IOvertimeRequestUnderStaffingSkillProvider>().SingleInstance();
+			builder.RegisterType<OvertimeRequestUnderStaffingSkillProvider>().As<IOvertimeRequestUnderStaffingSkillProvider>().SingleInstance();
 
 
 			builder.RegisterType<OvertimeRequestOpenPeriodProvider>().As<IOvertimeRequestOpenPeriodProvider>();
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BudgetGroupHeadCountSpecificationExtended>().As<IBudgetGroupHeadCountCalculator>()
 				.SingleInstance();
 
-			builder.RegisterType<OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On>().As<IOvertimeRequestCriticalUnderStaffedSpecification>()
+			builder.RegisterType<OvertimeRequestCriticalUnderStaffedSpecification>().As<IOvertimeRequestCriticalUnderStaffedSpecification>()
 				.SingleInstance();
 
 			builder.RegisterType<PrimaryPersonSkillFilter>().As<IPrimaryPersonSkillFilter>().SingleInstance();
