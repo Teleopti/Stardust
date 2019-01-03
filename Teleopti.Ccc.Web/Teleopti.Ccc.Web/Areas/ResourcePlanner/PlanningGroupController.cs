@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/planninggroup")]
-		public virtual IHttpActionResult Create(PlanningGroupModel model)
+		public virtual IHttpActionResult Save(PlanningGroupModel model)
 		{
 			_planningGroupModelPersister.Persist(model);
 			return Ok();

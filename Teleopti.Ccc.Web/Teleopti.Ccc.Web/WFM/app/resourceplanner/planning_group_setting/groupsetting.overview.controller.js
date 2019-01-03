@@ -58,6 +58,7 @@
 		}
 
 		function goCreateSchedulingSetting() {
+			var maxPriority = Math.max.apply(Math, vm.settings.map(function(item){return item.Priority;}));
 			vm.settings.unshift({
 				BlockFinderType: 0,
 				BlockSameShift: false,
@@ -73,7 +74,7 @@
 				MaxFullWeekendsOff: 8,
 				MinWeekendDaysOff: 0,
 				MaxWeekendDaysOff: 16,
-				Priority: null,
+				Priority: maxPriority+1,
 				Id: null,
 				Filters: [],
 				Default: false,
@@ -102,8 +103,6 @@
 			var temp = item1.Priority;
 			item1.Priority = item2.Priority;
 			item2.Priority = temp;
-			persist(item1);
-			persist(item2);
 			resortDisplayOrder(vm.settings);
 		}
 

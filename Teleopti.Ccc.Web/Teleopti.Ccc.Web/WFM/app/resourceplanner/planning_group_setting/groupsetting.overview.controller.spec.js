@@ -143,7 +143,6 @@ describe('planningGroupSettingOverviewController', function () {
 		vm.test = true;
 		vm.setHigherPriority(vm.settings[2], 2);
 
-		$httpBackend.flush();
 		expect(vm.settings[1].Id).toEqual(id);
 		expect(vm.settings[2].Priority).toEqual(priority);
 	});
@@ -160,7 +159,6 @@ describe('planningGroupSettingOverviewController', function () {
 		vm.test = true;
 		vm.setLowerPriority(vm.settings[1], 1);
 
-		$httpBackend.flush();
 		expect(vm.settings[2].Id).toEqual(id);
 		expect(vm.settings[1].Priority).toEqual(priority);
 	});
@@ -181,4 +179,14 @@ describe('planningGroupSettingOverviewController', function () {
 		expect(vm.settings.length).toEqual(3);
 	});
 
+    it('should increase priority number for new planning group setting', function() {
+        var vm = $controller('planningGroupSettingOverviewController', {
+            $stateParams: stateparams
+        }, {
+            settings: settings
+        });
+
+        vm.goCreateSchedulingSetting();
+        expect(vm.settings[0].Priority).toEqual(4);
+    });
 });

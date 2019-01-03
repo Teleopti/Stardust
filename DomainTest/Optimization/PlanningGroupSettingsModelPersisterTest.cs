@@ -507,31 +507,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldInsertWithHighestPriority()
-		{
-			var planningGroup = new PlanningGroup().WithId();
-			planningGroup.AddSetting(new PlanningGroupSettings
-			{
-				Priority = 2
-			});
-			PlanningGroupRepository.Add(planningGroup);
-			var model = new PlanningGroupSettingsModel
-			{
-				PlanningGroupId = planningGroup.Id.Value
-			};
-
-			Target.Persist(new PlanningGroupModel
-			{
-				Id = planningGroup.Id.Value,
-				Settings = new[] {model}
-			});
-
-			var inDbs = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings;
-			inDbs.Max(x=>x.Priority).Should().Be.EqualTo(3);
-		}
-
-		[Test]
-		public void ShouldNotChangeThePriorityWhenModifySettings()
+		public void ShouldSetPriority()
 		{
 			var settingId = Guid.NewGuid();
 			var planningGroupSettings = new PlanningGroupSettings
