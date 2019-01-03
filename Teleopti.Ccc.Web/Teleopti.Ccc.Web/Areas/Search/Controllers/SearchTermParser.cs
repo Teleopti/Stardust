@@ -11,12 +11,13 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 	public static class SearchTermParser
 	{
 		private static int _MAX_FIELD_VALUE_LENGTH = 500;
+
+		private const char keyValueSplitter = ':';
+		private const char keywordsSplitter = ' ';
+		private const char searchTermSplitter = ';';
+
 		public static IDictionary<PersonFinderField, string> Parse(string values)
 		{
-			const char keyValueSplitter = ':';
-			const char keywordsSplitter = ' ';
-			const char searchTermSplitter = ';';
-
 			var parsedTerms = new Dictionary<PersonFinderField, string>();
 
 			if (string.IsNullOrWhiteSpace(values))
@@ -32,26 +33,28 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			var quotePatternRegex = new Regex("\\s*(\"[^\"]*?\")\\s*");
 			var splitPattern =
-				new Regex("(?<!\"[^" + keywordsSplitter + "]+)" + keywordsSplitter + "(?![^" + keywordsSplitter + "]+\")");
+				new Regex($"(?<!\"[^{keywordsSplitter}]+){keywordsSplitter}(?![^{keywordsSplitter}]+\")");
 
 			values = Regex.Replace(values, @"\s{1,}", " ");
 			var searchTerms = values.Split(searchTermSplitter)
 				.Select(s => s.Trim())
 				.Where(s => !string.IsNullOrEmpty(s));
-			foreach (var term in searchTerms)
+
+			var groupedTerms = searchTerms.Select(t =>
 			{
-				var splitterPosition = term.IndexOf(keyValueSplitter);
-				if (splitterPosition < 0) continue;
+				var s = t.Split(keyValueSplitter);
+				return new {Type = s[0].ToLowerInvariant(), Terms = s.Length > 1 ? s[1] : string.Empty};
+			}).GroupBy(t => t.Type);
 
-				var searchTypeString = term.Substring(0, splitterPosition).Trim();
-
-				PersonFinderField searchType;
-				if (!Enum.TryParse(searchTypeString, true, out searchType))
+			foreach (var groupedTerm in groupedTerms)
+			{
+				if (!Enum.TryParse(groupedTerm.Key, true, out PersonFinderField searchType))
 				{
 					continue;
 				}
 
-				var searchValues = term.Substring(splitterPosition + 1, term.Length - splitterPosition - 1).Trim();
+				var searchValues = string.Join(" ", groupedTerm.Select(t => t.Terms));
+				if (string.IsNullOrWhiteSpace(searchValues)) continue;
 
 				// Replace multiple spaces and tabs before/after quote pair to single space
 				// Or add space before/after quote pair if there is no space
@@ -62,15 +65,12 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					.Select(x => x.Trim())
 					.Where(x => !string.IsNullOrEmpty(x));
 
-				var searchKeywords = parsedTerms.ContainsKey(searchType)
-					? parsedTerms[searchType].Split(keywordsSplitter).ToList()
-					: new List<string>();
-
-				searchKeywords.AddRange(result);
-				parsedTerms[searchType] = string.Join(keywordsSplitter.ToString(CultureInfo.CurrentCulture),
-					new HashSet<string>(searchKeywords));
-				if (parsedTerms[searchType].Length > _MAX_FIELD_VALUE_LENGTH)
+				var parsedTerm = string.Join(keywordsSplitter.ToString(CultureInfo.CurrentCulture),
+					new HashSet<string>(result));
+				if (parsedTerm.Length > _MAX_FIELD_VALUE_LENGTH)
 					return new Dictionary<PersonFinderField, string>();
+
+				parsedTerms[searchType] = parsedTerm;
 			}
 
 			return parsedTerms;
@@ -81,12 +81,12 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			if (string.IsNullOrEmpty(values) && myTeam != null)
 			{
 				var siteTerm = myTeam.Site.Description.Name.Contains(" ")
-					? "\"" + myTeam.Site.Description.Name + "\""
+					? $"\"{myTeam.Site.Description.Name}\""
 					: myTeam.Site.Description.Name;
 				var teamTerm = myTeam.Description.Name.Contains(" ")
-					? "\"" + myTeam.Description.Name + "\""
+					? $"\"{myTeam.Description.Name}\""
 					: myTeam.Description.Name;
-				values = siteTerm + " " + teamTerm;
+				values = $"{siteTerm} {teamTerm}";
 			}
 			return values;
 		}

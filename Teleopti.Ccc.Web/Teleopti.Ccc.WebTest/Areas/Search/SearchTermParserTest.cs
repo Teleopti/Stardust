@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "FirstName: aa bb; LastName: cc dd";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			Assert.AreEqual(2, result.Count());
+			Assert.AreEqual(2, result.Count);
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "FirstName: \taa    bb; \t LastName  \t  :   cc   \tdd  ";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			Assert.AreEqual(2, result.Count());
+			Assert.AreEqual(2, result.Count);
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "Firstme: aa bb; lastName: cc dd";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			Assert.AreEqual(1, result.Count());
+			Assert.AreEqual(1, result.Count);
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.LastName, firstTerm.Key);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "aa bb cc dd";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			Assert.AreEqual(1, result.Count());
+			Assert.AreEqual(1, result.Count);
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.All, firstTerm.Key);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "Firstname: aa bb; Firstname: ee";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			Assert.AreEqual(1, result.Count());
+			Assert.AreEqual(1, result.Count);
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string advancedSingleSearchTerm = "FirstName:aa bb";
 			var result = SearchTermParser.Parse(advancedSingleSearchTerm);
 
-			Assert.AreEqual(1, result.Count());
+			Assert.AreEqual(1, result.Count);
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "Firstname: aa bb; Firstname: aa ee";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			Assert.AreEqual(1, result.Count());
+			Assert.AreEqual(1, result.Count);
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "Firstname: \"aa bb\"dd; Firstname: aa ee";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			Assert.AreEqual(1, result.Count());
+			Assert.AreEqual(1, result.Count);
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
