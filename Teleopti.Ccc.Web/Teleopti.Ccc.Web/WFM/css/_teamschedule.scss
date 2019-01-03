@@ -1204,13 +1204,13 @@ shift-editor {
 	.btn-refresh {
 		margin: 0 10px;
 
-		.mdi-refresh:before {
-			font-size: 16px;
+		&:disabled {
+			background: none;
 		}
-	}
 
-	.btn-refresh:not(:disabled) {
-		background-color: $blue-500 !important;
+		&:not(:disabled) {
+			color: $blue-500;
+		}
 	}
 
 	.error-info {
@@ -1275,7 +1275,7 @@ shift-editor {
 			width: 100%;
 			cursor: pointer;
 			height: 10em;
-			margin-left:15px;
+			margin-left: 15px;
 
 			.scroll-toolbar {
 				display: none;
@@ -1327,10 +1327,9 @@ shift-editor {
 						transform: translateX(-50%);
 						padding: 0.1em 0.3em;
 						display: inline-block;
-						background-color: $gray-500;
 
-						&.highlight {
-							background-color: #5bc0de;
+						&:not(.highlight) {
+							background-color: $gray-500;
 						}
 					}
 				}
@@ -1372,7 +1371,7 @@ shift-editor {
 				background-color: gainsboro;
 				z-index: 10;
 				cursor: pointer;
-				margin-left:15px;
+				margin-left: 15px;
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
