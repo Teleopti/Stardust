@@ -8,10 +8,8 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -88,18 +86,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Now.Is(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc));
 		}
 		
-		[Test]
-		public void ShouldApproveRequestInLessThan15Minutes()
-		{
-			setupPerson(8, 21);
-			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
-
-			var personRequest = createOvertimeRequestInMinutes(18, 10);
-			getTarget().Process(personRequest);
-
-			personRequest.IsApproved.Should().Be.True();
-		}
-
 		[Test]
 		public void ShouldApproveRequestIn31Minutes()
 		{

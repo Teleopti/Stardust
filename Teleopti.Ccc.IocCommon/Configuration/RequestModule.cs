@@ -102,14 +102,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AbsenceRequestFourteenDaySetting>().As<IAbsenceRequestSetting>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853))
-			{
-				builder.RegisterType<OvertimeRequestUnderStaffingSkillProviderToggle47853On>().As<IOvertimeRequestUnderStaffingSkillProvider>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<OvertimeRequestUnderStaffingSkillProviderToggle74944On>().As<IOvertimeRequestUnderStaffingSkillProvider>().SingleInstance();
-			}
+
+			builder.RegisterType<OvertimeRequestUnderStaffingSkillProviderToggle74944On>().As<IOvertimeRequestUnderStaffingSkillProvider>().SingleInstance();
 
 
 			builder.RegisterType<OvertimeRequestOpenPeriodProvider>().As<IOvertimeRequestOpenPeriodProvider>();
