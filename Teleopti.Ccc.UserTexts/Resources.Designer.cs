@@ -4845,6 +4845,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block scheduling:.
+        /// </summary>
+        public static string BlockSchedulingColon {
+            get {
+                return ResourceManager.GetString("BlockSchedulingColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Block scheduling may not work when using preferences..
         /// </summary>
         public static string BlockSchedulingNotWorkingWhenUsingPreferences {
@@ -26688,7 +26697,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preference Fulfillment (%):.
+        ///   Looks up a localized string similar to Preference fulfillment (%):.
         /// </summary>
         public static string PreferenceFulfillmentPercentColon {
             get {

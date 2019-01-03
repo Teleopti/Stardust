@@ -8359,6 +8359,10 @@ Period</value>
     <value>Block Scheduling</value>
     <comment>Block Scheduling</comment>
   </data>
+  <data name="BlockSchedulingColon" xml:space="preserve">
+    <value>Block scheduling:</value>
+    <comment>Block scheduling:</comment>
+  </data>
   <data name="UseBlockScheduling" xml:space="preserve">
     <value>Use Block Scheduling</value>
     <comment>Use Block Scheduling</comment>
@@ -18006,7 +18010,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Context in audit trail</comment>
   </data>
   <data name="PreferenceFulfillmentPercentColon" xml:space="preserve">
-    <value>Preference Fulfillment (%):</value>
+    <value>Preference fulfillment (%):</value>
     <comment>used in web plans</comment>
   </data>
   <data name="ClickToViewSchedules" xml:space="preserve">
