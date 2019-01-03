@@ -14,7 +14,7 @@
 
 		<property name="Date"
 				  access="property"
-				  type="datetime"
+				  type="DateTime"
 				  not-null="true"/>
 
 		<property name="Description"

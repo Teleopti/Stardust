@@ -1,8 +1,11 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSettingWeb;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
@@ -41,42 +44,38 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			else
 			{
 				string name = string.IsNullOrWhiteSpace(input.Name) ? "Unknow Calendar" : input.Name;
-				calendar = new Domain.SystemSettingWeb.BankHolidayCalendar(name);
+				calendar = new Domain.SystemSettingWeb.BankHolidayCalendar();
+				calendar.Name = name;
 				_bankHolidayCalendarRepository.Add(calendar);
 			}
 
 			return calendar;
 		}
 
-		private void PersistDates(IBankHolidayCalendar calendar, IEnumerable<BankHolidayDateForm> dates)
+		private List<IBankHolidayDate> PersistDates(IBankHolidayCalendar calendar, IEnumerable<BankHolidayDateForm> dates)
 		{
+			var _dates = _bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == calendar.Id.Value).ToList();
+
 			if (dates == null)
-				return;
+				return _dates;
+
 			foreach (var d in dates)
 			{
 				var _d = CreateBankHolidayDate(calendar, d);
 				if (_d == null)
 					continue;
-				switch (d.Action)
-				{
-					case BankHolidayDateAction.CREATE:
-						calendar.AddDate(_d);
-						break;
-					case BankHolidayDateAction.DELETE:
-						calendar.DeleteDate(_d.Id.Value);
-						break;
-					case BankHolidayDateAction.UPDATE:
-						calendar.UpdateDate(_d);
-						break;
-				}
 				_bankHolidayDateRepository.Add(_d);
+				if (!_dates.Contains(_d))
+					_dates.Add(_d);
 			}
+
+			return _dates;
 		}
 
 		private IBankHolidayDate CreateBankHolidayDate(IBankHolidayCalendar calendar, BankHolidayDateForm input)
 		{
-			IBankHolidayDate date = null;
-			var _date = input.Date;
+			IBankHolidayDate date;
+			var _date = input.Date.Date;
 			var des = input.Description;
 
 			if (input.Id.HasValue)
@@ -84,13 +83,17 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 				date = _bankHolidayDateRepository.Load(input.Id.Value);
 				date.Date = _date;
 				date.Description = des;
+				date.Calendar = calendar;
 				if (input.IsDeleted)
 					date.SetDeleted();
 			}
+			else if (_bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == calendar.Id.Value && d.Date == _date && !d.IsDeleted).FirstOrDefault() == null)
+			{
+				date = new BankHolidayDate() { Date = _date, Description = des, Calendar = calendar };
+			}
 			else
 			{
-				if (calendar.Dates.ToList().Find(d => d.Date == _date) == null)
-					date = new BankHolidayDate() { Date = _date, Description = des };
+				date = null;
 			}
 			return date;
 		}
@@ -98,15 +101,17 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		public virtual BankHolidayCalendarViewModel Persist(BankHolidayCalendarForm input)
 		{
 			var calendar = PersistCalendar(input);
-			PersistDates(calendar, input.Years?.SelectMany(y => y.Dates));
-			return _bankHolidayModelMapper.Map(calendar);
+			var dates = PersistDates(calendar, input.Years?.SelectMany(y => y.Dates));
+			return _bankHolidayModelMapper.Map(calendar, dates);
 		}
 
 		public virtual bool Delete(Guid Id)
 		{
 			try
 			{
-				_bankHolidayCalendarRepository.Delete(Id);
+				var calendar = _bankHolidayCalendarRepository.Load(Id);
+				_bankHolidayCalendarRepository.Remove(calendar);
+				_bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == Id)?.ToList().ForEach(d => _bankHolidayDateRepository.Remove(d));
 			}
 			catch (Exception ex)
 			{

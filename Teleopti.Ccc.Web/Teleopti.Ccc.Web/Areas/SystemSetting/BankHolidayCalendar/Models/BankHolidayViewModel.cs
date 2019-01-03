@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models
 {
@@ -20,21 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models
 	public class BankHolidayDateForm
 	{
 		public Guid? Id { get; set; }
-		public DateTime Date { get; set; }
+		public DateOnly Date { get; set; }
 		public string Description { get; set; }
 		public bool IsDeleted { get; set; }
-		public BankHolidayDateAction Action
-		{
-			get
-			{
-				if (!Id.HasValue)
-					return BankHolidayDateAction.CREATE;
-				else if (IsDeleted)
-					return BankHolidayDateAction.DELETE;
-				else
-					return BankHolidayDateAction.UPDATE;
-			}
-		}
 	}
 
 	public class BankHolidayCalendarViewModel
@@ -59,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models
 	public class BankHolidayDateViewModel
 	{
 		public Guid Id { get; set; }
-		public DateTime Date { get; set; }
+		public DateOnly Date { get; set; }
 		public string Description { get; set; }
 		public bool IsDeleted { get; set; }
 	}

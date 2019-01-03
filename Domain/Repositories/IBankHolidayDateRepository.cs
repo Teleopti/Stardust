@@ -5,5 +5,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IBankHolidayDateRepository : IRepository<IBankHolidayDate>
 	{
+
 	}
 }

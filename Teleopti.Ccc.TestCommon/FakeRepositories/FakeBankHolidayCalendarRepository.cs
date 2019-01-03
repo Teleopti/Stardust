@@ -38,13 +38,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _bankHolidayCalendars.Where(c=>!c.IsDeleted);
 		}
-
-		public void Delete(Guid Id)
-		{
-			var calendar = _bankHolidayCalendars.ToList().Find(c => c.Id.Value == Id);
-			calendar.IsDeleted = true;
-
-			calendar.Dates.ToList().ForEach(d=>d.SetDeleted());
-		}
 	}
 }

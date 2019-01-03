@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSettingWeb;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
 
@@ -7,21 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping
 {
 	public class BankHolidayModelMapper : IBankHolidayModelMapper
 	{
-		public BankHolidayCalendarViewModel Map(IBankHolidayCalendar calendar)
-		{
-
-			var dates = new List<BankHolidayDateViewModel>();
-
-			calendar?.Dates?.ToList().ForEach(d =>
-			{
-				if (d.Id.HasValue && !d.IsDeleted)
-					dates.Add(new BankHolidayDateViewModel { Date = d.Date, Description = d.Description, Id = d.Id.Value });
-			});
-
-			return MapBankHolidayCalendar(calendar, dates);
-		}
-
-		private BankHolidayCalendarViewModel MapBankHolidayCalendar(IBankHolidayCalendar calendar, List<BankHolidayDateViewModel> dates)
+		public BankHolidayCalendarViewModel Map(IBankHolidayCalendar calendar, IEnumerable<IBankHolidayDate> dates)
 		{
 			if (!calendar.Id.HasValue)
 				return null;
@@ -31,7 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping
 
 			var years = new List<BankHolidayYearViewModel>();
 
-			var query = from d in dates
+			var _dates = new List<BankHolidayDateViewModel>();
+
+			dates?.ToList().ForEach(d =>
+			{
+				if (d.Id.HasValue && !d.IsDeleted)
+					_dates.Add(new BankHolidayDateViewModel { Date = d.Date.ToDateOnly(), Description = d.Description, Id = d.Id.Value });
+			});
+
+			var query = from d in _dates
 						orderby d.Date
 						group d by d.Date.Year into g
 						orderby g.Key
@@ -47,10 +44,15 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping
 			return model;
 		}
 
-		public IEnumerable<BankHolidayCalendarViewModel> Map(IEnumerable<IBankHolidayCalendar> calendars)
+		public IEnumerable<BankHolidayCalendarViewModel> Map(IEnumerable<IBankHolidayCalendar> calendars, IEnumerable<IBankHolidayDate> dates)
 		{
 			var models = new List<BankHolidayCalendarViewModel>();
-			calendars?.ToList().ForEach(c => models.Add(Map(c)));
+			calendars?.ToList().ForEach(c =>
+			{
+				var _dates = dates.Where(d => d.Calendar.Id.Value == c.Id.Value);
+				var model = Map(c, _dates);
+				models.Add(model);
+			});
 			return models.OrderBy(m => m.Name);
 		}
 	}
