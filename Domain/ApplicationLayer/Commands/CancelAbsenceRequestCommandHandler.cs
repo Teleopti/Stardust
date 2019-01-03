@@ -69,15 +69,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var person = personRequest.Person;
 			var period = personRequest.Request.Period;
-			var timezone = personRequest.Request.Person.PermissionInformation.DefaultTimeZone();
-			var periodStartDate = new DateOnly(period.StartDateTimeLocal(timezone));
-			var periodEndDate = new DateOnly(period.EndDateTimeLocal(timezone));
+			var timeZone = personRequest.Request.Person.PermissionInformation.DefaultTimeZone();
+			var datePeriod = period.ToDateOnlyPeriod(timeZone);
 
-			var dayScheduleForAbsenceReqStart = getScheduleDay(person,periodStartDate);
-			var dayScheduleForAbsenceReqEnd = getScheduleDay(person,periodEndDate);
+			var dayScheduleForAbsenceReq = getScheduleRange(person, datePeriod).ScheduledDayCollection(datePeriod)
+				.ToDictionary(d => d.DateOnlyAsPeriod.DateOnly);
 
 			var adjustedPeriod = FullDayAbsenceRequestPeriodUtil.AdjustFullDayAbsencePeriodIfRequired(
-				period, person,dayScheduleForAbsenceReqStart,dayScheduleForAbsenceReqEnd,_globalSettingsDataRepository);
+				period, person,dayScheduleForAbsenceReq[datePeriod.StartDate],dayScheduleForAbsenceReq[datePeriod.EndDate],_globalSettingsDataRepository);
 						
 			var personAbsences = _personAbsenceRepository.FindExact(person, adjustedPeriod, absenceRequest.Absence, _currentScenario.Current());
 
@@ -87,15 +86,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			try
-			{				
-				var startDate = personAbsences.Min(pa => pa.Period.StartDateTime).AddDays(-1);
-				var endDate = personAbsences.Max(pa => pa.Period.EndDateTime).AddDays(1);
-				var scheduleRange = getScheduleRange(person, startDate, endDate);
-				scheduleRange.CanSeeUnpublishedSchedules = true;
-
+			{
+				var scheduleRange = getScheduleRange(person, adjustedPeriod.ToDateOnlyPeriod(timeZone).Inflate(1));
+				
 				foreach (var personAbsence in personAbsences)
 				{
-					var startDateOnly = new DateOnly(personAbsence.Period.StartDateTimeLocal(personRequest.Person.PermissionInformation.DefaultTimeZone()));
+					var startDateOnly = new DateOnly(personAbsence.Period.StartDateTimeLocal(timeZone));
 					var errorMessages = _personAbsenceRemover.RemovePersonAbsence(startDateOnly,
 						personRequest.Person, personAbsence, scheduleRange).ToList();
 
@@ -116,27 +112,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			return false;
 		}
-
-
-		private IScheduleDay getScheduleDay(IPerson person, DateOnly date)
-		{
-			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new [] {person},
-				new ScheduleDictionaryLoadOptions(false, false),
-				new DateOnlyPeriod(date, date),
-				_currentScenario.Current());
-
-			return dictionary[person].ScheduledDay(date, true);
-		}
-
-		private IScheduleRange getScheduleRange(IPerson person, DateTime startDate, DateTime endDate)
+		
+		private IScheduleRange getScheduleRange(IPerson person, DateOnlyPeriod period)
 		{
 			var scheduleDictionary =
 				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 					new ScheduleDictionaryLoadOptions(false, false),
-					new DateTimePeriod(startDate, endDate),
-					_currentScenario.Current());
+					period, _currentScenario.Current());
 
-			return scheduleDictionary[person];
+			var scheduleRange = scheduleDictionary[person];
+			scheduleRange.CanSeeUnpublishedSchedules = true;
+
+			return scheduleRange;
 		}
 	}
 }

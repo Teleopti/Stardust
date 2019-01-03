@@ -179,10 +179,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			createShiftsForPeriod(new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13));
 			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13), person);
 
-			person.WorkflowControlSet = new WorkflowControlSet();
-			person.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2016, 01, 01);
-			person.WorkflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2016, 8, 1, 2016, 9, 1);
-			person.WorkflowControlSet.PreferencePeriod = new DateOnlyPeriod(2016, 9, 1, 2016, 10, 1);
+			person.WorkflowControlSet = new WorkflowControlSet
+			{
+				SchedulePublishedToDate = new DateTime(2016, 01, 01),
+				PreferenceInputPeriod = new DateOnlyPeriod(2016, 8, 1, 2016, 9, 1),
+				PreferencePeriod = new DateOnlyPeriod(2016, 9, 1, 2016, 10, 1)
+			};
 
 			var cancelRequestCommand = new CancelAbsenceRequestCommand()
 			{
