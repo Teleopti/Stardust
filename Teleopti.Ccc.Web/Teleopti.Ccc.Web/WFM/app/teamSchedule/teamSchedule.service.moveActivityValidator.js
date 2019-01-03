@@ -144,7 +144,18 @@
 
 				var newShiftEndMoment = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
 				var scheduleLength = newShiftEndMoment ? newShiftEndMoment.diff(newShiftStartMoment, 'minutes') : 0;
-				if (serviceDateFormatHelper.getDateOnly(newShiftStartInAgentTimezone) != shiftDate || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
+
+				var currentDate = personSchedule.Date;
+				var hasConflict = personSchedule.Shifts.concat(personSchedule.ExtraShifts)
+					.some(function (shift) {
+						if (shift.Date === currentDate || !shift.ProjectionTimeRange) return false;
+						return (currentDate > shift.Date && newStartInAgentTimezone.isSameOrBefore(shift.ProjectionTimeRange.EndMoment, 'minute')) ||
+							(currentDate < shift.Date && newStartInAgentTimezone.isSameOrAfter(shift.ProjectionTimeRange.StartMoment, 'minute'));
+					});
+
+				if (serviceDateFormatHelper.getDateOnly(newShiftStartInAgentTimezone) != shiftDate
+					|| scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES
+					|| hasConflict) {
 					invalidPeople.push(personSchedule);
 				}
 			}
