@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			foreach (var batch in personIds.Batch(251))
 			{
 				var batchedPeople = _personRepository.FindPeople(batch);
-				var batchPermittedPersons = weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonList(batchedPeople, input.DateInUserTimeZone,
+				var batchPermittedPersons = weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonList(batchedPeople, d,
 					 DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
 
 				batchPermittedPersons.ForEach(pg =>
@@ -265,18 +265,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 				if (isResultTooMany(permittedPeopleIds))
 				{
-					return new GroupWeekScheduleViewModel()
+					return new GroupWeekScheduleViewModel
 					{
 						Total = permittedPeopleIds.Count
 					};
 				}
 			}
-
-			if (!permittedPeopleByDate.All(pd => pd.Value.Any()))
-			{
-				return new GroupWeekScheduleViewModel();
-			}
-
+			
 			var allPermittedPeople = permittedPeopleByDate
 					.SelectMany(pg => pg.Value)
 					.ToLookup(p => p.Id)
@@ -295,11 +290,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var peopleCanSeeSchedulesFor = permittedPeopleByDate.ToDictionary(pg => pg.Key, pg => pagedPeople.Where(p => pg.Value.Any(pp => pp.Id == p.Id)).Select(p => p.Id.GetValueOrDefault()).ToList());
 
 			var peopleCanSeeUnpublishedSchedulesFor =
-				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, input.DateInUserTimeZone,
+				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, d,
 					DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
 
 			var peopleCanSeeConfidentialFor =
-				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, input.DateInUserTimeZone,
+				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, d,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential));
 
 			return new GroupWeekScheduleViewModel
