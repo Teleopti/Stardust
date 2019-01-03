@@ -264,22 +264,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var person = scheduleDay.Person;
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var personPeriod = person.Period(date);
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var scheduleVm = new GroupScheduleShiftViewModel
 			{
-				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
-				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(scheduleDay.Person),
+				PersonId = person.Id.GetValueOrDefault().ToString(),
+				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToServiceDateFormat(),
 				IsFullDayAbsence = scheduleDay.IsFullDayAbsence(),
 				ShiftCategory = getShiftCategoryDescription(scheduleDay),
 				Timezone = new TimeZoneViewModel
 				{
-					IanaId = _ianaTimeZoneProvider.WindowsToIana(scheduleDay.Person.PermissionInformation.DefaultTimeZone().Id),
-					DisplayName = scheduleDay.Person.PermissionInformation.DefaultTimeZone().DisplayName
+					IanaId = _ianaTimeZoneProvider.WindowsToIana(timeZone.Id),
+					DisplayName = timeZone.DisplayName
 				},
 				MultiplicatorDefinitionSetIds =
-				(person.Period(date) != null &&
-				 person.Period(date).PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
-					? person.Period(date)
+				(personPeriod != null &&
+				 personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
+					? personPeriod
 						.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
 						.ToList()
 					: null

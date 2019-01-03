@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 				if (isResultTooMany(permittedPeopleIds))
 				{
-					return new GroupWeekScheduleViewModel()
+					return new GroupWeekScheduleViewModel
 					{
 						Total = permittedPeopleIds.Count
 					};
