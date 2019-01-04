@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 	{
 		private readonly ITeamSchedulePersonsProvider _teamSchedulePersonsProvider;
 		private readonly IScheduleProvider _scheduleProvider;
-		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
+		private readonly TeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _logonUser;
 		private readonly TeamScheduleAgentScheduleViewModelMapper _teamScheduleAgentScheduleViewModelMapper;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 		public TeamScheduleViewModelFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
 			IScheduleProvider scheduleProvider,
-			ITeamScheduleShiftViewModelProvider shiftViewModelProvider,
+			TeamScheduleShiftViewModelProvider shiftViewModelProvider,
 			IPermissionProvider permissionProvider,
 			ILoggedOnUser logonUser,
 			TeamScheduleAgentScheduleViewModelMapper teamScheduleAgentScheduleViewModelMapper,
@@ -58,14 +58,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				? _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, new[] { currentUser }).SingleOrDefault()
 				: null;
 
-			var myScheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, myScheduleDay, true);
+			var myScheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, currentUser, myScheduleDay, true);
 
 			var agentScheduleTupleList = constructAgentSchedulesWithoutReadModel(data);
 			var agentSchedules = agentScheduleTupleList.Item1;
 			var pageCount = agentScheduleTupleList.Item2;
 			var agentCount = agentScheduleTupleList.Item3;
 
-			var schedulePeriodInUtc = getSchedulePeriod(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel, 1)), data.ScheduleDate);
+			var schedulePeriodInUtc = getSchedulePeriod(currentUser, agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel, 1)), data.ScheduleDate);
 
 			var timeLineHours = _timeLineViewModelFactory.CreateTimeLineHours(schedulePeriodInUtc, data.ScheduleDate);
 
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 						person, ScheduleVisibleReasons.Any) || canSeeUnpublishedSchedules
 						? personScheduleDay.Item2
 						: null;
-					var scheduleReadModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, isPermittedToViewConfidential);
+					var scheduleReadModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, person, scheduleDay, isPermittedToViewConfidential);
 					agentSchedules.Add(scheduleReadModel);
 				}
 			}
@@ -199,12 +199,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return personScheduleDays;
 		}
 
-		private DateTimePeriod getSchedulePeriod(IEnumerable<AgentInTeamScheduleViewModel>
-			agentSchedules, DateOnly date)
+		private DateTimePeriod getSchedulePeriod(IPerson currentUser,
+			IEnumerable<AgentInTeamScheduleViewModel> agentSchedules, DateOnly date)
 		{
-			var scheduleMinMaxPeriod = getScheduleMinMax(agentSchedules);
+			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
 
-			var timeZone = _logonUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var scheduleMinMaxPeriod = getScheduleMinMax(timeZone, agentSchedules);
 
 			var returnPeriodInUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour),
 				date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return returnPeriodInUtc;
 		}
 
-		private DateTimePeriod? getScheduleMinMax(IEnumerable<AgentInTeamScheduleViewModel> agentSchedules)
+		private DateTimePeriod? getScheduleMinMax(TimeZoneInfo timeZone, IEnumerable<AgentInTeamScheduleViewModel> agentSchedules)
 		{
 			var schedules = agentSchedules as IList<AgentInTeamScheduleViewModel> ?? agentSchedules.ToList();
 
@@ -245,8 +245,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 			if (!schedulesWithoutEmptyLayerDays.Any())
 				return null;
-
-			var timeZone = _logonUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
 			var startTime = schedulesWithoutEmptyLayerDays.Min(s => s.ScheduleLayers.First().Start);
 			var endTime = schedulesWithoutEmptyLayerDays.Max(l => l.ScheduleLayers.Last().End);

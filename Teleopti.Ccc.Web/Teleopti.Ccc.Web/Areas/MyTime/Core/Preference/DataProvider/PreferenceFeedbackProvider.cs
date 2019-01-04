@@ -7,53 +7,38 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
-	public class PreferenceFeedbackProvider : IPreferenceFeedbackProvider
+	public class PreferenceFeedbackProvider
 	{
 		private readonly IWorkTimeMinMaxCalculator _workTimeMinMaxCalculator;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceNightRestChecker _perferenceNightRestChecker;
 		private readonly IPersonRuleSetBagProvider _ruleSetBagProvider;
 
-		public PreferenceFeedbackProvider(IWorkTimeMinMaxCalculator workTimeMinMaxCalculator, ILoggedOnUser loggedOnUser,
+		public PreferenceFeedbackProvider(IWorkTimeMinMaxCalculator workTimeMinMaxCalculator,
 			IScheduleProvider scheduleProvider, IPreferenceNightRestChecker perferenceNightChecker,
 			IPersonRuleSetBagProvider ruleSetBagProvider)
 		{
 			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
-			_loggedOnUser = loggedOnUser;
 			_scheduleProvider = scheduleProvider;
 			_perferenceNightRestChecker = perferenceNightChecker;
 			_ruleSetBagProvider = ruleSetBagProvider;
 		}
-
-		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date, IScheduleDay scheduleDay)
+		
+		public IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> WorkTimeMinMaxForPeriod(IPerson currentUser, DateOnlyPeriod period)
 		{
-			var ruleSetBag = _ruleSetBagProvider.ForDate(_loggedOnUser.CurrentUser(), date);
-			return calculateWorkTimeMinMax(date, ruleSetBag, scheduleDay);
-		}
-
-		public IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> WorkTimeMinMaxForPeriod(DateOnlyPeriod period)
-		{
-			var result = new Dictionary<DateOnly, WorkTimeMinMaxCalculationResult>();
-
 			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period).ToDictionary(d => d.DateOnlyAsPeriod.DateOnly);
-			var ruleSetBags = _ruleSetBagProvider.ForPeriod(_loggedOnUser.CurrentUser(), period);
+			var ruleSetBags = _ruleSetBagProvider.ForPeriod(currentUser, period);
 
-			foreach (var date in period.DayCollection())
+			return period.DayCollection().ToDictionary(k => k, date =>
 			{
-				IScheduleDay scheduleDay;
-				scheduleDays.TryGetValue(date, out scheduleDay);
-				var ruleSetBag = ruleSetBags[date];
-				result.Add(date, calculateWorkTimeMinMax(date, ruleSetBag, scheduleDay));
-			}
-
-			return result;
+				scheduleDays.TryGetValue(date, out var scheduleDay);
+				return calculateWorkTimeMinMax(date, ruleSetBags[date], scheduleDay);
+			});
 		}
 
-		public IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(
-			DateOnlyPeriod period, IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> workTimeMinMaxCalculationResults)
+		public IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(IPerson currentUser, DateOnlyPeriod period, IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> workTimeMinMaxCalculationResults)
 		{
-			return _perferenceNightRestChecker.CheckNightRestViolation(_loggedOnUser.CurrentUser(),
+			return _perferenceNightRestChecker.CheckNightRestViolation(currentUser,
 				period, workTimeMinMaxCalculationResults);
 		}
 

@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPersonRepository _personRep;
 		private readonly IScheduleProvider _scheduleProvider;
-		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
+		private readonly TeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _logonUser;
 
 		public TeamScheduleViewModelFactoryToggle75989Off(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
 			ITimeLineViewModelMapperToggle75989Off timeLineViewModelMapper,
 			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep, IScheduleProvider scheduleProvider, 
-			ITeamScheduleShiftViewModelProvider shiftViewModelProvider, IPermissionProvider permissionProvider, ILoggedOnUser logonUser)
+			TeamScheduleShiftViewModelProvider shiftViewModelProvider, IPermissionProvider permissionProvider, ILoggedOnUser logonUser)
 		{
 			_teamSchedulePersonsProvider = teamSchedulePersonsProvider;
 			_timeLineViewModelMapper = timeLineViewModelMapper;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				? _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, new[] { currentUser }).SingleOrDefault()
 				: null;
 
-			var myScheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, myScheduleDay, true);
+			var myScheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, currentUser, myScheduleDay, true);
 
 			int pageCount;
 			var agentSchedules = constructAgentSchedules(data, out pageCount);
@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				people = _personRep.FindPeople(resultPersonId).ToList();
 			}
 
-			return getAgentSchedules(data, people, out pageCount);
+			return getAgentSchedules(currentUser, data, people, out pageCount);
 		}
 
-		private List<AgentInTeamScheduleViewModel> getAgentSchedules(TeamScheduleViewModelData data, IList<IPerson> people, out int pageCount)
+		private List<AgentInTeamScheduleViewModel> getAgentSchedules(IPerson currentUser, TeamScheduleViewModelData data, IList<IPerson> people, out int pageCount)
 		{
 			var isPermittedToViewConfidential =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 										  person, ScheduleVisibleReasons.Any) || canSeeUnpublishedSchedules
 						? personScheduleDay.Item2
 						: null;
-					var scheduleReadModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, isPermittedToViewConfidential);
+					var scheduleReadModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, person, scheduleDay, isPermittedToViewConfidential);
 					agentSchedules.Add(scheduleReadModel);
 				}
 			}

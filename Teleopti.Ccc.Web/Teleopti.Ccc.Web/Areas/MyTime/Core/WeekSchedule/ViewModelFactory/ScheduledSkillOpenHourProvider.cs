@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			if (!personPeriod.Any())
 				return null;
 
-			var personSkills = filterPersonSkills(personPeriod.SelectMany(p => personalSkills.PersonSkills(p)), period);
+			var personSkills = filterPersonSkills(person, personPeriod.SelectMany(p => personalSkills.PersonSkills(p)), period);
 
 			if (!personSkills.Any())
 				return null;
@@ -112,9 +112,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return personSkills;
 		}
 
-		private IPersonSkill[] filterPersonSkills(IEnumerable<IPersonSkill> personSkills, DateOnlyPeriod period)
+		private IPersonSkill[] filterPersonSkills(IPerson person, IEnumerable<IPersonSkill> personSkills,
+			DateOnlyPeriod period)
 		{
-			if (!_loggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestOpenPeriods.Any())
+			if (!person.WorkflowControlSet.OvertimeRequestOpenPeriods.Any())
 			{
 				return personSkills.ToArray();
 			}
@@ -247,29 +248,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			if (personPeriod == null)
 				return null;
 
-			var personSkills = filterPersonSkills(personalSkills.PersonSkills(personPeriod), date);
+			var personSkills = filterPersonSkills(person, personalSkills.PersonSkills(personPeriod), date);
 			if (!personSkills.Any())
 				return null;
 
 			return personSkills;
 		}
 
-		private IPersonSkill[] filterPersonSkills(IEnumerable<IPersonSkill> personSkills, DateOnly date)
+		private IPersonSkill[] filterPersonSkills(IPerson person, IEnumerable<IPersonSkill> personSkills, DateOnly date)
 		{
-			if (!_loggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestOpenPeriods.Any())
+			if (!person.WorkflowControlSet.OvertimeRequestOpenPeriods.Any())
 			{
 				return personSkills.ToArray();
 			}
 
-			var skillTypes = getSkillTypesInRequestOpenPeriod(date);
+			var skillTypes = getSkillTypesInRequestOpenPeriod(person, date);
 
 			return personSkills.Where(p => isSkillTypeMatchedInOpenPeriod(p, skillTypes)).ToArray();
 		}
 
-		private HashSet<ISkillType> getSkillTypesInRequestOpenPeriod(DateOnly date)
+		private HashSet<ISkillType> getSkillTypesInRequestOpenPeriod(IPerson person, DateOnly date)
 		{
-			var person = _loggedOnUser.CurrentUser();
-
 			var skillTypes = new HashSet<ISkillType>();
 			var phoneSkillType = _skillTypeRepository.LoadAll()
 				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));

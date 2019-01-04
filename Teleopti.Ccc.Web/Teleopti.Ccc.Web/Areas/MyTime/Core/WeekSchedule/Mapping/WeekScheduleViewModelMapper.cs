@@ -93,19 +93,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				RequestPermission = map(s),
 				ViewPossibilityPermission = s.ViewPossibilityPermission,
 				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
-				Days = days(s, loadOpenHourPeriod),
+				Days = days(currentUser, s, loadOpenHourPeriod),
 				AsmEnabled = s.AsmEnabled,
 				IsCurrentWeek = s.IsCurrentWeek,
 				CheckStaffingByIntraday = isCheckStaffingByIntradayForWeek(currentUser.WorkflowControlSet, s.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(s.Date, true),
+				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(currentUser, s.Date),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
 		}
 
-		private bool isOvertimeProbabilityEnabled(DateOnly date, bool forThisWeek)
+		private bool isOvertimeProbabilityEnabled(IPerson currentUser, DateOnly date)
 		{
-			var currentUser = _loggedOnUser.CurrentUser();
 			var overtimeProbabilityEnabled = currentUser.WorkflowControlSet?.OvertimeProbabilityEnabled != null
 											 && currentUser.WorkflowControlSet.OvertimeProbabilityEnabled
 											 && isOvertimeProbabilityLicenseAvailable();
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return false;
 
 			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider
-				.GetPeriodsForOvertime(currentUser, date, forThisWeek).Any();
+				.GetPeriodsForOvertime(currentUser, date, true).Any();
 			return isStaffingDataAvailable;
 		}
 
@@ -140,17 +139,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			return days.Any(day => workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), day));
 		}
 
-		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData, bool loadOpenHourPeriod = false)
+		private IEnumerable<DayViewModel> days(IPerson currentUser, WeekScheduleDomainData scheduleDomainData,
+			bool loadOpenHourPeriod = false)
 		{
 			return scheduleDomainData?.Days?.Select(s =>
 			{
-				var viewModel = createDayViewModel(s, loadOpenHourPeriod);
+				var viewModel = createDayViewModel(currentUser, s, loadOpenHourPeriod);
 				viewModel.Periods = projections(s).ToArray();
 				return viewModel;
 			}).ToArray();
 		}
 
-		private DayViewModel createDayViewModel(WeekScheduleDayDomainData s, bool loadOpenHourPeriod = false)
+		private DayViewModel createDayViewModel(IPerson currentUser, WeekScheduleDayDomainData s, bool loadOpenHourPeriod = false)
 		{
 			var personAssignment = s.PersonAssignment;
 			var significantPartForDisplay = s.SignificantPartForDisplay;
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				RequestsCount = s.PersonRequestCount,
 				ProbabilityClass = s.ProbabilityClass,
 				ProbabilityText = s.ProbabilityText,
-				State = s.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
+				State = s.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), currentUser.PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
 				Header = _headerViewModelFactory.CreateModel(s.ScheduleDay),
 				Note = s.ScheduleDay == null ? null : map(s.ScheduleDay.PublicNoteCollection()),
 				SeatBookings = s.SeatBookingInformation,

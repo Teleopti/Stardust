@@ -18,7 +18,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
-	public class TeamScheduleShiftViewModelProvider : ITeamScheduleShiftViewModelProvider
+	public class TeamScheduleShiftViewModelProvider
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				vm = Projection(scheduleDay, canViewConfidential);
 				if (needToLoadNoteAndUnderlyingSummary)
 				{
-					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(scheduleDay, previousScheduleDay, canViewConfidential);
+					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(timezone, scheduleDay, previousScheduleDay, canViewConfidential);
 				}
 			}
 
@@ -191,9 +191,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-		private UnderlyingScheduleSummary getUnderlyingScheduleSummary(IScheduleDay scheduleDay, IScheduleDay previousScheduleDay, bool canViewConfidential)
+		private UnderlyingScheduleSummary getUnderlyingScheduleSummary(TimeZoneInfo timeZone, IScheduleDay scheduleDay, IScheduleDay previousScheduleDay, bool canViewConfidential)
 		{
-			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var pa = scheduleDay.PersonAssignment();
 			var hasPartTimeAbsence = !scheduleDay.IsFullDayAbsence() && (scheduleDay.PersonAbsenceCollection()?.Any() ?? false);
 			var hasPersonalActivities = pa?.PersonalActivities()?.Any() ?? false;
@@ -217,8 +216,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					.Select(personAbsence => new Summary
 					{
 						Description = !canViewConfidential && (personAbsence.Layer.Payload as IAbsence).Confidential ? ConfidentialPayloadValues.Description.Name : personAbsence.Layer.Payload.Description.Name,
-						Start = personAbsence.Period.StartDateTimeLocal(timezone).ToServiceDateTimeFormat(),
-						End = personAbsence.Period.EndDateTimeLocal(timezone).ToServiceDateTimeFormat(),
+						Start = personAbsence.Period.StartDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
+						End = personAbsence.Period.EndDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
 						StartInUtc = personAbsence.Period.StartDateTime.ToServiceDateTimeFormat(),
 						EndInUtc = personAbsence.Period.EndDateTime.ToServiceDateTimeFormat()
 					})
@@ -229,8 +228,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(personalActivity => new Summary
 				{
 					Description = personalActivity.Payload.Description.Name,
-					Start = personalActivity.Period.StartDateTimeLocal(timezone).ToServiceDateTimeFormat(),
-					End = personalActivity.Period.EndDateTimeLocal(timezone).ToServiceDateTimeFormat(),
+					Start = personalActivity.Period.StartDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
+					End = personalActivity.Period.EndDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
 					StartInUtc = personalActivity.Period.StartDateTime.ToServiceDateTimeFormat(),
 					EndInUtc = personalActivity.Period.EndDateTime.ToServiceDateTimeFormat()
 				})
@@ -240,8 +239,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(personMeeting => new Summary
 				{
 					Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
-					Start = personMeeting.Period.StartDateTimeLocal(timezone).ToServiceDateTimeFormat(),
-					End = personMeeting.Period.EndDateTimeLocal(timezone).ToServiceDateTimeFormat(),
+					Start = personMeeting.Period.StartDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
+					End = personMeeting.Period.EndDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
 					StartInUtc = personMeeting.Period.StartDateTime.ToServiceDateTimeFormat(),
 					EndInUtc = personMeeting.Period.EndDateTime.ToServiceDateTimeFormat()
 				})
@@ -385,7 +384,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return scheduleVm;
 		}
 
-		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
+		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson currentUser, IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
 			var ret = new AgentInTeamScheduleViewModel
 			{

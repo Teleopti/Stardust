@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				IsToday = dayScheduleDomainData.IsCurrentDay,
 				CheckStaffingByIntraday = isCheckStaffingByIntradayForDay(currentUser.WorkflowControlSet, dayScheduleDomainData.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(dayScheduleDomainData.Date),
+				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(currentUser, dayScheduleDomainData.Date),
 				UnReadMessageCount = dayScheduleDomainData.UnReadMessageCount,
 				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
@@ -104,16 +104,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 			return viewModel;
 		}
 
-		private bool isOvertimeProbabilityEnabled(DateOnly date)
+		private bool isOvertimeProbabilityEnabled(IPerson user, DateOnly date)
 		{
-			var currentUser = _loggedOnUser.CurrentUser();
-			var overtimeProbabilityEnabled = currentUser.WorkflowControlSet?.OvertimeProbabilityEnabled != null
-											 && currentUser.WorkflowControlSet.OvertimeProbabilityEnabled
+			var overtimeProbabilityEnabled = user.WorkflowControlSet?.OvertimeProbabilityEnabled != null
+											 && user.WorkflowControlSet.OvertimeProbabilityEnabled
 											 && isOvertimeProbabilityLicenseAvailable();
 			if (!overtimeProbabilityEnabled)
 				return false;
 
-			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertime(currentUser, date).Any();
+			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertime(user, date).Any();
 			return isStaffingDataAvailable;
 		}
 

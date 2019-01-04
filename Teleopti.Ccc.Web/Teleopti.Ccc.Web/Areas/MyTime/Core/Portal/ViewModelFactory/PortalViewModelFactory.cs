@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var rollingPeriodSet = GamificationRollingPeriodSet.OnGoing;
 			if (showBadge)
 			{
-				var period = getDefaultPeriod(teamSetting.GamificationSetting);
+				var period = getDefaultPeriod(person, teamSetting.GamificationSetting);
 				badges = _agentBadgeWithinPeriodProvider.GetBadges(period);
 				rollingPeriodSet = teamSetting.GamificationSetting.RollingPeriodSet;
 			}
@@ -147,9 +147,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			return regionnal.Culture.Name;
 		}
 
-		private DateOnlyPeriod getDefaultPeriod(IGamificationSetting gamificationSetting)
+		private DateOnlyPeriod getDefaultPeriod(IPerson person, IGamificationSetting gamificationSetting)
 		{
-			var person = _loggedOnUser.CurrentUser();
 			var today = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())
 				.ToDateOnly();
 			var onGoingPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), today);

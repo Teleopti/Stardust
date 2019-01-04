@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	{
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IScheduleProvider _scheduleProvider;
-		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
+		private readonly TeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
 		private readonly IUserUiCulture _userUiCulture;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider,
 			IScheduleProvider scheduleProvider,
-			ITeamScheduleShiftViewModelProvider shiftViewModelProvider,
+			TeamScheduleShiftViewModelProvider shiftViewModelProvider,
 			IPeopleSearchProvider searchProvider,
 			IPersonRepository personRepository,
 			IUserUiCulture userUiCulture,

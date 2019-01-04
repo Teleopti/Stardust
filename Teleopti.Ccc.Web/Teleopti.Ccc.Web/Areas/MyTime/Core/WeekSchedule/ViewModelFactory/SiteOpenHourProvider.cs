@@ -28,10 +28,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public TimePeriod? GetMergedSiteOpenHourPeriod(DateOnlyPeriod weekPeriod)
 		{
 			var timePeriods = new List<TimePeriod>();
+			var person = _loggedOnUser.CurrentUser();
 
 			foreach (var day in weekPeriod.DayCollection())
 			{
-				var siteOpenHourPeriod = getSiteOpenHourPeriodByDate(day);
+				var siteOpenHourPeriod = getSiteOpenHourPeriodByDate(person, day);
 
 				if (!siteOpenHourPeriod.HasValue) continue;
 
@@ -65,9 +66,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return new TimePeriod(startTime, endTime);
 		}
 
-		private TimePeriod? getSiteOpenHourPeriodByDate(DateOnly date)
+		private TimePeriod? getSiteOpenHourPeriodByDate(IPerson person, DateOnly date)
 		{
-			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(date);
+			var siteOpenHour = person.SiteOpenHour(date);
 			if (siteOpenHour == null || siteOpenHour.IsClosed)
 			{
 				return null;

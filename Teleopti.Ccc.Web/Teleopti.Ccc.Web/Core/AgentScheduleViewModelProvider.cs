@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Web.Core
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
+		private readonly TeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly TeamScheduleAgentScheduleViewModelMapper _layerMapper;
 		private readonly ITimeLineViewModelFactory _timeLineViewModelFactory;
 
 		public AgentScheduleViewModelProvider(IScheduleStorage scheduleStorage, IPersonRepository personRepository, ICurrentScenario currentScenario,
-			ITeamScheduleShiftViewModelProvider shiftViewModelProvider, ILoggedOnUser loggedOnUser, TeamScheduleAgentScheduleViewModelMapper layerMapper, ITimeLineViewModelFactory timeLineViewModelFactory)
+			TeamScheduleShiftViewModelProvider shiftViewModelProvider, ILoggedOnUser loggedOnUser, TeamScheduleAgentScheduleViewModelMapper layerMapper, ITimeLineViewModelFactory timeLineViewModelFactory)
 		{
 			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
@@ -60,12 +60,11 @@ namespace Teleopti.Ccc.Web.Core
 			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);
 		}
 
-		private DateTimePeriod getSchedulePeriod(IEnumerable<AgentInTeamScheduleViewModel>
-			agentSchedules, DateOnly date)
+		private DateTimePeriod getSchedulePeriod(IPerson currentUser, IEnumerable<AgentInTeamScheduleViewModel> agentSchedules, DateOnly date)
 		{
 			var scheduleMinMaxPeriod = getScheduleMinMax(agentSchedules);
 
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
 
 			var returnPeriodInUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour),
 				date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
@@ -105,7 +104,8 @@ namespace Teleopti.Ccc.Web.Core
 
 			var agentSchedules = new List<AgentInTeamScheduleViewModel> { personFromSchedule, personToSchedule };
 
-			var schedulePeriodInUtc = getSchedulePeriod(agentSchedules, input.RequestDate.ToDateOnly());
+			var currentUser = _loggedOnUser.CurrentUser();
+			var schedulePeriodInUtc = getSchedulePeriod(currentUser, agentSchedules, input.RequestDate.ToDateOnly());
 
 			var timeLine = _timeLineViewModelFactory.CreateTimeLineHours(schedulePeriodInUtc, input.RequestDate.ToDateOnly())
 								.Select(t => new TeamScheduleTimeLineViewModel
@@ -119,33 +119,34 @@ namespace Teleopti.Ccc.Web.Core
 			return new ShiftTradeSchedulesViewModel
 			{
 				TimeLine = timeLine,
-				PersonFromSchedule = GetAgentScheduleViewModel(personFromSchedule, personFrom, schedulePeriodInUtc),
-				PersonToSchedule = GetAgentScheduleViewModel(personToSchedule,personTo, schedulePeriodInUtc)
+				PersonFromSchedule = GetAgentScheduleViewModel(currentUser, personFromSchedule, personFrom, schedulePeriodInUtc),
+				PersonToSchedule = GetAgentScheduleViewModel(currentUser, personToSchedule,personTo, schedulePeriodInUtc)
 			};
 		}
 
-		private TeamScheduleAgentScheduleViewModel GetAgentScheduleViewModel(AgentInTeamScheduleViewModel scheduleViewModel, IPerson person, DateTimePeriod schedulePeriod)
+		private TeamScheduleAgentScheduleViewModel GetAgentScheduleViewModel(IPerson currentUser, AgentInTeamScheduleViewModel scheduleViewModel, IPerson person, DateTimePeriod schedulePeriod)
 		{
-			var isMySchedule = _loggedOnUser.CurrentUser().Equals(person);
+			var isMySchedule = currentUser.Equals(person);
 			return _layerMapper.Map(scheduleViewModel, schedulePeriod, isMySchedule);
 		}
 
 		private AgentInTeamScheduleViewModel GetAgentInTeamScheduleViewModel(IPerson person, IScheduleDay scheduleDay)
 		{
-			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
+			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(_loggedOnUser.CurrentUser(), person, scheduleDay, true);
 			return scheduleViewModel;
 		}
 
 		public TeamScheduleAgentScheduleViewModel GetAgentScheduleViewModel(IPerson person, IScheduleDay scheduleDay)
 		{
-			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, true);
-			var schedulePeriod = getScheduleMinMax(scheduleViewModel, person, scheduleDay.DateOnlyAsPeriod.DateOnly);
-			var isMySchedule = _loggedOnUser.CurrentUser().Equals(person);
+			var currentUser = _loggedOnUser.CurrentUser();
+			var scheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, person, scheduleDay, true);
+			var schedulePeriod = getScheduleMinMax(currentUser, scheduleViewModel, person, scheduleDay.DateOnlyAsPeriod.DateOnly);
+			var isMySchedule = currentUser.Equals(person);
 
 			return _layerMapper.Map(scheduleViewModel, schedulePeriod, isMySchedule);
 		}
 
-		private DateTimePeriod getScheduleMinMax(AgentInTeamScheduleViewModel schedule, IPerson person, DateOnly date)
+		private DateTimePeriod getScheduleMinMax(IPerson currentUser, AgentInTeamScheduleViewModel schedule, IPerson person, DateOnly date)
 		{
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 
@@ -157,7 +158,7 @@ namespace Teleopti.Ccc.Web.Core
 			var startTime = schedule.ScheduleLayers.First().Start;
 			var endTime = schedule.ScheduleLayers.Last().End;
 
-			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, currentUser.PermissionInformation.DefaultTimeZone());
 		}
 	}
 }

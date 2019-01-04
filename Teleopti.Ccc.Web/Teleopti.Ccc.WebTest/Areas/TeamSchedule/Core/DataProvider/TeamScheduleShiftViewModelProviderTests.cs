@@ -954,13 +954,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var testAbsence = AbsenceFactory.CreateAbsence("TestAbsence");
 			var absenceLayer = new AbsenceLayer(testAbsence, absencePeriod);
-			var personAbsence = scheduleDay.CreateAndAddAbsence(absenceLayer).WithId();
+			scheduleDay.CreateAndAddAbsence(absenceLayer).WithId();
 
 			var timeSpanForPhoneActivityPeriod = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod);
 			var timeSpanForAbsencePeriod = getTimeSpanInMinutesFromPeriod(absencePeriod);
 			var expectedContactTime = timeSpanForPhoneActivityPeriod - timeSpanForAbsencePeriod;
 
-			var result = Target.MakeScheduleReadModel(person, scheduleDay, false);
+			var result = Target.MakeScheduleReadModel(LoggedOnUser.CurrentUser(), person, scheduleDay, false);
 
 			Assert.AreEqual(result.ScheduleLayers.Length, 4);
 
@@ -1026,7 +1026,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			const string lastName = "Holmes";
 
 			var person = PersonFactory.CreatePersonWithGuid(firstName, lastName);
-			var result = Target.MakeScheduleReadModel(person, null, false);
+			var result = Target.MakeScheduleReadModel(LoggedOnUser.CurrentUser(), person, null, false);
 
 			Assert.AreEqual(result.IsNotScheduled, true);
 		}
@@ -1044,7 +1044,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(baseDate), person, scenario);
 
 			scheduleDay.DeleteMainShift();
-			var result = Target.MakeScheduleReadModel(person, scheduleDay, false);
+			var result = Target.MakeScheduleReadModel(LoggedOnUser.CurrentUser(), person, scheduleDay, false);
 
 			Assert.AreEqual(result.IsNotScheduled, true);
 		}
@@ -1075,7 +1075,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			scheduleDay.Add(assignment1Person1);
 
-			var result = Target.MakeScheduleReadModel(person, scheduleDay, false);
+			var result = Target.MakeScheduleReadModel(LoggedOnUser.CurrentUser(), person, scheduleDay, false);
 
 			result.ShiftCategory.Name.Should().Be.EqualTo(shiftCategory.Description.Name);
 			result.ShiftCategory.DisplayColor.Should().Be.EqualTo(shiftCategory.DisplayColor.ToHtml());
@@ -1096,7 +1096,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(baseDate), person, scenario);
 			scheduleDay.Add(assignment1Person1);
 
-			var result = Target.MakeScheduleReadModel(person, scheduleDay, false);
+			var result = Target.MakeScheduleReadModel(LoggedOnUser.CurrentUser(), person, scheduleDay, false);
 
 			result.ShiftCategory.Name.Should().Be.EqualTo("Day Off");
 			result.ShiftCategory.ShortName.Should().Be.EqualTo("DO");

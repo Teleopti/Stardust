@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -149,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 				.As<IRequestsShiftTradeBulletinViewModelFactory>()
 				.SingleInstance();
 			builder.RegisterType<RequestsShiftTradeScheduleViewModelFactory>()
-				.As<IRequestsShiftTradeScheduleViewModelFactory>()
+				.AsSelf()
 				.SingleInstance();
 			builder.RegisterType<ShiftExchangeOffer>().As<IShiftExchangeOffer>().SingleInstance();
 			builder.RegisterType<ShiftExchangeOfferMapper>().As<IShiftExchangeOfferMapper>().SingleInstance();
@@ -204,7 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferencePersister>().As<IPreferencePersister>();
 			builder.RegisterType<MustHaveRestrictionSetter>().As<IMustHaveRestrictionSetter>();
 			builder.RegisterType<MustHaveRestrictionProvider>().As<IMustHaveRestrictionProvider>();
-			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>().SingleInstance();
+			builder.RegisterType<PreferenceFeedbackProvider>().AsSelf().SingleInstance();
 			builder.RegisterType<PreferencePeriodFeedbackProvider>().As<IPreferencePeriodFeedbackProvider>().SingleInstance();
 			builder.RegisterType<WorkTimeMinMaxRestrictionCreator>().As<IWorkTimeMinMaxRestrictionCreator>();
 			builder.RegisterType<EffectiveRestrictionForDisplayCreator>().As<IEffectiveRestrictionForDisplayCreator>();

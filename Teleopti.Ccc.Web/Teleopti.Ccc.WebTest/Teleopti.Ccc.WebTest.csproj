@@ -535,7 +535,6 @@
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryStudentAvailabilityTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryTeamScheduleTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMessageTest.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingTest.cs" />
     <Compile Include="Core\RequestContext\CurrentDataSourceTest.cs" />
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />

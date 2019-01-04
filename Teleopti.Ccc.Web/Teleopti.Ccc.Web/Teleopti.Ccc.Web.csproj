@@ -622,7 +622,6 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\AbsenceRequestDetailViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Models\ScheduleStaffingPossibility\StaffingPossibilityViewModel.cs" />
@@ -804,7 +803,6 @@
     <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\CheckingResult.cs" />
-    <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleShiftViewModelProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ProjectionSplitter.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ScheduleValidationProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Models\AddOvertimeActivityForm.cs" />
@@ -1222,7 +1220,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProvider.cs" />

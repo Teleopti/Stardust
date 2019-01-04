@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITimeFilterHelper _timeFilterHelper;
-		private readonly IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
+		private readonly RequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
 		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
 		private readonly RequestsViewModelMapper _viewModelMapper;
 		private readonly IUserTimeZone _userTimeZone;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			IRespondToShiftTrade respondToShiftTrade,
 			IPermissionProvider permissionProvider,
 			ITimeFilterHelper timeFilterHelper,
-			IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
+			RequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
 			IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
 			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider,
 			RequestsViewModelMapper viewModelMapper,
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var loadScheduleWithoutReadModel = data.TimeFilter == null && data.TimeSortOrder == null;
 
 			return Json(loadScheduleWithoutReadModel
-				? _shiftTradeScheduleViewModelFactory.CreateViewModel(data)
+				? _shiftTradeScheduleViewModelFactory.CreateViewModel(_loggedOnUser.CurrentUser(), data)
 				: _requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data));
 		}
 
