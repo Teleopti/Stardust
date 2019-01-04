@@ -264,6 +264,7 @@
 		$scope.$on('teamSchedule.shiftEditor.close', function (e, d) {
 			if (hasScheduleUpdatedInEditor === false || (d && d.needToUpdateSchedule)) {
 				vm.updateSchedules([personIdInEditing]);
+				vm.checkValidationWarningForCommandTargets([personIdInEditing]);
 			}
 			if (d && d.trackId) vm.lastCommandTrackId = d.trackId;
 			personIdInEditing = null;
@@ -272,6 +273,7 @@
 		$scope.$on('teamSchedule.updateSchedule', function (a, d) {
 			hasScheduleUpdatedInEditor = true;
 			scheduleMgmtSvc.updateSchedulesByRawData(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, [d.personId], d.rawSchedules);
+			vm.checkValidationWarningForCommandTargets([d.personId]);
 			resetHavingScheduleChange([d.personId]);
 		});
 
@@ -451,7 +453,6 @@
 			var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
-
 				teamScheduleSvc.searchSchedules(params).then(function (response) {
 					var result = response.data;
 					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
@@ -469,7 +470,6 @@
 					vm.searchOptions.focusingSearch = false;
 				});
 			} else if (vm.preSelectPersonIds.length > 0) {
-
 				teamScheduleSvc.getSchedules(date, vm.preSelectPersonIds).then(function (result) {
 					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, date);
