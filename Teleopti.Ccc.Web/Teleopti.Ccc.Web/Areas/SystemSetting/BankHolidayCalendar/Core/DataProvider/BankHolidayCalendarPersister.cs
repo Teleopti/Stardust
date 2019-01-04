@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 				if (input.IsDeleted)
 					date.SetDeleted();
 			}
-			else if (_bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == calendar.Id.Value && d.Date == _date && !d.IsDeleted).FirstOrDefault() == null)
+			else if (_bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == calendar.Id.Value && d.Date == _date).FirstOrDefault() == null)
 			{
 				date = new BankHolidayDate() { Date = _date, Description = des, Calendar = calendar };
 			}
