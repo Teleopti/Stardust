@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -39,9 +38,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			calendar.Name = "ChinaBankHoliday";
 			BankHolidayCalendarRepository.Add(calendar);
 
-			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _nationalDay.Date, Description = "National Day", Calendar = calendar });
-			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _springFestival.Date, Description = "Spring Festival", Calendar = calendar });
-			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _newYear.Date, Description = "New Year", Calendar = calendar });
+			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _nationalDay, Description = "National Day", Calendar = calendar });
+			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _springFestival, Description = "Spring Festival", Calendar = calendar });
+			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _newYear, Description = "New Year", Calendar = calendar });
 
 			return calendar;
 		}
@@ -133,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			result.Years.Last().Dates.Last().Date.Should().Be.EqualTo(_springFestival);
 			result.Years.Last().Dates.Last().Description.Should().Be.EqualTo("Spring Festival");
 
-			var count = BankHolidayDateRepository.LoadAll().Where(d => d.Date == _springFestival.Date && d.Calendar.Id.Value == calendar.Id.Value).Count();
+			var count = BankHolidayDateRepository.LoadAll().Count(d => d.Date == _springFestival && d.Calendar.Id.Value == calendar.Id.Value);
 			count.Should().Be.EqualTo(1);
 		}
 
@@ -267,7 +266,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			calendar.Name = "SwdenBankHoliday";
 			BankHolidayCalendarRepository.Add(calendar);
 
-			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _nationalDay.AddDays(1).Date, Description = "Swden National Day",Calendar=calendar });
+			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _nationalDay.AddDays(1), Description = "Swden National Day",Calendar=calendar });
 
 			var result = Target.LoadBankHolidayCalendars();
 

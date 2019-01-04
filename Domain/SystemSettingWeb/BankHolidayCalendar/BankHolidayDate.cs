@@ -4,17 +4,18 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.SystemSettingWeb
 {
-	public class BankHolidayDate : NonversionedAggregateRootWithBusinessUnit, IBankHolidayDate, IAggregateRootWithEvents
+	public class BankHolidayDate : AggregateRoot, IBankHolidayDate, IAggregateRoot
 	{
-		private DateTime _date;
+		private DateOnly _date;
+		private string _description;
+		private IBankHolidayCalendar _calendar;
+		private bool _isDeleted;
 
-		public virtual DateTime Date
+		public virtual DateOnly Date
 		{
 			get { return _date; }
 			set { _date = value; }
 		}
-
-		private string _description;
 
 		public virtual string Description
 		{
@@ -22,19 +23,13 @@ namespace Teleopti.Ccc.Domain.SystemSettingWeb
 			set { _description = value; }
 		}
 		
+		public virtual bool IsDeleted => _isDeleted;
 
-		private bool _isDeleted;
-
-		public virtual bool IsDeleted
-		{
-			get { return _isDeleted; }
-		}
 		public virtual void SetDeleted()
 		{
 			_isDeleted = true;
 		}
-
-		private IBankHolidayCalendar _calendar;
+		
 		public virtual IBankHolidayCalendar Calendar
 		{
 			get

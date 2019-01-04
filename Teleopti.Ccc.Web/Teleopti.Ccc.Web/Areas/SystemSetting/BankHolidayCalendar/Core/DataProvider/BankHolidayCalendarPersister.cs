@@ -75,21 +75,21 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		private IBankHolidayDate CreateBankHolidayDate(IBankHolidayCalendar calendar, BankHolidayDateForm input)
 		{
 			IBankHolidayDate date;
-			var _date = input.Date.Date;
+			var inputDate = input.Date;
 			var des = input.Description;
 
 			if (input.Id.HasValue)
 			{
 				date = _bankHolidayDateRepository.Load(input.Id.Value);
-				date.Date = _date;
+				date.Date = inputDate;
 				date.Description = des;
 				date.Calendar = calendar;
 				if (input.IsDeleted)
 					date.SetDeleted();
 			}
-			else if (_bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == calendar.Id.Value && d.Date == _date).FirstOrDefault() == null)
+			else if (_bankHolidayDateRepository.LoadAll().FirstOrDefault(d => d.Calendar.Id.Value == calendar.Id.Value && d.Date == inputDate) == null)
 			{
-				date = new BankHolidayDate() { Date = _date, Description = des, Calendar = calendar };
+				date = new BankHolidayDate { Date = inputDate, Description = des, Calendar = calendar };
 			}
 			else
 			{

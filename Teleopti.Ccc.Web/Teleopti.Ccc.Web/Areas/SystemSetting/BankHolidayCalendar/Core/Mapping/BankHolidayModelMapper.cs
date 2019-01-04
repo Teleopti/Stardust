@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSettingWeb;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
 
@@ -14,45 +11,26 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping
 		{
 			if (!calendar.Id.HasValue)
 				return null;
-			var model = new BankHolidayCalendarViewModel();
-			model.Id = calendar.Id.Value;
-			model.Name = calendar.Name;
 
-			var years = new List<BankHolidayYearViewModel>();
+			var model = new BankHolidayCalendarViewModel {Id = calendar.Id.Value, Name = calendar.Name};
 
-			var _dates = new List<BankHolidayDateViewModel>();
-
-			dates?.ToList().ForEach(d =>
-			{
-				if (d.Id.HasValue && !d.IsDeleted)
-					_dates.Add(new BankHolidayDateViewModel { Date = d.Date.ToDateOnly(), Description = d.Description, Id = d.Id.Value });
-			});
-
-			var query = from d in _dates
+			var viewModels = (dates ?? Enumerable.Empty<IBankHolidayDate>()).Where(d => d.Id.HasValue && !d.IsDeleted).Select(d => new BankHolidayDateViewModel { Date = d.Date, Description = d.Description, Id = d.Id.Value });
+			var years = from d in viewModels
 						orderby d.Date
 						group d by d.Date.Year into g
 						orderby g.Key
 						select g;
-
-			foreach (IGrouping<int, BankHolidayDateViewModel> gx in query)
-			{
-				years.Add(new BankHolidayYearViewModel { Dates = gx.ToList() });
-			}
-
-			model.Years = years;
+			
+			model.Years = years.Select(year => new BankHolidayYearViewModel { Dates = year.ToList() }).ToArray();
 
 			return model;
 		}
 
 		public IEnumerable<BankHolidayCalendarViewModel> Map(IEnumerable<IBankHolidayCalendar> calendars, IEnumerable<IBankHolidayDate> dates)
 		{
-			var models = new List<BankHolidayCalendarViewModel>();
-			calendars?.ToList().ForEach(c =>
-			{
-				var _dates = dates.Where(d => d.Calendar.Id.Value == c.Id.Value);
-				var model = Map(c, _dates);
-				models.Add(model);
-			});
+			var datesByCalendar = dates.ToLookup(d => d.Calendar);
+
+			var models = (calendars ?? Enumerable.Empty<IBankHolidayCalendar>()).Select(c => Map(c, datesByCalendar[c]));
 			return models.OrderBy(m => m.Name);
 		}
 	}
