@@ -515,6 +515,7 @@
 			resetHavingScheduleChange(personIdList);
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, function () {
 				personSelectionSvc.clearPersonInfo();
+				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
 			});

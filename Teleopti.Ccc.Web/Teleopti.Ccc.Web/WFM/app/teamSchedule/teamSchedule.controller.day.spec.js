@@ -401,6 +401,24 @@
 			expect(controller.preselectedSkills.skillAreaId).toEqual('groupPage');
 		});
 
+		it('should clear person selection after schedule changed', function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = false;
+
+			controller.scheduleDate = "2015-10-26";
+			controller.loadSchedules();
+			controller.selectAllForAllPages();
+
+			var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
+			expect(personSchedule1.IsSelected).toEqual(true);
+
+			controller.onPersonScheduleChanged(["221B-Baker-SomeoneElse"]);
+
+			expect(scheduleMgmt.groupScheduleVm.Schedules[0].IsSelected).toEqual(false);
+			expect(scheduleMgmt.groupScheduleVm.Schedules[1].IsSelected).toEqual(false);
+			expect(scheduleMgmt.groupScheduleVm.Schedules[2].IsSelected).toEqual(false);
+			expect(Object.keys(personSelection.personInfo).length).toEqual(0);
+		});
+
 		it("should not update schedule when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
 			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
 
@@ -599,6 +617,7 @@
 			teamScheduleService.getSchedules = function (date, agents) {
 				return {
 					then: function (cb) {
+						cb({ data: {}});
 						searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
 						currentAgentsForGettingSchedules = agents;
 					}
