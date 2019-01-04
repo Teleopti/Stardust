@@ -131,6 +131,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h2", planningGroupName);
 			Browser.Interactions.Click(".edit-plan-group");
 		}
+		
+		[When(@"I click planning group setting '(.*)'")]
+		public void WhenIClickPlanningGroupSetting(string planningGroupSettingName)
+		{
+			Browser.Interactions.ClickContaining("card-panel-header", planningGroupSettingName);
+		}
 
 		[When(@"I click delete planning group")]
 		public void WhenIClickDeletePlanningGroup()

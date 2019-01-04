@@ -153,6 +153,7 @@ Scenario: Edit scheduling setting for planning group
 	| Block scheduling        | default		           |
 	When I am viewing planning group list page
 	And I click edit planning group 'PlanningGroup 1'
+    And I click planning group setting 'PlanningGroupSetting 1'
 	And I input scheduling setting name 'PlanningGroupBlockSetting 1 Update'
 	And I turn off block scheduling setting
     And I save planning group
