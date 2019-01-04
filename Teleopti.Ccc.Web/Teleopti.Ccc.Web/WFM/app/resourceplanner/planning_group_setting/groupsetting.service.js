@@ -13,7 +13,6 @@
 
 		var service = {
 			removeSetting: setting.remove,
-			saveSetting: setting.save,
 			getFilterData: filterResult.query
 		};
 

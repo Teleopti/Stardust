@@ -56,10 +56,6 @@ describe('planningGroupSettingEditController', function() {
 			];
 		});
 
-		$httpBackend.whenPOST('../api/resourceplanner/plangroupsetting').respond(function(method, url, data, headers) {
-			return [200, true];
-		});
-
 		defaultSettingInfo = {
 			BlockFinderType: 0,
 			BlockSameShift: false,

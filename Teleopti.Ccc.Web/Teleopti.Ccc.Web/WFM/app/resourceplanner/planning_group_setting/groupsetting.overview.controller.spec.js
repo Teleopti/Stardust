@@ -96,10 +96,6 @@ describe('planningGroupSettingOverviewController', function () {
 		PlanGroupSettingService = _PlanGroupSettingService_;
 		planningGroupService = _planningGroupService_;
 
-		$httpBackend.whenPOST('../api/resourceplanner/plangroupsetting').respond(function (method, url, data, headers) {
-			return [200, true];
-		});
-
 		$httpBackend.whenDELETE('../api/resourceplanner/plangroupsetting/a1a97f86-d9aa-42b5-aeaf-78c8cab36f87').respond(function (method, url, data, headers) {
 			return [200, true];
 		});

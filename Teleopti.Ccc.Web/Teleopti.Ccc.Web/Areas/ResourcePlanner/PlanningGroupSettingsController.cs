@@ -17,13 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_planningGroupSettingsModelPersister = planningGroupSettingsModelPersister;
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/plangroupsetting")] 
-		public virtual IHttpActionResult Persist(PlanningGroupSettingsModel planningGroupSettingsModel)
-		{
-			_planningGroupSettingsModelPersister.Persist(planningGroupSettingsModel);
-			return Ok();
-		}
-
 		[UnitOfWork, HttpDelete, Route("api/resourceplanner/plangroupsetting/{id}")] 
 		public virtual IHttpActionResult Delete(Guid id)
 		{
