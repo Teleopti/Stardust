@@ -3,7 +3,7 @@
 </div>
 <div class="activity-info">
 	<div class="pull-left" ng-if="!!vm.selectedShiftLayers.length">
-		<span class="timespan">{{ vm.getSelectionTimeSpan()  }}</span>
+		<span class="timespan pull-left">{{ vm.getSelectionTimeSpan()  }}</span>
 		<span>
 			<md-select class="activity-selector" ng-model="vm.selectedActivitiyId" ng-change="vm.changeActivityType()" required placeholder="{{'SelectAnActivity'|translate}}">
 				<md-option ng-repeat="activity in vm.availableActivities" ng-value="activity.Id">
