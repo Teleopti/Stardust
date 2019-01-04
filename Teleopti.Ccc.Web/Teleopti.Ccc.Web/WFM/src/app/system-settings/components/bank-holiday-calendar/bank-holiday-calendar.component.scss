@@ -19,6 +19,9 @@
 	min-height: 80px;
 	max-height: calc(100vh - 195px);
 	overflow: auto;
+	nz-tabset {
+		border: 1px solid #ddd;
+	}
 }
 .bank-holiday-calendar-date-item {
 	span.inline-block {

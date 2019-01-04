@@ -32,52 +32,74 @@
 	>
 	</bank-holiday-calendar-edit>
 
-	<div *ngIf="!isAddingNewCalendar && !isEdittingCalendar" class="bank-holiday-calendar-list">
-		<nz-collapse *ngIf="bankHolidayCalendarsList.length > 0">
-			<nz-collapse-panel *ngFor="let calendar of bankHolidayCalendarsList" [nzHeader]="calendar.Name">
-				<nz-tabset *ngIf="calendar.Years.length > 0">
-					<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">
-						<nz-list>
-							<nz-list-item class="bank-holiday-calendar-date-item relative">
-								<span class="inline-block"> {{ 'Date' | translate }}</span>
-								<span class="inline-block"> {{ 'Description' | translate }}</span>
-							</nz-list-item>
-						</nz-list>
-						<nz-list
-							[nzDataSource]="year.Dates"
-							[nzRenderItem]="date"
-							class="bank-holiday-calendar-date-list"
-						>
-							<ng-template #date let-date>
-								<nz-list-item class="bank-holiday-calendar-date-item relative">
-									<span class="inline-block">
-										<span class="bank-holiday-date-text"> {{ date.Date }} </span>
-									</span>
-									<span class="inline-block">
-										<span class="bank-holiday-description">{{ date.Description }} </span>
-									</span>
-								</nz-list-item>
-							</ng-template>
-						</nz-list>
-					</nz-tab>
-				</nz-tabset>
+	<div *ngIf="!isAddingNewCalendar && !isEdittingCalendar">
+		<nz-tabset>
+			<nz-tab [nzTitle]="bankHolidayTabTitleTemplate">
+				<ng-template #bankHolidayTabTitleTemplate>
+					<div class="manage-bank-holiday-calendar-tab">
+						<span>{{ 'ManageCalendars' | translate }}</span>
+					</div>
+				</ng-template>
+				<div class="bank-holiday-calendar-list">
+					<nz-collapse *ngIf="bankHolidayCalendarsList.length > 0">
+						<nz-collapse-panel *ngFor="let calendar of bankHolidayCalendarsList" [nzHeader]="calendar.Name">
+							<nz-tabset *ngIf="calendar.Years.length > 0" nzSize="small">
+								<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">
+									<nz-list>
+										<nz-list-item class="bank-holiday-calendar-date-item relative">
+											<span class="inline-block"> {{ 'Date' | translate }}</span>
+											<span class="inline-block"> {{ 'Description' | translate }}</span>
+										</nz-list-item>
+									</nz-list>
+									<nz-list
+										[nzDataSource]="year.Dates"
+										[nzRenderItem]="date"
+										class="bank-holiday-calendar-date-list"
+									>
+										<ng-template #date let-date>
+											<nz-list-item class="bank-holiday-calendar-date-item relative">
+												<span class="inline-block">
+													<span class="bank-holiday-date-text"> {{ date.Date }} </span>
+												</span>
+												<span class="inline-block">
+													<span class="bank-holiday-description"
+														>{{ date.Description }}
+													</span>
+												</span>
+											</nz-list-item>
+										</ng-template>
+									</nz-list>
+								</nz-tab>
+							</nz-tabset>
 
-				<nz-alert
-					*ngIf="calendar.Years.length == 0"
-					nzType="warning"
-					[nzMessage]="'ThisCalendarHasNoDatesAdded' | translate"
-				></nz-alert>
+							<nz-alert
+								*ngIf="calendar.Years.length == 0"
+								nzType="warning"
+								[nzMessage]="'ThisCalendarHasNoDatesAdded' | translate"
+							></nz-alert>
 
-				<div class="con-flex operation-buttons">
-					<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar(calendar)">
-						{{ 'Delete' | translate }}
-					</button>
-					<button nz-button nzType="primary" (click)="startEditBankCalendar(calendar)">
-						{{ 'Edit' | translate }}
-					</button>
+							<div class="con-flex operation-buttons">
+								<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar(calendar)">
+									{{ 'Delete' | translate }}
+								</button>
+								<button nz-button nzType="primary" (click)="startEditBankCalendar(calendar)">
+									{{ 'Edit' | translate }}
+								</button>
+							</div>
+						</nz-collapse-panel>
+					</nz-collapse>
 				</div>
-			</nz-collapse-panel>
-		</nz-collapse>
+			</nz-tab>
+
+			<nz-tab *ngIf="isAssignBankHolidayCalendarsToSitesEnabled" [nzTitle]="bankHolidayTabTitleTemplate">
+				<ng-template #bankHolidayTabTitleTemplate>
+					<div class="bank-holiday-calendar-site-tab">
+						<span>{{ 'AssignCalendarsToSites' | translate }}</span>
+					</div>
+				</ng-template>
+				<div>Content of Tab Pane 2</div>
+			</nz-tab>
+		</nz-tabset>
 	</div>
 
 	<nz-modal

@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,7 +11,7 @@ import zh from '@angular/common/locales/zh';
 import en from '@angular/common/locales/en';
 
 import { configureTestSuite } from '@wfm/test';
-import { UserService } from 'src/app/core/services';
+import { UserService, TogglesService } from 'src/app/core/services';
 import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component';
 import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
 import { BankHolidayCalendarEditComponent } from '../bank-holiday-calendar-edit';
@@ -21,6 +21,7 @@ describe('BankHolidayCalendarComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarComponent>;
 	let document: Document;
 	let component: BankHolidayCalendarComponent;
+	let httpTestingController: HttpTestingController;
 
 	configureTestSuite();
 	beforeAll(() => {
@@ -50,7 +51,8 @@ describe('BankHolidayCalendarComponent', () => {
 					useValue: new ToggleMenuService({
 						innerWidth: 1200
 					} as Window)
-				}
+				},
+				TogglesService
 			]
 		}).compileComponents();
 
@@ -58,6 +60,7 @@ describe('BankHolidayCalendarComponent', () => {
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
 		fixture.autoDetectChanges(true);
+		httpTestingController = TestBed.get(HttpTestingController);
 	}));
 
 	afterAll(() => {
@@ -270,5 +273,22 @@ describe('BankHolidayCalendarComponent', () => {
 		list[0].getElementsByClassName('ant-btn')[1].dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 		expect(document.getElementsByClassName('edit-bank-holiday-calendar')[0]).toBeTruthy();
+	}));
+
+	it('should show site tab when WFM_Setting_AssignBankHolidayCalendarsToSites_79899 is turn on', async(() => {
+		let toggleReq = httpTestingController.match('../ToggleHandler/AllToggles');
+		toggleReq[0].flush({
+			WFM_Setting_BankHolidayCalendar_Create_79297: true,
+			WFM_Setting_AssignBankHolidayCalendarsToSites_79899: true
+		});
+
+		fixture.detectChanges();
+
+		expect(component.isAssignBankHolidayCalendarsToSitesEnabled).toBe(true);
+		expect(document.getElementsByClassName('bank-holiday-calendar-site-tab').length).toBe(1);
+		expect(
+			document.getElementsByClassName('bank-holiday-calendar-site-tab')[0].getElementsByTagName('span')[0]
+				.innerText
+		).toBe('AssignCalendarsToSites');
 	}));
 });

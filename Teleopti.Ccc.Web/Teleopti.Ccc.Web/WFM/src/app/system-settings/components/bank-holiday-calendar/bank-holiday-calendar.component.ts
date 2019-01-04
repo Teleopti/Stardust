@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { NzNotificationService } from 'ng-zorro-antd';
+import { TogglesService } from 'src/app/core/services';
 import { BankCalendarDataService } from '../../shared/bank-calendar-data.service';
 import { BankHolidayCalendar } from '../../interface';
-import { NzNotificationService } from 'ng-zorro-antd';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'bank-holiday-calendar',
 	templateUrl: './bank-holiday-calendar.component.html',
 	styleUrls: ['./bank-holiday-calendar.component.scss'],
-	providers: [BankCalendarDataService]
+	providers: [BankCalendarDataService, TogglesService]
 })
 export class BankHolidayCalendarComponent implements OnInit {
 	yearFormat: string = 'YYYY';
@@ -20,11 +21,13 @@ export class BankHolidayCalendarComponent implements OnInit {
 	edittingCalendar: BankHolidayCalendar;
 	selectedCalendar: BankHolidayCalendar;
 	isDeleteCalendarModalVisible: boolean = false;
+	isAssignBankHolidayCalendarsToSitesEnabled: boolean = false;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
 		private translate: TranslateService,
-		private noticeService: NzNotificationService
+		private noticeService: NzNotificationService,
+		private toggleService: TogglesService
 	) {}
 
 	ngOnInit(): void {
@@ -40,6 +43,11 @@ export class BankHolidayCalendarComponent implements OnInit {
 			this.bankHolidayCalendarsList = calendars.sort((c, n) => {
 				return c.Name.localeCompare(n.Name);
 			});
+		});
+
+		this.toggleService.toggles$.subscribe(toggles => {
+			this.isAssignBankHolidayCalendarsToSitesEnabled =
+				toggles.WFM_Setting_AssignBankHolidayCalendarsToSites_79899;
 		});
 	}
 

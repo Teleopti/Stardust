@@ -3592,6 +3592,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign calendars to sites.
+        /// </summary>
+        public static string AssignCalendarsToSites {
+            get {
+                return ResourceManager.GetString("AssignCalendarsToSites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assignment options.
         /// </summary>
         public static string AssignmentOptions {
@@ -18036,6 +18045,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ManageApplicationLogon {
             get {
                 return ResourceManager.GetString("ManageApplicationLogon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage calendars.
+        /// </summary>
+        public static string ManageCalendars {
+            get {
+                return ResourceManager.GetString("ManageCalendars", resourceCulture);
             }
         }
         

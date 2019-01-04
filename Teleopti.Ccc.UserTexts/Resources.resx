@@ -2280,7 +2280,7 @@ Periods</comment>
   <data name="DaysLowerCase" xml:space="preserve">
     <value>days</value>
     <comment>days</comment>
-  </data>	
+  </data>
   <data name="YearLowerCase" xml:space="preserve">
     <value>year</value>
     <comment>year</comment>
@@ -2312,7 +2312,7 @@ Periods</comment>
   <data name="WeekOrWeeks" xml:space="preserve">
     <value>Week(s)</value>
     <comment>Week(s)</comment>
-  </data>	
+  </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
     <comment>Welcome</comment>
@@ -18114,14 +18114,14 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator.</comment>
   </data>
   <data name="NumberOfAgents" xml:space="preserve">
-	<value>{0} agents</value>
-	<comment>Number of agents, used in plans to display number of agents in a planning group</comment>
+    <value>{0} agents</value>
+    <comment>Number of agents, used in plans to display number of agents in a planning group</comment>
   </data>
   <data name="OneAgent" xml:space="preserve">
-	<value>1 agent</value>
-	<comment>1 agent, used in plans to display number of agents in a planning group</comment>
+    <value>1 agent</value>
+    <comment>1 agent, used in plans to display number of agents in a planning group</comment>
   </data>
-	<data name="DayOffRulesColon" xml:space="preserve">
+  <data name="DayOffRulesColon" xml:space="preserve">
     <value>Day off rules:</value>
     <comment>Page header for day off rules/filter web</comment>
   </data>
@@ -18144,5 +18144,13 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
     <value>There are no agents in this planning group. Please review the filters. </value>
     <comment>Used in Plans when a planning group has been created and no agents match the filters</comment>
+  </data>
+  <data name="ManageCalendars" xml:space="preserve">
+    <value>Manage calendars</value>
+    <comment>Manage calendars tab title in WFM bank holiday calendars setting</comment>
+  </data>
+  <data name="AssignCalendarsToSites" xml:space="preserve">
+    <value>Assign calendars to sites</value>
+    <comment>Assign calendars to sites</comment>
   </data>
 </root>
