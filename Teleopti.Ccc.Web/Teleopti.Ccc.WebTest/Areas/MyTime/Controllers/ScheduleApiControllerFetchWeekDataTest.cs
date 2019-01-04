@@ -672,6 +672,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldHaveEvaluatedPeriods()
+		{
+			var start = new TimeSpan(12, 0, 0);
+			var end = new TimeSpan(24, 0, 1);
+			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), new DateOnly(2014, 12, 15), start, end);
+			ScheduleData.Add(overtimeAvailability);
+
+			Target.FetchWeekData(null).Days.First().Periods.GetType().Should().Be.EqualTo<PeriodViewModel[]>();
+		}
+
+		[Test]
 		public void ShouldCreateOvertimeAvailabilityPeriodViewModel()
 		{
 			var start = new TimeSpan(12, 0, 0);

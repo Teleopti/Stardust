@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				Date = dayScheduleDomainData.Date.ToFixedClientDateOnlyFormat(),
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = daylightModel,
-				TimeLine = createTimeLine(dayScheduleDomainData.MinMaxTime, dayScheduleDomainData.Date, daylightSavingAdjustment, timeZone),
+				TimeLine = createTimeLine(dayScheduleDomainData.MinMaxTime, dayScheduleDomainData.Date, daylightSavingAdjustment, timeZone).ToArray(),
 				RequestPermission = mapDaySchedulePermission(dayScheduleDomainData),
 				ViewPossibilityPermission = dayScheduleDomainData.ViewPossibilityPermission,
 				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
-			viewModel.Schedule.Periods = projections(dayScheduleDomainData);
+			viewModel.Schedule.Periods = projections(dayScheduleDomainData).ToArray();
 
 			return viewModel;
 		}

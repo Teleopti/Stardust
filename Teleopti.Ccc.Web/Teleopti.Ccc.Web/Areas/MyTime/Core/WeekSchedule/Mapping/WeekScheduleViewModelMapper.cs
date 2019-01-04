@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			return scheduleDomainData?.Days?.Select(s =>
 			{
 				var viewModel = createDayViewModel(s, loadOpenHourPeriod);
-				viewModel.Periods = projections(s);
+				viewModel.Periods = projections(s).ToArray();
 				return viewModel;
 			}).ToArray();
 		}
