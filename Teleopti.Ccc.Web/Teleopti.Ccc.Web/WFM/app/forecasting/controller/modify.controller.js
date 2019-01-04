@@ -391,8 +391,8 @@
 			vm.isForecastRunning = true;
 			forecastingService.exportForecast(
 				{
-					ForecastStart: moment(vm.forecastPeriod.startDate).format(),
-					ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
+					ForecastStart: moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD'),
+					ForecastEnd: moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD'),
 					ScenarioId: vm.selectedScenario.Id,
 					SkillId: vm.selectedWorkload.SkillId,
 					WorkloadId: vm.selectedWorkload.Workload.Id
