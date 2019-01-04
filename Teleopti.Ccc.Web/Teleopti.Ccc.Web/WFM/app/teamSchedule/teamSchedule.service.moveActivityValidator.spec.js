@@ -536,6 +536,80 @@
 				expect(result).toBeFalsy();
 			});
 
+			it('should return false when moving activity of yesterday is intersect the shift of today', function () {
+				var todaySchedule = {
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": "2019-01-03",
+					"Timezone": {
+						IanaId: "Europe/Berlin"
+					},
+					"Projection": [
+						{
+							"ShiftLayerIds": ["layer1"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"StartInUtc": "2019-01-03 09:00",
+							"EndInUtc": "2019-01-03 15:00"
+						},
+						{
+							"ShiftLayerIds": ["layer2"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Phone",
+							"StartInUtc": "2019-01-03 15:00",
+							"EndInUtc": "2019-01-03 17:00"
+						}
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				};
+
+				var previousSchedule = {
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": "2019-01-02",
+					"Timezone": {
+						IanaId: "Europe/Berlin"
+					},
+					"Projection": [
+						{
+							"ShiftLayerIds": ["layer3"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"StartInUtc": "2019-01-02 22:00",
+							"EndInUtc": "2019-01-03 05:00"
+						},
+						{
+							"ShiftLayerIds": ["layer4"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"StartInUtc": "2019-01-03 05:00",
+							"EndInUtc": "2019-01-03 06:00"
+						}
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				};
+
+				scheduleMgmt.resetSchedules([todaySchedule, previousSchedule], "2019-01-03", "Europe/Berlin");
+				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+				personSchedule.Shifts[1].Projections[1].Selected = true;
+				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[1].Projections[1], personSchedule);
+
+				var newStartMoment = moment.tz("2019-01-03 10:00", "Europe/Berlin");
+				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Europe/Berlin");
+				expect(result).toBeFalsy();
+
+				newStartMoment = moment.tz("2019-01-03 08:00", "Europe/Berlin");
+				result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Europe/Berlin");
+				expect(result).toBeTruthy();
+				
+			});
+
 			it('should return true when overtime is selected', function () {
 				var localSchedule = {
 					"PersonId": "221B-Baker-SomeoneElse",
