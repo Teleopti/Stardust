@@ -63,7 +63,7 @@
 					<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
 						<p>{{ projection.Title }}</p>
 						<p>{{ projection.TimeSpan }}</p>
-						<div ng-if="projection.Meeting" class="text-left">
+						<div ng-if="projection.Meeting&&!vm.hideMeetingDetails" class="text-left">
 							<p>
 								<span class="text-italic">{{ 'Title' | translate }}: </span>
 								{{ projection.Meeting.Title }}

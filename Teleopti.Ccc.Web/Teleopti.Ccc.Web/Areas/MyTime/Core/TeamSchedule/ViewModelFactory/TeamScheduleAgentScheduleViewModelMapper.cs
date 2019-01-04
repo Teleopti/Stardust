@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {
 	public class TeamScheduleAgentScheduleViewModelMapper
 	{
-		
+
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var timeZoneInfo = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var startTime = schedulePeriod.StartDateTimeLocal(timeZoneInfo);
 			var endTime = schedulePeriod.EndDateTimeLocal(timeZoneInfo);
-			
+
 			List<TeamScheduleAgentScheduleLayerViewModel> periods = buildPeriods(agentInTeamScheduleViewModel, startTime, endTime, isMySchedule);
 			return new TeamScheduleAgentScheduleViewModel
 			{
@@ -84,14 +84,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 						title = ConfidentialPayloadValues.Description.Name;
 					}
 
-				    var scheduleLayerViewModel = new TeamScheduleAgentScheduleLayerViewModel
+					var scheduleLayerViewModel = new TeamScheduleAgentScheduleLayerViewModel
 					{
 						Color = color,
 						Title = title,
 						StartTime = layer.Start,
 						EndTime = layer.End,
 						IsOvertime = layer.IsOvertime,
-						Meeting = layer.Meeting,
+						Meeting = isMySchedule ? layer.Meeting : null,
 						StartPositionPercentage = calculatePosition(layer.Start, startTime, diff),
 						EndPositionPercentage = calculatePosition(layer.End, startTime, diff),
 						TimeSpan = TimeHelper.TimeOfDayFromTimeSpan(layer.Start.TimeOfDay, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(layer.End.TimeOfDay, CultureInfo.CurrentCulture)

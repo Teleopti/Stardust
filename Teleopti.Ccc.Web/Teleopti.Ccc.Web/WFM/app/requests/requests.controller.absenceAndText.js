@@ -68,6 +68,7 @@
 		vm.enableScheduleIcon = false;
 		vm.enabledRequestStausesForShowingScheduleIcon = [requestsStatus.Pending, requestsStatus.Waitlisted];
 		vm.showingAbsenceSchedules = false;
+		vm.hideMeetingDetails = toggleService.WFM_Request_Show_Shift_for_Absence_Requests_79008;
 
 		var onInitCallBack = undefined;
 
