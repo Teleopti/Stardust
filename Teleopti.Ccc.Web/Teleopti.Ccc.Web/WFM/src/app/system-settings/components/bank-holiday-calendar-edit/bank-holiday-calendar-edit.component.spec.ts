@@ -265,4 +265,16 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(component.edittingCalendarYears[0].ModifiedDates[0].IsDeleted).toBe(false);
 		expect(component.edittingCalendarYears[0].ModifiedDates[0].Description).toBe('new description');
 	});
+
+	it('should change the binding date to datepicker after removing a date', () => {
+		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
+		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.edittingCalendarYears[0]);
+		component.addNewDateForYear(new Date('2015-01-11T00:00:00.000Z'), component.edittingCalendarYears[0]);
+
+		component.removeDateOfYear(component.edittingCalendarYears[0].Dates[1], component.edittingCalendarYears[0]);
+
+		expect(moment(component.edittingCalendarYears[0].YearDate).format('YYYY-MM-DD')).toBe(
+			moment(new Date(component.edittingCalendarYears[0].Dates[0].Date)).format('YYYY-MM-DD')
+		);
+	});
 });

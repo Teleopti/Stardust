@@ -131,6 +131,8 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 		let index = year.Dates.indexOf(date);
 		year.Dates.splice(index, 1);
 		year.SelectedDates.splice(index, 1);
+
+		if (year.Dates[0].Date) year.YearDate = new Date(year.Dates[0].Date);
 	}
 
 	selectTab(year: BankHolidayCalendarYearItem) {

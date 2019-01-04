@@ -174,6 +174,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			if (date.Id && date.Id === d.Id) d.IsDeleted = true;
 		});
 		year.SelectedDates.splice(index, 1);
+		if (year.Dates[0].Date) year.YearDate = new Date(year.Dates[0].Date);
 	}
 
 	updateDateDescription(date: BankHolidayCalendarDateItem, year: BankHolidayCalendarYearItem) {
