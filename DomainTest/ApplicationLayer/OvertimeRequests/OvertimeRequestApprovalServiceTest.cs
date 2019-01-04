@@ -191,6 +191,232 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		public void ShouldMergeContinuousPeriodOfActivityOfTheDifferentSkillWhenApproved()
+		{
+			setupPerson(0, 24);
+
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
+
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
+
+			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 1
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillPhone", null, timeZone);
+			criticalUnderStaffingSkillPhone.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
+
+			var criticalUnderStaffingSkillPhone2 = createSkill("criticalUnderStaffingSkillPhone2", null, timeZone);
+			criticalUnderStaffingSkillPhone2.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone2.DefaultResolution = _defaultIntervalInMinutes;
+
+			var phoneActivity = createActivity("phone activity");
+
+			var personSkillPhone = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone);
+			var personSkillPhone2 = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone2);
+			addPersonSkillsToPersonPeriod(personSkillPhone, personSkillPhone2);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(8).AddMinutes(15))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(15), Now.UtcDateTime().AddHours(8).AddMinutes(30))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period =new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(30), Now.UtcDateTime().AddHours(8).AddMinutes(45))
+
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period =new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(45), Now.UtcDateTime().AddHours(9))
+					}
+				}, timeZone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone2,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(8).AddMinutes(15))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(15), Now.UtcDateTime().AddHours(8).AddMinutes(30))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period =new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(30), Now.UtcDateTime().AddHours(8).AddMinutes(45))
+
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period =new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(45), Now.UtcDateTime().AddHours(9))
+					}
+				}, timeZone);
+
+			var personRequest = createOvertimeRequest(LoggedOnUser.CurrentUser(), period);
+
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
+			CommandDispatcher.AllComands.Clear();
+			var result = target.Approve(personRequest.Request);
+
+			result.Count().Should().Be(0);
+			CommandDispatcher.AllComands.Count.Should().Be(1);
+			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
+			addOvertimeActivityCommand.Should().Not.Be.Null();
+			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(phoneActivity.Id.GetValueOrDefault());
+			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period);
+		}
+
+		[Test]
+		public void ShouldMergePeriodOfActivityOfTheDifferentSkillWhenApproved()
+		{
+			setupPerson(0, 24);
+
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
+
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
+
+			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9).AddMinutes(30));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType ,_emailSkillType})
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 1
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var criticalUnderStaffingSkillEmail = createSkill("criticalUnderStaffingSkillEmail", null, timeZone);
+			criticalUnderStaffingSkillEmail.SkillType = _emailSkillType;
+			criticalUnderStaffingSkillEmail.DefaultResolution = _emailIntervalInMinutes;
+
+			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillPhone", null, timeZone);
+			criticalUnderStaffingSkillPhone.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
+
+			var criticalUnderStaffingSkillPhone2 = createSkill("criticalUnderStaffingSkillPhone2", null, timeZone);
+			criticalUnderStaffingSkillPhone2.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone2.DefaultResolution = _defaultIntervalInMinutes;
+
+			var phoneActivity = createActivity("phone activity");
+			var emailActivity = createActivity("email activity");
+
+			var personSkillPhone = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone);
+			var personSkillPhone2 = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone2);
+			var personSkillfEmail = createPersonSkill(emailActivity, criticalUnderStaffingSkillEmail);
+			addPersonSkillsToPersonPeriod(personSkillPhone, personSkillPhone2, personSkillfEmail);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(8).AddMinutes(15))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(15), Now.UtcDateTime().AddHours(8).AddMinutes(30))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period =new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(30), Now.UtcDateTime().AddHours(8).AddMinutes(45))
+
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period =new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(45), Now.UtcDateTime().AddHours(9))
+					}
+				}, timeZone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone2,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(8).AddMinutes(15))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(15), Now.UtcDateTime().AddHours(8).AddMinutes(30))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period =new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(30), Now.UtcDateTime().AddHours(8).AddMinutes(45))
+
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period =new DateTimePeriod(Now.UtcDateTime().AddHours(8).AddMinutes(45), Now.UtcDateTime().AddHours(9))
+					}
+				}, timeZone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillEmail,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 2d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(9), Now.UtcDateTime().AddHours(9).AddMinutes(15))
+					},new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = new DateTimePeriod(Now.UtcDateTime().AddHours(9).AddMinutes(15), Now.UtcDateTime().AddHours(9).AddMinutes(30))
+					}
+				}, timeZone); 
+
+			var personRequest = createOvertimeRequest(LoggedOnUser.CurrentUser(), period);
+
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
+			CommandDispatcher.AllComands.Clear();
+			var result = target.Approve(personRequest.Request);
+
+			result.Count().Should().Be(0);
+			CommandDispatcher.AllComands.Count.Should().Be(2);
+			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
+			addOvertimeActivityCommand.Should().Not.Be.Null();
+			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(emailActivity.Id.GetValueOrDefault());
+			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period.ChangeStartTime(TimeSpan.FromHours(1)));
+		}
+
+		[Test]
 		public void ShouldAddActivityOfPrimarySkillWhenApproved()
 		{
 			setupPerson(0, 24);
@@ -221,7 +447,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
 			criticalUnderStaffingSkillPhone.CascadingIndex(1);
 
-			var criticalUnderStaffingSkillEmail = createSkill("criticalUnderStaffingSkillPhone", null, timeZone);
+			var criticalUnderStaffingSkillEmail = createSkill($"criticalUnderStaffingSkillPhone", null, timeZone);
 			criticalUnderStaffingSkillEmail.SkillType = _emailSkillType;
 			criticalUnderStaffingSkillEmail.DefaultResolution = _emailIntervalInMinutes;
 			criticalUnderStaffingSkillEmail.CascadingIndex(2);
@@ -676,7 +902,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void
 			ShouldApprovedAndAssginActivityCorrectlyBaseOnSkillsWhenMultipleSkillTypesSelectionIsEnabledInOvertimeRequestOpenPeriodSetting()
 		{

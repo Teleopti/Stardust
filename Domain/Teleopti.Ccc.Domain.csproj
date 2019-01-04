@@ -134,8 +134,6 @@
     <Compile Include="AgentInfo\ISkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="AgentInfo\OvertimeRequestCriticalUnderStaffedSpecification.cs" />
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProvider.cs" />
-    <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProviderToggle47853On.cs" />
-    <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProviderToggle74944On.cs" />
     <Compile Include="AgentInfo\OvertimeStaffingPossibilityCalculator.cs" />
     <Compile Include="AgentInfo\PersonExternalLogonInfo.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoader.cs" />

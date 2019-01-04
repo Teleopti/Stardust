@@ -5,11 +5,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 
@@ -19,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	public partial class OvertimeRequestProcessorTest
 	{
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUseActivityOfMostUnderstaffedSkillAsOvertimeActivity()
 		{
 			setupPerson();
@@ -61,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUseFirstActivityOfSameUnderstaffedLevelSkillsAsOvertimeActivity()
 		{
 			setupPerson();
@@ -103,7 +99,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUseActivityOfFirstMostUnderstaffedSkillAsOvertimeActivity()
 		{
 			setupPerson();
@@ -150,7 +145,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUseActivityOfMostUnderstaffedSkillAsOvertimeActivityWithinRequestPeriod()
 		{
 			setupPerson();
@@ -206,7 +200,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUseEmailActivityAsOvertimeActivityWhenEmailSKillIsMoreCriticalUnderStaffed()
 		{
 			setupPerson();
@@ -267,7 +260,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUsePhoneActivityAsOvertimeActivityWhenPhoneSKillIsMoreCriticalUnderStaffed()
 		{
 			setupPerson();
@@ -330,7 +322,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUseEmailActivityAsOvertimeActivityWhenEmailSKillIsMoreCriticalUnderStaffedIn30Minutes()
 		{
 			setupPerson();
@@ -393,69 +384,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personAssignment.OvertimeActivities().First().Payload.Should().Be(emailActivity);
 		}
-
+		
 		[Test]
-		public void ShouldUseEmailActivityAsOvertimeActivityWhenEmailSKillIsMoreCriticalUnderStaffedIn30MinutesWhenToggle47853IsOff()
-		{
-			setupPerson();
-
-			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
-			});
-			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
-
-			var phoneActivity = createActivity("phoneActivity");
-			var emailActivity = createActivity("emailActivity");
-
-			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, timeZone);
-			criticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
-			var moreCriticalUnderStaffedPhoneSkill = createSkill("moreCriticalUnderStaffedPhoneSkill", null, timeZone);
-			moreCriticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
-			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedEmailSkill.SkillType = _phoneSkillType;
-			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
-
-			var personSkill1 = createPersonSkill(emailActivity, mostCriticalUnderStaffedEmailSkill);
-			var personSkill2 = createPersonSkill(phoneActivity, moreCriticalUnderStaffedPhoneSkill);
-			var personSkill3 = createPersonSkill(phoneActivity, criticalUnderStaffedPhoneSkill);
-
-			var date = new DateOnly(2017, 7, 17);
-			var period = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12);
-
-			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
-			{
-				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			}, timeZone);
-			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
-			{
-				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			}, timeZone);
-			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
-			{
-				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			}, timeZone);
-
-			addPersonSkillsToPersonPeriod(personSkill1, personSkill2, personSkill3);
-
-			var personRequest = createOvertimeRequestInMinutes(11, 30);
-			getTarget().Process(personRequest);
-
-			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(LoggedOnUser.CurrentUser(),
-				new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, Scenario.Current());
-			var personAssignment = schedule[LoggedOnUser.CurrentUser()].ScheduledDay(new DateOnly(personRequest.Request.Period.StartDateTime))
-				.PersonAssignment();
-
-			personRequest.IsApproved.Should().Be.True();
-
-			personAssignment.OvertimeActivities().First().Payload.Should().Be(emailActivity);
-		}
-
-		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldSupportDiffrentSkillTypesWithTwoFullOverlappedPeriods()
 		{
 			setupPerson();
@@ -516,7 +446,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldSupportDiffrentSkillTypesWithTwoPartialOverlappedPeriods()
 		{
 			setupPerson();
@@ -580,7 +509,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldOnlyUseOpenPeriodWithPeriodFullyMatchedToCheckSkillType()
 		{
 			setupPerson();
@@ -644,8 +572,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
-		public void ShouldApproveRequestInLessThan15MinutesWithToggle47853On()
+		public void ShouldApproveRequestInLessThan15Minutes()
 		{
 			setupPerson(8, 21);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
@@ -657,8 +584,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
-		public void ShouldApproveRequestWithPeriodEquals15MinutesWithToggle47853On()
+		public void ShouldApproveRequestWithPeriodEquals15Minutes()
 		{
 			setupPerson(8, 21);
 
@@ -678,8 +604,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
-		public void ShouldApproveRequestWithPeriodStartTimeEquals45MinutesWithToggle47853On()
+		public void ShouldApproveRequestWithPeriodStartTimeEquals45Minutes()
 		{
 			setupPerson(8, 21);
 
@@ -699,7 +624,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUseOvertimeRequestPeriodWithMostCriticalOfMatchedUnderStaffedSkillType()
 		{
 			setupPerson();
@@ -760,7 +684,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldUseOvertimeRequestPeriodWithHigherPriorityOfMatchedSkillType()
 		{
 			setupPerson();
@@ -824,7 +747,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldCheckSkillOpenHourWhenApprovingByAdministrator()
 		{
 			Now.Is(new DateTime(2017, 7, 13, 11, 0, 0, DateTimeKind.Utc));
@@ -901,7 +823,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldFailIfNoSkillIsMatchedWithSkillOpenHourWhenApprovingByAdministrator()
 		{
 			Now.Is(new DateTime(2017, 7, 13, 11, 0, 0, DateTimeKind.Utc));
@@ -975,7 +896,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
 		public void ShouldCheckContractRuleBasedOnAvailableSkillType()
 		{
 			setupPerson(8, 21);

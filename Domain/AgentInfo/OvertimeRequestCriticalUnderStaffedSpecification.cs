@@ -1,9 +1,8 @@
-﻿using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Specification;
+﻿using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-	public class OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On :
+	public class OvertimeRequestCriticalUnderStaffedSpecification :
 		Specification<OvertimeRequestValidatedSkillCount>, IOvertimeRequestCriticalUnderStaffedSpecification
 	{
 		public override bool IsSatisfiedBy(OvertimeRequestValidatedSkillCount obj)
