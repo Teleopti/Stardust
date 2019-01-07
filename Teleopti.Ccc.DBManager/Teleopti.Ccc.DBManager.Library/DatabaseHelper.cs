@@ -1,11 +1,9 @@
 using System;
-using System.Linq;
-using System.Configuration;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library;
 using Teleopti.Support.Library.Folders;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			_usingMaster = new ExecuteSql(() =>
 			{
-				if (AzureCommon.IsAzure)
+				if (InstallationEnvironment.IsAzure)
 					openConnection(forceMasterInAzure);
 				return openConnection(true);
 			}, Logger);
@@ -124,14 +122,14 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public bool HasCreateDbPermission()
 		{
-			if (AzureCommon.IsAzure)
+			if (InstallationEnvironment.IsAzure)
 				return true;
 			return Convert.ToBoolean(_usingDatabase.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));
 		}
 
 		public bool HasCreateViewAndLoginPermission()
 		{
-			if (AzureCommon.IsAzure)
+			if (InstallationEnvironment.IsAzure)
 			{
 				const string pwd = "tT12@andSomeMore";
 				var login = Guid.NewGuid().ToString().Replace("-", "#");

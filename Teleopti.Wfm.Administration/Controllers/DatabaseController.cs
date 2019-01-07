@@ -6,7 +6,6 @@ using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -16,6 +15,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Support.Library;
 using Teleopti.Wfm.Administration.Core;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
@@ -90,7 +90,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));
 			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString(model));
-			if (!AzureCommon.IsAzure)
+			if (!InstallationEnvironment.IsAzure)
 				newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionString(model));
 			_persistTenant.Persist(newTenant);
 			
@@ -103,7 +103,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_createBusinessUnit.Create(newTenant, model.BusinessUnit);
 
 			_updateCrossDatabaseView.Execute(analyticsDbConnectionString,
-				AzureCommon.IsAzure ? $"{model.Tenant}_TeleoptiAnalytics" : $"{model.Tenant}_TeleoptiAgg");
+				InstallationEnvironment.IsAzure ? $"{model.Tenant}_TeleoptiAnalytics" : $"{model.Tenant}_TeleoptiAgg");
 
 			addSystemUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 

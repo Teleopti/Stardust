@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Support.Library;
 using Teleopti.Wfm.Administration.Models;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Administration.Core
 {
@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.Administration.Core
 		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion, string tenant, int tenantId)
 		{
 
-			if (AzureCommon.IsAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
+			if (InstallationEnvironment.IsAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
 				return;
 
 			try
@@ -84,7 +84,7 @@ namespace Teleopti.Wfm.Administration.Core
 			if (helper.Tasks().Exists(helper.DatabaseName))
 				return;
 
-			if (AzureCommon.IsAzure)
+			if (InstallationEnvironment.IsAzure)
 				helper.CreateInAzureByDbManager();
 			else
 				helper.CreateByDbManager();

@@ -1,12 +1,9 @@
-﻿using System.Configuration;
-using System.Data.SqlClient;
-using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain.Azure;
+﻿using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Support.Library;
-using Teleopti.Support.Security;
 using Teleopti.Support.Security.Library;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Administration.Core
 {
@@ -53,7 +50,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var analConnstring = builder.ConnectionString;
 			aggDB = builder.InitialCatalog;
 			// and agg to
-			if (!AzureCommon.IsAzure && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
+			if (!InstallationEnvironment.IsAzure && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
 			{
 				builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 				_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,

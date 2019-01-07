@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Sdk.Common.Contracts;
+﻿using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 {

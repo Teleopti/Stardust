@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 
-namespace Teleopti.Ccc.Domain.Azure
+namespace Teleopti.Wfm.Azure.Common
 {
-	public static class AzureCommon
+	public static class InstallationEnvironment
 	{
 		public static bool IsAzure => Environment.GetEnvironmentVariable("TeleoptiIsAzure")?.ToLower() == "true";
 	}

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using Teleopti.Ccc.Domain.Azure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library.Folders;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			if (compareStringLowerCase(user, @"sa"))
 				return;
 
-			if (!AzureCommon.IsAzure)
+			if (!InstallationEnvironment.IsAzure)
 			{
 				//Create or Re-link e.g Alter the DB-user from SQL-Login
 				var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
