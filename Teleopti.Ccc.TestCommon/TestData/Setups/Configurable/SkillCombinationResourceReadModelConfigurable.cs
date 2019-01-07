@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			};
 			var updateStaffingDateSetting = new UpdateStaffingLevelReadModelStartDate();
 			updateStaffingDateSetting.RememberStartDateTime(skillComboList.Min(x=>x.StartDateTime));
-			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu, new FakeStardustJobFeedback(), updateStaffingDateSetting);
+			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu, new FakeStardustJobFeedback(), updateStaffingDateSetting, new SkillCombinationResourcesWithoutBpoToggleOn( currentBu, currentUnitOfWork));
 			skillCombinationReadModel.PersistSkillCombinationResource(_theDate.Date.AddHours(7),skillComboList);
 			
 		}

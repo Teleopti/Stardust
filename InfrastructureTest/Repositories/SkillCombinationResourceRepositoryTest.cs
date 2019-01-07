@@ -6,9 +6,11 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -16,6 +18,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -26,8 +29,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	[AllTogglesOn]
-	public class SkillCombinationResourceRepositoryTest : IIsolateSystem
+	[EnabledBy(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
+	public class SkillCombinationResourceRepositoryToggleOnTest: BaseSkillCombinationResourceRepositoryTest, IIsolateSystem
+	{
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<SkillCombinationResourcesWithoutBpoToggleOn>().For<ISkillCombinationResourcesWithoutBpo>();
+		}
+	}
+
+	[TestFixture]
+	[UnitOfWorkTest]
+	[DisabledBy(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
+	public class SkillCombinationResourceRepositoryToggleOffTest : BaseSkillCombinationResourceRepositoryTest, IIsolateSystem
+	{
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<SkillCombinationResourcesWithoutBpoToggleOff>().For<ISkillCombinationResourcesWithoutBpo>();
+		}
+	}
+
+	
+	public class BaseSkillCombinationResourceRepositoryTest 
 	{
 		public ISkillCombinationResourceRepository Target;
 		public MutableNow Now;
@@ -39,10 +64,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public CurrentBusinessUnit CurrentBusinessUnit;
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 		
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
-		}
 		private Guid persistSkill(IBusinessUnit businessUnit=null, string skillname = "skill")
 		{
 			var activity = new Activity("act");

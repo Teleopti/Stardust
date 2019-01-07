@@ -117,7 +117,8 @@
 		WFM_Connect_NewLandingPage_Remove_GDPR_78132,
 		WFM_Connect_NewLandingPage_WEB_78578,
 		WFM_AbsenceRequest_ImproveThroughput_79139,
-		WFM_ProbabilityView_ImproveResponseTime_80040
+		WFM_ProbabilityView_ImproveResponseTime_80040,
+		WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128
 		// ReSharper restore InconsistentNaming
 	}
 }
