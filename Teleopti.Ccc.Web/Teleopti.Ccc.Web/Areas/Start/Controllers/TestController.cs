@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
@@ -25,7 +24,6 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
-using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
@@ -42,8 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IFormsAuthentication _formsAuthentication;
 		private readonly IIdentityProviderProvider _identityProviderProvider;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
-		private readonly ISettings _settings;
-		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
 		private readonly RecurringEventPublishings _recurringEventPublishings;
@@ -60,8 +56,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IFormsAuthentication formsAuthentication,
 			IIdentityProviderProvider identityProviderProvider,
 			ILoadPasswordPolicyService loadPasswordPolicyService,
-			ISettings settings,
-			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
 			RecurringEventPublishings recurringEventPublishings,
@@ -77,8 +71,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_formsAuthentication = formsAuthentication;
 			_identityProviderProvider = identityProviderProvider;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
-			_settings = settings;
-			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
 			_hangfire = hangfire;
 			_recurringEventPublishings = recurringEventPublishings;
