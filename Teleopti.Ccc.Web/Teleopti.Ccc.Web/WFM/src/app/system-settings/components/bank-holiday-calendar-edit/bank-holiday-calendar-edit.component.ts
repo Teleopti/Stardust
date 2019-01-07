@@ -139,7 +139,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	dateClick(year: BankHolidayCalendarYearItem) {
 		setTimeout(() => {
-			if (year.Dates.length > 0) return;
+			if (!year.Dates || year.Dates.length > 0) return;
 
 			this.addDateForYear(year.YearDate, year);
 		});
