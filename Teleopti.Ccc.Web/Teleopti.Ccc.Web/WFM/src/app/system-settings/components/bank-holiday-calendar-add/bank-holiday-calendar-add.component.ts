@@ -5,7 +5,8 @@ import {
 	BankHolidayCalendar,
 	BankHolidayCalendarYear,
 	BankHolidayCalendarYearItem,
-	BankHolidayCalendarDateItem
+	BankHolidayCalendarDateItem,
+	BankHolidayCalendarItem
 } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
@@ -17,7 +18,7 @@ import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
 	providers: [BankCalendarDataService]
 })
 export class BankHolidayCalendarAddComponent implements OnInit {
-	@Input() bankHolidayCalendarsList: BankHolidayCalendar[];
+	@Input() bankHolidayCalendarsList: BankHolidayCalendarItem[];
 	@Input() exitAddNewBankCalendar: Function;
 
 	yearFormat: string = 'YYYY';
@@ -99,7 +100,15 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 		this.newCalendarYears[this.newCalendarTabIndex].Active = true;
 	}
 
-	addNewDateForYear(date: Date, year: BankHolidayCalendarYearItem) {
+	dateClick(year: BankHolidayCalendarYearItem) {
+		setTimeout(() => {
+			if (year.Dates.length > 0) return;
+
+			this.addDateForYear(year.YearDate, year);
+		});
+	}
+
+	dateChangeCallback(date: Date, year: BankHolidayCalendarYearItem) {
 		year.Dates.forEach(d => (d.IsLastAdded = false));
 		let index = year.SelectedDates.indexOf(date.getTime());
 
@@ -108,11 +117,28 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 			return;
 		}
 
+		this.addDateForYear(date, year);
+	}
+
+	addDateForYear(date: Date, year: BankHolidayCalendarYearItem) {
 		let newDate: BankHolidayCalendarDateItem = {
 			Date: moment(date).format(this.dateFormat),
 			Description: this.translate.instant('BankHoliday'),
 			IsLastAdded: true
 		};
+
+		if (year.ModifiedDates) {
+			let modifiedDate = year.ModifiedDates.filter(d => {
+				return d.Date == newDate.Date;
+			})[0];
+			if (modifiedDate) {
+				modifiedDate.IsDeleted = false;
+				modifiedDate.Description = newDate.Description;
+				newDate.Id = modifiedDate.Id;
+			} else {
+				year.ModifiedDates.push(newDate);
+			}
+		}
 
 		year.Dates.push(newDate);
 		year.Dates.sort((c, n) => {
@@ -129,10 +155,25 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 
 	removeDateOfYear(date: BankHolidayCalendarDateItem, year: BankHolidayCalendarYearItem) {
 		let index = year.Dates.indexOf(date);
-		year.Dates.splice(index, 1);
-		year.SelectedDates.splice(index, 1);
+		let deletedDate = year.Dates.splice(index, 1)[0];
+		if (deletedDate.Id) {
+			deletedDate.IsDeleted = true;
+			let modifiedDate = year.ModifiedDates.filter(d => {
+				return d.Date == deletedDate.Date;
+			})[0];
 
-		if (year.Dates[0].Date) year.YearDate = new Date(year.Dates[0].Date);
+			if (modifiedDate) modifiedDate.IsDeleted = true;
+			else year.ModifiedDates.push(deletedDate);
+		}
+
+		year.SelectedDates.splice(index, 1);
+		if (year.Dates[0]) {
+			let lastAddedItem = year.Dates.filter(d => {
+				return d.IsLastAdded;
+			})[0];
+			if (lastAddedItem) year.YearDate = new Date(lastAddedItem.Date);
+			else year.YearDate = new Date(year.Dates[0].Date);
+		}
 	}
 
 	selectTab(year: BankHolidayCalendarYearItem) {
@@ -166,7 +207,7 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 						});
 					});
 
-					this.bankHolidayCalendarsList.unshift(result);
+					this.bankHolidayCalendarsList.unshift(result as BankHolidayCalendarItem);
 					this.bankHolidayCalendarsList.sort((c, n) => {
 						return c.Name.localeCompare(n.Name);
 					});

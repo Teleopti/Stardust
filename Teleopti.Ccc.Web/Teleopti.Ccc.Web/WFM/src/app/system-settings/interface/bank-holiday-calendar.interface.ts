@@ -4,6 +4,10 @@ export interface BankHolidayCalendar {
 	Years: BankHolidayCalendarYear[];
 }
 
+export interface BankHolidayCalendarItem extends BankHolidayCalendar {
+	CurrentYearIndex?: number;
+}
+
 export interface BankHolidayCalendarYear {
 	Year: string;
 	Dates: BankHolidayCalendarDateItem[];

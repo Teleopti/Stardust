@@ -13,7 +13,7 @@
 		}
 	}
 	nz-content .bank-holiday-calendar-date-list {
-		max-height: calc(100vh - 440px);
+		max-height: calc(100vh - 425px);
 		min-width: 420px;
 		overflow: auto;
 		padding: 0 10px 0 0;
@@ -51,10 +51,30 @@
 		justify-content: center;
 	}
 }
+.bank-holiday-year-content {
+	padding: 15px 0 0 20px;
+}
+.bank-holiday-calendar-date-item-header span {
+	.ant-list-item {
+		padding: 0;
+	}
+	span {
+		font-weight: bold;
+		color: #294766;
+	}
+}
+:host-context(.angular-theme-dark) {
+	.bank-holiday-calendar-date-item-header {
+		span {
+			font-weight: bold;
+			color: #c9d4d6;
+		}
+	}
+}
 .bank-holiday-calendar-date-item {
 	span.inline-block {
 		margin: 0 15px;
-		min-width: 100px;
+		min-width: 80px;
 
 		& > span {
 			font-weight: bold;

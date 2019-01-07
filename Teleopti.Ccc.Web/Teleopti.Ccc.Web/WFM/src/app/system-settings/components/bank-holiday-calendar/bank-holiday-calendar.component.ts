@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NzNotificationService } from 'ng-zorro-antd';
 import { TogglesService } from 'src/app/core/services';
 import { BankCalendarDataService } from '../../shared/bank-calendar-data.service';
-import { BankHolidayCalendar } from '../../interface';
+import { BankHolidayCalendarItem } from '../../interface';
 
 @Component({
 	selector: 'bank-holiday-calendar',
@@ -15,11 +15,11 @@ export class BankHolidayCalendarComponent implements OnInit {
 	yearFormat: string = 'YYYY';
 	dateFormat: string = 'YYYY-MM-DD';
 
-	bankHolidayCalendarsList: BankHolidayCalendar[] = [];
+	bankHolidayCalendarsList: BankHolidayCalendarItem[] = [];
 	isAddingNewCalendar: boolean = false;
 	isEdittingCalendar: boolean = false;
-	edittingCalendar: BankHolidayCalendar;
-	selectedCalendar: BankHolidayCalendar;
+	edittingCalendar: BankHolidayCalendarItem;
+	selectedCalendar: BankHolidayCalendarItem;
 	isDeleteCalendarModalVisible: boolean = false;
 	isAssignBankHolidayCalendarsToSitesEnabled: boolean = false;
 
@@ -32,15 +32,23 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.bankCalendarDataService.getBankHolidayCalendars().subscribe(calendars => {
-			calendars.forEach(c => {
-				c.Years.forEach(y => {
+			let cals = calendars as BankHolidayCalendarItem[];
+			let curYear = moment().year();
+			cals.forEach(c => {
+				c.CurrentYearIndex = 0;
+
+				c.Years.forEach((y, i) => {
 					y.Dates.forEach(d => {
 						d.Date = moment(d.Date).format(this.dateFormat);
 					});
+
+					if (moment(y.Year.toString()).year() == curYear) {
+						c.CurrentYearIndex = i;
+					}
 				});
 			});
 
-			this.bankHolidayCalendarsList = calendars.sort((c, n) => {
+			this.bankHolidayCalendarsList = cals.sort((c, n) => {
 				return c.Name.localeCompare(n.Name);
 			});
 		});
@@ -51,7 +59,8 @@ export class BankHolidayCalendarComponent implements OnInit {
 		});
 	}
 
-	confirmDeleteHolidayCanlendar(calendar: BankHolidayCalendar) {
+	confirmDeleteHolidayCanlendar(event: Event, calendar: BankHolidayCalendarItem) {
+		event.stopPropagation();
 		this.selectedCalendar = calendar;
 		this.isDeleteCalendarModalVisible = true;
 	}
@@ -95,7 +104,9 @@ export class BankHolidayCalendarComponent implements OnInit {
 		this.isAddingNewCalendar = false;
 	};
 
-	startEditBankCalendar(calendar: BankHolidayCalendar) {
+	startEditBankCalendar(event: Event, calendar: BankHolidayCalendarItem) {
+		event.stopPropagation();
+
 		this.edittingCalendar = calendar;
 		this.isEdittingCalendar = true;
 	}

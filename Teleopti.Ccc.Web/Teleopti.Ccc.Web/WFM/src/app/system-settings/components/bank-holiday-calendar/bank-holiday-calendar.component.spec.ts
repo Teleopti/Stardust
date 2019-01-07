@@ -194,7 +194,7 @@ describe('BankHolidayCalendarComponent', () => {
 		).toBeTruthy();
 	}));
 
-	it('should show delete and edit button for each bank holiday calendar item', async(() => {
+	it('should show delete and edit icon for each bank holiday calendar item', async(() => {
 		component.bankHolidayCalendarsList.splice(0, 0, {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
@@ -225,19 +225,8 @@ describe('BankHolidayCalendarComponent', () => {
 		let list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
 		expect(list.length).toBe(1);
-		expect(list[0].getElementsByClassName('ant-btn').length).toBe(2);
-		expect(
-			list[0]
-				.getElementsByClassName('ant-btn')[0]
-				.getElementsByTagName('span')[0]
-				.innerText.trim()
-		).toBe('Delete');
-		expect(
-			list[0]
-				.getElementsByClassName('ant-btn')[1]
-				.getElementsByTagName('span')[0]
-				.innerText.trim()
-		).toBe('Edit');
+		expect(list[0].getElementsByClassName('anticon-delete').length).toBe(1);
+		expect(list[0].getElementsByClassName('anticon-edit').length).toBe(1);
 	}));
 
 	it('should go to edit bank holiday calendar panel after click edit buton', async(() => {
@@ -270,7 +259,7 @@ describe('BankHolidayCalendarComponent', () => {
 		let bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
 		let list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
-		list[0].getElementsByClassName('ant-btn')[1].dispatchEvent(new Event('click'));
+		list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 		expect(document.getElementsByClassName('edit-bank-holiday-calendar')[0]).toBeTruthy();
 	}));

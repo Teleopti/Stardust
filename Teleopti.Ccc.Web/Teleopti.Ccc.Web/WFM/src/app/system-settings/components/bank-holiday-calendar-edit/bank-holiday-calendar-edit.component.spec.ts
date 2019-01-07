@@ -50,7 +50,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should render delete, cancel and save button', async(() => {
+	it('should render cancel and save button', async(() => {
 		component.edittingCalendar = {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
@@ -79,22 +79,17 @@ describe('BankHolidayCalendarEditComponent', () => {
 		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 		let operationButtons = editBankHolidayCalendarPanel.getElementsByClassName('operation-buttons')[0];
 
-		expect(operationButtons.getElementsByClassName('ant-btn').length).toBe(3);
+		expect(operationButtons.getElementsByClassName('ant-btn').length).toBe(2);
+
 		expect(
 			operationButtons
 				.getElementsByClassName('ant-btn')[0]
 				.getElementsByTagName('span')[0]
 				.innerText.trim()
-		).toBe('Delete');
-		expect(
-			operationButtons
-				.getElementsByClassName('ant-btn')[1]
-				.getElementsByTagName('span')[0]
-				.innerText.trim()
 		).toBe('Cancel');
 		expect(
 			operationButtons
-				.getElementsByClassName('ant-btn')[2]
+				.getElementsByClassName('ant-btn')[1]
 				.getElementsByTagName('span')[0]
 				.innerText.trim()
 		).toBe('Save');
@@ -168,7 +163,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(dateRows[0].innerHTML.indexOf('2013-01-09') > -1).toBeTruthy();
 		expect(dateRows[0].innerHTML.indexOf('BankHoliday 1') > -1).toBeTruthy();
 
-		component.addNewDateForYear(new Date('2013-01-10'), component.edittingCalendarYears[0]);
+		component.dateChangeCallback(new Date('2013-01-10'), component.edittingCalendarYears[0]);
 		fixture.detectChanges();
 
 		expect(dateRows.length).toBe(2);
@@ -266,10 +261,10 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(component.edittingCalendarYears[0].ModifiedDates[0].Description).toBe('new description');
 	});
 
-	it('should change the binding date to datepicker after removing a date', () => {
+	it('should change the binding date of datepicker to last active date or first date in the list after removing a date', () => {
 		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
-		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.edittingCalendarYears[0]);
-		component.addNewDateForYear(new Date('2015-01-11T00:00:00.000Z'), component.edittingCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.edittingCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-11T00:00:00.000Z'), component.edittingCalendarYears[0]);
 
 		component.removeDateOfYear(component.edittingCalendarYears[0].Dates[1], component.edittingCalendarYears[0]);
 

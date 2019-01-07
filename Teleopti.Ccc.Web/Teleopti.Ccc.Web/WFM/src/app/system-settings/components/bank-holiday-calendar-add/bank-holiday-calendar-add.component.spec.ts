@@ -80,18 +80,18 @@ describe('BankHolidayCalendarAddComponent', () => {
 	it('should not add duplicated date', () => {
 		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
 
-		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
-		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
 
 		expect(component.newCalendarYears[0].Dates.length).toBe(1);
 	});
 
 	it('should focus to another year after deleting one year tab', () => {
 		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
-		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
 
 		component.newYearTab(new Date('2016-01-10T00:00:00.000Z'));
-		component.addNewDateForYear(new Date('2016-01-10T00:00:00.000Z'), component.newCalendarYears[1]);
+		component.dateChangeCallback(new Date('2016-01-10T00:00:00.000Z'), component.newCalendarYears[1]);
 
 		component.deleteYearTab(component.newCalendarYears[1]);
 
@@ -100,10 +100,10 @@ describe('BankHolidayCalendarAddComponent', () => {
 		expect(component.newCalendarYears[0].Active).toBe(true);
 	});
 
-	it('should change the binding date to datepicker after removing a date', () => {
+	it('should change the binding date of datepicker to last active date or first date in the list after removing a date', () => {
 		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
-		component.addNewDateForYear(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
-		component.addNewDateForYear(new Date('2015-01-11T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-11T00:00:00.000Z'), component.newCalendarYears[0]);
 
 		component.removeDateOfYear(component.newCalendarYears[0].Dates[1], component.newCalendarYears[0]);
 

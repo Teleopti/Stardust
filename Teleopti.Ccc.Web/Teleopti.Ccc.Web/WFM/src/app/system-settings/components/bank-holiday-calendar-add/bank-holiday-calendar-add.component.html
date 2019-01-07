@@ -51,7 +51,7 @@
 								nzAllowClear="false"
 								[nzDisabledDate]="year.DisabledDate"
 								[(ngModel)]="year.YearDate"
-								(ngModelChange)="addNewDateForYear($event, year)"
+								(ngModelChange)="dateChangeCallback($event, year)"
 								[nzDateRender]="dateRender"
 							></nz-date-picker>
 
@@ -59,6 +59,7 @@
 								<div
 									class="ant-calendar-date"
 									[class.border]="year.SelectedDates.indexOf(currentDate.getTime()) > -1"
+									(click)="dateClick(currentDate, year)"
 								>
 									{{ currentDate.getDate() }}
 								</div>
@@ -74,7 +75,7 @@
 				</nz-sider>
 
 				<nz-content class="bank-holiday-year-content">
-					<nz-list *ngIf="year.Dates.length > 0">
+					<nz-list *ngIf="year.Dates.length > 0" class="bank-holiday-calendar-date-item-header">
 						<nz-list-item class="bank-holiday-calendar-date-item">
 							<span class="inline-block">{{ 'Date' | translate }}</span>
 							<span class="inline-block">{{ 'Description' | translate }}</span>

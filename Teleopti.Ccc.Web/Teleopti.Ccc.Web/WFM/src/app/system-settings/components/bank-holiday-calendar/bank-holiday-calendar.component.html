@@ -1,4 +1,4 @@
-<div class="bank-holiday-settings panel material-depth-1 full-padding border">
+<div class="bank-holiday-settings panel material-depth-1 full-padding">
 	<h2>
 		<i nz-icon type="calendar" theme="outline"></i> {{ 'BankHolidayCalendars' | translate }}
 		<button
@@ -40,15 +40,56 @@
 						<span>{{ 'ManageCalendars' | translate }}</span>
 					</div>
 				</ng-template>
+
 				<div class="bank-holiday-calendar-list">
 					<nz-collapse *ngIf="bankHolidayCalendarsList.length > 0">
-						<nz-collapse-panel *ngFor="let calendar of bankHolidayCalendarsList" [nzHeader]="calendar.Name">
-							<nz-tabset *ngIf="calendar.Years.length > 0" nzSize="small">
+						<nz-collapse-panel
+							*ngFor="let calendar of bankHolidayCalendarsList"
+							[nzHeader]="bankHolidayListPanelHeader"
+						>
+							<ng-template #bankHolidayListPanelHeader>
+								<span>{{ calendar.Name }}</span>
+								<span class="operation-buttons pull-right">
+									<button
+										class="inline-block"
+										(click)="confirmDeleteHolidayCanlendar($event, calendar)"
+										[nzTitle]="'Delete' | translate"
+										nz-tooltip
+										nz-button
+										nzPlacement="bottom"
+										nzType="danger"
+										nzShape="circle"
+										nzSize="small"
+									>
+										<i nz-icon type="delete" theme="outline"></i>
+									</button>
+
+									<button
+										class="inline-block"
+										(click)="startEditBankCalendar($event, calendar)"
+										[nzTitle]="'Edit' | translate"
+										nz-tooltip
+										nzPlacement="bottom"
+										nz-button
+										nzType="primary"
+										nzShape="circle"
+										nzSize="small"
+									>
+										<i nz-icon type="edit" theme="outline"></i>
+									</button>
+								</span>
+							</ng-template>
+
+							<nz-tabset
+								*ngIf="calendar.Years.length > 0"
+								nzSize="small"
+								[nzSelectedIndex]="calendar.CurrentYearIndex"
+							>
 								<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">
-									<nz-list>
+									<nz-list class="bank-holiday-calendar-date-item-header">
 										<nz-list-item class="bank-holiday-calendar-date-item relative">
-											<span class="inline-block"> {{ 'Date' | translate }}</span>
-											<span class="inline-block"> {{ 'Description' | translate }}</span>
+											<span class="inline-block font-bold"> {{ 'Date' | translate }}</span>
+											<span class="inline-block font-bold"> {{ 'Description' | translate }}</span>
 										</nz-list-item>
 									</nz-list>
 									<nz-list
@@ -77,15 +118,6 @@
 								nzType="warning"
 								[nzMessage]="'ThisCalendarHasNoDatesAdded' | translate"
 							></nz-alert>
-
-							<div class="con-flex operation-buttons">
-								<button nz-button nzType="danger" (click)="confirmDeleteHolidayCanlendar(calendar)">
-									{{ 'Delete' | translate }}
-								</button>
-								<button nz-button nzType="primary" (click)="startEditBankCalendar(calendar)">
-									{{ 'Edit' | translate }}
-								</button>
-							</div>
 						</nz-collapse-panel>
 					</nz-collapse>
 				</div>
