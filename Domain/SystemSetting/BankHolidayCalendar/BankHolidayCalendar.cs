@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.SystemSetting
+namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 {
 	public class BankHolidayCalendar : NonversionedAggregateRootWithBusinessUnit, IBankHolidayCalendar, IAggregateRootWithEvents
 	{

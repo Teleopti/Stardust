@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
 				   assembly="Teleopti.Ccc.Domain"
-				   namespace="Teleopti.Ccc.Domain.SystemSetting"
+				   namespace="Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar"
 				   default-access="field.camelcase-underscore">
 
 	<class name="BankHolidayDate" table="BankHolidayDate">
@@ -33,7 +33,7 @@
 		
 
 		<many-to-one name="Calendar" column="CalendarId"
-					 class="Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar"
+					 class="Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar.BankHolidayCalendar"
 					 not-null="true"
 					 foreign-key="FK_BankHolidayDate_BankHolidayCalendar"/>
 		

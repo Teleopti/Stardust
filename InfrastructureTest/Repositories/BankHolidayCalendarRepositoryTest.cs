@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.SystemSetting;
+using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
