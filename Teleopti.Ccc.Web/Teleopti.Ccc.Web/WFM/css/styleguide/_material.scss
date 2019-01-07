@@ -223,3 +223,12 @@ _:-ms-lang(x),
 	border-radius: 4px;
 	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 }
+
+// Overrride the robot font
+button,
+html,
+input,
+select,
+textarea {
+	font-family: 'Open Sans', sans-serif;
+}
