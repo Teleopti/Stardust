@@ -8,6 +8,5 @@ namespace Teleopti.Ccc.DBManager.Library
 		}
 
 		public int ProductVersion { get; private set; }
-		//public bool IsAzure { get; private set; }
 	}
 }
