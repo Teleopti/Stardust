@@ -1,5 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.SystemSettingWeb;
+using Teleopti.Ccc.Domain.SystemSetting;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {

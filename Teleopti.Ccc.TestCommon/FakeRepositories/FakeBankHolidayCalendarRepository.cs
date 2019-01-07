@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SystemSettingWeb;
+using Teleopti.Ccc.Domain.SystemSetting;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

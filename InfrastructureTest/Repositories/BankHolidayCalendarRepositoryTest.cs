@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
-using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.SystemSettingWeb;
+using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories

@@ -225,6 +225,7 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitId.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitIdWithoutChangeInfo.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendar.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\AccuracyModel.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="InterfaceLegacy\Domain\IntervalDefinition.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonInfoModel.cs" />
     <Compile Include="InterfaceLegacy\Domain\IStateReader.cs" />
+    <Compile Include="InterfaceLegacy\Domain\ISiteBankHolidayCalendar.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserCulture.cs" />
     <Compile Include="InterfaceLegacy\Domain\MinMax.cs" />
     <Compile Include="InterfaceLegacy\Domain\ParsedTimeOfDay.cs" />
@@ -274,9 +276,10 @@
     <Compile Include="InterfaceLegacy\Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarRepository.cs" />
     <Compile Include="Repositories\IBankHolidayDateRepository.cs" />
+    <Compile Include="Repositories\ISiteBankHolidayCalendarRepository.cs" />
     <Compile Include="Staffing\IStaffingAudit.cs" />
-    <Compile Include="SystemSettingWeb\BankHolidayCalendar\IBankHolidayCalendar.cs" />
-    <Compile Include="SystemSettingWeb\BankHolidayCalendar\IBankHolidayDate.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendar.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayDate.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IPasswordStrengthRule.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IPersonInfoCreator.cs" />
@@ -719,8 +722,8 @@
     <Compile Include="Staffing\IStaffingAuditRepository.cs" />
     <Compile Include="Staffing\ITenantAuditRepository.cs" />
     <Compile Include="Staffing\StaffingAudit.cs" />
-    <Compile Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayCalendar.cs" />
-    <Compile Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayDate.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendar.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayDate.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
@@ -3889,6 +3892,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\Messaging\PushMessage.hbm.xml">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -4057,10 +4061,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayDate.hbm.xml">
+    <EmbeddedResource Include="SystemSetting\BankHolidayCalendar\BankHolidayDate.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SystemSettingWeb\BankHolidayCalendar\BankHolidayCalendar.hbm.xml">
+    <EmbeddedResource Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendar.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Staffing\StaffingAudit.hbm.xml">
@@ -4095,6 +4099,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\ForecastDayOverride.hbm.xml" />
+    <EmbeddedResource Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendar.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

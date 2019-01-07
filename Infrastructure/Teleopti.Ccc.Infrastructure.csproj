@@ -340,6 +340,7 @@
     <Compile Include="Repositories\Stardust\JobFilterModel.cs" />
     <Compile Include="Repositories\Stardust\StardustRepository.cs" />
     <Compile Include="Repositories\Stardust\WorkerNode.cs" />
+    <Compile Include="Repositories\SiteBankHolidayCalendarRepository.cs" />
     <Compile Include="Repositories\TenantAuditRepository.cs" />
     <Compile Include="Repositories\UserDeviceRepository.cs" />
     <Compile Include="Repositories\RequeueHangfireRepository.cs" />

@@ -6,7 +6,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.SystemSettingWeb;
+using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			else
 			{
 				string name = string.IsNullOrWhiteSpace(input.Name) ? "Unknow Calendar" : input.Name;
-				calendar = new Domain.SystemSettingWeb.BankHolidayCalendar();
+				calendar = new Domain.SystemSetting.BankHolidayCalendar();
 				calendar.Name = name;
 				_bankHolidayCalendarRepository.Add(calendar);
 			}
