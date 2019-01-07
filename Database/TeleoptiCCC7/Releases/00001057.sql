@@ -39,7 +39,7 @@ GO
 CREATE TABLE [dbo].[BankHolidayCalendarsForSite](
 	[Parent] [uniqueidentifier] NOT NULL,
 	[BankHolidayCalendar] [uniqueidentifier] NOT NULL,
- CONSTRAINT [PK_BankHolidayDates] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_BankHolidayCalendarsForSite] PRIMARY KEY CLUSTERED 
 (
 	[Parent] ASC,
 	[BankHolidayCalendar] ASC
