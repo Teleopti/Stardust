@@ -1,5 +1,4 @@
-﻿
-# Note: If you change this file in production, app pool will recycle!
+﻿# !!! Don't change this file in production, use toggle override from admin portal instead !!!
 #
 # How to...
 #
