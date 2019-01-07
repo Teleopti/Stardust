@@ -7,6 +7,7 @@
 <!--[if gt IE 8]><!-->
 <html class="no-js">
 <!--<![endif]-->
+
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge;IE=8;FF=3;OtherUA=4,chrome=1" />
@@ -19,7 +20,7 @@
 	<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap.css" />
 	<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />
 
-	<link href="content/favicon.ico?v=2" rel="shortcut icon" type="image/x-icon" />
+	<link href="~/WFM/dist/ng2/assets/favicon/favicon.ico?v=2" rel="shortcut icon" type="image/x-icon" />
 	<script type="text/javascript" src="Content/jquery/jquery-1.12.4.min.js"></script>
 	<script type="text/javascript">
 		function showPendingTime(pendingTimeInSecond) {
@@ -41,6 +42,7 @@
 		showPendingTime(<%= ViewData.Eval("WaitingTimeInSecond") %>);
 	</script>
 </head>
+
 <body>
 	<nav class="navbar navbar-inverse navbar-static-top">
 		<div class="container">
@@ -50,15 +52,18 @@
 			<div>
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#"><span><%= ViewData.Eval("ResTeamSchedule") %></span></a>
+						<a href="#"><span>
+								<%= ViewData.Eval("ResTeamSchedule") %></span></a>
 					</li>
 
 					<li id="link-realtimeadherence">
-						<a href="#"><span><%= ViewData.Eval("ResRta") %></span></a>
+						<a href="#"><span>
+								<%= ViewData.Eval("ResRta") %></span></a>
 					</li>
 
 					<li id="reports" class="dropdown">
-						<a href="#"><span><%= ViewData.Eval("ResReports") %></span>
+						<a href="#"><span>
+								<%= ViewData.Eval("ResReports") %></span>
 							<b class="caret"></b>
 						</a>
 					</li>
@@ -68,7 +73,8 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
 						<span>
-							<small><%= ViewData.Eval("CurrentBusinessUnit") %></small>
+							<small>
+								<%= ViewData.Eval("CurrentBusinessUnit") %></small>
 						</span>
 						<b class="caret"></b>
 					</a>
@@ -77,7 +83,8 @@
 					<a href="#" class="dropdown-toggle">
 						<i class="glyphicon glyphicon-user"></i>
 						<span class="user-name">
-							<small><%= ViewData.Eval("CurrentUserName") %></small>
+							<small>
+								<%= ViewData.Eval("CurrentUserName") %></small>
 						</span>
 						<b class="caret"></b>
 					</a>
@@ -87,11 +94,16 @@
 	</nav>
 	<div class="container">
 		<div class="row" style="background: #bada55; text-align: left; color: #333 !important; text-decoration: none !important;">
-			<h2 class="text-center"><%= ViewData.Eval("ResMyTeamMigrated") %></h2>
+			<h2 class="text-center">
+				<%= ViewData.Eval("ResMyTeamMigrated") %>
+			</h2>
 		</div>
 		<div class="row">
-			<h4 class="text-center"><%= ViewData.Eval("ResPageWillBeRedirected") %></h4>
+			<h4 class="text-center">
+				<%= ViewData.Eval("ResPageWillBeRedirected") %>
+			</h4>
 		</div>
 	</div>
 </body>
+
 </html>
