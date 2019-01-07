@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			{
 				IEnumerable<ReadOnlyGroup> permittedTeamGroups;
 
-				if (functionPath != null)
+				if (functionPath == null)
 				{
 					permittedTeamGroups = siteLookUp;
 				}

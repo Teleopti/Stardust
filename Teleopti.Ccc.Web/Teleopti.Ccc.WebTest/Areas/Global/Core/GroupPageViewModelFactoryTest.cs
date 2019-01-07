@@ -176,6 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			gpChildren.Count.Should().Be.EqualTo(1);
 			gpChildren.Single().Id.Should().Be.EqualTo(team.Id);
 		}
+
 		[Test]
 		public void ShouldReturnSortedGroupPages()
 		{
@@ -284,6 +285,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			gp1.Name.Should().Be.EqualTo("Skill");
 			childGroupsForGroupPage1[0].Name.Should().Be.EqualTo("ASkill");
 			childGroupsForGroupPage1[1].Name.Should().Be.EqualTo("Email");
+		}
+
+		[Test]
+		public void ShouldReturnNoGroupPagesIfLogonUserHasNoPermissionAfterTurnOnPermissionCheck()
+		{
+			PermissionProvider.Enable();
+
+			var mainPage = new ReadOnlyGroupPage()
+			{
+				PageName = "Main",
+				PageId = Group.PageMainId
+			};
+
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var team1 = TeamFactory.CreateTeam("Team1", "Site1").WithId();
+			team1.Site.WithId(siteId);
+
+			var groups = new[]
+			{
+				new ReadOnlyGroup
+				{
+					PageId = mainPage.PageId,
+					PageName = mainPage.PageName,
+					GroupName = team1.SiteAndTeam,
+					SiteId = siteId,
+					TeamId =  team1.Id.Value,
+					GroupId = team1.Id.GetValueOrDefault(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			TeamRepository.Add(team1);
+			GroupingReadOnlyRepository.Has(groups);
+
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var orgs = result.BusinessHierarchy;
+			orgs.Length.Should().Be.EqualTo(0);
 		}
 
 		[Test, SetUICulture("sv-SE")]
