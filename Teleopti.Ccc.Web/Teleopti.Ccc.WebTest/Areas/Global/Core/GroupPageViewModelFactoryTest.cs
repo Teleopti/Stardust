@@ -754,7 +754,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			TeamRepository.Add(team);
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModelWithoutPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
 
 			var orgs = result.BusinessHierarchy.ToList();
 			var gp = result.GroupPages[0];
@@ -797,7 +797,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 
-			var result = Target.CreateViewModelWithoutPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
 
 			result.LogonUserTeamId.Should().Be.EqualTo(team.Id);
 		}
@@ -827,7 +827,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			TeamRepository.Add(team);
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModelWithoutPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
 
 			result.LogonUserTeamId.Should().Be.EqualTo(null);
 		}
@@ -857,7 +857,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			TeamRepository.Add(team);
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModelWithoutPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
 
 			result.GroupPages[0].Name.Should().Be.EqualTo(Resources.ResourceManager.GetString(groupPage.PageName.Substring(2)));
 		}
@@ -898,7 +898,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			};
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModelWithoutPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
 
 			result.GroupPages[0].Name.Should().Be.EqualTo(groupPageB.PageName);
 			result.GroupPages[1].Name.Should().Be.EqualTo(groupPageC.PageName);
