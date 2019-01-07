@@ -113,11 +113,11 @@
 		"typescript-eslint-parser": "^12.0.0"
 	},
 	"scripts": {
-		"pretest": "grunt concat:concatJsDependencies | grunt copy",
+		"pretest": "grunt pretest",
 		"test": "ng test --source-map=false",
-		"pretest:teamcity": "grunt concat:concatJsDependencies | grunt copy",
+		"pretest:teamcity": "grunt pretest",
 		"test:teamcity": "ng test --karma-config test/karma.conf.teamcity.js",
-		"pretest:rta": "grunt concat:concatJsDependencies",
+		"pretest:rta": "grunt pretest",
 		"test:rta": "ng test --karma-config test/karma.conf.rta.js",
 		"test:teams": "ng test --karma-config test/karma.conf.teams.js",
 		"test:requests": "ng test --karma-config test/karma.conf.requests.js",
