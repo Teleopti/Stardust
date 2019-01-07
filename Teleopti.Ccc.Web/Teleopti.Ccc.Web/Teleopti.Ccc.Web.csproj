@@ -2815,7 +2815,6 @@
     <Content Include="Content\busterjs\buster-test.js" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
-    <Content Include="Content\favicon.ico" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
     <Content Include="Content\jasny-bootstrap\css\jasny-bootstrap.css" />
@@ -2907,7 +2906,6 @@
     <Content Include="Content\moment\moment-with-locales.js" />
     <Content Include="Content\moment\moment-with-locales.min.js" />
     <Content Include="Content\select2\select2-bootstrap.css" />
-    <Content Include="favicon.ico" />
     <Content Include="Content\modernizr\modernizr-2.6.2.js" />
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
