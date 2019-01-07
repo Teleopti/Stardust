@@ -54,6 +54,8 @@ export class IntradayChartComponent implements OnChanges {
 					class: 'time-line'
 				}
 			]);
+		} else {
+			this.chart.xgrids([]);
 		}
 	}
 
