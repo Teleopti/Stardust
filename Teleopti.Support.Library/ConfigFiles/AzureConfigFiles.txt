@@ -18,6 +18,7 @@ $(SupportTool)..\..\..\sitesroot\7\web.config,$(BuildArtifacts)Web.WindowsIdenti
 $(SupportTool)..\..\..\sitesroot\8\web.config,$(BuildArtifacts)Web.Administration.Web.config
 $(SupportTool)..\..\..\sitesroot\8\ApplicationInsights.config,$(BuildArtifacts)AdminApplicationInsights.config
 $(SupportTool)..\..\..\sitesroot\9\web.config,$(BuildArtifacts)Web.Api.Web.config
+$(SupportTool)..\..\..\sitesroot\9\ApplicationInsights.config,$(BuildArtifacts)ApiApplicationInsights.config
 $(SupportTool)..\..\Web.config,$(BuildArtifacts)Web.StartPage.Web.config
 $(SupportTool)..\..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config,$(BuildArtifacts)AppETLService.config
 $(SupportTool)..\..\Services\ETL\Service\ApplicationInsights.config,$(BuildArtifacts)AppApplicationInsights.config

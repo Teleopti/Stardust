@@ -30,22 +30,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
 			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
-
-			var newList = new List<PeriodViewModel>();
-
+			
 			var timezone = _timeZone.TimeZone();
 			var totalLengthTicks = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
 
-			foreach (var visualLayer in layerExtendedList)
-			{
+			return layerExtendedList.Select(visualLayer => {
 				var meetingModel = createMeetingViewModel(visualLayer);
 
 				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
 
 				var positionPercentage =
-					getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone), totalLengthTicks);
+					getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone),
+						totalLengthTicks);
 
-				newList.Add(new PeriodViewModel
+				return new PeriodViewModel
 				{
 					Summary =
 						TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
@@ -60,18 +58,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					StartPositionPercentage = positionPercentage.Start,
 					EndPositionPercentage = positionPercentage.End,
 					IsOvertime = isOvertimeLayer
-				});
-			}
-			return newList;
+				};
+			}).ToArray();
 		}
 
 		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForDay(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone, IPerson person, bool allowCrossNight)
 		{
 			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
 			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone, allowCrossNight);
-
-			var newList = new List<PeriodViewModel>();
-
+			
 			var timezone = _timeZone.TimeZone();
 			var daylightTime = TimeZoneHelper.GetDaylightChanges(
 				timezone, TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone).Year);
@@ -80,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 			var totalLengthTicks = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
 
-			foreach (var visualLayer in layerExtendedList)
+			return layerExtendedList.Select(visualLayer => 
 			{
 				var meetingModel = createMeetingViewModel(visualLayer);
 				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
@@ -99,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					positionPercentage = getPeriodPositionPercentage(minMaxTime, localTimePeriod, totalLengthTicks);
 				}
 
-				newList.Add(new PeriodViewModel
+				return new PeriodViewModel
 				{
 					Summary =
 						TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
@@ -114,15 +109,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					StartPositionPercentage = positionPercentage.Start,
 					EndPositionPercentage = positionPercentage.End,
 					IsOvertime = isOvertimeLayer
-				});
-			}
-			return newList.OrderBy(l => l.StartTime);
+				};
+			}).OrderBy(l => l.StartTime);
 		}
 
 		private static TimePeriod getVisualLayerTimePeriod(VisualLayerForWebDisplay visualLayer, DateOnly localDate, TimeZoneInfo timezone)
 		{
-			var timePeriodStart = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.StartDateTime, timezone);
-			var timePeriodEnd = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.EndDateTime, timezone);
+			var timePeriodStart = visualLayer.VisualPeriod.StartDateTimeLocal(timezone);
+			var timePeriodEnd = visualLayer.VisualPeriod.EndDateTimeLocal(timezone);
 
 			var timeSpanStart = timePeriodStart.TimeOfDay;
 			var timeSpanEnd = timePeriodEnd.TimeOfDay;
@@ -144,8 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		{
 			MeetingViewModel meetingModel = null;
 
-			var meetingPayload = visualLayer.Payload as IMeetingPayload;
-			if (meetingPayload != null)
+			if (visualLayer.Payload is IMeetingPayload meetingPayload)
 			{
 				var formatter = new NoFormatting();
 				meetingModel = new MeetingViewModel
@@ -221,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public IEnumerable<OvertimeAvailabilityPeriodViewModel> CreateOvertimeAvailabilityPeriodViewModels(IOvertimeAvailability overtimeAvailability, IOvertimeAvailability overtimeAvailabilityYesterday, TimePeriod minMaxTime)
 		{
-			var overtimeAvailabilityPeriods = new List<OvertimeAvailabilityPeriodViewModel>();
+			var overtimeAvailabilityPeriods = new List<OvertimeAvailabilityPeriodViewModel>(2);
 			var diff = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
 			if (overtimeAvailability != null)
 			{

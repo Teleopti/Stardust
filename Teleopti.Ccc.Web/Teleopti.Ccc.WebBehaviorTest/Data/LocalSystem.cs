@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				builder.RegisterType<ScenarioDataFactory>().InstancePerDependency();
 			}, arguments => { arguments.AllEventPublishingsAsSync = true; }, null);
 			ContainerPlugin.UseContainer(IntegrationIoCTest.Container);
-
+			
 			Toggles = IntegrationIoCTest.Container.Resolve<IToggleManager>();
 			Now = IntegrationIoCTest.Container.Resolve<INow>() as MutableNow;
 			UnitOfWork = IntegrationIoCTest.Container.Resolve<ICurrentUnitOfWork>();

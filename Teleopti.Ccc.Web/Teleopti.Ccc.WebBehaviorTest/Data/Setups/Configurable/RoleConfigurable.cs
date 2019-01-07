@@ -85,6 +85,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToIntraday { get; set; }
 
 		public bool AccessToPermissions { get; set; }
+		
+		public bool AccessToModifySkillGroup { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -137,6 +139,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToWfmMyTeamSchedule = false;
 			AccessToPermissions = false;
 			AccessToWfmLeaderboard = true;
+			AccessToModifySkillGroup = true;
+			AccessToIntraday = false;
 		}
 
 
@@ -298,8 +302,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			if (!AccessToIntraday)
-				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebIntraday
-																		|| f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup);
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebIntraday);
 
 			if (!AccessToPermissions)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebPermissions);
@@ -314,6 +317,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!ImportSchedules)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ImportSchedule);
 
+			if (!AccessToModifySkillGroup)
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup);
+			
 			return applicationFunctions;
 		}
 	}

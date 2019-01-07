@@ -146,13 +146,11 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +240,7 @@
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerierTest.cs" />
     <Compile Include="Performance\NumberOfDbCallsTest.cs" />
     <Compile Include="Persisters\Account\PersonAccountConflictResolverTest.cs" />
+    <Compile Include="Persisters\Plans\PlanningGroupModelPersisterTest.cs" />
     <Compile Include="Persisters\Schedules\DeleteOneOfManyLayersTest.cs" />
     <Compile Include="Persisters\Schedules\HandleMovingOfLayersTest.cs" />
     <Compile Include="Persisters\Schedules\Performance\NoUnnecessaryUpdatesWhenAddingLayerTest.cs" />
@@ -254,6 +253,8 @@
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />
+    <Compile Include="Repositories\BankHolidayCalendarRepositoryTest.cs" />
+    <Compile Include="Repositories\BankHolidayDateRepositoryTest.cs" />
     <Compile Include="Repositories\Bug47522.cs" />
     <Compile Include="Repositories\ExtensiveLogRepositoryTest.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepositoryTest.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="Repositories\ScenarioRepositoryNoCurrentBusinessUnitTest.cs" />
     <Compile Include="Repositories\ShiftCategorySelectionRepositoryTest.cs" />
     <Compile Include="Repositories\ShiftCategoryUsageFinderTest.cs" />
+    <Compile Include="Repositories\SiteBankHolidayCalendarRepositoryTest.cs" />
     <Compile Include="Repositories\SkillCombinationBpoTimeLineReaderTest.cs" />
     <Compile Include="Repositories\SkillCombinationResourceReaderTest.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepositoryTest.cs" />

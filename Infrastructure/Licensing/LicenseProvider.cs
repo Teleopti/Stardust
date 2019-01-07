@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 					DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests,
 					licenseService.TeleoptiWFMOvertimeRequestsEnabled
 				},{
-					DefinedLicenseOptionPaths.TeleoptiWfmChatBot,
-					licenseService.TeleoptiWFMChatBotEnabled
+					DefinedLicenseOptionPaths.TeleoptiWfmGrant,
+					licenseService.TeleoptiWFMGrantEnabled
 				},{
 					DefinedLicenseOptionPaths.TeleoptiWfmInsights,
 					licenseService.TeleoptiWFMInsightsEnabled

@@ -5,6 +5,7 @@
 		public string Url { get; set; }
 		public string Name { get; set; }
 		public bool IsWebReport { get; set; }
+		public string ForeignId { get; set; }
 	}
 
 	public class CategorizedReportItemViewModel : ReportItemViewModel

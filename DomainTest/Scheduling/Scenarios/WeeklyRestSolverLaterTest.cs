@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			schedulePeriod.SetDaysOff(1);
 			agent.AddSchedulePeriod(schedulePeriod);
 
-			SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
+			SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>{skill};
 			var skillDay = SkillDayFactory.CreateSkillDay(skill, weekPeriod.StartDate, scenario);
 			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, weekPeriod);
 			SchedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					TimeZone = TimeZoneInfoFactory.MoskowTimeZoneInfo()
 				}.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
+			SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>{skill};
 			var skillDayMo = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
 			var skillDayTu = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60));
 			var skillDayWe = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(2), TimeSpan.FromMinutes(60));

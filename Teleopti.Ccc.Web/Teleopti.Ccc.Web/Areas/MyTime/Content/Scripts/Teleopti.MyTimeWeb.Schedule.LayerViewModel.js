@@ -6,7 +6,8 @@
 	useFixedContainerHeight,
 	timelineStart,
 	selectedDate,
-	cleanOvernightNumber
+	cleanOvernightNumber,
+	isMySchedule
 ) {
 	var self = this;
 	var common = Teleopti.MyTimeWeb.Common;
@@ -17,7 +18,7 @@
 	self.title = layer.Title;
 	self.hasMeeting = layer.Meeting !== null;
 	self.timeSpan = getTimeSpan(layer.TimeSpan, cleanOvernightNumber);
-	self.tooltipText = buildTooltipText(self.title, self.timeSpan, self.hasMeeting);
+	self.tooltipText = buildTooltipText(self.title, self.timeSpan, self.hasMeeting,isMySchedule);
 	self.backgroundColor = Teleopti.MyTimeWeb.Common.ConvertColorToRGB(layer.Color);
 	self.textColor = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor);
 	self.startPositionPercentage = layer.StartPositionPercentage;
@@ -79,7 +80,7 @@
 		return realTimespan;
 	}
 
-	function buildTooltipText(title, timeSpan, hasMeeting) {
+	function buildTooltipText(title, timeSpan, hasMeeting, isMySchedule) {
 		var tooltipContent = '<div>{0}</div>'.format(title);
 		if (!hasMeeting) {
 			return tooltipContent + timeSpan;
@@ -90,14 +91,18 @@
 			meetingDescription = meetingDescription.substring(0, 200) + '...';
 		}
 
-		var text = (
-			"<div>{0}</div><div style='text-align: left'>" +
-			"<div class='tooltip-wordwrap' style='overflow: hidden'><i>{1}</i> {2}</div>" +
-			"<div class='tooltip-wordwrap' style='overflow: hidden'><i>{3}</i> {4}</div>" +
-			"<div class='tooltip-wordwrap' style='white-space: normal'><i>{5}</i> {6}</div>" +
+		var timeSpanText = "<div>{0}</div>".format(timeSpan);
+
+		if (!isMySchedule)
+			return tooltipContent + timeSpanText;
+
+		var meetingText = (
+			"<div class='meeting-detail' style='text-align: left'>" +
+			"<div class='tooltip-wordwrap' style='overflow: hidden'><i>{0}</i> {1}</div>" +
+			"<div class='tooltip-wordwrap' style='overflow: hidden'><i>{2}</i> {3}</div>" +
+			"<div class='tooltip-wordwrap' style='white-space: normal'><i>{4}</i> {5}</div>" +
 			'</div>'
 		).format(
-			timeSpan,
 			userTexts.SubjectColon,
 			$('<div/>')
 				.text(layer.Meeting.Title)
@@ -112,7 +117,7 @@
 				.html()
 		);
 
-		return tooltipContent + text;
+		return tooltipContent + timeSpanText + meetingText;
 	}
 
 	function getTopValue(startPos, scheduleHeight, useFixedContainerHeight, timelineStart, layerStartTime, offset) {

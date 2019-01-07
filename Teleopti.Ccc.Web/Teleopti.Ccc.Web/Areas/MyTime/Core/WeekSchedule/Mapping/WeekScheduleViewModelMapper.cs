@@ -93,19 +93,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				RequestPermission = map(s),
 				ViewPossibilityPermission = s.ViewPossibilityPermission,
 				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
-				Days = days(s, loadOpenHourPeriod),
+				Days = days(currentUser, s, loadOpenHourPeriod),
 				AsmEnabled = s.AsmEnabled,
 				IsCurrentWeek = s.IsCurrentWeek,
 				CheckStaffingByIntraday = isCheckStaffingByIntradayForWeek(currentUser.WorkflowControlSet, s.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(s.Date, true),
+				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(currentUser, s.Date),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
 		}
 
-		private bool isOvertimeProbabilityEnabled(DateOnly date, bool forThisWeek)
+		private bool isOvertimeProbabilityEnabled(IPerson currentUser, DateOnly date)
 		{
-			var currentUser = _loggedOnUser.CurrentUser();
 			var overtimeProbabilityEnabled = currentUser.WorkflowControlSet?.OvertimeProbabilityEnabled != null
 											 && currentUser.WorkflowControlSet.OvertimeProbabilityEnabled
 											 && isOvertimeProbabilityLicenseAvailable();
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return false;
 
 			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider
-				.GetPeriodsForOvertime(currentUser, date, forThisWeek).Any();
+				.GetPeriodsForOvertime(currentUser, date, true).Any();
 			return isStaffingDataAvailable;
 		}
 
@@ -140,20 +139,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			return days.Any(day => workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), day));
 		}
 
-		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData, bool loadOpenHourPeriod = false)
+		private IEnumerable<DayViewModel> days(IPerson currentUser, WeekScheduleDomainData scheduleDomainData,
+			bool loadOpenHourPeriod = false)
 		{
 			return scheduleDomainData?.Days?.Select(s =>
 			{
-				var viewModel = createDayViewModel(s, loadOpenHourPeriod);
-				viewModel.Periods = projections(s);
+				var viewModel = createDayViewModel(currentUser, s, loadOpenHourPeriod);
+				viewModel.Periods = projections(s).ToArray();
 				return viewModel;
 			}).ToArray();
 		}
 
-		private DayViewModel createDayViewModel(WeekScheduleDayDomainData s, bool loadOpenHourPeriod = false)
+		private DayViewModel createDayViewModel(IPerson currentUser, WeekScheduleDayDomainData s, bool loadOpenHourPeriod = false)
 		{
-			var personAssignment = s.ScheduleDay?.PersonAssignment();
-			var significantPartForDisplay = s.ScheduleDay?.SignificantPartForDisplay();
+			var personAssignment = s.PersonAssignment;
+			var significantPartForDisplay = s.SignificantPartForDisplay;
 			var dayViewModel = new DayViewModel
 			{
 				Date = s.Date.ToShortDateString(),
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				RequestsCount = s.PersonRequestCount,
 				ProbabilityClass = s.ProbabilityClass,
 				ProbabilityText = s.ProbabilityText,
-				State = s.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
+				State = s.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), currentUser.PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
 				Header = _headerViewModelFactory.CreateModel(s.ScheduleDay),
 				Note = s.ScheduleDay == null ? null : map(s.ScheduleDay.PublicNoteCollection()),
 				SeatBookings = s.SeatBookingInformation,
@@ -302,11 +302,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var periodViewModelFactory = _periodViewModelFactory;
 			var minMaxTime = adjustMinEndTime(s.MinMaxTime);
 
-			IEnumerable<PeriodViewModel> periodsViewModels;
-			periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForWeek(projectionList, minMaxTime, s.Date,
-				s.ScheduleDay?.TimeZone, s.ScheduleDay.Person);
-
-			periodsViewModels = periodsViewModels ?? new PeriodViewModel[0];
+			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForWeek(projectionList, minMaxTime, s.Date,
+				s.ScheduleDay?.TimeZone, s.ScheduleDay.Person) ?? new PeriodViewModel[0];
 
 			var overtimeAvailabilityPeriodViewModels =
 				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability,
@@ -330,7 +327,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return _overtimeMapper.Map(s.OvertimeAvailability);
 			}
 
-			if (s.ScheduleDay?.SignificantPartForDisplay() != SchedulePartView.MainShift)
+			if (s.SignificantPartForDisplay != SchedulePartView.MainShift)
 			{
 				return new OvertimeAvailabilityViewModel
 				{
@@ -341,7 +338,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				};
 			}
 
-			var personAssignment = s.ScheduleDay.PersonAssignment();
+			var personAssignment = s.PersonAssignment;
 			var endTime = personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime;
 			var endTimeTomorrow = endTime.Add(TimeSpan.FromHours(1));
 			return new OvertimeAvailabilityViewModel
@@ -363,7 +360,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				};
 			}
 
-			var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+			var significantPart = s.SignificantPartForDisplay;
 
 			switch (significantPart)
 			{
@@ -388,13 +385,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					{
 						return new PersonDayOffPeriodViewModel
 						{
-							Title = s.ScheduleDay?.PersonAssignment()?.DayOff()?.Description.Name,
+							Title = s.PersonAssignment?.DayOff()?.Description.Name,
 							StyleClassName = StyleClasses.DayOff + " " + StyleClasses.Striped
 						};
 					}
 				case SchedulePartView.MainShift:
 					{
-						var personAssignment = s.ScheduleDay?.PersonAssignment();
+						var personAssignment = s.PersonAssignment;
 						var shiftCategory = personAssignment?.ShiftCategory;
 						return new PersonAssignmentPeriodViewModel
 						{

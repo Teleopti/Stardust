@@ -1,0 +1,1 @@
+UPDATE dbo.ApplicationFunction SET FunctionDescription=N'Grant' WHERE ForeignId='0161' AND ForeignSource='Raptor'

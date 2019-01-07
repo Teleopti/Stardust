@@ -1,25 +1,29 @@
-import { Component, OnInit, OnDestroy, AfterContentInit, OnChanges } from '@angular/core';
-import moment, { Moment } from 'moment';
-import { IntradayDataService } from '../services/intraday-data.service';
-import { IntradayPersistService } from '../services/intraday-persist.service';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { NzMessageService, NzTabComponent, NzTabChangeEvent } from 'ng-zorro-antd';
 import c3 from 'c3';
+import moment, { Moment } from 'moment';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Subscription } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+import { IntradayDataService } from '../services/intraday-data.service';
+import { IntradayIconService } from '../services/intraday-icon.service';
+import { IntradayPersistService } from '../services/intraday-persist.service';
 import {
-	SkillPickerItem,
 	IntradayChartType,
+	IntradayLatestTimeData,
+	IntradayPerformanceData,
+	IntradayPerformanceDataSeries,
+	IntradayPerformanceSummaryData,
+	IntradayPerformanceSummaryItem,
+	IntradayStaffingDataSeries,
 	IntradayTrafficData,
 	IntradayTrafficDataSeries,
-	IntradayTrafficSummaryItem,
 	IntradayTrafficSummaryData,
-	IntradayPerformanceDataSeries,
-	IntradayPerformanceSummaryItem,
-	IntradayPerformanceSummaryData,
-	IntradayStaffingDataSeries,
+	IntradayTrafficSummaryItem,
 	Skill,
+	SkillPickerItem,
 	SkillPickerItemType
 } from '../types';
-import { IntradayIconService } from '../services/intraday-icon.service';
 
 @Component({
 	selector: 'app-intraday-main',
@@ -27,12 +31,13 @@ import { IntradayIconService } from '../services/intraday-icon.service';
 	styleUrls: ['./intraday-main.component.scss']
 })
 export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentInit {
+	request: Subscription;
 	constructor(
 		public intradayDataService: IntradayDataService,
 		public translate: TranslateService,
 		private message: NzMessageService,
 		private persistData: IntradayPersistService,
-		private skillIcons: IntradayIconService
+		public skillIcons: IntradayIconService
 	) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
@@ -46,11 +51,15 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	displayDate: string = moment().format('LLLL');
 	intradayTabs: IntradayChartType;
 	chartData: c3.Data = this.trafficDataToC3Data(this.getEmptyTrafficData().DataSeries);
+	latestTime: IntradayLatestTimeData | undefined;
 	summaryData: IntradayTrafficSummaryItem[] | IntradayPerformanceSummaryItem[] = [];
 	loading = false;
+	error = false;
+	errorMessage = '';
 	exporting = false;
 	timer: any;
 	showSkills = true;
+	showReforecastedWarning = false;
 
 	ngOnInit() {
 		this.startTimer();
@@ -170,25 +179,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		this.exporting = false;
 	}
 
-	// getSelectedSkillOrGroup(): SkillPickerItem {
-	// 	console.log('selected');
-
-	// 	clearInterval(this.timer);
-	// 	if (!this.selectedSubSkillId || this.selectedSubSkillId === 'all') {
-	// 		this.timer = setInterval(this.updateData, 1000);
-	// 		return this.selectedSkillOrGroup;
-	// 	} else {
-	// 		const spi: SkillPickerItem = {
-	// 			Id: this.selectedSubSkillId,
-	// 			Name: '',
-	// 			Skills: [],
-	// 			Type: SkillPickerItemType.Skill
-	// 		};
-	// 		this.timer = setInterval(this.updateData, 1000);
-	// 		return spi;
-	// 	}
-	// }
-
 	onPickSubSkill() {
 		this.updateData(true);
 	}
@@ -202,6 +192,9 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
 		}
+
+		this.showReforecastedWarning = this.isWarningableTab() && this.isSkillEmailOrBackoffice();
+
 		let selectedSkill = this.selectedSkillOrGroup;
 		if (this.selectedSubSkillId && this.selectedSubSkillId !== 'all') {
 			selectedSkill = {
@@ -212,62 +205,181 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			};
 		}
 		if (this.selectedChartType === 'traffic') {
+			if (this.request) this.request.unsubscribe();
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
-				this.intradayDataService.getTrafficData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
-					this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
-					this.summaryData = this.trafficDataToSummaryData(data.Summary);
-					this.loading = false;
-				});
+				this.error = false;
+				this.request = this.intradayDataService
+					.getTrafficData(selectedSkill.Id, this.selectedOffset)
+					.pipe(
+						switchMap((data: IntradayTrafficData) =>
+							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
+								tap(
+									(time: IntradayLatestTimeData) => {
+										if (this.selectedOffset === 0) {
+											this.latestTime = time;
+										}
+										if (data.IncomingTrafficHasData) {
+											this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+										} else {
+											this.chartData = {};
+										}
+										this.summaryData = this.trafficDataToSummaryData(data.Summary);
+										this.loading = false;
+									},
+									err => {
+										this.handleError(err);
+									}
+								)
+							)
+						)
+					)
+					.subscribe(null, err => {
+						this.handleError(err);
+					});
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
-				this.intradayDataService.getGroupTrafficData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
-					this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
-					this.summaryData = this.trafficDataToSummaryData(data.Summary);
-					this.loading = false;
-				});
+				this.error = false;
+				this.request = this.intradayDataService
+					.getGroupTrafficData(selectedSkill.Id, this.selectedOffset)
+					.pipe(
+						switchMap((data: IntradayTrafficData) =>
+							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
+								tap(
+									(time: IntradayLatestTimeData) => {
+										if (this.selectedOffset === 0) {
+											this.latestTime = time;
+										}
+										if (data.IncomingTrafficHasData) {
+											this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+										} else {
+											this.chartData = {};
+										}
+										this.summaryData = this.trafficDataToSummaryData(data.Summary);
+										this.loading = false;
+									},
+									err => {
+										this.handleError(err);
+									}
+								)
+							)
+						)
+					)
+					.subscribe(null, err => {
+						this.handleError(err);
+					});
 			}
 		}
 
 		if (this.selectedChartType === 'performance') {
+			if (this.request) this.request.unsubscribe();
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
-				this.intradayDataService.getPerformanceData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
-					this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
-					this.summaryData = this.performanceDataToSummaryData(data.Summary);
-					this.loading = false;
-				});
+				this.error = false;
+				this.request = this.intradayDataService
+					.getPerformanceData(selectedSkill.Id, this.selectedOffset)
+					.pipe(
+						switchMap((data: IntradayPerformanceData) =>
+							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
+								tap(
+									(time: IntradayLatestTimeData) => {
+										if (this.selectedOffset === 0) {
+											this.latestTime = time;
+										}
+										if (data.PerformanceHasData) {
+											this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+										} else {
+											this.chartData = {};
+										}
+										this.summaryData = this.performanceDataToSummaryData(data.Summary);
+										this.loading = false;
+									},
+									err => {
+										this.handleError(err);
+									}
+								)
+							)
+						)
+					)
+					.subscribe(null, err => {
+						this.handleError(err);
+					});
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
-				this.intradayDataService
+				this.error = false;
+				this.request = this.intradayDataService
 					.getGroupPerformanceData(selectedSkill.Id, this.selectedOffset)
-					.subscribe(data => {
-						this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
-						this.summaryData = this.performanceDataToSummaryData(data.Summary);
-						this.loading = false;
+					.pipe(
+						switchMap((data: IntradayPerformanceData) =>
+							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
+								tap(
+									(time: IntradayLatestTimeData) => {
+										if (this.selectedOffset === 0) {
+											this.latestTime = time;
+										}
+										this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+										this.summaryData = this.performanceDataToSummaryData(data.Summary);
+										this.loading = false;
+									},
+									err => {
+										this.handleError(err);
+									}
+								)
+							)
+						)
+					)
+					.subscribe(null, err => {
+						this.handleError(err);
 					});
 			}
 		}
 
 		if (this.selectedChartType === 'staffing') {
+			if (this.request) this.request.unsubscribe();
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
-				this.intradayDataService.getStaffingData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
-					this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
-					this.loading = false;
-				});
+				this.error = false;
+				this.request = this.intradayDataService
+					.getStaffingData(selectedSkill.Id, this.selectedOffset)
+					.subscribe(
+						data => {
+							this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
+							this.loading = false;
+						},
+						() => {
+							this.error = true;
+							this.errorMessage = this.translate.instant('NoDataAvailable');
+						}
+					);
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
-				this.intradayDataService.getGroupStaffingData(selectedSkill.Id, this.selectedOffset).subscribe(data => {
-					this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
-					this.loading = false;
-				});
+				this.error = false;
+				this.request = this.intradayDataService
+					.getGroupStaffingData(selectedSkill.Id, this.selectedOffset)
+					.subscribe(
+						data => {
+							this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
+							this.loading = false;
+						},
+						() => {
+							this.error = true;
+							this.errorMessage = this.translate.instant('NoDataAvailable');
+						}
+					);
 			}
 		}
 	};
+
+	private handleError(err: any) {
+		console.warn('Http error', err);
+		this.error = true;
+		this.chartData = undefined;
+		this.errorMessage = this.translate.instant('NoDataAvailable');
+		this.loading = false;
+	}
 
 	goToGroupManager() {
 		location.hash = '#/intraday/skill-group-manager';
@@ -275,13 +387,17 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	private trafficDataToC3Data(input: IntradayTrafficDataSeries, columnsOnly: boolean = false): c3.Data {
 		if (input && input.Time !== null) {
-			const timeStamps = input.Time.map(item => moment(item).format('HH:mm'));
+			const timeStamps = input.Time.map(item => {
+				return moment(item).format('YYYY-MM-DD HH:mm');
+			});
+			if (!timeStamps || timeStamps.length === 0) return {};
 			if (columnsOnly) {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
-						['Forcasted_calls'].concat(input.ForecastedCalls),
+						['Forecasted_calls'].concat(input.ForecastedCalls),
 						['Calls'].concat(input.CalculatedCalls),
 						['Forecasted_AHT'].concat(input.ForecastedAverageHandleTime),
 						['AHT'].concat(input.AverageHandleTime)
@@ -290,17 +406,15 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			} else {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
-						['Forcasted_calls'].concat(input.ForecastedCalls),
+						['Forecasted_calls'].concat(input.ForecastedCalls),
 						['Calls'].concat(input.CalculatedCalls),
 						['Forecasted_AHT'].concat(input.ForecastedAverageHandleTime),
 						['AHT'].concat(input.AverageHandleTime)
 					],
 					type: 'area-spline',
-					types: {
-						Current: 'bar'
-					},
 					colors: {
 						Forecasted_calls: '#99D6FF',
 						Calls: '#0099FF',
@@ -333,7 +447,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					Heading: this.translate.instant('Volume'),
 					Forecasted: input.ForecastedCalls,
 					Actual: input.CalculatedCalls,
-					Difference: input.ForecastedActualHandleTimeDiff
+					Difference: input.ForecastedActualCallsDiff
 				},
 				{
 					Heading: this.translate.instant('AverageHandlingTime'),
@@ -350,10 +464,12 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	private performanceDataToC3Data(input: IntradayPerformanceDataSeries, columnsOnly: boolean = false): c3.Data {
 		if (input && input.Time !== null) {
-			const timeStamps = input.Time.map(item => moment(item).format('HH:mm'));
+			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
+			if (!timeStamps || timeStamps.length === 0) return {};
 			if (columnsOnly) {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['ASA'].concat(input.AverageSpeedOfAnswer),
@@ -365,6 +481,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			} else {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['ASA'].concat(input.AverageSpeedOfAnswer),
@@ -373,14 +490,11 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 						['ESL'].concat(input.EstimatedServiceLevels)
 					],
 					type: 'area-spline',
-					types: {
-						Current: 'bar'
-					},
 					colors: {
-						Forecasted_calls: '#99D6FF',
-						Calls: '#0099FF',
-						Forecasted_AHT: '#FFC285',
-						AHT: '#FB8C00'
+						ASA: '#99D6FF',
+						Abandoned_rate: '#0099FF',
+						Service_level: '#FFC285',
+						ESL: '#FB8C00'
 					},
 					names: {
 						ASA: this.translate.instant('AverageSpeedOfAnswer') + ' ←',
@@ -406,8 +520,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			return [
 				{
 					Heading: this.translate.instant('Average'),
-					ServiceLevel: input.ServiceLevel,
-					EstimatedServiceLevel: input.EstimatedServiceLevel,
+					ServiceLevel: input.ServiceLevel * 100,
+					EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
 					AbandonRate: input.AbandonRate,
 					AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
 				}
@@ -419,10 +533,12 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	private staffingDataToC3Data(input: IntradayStaffingDataSeries, columnsOnly: boolean = false): c3.Data {
 		if (input && input.Time !== null) {
-			const timeStamps = input.Time.map(item => moment(item).format('HH:mm'));
+			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
+			if (!timeStamps || timeStamps.length === 0) return {};
 			if (columnsOnly) {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['Forecasted_staffing'].concat(input.ForecastedStaffing),
@@ -434,6 +550,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			} else {
 				return {
 					x: 'x',
+					xFormat: '%Y-%m-%d %H:%M',
 					columns: [
 						['x'].concat(timeStamps),
 						['Forecasted_staffing'].concat(input.ForecastedStaffing),
@@ -442,7 +559,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 						['Scheduled_staffing'].concat(input.ScheduledStaffing)
 					],
 					type: 'area-spline',
-					types: { Current: 'bar' },
 					colors: {
 						Forecasted_calls: '#99D6FF',
 						Calls: '#0099FF',
@@ -467,6 +583,35 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			return {};
 		}
 	}
+
+	public getEmailOrBackofficeWarning = function() {
+		if (this.selectedTabIndex === 1) {
+			return this.translate.instant('NotShowingAbandonRate');
+		} else if (this.selectedTabIndex === 2) {
+			return this.translate.instant('NotShowingReforcastedAgents');
+		}
+	};
+
+	public isSkillEmailOrBackoffice = function() {
+		if (this.selectedSkillOrGroup.Skills && this.selectedSkillOrGroup.Skills.length > 0) {
+			return this.selectedSkillOrGroup.Skills.find(function(skill) {
+				return skill.SkillType === 'SkillTypeEmail' || skill.SkillType === 'SkillTypeBackoffice';
+			});
+		} else {
+			return (
+				this.selectedSkillOrGroup.Skill.SkillType === 'SkillTypeEmail' ||
+				this.selectedSkillOrGroup.Skill.SkillType === 'SkillTypeBackoffice'
+			);
+		}
+		return false;
+	};
+
+	public isWarningableTab = function() {
+		if (this.selectedTabIndex === 0) {
+			return false;
+		}
+		return true;
+	};
 
 	getEmptyTrafficData(): IntradayTrafficData {
 		return {

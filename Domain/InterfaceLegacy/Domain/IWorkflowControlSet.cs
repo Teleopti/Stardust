@@ -306,6 +306,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone) where T : IAbsenceRequestValidator;
 
+		bool IsAbsenceRequestCheckStaffingByIntradayWithShrinkage(DateOnly today,DateOnly date);
+
 		bool IsAbsenceRequestCheckStaffingByIntraday(DateOnly today, DateOnly date);
 
 		bool OvertimeProbabilityEnabled { get; set; }

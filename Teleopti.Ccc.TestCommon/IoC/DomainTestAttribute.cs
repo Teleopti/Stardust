@@ -47,7 +47,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Wfm.Adherence.Configuration;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
@@ -93,7 +92,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// stuff?
 			isolate.UseTestDouble<MutableNowWithEvents>().For<MutableNow, INow, IMutateNow>();
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
-			isolate.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
+
+			if (!QueryAllAttributes<UseRealPersonRequestPermissionCheckAttribute>().Any())
+			{
+				isolate.UseTestDouble<PersonRequestAuthorizationCheckerForTest>()
+					.For<IPersonRequestCheckAuthorization>();
+			}
+
 			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 
 			// Tenant (and datasource) stuff

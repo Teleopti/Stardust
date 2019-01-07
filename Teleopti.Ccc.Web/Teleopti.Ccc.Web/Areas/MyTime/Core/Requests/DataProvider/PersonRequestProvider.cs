@@ -34,9 +34,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				RequestType.OvertimeRequest
 			};
 
+			var currentUser = _loggedOnUser.CurrentUser();
 			var hasPermissionForShiftTrade = _permissionProvider.HasPersonPermission(
 				DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today,
-				_loggedOnUser.CurrentUser());
+				currentUser);
 			if (hasPermissionForShiftTrade)
 			{
 				types.Add(RequestType.ShiftExchangeOffer);
@@ -46,17 +47,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			DateTime? earliestDateUtc = null;
 			if (filter.HideOldRequest)
 			{
-				var currentTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+				var currentTimezone = currentUser.PermissionInformation.DefaultTimeZone();
 				var earliestDateLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, currentTimezone).AddDays(-10).Date;
 				earliestDateUtc = TimeZoneInfo.ConvertTimeToUtc(earliestDateLocal, currentTimezone);
 			}
 
 			if (filter.IsSortByUpdateDate)
 			{
-				return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, earliestDateUtc, types.ToArray());
+				return _repository.FindAllRequestsForAgentByType(currentUser, paging, earliestDateUtc, types.ToArray());
 			}
 
-			return _repository.FindAllRequestsSortByRequestedDate(_loggedOnUser.CurrentUser(), paging, earliestDateUtc, types.ToArray());
+			return _repository.FindAllRequestsSortByRequestedDate(currentUser, paging, earliestDateUtc, types.ToArray());
 		}
 
 		public IEnumerable<DateTimePeriod> RetrieveRequestPeriodsForLoggedOnUser(DateOnlyPeriod period)

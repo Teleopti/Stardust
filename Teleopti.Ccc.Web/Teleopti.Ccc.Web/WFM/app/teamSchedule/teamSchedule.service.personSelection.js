@@ -77,10 +77,6 @@
 					svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
 
 					personSchedule.Shifts.forEach(function (shift) {
-						if (shift.Date !== personSchedule.Date) {
-							return;
-						}
-
 						if (!shift.Projections) return;
 
 						shift.Projections.forEach(function (projection) {
@@ -113,7 +109,6 @@
 						return true;
 					});
 				}
-				return true;
 			});
 		}
 

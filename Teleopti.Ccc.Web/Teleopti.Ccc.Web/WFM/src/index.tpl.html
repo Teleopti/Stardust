@@ -5,12 +5,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>WFM</title>
-	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css" media="none" onload="if(media!=='all')media='all'">
-	<link href="vendor/open-sans/font.css" rel="stylesheet">
+	<link rel="stylesheet" href="dist/ng2/assets/mdi/css/materialdesignicons.min.css">
+	<link href="dist/ng2/assets/open-sans/font.css" rel="stylesheet">
 	<link rel="apple-touch-icon" sizes="180x180" href="dist/ng2/assets/apple-touch-icon.png?v=1">
 	<link rel="icon" type="image/png" sizes="32x32" href="dist/ng2/assets/favicon-32x32.png?v=1">
 	<link rel="icon" type="image/png" sizes="16x16" href="dist/ng2/assets/favicon-16x16.png?v=1">
-	<link rel="manifest" href="dist/ng2/assets/site.webmanifest.json?v=1">
+	<link rel="manifest" href="dist/ng2/assets/site.webmanifest?v=1">
 	<link rel="mask-icon" href="dist/ng2/assets/safari-pinned-tab.svg?v=1" color="#128fff">
 	<link rel="shortcut icon" href="dist/ng2/assets/favicon.ico?v=1">
 	<meta name="apple-mobile-web-app-title" content="Teleopti WFM">
@@ -69,10 +69,9 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="dist/ng2/assets/index_desktop_client_mods.js"></script>
-	<link id="themeDependencies" rel="stylesheet" href="dist/dependencies.css">
-	<link id="themeStyleguide" rel="stylesheet" href="">
-	<link id="themeAnt" rel="stylesheet" href="">
+
 	<ng2-bootstrap [style]="mainController.style"></ng2-bootstrap>
+	<link id="themeAnt" rel="stylesheet" href="">
 	<!-- build:template
 	<% if (environment === 'dev') { %>
 	<script src="dist/resources/modules.js"></script>
@@ -80,6 +79,7 @@
 	<script src="dist/main.js"></script>
 	<script src="dist/ng2/runtime.js"></script>
 	<script src="dist/ng2/polyfills.js"></script>
+	<script src="dist/ng2/dependencies.js"></script>
 	<script src="dist/ng2/styles.js"></script>
 	<script src="dist/ng2/vendor.js"></script>
 	<script src="dist/ng2/main.js"></script>
@@ -89,6 +89,7 @@
 	<script src="dist/main.js"></script>
 	<script src="dist/ng2/runtime.js"></script>
 	<script src="dist/ng2/polyfills.js"></script>
+	<link rel="stylesheet" href="dist/ng2/dependencies.css">
 	<link rel="stylesheet" href="dist/ng2/styles.css">
 	<script src="dist/ng2/main.js"></script>
 	<% } %>

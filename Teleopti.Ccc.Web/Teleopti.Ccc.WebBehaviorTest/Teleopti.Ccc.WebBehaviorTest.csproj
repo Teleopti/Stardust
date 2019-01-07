@@ -726,6 +726,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\RestrictModifySkillGroups_78568.feature.cs">
+      <DependentUpon>RestrictModifySkillGroups_78568.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\ReviewHistoricalAdherence_74770.feature.cs">
       <DependentUpon>ReviewHistoricalAdherence_74770.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -791,6 +796,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceAndTextRequests.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\ResetPassword\ResetPassword.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResetPassword.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\ResetPassword\ResetPasswordStepDefinitions.cs" />
     <Compile Include="Wfm\ResourcePlanner\PlanningGroupStepDefinition.cs" />
     <Compile Include="Wfm\ResourcePlanner\PlanningPeriod.feature.cs">
       <DependentUpon>PlanningPeriod.feature</DependentUpon>
@@ -1231,6 +1242,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PermissionsNew.feature.cs</LastGenOutput>
     </None>
+    <None Include="Wfm\RealTimeAdherence\RestrictModifySkillGroups_78568.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Agents.feature.cs</LastGenOutput>
+    </None>
     <None Include="Wfm\RealTimeAdherence\ReviewHistoricalAdherence_74770.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ReviewHistoricalAdherence_74770.feature.cs</LastGenOutput>
@@ -1286,6 +1301,10 @@
     <None Include="Wfm\Requests\AbsenceAndTextRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AbsenceAndTextRequests.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\ResetPassword\ResetPassword.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ResetPassword.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\ResourcePlanner\PlanningPeriod.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -44,7 +44,7 @@ h1 {
 	border-radius: 22px;
 	color: #fff;
 	text-align: center;
-	margin: 0 10px;
+	margin: 0 10px 10px;
 }
 
 .login-message .alert-warning,
@@ -55,7 +55,7 @@ h1 {
 	border-radius: 22px;
 	color: rgba(0, 0, 0, 0.8) !important;
 	text-align: center;
-	margin: 0 10px;
+	margin: 0 10px 10px;
 }
 
 #Password-change-success,

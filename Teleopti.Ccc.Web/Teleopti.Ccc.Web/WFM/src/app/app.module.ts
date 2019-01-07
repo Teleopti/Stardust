@@ -15,6 +15,7 @@ import { InsightsModule } from './insights/insights.module';
 import { IntradayModule } from './intraday/intraday.module';
 import { MenuModule } from './menu/menu.module';
 import { PeopleModule } from './people/people.module';
+import { SystemSettingsModule } from './system-settings/system-settings.module';
 import { ReportModule } from './reports/reports.module';
 import { ResetPasswordModule } from './reset-password/reset-password.module';
 
@@ -25,6 +26,7 @@ import { ResetPasswordModule } from './reset-password/reset-password.module';
 		BrowserModule,
 		UpgradeModule,
 		PeopleModule,
+		SystemSettingsModule,
 		AuthenticationModule,
 		ApiAccessModule,
 		HttpClientModule,

@@ -14,14 +14,7 @@ module.exports = function(config) {
 			{ pattern: 'app/**/*.spec.js' },
 
 			{ pattern: 'node_modules/angular-i18n/angular-locale_sv.js', watched: false },
-			{ pattern: 'node_modules/angular-i18n/angular-locale_en-us.js', watched: false },
-
-			//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
-			{ pattern: 'app/seatManagement/images/*.svg', watched: false, included: false }
-		],
-
-		proxies: {
-			'/app/seatManagement/images/': '/base/app/seatManagement/images/'
-		}
+			{ pattern: 'node_modules/angular-i18n/angular-locale_en-us.js', watched: false }
+		]
 	});
 };

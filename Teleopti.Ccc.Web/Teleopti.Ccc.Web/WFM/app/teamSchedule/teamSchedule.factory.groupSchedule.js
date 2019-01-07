@@ -135,9 +135,6 @@ function GroupScheduleFactory(timeLineFactory, personSchedule, serviceDateFormat
 		}
 
 		if (schedule.Date > queryDate) {
-			if (schedule.DayOff) {
-				return schedule.DayOff.StartMoment.isBefore(maximumViewRange.endMoment);
-			}
 			if (schedule.Projection && schedule.Projection.length > 0) {
 				var startTimes = schedule.Projection.map(function (p) {
 					return p.StartMoment.clone();
@@ -148,6 +145,9 @@ function GroupScheduleFactory(timeLineFactory, personSchedule, serviceDateFormat
 					if (cur.isBefore(prev)) return cur;
 					return prev;
 				}).isBefore(maximumViewRange.endMoment);
+			}
+			if (schedule.DayOff) {
+				return schedule.DayOff.StartMoment.isBefore(maximumViewRange.endMoment);
 			}
 			return false;
 		}

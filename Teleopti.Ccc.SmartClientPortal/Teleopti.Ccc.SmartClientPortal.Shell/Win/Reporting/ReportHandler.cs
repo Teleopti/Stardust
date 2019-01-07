@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
@@ -10,22 +9,16 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Reporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
-
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
@@ -43,7 +36,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			return reportDetail;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static void ShowReport(ReportDetail reportDetail, IComponentContext componentContext, IApplicationFunction applicationFunction)
 		{
 			var viewer = new SchedulerReportsViewer(new EventAggregator(), componentContext, applicationFunction);
@@ -67,7 +59,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			viewer.Show();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public static void CreateScheduledTimeVersusTargetData(IUnitOfWork unitOfWork, ReportSettingsScheduleTimeVersusTargetTimeModel model, Dictionary<string, IList<IScheduledTimeVersusTargetTimeReportData>> data, TimeZoneInfo timeZoneInfo, CommonNameDescriptionSetting commonNameDescriptionSetting)
 		{
 			if (model == null)
@@ -102,15 +93,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 								: endDate;
 					personDictionary.Add(person, schedulePeriods);
 				}
-
 			});
 
 			var loadPeriod = new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue);
 
 			if(endDate > startDate)
 				loadPeriod = new DateOnlyPeriod(startDate, endDate);
-			var stateHolder = new SchedulerStateHolder(model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod, timeZoneInfo), model.Persons, new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork)), new SchedulingResultStateHolder(), new TimeZoneGuard());
-			loadSchedules(unitOfWork, model.Persons, stateHolder);
+			var schedules = loadSchedules(unitOfWork, model.Persons, model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod, timeZoneInfo));
 			
 			personDictionary.ForEach(personSchedulePeriods =>
 			{
@@ -122,20 +111,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 					//TODO: refactor report to use the same data as in the agentinfo in scheduler. DaysOff, TargetTime, ScheduledDayOff, ScheduledTime 
 					// should be the virtual schedule period's responsibility where is is tested code!!! This is NOT!
 
-					stateHolder.Schedules[person].ForceRecalculationOfTargetTimeContractTimeAndDaysOff();
+					schedules[person].ForceRecalculationOfTargetTimeContractTimeAndDaysOff();
 
 					IScheduledTimeVersusTargetTimeReportData detailData = new ScheduledTimeVersusTargetTimeReportData();
 
-					var targetTime = stateHolder.Schedules[person].CalculatedTargetTimeHolder(schedulePeriod.DateOnlyPeriod);
+					var targetTime = schedules[person].CalculatedTargetTimeHolder(schedulePeriod.DateOnlyPeriod);
 
 					detailData.PersonName = commonNameDescriptionSetting.BuildFor(person);
 					detailData.PeriodFrom = schedulePeriod.DateOnlyPeriod.StartDate.Date;
 					detailData.PeriodTo = schedulePeriod.DateOnlyPeriod.EndDate.Date;
 					if (targetTime.HasValue) detailData.TargetTime = targetTime.Value.TotalMinutes;
-					detailData.TargetDayOffs = stateHolder.Schedules[person].CalculatedTargetScheduleDaysOff(schedulePeriod.DateOnlyPeriod).GetValueOrDefault(0);
+					detailData.TargetDayOffs = schedules[person].CalculatedTargetScheduleDaysOff(schedulePeriod.DateOnlyPeriod).GetValueOrDefault(0);
 
-					detailData.ScheduledTime = stateHolder.Schedules[person].CalculatedContractTimeHolderOnPeriod(schedulePeriod.DateOnlyPeriod).TotalMinutes;
-					detailData.ScheduledDayOffs = stateHolder.Schedules[person].CalculatedScheduleDaysOffOnPeriod(schedulePeriod.DateOnlyPeriod);
+					detailData.ScheduledTime = schedules[person].CalculatedContractTimeHolderOnPeriod(schedulePeriod.DateOnlyPeriod).TotalMinutes;
+					detailData.ScheduledDayOffs = schedules[person].CalculatedScheduleDaysOffOnPeriod(schedulePeriod.DateOnlyPeriod);
 					detailDataList.Add(detailData);
 				});
 			});
@@ -143,14 +132,39 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			data.Add("DataSet1", detailDataList);
 		}
 
-		private static void loadSchedules(IUnitOfWork unitOfWork, IEnumerable<IPerson> persons, ISchedulerStateHolder stateHolder)
+		private static IScheduleDictionary loadSchedules(IUnitOfWork unitOfWork, IEnumerable<IPerson> persons,
+			IScenario scenario, DateOnlyPeriodAsDateTimePeriod dateOnlyPeriodAsDateTimePeriod)
 		{
-			if (stateHolder == null) throw new ArgumentNullException(nameof(stateHolder));
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			unitOfWork.Reassociate(persons);
-			var repositoryFactory = new RepositoryFactory();
+
 			var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-			stateHolder.LoadSchedules(new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork), CurrentAuthorization.Make()), persons, scheduleDictionaryLoadOptions, stateHolder.RequestedPeriod.Period());
+			var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+			var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
+			var noteRepository = new NoteRepository(currentUnitOfWork);
+			var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
+			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
+			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
+			var scheduleStorage = new ScheduleStorage(currentUnitOfWork, personAssignmentRepository,
+				personAbsenceRepository, new MeetingRepository(currentUnitOfWork),
+				agentDayScheduleTagRepository, noteRepository,
+				publicNoteRepository, preferenceDayRepository,
+				studentAvailabilityDayRepository,
+				new PersonAvailabilityRepository(currentUnitOfWork),
+				new PersonRotationRepository(currentUnitOfWork),
+				overtimeAvailabilityRepository,
+				new PersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()),
+				new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+					() => personAbsenceRepository,
+					() => preferenceDayRepository, () => noteRepository,
+					() => publicNoteRepository,
+					() => studentAvailabilityDayRepository,
+					() => agentDayScheduleTagRepository,
+					() => overtimeAvailabilityRepository),
+				CurrentAuthorization.Make());
+			return scheduleStorage.FindSchedulesForPersons(scenario, persons, scheduleDictionaryLoadOptions, dateOnlyPeriodAsDateTimePeriod.Period(), persons, true);
 		}
 	
 		public static IList<IReportDataParameter> CreateScheduledTimeVersusTargetParameters(ReportSettingsScheduleTimeVersusTargetTimeModel model, IFormatProvider culture)
@@ -170,7 +184,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			parameters.Add(new ReportDataParameter("param_date_to", model.Period.EndDate.ToShortDateString(culture)));
 			
 			return parameters;
-
 		}
 	}
 }

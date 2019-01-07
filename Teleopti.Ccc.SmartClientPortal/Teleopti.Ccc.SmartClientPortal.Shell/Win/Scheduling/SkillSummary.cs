@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class SkillSummary : BaseDialogForm
 	{
-		private readonly IList<ISkill> _skills = new List<ISkill>();
+		private readonly IEnumerable<ISkill> _skills;
 		private IAggregateSkill _aggregateSkillSkill;
 
-		public SkillSummary(IAggregateSkill aggregateSkillSkill, IList<ISkill> skills)
+		public SkillSummary(IAggregateSkill aggregateSkillSkill, IEnumerable<ISkill> skills)
 		{
 			setupForm();
 			_skills = skills;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			textBoxSummeryName.Text = ((ISkill) _aggregateSkillSkill).Name;
 			loadSkills();
 		}
-		public SkillSummary(IList<ISkill> skills)
+		public SkillSummary(IEnumerable<ISkill> skills)
 		{
 			setupForm();
 			_skills = skills;

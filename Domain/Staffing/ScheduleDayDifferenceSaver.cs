@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public interface IScheduleDayDifferenceSaver
 	{
-		IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange);
+		void SaveDifferences(IScheduleRange scheduleRange);
 		IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange);
 	}
 
@@ -31,11 +31,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_staffingSettingsReader = staffingSettingsReader;
 		}
 
-		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
+		public void SaveDifferences(IScheduleRange scheduleRange)
 		{
 			var skillCombinationResourceDeltas = GetDifferences(scheduleRange).ToList();
 			_skillCombinationResourceRepository.PersistChanges(skillCombinationResourceDeltas);
-			return skillCombinationResourceDeltas;
 		}
 
 		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)
@@ -55,9 +54,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 	public class EmptyScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
 	{
-		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
+		public void SaveDifferences(IScheduleRange scheduleRange)
 		{
-			return new List<SkillCombinationResource>(); //do nothing
 		}
 
 		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)

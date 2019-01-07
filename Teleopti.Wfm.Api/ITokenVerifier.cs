@@ -1,7 +1,10 @@
-﻿namespace Teleopti.Wfm.Api
+﻿using System;
+using System.Threading.Tasks;
+
+namespace Teleopti.Wfm.Api
 {
 	public interface ITokenVerifier
 	{
-		bool TryGetUser(string token, out UserIdWithTenant user);
+		Task<ValueTuple<bool, UserIdWithTenant>> TryGetUserAsync(string token);
 	}
 }

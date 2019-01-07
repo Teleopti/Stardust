@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
@@ -10,10 +9,10 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
     public class SmartDayOffBackToLegalStateService : ISmartDayOffBackToLegalStateService
     {
     	private readonly IDayOffDecisionMaker _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker;
-		private readonly IMatrixClosedDayLocker _matrixClosedDayLocker;
+		private readonly MatrixClosedDayLocker _matrixClosedDayLocker;
 		private const int solverAndExecuteMaxIterations = 100;
 
-		public SmartDayOffBackToLegalStateService(IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker, IMatrixClosedDayLocker matrixClosedDayLocker)
+		public SmartDayOffBackToLegalStateService(IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker, MatrixClosedDayLocker matrixClosedDayLocker)
 		{
 			_cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker;
 			_matrixClosedDayLocker = matrixClosedDayLocker;

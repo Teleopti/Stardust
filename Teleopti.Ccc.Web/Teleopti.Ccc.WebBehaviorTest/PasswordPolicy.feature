@@ -1,5 +1,4 @@
-﻿@ignore
-@PasswordPolicy
+﻿@PasswordPolicy
 Feature: Password Policy
 	In order to have a good security
 	As a user that is trying to sign in or change password
@@ -26,7 +25,7 @@ Background:
 	| Business Unit        | Business Unit 1 |
 	| Access to mytime web | true            |
 
-Scenario: XChange password fails against the policy
+Scenario: Change password fails against the policy
 	Given I am a user signed in with
 	| Field    | Value     |
 	| Role     | Role1     |

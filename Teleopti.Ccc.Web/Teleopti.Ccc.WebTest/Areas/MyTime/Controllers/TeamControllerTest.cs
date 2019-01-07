@@ -11,7 +11,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Common;
@@ -20,7 +19,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -32,6 +30,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
 			var target = new TeamController(viewModelFactory, new Now(), null);
+
+			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(new List<SelectOptionItem>());
 
 			target.TeamsForShiftTrade(null);
 
@@ -152,7 +152,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new TeamController(null, null, viewModelFactory);
 			var result = target.TeamsUnderSiteForShiftTrade("00000000-0000-0000-0000-000000000000", DateOnly.Today);
 
-			result.Data.Should().Be.EqualTo(expectedResult);
-	}
+			var data = result.Data as IEnumerable<SelectOptionItem>;
+			data.Should().Have.SameValuesAs(expectedResult);
+		}
 }
 }

@@ -6,6 +6,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IFetchPlanningGroupSettingsModel
 	{
 		PlanningGroupSettingsModel Fetch(Guid id);
-		IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId);
 	}
 }

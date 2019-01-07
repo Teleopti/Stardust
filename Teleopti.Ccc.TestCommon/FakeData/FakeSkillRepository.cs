@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeSkillRepository : ISkillRepository
 	{
 		private readonly IList<ISkill> _skills;
-		public List<SkillOpenHoursLight> OpenHoursList;
-
+		
 		public FakeSkillRepository()
 		{
 			_skills = new List<ISkill>();
@@ -131,7 +130,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<SkillOpenHoursLight> FindOpenHoursForSkills(IEnumerable<Guid> skillIds)
 		{
-			return OpenHoursList;
+			return LoadSkills(skillIds).SelectMany(s => s.WorkloadCollection.SelectMany(w => w.TemplateWeekCollection).Where(t => t.Value.OpenForWork.IsOpen).Select(t =>
+				new SkillOpenHoursLight
+				{
+					SkillId = s.Id.GetValueOrDefault(), TimeZoneId = s.TimeZone.Id, WeekdayIndex = t.Key,
+					StartTimeTicks = t.Value.OpenHourList[0].StartTime.Ticks,
+					EndTimeTicks = t.Value.OpenHourList[0].EndTime.Ticks
+				}));
 		}
 		
 		public IMultisiteSkill HasMultisiteSkill(string skillName, IActivity activity)

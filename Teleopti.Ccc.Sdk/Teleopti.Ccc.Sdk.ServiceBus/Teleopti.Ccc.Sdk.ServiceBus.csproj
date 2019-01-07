@@ -113,8 +113,8 @@
     <Reference Include="Polly, Version=5.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Polly.5.9.0\lib\net45\Polly.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Node, Version=1.0.0.838, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Node.1.0.0.838\lib\net451\Stardust.Node.dll</HintPath>
+    <Reference Include="Stardust.Node, Version=1.0.0.840, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Node.1.0.0.840\lib\net451\Stardust.Node.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -154,13 +154,11 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

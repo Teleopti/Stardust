@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
 			if (setting == SchedulerSortCommandSetting.SortByEndAscending) return new SortByEndAscendingCommand(_schedulerStateHolder);
 			if (setting == SchedulerSortCommandSetting.SortByContractTimeAscending) return new SortByContractTimeAscendingCommand(_schedulerStateHolder);
 			if (setting == SchedulerSortCommandSetting.SortByContractTimeDescending) return new SortByContractTimeDescendingCommand(_schedulerStateHolder);
-			if (setting == SchedulerSortCommandSetting.SortBySeniorityRankingAscending) return new SortBySeniorityRankingAscendingCommand(_schedulerStateHolder.SchedulerStateHolder, _container.Resolve<IRankedPersonBasedOnStartDate>());
-			if (setting == SchedulerSortCommandSetting.SortBySeniorityRankingDescending) return new SortBySeniorityRankingDescendingCommand(_schedulerStateHolder.SchedulerStateHolder, _container.Resolve<IRankedPersonBasedOnStartDate>());
+			if (setting == SchedulerSortCommandSetting.SortBySeniorityRankingAscending) return new SortBySeniorityRankingAscendingCommand(_schedulerStateHolder, _container.Resolve<IRankedPersonBasedOnStartDate>());
+			if (setting == SchedulerSortCommandSetting.SortBySeniorityRankingDescending) return new SortBySeniorityRankingDescendingCommand(_schedulerStateHolder, _container.Resolve<IRankedPersonBasedOnStartDate>());
 			return new NoSortCommand();
 		}
 	}

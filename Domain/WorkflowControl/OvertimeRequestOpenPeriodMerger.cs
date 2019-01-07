@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				new SkillTypeFlatOvertimeOpenPeriodMapper().Map(overtimeRequestOpenPeriods, phoneSkillType)
 					.GroupBy(o => o.SkillType ?? phoneSkillType);
 
+			var viewpointDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), permissionInformation.DefaultTimeZone()));
 			var mergedOvertimeRequestOpenPeriods = new List<OvertimeRequestSkillTypeFlatOpenPeriod>();
 			foreach (var overtimeRequestOpenPeriodSkillTypeGroup in overtimeRequestOpenPeriodGroups)
 			{
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					overtimeRequestOpenPeriodSkillTypeGroup.OrderBy(o => o.OrderIndex).ToList(),
 					permissionInformation.Culture(),
 					permissionInformation.UICulture(),
-					new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), permissionInformation.DefaultTimeZone())));
+					viewpointDate);
 				var openPeriods = overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(period);
 
 				mergedOvertimeRequestOpenPeriods.Add(openPeriods.OrderBy(o => o.OrderIndex).Last());

@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>WFM</title>
-	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="dist/ng2/assets/mdi/css/materialdesignicons.min.css">
 	<style>
 		.loader {
 			width: 75px;
@@ -88,10 +88,8 @@
 		};
 	</script>
 
-	<link id="themeDependencies" rel="stylesheet" href="dist/dependencies.css">
-	<link id="themeStyleguide" rel="stylesheet" href="">
-	<link id="themeAnt" rel="stylesheet" href="">
 	<ng2-bootstrap [style]="mainController.style"></ng2-bootstrap>
+	<link id="themeAnt" rel="stylesheet" href="">
 	<!-- build:template
 	<% if (environment === 'dev') { %>
 	<script src="dist/resources/modules.js"></script>
@@ -99,6 +97,7 @@
 	<script src="dist/main.js"></script>
 	<script src="dist/ng2/runtime.js"></script>
 	<script src="dist/ng2/polyfills.js"></script>
+	<script src="dist/ng2/dependencies.js"></script>
 	<script src="dist/ng2/styles.js"></script>
 	<script src="dist/ng2/vendor.js"></script>
 	<script src="dist/ng2/main.js"></script>
@@ -108,10 +107,12 @@
 	<script src="dist/mainForDesktop.js"></script>
 	<script src="dist/ng2/runtime.js"></script>
 	<script src="dist/ng2/polyfills.js"></script>
+	<link rel="stylesheet" href="dist/ng2/dependencies.css">
 	<link rel="stylesheet" href="dist/ng2/styles.css">
 	<script src="dist/ng2/main.js"></script>
 	<% } %>
 	/build -->
+
 </body>
 
 </html>

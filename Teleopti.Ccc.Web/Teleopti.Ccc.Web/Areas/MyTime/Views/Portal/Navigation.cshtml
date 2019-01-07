@@ -57,6 +57,29 @@
 @if (Model.GrantEnabled)
 {
 	<script type="text/javascript">
+		// Polyfill for Object.assign
+		if (typeof Object.assign != 'function') {
+			Object.assign = function(target) {
+				'use strict';
+				if (target == null) {
+					throw new TypeError('Cannot convert undefined or null to object');
+				}
+
+				target = Object(target);
+				for (var index = 1; index < arguments.length; index++) {
+					var source = arguments[index];
+					if (source != null) {
+						for (var key in source) {
+							if (Object.prototype.hasOwnProperty.call(source, key)) {
+								target[key] = source[key];
+							}
+						}
+					}
+				}
+				return target;
+			};
+		}
+
 		$(document).ready(function () {
 			var div = document.createElement("div");
 			document.getElementsByTagName('body')[0].appendChild(div);
@@ -86,47 +109,7 @@
 
 					if (document.querySelector("#grantBot>.wc-app") === null) {
 						var ajax = new Teleopti.MyTimeWeb.Ajax();
-						ajax.Ajax({
-							url: "../api/GrantBot/Config",
-							dataType: "json",
-							type: 'GET',
-							contentType: 'application/json; charset=utf-8',
-							success: function (grantBotConfig) {
-								var dl = new BotChat.DirectLine({ token: grantBotConfig.Token });
-								var user = { id: "@Model.CurrentLogonAgentId", name: "@Model.CurrentLogonAgentName" };
-
-								BotChat.App({
-									botConnection: Object.assign({}, dl, {
-										postActivity: activity => {
-											var newActivity = Object.assign({}, activity, { channelData: { "personId": "@Model.CurrentLogonAgentId", "environment": window.location.host } });
-											return dl.postActivity(newActivity);
-										}
-									}),
-									user: user,
-									bot: { id: "botid" },
-									resize: "detect",
-									chatTitle: false,
-									showUploadButton: false
-								}, document.getElementById("grantBot"));
-
-								dl.postActivity({
-										from: user,
-										name: 'startConversation',
-										type: 'event',
-										value: '',
-										channelData: {
-											"personId": "@Model.CurrentLogonAgentId",
-											"environment": window.location.host
-										}
-									})
-									.subscribe(function (id) {
-										if (console) console.log('"trigger requestWelcomeDialog" sent');
-									});
-							},
-							error: function (e) {
-								if (console) console.error("Failed to load GrantBot config.", e);
-							}
-						});
+						var chatConfig = $.Deferred();
 
 						ajax.Ajax({
 							url: "../api/ChatConfiguration/exists",
@@ -143,17 +126,78 @@
 										data: JSON.stringify({ name: 'GrantBot' }),
 										contentType: 'application/json; charset=utf-8',
 										success: function(token) {
-												ajax.Ajax({
-													url: "../api/ChatConfiguration",
-													dataType: "json",
-													type: 'POST',
-													data: JSON.stringify({ host: window.location.host, tenant: '@Model.CurrentLogonAgentId', apiKey: token.Token }),
-													contentType: 'application/json; charset=utf-8',
-													success: function() {
-													}});
-										}});
+											ajax.Ajax({
+												url: "../api/ChatConfiguration",
+												dataType: "json",
+												type: 'POST',
+												data: JSON.stringify({
+													host: window.location.host,
+													tenant: '@Model.CurrentLogonAgentId',
+													apiKey: token.Token
+												}),
+												contentType: 'application/json; charset=utf-8',
+												success: function () {
+													chatConfig.resolve();
+												}
+											});
+										}
+									});
+								} else {
+									chatConfig.resolve();
 								}
+
 							}});
+
+						ajax.Ajax({
+							url: "../api/GrantBot/Config",
+							dataType: "json",
+							type: 'GET',
+							contentType: 'application/json; charset=utf-8',
+							success: function (grantBotConfig) {
+								var dl = new BotChat.DirectLine({ token: grantBotConfig.Token });
+								var user = { id: "@Model.CurrentLogonAgentId", name: "@Model.CurrentLogonAgentName" };
+
+								BotChat.App({
+									botConnection: Object.assign({}, dl, {
+										postActivity: function(activity) {
+											var newActivity = Object.assign({}, activity,
+												{
+													channelData: {
+														"personId": "@Model.CurrentLogonAgentId",
+															"environment": window.location.host
+														}
+													});
+												return dl.postActivity(newActivity);
+											}
+										}),
+										user: user,
+										bot: { id: "botid" },
+										resize: "detect",
+										chatTitle: false,
+										showUploadButton: false
+									},
+									document.getElementById("grantBot"));
+
+								$.when(chatConfig).done(function() {
+									dl.postActivity({
+											from: user,
+											name: 'startConversation',
+											type: 'event',
+											value: '',
+											channelData: {
+												"personId": "@Model.CurrentLogonAgentId",
+												"environment": window.location.host
+											}
+										})
+										.subscribe(function(id) {
+											if (console) console.log('"trigger requestWelcomeDialog" sent');
+										});
+								});
+							},
+							error: function (e) {
+								if (console) console.error("Failed to load GrantBot config.", e);
+							}
+						});
 					}
 
 					var availableClientWidth = document.documentElement.clientWidth;

@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradePersonScheduleProvider _personScheduleProvider;
-		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
+		private readonly TeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IShiftTradeSiteOpenHourFilter _shiftTradeSiteOpenHourFilter;
 		private readonly IProjectionProvider _projectionProvider;
 
 		public ShiftTradePersonScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser
-			, IShiftTradePersonScheduleProvider personScheduleProvider, ITeamScheduleShiftViewModelProvider shiftViewModelProvider
+			, IShiftTradePersonScheduleProvider personScheduleProvider, TeamScheduleShiftViewModelProvider shiftViewModelProvider
 			, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IPersonRequestRepository personRequestRepository
 			, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter, IProjectionProvider projectionProvider)
 		{
@@ -39,19 +39,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public ShiftTradeAddPersonScheduleViewModel MakeMyScheduleViewModel(ShiftTradeScheduleViewModelData inputData)
 		{
+			var currentUser = _loggedOnUser.CurrentUser();
 			var myScheduleDay = _permissionProvider.IsPersonSchedulePublished(inputData.ShiftTradeDate,
-				_loggedOnUser.CurrentUser()) || _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
-				? _personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] { _loggedOnUser.CurrentUser() }).SingleOrDefault()
+				currentUser) || _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
+				? _personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] { currentUser }).SingleOrDefault()
 				: null;
-			var myScheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(_loggedOnUser.CurrentUser(), myScheduleDay, true);
+			var myScheduleViewModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, currentUser, myScheduleDay, true);
 			return new ShiftTradeAddPersonScheduleViewModel(myScheduleViewModel);
 		}
 
 		public IList<ShiftTradeAddPersonScheduleViewModel> MakePossibleShiftTradeAddPersonScheduleViewModels(
 			ShiftTradeScheduleViewModelData inputData, ShiftTradeAddPersonScheduleViewModel myScheduleView, out int pageCount)
 		{
+			var currentUser = _loggedOnUser.CurrentUser();
 			var myScheduleDay = _personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new List<IPerson>
-				{_loggedOnUser.CurrentUser()}).FirstOrDefault();
+				{currentUser}).FirstOrDefault();
 
 
 			var shiftTradeRequests = _personRequestRepository.FindShiftExchangeOffersForBulletin(inputData.ShiftTradeDate).Where(x => x.IsWantedSchedule(myScheduleDay));
@@ -91,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			foreach (var tuple in allPossibleScheduleDayTuples)
 			{
 				var agent = tuple.Item2.Person;
-				var scheduleVm = _shiftViewModelProvider.MakeScheduleReadModel(agent, tuple.Item1, true);
+				var scheduleVm = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, agent, tuple.Item1, true);
 
 				// Agent may create multiple shift trade post for same day, only return first one
 				if (allPossibleExchangedScheduleViews.Any(x => x.PersonId == agent.Id && x.StartTimeUtc == scheduleVm.StartTimeUtc))

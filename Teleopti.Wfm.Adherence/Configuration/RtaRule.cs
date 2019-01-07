@@ -2,11 +2,11 @@ using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Configuration.Events;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {
-	public class RtaRule : VersionedAggregateRootWithBusinessUnit, IRtaRule
+	public class RtaRule : VersionedAggregateRootWithBusinessUnitIdWithoutChangeInfo, IRtaRule
 	{
 		private Description _description;
 		private Color _displayColor;
@@ -95,14 +95,6 @@ namespace Teleopti.Wfm.Adherence.Configuration
 		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
 		{
 			return DisplayColor;
-		}
-
-		public virtual bool InContractTime { get; set; }
-		public virtual ITracker Tracker { get; set; }
-
-		public virtual IPayload UnderlyingPayload
-		{
-			get { return this; }
 		}
 	}
 

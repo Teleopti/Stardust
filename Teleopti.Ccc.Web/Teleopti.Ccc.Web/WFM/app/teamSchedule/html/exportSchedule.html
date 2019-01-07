@@ -1,75 +1,93 @@
-﻿<div class="export-schedule">
+<div class="export-schedule">
 	<form name="exportScheduleForm" class="wfm-form" novalidate>
 		<div class="con-row">
-			<div class="con-flex vcenter">
-				{{'Period' | translate}}
-			</div>
+			<div class="con-flex vcenter">{{ 'Period' | translate }}</div>
 			<div class="con-flex x3">
 				<div class="form-input-wrap">
-					<wfm-date-range-picker ng-class="{'invalid': !vm.isDateValid()}"
-									   ng-model="vm.configuration.period"
-									   popup-mode="true"
-									   custom-validate="vm.dateRangeCustomValidators()"
-									   on-date-change="vm.onPeriodChanged()"></wfm-date-range-picker>
-					<div class="tips"><i class="mdi mdi-information-outline"></i>{{'ExportSchedulesMaximumDays' | translate}}</div>
+					<wfm-date-range-picker
+						ng-class="{'invalid': !vm.isDateValid()}"
+						ng-model="vm.configuration.period"
+						popup-mode="true"
+						custom-validate="vm.dateRangeCustomValidators()"
+						on-date-change="vm.onPeriodChanged()"
+					></wfm-date-range-picker>
+					<div class="tips">
+						<i class="mdi mdi-information-outline"></i> {{ 'ExportSchedulesMaximumDays' | translate }}
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="con-row">
-			<div class="con-flex">
-				{{'Groupings' | translate}}
-			</div>
+			<div class="con-flex">{{ 'Groupings' | translate }}</div>
 			<div class="con-flex x3">
-				<group-page-picker group-pages="vm.availableGroups"
-								   class="group-picker-container inline-block"
-								   selected-groups="vm.configuration.selectedGroups" required="true"></group-page-picker>
+				<group-page-picker
+					group-pages="vm.availableGroups"
+					class="group-picker-container inline-block"
+					selected-groups="vm.configuration.selectedGroups"
+					required="true"
+				></group-page-picker>
 			</div>
 		</div>
 		<div class="con-row">
-			<div class="con-flex">
-				{{'Scenario' | translate}}
-			</div>
+			<div class="con-flex">{{ 'Scenario' | translate }}</div>
 			<div class="con-flex x3">
 				<md-select ng-model="vm.configuration.scenarioId" placeholder="{{ 'Scenario'|translate }}" required>
-					<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario.Id">{{::scenario.Name}}</md-option>
+					<md-option
+						ng-repeat="scenario in vm.scenarios"
+						ng-value="scenario.Id"
+						>{{::scenario.Name}}</md-option
+					>
 				</md-select>
 			</div>
 		</div>
 		<div class="con-row">
-			<div class="con-flex">
-				{{'TimeZone' | translate}}
-			</div>
+			<div class="con-flex">{{ 'TimeZone' | translate }}</div>
 			<div class="con-flex x3">
 				<md-select ng-model="vm.configuration.timezoneId" placeholder="{{ 'Timezone'|translate }}" required>
-					<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone.Id">{{::timezone.Name}}</md-option>
+					<md-option
+						ng-repeat="timezone in vm.timezones"
+						ng-value="timezone.Id"
+						>{{::timezone.Name}}</md-option
+					>
 				</md-select>
 			</div>
 		</div>
 		<div class="con-row">
-			<div class="con-flex vcenter">
-				{{'OptionalColumns' | translate}}
-			</div>
+			<div class="con-flex vcenter">{{ 'OptionalColumns' | translate }}</div>
 			<div class="con-flex x3">
 				<div class="form-input-wrap">
 					<div>
-						<md-select multiple ng-model="vm.configuration.optionalColumnIds" placeholder="{{ 'OptionalColumns'|translate }}">
-							<md-option ng-repeat="optionalColumn in vm.optionalColumns" ng-disabled="vm.isOptionalColDisabled(optionalColumn.Id)" ng-value="optionalColumn.Id">{{::optionalColumn.Name}}</md-option>
+						<md-select
+							multiple
+							ng-model="vm.configuration.optionalColumnIds"
+							placeholder="{{ 'OptionalColumns'|translate }}"
+						>
+							<md-option
+								ng-repeat="optionalColumn in vm.optionalColumns"
+								ng-disabled="vm.isOptionalColDisabled(optionalColumn.Id)"
+								ng-value="optionalColumn.Id"
+								>{{::optionalColumn.Name}}</md-option
+							>
 						</md-select>
 					</div>
-					<div class="tips"><i class="mdi mdi-information-outline"></i>{{'ExportSchedulesMaximumOptionalColumns' | translate}}</div>
+					<div class="tips">
+						<i class="mdi mdi-information-outline"></i
+						>{{ 'ExportSchedulesMaximumOptionalColumns' | translate }}
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="con-footer">
-			<button type="button" class="wfm-btn wfm-btn-invis-default"
-					ng-click="vm.gotoDayView()">
-				{{ 'Back'|translate }}
+			<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.gotoDayView()">
+				{{ 'Back' | translate }}
 			</button>
-			<button class="wfm-btn"
-					ng-class="{'wfm-btn-invis-primary': vm.isApplyEnabled(), 'wfm-btn-invis-disabled': !vm.isApplyEnabled() || vm.isExporting}"
-					ng-disabled="!vm.isApplyEnabled() || vm.isExporting"
-					ng-click="vm.startExport()">
-				{{ 'Start'|translate }}
+			<button
+				class="wfm-btn"
+				ng-class="{'wfm-btn-invis-primary': vm.isApplyEnabled(), 'wfm-btn-invis-disabled': !vm.isApplyEnabled() || vm.isExporting}"
+				ng-disabled="!vm.isApplyEnabled() || vm.isExporting"
+				ng-click="vm.startExport()"
+			>
+				{{ 'Start' | translate }}
 			</button>
 		</div>
 	</form>

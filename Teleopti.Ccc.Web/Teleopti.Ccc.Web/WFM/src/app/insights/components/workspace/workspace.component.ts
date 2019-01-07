@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { ReportService } from '../../core/report.service';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { NavigationService } from '../../core/navigation.service';
-import { Report } from '../../models/Report.model';
+import { ReportService } from '../../core/report.service';
 import { Permission } from '../../models/Permission.model';
-import { NzModalService, NzModalRef } from 'ng-zorro-antd';
+import { Report } from '../../models/Report.model';
 
 @Component({
 	selector: 'app-insights-workspace',
@@ -19,14 +19,16 @@ export class WorkspaceComponent implements OnInit {
 	public permission: Permission;
 	public newReportName: string = undefined;
 	public messageForNewReportName = '';
+	public modalTitle = '';
 	public refNewReportNameModal: NzModalRef;
 
 	@ViewChild('newReportNameTemplate')
 	private newReportNameTempRef: TemplateRef<any>;
+	modalIsVisible = false;
+	private modalType = '';
+	modalReport: Report;
 
-	constructor(private reportSvc: ReportService,
-		private modalSvc: NzModalService,
-		public nav: NavigationService) {
+	constructor(private reportSvc: ReportService, private modalSvc: NzModalService, public nav: NavigationService) {
 		this.initialized = false;
 	}
 
@@ -40,6 +42,20 @@ export class WorkspaceComponent implements OnInit {
 
 			this.initialized = true;
 		});
+	}
+
+	handleOk(): void {
+		if (this.modalType === 'create') {
+			this.createReport();
+		} else if (this.modalType === 'clone') {
+			this.cloneReport(this.modalReport);
+		}
+
+		this.modalIsVisible = false;
+	}
+
+	handleCancel(): void {
+		this.modalIsVisible = false;
 	}
 
 	loadReportList() {
@@ -69,10 +85,10 @@ export class WorkspaceComponent implements OnInit {
 		}
 
 		this.isLoading = true;
-		this.reportSvc.createReport(this.newReportName).then((newReport) => {
+		this.reportSvc.createReport(this.newReportName).then(newReport => {
 			this.nav.editReport({
 				Id: newReport.ReportId,
-				Name: newReport.ReportName,
+				Name: newReport.ReportName
 			});
 			return true;
 		});
@@ -98,24 +114,19 @@ export class WorkspaceComponent implements OnInit {
 		this.newReportName = undefined;
 	}
 
-	public confirmCreateReport(report) {
-		this.messageForNewReportName = `Please input name for new report:`;
-		this.refNewReportNameModal = this.modalSvc.create({
-			nzTitle: 'Create new report',
-			nzContent: this.newReportNameTempRef,
-			nzOnOk: () => this.createReport(),
-			nzOnCancel: () => this.cancelCreateReport()
-		});
+	public confirmCreateReport() {
+		this.modalType = 'create';
+		this.modalIsVisible = true;
+		this.messageForNewReportName = '';
+		this.modalTitle = 'Create new report';
 	}
 
 	public confirmCloneReport(report) {
+		this.modalType = 'clone';
 		this.messageForNewReportName = `Please input name for new copy of report "${report.Name}":`;
-		this.refNewReportNameModal = this.modalSvc.create({
-			nzTitle: 'Save as new report',
-			nzContent: this.newReportNameTempRef,
-			nzOnOk: () => this.cloneReport(report),
-			nzOnCancel: () => this.cancelCreateReport()
-		});
+		this.modalIsVisible = true;
+		this.modalTitle = 'Save as new report';
+		this.modalReport = report;
 	}
 
 	public deleteReport(report) {

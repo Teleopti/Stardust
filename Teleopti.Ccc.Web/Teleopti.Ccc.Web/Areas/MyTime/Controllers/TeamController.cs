@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				date = _now.ServerDate_DontUse();
 			return
 				Json(
-					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
+					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb).ToArray(),
 					JsonRequestBehavior.AllowGet);
 		}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			if (ids[0] == "") return Json(new List<Guid>());
 
 			var allSiteIds = ids.Select(siteId => new Guid(siteId)).ToList();
-			return Json(_siteViewModelFactory.GetTeams(allSiteIds, date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
+			return Json(_siteViewModelFactory.GetTeams(allSiteIds, date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb).ToArray());
 		}
 
 		[UnitOfWork]
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				date = _now.ServerDate_DontUse();
 			return
 				Json(
-					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
+					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard).ToArray(),
 					JsonRequestBehavior.AllowGet);
 		}
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult SitesForShiftTrade(DateOnly? date)
 		{
 			if (!date.HasValue) date = _now.ServerDate_DontUse();
-			return Json( _siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb), JsonRequestBehavior.AllowGet);
+			return Json( _siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb).ToArray(), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(
 				new
 				{
-					teams = _teamViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value),
+					teams = _teamViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value).ToArray(),
 					allTeam = new { id = "allTeams", text = Resources.AllPermittedTeamsToMakeShiftTradeWith }
 				}, JsonRequestBehavior.AllowGet);
 		}

@@ -601,14 +601,36 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				//Avoid lazy load error
 				avoidLazyLoadForLoadSchedule(uow, persons);
 
-				var repositoryFactory = new RepositoryFactory();
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
 				var currentAuthorization = CurrentAuthorization.Make();
-				var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory,
+				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
+				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
+				var noteRepository = new NoteRepository(currentUnitOfWork);
+				var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
+				var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
+				var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+				var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(currentUnitOfWork);
+				var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
+					personAssignmentRepository, personAbsenceRepository,
+					new MeetingRepository(currentUnitOfWork), agentDayScheduleTagRepository,
+					noteRepository, publicNoteRepository,
+					preferenceDayRepository,
+					studentAvailabilityDayRepository,
+					new PersonAvailabilityRepository(currentUnitOfWork),
+					new PersonRotationRepository(currentUnitOfWork),
+					overtimeAvailabilityRepository,
 					new PersistableScheduleDataPermissionChecker(currentAuthorization),
-					new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork),
+					new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+						() => personAbsenceRepository,
+						() => preferenceDayRepository, () => noteRepository,
+						() => publicNoteRepository,
+						() => studentAvailabilityDayRepository,
+						() => agentDayScheduleTagRepository,
+						() => overtimeAvailabilityRepository),
 					currentAuthorization);
-				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
+				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true)
+					{LoadDaysAfterLeft = true};
 
 				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scenario, persons, scheduleDictionaryLoadOptions, period, persons, false);
 

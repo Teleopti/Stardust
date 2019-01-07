@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+				   assembly="Teleopti.Ccc.Domain"
+				   namespace="Teleopti.Ccc.Domain.SystemSetting"
+				   default-access="field.camelcase-underscore">
+
+	<class name="BankHolidayDate" table="BankHolidayDate">
+		<id name="Id"
+					 type="guid"
+						 access="nosetter.camelcase-underscore"
+					 unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+
+		<property name="Date"
+				  access="property"
+				  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+				  not-null="true"/>
+
+		<property name="Description"
+				  access="property"
+				  type="string"
+				  length="250"
+				  not-null="false"/>
+	
+		<many-to-one name="UpdatedBy"
+                 class="Teleopti.Ccc.Domain.Common.Person"
+                 not-null="true" foreign-key="FK_BankHolidayDate_UpdatedBy"/>
+		<property name="UpdatedOn"  update="false"
+              type="UtcDateTime"
+              not-null="true"/>
+
+		
+
+		<many-to-one name="Calendar" column="CalendarId"
+					 class="Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar"
+					 not-null="true"
+					 foreign-key="FK_BankHolidayDate_BankHolidayCalendar"/>
+		
+
+		<property name="IsDeleted"
+				  type="boolean"
+				  not-null="true"/>
+
+	
+		<filter name="deletedFlagFilter"
+				condition="IsDeleted = 0" />
+
+		<filter name="businessUnitFilter"
+          condition="exists(select 1 from BankHolidayDate 
+                                inner join BankHolidayCalendar on BankHolidayDate.CalendarId=BankHolidayCalendar.Id 
+                          where Id=BankHolidayDate.Id and BankHolidayCalendar.BusinessUnit=:businessUnitParameter)" />
+		
+	</class>
+</hibernate-mapping>

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				Date = dayScheduleDomainData.Date.ToFixedClientDateOnlyFormat(),
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = daylightModel,
-				TimeLine = createTimeLine(dayScheduleDomainData.MinMaxTime, dayScheduleDomainData.Date, daylightSavingAdjustment, timeZone),
+				TimeLine = createTimeLine(dayScheduleDomainData.MinMaxTime, dayScheduleDomainData.Date, daylightSavingAdjustment, timeZone).ToArray(),
 				RequestPermission = mapDaySchedulePermission(dayScheduleDomainData),
 				ViewPossibilityPermission = dayScheduleDomainData.ViewPossibilityPermission,
 				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
@@ -94,26 +94,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				IsToday = dayScheduleDomainData.IsCurrentDay,
 				CheckStaffingByIntraday = isCheckStaffingByIntradayForDay(currentUser.WorkflowControlSet, dayScheduleDomainData.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(dayScheduleDomainData.Date),
+				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(currentUser, dayScheduleDomainData.Date),
 				UnReadMessageCount = dayScheduleDomainData.UnReadMessageCount,
 				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
-			viewModel.Schedule.Periods = projections(dayScheduleDomainData);
+			viewModel.Schedule.Periods = projections(dayScheduleDomainData).ToArray();
 
 			return viewModel;
 		}
 
-		private bool isOvertimeProbabilityEnabled(DateOnly date)
+		private bool isOvertimeProbabilityEnabled(IPerson user, DateOnly date)
 		{
-			var currentUser = _loggedOnUser.CurrentUser();
-			var overtimeProbabilityEnabled = currentUser.WorkflowControlSet?.OvertimeProbabilityEnabled != null
-											 && currentUser.WorkflowControlSet.OvertimeProbabilityEnabled
+			var overtimeProbabilityEnabled = user.WorkflowControlSet?.OvertimeProbabilityEnabled != null
+											 && user.WorkflowControlSet.OvertimeProbabilityEnabled
 											 && isOvertimeProbabilityLicenseAvailable();
 			if (!overtimeProbabilityEnabled)
 				return false;
 
-			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertime(currentUser, date).Any();
+			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertime(user, date).Any();
 			return isStaffingDataAvailable;
 		}
 
@@ -135,8 +134,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 
 		private DayViewModel createDayViewModel(DayScheduleDomainData dayScheduleDomainData, bool loadOpenHourPeriod = false)
 		{
-			var personAssignment = dayScheduleDomainData.ScheduleDay?.PersonAssignment();
-			var significantPartForDisplay = dayScheduleDomainData.ScheduleDay?.SignificantPartForDisplay();
+			var personAssignment = dayScheduleDomainData.PersonAssignment;
+			var significantPartForDisplay = dayScheduleDomainData.SignificantPartForDisplay;
 			var dayViewModel = new DayViewModel
 			{
 				Date = dayScheduleDomainData.Date.ToShortDateString(),
@@ -337,7 +336,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				return _overtimeMapper.Map(s.OvertimeAvailability);
 			}
 
-			if (s.ScheduleDay?.SignificantPartForDisplay() != SchedulePartView.MainShift)
+			if (s.SignificantPartForDisplay != SchedulePartView.MainShift)
 			{
 				return new OvertimeAvailabilityViewModel
 				{
@@ -348,7 +347,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				};
 			}
 
-			var personAssignment = s.ScheduleDay.PersonAssignment();
+			var personAssignment = s.PersonAssignment;
 			var endTime = personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime;
 			var endTimeTomorrow = endTime.Add(TimeSpan.FromHours(1));
 			return new OvertimeAvailabilityViewModel
@@ -370,7 +369,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				};
 			}
 
-			var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+			var significantPart = s.SignificantPartForDisplay;
 
 			switch (significantPart)
 			{
@@ -395,13 +394,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 					{
 						return new PersonDayOffPeriodViewModel
 						{
-							Title = s.ScheduleDay?.PersonAssignment()?.DayOff()?.Description.Name,
+							Title = s.PersonAssignment?.DayOff()?.Description.Name,
 							StyleClassName = StyleClasses.DayOff + " " + StyleClasses.Striped
 						};
 					}
 				case SchedulePartView.MainShift:
 					{
-						var personAssignment = s.ScheduleDay?.PersonAssignment();
+						var personAssignment = s.PersonAssignment;
 						var shiftCategory = personAssignment?.ShiftCategory;
 						return new PersonAssignmentPeriodViewModel
 						{

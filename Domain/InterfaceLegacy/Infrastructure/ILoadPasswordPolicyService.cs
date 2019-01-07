@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 		int LoadPasswordValidForDayCount();
 		int LoadPasswordExpireWarningDayCount();
 		IList<IPasswordStrengthRule> LoadPasswordStrengthRules();
-		string Path { get; set; }
-		void ClearFile();
+		string Path { get; }
 		string DocumentAsString { get; }
 	}
 }

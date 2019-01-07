@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				Name = "TestPlanningGroup"
 			};
 
-			Target.Create(model);
+			Target.Save(model);
 
 			var planningGroup = PlanningGroupRepository.LoadAll().Single();
 			planningGroup.Name.Should().Be.EqualTo(model.Name);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				Id = existingPlanningGroup.Id.Value
 			};
 
-			Target.Create(model);
+			Target.Save(model);
 
 			var planningGroup = PlanningGroupRepository.LoadAll().Single();
 			planningGroup.Name.Should().Be.EqualTo(model.Name);

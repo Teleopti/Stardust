@@ -558,19 +558,19 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Rooster</value>
   </data>
   <data name="ScheduledHeads" xml:space="preserve">
-    <value>Ingeroosterd hoofden</value>
+    <value>Ingeroosterde heads</value>
   </data>
   <data name="ScheduledHours" xml:space="preserve">
-    <value>Ingeroosterd uren</value>
+    <value>Ingeroosterde uren</value>
   </data>
   <data name="ScheduledStaff" xml:space="preserve">
-    <value>Ingeroosterd agenten</value>
+    <value>Ingeroosterde medewerkers</value>
   </data>
   <data name="SchedulePeriods" xml:space="preserve">
     <value>Rooster Periodes</value>
   </data>
   <data name="Schedules" xml:space="preserve">
-    <value>Roosteren</value>
+    <value>Roosters</value>
   </data>
   <data name="SkillViews" xml:space="preserve">
     <value>Skill Views</value>
@@ -681,7 +681,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Persoon accounts konden niet geladen worden. Er moet minstens een absence met een tracker gedefinieerd zijn in opties.</value>
   </data>
   <data name="StategroupOverview" xml:space="preserve">
-    <value>Staatsgroep Overzicht</value>
+    <value>statusgroep Overzicht</value>
   </data>
   <data name="ScheduleDate" xml:space="preserve">
     <value>Rooster datum</value>
@@ -756,7 +756,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Bekijk Roosteren</value>
   </data>
   <data name="NotScheduled" xml:space="preserve">
-    <value>Niet Ingeroosterd</value>
+    <value>Niet geroosterd</value>
   </data>
   <data name="TheScheduleHasChanged" xml:space="preserve">
     <value>De rooster is veranderd. Dit verzoek moet opnieuw aanvaard worden.</value>
@@ -837,7 +837,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Workflow Control Set:</value>
   </data>
   <data name="AgentPerformance" xml:space="preserve">
-    <value>Agent Performance</value>
+    <value>medewerker Performance</value>
   </data>
   <data name="ForecastingPerformance" xml:space="preserve">
     <value>Voorspelde Performance</value>
@@ -1153,13 +1153,13 @@ geweigerd omdat Uw skills komen niet overeen met en andere persoon</value>
     <value>Geavanceerd</value>
   </data>
   <data name="AfterCallWorkTime" xml:space="preserve">
-    <value>After call work time</value>
+    <value>Nawerktijd</value>
   </data>
   <data name="AgentInfo" xml:space="preserve">
     <value>Info</value>
   </data>
   <data name="Agents" xml:space="preserve">
-    <value>Agenten</value>
+    <value>Medwerkers</value>
   </data>
   <data name="AgentSettings" xml:space="preserve">
     <value>Agentinstellingen</value>
@@ -1174,7 +1174,7 @@ geweigerd omdat Uw skills komen niet overeen met en andere persoon</value>
     <value>Beantwoorde Telefoongesprekken</value>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
-    <value>Appl. inlognaam</value>
+    <value>Appl. gebruikersnaam</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Rollen</value>
@@ -1198,7 +1198,7 @@ geweigerd omdat Uw skills komen niet overeen met en andere persoon</value>
     <value>Gemiddelde Telefoongesprekken</value>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
-    <value>Gemiddelde Spreektijd</value>
+    <value>Gemiddelde gesprekstijd</value>
   </data>
   <data name="AverageTasks" xml:space="preserve">
     <value>Gemiddelde taken</value>
@@ -1237,7 +1237,7 @@ geweigerd omdat Uw skills komen niet overeen met en andere persoon</value>
     <value>Campagne Telefoongesprekken %</value>
   </data>
   <data name="CampaignTalkTimePercentSign" xml:space="preserve">
-    <value>Campagne spreektijd %</value>
+    <value>Campagne gesprekstijd%</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Annuleren</value>
@@ -1367,7 +1367,7 @@ Datum</value>
     <value>Deviatie telefoongesprekken</value>
   </data>
   <data name="DeviationTalkTimeColon" xml:space="preserve">
-    <value>Deviatie spreektijd:</value>
+    <value>Deviatie gesprekstijd:</value>
   </data>
   <data name="DoubleArrowAdd" xml:space="preserve">
     <value>&gt;&gt;</value>
@@ -1421,7 +1421,7 @@ Datum</value>
     <value>Voorspelde agenten</value>
   </data>
   <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
-    <value>Voorspelde gemiddeld after call work</value>
+    <value>geforecaste nawerktijd</value>
   </data>
   <data name="ForecastedCalls" xml:space="preserve">
     <value>Voorspelde telefoongesprekken</value>
@@ -1430,7 +1430,7 @@ Datum</value>
     <value>Uren</value>
   </data>
   <data name="ForecastedTalkTime" xml:space="preserve">
-    <value>Voorspelde spreektijd</value>
+    <value>Voorspelde gesprekstijd</value>
   </data>
   <data name="Forecasts" xml:space="preserve">
     <value>Forecasts</value>
@@ -1463,7 +1463,7 @@ Datum</value>
     <value>Index telefoongesprekken</value>
   </data>
   <data name="IndexTalkTime" xml:space="preserve">
-    <value>Index spreektijd</value>
+    <value>Index gesprekstijd</value>
   </data>
   <data name="IndexTasks" xml:space="preserve">
     <value>Index taken</value>
@@ -1475,22 +1475,22 @@ Datum</value>
     <value>Heeft</value>
   </data>
   <data name="KpiAbsenteeism" xml:space="preserve">
-    <value>Absenteïsme (%)</value>
+    <value>afwezigheid (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>Rooster opvolging (%)</value>
+    <value>adherence (%)</value>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>Gemiddeld After Call Work (s)</value>
+    <value>Gemiddelde nawerktijd(s)</value>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
     <value>Gemiddelde Afhandelingstijd (s)</value>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>Gemiddelde Spreektijd (s)</value>
+    <value>Gemiddelde gesprekstijd(s)</value>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
-    <value>Bereidheid (%)</value>
+    <value>beschikbare tijd (%)</value>
   </data>
   <data name="KPIsIncludedInScorecardColon" xml:space="preserve">
     <value>Kpi's in scorekaart:</value>
@@ -1502,7 +1502,7 @@ Datum</value>
     <value>Achternaam</value>
   </data>
   <data name="LastUpdated" xml:space="preserve">
-    <value>Laatste update</value>
+    <value>Laatste bijgewerkt</value>
   </data>
   <data name="Limitations" xml:space="preserve">
     <value>Beperkingen</value>
@@ -1520,7 +1520,7 @@ Datum</value>
     <value>Maximale agenten</value>
   </data>
   <data name="MaximumOccupancy" xml:space="preserve">
-    <value>Maximale bezetting</value>
+    <value>Maximale bezettingsgraad</value>
   </data>
   <data name="MaxTime" xml:space="preserve">
     <value>Max</value>
@@ -1535,7 +1535,7 @@ Datum</value>
     <value>Minimale agenten</value>
   </data>
   <data name="MinimumOccupancy" xml:space="preserve">
-    <value>Minimale bezetting</value>
+    <value>Minimale bezettingsgraad</value>
   </data>
   <data name="MinTime" xml:space="preserve">
     <value>Min</value>
@@ -1619,7 +1619,7 @@ Datum</value>
     <value>Geen</value>
   </data>
   <data name="Note" xml:space="preserve">
-    <value>Noot</value>
+    <value>Notitie</value>
   </data>
   <data name="NotInHierarchy" xml:space="preserve">
     <value>Users</value>
@@ -1628,7 +1628,7 @@ Datum</value>
     <value>Nummer</value>
   </data>
   <data name="OccupancyAdjustment" xml:space="preserve">
-    <value>Bezetting aanpassing</value>
+    <value>Bezettingsgraad aanpassing</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
@@ -1637,7 +1637,7 @@ Datum</value>
     <value>Open</value>
   </data>
   <data name="OpenHours" xml:space="preserve">
-    <value>Openingsuren</value>
+    <value>Openingtijden</value>
   </data>
   <data name="OpenPersonAdminPage" xml:space="preserve">
     <value>Mensen</value>
@@ -1646,19 +1646,19 @@ Datum</value>
     <value>Opties</value>
   </data>
   <data name="OriginalACW" xml:space="preserve">
-    <value>Origineel ACW</value>
+    <value>Originele ACW</value>
   </data>
   <data name="OriginalTalkTime" xml:space="preserve">
-    <value>Origineel spreektijd</value>
+    <value>Originele Gesprekstijd</value>
   </data>
   <data name="Outlier" xml:space="preserve">
-    <value>Speciale Event</value>
+    <value>Speciaal Event</value>
   </data>
   <data name="PartTimePercentage" xml:space="preserve">
-    <value>Deeltijd Percentage</value>
+    <value>Part-Time Percentage</value>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
-    <value>Deeltijd Percentages</value>
+    <value>Part-Time Percentages</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Wachtwoord</value>
@@ -1682,7 +1682,7 @@ Datum</value>
     <value>Plakken Speciaal...</value>
   </data>
   <data name="PeoplePeriods" xml:space="preserve">
-    <value>Personen periode</value>
+    <value>Persoonsperiode</value>
   </data>
   <data name="Percentage" xml:space="preserve">
     <value>Percentage</value>
@@ -1871,10 +1871,10 @@ Datum</value>
     <value>Deviatie chats:</value>
   </data>
   <data name="QuestionCreateAnotherSubSkill" xml:space="preserve">
-    <value>Wilt U een ander sub skill creëren?</value>
+    <value>Wilt U een andere sub skill creëren?</value>
   </data>
   <data name="QuestionCreateAnotherWorkload" xml:space="preserve">
-    <value>Wilt U een ander workload creëren?</value>
+    <value>Wilt U een andere workload creëren?</value>
   </data>
   <data name="QuestionCreateSubSkill" xml:space="preserve">
     <value>De multi-site skill bevat geen sub skills. Wilt U een creëren?</value>
@@ -2027,7 +2027,7 @@ Datum</value>
     <value>Specifieke datums selectie</value>
   </data>
   <data name="Split" xml:space="preserve">
-    <value>Spleet</value>
+    <value>Split</value>
   </data>
   <data name="Standard" xml:space="preserve">
     <value>Standaard</value>
@@ -2060,7 +2060,7 @@ Datum</value>
     <value>Overzicht</value>
   </data>
   <data name="TalkTime" xml:space="preserve">
-    <value>Spreektijd</value>
+    <value>gesprekstijd</value>
   </data>
   <data name="Target" xml:space="preserve">
     <value>Doel</value>
@@ -2099,13 +2099,13 @@ Datum</value>
     <value>Totaal</value>
   </data>
   <data name="TotalACW" xml:space="preserve">
-    <value>Totaal ACW</value>
+    <value>Totale ACW</value>
   </data>
   <data name="TotalCalls" xml:space="preserve">
     <value>Totaal telefoongesprekken</value>
   </data>
   <data name="TotalTalkTime" xml:space="preserve">
-    <value>Totaal spreektijd</value>
+    <value>Totaal gesprekstijd</value>
   </data>
   <data name="Trend" xml:space="preserve">
     <value>Trend</value>
@@ -2144,7 +2144,7 @@ Datum</value>
     <value>Gevalideerde telefoongesprekken</value>
   </data>
   <data name="ValidatedTalkTime" xml:space="preserve">
-    <value>Gevalideerde spreektijd</value>
+    <value>Gevalideerde gesprektijd</value>
   </data>
   <data name="ValidatedTasks" xml:space="preserve">
     <value>Gevalideerde taken</value>
@@ -2234,7 +2234,7 @@ Datum</value>
     <value>Afwezigheid Verzoek</value>
   </data>
   <data name="AgentName" xml:space="preserve">
-    <value>Agent Naam</value>
+    <value>Medewerker Naam</value>
   </data>
   <data name="Requests" xml:space="preserve">
     <value>Verzoeken</value>
@@ -2658,7 +2658,7 @@ Periode: {3}</value>
     <value>Voorspelde telefoongesprekken:</value>
   </data>
   <data name="ForecastedTalkTimeColon" xml:space="preserve">
-    <value>Voorspelde spreektijd:</value>
+    <value>Voorspelde gesprekstijd:</value>
   </data>
   <data name="Restrictions" xml:space="preserve">
     <value>Beperkingen</value>
@@ -2835,7 +2835,7 @@ Periode: {3}</value>
     <value>Agenten met shrinkage</value>
   </data>
   <data name="ExternalLogOn" xml:space="preserve">
-    <value>Externe logon</value>
+    <value>Externe gebruikersnaam</value>
   </data>
   <data name="BusinessRuleMaxWeekWorkTimeErrorMessage" xml:space="preserve">
     <value>De week bevat te veel werk tijd ({0}). Max is {1}.</value>
@@ -2950,13 +2950,13 @@ Kolommen</value>
     <value>Campagne ATW %</value>
   </data>
   <data name="CampaignEmailsHandlingtimePercent" xml:space="preserve">
-    <value>Campagne emails verwerkingstijd %</value>
+    <value>Campagne emails AHT%</value>
   </data>
   <data name="CampaignEmailsPercent" xml:space="preserve">
     <value>Campagne emails %</value>
   </data>
   <data name="CampaignFacsimilesHandlingtime" xml:space="preserve">
-    <value>Campagne facsimiles verwerkingstijd %</value>
+    <value>Campagne facsimiles AHT%</value>
   </data>
   <data name="CampaignFacsimilesPercent" xml:space="preserve">
     <value>Campagne facsimiles %</value>
@@ -2983,7 +2983,7 @@ Kolommen</value>
     <value>Index facsimiles</value>
   </data>
   <data name="IndexHandlingTime" xml:space="preserve">
-    <value>Index verwerkingstijd</value>
+    <value>Index AHT</value>
   </data>
   <data name="Tasks" xml:space="preserve">
     <value>Taken</value>
@@ -3004,7 +3004,7 @@ Kolommen</value>
     <value>Gemiddelde emails</value>
   </data>
   <data name="AverageHandlingTime" xml:space="preserve">
-    <value>Gemiddelde verwerkingstijd</value>
+    <value>Gemiddelde AHT</value>
   </data>
   <data name="OriginalAEW" xml:space="preserve">
     <value>Origineel AEW</value>
@@ -3016,7 +3016,7 @@ Kolommen</value>
     <value>Origineel ATW</value>
   </data>
   <data name="OriginalHandlingTime" xml:space="preserve">
-    <value>Origineel verwerkingstijd</value>
+    <value>Originele AHT</value>
   </data>
   <data name="OriginalOfferedEmails" xml:space="preserve">
     <value>Origineel aangeboden emails</value>
@@ -3034,7 +3034,7 @@ Kolommen</value>
     <value>Gevalideerde facsimiles</value>
   </data>
   <data name="ValidatedHandlingTime" xml:space="preserve">
-    <value>Gevalideerde verwerkingstijd</value>
+    <value>Gevalideerde AHT</value>
   </data>
   <data name="ShiftCreatorValidationErrorMessage" xml:space="preserve">
     <value>Grid bevat ongeldige data</value>
@@ -3094,7 +3094,7 @@ Kolommen</value>
     <value>Skill Voorbereiden</value>
   </data>
   <data name="ApplicationLogon" xml:space="preserve">
-    <value>Applicatie logon</value>
+    <value>Applicatie gebruikersnaam</value>
   </data>
   <data name="InitializingTreeDots" xml:space="preserve">
     <value>Initialiseren</value>
@@ -3133,7 +3133,7 @@ Kolommen</value>
     <value>Wijzig naam en wachtwoord</value>
   </data>
   <data name="OpenPermissionPage" xml:space="preserve">
-    <value>Permissies</value>
+    <value>Permissie</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
     <value>Open Teleopti WFM</value>
@@ -3197,7 +3197,7 @@ Accounts</value>
     <value>Drempels</value>
   </data>
   <data name="Agent" xml:space="preserve">
-    <value>Agent</value>
+    <value>Medewerker</value>
   </data>
   <data name="AutomaticUpdate" xml:space="preserve">
     <value>Automatische update</value>
@@ -3218,7 +3218,7 @@ Accounts</value>
     <value>Afgewezen</value>
   </data>
   <data name="Pending" xml:space="preserve">
-    <value>Hangende</value>
+    <value>in behandeling</value>
   </data>
   <data name="RequestType" xml:space="preserve">
     <value>Aanvraag type</value>
@@ -3233,13 +3233,13 @@ Accounts</value>
     <value>Status</value>
   </data>
   <data name="ActualAgents" xml:space="preserve">
-    <value>Actuele agenten</value>
+    <value>Actuele medewerkers</value>
   </data>
   <data name="ActualHandlingTime" xml:space="preserve">
-    <value>Actuele verwerkingstijd</value>
+    <value>Actuele AHT</value>
   </data>
   <data name="ActualTalkTime" xml:space="preserve">
-    <value>Actuele spreektijd</value>
+    <value>Actuele gesprekstijd</value>
   </data>
   <data name="AverageSpeedOfAnswer" xml:space="preserve">
     <value>Gemiddelde snelheid van antwoord</value>
@@ -3281,7 +3281,7 @@ Accounts</value>
     <value>Kolom</value>
   </data>
   <data name="Deny" xml:space="preserve">
-    <value>Ontkennen</value>
+    <value>Afwijzen</value>
   </data>
   <data name="HandleRequests" xml:space="preserve">
     <value>Aanvragen afhandelen</value>
@@ -3356,13 +3356,13 @@ Accounts</value>
     <value>Nieuwe toestand groep</value>
   </data>
   <data name="RealTimeAdherence" xml:space="preserve">
-    <value>Real Time Rooster opvolging</value>
+    <value>Real Time adherence</value>
   </data>
   <data name="SetAsDefaultStateGroup" xml:space="preserve">
     <value>Ingesteld als standaard toestand groep</value>
   </data>
   <data name="StateGroupAvailableDescription" xml:space="preserve">
-    <value>(agenten zijn beschikbaar voor telefoongesprekken te nemen)</value>
+    <value>(medewerkers zijn beschikbaar voor telefoongesprekken te nemen)</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>&lt;Leeg&gt;</value>
@@ -3382,7 +3382,7 @@ goedkeuren</value>
   </data>
   <data name="ReplyAndDeny" xml:space="preserve">
     <value>Beantwoorden en
-ontkennen</value>
+afwijzen</value>
   </data>
   <data name="Site" xml:space="preserve">
     <value>Site</value>
@@ -3632,7 +3632,7 @@ Standaard</value>
     <value>Bent U zeker dat U van de groep '{0}' wilt verwijderen?</value>
   </data>
   <data name="LoadingRealTimeAdherenceDataThreeDots" xml:space="preserve">
-    <value>Loading real time Rooster opvolging data...</value>
+    <value>ophalen real time adherence data...</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDefinitionSet" xml:space="preserve">
     <value>Bent U zeker dat '{0}' wilt verwijderen?</value>
@@ -3788,7 +3788,7 @@ Standaard</value>
     <value>Beschikbaarheden konden niet geladen worden. Er zijn zeker geen beschikbaarheden in de database.</value>
   </data>
   <data name="Adherence" xml:space="preserve">
-    <value>Rooster opvolging</value>
+    <value>adherence </value>
   </data>
   <data name="InvalidAgentName" xml:space="preserve">
     <value>Ongeldige Naam</value>
@@ -3917,7 +3917,7 @@ Standaard</value>
     <value>Tijd</value>
   </data>
   <data name="State" xml:space="preserve">
-    <value>Staat</value>
+    <value>Status</value>
   </data>
   <data name="TargetTime" xml:space="preserve">
     <value>Tijd</value>
@@ -3989,7 +3989,7 @@ Standaard</value>
     <value>Shrinkage (%)</value>
   </data>
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
-    <value>De RTA staat groepen moeten eerst geconfigureerd worden.</value>
+    <value>De RTA statusgroepen moeten eerst geconfigureerd worden.</value>
   </data>
   <data name="Success" xml:space="preserve">
     <value>Succes</value>
@@ -4058,7 +4058,7 @@ Standaard</value>
     <value>Totaal:</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>Totaal van Rooster opvolging:</value>
+    <value>out of adherence:</value>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
     <value>Opslaan als Scenario</value>
@@ -4426,10 +4426,10 @@ Nieuwe Multiplicator</value>
     <value>Beheer Alarm Typen</value>
   </data>
   <data name="StateGroups" xml:space="preserve">
-    <value>Staat Groepen</value>
+    <value>Status Groepen</value>
   </data>
   <data name="StateGroupsAndStates" xml:space="preserve">
-    <value>Staat Groepen en Staten</value>
+    <value>status Groepen en Statussen</value>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
     <value>VERBETEREN</value>
@@ -4489,7 +4489,7 @@ Nieuwe Multiplicator</value>
     <value>Load</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>Afwezigheid Tijd per Agent</value>
+    <value>Afwezigheid Tijd per medewerker</value>
   </data>
   <data name="Answered" xml:space="preserve">
     <value>Beantwoord</value>
@@ -4558,7 +4558,7 @@ Nieuwe Multiplicator</value>
     <value>Wijzig Persoon beperking</value>
   </data>
   <data name="NoStateGroupPresent" xml:space="preserve">
-    <value>Geen staat groep aanwezig</value>
+    <value>Geen statusgroep groep aanwezig</value>
   </data>
   <data name="DateAlreadyExists" xml:space="preserve">
     <value>Datum bestaat al</value>
@@ -4585,7 +4585,7 @@ Nieuwe Multiplicator</value>
     <value>Standaard segment lengte</value>
   </data>
   <data name="AdherenceReportCalculation" xml:space="preserve">
-    <value>Rooster opvolging Berekening</value>
+    <value>adherence Berekening</value>
   </data>
   <data name="SelectDates" xml:space="preserve">
     <value>Selecteer datums</value>
@@ -4696,10 +4696,10 @@ Weekdag</value>
     <value>Uurlijkse Beschikbaarheid Vervulling</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>Rooster opvolging per Agent</value>
+    <value>adherence per Agent</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
-    <value>Rooster opvolging per Dag</value>
+    <value>Adherence per Dag</value>
   </data>
   <data name="DataHasBeenDeleted" xml:space="preserve">
     <value>Error bij het opslaan van uw wijzigingen. De meest mogelijke reden is dat U of een andere user de data die U heeft ingesteld verwijderd heeft. Om gegevensconsistentie te bewaren, wordt het formulier gesloten. Sorry, Uw wijzigingen zijn verloren.</value>
@@ -5146,10 +5146,10 @@ Teleopti R &amp; D</value>
     <value>Verbeteren</value>
   </data>
   <data name="ScheduleAnalysis" xml:space="preserve">
-    <value>Rooster Analysis</value>
+    <value>Rooster Analyse</value>
   </data>
   <data name="ServiceLevelAnalysis" xml:space="preserve">
-    <value>Service Level Analysis</value>
+    <value>Service Level Analyse</value>
   </data>
   <data name="OptimizingDaysOff" xml:space="preserve">
     <value>Optimaliseren van vrije dagen</value>
@@ -5316,7 +5316,7 @@ Als deze validatie error nog steeds optreedt moet u controleren of uw wachtwoord
     <value>De week heeft niet de gestipuleerde ({0}) wekelijkse rusttijd. </value>
   </data>
   <data name="ActiveAgentsInUseColon" xml:space="preserve">
-    <value>Actieve agenten in gebruik: </value>
+    <value>Actieve medewerkers in gebruik: </value>
   </data>
   <data name="OptimizingShiftLengths" xml:space="preserve">
     <value>Optimaliseren van dienst lengten</value>
@@ -5687,7 +5687,7 @@ Periode</value>
     <value>Alle Must Have</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Activiteit Tijd per Agent</value>
+    <value>Activiteit Tijd per medewerker</value>
   </data>
   <data name="ProficiencyPercent" xml:space="preserve">
     <value>Proficiency (%)</value>
@@ -5948,7 +5948,7 @@ Periode</value>
     <value>Running background job...</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Aanvragen per Agent</value>
+    <value>Aanvragen per medewerker</value>
   </data>
   <data name="TargetValue" xml:space="preserve">
     <value>Target Value</value>
@@ -6074,7 +6074,7 @@ Periode</value>
     <value>Moet vervulling hebben</value>
   </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
-    <value>Actuele after call work tijd</value>
+    <value>Actuele nawerktijd</value>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
     <value>Voorkeur vervulling</value>
@@ -6107,10 +6107,10 @@ Periode</value>
     <value>Volle Dag</value>
   </data>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
-    <value>U moet {0} vrije dagen hebben.</value>
+    <value>U dient {0} vrije dagen te hebben.</value>
   </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
-    <value>U moet tussen {0} en {1} vrije dagen hebben.</value>
+    <value>U dient tussen {0} en {1} vrije dagen te hebben.</value>
   </data>
   <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
     <value>Uw voorkeuren kunnen in {0} vrije dagen resulteren .</value>
@@ -6122,10 +6122,10 @@ Periode</value>
     <value>Uw voorkeuren kunnen in {0} tot {1} uren resulteren .</value>
   </data>
   <data name="YouShouldWorkXHours" xml:space="preserve">
-    <value>U moet {0} uren werken.</value>
+    <value>U dient {0} uren werken.</value>
   </data>
   <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
-    <value>U zou {0}  tot {1} uren moeten werken.</value>
+    <value>U dient {0} tot {1} uren werken.</value>
   </data>
   <data name="MissingAbsenceType" xml:space="preserve">
     <value>Ontbrekende afwezigheid type.</value>
@@ -6245,7 +6245,7 @@ Periode</value>
     <value>U heeft geen toestemming voor toegang tot de webportal te hebben.</value>
   </data>
   <data name="NotWorking" xml:space="preserve">
-    <value>Het werkt niet.</value>
+    <value>Niet aan het werk.</value>
   </data>
   <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
     <value>Maand 7-8</value>
@@ -6458,7 +6458,7 @@ Periode</value>
     <value>Skill activiteit:</value>
   </data>
   <data name="ManageStateGroupsAndStates" xml:space="preserve">
-    <value>Beheer Staat Groepen en Staten</value>
+    <value>Beheer status Groepen en statussen</value>
   </data>
   <data name="EnterSettingsForScenario" xml:space="preserve">
     <value>Voer de instellingen voor scenario</value>
@@ -6521,7 +6521,7 @@ Periode</value>
     <value>MyReport</value>
   </data>
   <data name="ActiveAgents" xml:space="preserve">
-    <value>Actieve Agenten</value>
+    <value>Actieve medewerkers</value>
   </data>
   <data name="NoPeriodPresent" xml:space="preserve">
     <value>Geen aanwezig periode</value>
@@ -6537,5 +6537,395 @@ Periode</value>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
     <value>Rooster moet herladen worden</value>
+  </data>
+  <data name="DetailView" xml:space="preserve">
+    <value>Gedetaileerd overzicht</value>
+  </data>
+  <data name="AddOptionalColumn" xml:space="preserve">
+    <value>Voeg optionele kolom toe</value>
+  </data>
+  <data name="ChangeOptionalColumn" xml:space="preserve">
+    <value>Wijzig optionele kolom</value>
+  </data>
+  <data name="IsFullDayAbsence" xml:space="preserve">
+    <value>Volledige dag afwezig</value>
+  </data>
+  <data name="InvalidCredential" xml:space="preserve">
+    <value>Verkeerde gebruikersnaam of wachtwoord. Probeer het opnieuw</value>
+  </data>
+  <data name="ItemsSelectedParameter" xml:space="preserve">
+    <value>{0} items geselecteerd</value>
+  </data>
+  <data name="LockAll" xml:space="preserve">
+    <value>Blokkeer alles</value>
+  </data>
+  <data name="ManageTemplate" xml:space="preserve">
+    <value>Beheer template</value>
+  </data>
+  <data name="MoreDoubleArrow" xml:space="preserve">
+    <value>Meer &gt;&gt;</value>
+  </data>
+  <data name="MoreThanColon" xml:space="preserve">
+    <value>&amp;Meer dan:</value>
+  </data>
+  <data name="MoveLeft" xml:space="preserve">
+    <value>Naar links Verplaatsen</value>
+  </data>
+  <data name="MoveRight" xml:space="preserve">
+    <value>Naar rechts Verplaatsen</value>
+  </data>
+  <data name="MyLanguage" xml:space="preserve">
+    <value>Mijn Taal</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>Nieuwe Skill</value>
+  </data>
+  <data name="OccupancySettings" xml:space="preserve">
+    <value>Bezettingsgraad instellingen</value>
+  </data>
+  <data name="OriginalAfterCallWork" xml:space="preserve">
+    <value>Originele nawerktijd</value>
+  </data>
+  <data name="OriginalCalls" xml:space="preserve">
+    <value>Origineel aangeboden calls</value>
+  </data>
+  <data name="OriginalTasks" xml:space="preserve">
+    <value>Originele taken</value>
+  </data>
+  <data name="OverlappningShifts" xml:space="preserve">
+    <value>Overlappende diensten</value>
+  </data>
+  <data name="PageSetup" xml:space="preserve">
+    <value>Pagina setup</value>
+  </data>
+  <data name="PasswordsDoNotMatch" xml:space="preserve">
+    <value>Wachtwoorden komen niet overeen</value>
+  </data>
+  <data name="PasswordSettings" xml:space="preserve">
+    <value>Wachtwoord instellingen</value>
+  </data>
+  <data name="PasteAssignment" xml:space="preserve">
+    <value>Plak Dienst</value>
+  </data>
+  <data name="PeopleAdminScreen" xml:space="preserve">
+    <value>Personen</value>
+  </data>
+  <data name="PeriodView" xml:space="preserve">
+    <value>Periode overzicht</value>
+  </data>
+  <data name="PersonalizeYourAgentPortal" xml:space="preserve">
+    <value>Pesonaliseer MyTime</value>
+  </data>
+  <data name="PlanDayOffs" xml:space="preserve">
+    <value>Plan vrije dagen</value>
+  </data>
+  <data name="QuestionSaveChanges" xml:space="preserve">
+    <value>Wijzigingen opslaan?</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Accuratesse</value>
+  </data>
+  <data name="ResultView" xml:space="preserve">
+    <value>Resultaat overzicht</value>
+  </data>
+  <data name="RollingPeriod" xml:space="preserve">
+    <value>Rolling Periode</value>
+  </data>
+  <data name="ScheduleDescripton" xml:space="preserve">
+    <value>Rooster beschrijving</value>
+  </data>
+  <data name="ScheduleSelected" xml:space="preserve">
+    <value>Rooster geselecteerd</value>
+  </data>
+  <data name="ScheduleViews" xml:space="preserve">
+    <value>Roosteroverzicht</value>
+  </data>
+  <data name="SchedulingScreen" xml:space="preserve">
+    <value>Rooster scherm</value>
+  </data>
+  <data name="SelectedExceptions" xml:space="preserve">
+    <value>Geselecteerde uitzonderingen</value>
+  </data>
+  <data name="SetPassword" xml:space="preserve">
+    <value>Wachtwoord instellen</value>
+  </data>
+  <data name="ShowAbsence" xml:space="preserve">
+    <value>Toon afwezigheid</value>
+  </data>
+  <data name="ShowMainShift" xml:space="preserve">
+    <value>Toon dienst</value>
+  </data>
+  <data name="ShowNextShift" xml:space="preserve">
+    <value>Toon volgende dienst</value>
+  </data>
+  <data name="ShowPersonalShifts" xml:space="preserve">
+    <value>Toon persoonlijke dienst</value>
+  </data>
+  <data name="ShowPreviousShift" xml:space="preserve">
+    <value>Toon vorige dienst</value>
+  </data>
+  <data name="SixMinutes" xml:space="preserve">
+    <value>6 minunten</value>
+  </data>
+  <data name="SixtyMinutes" xml:space="preserve">
+    <value>60 minuten</value>
+  </data>
+  <data name="SpecialTemplates" xml:space="preserve">
+    <value>Speciale templates</value>
+  </data>
+  <data name="StandardColors" xml:space="preserve">
+    <value>Standaard kleuren</value>
+  </data>
+  <data name="StartSegment" xml:space="preserve">
+    <value>Start segment</value>
+  </data>
+  <data name="SummaryView" xml:space="preserve">
+    <value>Overzicht</value>
+  </data>
+  <data name="TenMinutes" xml:space="preserve">
+    <value>10 minuten</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minunten</value>
+  </data>
+  <data name="ValidatedAfterCallWork" xml:space="preserve">
+    <value>Gevalideerde nawerktijd</value>
+  </data>
+  <data name="Visual" xml:space="preserve">
+    <value>visueel</value>
+  </data>
+  <data name="WeeklyView" xml:space="preserve">
+    <value>weekoverzicht</value>
+  </data>
+  <data name="YouHaveUnsavedDataDoYouWantToCloseAnyWay" xml:space="preserve">
+    <value>wil je de wijzigingen in het rooster opslaan?</value>
+  </data>
+  <data name="RequestDate" xml:space="preserve">
+    <value>Aanvraag datum</value>
+  </data>
+  <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
+    <value>Je dient minimaal {0} uur te werken. Op dit moment ben je tussen {1} en {2} uur beschikbaar</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>Starttijd dient later ter zijn dan de eindtijd</value>
+  </data>
+  <data name="YouShouldHaveDaysOffParameterDotYouHaveParameterDot" xml:space="preserve">
+    <value>Je dient  {0}  vrije dagen te hebben, op dit mo
+ment heb je er {1}.</value>
+  </data>
+  <data name="YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot" xml:space="preserve">
+    <value>Je dient {0}  uur te werken. Jouw voorkeuren resulteren in {1} tot {2} uur.</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>Je dient minimaal één dag te kiezen.</value>
+  </data>
+  <data name="MustHaveCapitalized" xml:space="preserve">
+    <value>Must have</value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>Zoeken op naam</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Mijn Rooster</value>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>Toekomstige verzoeken</value>
+  </data>
+  <data name="SortByUpdateDate" xml:space="preserve">
+    <value>Laatst bijgewerkt</value>
+  </data>
+  <data name="SortByStartDate" xml:space="preserve">
+    <value>Startdatum:</value>
+  </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>Alle aanvragen</value>
+  </data>
+  <data name="AbsenceType" xml:space="preserve">
+    <value>Soort afwezigheid:</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Afzender:</value>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>Stap 1:</value>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>Stap 2:</value>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>Download en Insalleer de Teleopti WFM app door op de juiste knop te klikken, of de QR code hieronder te scannen</value>
+  </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>Start de app en scan de QR code of voer de volgende tekst op.</value>
+  </data>
+  <data name="TeleoptiMobileApp" xml:space="preserve">
+    <value>Mobiele App</value>
+  </data>
+  <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
+    <value>[achternaam] [voornaam]</value>
+  </data>
+  <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
+    <value>[voornaam] [achternaam]</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>Geen medewerkers beschikbaar om mee te ruilen</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Dienst ruil plaats</value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>Biedt dienst aan voor ruiling</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>Geen dienst gevonden die overeenkomt met jouw dienst</value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>ik wil een dienst die aan de volgende eisen voldoet</value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>aanbod is geldig tot</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>Nieuwe template naam</value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>Verwijder Must have</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>Voeg Musthave toe</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Log uit</value>
+  </data>
+  <data name="RequestStatusDtoPending" xml:space="preserve">
+    <value>in behandeling</value>
+  </data>
+  <data name="RequestStatusPending" xml:space="preserve">
+    <value>in behandeling</value>
+  </data>
+  <data name="AverageAfterCallWork" xml:space="preserve">
+    <value>Gemiddelde nawerktijd</value>
+  </data>
+  <data name="IndexAfterCallWork" xml:space="preserve">
+    <value>index nawerktijd</value>
+  </data>
+  <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
+    <value>Gebruik de teleopti app om deze QR code te scannen</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Volgende activiteit ({0}) start om
+ {1}</value>
+  </data>
+  <data name="FilterTeamSchedules" xml:space="preserve">
+    <value>Filter team roosters</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>Geen berichten in inbox</value>
+  </data>
+  <data name="AgentDescription" xml:space="preserve">
+    <value>medewerker beschrijving</value>
+  </data>
+  <data name="AbsenceCannotBeTraded" xml:space="preserve">
+    <value>Dagen met afwezigheid kunnen niet worden geruild</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>selecteer een datum</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>geef een eindtijd op</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>geef een starttijd op</value>
+  </data>
+  <data name="RequestList" xml:space="preserve">
+    <value>aanvragen lijst</value>
+  </data>
+  <data name="SelectSkillGroup" xml:space="preserve">
+    <value>Selecteer skillgroep</value>
+  </data>
+  <data name="ManageSkillGroups" xml:space="preserve">
+    <value>beheer skillgroups</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Selecteer organisatie</value>
+  </data>
+  <data name="ShowStaffing" xml:space="preserve">
+    <value>bezetting weergeven</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>Alleen absenties weergeven</value>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>waarschuwingen weergeven</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Navigeren</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>gebruikersvoorkeuren</value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>donker thema</value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>minder fel</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Feedback geven</value>
+  </data>
+  <data name="TotalAgentsInAlarm" xml:space="preserve">
+    <value>aantal medewerkers in alarm</value>
+  </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>Medewerkers in alarm</value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>in Alarm</value>
+  </data>
+  <data name="InAlarmInSite" xml:space="preserve">
+    <value>in alarm per vestiging</value>
+  </data>
+  <data name="TimeInAlarm" xml:space="preserve">
+    <value>tijd in alarm</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>Tijd adherence</value>
+  </data>
+  <data name="TimeInState" xml:space="preserve">
+    <value>tijd in status</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>tijd in status per medewerker</value>
+  </data>
+  <data name="WebStaffing" xml:space="preserve">
+    <value>Bezetting</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="CreatedOn" xml:space="preserve">
+    <value>aangemaakt op</value>
+  </data>
+  <data name="CreateInfo" xml:space="preserve">
+    <value>aangemaakt door: {0}
+aangemaakt op: {1}</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>geef weer in mijn tijdzone</value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>geef weer in tijdzone aanvrager</value>
+  </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>{0} teams geselecteerd</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>filter weergeven</value>
+  </data>
+  <data name="AccessManagement" xml:space="preserve">
+    <value>Toegang beheer</value>
+  </data>
+  <data name="LoginNameColon" xml:space="preserve">
+    <value>gebruikersnaam</value>
   </data>
 </root>

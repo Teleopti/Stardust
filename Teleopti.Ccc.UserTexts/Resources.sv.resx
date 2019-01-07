@@ -15902,9 +15902,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>Något gick fel. Var god och försök igen senare. </value>
   </data>
-  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
-    <value>Ändringslogg</value>
-  </data>
   <data name="FilterTeamSchedules" xml:space="preserve">
     <value>Filtrera teamscheman</value>
   </data>
@@ -16018,5 +16015,62 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="HelpCreatePlanningPeriod" xml:space="preserve">
     <value>En planeringsperiod krävs för att schemalägga agenterna. </value>
+  </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>Systeminställningar</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>Allmänna inställningar</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bekräfta</value>
+  </data>
+  <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
+    <value>Du har ändrat det här skiftet. Vill du stänga och förlora ändringarna?</value>
+  </data>
+  <data name="PasswordPolicyError" xml:space="preserve">
+    <value>Lösenordspolicyfel</value>
+  </data>
+  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort denna helgdagskalender?</value>
+  </data>
+  <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort år {0} från kalender {1}?</value>
+  </data>
+  <data name="BankHolidayCalendarHasBeenSuccessfullyDeleted" xml:space="preserve">
+    <value>Helgdagskalendern {0} har tagits bort. </value>
+  </data>
+  <data name="BankHolidayCalendars" xml:space="preserve">
+    <value>Helgdagskalendrar</value>
+  </data>
+  <data name="DeleteThisYear" xml:space="preserve">
+    <value>Ta bort detta år</value>
+  </data>
+  <data name="NameAlreadyExisting" xml:space="preserve">
+    <value>Namnet används redan</value>
+  </data>
+  <data name="NewCalendarName" xml:space="preserve">
+    <value>Nytt kalendernamn</value>
+  </data>
+  <data name="AddANewYear" xml:space="preserve">
+    <value>Lägg till ett nytt år</value>
+  </data>
+  <data name="ThisCalendarHasNoDatesAdded" xml:space="preserve">
+    <value>Den här kalendern har inga tillagda datum</value>
+  </data>
+  <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">
+    <value>Inga helgdagar har angivits för detta år. Välj en dag i kalendern för att lägga till en helgdag. </value>
+  </data>
+  <data name="BankHoliday" xml:space="preserve">
+    <value>Helgdag</value>
+  </data>
+  <data name="NoBankHolidays" xml:space="preserve">
+    <value>Inga helgdagar</value>
+  </data>
+  <data name="AddNewBankHolidayCalendar" xml:space="preserve">
+    <value>Lägg till ny helgdagskalender</value>
+  </data>
+  <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
+    <value>Ett fel inträffade. Var god kontrollera nätverksanslutningen och prova igen. Om detta fortsätter att hända, kontakta administratören. </value>
   </data>
 </root>

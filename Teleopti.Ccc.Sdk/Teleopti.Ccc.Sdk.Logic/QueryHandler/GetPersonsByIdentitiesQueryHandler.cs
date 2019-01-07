@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -13,14 +12,14 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetPersonsByIdentitiesQueryHandler : IHandleQuery<GetPersonsByIdentitiesQueryDto, ICollection<PersonDto>>
 	{
-		private readonly IAssembler<IPerson, PersonDto> _assembler;
+		private readonly PersonCredentialsAppender _credentialsAppender;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ITenantLogonDataManager _tenantLogonDataManager;
 
-		public GetPersonsByIdentitiesQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantLogonDataManager tenantLogonDataManager)
+		public GetPersonsByIdentitiesQueryHandler(PersonCredentialsAppender credentialsAppender, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantLogonDataManager tenantLogonDataManager)
 		{
-			_assembler = assembler;
+			_credentialsAppender = credentialsAppender;
 			_personRepository = personRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_tenantLogonDataManager = tenantLogonDataManager;
@@ -33,13 +32,11 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
-					var memberList = new List<IPerson>();
 					var logonInfos = _tenantLogonDataManager.GetLogonInfoForIdentities(query.Identities).ToList();
 					if (!logonInfos.Any())
 						return new PersonDto[] { };
-					var foundPersons = _personRepository.FindPeople(logonInfos.Select(li => li.PersonId));
-					memberList.AddRange(foundPersons);
-					return _assembler.DomainEntitiesToDtos(memberList).ToList();
+					var foundPersons = _personRepository.FindPeople(logonInfos.Select(li => li.PersonId)).ToArray();
+					return _credentialsAppender.Convert(foundPersons).ToList();
 				}
 			}
 		}

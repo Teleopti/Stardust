@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
 {
     public class SortBySeniorityRankingCommandBase
     {
-	    private readonly ISchedulerStateHolder _schedulerState;
+	    private readonly SchedulingScreenState _schedulerState;
 
-		public SortBySeniorityRankingCommandBase(ISchedulerStateHolder schedulerState)
+		public SortBySeniorityRankingCommandBase(SchedulingScreenState schedulerState)
 	    {
 		    _schedulerState = schedulerState;
 	    }
@@ -24,16 +24,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortin
 
 		private IEnumerable<IPerson> extractPersonListFromScheduler()
 		{
-			return _schedulerState.FilteredAgentsDictionary.Values.ToList();
+			return _schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Values.ToList();
 		}
 
 		private void writeBackSortedListsToScheduler(IEnumerable<IPerson> personList)
         {
-			_schedulerState.FilteredAgentsDictionary.Clear();
+			_schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Clear();
 			foreach (var person in personList)
 			{
 				if (person.Id != null)
-					_schedulerState.FilteredAgentsDictionary.Add(person.Id.Value, person);
+					_schedulerState.SchedulerStateHolder.FilteredAgentsDictionary.Add(person.Id.Value, person);
 			}
         }
     }

@@ -32,12 +32,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		private readonly IOvertimeRequestAvailability _overtimeRequestLicense;
 		private readonly IShiftTradeRequestAvailability _shiftTradeRequestLicense;
 		private readonly IAuthorization _authorization;
+		private readonly IAgentScheduleViewModelProvider _agentScheduleViewModelProvider;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			IRequestCommandHandlingProvider commandHandlingProvider,
 			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider, 
 			IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense, IShiftTradeRequestAvailability shiftTradeRequestLicense,
-			IAuthorization authorization)
+			IAuthorization authorization, IAgentScheduleViewModelProvider agentScheduleViewModelProvider)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			_overtimeRequestLicense = overtimeRequestLicense;
 			_shiftTradeRequestLicense = shiftTradeRequestLicense;
 			_authorization = authorization;
+			_agentScheduleViewModelProvider = agentScheduleViewModelProvider;
 		}
 
 		[HttpPost, Route("api/Requests/requests"), UnitOfWork]
@@ -66,6 +68,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		public virtual RequestListViewModel<OvertimeRequestViewModel> GetOvertimeRequests([FromBody]AllRequestsFormData input)
 		{
 			return _requestsViewModelFactory.CreateOvertimeRequestListViewModel(input);
+		}
+
+		[HttpPost, Route("api/Requests/shiftTradeRequestSchedules"), UnitOfWork]
+		public virtual ShiftTradeSchedulesViewModel GetShiftTradeSchedules([FromBody]ShiftTradeScheduleForm input)
+		{
+			return _agentScheduleViewModelProvider.GetShiftTradeSchedulesViewModel(input);
 		}
 
 		[HttpPost, Route("api/Requests/approveRequests"), UnitOfWork]

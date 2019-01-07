@@ -56,6 +56,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			SignInApplication(userName, "wrong password");
 		}
 
+		[When(@"I sign in by username '(.*)' and password '(.*)'")]
+		public void WhenISignInByUserNameAnPassword(string username, string password)
+		{
+			SignInApplication(username, password);
+		}
+
 		[When(@"I select business unit '(.*)'")]
 		public void WhenISelectBusinessUnit(string businessUnit)
 		{

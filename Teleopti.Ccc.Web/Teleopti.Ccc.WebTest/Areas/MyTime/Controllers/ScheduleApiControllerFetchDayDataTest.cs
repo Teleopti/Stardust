@@ -494,6 +494,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldHaveEvaluatedPeriods()
+		{
+			var date = new DateOnly(2014, 12, 15);
+			var start = new TimeSpan(12, 0, 0);
+			var end = new TimeSpan(13, 0, 0);
+			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), date, start, end);
+			ScheduleData.Add(overtimeAvailability);
+
+			Target.FetchDayData(date).Schedule.Periods.GetType().Should().Be.EqualTo<PeriodViewModel[]>();
+		}
+
+		[Test]
 		public void ShouldCreateOvernightOvertimeAvailabilityPeriodViewModelCorrectlyOnFetchDayData()
 		{
 			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();

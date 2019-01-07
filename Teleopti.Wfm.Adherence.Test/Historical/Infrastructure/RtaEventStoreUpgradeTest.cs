@@ -3,17 +3,15 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Events;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
@@ -76,7 +74,24 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 					.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-10-31".Date());
 			}
 		}
+		
+		[Test]
+		public void ShouldUpdateWhenNoStoreVersion()
+		{
+			var dataSource = DataSource.Current();
+			var person = Guid.NewGuid();
+			WithUnitOfWork.Do(() => { EventsT.AddWithoutStoreVersion(new PersonStateChangedEvent {PersonId = person, Timestamp = "2018-12-13 08:00".Utc()}, DeadLockVictim.No); });
+			Context.Logout();
 
+			using (DataSourceScope.OnThisThreadUse(dataSource))
+			{
+				Target.Upgrade();
+
+				WithUnitOfWork.Get(() => EventsT.LoadAllForTest())
+					.OfType<PersonStateChangedEvent>().Single().BelongsToDate.Should().Be("2018-12-13".Date());
+			}
+		}		
+		
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();

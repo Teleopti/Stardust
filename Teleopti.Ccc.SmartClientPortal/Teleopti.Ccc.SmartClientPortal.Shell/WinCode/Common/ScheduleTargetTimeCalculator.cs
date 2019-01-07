@@ -9,22 +9,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
 	public class ScheduleTargetTimeCalculator : IScheduleTargetTimeCalculator
 	{
-		private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly IScheduleDictionary _schedules;
 		private readonly IPerson _person;
 		private readonly DateOnlyPeriod _dateOnlyPeriod;
 
 		public ScheduleTargetTimeCalculator(
-            ISchedulerStateHolder schedulerStateHolder, 
+            IScheduleDictionary schedules, 
             IPerson person, 
             DateOnlyPeriod dateOnlyPeriod)
 		{
-			if (schedulerStateHolder == null)
-				throw new ArgumentNullException("schedulerStateHolder");
+			if (schedules == null)
+				throw new ArgumentNullException("schedules");
 
 			if (person == null)
 				throw new ArgumentNullException("person");
 
-			_schedulerStateHolder = schedulerStateHolder;
+			_schedules = schedules;
 			_person = person;
 			_dateOnlyPeriod = dateOnlyPeriod;
 		}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             var fullWeekOuterWeekPeriodCreator = 
                 new FullWeekOuterWeekPeriodCreator(_dateOnlyPeriod, _person);
 			var matrix = 
-                new ScheduleMatrixPro(_schedulerStateHolder.SchedulingResultState, fullWeekOuterWeekPeriodCreator, virtualSchedulePeriod);
+                new ScheduleMatrixPro(_schedules, fullWeekOuterWeekPeriodCreator, virtualSchedulePeriod);
 			var schedulePeriodTargetCalculatorFactory = 
                 new NewSchedulePeriodTargetCalculatorFactory(matrix);
 			var schedulePeriodTargetCalculator = 

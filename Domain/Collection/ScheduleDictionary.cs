@@ -179,6 +179,17 @@ namespace Teleopti.Ccc.Domain.Collection
 			return ret;
 		}
 
+		public bool AnyDifferenceSinceSnapshotInVisiblePeriod()
+		{
+			foreach (var range in _dictionary.Values)
+			{
+				if (range.DifferenceSinceSnapshot(_differenceCollectionService,
+					Period.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc)).Any())
+					return true;
+			}
+			return false;
+		}
+
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
 		{
 			_dictionary.Values.ForEach(scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, period));

@@ -292,17 +292,17 @@ var rtaTester = (function () {
 			state.lastNotice = undefined;
 		});
 
-		var bagOfCandy = controllerName == 'RtaAgentsController74770';
+		var bagOfCandy = controllerName == 'RtaAgentsController78568';
 		injectTester(state, tests, bagOfCandy);
 	};
 
 	function setupByDescription(description, tests) {
 		if (description === 'RtaOverviewController')
-			setup(tests, '', 'RtaOverviewController74770');
+			setup(tests, '', 'RtaOverviewController78568');
 		if (description === 'RtaAgentsController')
-			setup(tests, '', 'RtaAgentsController74770');
+			setup(tests, '', 'RtaAgentsController78568');
 		if (description === 'RtaHistoricalController')
-			setup(tests, 'rta-historical', 'RtaHistoricalController76470');
+			setup(tests, 'rta-historical', 'RtaHistoricalController77045');
 		if (description === 'RtaTracerController')
 			setup(tests, '', 'RtaTracerController');
 		if (description === 'RtaHistoricalOverviewController')

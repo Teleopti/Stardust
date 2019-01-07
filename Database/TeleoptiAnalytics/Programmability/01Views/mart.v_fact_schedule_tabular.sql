@@ -10,7 +10,5 @@ FROM            mart.fact_schedule AS f INNER JOIN
                          mart.dim_date AS d ON b.local_date_id = d.date_id INNER JOIN
                          mart.dim_interval AS i ON b.local_interval_id = i.interval_id INNER JOIN
                          mart.dim_time_zone AS tz ON tz.time_zone_id = b.time_zone_id
-WHERE        (tz.time_zone_id =
-                             (SELECT        TOP (1) b.time_zone_id
-                               WHERE        (tz.default_zone = 1)))
+WHERE        (tz.time_zone_code COLLATE DATABASE_DEFAULT = (SELECT LTRIM(RTRIM([value])) AS 'TimeZoneCodeInsights' FROM mart.sys_configuration WHERE [key]='TimeZoneCodeInsights'))
 GO

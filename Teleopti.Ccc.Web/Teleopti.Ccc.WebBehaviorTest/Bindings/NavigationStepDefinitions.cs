@@ -396,6 +396,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I view Real time adherence sites")]
+		[When(@"I monitor organization adherence")]
 		public void WhenIViewRealTimeAdherenceSites()
 		{
 			TestControllerMethods.Logon();
@@ -671,6 +672,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		[Given(@"I view real time adherence for all agents on entire Bu")]
 		[When(@"I view real time adherence for all agents on entire Bu")]
+		[When(@"I monitor agents adherence")]
 		public void WhenIViewRealTimeAdherenceForAllAgentsOnEntireBu()
 		{
 			TestControllerMethods.Logon();

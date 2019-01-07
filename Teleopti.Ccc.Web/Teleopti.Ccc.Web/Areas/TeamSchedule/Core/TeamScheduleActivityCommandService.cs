@@ -140,7 +140,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var actionResult = new ActionResult(personId);
 				var person = people[personId].SingleOrDefault();
 
-				var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+				var currentUser = _loggedOnUser.CurrentUser();
+				var userTimezone = currentUser.PermissionInformation.DefaultTimeZone();
 				var startDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.StartDateTime, userTimezone);
 				var endDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.EndDateTime, userTimezone);
 
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						Period = new DateTimePeriod(startDateTimeUtc, endDateTimeUtc),
 						MultiplicatorDefinitionSetId = input.MultiplicatorDefinitionSetId,
 						TrackedCommandInfo =
-							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = currentUser.Id.Value }
 					};
 					_commandDispatcher.Execute(command);
 					if (command.ErrorMessages != null && command.ErrorMessages.Any())
@@ -216,7 +217,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public List<ActionResult> MoveActivity(MoveActivityFormData input)
 		{
-			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var currentUser = _loggedOnUser.CurrentUser();
+			var userTimezone = currentUser.PermissionInformation.DefaultTimeZone();
 			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.StartTime, userTimezone);
 			var result = new List<ActionResult>();
 
@@ -259,7 +261,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 									ShiftLayerId = pl.Key,
 									TrackedCommandInfo =
 										input.TrackedCommandInfo ??
-										new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault() }
+										new TrackedCommandInfo { OperatedPersonId = currentUser.Id.GetValueOrDefault() }
 								};
 								_commandDispatcher.Execute(command);
 								if (command.ErrorMessages != null && command.ErrorMessages.Any())
@@ -284,7 +286,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public IList<ActionResult> MoveShift(MoveShiftForm input)
 		{
-			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var currentUser = _loggedOnUser.CurrentUser();
+			var userTimezone = currentUser.PermissionInformation.DefaultTimeZone();
 			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.NewShiftStart, userTimezone);
 			var result = new List<ActionResult>();
 
@@ -304,7 +307,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					ScheduleDate = input.Date,
 					NewStartTimeInUtc = newStartTimeInUtc,
 					TrackedCommandInfo =
-						input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+						input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = currentUser.Id.Value }
 				};
 				_commandDispatcher.Execute(command);
 				if (command.ErrorMessages != null && command.ErrorMessages.Any())

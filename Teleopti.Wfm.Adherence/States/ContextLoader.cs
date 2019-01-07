@@ -215,15 +215,14 @@ namespace Teleopti.Wfm.Adherence.States
 							)
 						)
 						.Select(x => _processor.Process(x))
-						.Where(x => x.Processed)
-						.Select(x =>
-						{
-							_agentStatePersister.Update(x.State);
-							return x;
-						})
 						.SelectMany(x =>
 						{
-							_tracer.StateProcessed(x.TraceLog, x.Events);
+							if (x.Processed)
+							{
+								_agentStatePersister.Update(x.State);
+								_tracer.StateProcessed(x.TraceLog, x.Events);
+							}
+
 							return x.Events;
 						})
 						.ToArray()

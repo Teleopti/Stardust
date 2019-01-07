@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -431,5 +432,41 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ViewModels.AgentStateViewMode
 
 			agentState.Single().StateId.Should().Be(phone);
 		}
+		
+		[Test]
+		[SetCulture("fi-FI")]
+		public void ShouldBuildWithInvariantCultureDateFormat()
+		{
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				TeamId = teamId,
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2018-12-12 07:40".Utc(),
+						EndTime = "2018-12-12 08:00".Utc()
+					}
+				},
+				Shift = new[]
+				{
+					new AgentStateActivityReadModel
+					{
+						StartTime = "2018-12-12 08:00:00".Utc(),
+						EndTime = "2018-12-12 17:00:00".Utc()
+					}
+				}
+			});
+			Now.Is("2018-12-12 08:00");
+
+			var model = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single();
+
+			model.OutOfAdherences.Single().StartTime.Should().Be("2018-12-12T07:40:00");
+			model.OutOfAdherences.Single().EndTime.Should().Be("2018-12-12T08:00:00");
+			model.Shift.Single().StartTime.Should().Be("2018-12-12T08:00:00");
+			model.Shift.Single().EndTime.Should().Be("2018-12-12T17:00:00");
+		}		
 	}
 }

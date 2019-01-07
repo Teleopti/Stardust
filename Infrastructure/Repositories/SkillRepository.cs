@@ -160,7 +160,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IMultisiteSkill LoadMultisiteSkill(ISkill skill)
         {
-            var workloadIds = getWorkloadIds(skill);
+			var childSkills = DetachedCriteria.For<Skill>()
+				.Add(Restrictions.Eq("Id", skill.Id.GetValueOrDefault())).Fetch("ChildSkills");
+			var childSkillsSubQuery = DetachedCriteria.For<Skill>()
+				.Add(Restrictions.Eq("ParentSkill", skill))
+				.SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
+			var childSkillsDetail = getChildSkillDetail(childSkillsSubQuery);
+			Session.CreateQueryBatch().Add<Skill>(childSkills).Add<Skill>(childSkillsDetail).Execute();
+
+			var workloadIds = getWorkloadIds(skill);
             var workloads = getWorkloads(skill);
             var queues = getQueues(workloadIds);
             var templateIds = getWorkloadDayTemplateIds(workloadIds);
@@ -190,14 +198,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Fetch("Distribution")
                 .SetResultTransformer(Transformers.DistinctRootEntity);
 
-            var childSkills = DetachedCriteria.For<Skill>()
-                .Add(Restrictions.Eq("Id", skill.Id.GetValueOrDefault())).Fetch("ChildSkills");
-            var childSkillsSubQuery = DetachedCriteria.For<Skill>()
-                .Add(Restrictions.Eq("ParentSkill", skill))
-                .SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
-            var childSkillsDetail = getChildSkillDetail(childSkillsSubQuery);
-
-            var multiCriteria =
+          var multiCriteria =
                 Session.CreateQueryBatch().Add<Skill>(workloads).Add<Workload>(queues).Add<Workload>(templates).Add<WorkloadDayBase>(openhours).
                     Add<WorkloadDayBase>(taskPeriods).Add<Skill>(multisiteDayTemplates).Add<MultisiteDayTemplate>(templateMultisitePeriods).Add<TemplateMultisitePeriod>(distributions)
 					.Add<Skill>(childSkills).Add<Skill>(childSkillsDetail).Add<Skill>(getSkillDetail(skill));

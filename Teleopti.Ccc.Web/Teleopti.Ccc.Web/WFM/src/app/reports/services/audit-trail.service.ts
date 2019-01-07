@@ -1,7 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { flatMap, map, switchMap } from 'rxjs/operators';
 import { Person, AuditEntry } from '../../shared/types';
 
 export interface PersonByKeyWordResponse {
@@ -22,9 +21,9 @@ export class AuditTrailService {
 		return response as Observable<PersonByKeyWordResponse>;
 	}
 
-	getStaffingAuditTrail(personId: string, startDate: string, endDate: string): Observable<AuditTrailsResponse> {
+	getStaffingAuditTrail(personId: string, startDate: string, endDate: string, searchword: string): Observable<AuditTrailsResponse> {
 		const response = this.http.get(
-			'../api/Reports/getauditlogs?personId=' + personId + '&startDate=' + startDate + '&endDate=' + endDate
+			'../api/Reports/getauditlogs?personId=' + personId + '&startDate=' + startDate + '&endDate=' + endDate + '&searchword=' + searchword
 		);
 		return response as Observable<AuditTrailsResponse>;
 	}

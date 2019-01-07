@@ -13,12 +13,11 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Global.Core;
-
 
 namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 {
-
 	[TestFixture, DomainTest, FakePermissions]
 	public class GroupPageViewModelFactoryTest : IIsolateSystem, IExtendSystem
 	{
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			PersonRepository.Add(person);
 			OptionalColumnRepository.AddPersonValues(valueForTest);
 			OptionalColumnRepository.AddPersonValues(valueForNoGroup);
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var gps = result.GroupPages;
 
@@ -87,14 +86,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			OptionalColumnRepository.AddPersonValues(valueForAnother);
 
 			PersonRepository.Add(person);
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var gps = result.GroupPages;
 
 			gps.Single().Name.Should().Be.EqualTo(optionalColumnWithValue.Name);
 			gps.Single().Children.Single().Name.Should().Be.EqualTo(valueForAnother.Description);
 		}
-
+		
 		[Test]
 		public void ShouldNotReturnAvailableDynamicOptionalColumnGroupPageWithValuesReferingToDeletedPersonOnly()
 		{
@@ -117,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			PersonRepository.Add(person);
 			PersonRepository.Add(personDeleted);
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var gps = result.GroupPages;
 
@@ -165,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			TeamRepository.Add(team);
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var orgs = result.BusinessHierarchy.ToList();
 			var gp = result.GroupPages[0];
@@ -177,6 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			gpChildren.Count.Should().Be.EqualTo(1);
 			gpChildren.Single().Id.Should().Be.EqualTo(team.Id);
 		}
+
 		[Test]
 		public void ShouldReturnSortedGroupPages()
 		{
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			TeamRepository.Add(team3);
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var orgs = result.BusinessHierarchy;
 			var gps = result.GroupPages;
@@ -285,6 +285,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			gp1.Name.Should().Be.EqualTo("Skill");
 			childGroupsForGroupPage1[0].Name.Should().Be.EqualTo("ASkill");
 			childGroupsForGroupPage1[1].Name.Should().Be.EqualTo("Email");
+		}
+
+		[Test]
+		public void ShouldReturnNoGroupPagesIfLogonUserHasNoPermissionAfterTurnOnPermissionCheck()
+		{
+			PermissionProvider.Enable();
+
+			var mainPage = new ReadOnlyGroupPage()
+			{
+				PageName = "Main",
+				PageId = Group.PageMainId
+			};
+
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var team1 = TeamFactory.CreateTeam("Team1", "Site1").WithId();
+			team1.Site.WithId(siteId);
+
+			var groups = new[]
+			{
+				new ReadOnlyGroup
+				{
+					PageId = mainPage.PageId,
+					PageName = mainPage.PageName,
+					GroupName = team1.SiteAndTeam,
+					SiteId = siteId,
+					TeamId =  team1.Id.Value,
+					GroupId = team1.Id.GetValueOrDefault(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			TeamRepository.Add(team1);
+			GroupingReadOnlyRepository.Has(groups);
+
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var orgs = result.BusinessHierarchy;
+			orgs.Length.Should().Be.EqualTo(0);
 		}
 
 		[Test, SetUICulture("sv-SE")]
@@ -315,7 +353,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var gps = result.GroupPages;
 			var gp0 = gps[0];
@@ -431,7 +469,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			GroupingReadOnlyRepository.Has(groupDetails);
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var ogs = result.BusinessHierarchy;
 			var childrenForFirstSite = ogs[0].Children;
@@ -509,12 +547,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 				BusinessUnitId = businessUnitId
 			});
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var orgs = result.BusinessHierarchy;
-			orgs.Single().Name.Should().Be.EqualTo("site1");
-			orgs.Single().Id.Should().Be.EqualTo(site1Id);
-			orgs.Single().Children.Count.Should().Be.EqualTo(1);
+			orgs.First().Name.Should().Be.EqualTo("site1");
+			orgs.First().Id.Should().Be.EqualTo(site1Id);
+			orgs.First().Children.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -559,7 +597,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 				BusinessUnitId = businessUnitId
 			});
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 			result.BusinessHierarchy.Length.Should().Be.EqualTo(0);
 		}
 
@@ -608,7 +646,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			};
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var gps = result.GroupPages;
 			var gp0 = gps[0];
@@ -660,7 +698,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 				BusinessUnitId = businessUnitId
 			});
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			result.LogonUserTeamId.Should().Be.EqualTo(team.Id);
 		}
@@ -705,7 +743,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			TeamRepository.Add(team);
 			GroupingReadOnlyRepository.Has(groups);
 
-			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModelWithPermissionCheck(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var orgs = result.BusinessHierarchy.ToList();
 			var gp = result.GroupPages[0];
@@ -715,7 +753,194 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		
 		}
 
+		[Test]
+		public void ShouldReturnAvailableGroupPages()
+		{
+			var mainPage = new ReadOnlyGroupPage()
+			{
+				PageName = "Main",
+				PageId = Group.PageMainId
+			};
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageName = "Skill",
+				PageId = Guid.NewGuid()
+			};
+			var businessUnitId = Guid.NewGuid();
+			var team = TeamFactory.CreateTeam("team1", "site1").WithId();
+			team.Site.WithId();
+			var groups = new[]
+			{
+				new ReadOnlyGroup
+				{
+					PageId = mainPage.PageId,
+					PageName = mainPage.PageName,
+					GroupName = team.SiteAndTeam,
+					SiteId = team.Site.Id.Value,
+					TeamId =  team.Id.Value,
+					GroupId = team.Id.GetValueOrDefault(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroup
+				{
+					PageId = groupPage.PageId,
+					PageName = groupPage.PageName,
+					GroupName = "Email",
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			TeamRepository.Add(team);
+			GroupingReadOnlyRepository.Has(groups);
 
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+
+			var orgs = result.BusinessHierarchy.ToList();
+			var gp = result.GroupPages[0];
+			var gpChildren = orgs[0].Children;
+			orgs.Count.Should().Be.EqualTo(1);
+			orgs[0].Name.Should().Be.EqualTo("site1");
+			orgs[0].Id.Should().Be.EqualTo(team.Site.Id);
+			gp.Name.Should().Be.EqualTo(groupPage.PageName);
+			gpChildren.Count.Should().Be.EqualTo(1);
+			gpChildren.Single().Id.Should().Be.EqualTo(team.Id);
+		}
+
+		[Test]
+		public void ShouldReturnMyTeamAsDefaultGroup()
+		{
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageName = "Skill",
+				PageId = Guid.NewGuid()
+			};
+			var businessUnitId = Guid.NewGuid();
+			var team = TeamFactory.CreateTeam("team1", "site1").WithId();
+			team.Site.WithId();
+			var groups = new[]
+			{
+				new ReadOnlyGroup
+				{
+					PageId = groupPage.PageId,
+					PageName = groupPage.PageName,
+					GroupName = "Email",
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			TeamRepository.Add(team);
+			GroupingReadOnlyRepository.Has(groups);
+
+			var me = PersonFactory.CreatePerson("me").WithId();
+			me.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
+
+			LoggedOnUser.SetFakeLoggedOnUser(me);
+
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+
+			result.LogonUserTeamId.Should().Be.EqualTo(team.Id);
+		}
+
+		[Test]
+		public void ShouldReturnNoDefaultGroupIfIHaveNoTeam()
+		{
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageName = "Skill",
+				PageId = Guid.NewGuid()
+			};
+			var businessUnitId = Guid.NewGuid();
+			var team = TeamFactory.CreateTeam("team1", "site1").WithId();
+			team.Site.WithId();
+			var groups = new[]
+			{
+				new ReadOnlyGroup
+				{
+					PageId = groupPage.PageId,
+					PageName = groupPage.PageName,
+					GroupName = "Email",
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			TeamRepository.Add(team);
+			GroupingReadOnlyRepository.Has(groups);
+
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+
+			result.LogonUserTeamId.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldReplaceGroupPageNameFromResourceMangerIfItStartsWithXx()
+		{
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageName = "xxMain",
+				PageId = Guid.NewGuid()
+			};
+			var businessUnitId = Guid.NewGuid();
+			var team = TeamFactory.CreateTeam("team1", "site1").WithId();
+			team.Site.WithId();
+			var groups = new[]
+			{
+				new ReadOnlyGroup
+				{
+					PageId = groupPage.PageId,
+					PageName = groupPage.PageName,
+					GroupName = "Email",
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			TeamRepository.Add(team);
+			GroupingReadOnlyRepository.Has(groups);
+
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+
+			result.GroupPages[0].Name.Should().Be.EqualTo(Resources.ResourceManager.GetString(groupPage.PageName.Substring(2)));
+		}
+
+		[Test]
+		public void ShouldOrderBuildInGroupPageByName()
+		{
+			var groupPageC = new ReadOnlyGroupPage
+			{
+				PageName = "C group",
+				PageId = Guid.NewGuid()
+			};
+
+			var groupPageB = new ReadOnlyGroupPage
+			{
+				PageName = "B group",
+				PageId = Guid.NewGuid()
+			};
+			var businessUnitId = Guid.NewGuid();
+			var groups = new[]
+			{
+				new ReadOnlyGroup
+				{
+					PageId = groupPageC.PageId,
+					PageName = groupPageC.PageName,
+					GroupName = "Team green A",
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroup
+				{
+					PageId = groupPageB.PageId,
+					PageName = groupPageB.PageName,
+					GroupName = "Team green B",
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			GroupingReadOnlyRepository.Has(groups);
+
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+
+			result.GroupPages[0].Name.Should().Be.EqualTo(groupPageB.PageName);
+			result.GroupPages[1].Name.Should().Be.EqualTo(groupPageC.PageName);
+		}
 	}
-
 }

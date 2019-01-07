@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import moment, { Moment } from 'moment';
-import { IntradayTrafficData, IntradayPerformanceData, Skill } from '../types';
+import { IntradayPerformanceData, IntradayTrafficData, Skill } from '../types';
 
 @Injectable()
 export class IntradayFakeDataService {

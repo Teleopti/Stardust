@@ -1,4 +1,4 @@
-﻿<div ng-if="!vm.isLoading && vm.budgetGroups.length > 0" class="requests-allowance-header">
+<div ng-if="!vm.isLoading && vm.budgetGroups.length > 0" class="requests-allowance-header">
 	<wfm-date-picker ng-model="vm.selectedDate" show-week="true" popup-mode="true" on-date-change="vm.selectedDateChanged(vm.selectedDate)"></wfm-date-picker>
 	<md-select class="pull-left" ng-model="vm.selectedBudgetGroupId" ng-change="vm.loadBudgetAllowance()" placeholder="{{'SelectABudgetGroupThreeDots'|translate}}">
 		<md-option ng-repeat="group in vm.budgetGroups" ng-value="group.Id">

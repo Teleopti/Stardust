@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		[HttpPost, Route("api/Gamification/LoadSites"), UnitOfWork]
 		public virtual IEnumerable<SelectOptionItem> GetAllSites()
 		{
-			return _siteViewModelFactory.CreateSiteOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.Gamification);
+			return _siteViewModelFactory.CreateSiteOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.Gamification).ToArray();
 		}
 
 		[HttpPost, Route("api/Gamification/LoadTeamGamification"), UnitOfWork]

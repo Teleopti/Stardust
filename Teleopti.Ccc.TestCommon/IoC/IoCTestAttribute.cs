@@ -127,6 +127,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var configuration = new IocConfiguration(args, toggles);
 
 			extend.AddModule(new CommonModule(configuration));
+			extend.AddModule(new DataFactoryModule());
+			extend.AddModule(new ServiceLocatorForFakesModule());
 
 			Extend(extend, configuration);
 			QueryAllExtensions<IExtendSystem>()

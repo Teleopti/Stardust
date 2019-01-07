@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				DefinedRaptorApplicationFunctionForeignIds.WebEditSiteOpenHours);
 			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Connect_NewLandingPage_WEB_78578,
 				DefinedRaptorApplicationFunctionForeignIds.ViewCustomerCenter);
+			hideAppFunctionWithToggleOff(functions, Toggles.WFM_Setting_BankHolidayCalendar_Create_79297,
+				DefinedRaptorApplicationFunctionForeignIds.SystemSetting);
 
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.BpoExchange);
 			hideIfNotLicensed(functions, DefinedRaptorApplicationFunctionForeignIds.ChatBot);
@@ -61,6 +63,9 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		{
 			hideAppFunctionWithToggleOff(functions, Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125,
 				DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
+
+			hideAppFunctionWithToggleOff(functions, Toggles.Wfm_AuditTrail_GenericAuditTrail_74938, DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
+
 			hideAppFunctionWithToggleOn(functions, Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 				DefinedRaptorApplicationFunctionForeignIds.ScheduleTimeVersusTargetTimeReport);
 

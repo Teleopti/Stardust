@@ -1,13 +1,13 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -132,7 +132,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<OvertimeRequestPersister>().As<IOvertimeRequestPersister>();
 			builder.RegisterType<ShiftTradeRequestProvider>().As<IShiftTradeRequestProvider>().SingleInstance();
 			builder.RegisterType<RespondToShiftTrade>().As<IRespondToShiftTrade>();
-			builder.RegisterType<WebPersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
 			builder.RegisterType<ShiftTradePeriodViewModelMapper>().As<IShiftTradePeriodViewModelMapper>();
 			builder.RegisterType<ShiftTradeRequestMapper>().As<IShiftTradeRequestMapper>();
 			builder.RegisterType<PossibleShiftTradePersonsProvider>().As<IPossibleShiftTradePersonsProvider>();
@@ -149,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 				.As<IRequestsShiftTradeBulletinViewModelFactory>()
 				.SingleInstance();
 			builder.RegisterType<RequestsShiftTradeScheduleViewModelFactory>()
-				.As<IRequestsShiftTradeScheduleViewModelFactory>()
+				.AsSelf()
 				.SingleInstance();
 			builder.RegisterType<ShiftExchangeOffer>().As<IShiftExchangeOffer>().SingleInstance();
 			builder.RegisterType<ShiftExchangeOfferMapper>().As<IShiftExchangeOfferMapper>().SingleInstance();
@@ -204,7 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferencePersister>().As<IPreferencePersister>();
 			builder.RegisterType<MustHaveRestrictionSetter>().As<IMustHaveRestrictionSetter>();
 			builder.RegisterType<MustHaveRestrictionProvider>().As<IMustHaveRestrictionProvider>();
-			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>().SingleInstance();
+			builder.RegisterType<PreferenceFeedbackProvider>().AsSelf().SingleInstance();
 			builder.RegisterType<PreferencePeriodFeedbackProvider>().As<IPreferencePeriodFeedbackProvider>().SingleInstance();
 			builder.RegisterType<WorkTimeMinMaxRestrictionCreator>().As<IWorkTimeMinMaxRestrictionCreator>();
 			builder.RegisterType<EffectiveRestrictionForDisplayCreator>().As<IEffectiveRestrictionForDisplayCreator>();
@@ -257,7 +256,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ScheduleWeekMinMaxTimeCalculator>().As<IScheduleWeekMinMaxTimeCalculator>().SingleInstance();
 			builder.RegisterType<ScheduleDayMinMaxTimeCalculator>().As<IScheduleDayMinMaxTimeCalculator>().SingleInstance();
 			builder.RegisterType<SiteOpenHourProvider>().As<ISiteOpenHourProvider>().SingleInstance();
-			builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
+
+			if (_config.Toggle(Toggles.WFM_ProbabilityView_ImproveResponseTime_80040))
+			{
+				builder.RegisterType<ScheduledSkillOpenHourProviderOptimized>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
+			}
+
+
 			builder.RegisterType<IntradayScheduleEdgeTimeCalculator>().As<IIntradayScheduleEdgeTimeCalculator>();
 		}
 

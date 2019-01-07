@@ -2,15 +2,11 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Ccc.TestCommon.FakeData;
-
-
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 {
@@ -22,7 +18,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		private ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
 		private ICachedShiftCategoryDistribution _cachedShiftCategoryDistribution;
-		private ISchedulerStateHolder _schedulerStateHolder;
 		private bool _chartUpdateNeeded;
 
 	    [SetUp]
@@ -32,9 +27,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			_cachedNumberOfEachCategoryPerPerson = _mocks.StrictMock<ICachedNumberOfEachCategoryPerPerson>();
 			_cachedNumberOfEachCategoryPerDate = _mocks.StrictMock<ICachedNumberOfEachCategoryPerDate>();
 			_cachedShiftCategoryDistribution = _mocks.StrictMock<ICachedShiftCategoryDistribution>();
-			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
 			_target = new ShiftCategoryDistributionModel(_cachedShiftCategoryDistribution, _cachedNumberOfEachCategoryPerDate, _cachedNumberOfEachCategoryPerPerson,
-														 new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder);
+														 new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), new CommonNameDescriptionSetting());
 			_target.ChartUpdateNeeded += targetChartUpdateNeeded;
 		}
 
@@ -54,7 +48,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			{
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons)).Repeat.AtLeastOnce();
 				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons)).Repeat.AtLeastOnce();
-				Expect.Call(_schedulerStateHolder.CommonNameDescription).Return(new CommonNameDescriptionSetting()).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -196,7 +189,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(dic).Repeat.AtLeastOnce();
-				Expect.Call(_schedulerStateHolder.CommonNameDescription).Return(new CommonNameDescriptionSetting()).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())

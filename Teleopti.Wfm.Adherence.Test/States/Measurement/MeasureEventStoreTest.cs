@@ -12,8 +12,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.States.Events;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Measurement

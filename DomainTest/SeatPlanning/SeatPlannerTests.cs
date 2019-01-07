@@ -211,9 +211,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[0]).Seat.Should().Be(childLocations[1].Seats[0]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[1]).Seat.Should().Be(childLocations[1].Seats[1]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[2]).Seat.Should().Be(childLocations[0].Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[0])[0].Seat.Should().Be(childLocations[1].Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[1])[0].Seat.Should().Be(childLocations[1].Seats[1]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[2])[0].Seat.Should().Be(childLocations[0].Seats[0]);
 		}
 
 		[Test]
@@ -271,12 +271,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[0]).Seat.Should().Be(childLocations[1].Seats[0]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[1]).Seat.Should().Be(childLocations[1].Seats[1]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[2]).Seat.Should().Be(childLocations[0].Seats[0]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[3]).Seat.Should().Be(childLocations[0].Seats[1]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[4]).Seat.Should().Be(childLocations[0].Seats[2]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnly, people[5]).Seat.Should().Be(childLocations[0].Seats[3]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[0])[0].Seat.Should().Be(childLocations[1].Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[1])[0].Seat.Should().Be(childLocations[1].Seats[1]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[2])[0].Seat.Should().Be(childLocations[0].Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[3])[0].Seat.Should().Be(childLocations[0].Seats[1]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[4])[0].Seat.Should().Be(childLocations[0].Seats[2]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnly.ToDateOnlyPeriod(), people[5])[0].Seat.Should().Be(childLocations[0].Seats[3]);
 		}
 
 		[Test]
@@ -346,19 +346,19 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 			
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay1, people[0]).Seat.Should().Be(childLocations[1].Seats[0]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay1, people[1]).Seat.Should().Be(childLocations[1].Seats[1]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay1, people[2]).Seat.Should().Be(childLocations[0].Seats[0]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay1, people[3]).Seat.Should().Be(childLocations[0].Seats[1]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay1, people[4]).Seat.Should().Be(childLocations[0].Seats[2]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay1, people[5]).Seat.Should().Be(childLocations[0].Seats[3]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay1.ToDateOnlyPeriod(), people[0])[0].Seat.Should().Be(childLocations[1].Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay1.ToDateOnlyPeriod(), people[1])[0].Seat.Should().Be(childLocations[1].Seats[1]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay1.ToDateOnlyPeriod(), people[2])[0].Seat.Should().Be(childLocations[0].Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay1.ToDateOnlyPeriod(), people[3])[0].Seat.Should().Be(childLocations[0].Seats[1]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay1.ToDateOnlyPeriod(), people[4])[0].Seat.Should().Be(childLocations[0].Seats[2]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay1.ToDateOnlyPeriod(), people[5])[0].Seat.Should().Be(childLocations[0].Seats[3]);
 
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay2, people[0]).Seat.Should().Be(childLocations[1].Seats[0]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay2, people[1]).Seat.Should().Be(childLocations[1].Seats[1]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay2, people[2]).Seat.Should().Be(childLocations[0].Seats[0]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay2, people[3]).Seat.Should().Be(childLocations[0].Seats[1]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay2, people[4]).Seat.Should().Be(childLocations[0].Seats[2]);
-			SeatBookingRepository.LoadSeatBookingForPerson(startDateOnlyDay2, people[5]).Seat.Should().Be(childLocations[0].Seats[3]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay2.ToDateOnlyPeriod(), people[0])[0].Seat.Should().Be(childLocations[1].Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay2.ToDateOnlyPeriod(), people[1])[0].Seat.Should().Be(childLocations[1].Seats[1]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay2.ToDateOnlyPeriod(), people[2])[0].Seat.Should().Be(childLocations[0].Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay2.ToDateOnlyPeriod(), people[3])[0].Seat.Should().Be(childLocations[0].Seats[1]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay2.ToDateOnlyPeriod(), people[4])[0].Seat.Should().Be(childLocations[0].Seats[2]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDateOnlyDay2.ToDateOnlyPeriod(), people[5])[0].Seat.Should().Be(childLocations[0].Seats[3]);
 		}
 
 		[Test]
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var team = addTeam("Team");
 			var teams = new[] { team };
-			var assignmentEndDateTime = new DateTime(endDate.Year, endDate.Month, endDate.Day, 13, 00, 00, DateTimeKind.Utc);
+			var assignmentEndDateTime = endDate.Date.AddHours(13);
 
 			var people = new[]
 			{
@@ -393,11 +393,11 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 
-			SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), people[1])
+			SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(startDate).ToDateOnlyPeriod(), people[1])[0]
 				.Seat.Should()
 				.Be(seatMapLocation.Seats.First());
 
-			Assert.IsTrue(SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), people[0]) == null);
+			Assert.IsEmpty(SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(startDate).ToDateOnlyPeriod(), people[0]));
 		}
 
 		[Test]
@@ -422,7 +422,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var childLocation = addLocation("ChildLocation", null, new Seat("Seat 1", 1));
 			addLocation("RootLocation", new[] { childLocation }, null);
 
-			var assignmentEndDateTime = new DateTime(endDate.Year, endDate.Month, endDate.Day, 13, 00, 00, DateTimeKind.Utc);
+			var assignmentEndDateTime = endDate.Date.AddHours(13);
 
 
 			addSeatBooking(people[0], startDate, startDate, assignmentEndDateTime, childLocation.Seats[0]);
@@ -434,10 +434,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 			
-			SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), people[0])
+			SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(startDate).ToDateOnlyPeriod(), people[0])[0]
 				.Seat.Should().Be(childLocation.Seats[0]);
 
-			Assert.IsNull(SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), people[1]));
+			Assert.IsEmpty(SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(startDate).ToDateOnlyPeriod(), people[1]));
 		}
 
 		[Test]
@@ -468,7 +468,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				dateOnlyPeriod, null, null);
 			
 			SeatBookingRepository.CountAllEntities().Should().Be(1);
-			var booking = SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
+			var booking = SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date).ToDateOnlyPeriod(), person)[0];
 			booking.Seat.Should().Be(seatMapLocation.Seats.First());
 			booking.EndDateTime.Should().Be(date.AddHours(8));
 		}
@@ -504,9 +504,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				dateOnlyPeriod, null, null);
 
 
-			SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date.AddDays(-1)), people[1])
+			SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date.AddDays(-1)).ToDateOnlyPeriod(), people[1])[0]
 				.Seat.Should().Be(seatMapLocation.Seats[0]);
-			Assert.IsTrue(SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), people[0]) == null);
+			Assert.IsEmpty(SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date).ToDateOnlyPeriod(), people[0]));
 		}
 
 		[Test]
@@ -540,10 +540,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 
-			SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date.AddDays(-1)), people[1])
+			SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date.AddDays(-1)).ToDateOnlyPeriod(), people[1])[0]
 				.Seat.Should().Be(seatMapLocation.Seats[0]);
 
-			SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), people[0])
+			SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date).ToDateOnlyPeriod(), people[0])[0]
 				.Seat.Should().Be(seatMapLocation.Seats[0]);
 		}
 
@@ -576,8 +576,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 
-			Assert.That(SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDateTime), people[0]) == null);
-			Assert.That(SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDateTime), people[1]) != null);
+			Assert.IsEmpty(SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(startDateTime).ToDateOnlyPeriod(), people[0]));
+			Assert.IsNotEmpty(SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(startDateTime).ToDateOnlyPeriod(), people[1]));
 		}
 
 		[Test]
@@ -616,7 +616,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 			
-			SeatBookingRepository.LoadSeatBookingForPerson(startDate, people[0]).Seat.Should().Be(location.Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDate.ToDateOnlyPeriod(), people[0])[0].Seat.Should().Be(location.Seats[0]);
 
 			Assert.IsTrue(SeatBookingRepository.LoadSeatBookingsForDay(startDate).Count == 3);
 			Assert.IsFalse(SeatBookingRepository.LoadSeatBookingsForDay(startDate.AddDays(1)).Any());
@@ -627,7 +627,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				getTeamGuids(teams),
 				dateOnlyPeriod, null, null);
 
-			SeatBookingRepository.LoadSeatBookingForPerson(startDate, people[0]).Seat.Should().Be(location.Seats[0]);
+			SeatBookingRepository.LoadSeatBookingsForPerson(startDate.ToDateOnlyPeriod(), people[0])[0].Seat.Should().Be(location.Seats[0]);
 
 			Assert.IsTrue(SeatBookingRepository.LoadSeatBookingsForDay(startDate).Count == 3);
 			Assert.IsTrue(!SeatBookingRepository.LoadSeatBookingsForDay(startDate.AddDays(1)).Any());
@@ -865,10 +865,10 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				new[] { people[0].Id.Value }.ToList());
 			
 			SeatBookingRepository
-				.LoadSeatBookingForPerson(new DateOnly(startDate), people[1])
+				.LoadSeatBookingsForPerson(new DateOnly(startDate).ToDateOnlyPeriod(), people[1])[0]
 				.Seat.Should().Be(seatMapLocation.Seats.First());
 
-			Assert.IsTrue(SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), people[0]) == null);
+			Assert.IsEmpty(SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(startDate).ToDateOnlyPeriod(), people[0]));
 		}
 
 		[Test]
@@ -900,7 +900,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				new[] { person.Id.Value }.ToList());
 
 			SeatBookingRepository.CountAllEntities().Should().Be(1);
-			var booking = SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
+			var booking = SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date).ToDateOnlyPeriod(), person)[0];
 			booking.Seat.Should().Be(seatMapLocation.Seats[1]);
 			booking.EndDateTime.Should().Be(date.AddHours(8));
 		}
@@ -933,9 +933,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				new[] { people[1].Id.Value }.ToList());
 			
 			SeatBookingRepository
-				.LoadSeatBookingForPerson(new DateOnly(date.AddDays(-1)), people[1])
+				.LoadSeatBookingsForPerson(new DateOnly(date.AddDays(-1)).ToDateOnlyPeriod(), people[1])[0]
 				.Seat.Should().Be(seatMapLocation.Seats[0]);
-			Assert.IsTrue(SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), people[0]) == null);
+			Assert.IsEmpty(SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date).ToDateOnlyPeriod(), people[0]));
 		}
 		
 		[Test]
@@ -1039,7 +1039,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				null);
 
 			SeatBookingRepository.CountAllEntities().Should().Be(2);
-			var booking = SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
+			var booking = SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date).ToDateOnlyPeriod(), person)[0];
 			booking.Seat.Should().Be(seatMapLocation.Seats[1]);
 		}
 		
@@ -1069,8 +1069,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				dateOnlyPeriod, null, null);
 
 			SeatBookingRepository.CountAllEntities().Should().Be(0);
-			var booking = SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
-			booking.Should().Be.Null();
+			SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date).ToDateOnlyPeriod(), person).Should().Be.Empty();
 		}
 
 
@@ -1104,8 +1103,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				dateOnlyPeriod, null, null);
 
 			SeatBookingRepository.CountAllEntities().Should().Be(0);
-			var booking = SeatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
-			booking.Should().Be.Null();
+			SeatBookingRepository.LoadSeatBookingsForPerson(new DateOnly(date).ToDateOnlyPeriod(), person).Should().Be.Empty();
 		}
 	}
 }

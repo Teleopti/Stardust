@@ -343,7 +343,7 @@ describe('Wfm date range picker basics', function() {
 
 		expect(vm.pickStartDate).toEqual(vm.pickEndDate);
 		expect(range.length).toEqual(1);
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Days');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1DayLowerCase');
 	});
 
 	it('should be able to auto update new end date while new pick date is equal to start date', function() {
@@ -356,7 +356,7 @@ describe('Wfm date range picker basics', function() {
 
 		expect(vm.pickStartDate).toEqual(vm.pickEndDate);
 		expect(range.length).toEqual(1);
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Days');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1DayLowerCase');
 	});
 
 	it('should automatically set new start date to null after picked start date is later than end date in disabling end date selection mode', function() {
@@ -408,7 +408,7 @@ describe('Wfm date range picker basics', function() {
 		vm.pickDate = moment([2018, 1, 27]);
 		vm.switchDate();
 
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Months');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1MonthLowerCase');
 	});
 
 	it('should be able to [handle February as special case] and understand the interval length between 2018-01-28 to 2018-02-27 is one month', function() {
@@ -424,7 +424,7 @@ describe('Wfm date range picker basics', function() {
 		vm.pickDate = moment([2018, 1, 27]);
 		vm.switchDate();
 
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Months');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1MonthLowerCase');
 	});
 
 	it('should be able to [handle February as special case] and understand the interval length between 2018-02-01 to 2018-02-28 is one month', function() {
@@ -439,7 +439,7 @@ describe('Wfm date range picker basics', function() {
 		vm.pickDate = moment([2018, 1, 28]);
 		vm.switchDate();
 
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Months');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1MonthLowerCase');
 	});
 
 	it('should be able to [handle February as special case] and understand the interval length between 2018-01-16 to 2018-02-15 is one month', function() {
@@ -454,7 +454,7 @@ describe('Wfm date range picker basics', function() {
 		vm.pickDate = moment([2018, 1, 15]);
 		vm.switchDate();
 
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Months');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1MonthLowerCase');
 	});
 
 	it('should be able to [handle February as special case] and understand the interval length between 2018-01-16 to 2018-04-15 is three month', function() {
@@ -470,7 +470,7 @@ describe('Wfm date range picker basics', function() {
 		vm.pickDate = moment([2018, 3, 15]);
 		vm.switchDate();
 
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('3Months');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('3MonthsLowerCase');
 	});
 
 	it('should be able to [handle February as special case in leap year] and understand the interval length between 2020-01-29 to 2020-02-28 is one month', function() {
@@ -487,7 +487,7 @@ describe('Wfm date range picker basics', function() {
 		vm.pickDate = moment([2020, 1, 28]);
 		vm.switchDate();
 
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Months');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1MonthLowerCase');
 	});
 
 	it('should be able to [handle February as special case in leap year] and understand the interval length between 2020-01-31 to 2020-02-28 is one month', function() {
@@ -503,7 +503,7 @@ describe('Wfm date range picker basics', function() {
 		vm.pickDate = moment([2020, 1, 28]);
 		vm.switchDate();
 
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Months');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1MonthLowerCase');
 	});
 
 	it('should be able to [handle February as special case in leap year] and understand the interval length between 2020-02-01 to 2018-02-29 is one month', function() {
@@ -519,7 +519,7 @@ describe('Wfm date range picker basics', function() {
 		vm.pickDate = moment([2020, 1, 29]);
 		vm.switchDate();
 
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1Months');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('1MonthLowerCase');
 	});
 
 	it('should be able to validate date range', function() {

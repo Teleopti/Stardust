@@ -54,6 +54,10 @@ export class ResetPasswordFormComponent {
 		return this.form.get('password');
 	}
 
+	get confirmPasswordControl(): AbstractControl {
+		return this.form.get('confirmPassword');
+	}
+
 	onSubmit(): void {
 		this.form.setErrors({ resetFailed: false });
 		for (const i in this.form.controls) {
@@ -64,7 +68,7 @@ export class ResetPasswordFormComponent {
 		}
 		if (this.isFormValid) {
 			this.resetPasswordService
-				.reset({
+				.resetPassword({
 					ResetToken: this.token,
 					NewPassword: this.passwordControl.value
 				})
@@ -72,8 +76,12 @@ export class ResetPasswordFormComponent {
 					next: () => {
 						this.success.emit(true);
 					},
-					error: () => {
-						this.form.setErrors({ resetFailed: true });
+					error: e => {
+						if (e.indexOf('Error_Policy') !== -1) {
+							this.form.setErrors({ policyError: true });
+						} else {
+							this.form.setErrors({ resetFailed: true });
+						}
 					}
 				});
 		}

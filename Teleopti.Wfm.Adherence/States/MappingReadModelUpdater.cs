@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Wfm.Adherence.Configuration;
-using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.Configuration.Events;
 using Teleopti.Wfm.Adherence.States.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.States
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Adherence.States
 		[AllBusinessUnitsUnitOfWork]
 		public virtual void Handle(UnknownStateCodeReceviedEvent @event)
 		{
-			var stateGroups = _stateGroups.LoadAll().ToLookup(g => g.BusinessUnit.Id.Value);
+			var stateGroups = _stateGroups.LoadAll().ToLookup(g => g.BusinessUnit);
 
 			var existingStateGroup = stateGroups[@event.BusinessUnitId].SingleOrDefault(g => g.StateCollection.Any(s => s.StateCode == @event.StateCode));
 			if (existingStateGroup != null)
@@ -134,7 +134,7 @@ namespace Teleopti.Wfm.Adherence.States
 				select new
 				{
 					g.Id,
-					BusinessUnitId = g.BusinessUnit.Id.Value,
+					BusinessUnitId = g.BusinessUnit.Value,
 					g.Name,
 					IsLoggedOut = g.IsLogOutState,
 					States = g.StateCollection.AsEnumerable()
@@ -197,7 +197,7 @@ namespace Teleopti.Wfm.Adherence.States
 				from c in codes
 				select new
 				{
-					Key = new Tuple<Guid,Guid?,String>(m.BusinessUnit.Id.Value,m.Activity?.Id,c.StateCode),
+					Key = new Tuple<Guid,Guid?,String>(m.BusinessUnit.Value,m.Activity,c.StateCode),
 					Rule = m.RtaRule
 				}).ToLookup(m => m.Key);
 

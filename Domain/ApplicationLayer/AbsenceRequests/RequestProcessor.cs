@@ -68,9 +68,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			try
 			{
+				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
+				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+
+				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
+				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
+
 				var loadSchedulesPeriodToCoverForMidnightShifts = personRequest.Request.Period.ChangeStartTime(TimeSpan.FromDays(-1));
 				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
-				if (personRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistEnabled)
+				if (personRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistEnabled && autoGrant)
 				{
 					var periods = personRequest.Person.PersonPeriods(personRequest.Request.Period.ToDateOnlyPeriod(timeZone));
 					var absenceReqThresh = personRequest.Person.WorkflowControlSet.AbsenceRequestExpiredThreshold.GetValueOrDefault();
@@ -119,13 +125,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var skillIds = combinationResources.SelectMany(s => s.SkillCombination).Distinct().ToArray();
 				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.GetValueOrDefault())).Min(x => x.DefaultResolution);
-
-				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);
-				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
-
-				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
-				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
-
+				
 				var shiftPeriodList = new List<DateTimePeriod>();
 				foreach (var day in scheduleDays)
 				{
@@ -255,10 +255,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
-							var scheduledStaff =
-								scheduledStaffingPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartDateTime == skillStaffPeriod.Period.StartDateTime);
 							skillStaffPeriod.SetCalculatedResource65(0);
-							if(scheduledStaff == null)
+
+							if (!scheduledStaffingPerSkill.Contains(skill.Id.GetValueOrDefault())) continue;
+							var scheduledStaff = scheduledStaffingPerSkill[skill.Id.GetValueOrDefault()]
+								.FirstOrDefault(x => x.StartDateTime == skillStaffPeriod.Period.StartDateTime);
+
+							if (scheduledStaff == null)
 								continue;
 							if (scheduledStaff.StaffingLevel > 0)
 								skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);

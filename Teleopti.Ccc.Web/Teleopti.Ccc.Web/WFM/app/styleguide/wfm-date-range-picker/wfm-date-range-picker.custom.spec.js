@@ -103,7 +103,7 @@ describe('Wfm date range picker custom', function() {
 
 		expect(vm.pickStartDate).toEqual(data.startDate);
 		expect(vm.pickEndDate).toEqual(data.endDate);
-		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('5Weeks1Days');
+		expect(vm.dateRangeText.replace(/\s/g, '')).toEqual('5WeeksLowerCase1DayLowerCase');
 	});
 
 	it('should be able to only allow update end date with a readonly preselected start date', function() {

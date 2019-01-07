@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
 												{
 													AdjustFullDayAbsenceNextDay(item);
 												}
-												
+
 											}
 										}
 										else
@@ -123,38 +123,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
 	    protected static void AdjustFullDayAbsenceNextDay<T>(T part)
 		{
 			var destination = part as IScheduleDay;
-			if (destination == null) return;
-
-			var assignment = destination.PersonAssignment();
-			if (assignment == null) return;
-
-			var dayPeriod = destination.DateOnlyAsPeriod.Period();
-			var nextDay = assignment.Period.EndDateTime > dayPeriod.EndDateTime && assignment.Period.StartDateTime < dayPeriod.EndDateTime;
-
-			if (!nextDay) return;
-
-			IList<IPersonAbsence> allAbsences = new List<IPersonAbsence>(destination.PersonAbsenceCollection());
-			foreach (IPersonAbsence personAbsence in destination.PersonAbsenceCollection())
-			{
-				if(personAbsence.Period.StartDateTime < destination.Period.EndDateTime)
-					destination.Remove(personAbsence);
-			}
-
-			foreach (var personAbsence in allAbsences)
-			{
-				if(personAbsence.Period.StartDateTime >= destination.Period.EndDateTime) continue;
-				var oldLayer = personAbsence.Layer;
-				var oldPeriod = oldLayer.Period;
-
-				var diffEnd = oldPeriod.EndDateTime.Subtract(assignment.Period.EndDateTime);
-				var diffStart = oldPeriod.StartDateTime.Subtract(assignment.Period.StartDateTime);
-				var newPeriod = oldPeriod.ChangeEndTime(-diffEnd);
-				newPeriod = newPeriod.ChangeStartTime(-diffStart);
-
-				IAbsenceLayer newLayer = new AbsenceLayer(oldLayer.Payload, newPeriod);
-				IPersonAbsence newPersonAbsence = new PersonAbsence(personAbsence.Person, destination.Scenario, newLayer);
-				destination.Add(newPersonAbsence);	
-			}
+			destination?.AdjustFullDayAbsenceNextDay(destination);
 		}
 
         //check if we have a full day absence

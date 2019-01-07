@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			Mapper.DynamicMappingsForTestProjects = false;
 			Mapper.StaticMappingsForTestProjects = false;
 		}
-		
+
 		[Test]
 		public void AllNewHandlersShouldBeMapped()
 		{
@@ -136,8 +136,18 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				"Teleopti.Wfm.Adherence.ApplicationLayer.ReadModels.RtaEventStoreMaintainer, Teleopti.Wfm.Adherence",
 			};
 
-			legacyTypes.ForEach(x => { Mapper.TypeForPersistedName(x); });
+			legacyTypes.ForEach(x =>
+			{
+				Mapper.TypeForPersistedName(x)
+					.Should().Not.Be.Null();
+			});
 		}
 
+		[Test]
+		public void ScheduleChangeProcessorPersistedNameShouldWork()
+		{
+			Mapper.TypeForPersistedName("Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service.ScheduleChangeProcessor, Teleopti.Ccc.Domain")
+				.Should().Not.Be.Null();
+		}
 	}
 }

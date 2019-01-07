@@ -478,10 +478,6 @@
     <value>Výpočet servisní úrovně:</value>
     <comment>Service Level Calculation:</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Dodržování plánu</value>
-    <comment>Agent - Schedule Adherence</comment>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Seřadit podle:</value>
     <comment>Sort by:</comment>

@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Cascading;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -440,9 +439,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolvePreferenceFeedbackProvider()
 		{
-			var result1 = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			var result1 = requestContainer.Resolve<PreferenceFeedbackProvider>();
 			result1.Should().Not.Be.Null();
-			var result2 = requestContainer.Resolve<IPreferenceFeedbackProvider>();
+			var result2 = requestContainer.Resolve<PreferenceFeedbackProvider>();
 			result2.Should().Be.SameInstanceAs(result1);
 		}
 

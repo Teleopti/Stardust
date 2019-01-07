@@ -90,12 +90,12 @@
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.14.0\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.15.0\lib\net40\MbCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.14.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.15.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -267,13 +267,11 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>

@@ -1,4 +1,4 @@
-﻿<div class="view-header">
+<div class="view-header">
 	<div class="view-title">
 		<h1>
 			<i class="mdi mdi-account-multiple"></i>
@@ -59,6 +59,13 @@
 		</div>
 
 		<div class="rightside-part">
+			<button type="button" class="context-menu card-context" ng-if="vm.isRefreshButtonVisible" ng-disabled="!vm.havingScheduleChanged" ng-click="vm.onRefreshButtonClicked()">
+				<i class="mdi mdi-refresh"></i>
+				<md-tooltip>
+					{{'Refresh' | translate}}
+				</md-tooltip>
+			</button>
+
 			<div class="context-menu card-context"
 				 ng-if="vm.isExportScheduleEnabled()" ng-click="vm.openExportPanel()">
 				<i class="mdi mdi-file-excel">
@@ -83,7 +90,7 @@
 		<div class="con-row teamschedule-body relative">
 			<div class="big-table-wrapper relative" ng-style="vm.scheduleTableWrapperStyle">
 				<div class="alert-warning notice-spacer" ng-if="vm.isResultTooMany()">
-					<i class='mdi mdi-alert'></i>{{vm.warningMessageForTooManyResults()}}
+					<i class='mdi mdi-alert'></i> {{vm.warningMessageForTooManyResults()}}
 				</div>
 
 				<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
@@ -108,7 +115,6 @@
 			<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">
 				<settings></settings>
 			</md-sidenav>
-
 		</div>
 
 		<div class="teamschedule-footer">

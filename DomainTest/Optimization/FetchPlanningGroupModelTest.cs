@@ -116,7 +116,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			planningGroupModel.Id.Should().Be.EqualTo(planningGroup.Id);
 			planningGroupModel.Name.Should().Be.EqualTo(planningGroup.Name);
 		}
-		
+
+		[Test]
+		public void ShouldFetchPlanningGroupSettings()
+		{
+			var planningGroup = new PlanningGroup().WithId();
+			var planningGroupSettings = new PlanningGroupSettings
+			{
+				Name = "_"
+			};
+			planningGroup.AddSetting(planningGroupSettings);
+			PlanningGroupRepository.Add(planningGroup);
+			
+			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
+			planningGroupModel.Settings.Single(x => x.Default).Name.Should().Be
+				.EqualTo(planningGroup.Settings.Single(x => x.Default).Name);
+			planningGroupModel.Settings.Single(x => !x.Default).Name.Should().Be
+				.EqualTo(planningGroupSettings.Name);
+		}
+
 		[Test]
 		public void ShouldFetchPreferenceValue()
 		{
@@ -125,7 +143,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			PlanningGroupRepository.Add(planningGroup);
 
 			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
-			planningGroupModel.PreferenceValue.Should().Be.EqualTo(planningGroup.Settings.PreferenceValue.Value);
+			planningGroupModel.PreferencePercent.Should().Be
+				.EqualTo(planningGroup.Settings.PreferenceValue.Value * 100);
 		}
 
 		[Test]

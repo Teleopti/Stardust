@@ -364,31 +364,77 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteFullDayAbsence(IScheduleDay source)
 		{
-			IPersonAbsence personAbsenceUpForDelete = null;
+			
 
 			foreach (var personAbsence in PersonAbsenceCollection())
 			{
-				if (Period.Intersect(personAbsence.Layer.Period))
+				IPersonAbsence personAbsenceUpForDelete = null;
+				if (SignificantPart() == SchedulePartView.FullDayAbsence || SignificantPartForDisplay() == SchedulePartView.ContractDayOff && Period.Intersect(personAbsence.Layer.Period) || Period.Contains(personAbsence.Period.StartDateTime))
+				{
 					personAbsenceUpForDelete = personAbsence;
+				}
 
 				if (personAbsenceUpForDelete == null) continue;
 
-				IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
-				var assignment = PersonAssignment();
-				if (assignment?.ShiftCategory != null)
-				{
-					if (assignment.Period != personAbsenceUpForDelete.Period)
-					{
-						personAbsenceUpForDelete.Split(source.Period).ForEach(splitList.Add);
-					}
-				}
-				else
-				{
-					personAbsenceUpForDelete.Split(source.Period).ForEach(splitList.Add);
-				}
-
+				var splitList = new List<IPersonAbsence>();
+				var period = AbsenceSplitPeriod(source);
+				var start = period.StartDateTime;
+				var end = period.EndDateTime;
+				if (personAbsenceUpForDelete.Period.EndDateTime <= start) continue;
+				if (Period.Contains(personAbsence.Period.StartDateTime)) start = source.Period.StartDateTime;
+				personAbsenceUpForDelete.Split(new DateTimePeriod(start, end)).ForEach(splitList.Add);
 				Remove(personAbsenceUpForDelete);
 				splitList.ForEach(Add);
+			}
+		}
+
+		public DateTimePeriod AbsenceSplitPeriod(IScheduleDay scheduleDay)
+		{
+			var dayBefore = Owner[scheduleDay.Person].ScheduledDay(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(-1));
+			var endBefore = dayBefore.PersonAssignment(true).Period.EndDateTime;
+			var assignmentEnd = scheduleDay.PersonAssignment(true).Period.EndDateTime;
+			var end = assignmentEnd < scheduleDay.Period.EndDateTime ? scheduleDay.Period.EndDateTime : assignmentEnd;
+			var start = scheduleDay.Period.StartDateTime > endBefore ? scheduleDay.Period.StartDateTime : endBefore;
+			return new DateTimePeriod(start, end);
+		}
+
+		public void AdjustFullDayAbsenceNextDay(IScheduleDay destination)
+		{
+			var assignment = destination?.PersonAssignment();
+			if (assignment == null) return;
+
+			var dayPeriod = destination.DateOnlyAsPeriod.Period();
+			var nextDay = assignment.Period.EndDateTime > dayPeriod.EndDateTime && assignment.Period.StartDateTime < dayPeriod.EndDateTime;
+
+			if (!nextDay) return;
+
+			IList<IPersonAbsence> allAbsences = new List<IPersonAbsence>(destination.PersonAbsenceCollection());
+			foreach (IPersonAbsence personAbsence in destination.PersonAbsenceCollection())
+			{
+				var period = destination.AbsenceSplitPeriod(destination);
+				if (personAbsence.Period.EndDateTime <= period.StartDateTime) continue;
+
+				if (personAbsence.Period.StartDateTime < destination.Period.EndDateTime)
+					destination.Remove(personAbsence);
+			}
+
+			foreach (var personAbsence in allAbsences)
+			{
+				var period = destination.AbsenceSplitPeriod(destination);
+				if (personAbsence.Period.EndDateTime <= period.StartDateTime) continue;
+
+				if (personAbsence.Period.StartDateTime >= destination.Period.EndDateTime) continue;
+				var oldLayer = personAbsence.Layer;
+				var oldPeriod = oldLayer.Period;
+
+				var diffEnd = oldPeriod.EndDateTime.Subtract(assignment.Period.EndDateTime);
+				var diffStart = oldPeriod.StartDateTime.Subtract(assignment.Period.StartDateTime);
+				var newPeriod = oldPeriod.ChangeEndTime(-diffEnd);
+				newPeriod = newPeriod.ChangeStartTime(-diffStart);
+
+				IAbsenceLayer newLayer = new AbsenceLayer(oldLayer.Payload, newPeriod);
+				IPersonAbsence newPersonAbsence = new PersonAbsence(personAbsence.Person, destination.Scenario, newLayer);
+				destination.Add(newPersonAbsence);
 			}
 		}
 
@@ -518,7 +564,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
 			workingCopyOfAssignment.SetActivitiesAndShiftCategoryFromWithOffset(sourceAssignment, periodOffset);
 
-			var period = source.Period.MovePeriod(periodOffset);
 			if (PersonAssignment() == null && SignificantPart() == SchedulePartView.DayOff)
 			{
 				DeleteDayOff();
@@ -526,7 +571,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var currentAssignment = PersonAssignment(true);
 			currentAssignment.SetActivitiesAndShiftCategoryFrom(workingCopyOfAssignment);
-			if (splitAbsence) SplitAbsences(period);
+			if (splitAbsence)
+			{
+				var splitPeriod = AbsenceSplitPeriod(this);
+				SplitAbsences(splitPeriod);
+			}
 		}
 
 		public void SplitAbsences(DateTimePeriod period)

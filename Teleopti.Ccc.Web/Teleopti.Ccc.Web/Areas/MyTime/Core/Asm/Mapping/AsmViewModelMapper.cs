@@ -27,11 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 
 		public AsmViewModel Map(DateTime asmZeroLocal, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount)
 		{
-			var layers = new List<IVisualLayer>();
-			foreach (var proj in scheduleDays.Select(scheduleDay => _projectionProvider.Projection(scheduleDay)).Where(proj => proj != null))
-			{
-				layers.AddRange(proj);
-			}
+			var layers = scheduleDays.Select(scheduleDay => _projectionProvider.Projection(scheduleDay))
+				.Where(proj => proj != null).SelectMany(proj => proj).ToList();
 			var timeZone = _userTimeZoneInfo.TimeZone();
 			var dstJudgement = new DSTJudgement();
 			var culture = _userCulture.GetCulture();
@@ -86,16 +83,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 
 		private IEnumerable<AsmLayer> createAsmLayers(DateTime asmZero, TimeZoneInfo timeZone, CultureInfo culture, IEnumerable<IVisualLayer> layers, DSTJudgement dstJudgement)
 		{
+			var currentUser = _loggedOnUser.CurrentUser();
 			var asmLayers = (from visualLayer in layers
-			                 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
-			                 let endDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.EndDateTime, timeZone)
+			                 let startDate = visualLayer.Period.StartDateTimeLocal(timeZone)
+			                 let endDate = visualLayer.Period.EndDateTimeLocal(timeZone)
 			                 let length = visualLayer.Period.ElapsedTime().TotalMinutes
 			                 select new AsmLayer
 			                        	{														    
-			                        		Payload = visualLayer.Payload.ConfidentialDescription(_loggedOnUser.CurrentUser()).Name,
+			                        		Payload = visualLayer.Payload.ConfidentialDescription(currentUser).Name,
 											StartMinutesSinceAsmZero = getStartMinutesSinceAsmZero(dstJudgement, startDate,asmZero),
 			                        		LengthInMinutes = length,
-			                        		Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(_loggedOnUser.CurrentUser())),
+			                        		Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(currentUser)),
 											StartTimeText = startDate.ToString(culture.DateTimeFormat.ShortTimePattern, culture),
 											EndTimeText = endDate.ToString(culture.DateTimeFormat.ShortTimePattern, culture)
 							 }).ToList();

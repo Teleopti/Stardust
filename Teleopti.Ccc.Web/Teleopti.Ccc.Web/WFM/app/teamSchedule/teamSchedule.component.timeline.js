@@ -6,16 +6,18 @@
 		templateUrl: 'app/teamSchedule/html/timeline.html',
 		bindings: {
 			times: '<',
-			scheduleCount: '<'
+			scheduleCount: '<',
+			isScheduleInEditing: '<'
 		},
 	});
 
-	TimeLineCtrl.$inject = ['$timeout', '$document', '$window'];
-	function TimeLineCtrl($timeout, $document, $window) {
+	TimeLineCtrl.$inject = ['$timeout', '$window'];
+	function TimeLineCtrl($timeout,  $window) {
 		var ctrl = this;
 		ctrl.height = 0;
 		ctrl.$onChanges = function (changesObj) {
-			if (changesObj.scheduleCount && !!changesObj.scheduleCount.currentValue) {
+			if ((changesObj.scheduleCount && !!changesObj.scheduleCount.currentValue)
+				|| changesObj.isScheduleInEditing) {
 				updateRulerHeight();
 			}
 		};
@@ -30,7 +32,8 @@
 
 		function updateRulerHeight() {
 			$timeout(function () {
-				ctrl.height = (ctrl.scheduleCount * 32.5) + 50 - 5;
+				var editingHeight = ctrl.isScheduleInEditing ? 260 : 0;
+				ctrl.height = (ctrl.scheduleCount * 32.5) + 40 - 5 + editingHeight;
 			});
 		}
 

@@ -31,12 +31,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				var person = schedule.Key;
 				if (!people.Contains(person)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
-				if (!blockOption.UseTeamBlockOption) continue;
+				if (blockOption.BlockTypeValue == BlockFinderType.SingleDay) continue;
 
-				var personPeriod = person.Period(period.StartDate);
+				var shiftBag = personPeriods.FirstOrDefault()?.RuleSetBag;
 
-				var shiftBag = personPeriod?.RuleSetBag;
-				if (shiftBag == null)
+				if (shiftBag == null || personPeriods.Any(p => p.RuleSetBag != shiftBag))
 					continue;
 				var shiftProjectionCaches = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(period.StartDate, person.PermissionInformation.DefaultTimeZone()), shiftBag.RuleSetCollection, false);
 				var allStartTime = shiftProjectionCaches.Select(x => x.WorkShiftStartTime()).Distinct().ToList();

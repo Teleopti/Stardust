@@ -51,16 +51,49 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var resolution = skills.Min(s => s.DefaultResolution);
 			var skillDays = _skillDayLoadHelper
 				.LoadSchedulerSkillDaysFlat(period.Inflate(1), skills, _scenarioRepository.Current())
-				.ToList();
+				.ToArray();
 
+			var timeZoneInfo = _userTimeZone.TimeZone();
 			foreach (var dateOnly in period.DayCollection())
 			{
 				var dateOnlyPeriod = dateOnly.ToDateOnlyPeriod();
-				var skillDaysInDay = skillDays.Where(s => dateOnlyPeriod.Inflate(1).Contains(s.CurrentDate)).ToList();
+				var extendedPeriod = dateOnlyPeriod.Inflate(1);
+				var skillDaysInDay = skillDays.Where(s => extendedPeriod.Contains(s.CurrentDate)).ToArray();
 				var skillSkillDayDictionary = skillDaysInDay.GroupBy(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
 
 				_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(skillSkillDayDictionary, dateOnly,
-					_userTimeZone.TimeZone(), useShrinkage);
+					timeZoneInfo, useShrinkage);
+
+				var skillStaffingDatas = createSkillStaffingDatas(dateOnlyPeriod, skills, resolution, useShrinkage,
+					skillDaysInDay, dayFilter);
+
+				skillStaffingList.AddRange(skillStaffingDatas);
+			}
+
+			return skillStaffingList;
+		}
+
+		public IList<SkillStaffingData> Load(IList<ISkill> skills, DateOnlyPeriod period, Dictionary<DateOnly, bool> useShrinkageDic, Func<DateOnly, bool> dayFilter = null)
+		{
+			var skillStaffingList = new List<SkillStaffingData>();
+			if (!skills.Any()) return skillStaffingList;
+
+			var resolution = skills.Min(s => s.DefaultResolution);
+			var skillDays = _skillDayLoadHelper
+				.LoadSchedulerSkillDaysFlat(period.Inflate(1), skills, _scenarioRepository.Current())
+				.ToArray();
+
+			var timeZoneInfo = _userTimeZone.TimeZone();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				var dateOnlyPeriod = dateOnly.ToDateOnlyPeriod();
+				var extendedPeriod = dateOnlyPeriod.Inflate(1);
+				var skillDaysInDay = skillDays.Where(s => extendedPeriod.Contains(s.CurrentDate)).ToArray();
+				var skillSkillDayDictionary = skillDaysInDay.GroupBy(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
+
+				var useShrinkage = useShrinkageDic[dateOnly];
+
+				_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(skillSkillDayDictionary, dateOnly, timeZoneInfo, useShrinkage);
 
 				var skillStaffingDatas = createSkillStaffingDatas(dateOnlyPeriod, skills, resolution, useShrinkage,
 					skillDaysInDay, dayFilter);
@@ -74,7 +107,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills,
 			int resolution, bool useShrinkage, IList<ISkillDay> skillDays, Func<DateOnly, bool> dayFilter)
 		{
-			var days = period.DayCollection().ToList();
+			var days = period.DayCollection();
 			if (dayFilter != null)
 			{
 				days = days.Where(dayFilter).ToList();
@@ -84,20 +117,20 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			{
 				Date = day,
 				Forecasted = getForecastedStaffing(resolution, useShrinkage, skillDays, day)
-					.ToLookup(x => new {x.StartTime, x.SkillId}),
+					.ToLookup(x => (x.StartTime, x.SkillId)),
 				Scheduled = getScheduledStaffing(skills, resolution, useShrinkage, day)
-					.ToLookup(x => new { StartTime = x.StartDateTime, SkillId = x.Id })
+					.ToLookup(x => (x.StartDateTime, x.Id ))
 			});
 
 			var skillStaffingDatas = from dayStaffingData in dayStaffingDatas
-				let scheduledGroupStartTimes = dayStaffingData.Scheduled.Select(t => t.Key.StartTime)
-				let forecastedGroupStartTimes = dayStaffingData.Forecasted.Select(t => t.Key.StartTime)
+				let scheduledGroupStartTimes = dayStaffingData.Scheduled.Select(t => t.Key.Item1)
+				let forecastedGroupStartTimes = dayStaffingData.Forecasted.Select(t => t.Key.Item1)
 				let distinctedStartTimes = scheduledGroupStartTimes.Union(forecastedGroupStartTimes).Distinct().OrderBy(t => t)
 				from startTime in distinctedStartTimes
 				from skill in skills
-				let skillTimePair = new {StartTime = startTime, SkillId = skill.Id.GetValueOrDefault()}
-				let scheduledStaffing = roundWithOneFractionalDigit(calculateScheduledStaffing(dayStaffingData.Scheduled[skillTimePair].ToList()))
-				let forecastedStaffing = roundWithOneFractionalDigit(calculateForecastedStaffing(dayStaffingData.Forecasted[skillTimePair].ToList()))
+				let skillTimePair = (startTime, skill.Id.GetValueOrDefault())
+				let scheduledStaffing = roundWithOneFractionalDigit(calculateScheduledStaffing(dayStaffingData.Scheduled[skillTimePair].ToArray()))
+				let forecastedStaffing = roundWithOneFractionalDigit(calculateForecastedStaffing(dayStaffingData.Forecasted[skillTimePair].ToArray()))
 				select new SkillStaffingData
 				{
 					Resolution = resolution,
@@ -111,7 +144,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return skillStaffingDatas;
 		}
 
-		private static double? calculateForecastedStaffing(IEnumerable<StaffingIntervalModel> forecasteds)
+		private static double? calculateForecastedStaffing(IList<StaffingIntervalModel> forecasteds)
 		{
 			return forecasteds.Any() ? forecasteds.Sum(forecasted => forecasted?.Agents) : null;
 		}
@@ -126,7 +159,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private static double? calculateScheduledStaffing(IList<SkillStaffingIntervalLightModel> scheduleds)
 		{
 			if (!scheduleds.Any()) return null;
-			return scheduleds.Sum(s => s.StartDateTime != new DateTime() ? (double?) s.StaffingLevel : null);
+			return scheduleds.Sum(s => s.StartDateTime != default(DateTime) ? (double?) s.StaffingLevel : null);
 		}
 
 		private IEnumerable<SkillStaffingIntervalLightModel> getScheduledStaffing(IList<ISkill> skills, int resolution,

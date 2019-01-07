@@ -8,6 +8,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
 		int? IntervalLength { get; }
 		string TimeZoneCode { get; }
 		bool RunIndexMaintenance { get; }
+		InsightsConfiguration InsightsConfig { get; }
 		IJobHelper JobHelper { get; set; }
 	}
 }

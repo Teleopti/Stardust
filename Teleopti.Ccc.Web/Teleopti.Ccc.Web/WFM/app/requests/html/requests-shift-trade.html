@@ -1,11 +1,11 @@
-﻿<md-progress-linear md-mode="indeterminate" ng-if="vm.isLoading"></md-progress-linear>
+<md-progress-linear md-mode="indeterminate" ng-if="vm.isLoading"></md-progress-linear>
 <div class="requests-uigrid-table-container">
 	<div id="shift-detail" ui-grid="vm.gridOptions" ui-grid-auto-resize class="ui-grid requests-uigrid-table" ui-grid-auto-resize ui-grid-selection
-	 ui-grid-resize-columns ui-grid-pinning ui-grid-save-state ui-grid-disable-animation></div>
+		 ui-grid-resize-columns ui-grid-pinning ui-grid-save-state ui-grid-disable-animation></div>
 	<i ng-if="!vm.isLoading" ng-show="vm.gridOptions.enableFiltering" ng-click="vm.clearAllFilters()" class="mdi mdi-block-helper clear-all-filters pointer">
 		<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 	</i>
-	<div outside-click="vm.hideShiftDetail()" ng-if="vm.displayShiftDetail" ng-style="vm.shiftDetailStyleJson()" class="schedule-container full-padding">
-		<requests-schedule-table schedules="vm.schedules" />
+	<div outside-click="vm.hideShiftDetail()" ng-if="vm.displayShiftDetail" ng-style="vm.shiftDetailStyleJson" class="shift-trade-schedules requests-schedule-container full-padding">
+		<requests-schedule-table shifts="vm.shifts" times="vm.timeLine" schedules="vm.schedules"/>
 	</div>
 </div>

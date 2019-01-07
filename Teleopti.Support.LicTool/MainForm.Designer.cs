@@ -383,7 +383,7 @@
 			this.chkChatBot.Name = "chkChatBot";
 			this.chkChatBot.Size = new System.Drawing.Size(102, 17);
 			this.chkChatBot.TabIndex = 44;
-			this.chkChatBot.Text = "Grant (Chat Bot)";
+			this.chkChatBot.Text = "Grant";
 			this.chkChatBot.UseVisualStyleBackColor = true;
 			// 
 			// chkBPOExchange

@@ -9,12 +9,10 @@
 			<generator class="guid.comb"/>
 		</id>
 		<version name="Version" unsaved-value="null"/>
-		<many-to-one name="UpdatedBy" class="Teleopti.Ccc.Domain.Common.Person"/>
-		<property name="UpdatedOn" type="UtcDateTime"/>
-		<many-to-one name="Activity" class="Teleopti.Ccc.Domain.Scheduling.Activity"/>
+		<property name="Activity" access="property"/>
 		<many-to-one name="StateGroup" class="Teleopti.Wfm.Adherence.Configuration.RtaStateGroup"/>
 		<many-to-one name="RtaRule" class="Teleopti.Wfm.Adherence.Configuration.RtaRule"/>
-		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="nosetter.camelcase-underscore"/>
+		<property name="BusinessUnit" access="property"/>
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
 	</class>
 </hibernate-mapping>

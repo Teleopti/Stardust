@@ -61,6 +61,12 @@
 				not-null="false"
 				length="300"
 				type="string" />
+
+	  <property name="SearchKeys"
+				access="property"
+				not-null="false"
+				length="8001"
+				type="string" />
   </class>
 	<query name="PersonAccessAuditOnCriteria">
 		<![CDATA[

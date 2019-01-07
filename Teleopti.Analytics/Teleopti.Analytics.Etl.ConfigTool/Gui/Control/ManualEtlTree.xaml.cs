@@ -12,7 +12,6 @@ using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {

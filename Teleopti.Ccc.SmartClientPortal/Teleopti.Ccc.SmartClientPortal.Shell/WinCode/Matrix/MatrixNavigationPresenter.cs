@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Reports;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
@@ -46,13 +49,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 		private readonly IReportNavigationModel _model;
 		private readonly IMatrixNavigationView _view;
 		private readonly IReportUrl _reportUrlConstructor;
+		private readonly IToggleManager _toggleManager;
 
 		public MatrixNavigationPresenter(IReportNavigationModel model, IMatrixNavigationView view,
-			IReportUrl reportUrlConstructor)
+			IReportUrl reportUrlConstructor, IToggleManager toggleManager)
 		{
 			_model = model;
 			_view = view;
 			_reportUrlConstructor = reportUrlConstructor;
+			_toggleManager = toggleManager;
 		}
 
 		public void LinkClick(IApplicationFunction applicationFunction, bool realTime)
@@ -63,8 +68,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 			}
 			else
 			{
-				if (applicationFunction.ForeignId == "0148")
+				if (applicationFunction.ForeignId == DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport || 
+					applicationFunction.ForeignId == DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport)
 					applicationFunction.IsWebReport = false;
+				
 				var url = _reportUrlConstructor.Build(applicationFunction);
 				_view.OpenUrl(new Uri(url));
 			}
@@ -73,7 +80,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 		public void Initialize()
 		{
 			_view.SetColor();
-			var matrixFunctionGroups = _model.PermittedCategorizedReportFunctions;
+			var matrixFunctionGroups = _model.PermittedCategorizedReportFunctions.ToList();
+			
+			if(!_toggleManager.IsEnabled(Toggles.Wfm_AuditTrail_GenericAuditTrail_74938))
+			{
+				var auditTrailGroup =
+					matrixFunctionGroups.SingleOrDefault(g => g.ApplicationFunctions.Any(af => af.ForeignId == DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport));
+				if(auditTrailGroup != null)
+				{
+					auditTrailGroup.ApplicationFunctions =
+						auditTrailGroup.ApplicationFunctions.Where(af => af.ForeignId != DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
+				}
+			}
 			var orphanMatrixFunctions = _model.PermittedCustomReportFunctions;
 			var tree = CreateTree(matrixFunctionGroups, orphanMatrixFunctions);
 			var treeRealTime = CreateTree(_model.PermittedRealTimeReportFunctions);
@@ -94,7 +112,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Matrix
 														  let node = CreateTreeNode(g, childNodes)
 														  select node)
 										  };
-
+			
 			var customTreeNode = new MatrixTreeNode
 											 {
 												 DisplayName = Resources.CustomReports,

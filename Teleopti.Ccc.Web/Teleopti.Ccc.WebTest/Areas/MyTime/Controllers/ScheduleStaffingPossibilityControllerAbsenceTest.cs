@@ -5,10 +5,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -156,6 +156,48 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
+		}
+
+		[Test]
+		public void ShouldGetProperPossibilitiesWhenUsingBothIntradayAndIntradayWithShrinkageValidators()
+		{
+			setupSiteOpenHour();
+			setupTestData(new double?[] {10d, 9.5d}, new double?[] {10d, 9.5d});
+
+			var rollingPeriod = new AbsenceRequestOpenRollingPeriod
+			{
+				OrderIndex = 0,
+				BetweenDays = new MinMax<int>(0, 20),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse().AddDays(-20), Now.ServerDate_DontUse().AddDays(40)),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
+			};
+
+			var intradayWithShkinagePeriod = new AbsenceRequestOpenDatePeriod
+			{
+				OrderIndex = 1,
+				Period = new DateOnlyPeriod(Now.ServerDate_DontUse().AddDays(21), Now.ServerDate_DontUse().AddDays(40)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse().AddDays(-20), Now.ServerDate_DontUse().AddDays(40)),
+				StaffingThresholdValidator = new StaffingThresholdWithShrinkageValidator()
+			};
+
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(rollingPeriod);
+			workFlowControlSet.AddOpenAbsenceRequestPeriod(intradayWithShkinagePeriod);
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var dayInRollingPeriod = Now.ServerDate_DontUse().AddDays(19);
+			var possibilitiesIntraday = getPossibilityViewModels(dayInRollingPeriod, StaffingPossiblityType.Absence)
+				.Where(x=>x.Date == dayInRollingPeriod.ToFixedClientDateOnlyFormat()).ToList();
+
+			var dayInShrinkagePeriod = Now.ServerDate_DontUse().AddDays(22);
+			var possibilitiesIntradayWithShrinkage = getPossibilityViewModels(dayInShrinkagePeriod, StaffingPossiblityType.Absence)
+				.Where(x=>x.Date == dayInShrinkagePeriod.ToFixedClientDateOnlyFormat()).ToList();
+
+			Assert.AreEqual(2, possibilitiesIntraday.Count);
+			possibilitiesIntraday.ForEach(x => Assert.AreEqual(1, x.Possibility));
+
+			Assert.AreEqual(2, possibilitiesIntradayWithShrinkage.Count);
+			possibilitiesIntradayWithShrinkage.ForEach(x => Assert.AreEqual(0, x.Possibility));
 		}
 
 		[Test]

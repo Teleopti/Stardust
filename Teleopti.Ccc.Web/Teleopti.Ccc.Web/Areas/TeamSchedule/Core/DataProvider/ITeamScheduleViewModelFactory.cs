@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public Guid? GroupPageId { get; set; }
 		public string[] DynamicOptionalValues { get; set; }
 
-		public bool IsDynamic => DynamicOptionalValues != null && DynamicOptionalValues.Any();
+		public bool IsDynamic => DynamicOptionalValues?.Any() ?? false;
 
 		public bool NoGroupInput => (GroupIds == null || !GroupIds.Any())
 				&& (DynamicOptionalValues == null || !DynamicOptionalValues.Any());

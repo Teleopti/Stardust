@@ -26,11 +26,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var defaultTimeZone = person.PermissionInformation.DefaultTimeZone();
 
-			var skills = new List<ISkill>();
-			foreach (var date in period.DayCollection())
-			{
-				skills.AddRange(_overtimeRequestSkillProvider.GetAvailableSkillsBySkillType(person, date.ToDateTimePeriod(defaultTimeZone)).ToList());
-			}
+			var skills = period.DayCollection().Select(date =>
+					_overtimeRequestSkillProvider
+						.GetAvailableSkillsBySkillType(person, date.ToDateTimePeriod(defaultTimeZone)).ToList())
+				.SelectMany(s => s);
 
 			var useShrinkage = person.WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
 							OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
@@ -51,18 +50,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			IList<SkillStaffingData> skillStaffingDatas, bool satisfyAllSkills)
 		{
 			var resolution = skillStaffingDatas.FirstOrDefault()?.Resolution ?? 15;
-			var calculatedPossibilityModels = new List<CalculatedPossibilityModel>();
 			var skillStaffingDataGroups = skillStaffingDatas.GroupBy(s => s.Date);
-			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
+
+			return skillStaffingDataGroups.Select(skillStaffingDataGroup => new CalculatedPossibilityModel
 			{
-				calculatedPossibilityModels.Add(new CalculatedPossibilityModel
-				{
-					Date = skillStaffingDataGroup.Key,
-					IntervalPossibilies = calculateIntervalPossibilities(skillStaffingDataGroup, satisfyAllSkills),
-					Resolution = resolution
-				});
-			}
-			return calculatedPossibilityModels;
+				Date = skillStaffingDataGroup.Key,
+				IntervalPossibilies = calculateIntervalPossibilities(skillStaffingDataGroup, satisfyAllSkills),
+				Resolution = resolution
+			}).ToList();
 		}
 
 		private Dictionary<DateTime, int> calculateIntervalPossibilities(IEnumerable<SkillStaffingData> skillStaffingDatas, bool satisfyAllSkills)

@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
@@ -19,7 +21,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		{
 			var stateHolder = _stateHolder();
 			var result = _maxSeatSkillDataFactory.Create(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.LoadedAgents, stateHolder.RequestedScenario,stateHolder.SchedulingResultState.LoadedAgents, intervalLength);
-			result.AllMaxSeatSkills().ForEach(s => stateHolder.SchedulingResultState.AddSkills(s));
+			var oldSkillsPlusMaxSeatSkills = stateHolder.SchedulingResultState.Skills;
+			foreach (var maxSeatSkill in result.AllMaxSeatSkills())
+			{
+				oldSkillsPlusMaxSeatSkills.Add(maxSeatSkill);
+			}
+			stateHolder.SchedulingResultState.Skills = oldSkillsPlusMaxSeatSkills;
 			result.AllMaxSeatSkillDaysPerSkill().ForEach(kvp => stateHolder.SchedulingResultState.SkillDays.Add(kvp.Key, kvp.Value));
 		}
 	}

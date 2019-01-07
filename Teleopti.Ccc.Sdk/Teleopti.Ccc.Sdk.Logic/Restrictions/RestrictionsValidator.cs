@@ -12,14 +12,7 @@ using Teleopti.Ccc.Sdk.Logic.Assemblers;
 
 namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 {
-    public interface IRestrictionsValidator {
-        IList<ValidatedSchedulePartDto> ValidateSchedulePeriod(DateOnlyPeriod loadedPeriod, 
-            DateOnlyPeriod schedulePeriod, ISchedulingResultStateHolder stateHolder,
-            int periodTargetInMinutes, int periodNegativeTolerance, int periodPositiveTolerance, int periodDayOffsTarget, IPerson person, int mustHave,
-            int balancedPeriodTargetInMinutes, int balanceInInMinutes, int extraInMinutes, int balanceOutInMinutes, int numberOfDaysOff, double seasonality, bool useStudentAvailability);
-        }
-
-    public class RestrictionsValidator : IRestrictionsValidator
+    public class RestrictionsValidator
     {
         private readonly IIsEditablePredicate _isEditablePredicate;
         private readonly IAssembler<IPreferenceDay, PreferenceRestrictionDto> _preferenceDayAssembler;
@@ -42,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 		
 	    public IList<ValidatedSchedulePartDto> ValidateSchedulePeriod(DateOnlyPeriod loadedPeriod,
 	                                                                  DateOnlyPeriod schedulePeriod,
-	                                                                  ISchedulingResultStateHolder stateHolder,
+	                                                                  IScheduleDictionary schedules,
 	                                                                  int periodTargetInMinutes,
 	                                                                  int periodNegativeTolerance,
 	                                                                  int periodPositiveTolerance, int periodDayOffsTarget,
@@ -52,8 +45,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 	                                                                  int balanceOutInMinutes, int numberOfDaysOff,
 	                                                                  double seasonality, bool useStudentAvailability)
 	    {
-		    if (stateHolder == null)
-			    throw new ArgumentNullException(nameof(stateHolder));
+		    if (schedules == null)
+			    throw new ArgumentNullException(nameof(schedules));
 
 		    if (person == null)
 			    throw new ArgumentNullException(nameof(person));
@@ -76,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 					    Seasonality = seasonality
 				    };
 
-			    IScheduleDay scheduleDay = stateHolder.Schedules[person].ScheduledDay(dateOnly);
+			    var scheduleDay = schedules[person].ScheduledDay(dateOnly);
 			    var restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation());
 			    var restrictionResult = restrictionExtractor.Extract(scheduleDay);
 				IEffectiveRestriction effectiveRestriction = restrictionResult.CombinedRestriction(new SchedulingOptions

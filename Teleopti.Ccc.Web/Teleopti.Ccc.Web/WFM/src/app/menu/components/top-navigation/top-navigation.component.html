@@ -17,6 +17,11 @@
 			<feedback></feedback>
 		</a>
 
+		<a class="system-settings-icon" *ngIf="isSystemSettingsVisible" [nzTitle]="'SystemSettings' | translate"
+			nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5" [nzMouseLeaveDelay]="0" rel="noopener" (click)="goToSystemSettings()">
+			<i nz-icon type="setting" theme="outline"></i>
+		</a>
+
 		<a [href]="helpUrl$ | async" [nzTitle]="'HelpLabel'|translate" nzPlacement="bottom" nz-tooltip [nzMouseEnterDelay]="0.5"
 		 [nzMouseLeaveDelay]="0" target="_blank" class="help-link" rel="noopener">
 			<i nz-icon type="question-circle" theme="outline" style="font-size: 18px"></i>

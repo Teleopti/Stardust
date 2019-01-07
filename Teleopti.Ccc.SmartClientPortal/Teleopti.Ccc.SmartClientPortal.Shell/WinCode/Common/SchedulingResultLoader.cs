@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             loadPersonalAccounts(unitOfWork);
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingPeopleTreeDots);
             initializeSkills(unitOfWork);
-			_peopleLoader.Initialize(); 
+			_peopleLoader.Initialize(SchedulerState); 
 			initializeDecider();
             filterSkills();
             initializePeopleInOrganization();
@@ -88,13 +88,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         private void loadPersonalAccounts(IUnitOfWork uow)
         {
-            var personAbsenceAccountRepository = _repositoryFactory.CreatePersonAbsenceAccountRepository(uow);
+            var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
             SchedulerState.SchedulingResultState.AllPersonAccounts = personAbsenceAccountRepository.LoadAllAccounts();
         }
 
         private void loadDefinitionSets(IUnitOfWork uow)
         {
-            IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository = _repositoryFactory.CreateMultiplicatorDefinitionSetRepository(uow);
+            IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(uow);
             MultiplicatorDefinitionSets = multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();
         }
 
@@ -128,7 +128,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         private void filterSkills()
         {
-            _deciderResult.FilterSkills(SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.RemoveSkill,s => SchedulerState.SchedulingResultState.AddSkills(s));
+			var allSkills = SchedulerState.SchedulingResultState.Skills.ToArray();
+			SchedulerState.SchedulingResultState.SetSkills(_deciderResult, allSkills);
         }
 
 	    private void initializeSkills(IUnitOfWork uow)
@@ -142,9 +143,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 					_lazyManager.Initialize(s.SkillType);
 			    })
 			    .ToArray();
-
-		    SchedulerState.SchedulingResultState.ClearSkills();
-		    SchedulerState.SchedulingResultState.AddSkills(skills);
+			SchedulerState.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 	    }
 
 	    private void initializeSkillDays()

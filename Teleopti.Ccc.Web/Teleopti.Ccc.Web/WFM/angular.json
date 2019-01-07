@@ -22,10 +22,26 @@
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
-              }
+							},
+							{
+                "glob": "**/*",
+                "input": "./app/seatManagement/images/",
+                "output": "/assets/seatMap"
+							},
+							{
+                "glob": "**/angular-locale_*.js",
+                "input": "./node_modules/angular-i18n/",
+                "output": "/assets/angular-i18n"
+							},
+							{
+                "glob": "?(fonts|css)/*",
+                "input": "./node_modules/@mdi/font/",
+                "output": "/assets/mdi"
+							}
             ],
             "styles": [
-              "src/styles.scss"
+							"src/styles.scss",
+							{ "input": "src/dependencies.scss", "lazy": true }
             ],
             "scripts": []
           },
@@ -77,12 +93,14 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/c3/c3.min.css"
-            ],
+            "styles": [],
             "assets": [
-              "src/assets"
+							"src/assets",
+							{
+                "glob": "**/*",
+                "input": "./app/seatManagement/images/",
+                "output": "/assets/seatMap"
+              }
             ]
           }
         },

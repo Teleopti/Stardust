@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Auditing
 		{
 		}
 
-		public PersonAccess(IPerson actionBy, IPerson actionOn, string action, string actionResult, string actionData, Guid? correlation = null)
+		public PersonAccess(IPerson actionBy, IPerson actionOn, string action, string actionResult, string actionData,string searchKeys, Guid? correlation = null)
 			: this()
 		{
 			ActionPerformedById = actionBy.Id.GetValueOrDefault();
@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Auditing
 			Data = actionData;
 			Correlation = correlation ?? Guid.NewGuid();
 			TimeStamp = DateTime.UtcNow;
+			SearchKeys = searchKeys;
 		}
 
 		private string createSerializedPersonAuditInfo(IPerson person)
@@ -47,5 +48,6 @@ namespace Teleopti.Ccc.Domain.Auditing
 		public virtual string ActionResult { get; set; }
 		public virtual string Data { get; set; }
 		public virtual Guid Correlation { get; set; }
+		public virtual string SearchKeys { get; set; }
 	}
 }

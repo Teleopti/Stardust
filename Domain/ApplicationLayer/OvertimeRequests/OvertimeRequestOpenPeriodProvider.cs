@@ -16,21 +16,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_overtimeRequestOpenPeriodMerger = overtimeRequestOpenPeriodMerger;
 		}
 
-		public IList<OvertimeRequestSkillTypeFlatOpenPeriod> GetOvertimeRequestOpenPeriods(IPerson person, DateTimePeriod period)
+		public IList<OvertimeRequestSkillTypeFlatOpenPeriod> GetOvertimeRequestOpenPeriods(IPerson person, DateOnly date)
 		{
 			if (person.WorkflowControlSet == null)
 				return null;
-
-			var permissionInformation = person.PermissionInformation;
-			var agentTimeZone = permissionInformation.DefaultTimeZone();
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(agentTimeZone);
-			var personPeriod = person.PersonPeriods(dateOnlyPeriod).ToArray();
-			if (!personPeriod.Any())
+			
+			var personPeriod = person.Period(date);
+			if (personPeriod == null)
 				return null;
 
-			var personSkillTypeDescriptions = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p)).Select(p => p.Skill.SkillType.Description).ToList();
+			var personSkillTypeDescriptions = _personalSkills.PersonSkills(personPeriod).Select(p => p.Skill.SkillType.Description).ToList();
 
-			var margedPeriod = _overtimeRequestOpenPeriodMerger.GetMergedOvertimeRequestOpenPeriods(person.WorkflowControlSet.OvertimeRequestOpenPeriods, permissionInformation, dateOnlyPeriod);
+			var margedPeriod = _overtimeRequestOpenPeriodMerger.GetMergedOvertimeRequestOpenPeriods(person.WorkflowControlSet.OvertimeRequestOpenPeriods, person.PermissionInformation, date.ToDateOnlyPeriod());
 			if (margedPeriod.Any())
 			{
 				return margedPeriod

@@ -32,8 +32,8 @@
 				templateUrl: 'app/reports/html/audit.html',
 				controller: 'AuditTrailController as vm'
 			})
-			.state('test', {
-				url: '/report/test',
+			.state('generalAuditTrail', {
+				url: '/report/general-audit-trail',
 				template: '<ng2-general-audit-trail-page></ng2-general-audit-trail-page>'
 			});
 	}

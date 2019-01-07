@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		}
 
 		public MeetingImpactView(IMeetingViewModel meetingViewModel, 
-								ISchedulerStateHolder schedulerStateHolder, 
+								SchedulingScreenState schedulerStateHolder, 
 								MeetingComposerView meetingComposerView, 
 								IResourceCalculation resourceOptimizationHelper,
 								ISkillPriorityProvider skillPriorityProvider,
@@ -62,17 +62,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			office2007OutlookTimePickerEndSlotPeriod.CreateAndBindList();
 
 			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory());
-			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
+			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
-			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
+			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder.SchedulerStateHolder,
 																UnitOfWorkFactory.Current, decider);
 			var transparentWindowHandler = new MeetingImpactTransparentWindowHandler(this, meetingViewModel,
-																					 schedulerStateHolder.
-																						 SchedulingResultState);
-			_meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current, _staffingCalculatorServiceFacade);
-			_presenter = new MeetingImpactPresenter(schedulerStateHolder, this, meetingViewModel, _meetingStateHolderLoaderHelper,
-				slotFinder, new MeetingImpactCalculator(schedulerStateHolder, resourceOptimizationHelper, meetingViewModel.Meeting, resourceCalculationContextFactory),
+																					 schedulerStateHolder.SchedulerStateHolder.SchedulingResultState);
+			_meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder.SchedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current, _staffingCalculatorServiceFacade);
+			_presenter = new MeetingImpactPresenter(schedulerStateHolder.SchedulerStateHolder, this, meetingViewModel, _meetingStateHolderLoaderHelper,
+				slotFinder, new MeetingImpactCalculator(schedulerStateHolder.SchedulerStateHolder, resourceOptimizationHelper, meetingViewModel.Meeting, resourceCalculationContextFactory),
 				gridHandler, transparentWindowHandler, UnitOfWorkFactory.Current);
 			SetTexts();
 

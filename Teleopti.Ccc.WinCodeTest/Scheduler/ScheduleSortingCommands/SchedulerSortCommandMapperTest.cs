@@ -93,11 +93,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			Assert.IsTrue(sortByStartDescendingSetting == SchedulerSortCommandSetting.SortByStartDescending);
 
 			var sortBySeniorityRankAscendingCommand =
-				_target.GetSettingFromCommand(new SortBySeniorityRankingAscendingCommand(_schedulerStateHolder.SchedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
+				_target.GetSettingFromCommand(new SortBySeniorityRankingAscendingCommand(_schedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
 			Assert.IsTrue(sortBySeniorityRankAscendingCommand == SchedulerSortCommandSetting.SortBySeniorityRankingAscending);
 
 			var sortBySeniorityRankDescendingCommand =
-				_target.GetSettingFromCommand(new SortBySeniorityRankingDescendingCommand(_schedulerStateHolder.SchedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
+				_target.GetSettingFromCommand(new SortBySeniorityRankingDescendingCommand(_schedulerStateHolder, new RankedPersonBasedOnStartDate(null)));
 			Assert.IsTrue(sortBySeniorityRankDescendingCommand == SchedulerSortCommandSetting.SortBySeniorityRankingDescending);
 
 		

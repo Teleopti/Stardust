@@ -109,13 +109,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				IScheduleDictionary scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(true, false), period.ToDateOnlyPeriod(timeZoneInfo), _scenarioRepository.Current());
 
-
-				var stateHolder = new SchedulingResultStateHolder();
-					stateHolder.Schedules = scheduleDictionary;
-					stateHolder.LoadedAgents = personList;
-
 					var fullWeekOuterWeekPeriodCreator = new FullWeekOuterWeekPeriodCreator(schedulePeriod.DateOnlyPeriod, person);
-					var scheduleMatrix = new ScheduleMatrixPro(stateHolder, fullWeekOuterWeekPeriodCreator, schedulePeriod);
+					var scheduleMatrix = new ScheduleMatrixPro(scheduleDictionary, fullWeekOuterWeekPeriodCreator, schedulePeriod);
 
 					var periodTargetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
 					var schedulePeriodTargetBalanced = periodTargetTimeCalculator.TargetTime(scheduleMatrix);
@@ -136,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 					const bool useStudentAvailability = false;
 					return restrictionValidator.ValidateSchedulePeriod(loadedPeriod,
-												realSchedulePeriod, stateHolder,
+												realSchedulePeriod, scheduleDictionary,
 												(int)periodTarget.TotalMinutes, (int)tolerance.StartTime.TotalMinutes, (int)tolerance.EndTime.TotalMinutes, daysOffTarget, person,
 												schedulePeriod.MustHavePreference, (int)schedulePeriodTargetBalanced.TotalMinutes, (int)schedulePeriod.BalanceIn.TotalMinutes,
 												(int)schedulePeriod.Extra.TotalMinutes, (int)schedulePeriod.BalanceOut.TotalMinutes, numberOfDaysOff, schedulePeriod.Seasonality.Value, useStudentAvailability);

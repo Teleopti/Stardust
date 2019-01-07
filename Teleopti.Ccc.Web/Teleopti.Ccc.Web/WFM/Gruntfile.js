@@ -1,4 +1,27 @@
-const sassImplementation = require('node-sass');
+const glob = require('glob');
+const file = require('fs');
+const { join } = require('path');
+const { minify } = require('html-minifier');
+
+function templateCache() {
+	const readFile = path => file.readFileSync(path, { encoding: 'utf8' });
+	const writeFile = (path, data) => file.writeFileSync(path, data, { encoding: 'utf8' });
+	const files = glob.sync('@(html|app)/**/*.html');
+
+	const templates = files.map(filename => {
+		const html = readFile(join(__dirname, filename));
+		const minifiedHtml = minify(html, {
+			collapseWhitespace: true,
+			removeComments: true,
+			caseSensitive: true
+		});
+		const escapedHtml = minifiedHtml.replace(/(\"|\\.)/gm, '\\$1').replace(/(\r|\n)/gm, '\\n');
+		return `$templateCache.put("${filename}", "${escapedHtml}")`;
+	});
+
+	let templateCache = `angular.module('wfm.templates',[]).run(['$templateCache', function($templateCache) {${templates}}]);`.trim();
+	writeFile(join(__dirname, 'dist', 'templates.js'), templateCache);
+}
 
 module.exports = function(grunt) {
 	const isDev = grunt.option('development') || false;
@@ -11,7 +34,7 @@ module.exports = function(grunt) {
 		},
 		angularjsTemplates: {
 			files: ['src/index.tpl.html', 'app/**/*.html', 'html/**/*.html'],
-			tasks: ['ngtemplates']
+			tasks: ['templateCache']
 		},
 		angularjsCode: {
 			files: ['app/**/*.js'],
@@ -20,10 +43,6 @@ module.exports = function(grunt) {
 		antThemes: {
 			files: ['src/themes/*.less'],
 			tasks: ['less']
-		},
-		styleguideStyle: {
-			files: ['css/styleguide/**/*.scss'],
-			tasks: ['sass']
 		}
 	};
 
@@ -37,30 +56,6 @@ module.exports = function(grunt) {
 			files: {
 				'dist/ant_classic.css': 'src/themes/ant_classic.less',
 				'dist/ant_dark.css': 'src/themes/ant_dark.less'
-			}
-		}
-	};
-
-	const sass = {
-		themes: {
-			options: {
-				implementation: sassImplementation,
-				sourceMap: true,
-				outputStyle: isProd ? 'compressed' : 'nested'
-			},
-			files: {
-				'dist/styleguide_classic.css': 'css/styleguide/styleguide_classic.scss',
-				'dist/styleguide_dark.css': 'css/styleguide/styleguide_dark.scss'
-			}
-		}
-	};
-
-	const ngtemplates = {
-		'wfm.templates': {
-			src: ['html/**/*.html', 'app/**/*.html', 'app/**/html/*.html'],
-			dest: 'dist/templates.js',
-			options: {
-				standalone: true
 			}
 		}
 	};
@@ -173,35 +168,12 @@ module.exports = function(grunt) {
 		dest: 'dist/resources/d3.js'
 	};
 
-	// TODO: Add desktop concat
-
-	const concatCssDependencies = {
-		src: [
-			'node_modules/c3/c3.min.css',
-			'node_modules/angular-resizable/src/angular-resizable.css',
-			'node_modules/angular-ui-tree/source/angular-ui-tree.css',
-			'node_modules/angular-ui-grid/ui-grid.css',
-			'node_modules/angular-material/angular-material.css',
-			'node_modules/angular-gantt/assets/angular-gantt.css',
-			'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
-			'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
-			'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css'
-		],
-		dest: 'dist/dependencies.css'
-	};
-
 	const uglifyOptions = {
 		sourceMap: false,
 		beautify: false,
 		mangle: false
 	};
 	const uglify = {
-		templates: {
-			files: {
-				'dist/templates.js': ['dist/templates.js']
-			},
-			options: uglifyOptions
-		},
 		browser: {
 			files: {
 				'dist/main.js': [
@@ -230,14 +202,12 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		watch,
-		ngtemplates,
+		templateCache,
 		processhtml,
 		less,
-		sass,
 		concat: {
 			concatJsDependencies,
-			concatJsWfm,
-			concatCssDependencies
+			concatJsWfm
 		},
 		uglify,
 		msbuild: {
@@ -283,29 +253,6 @@ module.exports = function(grunt) {
 		},
 
 		copy: {
-			locales: {
-				files: [
-					{
-						expand: true,
-						cwd: './node_modules/angular-i18n/',
-						src: ['angular-locale_*.js'],
-						dest: 'dist/angular-i18n/'
-					}
-				]
-			},
-			sourceMaps: {
-				files: [
-					// includes files within path
-					{
-						expand: true,
-						cwd: 'vendor',
-						flatten: true,
-						src: ['*/*.map'],
-						dest: 'dist/resources',
-						filter: 'isFile'
-					}
-				]
-			},
 			extras: {
 				files: [
 					{
@@ -313,28 +260,6 @@ module.exports = function(grunt) {
 						cwd: 'node_modules/angular-ui-grid',
 						src: ['*.ttf', '*.woff', '*.eot'],
 						dest: 'dist/',
-						filter: 'isFile'
-					}
-				]
-			},
-			bootstrap: {
-				files: [
-					{
-						expand: true,
-						cwd: 'node_modules/bootstrap/fonts',
-						src: ['*.ttf', '*.woff', '*.eot'],
-						dest: 'dist/fonts',
-						filter: 'isFile'
-					}
-				]
-			},
-			images: {
-				files: [
-					{
-						expand: true,
-						cwd: 'app/seatManagement/images',
-						src: ['*.svg', '*.jpg', '*.png'],
-						dest: 'dist/images',
 						filter: 'isFile'
 					}
 				]
@@ -347,14 +272,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-less');
-	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-msbuild');
-	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-processhtml');
 
-	grunt.registerTask('devBuild', ['concat', 'copy', 'ngtemplates', 'less', 'sass', 'processhtml']);
+	grunt.registerTask('templateCache', templateCache);
+	grunt.registerTask('devBuild', ['concat', 'copy', 'templateCache', 'less', 'processhtml']);
 	grunt.registerTask('devWatch', ['devBuild', 'watch']);
-	grunt.registerTask('prodBuild', ['concat', 'copy', 'ngtemplates', 'less', 'sass', 'processhtml', 'uglify']);
+	grunt.registerTask('prodBuild', ['concat', 'copy', 'templateCache', 'less', 'processhtml', 'uglify']);
 
 	grunt.registerTask('default', ['devWatch']);
 

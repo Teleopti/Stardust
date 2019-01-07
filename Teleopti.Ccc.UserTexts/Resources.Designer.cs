@@ -943,6 +943,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a new year.
+        /// </summary>
+        public static string AddANewYear {
+            get {
+                return ResourceManager.GetString("AddANewYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Another Level.
         /// </summary>
         public static string AddAnotherLevel {
@@ -1200,6 +1209,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AddNew {
             get {
                 return ResourceManager.GetString("AddNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new bank holiday calendar.
+        /// </summary>
+        public static string AddNewBankHolidayCalendar {
+            get {
+                return ResourceManager.GetString("AddNewBankHolidayCalendar", resourceCulture);
             }
         }
         
@@ -2699,6 +2717,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred. Please check the network connection and try again. If this continues to happen, please contact your administrator..
+        /// </summary>
+        public static string AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain {
+            get {
+                return ResourceManager.GetString("AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred. Please try again..
         /// </summary>
         public static string AnErrorOccurredPleaseTryAgain {
@@ -3232,6 +3259,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete this bank holiday calendar?.
+        /// </summary>
+        public static string AreYouSureToDeleteThisBankHolidayCalendar {
+            get {
+                return ResourceManager.GetString("AreYouSureToDeleteThisBankHolidayCalendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete year {0} from calendar {1}?.
+        /// </summary>
+        public static string AreYouSureToDeleteYearFromCalendar {
+            get {
+                return ResourceManager.GetString("AreYouSureToDeleteYearFromCalendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to remove {0} absences from {1} agents?.
         /// </summary>
         public static string AreYouSureToRemoveSelectedAbsence {
@@ -3543,6 +3588,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ASMTimeAheadOfActivityChangeToAlert {
             get {
                 return ResourceManager.GetString("ASMTimeAheadOfActivityChangeToAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign calendars to sites.
+        /// </summary>
+        public static string AssignCalendarsToSites {
+            get {
+                return ResourceManager.GetString("AssignCalendarsToSites", resourceCulture);
             }
         }
         
@@ -4602,6 +4656,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bank holiday.
+        /// </summary>
+        public static string BankHoliday {
+            get {
+                return ResourceManager.GetString("BankHoliday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank holiday calendar {0} has been successfully deleted..
+        /// </summary>
+        public static string BankHolidayCalendarHasBeenSuccessfullyDeleted {
+            get {
+                return ResourceManager.GetString("BankHolidayCalendarHasBeenSuccessfullyDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank holiday calendars.
+        /// </summary>
+        public static string BankHolidayCalendars {
+            get {
+                return ResourceManager.GetString("BankHolidayCalendars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bar.
         /// </summary>
         public static string Bar {
@@ -4710,7 +4791,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Schedule Period.
+        ///   Looks up a localized string similar to Schedule period.
         /// </summary>
         public static string BlockFinderTypeSchedulePeriod {
             get {
@@ -4769,6 +4850,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BlockScheduling {
             get {
                 return ResourceManager.GetString("BlockScheduling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Block scheduling:.
+        /// </summary>
+        public static string BlockSchedulingColon {
+            get {
+                return ResourceManager.GetString("BlockSchedulingColon", resourceCulture);
             }
         }
         
@@ -7245,6 +7335,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancelling this approved request will remove any related absences from your schedule.  Are you sure you wish to continue?.
         /// </summary>
         public static string ConfirmCancelRequest {
@@ -7322,6 +7421,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ConfirmGroupingDeletion {
             get {
                 return ResourceManager.GetString("ConfirmGroupingDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have modified this shift. Do you want to close and lose changes?.
+        /// </summary>
+        public static string ConfirmMessageWhenCancelShiftEditing {
+            get {
+                return ResourceManager.GetString("ConfirmMessageWhenCancelShiftEditing", resourceCulture);
             }
         }
         
@@ -8903,6 +9011,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to day.
+        /// </summary>
+        public static string DayLowerCase {
+            get {
+                return ResourceManager.GetString("DayLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Day Off.
         /// </summary>
         public static string DayOff {
@@ -8971,6 +9088,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DayOffRules {
             get {
                 return ResourceManager.GetString("DayOffRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day off rules:.
+        /// </summary>
+        public static string DayOffRulesColon {
+            get {
+                return ResourceManager.GetString("DayOffRulesColon", resourceCulture);
             }
         }
         
@@ -9151,6 +9277,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DaysAreSelectedFrom {
             get {
                 return ResourceManager.GetString("DaysAreSelectedFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to days.
+        /// </summary>
+        public static string DaysLowerCase {
+            get {
+                return ResourceManager.GetString("DaysLowerCase", resourceCulture);
             }
         }
         
@@ -9880,6 +10015,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DeleteTag {
             get {
                 return ResourceManager.GetString("DeleteTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete this year.
+        /// </summary>
+        public static string DeleteThisYear {
+            get {
+                return ResourceManager.GetString("DeleteThisYear", resourceCulture);
             }
         }
         
@@ -11000,7 +11144,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Planning Group.
+        ///   Looks up a localized string similar to Edit planning group.
         /// </summary>
         public static string EditPlanningGroup {
             get {
@@ -14250,6 +14394,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to General settings.
+        /// </summary>
+        public static string GeneralSettings {
+            get {
+                return ResourceManager.GetString("GeneralSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General view.
         /// </summary>
         public static string GeneralView {
@@ -16294,7 +16447,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Optimize Intraday.
+        ///   Looks up a localized string similar to Optimize intraday.
         /// </summary>
         public static string IntraOptimize {
             get {
@@ -17892,6 +18045,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ManageApplicationLogon {
             get {
                 return ResourceManager.GetString("ManageApplicationLogon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage calendars.
+        /// </summary>
+        public static string ManageCalendars {
+            get {
+                return ResourceManager.GetString("ManageCalendars", resourceCulture);
             }
         }
         
@@ -19688,6 +19850,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to month.
+        /// </summary>
+        public static string MonthLowerCase {
+            get {
+                return ResourceManager.GetString("MonthLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Monthly.
         /// </summary>
         public static string Monthly {
@@ -19706,6 +19877,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Month(s).
+        /// </summary>
+        public static string MonthOrMonths {
+            get {
+                return ResourceManager.GetString("MonthOrMonths", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Months.
         /// </summary>
         public static string Months {
@@ -19720,6 +19900,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MonthSchedule {
             get {
                 return ResourceManager.GetString("MonthSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to months.
+        /// </summary>
+        public static string MonthsLowerCase {
+            get {
+                return ResourceManager.GetString("MonthsLowerCase", resourceCulture);
             }
         }
         
@@ -20489,6 +20678,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name already existing.
+        /// </summary>
+        public static string NameAlreadyExisting {
+            get {
+                return ResourceManager.GetString("NameAlreadyExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The name already exists.
         /// </summary>
         public static string NameAlreadyExists {
@@ -20737,6 +20935,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewBudgetGroupThreeDots {
             get {
                 return ResourceManager.GetString("NewBudgetGroupThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New calendar name.
+        /// </summary>
+        public static string NewCalendarName {
+            get {
+                return ResourceManager.GetString("NewCalendarName", resourceCulture);
             }
         }
         
@@ -21581,6 +21788,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no agents in this planning group. Please review the filters. .
+        /// </summary>
+        public static string NoAgentsWithinPlanningGroupReviewFilters {
+            get {
+                return ResourceManager.GetString("NoAgentsWithinPlanningGroupReviewFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No agents with issues was found.
         /// </summary>
         public static string NoAgentsWithIssuesFound {
@@ -21640,6 +21856,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoAvailableShifts {
             get {
                 return ResourceManager.GetString("NoAvailableShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No bank holidays.
+        /// </summary>
+        public static string NoBankHolidays {
+            get {
+                return ResourceManager.GetString("NoBankHolidays", resourceCulture);
             }
         }
         
@@ -22949,6 +23174,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} agents.
+        /// </summary>
+        public static string NumberOfAgents {
+            get {
+                return ResourceManager.GetString("NumberOfAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of cells.
         /// </summary>
         public static string NumberOfMembers {
@@ -23107,6 +23341,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OnAvailableAgentsOnly {
             get {
                 return ResourceManager.GetString("OnAvailableAgentsOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 agent.
+        /// </summary>
+        public static string OneAgent {
+            get {
+                return ResourceManager.GetString("OneAgent", resourceCulture);
             }
         }
         
@@ -24822,6 +25065,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password policy error.
+        /// </summary>
+        public static string PasswordPolicyError {
+            get {
+                return ResourceManager.GetString("PasswordPolicyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to invalid password;.
         /// </summary>
         public static string PasswordPolicyErrorMsgSemicolon {
@@ -26472,7 +26724,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preference Fulfillment (%):.
+        ///   Looks up a localized string similar to Preference fulfillment (%):.
         /// </summary>
         public static string PreferenceFulfillmentPercentColon {
             get {
@@ -27020,6 +27272,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PublishSchedule {
             get {
                 return ResourceManager.GetString("PublishSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publish schedule.
+        /// </summary>
+        public static string PublishSchedulePlans {
+            get {
+                return ResourceManager.GetString("PublishSchedulePlans", resourceCulture);
             }
         }
         
@@ -30375,6 +30636,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduled agents.
+        /// </summary>
+        public static string ScheduledAgents {
+            get {
+                return ResourceManager.GetString("ScheduledAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scheduled agents after OT.
         /// </summary>
         public static string ScheduledAgentsAfterOT {
@@ -31078,7 +31348,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search site / team / contract.
+        ///   Looks up a localized string similar to Search for: site / team / contract.
         /// </summary>
         public static string SearchForDayOff {
             get {
@@ -31742,7 +32012,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected Filters:.
+        ///   Looks up a localized string similar to Selected filters:.
         /// </summary>
         public static string SelectedFiltersColon {
             get {
@@ -35716,6 +35986,15 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to System Settings.
         /// </summary>
+        public static string SystemSetting {
+            get {
+                return ResourceManager.GetString("SystemSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System Settings.
+        /// </summary>
         public static string SystemSettings {
             get {
                 return ResourceManager.GetString("SystemSettings", resourceCulture);
@@ -36616,6 +36895,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no bank holidays defined for this year. Select a day in the calendar to add a bank holiday..
+        /// </summary>
+        public static string ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday {
+            get {
+                return ResourceManager.GetString("ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHolida" +
+                        "y", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are teams assigned underneath.
         /// </summary>
         public static string ThereAreTeamsAssignedUnderneath {
@@ -36738,6 +37027,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping {
             get {
                 return ResourceManager.GetString("ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This calendar has no dates added..
+        /// </summary>
+        public static string ThisCalendarHasNoDatesAdded {
+            get {
+                return ResourceManager.GetString("ThisCalendarHasNoDatesAdded", resourceCulture);
             }
         }
         
@@ -39037,6 +39335,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validation issues.
+        /// </summary>
+        public static string ValidationIssues {
+            get {
+                return ResourceManager.GetString("ValidationIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation period.
         /// </summary>
         public static string ValidationPeriod {
@@ -39051,6 +39358,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Validations {
             get {
                 return ResourceManager.GetString("Validations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation are loading.
+        /// </summary>
+        public static string ValidationsAreLoading {
+            get {
+                return ResourceManager.GetString("ValidationsAreLoading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation are loading, this might take a few minutes.
+        /// </summary>
+        public static string ValidationsAreLoadingTooltip {
+            get {
+                return ResourceManager.GetString("ValidationsAreLoadingTooltip", resourceCulture);
             }
         }
         
@@ -39640,6 +39965,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to week.
+        /// </summary>
+        public static string WeekLowerCase {
+            get {
+                return ResourceManager.GetString("WeekLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Weekly.
         /// </summary>
         public static string Weekly {
@@ -39757,6 +40091,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Week(s).
+        /// </summary>
+        public static string WeekOrWeeks {
+            get {
+                return ResourceManager.GetString("WeekOrWeeks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Weeks.
         /// </summary>
         public static string Weeks {
@@ -39771,6 +40114,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WeeksColon {
             get {
                 return ResourceManager.GetString("WeeksColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to weeks.
+        /// </summary>
+        public static string WeeksLowerCase {
+            get {
+                return ResourceManager.GetString("WeeksLowerCase", resourceCulture);
             }
         }
         
@@ -40363,15 +40715,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audit Trail.
-        /// </summary>
-        public static string xxGeneralAuditTrailWebReport {
-            get {
-                return ResourceManager.GetString("xxGeneralAuditTrailWebReport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Modify writeprotected schedule.
         /// </summary>
         public static string xxx {
@@ -40390,6 +40733,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to year.
+        /// </summary>
+        public static string YearLowerCase {
+            get {
+                return ResourceManager.GetString("YearLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yearly trend.
         /// </summary>
         public static string YearlyTrend {
@@ -40404,6 +40756,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Years {
             get {
                 return ResourceManager.GetString("Years", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to years.
+        /// </summary>
+        public static string YearsLowerCase {
+            get {
+                return ResourceManager.GetString("YearsLowerCase", resourceCulture);
             }
         }
         

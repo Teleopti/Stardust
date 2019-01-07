@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Core.Extensions;
@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private readonly IPersonRequestProvider _personRequestProvider;
 		private readonly ISeatOccupancyProvider _seatBookingProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
 		private readonly ILicenseAvailability _licenseAvailability;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			IPersonRequestProvider personRequestProvider,
 			ISeatOccupancyProvider seatBookingProvider,
 			IUserTimeZone userTimeZone,
+			ILoggedOnUser loggedOnUser,
 			IPermissionProvider permissionProvider,
 			INow now,
 			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider, ILicenseAvailability licenseAvailability)
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			_personRequestProvider = personRequestProvider;
 			_seatBookingProvider = seatBookingProvider;
 			_userTimeZone = userTimeZone;
+			_loggedOnUser = loggedOnUser;
 			_permissionProvider = permissionProvider;
 			_now = now;
 			_absenceRequestProbabilityProvider = absenceRequestProbabilityProvider;
@@ -64,12 +67,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		{
 			var periodStartDate = period.StartDate;
 
+			var timeZone = _userTimeZone.TimeZone();
 			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
-			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
+			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay,
+				new ScheduleDictionaryLoadOptions(true, true, true) {LoadAgentDayScheduleTags = false}).ToArray();
 
-			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period);
-			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period);
-			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays);
+			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period).ToLookup(r => r.StartDateTimeLocal(timeZone).ToDateOnly());
+			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period).ToLookup(r => r.Date);
+			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(periodWithPreviousDay, _loggedOnUser.CurrentUser()).ToLookup(b => b.BelongsToDate);
 			var scheduleDaysAndProjections = scheduleDays.ToDictionary(day => day.DateOnlyAsPeriod.DateOnly,
 				day => new ScheduleDaysAndProjection
 				{
@@ -78,8 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				});
 			var minMaxTime = getMinMaxTime(scheduleDaysAndProjections, period);
 
-			var list = new List<WeekScheduleDayDomainData>();
-			foreach (var day in periodStartDate.DateRange(period.DayCount()))
+			var days = periodStartDate.DateRange(period.DayCount()).Select(day =>
 			{
 				var scheduleDayDomainData = new WeekScheduleDayDomainData
 				{
@@ -89,54 +93,40 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 					ProbabilityText = "",
 				};
 
-				if (scheduleDaysAndProjections.ContainsKey(day))
+				if (scheduleDaysAndProjections.TryGetValue(day, out var theDay))
 				{
-					var theDay = scheduleDaysAndProjections[day];
 					var scheduleDay = theDay.ScheduleDay;
+					scheduleDayDomainData.PersonAssignment = scheduleDay.PersonAssignment();
+					scheduleDayDomainData.SignificantPartForDisplay = scheduleDay.SignificantPartForDisplay();
 					scheduleDayDomainData.ScheduleDay = scheduleDay;
 					scheduleDayDomainData.Projection = theDay.Projection;
-					scheduleDayDomainData.OvertimeAvailability = scheduleDay.OvertimeAvailablityCollection() == null
-						? null
-						: scheduleDay.OvertimeAvailablityCollection().FirstOrDefault();
+					scheduleDayDomainData.OvertimeAvailability =
+						scheduleDay.OvertimeAvailablityCollection()?.FirstOrDefault();
 				}
 
-				if (scheduleDaysAndProjections.ContainsKey(day.AddDays(-1)))
+				if (scheduleDaysAndProjections.TryGetValue(day.AddDays(-1), out var yesterday))
 				{
-					var yesterday = scheduleDaysAndProjections[day.AddDays(-1)];
 					var scheduleYesterday = yesterday.ScheduleDay;
 					scheduleDayDomainData.ProjectionYesterday = yesterday.Projection;
-					scheduleDayDomainData.OvertimeAvailabilityYesterday = scheduleYesterday.OvertimeAvailablityCollection() == null
-						? null
-						: scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault();
+					scheduleDayDomainData.OvertimeAvailabilityYesterday =
+						scheduleYesterday.OvertimeAvailablityCollection()?.FirstOrDefault();
 				}
 
-				if (personRequestPeriods != null)
-				{
-					scheduleDayDomainData.PersonRequestCount = personRequestPeriods
-						.Where(r => TimeZoneInfo.ConvertTimeFromUtc(r.StartDateTime, _userTimeZone.TimeZone())
-										.Date == day.Date)
-						.ToArray().Length;
-				}
+				scheduleDayDomainData.PersonRequestCount = personRequestPeriods[day].Count();
 
-				if (requestProbability != null)
+				var absenceRequestProbability = requestProbability[day].FirstOrDefault();
+				if (absenceRequestProbability != null)
 				{
-					var absenceRequestProbability = requestProbability.First(a => a.Date == day);
 					scheduleDayDomainData.Availability = absenceRequestProbability.Availability;
 					scheduleDayDomainData.ProbabilityClass = absenceRequestProbability.CssClass;
 					scheduleDayDomainData.ProbabilityText = absenceRequestProbability.Text;
 				}
 
-				if (seatBookings != null)
-				{
-					scheduleDayDomainData.SeatBookingInformation = seatBookings
-						.Where(seatBooking => seatBooking.BelongsToDate == day)
-						.ToArray();
-				}
+				scheduleDayDomainData.SeatBookingInformation = seatBookings[day].ToArray();
 
-				list.Add(scheduleDayDomainData);
-			}
-			var days = list.ToArray();
-
+				return scheduleDayDomainData;
+			}).ToArray();
+			
 			var colorSource = new ScheduleColorSource
 			{
 				ScheduleDays = scheduleDays,
@@ -164,7 +154,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var viewPossibilityPermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo);
 
-			var isCurrentWeek = period.Contains(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone())));
+			var isCurrentWeek = period.Contains(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone)));
 
 			return new WeekScheduleDomainData
 			{

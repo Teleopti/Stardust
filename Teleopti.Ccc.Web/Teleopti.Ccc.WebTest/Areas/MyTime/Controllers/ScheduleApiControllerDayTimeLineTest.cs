@@ -9,9 +9,9 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -19,6 +19,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -30,28 +31,30 @@ using Teleopti.Ccc.WebTest.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
-	[TestFixture]
+	[TestFixture(true)]
+	[TestFixture(false)]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerDayTimeLineTest : IIsolateSystem
+	public class ScheduleApiControllerDayTimeLineTest : IIsolateSystem, IConfigureToggleManager
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
 		public ILoggedOnUser User;
-		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public IPushMessageDialogueRepository PushMessageDialogueRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakeOvertimeAvailabilityRepository OvertimeAvailabilityRepository;
+		public FakeSkillRepository SkillRepository;
 		public FakeUserTimeZone UserTimeZone;
-		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
-			.WithId();
+
+		private readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			var person = PersonFactory.CreatePersonWithId();
 			var skill = new Skill("test1").WithId();
 			skill.SkillType = skillType;
+			
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2014, 1, 1), skill);
 			personPeriod.Team = TeamFactory.CreateTeam("team1", "site1");
 			person.AddPersonPeriod(personPeriod);
@@ -63,10 +66,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			person.WorkflowControlSet = workflowControlSet;
 
+			var skillRepository = new FakeSkillRepository();
+			skillRepository.Has(skill);
+
+			isolate.UseTestDouble(skillRepository).For<ISkillRepository>();
 			isolate.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
-
 			isolate.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
+		}
 
+		private readonly Action<FakeToggleManager> _configure;
+
+		public ScheduleApiControllerDayTimeLineTest(bool optimizedEnabled)
+		{
+			_configure = t => t.Set(Toggles.WFM_ProbabilityView_ImproveResponseTime_80040, optimizedEnabled);
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			_configure.Invoke(toggleManager);
 		}
 
 		[Test]
@@ -80,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
 			assignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Red });
-			ScheduleData.Add(assignment);
+			PersonAssignmentRepository.Add(assignment);
 
 			var result = Target.FetchDayData(date);
 			result.TimeLine.Count().Should().Be.EqualTo(10);
@@ -170,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				OrderIndex = 2
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
-
+			
 			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
 			skill1.SkillType = phoneSkillType;
@@ -316,7 +333,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var date = new DateOnly(2014, 12, 18);
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
-			ScheduleData.Add(assignment);
+			PersonAssignmentRepository.Add(assignment);
 
 			var result = Target.FetchDayData(date);
 
@@ -344,7 +361,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), dateOnly);
 			assignment.AddOvertimeActivity(activity, period, multiplicatorDefinicationSet, false);
-			ScheduleData.Add(assignment);
+			PersonAssignmentRepository.Add(assignment);
 
 			var result = Target.FetchDayData(dateOnly, StaffingPossiblityType.Overtime);
 
@@ -560,7 +577,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			addSkill();
 			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(User.CurrentUser(), Scenario.Current(), new DateOnly(Now.UtcDateTime()), DayOffFactory.CreateDayOff(new Description("Dayoff")));
-			ScheduleData.Add(dayOffAssignment);
+			PersonAssignmentRepository.Add(dayOffAssignment);
 
 			var result = Target.FetchDayData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
@@ -573,7 +590,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var date = new DateOnly(Now.UtcDateTime());
 			IOvertimeAvailability overtimeAvailability =
 				new OvertimeAvailability(User.CurrentUser(), date, TimeSpan.FromHours(2), TimeSpan.FromHours(8));
-			ScheduleData.Add(overtimeAvailability);
+			OvertimeAvailabilityRepository.Add(overtimeAvailability);
 			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 1, 45, 8, 15);
@@ -585,7 +602,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var date = new DateOnly(Now.UtcDateTime());
 			IOvertimeAvailability overtimeAvailability =
 				new OvertimeAvailability(User.CurrentUser(), date, TimeSpan.FromHours(2), TimeSpan.FromHours(8));
-			ScheduleData.Add(overtimeAvailability);
+			OvertimeAvailabilityRepository.Add(overtimeAvailability);
 
 			var period = new DateTimePeriod(date.Utc().AddHours(7), date.Utc().AddHours(17));
 			addAssignment(date, new activityDto { Activity = new Activity(), Period = period });
@@ -601,7 +618,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var date = new DateOnly(Now.UtcDateTime());
 			IOvertimeAvailability overtimeAvailability =
 				new OvertimeAvailability(User.CurrentUser(), date, TimeSpan.FromHours(2), TimeSpan.FromHours(22));
-			ScheduleData.Add(overtimeAvailability);
+			OvertimeAvailabilityRepository.Add(overtimeAvailability);
 
 			var period = new DateTimePeriod(date.Utc().AddHours(7), date.Utc().AddHours(17));
 			addAssignment(date, new activityDto { Activity = new Activity(), Period = period });
@@ -621,7 +638,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			IOvertimeAvailability overtimeAvailability =
 				new OvertimeAvailability(User.CurrentUser(), date.AddDays(-1), TimeSpan.FromHours(18), TimeSpan.FromHours(28));
-			ScheduleData.Add(overtimeAvailability);
+			OvertimeAvailabilityRepository.Add(overtimeAvailability);
 
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(date.Date.AddHours(2), timezone),
 				TimeZoneHelper.ConvertToUtc(date.Date.AddHours(9), timezone));
@@ -638,7 +655,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var date = new DateOnly(Now.UtcDateTime());
 			IOvertimeAvailability overtimeAvailability =
 				new OvertimeAvailability(User.CurrentUser(), date.AddDays(-1), TimeSpan.FromHours(18), TimeSpan.FromHours(36));
-			ScheduleData.Add(overtimeAvailability);
+			OvertimeAvailabilityRepository.Add(overtimeAvailability);
 
 			var period = new DateTimePeriod(date.Utc().AddHours(3), date.Utc().AddHours(12));
 			addAssignment(date, new activityDto { Activity = new Activity(), Period = period });
@@ -654,7 +671,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var date = new DateOnly(Now.UtcDateTime());
 			IOvertimeAvailability overtimeAvailability =
 				new OvertimeAvailability(User.CurrentUser(), date.AddDays(-1), TimeSpan.FromHours(18), TimeSpan.FromHours(37));
-			ScheduleData.Add(overtimeAvailability);
+			OvertimeAvailabilityRepository.Add(overtimeAvailability);
 
 			var period = new DateTimePeriod(date.Utc().AddHours(3), date.Utc().AddHours(12));
 			addAssignment(date, new activityDto { Activity = new Activity(), Period = period });
@@ -673,7 +690,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			IOvertimeAvailability overtimeAvailability =
 				new OvertimeAvailability(User.CurrentUser(), new DateOnly(Now.UtcDateTime()).AddDays(-1), TimeSpan.FromHours(11), TimeSpan.FromHours(12));
-			ScheduleData.Add(overtimeAvailability);
+			OvertimeAvailabilityRepository.Add(overtimeAvailability);
 			var result = Target.FetchDayData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
@@ -688,7 +705,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			IOvertimeAvailability overtimeAvailability =
 				new OvertimeAvailability(User.CurrentUser(), new DateOnly(Now.UtcDateTime()).AddDays(-1), TimeSpan.FromHours(23), TimeSpan.FromDays(1));
-			ScheduleData.Add(overtimeAvailability);
+			OvertimeAvailabilityRepository.Add(overtimeAvailability);
 			var result = Target.FetchDayData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
@@ -719,12 +736,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					});
 				}
 			}
+
+			SkillRepository.Has(skill);
 			return skill;
 		}
 
 		private ISkill addSkill()
 		{
 			var skill = createSkillWithOpenHours(TimeSpan.FromHours(7), TimeSpan.FromHours(18));
+			
 			var personPeriod = getOrAddPersonPeriod();
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			return skill;
@@ -771,7 +791,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				assignment.AddActivity(activityDto.Activity, activityDto.Period);
 			}
-			ScheduleData.Add(assignment);
+			PersonAssignmentRepository.Add(assignment);
 		}
 
 		private void addSiteOpenHour()

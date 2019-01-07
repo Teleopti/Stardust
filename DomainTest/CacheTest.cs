@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest
 				_configuration.Args().Cache.This<CachedServiceImpl>(
 					(c, b) => b
 						.CacheMethod(x => x.GetDataSourceName())
-						.CacheKey(c.Resolve<CachePerDataSource>())
+						.OverrideCacheKey(c.Resolve<CachePerDataSource>())
 				);
 			}
 		}

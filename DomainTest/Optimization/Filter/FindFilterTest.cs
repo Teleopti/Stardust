@@ -81,16 +81,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		}
 
 		[Test]
-		public void EmptySearchStringShouldGiveNoResult()
-		{
-			var site = new Site(RandomName.Make()).WithId();
-			SiteRepository.Add(site);
-
-			Target.Search(string.Empty, 10)
-				.Should().Be.Empty();
-		}
-
-		[Test]
 		public void ShouldOnlyFetchMaxHits()
 		{
 			const int maxHits = 3;
@@ -105,13 +95,38 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			Target.Search(name, maxHits).Count()
 				.Should().Be.EqualTo(maxHits);
 		}
+		
+		[Test]
+		public void ShouldReturnAllWhenSearchEmpty()
+		{
+			var name = RandomName.Make();
+			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
+			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
+			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
+			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
 
+			Target.Search(name, 10).Count()
+				.Should().Be.EqualTo(4);
+		}
 
 		[Test]
 		public void ShouldGiveEmptyResultForPlanningGroup()
 		{
 			Target.SearchForPlanningGroup(RandomName.Make(), 10)
 				.Should().Be.Empty();
+		}
+		
+		[Test]
+		public void ShouldReturnAllWhenSearchEmptyForPlanningGroup()
+		{
+			var name = RandomName.Make();
+			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
+			SiteRepository.Add(new Site(name + RandomName.Make()).WithId());
+			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
+			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
+			
+			Target.SearchForPlanningGroup("", 10).Count()
+				.Should().Be.EqualTo(4);
 		}
 
 		[Test]
@@ -177,16 +192,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			result.Name.Should().Contain(searchString);
 			result.Id.Should().Be.EqualTo(expectedGuid);
 			result.FilterType.Should().Be.EqualTo(expectedType);
-		}
-
-		[Test]
-		public void EmptySearchStringShouldGiveNoResultForPlanningGroup()
-		{
-			var site = new Site(RandomName.Make()).WithId();
-			SiteRepository.Add(site);
-
-			Target.SearchForPlanningGroup(string.Empty, 10)
-				.Should().Be.Empty();
 		}
 
 		[Test]

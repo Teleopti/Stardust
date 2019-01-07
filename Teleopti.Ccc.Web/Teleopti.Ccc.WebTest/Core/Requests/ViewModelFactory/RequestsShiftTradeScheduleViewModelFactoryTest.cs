@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -22,7 +21,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
-
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 {
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public ITeamRepository TeamRepository;
 		public IScheduleStorage ScheduleStorage;
 		public FakeLoggedOnUser LoggedOnUser;
-		public IRequestsShiftTradeScheduleViewModelFactory Target;
+		public RequestsShiftTradeScheduleViewModelFactory Target;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
@@ -82,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, period, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(me, new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 13),
@@ -118,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, period, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(me, new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 13),
@@ -151,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, period, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(me, new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 13),
@@ -195,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, period, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(me, new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 13),
@@ -228,7 +226,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, period, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 13),
@@ -259,7 +257,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, period, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 13),
@@ -312,7 +310,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				TeamId = team.Id
 			});
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 13),
@@ -366,7 +364,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				TeamId = team.Id
 			});
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 13),
@@ -435,7 +433,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
 			ScheduleStorage.Add(p3Abs);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 13),
@@ -469,7 +467,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 16),
@@ -503,7 +501,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 16),
@@ -549,7 +547,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 					DateTime.SpecifyKind(new DateTime(2096, 1, 16, 23, 0, 0), DateTimeKind.Utc)), abs);
 			ScheduleStorage.Add(p3Abs);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 16),
@@ -587,7 +585,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, period, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 16),
@@ -678,7 +676,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			Settings.Persist(new NameFormatSettings {NameFormatId = (int) NameFormatSetting.LastNameThenFirstName});
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 16),
@@ -782,7 +780,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 16),
@@ -833,7 +831,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			Settings.Persist(new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2096, 1, 16),
@@ -910,7 +908,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				scenario, new DateOnly(2096, 1, 16), new DayOffTemplate());
 			ScheduleStorage.Add(personWithDayoffAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 2, Take = 2},
 				ShiftTradeDate = new DateOnly(2096, 1, 16),
@@ -950,7 +948,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
 			ScheduleStorage.Add(meAbs);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 16),
@@ -994,7 +992,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			ScheduleStorage.Add(meDayOff);
 			ScheduleStorage.Add(meAbs);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 16),
@@ -1036,7 +1034,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
 			ScheduleStorage.Add(meAbs);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 16),
@@ -1079,7 +1077,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
 			ScheduleStorage.Add(meAss);
 
-			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
+			var result = Target.CreateViewModel(LoggedOnUser.CurrentUser(), new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
 				ShiftTradeDate = new DateOnly(2016, 1, 16),

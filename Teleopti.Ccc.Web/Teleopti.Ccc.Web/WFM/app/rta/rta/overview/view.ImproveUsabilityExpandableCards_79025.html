@@ -1,0 +1,139 @@
+<div class="rta-view-legacy">
+
+    <div class="view-header with-fab with-desc" style="padding-top: 10px;">
+        <div class="view-title">
+            <div class="pull-left">
+                <h1>
+                    <i class="mdi mdi-alarm"></i> {{'Adherence'|translate}}
+                </h1>
+            </div>
+            <div class="rta-top-buttons-wrapper pull-left">
+			<span>
+					<button class="wfm-btn wfm-btn-primary rta-default-cursor">{{'MonitorOrganization'|translate}}</button>
+					<span>
+					<span ng-if="vm.highlightAgentsButton()">
+							<span class="pulse-element"></span>
+			<i class="mdi mdi-filter-outline filter-icon"></i>
+			</span>
+			<span></span>
+			<button class="wfm-btn wfm-btn-default select-skill wfm-badge-wrapper" ng-click="vm.goToAgents()">{{'MonitorAgents'|translate}} 
+				<md-tooltip md-direction="bottom" ng-if="vm.highlightAgentsButton()">{{'ViewAgentsBySelection'|translate}}</md-tooltip>
+				<md-tooltip md-direction="bottom"
+                            ng-if="!vm.highlightAgentsButton()">{{'ViewAgents'|translate}}</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default wfm-badge-wrapper" ng-click="vm.goToHistorical()"
+                    ng-if="vm.hasHistoricalOverviewPermission">{{'HistoricalOverview'|translate}}
+			</button>
+			</span>
+			</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="con-row">
+        <div class="con-flex">
+            <md-progress-linear md-mode="indeterminate" ng-if="vm.loading()"></md-progress-linear>
+            <div class="panel material-depth-1 rta-filter-panel">
+                <div class="con-row">
+                    <div class="con-flex">
+                        <skill-picker skills="vm.skills" skill-areas="vm.skillAreas"
+                                      item-to-return="vm.selectSkillOrSkillArea"
+                                      preselected-item="vm.skillPickerPreselectedItem"></skill-picker>
+                    </div>
+                    <div class="pull-right" ng-if="vm.hasModifySkillGroupPermission">
+                        <a ui-sref="rta-skill-area-manager">
+                            <skill-group-manager-button></skill-group-manager-button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="con-row" ng-if="vm.displayNoSitesMessage()">
+        <div class="con-flex">
+            <div class="panel material-depth-1">
+                <div class="con-row">
+                    <div class="con-flex">
+                        {{'NoRealTimeAdherenceResultMessage'|translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="con-row demo-outline">
+        <div class="con-flex">
+            <div class="wfm-chip-wrap" ng-if="!vm.displayNoSitesMessage()">
+			<span class="wfm-chip" style="cursor:default;">
+				<span class="chip-handle">
+				<i class="mdi mdi-alert-circle"></i>
+				</span>
+			<span class="chip-text">{{'TotalAgentsInAlarm'|translate}}: <b>{{vm.totalAgentsInAlarm}}</b></span>
+			</span>
+            </div>
+            
+            <rta-card-panel class="site" ng-repeat="card in vm.siteCards" open="card.isOpen" classes="card.ClassesOnSelection">
+                <rta-card-panel-header class="flex">
+                    <span class="chevron"><i class="mdi" ng-class="{'mdi-chevron-down': card.isOpen, 'mdi-chevron-right':!card.isOpen}"></i></span>
+                    <div class="rta-card-content-wrapper flex" style="margin-left: 20px">
+                        <div class="rta-site-name-container">
+                            <b ng-attr-data-max="{{card.AgentsCount}}" ng-attr-data-value="{{card.InAlarmCount}}">{{card.Name}}</b>
+                        </div>
+                        <div class="rta-alarm-values-container">{{'InAlarmInSite'|translate}}:
+                            <b>{{card.InAlarmCount}}</b>
+                        </div>
+                        <div ng-click="$event.stopPropagation(); vm.selectTeamOrSite(card);"
+                             class="rta-icons-container">
+                            <i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
+                            <md-tooltip ng-if="card.isSelected">{{'UnselectSite'|translate}}</md-tooltip>
+                            <md-tooltip ng-if="!card.isSelected">{{'SelectSite'|translate}}</md-tooltip>
+                        </div>
+                        <a href="{{card.href}}" class="rta-icons-container" style="text-decoration: none;">
+                            <div><i class="mdi mdi-arrow-right"></i>
+                                <md-tooltip>{{'OpenSite'|translate}}</md-tooltip>
+                            </div>
+                        </a>
+                    </div>
+                </rta-card-panel-header>
+                <rta-card-panel-content>
+                    <div class="con-fluid-row dense">
+                        <div class="con-fluid-flex" ng-repeat="team in card.teams">
+                            <div class="card panel material-depth-1 team" ng-class="team.ClassOnSelection">
+                                <div class="sub-header flex" ng-click="vm.selectTeamOrSite(team)">
+                                    <h1 ng-attr-data-max="{{team.AgentsCount}}"
+                                        ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">
+                                        {{team.Name}}
+                                    </h1>
+                                    <i class="mdi pull-right flex-1"
+                                       ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>
+                                    <md-tooltip ng-if="team.isSelected">{{'UnselectTeam'|translate}}</md-tooltip>
+                                    <md-tooltip ng-if="!team.isSelected">{{'SelectTeam'|translate}}</md-tooltip>
+                                </div>
+                                <div class="con-row">
+                                    <div class="con-flex">
+									<span ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}: 
+										<b>{{team.InAlarmCount}}</b>
+									</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer con-row">
+                                    <span class="con-flex card-footer-section"></span>
+                                    <span class="con-flex line-right card-footer-section">
+									<a class="wfm-btn wfm-btn-invis-primary pull-right"
+                                       href="{{team.href}}" style="text-decoration: none;">{{'Open'|translate}}</a>
+								</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </rta-card-panel-content>
+            </rta-card-panel>
+        </div>
+    </div>
+    <div class="con-footer">
+
+    </div>
+
+</div>

@@ -4,8 +4,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Events;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service.AgentState

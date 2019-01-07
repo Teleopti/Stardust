@@ -22,11 +22,13 @@ function Hostsfile-Add-Cname {
     param(
     [string]$CName
     )
-
+	
+	$ipV4 = Test-Connection -ComputerName (hostname) -Count 1  | Select IPV4Address
+	$hostentry = "$($ipV4.IPV4Address.IPAddressToString) $CName"
     $hostsFile = "$($env:windir)\system32\Drivers\etc\hosts"
-    If ((Get-Content "$hostsFile" ) -notcontains "localhost $CName") {
+    If ((Get-Content "$hostsFile" ) -notcontains "$hostentry") {
         Add-Content -Encoding UTF8  "$hostsFile" "`r`n"
-        Add-Content -Encoding UTF8  "$hostsFile" "localhost $CName"
+        Add-Content -Encoding UTF8  "$hostsFile" "$hostentry"
     }
 }
 

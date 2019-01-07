@@ -34,13 +34,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_tokenIdentityProvider = tokenIdentityProvider;
 		}
 
-		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId, string tenantPassword, bool isPersistent, bool isLogonFromBrowser)
+		public void LogOn(string dataSourceName, Guid businessUnitId, IPerson person, string tenantPassword, bool isPersistent, bool isLogonFromBrowser)
 		{
 			var dataSource = _dataSourceForTenant.Tenant(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var personRep = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRep.Get(personId);
 				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).Get(businessUnitId);
 				_logOnOff.LogOn(dataSource, person, businessUnit);
 
@@ -58,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 			var currentToken = _tokenIdentityProvider.RetrieveToken();
 			_tokenIdentityProvider.GetHashCode();
-			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, tenantPassword, currentToken.IsTeleoptiApplicationLogon);
+			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, person.Id.GetValueOrDefault(), tenantPassword, currentToken.IsTeleoptiApplicationLogon);
 			_sessionSpecificWfmCookieProvider.StoreInCookie(sessionSpecificData, isPersistent, isLogonFromBrowser, dataSourceName);
 			_sessionSpecificWfmCookieProvider.RemoveAuthBridgeCookie();
 		}

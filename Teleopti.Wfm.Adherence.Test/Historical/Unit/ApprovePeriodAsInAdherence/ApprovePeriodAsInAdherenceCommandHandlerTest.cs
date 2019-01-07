@@ -5,8 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Historical.Events;
 
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ApprovePeriodAsInAdherence
 {

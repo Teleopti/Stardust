@@ -12,14 +12,13 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.Web.Core.Extensions;
-
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
-	public class TeamScheduleShiftViewModelProvider : ITeamScheduleShiftViewModelProvider
+	public class TeamScheduleShiftViewModelProvider
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				vm = Projection(scheduleDay, canViewConfidential);
 				if (needToLoadNoteAndUnderlyingSummary)
 				{
-					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(scheduleDay, previousScheduleDay, canViewConfidential);
+					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(timezone, scheduleDay, previousScheduleDay, canViewConfidential);
 				}
 			}
 
@@ -192,9 +191,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-		private UnderlyingScheduleSummary getUnderlyingScheduleSummary(IScheduleDay scheduleDay, IScheduleDay previousScheduleDay, bool canViewConfidential)
+		private UnderlyingScheduleSummary getUnderlyingScheduleSummary(TimeZoneInfo timeZone, IScheduleDay scheduleDay, IScheduleDay previousScheduleDay, bool canViewConfidential)
 		{
-			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var pa = scheduleDay.PersonAssignment();
 			var hasPartTimeAbsence = !scheduleDay.IsFullDayAbsence() && (scheduleDay.PersonAbsenceCollection()?.Any() ?? false);
 			var hasPersonalActivities = pa?.PersonalActivities()?.Any() ?? false;
@@ -218,8 +216,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					.Select(personAbsence => new Summary
 					{
 						Description = !canViewConfidential && (personAbsence.Layer.Payload as IAbsence).Confidential ? ConfidentialPayloadValues.Description.Name : personAbsence.Layer.Payload.Description.Name,
-						Start = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
-						End = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+						Start = personAbsence.Period.StartDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
+						End = personAbsence.Period.EndDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
 						StartInUtc = personAbsence.Period.StartDateTime.ToServiceDateTimeFormat(),
 						EndInUtc = personAbsence.Period.EndDateTime.ToServiceDateTimeFormat()
 					})
@@ -230,8 +228,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(personalActivity => new Summary
 				{
 					Description = personalActivity.Payload.Description.Name,
-					Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
-					End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+					Start = personalActivity.Period.StartDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
+					End = personalActivity.Period.EndDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
 					StartInUtc = personalActivity.Period.StartDateTime.ToServiceDateTimeFormat(),
 					EndInUtc = personalActivity.Period.EndDateTime.ToServiceDateTimeFormat()
 				})
@@ -241,8 +239,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(personMeeting => new Summary
 				{
 					Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
-					Start = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.StartDateTime, timezone).ToServiceDateTimeFormat(),
-					End = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.EndDateTime, timezone).ToServiceDateTimeFormat(),
+					Start = personMeeting.Period.StartDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
+					End = personMeeting.Period.EndDateTimeLocal(timeZone).ToServiceDateTimeFormat(),
 					StartInUtc = personMeeting.Period.StartDateTime.ToServiceDateTimeFormat(),
 					EndInUtc = personMeeting.Period.EndDateTime.ToServiceDateTimeFormat()
 				})
@@ -265,22 +263,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var person = scheduleDay.Person;
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var personPeriod = person.Period(date);
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var scheduleVm = new GroupScheduleShiftViewModel
 			{
-				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
-				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(scheduleDay.Person),
+				PersonId = person.Id.GetValueOrDefault().ToString(),
+				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToServiceDateFormat(),
 				IsFullDayAbsence = scheduleDay.IsFullDayAbsence(),
 				ShiftCategory = getShiftCategoryDescription(scheduleDay),
 				Timezone = new TimeZoneViewModel
 				{
-					IanaId = _ianaTimeZoneProvider.WindowsToIana(scheduleDay.Person.PermissionInformation.DefaultTimeZone().Id),
-					DisplayName = scheduleDay.Person.PermissionInformation.DefaultTimeZone().DisplayName
+					IanaId = _ianaTimeZoneProvider.WindowsToIana(timeZone.Id),
+					DisplayName = timeZone.DisplayName
 				},
 				MultiplicatorDefinitionSetIds =
-				(person.Period(date) != null &&
-				 person.Period(date).PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
-					? person.Period(date)
+				(personPeriod != null &&
+				 personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
+					? personPeriod
 						.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
 						.ToList()
 					: null
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return scheduleVm;
 		}
 
-		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
+		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson currentUser, IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
 			var ret = new AgentInTeamScheduleViewModel
 			{

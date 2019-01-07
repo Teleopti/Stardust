@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import c3 from 'c3';
+import * as moment from 'moment';
+import { IntradayLatestTimeData } from '../../types';
 import { IntradayChartType } from '../../types/intraday-chart-type';
 
 @Component({
@@ -19,9 +21,39 @@ export class IntradayChartComponent implements OnChanges {
 	@Input()
 	chartType: IntradayChartType;
 
+	@Input()
+	latestTime: IntradayLatestTimeData | undefined;
+
+	emptyChart = {
+		x: 'x',
+		xFormat: '%Y-%m-%d %H:%M',
+		type: 'area-spline',
+		columns: [],
+		empty: { label: { text: this.translate.instant('NoDataAvailable') } }
+	};
+
 	ngOnChanges(changes: SimpleChanges) {
-		if (changes.chartData) {
+		if (this.isEmptyObject(this.chartData)) {
+			this.initChart(this.emptyChart);
+		}
+		if (changes.chartData && (changes.chartData.currentValue as c3.Data).x) {
 			this.loadChart();
+		}
+	}
+
+	private indicateLatestTime(ltd: IntradayLatestTimeData) {
+		if (ltd && this.chart) {
+			const end = moment(ltd.StartTime);
+			const time = moment()
+				.hour(end.hour())
+				.minute(end.minute());
+			this.chart.xgrids([
+				{
+					value: time.format('YYYY-MM-DD HH:mm'),
+					text: this.translate.instant('Latest data'),
+					class: 'time-line'
+				}
+			]);
 		}
 	}
 
@@ -41,6 +73,7 @@ export class IntradayChartComponent implements OnChanges {
 		} else {
 			this.initChart(this.chartData);
 		}
+		this.indicateLatestTime(this.latestTime);
 	}
 
 	private loadTrafficChart(value: c3.Data) {
@@ -121,6 +154,10 @@ export class IntradayChartComponent implements OnChanges {
 		}
 	}
 
+	private isEmptyObject(data: any) {
+		return Object.keys(data).length === 0 && data.constructor === Object;
+	}
+
 	toggleData(id) {
 		if (this.hiddenArray.indexOf(id) > -1) {
 			this.hiddenArray.splice(this.hiddenArray.indexOf(id), 1);
@@ -132,8 +169,8 @@ export class IntradayChartComponent implements OnChanges {
 	}
 
 	initChart(inData: c3.Data) {
-		if (angular.isDefined(inData)) {
-			const chartObject = {
+		if (angular.isDefined(inData) && inData.columns) {
+			const chartObject: c3.ChartConfiguration = {
 				bindto: '#chart',
 				data: inData,
 				axis: {
@@ -142,14 +179,16 @@ export class IntradayChartComponent implements OnChanges {
 							text: this.translate.instant('SkillTypeTime'),
 							position: 'outer-center'
 						},
-						type: 'category',
+						type: 'timeseries',
+						localtime: true,
 						tick: {
 							culling: {
 								max: 24
 							},
 							fit: true,
 							centered: true,
-							multiline: false
+							multiline: false,
+							format: '%H:%M'
 						}
 					},
 					y: {
@@ -183,7 +222,6 @@ export class IntradayChartComponent implements OnChanges {
 					duration: 400
 				}
 			};
-
 			this.chart = c3.generate(chartObject);
 		}
 	}

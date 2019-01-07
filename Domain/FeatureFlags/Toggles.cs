@@ -22,8 +22,9 @@
 		RTA_TooManyPersonAssociationChangedEvents_Packages_78669,
 		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
-		RTA_ManageSkillGroupPermission_78568,
-		
+		RTA_RestrictModifySkillGroups_78568,
+		RTA_InputValidationForApprovingAdherencePeriods_77045,
+		RTA_ImproveUsabilityExpandableCards_79025,
 		
 		MessageBroker_HttpSenderThrottleRequests_79140,
 		MessageBroker_VeganBurger_79140,
@@ -39,7 +40,8 @@
 		Wfm_WebPlan_Pilot_46815,
 		
 		WfmTeamSchedule_SuggestShiftCategory_152,
-		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
+		WfmTeamSchedule_ShiftEditorInDayView_78295,
+		WfmTeamSchedule_DisableAutoRefreshSchedule_79826,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
@@ -66,7 +68,6 @@
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
-		ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348,
 		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
@@ -77,7 +78,6 @@
 
 		Wfm_SkillPriorityRoutingGUI_39885,
 		WfmStaffing_AddOvertime_42524,
-		OvertimeRequestUseMostUnderStaffedSkill_47853,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
 		WFM_Forecaster_Preview_74801,
 		WFM_Forecast_Show_History_Data_76432,
@@ -92,6 +92,9 @@
 		WFM_Request_View_Permissions_77731,
 		WFM_Request_Show_Feedback_Link_77733,
 		WFM_Request_Show_Shift_for_Absence_Requests_79008,
+		WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412,
+		WFM_Setting_BankHolidayCalendar_Create_79297,
+		WFM_Setting_AssignBankHolidayCalendarsToSites_79899,
 
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
@@ -113,7 +116,8 @@
 		Wfm_AuditTrail_GenericAuditTrail_74938,
 		WFM_Connect_NewLandingPage_Remove_GDPR_78132,
 		WFM_Connect_NewLandingPage_WEB_78578,
-		WFM_AbsenceRequest_ImproveThroughput_79139
+		WFM_AbsenceRequest_ImproveThroughput_79139,
+		WFM_ProbabilityView_ImproveResponseTime_80040
 		// ReSharper restore InconsistentNaming
 	}
 }

@@ -4,7 +4,6 @@ using System.ServiceModel;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;

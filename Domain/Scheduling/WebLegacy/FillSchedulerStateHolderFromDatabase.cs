@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, skills, scenario);
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = forecast;
-			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
+			schedulerStateHolderTo.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 		}
 
 		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)

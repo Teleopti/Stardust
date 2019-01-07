@@ -33,7 +33,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<RequestFactory>().As<IRequestFactory>();
-			builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
+
+			if (_configuration.Args().IsFatClient)
+			{
+				builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
+			}
+			else
+			{
+				builder.RegisterType<SlimPersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
+			}
+
 			builder.RegisterType<ConfigurableBusinessRuleProvider>().As<IBusinessRuleProvider>();
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();
@@ -64,7 +73,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestStrategyProcessor>().As<IAbsenceRequestStrategyProcessor>().SingleInstance();
 			builder.RegisterType<DenyLongQueuedAbsenceRequests>().As<DenyLongQueuedAbsenceRequests>().SingleInstance();
 			builder.RegisterType<ArrangeRequestsByProcessOrder>().As<ArrangeRequestsByProcessOrder>().SingleInstance();
-			builder.RegisterType<IntradayRequestWithinOpenHourValidator>().As<IIntradayRequestWithinOpenHourValidator>().SingleInstance();
 			builder.RegisterType<AlreadyAbsentValidator>().As<IAlreadyAbsentValidator>();
 			builder.RegisterType<AbsenceRequestWorkflowControlSetValidator>()
 				.As<IAbsenceRequestWorkflowControlSetValidator>();
@@ -94,14 +102,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AbsenceRequestFourteenDaySetting>().As<IAbsenceRequestSetting>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853))
-			{
-				builder.RegisterType<OvertimeRequestUnderStaffingSkillProviderToggle47853On>().As<IOvertimeRequestUnderStaffingSkillProvider>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<OvertimeRequestUnderStaffingSkillProviderToggle74944On>().As<IOvertimeRequestUnderStaffingSkillProvider>().SingleInstance();
-			}
+
+			builder.RegisterType<OvertimeRequestUnderStaffingSkillProvider>().As<IOvertimeRequestUnderStaffingSkillProvider>().SingleInstance();
 
 
 			builder.RegisterType<OvertimeRequestOpenPeriodProvider>().As<IOvertimeRequestOpenPeriodProvider>();
@@ -135,7 +137,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BudgetGroupHeadCountSpecificationExtended>().As<IBudgetGroupHeadCountCalculator>()
 				.SingleInstance();
 
-			builder.RegisterType<OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On>().As<IOvertimeRequestCriticalUnderStaffedSpecification>()
+			builder.RegisterType<OvertimeRequestCriticalUnderStaffedSpecification>().As<IOvertimeRequestCriticalUnderStaffedSpecification>()
 				.SingleInstance();
 
 			builder.RegisterType<PrimaryPersonSkillFilter>().As<IPrimaryPersonSkillFilter>().SingleInstance();

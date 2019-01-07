@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<TenantAuthenticationAlwaysAuthenticated>().As<ITenantAuthentication>().SingleInstance();
 
-			builder.RegisterModule(new TestModule());
+			builder.RegisterModule(new DataFactoryModule());
 
 			registrations?.Invoke(builder);
 

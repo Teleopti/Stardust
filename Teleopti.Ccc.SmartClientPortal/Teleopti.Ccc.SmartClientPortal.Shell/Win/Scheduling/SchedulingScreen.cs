@@ -1210,15 +1210,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		// have to use Application.DoEvents(); here. Else the loop will continue for ever
 		private void cancelAllBackgroundWorkers()
 		{
-			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCancellingThreeDots");
-
-			cancelBackgroundWorker(_backgroundWorkerValidatePersons);
-			cancelBackgroundWorker(_backgroundWorkerResourceCalculator);
-			cancelBackgroundWorker(backgroundWorkerLoadData);
-			cancelBackgroundWorker(_backgroundWorkerDelete);
-			cancelBackgroundWorker(_backgroundWorkerScheduling);
-			cancelBackgroundWorker(_backgroundWorkerOvertimeScheduling);
-			cancelBackgroundWorker(_backgroundWorkerOptimization);
+			var bgwsToKill = new[]
+			{
+				_backgroundWorkerValidatePersons,
+				_backgroundWorkerResourceCalculator,
+				backgroundWorkerLoadData,
+				_backgroundWorkerDelete,
+				_backgroundWorkerScheduling,
+				_backgroundWorkerOvertimeScheduling,
+				_backgroundWorkerOptimization
+			};
+			for (var i = 0; i < bgwsToKill.Length; i++)
+			{
+				scheduleStatusBarUpdate($"{LanguageResourceHelper.Translate("XXCancellingThreeDots")} ({i + 1}/{bgwsToKill.Length})");
+				cancelBackgroundWorker(bgwsToKill[i]);
+			}
+			scheduleStatusBarUpdate(LanguageResourceHelper.Translate("XXCancellingThreeDots"));
 		}
 
 		private void cancelBackgroundWorker(BackgroundWorker worker)
@@ -1434,10 +1441,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void pasteFromClipboard(PasteOptions options)
 		{
-			_backgroundWorkerRunning = true;
-			_scheduleView.GridClipboardPaste(options, _undoRedo);
-			_backgroundWorkerRunning = false;
-			RecalculateResources();
+			if (Clipboard.ContainsData("PersistableScheduleData"))
+			{
+				_backgroundWorkerRunning = true;
+				_scheduleView.GridClipboardPaste(options, _undoRedo);
+				_backgroundWorkerRunning = false;
+				RecalculateResources();
+			}
 		}
 
 		#endregion
@@ -3202,9 +3212,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				SchedulerState.SchedulerStateHolder.ChoosenAgents.ForEach(peopleInOrg.Add);
 				SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents = peopleInOrg;
 				log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
-				var skills = stateHolder.SchedulerStateHolder.SchedulingResultState.Skills;
+				var skills = stateHolder.SchedulerStateHolder.SchedulingResultState.Skills.ToArray();
 				int orgSkills = skills.Length;
-				int removedSkills = result.FilterSkills(skills, stateHolder.SchedulerStateHolder.SchedulingResultState.RemoveSkill, s => stateHolder.SchedulerStateHolder.SchedulingResultState.AddSkills(s));
+				var removedSkills = stateHolder.SchedulerStateHolder.SchedulingResultState.SetSkills(result, skills);
 				log.Info("Removed " + removedSkills + " skill when filtering (original: " + orgSkills + ")");
 			}
 		}
@@ -3213,10 +3223,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var staffingCalculatorServiceFacade = _container.Resolve<IStaffingCalculatorServiceFacade>();
 			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			stateHolder.SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 			foreach (ISkill skill in skills)
 			{
 				skill.SkillType.StaffingCalculatorService = staffingCalculatorServiceFacade;
-				stateHolder.SchedulerStateHolder.SchedulingResultState.AddSkills(skill);
 			}
 		}
 
@@ -3323,18 +3333,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				IPeopleLoader loader;
 				if (_teamLeaderMode)
 				{
-					loader = new PeopleLoaderForTeamLeaderMode(uow, SchedulerState.SchedulerStateHolder,
+					loader = new PeopleLoaderForTeamLeaderMode(uow, 
 						new SelectedEntitiesForPeriod(_temporarySelectedEntitiesFromTreeView,
 							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), new RepositoryFactory());
 				}
 				else
 				{
-					loader = new PeopleLoader(personRep, new ContractRepository(uow), SchedulerState.SchedulerStateHolder,
+					loader = new PeopleLoader(personRep, new ContractRepository(uow), 
 						new SelectedEntitiesForPeriod(_temporarySelectedEntitiesFromTreeView,
 							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod), new SkillRepository(uow));
 				}
 
-				loader.Initialize();
+				loader.Initialize(SchedulerState.SchedulerStateHolder);
 
 				if(_container.Resolve<IToggleManager>().IsEnabled(Toggles.SchedulePeriod_HideChineseMonth_78424))
 				{
@@ -4088,7 +4098,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
 			var currentAuthorization = CurrentAuthorization.Make();
-			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(),
+			var currentUnitOfWork = new FromFactory(() => uowFactory);
+			var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
+				new PersonAssignmentRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
+				new MeetingRepository(currentUnitOfWork), new AgentDayScheduleTagRepository(currentUnitOfWork),
+				new NoteRepository(currentUnitOfWork), new PublicNoteRepository(currentUnitOfWork),
+				new PreferenceDayRepository(currentUnitOfWork), new StudentAvailabilityDayRepository(currentUnitOfWork),
+				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
+				new OvertimeAvailabilityRepository(currentUnitOfWork),
 				new PersistableScheduleDataPermissionChecker(currentAuthorization),
 				_container.Resolve<IScheduleStorageRepositoryWrapper>(), currentAuthorization);
 			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
@@ -4236,7 +4253,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (SchedulerState.SchedulerStateHolder.Schedules == null)
 				return 0;
 
-			if (!SchedulerState.SchedulerStateHolder.Schedules.DifferenceSinceSnapshot().IsEmpty() || SchedulerState.ChangedRequests() ||
+			var diffExists = SchedulerState.SchedulerStateHolder.Schedules.AnyDifferenceSinceSnapshotInVisiblePeriod();
+			if (diffExists || SchedulerState.ChangedRequests() ||
 				!_modifiedWriteProtections.IsEmpty() || !SchedulerState.ModifiedWorkflowControlSets.IsEmpty())
 			{
 				DialogResult res = ShowConfirmationMessage(Resources.DoYouWantToSaveChangesYouMade, Resources.Save);
@@ -5385,7 +5403,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripButtonShowEditorClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowEditor.Checked = !toolStripButtonShowEditor.Checked;
-			schedulerSplitters1.ShowEditor(true);
+			schedulerSplitters1.ShowEditor(toolStripButtonShowEditor.Checked);
 			_showEditor = toolStripButtonShowEditor.Checked;
 			updateShiftEditor();
 		}
@@ -5761,14 +5779,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripMenuItemSeniorityRankDescMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
-				_scheduleView.Sort(new SortBySeniorityRankingDescendingCommand(SchedulerState.SchedulerStateHolder,
+				_scheduleView.Sort(new SortBySeniorityRankingDescendingCommand(SchedulerState,
 					_container.Resolve<IRankedPersonBasedOnStartDate>()));
 		}
 
 		private void toolStripMenuItemSeniorityRankAscMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
-				_scheduleView.Sort(new SortBySeniorityRankingAscendingCommand(SchedulerState.SchedulerStateHolder,
+				_scheduleView.Sort(new SortBySeniorityRankingAscendingCommand(SchedulerState,
 					_container.Resolve<IRankedPersonBasedOnStartDate>()));
 		}
 

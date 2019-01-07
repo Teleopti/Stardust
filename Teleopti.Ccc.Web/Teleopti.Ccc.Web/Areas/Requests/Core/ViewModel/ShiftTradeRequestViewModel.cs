@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
@@ -13,6 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public string PersonToTimeZone { get; set; }
 		public IEnumerable<string> BrokenRules { get; set; }
 		public IEnumerable<ShiftTradeDayViewModel> ShiftTradeDays { get; set; }
+	}
+
+	public class ShiftTradeSchedulesViewModel
+	{
+		public TeamScheduleAgentScheduleViewModel PersonFromSchedule{ get; set; }
+		public TeamScheduleAgentScheduleViewModel PersonToSchedule{ get; set; }
+		public IEnumerable<TeamScheduleTimeLineViewModel> TimeLine { get; set; }
 	}
 
 	public class ShiftTradeDayViewModel

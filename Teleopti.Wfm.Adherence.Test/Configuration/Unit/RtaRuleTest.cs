@@ -31,8 +31,6 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 			Assert.AreEqual(_color, _target.ConfidentialDisplayColor(null));
 			Assert.AreEqual(_thresholdTime, _target.ThresholdTime);
 			Assert.AreEqual(_staffingEffect, _target.StaffingEffect);
-			Assert.IsNull(_target.Tracker);
-			Assert.IsFalse(_target.InContractTime);
 
 			Description description = new Description("My new description");
 			Color color = Color.Firebrick;
@@ -41,16 +39,11 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 			_target.Description = description;
 			_target.DisplayColor = color;
 			_target.ThresholdTime = thresholdTime;
-			_target.Tracker = null;
-			_target.InContractTime = true;
 			_target.StaffingEffect = 0.8;
-
 
 			Assert.AreEqual(description, _target.Description);
 			Assert.AreEqual(color, _target.DisplayColor);
 			Assert.AreEqual(thresholdTime, _target.ThresholdTime);
-			Assert.IsNull(_target.Tracker);
-			Assert.IsTrue(_target.InContractTime);
 			Assert.AreEqual(0.8, _target.StaffingEffect);
 		}
 

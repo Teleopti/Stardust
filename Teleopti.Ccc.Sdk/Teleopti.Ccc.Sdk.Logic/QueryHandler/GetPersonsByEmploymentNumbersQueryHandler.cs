@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -13,13 +12,13 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetPersonsByEmploymentNumbersQueryHandler :
 		IHandleQuery<GetPersonsByEmploymentNumbersQueryDto, ICollection<PersonDto>>
 	{
-		private readonly IAssembler<IPerson, PersonDto> _assembler;
+		private readonly PersonCredentialsAppender _credentialsAppender;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetPersonsByEmploymentNumbersQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public GetPersonsByEmploymentNumbersQueryHandler(PersonCredentialsAppender credentialsAppender, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
-			_assembler = assembler;
+			_credentialsAppender = credentialsAppender;
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
@@ -32,10 +31,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
-					var memberList = new List<IPerson>();
-					var foundPersons = _personRepository.FindPeopleByEmploymentNumbers(query.EmploymentNumbers);
-					memberList.AddRange(foundPersons);
-					return _assembler.DomainEntitiesToDtos(memberList).ToList();
+					var memberList = _personRepository.FindPeopleByEmploymentNumbers(query.EmploymentNumbers).ToArray();
+					return _credentialsAppender.Convert(memberList).ToList();
 				}
 			}
 		}

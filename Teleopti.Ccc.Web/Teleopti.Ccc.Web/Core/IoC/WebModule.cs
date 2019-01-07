@@ -43,6 +43,7 @@ using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
+using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.IoC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Logging;
@@ -67,9 +68,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterApiControllers(typeof(WebModule).Assembly).ApplyAspects();
-			builder.RegisterControllers(typeof(WebModule).Assembly).ApplyAspects();
-			builder.RegisterHubs(typeof(WebModule).Assembly);
+			var assembly = typeof(WebModule).Assembly;
+			builder.RegisterApiControllers(assembly).ApplyAspects();
+			builder.RegisterControllers(assembly).ApplyAspects();
+			builder.RegisterHubs(assembly);
 
 			builder.RegisterModule(new MessageBrokerWebModule(_configuration));
 
@@ -112,6 +114,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<OptionsAreaModule>();
 			builder.RegisterModule<GamificationAreaModel>();
 			builder.RegisterModule<InsightsAreaModel>();
+			builder.RegisterModule<BankHolidayAreaModule>();
 
 			//remove me when #36904 is done!
 			builder.RegisterType<TranslatedTexts>().SingleInstance();

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -111,6 +110,24 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var result = StaffingViewModelCreator.Load(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), null, true);
+				Assert.AreEqual(result.StaffingHasData, true);
+				Assert.Greater(result.DataSeries.Time.Length, 0);
+				Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
+				Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
+			});
+		}
+
+
+		[Test]
+		public void LoadStaffingAndForecastForSingleSkill()
+		{
+			Now.Is("2016-03-07 07:00");
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			WithUnitOfWork.Do(() =>
+			{
+				//var result = StaffingViewModelCreator.Load(skills.Select(x => x.Id.GetValueOrDefault()).ToArray());
+				var result = StaffingViewModelCreator.Load(new[] {new Guid("DAA1A1EC-1A93-470F-85B5-A14E00F48588") });
 				Assert.AreEqual(result.StaffingHasData, true);
 				Assert.Greater(result.DataSeries.Time.Length, 0);
 				Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);

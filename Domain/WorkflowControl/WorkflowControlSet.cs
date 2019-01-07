@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
@@ -510,6 +509,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			return validOpenPeriods.Any(p =>
 				p.StaffingThresholdValidator != null && p.StaffingThresholdValidator.GetType() == expectedValidatorType);
+		}
+
+		public virtual bool IsAbsenceRequestCheckStaffingByIntradayWithShrinkage(DateOnly today,DateOnly date)
+		{
+			var validOpenPeriods = AbsenceRequestOpenPeriods.Where(openPeriod => isValidOpenPeriod(openPeriod, today, date))
+				.OrderByDescending(p => p.OrderIndex).ToList();
+			if (!validOpenPeriods.Any()) return false;
+
+			var validator = validOpenPeriods[0].StaffingThresholdValidator;
+			return validator is StaffingThresholdWithShrinkageValidator;
 		}
 
 		public virtual bool IsAbsenceRequestCheckStaffingByIntraday(DateOnly today, DateOnly date)

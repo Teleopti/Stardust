@@ -92,23 +92,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private static void removeUnwantedSkillsAndSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skillsToKeep)
 		{
-			foreach (var skill in schedulerStateHolderTo.SchedulingResultState.Skills.ToList().Where(skill => !skillsToKeep.Contains(skill)))
-			{
-				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(skill);
-			}
-			foreach (var skillDay in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList().Where(skillDay => !skillsToKeep.Contains(skillDay.Key)))
+			foreach (var skillDay in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList()
+				.Where(skillDay => !skillsToKeep.Contains(skillDay.Key) || !skillDay.Value.Any()))
 			{
 				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skillDay.Key);
 			}
-			foreach (var emptySkillday in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList().Where(skillDay => !skillDay.Value.Any()))
+			
+			var skillsToRemove = new HashSet<ISkill>();
+			foreach (var skill in schedulerStateHolderTo.SchedulingResultState.Skills
+				.Where(skill => !skillsToKeep.Contains(skill) || !schedulerStateHolderTo.SchedulingResultState.SkillDays.Keys.Contains(skill)))
 			{
-				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(emptySkillday.Key);
-				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(emptySkillday.Key);
+				skillsToRemove.Add(skill);
 			}
-			foreach (var skillWithMissingSkillDay in schedulerStateHolderTo.SchedulingResultState.Skills.ToList().Where(skill => !schedulerStateHolderTo.SchedulingResultState.SkillDays.Keys.Contains(skill)))
-			{
-				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(skillWithMissingSkillDay);
-			}
+			var skillToKeepInStateHolder = schedulerStateHolderTo.SchedulingResultState.Skills.Except(skillsToRemove);
+			schedulerStateHolderTo.SchedulingResultState.Skills = new HashSet<ISkill>(skillToKeepInStateHolder);
 		}
 
 		private static void removeUnwantedScheduleRanges(ISchedulerStateHolder schedulerStateHolderTo)

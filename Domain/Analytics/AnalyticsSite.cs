@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.Analytics
 	{
 		public Guid SiteCode { get; set; }
 		public string Name { get; set; }
+		public DateTime? DataSourceUpdateDate { get; set; }
 	}
 }

@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			mocks.ReplayAll();
 
-			_schedulerStateHolder.SchedulingResultState.AddSkills(skill);
+			_schedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>{skill};
 			_schedulerStateHolder.SchedulingResultState.Schedules = _scheduleDictionary;
 			target.Execute(new EventMessage());
 

@@ -1122,4 +1122,22 @@
   <data name="ResESLPercent" xml:space="preserve">
     <value>預估服務水準(%)</value>
   </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>遵時率 (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>遵時率計算：</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>按時段的遵時率 (%)</value>
+  </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>加班申请</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>按座席代表的遵時率</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>按天的遵時率</value>
+  </data>
 </root>

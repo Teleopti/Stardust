@@ -34,8 +34,28 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
 			var absence = new AbsenceRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
-			var repositoryFactory = new RepositoryFactory();
-			var scheduleRepository = new ScheduleStorage(unitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(new FullPermission()), new ScheduleStorageRepositoryWrapper(repositoryFactory, unitOfWork), new FullPermission());
+			var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var personAbsenceRepository = new PersonAbsenceRepository(unitOfWork);
+			var noteRepository = new NoteRepository(unitOfWork);
+			var publicNoteRepository = new PublicNoteRepository(unitOfWork);
+			var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(unitOfWork);
+			var preferenceDayRepository = new PreferenceDayRepository(unitOfWork);
+			var studentAvailabilityDayRepository = new StudentAvailabilityDayRepository(unitOfWork);
+			var overtimeAvailabilityRepository = new OvertimeAvailabilityRepository(unitOfWork);
+			var scheduleRepository = new ScheduleStorage(unitOfWork, personAssignmentRepository,
+				personAbsenceRepository, new MeetingRepository(unitOfWork),
+				agentDayScheduleTagRepository, noteRepository,
+				publicNoteRepository, preferenceDayRepository,
+				studentAvailabilityDayRepository, new PersonAvailabilityRepository(unitOfWork),
+				new PersonRotationRepository(unitOfWork), overtimeAvailabilityRepository,
+				new PersistableScheduleDataPermissionChecker(new FullPermission()),
+				new ScheduleStorageRepositoryWrapper(() => personAssignmentRepository,
+					() => personAbsenceRepository,
+					() => preferenceDayRepository, () => noteRepository,
+					() => publicNoteRepository,
+					() => studentAvailabilityDayRepository,
+					() => agentDayScheduleTagRepository,
+					() => overtimeAvailabilityRepository), new FullPermission());
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(new EmptyScheduleDayDifferenceSaver(), new PersistScheduleChanges(scheduleRepository, CurrentUnitOfWork.Make())), personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack());
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());

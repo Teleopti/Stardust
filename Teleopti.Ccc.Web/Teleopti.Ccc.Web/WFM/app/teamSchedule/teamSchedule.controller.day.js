@@ -23,12 +23,13 @@
 		'ViewStateKeeper',
 		'teamsPermissions',
 		'UtilityService',
+		'Toggle',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $stateParams, $mdComponentRegistry, $document,
-		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc,  ValidateRulesService,
+		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, bootstrapCommon, groupPageService,
-		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions, Utility) {
+		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper, teamsPermissions, Utility, toggleSvc) {
 		var mode = {
 			BusinessHierarchy: 'BusinessHierarchy',
 			GroupPages: 'GroupPages'
@@ -36,18 +37,24 @@
 
 		var vm = this;
 		var viewState = ViewStateKeeper.get();
+		var personIdsHavingScheduleChange = {};
+		var personIdInEditing;
+		var hasScheduleUpdatedInEditor = null; // init it to null because of only if it's false then need to update schedule after shift editor closed
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
-	
+
 		vm.preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
-		
+
 		vm.currentTimezone = viewState.timezone;
 		vm.scheduleDate = $stateParams.selectedDate || viewState.selectedDate || Utility.nowDateInUserTimezone();
 		vm.avaliableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = viewState.staffingEnabled;
 		vm.permissions = {};
+		vm.isRefreshButtonVisible = !!toggleSvc.WfmTeamSchedule_DisableAutoRefreshSchedule_79826;
+		vm.havingScheduleChanged = false;
+
 
 		initSelectedGroups(mode.BusinessHierarchy, [], '');
 		if (angular.isArray(viewState.selectedTeamIds) && viewState.selectedTeamIds.length > 0) {
@@ -144,6 +151,7 @@
 
 		vm.triggerCommand = function (command, needToOpenSidePanel) {
 			closeSettingsSidenav();
+			closeShiftEditor();
 			if ($mdSidenav(commandContainerId).isOpen()) {
 				$mdSidenav(commandContainerId).close().then(function () {
 					initCommand(command, needToOpenSidePanel);
@@ -246,6 +254,29 @@
 
 		});
 
+		$scope.$on('teamSchedule.shiftEditor.editing', function (e, d) {
+			personIdInEditing = d.personId;
+			if (!!personIdsHavingScheduleChange[personIdInEditing]) {
+				$scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', { isStaleSchedule: true });
+			}
+		});
+
+		$scope.$on('teamSchedule.shiftEditor.close', function (e, d) {
+			if (hasScheduleUpdatedInEditor === false || (d && d.needToUpdateSchedule)) {
+				vm.updateSchedules([personIdInEditing]);
+				vm.checkValidationWarningForCommandTargets([personIdInEditing]);
+			}
+			if (d && d.trackId) vm.lastCommandTrackId = d.trackId;
+			personIdInEditing = null;
+		});
+
+		$scope.$on('teamSchedule.updateSchedule', function (a, d) {
+			hasScheduleUpdatedInEditor = true;
+			scheduleMgmtSvc.updateSchedulesByRawData(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, [d.personId], d.rawSchedules);
+			vm.checkValidationWarningForCommandTargets([d.personId]);
+			resetHavingScheduleChange([d.personId]);
+		});
+
 		function getSkillsRowHeight() {
 			var skillsRow = $document[0].querySelector('.skills-row-wrapper');
 			return skillsRow ? skillsRow.offsetHeight : 0;
@@ -277,10 +308,12 @@
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
-			personIds && vm.updateSchedules(personIds);
-			vm.checkValidationWarningForCommandTargets(personIds);
-			if (vm.staffingEnabled) {
-				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
+			if (personIds) {
+				vm.updateSchedules(personIds);
+				vm.checkValidationWarningForCommandTargets(personIds);
+				if (vm.staffingEnabled) {
+					$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
+				}
 			}
 		};
 
@@ -308,6 +341,10 @@
 
 		function closeSettingsSidenav() {
 			$mdSidenav(settingsContainerId).isOpen() && $mdSidenav(settingsContainerId).close();
+		}
+
+		function closeShiftEditor() {
+			$scope.$broadcast('teamSchedule.shiftEditor.close');
 		}
 
 		vm.onPageSizeSelectorChange = function () {
@@ -402,17 +439,20 @@
 		}
 
 		vm.changeTimezone = function () {
+			closeShiftEditor();
 			scheduleMgmtSvc.recreateScheduleVm(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone);
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.schedules());
 		};
 
 		vm.loadSchedules = function () {
 			closeAllCommandSidenav();
+			resetHavingScheduleChange();
+			closeShiftEditor();
+
 			vm.isLoading = true;
 			var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
-				
 				teamScheduleSvc.searchSchedules(params).then(function (response) {
 					var result = response.data;
 					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
@@ -430,7 +470,6 @@
 					vm.searchOptions.focusingSearch = false;
 				});
 			} else if (vm.preSelectPersonIds.length > 0) {
-
 				teamScheduleSvc.getSchedules(date, vm.preSelectPersonIds).then(function (result) {
 					scheduleMgmtSvc.resetSchedules(result.Schedules, date, vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, date);
@@ -473,8 +512,10 @@
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
+			resetHavingScheduleChange(personIdList);
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, function () {
 				personSelectionSvc.clearPersonInfo();
+				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
 			});
@@ -509,10 +550,47 @@
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
 
-		vm.onPersonScheduleChanged = function (personIds) {
+		vm.onPersonScheduleChanged = function (personIds, messages) {
+			if (!toggleSvc.WfmTeamSchedule_DisableAutoRefreshSchedule_79826) {
+				var pIndex;
+				if (personIdInEditing && (pIndex = personIds.indexOf(personIdInEditing)) > -1) {
+					personIds.splice(pIndex, 1);
+					hasScheduleUpdatedInEditor = false;
+				}
+				if (!!personIds.length) {
+					vm.updateSchedules(personIds);
+					vm.checkValidationWarningForCommandTargets(personIds);
+				}
+			} else {
+				angular.forEach(personIds, function (personId) {
+					personIdsHavingScheduleChange[personId] = personId;
+				});
+				vm.havingScheduleChanged = true;
+			}
+			$scope.$broadcast('teamSchedule.shiftEditor.scheduleChanged', { messages: messages });
+		};
+
+		vm.onRefreshButtonClicked = function () {
+			var personIds = Object.keys(personIdsHavingScheduleChange);
 			vm.updateSchedules(personIds);
 			vm.checkValidationWarningForCommandTargets(personIds);
-		};
+			if (vm.staffingEnabled) {
+				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
+			}
+		}
+
+		function resetHavingScheduleChange(personIds) {
+			if (personIds) {
+				personIds.forEach(function (personId) {
+					if (personIdsHavingScheduleChange[personId])
+						delete personIdsHavingScheduleChange[personId];
+				});
+			} else {
+				personIdsHavingScheduleChange = {};
+			}
+			vm.havingScheduleChanged = !!Object.keys(personIdsHavingScheduleChange).length;
+		}
+
 		vm.searchOptions = {
 			keyword: viewState.keyword || '',
 			searchKeywordChanged: false,

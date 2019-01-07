@@ -85,12 +85,12 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\packages\MbCache.2.14.0\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\packages\MbCache.2.15.0\lib\net40\MbCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\packages\MbCache.2.14.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\packages\MbCache.2.15.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -137,13 +137,11 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -220,7 +218,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsUpdaterWithValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SendUpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerNoMocksTest.cs" />
@@ -276,6 +273,7 @@
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
+    <Compile Include="Notification\NotificationServiceClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePollerTest.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardustTest.cs" />
@@ -390,7 +388,7 @@
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccShiftTradesLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccSmsLinkLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccVacationPlannerLicenseOptionTest.cs" />
-    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmChatBotLicenseOptionTest.cs" />
+    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmGrantLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmOutboundLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmInsightsLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiWfmSeatPlannerLicenseOptionTest.cs" />
@@ -871,7 +869,6 @@
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeamTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderWrapperTest.cs" />
-    <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssuesTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionCacheIntraIntervalValueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionIntraIntervalBestFitCalculatorTest.cs" />
@@ -902,7 +899,6 @@
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionForPersonsTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportServiceTest.cs" />
@@ -956,7 +952,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameTimeZoneValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FilterOutIntervalsAfterMidNightTest.cs" />
-    <Compile Include="Optimization\TeamBlock\LocateMissingIntervalsIfMidNightBreakTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\DayValueUnlockedIndexSorterTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeDescisionMakerTest.cs" />
@@ -1234,7 +1229,6 @@
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSetZeroValues.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolderTest.cs" />
-    <Compile Include="ResourceCalculation\StudentSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingOptionsTest.cs" />

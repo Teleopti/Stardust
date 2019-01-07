@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceDayFeedbackViewModelMapper
 	{
 		private const string timeSpanFormat = @"hh\:mm";
-		private readonly IPreferenceFeedbackProvider _preferenceFeedbackProvider;
+		private readonly PreferenceFeedbackProvider _preferenceFeedbackProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public PreferenceDayFeedbackViewModelMapper(IPreferenceFeedbackProvider preferenceFeedbackProvider)
+		public PreferenceDayFeedbackViewModelMapper(PreferenceFeedbackProvider preferenceFeedbackProvider, ILoggedOnUser loggedOnUser)
 		{
 			_preferenceFeedbackProvider = preferenceFeedbackProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public PreferenceDayFeedbackViewModel Map(DateOnly date)
@@ -27,9 +29,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		public IEnumerable<PreferenceDayFeedbackViewModel> Map(DateOnlyPeriod period)
 		{
 			var result = new List<PreferenceDayFeedbackViewModel>();
-			
-			var workTimeMinMaxCalculationResults = _preferenceFeedbackProvider.WorkTimeMinMaxForPeriod(period);
-			var nightResultResults = _preferenceFeedbackProvider.CheckNightRestViolation(period, workTimeMinMaxCalculationResults);
+
+			var currentUser = _loggedOnUser.CurrentUser();
+			var workTimeMinMaxCalculationResults = _preferenceFeedbackProvider.WorkTimeMinMaxForPeriod(currentUser, period);
+			var nightResultResults = _preferenceFeedbackProvider.CheckNightRestViolation(currentUser, period, workTimeMinMaxCalculationResults);
 
 			foreach (var date in period.DayCollection())
 			{

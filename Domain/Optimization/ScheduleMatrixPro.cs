@@ -14,17 +14,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDictionary<DateOnly, IScheduleDayPro> _weekAfterOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
         private readonly IDictionary<DateOnly, IScheduleDayPro> _unLockedDays = new Dictionary<DateOnly, IScheduleDayPro>();
 
-	    /// <summary>
-        /// Initializes a new instance of the <see cref="ScheduleDayPro"/> class.
-        /// </summary>
-        /// <param name="stateHolder">The state holder.</param>
-        /// <param name="periodCreator">The period creator.</param>
-        /// <param name="schedulePeriod">The schedule period.</param>
-        public ScheduleMatrixPro(ISchedulingResultStateHolder stateHolder, IFullWeekOuterWeekPeriodCreator periodCreator, IVirtualSchedulePeriod schedulePeriod)
+        public ScheduleMatrixPro(IScheduleDictionary schedules, IFullWeekOuterWeekPeriodCreator periodCreator, IVirtualSchedulePeriod schedulePeriod)
         {
             Person = periodCreator.Person;
             SchedulePeriod = schedulePeriod;
-            ActiveScheduleRange = stateHolder.Schedules[Person];
+            ActiveScheduleRange = schedules[Person];
             createScheduleDays(periodCreator);
         }
 

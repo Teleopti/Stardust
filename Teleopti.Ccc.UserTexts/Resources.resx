@@ -1173,6 +1173,10 @@ Date</value>
     <value>Months</value>
     <comment>Months</comment>
   </data>
+  <data name="MonthOrMonths" xml:space="preserve">
+    <value>Month(s)</value>
+    <comment>Month(s)</comment>
+  </data>
   <data name="MonthView" xml:space="preserve">
     <value>Month View</value>
     <comment>Month view</comment>
@@ -2253,6 +2257,38 @@ Periods</comment>
     <value>Week</value>
     <comment>Week</comment>
   </data>
+  <data name="WeekLowerCase" xml:space="preserve">
+    <value>week</value>
+    <comment>week</comment>
+  </data>
+  <data name="WeeksLowerCase" xml:space="preserve">
+    <value>weeks</value>
+    <comment>weeks</comment>
+  </data>
+  <data name="MonthLowerCase" xml:space="preserve">
+    <value>month</value>
+    <comment>month</comment>
+  </data>
+  <data name="MonthsLowerCase" xml:space="preserve">
+    <value>months</value>
+    <comment>months</comment>
+  </data>
+  <data name="DayLowerCase" xml:space="preserve">
+    <value>day</value>
+    <comment>day</comment>
+  </data>
+  <data name="DaysLowerCase" xml:space="preserve">
+    <value>days</value>
+    <comment>days</comment>
+  </data>
+  <data name="YearLowerCase" xml:space="preserve">
+    <value>year</value>
+    <comment>year</comment>
+  </data>
+  <data name="YearsLowerCase" xml:space="preserve">
+    <value>years</value>
+    <comment>years</comment>
+  </data>
   <data name="WeekWithNumber" xml:space="preserve">
     <value>Week {0}</value>
     <comment>Week with week number</comment>
@@ -2272,6 +2308,10 @@ Periods</comment>
   <data name="Weeks" xml:space="preserve">
     <value>Weeks</value>
     <comment>Weeks</comment>
+  </data>
+  <data name="WeekOrWeeks" xml:space="preserve">
+    <value>Week(s)</value>
+    <comment>Week(s)</comment>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
@@ -8319,6 +8359,10 @@ Period</value>
     <value>Block Scheduling</value>
     <comment>Block Scheduling</comment>
   </data>
+  <data name="BlockSchedulingColon" xml:space="preserve">
+    <value>Block scheduling:</value>
+    <comment>Block scheduling:</comment>
+  </data>
   <data name="UseBlockScheduling" xml:space="preserve">
     <value>Use Block Scheduling</value>
     <comment>Use Block Scheduling</comment>
@@ -12259,7 +12303,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>No team option in team scheduling /optimization</comment>
   </data>
   <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
-    <value>Schedule Period</value>
+    <value>Schedule period</value>
   </data>
   <data name="Desktop" xml:space="preserve">
     <value>Desktop</value>
@@ -12774,6 +12818,10 @@ Reduce the complexity to use these shifts.</value>
   <data name="PublishSchedule" xml:space="preserve">
     <value>Publish Schedule</value>
     <comment>Publish Schedule</comment>
+  </data>
+  <data name="PublishSchedulePlans" xml:space="preserve">
+    <value>Publish schedule</value>
+    <comment>Publish schedule, used in plans</comment>
   </data>
   <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
     <value>Start time should be earlier than end time</value>
@@ -13830,7 +13878,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Set of planning periods</comment>
   </data>
   <data name="SelectedFiltersColon" xml:space="preserve">
-    <value>Selected Filters:</value>
+    <value>Selected filters:</value>
     <comment>Selected Filters:</comment>
   </data>
   <data name="StartNext" xml:space="preserve">
@@ -14164,7 +14212,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Seat property information title of seatmap right panel</comment>
   </data>
   <data name="IntraOptimize" xml:space="preserve">
-    <value>Optimize Intraday</value>
+    <value>Optimize intraday</value>
     <comment>describing action for starting intraday optimization on selected schedule</comment>
   </data>
   <data name="ShowErrors" xml:space="preserve">
@@ -16003,7 +16051,7 @@ Do you want to participate?</value>
     <comment>Delete planning period</comment>
   </data>
   <data name="EditPlanningGroup" xml:space="preserve">
-    <value>Edit Planning Group</value>
+    <value>Edit planning group</value>
     <comment>text for edit planning group</comment>
   </data>
   <data name="FilterValidationIssues" xml:space="preserve">
@@ -16079,7 +16127,7 @@ Do you want to participate?</value>
     <comment>used for creating planning group</comment>
   </data>
   <data name="SearchForDayOff" xml:space="preserve">
-    <value>Search site / team / contract</value>
+    <value>Search for: site / team / contract</value>
     <comment>SearchForDayOff</comment>
   </data>
   <data name="SelectedPlanningPeriod" xml:space="preserve">
@@ -17830,10 +17878,6 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>No restrictions in period</value>
     <comment>No restrictions in period</comment>
   </data>
-  <data name="xxGeneralAuditTrailWebReport" xml:space="preserve">
-    <value>Audit Trail</value>
-    <comment>The new generic audit trail web report </comment>
-  </data>
   <data name="CopySchedule" xml:space="preserve">
     <value>Copy schedule</value>
     <comment>Copy schedule</comment>
@@ -17966,7 +18010,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Context in audit trail</comment>
   </data>
   <data name="PreferenceFulfillmentPercentColon" xml:space="preserve">
-    <value>Preference Fulfillment (%):</value>
+    <value>Preference fulfillment (%):</value>
     <comment>used in web plans</comment>
   </data>
   <data name="ClickToViewSchedules" xml:space="preserve">
@@ -17995,5 +18039,118 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="AuditTrailSearchFilter" xml:space="preserve">
     <value>Search filter</value>
     <comment>Free text search filter used in general audit trail report</comment>
+  </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>System Settings</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>General settings</value>
+    <comment>General settings icon tooltip in WFM</comment>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
+    <value>You have modified this shift. Do you want to close and lose changes?</value>
+  </data>
+  <data name="PasswordPolicyError" xml:space="preserve">
+    <value>Password policy error</value>
+    <comment>Title of the password policy error box</comment>
+  </data>
+  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>Are you sure to delete this bank holiday calendar?</value>
+    <comment>Are you sure to delete this bank holiday calendar?</comment>
+  </data>
+  <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
+    <value>Are you sure to delete year {0} from calendar {1}?</value>
+    <comment>Are you sure to delete year {0} from calendar {1}?</comment>
+  </data>
+  <data name="BankHolidayCalendarHasBeenSuccessfullyDeleted" xml:space="preserve">
+    <value>Bank holiday calendar {0} has been successfully deleted.</value>
+    <comment>Bank holiday calendar {0} has been successfully deleted.</comment>
+  </data>
+  <data name="BankHolidayCalendars" xml:space="preserve">
+    <value>Bank holiday calendars</value>
+    <comment>Title of bank holiday calendars in WFM</comment>
+  </data>
+  <data name="DeleteThisYear" xml:space="preserve">
+    <value>Delete this year</value>
+    <comment>Delete this year </comment>
+  </data>
+  <data name="NameAlreadyExisting" xml:space="preserve">
+    <value>Name already existing</value>
+    <comment>Name already existing tip for duplicated name </comment>
+  </data>
+  <data name="NewCalendarName" xml:space="preserve">
+    <value>New calendar name</value>
+    <comment>New calendar name input tooltip on creating bank holiday calendar page</comment>
+  </data>
+  <data name="AddANewYear" xml:space="preserve">
+    <value>Add a new year</value>
+    <comment>Add a new year - input tip of bank holiday calendar editing or creating</comment>
+  </data>
+  <data name="ThisCalendarHasNoDatesAdded" xml:space="preserve">
+    <value>This calendar has no dates added.</value>
+    <comment>This calendar has no dates added</comment>
+  </data>
+  <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">
+    <value>There are no bank holidays defined for this year. Select a day in the calendar to add a bank holiday.</value>
+    <comment>There are no bank holidays defined for this year. Select a day in the calendar to create a new holiday.</comment>
+  </data>
+  <data name="BankHoliday" xml:space="preserve">
+    <value>Bank holiday</value>
+    <comment>Default description for a bank holiday</comment>
+  </data>
+  <data name="NoBankHolidays" xml:space="preserve">
+    <value>No bank holidays</value>
+    <comment>No bank holidays</comment>
+  </data>
+  <data name="AddNewBankHolidayCalendar" xml:space="preserve">
+    <value>Add new bank holiday calendar</value>
+    <comment>Add new bank holiday calendar tooltip</comment>
+  </data>
+  <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
+    <value>An error occurred. Please check the network connection and try again. If this continues to happen, please contact your administrator.</value>
+    <comment>An error occurred. Please check the network connection and try again. If this continues happening, please contact your administrator.</comment>
+  </data>
+  <data name="NumberOfAgents" xml:space="preserve">
+    <value>{0} agents</value>
+    <comment>Number of agents, used in plans to display number of agents in a planning group</comment>
+  </data>
+  <data name="OneAgent" xml:space="preserve">
+    <value>1 agent</value>
+    <comment>1 agent, used in plans to display number of agents in a planning group</comment>
+  </data>
+  <data name="DayOffRulesColon" xml:space="preserve">
+    <value>Day off rules:</value>
+    <comment>Page header for day off rules/filter web</comment>
+  </data>
+  <data name="ScheduledAgents" xml:space="preserve">
+    <value>Scheduled agents</value>
+    <comment>Number of successfully scheduled agents. Shown in planning period overview in Plans</comment>
+  </data>
+  <data name="ValidationIssues" xml:space="preserve">
+    <value>Validation issues</value>
+    <comment>Shown in planning period overview in Plans</comment>
+  </data>
+  <data name="ValidationsAreLoading" xml:space="preserve">
+    <value>Validation are loading</value>
+    <comment>Shown in planning period overview in Plans</comment>
+  </data>
+  <data name="ValidationsAreLoadingTooltip" xml:space="preserve">
+    <value>Validation are loading, this might take a few minutes</value>
+    <comment>Shown in planning period overview in Plans</comment>
+  </data>
+  <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
+    <value>There are no agents in this planning group. Please review the filters. </value>
+    <comment>Used in Plans when a planning group has been created and no agents match the filters</comment>
+  </data>
+  <data name="ManageCalendars" xml:space="preserve">
+    <value>Manage calendars</value>
+    <comment>Manage calendars tab title in WFM bank holiday calendars setting</comment>
+  </data>
+  <data name="AssignCalendarsToSites" xml:space="preserve">
+    <value>Assign calendars to sites</value>
+    <comment>Assign calendars to sites</comment>
   </data>
 </root>

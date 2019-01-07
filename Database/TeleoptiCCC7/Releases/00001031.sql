@@ -1,2 +1,2 @@
-UPDATE rta.Events SET StoreVersion = 1
-GO
+--UPDATE rta.Events SET StoreVersion = 1
+--GO

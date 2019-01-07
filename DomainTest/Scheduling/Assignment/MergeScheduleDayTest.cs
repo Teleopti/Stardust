@@ -4,14 +4,18 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Scheduling;
 
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
@@ -19,11 +23,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[DomainTest]
 	public class MergeScheduleDayTest
 	{
+		public Func<ISchedulerStateHolder> SchedulerStateHolder;
+
 		private readonly DateTimePeriod period1 = new DateTimePeriod(new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 17, 0, 0, DateTimeKind.Utc));
 		private readonly DateTimePeriod period2 = new DateTimePeriod(new DateTime(1999, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2001, 10, 1, 17, 0, 0, DateTimeKind.Utc));
 		private readonly DateTimePeriod period3 = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 15, 0, 0, DateTimeKind.Utc));
 		private readonly TimeZoneInfo timeZoneInfoTokyo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
 		private readonly DateTimePeriod rangePeriod = new DateTimePeriod(2000, 1, 1, 2001, 6, 1);
+
+		[Test]
+		public void ShouldSplitAbsenceWhenMergingMainShift()
+		{
+			var dateBefore = new DateOnly(2018, 10, 1);
+			var date = dateBefore.AddDays(1);
+			var dateSource = dateBefore.AddDays(4);
+			var scenario = new Scenario().WithId();
+			var activity = new Activity().WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance());
+			var expectedPeriod = dateBefore.ToDateTimePeriod(new TimePeriod(0, 27), TimeZoneInfo.Utc);
+			var personAssignmentBefore = new PersonAssignment(agent, scenario, dateBefore).ShiftCategory(new ShiftCategory().WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAssignment = new PersonAssignment(agent, scenario, date).ShiftCategory(new ShiftCategory().WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAssignmentSource = new PersonAssignment(agent, scenario, dateSource).ShiftCategory(new ShiftCategory().WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence().WithId(), dateBefore.ToDateTimePeriod(new TimePeriod(0, 51), TimeZoneInfo.Utc)));
+			var data = new List<IPersistableScheduleData> { personAssignmentBefore, personAssignment, personAssignmentSource, personAbsence };
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateBefore, 1), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
+			var destination = stateHolder.Schedules[agent].ScheduledDay(date);
+			var source = stateHolder.Schedules[agent].ScheduledDay(dateSource);
+
+			destination.Merge(source, false, true);
+
+			destination.PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(expectedPeriod);
+		}
+
 
 		[Test]
 		public void VerifyMergeEmptyDay()

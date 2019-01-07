@@ -22,7 +22,6 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.TeamSchedule;
 
-
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {
 	[TestFixture, TeamScheduleTest]
@@ -31,7 +30,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public TeamScheduleViewModelFactory Target;
 		public FakePeopleSearchProvider PeopleSearchProvider;
 		public FakePersonRepository PersonRepository;
-		public IScheduleStorage ScheduleStorage;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeScenarioRepository CurrentScenario;
 		public FakeUserTimeZone UserTimeZone;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public FakeUserUiCulture UserUiCulture;
 		public FakeUserCulture UserCulture;
 		public FakeMeetingRepository MeetingRepository;
+		public FakeNoteRepository NoteRepository;
 
 		private ITeam team;
 		private IPerson personInUtc;
@@ -90,8 +91,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 4, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 13, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa);
+			PersonAssignmentRepository.Add(pa2);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>();
 
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
@@ -209,7 +210,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
@@ -246,7 +247,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				shiftCategory, ActivityFactory.CreateActivity("activity1", new Color()));
 			pa.SetDayOff(new DayOffTemplate(new Description("DayOff")));
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
@@ -287,8 +288,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
@@ -322,7 +323,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				shiftCategory, ActivityFactory.CreateActivity("activity1", new Color()));
 			pa.SetDayOff(new DayOffTemplate(new Description("DayOff")));
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
@@ -373,9 +374,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(2020, 1, 1, 11, 2020, 1, 1, 12), absence).WithId();
 			var personAbsence2 = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(2020, 1, 1, 12, 2020, 1, 1, 13), absence).WithId();
-			ScheduleStorage.Add(personAbsence1);
-			ScheduleStorage.Add(personAbsence2);
-			ScheduleStorage.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence1);
+			PersonAbsenceRepository.Add(personAbsence2);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -409,7 +410,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
-			ScheduleStorage.Add(personAbsence);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -450,8 +451,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 15));
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -494,8 +495,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
 			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(personInUtc, scenario,
 				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
@@ -548,8 +549,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 17));
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2020, 1, 4));
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
@@ -602,11 +603,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", Color.White),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 15));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 10), secretAbs);
-			ScheduleStorage.Add(personAbsence);
+			PersonAbsenceRepository.Add(personAbsence);
 
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
@@ -660,14 +661,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", Color.White),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 15));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var secretAbs = AbsenceFactory.CreateAbsence("secret");
 			secretAbs.Confidential = true;
 			secretAbs.DisplayColor = Color.Red;
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario,
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 10), secretAbs);
-			ScheduleStorage.Add(personAbsence);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -730,7 +731,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -771,11 +772,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario, new DateTimePeriod(2019, 12, 31, 20, 2020, 1, 1, 3));
-			ScheduleStorage.Add(paPrev);
+			PersonAssignmentRepository.Add(paPrev);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -808,7 +809,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario, new DateTimePeriod(2019, 12, 31, 20, 2020, 1, 1, 3));
-			ScheduleStorage.Add(paPrev);
+			PersonAssignmentRepository.Add(paPrev);
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
@@ -841,7 +842,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario, new DateTimePeriod(2019, 12, 31, 20, 2020, 1, 1, 3));
-			ScheduleStorage.Add(paPrev);
+			PersonAssignmentRepository.Add(paPrev);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -876,7 +877,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			pa.AddOvertimeActivity(ActivityFactory.CreateActivity("activity2", new Color()),
 				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11),
 				new MultiplicatorDefinitionSet("temp", MultiplicatorType.Overtime));
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -934,18 +935,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
@@ -954,14 +955,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person4,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa4);
-			ScheduleStorage.Add(personAbsenceForPerson4);
+			PersonAssignmentRepository.Add(pa4);
+			PersonAbsenceRepository.Add(personAbsenceForPerson4);
 
 			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
 			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
 			var dayOffAssigment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person5, scenario,
 				new DateOnly(scheduleDate), new DayOffTemplate(new Description("day off")));
-			ScheduleStorage.Add(dayOffAssigment);
+			PersonAssignmentRepository.Add(dayOffAssigment);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1002,7 +1003,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1070,29 +1071,29 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa1 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 4, 7, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
 				new DateTimePeriod(2020, 1, 4, 8, 2020, 1, 4, 17));
 			var pa4 = PersonAssignmentFactory.CreatePersonAssignment(person4, scenario, new DateOnly(2020, 1, 4));
-			ScheduleStorage.Add(pa4);
-			ScheduleStorage.Add(personAbsenceForPerson4);
+			PersonAssignmentRepository.Add(pa4);
+			PersonAbsenceRepository.Add(personAbsenceForPerson4);
 
 			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
 			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
 			var dayOffAssigment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person5, scenario,
 				new DateOnly(scheduleDate), new DayOffTemplate(new Description("day off")));
-			ScheduleStorage.Add(dayOffAssigment);
+			PersonAssignmentRepository.Add(dayOffAssigment);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1155,18 +1156,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 			var personAbsenceForPerson4 = PersonAbsenceFactory.CreatePersonAbsence(person4, scenario,
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
@@ -1175,14 +1176,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person4,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa4);
-			ScheduleStorage.Add(personAbsenceForPerson4);
+			PersonAssignmentRepository.Add(pa4);
+			PersonAbsenceRepository.Add(personAbsenceForPerson4);
 
 			var scheduleDay5 = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person5, scenario);
 			scheduleDay5.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
 			var dayOffAssigment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person5, scenario,
 				new DateOnly(scheduleDate), new DayOffTemplate(new Description("day off")));
-			ScheduleStorage.Add(dayOffAssigment);
+			PersonAssignmentRepository.Add(dayOffAssigment);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1218,11 +1219,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var personAssignment1 = new PersonAssignment(personInUtc, scenario, scheduleDateOnly);
 			personAssignment1.AddActivity(new Activity("activity1"), new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
-			ScheduleStorage.Add(personAssignment1);
+			PersonAssignmentRepository.Add(personAssignment1);
 
 			var personAssignment2 = new PersonAssignment(personInHongKong, scenario, scheduleDateOnly);
 			personAssignment2.AddActivity(new Activity("activity2"), new DateTimePeriod(scheduleDate.AddHours(8), scheduleDate.AddHours(18)));
-			ScheduleStorage.Add(personAssignment2);
+			PersonAssignmentRepository.Add(personAssignment2);
 
 			var result = Target.CreateViewModelForPeople(
 				new[] { personInUtc.Id.Value, personInHongKong.Id.Value }, new DateOnly(scheduleDate));
@@ -1246,7 +1247,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var personAssignment1 = new PersonAssignment(personInUtc, scenario, scheduleDateOnly);
 			personAssignment1.AddActivity(new Activity("activity1"), new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
-			ScheduleStorage.Add(personAssignment1);
+			PersonAssignmentRepository.Add(personAssignment1);
 
 			var result = Target.CreateViewModelForPeople(
 				new[] { personInUtc.Id.Value }, new DateOnly());
@@ -1267,12 +1268,52 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var personAssignment1 = new PersonAssignment(person, scenario, scheduleDateOnly);
 			personAssignment1.AddActivity(new Activity("activity1"), new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
-			ScheduleStorage.Add(personAssignment1);
+			PersonAssignmentRepository.Add(personAssignment1);
 
 			var result = Target.CreateViewModelForPeople(new[] { person.Id.Value }, scheduleDateOnly);
 
 			result.Schedules.Should().Be.Empty();
 			result.Total.Should().Be(0);
+		}
+
+		[Test, SetCulture("sv-SE")]
+		public void ShouldReturnScheduleForPermittedTeamMembers()
+		{
+			var scheduleDate = new DateTime(2018, 10, 30, 00, 00, 00, DateTimeKind.Utc);
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+
+			var secondScheduleDate = new DateTime(2018, 10, 31, 00, 00, 00, DateTimeKind.Utc);
+			var secondScheduleDateOnly = new DateOnly(secondScheduleDate);
+
+			setUpPersonAndCulture();
+
+			PeopleSearchProvider.EnableDateFilter();
+			PeopleSearchProvider.Add(secondScheduleDateOnly,personInUtc);
+			PermissionProvider.Enable();
+			PermissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules,
+				secondScheduleDateOnly, team);
+
+			var scenario = CurrentScenario.Has("Default");
+
+			var activity = new Activity("activity1");
+			var personAssignment1 = new PersonAssignment(personInUtc, scenario, scheduleDateOnly);
+			personAssignment1.AddActivity(activity, new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
+			PersonAssignmentRepository.Add(personAssignment1);
+
+			var personAssignment2 = new PersonAssignment(personInUtc, scenario, secondScheduleDateOnly);
+			personAssignment2.AddActivity(activity, new DateTimePeriod(secondScheduleDate.AddHours(7), secondScheduleDate.AddHours(18)));
+			PersonAssignmentRepository.Add(personAssignment2);
+
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
+			{
+				DateInUserTimeZone = scheduleDateOnly,
+				CurrentPageIndex = 0,
+				CriteriaDictionary = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, personInUtc.Name.FirstName} },
+				GroupIds = new[] {team.Id.GetValueOrDefault()}
+			});
+
+			result.PersonWeekSchedules[0].DaySchedules[1].ContractTimeMinutes.Should().Be.EqualTo(0);
+			result.PersonWeekSchedules[0].DaySchedules[2].ContractTimeMinutes.Should().Be.GreaterThan(0);
 		}
 
 		[Test, SetCulture("en-US")]
@@ -1287,7 +1328,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1330,7 +1371,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1367,7 +1408,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(personInUtc, scenario, scheduleDate, DayOffFactory.CreateDayOff(new Description("DayOff")));
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1412,8 +1453,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1456,7 +1497,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, period, ShiftCategoryFactory.CreateShiftCategory("Main", "blue"));
 			pa.AddPersonalActivity(ActivityFactory.CreateActivity("personal activity", Color.Azure), personalPeriod);
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string> {
 				   { PersonFinderField.FirstName, "Sherlock"}
@@ -1493,7 +1534,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, period, ShiftCategoryFactory.CreateShiftCategory("Main", "blue"));
 			pa.AddPersonalActivity(ActivityFactory.CreateActivity("personal activity", Color.Azure), personalPeriod);
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string> {
 						   { PersonFinderField.FirstName, "Sherlock"}
@@ -1532,8 +1573,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1576,8 +1617,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1623,8 +1664,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), absence);
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1673,8 +1714,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), absence);
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1726,8 +1767,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc),
 					new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), AbsenceFactory.CreateAbsence("abs"));
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
+			PersonAssignmentRepository.Add(pa);
+			PersonAbsenceRepository.Add(personAbsence);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1764,7 +1805,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var scenario = CurrentScenario.Has("Default");
 			var note = new Note(personInUtc, new DateOnly(scheduleDate), scenario, "dummy notes");
-			ScheduleStorage.Add(note);
+			NoteRepository.Add(note);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1834,7 +1875,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, activity, new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), shiftCategory);
 
-			ScheduleStorage.Add(pa);
+			PersonAssignmentRepository.Add(pa);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1885,8 +1926,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, new DateTimePeriod(startTimeUtc, endTimeUtc), shiftCategory);
 			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity, new DateTimePeriod(startTimeUtc, endTimeUtc), shiftCategory);
 
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa);
+			PersonAssignmentRepository.Add(pa2);
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -1978,18 +2019,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 
 			var result = Target.CreateViewModel(
@@ -2083,18 +2124,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 
 			var result = Target.CreateViewModel(
@@ -2145,18 +2186,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 
 			var result = Target.CreateViewModel(
@@ -2206,18 +2247,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 
 			var result = Target.CreateViewModel(
@@ -2267,18 +2308,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 18), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 12), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 
 			var result = Target.CreateViewModel(
@@ -2336,18 +2377,18 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 6, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 
 			var result = Target.CreateViewModel(
@@ -2398,13 +2439,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 
 
@@ -2456,16 +2497,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(person2, scenario,
 				new DateTimePeriod(2020, 1, 1, 0, 2020, 1, 1, 23));
 
-			ScheduleStorage.Add(personAbs);
+			PersonAbsenceRepository.Add(personAbs);
 
 			var pa3 = PersonAssignmentFactory.CreateEmptyAssignment(person3, scenario,
 				new DateTimePeriod(2020, 1, 1, 0, 2020, 1, 1, 23));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 
 			var result = Target.CreateViewModel(
@@ -2515,16 +2556,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 = PersonAssignmentFactory.CreateEmptyAssignment(person2, scenario,
 				new DateTimePeriod(2020, 1, 1, 0, 2020, 1, 1, 23));
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person3, scenario, new DateOnly(2020, 1, 1),
 				new DayOffTemplate());
 
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 
 			var result = Target.CreateViewModel(
@@ -2573,17 +2614,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa1);
+			PersonAssignmentRepository.Add(pa1);
 
 			var pa2 =
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
 					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
 
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person3, scenario,
 				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
@@ -2631,11 +2672,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var pa2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, scenario,
 				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
-			ScheduleStorage.Add(pa2);
+			PersonAssignmentRepository.Add(pa2);
 
 			var pa3 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person3, scenario,
 				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
-			ScheduleStorage.Add(pa3);
+			PersonAssignmentRepository.Add(pa3);
 
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
@@ -2667,20 +2708,20 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var personAssignment = new PersonAssignment(personInUtc, scenario, scheduleDate);
 			personAssignment.AddActivity(new Activity("activity"), new DateTimePeriod(date.AddHours(7), date.AddHours(18)));
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 
 			var previousDate = date.AddDays(-1);
 			var previousDay = new DateOnly(previousDate);
 			var personAssignmentPreviousDay = new PersonAssignment(personInUtc, scenario, previousDay);
 			personAssignmentPreviousDay.AddActivity(new Activity("activity for previous day"), new DateTimePeriod(previousDate.AddHours(7), previousDate.AddHours(18)));
-			ScheduleStorage.Add(personAssignmentPreviousDay);
+			PersonAssignmentRepository.Add(personAssignmentPreviousDay);
 
 
 			var nextDate = date.AddDays(1);
 			var nextDay = new DateOnly(nextDate);
 			var personAssignmentNextDay = new PersonAssignment(personInUtc, scenario, nextDay);
 			personAssignmentNextDay.AddActivity(new Activity("activity for next day"), new DateTimePeriod(nextDate.AddHours(7), nextDate.AddHours(18)));
-			ScheduleStorage.Add(personAssignmentNextDay);
+			PersonAssignmentRepository.Add(personAssignmentNextDay);
 
 			var result = Target.CreateViewModelForPeople(
 				new[] { personInUtc.Id.Value }, scheduleDate);

@@ -161,18 +161,18 @@ namespace Teleopti.Wfm.Adherence.Monitor
 					Shift = state.Shift?.Select(y => new AgentStateActivityViewModel
 					{
 						Color = ColorTranslator.ToHtml(Color.FromArgb(y.Color)),
-						StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-						EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH\\:mm\\:ss"),
+						EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH\\:mm\\:ss"),
 						Name = y.Name
 					}),
 					OutOfAdherences = state.OutOfAdherences?.Select(y =>
 					{
 						string endTime = null;
 						if (y.EndTime.HasValue)
-							endTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
+							endTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH\\:mm\\:ss");
 						return new AgentOutOfAdherenceViewModel
 						{
-							StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+							StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH\\:mm\\:ss"),
 							EndTime = endTime
 						};
 					})

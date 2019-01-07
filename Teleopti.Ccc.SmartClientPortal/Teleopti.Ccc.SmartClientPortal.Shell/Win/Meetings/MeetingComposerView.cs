@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingImpactView getImpactView()
 		{
-			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulingScreenState.SchedulerStateHolder, this, 
+			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulingScreenState, this, 
 				_resourceOptimizationHelper, _skillPriorityProvider, _staffingCalculatorServiceFacade, _resourceCalculationContextFactory);
 		}
 

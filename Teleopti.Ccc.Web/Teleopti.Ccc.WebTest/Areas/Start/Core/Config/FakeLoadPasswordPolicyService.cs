@@ -33,11 +33,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			return null;
 		}
-
-
-		public void ClearFile()
-		{
-		}
-
 	}
 }

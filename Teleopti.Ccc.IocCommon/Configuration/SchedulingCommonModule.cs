@@ -182,7 +182,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IClearReferredShiftTradeRequests>()
 				.AsSelf()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<TimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<BudgetGroupState>().InstancePerLifetimeScope();
@@ -274,15 +273,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().SingleInstance();
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
-
-			if (_configuration.Toggle(Toggles.ResourcePlanner_RespectClosedDaysWhenDoingDOBackToLegal_76348))
-			{
-				builder.RegisterType<MatrixClosedDayLocker>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
-			}
-			else
-			{
-				builder.RegisterType<MatrixClosedDaysLockerDoNothing>().As<IMatrixClosedDayLocker>().InstancePerLifetimeScope();
-			}
+			builder.RegisterType<MatrixClosedDayLocker>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941))
 			{
@@ -293,14 +284,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ScheduleAllRemovedDaysOrRollbackDoNothing>().As<IScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
 			}
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))
-			{
-				builder.RegisterType<OpenHoursSkillExtractor>().As<IOpenHoursSkillExtractor>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<OpenHoursSkillExtractorDoNothing>().As<IOpenHoursSkillExtractor>().SingleInstance();
-			}
+			builder.RegisterToggledComponent<OpenHoursSkillExtractor, OpenHoursSkillExtractorDoNothing, IOpenHoursSkillExtractor>(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118);
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().SingleInstance();
@@ -437,6 +421,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Args().IsFatClient)
 			{
+				builder.RegisterType<TimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 				builder.RegisterType<DesktopPeopleInOrganization>().As<IAllStaff>().SingleInstance();
 				builder.RegisterType<DesktopContextState>()
 					.As<IOptimizationPreferencesProvider>()
@@ -461,6 +446,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
+				builder.RegisterType<UserTimeZoneGuard>().As<ITimeZoneGuard>().SingleInstance();
 				builder.RegisterType<BlockPreferenceProviderForPlanningPeriod>().As<IBlockPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<DayOffOptimizationPreferenceProviderForPlanningPeriod>().As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<PersistSchedulesAfterIsland>().As<ISynchronizeSchedulesAfterIsland>().SingleInstance();

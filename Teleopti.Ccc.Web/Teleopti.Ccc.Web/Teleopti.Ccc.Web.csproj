@@ -126,12 +126,12 @@
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.14.0\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.15.0\lib\net40\MbCache.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.14.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.15.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.15.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -277,8 +277,8 @@
     <Reference Include="StackExchange.Redis.StrongName, Version=1.1.608.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.1.608\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Manager, Version=1.0.0.838, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Manager.1.0.0.838\lib\net451\Stardust.Manager.dll</HintPath>
+    <Reference Include="Stardust.Manager, Version=1.0.0.840, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Manager.1.0.0.840\lib\net451\Stardust.Manager.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -377,13 +377,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.272\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="Validation">
       <HintPath>..\..\packages\Validation.2.0.2.13022\lib\portable-windows8+net40+sl5+windowsphone8\Validation.dll</HintPath>
@@ -418,6 +416,16 @@
     <Compile Include="Areas\Insights\Controllers\InsightsController.cs" />
     <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Controller\BankHolidayCalendarController.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarPersister.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarPersister.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\IoC\BankHolidayAreaModule.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\BankHolidayModelMapper.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\IBankHolidayModelMapper.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayDateAction.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Models\BankHolidayViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GroupScheduleShiftViewModel.cs" />
@@ -477,8 +485,6 @@
     <Compile Include="Areas\Intraday\IntradayMonitorStaffingController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\IPasswordManager.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\PasswordManager.cs" />
     <Compile Include="Areas\MultiTenancy\Controllers\ExternalApplicationAccessController.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\BaseResultModel.cs" />
@@ -616,7 +622,6 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\AbsenceRequestDetailViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Models\ScheduleStaffingPossibility\StaffingPossibilityViewModel.cs" />
@@ -798,7 +803,6 @@
     <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\CheckingResult.cs" />
-    <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleShiftViewModelProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ProjectionSplitter.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ScheduleValidationProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Models\AddOvertimeActivityForm.cs" />
@@ -824,11 +828,13 @@
     <Compile Include="Core\Extensions\DateTimeFormatExtensions.cs" />
     <Compile Include="Core\IoC\LegacyRegistrationsFromAnywhere.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificCookieSettingsProvider.cs" />
+    <Compile Include="Core\AgentScheduleViewModelProvider.cs" />
     <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\InitializeApplication\PublishStartupJobsTask.cs" />
     <Compile Include="Core\Startup\InitializeApplication\RequeueHangfireEventsTask.cs" />
     <Compile Include="Core\Startup\NoCacheFilter.cs" />
     <Compile Include="Core\Startup\OriginHandlerPipelineModule.cs" />
+    <Compile Include="Core\Startup\SlimAssembliesResolver.cs" />
     <Compile Include="Core\Startup\TenantStartupTask.cs" />
     <Compile Include="Core\ThemeSettingProvider.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
@@ -1105,7 +1111,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\WebPersonRequestCheckAuthorization.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IRespondToShiftTrade.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\RespondToShiftTrade.cs" />
@@ -1215,7 +1220,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProvider.cs" />
@@ -1487,15 +1491,13 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
-    <Content Include="Areas\SSO\Content\Images\bg.png" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordViewModel.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ForgotPasswordView.js" />
     <Content Include="Areas\Start\Content\Css\newLogin.css" />
     <Content Include="Areas\Start\Content\Css\main.min.css" />
-    <Content Include="Areas\Start\Content\Images\bg.png" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
+    <Content Include="Content\botchat\botchat-es5.js" />
     <Content Include="Content\botchat\botchat.css" />
-    <Content Include="Content\botchat\botchat.js" />
     <Content Include="Content\Error\404.aspx" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.dialog.js" />
@@ -1659,12 +1661,15 @@
     <Content Include="WFM\app\requests\html\requests-shift-trade.html" />
     <Content Include="WFM\app\requests\html\requests-overtime.html" />
     <Content Include="WFM\app\requests\html\shift-trade-day-template.html" />
+    <Content Include="WFM\app\requests\html\timeline.html" />
+    <Content Include="WFM\app\requests\requests.directive.timeline.js" />
     <Content Include="WFM\app\requests\requests.controller.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.shiftTrade.spec.js" />
     <Content Include="WFM\app\requests\requests.directive.shiftDetail.spec.js" />
     <Content Include="WFM\app\requests\requests.service.data.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.absenceAndText.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.overtime.spec.js" />
+    <Content Include="WFM\app\requests\requests.service.shiftTradeSchedule.js" />
     <Content Include="WFM\app\requests\requests.service.uigridUtilities.js" />
     <Content Include="WFM\app\requests\requests.directive.budgetAllowance.js" />
     <Content Include="WFM\app\requests\requests.directive.budgetAllowance.spec.js" />
@@ -1681,10 +1686,12 @@
     <Content Include="WFM\app\requests\requests.service.requestSchedule.js" />
     <Content Include="WFM\app\requests\requests.service.requestSchedule.spec.js" />
     <Content Include="WFM\app\requests\_modules.js" />
+    <Content Include="WFM\app\resourceplanner\components\week-month-group.component.js" />
+    <Content Include="WFM\app\resourceplanner\components\week-month-group.tpl.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.js" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.service.js" />
+    <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.controller.js" />
+    <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.controller.spec.js" />
+    <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.service.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\cardPanel.demo.controller.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\demo.html" />
     <Content Include="WFM\app\resourceplanner\tree_data\main.controller.js" />
@@ -1701,11 +1708,14 @@
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.ReviewHistoricalAdherence_74770.html" />
+    <Content Include="WFM\app\rta\rta\agents\rta-agents.RestrictModifySkillGroups_78568.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.noagentsmessage.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.restrictHistoricalOverviewWithPermission.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.restrictModifySkillGroups.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RestrictModifySkillGroups_78568.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.ReviewHistoricalAdherence_74770.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ImprovedStateGroupFilter_48724.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.selection.spec.js" />
@@ -1718,11 +1728,14 @@
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
+    <Content Include="WFM\app\rta\rta\historical\rta-historical.inputValidationForApprovingAdherencePeriods_77045.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.inputValidationForApprovingAdherencePeriods_77045.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.inputValidationForApprovingAdherencePeriods_77045.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.outOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.spec.js" />
@@ -1737,10 +1750,14 @@
     <Content Include="WFM\app\rta\rta\overview\controller.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.nositesmessage.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.restrictHistoricalOverviewWithPermission.spec.js" />
+    <Content Include="WFM\app\rta\rta\overview\controller.restrictModifySkillGroups.spec.js" />
+    <Content Include="WFM\app\rta\rta\overview\controller.RestrictModifySkillGroups_78568.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.ReviewHistoricalAdherence_74770.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.RTA_ConfigurationValidationNotification_46933.js" />
+    <Content Include="WFM\app\rta\rta\overview\view.ImproveUsabilityExpandableCards_79025.html" />
     <Content Include="WFM\app\rta\rta\overview\view.ReviewHistoricalAdherence_74770.html" />
     <Content Include="WFM\app\rta\rta\overview\view.RTA_ModifySkillGroup_48191.html" />
+    <Content Include="WFM\app\rta\rta\overview\view.RestrictModifySkillGroups_78568.html" />
     <Content Include="WFM\app\rta\rta\rta.configuration.validator.service.js" />
     <Content Include="WFM\app\rta\rta\rta.data.service.js" />
     <Content Include="WFM\app\rta\shared\polling.service.js" />
@@ -1880,14 +1897,13 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
-    <Content Include="WFM\app\teamSchedule\html\shiftEditorView.html" />
     <Content Include="WFM\app\teamSchedule\html\shiftEditor.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsTimePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\underlyingScheduleInfo.html" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.exportSchedule.spec.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.controller.shiftEditor.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.controller.shiftEditor.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.shiftEditor.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.shiftEditor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.exportSchedule.js" />
@@ -1896,6 +1912,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.week.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.scheduletable.new.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.groupSchedule.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.spec.js" />
@@ -1934,30 +1951,28 @@
     <Content Include="WFM\app\permissions\permissions.controller.r.js" />
     <Content Include="WFM\app\permissions\permissions.service.r.js" />
     <Content Include="WFM\app\requests\requests.directive.shiftDetail.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group_setting\groupsetting.createform.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group_setting\groupsetting.createform.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group_setting\groupsetting.createform.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group_setting\groupsetting.overview.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group_setting\groupsetting.overview.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group_setting\groupsetting.overview.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group_setting\groupsetting.service.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.detail.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.detail.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.service.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroups.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroups.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.select.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.select.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.select.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.service.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.validation.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.validation.html" />
+    <Content Include="WFM\app\resourceplanner\planning_group_setting\groupsetting.createform.controller.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group_setting\groupsetting.createform.controller.spec.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group_setting\groupsetting.createform.html" />
+    <Content Include="WFM\app\resourceplanner\planning_group_setting\groupsetting.overview.controller.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group_setting\groupsetting.overview.controller.spec.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group_setting\groupsetting.overview.html" />
+    <Content Include="WFM\app\resourceplanner\planning_group_setting\groupsetting.service.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group\planninggroup.createform.controller.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group\planninggroup.createform.controller.spec.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group\planninggroup.createform.html" />
+    <Content Include="WFM\app\resourceplanner\planning_group\planninggroup.service.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group\planninggroups.controller.js" />
+    <Content Include="WFM\app\resourceplanner\planning_group\planninggroups.html" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.overview.controller.js" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.overview.controller.spec.js" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.overview.html" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.select.controller.js" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.select.controller.spec.js" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.select.html" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.service.js" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.validation.controller.js" />
+    <Content Include="WFM\app\resourceplanner\planning_period\planningperiod.validation.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.backend.fake.js" />
     <Content Include="WFM\app\seatManagement\html\seatplaninitmanualperiod.html" />
     <Content Include="WFM\app\seatManagement\seatplaninitmanualperiod.directive.js" />

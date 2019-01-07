@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SchedulingResultStateHolder : ISchedulingResultStateHolder
 	{
 		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
-		private readonly HashSet<ISkill> _skills = new HashSet<ISkill>();
+		private ISet<ISkill> _skills = new HashSet<ISkill>();
 
 		private Lazy<SkillStaffPeriodHolder> _skillStaffPeriodHolder =
 			new Lazy<SkillStaffPeriodHolder>(
@@ -76,35 +76,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		/// <summary>
-		/// Gets the skills.
-		/// </summary>
-		/// <value>The skills.</value>
-		/// <remarks>
-		/// Created by: zoet
-		/// Created date: 2008-01-10
-		/// </remarks>
-		public ISkill[] Skills
+		public ISet<ISkill> Skills
 		{
-			get { return _skills.ToArray(); }
-		}
-
-		public void AddSkills(params ISkill[] skills)
-		{
-			skills.ForEach(s => _skills.Add(s));
-			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
-		}
-
-		public void ClearSkills()
-		{
-			_skills.Clear();
-			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
-		}
-
-		public void RemoveSkill(ISkill skill)
-		{
-			if (_skills.Remove(skill))
+			//dont know if a clone is necessary but it was before so let's keep it that way 
+			get => new HashSet<ISkill>(_skills);
+			set
 			{
+				_skills = value;
 				_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
 			}
 		}
@@ -139,24 +117,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				//THIS IS MOST PROBABLY WRONG when having cascading skills and you're in primary mode
 				return _visibleSkills.Value;
 			}
-		}
-
-		public IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList)
-		{
-			return SkillDays == null ? 
-				Enumerable.Empty<ISkillDay>() : 
-				SkillDays.FilterOnDates(theDateList);
-		}
-
-		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
-		{
-			IEnumerable<ISkillDay> foundSkillDays;
-			if (SkillDays != null && SkillDays.TryGetValue(skill, out foundSkillDays))
-			{
-				return foundSkillDays.FirstOrDefault(s => s.CurrentDate == dateOnly);
-			}
-
-			return null;
 		}
 
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }

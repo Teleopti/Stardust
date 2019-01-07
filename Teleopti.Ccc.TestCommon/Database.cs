@@ -537,7 +537,12 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithMapping()
 		{
-			var mapping = new RtaMap(stateGroup(), activity(null, null)) {RtaRule = rule()};
+			var mapping = new RtaMap
+			{
+				StateGroup = stateGroup(),
+				Activity = activity(null, null).Id.Value,
+				RtaRule = rule()
+			};
 			_mappings.Add(mapping);
 			return this;
 		}
@@ -547,7 +552,12 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			_rule = ruleName;
 			_stateGroup = stateGroupName;
-			var mapping = new RtaMap(stateGroup(), null) {RtaRule = rule()};
+			var mapping = new RtaMap
+			{
+				StateGroup = stateGroup(),
+				Activity = null,
+				RtaRule = rule()
+			};
 			_mappings.Add(mapping);
 			return this;
 		}

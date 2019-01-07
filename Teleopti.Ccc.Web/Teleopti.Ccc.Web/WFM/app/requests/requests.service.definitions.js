@@ -1,9 +1,9 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('wfm.requests').service('requestsDefinitions', requestsDefinitionsService);
+	angular.module('wfm.requests').service('requestsDefinitions', ['$translate',requestsDefinitionsService]);
 
-	function requestsDefinitionsService() {
+	function requestsDefinitionsService($translate) {
 		var svc = this;
 
 		svc.REQUEST_TYPES = {
@@ -149,25 +149,25 @@
 
 			var Orders = svc.REQUEST_SORTING_ORDERS;
 
-			if (sortColumn.displayName === 'AgentName') {
+			if (sortColumn.displayName === $translate.instant('AgentName')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.AgentNameAsc : Orders.AgentNameDesc;
-			} else if (sortColumn.displayName === 'StartTime') {
+			} else if (sortColumn.displayName === $translate.instant('StartTime')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.PeriodStartAsc : Orders.PeriodStartDesc;
-			} else if (sortColumn.displayName === 'EndTime') {
+			} else if (sortColumn.displayName === $translate.instant('EndTime')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.PeriodEndAsc : Orders.PeriodEndDesc;
-			} else if (sortColumn.displayName === 'UpdatedOn') {
+			} else if (sortColumn.displayName === $translate.instant('UpdatedOn')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.UpdatedOnAsc : Orders.UpdatedOnDesc;
-			} else if (sortColumn.displayName === 'CreatedOn') {
+			} else if (sortColumn.displayName === $translate.instant('CreatedOn')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.CreatedOnAsc : Orders.CreatedOnDesc;
-			} else if (sortColumn.displayName === 'DenyReason') {
+			} else if (sortColumn.displayName === $translate.instant('DenyReason')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.DenyReasonAsc : Orders.DenyReasonDesc;
-			} else if (sortColumn.displayName === 'Message') {
+			} else if (sortColumn.displayName === $translate.instant('Message')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.MessageAsc : Orders.MessageDesc;
-			} else if (sortColumn.displayName === 'Subject') {
+			} else if (sortColumn.displayName === $translate.instant('Subject')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.SubjectAsc : Orders.SubjectDesc;
-			} else if (sortColumn.displayName === 'Seniority') {
+			} else if (sortColumn.displayName === $translate.instant('Seniority')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.SeniorityAsc : Orders.SeniorityDesc;
-			} else if (sortColumn.displayName === 'Team') {
+			} else if (sortColumn.displayName === $translate.instant('Team')) {
 				return sortColumn.sort.direction === 'asc' ? Orders.TeamAsc : Orders.TeamDesc;
 			} else {
 				return null;

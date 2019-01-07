@@ -31,10 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.Config
 			throw new NotImplementedException("not to be used in runtime");
 		}
 
-		public string Path { get; set; }
-		public void ClearFile()
-		{
-		}
+		public string Path { get; }
+
 		public string DocumentAsString { get; private set; }
 	}
 }

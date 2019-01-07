@@ -16,6 +16,11 @@ export interface IntradayPerformanceDataSeries {
 	ServiceLevel: any[];
 }
 
+export interface IntradayLatestTimeData {
+	StartTime: string;
+	EndTime: string;
+}
+
 export interface IntradayPerformanceSummaryItem {
 	Heading: string;
 	AverageSpeedOfAnswer: number;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
@@ -11,14 +10,14 @@ using DateOnly = Teleopti.Wfm.Adherence.DateOnly;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeRtaEventStore : IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreUpgradeWriter
+	public class FakeRtaEventStore : IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreUpgradeWriter, IRtaEventStoreTester
 	{
 		private readonly Lazy<IRtaEventStoreSynchronizer> _synchronizer;
 
 		public class StoredEvent
 		{
 			public int Id;
-			public int StoreVersion;
+			public int? StoreVersion;
 			public Guid PersonId;
 			public DateOnly? BelongsToDate;
 			public DateTime StartTime;
@@ -35,10 +34,16 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IEnumerable<StoredEvent> Data = Enumerable.Empty<StoredEvent>();
 
-		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) =>
-			Add(new[] {@event}, deadLockVictim, storeVersion);
+		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) => 
+			add(new [] {@event}, storeVersion);
 
-		public void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion)
+		public void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion) => 
+			add(events, storeVersion);	
+		
+		public void AddWithoutStoreVersion(IEvent @event, DeadLockVictim deadLockVictim) =>
+			add(new [] {@event}, null);
+
+		private void add(IEnumerable<IEvent> events, int? storeVersion)
 		{
 			events.ForEach(@event =>
 				{
@@ -67,7 +72,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IEnumerable<UpgradeEvent> LoadForUpgrade(int fromStoreVersion, int batchSize)
 		{
 			return Data
-				.Where(x => x.StoreVersion == fromStoreVersion)
+				.Where(x => (x.StoreVersion ?? RtaEventStoreVersion.WithoutBelongsToDate)  == fromStoreVersion)
 				.Select(e => new UpgradeEvent
 				{
 					Id = e.Id,
@@ -127,5 +132,15 @@ namespace Teleopti.Ccc.TestCommon
 
 		public long ReadLastId() =>
 			Data.LastOrDefault()?.Id ?? 0;
+		
+		public IEnumerable<IEvent> LoadAllForTest()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<string> LoadAllEventTypeIds()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

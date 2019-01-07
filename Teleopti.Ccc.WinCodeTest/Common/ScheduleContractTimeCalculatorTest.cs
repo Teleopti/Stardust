@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	public class ScheduleContractTimeCalculatorTest
 	{
 		private ScheduleContractTimeCalculator _scheduleContractTimeCalculator;
-		private ISchedulerStateHolder _schedulerStateHolder;
 		private MockRepository _mockRepository;
 		private DateOnlyPeriod _dateOnlyPeriod;
 		private IPerson _person;
@@ -29,11 +28,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void Setup()
 		{	
 			_mockRepository = new MockRepository();
-			_schedulerStateHolder = _mockRepository.StrictMock<ISchedulerStateHolder>();
 			_dateOnlyPeriod = new DateOnlyPeriod(2011, 1, 1, 2011, 1, 1);
 			_person = _mockRepository.StrictMock<IPerson>();
-			_scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(_schedulerStateHolder, _person, _dateOnlyPeriod);
 			_scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
+			_scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(_scheduleDictionary, _person, _dateOnlyPeriod);
 			_scheduleRange = _mockRepository.StrictMock<IScheduleRange>();
 			_scheduleDay1 = _mockRepository.StrictMock<IScheduleDay>();
 			_scheduleDay2 = _mockRepository.StrictMock<IScheduleDay>();
@@ -47,7 +45,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			using(_mockRepository.Record())
 			{
-				Expect.Call(_schedulerStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDayCollection(_dateOnlyPeriod)).Return(_scheduleDays);
 				Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService);
@@ -60,18 +57,5 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 				Assert.AreEqual(TimeSpan.FromHours(4),_scheduleContractTimeCalculator.CalculateContractTime());
 			}
 		}
-
-       
-        [Test]
-        public void ShouldThrowIfStateHolderIsNull()
-        {
-			Assert.Throws<ArgumentNullException>(() => _scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(null, _person, _dateOnlyPeriod));
-        }
-
-        [Test]
-        public void ShouldThrowIfPersonIsNull()
-        {
-			Assert.Throws<ArgumentNullException>(() => _scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(_schedulerStateHolder, null, _dateOnlyPeriod));
-        }
 	}
 }

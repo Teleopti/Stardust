@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Adherence.Configuration
 
 		public IEnumerable<ConfigurationValidationViewModel> Validate()
 		{
-			var stateGroups = _stateGroups.LoadAll().ToLookup(s => s.BusinessUnit);
+			var stateGroups = _stateGroups.LoadAll().ToLookup(s => _businessUnits.Load(s.BusinessUnit.Value));
 			var businessUnits = _businessUnits.LoadAll();
 
 			return validateLoggedOutStateGroupInConfiguration(businessUnits, stateGroups)

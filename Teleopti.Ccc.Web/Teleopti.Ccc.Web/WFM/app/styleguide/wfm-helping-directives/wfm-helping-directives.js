@@ -6,7 +6,7 @@
 			restrict: 'A',
 			link: function(scope, element, attrs) {
 				var outsideClickBackdrop = document.createElement('div');
-				outsideClickBackdrop.classList = 'outside-click-backdrop';
+				outsideClickBackdrop.classList.add('outside-click-backdrop');
 				outsideClickBackdrop.style.position = 'fixed';
 				outsideClickBackdrop.style.top = 0;
 				outsideClickBackdrop.style.right = 0;

@@ -429,9 +429,6 @@
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
     <value>Расчет уровня сервиса:</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Оператор - Соблюдение графика</value>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Сортировать по:</value>
   </data>
@@ -1110,9 +1107,6 @@
   </data>
   <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
     <value>Несколько активностей/отсутствий</value>
-  </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value>Успешный вход</value>
   </data>
   <data name="ResPlannedOvertimeH" xml:space="preserve">
     <value>Запланированные сверхурочные (чч:мм)</value>

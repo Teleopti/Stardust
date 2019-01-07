@@ -15,14 +15,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ISeatOccupancyProvider _seatBookingProvider;
 		private readonly ILicenseAvailability _licenseAvailability;
+		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
 
-		public MonthScheduleDomainDataProvider(IScheduleProvider scheduleProvider, ISeatOccupancyProvider seatBookingProvider, IPermissionProvider permissionProvider, ILicenseAvailability licenseAvailability)
+		public MonthScheduleDomainDataProvider(IScheduleProvider scheduleProvider, ISeatOccupancyProvider seatBookingProvider, IPermissionProvider permissionProvider, ILicenseAvailability licenseAvailability, ILoggedOnUser loggedOnUser)
 		{
 			_scheduleProvider = scheduleProvider;
 			_seatBookingProvider = seatBookingProvider;
 			_permissionProvider = permissionProvider;
 			_licenseAvailability = licenseAvailability;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public MonthScheduleDomainData Get(DateOnly date, bool loadSeatBooking)
@@ -36,12 +38,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var scheduleDays =
 				_scheduleProvider.GetScheduleForPeriod(period, new Domain.Common.ScheduleDictionaryLoadOptions(false, false))
 					.ToList();
-			var seatBookings = loadSeatBooking ? _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays) : null;
+			var seatBookings = loadSeatBooking ? _seatBookingProvider.GetSeatBookingsForScheduleDays(period, _loggedOnUser.CurrentUser()).ToLookup(k => k.BelongsToDate) : null;
 
-			var days = scheduleDays.Select(scheduleDay => new MonthScheduleDayDomainData
+			var days = scheduleDays.Select(scheduleDay =>
 			{
-				ScheduleDay = scheduleDay,
-				SeatBookingInformation = seatBookings?.Where(seatBooking => seatBooking.BelongsToDate == scheduleDay.DateOnlyAsPeriod.DateOnly).ToArray()
+				var personAssignment = scheduleDay.PersonAssignment();
+				return new MonthScheduleDayDomainData
+				{
+					SignificantPartForDisplay = scheduleDay.SignificantPartForDisplay(),
+					PersonAssignment = personAssignment,
+					ScheduleDay = scheduleDay,
+					SeatBookingInformation = personAssignment == null
+						? null
+						: seatBookings?[scheduleDay.DateOnlyAsPeriod.DateOnly].ToArray()
+				};
 			});
 
 			var asmPermission =

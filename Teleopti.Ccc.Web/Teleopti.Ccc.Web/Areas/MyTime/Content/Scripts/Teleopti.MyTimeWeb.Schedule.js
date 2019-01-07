@@ -170,6 +170,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 
 		self.weekStart = weekStart;
 		self.displayDate = ko.observable();
+		self.currentUserDate = ko.observable();
 		self.nextWeekDate = ko.observable(moment());
 		self.previousWeekDate = ko.observable(moment());
 		self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
@@ -567,6 +568,7 @@ Teleopti.MyTimeWeb.Schedule = (function($) {
 		self.baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 		self.daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
 		var currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format('YYYY-MM-DD');
+		self.currentUserDate(currentUserDate);
 		self.isCurrentWeek(data.IsCurrentWeek);
 
 		if (data.RequestPermission) {

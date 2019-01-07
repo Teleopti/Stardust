@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon
 			TeleoptiWFMVacationPlannerEnabled = true;
 			TeleoptiWFMVNextEnabled = true;
 			TeleoptiWFMOvertimeRequestsEnabled = overtimeRequestsEnabled;
-			TeleoptiWFMChatBotEnabled = true;
+			TeleoptiWFMGrantEnabled = true;
 			TeleoptiWFMInsightsEnabled = true;
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon
 		public bool TeleoptiCccSmsLinkEnabled { get; }
 		public bool TeleoptiCccCalendarLinkEnabled { get; }
 		public bool TeleoptiWFMOvertimeRequestsEnabled { get; }
-		public bool TeleoptiWFMChatBotEnabled { get; }
+		public bool TeleoptiWFMGrantEnabled { get; }
 		public bool TeleoptiWFMInsightsEnabled { get; }
 		public bool TeleoptiCccFreemiumForecastsEnabled { get; }
 		public int MaxSeats => 10;

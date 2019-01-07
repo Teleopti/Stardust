@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				}
 				c.Filters.Add(new NoCacheFilterHttp());
 				c.Services.Add(typeof (IExceptionLogger), new Log4NetWebApiLogger(_log4NetLogger));
-
+				
 				c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
 				c.Formatters.JsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
 				c.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new DateOnlyConverter());

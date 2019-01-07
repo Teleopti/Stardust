@@ -6,6 +6,7 @@
 		);
 
 	self.fixedDate = scheduleDay.FixedDate;
+	self.notPastTime = self.fixedDate >= parent.currentUserDate();
 
 	self.userNowInMinute = -1;
 	self.state = scheduleDay.State;

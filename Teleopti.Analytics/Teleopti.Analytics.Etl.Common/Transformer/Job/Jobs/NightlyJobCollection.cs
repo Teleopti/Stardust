@@ -1,3 +1,4 @@
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -56,6 +57,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new PurgeJobStep(jobParameters));     // BU independent
 			
 			Add(new CalculateBadgesJobStep(jobParameters));
+
+			if (jobParameters.ToggleManager.IsEnabled(Toggles.WFM_Insights_78059) && jobParameters.InsightsLicensed)
+			{
+				Add(new TriggerInsightsDataRefreshJobStep(jobParameters, new ServiceBusTopicClientFactory()));
+			}
 		}
 	}
 }

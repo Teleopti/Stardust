@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;

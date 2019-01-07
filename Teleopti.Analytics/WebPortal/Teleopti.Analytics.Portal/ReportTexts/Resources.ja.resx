@@ -378,9 +378,6 @@
   <data name="ResScheduledvsReady" xml:space="preserve">
     <value>予定エージェントに対するレディ状態エージェント</value>
   </data>
-  <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value> </value>
-  </data>
   <data name="ResSmoothnessPercent" xml:space="preserve">
     <value>スムーズ率 (%)</value>
   </data>

@@ -6,6 +6,7 @@
 			'wfm.pagination',
 			'toggleService',
 			'ngResource',
+			'ngSanitize',
 			'wfm.notice',
 			'ngMaterial',
 			'ui.bootstrap',

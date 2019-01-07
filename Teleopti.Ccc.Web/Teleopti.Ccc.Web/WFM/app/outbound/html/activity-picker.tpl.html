@@ -1,4 +1,4 @@
-﻿<div class="polymorphic-input-body">
+<div class="polymorphic-input-body">
 	<input type="text" ng-model="inputs.Name" ng-if="!(disableCreate || inputs.useExisting)" placeholder="{{inputPlaceholder | translate }}" ng-readonly="disableInput" />
 	<md-select ng-if="disableCreate || inputs.useExisting" placeholder="Choose" ng-model="inputs.Id">
 		<md-option ng-repeat="activityOption in allActivities" ng-value="activityOption.Id" ng-selected="activityOption.Id == inputs.Id">

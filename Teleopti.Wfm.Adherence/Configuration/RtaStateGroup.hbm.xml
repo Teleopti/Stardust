@@ -17,7 +17,7 @@
 			<key column="Parent"/>
 			<one-to-many class="RtaState"/>
 		</bag>
-		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="nosetter.camelcase-underscore"/>
+		<property name="BusinessUnit" access="property"/>
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
 	</class>
 </hibernate-mapping>

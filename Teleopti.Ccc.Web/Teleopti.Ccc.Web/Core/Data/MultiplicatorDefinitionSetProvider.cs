@@ -35,9 +35,10 @@ namespace Teleopti.Ccc.Web.Core.Data
 
 		public IList<MultiplicatorDefinitionSetViewModel> GetDefinitionSetsForCurrentUser()
 		{
-			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var currentUser = _loggedOnUser.CurrentUser();
+			var timezone = currentUser.PermissionInformation.DefaultTimeZone();
 			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone));
-			return GetDefinitionSets(_loggedOnUser.CurrentUser(), today);
+			return GetDefinitionSets(currentUser, today);
 		}
 
 		private IList<MultiplicatorDefinitionSetViewModel> convertToViewModel(

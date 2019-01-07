@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					person,
 					PersonAuditActionType.GrantRole.ToString(),
 					PersonAuditActionResult.Change.ToString(),
-					JsonConvert.SerializeObject(role2))
+					JsonConvert.SerializeObject(role2), role2.Name)
 				{ TimeStamp = new DateTime(2018, 10, 14, 10, 0, 0, DateTimeKind.Utc) };
 			
 			StaffingAuditRepository.Add(staffingAudit);
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					person,
 					PersonAuditActionType.GrantRole.ToString(),
 					PersonAuditActionResult.Change.ToString(),
-					JsonConvert.SerializeObject(role));
+					JsonConvert.SerializeObject(role), appRole.DescriptionText);
 				personAccess.TimeStamp = now;
 				PersonAccessAuditRepository.Add(personAccess);
 			}

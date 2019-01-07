@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: zoet
         /// Created date: 2008-01-10
         /// </remarks>
-        ISkill[] Skills { get; }
+		ISet<ISkill> Skills { get; set; }
 
 			/// <summary>
         /// Gets the visible skills.
@@ -78,15 +78,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created date: 2008-05-07
         /// </remarks>
         IList<ISkill> VisibleSkills { get; }
-
-       /// <summary>
-        /// Return SkillDays on the DateOnlys.
-        /// </summary>
-        /// <param name="theDateList">The DateOnlys.</param>
-        /// <returns></returns>
-        IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList);
-
-		
         /// <summary>
         /// Gets the skill staff period holder.
         /// </summary>
@@ -118,14 +109,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		/// <returns></returns>
 		INewBusinessRuleCollection GetRulesToRun();
-
-	    ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly);
-
 		ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
 		IEnumerable<ExternalStaff> ExternalStaff { get; set; }
-		void AddSkills(params ISkill[] skills);
-	    void ClearSkills();
-	    void RemoveSkill(ISkill skill);
 	    bool GuessResourceCalculationHasBeenMade();
 	    ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
 	    int MinimumSkillIntervalLength();

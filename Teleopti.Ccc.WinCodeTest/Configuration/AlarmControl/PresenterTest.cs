@@ -47,11 +47,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             _createPerson.PermissionInformation.SetDefaultTimeZone((
                                                                        TimeZoneInfo.FindSystemTimeZoneById(
                                                                            "W. Europe Standard Time")));
-            foreach (RtaRule rule in alarms)
-            {
-                ReflectionHelper.SetUpdatedBy(rule, _createPerson);
-                ReflectionHelper.SetUpdatedOn(rule, _createDate.AddHours(1));
-            }
         }
 
         [Test]
@@ -99,15 +94,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.Time, style);
             _target.QueryCellInfo(null, e);
             Assert.AreEqual(Resources.Time, e.Style.Text);
-
-            e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.UpdatedBy, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(Resources.UpdatedBy, e.Style.Text);
-
-            e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.UpdatedOn, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(Resources.UpdatedOn, e.Style.Text);
-
         }
 
         [Test]
@@ -143,11 +129,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.StaffingEffect, style);
             _target.QueryCellInfo(null, e);
             Assert.AreEqual(0.8, style.CellValue);
-
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.UpdatedBy, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(_createPerson.Name, style.CellValue);
 
             style = new GridStyleInfo();
 

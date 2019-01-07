@@ -5,6 +5,9 @@ using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 {
@@ -23,14 +26,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		{
 			_jobMultipleDate = JobMultipleDateFactory.CreateJobMultipleDate();
 			_olapServer = "SSASServer\\Instance";
-			_olapDatabase= "SSASDatabase";
-			string cubeConnectionString = string.Concat("Data Source=", _olapServer, ";", "Initial Catalog=",
-														_olapDatabase);
+			_olapDatabase = "SSASDatabase";
+			var cubeConnectionString =
+				string.Concat("Data Source=", _olapServer, ";", "Initial Catalog=", _olapDatabase);
 			_target = new JobParameters(
-				_jobMultipleDate, 1, "W. Europe Standard Time", 5, 
-				cubeConnectionString, "true", 
-				CultureInfo.CurrentCulture, 
-				new JobParametersFactory.FakeContainerHolder(), 
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5,
+				cubeConnectionString, "true",
+				CultureInfo.CurrentCulture,
+				new JobParametersFactory.FakeContainerHolder(),
 				false
 			);
 		}
@@ -46,7 +49,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		[Test]
 		public void VerifyTimeZone()
 		{
-			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 
 			Assert.AreEqual(timeZoneInfo.Id, _target.DefaultTimeZone.Id);
 		}
@@ -55,9 +58,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		public void VerifyCanAccessJobMultipleDate()
 		{
 			Assert.AreEqual(new DateTime(2008, 1, 1),
-							_target.JobCategoryDates.GetJobMultipleDateItem(JobCategoryType.Schedule).StartDateLocal);
+				_target.JobCategoryDates.GetJobMultipleDateItem(JobCategoryType.Schedule).StartDateLocal);
 			Assert.AreEqual(new DateTime(2007, 12, 28),
-							_target.JobCategoryDates.GetJobMultipleDateItem(JobCategoryType.AgentStatistics).StartDateLocal);
+				_target.JobCategoryDates.GetJobMultipleDateItem(JobCategoryType.AgentStatistics).StartDateLocal);
 		}
 
 		[Test]
@@ -70,7 +73,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		[Test]
 		public void VerifyTimeZonesUsedByDataSources()
 		{
-			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			IList<TimeZoneInfo> timeZones = new List<TimeZoneInfo>();
 			_target.TimeZonesUsedByDataSources = timeZones;
 			Assert.AreEqual(0, _target.TimeZonesUsedByDataSources.Count);
@@ -83,17 +86,28 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		{
 			Assert.IsTrue(_target.IsPmInstalled);
 
-			_target = new JobParameters(
-				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "false", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
+			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "false",
+				CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 			Assert.IsFalse(_target.IsPmInstalled);
 
-			_target = new JobParameters(
-				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "True", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
+			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "True",
+				CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 			Assert.IsTrue(_target.IsPmInstalled);
 
-			_target = new JobParameters(
-				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
+			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "",
+				CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 			Assert.IsFalse(_target.IsPmInstalled);
+		}
+
+		[Test]
+		public void VerifyInsightsIsLicensed()
+		{
+			Assert.IsFalse(_target.InsightsLicensed);
+
+			var licenseActivator = new FakeLicenseActivator("test customer");
+			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
+			DefinedLicenseDataFactory.SetLicenseActivator(UnitOfWorkFactory.Current.Name, licenseActivator);
+			Assert.IsTrue(_target.InsightsLicensed);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.Api.Test
@@ -11,9 +12,10 @@ namespace Teleopti.Wfm.Api.Test
 		private readonly Dictionary<string, UserIdWithTenant> hashUsers =
 			new Dictionary<string, UserIdWithTenant> {{ "afdsafasdf", new UserIdWithTenant {Tenant = DomainTestAttribute.DefaultTenantName, UserId = UserId}}};
 
-		public bool TryGetUser(string token, out UserIdWithTenant user)
+		public Task<ValueTuple<bool,UserIdWithTenant>> TryGetUserAsync(string token)
 		{
-			return hashUsers.TryGetValue(token, out user);
+			var result = hashUsers.TryGetValue(token, out var user);
+			return Task.FromResult((result, user));
 		}
 	}
 }

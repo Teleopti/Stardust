@@ -43,6 +43,7 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 
 	public interface IRtaEventStoreTester
 	{
+		void AddWithoutStoreVersion(IEvent @event, DeadLockVictim deadLockVictim);
 		IEnumerable<IEvent> LoadAllForTest();
 		IEnumerable<string> LoadAllEventTypeIds();
 	}

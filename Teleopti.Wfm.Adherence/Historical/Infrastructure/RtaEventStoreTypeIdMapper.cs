@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Wfm.Adherence.Domain.Events;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 {
@@ -23,7 +23,6 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 			var example = typeof(PersonStateChangedEvent);
 			return example.Assembly
 				.GetTypes()
-				.Where(x => x.Namespace == example.Namespace)
 				.Where(x => x.IsClass)
 				.Where(x => typeof(IRtaStoredEvent).IsAssignableFrom(x))
 				.ToDictionary(eventTypeId, x => x);

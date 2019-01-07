@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return origCount - people.Count;
 		}
 
-		public int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill)
+		public int FilterSkills(IEnumerable<ISkill> skills, Action<ISkill> removeSkill, Action<ISkill> addSkill)
 		{
 			if (SkillGuidDependencies == null)
 				throw new InvalidOperationException("Before filtering skills, run Execute method");

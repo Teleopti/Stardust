@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 	[ApplicationFunctionApi(
 		DefinedRaptorApplicationFunctionPaths.WebIntraday,
 		DefinedRaptorApplicationFunctionPaths.WebStaffing,
+		DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
 		DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)]
 	public class SkillGroupController : ApiController
 	{

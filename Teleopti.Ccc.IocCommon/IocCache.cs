@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.IocCommon
 	{
 		private readonly List<Action<IComponentContext, CacheBuilder>> _builderActions = new List<Action<IComponentContext, CacheBuilder>>();
 
-		public void This<T>(Func<IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods) where T : class
+		public void This<T>(Func<FluentBuilder<T>, FluentBuilder<T>> cachedMethods) where T : class
 		{
 			_builderActions.Add((c, b) =>
 			{
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.IocCommon
 			});
 		}
 
-		public void This<T>(Func<IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods, string cacheKeyForType) where T : class
+		public void This<T>(Func<FluentBuilder<T>, FluentBuilder<T>> cachedMethods, string cacheKeyForType) where T : class
 		{
 			_builderActions.Add((c, b) =>
 			{
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.IocCommon
 			});
 		}
 
-		public void This<T>(Func<IComponentContext, IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods) where T : class
+		public void This<T>(Func<IComponentContext, FluentBuilder<T>, FluentBuilder<T>> cachedMethods) where T : class
 		{
 			_builderActions.Add((c, b) =>
 			{

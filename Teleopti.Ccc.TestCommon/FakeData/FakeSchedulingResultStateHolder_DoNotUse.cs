@@ -16,14 +16,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; set; }
 
 		public IScheduleDictionary Schedules { get; set; }
-		public ISkill[] Skills { get { return _skills.ToArray(); } }
+		public ISet<ISkill> Skills { get => new HashSet<ISkill>(_skills);set{}}
 
 		public IList<ISkill> VisibleSkills { get; private set; }
-		public IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList)
-		{
-			throw new NotImplementedException();
-		}
-
 		private ISkillStaffPeriodHolder _skillStaffPeriodHolder;
 		public ISkillStaffPeriodHolder SkillStaffPeriodHolder
 		{
@@ -41,33 +36,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			throw new NotImplementedException();
 		}
-
-		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
-		{
-			throw new NotImplementedException();
-		}
-
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
 
 		public IEnumerable<ExternalStaff> ExternalStaff
 		{
 			get { yield break; }
 			set {  }
-		}
-
-		public void AddSkills(params ISkill[] skills)
-		{
-			_skills.AddRange(skills);
-		}
-
-		public void ClearSkills()
-		{
-			_skills.Clear();
-		}
-
-		public void RemoveSkill(ISkill skill)
-		{
-			_skills.Remove(skill);
 		}
 
 		public bool GuessResourceCalculationHasBeenMade()

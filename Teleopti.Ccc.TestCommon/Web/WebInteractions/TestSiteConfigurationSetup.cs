@@ -204,7 +204,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		private static void writeWebConfigs()
 		{
-			writeWebConfig("web.root.web.config", Paths.WebPath());
+			var targetFolder = Paths.WebPath();
+			var appInsightsConfig = Path.Combine(targetFolder,"ApplicationInsights.config");
+			if (File.Exists(appInsightsConfig))
+			{
+				File.Delete(appInsightsConfig);
+			}
+			writeWebConfig("web.root.web.config", targetFolder);
 			writeWebConfig("web.AuthenticationBridge.web.config", Paths.WebAuthenticationBridgePath());
 			writeWebConfig("web.WindowsIdentityProvider.web.config", Paths.WebWindowsIdentityProviderPath());
 		}

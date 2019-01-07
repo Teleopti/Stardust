@@ -18,6 +18,11 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	margin:0;
 }
 
+.chip-text .mdi-close{
+	position: relative;
+	top: 2px;
+}
+
 .filter-boxes{
 	display:block;
 	width:auto;
@@ -322,7 +327,6 @@ table.overview {
 }
 
 .pp-tabContent {
-	display:none;
 	overflow:hidden;
 
 	.pp-overview-dashborad-header {
@@ -473,10 +477,29 @@ card-panel-content {
   z-index: 40;
 }
 
-.plan-group{
+.plan-group:hover{
   cursor: pointer;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 }
 
-.plan-group-pp{
+.plan-group-pp:hover{
   cursor: pointer;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+}
+
+.wfm-form{
+  background-color: $white;
+}
+
+.date-info-wrapper .disabled h1{
+  color: $white !important;
+}
+
+.wfm-badge{
+	position: unset;
+	margin-left: 5px;
+}
+
+planning-group-settings-overview .card-panel-header-wrapper{
+	border-left: none !important;
 }

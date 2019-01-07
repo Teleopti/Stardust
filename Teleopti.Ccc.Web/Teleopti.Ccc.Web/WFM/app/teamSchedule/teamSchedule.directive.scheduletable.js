@@ -26,6 +26,7 @@
 	ScheduleTableController.$inject = ['$scope', '$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper'];
 	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions, serviceDateFormatHelper) {
 		var vm = this;
+		vm.scheduleInEditing = null;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
@@ -118,9 +119,9 @@
 				showEditor: true
 			};
 		};
-
+	
 		vm.showEditButton = function (personSchedule) {
-			return toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978
+			return toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295
 				&& !personSchedule.IsFullDayAbsence
 				&& !(personSchedule.IsProtected && !vm.permissions.HasModifyWriteProtectedSchedulePermission)
 				&& !personSchedule.IsDayOff()
@@ -128,15 +129,26 @@
 		}
 
 		vm.clickEditButton = function (personSchedule) {
-			$state.go('teams.shiftEditor', {
-				personId: personSchedule.PersonId,
-				timezone: vm.selectedTimezone,
-				date: serviceDateFormatHelper.getDateOnly(vm.selectedDate)
-			});
+			if (vm.scheduleInEditing !== personSchedule) {
+				vm.scheduleInEditing = personSchedule;
+			}
+		}
+
+		vm.isScheduleInEditing = function (personSchedule) {
+			return vm.scheduleInEditing && vm.scheduleInEditing.PersonId === personSchedule.PersonId;
 		}
 
 		vm.isNotSameTimezone = function (personTimezone) {
 			return vm.selectedTimezone && personTimezone.IanaId !== vm.selectedTimezone;
+		}
+
+		vm.getHourPointsForHourLine = function () {
+			var pointsCount = vm.scheduleVm.TimeLine.HourPoints.length;
+			return angular.copy(vm.scheduleVm.TimeLine.HourPoints).splice(0, pointsCount - 2);
+		}
+
+		vm.getRawSchedule = function (personId) {
+			return ScheduleMgmt.getRawScheduleByPersonId(vm.selectedDate, personId);
 		}
 
 		function isAllInCurrentPageSelected() {
@@ -159,11 +171,13 @@
 		vm.init = function () {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
-
 			vm.permissions = teamsPermissions.all();
 		};
-
 		vm.init();
+
+		$scope.$on('teamSchedule.shiftEditor.close', function () {
+			vm.scheduleInEditing = null;
+		});
 
 		$scope.$watchCollection(function () {
 			return angular.isDefined(ScheduleMgmt.groupScheduleVm) ? ScheduleMgmt.groupScheduleVm.Schedules : [];

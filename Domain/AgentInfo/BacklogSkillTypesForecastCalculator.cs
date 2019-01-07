@@ -17,18 +17,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 		}
 
-		public void CalculateForecastedAgents(IDictionary<ISkill, IEnumerable<ISkillDay>> skillSkillDayDictionary, DateOnly dateOnly,
-			TimeZoneInfo timezone, bool useShrinkage)
+		public void CalculateForecastedAgents(IDictionary<ISkill, IEnumerable<ISkillDay>> skillSkillDayDictionary, DateOnly dateOnly, TimeZoneInfo timezone, bool useShrinkage)
 		{
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
-			var skillGroupsByResuolution = skillSkillDayDictionary.Keys
+			var skillGroupsByResolution = skillSkillDayDictionary.Keys
 				.Where(SkillTypesWithBacklog.IsBacklogSkillType)
 				.GroupBy(x => x.DefaultResolution);
-			foreach (var group in skillGroupsByResuolution)
+			foreach (var group in skillGroupsByResolution)
 			{
-				var emailSkillsForOneResoultion = group.ToList();
-				scheduledStaffingPerSkill.AddRange(
-					_scheduledStaffingProvider.StaffingPerSkill(emailSkillsForOneResoultion, group.Key, dateOnly, useShrinkage));
+				var emailSkillsForOneResoultion = group.ToArray();
+				var skillStaffingIntervalLightModels = _scheduledStaffingProvider.StaffingPerSkill(emailSkillsForOneResoultion, @group.Key, dateOnly, useShrinkage);
+				scheduledStaffingPerSkill.AddRange(skillStaffingIntervalLightModels);
+				var staffingBySkill = skillStaffingIntervalLightModels.ToLookup(s => s.Id);
 
 				foreach (var skill in emailSkillsForOneResoultion)
 				{
@@ -38,9 +38,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
 							var intervalStartLocal = skillStaffPeriod.Period.StartDateTimeLocal(timezone);
-							var scheduledStaff =
-								scheduledStaffingPerSkill.FirstOrDefault(
-									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStartLocal);
+							var scheduledStaff = staffingBySkill[skill.Id.Value].FirstOrDefault(x => x.StartDateTime == intervalStartLocal);
 							skillStaffPeriod.SetCalculatedResource65(0);
 							if (scheduledStaff.StaffingLevel > 0)
 								skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);

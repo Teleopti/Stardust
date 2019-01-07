@@ -46,7 +46,7 @@ fabric.Seat = fabric.util.createClass(fabric.Image, {
 fabric.Seat.async = true;
 
 fabric.Seat.fromObject = function (object, callback) {
-    object.src = 'dist/images/seat.svg';
+    object.src = 'dist/ng2/assets/seatMap/seat.svg';
 	fabric.util.loadImage(object.src, function (img) {
 		callback && callback(new fabric.Seat(img, object));
 	});

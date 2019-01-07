@@ -9,19 +9,17 @@
 			<generator class="guid.comb"/>
 		</id>
 		<version name="Version" unsaved-value="null"/>
-		<many-to-one name="UpdatedBy" class="Teleopti.Ccc.Domain.Common.Person"/>
-		<property name="UpdatedOn" type="UtcDateTime"/>
 		<component name="Description">
 			<property name="Name"/>
 			<property name="ShortName"/>
 		</component>
-		<property name="DisplayColor" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"/>
+		<property name="DisplayColor" type="Teleopti.Wfm.Adherence.Configuration.ColorNumber, Teleopti.Wfm.Adherence"/>
 		<property name="ThresholdTime"/>
 		<property name="StaffingEffect"/>
 		<property name="Adherence"/>
 		<property name="IsAlarm"/>
-		<property name="AlarmColor" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"/>
-		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="nosetter.camelcase-underscore"/>
+		<property name="AlarmColor" type="Teleopti.Wfm.Adherence.Configuration.ColorNumber, Teleopti.Wfm.Adherence"/>
+		<property name="BusinessUnit" access="property"/>
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
 	</class>
 </hibernate-mapping>

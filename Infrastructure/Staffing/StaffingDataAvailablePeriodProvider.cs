@@ -46,15 +46,14 @@ namespace Teleopti.Ccc.Infrastructure.Staffing
 			{
 				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
 			}
-
-			var timezone = person.PermissionInformation.DefaultTimeZone();
+			
 			var days = period.DayCollection();
 			var availableDays = new List<DateOnly>();
 			foreach (var day in days)
 			{
 				var overtimeRequestOpenPeriods =
 					_mergedOvertimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
-						day.ToDateTimePeriod(timezone));
+						day);
 
 				if (overtimeRequestOpenPeriods != null && overtimeRequestOpenPeriods.Any())
 				{

@@ -1,18 +1,7 @@
-label {
-	display: inline;
-	font-weight: normal;
-}
-
-input[type='text'],
-[type='number'],
-input[type='password'],
-input[type='time'],
-select,
 md-autocomplete {
 	border: 1px solid $hover;
 	color: $text-color-standard;
-	-webkit-appearance: none;
-	-moz-appearance: none;
+	appearance: none;
 	background: $white;
 	line-height: 1;
 	cursor: pointer;
@@ -30,28 +19,6 @@ md-autocomplete {
 .wfm-form input,
 .wfm-form select {
 	margin: 0 !important;
-}
-
-textarea {
-	background-color: $white;
-	color: $text-color-standard;
-	resize: vertical;
-	width: 100%;
-}
-
-input::-ms-clear {
-	display: none;
-}
-
-select:after {
-	width: 0;
-	height: 0;
-	padding: 0;
-	content: '';
-	border-left: 0.25em solid transparent;
-	border-right: 0.25em solid transparent;
-	border-top: 0.375em solid red;
-	pointer-events: none;
 }
 
 .md-ink-ripple:before {
@@ -180,28 +147,6 @@ select:after {
 	filter: alpha(opacity = 0);
 }
 
-::-webkit-input-placeholder {
-	/* WebKit browsers */
-	color: $text-color-muted;
-}
-
-:-moz-placeholder {
-	/* Mozilla Firefox 4 to 18 */
-	color: $text-color-muted;
-	opacity: 1;
-}
-
-::-moz-placeholder {
-	/* Mozilla Firefox 19+ */
-	color: $text-color-muted;
-	opacity: 1;
-}
-
-input:-ms-input-placeholder {
-	/* Internet Explorer 10+ */
-	color: $text-color-muted;
-}
-
 /*Form validation*/
 .wfm-form {
 	label {
@@ -217,6 +162,12 @@ input:-ms-input-placeholder {
 
 	input > .ng-invalid {
 		border-bottom: 5px solid red !important;
+	}
+
+	ul {
+		margin-bottom: 0;
+		list-style: none;
+		padding-left: 0;
 	}
 
 	.form-input-message {

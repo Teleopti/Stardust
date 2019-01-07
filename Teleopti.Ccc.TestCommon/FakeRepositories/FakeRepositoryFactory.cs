@@ -15,22 +15,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly IContractRepository _contractRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
-		private readonly IScheduleTagRepository _scheduleTagRepository;
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
-		private readonly IPersonAbsenceRepository _personAbsenceRepository;
-		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IMeetingRepository _meetingRepository;
-		private readonly IAgentDayScheduleTagRepository _agentDayScheduleTagRepository;
 		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly IStudentAvailabilityDayRepository _studentAvailabilityDayRepository;
-		private readonly IOvertimeAvailabilityRepository _overtimeAvailabilityRepository;
-		private readonly IPersonAvailabilityRepository _personAvailabilityRepository;
-		private readonly IPersonRotationRepository _personRotationRepository;
 		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly IRuleSetBagRepository _ruleSetBagRepository;
-		private readonly INoteRepository _noteRepository;
-		private readonly IPublicNoteRepository _publicNoteRepository;
 		private readonly IGroupPageRepository _groupPageRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
@@ -45,22 +36,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IShiftCategoryRepository shiftCategoryRepository,
 			IContractRepository contractRepository,
 			IContractScheduleRepository contractScheduleRepository,
-			IScheduleTagRepository scheduleTagRepository,
 			IWorkflowControlSetRepository workflowControlSetRepository,
-			IPersonAbsenceRepository personAbsenceRepository,
-			IPersonAssignmentRepository personAssignmentRepository,
 			IMeetingRepository meetingRepository,
-			IAgentDayScheduleTagRepository agentDayScheduleTagRepository,
 			IPreferenceDayRepository preferenceDayRepository,
 			IStudentAvailabilityDayRepository studentAvailabilityDayRepository,
-			IOvertimeAvailabilityRepository overtimeAvailabilityRepository,
-			IPersonAvailabilityRepository personAvailabilityRepository,
-			IPersonRotationRepository personRotationRepository,
 			IPartTimePercentageRepository partTimePercentageRepository,
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository,
 			IRuleSetBagRepository ruleSetBagRepository, 
-			INoteRepository noteRepository, 
-			IPublicNoteRepository publicNoteRepository,
 			IGroupPageRepository groupPageRepository,
 			ISkillRepository skillRepository,
 			ISkillTypeRepository skillTypeRepository,
@@ -74,22 +56,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_contractRepository = contractRepository;
 			_contractScheduleRepository = contractScheduleRepository;
-			_scheduleTagRepository = scheduleTagRepository;
 			_workflowControlSetRepository = workflowControlSetRepository;
-			_personAbsenceRepository = personAbsenceRepository;
-			_personAssignmentRepository = personAssignmentRepository;
 			_meetingRepository = meetingRepository;
-			_agentDayScheduleTagRepository = agentDayScheduleTagRepository;
 			_preferenceDayRepository = preferenceDayRepository;
 			_studentAvailabilityDayRepository = studentAvailabilityDayRepository;
-			_overtimeAvailabilityRepository = overtimeAvailabilityRepository;
-			_personAvailabilityRepository = personAvailabilityRepository;
-			_personRotationRepository = personRotationRepository;
 			_partTimePercentageRepository = partTimePercentageRepository;
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_ruleSetBagRepository = ruleSetBagRepository;
-			_noteRepository = noteRepository;
-			_publicNoteRepository = publicNoteRepository;
 			_groupPageRepository = groupPageRepository;
 			_skillRepository = skillRepository;
 			_skillTypeRepository = skillTypeRepository;
@@ -105,22 +78,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _absenceRepository;
 		}
-
-		public IPersonAssignmentRepository CreatePersonAssignmentRepository(IUnitOfWork unitOfWork)
-		{
-			return _personAssignmentRepository;
-		}
-
-		public IPersonAbsenceRepository CreatePersonAbsenceRepository(IUnitOfWork unitOfWork)
-		{
-			return _personAbsenceRepository;
-		}
-
-		public IPersonAbsenceAccountRepository CreatePersonAbsenceAccountRepository(IUnitOfWork unitOfWork)
-		{
-			throw new System.NotImplementedException();
-		}
-
+		
 		public IScenarioRepository CreateScenarioRepository(IUnitOfWork unitOfWork)
 		{
 			throw new System.NotImplementedException();
@@ -180,17 +138,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _contractRepository;
 		}
-
-		public IPersonRotationRepository CreatePersonRotationRepository(IUnitOfWork unitOfWork)
-		{
-			return _personRotationRepository;
-		}
-
-		public IPersonAvailabilityRepository CreatePersonAvailabilityRepository(IUnitOfWork unitOfWork)
-		{
-			return _personAvailabilityRepository;
-		}
-
+		
 		public IPersonRequestRepository CreatePersonRequestRepository(IUnitOfWork unitOfWork)
 		{
 			return new FakePersonRequestRepository();
@@ -310,26 +258,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new System.NotImplementedException();
 		}
-
-		public INoteRepository CreateNoteRepository(IUnitOfWork unitOfWork)
-		{
-			return _noteRepository;
-		}
-
-		public IPublicNoteRepository CreatePublicNoteRepository(IUnitOfWork unitOfWork)
-		{
-			return _publicNoteRepository;
-		}
-
-		public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
-		{
-			return _agentDayScheduleTagRepository;
-		}
-
-		public IScheduleTagRepository CreateScheduleTagRepository(IUnitOfWork unitOfWork)
-		{
-			return _scheduleTagRepository;
-		}
 		
 		public ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork)
 		{
@@ -350,12 +278,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new System.NotImplementedException();
 		}
-
-		public IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork)
-		{
-			return _overtimeAvailabilityRepository;
-		}
-
+		
 		public IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork)
 		{
 			throw new System.NotImplementedException();

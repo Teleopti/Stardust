@@ -96,13 +96,9 @@
 			hasSelection: function () {
 				return state.siteIds.length > 0 || state.teamIds.length > 0 || state.skillIds.length > 0 || state.skillAreaId;
 			},
-
-
-			agentsHrefForTeam: function (siteId, teamId) {
-				var site = data.organization.find(function (site) {
-					return siteId == site.Id;
-				});
-				if (site.Teams.length == 1)
+			
+			agentsHrefForTeam: function (teamCount, siteId, teamId) {
+				if (teamCount == 1)
 					return $state.href('rta-agents', {siteIds: siteId, skillIds: state.skillIds, skillAreaId: state.skillAreaId});
 				return $state.href('rta-agents', {teamIds: teamId, skillIds: state.skillIds, skillAreaId: state.skillAreaId});
 			},

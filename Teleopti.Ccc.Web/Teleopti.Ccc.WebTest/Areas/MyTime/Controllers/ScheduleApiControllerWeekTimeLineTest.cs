@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -28,7 +29,8 @@ using Teleopti.Ccc.WebTest.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
-	[TestFixture]
+	[TestFixture(true)]
+	[TestFixture(false)]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
 	public class ScheduleApiControllerWeekTimeLineTest:IIsolateSystem
@@ -41,8 +43,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public IPushMessageDialogueRepository PushMessageDialogueRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeUserTimeZone UserTimeZone;
-		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
-			.WithId();
+
+		private readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+		private readonly Action<FakeToggleManager> _configure;
+
+		public ScheduleApiControllerWeekTimeLineTest(bool optimizedEnabled)
+		{
+			_configure = t => t.Set(Toggles.WFM_ProbabilityView_ImproveResponseTime_80040, optimizedEnabled);
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			_configure.Invoke(toggleManager);
+		}
 
 		public void Isolate(IIsolate isolate)
 		{

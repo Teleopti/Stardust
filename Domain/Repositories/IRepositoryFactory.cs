@@ -32,25 +32,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IAbsenceRepository CreateAbsenceRepository(IUnitOfWork unitOfWork);
 
 		/// <summary>
-		/// Creates the person assignment repository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		IPersonAssignmentRepository CreatePersonAssignmentRepository(IUnitOfWork unitOfWork);
-
-		/// <summary>
-		/// Creates the person absence repository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		IPersonAbsenceRepository CreatePersonAbsenceRepository(IUnitOfWork unitOfWork);
-		/// <summary>asdepository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		IPersonAbsenceAccountRepository CreatePersonAbsenceAccountRepository(IUnitOfWork unitOfWork);
-
-		/// <summary>
 		/// Creates the scenario repository.
 		/// </summary>
 		/// <param name="unitOfWork">The uow.</param>
@@ -156,21 +137,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2008-10-22
 		/// </remarks>
 		IContractRepository CreateContractRepository(IUnitOfWork unitOfWork);
-
-		/// <summary>
-		/// Creates the person rotation repository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		IPersonRotationRepository CreatePersonRotationRepository(IUnitOfWork unitOfWork);
-
-
-		/// <summary>
-		/// Creates the person availability repository.
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <returns></returns>
-		IPersonAvailabilityRepository CreatePersonAvailabilityRepository(IUnitOfWork unitOfWork);
 
 		/// <summary>
 		/// Creates the person request repository.
@@ -387,15 +353,10 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IRepository<IBudgetGroup> CreateBudgetGroupRepository(IUnitOfWork unitOfWork);
 
 		IMasterActivityRepository CreateMasterActivityRepository(IUnitOfWork unitOfWork);
-		INoteRepository CreateNoteRepository(IUnitOfWork unitOfWork);
-		IPublicNoteRepository CreatePublicNoteRepository(IUnitOfWork unitOfWork);
-		IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork);
-		IScheduleTagRepository CreateScheduleTagRepository(IUnitOfWork unitOfWork);
 		ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork);
 		ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork);
 		IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork);
 		IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork);
-		IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork);
 		IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork);
 		ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork);
 	}

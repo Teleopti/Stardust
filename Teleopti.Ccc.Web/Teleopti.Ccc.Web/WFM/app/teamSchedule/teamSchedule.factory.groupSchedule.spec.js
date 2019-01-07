@@ -327,12 +327,12 @@
 				"Date": "2018-10-16",
 				"Projection": [],
 				"DayOff":
-					{
-						"DayOffName": "DayOff",
-						"StartInUtc": "2018-10-16 00:00",
-						"EndInUtc": "2018-10-17 00:00",
-						"Minutes": 1440
-					}
+				{
+					"DayOffName": "DayOff",
+					"StartInUtc": "2018-10-16 00:00",
+					"EndInUtc": "2018-10-17 00:00",
+					"Minutes": 1440
+				}
 			};
 			var vm = target.Create([schedule], "2018-10-16", "etc/UTC");
 			var personSchedule = vm.Schedules[0];
@@ -350,11 +350,11 @@
 				"Date": "2018-10-16",
 				"Projection": [],
 				"DayOff":
-					{
-						"DayOffName": "DayOff",
-						"StartInUtc": "2018-10-16 16:00",
-						"EndInUtc": "2018-10-17 16:00"
-					}
+				{
+					"DayOffName": "DayOff",
+					"StartInUtc": "2018-10-16 16:00",
+					"EndInUtc": "2018-10-17 16:00"
+				}
 			};
 
 			var scheduleForPerson2 = {
@@ -736,11 +736,11 @@
 				"Date": "2018-10-16",
 				"Projection": [],
 				"DayOff":
-					{
-						"DayOffName": "Day off",
-						"StartInUtc": "2018-10-16 00:00",
-						"EndInUtc": "2018-10-17 00:00"
-					}
+				{
+					"DayOffName": "Day off",
+					"StartInUtc": "2018-10-16 00:00",
+					"EndInUtc": "2018-10-17 00:00"
+				}
 			};
 
 			var schedule = {
@@ -749,11 +749,11 @@
 				"Date": "2018-10-17",
 				"Projection": [],
 				"DayOff":
-					{
-						"DayOffName": "Shoft DayOff",
-						"StartInUtc": "2018-10-17 00:00",
-						"EndInUtc": "2018-10-18 00:00",
-					}
+				{
+					"DayOffName": "Shoft DayOff",
+					"StartInUtc": "2018-10-17 00:00",
+					"EndInUtc": "2018-10-18 00:00",
+				}
 			};
 
 			var personSchedule = target.Create([schedule, yesterdaySchedule], '2018-10-17', 'etc/UTC').Schedules[0];
@@ -1571,6 +1571,52 @@
 			expect(timelineVm.HourPoints[4].TimeLabel).toEqual('3:00 AM');
 			expect(timelineVm.HourPoints[5].TimeLabel).toEqual('4:00 AM');
 			expect(timelineVm.HourPoints[6].TimeLabel).toEqual('5:00 AM');
+		});
+
+		it('should not show day off for today when the next day has day off and full day absence', function () {
+			var scheduleForPerson1 = [{
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2019-01-02',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2019-01-02 08:00",
+						"EndInUtc": "2019-01-02 19:00",
+						"IsOvertime": false
+					}
+				],
+				"DayOff": null
+			},
+			{
+				"PersonId": "person1",
+				"Name": "person1",
+				"Date": '2019-01-03',
+				"Projection": [
+					{
+						"ActivityId": "4b4c15f0-5c3c-479e-8f9f-9bb900b80624",
+						"ShiftLayerIds": null,
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2019-01-03 08:00",
+						"EndInUtc": "2019-01-03 16:00",
+						"IsOvertime": false,
+						"ParentPersonAbsences": ["d0243397-f9e8-450a-a889-a9c90034667d"]
+					}
+				],
+				"DayOff": {
+					"DayOffName": "Day off",
+					"StartInUtc": "2019-01-03 00:00",
+					"EndInUtc": "2019-01-04 00:00"
+				}
+			}
+			];
+			var timelineVm = target.Create(scheduleForPerson1, '2019-01-02', 'Europe/Berlin').TimeLine;
+
+			expect(timelineVm.StartMinute).toEqual(480);
+			expect(timelineVm.EndMinute).toEqual(1260);
 		});
 	});
 

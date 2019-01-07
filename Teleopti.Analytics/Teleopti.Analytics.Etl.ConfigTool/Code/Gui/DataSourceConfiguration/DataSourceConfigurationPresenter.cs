@@ -23,46 +23,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
             _model = model;
         }
 
-        public MessageBoxProperties CheckForFirstUse()
-        {
-        	var etlToolStateType = _model.InitialLoadState;
-            var isQuestion = false;
-            var text = "";
-            string caption;
-
-            switch (etlToolStateType)
-            {
-                case EtlToolStateType.FirstTimeUsed:
-                    caption = "Important";
-                    text += "Welcome!";
-                    text += "\r\n";
-                    text += "\r\n";
-                    text += "This is the first time you are about to run this ETL Tool. A really important decision must now be made before you continue.";
-                    text += "\r\n";
-                    text += "\r\n";
-                    text += string.Format(CultureInfo.CurrentCulture, "The interval length is currently set to '{0}' minutes. Please make sure that this setting is matching the interval length of your statistics in the aggregation database.", _model.IntervalLengthMinutes);
-                    text += "\r\n";
-                    text += "\r\n";
-                    text += "If you need to change this setting in the ETL Tool you must change the key 'intervalLengthMinutes' in the XML Configuration Files for both the Service and the Tool.";
-                    text += "\r\n";
-                    text += "\r\n";
-					text += string.Format(CultureInfo.CurrentCulture, "Are you really sure you want to use the interval length '{0}' minutes?", _model.IntervalLengthMinutes);
-                    isQuestion = true;
-                    break;
-                case EtlToolStateType.Invalid:
-					caption = "Invalid ETL Tool State";
-					text += "The ETL Tool seems to be in an invalid state and can not run. The data in the following data mart tables are inconsistent: mart.dim_interval, mart.dim_date and mart.dim_time_zone.";
-                    text += "\r\n";
-                    text += "\r\n";
-                    text += "The ETL Tool will be closed. Please contact the Teleopti Support.";
-                    break;
-                default:
-                    return null;
-            }
-
-            return new MessageBoxProperties(isQuestion, text, caption);
-        }
-
         public void Initialize()
         {
             _view.SetOkButtonEnabled(false);

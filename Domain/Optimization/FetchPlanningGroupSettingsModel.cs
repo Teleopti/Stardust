@@ -25,15 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningGroupSettings = planningGroup.Settings.SingleOrDefault(x => x.Id.HasValue && x.Id.Value == planningGroupSettingId);
 
 			var planningGroupSettingsModel = _planningGroupSettingsMapper.ToModel(planningGroupSettings);
-			planningGroupSettingsModel.PreferencePercent = (int)planningGroup.Settings.PreferenceValue.ValueAsPercent();
 			return planningGroupSettingsModel;
-		}
-
-		public IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId)
-		{
-			var planningGroup = _planningGroupRepository.Get(planningGroupId);
-			var result = planningGroup.Settings.Select(planningGroupSettings => _planningGroupSettingsMapper.ToModel(planningGroupSettings)).ToList();
-			return result;
 		}
 	}
 }

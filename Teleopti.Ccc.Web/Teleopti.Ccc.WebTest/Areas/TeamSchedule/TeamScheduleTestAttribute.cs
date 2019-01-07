@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			isolate.UseTestDouble<ScheduleProjectionHelper>().For<IScheduleProjectionHelper>();
 			isolate.UseTestDouble<IanaTimeZoneProvider>().For<IIanaTimeZoneProvider>();
 			isolate.UseTestDouble<PersonNameProvider>().For<IPersonNameProvider>();
-			isolate.UseTestDouble<TeamScheduleShiftViewModelProvider>().For<ITeamScheduleShiftViewModelProvider>();
+			isolate.UseTestDouble<TeamScheduleShiftViewModelProvider>().For<TeamScheduleShiftViewModelProvider>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble<ChangeActivityTypeFormValidator>().For<IChangeActivityTypeFormValidator>();
 

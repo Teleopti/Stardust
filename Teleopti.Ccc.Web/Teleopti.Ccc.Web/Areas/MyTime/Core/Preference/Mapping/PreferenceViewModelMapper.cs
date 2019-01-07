@@ -180,18 +180,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			var currentPeriod =
 				personPeriods.SingleOrDefault(p => p.Period.Contains(date) && p.RuleSetBag != null);
 
-			var shiftCategoriesFromBag = currentPeriod != null
-				? currentPeriod.RuleSetBag.ShiftCategoriesInBag()
-				: new List<IShiftCategory>();
+			var shiftCategoriesFromBag = currentPeriod?.RuleSetBag?.ShiftCategoriesInBag() ?? new List<IShiftCategory>();
 
-			var availableShiftCategory = new List<IShiftCategory>();
-			foreach (var shift in shiftCategoriesFromWorkflowControlSet)
-			{
-				if (shiftCategoriesFromBag.Any(x => x.Id == shift.Id))
-				{
-					availableShiftCategory.Add(shift);
-				}
-			}
+			var availableShiftCategory =
+				shiftCategoriesFromWorkflowControlSet.Where(shift => shiftCategoriesFromBag.Any(x => x.Id == shift.Id));
 
 			var shiftCategories = availableShiftCategory.Select(s => new PreferenceOption
 				{

@@ -12,9 +12,9 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 {
-	public class RequestsShiftTradeScheduleViewModelFactory : IRequestsShiftTradeScheduleViewModelFactory
+	public class RequestsShiftTradeScheduleViewModelFactory
 	{
-		private readonly ITeamScheduleShiftViewModelProvider _shiftViewModelProvider;
+		private readonly TeamScheduleShiftViewModelProvider _shiftViewModelProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IShiftTradePersonScheduleViewModelMapper _personScheduleViewModelMapper;
 		private readonly IShiftTradeSiteOpenHourFilter _shiftTradeSiteOpenHourFilter;
 
-		public RequestsShiftTradeScheduleViewModelFactory(ITeamScheduleShiftViewModelProvider shiftViewModelProvider,
+		public RequestsShiftTradeScheduleViewModelFactory(TeamScheduleShiftViewModelProvider shiftViewModelProvider,
 			IPermissionProvider permissionProvider,
 			IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
 			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper,
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_shiftTradeSiteOpenHourFilter = shiftTradeSiteOpenHourFilter;
 		}
 
-		public ShiftTradeScheduleViewModel CreateViewModel(ShiftTradeScheduleViewModelData inputData)
+		public ShiftTradeScheduleViewModel CreateViewModel(IPerson currentUser, ShiftTradeScheduleViewModelData inputData)
 		{
 			var pageCount = 0;
 			var possibleTradeSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					{
 						var person = pair.Item1;
 						var scheduleDay = pair.Item2;
-						var scheduleReadModel = _shiftViewModelProvider.MakeScheduleReadModel(person, scheduleDay, canViewConfidential);
+						var scheduleReadModel = _shiftViewModelProvider.MakeScheduleReadModel(currentUser, person, scheduleDay, canViewConfidential);
 						return new ShiftTradeAddPersonScheduleViewModel(scheduleReadModel);
 					}).ToList();
 			}

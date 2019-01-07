@@ -565,7 +565,6 @@ header,
 	margin: 0 auto;
 }
 
-
 html,
 body {
 	width: 100%;
@@ -589,7 +588,6 @@ header {
 	width: 100%;
 	height: 50px;
 }
-
 
 footer {
 	margin: 0 auto;
@@ -1817,4 +1815,9 @@ button.btn.absence-report-cancel {
 .traffic-light-progress-good .progress-bar {
 	width: 80%;
 	background: green;
+}
+
+/*rewrite z-index of bootstrap dropdown-menu*/
+.dropdown-menu {
+	z-index: 10000;
 }

@@ -11,14 +11,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
         public IList<VisualLayerForWebDisplay> CreateVisualPeriods(DateOnly date, IEnumerable<IVisualLayer> visualLayerCollection, TimeZoneInfo timeZone, bool allowCrossNight = false)
         {
             var returnList = new List<VisualLayerForWebDisplay>();
-            
-            foreach (var visualLayer in visualLayerCollection)
+
+			var completeDate = date.ToDateTimePeriod(timeZone).ChangeEndTime(TimeSpan.FromSeconds(-1));
+			foreach (var visualLayer in visualLayerCollection)
             {
                 var layer = visualLayer as VisualLayer;
                 if (layer == null)
                     continue;
-
-				var completeDate = date.ToDateTimePeriod(timeZone).ChangeEndTime(TimeSpan.FromSeconds(-1));
 
 				if(allowCrossNight && layer.Period.EndDateTime > completeDate.EndDateTime)
 				{

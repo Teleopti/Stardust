@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 	public class AbsenceMerger
 	{
-		private IList<IScheduleDay> pasteList;
+		private readonly IList<IScheduleDay> pasteList;
 
 		public AbsenceMerger(IList<IScheduleDay> scheduleDays)
 		{
@@ -22,15 +22,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 				if (scheduleDay == null || scheduleDayBefore == null) continue;
 				var isFullDay = ((scheduleDay.SignificantPart() == SchedulePartView.FullDayAbsence || scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff));
+				var merged = false;
 
 				if (isFullDay)
 				{
 					if (scheduleDay.Person.Equals(scheduleDayBefore.Person))
 					{
-						var merged = false;
-						//IPersonAbsence personAbsenceDayBefore = null;
-						//IPersonAbsence personAbsenceMerged = null;
-
 						foreach (var data in scheduleDay.PersistableScheduleDataCollection())
 						{
 							var personAbsence = data as IPersonAbsence;
@@ -40,18 +37,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 							foreach (var dataDayBefore in scheduleDayBefore.PersistableScheduleDataCollection())
 							{
 								var personAbsenceDayBefore = dataDayBefore as IPersonAbsence;
-								//personAbsenceDayBefore = dataDayBefore as IPersonAbsence;
 								if (personAbsenceDayBefore == null) continue;
 								if(personAbsenceDayBefore.Id != null) continue;
 
-								//personAbsenceMerged = personAbsenceDayBefore.Merge(personAbsence);
 								var personAbsenceMerged = personAbsenceDayBefore.Merge(personAbsence);
 								if (personAbsenceMerged != null)
 								{
 									merged = true;
 									scheduleDayBefore.Remove(dataDayBefore);
 									scheduleDayBefore.Add(personAbsenceMerged);
-									//break;
 								}
 							}
 						}
@@ -62,6 +56,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 							RemoveDoubles(scheduleDayBefore);
 						}
 					}
+				}
+
+				foreach (var dataDayBefore in scheduleDayBefore.PersistableScheduleDataCollection())
+				{
+					var personAbsenceDayBefore = dataDayBefore as IPersonAbsence;
+					if (merged || personAbsenceDayBefore == null || !dataDayBefore.Period.Intersect(scheduleDay.Period)) continue;
+					if(!scheduleDay.PersistableScheduleDataCollection().Contains(personAbsenceDayBefore))
+						scheduleDay.Add(personAbsenceDayBefore);
 				}
 			}
 		}

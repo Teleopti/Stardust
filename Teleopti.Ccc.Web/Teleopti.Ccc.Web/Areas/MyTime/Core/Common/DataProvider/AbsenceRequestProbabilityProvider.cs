@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public class AbsenceRequestProbabilityProvider : IAbsenceRequestProbabilityProvider
@@ -24,34 +23,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public List<IAbsenceRequestProbability> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
-			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period).ToList();
-			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period).ToList();
+			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period).ToLookup(a => a.Date);
+			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period).ToLookup(a => a.Date);
 
 			var ret = new List<IAbsenceRequestProbability>();
 
 			foreach (var dateOnly in period.DayCollection())
 			{
-				var absenceTimeForDay = .0;
-				var absenceHeadsForDay = .0;
-				if (absenceTimeCollection.Any())
-				{
-					absenceTimeForDay = absenceTimeCollection.First(a => a.Date == dateOnly.Date).AbsenceTime;
-					absenceHeadsForDay = absenceTimeCollection.First(a => a.Date == dateOnly.Date).HeadCounts;
-				}
+				var absenceTime = absenceTimeCollection[dateOnly.Date].FirstOrDefault();
+				var absenceTimeForDay = absenceTime?.AbsenceTime ?? .0;
+				var absenceHeadsForDay = absenceTime?.HeadCounts ?? .0;
 
-				var allowanceDay = allowanceCollection.Any()
-					? allowanceCollection.First(a => a.Date == dateOnly)
-					: null;
+				var allowanceDay = allowanceCollection[dateOnly].FirstOrDefault();
 
-				var fulltimeEquivalentForDay = .0;
-				var allowanceMinutesForDay = .0;
-				var allowanceForDay = .0;
-				if (allowanceDay != null)
-				{
-					fulltimeEquivalentForDay = allowanceDay.Heads.TotalMinutes;
-					allowanceMinutesForDay = allowanceDay.Time.TotalMinutes;
-					allowanceForDay = allowanceDay.AllowanceHeads;
-				}
+				var fulltimeEquivalentForDay = allowanceDay?.Heads.TotalMinutes ?? .0;
+				var allowanceMinutesForDay = allowanceDay?.Time.TotalMinutes ?? .0;
+				var allowanceForDay = allowanceDay?.AllowanceHeads ?? .0;
 
 				var probabilityIndex = -1;
 				if (allowanceDay != null && allowanceDay.ValidateBudgetGroup)

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.Scheduling
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			var skillDayBySkill = skillDays.ToLookup(s => s.Skill);
 		
-			stateHolder.SchedulingResultState.AddSkills(skillDayBySkill.Select(s => s.Key).ToArray());
+			stateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skillDayBySkill.Select(s => s.Key));
 			foreach (var uniqueSkill in skillDayBySkill)
 			{
 				stateHolder.SchedulingResultState.SkillDays[uniqueSkill.Key] = skillDayBySkill[uniqueSkill.Key];

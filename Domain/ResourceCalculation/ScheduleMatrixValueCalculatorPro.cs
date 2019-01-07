@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly SchedulingOptions _schedulingOptions;
 	    private readonly ISchedulingResultStateHolder _stateHolder;
 	    private readonly IUserTimeZone _userTimeZone;
-	    private readonly IList<ISkill> _activeSkills;
+	    private readonly ISet<ISkill> _activeSkills;
 
 	    public ScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays,
 		    SchedulingOptions schedulingOptions, ISchedulingResultStateHolder stateHolder, IUserTimeZone userTimeZone)
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				: Calculation.Variances.RMS(values);
 		}
 
-        public double? DayValueForSkills(DateOnly scheduleDay, IList<ISkill> skillList)
+        public double? DayValueForSkills(DateOnly scheduleDay, IEnumerable<ISkill> skillList)
         {
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                 scheduleDay.Date, scheduleDay.Date.AddDays(1), _userTimeZone.TimeZone());
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return DayValueForSkills(scheduleDay, _activeSkills);
         }
 
-		private double? dayValueForSkillsForDayOffOptimization(DateOnly scheduleDay, IList<ISkill> skillList)
+		private double? dayValueForSkillsForDayOffOptimization(DateOnly scheduleDay, IEnumerable<ISkill> skillList)
 		{
 			DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 				scheduleDay.Date, scheduleDay.Date.AddDays(1), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);

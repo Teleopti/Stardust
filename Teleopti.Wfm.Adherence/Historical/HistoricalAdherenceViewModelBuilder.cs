@@ -169,6 +169,6 @@ namespace Teleopti.Wfm.Adherence.Historical
 		}
 
 		private string formatForUser(DateTime? time) =>
-			time.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(time.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss") : null;
+			time.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(time.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH\\:mm\\:ss") : null;
 	}
 }

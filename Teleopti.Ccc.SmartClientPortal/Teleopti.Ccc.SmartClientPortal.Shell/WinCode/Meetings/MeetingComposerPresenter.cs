@@ -161,8 +161,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 			_schedulingScreenState = new SchedulingScreenState(_disableDeletedFilter, new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone),
 															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder(), new TimeZoneGuard()));
                                         
-            var stateLoader = new SchedulerStateLoader(
-                                                    _schedulingScreenState.SchedulerStateHolder,
+            var stateLoader = new SchedulerStateLoader(_schedulingScreenState,
                                                     RepositoryFactory,
                                                     UnitOfWorkFactory,
 					                                new LazyLoadingManagerWrapper(),

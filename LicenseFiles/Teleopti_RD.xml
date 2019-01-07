@@ -27,7 +27,7 @@
     <OvertimeRequests>true</OvertimeRequests>
     <SeatPlanner>true</SeatPlanner>
     <BPOExchange>true</BPOExchange>
-    <ChatBot>true</ChatBot>
+    <Grant>true</Grant>
     <Insights>true</Insights>
   </TeleoptiWFM>
   <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
@@ -40,9 +40,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
-        <DigestValue>E2ZtqVxuLCiucGvIGRp03ZXm/yd7xok7tC9r7FldVr4=</DigestValue>
+        <DigestValue>p388iVNwH5M4VhrOiydjWwzZnl5qaE2ssR+On/Vypls=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>zMUYEh/1grrNQQSejCvzjmasQXF2mtGzK6fn2MamOcCgsa5a6T1/SHoGEJ6pYIBTzdvw5QzdJdervhiI+eu5djOQlLLODBTBDWcwm13rs5YNzilB5wTMCXAKuq5RpXPIHsjuxTpf9mGb/cfuQwzjsVdqwj09AxQMqhaGcrx/4Ow=</SignatureValue>
+    <SignatureValue>QdW4ub1RzzzU2OCHk+tv7N4ShECBM7u8v8oDnITJi4wp3x5Qj95iA9pP8+WN4UFYtyqtoi0p0E8z4ecwkCWRKRnW2MDXLryPTzfRqHAq8Vn2rkn0kgRd7cf/9l89P7EMyd2WqL89sBvqbcsw0xxIhVU3RZeQTY1D+NxTK7prS5U=</SignatureValue>
   </Signature>
 </License>

@@ -6,10 +6,6 @@
 	padding-bottom: 0;
 	margin-bottom: 0;
 
-	schedule-table thead {
-		height: 50px;
-	}
-
 	md-sidenav {
 		background: $white;
 
@@ -49,8 +45,10 @@
 		right: 19px;
 	}
 
+
 	.time-line {
 		min-width: 300px;
+		height: 100%;
 
 		.ruler {
 			height: 100%;
@@ -67,8 +65,12 @@
 			padding-right: 0.3em;
 		}
 
-		& > .relative > span {
-			padding: 10px;
+		& > .relative {
+			height: 100%;
+
+			> span {
+				padding: 10px;
+			}
 		}
 
 		.notcurrentday {
@@ -103,6 +105,9 @@
 	}
 
 	.shift {
+		position: relative;
+		top: 4px;
+
 		.layer {
 			height: 22px;
 			text-align: center;
@@ -147,6 +152,14 @@
 			-moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 		}
+
+		.layer.unselectable {
+			cursor: not-allowed;
+		}
+	}
+
+	.dayoff {
+		top: 4px;
 	}
 
 	.uib-timepicker {
@@ -233,10 +246,6 @@
 		cursor: pointer;
 	}
 
-	.unselectable {
-		cursor: not-allowed !important;
-	}
-
 	note-editor {
 		.md-tab {
 			text-transform: none;
@@ -248,11 +257,16 @@
 		}
 	}
 
-	.teamschedule-body .mdi-alert {
-		color: $orange-500;
+	.teamschedule-body {
+		th.time-line-container {
+			padding: 5px 0 0 0;
+		}
+
+		.mdi-alert {
+			color: $orange-500;
+		}
 	}
 }
-
 //Header
 .teamschedule-header {
 	padding: 0.8em 0.5em;
@@ -335,6 +349,14 @@
 
 	.context-menu.active-menu {
 		background: rgba(0, 0, 0, 0.06) !important;
+	}
+
+	button.context-menu {
+		background: none;
+
+		&:not(:disabled) {
+			color: $blue-500;
+		}
 	}
 
 	.view-navigator-container .wfm-btn {
@@ -620,21 +642,25 @@ team-schedule-datepicker {
 
 		thead {
 			width: calc(100% - 17px);
+			height: 40px;
 		}
 
 		tbody tr:last-child {
 			border-bottom: 1px solid #dddddd;
 		}
 
-		tbody tr:hover {
+		tbody tr:not(.shift-editor-row):hover, tbody tr.in-editing {
 			background: $gray012;
 		}
 
-		th,
-		td {
+		tbody .shift-editor-row td {
+			padding: 0;
+		}
+
+		th, td {
 			padding: 5px 0 5px 0;
 			border-bottom: none;
-			line-height: 1.42857143;
+			line-height: 1.5;
 			vertical-align: top;
 		}
 
@@ -718,6 +744,10 @@ team-schedule-datepicker {
 				width: 20px;
 				display: inline-block;
 			}
+		}
+
+		td.schedule-column {
+			padding: 0px;
 		}
 		//Week view table
 		thead tr.weekview-thead {
@@ -978,7 +1008,6 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 		font-size: 12px !important;
 	}
 }
-
 // temp
 ._off-screen {
 	visibility: hidden;
@@ -1146,8 +1175,12 @@ teams-time-picker.ng-invalid-dst {
 	vertical-align: middle;
 }
 
-.shift-editor {
+
+shift-editor {
 	position: relative;
+	display: block;
+	background: #ffffff;
+	box-shadow: 2px 2px 2px $gray-300, -2px 0 2px $gray-300;
 
 	.progress-linear-container {
 		height: 15px;
@@ -1156,10 +1189,6 @@ teams-time-picker.ng-invalid-dst {
 	.name {
 		font-size: 16px;
 		font-weight: bold;
-	}
-
-	.mdi:before {
-		font-size: 14px !important;
 	}
 
 	.underlying-info,
@@ -1172,22 +1201,33 @@ teams-time-picker.ng-invalid-dst {
 		color: $orange-500;
 	}
 
-	.btn-refresh:not(:disabled) {
-		background-color: $blue-500 !important;
+	.btn-refresh {
+		margin: 0 10px;
+
+		&:disabled {
+			background: none;
+		}
+
+		&:not(:disabled) {
+			color: $blue-500;
+		}
 	}
 
 	.error-info {
 		height: 40px;
+		display: inline-block;
 	}
 
 	.activity-info {
 		height: 50px;
+		white-space: nowrap;
 
 		.timespan {
 			background-color: $gray-300;
 			border-radius: 2px;
-			padding: 2px 5px;
+			padding: 0 5px;
 			margin: 0 5px;
+			line-height: 30px;
 		}
 
 		.activity-selector {
@@ -1198,7 +1238,6 @@ teams-time-picker.ng-invalid-dst {
 	}
 
 	.shift-container {
-		height: 500px;
 		-webkit-user-select: none;
 		-moz-user-select: -moz-none;
 		-ms-user-select: none;
@@ -1225,23 +1264,24 @@ teams-time-picker.ng-invalid-dst {
 			}
 		}
 
-		.height-5em {
-			height: 5em;
+		.height-4em {
+			height: 4em;
 		}
 
-		.height-15em {
-			height: 15em;
+		.height-7em {
+			height: 7em;
 		}
 
 		.timeline {
 			width: 100%;
 			cursor: pointer;
 			height: 10em;
+			margin-left: 15px;
 
 			.scroll-toolbar {
 				display: none;
 				position: absolute;
-				top: 140px;
+				top: 90px;
 				width: 98%;
 
 				.left-scroll {
@@ -1288,10 +1328,9 @@ teams-time-picker.ng-invalid-dst {
 						transform: translateX(-50%);
 						padding: 0.1em 0.3em;
 						display: inline-block;
-						background-color: $gray-500;
 
-						&.highlight {
-							background-color: #5bc0de;
+						&:not(.highlight) {
+							background-color: $gray-500;
 						}
 					}
 				}
@@ -1331,8 +1370,9 @@ teams-time-picker.ng-invalid-dst {
 				display: inline-block;
 				height: 30px;
 				background-color: gainsboro;
-				z-index: 900;
+				z-index: 10;
 				cursor: pointer;
+				margin-left: 15px;
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
@@ -1358,10 +1398,11 @@ teams-time-picker.ng-invalid-dst {
 				&.selected {
 					opacity: 1;
 					border: 1px dashed;
-					z-index: 990;
+					z-index: 11;
+					transition-duration: 0s;
 
 					&.float-top {
-						z-index: 990;
+						z-index: 11;
 					}
 
 					&.border-light {
@@ -1378,7 +1419,7 @@ teams-time-picker.ng-invalid-dst {
 				}
 
 				&.float-top {
-					z-index: 999;
+					z-index: 12;
 				}
 			}
 		}

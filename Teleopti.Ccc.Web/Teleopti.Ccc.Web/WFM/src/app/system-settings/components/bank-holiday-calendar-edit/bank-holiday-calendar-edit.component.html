@@ -1,0 +1,163 @@
+<div class="edit-bank-holiday-calendar" *ngIf="edittingCalendar">
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="full-padding">
+				<span class="inline-block">{{ 'Name' | translate }} :</span>
+				<input
+					nz-input
+					[placeholder]="'Name' | translate"
+					[(ngModel)]="edittingCalendarName"
+					(blur)="checkNewCalendarName()"
+				/>
+				<nz-alert
+					*ngIf="nameAlreadyExisting"
+					nzType="error"
+					[nzMessage]="'NameAlreadyExisting' | translate"
+				></nz-alert>
+			</div>
+
+			<div class="full-padding">
+				<span class="inline-block">{{ 'Years' | translate }} :</span>
+				<nz-year-picker
+					nzAllowClear="false"
+					[(ngModel)]="selectedYearDate"
+					(ngModelChange)="newYearTab($event)"
+					[nzPlaceHolder]="'AddANewYear' | translate"
+				></nz-year-picker>
+			</div>
+		</div>
+	</div>
+
+	<nz-tabset
+		[nzSelectedIndex]="editingCalendarTabIndex"
+		*ngIf="edittingCalendarYears.length > 0"
+		nzAnimated="false"
+		nzSize="small"
+	>
+		<nz-tab
+			*ngFor="let year of edittingCalendarYears"
+			(nzSelect)="selectTab(year)"
+			(nzDeselect)="deselectTab(year)"
+			[nzTitle]="year.Year"
+		>
+			<nz-layout>
+				<nz-sider nzWidth="320">
+					<nz-layout>
+						<nz-content>
+							<nz-date-picker
+								*ngIf="year.Active"
+								nzOpen="true"
+								nzShowToday="false"
+								nzAllowClear="false"
+								[nzDisabledDate]="year.DisabledDate"
+								[(ngModel)]="year.YearDate"
+								(ngModelChange)="dateChangeCallback($event, year)"
+								[nzDateRender]="dateRender"
+							></nz-date-picker>
+
+							<ng-template #dateRender let-currentDate>
+								<div
+									class="ant-calendar-date"
+									[class.border]="year.SelectedDates.indexOf(currentDate.getTime()) > -1"
+									(click)="dateClick(year)"
+								>
+									{{ currentDate.getDate() }}
+								</div>
+							</ng-template>
+						</nz-content>
+
+						<nz-footer>
+							<button (click)="confirmDeleteYearTab(year)" nz-button nzType="danger" *ngIf="year.Active">
+								{{ 'DeleteThisYear' | translate }}
+							</button>
+						</nz-footer>
+					</nz-layout>
+				</nz-sider>
+
+				<nz-content class="bank-holiday-year-content">
+					<nz-list *ngIf="year.Dates.length > 0" class="bank-holiday-calendar-date-item-header">
+						<nz-list-item class="bank-holiday-calendar-date-item relative">
+							<span class="inline-block">{{ 'Date' | translate }}</span>
+							<span class="inline-block">{{ 'Description' | translate }}</span>
+						</nz-list-item>
+					</nz-list>
+
+					<nz-list
+						*ngIf="year.Dates.length > 0"
+						[nzDataSource]="year.Dates"
+						[nzRenderItem]="date"
+						class="bank-holiday-calendar-date-list"
+					>
+						<ng-template #date let-date>
+							<nz-list-item class="bank-holiday-calendar-date-item relative">
+								<span class="selected-date-indicator absolute" [hidden]="!date.IsLastAdded"></span>
+								<span class="inline-block">
+									<span class="bank-holiday-date-text">{{ date.Date }}</span>
+								</span>
+								<span class="inline-block">
+									<input
+										nz-input
+										[placeholder]="'Description' | translate"
+										[(ngModel)]="date.Description"
+										(ngModelChange)="updateDateDescription(date, year)"
+									/>
+								</span>
+								<button
+									nz-tooltip
+									nz-button
+									nzSize="small"
+									nzType="danger"
+									nzShape="circle"
+									(click)="removeDateOfYear(date, year)"
+									class="remove-date-icon"
+								>
+									<i nz-icon type="close" theme="outline"></i>
+								</button>
+							</nz-list-item>
+						</ng-template>
+					</nz-list>
+
+					<nz-alert
+						*ngIf="year.Dates.length == 0"
+						nzType="info"
+						class="bank-holiday-no-date-tip"
+						[nzMessage]="'NoBankHolidays' | translate"
+						[nzDescription]="
+							'ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday'
+								| translate
+						"
+						nzShowIcon
+					>
+					</nz-alert>
+				</nz-content>
+			</nz-layout>
+		</nz-tab>
+	</nz-tabset>
+
+	<div class="con-flex operation-buttons">
+		<button nz-button nzType="default" (click)="exitEdittingBankCalendar()">{{ 'Cancel' | translate }}</button>
+		<button
+			nz-button
+			nzType="primary"
+			[disabled]="nameAlreadyExisting || edittingCalendarName.length == 0"
+			(click)="saveEditingBankCalendar()"
+		>
+			{{ 'Save' | translate }}
+		</button>
+	</div>
+
+	<nz-modal
+		*ngIf="isDeleteYearModalVisible && activedYearTab"
+		[(nzVisible)]="isDeleteYearModalVisible"
+		[nzTitle]="
+			('AreYouSureToDeleteYearFromCalendar' | translate)
+				.replace('{0}', activedYearTab.Year.toString())
+				.replace('{1}', this.edittingCalendarName)
+		"
+		[nzOkText]="'Delete' | translate"
+		nzOkType="danger"
+		[nzCancelText]="'Cancel' | translate"
+		(nzOnOk)="deleteYearTab(activedYearTab)"
+		(nzOnCancel)="closeDeleteYearTabModal()"
+	></nz-modal>
+</div>

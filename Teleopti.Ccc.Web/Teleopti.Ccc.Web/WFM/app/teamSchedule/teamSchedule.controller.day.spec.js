@@ -5,14 +5,15 @@
 			$mdSidenav,
 			rootScope,
 			controller,
-			searchScheduleCalledTimes,
+			searchScheduleCalledTimes = 0,
 			personSelection,
 			scheduleMgmt,
 			teamScheduleService,
 			staffingConfigStorageService,
 			$controller,
 			$httpBackend,
-			viewStateKeeper;
+			viewStateKeeper,
+			fakeToggle;
 
 		beforeEach(function () {
 			module('externalModules');
@@ -21,8 +22,11 @@
 			module('wfm.teamSchedule');
 
 			module(function ($provide) {
+				fakeToggle = {};
 				$provide.service('$locale', setupMockLocale);
-				$provide.service('Toggle', setupMockAllTrueToggleService);
+				$provide.service('Toggle', function () {
+					return fakeToggle;
+				});
 				$provide.service('groupPageService', setUpMockGroupPagesService);
 				$provide.service('$mdSidenav', setUpMockMdSideNav);
 			});
@@ -49,7 +53,7 @@
 			staffingConfigStorageService = _TeamsStaffingConfigurationStorageService_;
 			staffingConfigStorageService.clearConfig();
 			controller = setUpController(_$controller_);
-
+			searchScheduleCalledTimes = 0;
 			
 		}));
 
@@ -397,6 +401,91 @@
 			expect(controller.preselectedSkills.skillAreaId).toEqual('groupPage');
 		});
 
+		it('should clear person selection after schedule changed', function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = false;
+
+			controller.scheduleDate = "2015-10-26";
+			controller.loadSchedules();
+			controller.selectAllForAllPages();
+
+			var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
+			expect(personSchedule1.IsSelected).toEqual(true);
+
+			controller.onPersonScheduleChanged(["221B-Baker-SomeoneElse"]);
+
+			expect(scheduleMgmt.groupScheduleVm.Schedules[0].IsSelected).toEqual(false);
+			expect(scheduleMgmt.groupScheduleVm.Schedules[1].IsSelected).toEqual(false);
+			expect(scheduleMgmt.groupScheduleVm.Schedules[2].IsSelected).toEqual(false);
+			expect(Object.keys(personSelection.personInfo).length).toEqual(0);
+		});
+
+		it("should not update schedule when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+
+			controller = setUpController($controller);
+			controller.scheduleDate = "2018-12-17";
+			controller.loadSchedules();
+			rootScope.$digest();
+
+			controller.onPersonScheduleChanged(["221B-Baker-SomeoneElse"]);
+			expect(searchScheduleCalledTimes).toBe(0);
+		});
+
+		it("should update schedule when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is off", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = false;
+
+			controller = setUpController($controller);
+			controller.scheduleDate = "2018-12-17";
+			controller.loadSchedules();
+			rootScope.$digest();
+
+			controller.onPersonScheduleChanged(["221B-Baker-SomeoneElse"]);
+			expect(searchScheduleCalledTimes).toBe(1);
+		});
+
+		it("should show refresh button and disable on init when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+
+			controller = setUpController($controller);
+			controller.scheduleDate = "2018-12-17";
+
+			expect(controller.isRefreshButtonVisible).toBeTruthy();
+			expect(controller.havingScheduleChanged).toBeFalsy();
+		});
+
+		it("should enable refresh button when schedule is changed and WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+
+			controller = setUpController($controller);
+			controller.scheduleDate = "2018-12-17";
+
+			controller.onPersonScheduleChanged(["221B-Baker-SomeoneElse"]);
+			expect(controller.havingScheduleChanged).toBeTruthy();
+		});
+
+		it("should reload schedules for people having schedule changed after clicking refresh button when WfmTeamSchedule_DisableAutoRefreshSchedule_79826 is on", function () {
+			fakeToggle.WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = true;
+
+			controller = setUpController($controller);
+			controller.scheduleDate = "2018-12-17";
+
+			controller.onPersonScheduleChanged(["221B-Baker-SomeoneElse", "221B-Sherlock"]);
+			controller.onPersonScheduleChanged(["221B-Baker-SomeoneElse", "221B-Sherlock"]);
+
+			controller.onRefreshButtonClicked();
+
+			expect(searchScheduleCalledTimes).toBe(1);
+			expect(teamScheduleService.currentAgentsForGettingSchedules()).toEqual(["221B-Baker-SomeoneElse", "221B-Sherlock"]);
+			expect(controller.havingScheduleChanged).toBeFalsy();
+		});
+
+		xit("should disable the favorite button when editing shift editor", function () {
+			controller = setUpController($controller);
+			controller.scheduleDate = "2018-12-19";
+
+
+		});
+
 		function setUpController($controller) {
 			return $controller("TeamScheduleController", {
 				$scope: rootScope,
@@ -406,9 +495,14 @@
 
 		function setupMockTeamScheduleService(teamScheduleService) {
 			var currentInput;
+			var currentAgentsForGettingSchedules = [];
 
 			teamScheduleService.currentInput = function () {
 				return currentInput;
+			}
+
+			teamScheduleService.currentAgentsForGettingSchedules = function () {
+				return currentAgentsForGettingSchedules;
 			}
 
 			teamScheduleService.loadAbsences = {
@@ -523,7 +617,9 @@
 			teamScheduleService.getSchedules = function (date, agents) {
 				return {
 					then: function (cb) {
+						cb({ data: {}});
 						searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
+						currentAgentsForGettingSchedules = agents;
 					}
 				}
 			}
@@ -566,11 +662,6 @@
 				};
 			};
 		}
-
-		function setupMockAllTrueToggleService() {
-			return {};
-		}
-
 	});
 
 	describe('#teamschedule controller tests for stateParams#', function () {
@@ -601,8 +692,6 @@
 			expect(moment(controller.scheduleDate).format('YYYY-MM-DD')).toEqual('2018-06-13');
 		});
 	});
-
-
 
 	function setUpMockGroupPagesService() {
 		return {

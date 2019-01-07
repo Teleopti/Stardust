@@ -377,6 +377,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool HasProjection();
 
 		IPreferenceDay PreferenceDay();
+
+		DateTimePeriod AbsenceSplitPeriod(IScheduleDay scheduleDay);
+		void AdjustFullDayAbsenceNextDay(IScheduleDay destination);
 	}
 
 }

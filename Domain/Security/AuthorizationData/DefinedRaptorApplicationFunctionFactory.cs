@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			// Reports
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, "xxBadgeLeaderBoardReport", DefinedRaptorApplicationFunctionForeignIds.ViewBadgeLeaderboardUnderReports);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport, "xxScheduleAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport, "xxGeneralAuditTrailWebReport", DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.GeneralAuditTrailWebReport, "xxAuditTrailGeneralAuditTrailReport", DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
 
 			// Agent Portal Web
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, "xxMyTimeWeb", DefinedRaptorApplicationFunctionForeignIds.MyTimeWeb);
@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ChatBot, "xxChatBot", DefinedRaptorApplicationFunctionForeignIds.ChatBot);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExportSchedule, "xxExportSchedule", DefinedRaptorApplicationFunctionForeignIds.ExportSchedule);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ViewCustomerCenter, "xxViewCustomerCenter", DefinedRaptorApplicationFunctionForeignIds.ViewCustomerCenter);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SystemSetting, "xxSystemSetting", DefinedRaptorApplicationFunctionForeignIds.SystemSetting);
 
 			// Insights
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Insights, "Insights", DefinedRaptorApplicationFunctionForeignIds.Insights);

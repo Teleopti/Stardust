@@ -25,9 +25,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return new OvertimeRequestValidationResult
 			{
 				IsValid = false,
-				InvalidReasons = new []{string.Format(Resources.OvertimeRequestDenyReasonExpired,
-					TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime,
-						_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()), OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes)}
+				InvalidReasons = new[]
+				{
+					string.Format(Resources.OvertimeRequestDenyReasonExpired,
+						personRequest.Request.Period.StartDateTimeLocal(_loggedOnUser.CurrentUser()
+							.PermissionInformation.DefaultTimeZone()),
+						OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes)
+				}
 			};
 		}
 	}

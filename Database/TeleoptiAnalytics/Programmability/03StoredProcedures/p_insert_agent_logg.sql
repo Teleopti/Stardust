@@ -215,6 +215,24 @@ SELECT @txt = '['+@logdb_name+'].['+@schema+'].['+@proc_name+']
 
 EXECUTE(@txt)
 
+
+delete from #tmp_alogg
+where 
+                coalesce(avail_dur,0) = 0 and
+                coalesce(tot_work_dur,0) = 0 and
+                coalesce(talking_call_dur,0) = 0 and
+                coalesce(pause_dur,0) = 0 and
+                coalesce(wait_dur,0) = 0 and
+                coalesce(wrap_up_dur,0) = 0 and
+                coalesce(answ_call_cnt,0) = 0 and
+                coalesce(direct_out_call_cnt,0) = 0 and
+                coalesce(direct_out_call_dur,0) = 0 and
+                coalesce(direct_in_call_cnt,0) = 0 and
+                coalesce(direct_in_call_dur,0) = 0 and
+                coalesce(transfer_out_call_cnt,0) = 0 and
+				coalesce(admin_dur,0) = 0
+
+
 /*********************************************************************************/
 /* Adjust for different time zones between log_object and T-CCC?      */
 /* If so, interval and date_from might need adjustment.                       */

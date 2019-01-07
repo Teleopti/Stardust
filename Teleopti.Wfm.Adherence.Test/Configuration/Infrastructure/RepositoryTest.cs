@@ -32,7 +32,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		public void VerifyIncorrectBusinessUnitIsNotReadable()
 		{
 			var correct = CreateAggregateWithCorrectBusinessUnit();
-			if (correct is IBelongsToBusinessUnit buRef)
+			var buRef = correct as IBelongsToBusinessUnit;
+			var buRefId = correct as IBelongsToBusinessUnitId;
+			if (buRef != null || buRefId != null)
 			{
 				PersistAndRemoveFromUnitOfWork(correct);
 
@@ -42,7 +44,10 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 				PersistAndRemoveFromUnitOfWork(inCorrect);
 
 				var retList = rep.LoadAll();
-				Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
+				if (buRef != null)
+					Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
+				if (buRefId != null)
+					Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnitId) r).BusinessUnit.Equals(buRefId.BusinessUnit)));
 			}
 			else
 			{

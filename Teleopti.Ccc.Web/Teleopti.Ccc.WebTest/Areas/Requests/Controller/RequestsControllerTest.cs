@@ -23,6 +23,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 {
@@ -53,6 +54,40 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			isolate.UseTestDouble<FakeLicenseAvailability>().For<ILicenseAvailability>();
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") {DefaultScenario = true}))
 				.For<IScenarioRepository>();
+		}
+
+		[Test]
+		public void ShouldGetShiftTradeScheduleViewModelWithTimeLine()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupShiftTradeScheduleData(date);
+
+			var result = Target.GetShiftTradeSchedules(input);
+
+			result.TimeLine.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldGetShiftTradeScheduleViewModelWithCorrectStartPositionPercentageInPeriods()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupShiftTradeScheduleData(date);
+
+			var result = Target.GetShiftTradeSchedules(input);
+
+			result.PersonFromSchedule.Periods.First().StartPositionPercentage.Should().Not.Be.EqualTo(0.0);
+		}
+
+		[Test]
+		public void ShouldGetShiftTradeScheduleViewModel()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupShiftTradeScheduleData(date);
+
+			var result = Target.GetShiftTradeSchedules(input);
+
+			result.PersonFromSchedule.Should().Not.Be.Null();
+			result.PersonToSchedule.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -88,6 +123,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		}
 
 		[Test]
+		public void ShouldGetShiftsInitialized()
+		{
+			var date = new DateTime(2018, 11, 21);
+			var input = setupData(date);
+
+			var result = Target.GetRequests(input);
+			result.Requests.First().Shifts.GetType().Should().Be.EqualTo(typeof(TeamScheduleAgentScheduleViewModel[]));
+		}
+
+		[Test]
 		public void ShouldGetShiftPeriods()
 		{
 			var date = new DateTime(2018, 11, 21);
@@ -96,11 +141,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 
 			var result = Target.GetRequests(input);
-			result.Requests.First().Shifts.Count().Should().Be.EqualTo(1);
-			result.Requests.First().Shifts.First().Periods.First().StartTime.Should().Be.EqualTo(date.AddHours(1));
-			result.Requests.First().Shifts.First().Periods.First().EndTime.Should().Be.EqualTo(date.AddHours(10));
-			result.Requests.First().Shifts.First().Periods.First().StartPositionPercentage.Should().Be.EqualTo(0.0);
-			result.Requests.First().Shifts.First().Periods.First().EndPositionPercentage.Should().Be.EqualTo(1.0);
+
+			var teamScheduleAgentScheduleViewModels = result.Requests.First().Shifts;
+			teamScheduleAgentScheduleViewModels.Count().Should().Be.EqualTo(1);
+
+			var teamScheduleAgentScheduleLayerViewModel = teamScheduleAgentScheduleViewModels.First().Periods.First();
+			teamScheduleAgentScheduleLayerViewModel.StartTime.Should().Be.EqualTo(date.AddHours(1));
+			teamScheduleAgentScheduleLayerViewModel.EndTime.Should().Be.EqualTo(date.AddHours(10));
+			teamScheduleAgentScheduleLayerViewModel.StartPositionPercentage.Should().Be.EqualTo(0.0);
+			teamScheduleAgentScheduleLayerViewModel.EndPositionPercentage.Should().Be.EqualTo(1.0);
 		}
 
 		[Test]
@@ -318,6 +367,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			setUpLogonUser();
 
 			return getInputForm(teamId, requestStartTime, requestEndTime);
+		}
+
+		private ShiftTradeScheduleForm setupShiftTradeScheduleData(DateTime date)
+		{
+			var scenarioId = Guid.NewGuid();
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+
+			CurrentScenario.Current().WithId(scenarioId);
+
+			Database.WithPerson(personFromId)
+				.WithScenario(scenarioId)
+				.WithPeriod(date.ToDateOnly().ToString())
+				.WithSchedule(date.Date.AddHours(9).ToString(), date.Date.AddHours(18).ToString())
+				.WithPerson(personToId)
+				.WithScenario(scenarioId)
+				.WithPeriod(date.ToDateOnly().ToString())
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
+
+			setUpPersonRelatedInfo(personFromId);
+			setUpLogonUser();
+
+
+			return new ShiftTradeScheduleForm
+			{
+				PersonFromId = personFromId,
+				PersonToId = personToId,
+				RequestDate = date
+			};
 		}
 
 		private AllRequestsFormData getInputForm(Guid teamId, DateTime start, DateTime? end)

@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon.FakeData;
 
-
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     [TestFixture]
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			target.SeniorityWorkDayRanks = new SeniorityWorkDayRanks();
             IList<ISkill> list = target.VisibleSkills;
             Assert.IsNotNull(list);
-            Assert.AreEqual(1, target.Skills.Length);
+            Assert.AreEqual(1, target.Skills.Count);
             Assert.IsNotNull(target.LoadedAgents);
             Assert.IsNotNull(target.Schedules);
             Assert.IsNotNull(target.SkillDays);
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			ISkill maxSeat = SkillFactory.CreateSiteSkill("maxseat");
 			ISkill nonBlend = SkillFactory.CreateNonBlendSkill("nonBlend");
 			SchedulingResultStateHolder target = SchedulingResultStateHolderFactory.Create(_period);
-			target.AddSkills(normal,maxSeat,nonBlend);
+			target.Skills = new HashSet<ISkill>{normal,maxSeat,nonBlend};
 			IList<ISkill> result = target.VisibleSkills;
 			Assert.AreEqual(3, result.Count);
 		}

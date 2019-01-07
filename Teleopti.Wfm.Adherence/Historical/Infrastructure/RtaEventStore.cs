@@ -8,8 +8,8 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Wfm.Adherence.Domain.Events;
 using Teleopti.Wfm.Adherence.States;
+using Teleopti.Wfm.Adherence.States.Events;
 using Teleopti.Wfm.Adherence.States.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
@@ -41,9 +41,13 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 			_loadSize = config.ReadValue("RtaEventStoreLoadForSynchronizationSize", 50000);
 		}
 
-		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) => Add(new[] {@event}, deadLockVictim, storeVersion);
+		public void Add(IEvent @event, DeadLockVictim deadLockVictim, int storeVersion) =>
+			add(new[] {@event}, deadLockVictim, storeVersion);
 
-		public void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion)
+		public void Add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int storeVersion) => 
+			add(events, deadLockVictim, storeVersion);
+		
+		private void add(IEnumerable<IEvent> events, DeadLockVictim deadLockVictim, int? storeVersion)
 		{
 			_deadLockVictimPriority.Specify(deadLockVictim);
 
@@ -120,9 +124,10 @@ SELECT
 FROM 
 	[rta].[Events]
 WHERE
-	StoreVersion = :fromVersion
+	ISNULL(StoreVersion, :firstVersion) = :fromVersion
 ")
 					.SetParameter("fromVersion", fromStoreVersion)
+					.SetParameter("firstVersion", RtaEventStoreVersion.WithoutBelongsToDate)
 					.SetMaxResults(batchSize)
 			).Select(e => new UpgradeEvent
 			{
@@ -265,6 +270,9 @@ ORDER BY [Id]
 			public IEvent DeserializedEvent;
 		}
 
+		public void AddWithoutStoreVersion(IEvent @event, DeadLockVictim deadLockVictim) =>
+			add(new[] {@event}, deadLockVictim, null);
+		
 		public IEnumerable<IEvent> LoadAllForTest() =>
 			loadEvents(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
 

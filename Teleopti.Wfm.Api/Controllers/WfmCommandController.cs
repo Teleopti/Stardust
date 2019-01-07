@@ -3,13 +3,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Autofac;
+using log4net;
 
 namespace Teleopti.Wfm.Api.Controllers
 {
     public class WfmCommandController : ApiController
     {
-        readonly IComponentContext services;
-        readonly CommandDtoProvider dtoProvider;
+        private readonly IComponentContext services;
+        private readonly CommandDtoProvider dtoProvider;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(WfmCommandController));
 
         public WfmCommandController(IComponentContext services, CommandDtoProvider dtoProvider)
         {
@@ -48,6 +50,7 @@ namespace Teleopti.Wfm.Api.Controllers
 				}
 				catch (Exception e)
 				{
+					Logger.Warn($"Error when running command {commandType}.", e);
 					return Json(new ResultDto
 					{
 						Successful = false,

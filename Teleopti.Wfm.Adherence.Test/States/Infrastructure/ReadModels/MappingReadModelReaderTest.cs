@@ -60,7 +60,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 		public void ShouldReadEmptyMapping()
 		{
 			WithUnitOfWork.Do(() =>
-				Maps.Add(new RtaMap(null, null)));
+				Maps.Add(new RtaMap()));
 
 			WithReadModels.Get(() => Target.Read())
 				.Should().Not.Be.Empty();
@@ -72,11 +72,8 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			ensureBusinessUnitInAnalytics();
 
 			var phone = new Activity("Phone");
-			WithUnitOfWork.Do(() =>
-			{
-				Activities.Add(phone);
-				Maps.Add(new RtaMap(null, phone));
-			});
+			WithUnitOfWork.Do(() => { Activities.Add(phone); });
+			WithUnitOfWork.Do(() => { Maps.Add(new RtaMap {Activity = phone.Id.Value}); });
 
 			WithReadModels.Get(() => Target.Read())
 				.Select(x => x.ActivityId).Should().Contain(phone.Id.Value);
@@ -90,7 +87,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			WithUnitOfWork.Do(() =>
 			{
 				Groups.Add(group);
-				Maps.Add(new RtaMap(group, null));
+				Maps.Add(new RtaMap {StateGroup = group});
 			});
 
 			var mapping = WithReadModels.Get(() => Target.Read()).Single(x => x.StateGroupId == group.Id.Value);
@@ -128,7 +125,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			WithUnitOfWork.Do(() =>
 			{
 				Rules.Add(rule);
-				Maps.Add(new RtaMap(null, null) {RtaRule = rule});
+				Maps.Add(new RtaMap() {RtaRule = rule});
 			});
 
 			var mapping = WithReadModels.Get(() => Target.Read()).Single();
@@ -153,7 +150,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 			WithUnitOfWork.Do(() =>
 			{
 				Rules.Add(rule);
-				Maps.Add(new RtaMap(null, null) {RtaRule = rule});
+				Maps.Add(new RtaMap {RtaRule = rule});
 			});
 
 			var mapping = WithReadModels.Get(() => Target.Read()).Single();
@@ -166,11 +163,11 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 		[Test]
 		public void ShouldReadBusinessUnitFromMapping()
 		{
-			var mapping = new RtaMap(null, null);
+			var mapping = new RtaMap();
 			WithUnitOfWork.Do(() => Maps.Add(mapping));
 
 			WithReadModels.Get(() => Target.Read())
-				.Single().BusinessUnitId.Should().Be(mapping.BusinessUnit.Id.Value);
+				.Single().BusinessUnitId.Should().Be(mapping.BusinessUnit.Value);
 		}
 
 		[Test]
@@ -182,7 +179,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 
 			WithReadModels.Get(() => Target.Read())
 				.Single(x => x.StateGroupId == group.Id.Value)
-				.BusinessUnitId.Should().Be(group.BusinessUnit.Id.Value);
+				.BusinessUnitId.Should().Be(group.BusinessUnit.Value);
 		}
 
 		private void ensureBusinessUnitInAnalytics()

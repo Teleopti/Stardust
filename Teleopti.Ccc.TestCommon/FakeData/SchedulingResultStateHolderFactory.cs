@@ -23,9 +23,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public static SchedulingResultStateHolder Create(DateTimePeriod period, ISkill skill)
         {
-
             SchedulingResultStateHolder result = Create(period);
-            result.AddSkills(skill);
+			result.Skills = new HashSet<ISkill>{skill};
           
             return result;
         }

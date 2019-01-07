@@ -150,6 +150,7 @@
 		public const string Gamification = "Raptor/Anywhere/Gamification";
 		public const string ExportSchedule = "Raptor/Anywhere/Schedules/ExportSchedule";
 		public const string ViewCustomerCenter = "Raptor/Anywhere/ViewCustomerCenter";
+		public const string SystemSetting = "Raptor/Anywhere/SystemSetting";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";

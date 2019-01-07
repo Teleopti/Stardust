@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 
 
@@ -38,25 +35,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 
 		private IEnumerable<SelectBase> createNotEmptyTeamOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
-			var options = new List<SelectOptionItem>();
-
 			var teams = _teamProvider.GetPermittedNotEmptyTeams(date, applicationFunctionPath);
-			if (teams == null) return options;
+			if (teams == null) return new List<SelectOptionItem>();
 			var sites = teams.ToList().GroupBy(t => t.Site)
 				.OrderBy(s => s.Key.Description.Name);
 
-			sites.ForEach(s =>
+			return sites.SelectMany(s => s.Select(t => new SelectOptionItem
 			{
-				var teamOptions = from t in s
-					select new SelectOptionItem
-					{
-						id = t.Id.ToString(),
-						text = s.Key.Description.Name + "/" + t.Description.Name
-					};
-				options.AddRange(teamOptions);
-			});
-
-			return options;
+				id = t.Id.ToString(),
+				text = s.Key.Description.Name + "/" + t.Description.Name
+			}));
 		}
 
 		public IEnumerable<SelectOptionItem> CreateTeamOptionsViewModel(DateOnly date, string applicationFunctionPath)
@@ -69,18 +57,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			var sites = teams.ToList().GroupBy(t => t.Site)
 				.OrderBy(s => s.Key.Description.Name);
 
-			sites.ForEach(s =>
+			return sites.SelectMany(s => s.Select(t => new SelectOptionItem
 			{
-				var teamOptions = from t in s
-								  select new SelectOptionItem
-								  {
-									  id = t.Id.ToString(),
-									  text = s.Key.Description.Name + "/" + t.Description.Name
-								  };
-				options.AddRange(teamOptions);
-			});
-
-			return options;
+				id = t.Id.ToString(),
+				text = s.Key.Description.Name + "/" + t.Description.Name
+			}));
 		}
 
 		private IEnumerable<SelectBase> createGroupPagesOptions(DateOnly date)
@@ -97,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 							.Select(p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId }).Single());
 			}
 
-			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToArray();
+			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToLookup(d => d.PageId);
 
 			foreach (var page in groupPages)
 			{
@@ -110,13 +91,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			return groupPages;
 		}
 
-		private void constructOptions(DateOnly date, SelectGroup page, IEnumerable<ReadOnlyGroupDetail> details, Guid pageId, string prefix)
+		private void constructOptions(DateOnly date, SelectGroup page, ILookup<Guid, ReadOnlyGroupDetail> details, Guid pageId, string prefix)
 		{
-			var detailsByGroup = from d in details
-								 where d.PageId == pageId
-								 group d by new { d.GroupId, GroupName = prefix + d.GroupName }
-									 into g
-									 select g;
+			var detailsByGroup = details[pageId].GroupBy(d => new {d.GroupId, GroupName = prefix + d.GroupName});
 			var groups = detailsByGroup.Where(
 				p => p.Any(d =>
 						   _permissionProvider.HasOrganisationDetailPermission(

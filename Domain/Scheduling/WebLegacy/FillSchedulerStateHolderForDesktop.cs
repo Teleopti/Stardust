@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>(stateHolderFrom.SchedulingResultState.SkillDays);
-			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
+			schedulerStateHolderTo.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
 		}
 
 		protected override void AddSkillDaysForReducedSkills(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)

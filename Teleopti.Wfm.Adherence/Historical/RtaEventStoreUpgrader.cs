@@ -59,7 +59,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 
 		[UnitOfWork]
 		protected virtual IEnumerable<UpgradeEvent> Read() =>
-			_writer.LoadForUpgrade(1, 1000);
+			_writer.LoadForUpgrade(RtaEventStoreVersion.WithoutBelongsToDate, 1000);
 
 		[UnitOfWork]
 		protected virtual void Write(IEnumerable<UpgradeEvent> events) =>

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 {
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 		[Test]
 		public void ShouldHaveCoverage()
 		{
-			var target = new WebPersonRequestCheckAuthorization();
+			var target = new SlimPersonRequestCheckAuthorization(new FullPermission());
 			target.HasEditRequestPermission(null);
 			target.HasViewRequestPermission(null);
 			target.VerifyEditRequestPermission(null);

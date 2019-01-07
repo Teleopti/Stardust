@@ -1,7 +1,3 @@
-dd {
-	margin-left: 40px;
-}
-
 .material-depth-1 {
 	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 }
@@ -36,22 +32,6 @@ dd {
 .wfm-block {
 	padding: $full-padding;
 	width: 100%;
-}
-
-.layout-container {
-	width: 100%;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-flex-direction: row;
-	flex-direction: row;
-}
-
-.layout-container .content {
-	-webkit-flex: auto;
-	flex: auto;
-	-ms-flex: auto;
-	flex-basis: 70%;
 }
 
 .md-ripple-container {
@@ -210,7 +190,9 @@ _:-ms-lang(x),
 	background-color: $teal-300;
 }
 
-.alert-error, .alert-success, .alert-warning {
+.alert-error,
+.alert-success,
+.alert-warning {
 	color: $gray087;
 	padding: 8px 15px;
 	margin-bottom: 5px;
@@ -233,11 +215,11 @@ _:-ms-lang(x),
 }
 
 .dropdown-menu {
-    position: absolute;
-    z-index: 1000;
-    min-width: 160px;
-    padding: 5px 0;
-    border: 1px solid $gray012;
-    border-radius: 4px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+	position: absolute;
+	z-index: 1000;
+	min-width: 160px;
+	padding: 5px 0;
+	border: 1px solid $gray012;
+	border-radius: 4px;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 }
