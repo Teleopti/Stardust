@@ -71,7 +71,7 @@
 			if (selectedShift) return selectedShift.Date;
 			else return personSchedule.Date;
 		}
-
+		
 		function validateShiftsToMove(ScheduleMgmt, newStartMoment) {
 			invalidPeople = [];
 			var selectedPersonIds = PersonSelectionSvc.getSelectedPersonIdList();
@@ -142,14 +142,14 @@
 				var newShiftStartMoment = getNewScheduleStartMoment(shiftDate, personSchedule, newStartMoment);
 				var newShiftStartInAgentTimezone = newShiftStartMoment.tz(personSchedule.Timezone.IanaId);
 
-				var newShiftEndMoment = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
-				var scheduleLength = newShiftEndMoment ? newShiftEndMoment.diff(newShiftStartMoment, 'minutes') : 0;
+				var newShiftEndInAgentTimezone = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
+				var scheduleLength = newShiftEndInAgentTimezone ? newShiftEndInAgentTimezone.diff(newShiftStartMoment, 'minutes') : 0;
 
 				var hasConflict = personSchedule.Shifts.concat(personSchedule.ExtraShifts)
 					.some(function (shift) {
 						if (shift.Date === shiftDate || !shift.ProjectionTimeRange) return false;
 						return (shiftDate > shift.Date && newStartInAgentTimezone.isSameOrBefore(shift.ProjectionTimeRange.EndMoment, 'minute')) ||
-							(shiftDate < shift.Date && newStartInAgentTimezone.isSameOrAfter(shift.ProjectionTimeRange.StartMoment, 'minute'));
+							(shiftDate < shift.Date && newShiftEndInAgentTimezone.isSameOrAfter(shift.ProjectionTimeRange.StartMoment, 'minute'));
 					});
 
 				if (serviceDateFormatHelper.getDateOnly(newShiftStartInAgentTimezone) != shiftDate

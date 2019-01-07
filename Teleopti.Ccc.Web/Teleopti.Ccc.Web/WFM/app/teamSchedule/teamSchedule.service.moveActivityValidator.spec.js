@@ -527,7 +527,7 @@
 				personSchedule.Shifts[0].Projections[1].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);
 
-				var newStartMoment = moment.tz("2019-01-04 05:00", "Europe/Berlin");
+				var newStartMoment = moment.tz("2019-01-04 04:00", "Europe/Berlin");
 				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Europe/Berlin");
 				expect(result).toBeTruthy();
 
@@ -580,14 +580,14 @@
 							"Color": "#80FF80",
 							"Description": "Email",
 							"StartInUtc": "2019-01-02 22:00",
-							"EndInUtc": "2019-01-03 05:00"
+							"EndInUtc": "2019-01-03 04:00"
 						},
 						{
 							"ShiftLayerIds": ["layer4"],
 							"ParentPersonAbsences": null,
 							"Color": "#80FF80",
 							"Description": "Email",
-							"StartInUtc": "2019-01-03 05:00",
+							"StartInUtc": "2019-01-03 04:00",
 							"EndInUtc": "2019-01-03 06:00"
 						}
 					],
@@ -606,8 +606,11 @@
 
 				newStartMoment = moment.tz("2019-01-03 08:00", "Europe/Berlin");
 				result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Europe/Berlin");
+				expect(result).toBeFalsy();
+
+				newStartMoment = moment.tz("2019-01-03 06:00", "Europe/Berlin");
+				result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Europe/Berlin");
 				expect(result).toBeTruthy();
-				
 			});
 
 			it('should return true when overtime is selected', function () {
