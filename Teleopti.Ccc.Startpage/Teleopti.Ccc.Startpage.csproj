@@ -225,8 +225,6 @@
     <Content Include="assets\vendor\respond\src\matchmedia.addListener.js" />
     <Content Include="assets\vendor\respond\src\matchmedia.polyfill.js" />
     <Content Include="assets\vendor\respond\src\respond.js" />
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="forecast.html" />
     <Content Include="index.html" />
   </ItemGroup>
