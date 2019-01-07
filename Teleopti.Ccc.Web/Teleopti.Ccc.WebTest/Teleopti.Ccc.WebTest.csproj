@@ -230,7 +230,6 @@
     <Compile Include="Areas\Gamification\TeamGamificationSettingProviderAndPersisterTest.cs" />
     <Compile Include="Areas\Global\ChatConfigurationControllerTest.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Global\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\ThemeSettingProviderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\WorkloadNameBuilderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
