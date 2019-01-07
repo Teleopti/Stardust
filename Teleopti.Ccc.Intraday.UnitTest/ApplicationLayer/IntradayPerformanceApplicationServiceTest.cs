@@ -451,6 +451,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 				CalculatedCalls = 20,
 				AnsweredCalls = 16,
 				AnsweredCallsWithinSL = 16,
+				AverageSpeedOfAnswer = 10 / 16,
 				SpeedOfAnswer = 10,
 				AbandonedCalls = 4,
 				AbandonedRate = 0.2d,
@@ -704,7 +705,65 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			result.LatestActualIntervalStart.Should().Be.EqualTo(latestStatsTime);
 			
 		}
+		
+		[Test]
+		public void ShouldReturnPerformanceDataWithGaps()
+		{
+			DateTime testDate = new DateTime(2019, 1, 3, 0, 30, 0, DateTimeKind.Utc);
 
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 0, 30), false);
+			var latestStatsTime = new DateTime(2019, 1, 3, 0, 0, 0, DateTimeKind.Utc);
+			var skillDay = createSkillDay(skill, testDate, new TimePeriod(0, 0, 0, 30), true);
+
+			var scheduledStaffingList = createScheduledStaffing(skillDay);
+
+			IntradayMonitorDataLoader.ShouldCompareDate = true;
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				AnsweredCalls = 2,
+				AverageSpeedOfAnswer = 2,
+				AbandonedCalls = 2,
+				AbandonedRate = 2,
+				AnsweredCallsWithinSL = 2,
+				ServiceLevel = 0.8,
+				CalculatedCalls = 2,
+				ForecastedCalls = 2
+			});
+
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime.AddMinutes(30), (60 / minutesPerInterval) * 24).Id,
+				AnsweredCalls = 4,
+				AverageSpeedOfAnswer = 4,
+				AbandonedCalls = 4,
+				AbandonedRate = 4,
+				AnsweredCallsWithinSL = 4,
+				ServiceLevel = 0.8,
+				CalculatedCalls = 4,
+				ForecastedCalls = 4
+			});
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Add(skillDay);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
+
+			var result = Target.GeneratePerformanceViewModel(new Guid[] { skill.Id.Value }, testDate);
+
+			result.Should().Not.Be.Null();
+			result.DataSeries.AbandonedRate.Count().Should().Be.EqualTo(3);
+			result.DataSeries.AbandonedRate[0].Should().Be.EqualTo(200);
+			result.DataSeries.AbandonedRate[1].Should().Be.EqualTo(null);
+			result.DataSeries.AbandonedRate[2].Should().Be.EqualTo(400);
+			result.DataSeries.AverageSpeedOfAnswer[0].Should().Be.EqualTo(2);
+			result.DataSeries.AverageSpeedOfAnswer[1].Should().Be.EqualTo(null);
+			result.DataSeries.AverageSpeedOfAnswer[2].Should().Be.EqualTo(4);
+			result.DataSeries.ServiceLevel[0].Should().Be.EqualTo(80);
+			result.DataSeries.ServiceLevel[1].Should().Be.EqualTo(null);
+			result.DataSeries.ServiceLevel[2].Should().Be.EqualTo(80);
+		}
 		[Test]
 		public void ShouldNotReturnPerformanceDataForSpecifiedDate()
 		{
@@ -794,8 +853,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			var result = Target.GeneratePerformanceViewModel(new Guid[] {skill.Id.Value});
 			result.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(1);
 			result.DataSeries.ServiceLevel[0].Should().Not.Be.EqualTo(null);
-			result.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(1);
-			result.DataSeries.AbandonedRate[0].Should().Be.EqualTo(null);
+			result.DataSeries.AbandonedRate.Should().Be.Empty();
 			result.Summary.AbandonRate.Should().Be.EqualTo(-99);
 		}
 
