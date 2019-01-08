@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Infrastructure.Audit;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -18,7 +17,7 @@ using Teleopti.Ccc.WebTest.Areas.People.IoC;
 namespace Teleopti.Ccc.WebTest.Areas.People
 {
 	[WebPeopleTest]
-	public class RoleControllerAuditBase
+	public abstract class RoleControllerAuditBase
 	{
 		public RoleController Target;
 		public FakeApplicationRoleRepository ApplicationRoleRepository;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void GrantRoles_ShouldMakeCorrectAuditLogEntry()
 		{
-			/// Setup
+			// Setup
 			PersonRepository.Add(_person1);
 			ApplicationRoleRepository.Add(_role1);
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				Roles = new[] {_role1.Id.GetValueOrDefault()}
 			};
 
-			/// Test
 			// Check Change, SingleGrant
 			var result = Target.GrantRoles(inputModel);
 			result.Should().Be.OfType<OkResult>();
@@ -82,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void GrantRoles_ShouldMakeNotPermittedAuditLogEntry()
 		{
-			/// Setup
+			// Setup
 			PersonRepository.Add(_person1);
 			ApplicationRoleRepository.Add(_role1);
 
@@ -92,7 +90,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				Roles = new[] { _role1.Id.GetValueOrDefault() }
 			};
 
-			/// Test
 			// Check Change, SingleGrant
 			var result = Target.GrantRoles(inputModel);
 			result.Should().Be.OfType<OkResult>();
@@ -108,14 +105,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void GrantMultipleRolesNewAndPresent_ShouldMakeAuditLogChangeAndNoChangeEntries()
 		{
-			/// Setup
+			// Setup
 			PersonRepository.Add(_person1);
 			PersonRepository.Add(_person2);
 			ApplicationRoleRepository.Add(_role1);
 			ApplicationRoleRepository.Add(_role2);
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 
-			/// Test
 			// Check Change, MultiGrant
 			var inputModel = new GrantRolesInputModel()
 			{
@@ -126,11 +122,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.GrantRoles(inputModel);
 			result.Should().Be.OfType<OkResult>();
 
-			var auditRows = PersonAccessRepository.LoadAll();
+			var auditRows = PersonAccessRepository.LoadAll().ToList();
 			auditRows.Count().Should().Be.EqualTo(2);
-			auditRows.Where(x => x.Action == PersonAuditActionType.AuditTrailMultiGrantRole.ToString()).Count().Should().Be.EqualTo(2);
-			auditRows.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(2);
-			auditRows.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(0);
+			auditRows.Count(x => x.Action == PersonAuditActionType.AuditTrailMultiGrantRole.ToString()).Should().Be.EqualTo(2);
+			auditRows.Count(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Should().Be.EqualTo(2);
+			auditRows.Count(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Should().Be.EqualTo(0);
 
 			var p1AuditRow1 = auditRows.Single(x => x.ActionPerformedOnId == _person1.Id);
 			var p2AuditRow1 = auditRows.Single(x => x.ActionPerformedOnId == _person2.Id);
@@ -144,20 +140,20 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				Roles = new[] {_role1.Id.GetValueOrDefault(), _role2.Id.GetValueOrDefault()}
 			};
 
-			var result2 = Target.GrantRoles(inputModel2);
+			Target.GrantRoles(inputModel2);
 			result.Should().Be.OfType<OkResult>();
 
-			var auditRows2 = PersonAccessRepository.LoadAll();
+			var auditRows2 = PersonAccessRepository.LoadAll().ToList();
 			auditRows2.Count().Should().Be.EqualTo(6);
-			auditRows2.Where(x => x.Action == PersonAuditActionType.AuditTrailMultiGrantRole.ToString()).Count().Should().Be.EqualTo(6);
-			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(4);
-			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(2);
+			auditRows2.Count(x => x.Action == PersonAuditActionType.AuditTrailMultiGrantRole.ToString()).Should().Be.EqualTo(6);
+			auditRows2.Count(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Should().Be.EqualTo(4);
+			auditRows2.Count(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Should().Be.EqualTo(2);
 		}
 
 		[Test]
 		public void RevokeRole_ShouldMakeCorrectAuditLogEntry()
 		{
-			/// Setup
+			// Setup
 			PersonRepository.Add(_person1);
 			ApplicationRoleRepository.Add(_role1);
 			_person1.PermissionInformation.AddApplicationRole(_role1);
@@ -169,7 +165,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				Roles = new[] { _role1.Id.GetValueOrDefault() }
 			};
 
-			/// Test
 			// Check Change, SingleRevoke
 			var result = Target.RevokeRoles(inputModel);
 			result.Should().Be.OfType<OkResult>();
@@ -196,7 +191,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void RevokeMultipleRolesNewAndPresent_ShouldMakeAuditLogChangeAndNoChangeEntries()
 		{
-			/// Setup
+			// Setup
 			PersonRepository.Add(_person1);
 			PersonRepository.Add(_person2);
 			ApplicationRoleRepository.Add(_role1);
@@ -207,7 +202,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			_person2.PermissionInformation.AddApplicationRole(_role2);
 			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 
-			/// Test
 			// Check Change, MultiRevoke
 			var inputModel = new RevokeRolesInputModel()
 			{
@@ -218,11 +212,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var result = Target.RevokeRoles(inputModel);
 			result.Should().Be.OfType<OkResult>();
 
-			var auditRows = PersonAccessRepository.LoadAll();
+			var auditRows = PersonAccessRepository.LoadAll().ToList();
 			auditRows.Count().Should().Be.EqualTo(2);
-			auditRows.Where(x => x.Action == PersonAuditActionType.AuditTrailMultiRevokeRole.ToString()).Count().Should().Be.EqualTo(2);
-			auditRows.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(2);
-			auditRows.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(0);
+			auditRows.Count(x => x.Action == PersonAuditActionType.AuditTrailMultiRevokeRole.ToString()).Should().Be.EqualTo(2);
+			auditRows.Count(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Should().Be.EqualTo(2);
+			auditRows.Count(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Should().Be.EqualTo(0);
 
 			var p1AuditRow1 = auditRows.Single(x => x.ActionPerformedOnId == _person1.Id);
 			var p2AuditRow1 = auditRows.Single(x => x.ActionPerformedOnId == _person2.Id);
@@ -236,14 +230,14 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				Roles = new[] { _role1.Id.GetValueOrDefault(), _role2.Id.GetValueOrDefault() }
 			};
 
-			var result2 = Target.RevokeRoles(inputModel2);
+			 Target.RevokeRoles(inputModel2);
 			result.Should().Be.OfType<OkResult>();
 
-			var auditRows2 = PersonAccessRepository.LoadAll();
+			var auditRows2 = PersonAccessRepository.LoadAll().ToList();
 			auditRows2.Count().Should().Be.EqualTo(6);
-			auditRows2.Where(x => x.Action == PersonAuditActionType.AuditTrailMultiRevokeRole.ToString()).Count().Should().Be.EqualTo(6);
-			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Count().Should().Be.EqualTo(4);
-			auditRows2.Where(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Count().Should().Be.EqualTo(2);
+			auditRows2.Count(x => x.Action == PersonAuditActionType.AuditTrailMultiRevokeRole.ToString()).Should().Be.EqualTo(6);
+			auditRows2.Count(x => x.ActionResult == PersonAuditActionResult.Change.ToString()).Should().Be.EqualTo(4);
+			auditRows2.Count(x => x.ActionResult == PersonAuditActionResult.NoChange.ToString()).Should().Be.EqualTo(2);
 		}
 	}
 
