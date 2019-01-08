@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
@@ -16,6 +16,7 @@ import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component'
 import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
 import { BankHolidayCalendarEditComponent } from '../bank-holiday-calendar-edit';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
+import { BankHolidayCalendarAssignToSitesComponent } from '../bank-holiday-calendar-assign-to-sites';
 
 describe('BankHolidayCalendarComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarComponent>;
@@ -33,7 +34,8 @@ describe('BankHolidayCalendarComponent', () => {
 			declarations: [
 				BankHolidayCalendarComponent,
 				BankHolidayCalendarAddComponent,
-				BankHolidayCalendarEditComponent
+				BankHolidayCalendarEditComponent,
+				BankHolidayCalendarAssignToSitesComponent
 			],
 			imports: [
 				TranslateModule.forRoot(),
@@ -41,7 +43,7 @@ describe('BankHolidayCalendarComponent', () => {
 				FormsModule,
 				ReactiveFormsModule,
 				HttpClientTestingModule,
-				BrowserAnimationsModule
+				NoopAnimationsModule
 			],
 			providers: [
 				TranslateService,

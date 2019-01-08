@@ -13,6 +13,7 @@ import { SystemSettingsComponent } from './system-settings.component';
 import { BankHolidayCalendarComponent } from '../../components/bank-holiday-calendar';
 import { BankHolidayCalendarAddComponent } from '../../components/bank-holiday-calendar-add';
 import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-calendar-edit';
+import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
 
 class mockStateService implements Partial<IStateService> {
 	public current: {
@@ -37,7 +38,8 @@ describe('SystemSettings page', () => {
 				SystemSettingsComponent,
 				BankHolidayCalendarComponent,
 				BankHolidayCalendarAddComponent,
-				BankHolidayCalendarEditComponent
+				BankHolidayCalendarEditComponent,
+				BankHolidayCalendarAssignToSitesComponent
 			],
 			imports: [
 				TranslateModule.forRoot(),

@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -27,7 +27,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 				FormsModule,
 				ReactiveFormsModule,
 				HttpClientTestingModule,
-				BrowserAnimationsModule
+				NoopAnimationsModule
 			],
 			providers: [
 				TranslateService,
