@@ -77,7 +77,7 @@
 			
 			vm.timelineVmWidth = getDiffMinutes(timeLineTimeRange.End, timeLineTimeRange.Start);
 			var intervals = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange).Intervals;
-			vm.timelineHtml = getTimelineHtml(intervals)
+			vm.timelineHtml = getTimelineHtml(intervals);
 		};
 
 		function getTimelineHtml(intervals) {
@@ -608,10 +608,18 @@
 				vm.isChangedByOthers = true;
 				return;
 			}
+			var dateMoment = moment.tz(vm.date, vm.timezone);
+			var viewRangeStart = dateMoment.clone().add(-1, 'day').startOf('day');
+			var viewRangeEnd = dateMoment.clone().add(1, 'day').startOf('day');
+			
 			for (var i = 0; i < d.messages.length; i++) {
 				var message = d.messages[i];
+				var startDate = moment.tz(message.StartDate.substring(1, message.StartDate.length), 'Etc/Utc').tz(vm.timezone);
+				var endDate = moment.tz(message.EndDate.substring(1, message.EndDate.length), 'Etc/Utc').tz(vm.timezone);
+				var isScheduleDateInMessageRange = startDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]')
+					|| endDate.isBetween(viewRangeStart, viewRangeEnd, 'day', '[]');
 				if (message.DomainReferenceId === vm.personId
-					&& moment(vm.date).isBetween(getMomentDate(message.StartDate), getMomentDate(message.EndDate), 'day', '[]')) {
+					&& isScheduleDateInMessageRange) {
 					if (vm.trackId !== message.TrackId) {
 						vm.isChangedByOthers = true;
 					}
