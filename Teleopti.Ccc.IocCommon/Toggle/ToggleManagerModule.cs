@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Security.Policy;
 using Autofac;
 using log4net;
+using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Infrastructure.Toggle.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle.InApp;
 using Toggle.Net;
 using Toggle.Net.Configuration;
@@ -35,7 +34,9 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			else
 			{
 				builder.CacheByInterfaceProxy<FetchToggleOverride, IFetchToggleOverride>();
-				_iocArgs.Cache.This<IFetchToggleOverride>(x => x.CacheMethod(m => m.OverridenValue(Toggles.TestToggle)));	
+				_iocArgs.Cache.This<IFetchToggleOverride>(x => 
+					x.CacheMethod(m => m.OverridenValue(Toggles.TestToggle))
+						.OverrideCache(new InMemoryCache(1)));	
 			}
 			
 			if (string.IsNullOrEmpty(pathToToggle))
