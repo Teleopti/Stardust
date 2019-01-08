@@ -111,6 +111,7 @@ Try
 
 	#Setting $Env:TeleoptiIsAzure = $true
 	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Machine")
+	log "Environment variable 'TeleoptiIsAzure' is set to '$Env:TeleoptiIsAzure'"
 
 	#Set environment variables for RoleInstanceID & Rolename
 	[Environment]::SetEnvironmentVariable("RoleName", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Role.Name, "Machine") 
