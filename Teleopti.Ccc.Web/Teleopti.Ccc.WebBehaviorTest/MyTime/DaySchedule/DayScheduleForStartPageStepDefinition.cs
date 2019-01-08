@@ -8,7 +8,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.MyTime
+namespace Teleopti.Ccc.WebBehaviorTest.MyTime.DaySchedule
 {
 	[Binding]
 	class DayScheduleForStartPageStepDefinition
@@ -150,6 +150,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIClickMenuTextRequest()
 		{
 			Browser.Interactions.ClickContaining("li>a", "Text Request");
+		}
+
+		[When(@"I click menu Overtime Request")]
+		public void WhenIClickMenuOvertimeRequest()
+		{
+			Browser.Interactions.ClickContaining("li>a", "Overtime Request");
 		}
 
 		[When(@"I click menu Shift Trade Request")]

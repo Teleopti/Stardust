@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string AbsenceRequestOpenPeriodEnd { get; set; }
 		public int OvertimeRequestOpenPeriodRollingStart { get; set; }
 		public int OvertimeRequestOpenPeriodRollingEnd { get; set; }
+		public bool OvertimeRequestAutoApprove { get; set; }
 		public string AbsenceRequestPreferencePeriodStart { get; set; }
 		public string AbsenceRequestPreferencePeriodEnd { get; set; }
 		public string StaffingCheck { get; set; }
@@ -211,7 +212,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (OvertimeRequestOpenPeriodRollingEnd > 0 && OvertimeRequestOpenPeriodRollingEnd >= OvertimeRequestOpenPeriodRollingStart)
 			{
-				workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod {AutoGrantType = OvertimeRequestAutoGrantType.No,BetweenDays = new MinMax<int>(OvertimeRequestOpenPeriodRollingStart,OvertimeRequestOpenPeriodRollingEnd)});
+				if (OvertimeRequestAutoApprove)
+				{
+					workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod { AutoGrantType = OvertimeRequestAutoGrantType.Yes, BetweenDays = new MinMax<int>(OvertimeRequestOpenPeriodRollingStart, OvertimeRequestOpenPeriodRollingEnd) });
+
+				}
+				else
+				{
+					workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod { AutoGrantType = OvertimeRequestAutoGrantType.No, BetweenDays = new MinMax<int>(OvertimeRequestOpenPeriodRollingStart, OvertimeRequestOpenPeriodRollingEnd) });
+
+				}
 			}
 
 			var repository = new WorkflowControlSetRepository(currentUnitOfWork);
