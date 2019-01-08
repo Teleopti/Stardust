@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				var openHours = _openHourForDate.OpenHours(day, skillIntervalDataPerDateAndActivity[day]);
 				var restriction = new EffectiveRestriction(
-					new StartTimeLimitation(null, null),
-					new EndTimeLimitation(null, null),
-					new WorkTimeLimitation(null, openHours?.SpanningTime()),
+					new StartTimeLimitation(openHours?.StartTime, null),
+					new EndTimeLimitation(null, openHours?.EndTime),
+					new WorkTimeLimitation(null, null),
 					null, null, null,
 					new List<IActivityRestriction>());
 
@@ -70,8 +70,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public TimeSpan ForCurrentDate()
 		{
-			if (!OpenHoursDictionary.TryGetValue(_currentDate, out var lengthLimit)) return TimeSpan.MaxValue;
-			return lengthLimit.WorkTimeLimitation.EndTime ?? TimeSpan.MaxValue;
+			if (OpenHoursDictionary == null) return TimeSpan.MaxValue;
+			if (!OpenHoursDictionary.TryGetValue(_currentDate, out var startEndRestriction)) return TimeSpan.MaxValue;
+			if (startEndRestriction.EndTimeLimitation.EndTime == null) return TimeSpan.MaxValue;
+			return startEndRestriction.StartTimeLimitation.StartTime == null
+				? TimeSpan.MaxValue
+				: startEndRestriction.EndTimeLimitation.EndTime.Value.Subtract(startEndRestriction.StartTimeLimitation.StartTime.Value);
 		}
 	}
 }

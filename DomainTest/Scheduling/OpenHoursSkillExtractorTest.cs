@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public OpenHoursSkillExtractor Target;
 
 		[Test]
-		[Ignore("76118 to be fixed")]
 		public void ShouldRestrictOnStartAndEndTime()
 		{
 			var date = new DateOnly(2018, 10, 1);
