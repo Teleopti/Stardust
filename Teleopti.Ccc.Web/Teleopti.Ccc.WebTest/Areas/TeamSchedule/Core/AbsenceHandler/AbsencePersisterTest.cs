@@ -1,119 +1,318 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Web.Areas.TeamSchedule;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 {
-	[TestFixture]
-	class AbsencePersisterTest
+	[TestFixture, TeamScheduleTest]
+	public class AbsencePersisterTest :IIsolateSystem
 	{
-		private IAbsenceCommandConverter _absenceCommandConverter;
-		private IPersonAbsenceCreator _personAbsenceCreator;
-		private AbsenceCreatorInfo _absenceCreatorInfo;
-		private IPermissionChecker _permissionChecker;
+		public IAbsencePersister Target;
+		public FakePersonRepository PersonRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public IScheduleStorage ScheduleStorage;
+		public FakeUserTimeZone UserTimeZone;
+		public Global.FakePermissionProvider PermissionProvider;
 
-		[SetUp]
-		public void SetUp()
+		public FakePersonAssignmentRepository PersonAssignmentRepo;
+		public FakePersonRepository PersonRepo;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakeAbsenceRepository AbsenceRepository;
+		public FakeEventPublisher EventPublisher;
+		public void Isolate(IIsolate isolate)
 		{
-			_absenceCommandConverter = MockRepository.GenerateMock<IAbsenceCommandConverter>();
-			_personAbsenceCreator = MockRepository.GenerateMock<IPersonAbsenceCreator>();
-			_permissionChecker = MockRepository.GenerateMock<IPermissionChecker>();
+			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeAbsenceRepository>().For<IProxyForId<IAbsence>>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IProxyForId<IPerson>>();
+			isolate.UseTestDouble<AbsencePersister>().For<IAbsencePersister>();
+			isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			isolate.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 
-			_absenceCreatorInfo = new AbsenceCreatorInfo()
-			{
-				Person = new Person()
-			};
 		}
+
 
 		[Test]
 		public void ShouldPersistFullDayAbsence()
 		{
-			var command = new AddFullDayAbsenceCommand();
-			_absenceCommandConverter.Stub(x => x.GetCreatorInfoForFullDayAbsence(command)).Return(_absenceCreatorInfo);
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
+			scenario.SetBusinessUnit(businessUnit);
 
-			var target = new AbsencePersister(_absenceCommandConverter, _personAbsenceCreator, _permissionChecker);
-			var result = target.PersistFullDayAbsence(command);
+			var person = PersonFactory.CreatePerson().WithId();
+			var abs = AbsenceFactory.CreateAbsence("abs").WithId();
 
-			_personAbsenceCreator.AssertWasCalled(x=>x.Create(_absenceCreatorInfo, true));
-			result.Should().Be.Null();
+			PersonRepo.Has(person);
+			ScenarioRepository.Has(scenario);
+			AbsenceRepository.Has(abs);
+
+			var command = new AddFullDayAbsenceCommand {
+				PersonId = person.Id.GetValueOrDefault(),
+				AbsenceId = abs.Id.GetValueOrDefault(),
+				StartDate = new DateTime(2019, 1, 8, 0, 0, 0),
+				EndDate = new DateTime(2019, 1, 9, 0, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = person.Id.GetValueOrDefault(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			var actionResult = Target.PersistFullDayAbsence(command);
+			actionResult.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldReturnErrorWhenNoPermissonForAddFullDayAbsence()
 		{
-			var expectedErrorMessage = "no permisson for add full day absence";
-			var command = new AddFullDayAbsenceCommand();
-			_absenceCommandConverter.Stub(x => x.GetCreatorInfoForFullDayAbsence(command)).Return(_absenceCreatorInfo);
-			_permissionChecker.Stub(x => x.CheckAddFullDayAbsenceForPerson(_absenceCreatorInfo.Person, new DateOnly())).IgnoreArguments().Return(expectedErrorMessage);
+			PermissionProvider.Enable();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
+			scenario.SetBusinessUnit(businessUnit);
 
-			var target = new AbsencePersister(_absenceCommandConverter, _personAbsenceCreator, _permissionChecker);
-			var result = target.PersistFullDayAbsence(command);
+			var person = PersonFactory.CreatePerson().WithId();
+			var abs = AbsenceFactory.CreateAbsence("abs").WithId();
 
-			result.ErrorMessages[0].Should().Be.EqualTo(expectedErrorMessage);
-		}
-		
-		[Test]
-		public void ShouldReturnFailResultWhenCreateFullDayAbsence()
-		{
-			var command = new AddFullDayAbsenceCommand();
-			var createResult = new List<string>() { "add absence fail" };
-			_absenceCommandConverter.Stub(x => x.GetCreatorInfoForFullDayAbsence(command)).Return(_absenceCreatorInfo);
-			_personAbsenceCreator.Stub(x => x.Create(_absenceCreatorInfo, true)).Return(createResult);
+			PersonRepo.Has(person);
+			ScenarioRepository.Has(scenario);
+			AbsenceRepository.Has(abs);
 
-			var target = new AbsencePersister(_absenceCommandConverter, _personAbsenceCreator, _permissionChecker);
-			var result = target.PersistFullDayAbsence(command);
-
-			result.PersonId.Should().Be.EqualTo(_absenceCreatorInfo.Person.Id.GetValueOrDefault());
-			result.ErrorMessages.Should().Be.Equals(createResult);
+			var command = new AddFullDayAbsenceCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				AbsenceId = abs.Id.GetValueOrDefault(),
+				StartDate = new DateTime(2019, 1, 8, 0, 0, 0),
+				EndDate = new DateTime(2019, 1, 9, 0, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = person.Id.GetValueOrDefault(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			var actionResult = Target.PersistFullDayAbsence(command);
+			actionResult.ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionAddFullDayAbsenceForAgent);
 		}
 
 		[Test]
 		public void ShouldPersistIntradayAbsence()
 		{
-			var command = new AddIntradayAbsenceCommand();
-			_absenceCommandConverter.Stub(x => x.GetCreatorInfoForIntradayAbsence(command)).Return(_absenceCreatorInfo);
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
+			scenario.SetBusinessUnit(businessUnit);
 
-			var target = new AbsencePersister(_absenceCommandConverter, _personAbsenceCreator, _permissionChecker);
-			var result = target.PersistIntradayAbsence(command);
+			var person = PersonFactory.CreatePerson().WithId();
+			var abs = AbsenceFactory.CreateAbsence("abs").WithId();
 
-			_personAbsenceCreator.AssertWasCalled(x => x.Create(_absenceCreatorInfo, false));
-			result.Should().Be.Null();
+			PersonRepo.Has(person);
+			ScenarioRepository.Has(scenario);
+			AbsenceRepository.Has(abs);
+
+			var command = new AddIntradayAbsenceCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				AbsenceId = abs.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2019, 1, 8, 0, 0, 0),
+				EndTime= new DateTime(2019, 1, 9, 0, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = person.Id.GetValueOrDefault(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			var actionResult = Target.PersistIntradayAbsence(command);
+			actionResult.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldReturnErrorWhenNoPermissonForAddIntradayAbsence()
 		{
-			var expectedErrorMessage = "no permisson for add intraday absence";
-			var command = new AddIntradayAbsenceCommand();
-			_absenceCommandConverter.Stub(x => x.GetCreatorInfoForIntradayAbsence(command)).Return(_absenceCreatorInfo);
-			_permissionChecker.Stub(x => x.CheckAddIntradayAbsenceForPerson(_absenceCreatorInfo.Person, new DateOnly())).IgnoreArguments().Return(expectedErrorMessage);
+			PermissionProvider.Enable();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
+			scenario.SetBusinessUnit(businessUnit);
 
-			var target = new AbsencePersister(_absenceCommandConverter, _personAbsenceCreator, _permissionChecker);
-			var result = target.PersistIntradayAbsence(command);
+			var person = PersonFactory.CreatePerson().WithId();
+			var abs = AbsenceFactory.CreateAbsence("abs").WithId();
 
-			result.ErrorMessages[0].Should().Be.EqualTo(expectedErrorMessage);
+			PersonRepo.Has(person);
+			ScenarioRepository.Has(scenario);
+			AbsenceRepository.Has(abs);
+
+			var command = new AddIntradayAbsenceCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				AbsenceId = abs.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2019, 1, 8, 0, 0, 0),
+				EndTime = new DateTime(2019, 1, 9, 0, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = person.Id.GetValueOrDefault(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			var actionResult = Target.PersistIntradayAbsence(command);
+			actionResult.ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermisionAddIntradayAbsenceForAgent);
 		}
 
 		[Test]
-		public void ShouldReturnFailResultWhenCreateIntradayAbsence()
+		public void ShouldReturnFailResultWhenNoPermissionOfViewUnpublishedScheduleForAddFullDayAbsence()
 		{
-			var command = new AddIntradayAbsenceCommand();
-			var createResult = new List<string>() { "add absence fail" };
-			_absenceCommandConverter.Stub(x => x.GetCreatorInfoForIntradayAbsence(command)).Return(_absenceCreatorInfo);
-			_personAbsenceCreator.Stub(x => x.Create(_absenceCreatorInfo, false)).Return(createResult);
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Homes");
+			PersonRepository.Has(person);
 
-			var target = new AbsencePersister(_absenceCommandConverter, _personAbsenceCreator, _permissionChecker);
-			var result = target.PersistIntradayAbsence(command);
+			var date = new DateOnly(2018, 2, 12);
+			var dateTimePeriod = new DateTimePeriod(2018, 2, 12, 8, 2018, 2, 12, 18);
+			PermissionProvider.PublishToDate(date.AddDays(-1));
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, person, date);
+			
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
+			scenario.SetBusinessUnit(businessUnit);
+			ScenarioRepository.Has(scenario);
 
-			result.PersonId.Should().Be.EqualTo(_absenceCreatorInfo.Person.Id.GetValueOrDefault());
-			result.ErrorMessages.Should().Be.Equals(createResult);
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+			AbsenceRepository.Has(absence);
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, dateTimePeriod, absence).WithId();
+			ScheduleStorage.Add(personAbsence);
+
+			var command = new AddFullDayAbsenceCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				AbsenceId = absence.Id.GetValueOrDefault(),
+				StartDate = dateTimePeriod.StartDateTime,
+				EndDate = dateTimePeriod.EndDateTime,
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = person.Id.GetValueOrDefault(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			var result = Target.PersistFullDayAbsence(command);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionToEditUnpublishedSchedule);
+		}
+
+		[Test]
+		public void ShouldReturnFailResultWhenNoPermissionOfViewUnpublishedScheduleForAddIntrayDayAbsence()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Homes");
+			PersonRepository.Has(person);
+
+			var date = new DateOnly(2018, 2, 12);
+			PermissionProvider.PublishToDate(date.AddDays(-1));
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, person, date);
+
+			var mainDateTimePeriod = new DateTimePeriod(2018, 2, 12, 8, 2018, 2, 12, 16);
+			var intradayDateTimePeriod = new DateTimePeriod(2018, 2, 12, 8, 2018, 2, 12, 9);
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
+			scenario.SetBusinessUnit(businessUnit);
+			ScenarioRepository.Has(scenario);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("main shift").WithId();
+			var activity = ActivityFactory.CreateActivity("activity").WithId();
+			
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainDateTimePeriod, shiftCategory, activity);
+
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+			AbsenceRepository.Has(absence);
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, intradayDateTimePeriod, absence).WithId();
+
+			ScheduleStorage.Add(personAssignment);
+			ScheduleStorage.Add(personAbsence);
+
+			var command = new AddIntradayAbsenceCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				AbsenceId = absence.Id.GetValueOrDefault(),
+				StartTime = intradayDateTimePeriod.StartDateTime,
+				EndTime = intradayDateTimePeriod.EndDateTime,
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = person.Id.GetValueOrDefault(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			var result = Target.PersistIntradayAbsence(command);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionToEditUnpublishedSchedule);
+		}
+
+		[Test]
+		public void ShouldRaiseEventWithPeriodIncludingScheduleDateWhenCurrentDayHasOvernightShiftAndTheIntradayAbsIsAddedToTheOvernightPart()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenario("default", true, false).WithId();
+			scenario.SetBusinessUnit(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId());
+			var abs = AbsenceFactory.CreateAbsence("abs").WithId();
+			var shiftPeriod = new DateTimePeriod(2019, 1, 3, 20, 2019, 1, 4, 5);
+
+			PersonRepository.Has(person);
+			ScenarioRepository.Has(scenario);
+			AbsenceRepository.Has(abs);
+
+			var overNightShift =
+				PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, shiftPeriod);
+			foreach (var shiftLayer in overNightShift.ShiftLayers)
+			{
+				shiftLayer.WithId();
+			}
+			PersonAssignmentRepo.Has(overNightShift);
+
+			Target.PersistIntradayAbsence(new AddIntradayAbsenceCommand
+			{
+				AbsenceId = abs.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2019, 1, 4, 4, 0, 0),
+				EndTime = new DateTime(2019, 1, 4, 5, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
+			});
+
+
+			EventPublisher.PublishedEvents.OfType<PersonAbsenceAddedEvent>().Single().StartDateTime.Should().Be.EqualTo(new DateTime(2019, 1, 3, 20, 0, 0));
+		}
+		
+		[Test]
+		public void ShouldRaiseEventWithPeriodIncludingScheduleDateWhenAddIntradayAbsence()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenario("default", true, false).WithId();
+			scenario.SetBusinessUnit(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId());
+			var abs = AbsenceFactory.CreateAbsence("abs").WithId();
+
+			PersonRepo.Has(person);
+			ScenarioRepository.Has(scenario);
+			AbsenceRepository.Has(abs);
+
+			Target.PersistIntradayAbsence(new AddIntradayAbsenceCommand
+			{
+				AbsenceId = abs.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2019, 1, 4, 4, 0, 0),
+				EndTime = new DateTime(2019, 1, 4, 5, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
+			});
+
+			EventPublisher.PublishedEvents.OfType<PersonAbsenceAddedEvent>().Single().StartDateTime.Should().Be.EqualTo(new DateTime(2019, 1, 4, 4, 0, 0));
 		}
 	}
 }

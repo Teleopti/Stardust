@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public IPersonRequest PersonRequest{ get; set; }
 		public DateTimePeriod AbsenceTimePeriod { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+		public DateTimePeriod EventTimePeriod { get; set; }
 	}
 }

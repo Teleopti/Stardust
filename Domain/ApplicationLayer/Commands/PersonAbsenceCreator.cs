@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
-		public IList<string> Create(AbsenceCreatorInfo absenceCreatorInfo, bool isFullDayAbsence)
+		public IList<string> Create(AbsenceCreatorInfo absenceCreatorInfo, bool isFullDayAbsence, bool muteEvent = false)
 		{
 			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(absenceCreatorInfo.ScheduleRange);
 			var personAbsence = createPersonAbsence(absenceCreatorInfo);
@@ -29,17 +29,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			else
 			{
-				personAbsence.IntradayAbsence(absenceCreatorInfo.Person, absenceCreatorInfo.TrackedCommandInfo);
+				personAbsence.IntradayAbsence(absenceCreatorInfo.Person, absenceCreatorInfo.TrackedCommandInfo, muteEvent);
 			}
 
 			return null;
 		}
 
-		private static PersonAbsence createPersonAbsence(AbsenceCreatorInfo absenceCreatorInfo )
+		private static PersonAbsence createPersonAbsence(AbsenceCreatorInfo absenceCreatorInfo)
 		{
 			var absenceLayer = new AbsenceLayer(
-				absenceCreatorInfo.Absence, 
-				new DateTimePeriod(absenceCreatorInfo.AbsenceTimePeriod.StartDateTime, 
+				absenceCreatorInfo.Absence,
+				new DateTimePeriod(absenceCreatorInfo.AbsenceTimePeriod.StartDateTime,
 				absenceCreatorInfo.AbsenceTimePeriod.EndDateTime));
 
 			var personAbsence = absenceCreatorInfo.ScheduleDay.CreateAndAddAbsence(absenceLayer) as PersonAbsence;

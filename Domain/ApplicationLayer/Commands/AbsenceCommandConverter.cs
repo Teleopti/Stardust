@@ -73,6 +73,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var scheduleDay = hasIntersectionWithPreviousDayShift ? scheduleRange.ScheduledDay(absenceStartDate.AddDays(-1))
 				: scheduleRange.ScheduledDay(absenceStartDate);
+			var eventPeriod = hasIntersectionWithPreviousDayShift
+				? new DateTimePeriod(previousDayAssignment.Period.StartDateTime, absenceTimePeriod.EndDateTime)
+				: absenceTimePeriod;
 
 			var creatorInfo = new AbsenceCreatorInfo()
 			{
@@ -81,7 +84,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				AbsenceTimePeriod = absenceTimePeriod,
 				ScheduleDay = scheduleDay,
 				ScheduleRange = scheduleRange,
-				TrackedCommandInfo = command.TrackedCommandInfo
+				TrackedCommandInfo = command.TrackedCommandInfo,
+				EventTimePeriod = eventPeriod
 			};
 
 			return creatorInfo;
