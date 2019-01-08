@@ -1,8 +1,7 @@
-﻿using System;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
-namespace Teleopti.Ccc.Domain.SystemSetting
+namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 {
 	public interface IBankHolidayDate : IAggregateRoot,IDeleteTag
 	{

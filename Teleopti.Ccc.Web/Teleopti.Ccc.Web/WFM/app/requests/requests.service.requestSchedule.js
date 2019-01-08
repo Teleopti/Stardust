@@ -108,7 +108,8 @@
 					IsOvertime: p.IsOvertime,
 					StartPositionPercentage: p.StartPositionPercentage,
 					EndPositionPercentage: p.EndPositionPercentage,
-					Meeting: p.Meeting
+					Meeting: p.Meeting,
+					showMeetingIcon: p.ShowMeetingIcon
 				});
 			});
 

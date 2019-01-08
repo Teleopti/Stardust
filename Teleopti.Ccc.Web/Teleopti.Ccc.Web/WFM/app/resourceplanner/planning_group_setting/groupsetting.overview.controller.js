@@ -18,7 +18,6 @@
 		vm.showDeleteSchedulingSettingModal = showDeleteSchedulingSettingModal;
 		vm.deleteSchedulingSetting = deleteSchedulingSetting;
 		vm.goEditSchedulingSetting = goEditSchedulingSetting;
-		vm.goCreateSchedulingSetting = goCreateSchedulingSetting;
 		vm.setHigherPriority = setHigherPriority;
 		vm.setLowerPriority = setLowerPriority;
 		vm.disableButton = disableButton;
@@ -54,32 +53,6 @@
 			$state.go('resourceplanner.editsetting', {
 				filterId: setting.Id.toString(),
 				groupId: $stateParams.groupId
-			});
-		}
-
-		function goCreateSchedulingSetting() {
-			var maxPriority = Math.max.apply(Math, vm.settings.map(function(item){return item.Priority;}));
-			vm.settings.unshift({
-				BlockFinderType: 0,
-				BlockSameShift: false,
-				BlockSameShiftCategory: false,
-				BlockSameStartTime: false,
-				MinDayOffsPerWeek: 1,
-				MaxDayOffsPerWeek: 3,
-				MinConsecutiveWorkdays: 2,
-				MaxConsecutiveWorkdays: 6,
-				MinConsecutiveDayOffs: 1,
-				MaxConsecutiveDayOffs: 3,
-				MinFullWeekendsOff: 0,
-				MaxFullWeekendsOff: 8,
-				MinWeekendDaysOff: 0,
-				MaxWeekendDaysOff: 16,
-				Priority: maxPriority+1,
-				Id: null,
-				Filters: [],
-				Default: false,
-				Name: "",
-				PlanningGroupId: $stateParams.groupId
 			});
 		}
 

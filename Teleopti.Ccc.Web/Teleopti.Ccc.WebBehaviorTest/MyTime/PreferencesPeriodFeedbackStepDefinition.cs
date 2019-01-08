@@ -34,7 +34,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			DataMaker.Data().Apply(new DayOffScheduled(date));
 		}
-		
+
+		[Given(@"I have a day off scheduled on tomorrow")]
+		public void GivenIHaveADayOffScheduledOnTomorrow()
+		{
+			DataMaker.Data().Apply(new DayOffScheduled(DateTime.Now.AddDays(1)));
+		}
+
 		[Given(@"I have a contract with:")]
 		public void GivenIHaveAContractWith(Table table)
 		{
@@ -133,7 +139,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertNotExists("#Preference-period-feedback-view div:nth-of-type(1)", "#Preference-period-feedback-view div:nth-of-type(1) span.glyphicon-exclamation-sign");
 		}
-
 
 		private static string FormatHours(int hours)
 		{

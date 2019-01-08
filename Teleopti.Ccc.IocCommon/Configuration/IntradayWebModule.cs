@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
@@ -69,6 +70,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayReforecastingService>();
 			builder.RegisterType<IntradayStatisticsService>();
 			builder.RegisterType<IntradayStaffingService>().As<IIntradayStaffingService>();
+
+			if (_configuration.Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128))
+			{
+				builder.RegisterType<SkillCombinationResourcesWithoutBpoToggleOn>().As<ISkillCombinationResourcesWithoutBpo>()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<SkillCombinationResourcesWithoutBpoToggleOff>().As<ISkillCombinationResourcesWithoutBpo>()
+					.SingleInstance();
+			}
 		}
 	}
 }

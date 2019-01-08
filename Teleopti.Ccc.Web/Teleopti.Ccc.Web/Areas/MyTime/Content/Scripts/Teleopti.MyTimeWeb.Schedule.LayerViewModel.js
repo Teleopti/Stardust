@@ -1,7 +1,5 @@
 ﻿Teleopti.MyTimeWeb.Schedule.LayerViewModel = function(
 	layer,
-	parent,
-	layersOnMobile,
 	offset,
 	useFixedContainerHeight,
 	timelineStart,
@@ -17,8 +15,9 @@
 
 	self.title = layer.Title;
 	self.hasMeeting = layer.Meeting !== null;
+	self.showMeetingIcon = layer.ShowMeetingIcon;
 	self.timeSpan = getTimeSpan(layer.TimeSpan, cleanOvernightNumber);
-	self.tooltipText = buildTooltipText(self.title, self.timeSpan, self.hasMeeting,isMySchedule);
+	self.tooltipText = buildTooltipText(self.title, self.timeSpan, self.hasMeeting, isMySchedule);
 	self.backgroundColor = Teleopti.MyTimeWeb.Common.ConvertColorToRGB(layer.Color);
 	self.textColor = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor);
 	self.startPositionPercentage = layer.StartPositionPercentage;
@@ -91,16 +90,15 @@
 			meetingDescription = meetingDescription.substring(0, 200) + '...';
 		}
 
-		var timeSpanText = "<div>{0}</div>".format(timeSpan);
+		var timeSpanText = '<div>{0}</div>'.format(timeSpan);
 
-		if (!isMySchedule)
-			return tooltipContent + timeSpanText;
+		if (!isMySchedule) return tooltipContent + timeSpanText;
 
 		var meetingText = (
 			"<div class='meeting-detail' style='text-align: left'>" +
-			"<div class='tooltip-wordwrap' style='overflow: hidden'><i>{0}</i> {1}</div>" +
-			"<div class='tooltip-wordwrap' style='overflow: hidden'><i>{2}</i> {3}</div>" +
-			"<div class='tooltip-wordwrap' style='white-space: normal'><i>{4}</i> {5}</div>" +
+			"<div class='tooltip-wordwrap' style='overflow: hidden'><span class='meeting-field-name'>{0}</span> {1}</div>" +
+			"<div class='tooltip-wordwrap' style='overflow: hidden'><span class='meeting-field-name'>{2}</span> {3}</div>" +
+			"<div class='tooltip-wordwrap' style='white-space: normal'><span class='meeting-field-name'>{4}</span> {5}</div>" +
 			'</div>'
 		).format(
 			userTexts.SubjectColon,

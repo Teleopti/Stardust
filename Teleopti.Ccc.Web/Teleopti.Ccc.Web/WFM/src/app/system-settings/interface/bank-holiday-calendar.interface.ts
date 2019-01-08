@@ -5,7 +5,7 @@ export interface BankHolidayCalendar {
 }
 
 export interface BankHolidayCalendarItem extends BankHolidayCalendar {
-	CurrentYearIndex?: number;
+	CurrentYearIndex: number;
 }
 
 export interface BankHolidayCalendarYear {

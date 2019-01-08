@@ -289,7 +289,6 @@
     <Content Include="Content\css\main.min.css" />
     <Content Include="Content\css\selector.css" />
     <Content Include="Content\css\site.css" />
-    <Content Include="Content\favicon.ico" />
     <Content Include="Default.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -73,6 +73,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published 100 days, SA open" });
 		}
 
+		[Given(@"I have a workflow control set with overtime request open periods and auto approval")]
+		public void GivenIHaveAWorkflowControlSetWithOvertimeRequestOpenPeriodsAndAutoApproval()
+		{
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Published 100 days, SA open",
+					SchedulePublishedToDate = "2030-12-01",
+					StudentAvailabilityPeriodIsClosed = false,
+					OvertimeRequestOpenPeriodRollingStart = 0,
+					OvertimeRequestOpenPeriodRollingEnd = 13,
+					OvertimeRequestAutoApprove = true
+				});
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published 100 days, SA open" });
+		}
+
 		[Then(@"I should see my existing overtime request with status '(.*)'")]
 		public void ThenIShouldSeeMyExistingOvertimeRequestWithStatus(string status)
 		{

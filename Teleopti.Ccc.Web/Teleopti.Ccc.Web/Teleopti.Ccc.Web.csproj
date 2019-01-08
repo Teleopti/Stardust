@@ -421,6 +421,8 @@
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarProvider.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarPersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\ISiteBankHolidayCalendarsProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\SiteBankHolidayCalendarsProvider.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\IoC\BankHolidayAreaModule.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\BankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\IBankHolidayModelMapper.cs" />
@@ -2815,7 +2817,6 @@
     <Content Include="Content\busterjs\buster-test.js" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
-    <Content Include="Content\favicon.ico" />
     <Content Include="Content\hasher\hasher.js" />
     <Content Include="Content\hasher\hasher.min.js" />
     <Content Include="Content\jasny-bootstrap\css\jasny-bootstrap.css" />
@@ -2907,7 +2908,6 @@
     <Content Include="Content\moment\moment-with-locales.js" />
     <Content Include="Content\moment\moment-with-locales.min.js" />
     <Content Include="Content\select2\select2-bootstrap.css" />
-    <Content Include="favicon.ico" />
     <Content Include="Content\modernizr\modernizr-2.6.2.js" />
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />

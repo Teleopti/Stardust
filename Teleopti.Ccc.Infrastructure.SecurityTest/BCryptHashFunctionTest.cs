@@ -29,6 +29,15 @@ namespace Teleopti.Ccc.Infrastructure.SecurityTest
 
 			target.Verify(incorrectPassword, hash).Should().Be.False();
 		}
+		
+		[Test]
+		public void NullHashVerifiedAsFailed()
+		{
+			const string password = "password input";
+			var target = new BCryptHashFunction();
+
+			target.Verify(password, null).Should().Be.False();
+		}
 
 		[Test]
 		public void HashedPasswordWithThisFunctionShouldBeRecognized()
@@ -50,6 +59,13 @@ namespace Teleopti.Ccc.Infrastructure.SecurityTest
 			var otherHash = other.CreateHash(password);
 
 			target.IsGeneratedByThisFunction(otherHash).Should().Be.False();
+		}
+		
+		[Test]
+		public void NullHashConsideredAsUsingBCrypt()
+		{
+			var target = new BCryptHashFunction();
+			target.IsGeneratedByThisFunction(null).Should().Be.True();
 		}
 	}
 }

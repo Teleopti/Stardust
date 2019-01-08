@@ -276,6 +276,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-processhtml');
 
 	grunt.registerTask('templateCache', templateCache);
+	grunt.registerTask('pretest', ['concat:concatJsDependencies', 'copy']);
 	grunt.registerTask('devBuild', ['concat', 'copy', 'templateCache', 'less', 'processhtml']);
 	grunt.registerTask('devWatch', ['devBuild', 'watch']);
 	grunt.registerTask('prodBuild', ['concat', 'copy', 'templateCache', 'less', 'processhtml', 'uglify']);

@@ -4,14 +4,12 @@ import c3 from 'c3';
 import moment, { Moment } from 'moment';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Subscription } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
 import { IntradayDataService } from '../services/intraday-data.service';
 import { IntradayIconService } from '../services/intraday-icon.service';
 import { IntradayPersistService } from '../services/intraday-persist.service';
 import {
 	IntradayChartType,
 	IntradayLatestTimeData,
-	IntradayPerformanceData,
 	IntradayPerformanceDataSeries,
 	IntradayPerformanceSummaryData,
 	IntradayPerformanceSummaryItem,
@@ -209,66 +207,56 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;
 				this.error = false;
-				this.request = this.intradayDataService
-					.getTrafficData(selectedSkill.Id, this.selectedOffset)
-					.pipe(
-						switchMap((data: IntradayTrafficData) =>
-							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
-								tap(
-									(time: IntradayLatestTimeData) => {
-										if (this.selectedOffset === 0) {
-											this.latestTime = time;
-										}
-										if (data.IncomingTrafficHasData) {
-											this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
-										} else {
-											this.chartData = {};
-										}
-										this.summaryData = this.trafficDataToSummaryData(data.Summary);
-										this.loading = false;
-									},
-									err => {
-										this.handleError(err);
-									}
-								)
-							)
-						)
-					)
-					.subscribe(null, err => {
-						this.handleError(err);
-					});
+				this.request = this.intradayDataService.getTrafficData(selectedSkill.Id, this.selectedOffset).subscribe(
+					data => {
+						if (data.IncomingTrafficHasData) {
+							if (this.selectedOffset === 0) {
+								this.latestTime = {
+									StartTime: data.LatestActualIntervalStart,
+									EndTime: data.LatestActualIntervalEnd
+								};
+							}
+							this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+						} else {
+							this.chartData = {};
+						}
+
+						this.summaryData = this.trafficDataToSummaryData(data.Summary);
+						this.loading = false;
+					},
+					() => {
+						this.error = true;
+						this.errorMessage = this.translate.instant('NoDataAvailable');
+					}
+				);
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
 				this.error = false;
 				this.request = this.intradayDataService
 					.getGroupTrafficData(selectedSkill.Id, this.selectedOffset)
-					.pipe(
-						switchMap((data: IntradayTrafficData) =>
-							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
-								tap(
-									(time: IntradayLatestTimeData) => {
-										if (this.selectedOffset === 0) {
-											this.latestTime = time;
-										}
-										if (data.IncomingTrafficHasData) {
-											this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
-										} else {
-											this.chartData = {};
-										}
-										this.summaryData = this.trafficDataToSummaryData(data.Summary);
-										this.loading = false;
-									},
-									err => {
-										this.handleError(err);
-									}
-								)
-							)
-						)
-					)
-					.subscribe(null, err => {
-						this.handleError(err);
-					});
+					.subscribe(
+						data => {
+							if (data.IncomingTrafficHasData) {
+								if (this.selectedOffset === 0) {
+									this.latestTime = {
+										StartTime: data.LatestActualIntervalStart,
+										EndTime: data.LatestActualIntervalEnd
+									};
+								}
+								this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+							} else {
+								this.chartData = {};
+							}
+
+							this.summaryData = this.trafficDataToSummaryData(data.Summary);
+							this.loading = false;
+						},
+						() => {
+							this.error = true;
+							this.errorMessage = this.translate.instant('NoDataAvailable');
+						}
+					);
 			}
 		}
 
@@ -279,64 +267,61 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				this.error = false;
 				this.request = this.intradayDataService
 					.getPerformanceData(selectedSkill.Id, this.selectedOffset)
-					.pipe(
-						switchMap((data: IntradayPerformanceData) =>
-							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
-								tap(
-									(time: IntradayLatestTimeData) => {
-										if (this.selectedOffset === 0) {
-											this.latestTime = time;
-										}
-										if (data.PerformanceHasData) {
-											this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
-										} else {
-											this.chartData = {};
-										}
-										this.summaryData = this.performanceDataToSummaryData(data.Summary);
-										this.loading = false;
-									},
-									err => {
-										this.handleError(err);
-									}
-								)
-							)
-						)
-					)
-					.subscribe(null, err => {
-						this.handleError(err);
-					});
+					.subscribe(
+						data => {
+							if (data.PerformanceHasData) {
+								if (this.selectedOffset === 0) {
+									this.latestTime = {
+										StartTime: data.LatestActualIntervalStart,
+										EndTime: data.LatestActualIntervalEnd
+									};
+								}
+								this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+							} else {
+								this.chartData = {};
+							}
+
+							this.summaryData = this.performanceDataToSummaryData(data.Summary);
+							this.loading = false;
+						},
+						() => {
+							this.error = true;
+							this.errorMessage = this.translate.instant('NoDataAvailable');
+						}
+					);
 			}
 			if (selectedSkill.Skills.length > 0) {
 				this.loading = true;
 				this.error = false;
 				this.request = this.intradayDataService
 					.getGroupPerformanceData(selectedSkill.Id, this.selectedOffset)
-					.pipe(
-						switchMap((data: IntradayPerformanceData) =>
-							this.intradayDataService.getLatestTimeForSkill(selectedSkill.Id).pipe(
-								tap(
-									(time: IntradayLatestTimeData) => {
-										if (this.selectedOffset === 0) {
-											this.latestTime = time;
-										}
-										this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
-										this.summaryData = this.performanceDataToSummaryData(data.Summary);
-										this.loading = false;
-									},
-									err => {
-										this.handleError(err);
-									}
-								)
-							)
-						)
-					)
-					.subscribe(null, err => {
-						this.handleError(err);
-					});
+					.subscribe(
+						data => {
+							if (data.PerformanceHasData) {
+								if (this.selectedOffset === 0) {
+									this.latestTime = {
+										StartTime: data.LatestActualIntervalStart,
+										EndTime: data.LatestActualIntervalEnd
+									};
+								}
+								this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+							} else {
+								this.chartData = {};
+							}
+
+							this.summaryData = this.performanceDataToSummaryData(data.Summary);
+							this.loading = false;
+						},
+						() => {
+							this.error = true;
+							this.errorMessage = this.translate.instant('NoDataAvailable');
+						}
+					);
 			}
 		}
 
 		if (this.selectedChartType === 'staffing') {
+			this.latestTime = undefined;
 			if (this.request) this.request.unsubscribe();
 			if (selectedSkill.Skills.length === 0) {
 				this.loading = true;

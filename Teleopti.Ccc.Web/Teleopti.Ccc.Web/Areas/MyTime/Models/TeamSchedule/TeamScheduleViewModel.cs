@@ -36,5 +36,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public decimal StartPositionPercentage { get; set; }
 		public decimal EndPositionPercentage { get; set; }
 		public MeetingViewModel Meeting { get; set; }
+		public bool ShowMeetingIcon { get; set; }
 	}
 }

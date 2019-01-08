@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -27,7 +27,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 				FormsModule,
 				ReactiveFormsModule,
 				HttpClientTestingModule,
-				BrowserAnimationsModule
+				NoopAnimationsModule
 			],
 			providers: [
 				TranslateService,
@@ -54,6 +54,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		component.edittingCalendar = {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
 			Years: [
 				{
 					Year: '2013',
@@ -99,6 +100,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		component.edittingCalendar = {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
 			Years: [
 				{
 					Year: '2013',
@@ -137,6 +139,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		component.edittingCalendar = {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
 			Years: [
 				{
 					Year: '2013',
@@ -176,6 +179,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		component.edittingCalendar = {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
 			Years: [
 				{
 					Year: '2013',
@@ -218,6 +222,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 		component.edittingCalendar = {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
 			Years: [
 				{
 					Year: '2013',

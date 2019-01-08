@@ -175,14 +175,5 @@ describe('planningGroupSettingOverviewController', function () {
 		expect(vm.settings.length).toEqual(3);
 	});
 
-    it('should increase priority number for new planning group setting', function() {
-        var vm = $controller('planningGroupSettingOverviewController', {
-            $stateParams: stateparams
-        }, {
-            settings: settings
-        });
-
-        vm.goCreateSchedulingSetting();
-        expect(vm.settings[0].Priority).toEqual(4);
-    });
+   
 });

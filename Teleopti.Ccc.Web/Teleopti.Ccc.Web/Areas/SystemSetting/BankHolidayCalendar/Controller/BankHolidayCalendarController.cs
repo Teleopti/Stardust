@@ -11,13 +11,14 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 	{
 		private readonly IBankHolidayCalendarPersister _bankHolidayCalendarPersister;
 		private readonly IBankHolidayCalendarProvider _bankHolidayCalendarProvider;
+		private readonly ISiteBankHolidayCalendarsProvider _siteBankHolidayCalendarsProvider;
 
-		public BankHolidayCalendarController(IBankHolidayCalendarPersister bankHolidayCalendarPersister, IBankHolidayCalendarProvider bankHolidayCalendarProvider)
+		public BankHolidayCalendarController(IBankHolidayCalendarPersister bankHolidayCalendarPersister, IBankHolidayCalendarProvider bankHolidayCalendarProvider, ISiteBankHolidayCalendarsProvider siteBankHolidayCalendarsProvider)
 		{
 			_bankHolidayCalendarPersister = bankHolidayCalendarPersister;
 			_bankHolidayCalendarProvider = bankHolidayCalendarProvider;
+			_siteBankHolidayCalendarsProvider = siteBankHolidayCalendarsProvider;
 		}
-
 
 		[HttpGet, Route("api/BankHolidayCalendars"), UnitOfWork]
 		public virtual IEnumerable<BankHolidayCalendarViewModel> LoadBankHolidayCalendars()
@@ -42,6 +43,12 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 		{
 			bool result = _bankHolidayCalendarPersister.Delete(Id);
 			return result;
+		}
+
+		[HttpGet, Route("api/SiteBankHolidayCalendars"), UnitOfWork]
+		public virtual IEnumerable<SiteBankHolidayCalendarsViewModel> GetAllSiteBankHolidayCalendars()
+		{
+			return _siteBankHolidayCalendarsProvider.GetAllSettings();
 		}
 	}
 }

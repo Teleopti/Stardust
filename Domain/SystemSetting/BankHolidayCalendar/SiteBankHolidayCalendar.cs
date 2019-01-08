@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.SystemSetting
+namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 {
 	[Serializable]
 	public class SiteBankHolidayCalendar : NonversionedAggregateRootWithBusinessUnit, ISiteBankHolidayCalendar

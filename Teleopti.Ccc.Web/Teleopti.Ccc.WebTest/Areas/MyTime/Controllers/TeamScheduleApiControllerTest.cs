@@ -1826,6 +1826,56 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldShowMeetingIconEvenForOtherAgentsMeetingInPeriod()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = PersonFactory.CreatePersonWithGuid("test", "agent");
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 16);
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var meeting = new Meeting(person, new[] { new MeetingPerson(person, false) }, "subj", "loc",
+				"desc", phoneActivity, null);
+			meeting.SetScenario(Scenario.Current());
+			meeting.StartDate = meeting.EndDate = today;
+			meeting.StartTime = TimeSpan.FromHours(15);
+			meeting.EndTime = TimeSpan.FromHours(16);
+			MeetingRepository.Has(meeting);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			var meetingViewModel = teamScheduleViewModel.AgentSchedules[0].Periods.ElementAt(1).Meeting;
+			meetingViewModel.Should().Be.EqualTo(null);
+			var showMeetingIcon = teamScheduleViewModel.AgentSchedules[0].Periods.ElementAt(1).ShowMeetingIcon;
+			showMeetingIcon.Should().Be.EqualTo(true);
+		}
+
+		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
 		public void ShouldReturnMatchedTotalAgentCount()
 		{

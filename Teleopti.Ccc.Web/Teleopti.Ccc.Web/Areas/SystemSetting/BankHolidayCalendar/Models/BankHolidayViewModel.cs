@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.SystemSetting;
 
 namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models
 {
@@ -26,10 +27,14 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models
 		public bool IsDeleted { get; set; }
 	}
 
-	public class BankHolidayCalendarViewModel
+	public class BankHolidayCalendarInfoViewModel
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }
+	}
+
+	public class BankHolidayCalendarViewModel : BankHolidayCalendarInfoViewModel
+	{
 		public IEnumerable<BankHolidayYearViewModel> Years { get; set; }
 	}
 
@@ -51,5 +56,11 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models
 		public DateOnly Date { get; set; }
 		public string Description { get; set; }
 		public bool IsDeleted { get; set; }
+	}
+
+	public class SiteBankHolidayCalendarsViewModel
+	{
+		public Guid Site { get; set; }
+		public IEnumerable<BankHolidayCalendarInfoViewModel> Calendars { get; set; }
 	}
 }

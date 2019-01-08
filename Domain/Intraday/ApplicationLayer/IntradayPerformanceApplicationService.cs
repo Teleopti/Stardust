@@ -75,16 +75,10 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 			var statisticsSumary = new IntradayIncomingSummary();
 			DateTime? timeOfLastIntervalWithDataUtc = null;
-			var intervalTimesUtc = new List<DateTime>();
 			var intervalsInUTC = _statisticsService.GetIntervalsInUTC(skillIdList, startOfDayUtc, startOfDayUtc.AddDays(1));
 			if (intervalsInUTC.Any())
 			{
 				statisticsSumary = _statisticsService.GenerateStatisticsSummary(intervalsInUTC, abandonRateSupported);
-
-				intervalTimesUtc = intervalsInUTC
-					.Select(x => x.IntervalDate.AddMinutes(x.IntervalId * intervalLength))
-					.OrderBy(x => x)
-					.ToList();
 
 				timeOfLastIntervalWithDataUtc = intervalsInUTC
 					.Where(x => x.CalculatedCalls.HasValue)
@@ -92,9 +86,20 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 					.LastOrDefault();
 			}
 
-			var opensAtUtc = DateTime.SpecifyKind(intervalTimesUtc.Any() ? intervalTimesUtc.First() : startOfDayUtc, DateTimeKind.Utc);
-			var closeAtUtc = DateTime.SpecifyKind(intervalTimesUtc.Any() ? intervalTimesUtc.Last().AddMinutes(intervalLength) : endOfDayUtc, DateTimeKind.Utc);
+			var intervalsWithUtcTimes = intervalsInUTC.Select(i => new
+			{
+				Timestamp = i.IntervalDate.AddMinutes(i.IntervalId * intervalLength),
+				i.AbandonedCalls,
+				i.AbandonedRate,
+				i.AnsweredCalls,
+				i.AnsweredCallsWithinSL,
+				i.AverageSpeedOfAnswer,
+				i.CalculatedCalls,
+				i.ServiceLevel
+			});
 
+			var opensAtUtc = DateTime.SpecifyKind(intervalsWithUtcTimes.Any() ? intervalsWithUtcTimes.Min(x => x.Timestamp) : startOfDayUtc, DateTimeKind.Utc);
+			var closeAtUtc = DateTime.SpecifyKind(intervalsWithUtcTimes.Any() ? intervalsWithUtcTimes.Max(x => x.Timestamp).AddMinutes(intervalLength) : endOfDayUtc, DateTimeKind.Utc);
 			var timesUtc = Enumerable
 				.Range(0, (int)Math.Ceiling((decimal)(closeAtUtc - opensAtUtc).TotalMinutes / intervalLength))
 				.Select(offset => opensAtUtc.AddMinutes(offset * intervalLength))
@@ -124,12 +129,16 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				.GroupBy(x => x.LocalTime)
 				.Select(x => x.Any(e => e.Esl.HasValue) ? x.Where(e => e.Esl.HasValue).Sum(e => e.Esl) / x.Count() : null)
 				.ToList();
-
-				// estServiceLevels = estServiceLevels.Take(estServiceLevels.FindLastIndex(x => x.HasValue) + 1).ToList();
 			}
-			DateTime? timeOfLastIntervalWithData = timeOfLastIntervalWithDataUtc.HasValue ? (DateTime?)TimeZoneHelper.ConvertFromUtc(timeOfLastIntervalWithDataUtc.Value, _timeZone.TimeZone()) : null;
 
+			DateTime? timeOfLastIntervalWithData = timeOfLastIntervalWithDataUtc.HasValue ? (DateTime?)TimeZoneHelper.ConvertFromUtc(timeOfLastIntervalWithDataUtc.Value, _timeZone.TimeZone()) : null;
+			
+			var intervals = timesUtc.Select(t => intervalsWithUtcTimes.FirstOrDefault(x => x.Timestamp.Equals(t)));
 			var sumOfForecastedCalls = eslIntervals.Sum(x => x.ForecastedCalls);
+			var averageSpeedOfAnswer = intervals.Select(x => (x != null && x.AnsweredCalls.HasValue) ? x.AverageSpeedOfAnswer : null).ToArray();
+			var abandonedRate = intervals.Select(x => (x != null && x.AbandonedCalls.HasValue) && abandonRateSupported ? x.AbandonedRate * 100 : null).ToArray();
+			var serviceLevel = intervals.Select(x => (x != null && x.AnsweredCallsWithinSL.HasValue) ? (double?) Math.Min(x.ServiceLevel.Value * 100, 100) : null).ToArray();
+
 			return new IntradayPerformanceViewModel
 			{
 				LatestActualIntervalStart = timeOfLastIntervalWithData,
@@ -138,9 +147,9 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				{
 					Time = timesInLocal.ToArray(),
 					EstimatedServiceLevels = estServiceLevels.ToArray(),
-					AverageSpeedOfAnswer = intervalsInUTC.Select(x => x.AnsweredCalls.HasValue ? x.AverageSpeedOfAnswer : null).ToArray(),
-					AbandonedRate = intervalsInUTC.Select(x => x.AbandonedCalls.HasValue && abandonRateSupported ? x.AbandonedRate * 100 : null).ToArray(),
-					ServiceLevel = intervalsInUTC.Select(x => x.AnsweredCallsWithinSL.HasValue ? (double?)Math.Min(x.ServiceLevel.Value * 100, 100) : null).ToArray()
+					AverageSpeedOfAnswer = averageSpeedOfAnswer.Any(x => x != null) ? averageSpeedOfAnswer : new double?[]{},
+					AbandonedRate = abandonedRate.Any(x => x != null) ? abandonedRate : new double?[]{},
+					ServiceLevel = serviceLevel.Any(x => x != null) ? serviceLevel : new double?[]{}
 				},
 				Summary = new IntradayPerformanceSummary
 				{
@@ -150,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 					EstimatedServiceLevel = Math.Abs(sumOfForecastedCalls) > 0.01 
 						? eslIntervals.Sum(x => x.AnsweredCallsWithinServiceLevel) / sumOfForecastedCalls * 100 ?? 0 : 0
 				},
-				PerformanceHasData = intervalsInUTC.Any(x => x.CalculatedCalls.HasValue)
+				PerformanceHasData = intervals.Any(x => (x != null && x.CalculatedCalls.HasValue))
 			};
 		}
 	}

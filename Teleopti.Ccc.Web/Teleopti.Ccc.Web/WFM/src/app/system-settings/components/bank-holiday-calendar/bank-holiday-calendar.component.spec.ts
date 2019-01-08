@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
@@ -16,6 +16,7 @@ import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component'
 import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
 import { BankHolidayCalendarEditComponent } from '../bank-holiday-calendar-edit';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
+import { BankHolidayCalendarAssignToSitesComponent } from '../bank-holiday-calendar-assign-to-sites';
 
 describe('BankHolidayCalendarComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarComponent>;
@@ -33,7 +34,8 @@ describe('BankHolidayCalendarComponent', () => {
 			declarations: [
 				BankHolidayCalendarComponent,
 				BankHolidayCalendarAddComponent,
-				BankHolidayCalendarEditComponent
+				BankHolidayCalendarEditComponent,
+				BankHolidayCalendarAssignToSitesComponent
 			],
 			imports: [
 				TranslateModule.forRoot(),
@@ -41,7 +43,7 @@ describe('BankHolidayCalendarComponent', () => {
 				FormsModule,
 				ReactiveFormsModule,
 				HttpClientTestingModule,
-				BrowserAnimationsModule
+				NoopAnimationsModule
 			],
 			providers: [
 				TranslateService,
@@ -93,6 +95,7 @@ describe('BankHolidayCalendarComponent', () => {
 		component.bankHolidayCalendarsList.splice(0, 0, {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
 			Years: [
 				{
 					Year: '2013',
@@ -145,6 +148,7 @@ describe('BankHolidayCalendarComponent', () => {
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 				Name: 'London bank holiday calendar',
+				CurrentYearIndex: 0,
 				Years: [
 					{
 						Year: '2013',
@@ -162,6 +166,7 @@ describe('BankHolidayCalendarComponent', () => {
 			{
 				Id: '7bb434fb-1e00-4e9e-a427-7fb0f3100508',
 				Name: 'Bank holiday calendar',
+				CurrentYearIndex: 0,
 				Years: [
 					{
 						Year: '2013',
@@ -198,6 +203,7 @@ describe('BankHolidayCalendarComponent', () => {
 		component.bankHolidayCalendarsList.splice(0, 0, {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
 			Years: [
 				{
 					Year: '2013',
@@ -229,10 +235,11 @@ describe('BankHolidayCalendarComponent', () => {
 		expect(list[0].getElementsByClassName('anticon-edit').length).toBe(1);
 	}));
 
-	it('should go to edit bank holiday calendar panel after click edit buton', async(() => {
+	it('should go to edit bank holiday calendar panel and active current view year tab after clicking edit buton', async(() => {
 		component.bankHolidayCalendarsList.splice(0, 0, {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 1,
 			Years: [
 				{
 					Year: '2013',
@@ -250,6 +257,23 @@ describe('BankHolidayCalendarComponent', () => {
 							IsDeleted: false
 						}
 					]
+				},
+				{
+					Year: '2014',
+					Dates: [
+						{
+							Id: '6f5fe53b-9045-4f0e-bbc6-ae0a12d00bc7',
+							Date: '2014-01-09',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						},
+						{
+							Id: 'bcb33f86-e9a7-4b07-a4c1-22a1418cfb5f',
+							Date: '2014-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
 				}
 			]
 		});
@@ -262,6 +286,7 @@ describe('BankHolidayCalendarComponent', () => {
 		list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 		expect(document.getElementsByClassName('edit-bank-holiday-calendar')[0]).toBeTruthy();
+		expect(document.getElementsByClassName('ant-tabs-tab-active')[0].innerHTML.indexOf('2014') > -1).toBeTruthy();
 	}));
 
 	it('should show site tab when WFM_Setting_AssignBankHolidayCalendarsToSites_79899 is turn on', async(() => {

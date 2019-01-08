@@ -110,7 +110,7 @@
 	self.showStaffingProbabilityBar = showStaffingProbabilityBar(self.fixedDate, parent);
 
 	self.layers = scheduleDay.Periods.map(function(item) {
-		return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, false, 0, true);
+		return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, 0, true, 0, null, false, true);
 	});
 
 	function getTrafficLightColor(probabilityClass) {

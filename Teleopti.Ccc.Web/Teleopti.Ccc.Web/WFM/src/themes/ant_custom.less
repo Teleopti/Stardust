@@ -54,7 +54,7 @@ select {
 		.table-data-row {
 			background: #424242;
 		}
-		
+
 		tr:nth-child(4n + 1) {
 			background: #333333;
 		}
@@ -63,14 +63,14 @@ select {
 			background: #333333;
 		}
 	}
-} 
+}
 
 .angular-theme-classic {
 	.general-audit-trail {
 		.table-data-row {
 			background: #ffffff;
 		}
-		
+
 		tr:nth-child(4n + 1) {
 			background: #fbfbfb;
 		}
@@ -79,4 +79,13 @@ select {
 			background: #fbfbfb;
 		}
 	}
+}
+
+//Remove the selected day cell style in nz-datepicker under bank holiday calendar setting module because we have a customized style for the selected date cells
+.bank-holiday-calendar-datepicker .ant-calendar-selected-day .ant-calendar-date {
+	background: inherit;
+}
+
+.bank-holiday-calendar-datepicker .ant-calendar-selected-day.ant-calendar-disabled-cell .ant-calendar-date {
+	background: #f5f5f5;
 }

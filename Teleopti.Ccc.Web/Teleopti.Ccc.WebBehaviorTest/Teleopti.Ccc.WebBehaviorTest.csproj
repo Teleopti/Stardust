@@ -73,7 +73,7 @@
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
-      <HintPath>..\..\packages\NHibernate.5.2.1\lib\net461\NHibernate.dll</HintPath>
+      <HintPath>..\..\packages\NHibernate.5.2.2\lib\net461\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
@@ -131,6 +131,22 @@
     <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceHistoricalOverviewStepDefinitions.cs" />
     <Compile Include="BusinessUnitSelectionTest.cs" />
     <Compile Include="FullIntegrationTestAttribute.cs" />
+    <Compile Include="MyTime\DaySchedule\80101_DayScheduleForStartPage.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>80101_DayScheduleForStartPage.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\DaySchedule\DayScheduleForStartPage.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DayScheduleForStartPage.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\DaySchedule\DayScheduleForStartPageStepDefinition.cs" />
+    <Compile Include="MyTime\DaySchedule\DayScheduleProbabilityForStartPage.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DayScheduleProbabilityForStartPage.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\ShiftTradeRequestViewShowingMultipleShifts.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -210,17 +226,6 @@
       <DependentUpon>CiscoFinesse.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\CiscoFinesseStepDefinition.cs" />
-    <Compile Include="MyTime\DayScheduleForStartPage.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DayScheduleForStartPage.feature</DependentUpon>
-    </Compile>
-    <Compile Include="MyTime\DayScheduleForStartPageStepDefinition.cs" />
-    <Compile Include="MyTime\DayScheduleProbabilityForStartPage.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DayScheduleProbabilityForStartPage.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyTime\OvertimeRequests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -898,11 +903,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\Agents.feature.cs">
-      <DependentUpon>Agents.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\AgentsMultiTeams.feature.cs">
       <DependentUpon>AgentsMultiTeams.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1037,11 +1037,15 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CiscoFinesse.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\DayScheduleForStartPage.feature">
+    <None Include="MyTime\DaySchedule\80101_DayScheduleForStartPage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>80101_DayScheduleForStartPage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\DaySchedule\DayScheduleForStartPage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DayScheduleForStartPage.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\DayScheduleProbabilityForStartPage.feature">
+    <None Include="MyTime\DaySchedule\DayScheduleProbabilityForStartPage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DayScheduleProbabilityForStartPage.feature.cs</LastGenOutput>
     </None>

@@ -5,20 +5,23 @@ import { IStateProvider } from 'angular-ui-router';
 import { DowngradeableComponent } from '@wfm/types';
 import { SharedModule } from '../shared/shared.module';
 import { SystemSettingsComponent } from './pages';
+import { GroupPageService } from '../shared/services/group-page-service';
 import { BankHolidayCalendarComponent } from './components/bank-holiday-calendar';
 import { BankHolidayCalendarAddComponent } from './components/bank-holiday-calendar-add';
 import { BankHolidayCalendarEditComponent } from './components/bank-holiday-calendar-edit';
 import { BankCalendarDataService } from './shared/bank-calendar-data.service';
+import { BankHolidayCalendarAssignToSitesComponent } from './components/bank-holiday-calendar-assign-to-sites';
 
 @NgModule({
 	declarations: [
 		SystemSettingsComponent,
 		BankHolidayCalendarComponent,
 		BankHolidayCalendarAddComponent,
-		BankHolidayCalendarEditComponent
+		BankHolidayCalendarEditComponent,
+		BankHolidayCalendarAssignToSitesComponent
 	],
 	imports: [SharedModule, TranslateModule.forChild()],
-	providers: [TranslateModule, BankCalendarDataService],
+	providers: [TranslateModule, BankCalendarDataService, GroupPageService],
 	exports: [],
 	entryComponents: [SystemSettingsComponent]
 })

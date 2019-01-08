@@ -1,0 +1,7 @@
+<div class="bank-holiday-calendar-assign-to-sites">
+	<nz-list [nzDataSource]="sitesList" [nzRenderItem]="siteItemTemplate" nzBordered>
+		<ng-template #siteItemTemplate let-site>
+			<nz-list-item><nz-list-item-meta [nzTitle]="site.Name"></nz-list-item-meta></nz-list-item>
+		</ng-template>
+	</nz-list>
+</div>

@@ -137,14 +137,17 @@ Layout = null;
 				<!-- ko foreach: layers-->
 				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-availability-bar': isOvertimeAvailability, 'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
 					<div data-bind="visible: showTitle && !isOvertimeAvailability">
-						<strong data-bind="text: title"></strong>
-						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 						<!-- ko if: hasMeeting -->
-						<div class="meeting mt5">
-							<i class="meeting-icon mr10">
+						<div class="meeting">
+							<i class="meeting-icon">
 								<i class="glyphicon glyphicon-user ml10"></i>
 							</i>
+							<strong data-bind="text: title"></strong>
 						</div>
+						<!-- /ko -->
+						<!-- ko ifnot: hasMeeting -->
+						<strong data-bind="text: title"></strong>
+						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 						<!-- /ko -->
 					</div>
 					<div data-bind="visible: showTitle && isOvertimeAvailability">

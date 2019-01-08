@@ -218,4 +218,14 @@ describe('planningGroupFormController', function () {
 
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.planningperiodoverview', {groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', ppId: 'a557210b-99cc-4128-8ae0-138d812974b6'});
 	});
+
+    it('should increase priority number for new planning group setting', function() {
+        var vm = $controller('planningGroupFormController', {
+            $stateParams: stateparams,
+            editPlanningGroup: editPlanningGroup
+        });
+
+        vm.goCreateSchedulingSetting();
+        expect(vm.editPlanningGroup.Settings[0].Priority).toEqual(1);
+    });
 });

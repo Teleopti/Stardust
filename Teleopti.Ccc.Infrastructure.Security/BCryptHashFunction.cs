@@ -11,12 +11,13 @@
 
 		public bool Verify(string password, string hash)
 		{
-			return !string.IsNullOrEmpty(password) && BCrypt.Net.BCrypt.Verify(password, hash);
+			return !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(hash) &&
+				   BCrypt.Net.BCrypt.Verify(password, hash);
 		}
 
 		public bool IsGeneratedByThisFunction(string hash)
 		{
-			return hash.StartsWith("$2a$") && hash.Length == 60;
+			return hash == null || hash.StartsWith("$2a$") && hash.Length == 60;
 		}
 	}
 }
