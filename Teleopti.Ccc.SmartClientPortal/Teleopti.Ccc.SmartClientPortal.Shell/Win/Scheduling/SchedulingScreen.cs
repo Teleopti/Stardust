@@ -623,8 +623,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#endregion
 
+		private string _last6KeyStrokes=string.Empty;
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
+			_last6KeyStrokes = _last6KeyStrokes + e.KeyCode;
+			_last6KeyStrokes = _last6KeyStrokes.Substring(Math.Max(0, _last6KeyStrokes.Length - 6));
+			if (_last6KeyStrokes.ToUpper() == "TOGGLE")
+			{
+				MessageBox.Show("todo: här ska det laddas om togglar");
+			}
 			if (e.KeyCode == Keys.F8 && e.Modifiers == Keys.Shift)
 			{
 				toggleCalculation();
