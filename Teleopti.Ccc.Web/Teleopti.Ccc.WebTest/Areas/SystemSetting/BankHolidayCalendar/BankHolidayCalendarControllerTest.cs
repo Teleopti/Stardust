@@ -1,11 +1,12 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		public BankHolidayCalendarController Target;
 		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
 		public FakeBankHolidayDateRepository BankHolidayDateRepository;
+		public FakeSiteBankHolidayCalendarRepository SiteBankHolidayCalendarRepository;
 
 		private DateOnly _nationalDay = new DateOnly(2018, 10, 1);
 		private DateOnly _springFestival = new DateOnly(2019, 2, 3);
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		{
 			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
 			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
+			isolate.UseTestDouble<FakeSiteBankHolidayCalendarRepository>().For<ISiteBankHolidayCalendarRepository>();
 		}
 
 		private BankHolidayCalendar PrepareData()
@@ -291,6 +294,22 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 
 			var dates = BankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == Id);
 			dates.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetAllSiteBankHolidayCalendars()
+		{
+			var expactedSiteId = Guid.NewGuid();
+			var expactedCalendarName = "China2019";
+			SiteBankHolidayCalendarRepository.Add(new SiteBankHolidayCalendar
+			{
+				Site = SiteFactory.CreateSiteWithId(expactedSiteId, "mySite"),
+				BankHolidayCalendarsForSite = new List<IBankHolidayCalendar> { new BankHolidayCalendar { Name = expactedCalendarName } }
+			});
+
+			var result = Target.GetAllSiteBankHolidayCalendars();
+			result.First().Site.Should().Be.EqualTo(expactedSiteId);
+			result.First().Calendars.First().Name.Should().Be.EqualTo(expactedCalendarName);
 		}
 	}
 }

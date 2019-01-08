@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<BankHolidayCalendarRepository>().As<IBankHolidayCalendarRepository>().SingleInstance();
+			builder.RegisterType<SiteBankHolidayCalendarRepository>().As<ISiteBankHolidayCalendarRepository>().SingleInstance();
 		}
 	}
 }

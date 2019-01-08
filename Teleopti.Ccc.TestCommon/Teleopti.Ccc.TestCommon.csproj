@@ -294,6 +294,7 @@
     <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="FakeRepositories\FakeShiftCategorySelectionRepository.cs" />
     <Compile Include="FakeRepositories\FakeShiftCategoryUsageFinder.cs" />
+    <Compile Include="FakeRepositories\FakeSiteBankHolidayCalendarRepository.cs" />
     <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillCombinationResourceReader.cs" />
