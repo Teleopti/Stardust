@@ -127,11 +127,8 @@
 						vm.approveStartTime = putTimeBetween(moment(interval.StartTime), moment(timelineStart), moment(timelineEnd)).toDate();
 						vm.approveEndTime = putTimeBetween(moment(interval.EndTime), moment(timelineStart), moment(timelineEnd)).toDate();
 
-						startTime = moment(vm.approveStartTime).format("LTS");
-						endTime = moment(vm.approveEndTime).format("LTS");
-
-						if (moment(vm.approveStartTime).isBefore(timelineStart))
-							vm.approveStartTime = moment(timelineStart).toDate();
+						startTime = moment(vm.approveStartTime).isValid() ? moment(vm.approveStartTime).format("LTS") : moment(timelineStart).format("LTS");
+						endTime = moment(vm.approveEndTime).isValid() ? moment(vm.approveEndTime).format("LTS") : moment(timelineEnd).format("LTS");
 					};
 
 					return o
