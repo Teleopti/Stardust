@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public MatrixListFactory MatrixFactory;
 
 		[Test]
-		[Ignore("76118 to be fixed")]
 		public void ShouldFilterOnOpenHours()
 		{
 			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))
