@@ -140,10 +140,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (_databaseHelperWrapper.LoginExists(connectionToNewDb, model.UserName, version))
 				return Json(new TenantResultModel {Success = true, Message = "Login exists, make sure you have entered a correct password."});
 			string message;
-			var canCreate = _databaseHelperWrapper.LoginCanBeCreated(connectionToNewDb, model.UserName, model.Password, version, out message);
+			var canCreate = _databaseHelperWrapper.LoginCanBeCreated(connectionToNewDb, model.UserName, model.Password, out message);
 			if(!canCreate)
 				return Json(new TenantResultModel { Success = false, Message = message });
-			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.UserName, model.Password,version);
+			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.UserName, model.Password);
 			return Json(new TenantResultModel {Success = true, Message = "Created new login."});
 		}
 
@@ -203,10 +203,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 
 			var version = _databaseHelperWrapper.Version(connectionString);
-			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, version))
+			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
-			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, version))
+			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
 			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };

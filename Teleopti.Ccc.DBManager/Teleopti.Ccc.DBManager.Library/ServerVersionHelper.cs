@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Teleopti.Ccc.DBManager.Library
 {
 	public class ServerVersionHelper
@@ -22,8 +19,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			return
 				new SqlVersion(
 					_masterExecuteSql.ExecuteScalar(
-						majorProductVersionSql),
-					Convert.ToBoolean(_masterExecuteSql.ExecuteScalar(determineAzureSql, parameters: new Dictionary<string, object> { { "@azure_edition", AzureEdition } })));
+						majorProductVersionSql));
 		}
 	}
 }
