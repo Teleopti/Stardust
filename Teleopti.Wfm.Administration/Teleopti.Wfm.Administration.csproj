@@ -307,6 +307,12 @@
     <Content Include="Scripts\App\changePasswordController.js" />
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
+    <Content Include="Scripts\App\NotificationSettings\smsSettings.template.html" />
+    <Content Include="Scripts\App\NotificationSettings\emailSettings.template.html" />
+    <Content Include="Scripts\App\NotificationSettings\SmsSettingsComponent.js" />
+    <Content Include="Scripts\App\NotificationSettings\EmailSettingsComponent.js" />
+    <Content Include="Scripts\App\NotificationSettings\SmsSettingsModule.js" />
+    <Content Include="Scripts\App\NotificationSettings\EmailSettingsModule.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
     <Content Include="Scripts\Chart.js" />

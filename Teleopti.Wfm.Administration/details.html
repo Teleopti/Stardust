@@ -56,7 +56,8 @@
 				<div title="{{detailsVm.SqlUserOkMessage}}">
 					<fieldset>
 						<legend ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">Credentials to upgrade</legend>
-						<div><input type="checkbox" ng-model="detailsVm.UseIntegratedSecurity" ng-change="detailsVm.CheckImportAdmin()"/> Use Integrated Security
+						<div>
+							<input type="checkbox" ng-model="detailsVm.UseIntegratedSecurity" ng-change="detailsVm.CheckImportAdmin()" /> Use Integrated Security
 						</div>
 
 						<div ng-hide="detailsVm.UseIntegratedSecurity">
@@ -71,20 +72,29 @@
 
 						</div>
 						<label ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.SqlUserOkMessage}}</label>
-						<br/>
+						<br />
 						<a class="btn btn-warning" ng-show="detailsVm.SqlUserOk" ng-click="detailsVm.UpgradeTenant()">Upgrade Tenant</a>
 					</fieldset>
-					<br/>
+					<br />
 					<fieldset>
 						<legend>Create a new Business Unit</legend>
 						<div class="importCaption">Name of the new Business Unit</div>
 						<div>
 							<input class=" form-control" type="text" ng-model="detailsVm.BuName" placeholder="New Business Unit">
 						</div>
-						<br/>
+						<br />
 						<a class="btn  btn-warning" ng-click="detailsVm.AddBu()">Save new Business Unit</a>
-						<br/>
+						<br />
 						<label ng-class="(detailsVm.NewBuOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.NewBusinessUnitMessage}}</label>
+					</fieldset>
+					<br />
+					<fieldset>
+						<legend>SMTP settings</legend>
+						<email-settings></email-settings>
+					</fieldset>
+					<fieldset>
+						<legend>SMS settings</legend>
+						<sms-settings></sms-settings>
 					</fieldset>
 				</div>
 
