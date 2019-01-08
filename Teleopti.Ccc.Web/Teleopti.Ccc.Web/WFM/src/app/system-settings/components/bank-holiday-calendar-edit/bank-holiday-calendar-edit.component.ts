@@ -63,11 +63,16 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 				}),
 				Active: false
 			};
+
+			if (y.Dates && y.Dates.length > 0) {
+				year.YearDate = new Date(y.Dates[0].Date);
+			}
 			this.edittingCalendarYears.push(year);
 		});
 
-		this.edittingCalendarYears[0].Active = true;
-		this.activedYearTab = this.edittingCalendarYears[0];
+		this.editingCalendarTabIndex = this.edittingCalendar.CurrentYearIndex;
+		this.edittingCalendarYears[this.editingCalendarTabIndex].Active = true;
+		this.activedYearTab = this.edittingCalendarYears[this.editingCalendarTabIndex];
 
 		this.menuService.showMenu$.subscribe(isMenuVisible => {
 			if (this.activedYearTab) {

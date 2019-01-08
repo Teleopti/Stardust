@@ -53,6 +53,7 @@
 								[(ngModel)]="year.YearDate"
 								(ngModelChange)="dateChangeCallback($event, year)"
 								[nzDateRender]="dateRender"
+								nzDropdownClassName="bank-holiday-calendar-datepicker"
 							></nz-date-picker>
 
 							<ng-template #dateRender let-currentDate>
