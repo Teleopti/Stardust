@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
+﻿namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 {
     public interface ISearchPath
 	{

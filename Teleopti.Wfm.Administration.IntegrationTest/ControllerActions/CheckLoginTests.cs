@@ -2,7 +2,6 @@
 using System.Data.SqlClient;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -30,7 +29,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "alogin", "password", new SqlVersion(12, false));
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "alogin", "password");
 			
 			var model = new CreateTenantModel
 			{

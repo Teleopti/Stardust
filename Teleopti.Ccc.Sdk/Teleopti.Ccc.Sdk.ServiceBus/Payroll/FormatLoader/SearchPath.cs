@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 {
