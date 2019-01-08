@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
+using Teleopti.Wfm.Azure.Common;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Wfm.Administration.Controllers
@@ -127,6 +128,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(new TenantResultModel { Success = true, Message =
 				$"Deleted Tenant {name}. The databases are not deleted."
 			});
+		}
+
+		[HttpGet]
+		[OverrideAuthentication]
+		[Route("IsAzure")]
+		public virtual bool IsInstalledEnvironmentAzure()
+		{
+			return InstallationEnvironment.IsAzure;
 		}
 
 		private TenantResultModel tenantCanBeDeletedInternal(string tenantName)

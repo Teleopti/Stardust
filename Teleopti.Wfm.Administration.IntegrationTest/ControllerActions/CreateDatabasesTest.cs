@@ -2,7 +2,6 @@
 using System.Data.SqlClient;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -93,7 +92,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "Password", new SqlVersion(12, false));
+            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "Password");
 
 			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", AppUser = "user", AppPassword = "Passw0rd", FirstUser = "user", FirstUserPassword = "password", BusinessUnit = "BU"};
 

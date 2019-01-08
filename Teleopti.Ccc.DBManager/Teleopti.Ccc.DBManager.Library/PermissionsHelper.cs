@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library.Folders;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -24,13 +25,13 @@ namespace Teleopti.Ccc.DBManager.Library
 		}
 
 		[SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public void CreatePermissions(string user, string pwd, SqlVersion isAzure)
+		public void CreatePermissions(string user, string pwd)
 		{
 			//if application login = sa then don't bother to do anything
 			if (compareStringLowerCase(user, @"sa"))
 				return;
 
-			if (!isAzure.IsAzure)
+			if (!InstallationEnvironment.IsAzure)
 			{
 				//Create or Re-link e.g Alter the DB-user from SQL-Login
 				var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);
