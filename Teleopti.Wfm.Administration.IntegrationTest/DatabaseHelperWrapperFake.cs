@@ -27,21 +27,21 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			return false;
 		}
 
-		public void CreateLogin(string connectionToNewDb, string login, string password)
+		public void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion isAzure)
 		{
 		}
 
-		public bool HasCreateDbPermission(string connectionString)
-		{
-			return true;
-		}
-
-		public bool HasCreateViewAndLoginPermission(string connectionString)
+		public bool HasCreateDbPermission(string connectionString, SqlVersion sqlVersion)
 		{
 			return true;
 		}
 
-		public bool LoginCanBeCreated(string connectionString, string login, string password, out string message)
+		public bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion sqlVersion)
+		{
+			return true;
+		}
+
+		public bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion, out string message)
 		{
 			message = "";
 			return true;
@@ -53,7 +53,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 
 		public SqlVersion Version(string connectionToNewDb)
 		{
-			return new SqlVersion(12);
+			return new SqlVersion(12,false);
 		}
 
 		public void AddSystemUserToPersonInfo(string connectionToNewDb, Guid personId, string userName, string password,

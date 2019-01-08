@@ -83,8 +83,8 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			builder.UserID = "dbcreatorperson";
 			builder.Password = "password";
 			
-			var sqlVersion = new SqlVersion(12);
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password");
+			var sqlVersion = new SqlVersion(12, false);
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion);
 			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", "password", sqlVersion,
 				"NewFineTenant", 1);
 
@@ -132,7 +132,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			builder.UserID = "dbcreatorperson";
 			builder.Password = "password";
 			
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password");
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", new SqlVersion(12, false));
 
 			var tempModel = new CreateTenantModelForTest();
 			var connStringBuilder =

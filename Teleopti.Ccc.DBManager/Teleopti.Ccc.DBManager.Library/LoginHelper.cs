@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library.Folders;
-using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public bool LoginExists(string login, SqlVersion sqlVersion)
 		{
-			if (InstallationEnvironment.IsAzure)
+			if (sqlVersion.IsAzure)
 			{
 				if (sqlVersion.ProductVersion < 12)
 					return azureLoginExist(login);
@@ -54,20 +53,20 @@ namespace Teleopti.Ccc.DBManager.Library
 				Convert.ToBoolean(_masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> {{"@login", login}}));
 		}
 		
-		public void DropLogin(string user)
+		public void DropLogin(string user, bool isAzure)
 		{
-			if (!InstallationEnvironment.IsAzure)
+			if (!isAzure)
 			{
 				var sql = string.Format("DROP LOGIN [{0}]", user);
 				_masterExecuteSql.ExecuteTransactionlessNonQuery(sql);	
 			}
 		}
 
-		public void CreateLogin(string user, string pwd, bool iswingroup)
+		public void CreateLogin(string user, string pwd, bool iswingroup, SqlVersion isAzure)
 		{
 			//TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
 			string sql;
-			if (InstallationEnvironment.IsAzure)
+			if (isAzure.IsAzure)
 			{
 				if (iswingroup)
 					_masterExecuteSql.ExecuteNonQuery("PRINT 'Windows Logins cannot be added to Windows Azure for the momement'");

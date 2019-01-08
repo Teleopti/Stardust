@@ -32,13 +32,11 @@
 
 	function loginController($scope, $http, $cookies, $rootScope, tokenHeaderService) {
 		var firstUser = false;
-		var isAzure = false;
 		var vm = this;
 		//checked if has cookie
 		var cookie = $cookies.getObject('WfmAdminAuth');
 		var token = cookie ? cookie.tokenKey : null;
 
-		vm.azureString = '';
 		vm.user = cookie ? cookie.user : null;
 		vm.shouldShowEtl = false;
 		vm.loginPassword = "";
@@ -92,16 +90,6 @@
 							resizable: false
 						});
 					}
-				}
-			}).catch(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-
-		$http.get("./isAzure")
-			.then(function (response) {
-				isAzure = response.data;
-				if (isAzure) {
-					vm.azureString = ' (Azure)';
 				}
 			}).catch(function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);

@@ -41,8 +41,8 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-			var sqlVersion = new SqlVersion(12);
-			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password");
+			var sqlVersion = new SqlVersion(12, false);
+			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", sqlVersion);
 			connStringBuilder.InitialCatalog = DatabaseHelper.MasterDatabaseName;
 
 			var executor = new ExecuteSql(() =>
