@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular
-		 .module('adminApp').controller('detailsController',
-		 ['$http', '$routeParams', 'tokenHeaderService', '$mdDialog', detailsController]);
+		.module('adminApp').controller('detailsController',
+			['$http', '$routeParams', 'tokenHeaderService', '$mdDialog', detailsController]);
 
 	function detailsController($http, $routeParams, tokenHeaderService, $mdDialog) {
 		var vm = this;
@@ -18,7 +18,7 @@
 		vm.AnalyticsDatabase = "";
 		vm.AggregationDatabase = "";
 		vm.Version = null;
-	    vm.Active = true;
+		vm.Active = true;
 		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
 		vm.AppDbOk = false;
@@ -30,7 +30,7 @@
 		vm.MaximumSessionTime = undefined;
 		vm.Message = "";
 		vm.AllowDelete = false;
-		
+
 		vm.CreateDbUser = '';
 		vm.CreateDbPassword = '';
 		vm.UseIntegratedSecurity = false;
@@ -45,12 +45,12 @@
 		vm.showConfirm = function (ev) {
 			// Appending dialog to document.body to cover sidenav in docs app
 			var confirm = $mdDialog.confirm()
-					.title('Would you like to detach this Tenant?')
-					.textContent('No database will be removed. You can always import it again if you like.')
-					.targetEvent(ev)
-					.ok('Please do it!')
-					.cancel('No not now.');
-					
+				.title('Would you like to detach this Tenant?')
+				.textContent('No database will be removed. You can always import it again if you like.')
+				.targetEvent(ev)
+				.ok('Please do it!')
+				.cancel('No not now.');
+
 			$mdDialog.show(confirm).then(function () {
 				vm.Delete();
 			}, function () {
@@ -58,9 +58,9 @@
 			});
 		};
 
-		vm.LoadTenant = function() {
+		vm.LoadTenant = function () {
 			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.then(function(response) {
+				.then(function (response) {
 					vm.TenantMessage = response.data.Message;
 					vm.TenantId = response.data.Id,
 						vm.TenantOk = response.data.Success;
@@ -91,12 +91,12 @@
 
 		vm.ShowTheLog = false;
 		vm.ShowLog = false;
-		vm.ShowHide = function() {
+		vm.ShowHide = function () {
 			//If DIV is visible it will be hidden and vice versa.
 			vm.ShowTheLog = vm.ShowLog;
 		};
 
-		vm.CheckImportAdmin = function() {
+		vm.CheckImportAdmin = function () {
 			vm.Message = '';
 			if (vm.UseIntegratedSecurity && vm.Server === '') {
 				vm.SqlUserOkMessage = '';
@@ -119,7 +119,7 @@
 			};
 
 			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
-				.then(function(response) {
+				.then(function (response) {
 					vm.SqlUserOk = response.data.Success,
 						vm.SqlUserOkMessage = response.data.Message;
 				});
@@ -139,16 +139,16 @@
 		//		});
 		//}
 
-		vm.CheckDelete = function() {
+		vm.CheckDelete = function () {
 			$http.post('./TenantCanBeDeleted', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
-				.then(function(response) {
+				.then(function (response) {
 					vm.AllowDelete = response.data.Success;
 				});
 		};
 
-		vm.Delete = function() {
+		vm.Delete = function () {
 			$http.post('./DeleteTenant', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
-				.then(function(response) {
+				.then(function (response) {
 					if (response.data.Success === false) {
 						vm.Message = response.data.Message;
 						return;
@@ -157,7 +157,7 @@
 				});
 		};
 
-		vm.UpgradeTenant = function() {
+		vm.UpgradeTenant = function () {
 			var model = {
 				Tenant: vm.OriginalName,
 				AdminUserName: vm.CreateDbUser,
@@ -165,7 +165,7 @@
 				UseIntegratedSecurity: vm.UseIntegratedSecurity
 			};
 			$http.post('./UpgradeTenant', model, tokenHeaderService.getHeaders())
-				.then(function(response) {
+				.then(function (response) {
 					if (response.data.Success === false) {
 						vm.Message = response.data.Message;
 						return;
@@ -174,14 +174,14 @@
 				});
 		};
 
-		vm.AddBu = function() {
+		vm.AddBu = function () {
 			var model = {
 				Tenant: vm.OriginalName,
 				BuName: vm.BuName
 
 			};
 			$http.post('./AddBusinessUnitToTenant', model, tokenHeaderService.getHeaders())
-				.then(function(response) {
+				.then(function (response) {
 					vm.NewBusinessUnitMessage = response.data.Message;
 				});
 		};
@@ -226,7 +226,7 @@
 		//		});
 		//}
 
-		vm.save = function() {
+		vm.save = function () {
 			//if (vm.AppDbOk === false) {
 			//	alert("Fix the settings to the Application database.");
 			//	return;
@@ -241,21 +241,21 @@
 			//}
 
 			$http.post('./UpdateTenant',
-					{
-						OriginalName: vm.OriginalName,
-						NewName: vm.Tenant,
-						AppDatabase: vm.AppDatabase,
-						AnalyticsDatabase: vm.AnalyticsDatabase,
-						Server: vm.Server,
-						UserName: vm.UserName,
-						Password: vm.Password,
-						UseIntegratedSecurity: vm.UseIntegratedSecurity,
-						CommandTimeout: vm.CommandTimeout,
-						Active: vm.Active,
-						MobileQRCodeUrl: vm.MobileQRCodeUrl,
-						MaximumSessionTime: vm.MaximumSessionTime
-					},
-					tokenHeaderService.getHeaders())
+				{
+					OriginalName: vm.OriginalName,
+					NewName: vm.Tenant,
+					AppDatabase: vm.AppDatabase,
+					AnalyticsDatabase: vm.AnalyticsDatabase,
+					Server: vm.Server,
+					UserName: vm.UserName,
+					Password: vm.Password,
+					UseIntegratedSecurity: vm.UseIntegratedSecurity,
+					CommandTimeout: vm.CommandTimeout,
+					Active: vm.Active,
+					MobileQRCodeUrl: vm.MobileQRCodeUrl,
+					MaximumSessionTime: vm.MaximumSessionTime
+				},
+				tokenHeaderService.getHeaders())
 				.then(function (response) {
 					if (response.data.Success === false) {
 						vm.Message = response.data.Message;
@@ -263,15 +263,15 @@
 					}
 					window.location = "#";
 				})
-				.catch(function(xhr, ajaxOptions, thrownError) {
+				.catch(function (xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.status + xhr.responseText + thrownError;
 					vm.Success = false;
 				});
 		};
 
-		vm.GetImportLog = function() {
+		vm.GetImportLog = function () {
 			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders())
-				.then(function(response) {
+				.then(function (response) {
 					vm.Log = response.data;
 				});
 		};

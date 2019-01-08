@@ -1,8 +1,8 @@
 {
-	"SmtpHost": "smtp.domain.com",
-	"SmtpPort": "25",
-	"SmtpUseSsl": "false",
-	"SmtpUseRelay": "false",
-	"SmtpUser": "user@domain.com",
-	"SmtpPassword": "pwd"
+	"host": "smtp.domain.com",
+	"port": 25,
+	"ssl": false,
+	"relay": true,
+	"user": "user@domain.com",
+	"password": "pwd"
 }

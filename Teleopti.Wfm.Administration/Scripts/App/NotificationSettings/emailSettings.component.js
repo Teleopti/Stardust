@@ -4,25 +4,23 @@
 		var vm = this;
 		vm.emailSettings = {
 			"host": "",
-			"port": "",
-			"ssl": "",
-			"relay": "",
+			"port": 0,
+			"ssl": false,
+			"relay": false,
 			"user": "",
 			"password": ""
 		};
+		vm.error = false;
 		getEmailSettings();
 
 		function getEmailSettings() {
 			return emailSettingsService.get().then(function (data) {
-				var config = data.Config;
-				vm.emailSettings.host = config.SmtpHost;
-				vm.emailSettings.port = config.SmtpPort;
-				vm.emailSettings.ssl = config.SmtpUseSsl;
-				vm.emailSettings.relay = config.SmtpUseRelay;
-				vm.emailSettings.user = config.SmtpUser;
-				vm.emailSettings.password = config.SmtpPassword;
-
-				return vm.emailSettings;
+				if (data.error) {
+					vm.error = true;
+					//Error when fetching settings, should it be the same error as when the form fails?
+				} else {
+					vm.emailSettings = data;
+				}
 			});
 		}
 	}

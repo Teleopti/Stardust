@@ -5,17 +5,17 @@
 
 <div class="importCaption">Port</div>
 <div>
-	<input class="form-control ng-pristine ng-untouched ng-valid ng-empty" type="text" ng-model="$ctrl.emailSettings.port" placeholder="SMTP Port" aria-invalid="false">
+	<input class="form-control ng-pristine ng-untouched ng-valid ng-empty" type="number" ng-model="$ctrl.emailSettings.port" placeholder="SMTP Port" aria-invalid="false">
 </div>
 
 <div class="importCaption">UseSsl</div>
 <div>
-	<input class="ng-pristine ng-untouched ng-valid ng-empty" type="checkbox" ng-model="$ctrl.emailSettings.ssl" ng-true-value="'true'" ng-false-value="'false'" placeholder="SMTP Use SSL" aria-invalid="false">
+	<input class="ng-pristine ng-untouched ng-valid ng-empty" type="checkbox" ng-model="$ctrl.emailSettings.ssl" ng-true-value="true" ng-false-value="false" placeholder="SMTP Use SSL" aria-invalid="false">
 </div>
 
 <div class="importCaption">UseRelay</div>
 <div>
-	<input class="ng-pristine ng-untouched ng-valid ng-empty" type="checkbox" ng-model="$ctrl.emailSettings.relay" ng-true-value="'true'" ng-false-value="'false'" placeholder="SMTP Use Relay" aria-invalid="false">
+	<input class="ng-pristine ng-untouched ng-valid ng-empty" type="checkbox" ng-model="$ctrl.emailSettings.relay" ng-true-value="true" ng-false-value="false" placeholder="SMTP Use Relay" aria-invalid="false">
 </div>
 
 <div class="importCaption">User</div>
@@ -26,6 +26,10 @@
 <div class="importCaption">Password</div>
 <div>
 	<input class="form-control ng-pristine ng-untouched ng-valid ng-empty" type="password" ng-model="$ctrl.emailSettings.password" placeholder="SMTP password" aria-invalid="false">
+</div>
+
+<div ng-if="$ctrl.error">
+	Something went wrong
 </div>
 
 <div class="importCaption">

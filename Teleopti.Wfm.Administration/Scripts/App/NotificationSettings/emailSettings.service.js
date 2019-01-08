@@ -15,14 +15,16 @@
         return emailSettings;
 
         function get() {
-            return $http.get('/smtpnotificationSettings.json').then(getEmailSettings).catch(getEmailSettingsFailed);
+            return $http.get('/smtpnotificationSettings.jsonn').then(getEmailSettings).catch(getEmailSettingsFailed);
 
             function getEmailSettings(response) {
                 return response.data;
             }
 
             function getEmailSettingsFailed(error) {
-                console.log('failed' + error.data);
+                return {
+                    "error": true
+                };
             }
         }
     }
