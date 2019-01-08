@@ -124,11 +124,13 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml" />
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.274\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.274\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Toggle.Net, Version=1.1.0.0, Culture=neutral, PublicKeyToken=edf35f5974b06d9f, processorArchitecture=MSIL">
       <HintPath>..\packages\Toggle.Net.1.1.0\lib\net40\Toggle.Net.dll</HintPath>
