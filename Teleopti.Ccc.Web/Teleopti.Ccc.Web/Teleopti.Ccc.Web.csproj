@@ -1500,8 +1500,6 @@
     <Content Include="Areas\Start\Content\Css\newLogin.css" />
     <Content Include="Areas\Start\Content\Css\main.min.css" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker-ext.js" />
-    <Content Include="Content\botchat\botchat-es5.js" />
-    <Content Include="Content\botchat\botchat.css" />
     <Content Include="Content\Error\404.aspx" />
     <Content Include="Content\jquery-plugin\jquery.touchSwipe.min.js" />
     <Content Include="Content\jqueryui\jquery-ui-1.10.2.dialog.js" />
@@ -1523,6 +1521,8 @@
     </None>
     <Content Include="Content\signalr\jquery.signalR-2.3.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.3.0.min.js" />
+    <Content Include="Content\webchat\readme.txt" />
+    <Content Include="Content\webchat\webchat-es5.js" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />

@@ -1,0 +1,1 @@
+Downloaded from https://cdn.botframework.com/botframework-webchat/latest/webchat-es5.js
