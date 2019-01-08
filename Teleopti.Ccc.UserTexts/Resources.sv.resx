@@ -16073,4 +16073,67 @@ Applikationen kommer nu att stängas. </value>
   <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
     <value>Ett fel inträffade. Var god kontrollera nätverksanslutningen och prova igen. Om detta fortsätter att hända, kontakta administratören. </value>
   </data>
+  <data name="NumberOfAgents" xml:space="preserve">
+    <value>{0} agenter</value>
+  </data>
+  <data name="OneAgent" xml:space="preserve">
+    <value>1 agent</value>
+  </data>
+  <data name="DayOffRulesColon" xml:space="preserve">
+    <value>Fridagsregler:</value>
+  </data>
+  <data name="ScheduledAgents" xml:space="preserve">
+    <value>Schemalagda agenter</value>
+  </data>
+  <data name="ValidationsAreLoading" xml:space="preserve">
+    <value>Validering pågår</value>
+  </data>
+  <data name="ValidationsAreLoadingTooltip" xml:space="preserve">
+    <value>Validering pågår, detta kan ta några minuter</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
+    <value>Det finns inga agenter i denna planeringsgrupp. Se över filterinställningarna. </value>
+  </data>
+  <data name="ManageCalendars" xml:space="preserve">
+    <value>Hantera kalendrar</value>
+  </data>
+  <data name="AssignCalendarsToSites" xml:space="preserve">
+    <value>Koppla kalendrar till enheter</value>
+  </data>
+  <data name="MonthOrMonths" xml:space="preserve">
+    <value>Månad(er)</value>
+  </data>
+  <data name="WeekLowerCase" xml:space="preserve">
+    <value>vecka</value>
+  </data>
+  <data name="WeeksLowerCase" xml:space="preserve">
+    <value>veckor</value>
+  </data>
+  <data name="MonthLowerCase" xml:space="preserve">
+    <value>månad</value>
+  </data>
+  <data name="MonthsLowerCase" xml:space="preserve">
+    <value>månader</value>
+  </data>
+  <data name="DayLowerCase" xml:space="preserve">
+    <value>dag</value>
+  </data>
+  <data name="DaysLowerCase" xml:space="preserve">
+    <value>dagar</value>
+  </data>
+  <data name="YearLowerCase" xml:space="preserve">
+    <value>år</value>
+  </data>
+  <data name="YearsLowerCase" xml:space="preserve">
+    <value>år</value>
+  </data>
+  <data name="WeekOrWeeks" xml:space="preserve">
+    <value>Veckor</value>
+  </data>
+  <data name="BlockSchedulingColon" xml:space="preserve">
+    <value>Blockschemaläggning:</value>
+  </data>
+  <data name="PublishSchedulePlans" xml:space="preserve">
+    <value>Publicera schema</value>
+  </data>
 </root>

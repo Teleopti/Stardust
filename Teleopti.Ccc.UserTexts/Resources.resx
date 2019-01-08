@@ -18134,11 +18134,11 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Shown in planning period overview in Plans</comment>
   </data>
   <data name="ValidationsAreLoading" xml:space="preserve">
-    <value>Validation are loading</value>
+    <value>Validation in progress</value>
     <comment>Shown in planning period overview in Plans</comment>
   </data>
   <data name="ValidationsAreLoadingTooltip" xml:space="preserve">
-    <value>Validation are loading, this might take a few minutes</value>
+    <value>Validation in progress, this might take a few minutes</value>
     <comment>Shown in planning period overview in Plans</comment>
   </data>
   <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
