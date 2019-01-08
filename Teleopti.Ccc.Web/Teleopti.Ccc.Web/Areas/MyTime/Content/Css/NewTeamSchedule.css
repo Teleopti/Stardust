@@ -487,7 +487,7 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	max-width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	white-space: normal;
 	max-height: 100%;
 }
 .teammates-schedules-container .new-teamschedule-layer-container strong {
@@ -548,6 +548,24 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	white-space: normal;
 	font-size: 14px;
 	max-height: 100%;
+}
+.new-teamschedule-view .new-teamschedule-layer .activity-info .meeting {
+	padding: 3px;
+	white-space: nowrap;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 1;
+}
+.new-teamschedule-view .new-teamschedule-layer .activity-info .meeting i {
+	top: 0;
+	transform: scale(1);
+	margin: 0;
+}
+.new-teamschedule-view .new-teamschedule-layer .activity-info .meeting strong {
+	white-space: nowrap;
+	max-width: calc(100% - 14px - 2*3px);
+	padding: 0;
 }
 .new-teamschedule-view .displayblock {
 	white-space: nowrap;

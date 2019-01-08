@@ -431,8 +431,6 @@
 		myScheduleData.Periods.forEach(function(layer, index, periods) {
 			var myLayerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(
 				layer,
-				null,
-				true,
 				timeLineOffset,
 				false,
 				timelineStart,
@@ -471,8 +469,6 @@
 			agentSchedule.Periods.forEach(function(layer, index, periods) {
 				var layerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(
 					layer,
-					null,
-					true,
 					timeLineOffset,
 					false,
 					timelineStart,

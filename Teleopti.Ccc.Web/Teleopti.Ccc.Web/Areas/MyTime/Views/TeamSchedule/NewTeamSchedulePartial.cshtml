@@ -140,14 +140,15 @@
 				<!-- ko foreach: mySchedule().layers -->
 				<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: $root.isHostADesktop ? 'hover' : 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyActivityTooltipPositionInTeamSchedule: true">
 					<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">
+						<!-- ko if: showMeetingIcon -->
+						<div class="meeting">
+							<i class="glyphicon glyphicon-user"></i>
+							<strong data-bind="text: title"></strong>
+						</div>
+						<!-- /ko -->
+						<!-- ko ifnot: showMeetingIcon -->
 						<strong data-bind="text: title"></strong>
 						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
-						<!-- ko if: showMeetingIcon -->
-						<div class="meeting mt5">
-							<i class="meeting-icon mr10">
-								<i class="glyphicon glyphicon-user ml10"></i>
-							</i>
-						</div>
 						<!-- /ko -->
 					</div>
 					<div data-bind="visible: showTitle && isOvertimeAvailability">
@@ -178,14 +179,15 @@
 					<!-- ko foreach: layers -->
 					<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: $root.isHostADesktop ? 'hover' : 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
 						<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">
-							<strong data-bind="text: title"></strong>
-							<span class="fullwidth displayblock" data-bind="visible: showDetail && false, text: timeSpan"></span>
 							<!-- ko if: showMeetingIcon -->
 							<div class="meeting">
-								<i class="meeting-icon mr10">
-									<i class="glyphicon glyphicon-user ml10"></i>
-								</i>
+								<i class="glyphicon glyphicon-user"></i>
+								<strong data-bind="text: title"></strong>
 							</div>
+							<!-- /ko -->
+							<!-- ko ifnot: showMeetingIcon -->
+							<strong data-bind="text: title"></strong>
+							<span class="fullwidth displayblock" data-bind="visible: showDetail && false, text: timeSpan"></span>
 							<!-- /ko -->
 						</div>
 						<div data-bind="visible: showTitle && isOvertimeAvailability">

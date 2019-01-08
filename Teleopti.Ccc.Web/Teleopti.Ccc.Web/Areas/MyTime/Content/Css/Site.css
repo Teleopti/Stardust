@@ -1320,6 +1320,11 @@ select.time-input {
 	float: right;
 }
 
+/*Tooltip of Meetings*/
+.meeting-detail .meeting-field-name {
+	font-style: italic;
+}
+
 /*Edit toolbar*/
 .rtl .clearleftfloat {
 	clear: right;
