@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
+using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly HangfireUtilities _hangfire;
 		private readonly RecurringEventPublishings _recurringEventPublishings;
 		private readonly SystemVersion _version;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(TestController));
 
 		public TestController(
 			IMutateNow mutateNow,
@@ -151,6 +153,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public virtual ViewResult Logon(string businessUnitName, string userName, string password, bool isPersistent = false, bool isLogonFromBrowser = true)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(userName, password);
+			if (!result.Successful)
+				_logger.Error(result.Message);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = businessUnits.Single(b => b.Name == businessUnitName);
 			string tenantPassword = null;
