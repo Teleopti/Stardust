@@ -93,6 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 						EndTime = layer.End,
 						IsOvertime = layer.IsOvertime,
 						Meeting = isMySchedule ? layer.Meeting : null,
+						ShowMeetingIcon = layer.Meeting != null ? true : false,
 						StartPositionPercentage = calculatePosition(layer.Start, startTime, diff),
 						EndPositionPercentage = calculatePosition(layer.End, startTime, diff),
 						TimeSpan = TimeHelper.TimeOfDayFromTimeSpan(layer.Start.TimeOfDay, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(layer.End.TimeOfDay, CultureInfo.CurrentCulture)

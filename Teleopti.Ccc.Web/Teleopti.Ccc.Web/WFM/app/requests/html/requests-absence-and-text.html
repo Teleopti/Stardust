@@ -59,7 +59,7 @@
 					ng-style=" {backgroundColor: projection.Color, left: projection.StartPositionPercentage * 100 + '%', width: (projection.EndPositionPercentage - projection.StartPositionPercentage) * 100 + '%', color: projection.TextColor}"
 					ng-class="{'overtime-light': projection.IsOvertime && projection.TextColor == 'white', 'overtime-dark': projection.IsOvertime && projection.TextColor == 'black'}"
 				>
-					<i ng-if="projection.Meeting" class="mdi mdi-account absolute"></i>
+					<i ng-if="projection.showMeetingIcon" class="mdi mdi-account absolute"></i>
 					<md-tooltip md-z-index="1200" class="multiline-tooltip layer-summary">
 						<p>{{ projection.Title }}</p>
 						<p>{{ projection.TimeSpan }}</p>

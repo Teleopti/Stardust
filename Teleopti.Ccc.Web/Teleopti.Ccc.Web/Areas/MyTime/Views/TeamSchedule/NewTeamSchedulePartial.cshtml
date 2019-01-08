@@ -142,7 +142,7 @@
 					<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">
 						<strong data-bind="text: title"></strong>
 						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
-						<!-- ko if: hasMeeting -->
+						<!-- ko if: showMeetingIcon -->
 						<div class="meeting mt5">
 							<i class="meeting-icon mr10">
 								<i class="glyphicon glyphicon-user ml10"></i>
@@ -180,7 +180,7 @@
 						<div class="activity-info" data-bind="visible: showTitle && !isOvertimeAvailability">
 							<strong data-bind="text: title"></strong>
 							<span class="fullwidth displayblock" data-bind="visible: showDetail && false, text: timeSpan"></span>
-							<!-- ko if: hasMeeting -->
+							<!-- ko if: showMeetingIcon -->
 							<div class="meeting">
 								<i class="meeting-icon mr10">
 									<i class="glyphicon glyphicon-user ml10"></i>

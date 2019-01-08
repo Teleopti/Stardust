@@ -17,6 +17,7 @@
 
 	self.title = layer.Title;
 	self.hasMeeting = layer.Meeting !== null;
+    self.showMeetingIcon=layer.ShowMeetingIcon;
 	self.timeSpan = getTimeSpan(layer.TimeSpan, cleanOvernightNumber);
 	self.tooltipText = buildTooltipText(self.title, self.timeSpan, self.hasMeeting,isMySchedule);
 	self.backgroundColor = Teleopti.MyTimeWeb.Common.ConvertColorToRGB(layer.Color);
