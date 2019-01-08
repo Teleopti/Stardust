@@ -15,7 +15,7 @@
         return emailSettings;
 
         function get() {
-            return $http.get('/notificationSettings.json').then(getEmailSettings).catch(getEmailSettingsFailed);
+            return $http.get('/smtpnotificationSettings.json').then(getEmailSettings).catch(getEmailSettingsFailed);
 
             function getEmailSettings(response) {
                 return response.data;
