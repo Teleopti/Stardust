@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.IocCommon
 			//just to support some old mock tests...
 		}
 
-		public virtual bool Toggle(Toggles toggle)
+		public virtual bool IsToggleEnabled(Toggles toggle)
 		{
-			return _toggleManager != null && _toggleManager.IsEnabled(toggle);
+			return _toggleManager?.IsEnabled(toggle) ?? false;
 		}
 
 		public IocArgs Args()

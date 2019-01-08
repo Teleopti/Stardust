@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>().SingleInstance();
-			if (_config.Toggle(Toggles.MessageBroker_ServerThrottleMessages_79140))
+			if (_config.IsToggleEnabled(Toggles.MessageBroker_ServerThrottleMessages_79140))
 				builder.RegisterType<MessageBrokerServerThrottleMessages>().As<IMessageBrokerServer>().SingleInstance().ApplyAspects();	
-			else if (_config.Toggle(Toggles.MessageBroker_VeganBurger_79140))
+			else if (_config.IsToggleEnabled(Toggles.MessageBroker_VeganBurger_79140))
 				builder.RegisterType<MessageBrokerServerNoMailboxPurge>().As<IMessageBrokerServer>().SingleInstance().ApplyAspects();
 			else
 				builder.RegisterType<MessageBrokerServer>().As<IMessageBrokerServer>().SingleInstance().ApplyAspects();

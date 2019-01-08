@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<TraceableRefreshService>().As<ITraceableRefreshService>();
             builder.RegisterType<CalculatePersonAccount>();
 			builder.RegisterType<PersonAccountUpdater>().As<IPersonAccountUpdater>();
-			if (!_configuration.Toggle(Toggles.WFM_Clear_Data_After_Leaving_Date_47768))
+			if (!_configuration.IsToggleEnabled(Toggles.WFM_Clear_Data_After_Leaving_Date_47768))
 			{
 				builder.RegisterType<ClearPersonRelatedInformation>().As<IPersonLeavingUpdater>().SingleInstance();
 			}

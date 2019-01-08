@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 
-			if (configuration.Toggle(Toggles.WFM_TrainingPlanner_44780))
+			if (configuration.IsToggleEnabled(Toggles.WFM_TrainingPlanner_44780))
 				builder.RegisterType<GetStaffingUsingReadModel>().As<ILoadSkillDaysByPeriod>().InstancePerLifetimeScope();
 			else
 				builder.RegisterType<GetStaffingUsingResourceCalculation>().As<ILoadSkillDaysByPeriod>().InstancePerLifetimeScope();

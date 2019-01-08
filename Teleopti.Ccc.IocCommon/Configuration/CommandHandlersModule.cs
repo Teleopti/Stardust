@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof(IHandleCommand<>).Assembly)
 				.Where(t =>
 					t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleCommand<>)) &&
-					t.EnabledByToggle(_config.Toggle))
+					t.EnabledByToggle(_config.IsToggleEnabled))
 				.As(t =>
 					t.GetInterfaces().Single(i => i.GetGenericTypeDefinition() == typeof(IHandleCommand<>))
 				);

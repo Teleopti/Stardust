@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NonoverwritableLayerChecker>().As<INonoverwritableLayerChecker>().SingleInstance();
 			builder.RegisterType<NonoverwritableLayerMovabilityChecker>().As<INonoverwritableLayerMovabilityChecker>().SingleInstance();
 			builder.RegisterType<NonoverwritableLayerMovingHelper>().As<INonoverwritableLayerMovingHelper>().SingleInstance();
-			if (_configuration.Toggle(Toggles.WfmTeamSchedule_SuggestShiftCategory_152))
+			if (_configuration.IsToggleEnabled(Toggles.WfmTeamSchedule_SuggestShiftCategory_152))
 			{
 				builder.RegisterType<ShiftCategorySelector>().SingleInstance();
 				builder.RegisterType<ShiftCategorySelectorWithPrediction>().As<IShiftCategorySelector>().SingleInstance();

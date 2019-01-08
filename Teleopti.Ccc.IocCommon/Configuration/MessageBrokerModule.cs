@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				{
 					Credentials = CredentialCache.DefaultNetworkCredentials
 				})).SingleInstance().ExternallyOwned();
-			if (_config.Toggle(Toggles.MessageBroker_HttpSenderThrottleRequests_79140))
+			if (_config.IsToggleEnabled(Toggles.MessageBroker_HttpSenderThrottleRequests_79140))
 				builder.RegisterType<HttpThrottledSender>().As<IMessageSender>().SingleInstance();
 			else
 				builder.RegisterType<HttpSender>().As<IMessageSender>().SingleInstance();

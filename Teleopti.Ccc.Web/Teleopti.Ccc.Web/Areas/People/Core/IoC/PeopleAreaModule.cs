@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.IoC
 			builder.RegisterType<PersonDataProvider>().As<IPersonDataProvider>().SingleInstance();
 			builder.RegisterType<PersonInfoUpdater>().As<IPersonInfoUpdater>().SingleInstance();
 			builder.RegisterType<AuditHelper>().As<IAuditHelper>().SingleInstance();
-			if(_configuration.Toggle(Toggles.Wfm_AuditTrail_GenericAuditTrail_74938))
+			if(_configuration.IsToggleEnabled(Toggles.Wfm_AuditTrail_GenericAuditTrail_74938))
 				builder.RegisterType<RoleManagerUsingAuditTrail>().As<IRoleManager>().SingleInstance().ApplyAspects();
 			else
 				builder.RegisterType<RoleManager>().As<IRoleManager>().SingleInstance().ApplyAspects();

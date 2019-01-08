@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public static class RegistrationByToggleExtensions
 	{
-		public static bool EnabledByToggle(this Type type, IocConfiguration config) => type.EnabledByToggle(config.Toggle);
+		public static bool EnabledByToggle(this Type type, IocConfiguration config) => type.EnabledByToggle(config.IsToggleEnabled);
 
 		public static bool EnabledByToggle(this Type type, Func<Toggles, bool> toggles)
 		{

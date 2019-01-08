@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExportStaffingPeriodValidationProvider>().As<ExportStaffingPeriodValidationProvider>().SingleInstance();
 
 			builder.RegisterType<UpdateStaffingLevelReadModelStartDate>().SingleInstance();
-			if (_configuration.Toggle(Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125))
+			if (_configuration.IsToggleEnabled(Toggles.Wfm_AuditTrail_StaffingAuditTrail_78125))
 			{
 				builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance()
 					.ApplyAspects();

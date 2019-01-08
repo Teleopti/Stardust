@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<BlockPreferenceProviderForPlanningPeriod>().As<IBlockPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<DayOffOptimizationPreferenceProviderForPlanningPeriod>().As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<PersistSchedulesAfterIsland>().As<ISynchronizeSchedulesAfterIsland>().SingleInstance();
-				if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
+				if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
 				{
 					builder.RegisterType<OptimizationPreferencesPerfTestProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
 					builder.RegisterType<SchedulingOptionsProviderForTeamPerfTest>().As<ISchedulingOptionsProvider>().SingleInstance();
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<PreferenceHint>().As<ISchedulePostHint>().SingleInstance();
 			}
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717))
+			if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717))
 			{
 				builder.RegisterType<PersonContractShiftBagHint>().As<ISchedulePreHint>().SingleInstance();
 			}

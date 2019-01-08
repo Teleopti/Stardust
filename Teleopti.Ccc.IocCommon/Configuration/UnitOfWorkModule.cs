@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<MessageBrokerSender>().As<ITransactionHook>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.MessageBroker_ScheduleChangedMessagePackaging_79140))
+			if (_configuration.IsToggleEnabled(Toggles.MessageBroker_ScheduleChangedMessagePackaging_79140))
 				builder.RegisterType<ScheduleChangedMessagePackagingSender>().As<ITransactionHook>();
 			else
 				builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		}
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (!_configuration.Toggle(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559))
+			if (!_configuration.IsToggleEnabled(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559))
 				builder.RegisterType<ReportScheduledTimeVsTargetVisible>().As<IReportVisible>().SingleInstance();
 
 			builder.RegisterType<ReportNavigationModel>().As<IReportNavigationModel>();

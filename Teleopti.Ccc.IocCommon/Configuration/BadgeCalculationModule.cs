@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			builder.RegisterType<AgentBadgeWithRankCalculator>().As<IAgentBadgeWithRankCalculator>();
 			builder.RegisterType<LogObjectDateChecker>().As<ILogObjectDateChecker>();
-			if (_config.Toggle(Toggles.WFM_Gamification_Calculate_Badges_47250))
+			if (_config.IsToggleEnabled(Toggles.WFM_Gamification_Calculate_Badges_47250))
 			{
 				builder.RegisterType<PerformAllBadgeCalculation>().As<IPerformBadgeCalculation>();
 			}

@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			where TToggleOn : T
 			where TToggleOff : T
 		{
-			if (_configuration.Toggle(toggle))
+			if (_configuration.IsToggleEnabled(toggle))
 			{
 				builder.RegisterType<TToggleOn>().As<T>().SingleInstance().ApplyAspects();
 			}

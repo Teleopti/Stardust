@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ScheduleDayMinMaxTimeCalculator>().As<IScheduleDayMinMaxTimeCalculator>().SingleInstance();
 			builder.RegisterType<SiteOpenHourProvider>().As<ISiteOpenHourProvider>().SingleInstance();
 
-			if (_config.Toggle(Toggles.WFM_ProbabilityView_ImproveResponseTime_80040))
+			if (_config.IsToggleEnabled(Toggles.WFM_ProbabilityView_ImproveResponseTime_80040))
 			{
 				builder.RegisterType<ScheduledSkillOpenHourProviderOptimized>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
 			}

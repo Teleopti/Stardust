@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldBeEnabledIfUseOnToggleIsTrueAndUseNotOnToggleIsFalse()
 		{
 			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle)).Return(true);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle2)).Return(false);
 
 			Assert.That(typeof(targetWithMultiAttribOnNotOn).EnabledByToggle(iocConfig), Is.True);
 		}
@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldNotBeEnabledIfUseOnToggleIsFalseAndUseNotOnToggleIsFalse()
 		{
 			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle)).Return(false);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle2)).Return(false);
 
 			Assert.That(typeof(targetWithMultiAttribOnNotOn).EnabledByToggle(iocConfig), Is.False);
 		}
@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldNotBeEnabledIfUseOnToggleIsTrueAndUseNotOnToggleIsTrue()
 		{
 			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(true);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle)).Return(true);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle2)).Return(true);
 
 			Assert.That(typeof(targetWithMultiAttribOnNotOn).EnabledByToggle(iocConfig), Is.False);
 		}
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldNotBeEnabledIfUseOnToggleIsFalseAndUseNotOnToggleIsTrue()
 		{
 			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(false);
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(true);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle)).Return(false);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle2)).Return(true);
 
 			Assert.That(typeof(targetWithMultiAttribOnNotOn).EnabledByToggle(iocConfig), Is.False);
 		}
@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public void ShouldNotBeEnabledIfUseOnToggleIsTrueAndUseNotOnToggleIsFalseAndTrue()
 		{
 			var iocConfig = MockRepository.GenerateMock<IocConfiguration>();
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle)).Return(true);
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle2)).Return(false);
-			iocConfig.Expect(m => m.Toggle(Toggles.TestToggle3)).Return(true);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle)).Return(true);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle2)).Return(false);
+			iocConfig.Expect(m => m.IsToggleEnabled(Toggles.TestToggle3)).Return(true);
 
 			Assert.That(typeof(targetWithMultiAttribOnNotOn2).EnabledByToggle(iocConfig), Is.False);
 		}

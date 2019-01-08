@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NotificationChecker>().As<INotificationChecker>();
 			builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();
 
-			if (_iocConfiguration.Toggle(Toggles.Wfm_ReadNotificationConfigurationFromDb_78242))
+			if (_iocConfiguration.IsToggleEnabled(Toggles.Wfm_ReadNotificationConfigurationFromDb_78242))
 			{
 				builder.RegisterType<NotificationConfigDbReader>().As<INotificationConfigReader>();
 			}

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			builder.RegisterType<SignalR>().As<ISignalR>().SingleInstance();
 
-			if (_config.Toggle(Toggles.MessageBroker_ServerThrottleMessages_79140))
+			if (_config.IsToggleEnabled(Toggles.MessageBroker_ServerThrottleMessages_79140))
 				builder.RegisterType<InProcessMessageSenderNoThrottle>().As<IMessageSender>().SingleInstance();
 			else
 				builder.RegisterType<InProcessMessageSender>().As<IMessageSender>().SingleInstance();

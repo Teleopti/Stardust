@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			builder.RegisterType<SearchPath>().As<ISearchPath>().SingleInstance();
 			
 			//Need to check if that is going to work for the container or not.
-			if (_configuration.Toggle(Toggles.Wfm_Payroll_SupportMultiDllPayrolls_75959))
+			if (_configuration.IsToggleEnabled(Toggles.Wfm_Payroll_SupportMultiDllPayrolls_75959))
 			{
 				builder.RegisterType<PayrollExportHandlerNew>().As<IHandleEvent<RunPayrollExportEvent>>().ApplyAspects();
 				builder.RegisterType<InitializePayrollFormatsUsingAppDomain>().As<IInitializePayrollFormats>().SingleInstance();

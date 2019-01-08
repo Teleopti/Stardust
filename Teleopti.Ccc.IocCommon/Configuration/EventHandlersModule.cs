@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterEventHandlers(
-				_config.Toggle,
+				_config.IsToggleEnabled,
 				EventHandlerLocations.Assemblies().ToArray()
 			);
 
