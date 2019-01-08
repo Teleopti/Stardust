@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 			return result;
 		}
 
-		[HttpGet, Route("api/BankHolidayCalendars"), UnitOfWork]
+		[HttpGet, Route("api/SiteBankHolidayCalendars"), UnitOfWork]
 		public virtual IEnumerable<SiteBankHolidayCalendarsViewModel> GetAllSiteBankHolidayCalendars()
 		{
 			return _siteBankHolidayCalendarsProvider.GetAllSettings();
