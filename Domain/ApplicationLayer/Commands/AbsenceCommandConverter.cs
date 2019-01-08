@@ -62,26 +62,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var person = _personRepository.Load(command.PersonId);
 			var absence = _absenceRepository.Load(command.AbsenceId);
-			var absenceTimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()),
-														TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
+			var logonTimezone = _timeZone.TimeZone();
+			var agentTimezone = person.PermissionInformation.DefaultTimeZone();
+			var absenceTimePeriodInUtc = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, logonTimezone),
+														TimeZoneHelper.ConvertToUtc(command.EndTime, logonTimezone));
 
-			var scheduleRange = getScheduleRangeForPeriod(absenceTimePeriod.ToDateOnlyPeriod(_timeZone.TimeZone()).Inflate(1), person);
-			var absenceStartDate = new DateOnly(command.StartTime);
-			var previousDayAssignment =
-				scheduleRange.ScheduledDay(absenceStartDate.AddDays(-1)).PersonAssignment();
-			var hasIntersectionWithPreviousDayShift = previousDayAssignment != null && previousDayAssignment.Period.Intersect(absenceTimePeriod);
+			var startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(absenceTimePeriodInUtc.StartDateTime, agentTimezone));
+			var previousDate = startDate.AddDays(-1);
+			var scheduleRange = getScheduleRangeForPeriod(new DateOnlyPeriod(previousDate, startDate.AddDays(1)), person);
 
-			var scheduleDay = hasIntersectionWithPreviousDayShift ? scheduleRange.ScheduledDay(absenceStartDate.AddDays(-1))
-				: scheduleRange.ScheduledDay(absenceStartDate);
+			var previousScheduleDay = scheduleRange.ScheduledDay(previousDate);
+
+			var previousDayAssignment = previousScheduleDay.PersonAssignment();
+			var hasIntersectionWithPreviousDayShift = previousDayAssignment != null && previousDayAssignment.Period.Intersect(absenceTimePeriodInUtc);
+
+			var scheduleDay = hasIntersectionWithPreviousDayShift ? previousScheduleDay : scheduleRange.ScheduledDay(startDate);
 			var eventPeriod = hasIntersectionWithPreviousDayShift
-				? new DateTimePeriod(previousDayAssignment.Period.StartDateTime, absenceTimePeriod.EndDateTime)
-				: absenceTimePeriod;
+				? new DateTimePeriod(previousDayAssignment.Period.StartDateTime, absenceTimePeriodInUtc.EndDateTime)
+				: absenceTimePeriodInUtc;
 
 			var creatorInfo = new AbsenceCreatorInfo()
 			{
 				Absence = absence,
 				Person = person,
-				AbsenceTimePeriod = absenceTimePeriod,
+				AbsenceTimePeriod = absenceTimePeriodInUtc,
 				ScheduleDay = scheduleDay,
 				ScheduleRange = scheduleRange,
 				TrackedCommandInfo = command.TrackedCommandInfo,
