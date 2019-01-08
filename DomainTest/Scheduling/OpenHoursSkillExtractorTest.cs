@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
+
+namespace Teleopti.Ccc.DomainTest.Scheduling
+{
+	[DomainTest]
+	[UseIocForFatClient]
+	public class OpenHoursSkillExtractorTest
+	{
+		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		public OpenHoursSkillExtractor Target;
+
+		[Test]
+		[Ignore("76118 to be fixed")]
+		public void ShouldRestrictOnStartAndEndTime()
+		{
+			var date = new DateOnly(2018, 10, 1);
+			var activity = new Activity { RequiresSkill = true }.WithId();
+			var scenario = new Scenario();
+			var skill = new Skill().For(activity).WithId().InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 16);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var group = new Group(new List<IPerson> { agent }, "_");
+			var teamInfo = new TeamInfo(group, new List<IList<IScheduleMatrixPro>>());
+			var blockInfo = new BlockInfo(date.ToDateOnlyPeriod());
+			var teamBlockInfo = new TeamBlockInfo(teamInfo, blockInfo);
+
+			var result = Target.Extract(teamBlockInfo, new[] { skillDay }, date.ToDateOnlyPeriod(), date);
+
+			result.OpenHoursDictionary[date].StartTimeLimitation.StartTime.Should().Be.EqualTo(TimeSpan.FromHours(8));
+			result.OpenHoursDictionary[date].EndTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(16));
+			result.ForCurrentDate().TotalHours.Should().Be.EqualTo(8);
+		}
+	}
+}
