@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	}
 
 	
-	public class BaseSkillCombinationResourceRepositoryTest 
+	public abstract class BaseSkillCombinationResourceRepositoryTest 
 	{
 		public ISkillCombinationResourceRepository Target;
 		public MutableNow Now;
