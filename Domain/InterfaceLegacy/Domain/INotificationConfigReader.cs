@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	public interface INotificationConfigReader
 	{
 		bool HasLoadedConfig { get; }
-		IXPathNavigable XmlDocument { get; }
+		//IXPathNavigable XmlDocument { get; }
 		Uri Url { get; }
 		string User { get; }
 		string Password { get; }

@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -25,6 +24,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<NotificationChecker>().As<INotificationChecker>();
 			builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
+
+			if (_toggleManager.IsEnabled(Toggles.Wfm_ReadNotificationConfigurationFromDb_78242))
+			{
+				builder.RegisterType<NotificationConfigDbReader>().As<INotificationConfigReader>();
+			}
+			else
+			{
+				builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
+			}
+
 			builder.RegisterType<Notifier>().As<INotifier>();
 			builder.RegisterType<NotifyAppSubscriptions>().ApplyAspects();
 			builder.RegisterType<UserDeviceService>().SingleInstance();

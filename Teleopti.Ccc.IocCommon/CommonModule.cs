@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<GamificationAreaModule>();
 			builder.RegisterModule(new ReportModule(_configuration));
 			builder.RegisterModule(new ApplicationInsightsModule());
-			builder.RegisterModule<NotificationModule>();
+			builder.RegisterModule(new NotificationModule(_configuration));
 			builder.RegisterModule(new AuditTrailModule(_configuration));
 			builder.RegisterModule<AbsenceModule>();
 			builder.RegisterModule<SystemSettingModel>();

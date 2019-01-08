@@ -3600,6 +3600,7 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <Compile Include="Notification\NotificationConfigDbReader.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

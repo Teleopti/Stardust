@@ -25,9 +25,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 					emailAddress = cmd.ExecuteScalar().ToString();
 					return true;
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
-					var asd = ex.Message;
 					emailAddress = null;
 					return false;
 				}

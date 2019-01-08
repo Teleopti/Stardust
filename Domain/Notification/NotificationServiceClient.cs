@@ -21,6 +21,10 @@ namespace Teleopti.Ccc.Domain.Notification
 			// POST  https://apiteleoptitest.azure-api.net/notify/asbq   // header   "Ocp-Apim-Subscription-Key"  : 2f0405da85a749999e1fc3fd71b2cd58
 			try
 			{
+				//ApplicationConfig
+				//var apiUrl = _serverConfiguration.Get("notification.apiEndpoint");
+				//pi.Tenant.ApplicationConfig.TryGetValue("notification.apiKey", out var apiKey);
+
 				//var configUri = "https://apiteleoptitest.azure-api.net/notify/asbq";
 				//var configApiKey = "2f0405da85a749999e1fc3fd71b2cd58";
 

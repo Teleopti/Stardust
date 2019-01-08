@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 				if (!_customerDb.TryGetEmailAddress(pi, out var userEmail))
 				{
-					return false;
+					return true;
 				}
 
 				var securityToken = _tokenGenerator.CreateSecurityToken(pi.Id, pi.ApplicationLogonInfo.LogonPassword);
@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 					ContentValue = mailTemplate
 				};
 
-				var apiUrl = _serverConfiguration.Get("notification.apiEndpoint");
-				pi.Tenant.ApplicationConfig.TryGetValue("notification.apiKey", out var apiKey);
+				var apiUrl = _serverConfiguration.Get("notification.ApiEndpoint");
+				pi.Tenant.ApplicationConfig.TryGetValue("notification.ApiKey", out var apiKey);
 				//var apiKey = "notification.apiKey";
 				return _notification.SendEmail(mailMessage, apiUrl, apiKey);
 			}
