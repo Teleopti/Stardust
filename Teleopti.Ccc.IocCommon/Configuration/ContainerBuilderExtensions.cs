@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Builder;
 using LinFu.DynamicProxy;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -11,36 +12,36 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		private static readonly ProxyFactory proxyFactory = new ProxyFactory();
 		
-		public static void RegisterToggledComponent<TToggleOn, TToggleOff, TInterface>(this ContainerBuilder builder, Toggles toggle)
+		public static IRegistrationBuilder<TInterface, SimpleActivatorData, SingleRegistrationStyle> RegisterToggledComponent<TToggleOn, TToggleOff, TInterface>(this ContainerBuilder builder, Toggles toggle)
 			where TToggleOn : TInterface 
 			where TToggleOff : TInterface
 			where TInterface : class
 		{
-			builder.RegisterType<TToggleOn>().SingleInstance().ApplyAspects();
-			builder.RegisterType<TToggleOff>().SingleInstance().ApplyAspects();
-			var proxy = proxyFactory.CreateProxy<TInterface>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(builder, toggle));
-			builder.RegisterInstance(proxy);
+			builder.RegisterType<TToggleOn>().ApplyAspects();
+			builder.RegisterType<TToggleOff>().ApplyAspects();
+			return builder.Register(c => proxyFactory.CreateProxy<TInterface>(new toggledTypeInterceptor<TToggleOn, TToggleOff>(c, toggle)));
 		}
-		
+
 		private class toggledTypeInterceptor<TToggleOn, TToggleOff> : IInterceptor
 		{
 			private readonly Toggles _toggle;
-			private IContainer _container;
+			private readonly IToggleManager _toggleManager;
+			private readonly TToggleOn _onService;
+			private readonly TToggleOff _offService;
 
-			public toggledTypeInterceptor(ContainerBuilder builder, Toggles toggle)
+			public toggledTypeInterceptor(IComponentContext componentContext, Toggles toggle)
 			{
+				_toggleManager = componentContext.Resolve<IToggleManager>();
+				_onService = componentContext.Resolve<TToggleOn>();
+				_offService = componentContext.Resolve<TToggleOff>();
 				_toggle = toggle;
-				builder.RegisterBuildCallback(container =>
-				{
-					_container = container;
-				});
 			}
 
 			public object Intercept(InvocationInfo info)
 			{
-				var svc = _container.Resolve<IToggleManager>().IsEnabled(_toggle) ? 
-					(object)_container.Resolve<TToggleOn>() : 
-					_container.Resolve<TToggleOff>();
+				var svc = _toggleManager.IsEnabled(_toggle) ? 
+					(object)_onService : 
+					_offService;
 				return info.TargetMethod.Invoke(svc, info.Arguments);
 			}
 		}

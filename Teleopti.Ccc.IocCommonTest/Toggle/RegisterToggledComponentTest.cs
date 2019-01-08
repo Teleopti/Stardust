@@ -14,24 +14,41 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	[DomainTest]
+	[TestFixture(true)]
+	[TestFixture(false)]
 	public class RegisterToggledComponentTest : IExtendSystem
 	{
+		private readonly bool _singleInstance;
 		public FakeToggleManager ToggleManager;
 		public IMyService MyService;
 		public ILifetimeScope LifetimeScope;
 
+		public RegisterToggledComponentTest(bool singleInstance)
+		{
+			_singleInstance = singleInstance;
+		}
+		
 		private class extraComponentsInTest : Module
 		{
+			private readonly bool _singleInstance;
+
+			public extraComponentsInTest(bool singleInstance)
+			{
+				_singleInstance = singleInstance;
+			}
+			
 			protected override void Load(ContainerBuilder builder)
 			{
-				builder.RegisterToggledComponent<MyServiceOn, MyServiceOff, IMyService>(Toggles.TestToggle);
+				var registration = builder.RegisterToggledComponent<MyServiceOn, MyServiceOff, IMyService>(Toggles.TestToggle);
+				if (_singleInstance)
+					registration.SingleInstance();
 				builder.RegisterType<MyAspect>().As<IAspect>().SingleInstance();
 			}
 		}
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
-			extend.AddModule(new extraComponentsInTest());
+			extend.AddModule(new extraComponentsInTest(_singleInstance));
 		}
 		
 		[TestCase(true, ExpectedResult = "on")]
@@ -45,22 +62,34 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 
 		[TestCase(true)]
 		[TestCase(false)]
-		public void ShouldRegisterProxyAsSingleton(bool toggleValue)
+		public void ShouldRegisterProxyWithCorrectScope(bool toggleValue)
 		{
 			ToggleManager.Set(Toggles.TestToggle, toggleValue);
 		
-			LifetimeScope.Resolve<IMyService>()
-				.Should().Be.SameInstanceAs(LifetimeScope.Resolve<IMyService>());
+			var svc1 = LifetimeScope.Resolve<IMyService>();
+			var svc2 = LifetimeScope.Resolve<IMyService>();
+
+			if (_singleInstance)
+			{
+				svc1.Should().Be.SameInstanceAs(svc2);
+			}
+			else
+			{
+				svc1.Should().Not.Be.SameInstanceAs(svc2);
+			}
 		}
 		
 		[TestCase(true)]
 		[TestCase(false)]
-		public void ShouldRegisterServiceAsSingleton(bool toggleValue)
+		public void ShouldRegisterServiceWithCorrectScope(bool toggleValue)
 		{
 			ToggleManager.Set(Toggles.TestToggle, toggleValue);
-		
-			(LifetimeScope.Resolve<IMyService>().Counter + 1)
-				.Should().Be.EqualTo(LifetimeScope.Resolve<IMyService>().Counter);
+
+			LifetimeScope.Resolve<IMyService>().Counter();
+			LifetimeScope.Resolve<IMyService>().Counter();
+			var result = LifetimeScope.Resolve<IMyService>().Counter();
+
+			result.Should().Be.EqualTo(_singleInstance ? 3 : 1);
 		}
 
 		[TestCase(true)]
@@ -99,7 +128,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public class MyServiceOn : IMyService
 		{
 			private int _counter;
-			public int Counter => _counter++;
+			public int Counter() => ++_counter;
 			public string Value { get; } = "on";
 			[MyAspect]
 			public virtual void AspectMethod()
@@ -110,7 +139,8 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public class MyServiceOff : IMyService
 		{
 			private int _counter;
-			public int Counter => _counter++;
+			public int Counter() => ++_counter;
+
 			[MyAspect]
 			public virtual void AspectMethod()
 			{
@@ -121,7 +151,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		public interface IMyService
 		{
 			string Value { get; }
-			int Counter { get; }
+			int Counter();
 			void AspectMethod();
 		}
 

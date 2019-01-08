@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ScheduleAllRemovedDaysOrRollbackDoNothing>().As<IScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
 			}
 
-			builder.RegisterToggledComponent<OpenHoursSkillExtractor, OpenHoursSkillExtractorDoNothing, IOpenHoursSkillExtractor>(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118);
+			builder.RegisterToggledComponent<OpenHoursSkillExtractor, OpenHoursSkillExtractorDoNothing, IOpenHoursSkillExtractor>(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118).SingleInstance();
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().SingleInstance();
