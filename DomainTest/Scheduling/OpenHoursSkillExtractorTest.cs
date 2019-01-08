@@ -15,10 +15,8 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
-	[UseIocForFatClient]
 	public class OpenHoursSkillExtractorTest
 	{
-		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public OpenHoursSkillExtractor Target;
 
 		[Test]
