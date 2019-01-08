@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Runtime.InteropServices;
+using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;

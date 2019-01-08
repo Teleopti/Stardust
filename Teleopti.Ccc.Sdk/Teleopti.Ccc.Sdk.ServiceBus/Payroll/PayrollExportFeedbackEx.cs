@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Net;
 using System.Net.Http;
 using Teleopti.Ccc.Domain.Coders;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;

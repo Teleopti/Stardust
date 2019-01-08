@@ -509,10 +509,6 @@
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
       <Name>Teleopti.Wfm.Adherence</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Wfm.Azure.Common\Teleopti.Wfm.Azure.Common.csproj">
-      <Project>{84C0328F-2AF7-42B6-8AB4-E9FDA5248374}</Project>
-      <Name>Teleopti.Wfm.Azure.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>

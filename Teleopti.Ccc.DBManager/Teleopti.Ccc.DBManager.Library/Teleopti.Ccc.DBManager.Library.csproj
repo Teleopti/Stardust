@@ -138,10 +138,6 @@
       <Project>{96BAA3E0-A623-412E-BFE7-D3BE03A2288A}</Project>
       <Name>Teleopti.Support.Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Wfm.Azure.Common\Teleopti.Wfm.Azure.Common.csproj">
-      <Project>{84C0328F-2AF7-42B6-8AB4-E9FDA5248374}</Project>
-      <Name>Teleopti.Wfm.Azure.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

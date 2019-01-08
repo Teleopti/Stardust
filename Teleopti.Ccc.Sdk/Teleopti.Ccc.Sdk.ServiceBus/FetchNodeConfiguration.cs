@@ -1,9 +1,10 @@
 using System;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using Stardust.Node;
-using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			Uri managerLocation, Assembly handlerAssembly, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds,
 			bool enableGC)
 		{
-			if (InstallationEnvironment.IsAzure)
+			if (isAzure())
 			{
 				var ipAddress = getIPAddress();
 				if (!string.IsNullOrEmpty(fixedNodeIp))
@@ -70,6 +71,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				sendDetailsToManagerMilliSeconds, enableGC
 			);
 
+		}
+
+		private bool isAzure()
+		{
+			var tennConn = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			return tennConn.DataSource.Contains("database.windows.net");
 		}
 
 		private string getIPAddress()
