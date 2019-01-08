@@ -19,7 +19,7 @@
 			<ManifestFile>$(OutputDirectory)\$(NameOfClickOnceItem).exe.manifest</ManifestFile>
 			<ApplicationName>$(NameOfClickOnceItem).application</ApplicationName>
 			<ApplicationFile>$(OutputDirectory)\$(ApplicationName)</ApplicationFile>
-			<IconFile>Teleopti.Ccc.SmartClientPortal.Shell.ico</IconFile>
+			<IconFile>TeleoptiWFM.ico</IconFile>
 		</PropertyGroup>
 	
 		<Exec Command='"$(MageTool)" -New Application -TrustLevel FullTrust -ToFile "$(ManifestFile)" -Name "$(NameOfClickOnceItem)" -Version $(CCCVersion) -FromDirectory "$(SourceDirectory)" -IconFile "$(IconFile)"'/>

@@ -687,7 +687,7 @@
     <value>..\Resources\ccc_AgentInfo2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Teleopti_WFM_main_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Teleopti-WFM-main-icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\TeleoptiWFM.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_WorkloadGridWeek" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_WorkloadGridWeek.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -831,7 +831,7 @@
     <value>..\Resources\ccc_SkillTime.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TeleoptiWFMLogin" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\TeleoptiWFMLogin.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\TeleoptiWFM.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_LineGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_LineGraph.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
