@@ -54,7 +54,11 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 		[HttpPost, Route("api/SiteBankHolidayCalendars/Update"), UnitOfWork]
 		public virtual bool SetCalendarsToSite([FromBody]SiteBankHolidayCalendarForm input)
 		{
+<<<<<<< HEAD
 			_siteBankHolidayCalendarsProvider.UpdateCalendarsForSites(input.Settings);
+=======
+			_siteBankHolidayCalendarsProvider.SetCalendarsForSites(input.Settings);
+>>>>>>> story #79899 update site bank holiday calendars
 			return true;
 		}
 	}

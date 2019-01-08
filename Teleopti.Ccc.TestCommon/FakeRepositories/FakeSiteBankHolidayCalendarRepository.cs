@@ -12,6 +12,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(ISiteBankHolidayCalendar obj)
 		{
+			addAndUpdate(obj);
+		}
+
+		private void addAndUpdate(ISiteBankHolidayCalendar obj)
+		{
+			var existObj = _siteBankHolidayCalendars.FirstOrDefault(x => x.Id == obj.Id);
+			if (existObj != null)
+			{
+				existObj.Site = obj.Site;
+				existObj.BankHolidayCalendarsForSite = obj.BankHolidayCalendarsForSite;
+				return;
+			}
+
 			_siteBankHolidayCalendars.Add(obj);
 		}
 
