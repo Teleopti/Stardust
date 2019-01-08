@@ -2,20 +2,28 @@
 	'use strict';
 	function emailSettingsController($scope, emailSettingsService) {
 		var vm = this;
-		vm.emailSettings = {};
+		vm.emailSettings = {
+			"host": "",
+			"port": "",
+			"ssl": "",
+			"relay": "",
+			"user": "",
+			"password": ""
+		};
 		getEmailSettings();
-		console.log(vm.emailSettings);
 
 		function getEmailSettings() {
 			return emailSettingsService.get().then(function (data) {
-				console.log(data);
-				vm.emailSettings = data;
+				var config = data.Config;
+				vm.emailSettings.host = config.SmtpHost;
+				vm.emailSettings.port = config.SmtpPort;
+				vm.emailSettings.ssl = config.SmtpUseSsl;
+				vm.emailSettings.relay = config.SmtpUseRelay;
+				vm.emailSettings.user = config.SmtpUser;
+				vm.emailSettings.password = config.SmtpPassword;
+
 				return vm.emailSettings;
 			});
-		}
-
-		function parseEmailSettings(config) {
-			return config;
 		}
 	}
 

@@ -14,7 +14,7 @@
         "data": "<![CDATA[ <clickAPI><sendMsg><user>{0}</user><password>{1}</password><api_id>{2}</api_id><to>{3}</to><from>{4}</from><text>{5}</text><unicode>{6}</unicode></sendMsg></clickAPI>]]>",
         "SmtpHost": "smtp.domain.com",
         "SmtpPort": "25",
-        "SmtpUseSsl": "false",
+        "SmtpUseSsl": "true",
         "SmtpUseRelay": "false",
         "SmtpUser": "user@domain.com",
         "SmtpPassword": "pwd"
