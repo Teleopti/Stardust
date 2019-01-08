@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -59,6 +61,16 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		
 			(LifetimeScope.Resolve<IMyService>().Counter + 1)
 				.Should().Be.EqualTo(LifetimeScope.Resolve<IMyService>().Counter);
+		}
+
+		[TestCase(true)]
+		[TestCase(false)]
+		public void OnlyOneMyServiceShouldBeRegistered(bool toggleValue)
+		{
+			ToggleManager.Set(Toggles.TestToggle, toggleValue);
+
+			LifetimeScope.Resolve<IEnumerable<IMyService>>().Count()
+				.Should().Be.EqualTo(1);
 		}
 
 		[Test]
