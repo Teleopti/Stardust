@@ -45,6 +45,10 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	handleOk(): void {
+		if (!this.isValidReportName(this.newReportName)) {
+			return;
+		}
+
 		if (this.modalType === 'create') {
 			this.createReport();
 		} else if (this.modalType === 'clone') {
@@ -76,7 +80,7 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	createReport(): boolean {
-		if (!this.newReportName || this.newReportName.trim().length === 0) {
+		if (!this.isValidReportName(this.newReportName)) {
 			return false;
 		}
 
@@ -97,7 +101,7 @@ export class WorkspaceComponent implements OnInit {
 	}
 
 	cloneReport(report): boolean {
-		if (!this.newReportName || this.newReportName.trim().length === 0) {
+		if (!this.isValidReportName(this.newReportName)) {
 			return false;
 		}
 
@@ -114,10 +118,14 @@ export class WorkspaceComponent implements OnInit {
 		this.newReportName = undefined;
 	}
 
+	isValidReportName(reportName): boolean {
+		return reportName && reportName.trim().length > 0;
+	}
+
 	public confirmCreateReport() {
 		this.modalType = 'create';
 		this.modalIsVisible = true;
-		this.messageForNewReportName = '';
+		this.messageForNewReportName = 'Please input name for new report:';
 		this.modalTitle = 'Create new report';
 	}
 
