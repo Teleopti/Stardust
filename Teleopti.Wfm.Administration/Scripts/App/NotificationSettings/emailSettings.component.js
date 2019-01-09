@@ -11,15 +11,30 @@
 			"password": ""
 		};
 		vm.error = false;
+		vm.success = false;
 		getEmailSettings();
 
 		function getEmailSettings() {
 			return emailSettingsService.get().then(function (data) {
 				if (data.error) {
 					vm.error = true;
+					vm.message = data.message;
 					//Error when fetching settings, should it be the same error as when the form fails?
 				} else {
 					vm.emailSettings = data;
+				}
+			});
+		}
+
+		vm.postData = function() {
+			return emailSettingsService.post(vm.emailSettings).then(function (data) {
+				if (data.error) {
+					vm.error = true;
+					vm.message = data.message;
+				} else {
+					vm.success = true;
+					vm.error = false;
+					vm.message = data.message;
 				}
 			});
 		}

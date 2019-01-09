@@ -28,10 +28,25 @@
 	<input class="form-control ng-pristine ng-untouched ng-valid ng-empty" type="password" ng-model="$ctrl.emailSettings.password" placeholder="SMTP password" aria-invalid="false">
 </div>
 
+<style>
+	.message {
+		padding: 15px;
+		margin-top: 10px;
+	}
+</style>
+
 <div ng-if="$ctrl.error">
-	Something went wrong
+	<p class="bg-danger message">
+		{{$ctrl.message}}
+	</p>
+</div>
+
+<div ng-if="$ctrl.success">
+	<p class="bg-success message">
+		{{$ctrl.message}}
+	</p>
 </div>
 
 <div class="importCaption">
-	<button class="btn btn-primary btn-default">Save</button>
+	<button class="btn btn-primary btn-default" ng-click="$ctrl.postData()">Save</button>
 </div>
