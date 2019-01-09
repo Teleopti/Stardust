@@ -4,11 +4,13 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.DTOs;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Intraday.Extensions;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
+using StaffingDataSeries = Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels.StaffingDataSeries;
 
 namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 {
@@ -105,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			var opensAtUtc = new DateTime(Math.Min(forecast.Min(x => x.StartTime).Ticks, scheduleStaffingMin.Ticks));
 			var closeAtUtc = new DateTime(Math.Max(forecast.Max(x => x.StartTime).AddMinutes(minutesPerInterval).Ticks, scheduleStaffingMax));
 
-			var timesUtc = this.GenerateTimeSeries(opensAtUtc, closeAtUtc, minutesPerInterval);
+			var timesUtc = generateTimeSeries(opensAtUtc, closeAtUtc, minutesPerInterval);
 
 			var workloadBacklog = _emailBacklogProvider.GetStatisticsBacklogByWorkload(
 				skillDaysBySkills,
@@ -183,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			var dataSeries = new StaffingDataSeries
 			{
 				Date = new DateOnly(startOfDayLocal),
-				Time = this.GenerateTimeSeries(opensAtLocal, closeAtLocal, minutesPerInterval),
+				Time = generateTimeSeries(opensAtLocal, closeAtLocal, minutesPerInterval),
 				ForecastedStaffing = timesUtc
 					.Select(x => forecastedStaffing.Any(f => f.StartTime.Equals(x)) 
 						? forecastedStaffing.Where(f => f.StartTime.Equals(x)).Sum(f => (double?)f.Agents)
@@ -212,7 +214,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 		}
 
-		public DateTime[] GenerateTimeSeries(DateTime start, DateTime stop, int resolution)
+		private DateTime[] generateTimeSeries(DateTime start, DateTime stop, int resolution)
 		{
 			var times = Enumerable
 				.Range(0, (int)Math.Ceiling((decimal)(stop - start).TotalMinutes / resolution))
@@ -221,7 +223,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			return times;
 		}
 
-		public IEnumerable<IntradayForcastedStaffingIntervalDTO> GetForecastedStaffing(
+		public IList<StaffingIntervalModel> GetForecastedStaffing(
 			IList<Guid> skillIdList,
 			DateTime fromTimeUtc,
 			DateTime toTimeUtc,
@@ -233,7 +235,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList.ToArray());
 			if (!skills.Any())
-				return new List<IntradayForcastedStaffingIntervalDTO>();
+				return new List<StaffingIntervalModel>();
 
 			var skillDays =
 				_skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(new DateOnly(fromTimeUtc), new DateOnly(toTimeUtc)), skills, scenario)
@@ -244,18 +246,17 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				.Where(x => x.StaffPeriod.Period.StartDateTime >= fromTimeUtc && x.StaffPeriod.Period.EndDateTime <= toTimeUtc);
 
 			if (!forecast.Any())
-				return new List<IntradayForcastedStaffingIntervalDTO>();
-		
-			return forecast.Select(x =>
-				new IntradayForcastedStaffingIntervalDTO
+				return new List<StaffingIntervalModel>();
+
+			return forecast.Select(x => new StaffingIntervalModel
 				{
+					StartTime = TimeZoneInfo.ConvertTimeFromUtc(x.StaffPeriod.Period.StartDateTime, _timeZone.TimeZone()),
 					SkillId = x.SkillDay.Skill.Id.Value,
-					StartTimeUtc = x.StaffPeriod.Period.StartDateTime,
 					Agents = x.StaffPeriod.FStaff
-				});
+				}).ToList();
 		}
 
-		public IList<IntradayScheduleStaffingIntervalDTO> GetScheduledStaffing(
+		public IList<SkillStaffingIntervalLightModel> GetScheduledStaffing(
 			Guid[] skillIdList, 
 			DateTime fromTimeUtc, 
 			DateTime toTimeUtc, 
@@ -263,11 +264,12 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			bool useShrinkage)
 		{
 			var scheduledStaffing = _staffingService.GetScheduledStaffing(skillIdList, fromTimeUtc, toTimeUtc, resolution, useShrinkage);
-			return scheduledStaffing.Select(x => new IntradayScheduleStaffingIntervalDTO
+
+			return scheduledStaffing.Select(x => new SkillStaffingIntervalLightModel
 				{
-					SkillId = x.Id,
-					StartDateTimeUtc = x.StartDateTime,
-					EndDateTimeUtc = x.EndDateTime,
+					Id = x.Id,
+					StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(x.StartDateTime, _timeZone.TimeZone()),
+					EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(x.EndDateTime, _timeZone.TimeZone()),
 					StaffingLevel = x.StaffingLevel
 				})
 				.ToList();

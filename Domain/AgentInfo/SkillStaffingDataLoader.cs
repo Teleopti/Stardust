@@ -4,8 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.DTOs;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 
@@ -20,16 +18,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly BacklogSkillTypesForecastCalculator _backlogSkillTypesForecastCalculator;
 		private readonly IUserTimeZone _userTimeZone;
 
-		private readonly IntradayStaffingApplicationService _intradayStaffingApplicationService;
-
 		public SkillStaffingDataLoader(
 			IScheduledStaffingProvider scheduledStaffingProvider,
 			IForecastedStaffingProvider forecastedStaffingProvider,
 			ICurrentScenario scenarioRepository, 
 			ISkillDayLoadHelper skillDayLoadHelper, 
 			BacklogSkillTypesForecastCalculator backlogSkillTypesForecastCalculator, 
-			IUserTimeZone userTimeZone,
-			IntradayStaffingApplicationService intradayStaffingApplicationService
+			IUserTimeZone userTimeZone
 			)
 		{
 			_scheduledStaffingProvider = scheduledStaffingProvider;
@@ -38,8 +33,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_backlogSkillTypesForecastCalculator = backlogSkillTypesForecastCalculator;
 			_userTimeZone = userTimeZone;
-
-			_intradayStaffingApplicationService = intradayStaffingApplicationService ?? throw new ArgumentNullException(nameof(intradayStaffingApplicationService));
 		}
 
 		public IList<SkillStaffingData> Load(IList<ISkill> skills, DateOnlyPeriod period, bool useShrinkage,
@@ -167,12 +160,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			return _scheduledStaffingProvider.StaffingPerSkill(skills, resolution, day, useShrinkage);
 		}
-		// The method above should be deleted and replaced by the one below when changes in intraday have been tested properly
-		private IEnumerable<IntradayScheduleStaffingIntervalDTO> getScheduledStaffing(IList<Guid> skillIds, int resolution,bool useShrinkage, DateOnly dayLocal)
-		{
-			var startOfDayLocal = dayLocal.Date;
-			return _intradayStaffingApplicationService.GetScheduledStaffing(skillIds.ToArray(), startOfDayLocal, startOfDayLocal.AddDays(1), TimeSpan.FromMinutes(resolution), useShrinkage);
-		}
+		//// The method above should be deleted and replaced by the one below when changes in intraday have been tested properly
+		//private IEnumerable<IntradayScheduleStaffingIntervalDTO> getScheduledStaffing(IList<Guid> skillIds, int resolution,bool useShrinkage, DateOnly dayLocal)
+		//{
+		//	var startOfDayLocal = dayLocal.Date;
+		//	return _intradayStaffingApplicationService.GetScheduledStaffing(skillIds.ToArray(), startOfDayLocal, startOfDayLocal.AddDays(1), TimeSpan.FromMinutes(resolution), useShrinkage);
+		//}
 
 		private IEnumerable<StaffingIntervalModel> getForecastedStaffing(int resolution, bool useShrinkage,
 			IEnumerable<ISkillDay> skillDays, DateOnly day)
@@ -181,11 +174,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				.GroupBy(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
 			return _forecastedStaffingProvider.StaffingPerSkill(skillDayDict, resolution, day, useShrinkage);
 		}
-		// The method above should be deleted and replaced by the one below when changes in intraday have been tested properly
-		private IEnumerable<IntradayForcastedStaffingIntervalDTO> getForecastedStaffing(IList<Guid> skillIds, int resolution, bool useShrinkage, DateOnly dayLocal)
-		{
-			var startOfDayLocal = dayLocal.Date;
-			return _intradayStaffingApplicationService.GetForecastedStaffing(skillIds, startOfDayLocal, startOfDayLocal.AddDays(1), TimeSpan.FromMinutes(resolution), useShrinkage);
-		}
+		//// The method above should be deleted and replaced by the one below when changes in intraday have been tested properly
+		//private IEnumerable<IntradayForcastedStaffingIntervalDTO> getForecastedStaffing(IList<Guid> skillIds, int resolution, bool useShrinkage, DateOnly dayLocal)
+		//{
+		//	var startOfDayLocal = dayLocal.Date;
+		//	return _intradayStaffingApplicationService.GetForecastedStaffing(skillIds, startOfDayLocal, startOfDayLocal.AddDays(1), TimeSpan.FromMinutes(resolution), useShrinkage);
+		//}
 	}
 }

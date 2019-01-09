@@ -288,8 +288,6 @@
     <Compile Include="InterfaceLegacy\Infrastructure\ISchedulingSourceScope.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ITenantPersonLogonQuerier.cs" />
     <Compile Include="InterfaceLegacy\PlanningPeriodState.cs" />
-    <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
-    <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationService.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayPerformanceApplicationService.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationService.cs" />

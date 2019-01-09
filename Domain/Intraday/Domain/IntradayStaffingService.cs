@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 
 			var allSkillStaffingIntervals = skillStaffingIntervals;
 			var relevantSkillStaffingIntervals = allSkillStaffingIntervals.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.SkillId)).ToList();
-			var splittedIntervals = this.Split(relevantSkillStaffingIntervals, resolution, false);
+			var splittedIntervals = split(relevantSkillStaffingIntervals, resolution, false);
 
 			return splittedIntervals.GroupBy(x => new
 				{
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			return actualStaffingIntervals;
 		}
 
-		public IList<SkillStaffingIntervalLightModel> Split(List<SkillStaffingInterval> staffingList, TimeSpan resolution, bool useShrinkage)
+		private static IList<SkillStaffingIntervalLightModel> split(List<SkillStaffingInterval> staffingList, TimeSpan resolution, bool useShrinkage)
 		{
 			var dividedIntervals = new List<SkillStaffingIntervalLightModel>();
 

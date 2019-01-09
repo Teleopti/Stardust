@@ -44,35 +44,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
-			var forecastedStaffing = _intradayStaffingApplicationService.GetForecastedStaffing(
-				skillIdList, 
-				startOfDayUtc, 
-				startOfDayUtc.AddDays(1).AddHours(1),
-				TimeSpan.FromMinutes(minutesPerInterval), 
-				useShrinkage)
-				.Select(x => new StaffingIntervalModel
-				{
-					StartTime = TimeZoneInfo.ConvertTimeFromUtc(x.StartTimeUtc, _timeZone.TimeZone()),
-					SkillId = x.SkillId,
-					Agents = x.Agents
-				})
-				.ToList();
+			var forecastedStaffing = _intradayStaffingApplicationService.GetForecastedStaffing(skillIdList, startOfDayUtc,
+				startOfDayUtc.AddDays(1).AddHours(1), TimeSpan.FromMinutes(minutesPerInterval), useShrinkage);
 
-			var scheduledStaffingPerSkill = _intradayStaffingApplicationService
-				.GetScheduledStaffing(
-					skillIdList, 
-					startOfDayUtc, 
-					startOfDayUtc.AddDays(1).AddHours(1), 
-					TimeSpan.FromMinutes(minutesPerInterval), 
-					useShrinkage)
-				.Select(x => new SkillStaffingIntervalLightModel
-				{
-					Id = x.SkillId,
-					StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(x.StartDateTimeUtc, _timeZone.TimeZone()),
-					EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(x.EndDateTimeUtc, _timeZone.TimeZone()),
-					StaffingLevel = x.StaffingLevel
-				})
-				.ToList();				
+			var scheduledStaffingPerSkill = _intradayStaffingApplicationService.GetScheduledStaffing(skillIdList, startOfDayUtc,
+				startOfDayUtc.AddDays(1).AddHours(1), TimeSpan.FromMinutes(minutesPerInterval), useShrinkage);				
 
 			var timeSeries = TimeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval, _timeZone.TimeZone()).Where(x => x.Date == startOfDayLocal.Date).ToArray();
 
