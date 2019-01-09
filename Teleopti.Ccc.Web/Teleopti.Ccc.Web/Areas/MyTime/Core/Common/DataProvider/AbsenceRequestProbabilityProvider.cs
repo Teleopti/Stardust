@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -9,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	{
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
+		private readonly IUserTimeZone _timeZone;
 		private readonly INow _now;
 
 		private readonly int noNeedToCalculate = 99;
@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public AbsenceRequestProbabilityProvider(
 			IAllowanceProvider allowanceProvider,
 			IAbsenceTimeProvider absenceTimeProvider,
-			INow now)
+			INow now,
+			IUserTimeZone timeZone)
 		{
 			_allowanceProvider = allowanceProvider;
 			_absenceTimeProvider = absenceTimeProvider;
 			_now = now;
+			_timeZone = timeZone;
 		}
 
 		public List<IAbsenceRequestProbability> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				var probabilityIndex = -1;
 				if (allowanceDay != null && allowanceDay.ValidateBudgetGroup)
 				{
-					if (dateOnly < _now.ServerDate_DontUse())
+					if (dateOnly <TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).ToDateOnly())
 					{
 						probabilityIndex = noNeedToCalculate;
 					}
