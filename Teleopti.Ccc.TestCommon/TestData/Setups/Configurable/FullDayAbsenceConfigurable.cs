@@ -63,12 +63,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var commandConverter = new AbsenceCommandConverter(new ThisCurrentScenario(scenario), new PersonRepository(unitOfWork), new AbsenceRepository(unitOfWork), scheduleRepository, UserTimeZone.Make());
 			var handler = new AddFullDayAbsenceCommandHandler(personAbsenceCreator, commandConverter);
 			handler.Handle(new AddFullDayAbsenceCommand
-				{
-					AbsenceId = absence.Id.Value,
-					StartDate = Date,
-					EndDate = Date,
-					PersonId = person.Id.Value
-				});
+			{
+				AbsenceId = absence.Id.Value,
+				StartDate = Date,
+				EndDate = Date,
+				PersonId = person.Id.Value
+			});
 		}
 	}
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
-		public new IList<string> Create(AbsenceCreatorInfo absenceCreatorInfo, bool isFullDayAbsence)
+		public new IList<string> Create(AbsenceCreatorInfo absenceCreatorInfo, bool isFullDayAbsence, bool muteEvent = false)
 		{
 			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(absenceCreatorInfo.ScheduleRange);
 			createPersonAbsence(absenceCreatorInfo);
