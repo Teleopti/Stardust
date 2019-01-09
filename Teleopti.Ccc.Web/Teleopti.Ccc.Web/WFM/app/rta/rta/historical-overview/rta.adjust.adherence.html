@@ -1,0 +1,76 @@
+<div class="rta-view historical-overview">
+    <div class="view-header with-fab with-desc">
+        <div class="view-title">
+            <div class="pull-left">
+                <h1>
+                    <i class="mdi mdi-alarm"></i> {{'Adherence'|translate}}
+                </h1>
+            </div>
+            <div class="rta-top-buttons-wrapper pull-left">
+				<span>
+					<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'MonitorOrganization'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default"
+                            ng-click="vm.goToAgents()">{{'MonitorAgents'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default non-pointer">{{'HistoricalOverview'|translate}}</button>
+				</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel material-depth-1 card-panel" style="width:406px">
+        <div class="con-row" style="padding-top: 10px">
+            <div class="con-flex">
+                <h3 style="padding-top: 10px; padding-left: 6px">Adjusted Periods</h3>
+            </div>
+            <div class="con-flex">
+                <div class="pull-right" style="padding-bottom: 10px;">
+                    <button class="wfm-btn wfm-btn-primary" ng-click="show = !show">Add Period</button>
+                </div>
+            </div>
+        </div>
+        <div class="con-row" style="padding-top: 10px; border-top: 1px solid lightgrey" ng-if="show">
+            <div class="con-flex"  style="padding: 0 0 10px 6px;">
+                <input type="text" class="pointer" ng-model="vm.selectedDateObj" placeholder="yyyy-mm-dd" style="width: 150px">
+                <button class="wfm-btn wfm-btn-primary" ng-click="show = !show">Adjust to Neutral</button>
+            </div>
+        </div>
+        <table class="wfm-table">
+            <thead>
+            <tr>
+                <th style="width: 155px;">Period</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">2019-01-07</td>
+                <td>
+                   <span class="remove-approved-period">
+						<i class="mdi mdi-delete"></i>
+						<md-tooltip>{{'Remove' | translate}}</md-tooltip>
+                   </span>
+                </td>
+            </tr>   
+            <tr>
+                <td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">2019-01-05</td>
+                <td>
+                   <span class="remove-approved-period">
+						<i class="mdi mdi-delete"></i>
+						<md-tooltip>{{'Remove' | translate}}</md-tooltip>
+                   </span>
+                </td>
+            </tr>       
+            <tr>
+                <td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">2019-01-03</td>
+                <td>
+                   <span class="remove-approved-period">
+						<i class="mdi mdi-delete"></i>
+						<md-tooltip>{{'Remove' | translate}}</md-tooltip>
+                   </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
