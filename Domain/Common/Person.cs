@@ -1,5 +1,4 @@
-﻿using NodaTime;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -8,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public virtual ITeam MyTeam(DateOnly theDate)
 		{
 			var per = Period(theDate);
-			return per == null ? null : per.Team;
+			return per?.Team;
 		}
 
 		public virtual void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
@@ -115,11 +115,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private personAssociationInfo currentAssociationInfo(INow now)
 		{
-			var nowInAgentTimeZone =
-				LocalDateTime.FromDateTime(now.UtcDateTime())
-					.InZoneLeniently(DateTimeZoneProviders.Bcl[PermissionInformation.DefaultTimeZone().Id])
-					.ToDateTimeUnspecified();
-			var period = Period(new DateOnly(nowInAgentTimeZone));
+			var nowInAgentTimeZone = now.CurrentLocalDate(PermissionInformation.DefaultTimeZone());
+			var period = Period(nowInAgentTimeZone);
 			var info = new personAssociationInfo();
 			if (period?.Team != null)
 			{
@@ -762,7 +759,7 @@ namespace Teleopti.Ccc.Domain.Common
 						var schedulePeriod = schedulePeriods.FirstOrDefault(s => s.Period.Contains(m.Day));
 						if (m.PersonPeriod == null) return new PersonWorkDay(m.Day);
 						return new PersonWorkDay(m.Day,
-							new Lazy<TimeSpan>(() => calculateAverageWorkTime(m.PersonPeriod.p, schedulePeriod != null ? schedulePeriod.p : null, m.Day)),
+							new Lazy<TimeSpan>(() => calculateAverageWorkTime(m.PersonPeriod.p, schedulePeriod?.p, m.Day)),
 							m.PersonPeriod.p.PersonContract.Contract.WorkTimeSource,
 							m.PersonPeriod.p.PersonContract.PartTimePercentage.Percentage,
 							isWorkDay(m.PersonPeriod.p.PersonContract.ContractSchedule, m.Day));
