@@ -36,21 +36,14 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 	public class CacheFilterHttpAttribute : System.Web.Http.Filters.ActionFilterAttribute
 	{
-		private readonly bool _isPrivate;
-
-		public CacheFilterHttpAttribute(bool IsPrivate = false)
-		{
-			_isPrivate = IsPrivate;
-		}
-
 		public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
 		{
 			if (actionExecutedContext.Request.Method == System.Net.Http.HttpMethod.Get && actionExecutedContext.Response != null)
 			{
 				actionExecutedContext.Response.Headers.CacheControl = new CacheControlHeaderValue
 				{
-					Public = !_isPrivate,
-					Private = _isPrivate,
+					Public = true,
+					Private = false,
 					MaxAge = TimeSpan.FromMinutes(30)
 				};
 				if (!actionExecutedContext.Response.Headers.Contains("X-Server-Version"))
