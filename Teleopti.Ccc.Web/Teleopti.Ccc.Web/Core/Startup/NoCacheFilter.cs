@@ -36,6 +36,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 	public class CacheFilterHttpAttribute : System.Web.Http.Filters.ActionFilterAttribute
 	{
+		private readonly int _timoutMinutes;
+
+		public CacheFilterHttpAttribute(int timoutMinutes)
+		{
+			_timoutMinutes = timoutMinutes;
+		}
+		
 		public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
 		{
 			if (actionExecutedContext.Request.Method == System.Net.Http.HttpMethod.Get && actionExecutedContext.Response != null)
@@ -44,7 +51,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				{
 					Public = true,
 					Private = false,
-					MaxAge = TimeSpan.FromMinutes(30)
+					MaxAge = TimeSpan.FromMinutes(_timoutMinutes)
 				};
 				if (!actionExecutedContext.Response.Headers.Contains("X-Server-Version"))
 				{

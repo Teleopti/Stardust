@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		/// [web]/ToggleHandler/IsEnabled?toggle=[yourToggle]
 		/// ]]>
 		/// </summary>
-		[HttpGet, Route("ToggleHandler/IsEnabled"), CacheFilterHttp]
+		[HttpGet, Route("ToggleHandler/IsEnabled"), CacheFilterHttp(30)]
 		public IHttpActionResult IsEnabled(Toggles toggle)
 		{
 			return Ok(new ToggleEnabledResult
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Toggle
 		/// [web]/ToggleHandler/AllToggles
 		/// ]]>
 		/// </summary>
-		[HttpGet, Route("ToggleHandler/AllToggles"), CacheFilterHttp]
+		[HttpGet, Route("ToggleHandler/AllToggles"), CacheFilterHttp(30)]
 		public IHttpActionResult AllToggles()
 		{
 			var dic = _togglesActive.AllActiveToggles()
