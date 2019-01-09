@@ -1,21 +1,30 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
-	function emailSettingsController($scope, emailSettingsService) {
+	function emailSettingsController($scope, emailSettingsService, tenantService, $routeParams) {
 		var vm = this;
 		vm.emailSettings = {
-			"host": "",
-			"port": 0,
-			"ssl": false,
-			"relay": false,
-			"user": "",
-			"password": ""
+			host: '',
+			port: 0,
+			ssl: false,
+			relay: false,
+			user: '',
+			password: ''
 		};
+		vm.tenant = $routeParams.tenant;
 		vm.error = false;
 		vm.success = false;
-		getEmailSettings();
+		vm.tenantId = -1;
+		loadTenant();
+
+		function loadTenant() {
+			tenantService.loadTenant(vm.tenant).then(function(data) {
+				vm.tenantId = data.Id;
+				getEmailSettings();
+			});
+		}
 
 		function getEmailSettings() {
-			return emailSettingsService.get(123).then(function (response) {
+			return emailSettingsService.get(vm.tenantId).then(function(response) {
 				if (!response.Success) {
 					vm.error = true;
 					vm.message = response.Message;
@@ -27,7 +36,7 @@
 		}
 
 		vm.postData = function() {
-			return emailSettingsService.post(vm.emailSettings).then(function (data) {
+			return emailSettingsService.post(vm.emailSettings).then(function(data) {
 				if (data.error) {
 					vm.error = true;
 					vm.message = data.message;
@@ -37,10 +46,10 @@
 					vm.message = data.message;
 				}
 			});
-		}
+		};
 	}
 
-	emailSettingsController.$inject = ['$scope', 'emailSettingsService'];
+	emailSettingsController.$inject = ['$scope', 'emailSettingsService', 'tenantService', '$routeParams'];
 
 	angular.module('emailSettingsModule').component('emailSettings', {
 		templateUrl: '/Scripts/App/NotificationSettings/emailSettings.template.html',

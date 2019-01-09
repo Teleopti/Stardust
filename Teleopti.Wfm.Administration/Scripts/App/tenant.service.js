@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
 
 	angular.module('adminApp').factory('tenantService', tenantService);
@@ -15,11 +15,11 @@
 		return tenant;
 
 		function loadTenant(tenant) {
-			return $http.post('./GetOneTenant', '"' + tenant + '"', tokenHeaderService.getHeaders())
-				.then(function (response) {
+			return $http
+				.post('./GetOneTenant', '"' + tenant + '"', tokenHeaderService.getHeaders())
+				.then(function(response) {
 					return response.data;
 				});
-		};
+		}
 	}
 })();
-
