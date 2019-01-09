@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
 		public FakeBankHolidayDateRepository BankHolidayDateRepository;
 		public FakeSiteBankHolidayCalendarRepository SiteBankHolidayCalendarRepository;
+		public FakeSiteRepository SiteRepository;
 
 		private DateOnly _nationalDay = new DateOnly(2018, 10, 1);
 		private DateOnly _springFestival = new DateOnly(2019, 2, 3);
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
 			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
 			isolate.UseTestDouble<FakeSiteBankHolidayCalendarRepository>().For<ISiteBankHolidayCalendarRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 		}
 
 		private BankHolidayCalendar PrepareData()
@@ -157,7 +159,6 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 				} } }
 			};
 
-
 			var result = Target.SaveBankHolidayCalendar(input);
 			result.Years.Count().Should().Be.EqualTo(2);
 			result.Years.First().Dates.First().Id.Should().Be.EqualTo(dateId);
@@ -181,7 +182,6 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 					new BankHolidayDateForm { Id=dateId, IsDeleted=true }
 				} } }
 			};
-
 
 			var result = Target.SaveBankHolidayCalendar(input);
 			result.Years.Count().Should().Be.EqualTo(1);
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			calendar.Name = "SwdenBankHoliday";
 			BankHolidayCalendarRepository.Add(calendar);
 
-			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _nationalDay.AddDays(1), Description = "Swden National Day",Calendar=calendar });
+			BankHolidayDateRepository.Add(new BankHolidayDate { Date = _nationalDay.AddDays(1), Description = "Swden National Day", Calendar = calendar });
 
 			var result = Target.LoadBankHolidayCalendars();
 
@@ -310,6 +310,83 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			var result = Target.GetAllSiteBankHolidayCalendars();
 			result.First().Site.Should().Be.EqualTo(expactedSiteId);
 			result.First().Calendars.First().Name.Should().Be.EqualTo(expactedCalendarName);
+		}
+
+		[Test]
+		public void ShouldAddNewSiteBankHolidayCalendar()
+		{
+			var siteId = Guid.NewGuid();
+			var bankHolidayCalendarId = Guid.NewGuid();
+			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, bankHolidayCalendarId);
+			var input = createSiteBankHolidayCalendarForm(siteId, siteBankHolidayCalendar.BankHolidayCalendarsForSite.First());
+
+			Target.SetCalendarsToSite(input);
+
+			var result = SiteBankHolidayCalendarRepository.LoadAll();
+			result.First().Site.Id.Should().Be.EqualTo(siteId);
+			result.First().BankHolidayCalendarsForSite.First().Id.Should().Be.EqualTo(bankHolidayCalendarId);
+		}
+
+		[Test]
+		public void ShouldUpdateExistingSiteBankHolidayCalender()
+		{
+			var bankHolidayCalendar2Id = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var bankHolidayCalendarId = Guid.NewGuid();
+			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, bankHolidayCalendarId);
+			SiteBankHolidayCalendarRepository.Add(siteBankHolidayCalendar);
+			var bankHolidayCalendar2 = new BankHolidayCalendar { Name = "China2020" };
+			bankHolidayCalendar2.SetId(bankHolidayCalendar2Id);
+			BankHolidayCalendarRepository.Add(bankHolidayCalendar2);
+			var input = createSiteBankHolidayCalendarForm(siteId, bankHolidayCalendar2);
+
+			Target.SetCalendarsToSite(input);
+
+			var result = SiteBankHolidayCalendarRepository.LoadAll();
+			result.First().Site.Id.Should().Be.EqualTo(siteId);
+			result.First().BankHolidayCalendarsForSite.First().Id.Should().Be.EqualTo(bankHolidayCalendar2Id);
+		}
+
+		[Test]
+		public void ShouldRemoveExistingSiteBankHolidayCalender()
+		{
+			var siteId = Guid.NewGuid();
+			var bankHolidayCalendarId = Guid.NewGuid();
+			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, bankHolidayCalendarId);
+			SiteBankHolidayCalendarRepository.Add(siteBankHolidayCalendar);
+			var input = createSiteBankHolidayCalendarForm(siteId, null);
+
+			Target.SetCalendarsToSite(input);
+
+			var result = SiteBankHolidayCalendarRepository.LoadAll();
+			result.Count().Should().Be.EqualTo(0);
+		}
+
+		private ISiteBankHolidayCalendar createSiteAndBankHolidayCalendar(Guid siteId, Guid bankHolidayCalendarId)
+		{
+			var site = SiteFactory.CreateSiteWithId(siteId, "mySite");
+			SiteRepository.Add(site);
+			var bankHolidayCalendar = new BankHolidayCalendar { Name = "China2019" };
+			bankHolidayCalendar.SetId(bankHolidayCalendarId);
+			BankHolidayCalendarRepository.Add(bankHolidayCalendar);
+			return new SiteBankHolidayCalendar { Site = site, BankHolidayCalendarsForSite = new List<IBankHolidayCalendar> { bankHolidayCalendar } };
+		}
+
+		private SiteBankHolidayCalendarForm createSiteBankHolidayCalendarForm(Guid siteId, IBankHolidayCalendar calendar)
+		{
+			var calendars = new List<BankHolidayCalendarInfoViewModel>();
+			if (calendar != null) calendars.Add(new BankHolidayCalendarInfoViewModel { Id = calendar.Id.GetValueOrDefault(), Name = calendar.Name });
+			return new SiteBankHolidayCalendarForm
+			{
+				Settings = new List<SiteBankHolidayCalendarsViewModel>
+				{
+					new SiteBankHolidayCalendarsViewModel
+					{
+						Site = siteId,
+						Calendars = calendars
+					}
+				}
+			};
 		}
 	}
 }

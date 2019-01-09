@@ -63,4 +63,9 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models
 		public Guid Site { get; set; }
 		public IEnumerable<BankHolidayCalendarInfoViewModel> Calendars { get; set; }
 	}
+
+	public class SiteBankHolidayCalendarForm
+	{
+		public IEnumerable<SiteBankHolidayCalendarsViewModel> Settings { get; set; }
+	}
 }

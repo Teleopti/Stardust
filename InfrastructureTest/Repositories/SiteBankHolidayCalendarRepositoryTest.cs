@@ -61,6 +61,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual("ChinaBankHoliday2019", loadedSiteBankHolidayCalendars.BankHolidayCalendarsForSite.First().Name);
 		}
 
+		[Test]
+		public void ShouldUpdateSiteBankHolidayCalendar()
+		{
+			var bankHolidayCalendar2 = new BankHolidayCalendar { Name = "ChinaBankHoliday2020" };
+			PersistAndRemoveFromUnitOfWork(bankHolidayCalendar2);
+			var siteBankHolidayCalendar = new SiteBankHolidayCalendar
+			{
+				Site = _site,
+				BankHolidayCalendarsForSite = new List<IBankHolidayCalendar> { _bankHolidayCalendar, bankHolidayCalendar2 }
+			};
+			PersistAndRemoveFromUnitOfWork(siteBankHolidayCalendar);
+
+			siteBankHolidayCalendar.UpdateBankHolidayCalendarsForSite(new List<IBankHolidayCalendar> { _bankHolidayCalendar });
+			PersistAndRemoveFromUnitOfWork(siteBankHolidayCalendar);
+
+			var repository = new SiteBankHolidayCalendarRepository(CurrUnitOfWork);
+			var loadedSiteBankHolidayCalendars = repository.FindSiteBankHolidayCalendar(_site);
+			Assert.AreEqual("site", loadedSiteBankHolidayCalendars.Site.Description.Name);
+			Assert.AreEqual(1, loadedSiteBankHolidayCalendars.BankHolidayCalendarsForSite.Count);
+			Assert.AreEqual("ChinaBankHoliday2019", loadedSiteBankHolidayCalendars.BankHolidayCalendarsForSite.First().Name);
+		}
+
 		protected override void VerifyAggregateGraphProperties(ISiteBankHolidayCalendar loadedAggregateFromDatabase)
 		{
 			ISiteBankHolidayCalendar org = CreateAggregateWithCorrectBusinessUnit();

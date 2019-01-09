@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 	public interface ISiteBankHolidayCalendarsProvider
 	{
 		IEnumerable<SiteBankHolidayCalendarsViewModel> GetAllSettings();
+		void UpdateCalendarsForSites(IEnumerable<SiteBankHolidayCalendarsViewModel> input);
 	}
 }

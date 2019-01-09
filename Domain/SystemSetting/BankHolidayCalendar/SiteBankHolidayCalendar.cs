@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 			set { _bankHolidayCalendarsForSite = value; }
 		}
 
+		public virtual void UpdateBankHolidayCalendarsForSite(ICollection<IBankHolidayCalendar> updatedData)
+		{
+			_bankHolidayCalendarsForSite = updatedData;
+		}
+
 		public virtual object Clone()
 		{
 			return MemberwiseClone();
