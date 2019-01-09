@@ -1,5 +1,28 @@
+$primary: #0099ff;
+$list-header-text-color: #294766;
+$list-header-text-color-theme-dark: #c9d4d6;
+
 .bank-holiday-calendar-assign-to-sites {
 	min-height: 80px;
 	max-height: calc(100vh - 240px);
 	overflow: auto;
+}
+
+nz-list-item-meta {
+	color: red;
+}
+
+// :host-context(.angular-theme-dark) {
+// 	.ant-list-item-meta-title {
+// 		color: $list-header-text-color-theme-dark;
+// 	}
+// }
+
+nz-list-item {
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+nz-list-item:hover {
+	border-bottom-color: $primary;
 }

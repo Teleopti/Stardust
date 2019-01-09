@@ -130,7 +130,9 @@
 						<span>{{ 'AssignCalendarsToSites' | translate }}</span>
 					</div>
 				</ng-template>
-				<bank-holiday-calendar-assign-to-sites></bank-holiday-calendar-assign-to-sites>
+				<bank-holiday-calendar-assign-to-sites
+					[bankHolidayCalendarsList]="bankHolidayCalendarsList"
+				></bank-holiday-calendar-assign-to-sites>
 			</nz-tab>
 		</nz-tabset>
 	</div>

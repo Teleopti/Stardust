@@ -1,7 +1,33 @@
 <div class="bank-holiday-calendar-assign-to-sites">
-	<nz-list [nzDataSource]="sitesList" [nzRenderItem]="siteItemTemplate" nzBordered>
+	<nz-list>
+		<nz-list-item>
+			<nz-list-item-meta [nzTitle]="'Sites' | translate"></nz-list-item-meta>
+			<nz-list-item-meta [nzTitle]="'Calendars' | translate"></nz-list-item-meta>
+		</nz-list-item>
+	</nz-list>
+
+	<nz-list [nzDataSource]="sitesList" [nzRenderItem]="siteItemTemplate" class="bank-holiday-calendar-sites-list">
 		<ng-template #siteItemTemplate let-site>
-			<nz-list-item><nz-list-item-meta [nzTitle]="site.Name"></nz-list-item-meta></nz-list-item>
+			<nz-list-item>
+				<nz-list-item-meta [nzDescription]="site.Name"></nz-list-item-meta>
+				<nz-list-item-meta [nzDescription]="calendarSelectorTemplate"></nz-list-item-meta>
+				<ng-template #calendarSelectorTemplate>
+					<nz-select
+						style="min-width: 200px;"
+						nzShowSearch
+						nzAllowClear
+						[nzPlaceHolder]="'SelectACalendarForSite' | translate"
+						[(ngModel)]="site.SelectedCalendarId"
+						(ngModelChange)="updateCalendarForSite($event, site)"
+					>
+						<nz-option
+							*ngFor="let cal of bankHolidayCalendarsList"
+							[nzLabel]="cal.Name"
+							[nzValue]="cal.Id"
+						></nz-option>
+					</nz-select>
+				</ng-template>
+			</nz-list-item>
 		</ng-template>
 	</nz-list>
 </div>

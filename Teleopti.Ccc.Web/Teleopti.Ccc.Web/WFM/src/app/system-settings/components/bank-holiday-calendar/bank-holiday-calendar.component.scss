@@ -20,13 +20,6 @@
 }
 .bank-holiday-calendar-date-item-header span {
 	font-weight: bold;
-	color: #294766;
-}
-:host-context(.angular-theme-dark) {
-	.bank-holiday-calendar-date-item-header span {
-		font-weight: bold;
-		color: #c9d4d6;
-	}
 }
 .bank-holiday-calendar-date-item {
 	span.inline-block {
