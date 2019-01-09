@@ -519,6 +519,9 @@
   <data name="ResAgentsColon" xml:space="preserve">
     <value>Müşteri Temsilcisi:</value>
   </data>
+  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
+    <value>Müşteri Temsilcisi - Vardiyaya Uyum</value>
+  </data>
   <data name="ResAgentDate" xml:space="preserve">
     <value>Müşteri Temsilcisi / Tarih</value>
   </data>
@@ -541,7 +544,7 @@
     <value>Taşan İç Çağrılar</value>
   </data>
   <data name="LogInRemember" xml:space="preserve">
-    <value>Gelecek sefer beni hatırla</value>
+    <value>Gelecek sefere hatırla</value>
   </data>
   <data name="LogInTitle" xml:space="preserve">
     <value>Giriş Yap</value>
@@ -953,5 +956,185 @@
   </data>
   <data name="SessionExpiredHeader" xml:space="preserve">
     <value>Oturum sona erdi</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Yerine getirilmiş</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Yerine getirilme (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Olmazsa olmaz</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Yerine getirilememiş</value>
+  </data>
+  <data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>Hazır Zaman Uyumu (%)</value>
+  </data>
+  <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>Hazır Zaman Uyumu Hesaplaması:</value>
+  </data>
+  <data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Hazır Zaman Uyumu / İnterval (%)</value>
+  </data>
+  <data name="ResPlannedOvertimeH" xml:space="preserve">
+    <value>Planlanmış Fazla Mesai (ss:dd)</value>
+  </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>Fazla Mesai</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Çalışan başına vardiya uyumu</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Çalışan başına hazır zaman uyumu</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Günlük vardiya uyumu</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Günlük hazır zaman uyumu</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Aktivite başına vardiyalanan çalışanlar</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Toplam</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Çık</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Tarih (vardiya başlangıcı):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Tarihinden başlayarak (vardiya başlangıcı):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Tarihine kadar (vadiya başlangıcı):</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Mevcut sayfa</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Dışarıya aktar</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Bul</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Bir sonrakini bul</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Raporda metin ara</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>İlk sayfa</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Geçersiz sayfa numarası</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Son sayfa</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Sonraki</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Sonraki sayfa</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Daha fazla eşleşme bulunamadı.</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>ait</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Sayfa ayarları</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Sayfa genişliği</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Önceki sayfa</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Sayfa düzeni</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Yazdır</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Yenile</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Oluşturmayı durdur</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Metin bulunamadı.</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Toplam sayfalar</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Tam sayfa</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Yakınlaş</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Veritabanı erişimi zaman aşımına uğradı. Arama kriterlerinizi sınırlamayı deneyin.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Çalışan başına uygunluk</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Uygun günler</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Uygun saatler</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Vardiyalanmış günler</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Faydalanma</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Sadece aktif yetenekler</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Çalışan yetenekleri</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Sadece aktif yetenekler:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Çalışan başına durumda harcanan zaman</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Durum grupları</value>
+  </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>Detaylandır:</value>
+  </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>İptal edilen</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>Beklemeye alınan</value>
+  </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>Birden fazla aktivite/devamsızlık</value>
+  </data>
+  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
+    <value>Tahmini hizmet seviyesi (daralma dahil) (%)</value>
+  </data>
+  <data name="ResESLPercent" xml:space="preserve">
+    <value>Tahmini hizmet seviyesi (%)</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Uzun süren eylemsizlik sebebiyle oturum zaman aşımına uğradı. Yeniden giriş sayfasına yönlendiriliyorsunuz.</value>
   </data>
 </root>
