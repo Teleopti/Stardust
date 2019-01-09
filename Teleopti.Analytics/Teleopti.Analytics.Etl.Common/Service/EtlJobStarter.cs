@@ -140,7 +140,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				using (new EtlJobLock(_connectionString, jobToRun.Name, true))
 				{
 					log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
-					_toggleFiller.FillAllToggles();
+					_toggleFiller.RefetchToggles();
 
 					var etlTenantName = scheduleJob.TenantName;
 					var etlTenants = Tenants.IsAllTenants(etlTenantName)

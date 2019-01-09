@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 		public void WhenIQueryOutofprocessToggleServiceForByLoadingThemAll(string flag)
 		{
 			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
-			toggleQuerier.FillAllToggles();
+			toggleQuerier.RefetchToggles();
 			reply = toggleQuerier.IsEnabled((Toggles) Enum.Parse(typeof(Toggles), flag));
 		}
 

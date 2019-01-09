@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			return uriBuilder.ExecuteJsonRequest<ToggleEnabledResult>().IsEnabled;
 		}
 
-		public void FillAllToggles()
+		public void RefetchToggles()
 		{
 			var uriBuilder = new UriBuilder(_pathToWebAppOrFile + "ToggleHandler/AllToggles");
 			_loadedToggles = uriBuilder.ExecuteJsonRequest<IDictionary<Toggles, bool>>();

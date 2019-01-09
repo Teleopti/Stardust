@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon
 		public void FillToggles()
 		{
 			var toggleQuerier = _toggleManager as ToggleQuerier;
-			toggleQuerier?.FillAllToggles();
+			toggleQuerier?.RefetchToggles();
 		}
 
 		public virtual bool Toggle(Toggles toggle)

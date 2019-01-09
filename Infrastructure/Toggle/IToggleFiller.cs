@@ -2,6 +2,6 @@
 {
 	public interface IToggleFiller
 	{
-		void FillAllToggles();
+		void RefetchToggles();
 	}
 }
