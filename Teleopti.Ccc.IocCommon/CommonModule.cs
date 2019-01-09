@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerServerModule(_configuration));
 			builder.RegisterModule<SchedulePersistModule>();
 			builder.RegisterModule(new HangfireModule(_configuration));
-			builder.RegisterModule(new ForecastEventModule(_configuration));
+			builder.RegisterModule(new ForecastEventModule());
 			builder.RegisterModule(new IntradayWebModule(_configuration));
 			builder.RegisterModule<StardustModule>();
 			builder.RegisterModule(new RequestModule(_configuration));

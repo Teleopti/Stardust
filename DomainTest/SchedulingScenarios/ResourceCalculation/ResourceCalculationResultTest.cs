@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var date = DateOnly.Today;
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(9, 17);
+			skill.AbandonRate = Percent.Zero;
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 2.4555555);
 			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 			{

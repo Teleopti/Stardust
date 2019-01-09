@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifyEstimatedServiceLevel()
         {
             _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_skill.AbandonRate = Percent.Zero;
             DateOnly startDateLocal;
             IList<ISkillDay> baseData = GetBaseData(_skill, out startDateLocal);
 
