@@ -262,6 +262,8 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			result => {
 				let calItem = result as BankHolidayCalendarItem;
 				let curYear = moment().year();
+
+				calItem.CurrentYearIndex = 0;
 				calItem.Years.forEach((y, i) => {
 					y.Dates.forEach(d => {
 						d.Date = moment(d.Date).format(this.dateFormat);

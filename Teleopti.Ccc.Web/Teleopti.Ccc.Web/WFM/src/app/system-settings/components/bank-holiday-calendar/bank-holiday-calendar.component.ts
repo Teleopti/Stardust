@@ -59,6 +59,10 @@ export class BankHolidayCalendarComponent implements OnInit {
 		});
 	}
 
+	selectedTabChange(event, calendar: BankHolidayCalendarItem) {
+		calendar.CurrentYearIndex = event.index;
+	}
+
 	confirmDeleteHolidayCanlendar(event: Event, calendar: BankHolidayCalendarItem) {
 		event.stopPropagation();
 		this.selectedCalendar = calendar;
