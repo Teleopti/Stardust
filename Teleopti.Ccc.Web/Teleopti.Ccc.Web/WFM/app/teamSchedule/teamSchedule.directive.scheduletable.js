@@ -119,7 +119,7 @@
 				showEditor: true
 			};
 		};
-	
+
 		vm.showEditButton = function (personSchedule) {
 			return toggleSvc.WfmTeamSchedule_ShiftEditorInDayView_78295
 				&& !personSchedule.IsFullDayAbsence
@@ -130,6 +130,9 @@
 
 		vm.clickEditButton = function (personSchedule) {
 			if (vm.scheduleInEditing !== personSchedule) {
+				if (vm.scheduleInEditing) {
+					$scope.$emit('teamSchedule.shiftEditor.close', { isOpeningNew: true });
+				}
 				vm.scheduleInEditing = personSchedule;
 			}
 		}
@@ -175,8 +178,9 @@
 		};
 		vm.init();
 
-		$scope.$on('teamSchedule.shiftEditor.close', function () {
-			vm.scheduleInEditing = null;
+		$scope.$on('teamSchedule.shiftEditor.close', function (e, d) {
+			if (!(d && d.isOpeningNew))
+				vm.scheduleInEditing = null;
 		});
 
 		$scope.$watchCollection(function () {
