@@ -1,5 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { first } from 'rxjs/operators';
+import { MediaQueryService } from 'src/app/browser/services/media-query.service';
 import { Area, AreaService } from '../../shared/area.service';
 import { ToggleMenuService } from '../../shared/toggle-menu.service';
 
@@ -47,7 +50,7 @@ const GROUPS: AreaGroup[] = [
 	templateUrl: './side-menu.component.html',
 	styleUrls: ['./side-menu.component.scss']
 })
-export class SideMenuComponent implements OnInit {
+export class SideMenuComponent implements OnInit, OnDestroy {
 	showMenu: boolean;
 	areas: AreaWithConfig[] = [];
 	groups: AreaGroup[];
@@ -55,7 +58,8 @@ export class SideMenuComponent implements OnInit {
 	constructor(
 		@Inject('$state') private $state: IStateService,
 		private areaService: AreaService,
-		public toggleMenuService: ToggleMenuService
+		public toggleMenuService: ToggleMenuService,
+		private mediaQueryService: MediaQueryService
 	) {
 		this.areaService.getAreas().subscribe(areas => {
 			this.areas = areas;
@@ -67,13 +71,15 @@ export class SideMenuComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.toggleMenuService.showMenu$.subscribe(isVisible => {
+		this.toggleMenuService.showMenu$.pipe(untilDestroyed(this)).subscribe(isVisible => {
 			this.showMenu = isVisible;
 		});
-		window.matchMedia('(max-width: 768px)').addListener(mq => {
-			if (mq.matches) this.toggleMenuService.setMenuVisible(false);
+		this.mediaQueryService.isMobileSize$.pipe(untilDestroyed(this)).subscribe(isMobileView => {
+			if (isMobileView) this.toggleMenuService.setMenuVisible(false);
 		});
 	}
+
+	ngOnDestroy(): void {}
 
 	addAreaInfo(group: AreaGroup) {
 		const mergeAreaConfigs = groupArea => {
@@ -90,14 +96,13 @@ export class SideMenuComponent implements OnInit {
 	}
 
 	go(event: Event, area: AreaWithConfig) {
-		if (!area.inNewTab) {
-			event.preventDefault();
-			if (area.CustomStateName) {
-				this.$state.go(area.CustomStateName, {}, { reload: true });
-			} else {
-				this.$state.go(area.InternalName, {}, { reload: true });
-			}
-		}
+		if (area.inNewTab) return;
+		event.preventDefault();
+		const stateName = area.CustomStateName ? area.CustomStateName : area.InternalName;
+		this.mediaQueryService.isMobileSize$.pipe(first()).subscribe(isMobileView => {
+			if (isMobileView) this.toggleMenuService.setMenuVisible(false);
+			this.$state.go(stateName, {}, { reload: true });
+		});
 	}
 
 	isActive(area: Area) {
