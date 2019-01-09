@@ -551,11 +551,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 		[TestCase(true, ExpectedResult = false)]
 		[TestCase(false, ExpectedResult = true)]
-		[Ignore("80070 to be fixed")]
 		public bool ShouldOnlyScheduleConnectedOvertimeTypes(bool haveSelectedDefinitionSet)
 		{
-			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-			var selectedDefinitionSet = new MultiplicatorDefinitionSet("selectedOvertime", MultiplicatorType.Overtime);
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime).WithId();
+			var selectedDefinitionSet = new MultiplicatorDefinitionSet("selectedOvertime", MultiplicatorType.Overtime).WithId();
 			var activity = new Activity();
 			var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			skill.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
