@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ToggleFillerDoNothing>().As<IToggleFiller>();
 			var pathToToggle = _iocArgs.FeatureToggle;
 			if (_iocArgs.ConfigReader.ConnectionString("Toggle") == null)
 			{
@@ -51,8 +50,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			{
 				builder.Register(c => new ToggleQuerier(pathToToggle))
 					.SingleInstance()
-					.As<IToggleManager>()
-					.As<IToggleFiller>();
+					.As<IToggleManager>();
 			}
 			else
 			{
