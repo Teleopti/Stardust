@@ -60,6 +60,18 @@
 </textarea>
 </div>
 
+<div ng-if="$ctrl.error">
+	<p class="bg-danger message">
+		{{$ctrl.message}}
+	</p>
+</div>
+
+<div ng-if="$ctrl.success">
+	<p class="bg-success message">
+		{{$ctrl.message}}
+	</p>
+</div>
+
 <div class="importCaption">
-	<button class="btn btn-primary btn-default" ng-click="vm.gajdklgjadklgjlk">Save</button>
+	<button class="btn btn-primary btn-default" ng-click="$ctrl.PostSmsSettings()">Save</button>
 </div>
