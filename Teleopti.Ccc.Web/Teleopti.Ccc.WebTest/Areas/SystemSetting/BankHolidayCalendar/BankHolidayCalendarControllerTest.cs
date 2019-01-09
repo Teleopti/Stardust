@@ -374,13 +374,13 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 
 		private SiteBankHolidayCalendarForm createSiteBankHolidayCalendarForm(Guid siteId, IBankHolidayCalendar calendar)
 		{
-			var calendars = new List<BankHolidayCalendarInfoViewModel>();
-			if (calendar != null) calendars.Add(new BankHolidayCalendarInfoViewModel { Id = calendar.Id.GetValueOrDefault(), Name = calendar.Name });
+			var calendars = new List<Guid>();
+			if (calendar != null) calendars.Add( calendar.Id.GetValueOrDefault());
 			return new SiteBankHolidayCalendarForm
 			{
-				Settings = new List<SiteBankHolidayCalendarsViewModel>
+				Settings = new List<SiteBankHolidayCalendarsUpdateForm>
 				{
-					new SiteBankHolidayCalendarsViewModel
+					new SiteBankHolidayCalendarsUpdateForm
 					{
 						Site = siteId,
 						Calendars = calendars

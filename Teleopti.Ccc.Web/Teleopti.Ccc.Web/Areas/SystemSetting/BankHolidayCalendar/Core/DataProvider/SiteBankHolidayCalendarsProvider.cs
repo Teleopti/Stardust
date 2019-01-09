@@ -37,14 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 				});
 		}
 
-		public void UpdateCalendarsForSites(IEnumerable<SiteBankHolidayCalendarsViewModel> input)
+		public void UpdateCalendarsForSites(IEnumerable<SiteBankHolidayCalendarsUpdateForm> input)
 		{
 			var allCurrentSettings = _siteBankHolidayCalendarRepository.FindAllSiteBankHolidayCalendarsSortedBySite().ToList();
 			foreach (var siteBankHolidayCalendarsViewModel in input)
 			{
 				var existingSetting = allCurrentSettings.Find(x => x.Site.Id == siteBankHolidayCalendarsViewModel.Site);
-				var calendarIds = siteBankHolidayCalendarsViewModel.Calendars.Select(calendar => calendar.Id);
-				var calendars = _bankHolidayCalendarRepository.FindBankHolidayCalendars(calendarIds);
+				var calendars = _bankHolidayCalendarRepository.FindBankHolidayCalendars(siteBankHolidayCalendarsViewModel.Calendars);
 
 				if (!calendars.Any())
 				{
