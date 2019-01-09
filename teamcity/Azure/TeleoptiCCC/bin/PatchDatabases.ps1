@@ -350,7 +350,9 @@ Try
 		log-error "User is not Admin!"
 		throw "User is not Admin!"
 	}
-
+	
+	log-info "Test if Env:TeleoptiIsAzure is sat to true: $Env:TeleoptiIsAzure"
+	
     #create event log source
     EventlogSource-Create "$JOB"
 	
