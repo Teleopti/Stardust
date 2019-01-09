@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
@@ -50,18 +52,23 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 					continue;
 				}
 
-				if (existingSetting == null)
+				addOrUpdateCalendars(existingSetting, calendars, siteBankHolidayCalendarsViewModel.Site);
+			}
+		}
+
+		private void addOrUpdateCalendars(ISiteBankHolidayCalendar existingSetting, ICollection<IBankHolidayCalendar> calendars, Guid newSettingSiteId)
+		{
+			if (existingSetting == null)
+			{
+				_siteBankHolidayCalendarRepository.Add(new SiteBankHolidayCalendar
 				{
-					_siteBankHolidayCalendarRepository.Add(new SiteBankHolidayCalendar
-					{
-						Site = _siteRepository.Get(siteBankHolidayCalendarsViewModel.Site),
-						BankHolidayCalendarsForSite = calendars
-					});
-				}
-				else
-				{
-					existingSetting.UpdateBankHolidayCalendarsForSite(calendars);
-				}
+					Site = _siteRepository.Get(newSettingSiteId),
+					BankHolidayCalendarsForSite = calendars
+				});
+			}
+			else
+			{
+				existingSetting.UpdateBankHolidayCalendarsForSite(calendars);
 			}
 		}
 	}

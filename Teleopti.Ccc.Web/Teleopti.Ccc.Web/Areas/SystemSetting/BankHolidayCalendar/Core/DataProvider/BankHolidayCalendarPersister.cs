@@ -1,12 +1,8 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
