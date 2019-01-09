@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
-			result.Should().Be.EqualTo(new DateOnly(now.Date.ToLocalTime()));
+			result.Should().Be.EqualTo(new DateOnly(now.Date));
 		}
 
 		[Test]
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
-			result.Should().Be.EqualTo(new DateOnly(now.Date.ToLocalTime()));
+			result.Should().Be.EqualTo(new DateOnly(now.Date));
 		}
 		
 		[Test]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
-			result.Should().Be.EqualTo(new DateOnly(now.Date.ToLocalTime()));
+			result.Should().Be.EqualTo(new DateOnly(now.Date));
 		}
 		
 		[Test]
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
-			result.Should().Be.EqualTo(new DateOnly(now.Date.ToLocalTime()));
+			result.Should().Be.EqualTo(new DateOnly(now.Date));
 
 		}
 
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
-			result.Should().Be.EqualTo(new DateOnly(now.Date.ToLocalTime()));
+			result.Should().Be.EqualTo(new DateOnly(now.Date));
 		}
 	}
 }
