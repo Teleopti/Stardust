@@ -10896,7 +10896,7 @@ Teleopti R&amp;D</value>
     <value>开始时间应早于结束时间</value>
   </data>
   <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Teleopti产品激活密钥免责条款</value>
+    <value>Teleopti产品激活密钥无效</value>
   </data>
   <data name="TestSendingToColon" xml:space="preserve">
     <value>测试发送到：</value>
