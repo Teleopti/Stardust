@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Staffing;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public IList<StaffingIntervalModel> StaffingPerSkill(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, int minutesPerInterval, DateOnly? dateOnly, bool useShrinkage)
 		{
-			var startTimeLocal = dateOnly?.Date ?? TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
+			var startTimeLocal = dateOnly?.Date ?? _now.CurrentLocalDateTime(_timeZone.TimeZone()).Date;
 			var endTimeLocal = startTimeLocal.AddDays(1);
 
 			var staffingIntervals = new List<StaffingInterval>();

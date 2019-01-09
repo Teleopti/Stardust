@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 using Teleopti.Wfm.Administration.Models;
@@ -96,7 +95,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			}
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-			var localNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone);
+			var localNow = _now.CurrentLocalDateTime(timeZone);
 
 			foreach (var jobPeriod in job.JobPeriods)
 			{

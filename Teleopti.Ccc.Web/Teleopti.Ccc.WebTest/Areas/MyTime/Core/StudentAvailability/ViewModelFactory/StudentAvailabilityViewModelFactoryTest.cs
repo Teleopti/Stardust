@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 				new StudentAvailabilityViewModelFactory(
 					new StudentAvailabilityViewModelMapper(scheduleProvider,
 						new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider),
-						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now)),
+						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
 						loggedOnUser, now),
 					new StudentAvailabilityDayFeedbackViewModelMapper(
 						new StudentAvailabilityFeedbackProvider(
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 				new StudentAvailabilityViewModelFactory(
 					new StudentAvailabilityViewModelMapper(scheduleProvider,
 						studentAvailabilityProvider,
-						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now)),
+						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
 						loggedOnUser, now),
 					new StudentAvailabilityDayFeedbackViewModelMapper(
 						new StudentAvailabilityFeedbackProvider(
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 				new StudentAvailabilityViewModelFactory(
 					new StudentAvailabilityViewModelMapper(scheduleProvider,
 						studentAvailabilityProvider,
-						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now)),
+						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
 						loggedOnUser, now),
 					new StudentAvailabilityDayFeedbackViewModelMapper(
 						new StudentAvailabilityFeedbackProvider(
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 				new StudentAvailabilityViewModelFactory(
 					new StudentAvailabilityViewModelMapper(scheduleProvider,
 						new DefaultScenarioForStudentAvailabilityScheduleProvider(scheduleProvider),
-						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now)),
+						new VirtualSchedulePeriodProvider(loggedOnUser, new DefaultDateCalculator(now, new FakeUserTimeZone())),
 						loggedOnUser, now),
 					new StudentAvailabilityDayFeedbackViewModelMapper(
 						new StudentAvailabilityFeedbackProvider(

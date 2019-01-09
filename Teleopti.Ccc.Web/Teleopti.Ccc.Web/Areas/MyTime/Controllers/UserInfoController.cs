@@ -22,10 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult Culture()
 		{
+			var cultureInfo = _userCulture.GetCulture();
 			return Json(new
 			{
-				WeekStart = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek,
-				DateFormatForMoment = _userCulture.GetCulture().DateTimeFormat.ShortDatePattern.ToUpper(),
+				WeekStart = (int)cultureInfo.DateTimeFormat.FirstDayOfWeek,
+				DateFormatForMoment = cultureInfo.DateTimeFormat.ShortDatePattern.ToUpper(),
 				BaseUtcOffsetInMinutes = _userTimeZone.TimeZone().BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = GetDaylightSavingTimeAdjustment()
 			}, JsonRequestBehavior.AllowGet);

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			personPeriod.SetParent(new Person());
 			var personPeriods = new List<IPersonPeriod> { personPeriod };
 
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			personPeriod.SetParent (new Person());
 			var personPeriods = new List<IPersonPeriod> { personPeriod };
 
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			personPeriod.SetParent (new Person());
 			var personPeriods = new List<IPersonPeriod> { personPeriod };
 
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			personPeriod.SetParent (new Person());
 			var personPeriods = new List<IPersonPeriod> { personPeriod };
 
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			personPeriod.SetParent (new Person());
 			var personPeriods = new List<IPersonPeriod> { personPeriod };
 
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -139,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			var personPeriods = new List<IPersonPeriod> {personPeriod1, personPeriod2};
 
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			var personPeriods = new List<IPersonPeriod> {personPeriod1, personPeriod2};
 
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			personPeriod.SetParent(new Person());
 			var personPeriods = new List<IPersonPeriod> { personPeriod };
 
-			var target = new DefaultDateCalculator(new Now());
+			var target = new DefaultDateCalculator(new Now(), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -212,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				personPeriod
 			};
 
-			var target = new DefaultDateCalculator(new Now());
+			var target = new DefaultDateCalculator(new Now(), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -224,7 +225,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public void ShouldCalculateDefaultDateToTodayWhenNoWorkflowControlSet()
 		{
 			var personPeriods = new List<IPersonPeriod> { PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today) };
-			var target = new DefaultDateCalculator(new Now());
+			var target = new DefaultDateCalculator(new Now(), new FakeUserTimeZone());
 
 			var result = target.Calculate(null, w => w.StudentAvailabilityPeriod, personPeriods);
 
@@ -241,7 +242,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod (DateOnly.Today.AddDays (-20));
 			personPeriod.SetParent(new Person());
 			var personPeriods = new List<IPersonPeriod> { personPeriod };
-			var target = new DefaultDateCalculator(new Now());
+			var target = new DefaultDateCalculator(new Now(), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.StudentAvailabilityPeriod, personPeriods);
 
@@ -256,7 +257,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 											PreferencePeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(7), DateOnly.Today.AddDays(30))
 										};
 
-			var target = new DefaultDateCalculator(new Now());
+			var target = new DefaultDateCalculator(new Now(), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, new List<IPersonPeriod>());
 
@@ -275,7 +276,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var pp = PersonPeriodFactory.CreatePersonPeriod(personPeriodStart);
 			pp.SetParent(new Person());
 			var personPeriods = new List<IPersonPeriod> {pp};
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 
@@ -299,7 +300,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			pp2.SetParent(person);
 			var personPeriods = new List<IPersonPeriod> {pp1,pp2};
 
-			var target = new DefaultDateCalculator(new MutableNow(now.Date));
+			var target = new DefaultDateCalculator(new MutableNow(now.Date), new FakeUserTimeZone());
 
 			var result = target.Calculate(workflowControlSet, w => w.PreferencePeriod, personPeriods);
 

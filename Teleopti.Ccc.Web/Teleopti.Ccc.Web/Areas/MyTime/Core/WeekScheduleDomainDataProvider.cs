@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var viewPossibilityPermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo);
 
-			var isCurrentWeek = period.Contains(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone)));
+			var isCurrentWeek = period.Contains(_now.CurrentLocalDate(timeZone));
 
 			return new WeekScheduleDomainData
 			{
@@ -192,8 +193,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			if (schedulePeriods != null && projection.HasLayers)
 			{
 				var userTimeZone = _userTimeZone.TimeZone();
-				var startTime = schedulePeriods.Value.TimePeriod(userTimeZone).StartTime;
-				var endTime = schedulePeriods.Value.TimePeriod(userTimeZone).EndTime;
+				var timePeriod = schedulePeriods.Value.TimePeriod(userTimeZone);
+				var startTime = timePeriod.StartTime;
+				var endTime = timePeriod.EndTime;
 				var localEndDate = new DateOnly(schedulePeriods.Value.EndDateTimeLocal(userTimeZone).Date);
 				if (endTime.Days > startTime.Days && endTime > TimeSpan.FromDays(1) && period.Contains(localEndDate))
 				{

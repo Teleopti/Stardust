@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
-			var target = new TeamController(viewModelFactory, new Now(), null);
+			var target = new TeamController(viewModelFactory, new Now(), null, new FakeUserTimeZone());
 
 			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(new List<SelectOptionItem>());
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
 			                .Return(teams);
 
-			var target = new TeamController(viewModelFactory, new Now(), null);
+			var target = new TeamController(viewModelFactory, new Now(), null, new FakeUserTimeZone());
 
 			var result = target.TeamsForShiftTrade(DateOnly.Today);
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var teamProvider = new TeamProvider(teamRepository, permissionProvider, searchProvider);
 
 			var viewModelFactory = new TeamViewModelFactory(teamProvider, null, null, null);
-			var target = new TeamController(viewModelFactory, new Now(), null);
+			var target = new TeamController(viewModelFactory, new Now(), null, new FakeUserTimeZone());
 
 
 			var result = target.TeamsForShiftTradeBoard(DateOnly.Today);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnSiteOptionsAsJsonForShiftTradeBoardWithoutBU()
 		{
 			var viewModelFactory = createSiteViewModelFactory("mysite");
-			var target = new TeamController(null, new Now(), viewModelFactory);
+			var target = new TeamController(null, new Now(), viewModelFactory, new FakeUserTimeZone());
 
 			var result = target.SitesForShiftTrade(DateOnly.Today);
 			var data = result.Data as IEnumerable<SelectOptionItem>;
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<ISiteViewModelFactory>();
 			viewModelFactory.Stub(x => x.GetTeams(new List<Guid> { new Guid() }, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).IgnoreArguments().Return(expectedResult);
 
-			var target = new TeamController(null, null, viewModelFactory);
+			var target = new TeamController(null, null, viewModelFactory, new FakeUserTimeZone());
 			var result = target.TeamsUnderSiteForShiftTrade("00000000-0000-0000-0000-000000000000", DateOnly.Today);
 
 			var data = result.Data as IEnumerable<SelectOptionItem>;

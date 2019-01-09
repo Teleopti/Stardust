@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -160,7 +161,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (planningGroup == null)
 				return BadRequest($"Invalid {nameof(planningGroupId)}");
 			var suggestion = getSuggestion(planningGroup);
-			var result = suggestion.SuggestedPeriods(new DateOnly(_now.UtcDateTime()));
+			var result = suggestion.SuggestedPeriods(_now.CurrentLocalDate(_userTimeZone.TimeZone()));
 			return Ok(result.Select(r => new SuggestedPlanningPeriodRangeModel
 			{
 				PeriodType = r.PeriodType.ToString(),
@@ -172,7 +173,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 		private IPlanningPeriodSuggestions getSuggestion(PlanningGroup planningGroup)
 		{
-			var period = new DateOnly(_now.UtcDateTime()).ToDateOnlyPeriod();
+			var period = _now.CurrentLocalDate(_userTimeZone.TimeZone()).ToDateOnlyPeriod();
 			var personIds = _planningGroupStaffLoader.LoadPersonIds(period, planningGroup);
 			var suggestion = _planningPeriodRepository.Suggestions(_now, personIds);
 			return suggestion;

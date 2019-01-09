@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
@@ -150,8 +151,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual bool IsExpired()
 		{
-			return Date <= new DateOnly(TimeZoneHelper.ConvertFromUtc(ServiceLocatorForEntity.Now.UtcDateTime(),
-					   _person.PermissionInformation.DefaultTimeZone()));
+			return Date <= ServiceLocatorForEntity.Now.CurrentLocalDate(_person.PermissionInformation.DefaultTimeZone());
 		}				
 	}
 }
