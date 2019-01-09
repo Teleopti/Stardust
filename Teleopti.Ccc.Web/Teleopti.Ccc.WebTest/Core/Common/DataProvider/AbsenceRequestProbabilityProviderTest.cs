@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public IExtractBudgetGroupPeriods ExtractBudgetGroupPeriods;
 		public MutableNow Now;
 		public FakeScheduleProjectionReadOnlyPersister ScheduleProjectionReadOnlyPersister;
+		public FakeUserTimeZone UserTimeZone;
 		public IAbsenceTimeProviderCache AbsenceTimeProviderCache;
 
 		private IScenario _scenario;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
+			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 			isolate.UseTestDouble<ExtractBudgetGroupPeriods>().For<IExtractBudgetGroupPeriods>();
@@ -242,6 +244,9 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			personPeriod.BudgetGroup = new BudgetGroup();
 			person.AddPersonPeriod(personPeriod);
 			person.WorkflowControlSet = new WorkflowControlSet();
+
+			var userTimeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
+			UserTimeZone.Is(userTimeZone);
 		}
 
 		private void addRollingAbsenceRequestPeriod(MinMax<int> betweenDays, IAbsenceRequestValidator validator)
@@ -277,7 +282,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				ExtractBudgetGroupPeriods, Now);
 			var absenceTimeProvider = new AbsenceTimeProvider(LoggedOnUser, ScenarioRepository, ScheduleProjectionReadOnlyPersister,
 				ExtractBudgetGroupPeriods, AbsenceTimeProviderCache);
-			var provider = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, Now);
+			var provider = new AbsenceRequestProbabilityProvider(allowanceProvider, absenceTimeProvider, Now, UserTimeZone);
 			var absenceRequestProbabilities = provider.GetAbsenceRequestProbabilityForPeriod(period);
 			return absenceRequestProbabilities;
 		}
