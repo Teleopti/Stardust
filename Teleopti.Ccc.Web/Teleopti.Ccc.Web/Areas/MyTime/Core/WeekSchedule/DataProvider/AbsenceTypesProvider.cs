@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 					return new List<IAbsence>();
 				}
 				var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
-				var agentToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
+				var agentToday = _now.CurrentLocalDate(timeZone);
 				return currentUser.WorkflowControlSet.AbsenceRequestOpenPeriods.Where(openPeriod =>
 					openPeriod.Absence.Requestable
 					&& openPeriod.OpenForRequestsPeriod.Contains(agentToday)).Select(a => a.Absence).Distinct().ToList();

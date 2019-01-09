@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private Percent _seasonality;
 		private TimeSpan _balanceIn;
 		private TimeSpan? _periodTime;
-		private readonly SchedulePeriodRangeCalculator _schedulePeriodRangeCalculator = new SchedulePeriodRangeCalculator();
+		private static readonly SchedulePeriodRangeCalculator _schedulePeriodRangeCalculator = new SchedulePeriodRangeCalculator();
 
 		/// <summary>
 		/// Default constructor
@@ -681,7 +681,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	public class SchedulePeriodRangeCalculator
 	{
-		private readonly PeriodIncrementorFactory _periodIncrementorFactory = new PeriodIncrementorFactory();
+		private static readonly PeriodIncrementorFactory _periodIncrementorFactory = new PeriodIncrementorFactory();
 
 		public DateOnlyPeriod PeriodForType(DateOnly requestedDate, SchedulePeriodForRangeCalculation period)
 		{

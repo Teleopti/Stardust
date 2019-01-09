@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -92,18 +93,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private bool isOutOpenPeriod(IPerson personTo, DateOnly date, out Name agentName)
 		{
 			agentName = new Name();
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var myToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
-			var myOpenPeriodStart = myToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
-			var myOpenPeriodEnd = myToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
+			var currentUser = _loggedOnUser.CurrentUser();
+			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
+			var myToday = _now.CurrentLocalDate(timeZone);
+			var myOpenPeriodStart = myToday.AddDays(currentUser.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
+			var myOpenPeriodEnd = myToday.AddDays(currentUser.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
 			if (date < myOpenPeriodStart || date > myOpenPeriodEnd)
 			{
-				agentName = _loggedOnUser.CurrentUser().Name;
+				agentName = currentUser.Name;
 				return true;
 			}
 
 			var personToTimeZone = personTo.PermissionInformation.DefaultTimeZone();
-			var personToToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), personToTimeZone));
+			var personToToday = _now.CurrentLocalDate(personToTimeZone);
 			var personToStart = personToToday.AddDays(personTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
 			var personToEnd = personToToday.AddDays(personTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
 			if (date < personToStart || date > personToEnd)

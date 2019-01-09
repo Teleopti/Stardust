@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				var probabilityIndex = -1;
 				if (allowanceDay != null && allowanceDay.ValidateBudgetGroup)
 				{
-					if (dateOnly <TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).ToDateOnly())
+					if (dateOnly < _now.CurrentLocalDate(_timeZone.TimeZone()))
 					{
 						probabilityIndex = noNeedToCalculate;
 					}

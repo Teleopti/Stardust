@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
@@ -68,8 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone, allowCrossNight);
 			
 			var timezone = _timeZone.TimeZone();
-			var daylightTime = TimeZoneHelper.GetDaylightChanges(
-				timezone, TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone).Year);
+			var daylightTime = TimeZoneHelper.GetDaylightChanges(timezone, _now.CurrentLocalDateTime(timezone).Year);
 			var isOnDSTStartDay = isEnteringDST(localDate, daylightTime, timezone);
 			var localDaylightStartTime = getLocalDaylightStartTime(daylightTime, timezone);
 

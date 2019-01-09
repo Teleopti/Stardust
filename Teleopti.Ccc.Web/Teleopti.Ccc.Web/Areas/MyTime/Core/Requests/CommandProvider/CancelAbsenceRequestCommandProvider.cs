@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -48,8 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.CommandProvider
 				var threshold = workflowControlSet.AbsenceRequestCancellationThreshold ?? 0;
 				var minDate = new DateOnly(personRequest.Request.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).AddDays(-threshold));
 
-				var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
-					personRequest.Person.PermissionInformation.DefaultTimeZone()));
+				var today = _now.CurrentLocalDate(personRequest.Person.PermissionInformation.DefaultTimeZone());
 				if (today > minDate)
 				{
 					command.ErrorMessages.Add(string.Format(Resources.AbsenceRequestCancellationThresholdExceeded, threshold));

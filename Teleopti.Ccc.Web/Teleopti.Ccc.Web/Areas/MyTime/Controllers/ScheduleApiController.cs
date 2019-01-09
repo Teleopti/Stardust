@@ -1,6 +1,7 @@
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory;
@@ -13,7 +14,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.DaySchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
-
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -40,20 +40,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork, Route("api/Schedule/GetIntradayScheduleEdgeTime"), HttpGet]
 		public virtual IntradayScheduleEdgeTime GetIntradayScheduleEdgeTime([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date)
 		{
-			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var showForDate = date ?? new DateOnly(nowForUser.Date);
-
-			var period = _intradayScheduleEdgeTimeCalculator.GetSchedulePeriodForCurrentUser(showForDate);
-
-			return period;
+			var showForDate = date ?? _now.CurrentLocalDate(_timeZone.TimeZone());
+			return _intradayScheduleEdgeTimeCalculator.GetSchedulePeriodForCurrentUser(showForDate);
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchDayData"), HttpGet]
 		public virtual DayScheduleViewModel FetchDayData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
 		{
-			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var showForDate = date ?? new DateOnly(nowForUser.Date);
-			
+			var showForDate = date ?? _now.CurrentLocalDate(_timeZone.TimeZone());
 			return _scheduleDayViewModelFactory.CreateDayViewModel(showForDate, staffingPossiblityType);
 		}
 
@@ -66,27 +60,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork, Route("api/Schedule/FetchWeekData"), HttpGet]
 		public virtual WeekScheduleViewModel FetchWeekData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date, StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None)
 		{
-			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var showForDate = date ?? new DateOnly(nowForUser);
-			
+			var showForDate = date ?? _now.CurrentLocalDate(_timeZone.TimeZone());
 			return _scheduleViewModelFactory.CreateWeekViewModel(showForDate, staffingPossiblityType);
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchMonthData"), HttpGet]
 		public virtual MonthScheduleViewModel FetchMonthData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date)
 		{
-			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var showForDate = date ?? new DateOnly(nowForUser.Date);
+			var showForDate = date ?? _now.CurrentLocalDate(_timeZone.TimeZone());
 			return _scheduleViewModelFactory.CreateMonthViewModel(showForDate);
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchMobileMonthData"), HttpGet]
 		public virtual MonthScheduleViewModel FetchMobileMonthData([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date)
 		{
-			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var showForDate = date ?? new DateOnly(nowForUser.Date);
+			var showForDate = date ?? _now.CurrentLocalDate(_timeZone.TimeZone());
 			return _scheduleViewModelFactory.CreateMobileMonthViewModel(showForDate);
 		}
-
 	}
 }
