@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.IocCommon
 
 		public void AddToggleManagerToBuilder(ContainerBuilder builder)
 		{
-			builder.RegisterInstance(_toggleManager).As<IToggleManager>().SingleInstance();
+			builder.RegisterInstance(_toggleManager).As<IToggleManager>().As<IToggleFiller>().SingleInstance();
 		}
 	}
 }
