@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -22,7 +21,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 {
 	[TestFixture, IoCTest]
-	public class AbsenceRequestProbabilityProviderNoMockTest : IIsolateSystem, ITestInterceptor
+	public class AbsenceRequestProbabilityProviderTest : IIsolateSystem, ITestInterceptor
 	{
 		public IBudgetDayRepository BudgetDayRepository;
 		public ILoggedOnUser LoggedOnUser;
@@ -52,6 +51,23 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public void OnBefore()
 		{
 			Now.Is(_today);
+		}
+
+		[Test]
+		public void ShouldNotCalculateForPastDate()
+		{
+			setupCommonData();
+
+			addAbsenceRequestOpenDatePeriod(new BudgetGroupHeadCountValidator());
+
+			var period = new DateOnlyPeriod(2016, 10, 24, 2016, 10, 29);
+
+			addReadModelActivity(period);
+			addBudgetDays(period, 2);
+
+			var absenceRequestProbabilities = getAbsenceRequestProbabilityForPeriod(period);
+
+			assertAbsenceRequestProbability(absenceRequestProbabilities, new DateOnly(2016, 10, 24), string.Empty, string.Empty);
 		}
 
 		[Test]
@@ -220,7 +236,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			_scenario = ScenarioFactory.CreateScenario("default", true, true).WithId();
 			ScenarioRepository.Add(_scenario);
 
-			var date = new DateOnly(_today);
+			var date = new DateOnly(_today.AddDays(-2));
 			var person = LoggedOnUser.CurrentUser();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(date);
 			personPeriod.BudgetGroup = new BudgetGroup();
@@ -242,6 +258,19 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			});
 		}
 
+		private void addAbsenceRequestOpenDatePeriod(IAbsenceRequestValidator validator)
+		{
+			var workflowControlSet = LoggedOnUser.CurrentUser().WorkflowControlSet;
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = _absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				PersonAccountValidator = new PersonAccountBalanceValidator(),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 1, 1, 2016, 12, 31),
+				Period = new DateOnlyPeriod(2016, 1, 1, 2016, 12, 31),
+				StaffingThresholdValidator = validator
+			});
+		}
 		private List<IAbsenceRequestProbability> getAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
 			var allowanceProvider = new AllowanceProvider(BudgetDayRepository, LoggedOnUser, ScenarioRepository,
