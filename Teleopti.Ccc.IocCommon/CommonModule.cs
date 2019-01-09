@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.IocCommon
 		public CommonModule(IocConfiguration configuration)
 		{
 			_configuration = configuration;
-			_configuration.FillToggles();
 		}
 
 		protected override void Load(ContainerBuilder builder)

@@ -20,12 +20,6 @@ namespace Teleopti.Ccc.IocCommon
 			//just to support some old mock tests...
 		}
 
-		public void FillToggles()
-		{
-			var toggleQuerier = _toggleManager as ToggleQuerier;
-			toggleQuerier?.RefetchToggles();
-		}
-
 		public virtual bool Toggle(Toggles toggle)
 		{
 			return _toggleManager != null && _toggleManager.IsEnabled(toggle);
