@@ -5258,7 +5258,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void setupAvailTimeZones()
 		{
-			TimeZoneGuard.Instance.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			TimeZoneGuard.Instance.Set(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			wpfShiftEditor1.SetTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
 
@@ -5967,7 +5967,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void changeTimeZone(TimeZoneInfo timeZone)
 		{
-			TimeZoneGuard.Instance.TimeZone = timeZone;
+			TimeZoneGuard.Instance.Set(timeZone);
 			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
 			var selectedSchedules = _scheduleView.SelectedSchedules();

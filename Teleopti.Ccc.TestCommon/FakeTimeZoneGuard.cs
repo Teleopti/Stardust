@@ -20,7 +20,12 @@ namespace Teleopti.Ccc.TestCommon
 			return TimeZone;
 		}
 
-		public TimeZoneInfo TimeZone { get; set; }
+		public TimeZoneInfo TimeZone { get; private set; }
+
+		public void Set(TimeZoneInfo timeZone)
+		{
+			TimeZone = timeZone;
+		}
 
 		public void SetTimeZone(TimeZoneInfo timeZoneInfo)
 		{

@@ -12,11 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_userTimeZone = userTimeZone;
 		}
 
-		public TimeZoneInfo TimeZone 
+		public TimeZoneInfo TimeZone => _userTimeZone.TimeZone();
+
+		public void Set(TimeZoneInfo timeZone)
 		{
-			get => _userTimeZone.TimeZone();
-			set { }
 		}
+
 		public TimeZoneInfo CurrentTimeZone()
 		{
 			return TimeZone;

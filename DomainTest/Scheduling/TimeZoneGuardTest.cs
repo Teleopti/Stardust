@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuard.Instance.TimeZone = null;
+			TimeZoneGuard.Instance.Set(null);
 		}
 
 		[Test]
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldSetTimeZone()
 		{
 			var timeZone = TimeZoneInfo.Utc;
-			_target.TimeZone = timeZone;
+			_target.Set(timeZone);
 
 			Assert.That(_target.TimeZone, Is.EqualTo(timeZone));
 		}
