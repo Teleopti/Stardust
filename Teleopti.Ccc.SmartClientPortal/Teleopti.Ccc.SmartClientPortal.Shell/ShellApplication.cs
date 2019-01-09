@@ -5,14 +5,12 @@ using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Security.Principal;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
 using EO.WebBrowser;
-using EO.WebEngine;
 using log4net;
 using log4net.Config;
 using Microsoft.Practices.CompositeUI;
@@ -29,11 +27,9 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
 using Teleopti.Ccc.SmartClientPortal.Shell.ConfigurationSections;
@@ -52,8 +48,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
-using Teleopti.Ccc.UserTexts;
-
 using Application = System.Windows.Forms.Application;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
@@ -110,7 +104,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			ContainerForLegacy.Container = configureContainer();
 
 			SetReleaseMode();
-			 populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(ContainerForLegacy.Container);
 			 var applicationStarter = ContainerForLegacy.Container.Resolve<ApplicationStartup>();
 			 if (applicationStarter.LogOn())
 			 {
@@ -130,44 +123,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var teleoptiPrincipal = new TeleoptiPrincipal(new GenericIdentity(""), null);
 			AppDomain.CurrentDomain.SetThreadPrincipal(teleoptiPrincipal);
 			Thread.CurrentPrincipal = teleoptiPrincipal;
-		}
-
-		private static void populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(IContainer container)
-		{
-			try
-			{
-				var toggleFiller = container.ResolveOptional<IToggleFiller>();
-				toggleFiller?.FillAllToggles();
-			}
-			catch (Exception ex)
-			{
-				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, toggleExceptionMessageBuilder()))
-				{
-					view.ShowDialog();
-				}
-
-				//if exception -> replace with a toggle manager returning false for everything
-				var updater = new ContainerBuilder();
-				updater.RegisterType<FalseToggleManager>().SingleInstance().As<IToggleManager>();
-#pragma warning disable CS0618 // Type or member is obsolete
-				updater.Update(container);
-#pragma warning restore CS0618 // Type or member is obsolete
-			}
-		}
-
-		private static string toggleExceptionMessageBuilder()
-		{
-			var ret = new StringBuilder();
-			ret.AppendLine(Resources.WebServerDown);
-
-			foreach (var toggle in Enum.GetValues(typeof(Toggles)))
-			{
-				var x = (Toggles) toggle;
-				if (x != Toggles.TestToggle)
-					ret.AppendLine(x.ToString());
-			}
-
-			return ret.ToString();
 		}
 
 		public SmartClientShellApplication(IComponentContext container)
