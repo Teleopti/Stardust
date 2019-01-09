@@ -3,9 +3,9 @@
 
 	angular
 		.module('adminApp').controller('detailsController',
-			['$http', '$routeParams', 'tokenHeaderService', '$mdDialog', detailsController]);
+		['$http', '$routeParams', 'tokenHeaderService', '$mdDialog', 'tenantService', detailsController]);
 
-	function detailsController($http, $routeParams, tokenHeaderService, $mdDialog) {
+	function detailsController($http, $routeParams, tokenHeaderService, $mdDialog, tenantService) {
 		var vm = this;
 
 		vm.Tenant = $routeParams.tenant;
@@ -59,23 +59,23 @@
 		};
 
 		vm.LoadTenant = function () {
-			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.then(function (response) {
-					vm.TenantMessage = response.data.Message;
-					vm.TenantId = response.data.Id,
-						vm.TenantOk = response.data.Success;
-					vm.Server = response.data.Server;
-					vm.UseIntegratedSecurity = response.data.UseIntegratedSecurity;
-					vm.AnalyticsDatabase = response.data.AnalyticsDatabase;
-					vm.AppDatabase = response.data.AppDatabase;
-					vm.AggregationDatabase = response.data.AggregationDatabase;
-					vm.Version = response.data.Version;
-					vm.CommandTimeout = response.data.CommandTimeout;
-					vm.Active = response.data.Active;
-					vm.MobileQRCodeUrl = response.data.MobileQRCodeUrl;
-					vm.MaximumSessionTime = response.data.MaximumSessionTime === 0
+			tenantService.loadTenant(vm.tenant)
+				.then(function (data) {
+					vm.TenantMessage = data.Message;
+					vm.TenantId = data.Id,
+						vm.TenantOk = data.Success;
+					vm.Server = data.Server;
+					vm.UseIntegratedSecurity = data.UseIntegratedSecurity;
+					vm.AnalyticsDatabase = data.AnalyticsDatabase;
+					vm.AppDatabase = data.AppDatabase;
+					vm.AggregationDatabase = data.AggregationDatabase;
+					vm.Version = data.Version;
+					vm.CommandTimeout = data.CommandTimeout;
+					vm.Active = data.Active;
+					vm.MobileQRCodeUrl = data.MobileQRCodeUrl;
+					vm.MaximumSessionTime = data.MaximumSessionTime === 0
 						? undefined
-						: response.data.MaximumSessionTime;
+						: data.MaximumSessionTime;
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();
 					vm.CheckDelete();

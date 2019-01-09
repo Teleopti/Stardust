@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -341,6 +342,41 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			return Json(new TenantResultModel { Message = $"Created new Business Unit wih name: {model.BuName}", Success = true });
 		}
+
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("AddEmailSettingsToTenant")]
+		public virtual JsonResult<TenantResultModel> AddEmailSettingsToTenant(AddBuToTenantModel model)
+		{
+			return Json(new TenantResultModel
+				{ Message = $"Created new Business Unit wih name: {model.BuName}", Success = true }
+			);
+		}
+
+		[HttpGet]
+		[TenantUnitOfWork]
+		[Route("GetEmailSettingsToTenant/tenant/{id}")]
+		public virtual JsonResult<EmailSettingsResultModel> GetEmailSettingsToTenant(int id)
+		{
+			var emailSettings = new EmailSettingsResultModel
+			{
+				Message = "Fyfan vad najs!",
+				Success = true,
+				Data = new EmailSettings
+				{
+					Host = "smtp.domain.com",
+					Password = "thisisapassword",
+					Port = 25,
+					Relay = true,
+					Ssl = false,
+					User = "user"
+				}
+			};
+			
+			return Json(emailSettings);
+		}
+
 		private TenantResultModel checkFirstUserInternal(string name, string password)
 		{
 
@@ -429,6 +465,25 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public string Message { get; set; }
 		public bool Success { get; set; }
 		public int TenantId { get; set; }
+	}
+
+	public class EmailSettingsResultModel : TenantResultModel
+	{
+		public EmailSettings Data { get; set; }
+	}
+
+	public class EmailSettings
+	{
+		public string Host { get; set; }
+		public int Port { get; set; }
+
+		public bool Ssl { get; set; }
+
+		public bool Relay { get; set; }
+
+		public string User { get; set; }
+
+		public string Password { get; set; }
 	}
 
 	public class AddSuperUserToTenantModel

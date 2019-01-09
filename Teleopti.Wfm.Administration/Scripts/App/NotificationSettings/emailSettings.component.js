@@ -15,13 +15,13 @@
 		getEmailSettings();
 
 		function getEmailSettings() {
-			return emailSettingsService.get().then(function (data) {
-				if (data.error) {
+			return emailSettingsService.get(123).then(function (response) {
+				if (!response.Success) {
 					vm.error = true;
-					vm.message = data.message;
+					vm.message = response.Message;
 					//Error when fetching settings, should it be the same error as when the form fails?
 				} else {
-					vm.emailSettings = data;
+					vm.emailSettings = response.Data;
 				}
 			});
 		}

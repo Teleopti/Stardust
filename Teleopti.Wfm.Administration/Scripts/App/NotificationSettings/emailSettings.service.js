@@ -3,9 +3,9 @@
 
     angular.module('emailSettingsModule').factory('emailSettingsService', emailSettingsService);
 
-    emailSettingsService.$inject = ['$http'];
+	emailSettingsService.$inject = ['$http', 'tokenHeaderService'];
 
-    function emailSettingsService($http) {
+	function emailSettingsService($http, tokenHeaderService) {
         var vm = this;
 
         var emailSettings = {
@@ -15,8 +15,16 @@
 
         return emailSettings;
 
-        function get() {
-            return $http.get('/smtpnotificationSettings.json').then(getEmailSettings).catch(getEmailSettingsFailed);
+		function get(tenantId) {
+			var headersObj = tokenHeaderService.getHeaders();
+
+			return $http(
+					{
+						url: '/GetEmailSettingsToTenant/tenant/' + tenantId,
+						method: 'GET',
+						headers: headersObj.headers
+					})
+				.then(getEmailSettings).catch(getEmailSettingsFailed);
 
             function getEmailSettings(response) {
                 return response.data;
