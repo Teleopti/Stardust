@@ -14,6 +14,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Service
@@ -23,6 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlJobStarter));
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly PmInfoProvider _pmInfoProvider;
+		private readonly IToggleFiller _toggleFiller;
 
 		private readonly string _connectionString;
 		private readonly JobExtractor _jobExtractor;
@@ -37,13 +39,15 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			JobExtractor jobExtractor,
 			ITenants tenants,
 			IBaseConfigurationRepository baseConfigurationRepository,
-			PmInfoProvider pmInfoProvider)
+			PmInfoProvider pmInfoProvider,
+			IToggleFiller toggleFiller)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
 			_tenants = tenants;
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_pmInfoProvider = pmInfoProvider;
+			_toggleFiller = toggleFiller;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 		}
 
@@ -136,6 +140,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				using (new EtlJobLock(_connectionString, jobToRun.Name, true))
 				{
 					log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
+					_toggleFiller.FillAllToggles();
 
 					var etlTenantName = scheduleJob.TenantName;
 					var etlTenants = Tenants.IsAllTenants(etlTenantName)
