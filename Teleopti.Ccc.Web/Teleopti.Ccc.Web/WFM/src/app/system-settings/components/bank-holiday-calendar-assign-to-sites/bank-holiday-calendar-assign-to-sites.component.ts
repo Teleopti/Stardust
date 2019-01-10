@@ -17,7 +17,6 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 	@Input() bankHolidayCalendarsList: BankHolidayCalendarItem[];
 
 	sitesList: GroupPageSiteItem[];
-	selectedBankHolidayCalendarId: string;
 
 	constructor(
 		private translate: TranslateService,
@@ -31,7 +30,14 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 			this.sitesList = result.BusinessHierarchy as GroupPageSiteItem[];
 
 			this.bankCalendarDataService.getSiteBankHolidayCalendars().subscribe(siteCalendars => {
-				console.log(siteCalendars);
+				if (siteCalendars && siteCalendars.length > 0) {
+					this.sitesList.forEach(s => {
+						let site = siteCalendars.filter(sc => sc.Site == s.Id)[0];
+						if (site) {
+							s.SelectedCalendarId = site.Calendars[0].Id;
+						}
+					});
+				}
 			});
 		});
 	}
@@ -43,8 +49,12 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 		this.bankCalendarDataService.updateCalendarForSite(data).subscribe(
 			result => {
 				if (result) {
-					console.log('saved');
 				} else {
+					this.sitesList.forEach(s => {
+						if (s.Id == site.Id) {
+							s.SelectedCalendarId = '';
+						}
+					});
 					this.updateError();
 				}
 			},

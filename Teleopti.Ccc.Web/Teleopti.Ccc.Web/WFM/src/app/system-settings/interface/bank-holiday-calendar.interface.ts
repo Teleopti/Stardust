@@ -34,9 +34,18 @@ export interface BankHolidayCalendarDateItem extends BankHolidayCalendarDate {
 
 export interface SiteBankHolidayCalendars {
 	Site: string;
+	Calendars: SiteBankHolidayCalendar[];
+}
+
+export interface SiteBankHolidayCalendar {
+	Id: string;
+}
+
+export interface SiteBankHolidayCalendarsFormData {
+	Site: string;
 	Calendars: string[];
 }
 
 export interface UpdateSiteBankHolidayCalendarsFormData {
-	Settings: SiteBankHolidayCalendars[];
+	Settings: SiteBankHolidayCalendarsFormData[];
 }
