@@ -368,12 +368,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Success = true,
 				Data = new EmailSettings
 				{
-					Host = "smtp.domain.com",
-					Password = "thisisapassword",
-					Port = 25,
-					Relay = true,
+					Host = "",
+					Password = "",
+					Port = 0,
+					Relay = false,
 					Ssl = false,
-					User = "user"
+					User = ""
 				}
 			};
 			
@@ -403,17 +403,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Success = true,
 				Data = new SmsSettings()
 				{
-					ApiId = "3388822",
-					Assembly = "Teleopti.Ccc.Domain",
-					Class = "Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender",
-					ErrorCode = "fault",
-					FindSuccessOrError = "Error",
-					From = "SmsSenderName",
-					Password = "pwd",
-					SkipSearch = true,
-					SuccessCode = "success",
-					Url = "http://api.clickatell.com/xml/xml?data=",
-					Data = "<![CDATA[ <clickAPI><sendMsg><user>{0}</user><password>{1}</password><api_id>{2}</api_id><to>{3}</to><from>{4}</from><text>{5}</text><unicode>{6}</unicode></sendMsg></clickAPI>]]>"
+					ApiId = "",
+					Assembly = "",
+					Class = "",
+					ErrorCode = "",
+					FindSuccessOrError = "",
+					From = "",
+					Password = "",
+					SkipSearch = false,
+					SuccessCode = "",
+					Url = "",
+					Data = ""
 				}
 			};
 
