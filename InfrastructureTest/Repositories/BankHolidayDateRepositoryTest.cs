@@ -36,5 +36,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new BankHolidayDateRepository(currentUnitOfWork);
 		}
+		
+		[Test]
+		public void ShouldFindOnlyOneBankHolidayDateByDateAndCalendarEventItIsDeleted()
+		{
+			var bankHolidayDate = CreateAggregateWithCorrectBusinessUnit();
+			bankHolidayDate.SetDeleted();
+			PersistAndRemoveFromUnitOfWork(bankHolidayDate);
+
+			var repository = new BankHolidayDateRepository(CurrUnitOfWork);
+			var result=repository.Find(bankHolidayDate.Date, calendar);
+
+			result.Should().Not.Be.EqualTo(null);
+			result.IsDeleted.Should().Be.EqualTo(true);
+			result.Description.Should().Be.EqualTo("Test");
+		}
 	}
 }

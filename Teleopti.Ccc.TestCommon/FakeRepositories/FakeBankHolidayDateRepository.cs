@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 
@@ -17,6 +18,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_bankHolidayDates.Add(obj);
 		}
 
+		public IBankHolidayDate Find(DateOnly date, IBankHolidayCalendar calendar)
+		{
+			return _bankHolidayDates.FirstOrDefault(s => s.Date == date && s.Calendar.Id.Value == calendar.Id.Value);
+		}
+
 		public IBankHolidayDate Get(Guid id)
 		{
 			return _bankHolidayDates.FirstOrDefault(s => s.Id == id);
@@ -29,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IBankHolidayDate> LoadAll()
 		{
-			return _bankHolidayDates.Where(d=>!d.IsDeleted);
+			return _bankHolidayDates.Where(d => !d.IsDeleted);
 		}
 
 		public void Remove(IBankHolidayDate root)

@@ -388,5 +388,27 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 				}
 			};
 		}
+
+		[Test]
+		public void ShouldCanAddSameDateAfterTheDateIsDeletedForCalendar()
+		{
+			var calendar=PrepareData();
+			var date=BankHolidayDateRepository.LoadAll().FirstOrDefault(d=>d.Date==_nationalDay&&d.Calendar.Id.Value== calendar.Id.Value);
+			date.SetDeleted();
+
+			var input = new BankHolidayCalendarForm
+			{
+				Id = calendar.Id.Value,
+				Years = new List<BankHolidayYearForm>{
+					new BankHolidayYearForm {
+				Dates = new List<BankHolidayDateForm> {
+					new BankHolidayDateForm {Date=_nationalDay,  Description="Test" }
+				} } }
+			};
+			
+			var result = Target.SaveBankHolidayCalendar(input);
+			result.Years.First().Dates.First().IsDeleted.Should().Be.EqualTo(false);
+			result.Years.First().Dates.First().Date.Should().Be.EqualTo(_nationalDay);
+		}
 	}
 }
