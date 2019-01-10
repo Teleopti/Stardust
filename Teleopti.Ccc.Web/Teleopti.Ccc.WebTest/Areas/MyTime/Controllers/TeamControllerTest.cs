@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -29,13 +30,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
-			var target = new TeamController(viewModelFactory, new Now(), null, new FakeUserTimeZone());
+			var target = new TeamController(viewModelFactory, new MutableNow(new DateTime(2019,1,1,10,0,0, DateTimeKind.Utc)), null, new FakeUserTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo()));
 
-			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(new List<SelectOptionItem>());
+			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(new DateOnly(2019, 1, 1), DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(new List<SelectOptionItem>());
 
 			target.TeamsForShiftTrade(null);
 
-			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
+			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(new DateOnly(2019,1,1), DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 		}
 
 		[Test]
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnTeamOptionsAsJsonForShiftTradeBoard()
 		{
 			var teamRepository = new FakeTeamRepository();
-			var site = new Domain.Common.Site("mysite");
+			var site = new Site("mysite");
 			var team = new Team {Site = site }.WithDescription(new Description("myteam")).WithId();
 			teamRepository.Add(team);
 
