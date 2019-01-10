@@ -38,7 +38,15 @@ namespace Teleopti.Ccc.IocCommon
 			}
 			else
 			{
-				builder.RegisterInstance(_toggleManager).As<IToggleManager>().SingleInstance();				
+				builder.RegisterInstance(_toggleManager).As<IToggleManager>().SingleInstance();
+				builder.RegisterType<noToggleFiller>().As<IToggleFiller>().SingleInstance();
+			}
+		}
+		
+		private class noToggleFiller : IToggleFiller
+		{
+			public void RefetchToggles()
+			{
 			}
 		}
 	}
