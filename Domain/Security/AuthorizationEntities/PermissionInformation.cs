@@ -62,23 +62,14 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			set { _belongsTo = value; }
 		}
 
-		public bool RightToLeftDisplay
-		{
-			get
-			{
-				return (UICulture().TextInfo.IsRightToLeft);
-			}
-		}
+		public bool RightToLeftDisplay => UICulture().TextInfo.IsRightToLeft;
 
 		public bool HasAccessToAllBusinessUnits()
 		{
 			foreach (IApplicationRole role in personInApplicationRole)
 			{
-				if (role.AvailableData != null)
-				{
-					if (role.AvailableData.AvailableDataRange == AvailableDataRangeOption.Everyone)
-						return true;
-				}
+				if (role.AvailableData?.AvailableDataRange == AvailableDataRangeOption.Everyone)
+					return true;
 			}
 			return false;
 		}
