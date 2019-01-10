@@ -63,6 +63,10 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			}
 			else
 			{
+				var existingNotUpdated = existingSetting.BankHolidayCalendarsForSite.Except(calendars);
+				var updatedNotExisting = calendars.Except(existingSetting.BankHolidayCalendarsForSite);
+				if(!existingNotUpdated.Any() && !updatedNotExisting.Any()) return;
+				
 				existingSetting.UpdateBankHolidayCalendarsForSite(calendars);
 			}
 		}
