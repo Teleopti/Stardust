@@ -3231,10 +3231,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var staffingCalculatorServiceFacade = _container.Resolve<IStaffingCalculatorServiceFacade>();
 			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
 			stateHolder.SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
-			foreach (ISkill skill in skills)
-			{
-				skill.SkillType.StaffingCalculatorService = staffingCalculatorServiceFacade;
-			}
 		}
 
 		private void loadSettings(IUnitOfWork uow, SchedulingScreenState stateHolder)

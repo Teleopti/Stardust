@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			var resultSkillDays = result[multisiteSkill];
 
 			Assert.AreEqual(1, resultSkillDays.Count());
-			Assert.AreEqual(resultSkillDays.ElementAt(0).Skill.SkillType.StaffingCalculatorService, StaffingCalculatorServiceFacade);
+			Assert.AreEqual(resultSkillDays.ElementAt(0).Skill.SkillType.StaffingCalculatorService.GetType(), StaffingCalculatorServiceFacade.GetType());
 		}
 
 		[Test]

@@ -1155,8 +1155,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				var repsoitory = new SkillTypeRepository(uow);
 				skillType = repsoitory.Get(skillTypeModel.Id);
 			}
-
-			skillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 			return skillType;
 		}
 

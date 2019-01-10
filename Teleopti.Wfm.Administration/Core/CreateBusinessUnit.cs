@@ -166,7 +166,6 @@ namespace Teleopti.Wfm.Administration.Core
 			if (ForecastSource.InboundTelephony == forecastSource)
 			{
 				skillType = new SkillTypePhone(description, forecastSource);
-				skillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 			}
 			
 			return skillType;
