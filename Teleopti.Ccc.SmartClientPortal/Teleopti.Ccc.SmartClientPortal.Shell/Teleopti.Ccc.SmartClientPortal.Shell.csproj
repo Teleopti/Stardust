@@ -4999,7 +4999,6 @@
     <Content Include="Win\_README.txt" />
     <Resource Include="Win\WpfControls\Resources\Filter2HS.png" />
     <Resource Include="Win\WpfControls\Resources\ccc_Agent_ListRequests_32x32.png" />
-    <None Include="Resources\TeleoptiWFM.ico" />
     <None Include="Resources\NotifyOK.ico" />
     <None Include="Resources\NotifyWarning.ico" />
     <EmbeddedResource Include="EmptyStatic.html" />
@@ -5040,6 +5039,10 @@
     <None Include="Resources\Shifts_small.png" />
     <None Include="Resources\Teleopti-WFM-main_small.png" />
     <None Include="Win\Forecasting\Forms\Forecaster.cd" />
+		<ContentWithTargetPath Include="Resources\TeleoptiWFM.ico">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<TargetPath>TeleoptiWFM.ico</TargetPath>
+    </ContentWithTargetPath>
     <EmbeddedResource Include="Reports\report_auditing.rdlc">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
