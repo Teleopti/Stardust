@@ -4,9 +4,10 @@
 	font-size: 13px;
 
 	.main-menu-link-wrapper {
-		height: 100%;
+		height: calc(100vh - 54px);
 		min-width: 200px;
 		overflow-y: auto;
+		padding-bottom: 10px;
 	}
 
 	@media screen and (max-width: 768px) {
