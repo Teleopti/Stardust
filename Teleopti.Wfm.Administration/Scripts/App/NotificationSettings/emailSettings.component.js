@@ -36,14 +36,14 @@
 		}
 
 		vm.postData = function() {
-			return emailSettingsService.post(vm.emailSettings).then(function(data) {
-				if (data.error) {
+			return emailSettingsService.post(vm.tenantId, vm.emailSettings).then(function(response) {
+				if (!response.data.Success) {
 					vm.error = true;
-					vm.message = data.message;
+					vm.message = response.data.Message;
 				} else {
 					vm.success = true;
 					vm.error = false;
-					vm.message = data.message;
+					vm.message = response.data.Message;
 				}
 			});
 		};

@@ -315,6 +315,7 @@
     <Content Include="Scripts\App\NotificationSettings\emailSettings.template.html" />
     <Content Include="Scripts\App\NotificationSettings\smsSettings.component.js" />
     <Content Include="Scripts\App\NotificationSettings\smsSettings.module.js" />
+    <Content Include="Scripts\App\tenant.service.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
     <Content Include="Scripts\Chart.js" />
@@ -396,7 +397,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="smtpnotificationSettings.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">

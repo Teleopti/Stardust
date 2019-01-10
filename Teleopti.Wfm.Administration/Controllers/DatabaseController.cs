@@ -346,22 +346,24 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		[Route("AddEmailSettingsToTenant")]
-		public virtual JsonResult<TenantResultModel> AddEmailSettingsToTenant(AddBuToTenantModel model)
+		[Route("AddEmailSettings")]
+		public virtual JsonResult<TenantResultModel> AddEmailSettingsToTenant(EmailSettingsPostModel model)
 		{
+			//todo: 78242
 			return Json(new TenantResultModel
-				{ Message = $"Created new Business Unit wih name: {model.BuName}", Success = true }
+				{ Message = $"Email settings saved", Success = true }
 			);
 		}
 
 		[HttpGet]
 		[TenantUnitOfWork]
-		[Route("GetEmailSettingsToTenant/tenant/{id}")]
+		[Route("GetEmailSettings/tenant/{id}")]
 		public virtual JsonResult<EmailSettingsResultModel> GetEmailSettingsToTenant(int id)
 		{
+			//todo: 78242
 			var emailSettings = new EmailSettingsResultModel
 			{
-				Message = "Fyfan vad najs!",
+				Message = "no message",
 				Success = true,
 				Data = new EmailSettings
 				{
@@ -470,6 +472,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class EmailSettingsResultModel : TenantResultModel
 	{
 		public EmailSettings Data { get; set; }
+	}
+
+	public class EmailSettingsPostModel
+	{
+		public int TenantId { get; set; }
+
+		public EmailSettings Settings { get; set; }
 	}
 
 	public class EmailSettings

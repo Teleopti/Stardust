@@ -20,7 +20,7 @@
 			var headersObj = tokenHeaderService.getHeaders();
 
 			return $http({
-				url: '/GetEmailSettingsToTenant/tenant/' + tenantId,
+				url: '/GetEmailSettings/tenant/' + tenantId,
 				method: 'GET',
 				headers: headersObj.headers
 			})
@@ -39,28 +39,29 @@
 			}
 		}
 
-		function post(data) {
+		function post(tenantId, data) {
+			var headersObj = tokenHeaderService.getHeaders();
+
+			var postData = {
+				TenantId: tenantId,
+				Settings: data
+			}
+
 			return $http({
-				url: '/smtpnotificationSettings.json',
+				url: '/AddEmailSettings',
 				method: 'POST',
-				data: data
+				data: postData, 
+				headers: headersObj.headers
 			})
 				.then(postEmailSettings)
 				.catch(postEmailSettingsFailed);
 
 			function postEmailSettings(response) {
-				return {
-					error: false,
-					message: 'Settings saved',
-					data: response.data
-				};
+				return response;
 			}
 
-			function postEmailSettingsFailed(error) {
-				return {
-					error: true,
-					message: 'Something went wrong in saving data'
-				};
+			function postEmailSettingsFailed(response) {
+				return response;
 			}
 		}
 	}

@@ -1,9 +1,0 @@
-{
-	"tenantId": 1, 
-	"host": "smtp.domain.com",
-	"port": 25,
-	"ssl": false,
-	"relay": true,
-	"user": "user@domain.com",
-	"password": "pwd"
-}
