@@ -60,8 +60,6 @@ describe('ChangePasswordComponent', () => {
 		};
 		spyOn(passwordService, 'setPassword').and.returnValue(of(authSuccessResponse));
 
-		const component = fixture.componentInstance;
-
 		component.currentPasswordControl.setValue('old');
 		component.newPasswordControl.setValue('new');
 		component.confirmPasswordControl.setValue('new');
@@ -85,8 +83,6 @@ describe('ChangePasswordComponent', () => {
 		};
 		spyOn(passwordService, 'setPassword').and.returnValue(of(authFailedResponse));
 
-		const component = fixture.componentInstance;
-
 		component.currentPasswordControl.setValue('wrong');
 		component.newPasswordControl.setValue('new');
 		component.confirmPasswordControl.setValue('new');
@@ -98,8 +94,6 @@ describe('ChangePasswordComponent', () => {
 	});
 
 	it('should ensure not same password', () => {
-		const component = fixture.componentInstance;
-
 		component.currentPasswordControl.setValue('same');
 		component.newPasswordControl.setValue('same');
 

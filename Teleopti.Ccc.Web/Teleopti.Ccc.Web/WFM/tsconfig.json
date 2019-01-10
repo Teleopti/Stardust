@@ -19,7 +19,9 @@
 			"@wfm/types": ["src/types/index"],
 			"stream": [ "./node_modules/readable-stream" ],
 			"@wfm/test": ["src/test/index"]
-		}
+		},
+		"noUnusedLocals": true,
+        "noUnusedParameters": true
 	},
 	"include": ["app", "src", "e2e"],
 	"exclude": ["node_modules", "dist"],

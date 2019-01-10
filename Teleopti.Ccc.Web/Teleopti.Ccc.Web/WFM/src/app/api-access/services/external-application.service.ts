@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ExternalApplication, ApiAccessToken } from '../types';
+import { ApiAccessToken, ExternalApplication } from '../types';
 
 @Injectable()
 export class ExternalApplicationService {
@@ -21,8 +21,8 @@ export class ExternalApplicationService {
 	}
 
 	revokeApiAccess(id: any): Observable<string> {
-		return this.http.delete('../api/token/' + id,{
-			responseType: 'text',
+		return this.http.delete('../api/token/' + id, {
+			responseType: 'text'
 		});
 	}
 }

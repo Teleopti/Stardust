@@ -15,78 +15,82 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	[DomainTest]
 	[Ignore("#79699 To be fixed")]
-	public class ToggleOnStardustTest : IExtendSystem, IIsolateSystem
+	public class RefreshTogglesOnEventHandlersTest : IExtendSystem, IIsolateSystem
 	{
 		public ToggleFiller Filler;
 		public ILifetimeScope Container;
 		
-		[TestCase(typeof(stardustEventHandler))]
-		[TestCase(typeof(stardustEventHandler_Singleton))]
+		[TestCase(typeof(IHandleEvent<IStardustSingletonEvent>))]
+		[TestCase(typeof(IHandleEvent<IStardustEvent>))]
 		public void ShouldRefreshTogglesBeforeCreatingStardustEventHandler(Type eventType)
 		{
 			Container.Resolve(eventType);
 			Filler.WasCalled.Should().Be.True();
 		}
 
-		[TestCase(typeof(stardustEventHandler))]
-		[TestCase(typeof(stardustEventHandler_Singleton))]
+		[TestCase(typeof(IHandleEvent<IStardustSingletonEvent>))]
+		[TestCase(typeof(IHandleEvent<IStardustEvent>))]
 		public void ShouldRefreshTogglesForEachResolve(Type eventType)
 		{
-			((IHandleEvent<IEvent>)Container.Resolve(eventType)).Handle(null);
-			((IHandleEvent<IEvent>)Container.Resolve(eventType)).Handle(null);
-			((IHandleEvent<IEvent>)Container.Resolve(eventType)).Handle(null);
+			((dynamic)Container.Resolve(eventType)).Handle(null);
+			((dynamic)Container.Resolve(eventType)).Handle(null);
+			((dynamic)Container.Resolve(eventType)).Handle(null);
 			Filler.Called.Should().Be.EqualTo(3);
 		}
 		
-		[TestCase(typeof(nonStardustEventHandler))]
-		[TestCase(typeof(nonStardustEventHandler_Singleton))]
+		[TestCase(typeof(IHandleEvent<INonStardustSingletonEvent>))]
+		[TestCase(typeof(IHandleEvent<INonStardustEvent>))]
 		public void ShouldNotRefreshTogglesIfNonStardustEventHandler(Type eventType)
 		{
-			((IHandleEvent<IEvent>)Container.Resolve(eventType)).Handle(null);
+			((dynamic)Container.Resolve(eventType)).Handle(null);
 			Filler.WasCalled.Should().Be.False();
 		}
 
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
-			extend.AddModule(new eventHandlerModule());
+			extend.AddModule(new EventHandlerModule());
 		}
 
 		[InstancePerLifetimeScope]
-		public class stardustEventHandler : IRunOnStardust, IHandleEvent<IEvent>
+		public class StardustEventHandler : IRunOnStardust, IHandleEvent<IStardustEvent>
 		{
-			public void Handle(IEvent @event)
+			public void Handle(IStardustEvent @event)
 			{
 			}
 		}
+		public interface IStardustEvent : IEvent{}
 		
 		[InstancePerLifetimeScope]
-		public class nonStardustEventHandler : IRunOnHangfire, IHandleEvent<IEvent>
+		public class NonStardustEventHandler : IRunOnHangfire, IHandleEvent<INonStardustEvent>
 		{
-			public void Handle(IEvent @event)
+			public void Handle(INonStardustEvent @event)
 			{
 			}
 		}
+		public interface INonStardustEvent : IEvent{}
 		
-		public class stardustEventHandler_Singleton : IRunOnStardust, IHandleEvent<IEvent>
+		public class StardustEventHandlerSingleton : IRunOnStardust, IHandleEvent<IStardustSingletonEvent>
 		{
-			public void Handle(IEvent @event)
+			public void Handle(IStardustSingletonEvent @event)
 			{
 			}
 		}
+		public interface IStardustSingletonEvent : IEvent{}
 		
-		public class nonStardustEventHandler_Singleton : IRunOnHangfire, IHandleEvent<IEvent>
+		public class NonStardustEventHandlerSingleton : IRunOnHangfire, IHandleEvent<INonStardustSingletonEvent>
 		{
-			public void Handle(IEvent @event)
+			public void Handle(INonStardustSingletonEvent @event)
 			{
 			}
 		}
+		public interface INonStardustSingletonEvent : IEvent{}
 
-		public class eventHandlerModule : Module
+		public class EventHandlerModule : Module
 		{
 			protected override void Load(ContainerBuilder builder)
 			{
-				builder.RegisterEventHandlers((x) => { return true;}, GetType().Assembly);
+				builder.RegisterEventHandlers((x) => true, GetType().Assembly);
 			}
 		}
 
