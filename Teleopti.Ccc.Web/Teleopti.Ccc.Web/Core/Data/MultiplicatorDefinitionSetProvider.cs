@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Web.Core.Data
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var timezone = currentUser.PermissionInformation.DefaultTimeZone();
-			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone));
+			var today = _now.CurrentLocalDate(timezone);
 			return GetDefinitionSets(currentUser, today);
 		}
 

@@ -68,13 +68,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
 			_scheduleDictionary = new ScheduleDictionaryForTest(_scenario, _scheduleDateTimePeriod, _dictionary);
 			_periodTarget = TimeSpan.FromHours(40);
-			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+			TimeZoneGuard.Instance.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 		}
 
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuard.Instance.TimeZone = null;
+			TimeZoneGuard.Instance.Set(null);
 		}
 
 		[Test]

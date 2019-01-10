@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 	public class SiteBankHolidayCalendar : NonversionedAggregateRootWithBusinessUnit, ISiteBankHolidayCalendar
 	{
 		private ISite _site;
-		private ICollection<IBankHolidayCalendar> _bankHolidayCalendarsForSite = new List<IBankHolidayCalendar>();
+		private ICollection<IBankHolidayCalendar> _bankHolidayCalendarsForSite = new HashSet<IBankHolidayCalendar>();
 
 		public virtual ISite Site
 		{
@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 		{
 			get { return _bankHolidayCalendarsForSite; }
 			set { _bankHolidayCalendarsForSite = value; }
+		}
+
+		public virtual void UpdateBankHolidayCalendarsForSite(ICollection<IBankHolidayCalendar> updatedData)
+		{
+			_bankHolidayCalendarsForSite = updatedData;
 		}
 
 		public virtual object Clone()

@@ -1,4 +1,4 @@
-﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @model PortalViewModel
@@ -7,8 +7,7 @@
 
 @if (Model.GrantEnabled)
 {
-<script src='@Url.Content("~/Content/botchat/botchat-es5.js")'></script>
-<link href='@Url.Content("~/Content/botchat/botchat.css")' rel="stylesheet" />
+<script src='@Url.Content("~/Content/webchat/webchat-es5.js")'></script>
 }
 <script type="text/javascript">
 	$(function () {

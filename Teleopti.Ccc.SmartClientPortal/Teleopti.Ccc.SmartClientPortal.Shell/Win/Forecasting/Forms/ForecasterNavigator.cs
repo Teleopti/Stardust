@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private readonly IConfigReader _configReader;
 		private readonly IStatisticHelper _statisticHelper;
 		private bool _hidePriorityToggle;
-		private bool _showAbandonRate;
 		private readonly IApplicationInsights _applicationInsights;
 		private readonly IComponentContext _container;
 
@@ -109,7 +108,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				instance.IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
 			_hidePriorityToggle = _toggleManager.IsEnabled(Toggles.ResourcePlanner_HideSkillPrioSliders_41312);
-			_showAbandonRate = _toggleManager.IsEnabled(Toggles.ResourcePlanner_UseErlangAWithFinitePatience_47738);
 		}
 
 		public ForecasterNavigator(IRepositoryFactory repositoryFactory,
@@ -552,7 +550,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			var skillType = getInitializedSkillType(st);
 			using (var swp = new SkillWizardPages(skillType, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 			{
-				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle, _showAbandonRate), new LazyLoadingManagerWrapper());
+				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
 				{
 					swp.Saved += swpAfterSave;
@@ -997,7 +995,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				var skill = getInitializedSkill(skillModel);
 				using (var spp = new SkillPropertiesPages(skill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 				{
-					var pages = PropertyPagesHelper.GetSkillPages(false, spp, _hidePriorityToggle, _showAbandonRate);
+					var pages = PropertyPagesHelper.GetSkillPages(false, spp, _hidePriorityToggle);
 					if (skillModel.IsMultisite) PropertyPagesHelper.AddMultisiteSkillPages(pages, _staffingCalculatorServiceFacade);
 					spp.Initialize(pages, new LazyLoadingManagerWrapper());
 					using (var propertiesPages = new PropertiesPages(spp))
@@ -1157,8 +1155,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				var repsoitory = new SkillTypeRepository(uow);
 				skillType = repsoitory.Get(skillTypeModel.Id);
 			}
-
-			skillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 			return skillType;
 		}
 
@@ -1176,7 +1172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			DialogResult result;
 			using (var swp = new SkillWizardPages(skill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 			{
-				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle, _showAbandonRate), new LazyLoadingManagerWrapper());
+				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
 				{
 					swp.Saved += multisiteSkillSaved;
@@ -1224,7 +1220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 					new SkillWizardPages(childSkill, null, null, _staffingCalculatorServiceFacade).SetSkillDefaultSettings(childSkill);
 					using (var swp = new SkillWizardPages(childSkill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 					{
-						swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true, _showAbandonRate), new LazyLoadingManagerWrapper());
+						swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true), new LazyLoadingManagerWrapper());
 						using (var wizard = new Wizard(swp))
 						{
 							result = wizard.ShowDialog(this);
@@ -1290,7 +1286,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 							var period = new DateOnlyPeriod(new DateOnly(message.TargetPeriodStart), new DateOnly(message.TargetPeriodEnd));
 							var jobResultRep = new JobResultRepository(new ThisUnitOfWork(uow));
 							var jobResult = new JobResult(JobCategory.QuickForecast, period,
-											  ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+											  ((ITeleoptiPrincipalForLegacy)TeleoptiPrincipal.CurrentPrincipal).UnsafePerson, DateTime.UtcNow);
 							jobResultRep.Add(jobResult);
 							var jobId = jobResult.Id.GetValueOrDefault();
 							uow.PersistAll();
@@ -1433,7 +1429,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 									var jobResultRep = new JobResultRepository(new ThisUnitOfWork(uow));
 									var period = new DateOnlyPeriod(new DateOnly(message.PeriodStart), new DateOnly(message.PeriodEnd));
 									var jobResult = new JobResult(JobCategory.MultisiteExport, period,
-																			((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+																			((ITeleoptiPrincipalForLegacy)TeleoptiPrincipal.CurrentPrincipal).UnsafePerson, DateTime.UtcNow);
 									jobResultRep.Add(jobResult);
 									message.JobId = jobResult.Id.GetValueOrDefault();
 									uow.PersistAll();

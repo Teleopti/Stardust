@@ -148,13 +148,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                new TimeSpan(50, 0, 0));
             _contract.MinTimeSchedulePeriod = new TimeSpan(1);
 
-			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+			TimeZoneGuard.Instance.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
         }
 
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuard.Instance.TimeZone = null;
+			TimeZoneGuard.Instance.Set(null);
 		}
 
 		[Test]

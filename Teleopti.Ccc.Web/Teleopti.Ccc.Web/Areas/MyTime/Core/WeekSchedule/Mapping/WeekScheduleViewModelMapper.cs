@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				RequestsCount = s.PersonRequestCount,
 				ProbabilityClass = s.ProbabilityClass,
 				ProbabilityText = s.ProbabilityText,
-				State = s.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), currentUser.PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
+				State = s.Date == _now.CurrentLocalDate(currentUser.PermissionInformation.DefaultTimeZone()) ? SpecialDateState.Today : 0,
 				Header = _headerViewModelFactory.CreateModel(s.ScheduleDay),
 				Note = s.ScheduleDay == null ? null : map(s.ScheduleDay.PublicNoteCollection()),
 				SeatBookings = s.SeatBookingInformation,

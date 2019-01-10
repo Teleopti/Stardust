@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				session.Save(DayOffTemplate);
 				session.Save(MultiplicatorDefinitionSet);
 				uow.PersistAll();
+				LazyLoadingManager.Initialize(PersonAssignment.UpdatedBy);
 			}
 			AuditSetup();
 		}

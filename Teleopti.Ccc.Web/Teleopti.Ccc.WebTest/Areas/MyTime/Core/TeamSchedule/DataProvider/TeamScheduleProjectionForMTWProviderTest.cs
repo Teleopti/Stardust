@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			principalBefore = System.Threading.Thread.CurrentPrincipal;
 			person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(timeZone);
-			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
+			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(
 					 new TeleoptiIdentity("test", null, null, null, null), person);
 		}
 

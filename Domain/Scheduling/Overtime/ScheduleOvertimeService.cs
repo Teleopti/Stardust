@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
 			if (_gridlockManager.Gridlocks(person, dateOnly) != null)
 				return false;
-			if (!hasMultiplicatorDefinitionSetOfOvertimeType(person, dateOnly))
+			if (!hasMultiplierDefinitionSetOfOvertimeType(person, dateOnly, overtimePreferences))
 				return false;
 
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime, overtimePreferences.SelectedTimePeriod.EndTime);
@@ -154,15 +153,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date, date.AddDays(1), timeZoneInfo));
 		}
 
-		private static bool hasMultiplicatorDefinitionSetOfOvertimeType(IPerson person, DateOnly dateOnly)
+		private static bool hasMultiplierDefinitionSetOfOvertimeType(IPerson person, DateOnly dateOnly, IOvertimePreferences overtimePreferences)
 		{
-			var personPeriod = person.Period(dateOnly);
-			if (personPeriod == null) return false;
+			var contract = person.Period(dateOnly)?.PersonContract?.Contract;
 
-			var personContract = personPeriod.PersonContract;
-			if (personContract == null) return false;
-
-			return personContract.Contract.MultiplicatorDefinitionSetCollection.Any(multiplicatorDefinitionSet => multiplicatorDefinitionSet.MultiplicatorType == MultiplicatorType.Overtime);
+			return contract != null 
+				   && overtimePreferences?.OvertimeType != null 
+				   && overtimePreferences.OvertimeType.MultiplicatorType.Equals(MultiplicatorType.Overtime) 
+				   && contract.MultiplicatorDefinitionSetCollection.Contains(overtimePreferences.OvertimeType);
 		}
 	}
 }

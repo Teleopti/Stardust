@@ -45,25 +45,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillStaffingData = _skillStaffingDataLoader.Load(skills, period, useShrinkageDic, date =>
 				workflowControlSet?.AbsenceRequestOpenPeriods != null &&
 				workflowControlSet.AbsenceRequestOpenPeriods.Any() &&
-				workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), date));
+				workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone()), date));
 
 			return calculatePossibilities(person, skillStaffingData, scheduleDictionary);
 		}
 
 		private Dictionary<DateOnly, bool> getShrinkageStatusAccordingToPeriods(IPerson person, DateOnlyPeriod period)
 		{
-			var useShrinkageDic = new Dictionary<DateOnly, bool>();
-			foreach (var dateOnly in period.DayCollection())
-			{
-				if (person.WorkflowControlSet?.AbsenceRequestOpenPeriods == null)
-				{
-					useShrinkageDic[dateOnly] = false;
-				}
-				else
-				{
-					useShrinkageDic[dateOnly] = person.WorkflowControlSet.IsAbsenceRequestCheckStaffingByIntradayWithShrinkage(_now.ServerDate_DontUse(), dateOnly);
-				}
-			}
+			var today = _now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone());
+			var useShrinkageDic = period.DayCollection().ToDictionary(d => d, dateOnly =>
+				person.WorkflowControlSet?.AbsenceRequestOpenPeriods != null && person.WorkflowControlSet
+					.IsAbsenceRequestCheckStaffingByIntradayWithShrinkage(
+						today, dateOnly));
 
 			return useShrinkageDic;
 		}
@@ -82,18 +75,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			IList<SkillStaffingData> skillStaffingData, IScheduleDictionary scheduleDictionary)
 		{
 			var resolution = skillStaffingData.FirstOrDefault()?.Resolution ?? 15;
-			var calculatedPossibilityModels = new List<CalculatedPossibilityModel>();
 			var skillStaffingDataGroups = skillStaffingData.GroupBy(s => s.Date);
-			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
+			return skillStaffingDataGroups.Select(skillStaffingDataGroup => new CalculatedPossibilityModel
 			{
-				calculatedPossibilityModels.Add(new CalculatedPossibilityModel
-				{
-					Date = skillStaffingDataGroup.Key,
-					IntervalPossibilies = calculateIntervalPossibilities(person, skillStaffingDataGroup.ToList(), scheduleDictionary),
-					Resolution = resolution
-				});
-			}
-			return calculatedPossibilityModels;
+				Date = skillStaffingDataGroup.Key,
+				IntervalPossibilies =
+					calculateIntervalPossibilities(person, skillStaffingDataGroup.ToList(), scheduleDictionary),
+				Resolution = resolution
+			}).ToList();
 		}
 
 		private Dictionary<DateTime, int> calculateIntervalPossibilities(IPerson person, IList<SkillStaffingData> skillStaffingData, IScheduleDictionary scheduleDictionary)

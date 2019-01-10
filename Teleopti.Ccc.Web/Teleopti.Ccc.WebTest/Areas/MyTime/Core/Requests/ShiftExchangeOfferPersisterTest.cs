@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new MutableNow()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new MutableNow()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new MutableNow()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 
@@ -156,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new MutableNow()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
@@ -192,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var target = new ShiftExchangeOfferPersister(personRequestRepository,
-				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))),
+				new RequestsViewModelMapper(new FakeUserTimeZone(), new FakeLinkProvider(), loggedOnUser, new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new MutableNow()),
 				new ShiftExchangeOfferMapper(loggedOnUser, scheduleProvider));
 
 			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))

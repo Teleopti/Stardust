@@ -24,19 +24,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 		private readonly ITeamScheduleViewModelFactoryToggle75989Off _teamScheduleViewModelFactoryToggle75989Off;
 		private readonly ITimeFilterHelper _timeFilterHelper;
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IUserCulture _userCulture;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public TeamScheduleApiController(
 			INow now,
 			IDefaultTeamProvider defaultTeamProvider,
 			ITimeFilterHelper timeFilterHelper,
-			ILoggedOnUser loggedOnUser,
+			IUserCulture userCulture,
+			IUserTimeZone userTimeZone,
 			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ITeamScheduleViewModelFactoryToggle75989Off teamScheduleViewModelFactoryToggle75989Off)
 		{
 			_now = now;
 			_defaultTeamProvider = defaultTeamProvider;
 			_timeFilterHelper = timeFilterHelper;
-			_loggedOnUser = loggedOnUser;
+			_userCulture = userCulture;
+			_userTimeZone = userTimeZone;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_teamScheduleViewModelFactoryToggle75989Off = teamScheduleViewModelFactoryToggle75989Off;
 		}
@@ -46,13 +49,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			var calendar = CultureInfo.CurrentCulture.Calendar;
 
-			var serverDateTimeDontUse = _now.ServerDateTime_DontUse();
+			var localNow = _now.CurrentLocalDateTime(_userTimeZone.TimeZone());
 			return new
 			{
-				NowYear = calendar.GetYear(serverDateTimeDontUse),
-				NowMonth = calendar.GetMonth(serverDateTimeDontUse),
-				NowDay = calendar.GetDayOfMonth(serverDateTimeDontUse),
-				DateTimeFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern
+				NowYear = calendar.GetYear(localNow),
+				NowMonth = calendar.GetMonth(localNow),
+				NowDay = calendar.GetDayOfMonth(localNow),
+				DateTimeFormat = _userCulture.GetCulture().DateTimeFormat.ShortDatePattern
 			};
 		}
 
@@ -95,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual object DefaultTeam(DateOnly? date)
 		{
 			if (!date.HasValue)
-				date = _now.ServerDate_DontUse();
+				date = _now.CurrentLocalDate(_userTimeZone.TimeZone());
 			var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);
 
 			if (defaultTeam?.Id != null)

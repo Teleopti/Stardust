@@ -84,6 +84,7 @@
 								*ngIf="calendar.Years.length > 0"
 								nzSize="small"
 								[nzSelectedIndex]="calendar.CurrentYearIndex"
+								(nzSelectChange)="selectedTabChange($event, calendar)"
 							>
 								<nz-tab [nzTitle]="year.Year" *ngFor="let year of calendar.Years">
 									<nz-list class="bank-holiday-calendar-date-item-header">

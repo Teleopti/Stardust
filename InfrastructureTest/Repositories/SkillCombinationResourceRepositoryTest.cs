@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			isolate.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 			isolate.UseTestDouble<SkillCombinationResourcesWithoutBpoToggleOn>().For<ISkillCombinationResourcesWithoutBpo>();
+
 		}
 	}
 

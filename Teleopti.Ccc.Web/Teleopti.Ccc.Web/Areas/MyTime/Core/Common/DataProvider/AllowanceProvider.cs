@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		{
 			var person = _loggedOnUser.CurrentUser();
 			var userTimezone = person.PermissionInformation.DefaultTimeZone();
-			var userToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone));
+			var userToday = _now.CurrentLocalDate(userTimezone);
 
 			var periodsOpenedForToday = person.WorkflowControlSet?.AbsenceRequestOpenPeriods?
 				.Where(p => p.OpenForRequestsPeriod.Contains(userToday)).ToList();

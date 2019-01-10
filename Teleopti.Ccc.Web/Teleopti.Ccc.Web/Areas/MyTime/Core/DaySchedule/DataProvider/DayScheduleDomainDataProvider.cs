@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 			var scheduleDayDomainData = new DayScheduleDomainData
 			{
 				Date = date,
-				IsCurrentDay = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone).Date == date.Date,
+				IsCurrentDay = _now.CurrentLocalDateTime(timezone).Date == date.Date,
 				MinMaxTime = getMinMaxTime(scheduleDaysAndProjections, date, timezone),
 				ProbabilityClass = "",
 				ProbabilityText = "",

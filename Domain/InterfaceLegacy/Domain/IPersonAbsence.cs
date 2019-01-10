@@ -46,6 +46,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	 
 	    void FullDayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo);
 
-	    void IntradayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo);
+	    void IntradayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false);
     }
 }

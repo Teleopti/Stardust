@@ -9,16 +9,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	{
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
+		private readonly IUserTimeZone _timeZone;
 		private readonly INow _now;
+
+		private readonly int noNeedToCalculate = 99;
 
 		public AbsenceRequestProbabilityProvider(
 			IAllowanceProvider allowanceProvider,
 			IAbsenceTimeProvider absenceTimeProvider,
-			INow now)
+			INow now,
+			IUserTimeZone timeZone)
 		{
 			_allowanceProvider = allowanceProvider;
 			_absenceTimeProvider = absenceTimeProvider;
 			_now = now;
+			_timeZone = timeZone;
 		}
 
 		public List<IAbsenceRequestProbability> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
@@ -43,13 +48,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				var probabilityIndex = -1;
 				if (allowanceDay != null && allowanceDay.ValidateBudgetGroup)
 				{
-					probabilityIndex = allowanceDay.UseHeadCount
-						? getAllowanceIndexWithHeadCount(allowanceForDay, absenceHeadsForDay)
-						: getAllowanceIndex(allowanceMinutesForDay, absenceTimeForDay, fulltimeEquivalentForDay);
-
-					if (dateOnly < _now.ServerDate_DontUse())
+					if (dateOnly < _now.CurrentLocalDate(_timeZone.TimeZone()))
 					{
-						probabilityIndex = 0;
+						probabilityIndex = noNeedToCalculate;
+					}
+					else
+					{
+						probabilityIndex = allowanceDay.UseHeadCount
+							? getAllowanceIndexWithHeadCount(allowanceForDay, absenceHeadsForDay)
+							: getAllowanceIndex(allowanceMinutesForDay, absenceTimeForDay, fulltimeEquivalentForDay);
 					}
 				}
 
@@ -73,12 +80,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var timeDiff = allowanceMinutesForDay - absenceTimeForDay;
 			if (!Equals(allowanceMinutesForDay, .0))
 			{
-				percent = 100*(timeDiff/allowanceMinutesForDay);
+				percent = 100 * (timeDiff / allowanceMinutesForDay);
 			}
 
 			if (percent > 0 && timeDiff >= fulltimeEquivalentForDay)
 			{
-				probabilityIndex = percent > 30 && timeDiff >= 2*fulltimeEquivalentForDay ? 2 : 1;
+				probabilityIndex = percent > 30 && timeDiff >= 2 * fulltimeEquivalentForDay ? 2 : 1;
 			}
 			return probabilityIndex;
 		}
@@ -91,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			if (allowanceDiff > 0)
 			{
-				percent = 100 - (100*(absenceHeadsForDay/allowanceForDay));
+				percent = 100 - (100 * (absenceHeadsForDay / allowanceForDay));
 			}
 
 			if (allowanceDiff >= 1)

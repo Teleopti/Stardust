@@ -7,17 +7,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public interface ITimeZoneGuard
 	{
 		TimeZoneInfo CurrentTimeZone();
-		TimeZoneInfo TimeZone { get; set; }
+		TimeZoneInfo TimeZone { get; }
+		void Set(TimeZoneInfo timeZone);
 	}
 	
 	public class TimeZoneGuard : ITimeZoneGuard
 	{
 		private TimeZoneInfo _timeZone;
 
-		public TimeZoneInfo TimeZone
+		public TimeZoneInfo TimeZone => _timeZone ?? (_timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+
+		public void Set(TimeZoneInfo timeZone)
 		{
-			get { return _timeZone ?? (_timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone); }
-			set { _timeZone = value; }
+			_timeZone = timeZone;
 		}
 
 		public static ITimeZoneGuard Instance => ServiceLocatorForLegacy.TimeZoneGuard;

@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -23,19 +24,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly IPersonNameProvider _personNameProvider;
+		private readonly INow _now;
 		private static readonly NoFormatting textFormatting = new NoFormatting();
 
 		public RequestsViewModelMapper(IUserTimeZone userTimeZone,
 			ILinkProvider linkProvider,
 			ILoggedOnUser loggedOnUser,
 			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
-			IPersonNameProvider personNameProvider)
+			IPersonNameProvider personNameProvider,
+			INow now)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 			_personNameProvider = personNameProvider;
+			_now = now;
 		}
 
 		public RequestViewModel Map(IPersonRequest s, NameFormatSettings nameFormatSettings=null)
@@ -133,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var timeZone = _userTimeZone.TimeZone();
 			var dateforDayCancellationCheck =
 				new DateOnly(personRequest.Request.Period.StartDateTimeLocal(timeZone));
-			if (dateforDayCancellationCheck >= new DateOnly(TimeZoneHelper.ConvertFromUtc(ServiceLocatorForEntity.Now.UtcDateTime(),timeZone)))
+			if (dateforDayCancellationCheck >= _now.CurrentLocalDate(timeZone))
 			{
 				if (PrincipalAuthorization.Current().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, new DateOnly(personRequest.RequestedDate),

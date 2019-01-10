@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 		DateOnly Date { get; set; }
 		IBankHolidayCalendar Calendar { get; set; }
 		string Description { get; set; }
+		void Active();
 	}
 }

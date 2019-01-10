@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 	public static class PropertyPagesHelper
 	{
 		public static IList<IPropertyPage> GetSkillPages(bool forWizard,
-			 IAbstractPropertyPages abstractPropertyPages, bool hidePriorityToggle, bool showAbandonRate)
+			 IAbstractPropertyPages abstractPropertyPages, bool hidePriorityToggle)
 		{
-			return GetSkillPages(forWizard, abstractPropertyPages, false, hidePriorityToggle, showAbandonRate);
+			return GetSkillPages(forWizard, abstractPropertyPages, false, hidePriorityToggle);
 		}
 
 		public static IList<IPropertyPage> BudgetGroupPages()
@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 			return new List<IPropertyPage> { new BudgetGroupGeneral() };
 		}
 
-		public static IList<IPropertyPage> GetSkillPages(bool forWizard, IAbstractPropertyPages abstractPropertyPages, bool setEditMode, bool hidePriorityToggle, bool showAbandonRate)
+		public static IList<IPropertyPage> GetSkillPages(bool forWizard, IAbstractPropertyPages abstractPropertyPages, bool setEditMode, bool hidePriorityToggle)
 		{
 			IList<IPropertyPage> list = new List<IPropertyPage>();
-			list.Add(new SkillGeneral(abstractPropertyPages, showAbandonRate));
+			list.Add(new SkillGeneral(abstractPropertyPages));
 			list.Add(new SkillThresholds());
 			if(!hidePriorityToggle)
 				list.Add(new SkillOptimisation());
@@ -49,15 +49,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 
 
 		public static IList<IPropertyPage> GetSkillPages(bool forWizard,
-			 IAbstractPropertyPages abstractPropertyPages, ISkillType skillType, bool hidePriorityToggle, bool showAbandonRate)
+			 IAbstractPropertyPages abstractPropertyPages, ISkillType skillType, bool hidePriorityToggle)
 		{
-			return GetSkillPages(forWizard, abstractPropertyPages, false, skillType, hidePriorityToggle, showAbandonRate);
+			return GetSkillPages(forWizard, abstractPropertyPages, false, skillType, hidePriorityToggle);
 		}
 
-		public static IList<IPropertyPage> GetSkillPages(bool forWizard, IAbstractPropertyPages abstractPropertyPages, bool setEditMode, ISkillType skillType, bool hidePriorityToggle, bool showAbandonRate)
+		public static IList<IPropertyPage> GetSkillPages(bool forWizard, IAbstractPropertyPages abstractPropertyPages, bool setEditMode, ISkillType skillType, bool hidePriorityToggle)
 		{
 			IList<IPropertyPage> list = new List<IPropertyPage>();
-			list.Add(new SkillGeneral(abstractPropertyPages, showAbandonRate));
+			list.Add(new SkillGeneral(abstractPropertyPages));
 			list.Add(new SkillThresholds());
 			if (!hidePriorityToggle)
 				list.Add(new SkillOptimisation());

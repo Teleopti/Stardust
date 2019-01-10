@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DowngradeableComponent } from '@wfm/types';
 import { IStateService } from 'angular-ui-router';
 import { AuthenticationModule } from '../authentication/authentication.module';
+import { BrowserModule } from '../browser/browser.module';
 import { SharedModule } from '../shared/shared.module';
 import { BusinessUnitSelectorComponent } from './components/businessunit-selector/businessunit-selector.component';
 import { FeedbackComponent } from './components/feedback';
@@ -16,7 +17,14 @@ import { BusinessUnitService } from './shared/businessunit.service';
 import { ToggleMenuService } from './shared/toggle-menu.service';
 
 @NgModule({
-	imports: [CommonModule, TranslateModule.forChild(), SharedModule, ReactiveFormsModule, AuthenticationModule],
+	imports: [
+		CommonModule,
+		TranslateModule.forChild(),
+		SharedModule,
+		ReactiveFormsModule,
+		AuthenticationModule,
+		BrowserModule
+	],
 	declarations: [
 		BusinessUnitSelectorComponent,
 		SideMenuComponent,

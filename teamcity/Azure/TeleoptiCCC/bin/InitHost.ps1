@@ -110,7 +110,12 @@ Try
     Hostsfile-Add-Cname -Cname $Cname
 
 	#Setting $Env:TeleoptiIsAzure = $true
-	[Environment]::SetEnvironmentVariable("TeleoptiIsAzure", "true", "Machine")
+	[System.Environment]::SetEnvironmentVariable('TeleoptiIsAzure', 'true', [System.EnvironmentVariableTarget]::Machine)
+	log-info "Environment variable 'TeleoptiIsAzure' is set to '$Env:TeleoptiIsAzure'"
+	if (!($Env:TeleoptiIsAzure -eq $true)) {
+		$Env:TeleoptiIsAzure = $true
+		log-info 'TestTabort $Env:TeleoptiIsAzure = $true'
+	}
 
 	#Set environment variables for RoleInstanceID & Rolename
 	[Environment]::SetEnvironmentVariable("RoleName", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Role.Name, "Machine") 

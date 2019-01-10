@@ -8,11 +8,12 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class PersonSchedulePeriodHint : ISchedulePreHint
 	{
+		private static readonly PeriodIncrementorFactory personIncrementor = new PeriodIncrementorFactory();
+
 		public void FillResult(HintResult hintResult, ScheduleHintInput input)
 		{
 			var people = input.People;
 			var range = input.Period;
-			var personIncrementor = new PeriodIncrementorFactory();
 			foreach (var person in people)
 			{
 				var schedulePeriods = person.PersonSchedulePeriods(range);

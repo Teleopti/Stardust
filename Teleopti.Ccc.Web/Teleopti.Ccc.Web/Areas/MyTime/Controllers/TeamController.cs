@@ -16,21 +16,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly ITeamViewModelFactory _teamViewModelFactory;
 		private readonly ISiteViewModelFactory _siteViewModelFactory;
+		private readonly IUserTimeZone _userTimeZone;
 		private readonly INow _now;
 
-		public TeamController(ITeamViewModelFactory teamViewModelFactory, INow now, ISiteViewModelFactory siteViewModelFactory)
+		public TeamController(ITeamViewModelFactory teamViewModelFactory, INow now, ISiteViewModelFactory siteViewModelFactory, IUserTimeZone userTimeZone)
 		{
 			_teamViewModelFactory = teamViewModelFactory;
 			_now = now;
 			_siteViewModelFactory = siteViewModelFactory;
+			_userTimeZone = userTimeZone;
 		}
 
 		[UnitOfWork]
 		[HttpGet]
 		public virtual JsonResult TeamsForShiftTrade(DateOnly? date)
 		{
-			if (!date.HasValue)
-				date = _now.ServerDate_DontUse();
+			date = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
 			return
 				Json(
 					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb).ToArray(),
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPost]
 		public virtual JsonResult TeamsUnderSiteForShiftTrade(string siteIds, DateOnly? date)
 		{
-			if (!date.HasValue) date = _now.ServerDate_DontUse();
+			date = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
 
 			var ids = siteIds.Split(',');
 			if (ids[0] == "") return Json(new List<Guid>());
@@ -54,8 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult TeamsForShiftTradeBoard(DateOnly? date)
 		{
-			if (!date.HasValue)
-				date = _now.ServerDate_DontUse();
+			date = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
 			return
 				Json(
 					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard).ToArray(),
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult SitesForShiftTrade(DateOnly? date)
 		{
-			if (!date.HasValue) date = _now.ServerDate_DontUse();
+			date = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
 			return Json( _siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb).ToArray(), JsonRequestBehavior.AllowGet);
 		}
 
@@ -74,8 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult TeamsAndGroupsWithAllTeam(DateOnly? date)
 		{
-			if (!date.HasValue)
-				date = _now.ServerDate_DontUse();
+			date = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
 			return Json(
 				new
 				{

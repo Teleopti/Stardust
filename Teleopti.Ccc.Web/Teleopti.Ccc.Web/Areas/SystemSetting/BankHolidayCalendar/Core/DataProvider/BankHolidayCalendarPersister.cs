@@ -1,12 +1,8 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
@@ -39,7 +35,6 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 				if (!string.IsNullOrWhiteSpace(input.Name))
 				{
 					calendar.Name = input.Name;
-					_bankHolidayCalendarRepository.Add(calendar);
 				}
 			}
 			else
@@ -63,11 +58,11 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			foreach (var d in dates)
 			{
 				var _d = CreateBankHolidayDate(calendar, d);
-				if (_d == null)
+				if (_d == null || _dates.Contains(_d))
 					continue;
+
 				_bankHolidayDateRepository.Add(_d);
-				if (!_dates.Contains(_d))
-					_dates.Add(_d);
+				_dates.Add(_d);
 			}
 
 			return _dates;
@@ -87,6 +82,11 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 				date.Calendar = calendar;
 				if (input.IsDeleted)
 					date.SetDeleted();
+			}
+			else if (((date = _bankHolidayDateRepository.Find(inputDate, calendar)) != null) && date.IsDeleted)
+			{
+				date.Description = des;
+				date.Active();
 			}
 			else if (_bankHolidayDateRepository.LoadAll().FirstOrDefault(d => d.Calendar.Id.Value == calendar.Id.Value && d.Date == inputDate) == null)
 			{

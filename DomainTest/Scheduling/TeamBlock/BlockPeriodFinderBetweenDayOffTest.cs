@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
 	        _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
-			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			TimeZoneGuard.Instance.Set(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 		}
 
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuard.Instance.TimeZone = null;
+			TimeZoneGuard.Instance.Set(null);
 		}
 
 		[Test]

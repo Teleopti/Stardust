@@ -623,8 +623,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#endregion
 
+		private string _last6KeyStrokes=string.Empty;
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
+			_last6KeyStrokes = _last6KeyStrokes + e.KeyCode;
+			_last6KeyStrokes = _last6KeyStrokes.Substring(Math.Max(0, _last6KeyStrokes.Length - 6));
+			if (_last6KeyStrokes.ToUpper() == "TOGGLE")
+			{
+				MessageBox.Show("todo: här ska det laddas om togglar");
+			}
 			if (e.KeyCode == Keys.F8 && e.Modifiers == Keys.Shift)
 			{
 				toggleCalculation();
@@ -3224,10 +3231,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var staffingCalculatorServiceFacade = _container.Resolve<IStaffingCalculatorServiceFacade>();
 			ICollection<ISkill> skills = new SkillRepository(uow).FindAllWithSkillDays(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
 			stateHolder.SchedulerStateHolder.SchedulingResultState.Skills = new HashSet<ISkill>(skills);
-			foreach (ISkill skill in skills)
-			{
-				skill.SkillType.StaffingCalculatorService = staffingCalculatorServiceFacade;
-			}
 		}
 
 		private void loadSettings(IUnitOfWork uow, SchedulingScreenState stateHolder)
@@ -5251,7 +5254,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void setupAvailTimeZones()
 		{
-			TimeZoneGuard.Instance.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			TimeZoneGuard.Instance.Set(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			wpfShiftEditor1.SetTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
 
@@ -5960,7 +5963,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void changeTimeZone(TimeZoneInfo timeZone)
 		{
-			TimeZoneGuard.Instance.TimeZone = timeZone;
+			TimeZoneGuard.Instance.Set(timeZone);
 			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
 			var selectedSchedules = _scheduleView.SelectedSchedules();

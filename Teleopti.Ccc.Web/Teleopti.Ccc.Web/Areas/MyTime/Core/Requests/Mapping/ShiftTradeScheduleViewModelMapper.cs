@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -225,7 +226,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		public DateOnlyPeriod GetShiftTradeOpenPeriod(IPerson person)
 		{
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var agentToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
+			var agentToday = _now.CurrentLocalDate(timeZone);
 			var openPeriodStart = agentToday.AddDays(person.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
 			var openPeriodEnd = agentToday.AddDays(person.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
 			return new DateOnlyPeriod(openPeriodStart, openPeriodEnd);
@@ -234,9 +235,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		public ShiftTradeToleranceInfoViewModel GetToleranceInfo(Guid personToId)
 		{
 			var personTo = _personRepository.Get(personToId);
-			var myShiftTradeOpenPeriod = GetShiftTradeOpenPeriod(_loggedOnUser.CurrentUser());
+			var currentUser = _loggedOnUser.CurrentUser();
+			var myShiftTradeOpenPeriod = GetShiftTradeOpenPeriod(currentUser);
 			var personToShiftTradeOpenPeriod = GetShiftTradeOpenPeriod(personTo);
-			var myVirtualSchedulePeriods = extractVirtualPeriods(_loggedOnUser.CurrentUser(), myShiftTradeOpenPeriod).ToList();
+			var myVirtualSchedulePeriods = extractVirtualPeriods(currentUser, myShiftTradeOpenPeriod).ToList();
 			var personToVirtualSchedulePeriods = extractVirtualPeriods(personTo, personToShiftTradeOpenPeriod).ToList();
 
 			var starts = myVirtualSchedulePeriods.Select(x => x.DateOnlyPeriod.StartDate).ToList();
@@ -246,12 +248,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var minStart = starts.Min().Date == DateTime.MinValue ? starts.Min().AddWeeks(52) : starts.Min();
 			var maxEnd = end.Max().Date == DateTime.MinValue ? new DateOnly(DateTime.MaxValue.AddYears(-1)) : end.Max();
 			var period = new DateOnlyPeriod(minStart, maxEnd);
-			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period, new List<IPerson> { _loggedOnUser.CurrentUser(), personTo });
+			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period, new List<IPerson> { currentUser, personTo });
 
 			return new ShiftTradeToleranceInfoViewModel
 			{
 				IsNeedToCheck = _selectableChecker.IsNeedCheckTolerance(),
-				MyInfos = getContractInfos(_loggedOnUser.CurrentUser(), myVirtualSchedulePeriods, allSchedules),
+				MyInfos = getContractInfos(currentUser, myVirtualSchedulePeriods, allSchedules),
 				PersonToInfos = getContractInfos(personTo, personToVirtualSchedulePeriods, allSchedules)
 			};
 		}

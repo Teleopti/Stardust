@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			{
 				builder.Register(c => new ToggleQuerier(pathToToggle))
 					.SingleInstance()
-					.As<IToggleManager>()
-					.As<IToggleFiller>();
+					.As<IToggleManager>();
 			}
 			else
 			{

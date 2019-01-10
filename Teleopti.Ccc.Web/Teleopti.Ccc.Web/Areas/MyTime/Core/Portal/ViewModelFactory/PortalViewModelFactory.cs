@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -89,8 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 			ITeamGamificationSetting teamSetting = null;
 			var person = _loggedOnUser.CurrentUser();
-			var today = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())
-				.ToDateOnly();
+			var today = _now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone());
 			var myTeam = person.MyTeam(today);
 			if (myTeam != null)
 			{
@@ -142,15 +142,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private string getLocale()
 		{
 			var principal = _currentIdentity.Current();
-			var principalCacheable = principal as TeleoptiPrincipalCacheable;
+			var principalCacheable = principal as TeleoptiPrincipal;
 			var regionnal = principalCacheable != null ? principalCacheable.Regional : principal.Regional;
 			return regionnal.Culture.Name;
 		}
 
 		private DateOnlyPeriod getDefaultPeriod(IPerson person, IGamificationSetting gamificationSetting)
 		{
-			var today = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())
-				.ToDateOnly();
+			var today = _now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone());
 			var onGoingPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), today);
 			if (!_toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866)) return onGoingPeriod;
 

@@ -2,13 +2,13 @@
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
-
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None,
 			bool returnOneWeekData = true)
 		{
-			var showForDate = date ?? new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone()));
+			var showForDate = date ?? _now.CurrentLocalDate(_userTimeZone.TimeZone());
 			return
 				_staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModels(
 					date.GetValueOrDefault(showForDate), staffingPossiblityType, returnOneWeekData);

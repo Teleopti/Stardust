@@ -80,9 +80,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			@events.ForEach(AddEvent);
 		}
 
-		public virtual void IntradayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo)
+		public virtual void IntradayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
 			_person = person;
+			if (muteEvent) return;
 
 			var personAbsenceAddedEvent = new PersonAbsenceAddedEvent
 			{

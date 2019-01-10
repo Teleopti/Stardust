@@ -275,16 +275,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixClosedDayLocker>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941))
-			{
-				builder.RegisterType<ScheduleAllRemovedDaysOrRollback>().As<IScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
-			}
-			else
-			{
-				builder.RegisterType<ScheduleAllRemovedDaysOrRollbackDoNothing>().As<IScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
-			}
+			builder
+				.RegisterToggledComponent<ScheduleAllRemovedDaysOrRollback, ScheduleAllRemovedDaysOrRollbackDoNothing,IScheduleAllRemovedDaysOrRollback>(
+					Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941)
+				.InstancePerLifetimeScope();
 
-			builder.RegisterToggledComponent<OpenHoursSkillExtractor, OpenHoursSkillExtractorDoNothing, IOpenHoursSkillExtractor>(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118);
+			builder.RegisterToggledComponent<OpenHoursSkillExtractor, OpenHoursSkillExtractorDoNothing, IOpenHoursSkillExtractor>(
+				Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)
+				.SingleInstance();
 
 			builder.RegisterType<MatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().SingleInstance();
@@ -467,17 +465,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<PlanningGroupSettingsProvider>().As<IPlanningGroupSettingsProvider>().SingleInstance();
 			}
 
-
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope();
-
-			if (_configuration.Toggle(Toggles.ResourcePlanner_HideSkillPrioSliders_41312))
-			{
-				builder.RegisterType<SkillPriorityProviderForToggle41312>().As<ISkillPriorityProvider>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<SkillPriorityProvider>().As<ISkillPriorityProvider>().SingleInstance();
-			}
+			builder
+				.RegisterToggledComponent<SkillPriorityProviderForToggle41312, SkillPriorityProvider, ISkillPriorityProvider>(
+					Toggles.ResourcePlanner_HideSkillPrioSliders_41312)
+				.SingleInstance();
 			builder.RegisterType<AnalyticsScheduleChangeForAllReportableScenariosFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
 			builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();

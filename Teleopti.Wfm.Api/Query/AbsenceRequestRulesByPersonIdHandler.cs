@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Wfm.Api.Query.Request;
@@ -28,8 +29,7 @@ namespace Teleopti.Wfm.Api.Query
 
 			var period = new DateOnlyPeriod(new DateOnly(query.StartDate), new DateOnly(query.EndDate));
 			var absences = _absenceRepository.LoadRequestableAbsence();
-			var today = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
-				person.PermissionInformation.DefaultTimeZone()).ToDateOnly();
+			var today = _now.CurrentLocalDate(person.PermissionInformation.DefaultTimeZone());
 
 			return new QueryResultDto<AbsenceRequestRuleDto>
 			{

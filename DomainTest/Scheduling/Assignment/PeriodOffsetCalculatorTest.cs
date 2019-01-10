@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _sourceScheduleDay = _mocks.StrictMock<IScheduleDay>();
             _targetScheduleDay = _mocks.StrictMock<IScheduleDay>();
 
-			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			TimeZoneGuard.Instance.Set(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             _singaporeTimeZone = TimeZoneInfoFactory.SingaporeTimeZoneInfo(); // -10
             _hawaiiTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo(); // +8
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuard.Instance.TimeZone = null;
+			TimeZoneGuard.Instance.Set(null);
 		}
 
         [Test]
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 	    public void ShouldUseCurrentViewPointWhenCalculatingPeriodOffsetWithDaylightSaving()
 		{
-			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.NewYorkTimeZoneInfo();
+			TimeZoneGuard.Instance.Set(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
 
 			_sourceDateTimePeriod = new DateTimePeriod(2016, 10, 25, 13, 2016, 10, 25, 21);
 			_targetDateTimePeriod = new DateTimePeriod(2016, 11, 1, 13, 2016, 11, 1, 21);
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				offSet.Should().Be.EqualTo(TimeSpan.FromDays(7));
 			}
 
-			TimeZoneGuard.Instance.TimeZone = null;
+			TimeZoneGuard.Instance.Set(null);
 		}
 
         [Test]

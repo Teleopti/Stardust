@@ -69,18 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime));
 			return requestForPeriod;
 		}
-
-		private static DetachedCriteria createRequestForPeriodCriteria(DateTime startDateTime)
-		{
-			var requestForPeriod = DetachedCriteria.For<Request>()
-				.SetProjection(Projections.Property("Parent"))
-				.Add(Restrictions.Eq("Period.period.Minimum", startDateTime))
-				.Add(Restrictions.Not(Restrictions.Eq("class", typeof(ShiftTradeRequest))))
-				.Add(Restrictions.Not(Restrictions.Eq("class", typeof(AbsenceRequest))))
-				.Add(Restrictions.Not(Restrictions.Eq("class", typeof(TextRequest))));
-			return requestForPeriod;
-		}
-
+		
 		private IList<IPersonRequest> findRequestsByRequestPeriod(IPerson person, DetachedCriteria requestForPeriod,
 			int status = 0)
 		{
@@ -100,9 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Fetch("Person")
 				.UniqueResult<IPersonRequest>();
 
-			var shiftTrade = returnPersonRequest?.Request as IShiftTradeRequest;
-
-			if (shiftTrade != null)
+			if (returnPersonRequest?.Request is IShiftTradeRequest shiftTrade)
 			{
 				LazyLoadingManager.Initialize(shiftTrade.ShiftTradeSwapDetails);
 			}
@@ -123,8 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			foreach (var returnPersonRequest in returnPersonRequests)
 			{
-				var absenceRequest = returnPersonRequest.Request as IAbsenceRequest;
-				if (absenceRequest != null)
+				if (returnPersonRequest.Request is IAbsenceRequest absenceRequest)
 				{
 					LazyLoadingManager.Initialize(absenceRequest.Absence);
 				}

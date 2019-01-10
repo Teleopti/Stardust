@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				RequestsCount = dayScheduleDomainData.PersonRequestCount,
 				ProbabilityClass = dayScheduleDomainData.ProbabilityClass,
 				ProbabilityText = dayScheduleDomainData.ProbabilityText,
-				State = dayScheduleDomainData.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
+				State = dayScheduleDomainData.Date == _now.CurrentLocalDate(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()) ? SpecialDateState.Today : 0,
 				Header = _headerViewModelFactory.CreateModel(dayScheduleDomainData.ScheduleDay),
 				Note = dayScheduleDomainData.ScheduleDay == null ? null : map(dayScheduleDomainData.ScheduleDay.PublicNoteCollection()),
 				SeatBookings = dayScheduleDomainData.SeatBookingInformation,

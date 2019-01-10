@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -38,6 +37,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<IBankHolidayCalendar> LoadAll()
 		{
 			return _bankHolidayCalendars.Where(c=>!c.IsDeleted);
+		}
+
+		public ICollection<IBankHolidayCalendar> FindBankHolidayCalendars(IEnumerable<Guid> ids)
+		{
+			return _bankHolidayCalendars.Where(x => ids.Contains(x.Id.GetValueOrDefault())).ToList();
 		}
 	}
 }

@@ -760,7 +760,7 @@
     <value>Tüm gün devamsızlık</value>
   </data>
   <data name="ItemsSelectedParameter" xml:space="preserve">
-    <value>[0] madde seçildi</value>
+    <value>{0} madde seçildi</value>
   </data>
   <data name="KpiAbsenteeism" xml:space="preserve">
     <value>Devamsızlık (%)</value>
@@ -2404,7 +2404,7 @@
     <value>Yeni gruplama için isim gir</value>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
-    <value>Kişi atanması geçerli değil. {0}</value>
+    <value>Kişi atanması geçersiz.</value>
   </data>
   <data name="ChangeYourRotations" xml:space="preserve">
     <value>Rotasyonlarını değiştir</value>
@@ -7807,7 +7807,7 @@
     <value>Rotasyonların karşılanması</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>{0} devamsızlık isteği reddedildi</value>
+    <value>{0} devamsızlık isteği reddedildi.</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>{0} vardiya takası ısteği. Onaylayın veya reddedin.</value>
@@ -9565,7 +9565,7 @@ Aktif opsiyonlar: {4}</value>
     <value>Değişik eşik değerleri kullan</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihinde cevapladığınız çağrı sayısı {0}</value>
+    <value>{1:yyyy-MM-dd} tarihinde {0} değerinden fazla çağrı cevaplayarak yeni bir bronz madalya kazandınız!</value>
   </data>
   <data name="RuleWithRatioConvertor" xml:space="preserve">
     <value>Çevirme oranı kullan</value>
@@ -9787,7 +9787,7 @@ Aktif opsiyonlar: {4}</value>
     <value>Sorunlar</value>
   </data>
   <data name="MissingForecastFrom" xml:space="preserve">
-    <value>Şu aralık için tahmin bulunamıyor</value>
+    <value>{0}-{1:d} aralığına ait tahmin bulunamıyor</value>
   </data>
   <data name="MissingSkills" xml:space="preserve">
     <value>Bu yetenekler için tahmin bulunamıyor</value>
@@ -10483,31 +10483,31 @@ Aktif opsiyonlar: {4}</value>
     <value>{1} gün süresince {0} üzerinde çağrı cevaplayarak yeni bir gümüş madalya kazandın.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>Vardiya uyumun {1.yyyy-MM-dd} tarihinde {0} üzerinde geldi ve bronz madalya kazandın.</value>
+    <value>Vardiya uyumunuz {1:yyyy-MM-dd} tarihinde {0} üzerinde geldi ve bronz madalya kazandınız.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAHT" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihindeki ortalama çağrı karşılama süren {0} altında geldi ve bronz madalya kazandın.</value>
+    <value>{1:yyyy-MM-dd} tarihindeki ortalama çağrı karşılama süreniz {0} altında geldi ve bronz madalya kazandınız.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihinde {0} üzerinde çağrı cevapladın ve bronz madalya kazandın.</value>
+    <value>{1:yyyy-MM-dd} tarihinde {0} üzerinde çağrı cevaplayarak bronz madalya kazandınız.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihindeki vardiya uyumun {0} üzerinde geldi ve altın madalya kazandın.</value>
+    <value>{1:yyyy-MM-dd} tarihindeki vardiya uyumun {0} üzerinde geldi ve altın madalya kazandın.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAHT" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihindeki ortalama çağrı karşılama süresi {0} saniye altında geldi ve altın madalya kazandın.</value>
+    <value>{1:yyyy-MM-dd} tarihindeki ortalama çağrı karşılama sürenizi {0} saniye altında tutarak altın madalya kazandınız.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihinde {0} üzerinde çağrı cevapladın ve altın madalya kazandın.</value>
+    <value>{1:yyyy-MM-dd} tarihinde {0} üzerinde çağrı cevaplayarak altın madalya kazandınız.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihindeki vardiya uyumun {0} üzerinde geldi ve gümüş madalya kazandın.</value>
+    <value>{1:yyyy-MM-dd} tarihinde {0} üzerinde vardiya uyumu sağlayarak gümüş madalya kazandınız.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAHT" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihindeki ortalama çağrı karşılama süresi {0} saniye altında geldi ve yeni bir gümüş madalya kazandın.</value>
+    <value>{1:yyyy-MM-dd} tarihindeki ortalama çağrı karşılama sürenizi {0} saniye altında tutarak yeni bir gümüş madalya kazandın.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
-    <value>{1.yyyy-MM-dd} tarihinde {0} üzerinde çağrı cevapladın ve yeni bir gümüş madalya kazandın.</value>
+    <value>{1:yyyy-MM-dd} tarihinde {0} üzerinde çağrı cevaplayarak yeni bir gümüş madalya kazandın.</value>
   </data>
   <data name="FilteredList" xml:space="preserve">
     <value>Elenmiş liste</value>
@@ -10648,7 +10648,7 @@ Aktif opsiyonlar: {4}</value>
     <value>Hatayı detaylı bir şekilde görüntüleyebilmek için indirilen Excel tablosuna bakınız.</value>
   </data>
   <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
-    <value>Arama 500'den fazla sonuç verecek. Lütfen arama kriterlerinizi tekrar düzenleyin.</value>
+    <value>Arama {0}'den fazla sonuç verecek. Lütfen arama kriterlerinizi tekrar düzenleyin.</value>
   </data>
   <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
     <value>Çiğneme ve kampanya ayarları eklendi.</value>
@@ -10744,7 +10744,7 @@ Aktif opsiyonlar: {4}</value>
     <value>Devamsızlık ekleme başarılı.</value>
   </data>
   <data name="AddAbsenceTotalResult" xml:space="preserve">
-    <value>{0} devamsızlık eklendi. {1} devamsızlık eklenemedi.</value>
+    <value>{0} temsilci için devamsızlık ekleniyor. {1} devamsızlık başarıyla eklendi. {2} devamsızlık başarısız oldu.</value>
   </data>
   <data name="SwapShifts" xml:space="preserve">
     <value>Vardiya değiş tokuşu</value>
@@ -10780,10 +10780,10 @@ Aktif opsiyonlar: {4}</value>
     <value>Devamsızlık kaldırıldı.</value>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>{0} kişisine güniçi devamsızlık ekleme yetkiniz yok.</value>
+    <value>Bu kişilere gün içi devamsızlık ekleme yetkiniz yok.</value>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>{0} kişisine tam gün devamsızlık ekleme yetkiniz yok.</value>
+    <value>Bu kişilere tam gün devamsızlık ekleme yetkiniz yok.</value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>Sunucuya ulaşılamıyor.
@@ -11090,7 +11090,7 @@ Lütfen İnternet bağlantınızı kontrol edip tekrar deneyin.</value>
     <value>Devamsızlık iptal sınırı</value>
   </data>
   <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
-    <value>{0} kişisinin aktivitelerini değiştirme yetkiniz yok.</value>
+    <value>Aktivitelerde değişiklik yapma yetkiniz yok.</value>
   </data>
   <data name="SelectedAgentsColon" xml:space="preserve">
     <value>Seçili çalışanlar:</value>
@@ -11138,7 +11138,7 @@ Lütfen İnternet bağlantınızı kontrol edip tekrar deneyin.</value>
     <value>Seçimi kaldır</value>
   </data>
   <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
-    <value>{0} adlı kişi için kişisel aktivite ekleme yetkiniz yok.</value>
+    <value>Bu kişilere kişisel aktivite ekleme yetkiniz yok.</value>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
     <value>Vardiya olmadığı için aktivite ekleyemezsiniz.</value>
@@ -11205,5 +11205,422 @@ Aşağıdaki ayarlar etkinleştirildi:
     <value>Lisans başarıyla uygulandı.
 Tebrikler!
 Uygulama az sonra kapanacak.</value>
+  </data>
+  <data name="OpenPlansPage" xml:space="preserve">
+    <value>Planlar</value>
+  </data>
+  <data name="RequestTypeOvertime" xml:space="preserve">
+    <value>Fazla mesai</value>
+  </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>Takım filtrele</value>
+  </data>
+  <data name="OvertimeRequest" xml:space="preserve">
+    <value>Fazla mesai isteği</value>
+  </data>
+  <data name="OvertimeRequests" xml:space="preserve">
+    <value>Fazla mesai istekleri</value>
+  </data>
+  <data name="OvertimeType" xml:space="preserve">
+    <value>Fazla mesai türü</value>
+  </data>
+  <data name="ReadyTimeAdherence" xml:space="preserve">
+    <value>Hazır zaman uyumu</value>
+  </data>
+  <data name="ReadyTimeAdherenceReportCalculation" xml:space="preserve">
+    <value>"Raporum" için hazır zaman uyum hesabı</value>
+  </data>
+  <data name="ShiftTradeResendMessage" xml:space="preserve">
+    <value>Vardiya değişimi sebebiyle istek yeniden gönderildi.</value>
+  </data>
+  <data name="RequestDenyReasonAutoPurge" xml:space="preserve">
+    <value>Zamanında işlenmediği için istek silindi.</value>
+  </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>İzin hesabınızda yeterli vakit kalmadı.</value>
+  </data>
+  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
+    <value>Devamsızlık isteği admin tarafından tamamen ya da kısmen devre dışı bırakıldı.</value>
+  </data>
+  <data name="FiltersColon" xml:space="preserve">
+    <value>Filtreler:</value>
+  </data>
+  <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
+    <value>Arama {0}'dan fazla sonuç verecek. Lütfen daha fazla arama kriteri ekleyip tekrar deneyin.</value>
+  </data>
+  <data name="FullAllowance" xml:space="preserve">
+    <value>Maksimum müsaade</value>
+  </data>
+  <data name="ShrinkedAllowance" xml:space="preserve">
+    <value>Eşik sonrası müsaade</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Lokasyon/takım filtreleme</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Filtrele</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Rolleri filtrele</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Lokasyonları filtrele</value>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0 ~ 1000000</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>1 ~ 100</value>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~ 9999</value>
+  </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>Bu kampanyayı silmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="InternalErrorMsg" xml:space="preserve">
+    <value>Bir hata oluştu.</value>
+  </data>
+  <data name="YouMustSelectAtLeastOneFilter" xml:space="preserve">
+    <value>En az bir filtre seçmelisiniz.</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Rol filtrele</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Beni hatırla</value>
+  </data>
+  <data name="ModifySkillGroup" xml:space="preserve">
+    <value>Yetenek grubu düzenle</value>
+  </data>
+  <data name="CreateSkillGroup" xml:space="preserve">
+    <value>Yetenek grubu yarat</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Güniçi değerlerini buradan gözlemleyebilirsiniz. Herhangi bir yetenek ya da yenenek grubu seçerek başlayın.</value>
+  </data>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>Yeni "Takımlar" modülünü denediniz mi?</value>
+  </data>
+  <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
+    <value>Sadece devamsızlık istekleri iptal edilebilir.</value>
+  </data>
+  <data name="CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios" xml:space="preserve">
+    <value>Kısıtlı senaryolarda değişiklik yapma yetkiniz bulunmadığından istek durumu değiştirilemiyor.</value>
+  </data>
+  <data name="OvertimeRequestAlreadyHasScheduleInPeriod" xml:space="preserve">
+    <value>{0}-{1} aralığında zaten vardiyalanmış bir aktivite bulunmakta.</value>
+  </data>
+  <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>{0} fazla mesai isteği reddedildi.</value>
+  </data>
+  <data name="OvertimeRequestWasCancelled" xml:space="preserve">
+    <value>Fazla mesai isteği iptal edildi.</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
+    <value>Fazla mesai isteğiniz otomatik olarak reddedildi. İstenilen fazla mesainin başlama saati: {0}. Bu değer şu anki saatten en az {1} dakika sonra olmalı.</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
+    <value>Fazla mesai isteğiniz otomatik olarak reddedildi. Lokasyonun açık olduğu saatler {1}. İstenilen aralık ise {0}.</value>
+  </data>
+  <data name="ShiftTradeRequestForExchangeOfferHasBeenCompleted" xml:space="preserve">
+    <value>Vardiya takası teklifi başka bir müşteri temsilcisi tarafından tamamlandı.</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
+    <value>Fazla mesai isteğiniz otomatik olarak reddedildi. Lokasyon {0} aralığında kapalı gözüküyor.</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonInvalidPeriod" xml:space="preserve">
+    <value>Fazla mesai isteğiniz otomatik olarak reddedildi. Fazla mesai için geçerli aralık {0} olmalı.</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Web</value>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>7. ve 8. aylar</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Müşteri temsilcisi başına hazır zaman uyumu</value>
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Gün başına hazır zaman uyumu</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Raporları filtrele</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRules" xml:space="preserve">
+    <value>İş kurallarına göre onayla</value>
+  </data>
+  <data name="SubmitApproveBasedOnBusinessRulesSuccess" xml:space="preserve">
+    <value>Seçili istekler iş kurallarına göre onaylanmak için işleme konuluyor.</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRulesFinished" xml:space="preserve">
+    <value>İsteklerin işlenmesi tamamlandı.</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
+    <value>Tahminleme yöntemleri ile aykırı değerlere ait detaylı bilgi</value>
+  </data>
+  <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
+    <value>Minimum onay süresi eşik değeri (isteğin başlama saatinden X dakika önce):</value>
+  </data>
+  <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
+    <value>{0} temsilci için vardiya kategorisi değiştiriliyor: {1} değişiklik başarılı, {2} başarısız</value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Seçili kişiler için vardiya kategorisi başarılı bir şekilde değiştirildi.</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(birden fazla oturma yeri seçili)</value>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>Oturma yeri numarası</value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>Temsilciler oturma yerine ihtiyaç duymuyor</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>Rezervasyonsuz kişiler</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>Oturma yeri rezervasyonu özeti</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>Başarılı rezervasyonlar</value>
+  </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>Vardiya kategorisi değiştir</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>Kategori seç</value>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>Yetenekler yükleniyor...</value>
+  </data>
+  <data name="LoadingSkillAreas" xml:space="preserve">
+    <value>Yetenek grupları yükleniyor...</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Listeye geri dön</value>
+  </data>
+  <data name="NotOk" xml:space="preserve">
+    <value>Bir yanlışlık var</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Hesap</value>
+  </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>Gönderi 2000 karakter sınırını aştığı için cevap kaydedilemiyor.</value>
+  </data>
+  <data name="RequestInvalidMessageModification" xml:space="preserve">
+    <value>İstek durumu {0} olduğundan cevabınız kaydedilemiyor.</value>
+  </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>Cevapla ve iptal et</value>
+  </data>
+  <data name="ReplySuccess" xml:space="preserve">
+    <value>{0} isteğe cevabınız kaydedildi</value>
+  </data>
+  <data name="SelectBusinessRulesWithColon" xml:space="preserve">
+    <value>Kural seç:</value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>Bütçe töleransına göre istekleri onayla</value>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>Güniçi kaynak dengesine göre istekleri onayla</value>
+  </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>Bu kişiler için vardiya kategorisi değiştirme izni yok</value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>Bu kişiler için değişiklik yapma</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>Bu kişiler için aktiviteyi çiğne</value>
+  </data>
+  <data name="ManageOpenHours" xml:space="preserve">
+    <value>Çalışma saatleri</value>
+  </data>
+  <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
+    <value>Çalışma saatleri güncellendi</value>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>Bu kişilerin aktiviteleri etkilendi:</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>Kapanın elinde kalır</value>
+  </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>Haftalık dinlenme süresi</value>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Haftalık minimum çalışma süresi</value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>Vardiya, izin günü ile çakışıyor</value>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Haftalık maksimum çalışma süresi</value>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>Gecelik dinlenme süresi</value>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>Aktivitenin üzerine kaydetme</value>
+  </data>
+  <data name="MaximumContinuousWorkTimeRuleName" xml:space="preserve">
+    <value>Maksimum sürekli çalışma süresi</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Alarm</value>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>İzin günü çakışması</value>
+  </data>
+  <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
+    <value>Bu aktivite, üst üste gelmeyen aktivitelerin dahi üzerine kaydedecektir.</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>{1} lokasyonu için {0} günü {2} - {3} arası çalışma saatleri bulunamadı.</value>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>Lokasyonun çalışma saatleri</value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>Kıdem</value>
+  </data>
+  <data name="ToggleClose" xml:space="preserve">
+    <value>Değiştirme düğmesi kapama</value>
+  </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>Hiçbir değişiklik yapılmadı</value>
+  </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>Doğrulama uyarılarını düzenle</value>
+  </data>
+  <data name="FilterPlanningPeriods" xml:space="preserve">
+    <value>Planlama aralıklarını filtrele</value>
+  </data>
+  <data name="ETOTRequests" xml:space="preserve">
+    <value>Fazla mesai istekleri</value>
+  </data>
+  <data name="MobileNotificationSettings" xml:space="preserve">
+    <value>Mobil uygulama bildiri ayarları</value>
+  </data>
+  <data name="ShowAllSchedules" xml:space="preserve">
+    <value>Bütün planları göster</value>
+  </data>
+  <data name="EnableMobileNotifications" xml:space="preserve">
+    <value>Mobil uygulama bildirilerini aç</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
+    <value>{1} intervalindeki, üzerinde ekleme yapılamayan {0} aktivitesinin üzerine, {3} intervalinde {2} aktivitesi eklendi.</value>
+  </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>Bu kişiler için üzerine yazılamayan aktiviteleri taşı</value>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>Yeni eklenen aktivite, üzerine ekleme yapılamayan aktiviteler ile çakışıyor</value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>Haftada maksimum iş saati sınırı aşımı var</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>Haftadaki iş saati minimum sınırın altında</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>Gecelik dinlenme vakti kuralı çiğneniyor</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>Bu aktivitenin saati, lokasyonun çalışma saatlerinin dışında.</value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>Vu aktivitenin saati, yeteneğin açılış saatlerinin dışında.</value>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>Üzerine ekleme yapılamayan aktiviteye ekleme yapıldı.</value>
+  </data>
+  <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
+    <value>İzin miktarı biriken izin değerini aştı.</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>Bu periyodda vardiya kategorisi kısıtlaması çiğnendi.</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>Bu hafta vardiya kategorisi kısıtlaması çiğnendi.</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>Dinlenme saati, öngörülen haftalık eşik değerinin aşağısında.</value>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>Üzerine ekleme yapılabilir.</value>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>Doğrulama ikazı</value>
+  </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>Bütün lokasyonlar</value>
+  </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>Yeniden tahminlenen iş gücü</value>
+  </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>Vardiya takası isteği, yeterli sayıda uygun oturma yeri bulunmamasından dolayı reddedildi.</value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Maksimum oturma yeri doğrulamasını etkinleştir</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Tam</value>
+  </data>
+  <data name="InternalNote" xml:space="preserve">
+    <value>Dahili not</value>
+  </data>
+  <data name="MatchColon" xml:space="preserve">
+    <value>Eşleşme:</value>
+  </data>
+  <data name="FullOrPartial" xml:space="preserve">
+    <value>Tam ya da kısmen</value>
+  </data>
+  <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
+    <value>Bu sayfayı görüntüleme izniniz yok.</value>
+  </data>
+  <data name="IntradayWithShrinkage" xml:space="preserve">
+    <value>Güniçi (daralma etkin)</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>Oturma yeri doluluk oranını onaylarken kullanılacak aralık</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Oturma yeri doluluk oranı doğrulaması</value>
+  </data>
+  <data name="ShiftTradeRequestSettings" xml:space="preserve">
+    <value>Vardiya Takası İsteği Ayarları</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Geçersiz, üst üste binmiş aktiviteyi hareket ettir</value>
+  </data>
+  <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">
+    <value>Geçersiz, üst üste binmiş aktiviteyi değiştirme izniniz yok.</value>
+  </data>
+  <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
+    <value>Halen üst üste binmiş fakat üzerine ekleme yapılamayan aktiviteler var.</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
+    <value>Geçersiz, üst üste binmiş aktiviteler başarılı bir şekilde değiştirildi.</value>
+  </data>
+  <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
+    <value>{0} kişinin geçersiz, üst üste binmiş aktiviteleri değiştirildi: {1} tanesi başarılı oldu, {2} tanesi başarısız. </value>
+  </data>
+  <data name="TeamsModule" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+  <data name="ValidateRequestsBasedOnExpiration" xml:space="preserve">
+    <value>Minimum onay zamanı eşiği ile doğrulama yap</value>
+  </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>{0} yeteneğine ait planlanmış kaynak bilgisi eksik.</value>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>İhtiyaç duyulan kişi</value>
   </data>
 </root>

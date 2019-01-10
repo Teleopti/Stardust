@@ -33,7 +33,7 @@
 				<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="copy" theme="outline"></i> Save as new...</span>
 			</ng-template>
 			<ng-template #deleteAction>
-				<a nz-popconfirm nzTitle="Are you sure to delete this report?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteReport(item)" *ngIf="permission.CanDeleteReport">
+				<a nz-popconfirm nzTitle="Are you sure you want to delete this report?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteReport(item)" *ngIf="permission.CanDeleteReport">
 					<i nz-icon type="delete" theme="outline"></i> Delete
 				</a>
 				<span class="disabledLink" *ngIf="!permission.CanDeleteReport"><i nz-icon type="delete" theme="outline"></i> Delete</span>

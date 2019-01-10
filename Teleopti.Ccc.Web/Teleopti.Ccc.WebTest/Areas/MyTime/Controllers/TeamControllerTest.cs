@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -29,13 +30,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
-			var target = new TeamController(viewModelFactory, new Now(), null);
+			var target = new TeamController(viewModelFactory, new MutableNow(new DateTime(2019,1,1,10,0,0, DateTimeKind.Utc)), null, new FakeUserTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo()));
 
-			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(new List<SelectOptionItem>());
+			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(new DateOnly(2019, 1, 1), DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(new List<SelectOptionItem>());
 
 			target.TeamsForShiftTrade(null);
 
-			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
+			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(new DateOnly(2019,1,1), DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 		}
 
 		[Test]
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
 			                .Return(teams);
 
-			var target = new TeamController(viewModelFactory, new Now(), null);
+			var target = new TeamController(viewModelFactory, new Now(), null, new FakeUserTimeZone());
 
 			var result = target.TeamsForShiftTrade(DateOnly.Today);
 
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnTeamOptionsAsJsonForShiftTradeBoard()
 		{
 			var teamRepository = new FakeTeamRepository();
-			var site = new Domain.Common.Site("mysite");
+			var site = new Site("mysite");
 			var team = new Team {Site = site }.WithDescription(new Description("myteam")).WithId();
 			teamRepository.Add(team);
 
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
 
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
+			var teleoptiPrincipal = new TeleoptiPrincipalForLegacy(identity, person);
 			teleoptiPrincipal.AddClaimSet(claimSet);
 
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var teamProvider = new TeamProvider(teamRepository, permissionProvider, searchProvider);
 
 			var viewModelFactory = new TeamViewModelFactory(teamProvider, null, null, null);
-			var target = new TeamController(viewModelFactory, new Now(), null);
+			var target = new TeamController(viewModelFactory, new Now(), null, new FakeUserTimeZone());
 
 
 			var result = target.TeamsForShiftTradeBoard(DateOnly.Today);
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnSiteOptionsAsJsonForShiftTradeBoardWithoutBU()
 		{
 			var viewModelFactory = createSiteViewModelFactory("mysite");
-			var target = new TeamController(null, new Now(), viewModelFactory);
+			var target = new TeamController(null, new Now(), viewModelFactory, new FakeUserTimeZone());
 
 			var result = target.SitesForShiftTrade(DateOnly.Today);
 			var data = result.Data as IEnumerable<SelectOptionItem>;
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
 
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
+			var teleoptiPrincipal = new TeleoptiPrincipalForLegacy(identity, person);
 			teleoptiPrincipal.AddClaimSet(claimSet);
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);
@@ -149,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<ISiteViewModelFactory>();
 			viewModelFactory.Stub(x => x.GetTeams(new List<Guid> { new Guid() }, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).IgnoreArguments().Return(expectedResult);
 
-			var target = new TeamController(null, null, viewModelFactory);
+			var target = new TeamController(null, null, viewModelFactory, new FakeUserTimeZone());
 			var result = target.TeamsUnderSiteForShiftTrade("00000000-0000-0000-0000-000000000000", DateOnly.Today);
 
 			var data = result.Data as IEnumerable<SelectOptionItem>;

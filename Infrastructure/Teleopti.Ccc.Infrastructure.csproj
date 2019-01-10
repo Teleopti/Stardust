@@ -21,6 +21,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+	  <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -174,11 +175,13 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.275\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.273\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.275\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -252,7 +255,7 @@
     <Compile Include="Foundation\ReportUrlConstructor.cs" />
     <Compile Include="Foundation\SelectivePrincipalContext.cs" />
     <Compile Include="Foundation\StardustJobFeedback.cs" />
-    <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
+    <Compile Include="Foundation\TeleoptiPrincipalFactory.cs" />
     <Compile Include="Foundation\TokenIdentityProvider.cs" />
     <Compile Include="Foundation\DatabaseConnectionLostException.cs" />
     <Compile Include="Foundation\WebRequestPrincipalContext.cs" />
@@ -575,7 +578,7 @@
     <Compile Include="Foundation\IRetrievePersonNameForPerson.cs" />
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalInternalsFactory.cs" />
-    <Compile Include="Foundation\TeleoptiPrincipalFactory.cs" />
+    <Compile Include="Foundation\TeleoptiPrincipalForLegacyFactory.cs" />
     <Compile Include="Licensing\Agreements\AgreementProvider.cs" />
     <Compile Include="Licensing\Agreements\LicenseAgreement.cs" />
     <Compile Include="Licensing\LicenseStatusRepositories.cs" />

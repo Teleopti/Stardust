@@ -4,6 +4,7 @@ using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_unitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_jobResultRepository = _mocks.DynamicMock<IJobResultRepository>();
 		    _publisher = new LegacyFakeEventPublisher();
-            _target = new QuickForecastCommandHandler( _unitOfWorkFactory, _jobResultRepository, _publisher, new DummyInfrastructureInfoPopulator());
+            _target = new QuickForecastCommandHandler( _unitOfWorkFactory, _jobResultRepository, _publisher, new DummyInfrastructureInfoPopulator(), MockRepository.GenerateMock<ILoggedOnUser>());
 			_unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
 		}
 

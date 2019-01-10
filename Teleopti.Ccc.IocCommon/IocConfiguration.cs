@@ -20,12 +20,6 @@ namespace Teleopti.Ccc.IocCommon
 			//just to support some old mock tests...
 		}
 
-		public void FillToggles()
-		{
-			var toggleQuerier = _toggleManager as ToggleQuerier;
-			toggleQuerier?.FillAllToggles();
-		}
-
 		public virtual bool Toggle(Toggles toggle)
 		{
 			return _toggleManager != null && _toggleManager.IsEnabled(toggle);
@@ -38,7 +32,14 @@ namespace Teleopti.Ccc.IocCommon
 
 		public void AddToggleManagerToBuilder(ContainerBuilder builder)
 		{
-			builder.RegisterInstance(_toggleManager).As<IToggleManager>().SingleInstance();
+			if (_toggleManager is IToggleFiller)
+			{
+				builder.RegisterInstance(_toggleManager).As<IToggleManager>().As<IToggleFiller>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterInstance(_toggleManager).As<IToggleManager>().SingleInstance();				
+			}
 		}
 	}
 }

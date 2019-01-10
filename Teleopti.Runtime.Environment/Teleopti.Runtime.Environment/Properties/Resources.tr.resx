@@ -117,4 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AgentScheduleMessenger" xml:space="preserve">
+    <value>Teleopti WFM Çalışan Vardiya Butonu</value>
+  </data>
+  <data name="AlwaysOnTop" xml:space="preserve">
+    <value>En üste al</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Yenile</value>
+  </data>
 </root>

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			[Values("Taipei Standard Time", "UTC", "GMT Standard Time", "Mountain Standard Time")] string timeZoneForAll)
 		{
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneForAll);
-			TimeZoneGuard.TimeZone = timeZone;
+			TimeZoneGuard.Set(timeZone);
 			UserTimeZone.Is(timeZone);
 			const int numberOfAgents = 10;
 			var date = new DateOnly(2015, 10, 12);

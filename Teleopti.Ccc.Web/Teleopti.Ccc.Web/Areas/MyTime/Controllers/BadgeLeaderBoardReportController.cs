@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	    [UnitOfWork]
 	    public virtual JsonResult OptionsForLeaderboard()
 	    {
-			var todayInUserTimezone = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()));
+			var todayInUserTimezone = _now.CurrentLocalDate(_timeZone.TimeZone());
 			return
 				Json(
 					_viewModelFactory.CreateLeaderboardOptions(todayInUserTimezone, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard),

@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 	{
 		private readonly string _pathToWebAppOrFile;
 		private IDictionary<Toggles, bool> _loadedToggles;
+		private readonly object locker = new object();
 
 		public ToggleQuerier(string pathToWebAppOrFile)
 		{
@@ -19,20 +20,22 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 
 		public bool IsEnabled(Toggles toggle)
 		{
-			if (_loadedToggles != null)
-				return _loadedToggles[toggle];
-
-			var uriBuilder = new UriBuilder(_pathToWebAppOrFile + "ToggleHandler/IsEnabled");
-			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-			query["toggle"] = toggle.ToString();
-			uriBuilder.Query = query.ToString();
-			return uriBuilder.ExecuteJsonRequest<ToggleEnabledResult>().IsEnabled;
+			lock (locker)
+			{
+				if(_loadedToggles ==null)
+					RefetchToggles();
+			
+				return _loadedToggles[toggle];				
+			}
 		}
 
-		public void FillAllToggles()
+		public void RefetchToggles()
 		{
-			var uriBuilder = new UriBuilder(_pathToWebAppOrFile + "ToggleHandler/AllToggles");
-			_loadedToggles = uriBuilder.ExecuteJsonRequest<IDictionary<Toggles, bool>>();
+			lock (locker)
+			{
+				var uriBuilder = new UriBuilder(_pathToWebAppOrFile + "ToggleHandler/AllToggles");
+				_loadedToggles = uriBuilder.ExecuteJsonRequest<IDictionary<Toggles, bool>>();				
+			}
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
@@ -24,8 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			var calendar = CultureInfo.CurrentCulture.Calendar;
-			var utcTime = now.UtcDateTime();
-			var agentTime = TimeZoneHelper.ConvertFromUtc(utcTime, timeZone);
+			var agentTime = now.CurrentLocalDateTime(timeZone);
 			vm.NowYear = calendar.GetYear(agentTime);
 			vm.NowMonth = calendar.GetMonth(agentTime);
 			vm.NowDay = calendar.GetDayOfMonth(agentTime);

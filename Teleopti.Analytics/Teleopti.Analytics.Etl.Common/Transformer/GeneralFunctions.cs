@@ -4,8 +4,6 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.UserTexts;
-
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
@@ -18,20 +16,20 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			_generalInfrastructure = generalInfrastructure;
 		}
 
-		public IList<IDataSourceEtl> DataSourceValidList => getDatasourceList(true, false);
+		public IList<IDataSourceEtl> DataSourceValidList => getDataSourceList(true, false);
 
-		public IList<IDataSourceEtl> DataSourceInvalidList => getDatasourceList(false, false);
+		public IList<IDataSourceEtl> DataSourceInvalidList => getDataSourceList(false, false);
 
-		public IList<IDataSourceEtl> DataSourceValidListIncludedOptionAll => getDatasourceList(true, true);
+		public IList<IDataSourceEtl> DataSourceValidListIncludedOptionAll => getDataSourceList(true, true);
 
-		private IList<IDataSourceEtl> getDatasourceList(bool getValidDatasources, bool includeOptionAll)
+		private IList<IDataSourceEtl> getDataSourceList(bool getValidDataSources, bool includeOptionAll)
 		{
-			var origList = _generalInfrastructure.GetDataSourceList(getValidDatasources, includeOptionAll);
+			var origList = _generalInfrastructure.GetDataSourceList(getValidDataSources, includeOptionAll);
 			var retList = new List<IDataSourceEtl>();
 			foreach (var source in origList)
 			{
-				var newSource = new DataSourceEtl(source.DataSourceId, source.DataSourceName, source.TimeZoneId, source.TimeZoneCode,
-					source.IntervalLength, source.Inactive);
+				var newSource = new DataSourceEtl(source.DataSourceId, source.DataSourceName, source.TimeZoneId,
+					source.TimeZoneCode, source.IntervalLength, source.Inactive);
 				retList.Add(newSource);
 			}
 			return retList;
@@ -90,12 +88,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			_generalInfrastructure.SetDataMartConnectionString(dataMartConnectionString);
 		}
 
-		public DateOnlyPeriod GetFactQueueAvailblePeriod(int datasourceId)
+		public DateOnlyPeriod GetFactQueueAvailablePeriod(int dataSourceId)
 		{
-			return _generalInfrastructure.GetFactQueuePeriod(datasourceId);
+			return _generalInfrastructure.GetFactQueuePeriod(dataSourceId);
 		}
 
-		public DateOnlyPeriod GetFactAgentAvailblePeriod(int dataSourceId)
+		public DateOnlyPeriod GetFactAgentAvailablePeriod(int dataSourceId)
 		{
 			return _generalInfrastructure.GetFactAgentPeriod(dataSourceId);
 		}
