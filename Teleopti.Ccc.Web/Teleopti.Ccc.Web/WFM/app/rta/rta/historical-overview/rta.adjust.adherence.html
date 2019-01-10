@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="panel material-depth-1 card-panel" style="width:406px">
+    <div class="panel material-depth-1 card-panel" style="width:355px">
         <div class="con-row" style="padding-top: 10px">
             <div class="con-flex">
                 <h3 style="padding-top: 10px; padding-left: 6px">Adjusted Periods</h3>
@@ -30,20 +30,35 @@
         </div>
         <div class="con-row" style="padding-top: 10px; border-top: 1px solid lightgrey" ng-if="show">
             <div class="con-flex"  style="padding: 0 0 10px 6px;">
+                <label>From:</label>
                 <input type="text" class="pointer" ng-model="vm.selectedDateObj" placeholder="yyyy-mm-dd" style="width: 150px">
-                <button class="wfm-btn wfm-btn-primary" ng-click="show = !show">Adjust to Neutral</button>
+                <input type="text" class="pointer" ng-model="vm.selectedDateObj" placeholder="hh-mm-ss" style="width: 150px">
+            </div>
+        </div>
+        <div class="con-row" ng-if="show">
+            <div class="con-flex"  style="padding: 0 0 6px 24px;">
+                <label>To:</label>
+                <input type="text" class="pointer" ng-model="vm.selectedDateObj" placeholder="yyyy-mm-dd" style="width: 150px">
+                <input type="text" class="pointer" ng-model="vm.selectedDateObj" placeholder="hh-mm-ss" style="width: 150px">
+            </div>
+        </div>
+        <div class="con-row" ng-if="show">
+            <div class="con-flex">
+                <div class="pull-right" style="padding-bottom: 6px;">
+                    <button class="wfm-btn wfm-btn-primary" ng-click="show = !show">Adjust to Neutral</button>
+                </div>
             </div>
         </div>
         <table class="wfm-table">
             <thead>
             <tr>
-                <th style="width: 155px;">Period</th>
-                <th></th>
+                <th style="width: 280px;">Period</th>
+                <th style="width: 70px;"></th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">2019-01-07</td>
+                <td style="max-width:300px; overflow: hidden; text-overflow: ellipsis">2019-01-07 10:00:00 - 2019-01-07 14:00:00</td>
                 <td>
                    <span class="remove-approved-period">
 						<i class="mdi mdi-delete"></i>
@@ -52,7 +67,7 @@
                 </td>
             </tr>   
             <tr>
-                <td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">2019-01-05</td>
+                <td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">2019-01-05 20:00:00 - 2019-01-06 04:00:00</td>
                 <td>
                    <span class="remove-approved-period">
 						<i class="mdi mdi-delete"></i>
@@ -61,7 +76,7 @@
                 </td>
             </tr>       
             <tr>
-                <td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">2019-01-03</td>
+                <td style="max-width:300px; overflow: hidden; text-overflow: ellipsis">2019-01-03 12:00:00 - 2019-01-03 13:00:00</td>
                 <td>
                    <span class="remove-approved-period">
 						<i class="mdi mdi-delete"></i>
