@@ -115,7 +115,8 @@
 		WFM_Connect_NewLandingPage_WEB_78578,
 		WFM_AbsenceRequest_ImproveThroughput_79139,
 		WFM_ProbabilityView_ImproveResponseTime_80040,
-		WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128
+		WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128,
+		WFM_Log_Analytics_Schedule_Change_Updater_78934
 		// ReSharper restore InconsistentNaming
 	}
 }

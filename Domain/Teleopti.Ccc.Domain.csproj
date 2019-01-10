@@ -208,6 +208,7 @@
     <Compile Include="ApplicationLayer\Intraday\ISkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateAnalyticsScheduleLogger.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestAvailability.cs" />
     <Compile Include="Auditing\ITenantAudit.cs" />
     <Compile Include="Auditing\PurgeAuditRunner.cs" />

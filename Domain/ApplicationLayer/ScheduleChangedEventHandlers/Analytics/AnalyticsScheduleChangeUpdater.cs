@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 
@@ -14,10 +15,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		IRunOnHangfire
 	{
 		private readonly UpdateFactSchedules _updateFactSchedules;
+		private readonly IUpdateAnalyticsScheduleLogger _updateAnalyticsScheduleLogger;
 
-		public AnalyticsScheduleChangeUpdater(UpdateFactSchedules updateFactSchedules)
+		public AnalyticsScheduleChangeUpdater(UpdateFactSchedules updateFactSchedules, IUpdateAnalyticsScheduleLogger updateAnalyticsScheduleLogger)
 		{
 			_updateFactSchedules = updateFactSchedules;
+			_updateAnalyticsScheduleLogger = updateAnalyticsScheduleLogger;
 		}
 
 		[ImpersonateSystem]
@@ -25,6 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		[Attempts(10)]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
+			_updateAnalyticsScheduleLogger.Log(@event);
+
 			Func<IPerson, IEnumerable<DateTime>> period = p =>
 			{
 				var days =
