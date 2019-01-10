@@ -123,12 +123,16 @@
 						vm.openRecordedOutOfAdherences = true;
 						vm.openApprovedPeriods = true;
 						vm.openApproveForm = true;
+	
+                        var start = moment(interval.StartTime).isValid() ?  moment(interval.StartTime) : moment(timelineStart);
+						vm.approveStartTime = putTimeBetween(start, moment(timelineStart), moment(timelineEnd)).toDate();
+						
+                        var end = moment(interval.EndTime).isValid() ?  moment(interval.EndTime) : moment(timelineEnd);
+						vm.approveEndTime = putTimeBetween(end, moment(timelineStart), moment(timelineEnd)).toDate();
 
-						vm.approveStartTime = putTimeBetween(moment(interval.StartTime), moment(timelineStart), moment(timelineEnd)).toDate();
-						vm.approveEndTime = putTimeBetween(moment(interval.EndTime), moment(timelineStart), moment(timelineEnd)).toDate();
-
-						startTime = moment(vm.approveStartTime).isValid() ? moment(vm.approveStartTime).format("LTS") : moment(timelineStart).format("LTS");
-						endTime = moment(vm.approveEndTime).isValid() ? moment(vm.approveEndTime).format("LTS") : moment(timelineEnd).format("LTS");
+						//string format representation
+						startTime = moment(vm.approveStartTime).format("LTS");
+						endTime = moment(vm.approveEndTime).format("LTS");
 					};
 
 					return o
