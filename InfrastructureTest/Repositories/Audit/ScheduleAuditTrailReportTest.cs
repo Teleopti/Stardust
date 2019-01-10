@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 
 
@@ -30,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 		private IScheduleAuditTrailReport target;
 		private IUserTimeZone timeZone;
-		private IPerson personProvider;
+		private IUnsafePersonProvider personProvider;
 		private FakeGlobalSettingDataRepository settingRepository;
 
 		protected override void AuditSetup()
@@ -45,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			target = new ScheduleAuditTrailReport(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()), timeZone,
 				settingRepository);
-			personProvider = SetupFixtureForAssembly.loggedOnPerson;
+			personProvider = new UnsafePersonProvider();
 		}
 
 		[Test]
@@ -87,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 				res.Any(pa => consideredEqual(pa, expected)).Should().Be.True();
@@ -108,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var notMatchingPerson = PersonFactory.CreatePersonWithGuid("John", "Smith");
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {notMatchingPerson});
 				res.Count.Should().Be.EqualTo(0);
@@ -128,13 +126,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(2)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
 				res.Count.Should().Be.GreaterThan(1);
 
-				res = target.Report(personProvider,
+				res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(2)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 1, new List<IPerson> {PersonAssignment.Person});
 
@@ -166,7 +164,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
@@ -197,7 +195,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod((timeZone.TimeZone())), 100, new List<IPerson> {PersonAssignment.Person});
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
@@ -237,7 +235,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date), 100,
 					new List<IPerson> {PersonAssignment.Person});
@@ -271,7 +269,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 				res.Any(schedule => consideredEqual(schedule, expected)).Should().Be.True();
@@ -302,7 +300,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date), 100,
 					new List<IPerson> {PersonAssignment.Person});
@@ -400,7 +398,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -425,7 +423,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -446,7 +444,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -469,7 +467,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -492,7 +490,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -514,7 +512,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -536,7 +534,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -556,7 +554,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -581,7 +579,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -604,7 +602,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider,
+				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
@@ -630,6 +628,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			var nameFormat = nameAliasFormat.Replace("{FirstName}", "{0}").Replace("{LastName}", "{1}");
 			return string.Format(nameFormat, person.Name.FirstName, person.Name.LastName);
 		}
-
 	}
 }

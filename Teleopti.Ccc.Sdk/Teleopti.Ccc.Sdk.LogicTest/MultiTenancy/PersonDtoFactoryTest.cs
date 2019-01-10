@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests;
 using Teleopti.Ccc.Sdk.WcfHost.Service.Factory;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -97,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 		[Test]
 		public void ShouldSetLognInfoOnLoggedOnPerson()
 		{
-			var pers = LogOn.loggedOnPerson;
+			var pers = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
 			PersonRepository.Add(pers);
 			TenantLogonDataManager.SetLogon(pers.Id.GetValueOrDefault(), "inloggningsnamn", "DOMAIN/NAME");
 			var res = PersonDtoFactory.GetLoggedOnPerson();

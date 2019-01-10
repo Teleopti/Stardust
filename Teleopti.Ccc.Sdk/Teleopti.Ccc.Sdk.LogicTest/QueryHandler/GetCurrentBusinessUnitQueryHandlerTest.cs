@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		public void ShouldGetTheCurrentBusinessUnit()
 		{
 			var result = target.Handle(new GetCurrentBusinessUnitQueryDto());
-			result.First().Name.Should().Be.EqualTo(((TeleoptiIdentity)TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity).BusinessUnit.Name);
+			result.First().Name.Should().Be.EqualTo(((TeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Name);
 		}
 	}
 }

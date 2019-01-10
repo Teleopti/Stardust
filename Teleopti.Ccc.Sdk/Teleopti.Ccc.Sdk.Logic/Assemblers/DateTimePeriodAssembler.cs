@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	{
         public DateTimePeriodAssembler()
         {
-            TimeZone = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone;
+            TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
         }
 
         public TimeZoneInfo TimeZone { get; set; }

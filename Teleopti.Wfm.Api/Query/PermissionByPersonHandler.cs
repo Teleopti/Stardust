@@ -14,13 +14,13 @@ namespace Teleopti.Wfm.Api.Query
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentDataSource;
 
-		public PermissionByPersonHandler(IPersonRepository personRepository, IRoleToPrincipalCommand roleToPrincipalCommand, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public PermissionByPersonHandler(IPersonRepository personRepository, IRoleToPrincipalCommand roleToPrincipalCommand, ICurrentUnitOfWorkFactory currentDataSource)
 		{
 			_personRepository = personRepository;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_currentDataSource = currentDataSource;
 		}
 
 		[UnitOfWork]
@@ -28,7 +28,8 @@ namespace Teleopti.Wfm.Api.Query
 		{
 			var person = _personRepository.Get(query.PersonId);
 			var owner = new ClaimsOwner(person);
-			_roleToPrincipalCommand.Execute(new SingleOwnedPerson(person), owner, _personRepository, _currentUnitOfWorkFactory.Current().Name);
+			_roleToPrincipalCommand.Execute(new SingleOwnedPerson(person), owner,
+				_currentDataSource.Current(), _personRepository);
 			return new QueryResultDto<ApplicationFunctionDto>
 			{
 				Successful = true,

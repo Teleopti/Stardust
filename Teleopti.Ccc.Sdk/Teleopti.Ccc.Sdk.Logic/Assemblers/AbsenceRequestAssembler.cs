@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             get
             {
                 return
-                    TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             }
         }
     }

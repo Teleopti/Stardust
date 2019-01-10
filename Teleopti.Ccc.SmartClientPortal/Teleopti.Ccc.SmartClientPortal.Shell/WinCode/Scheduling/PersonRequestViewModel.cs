@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         //Hmm. looks a bit vidrish, how do we do this better, move to domain in some way?
         private string ResolveRequestDate()
         {
-            var localPeriod = _personRequest.Request.Period.ToDateOnlyPeriod(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
+            var localPeriod = _personRequest.Request.Period.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             string text = localPeriod.DateString;
             if (localPeriod.DayCount() == 1)
             {

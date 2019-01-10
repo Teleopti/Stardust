@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
                 if (identities == null || identities.Count <= 0)
                     throw new FaultException("No Identity found");
 
-                evaluationContext.Properties.Add("Principal",new TeleoptiPrincipalForLegacy(identities[0], _personContainer?.Person));
+                evaluationContext.Properties.Add("Principal",new TeleoptiPrincipal(identities[0], _personContainer?.Person));
             }
         }
 

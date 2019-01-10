@@ -121,7 +121,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var toggles = Toggles();
 			(_fixture as IConfigureToggleManager)?.Configure(toggles);
 			var args = new IocArgs(config);
-			args.TeleoptiPrincipalForLegacy = false;
 			if (QueryAllAttributes<UseIocForFatClientAttribute>().Any())
 				args.IsFatClient = true;
 			(_fixture as ISetupConfiguration)?.SetupConfiguration(args);

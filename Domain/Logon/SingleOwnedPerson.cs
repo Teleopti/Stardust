@@ -4,24 +4,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Logon
 {
-	public interface IPersonOwner
-	{
-		IPerson GetPerson(IPersonRepository personRepository);
-	}
-
-	public class PrincipalPersonOwner : IPersonOwner
-	{
-		private readonly ITeleoptiPrincipal _principal;
-
-		public PrincipalPersonOwner(ITeleoptiPrincipal principal)
-		{
-			_principal = principal;
-		}
-
-		public IPerson GetPerson(IPersonRepository personRepository) =>
-			personRepository.Get(_principal.PersonId);
-	}
-
 	public class SingleOwnedPerson : IPersonOwner
 	{
 		private readonly IPerson _person;
@@ -31,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Logon
 			_person = person;
 		}
 
-		public IPerson GetPerson(IPersonRepository personRepository) =>
-			_person;
+		public IPerson GetPerson(IPersonRepository personRepository) => _person;
 	}
 }

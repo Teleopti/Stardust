@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public static IStatisticRepository Create()
 		{
 			ITeleoptiIdentity identity = null;
-			var principal = TeleoptiPrincipalForLegacy.CurrentPrincipal;
+			var principal = TeleoptiPrincipal.CurrentPrincipal;
 			if (principal != null)
 			{
 				identity = principal.Identity as ITeleoptiIdentity;

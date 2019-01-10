@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_target = new IntradayMainModel();
 			var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
 			_target.Period = dateOnlyPeriod;
-			Assert.AreEqual(_target.PeriodAsDateTimePeriod(), dateOnlyPeriod.ToDateTimePeriod(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone));
+			Assert.AreEqual(_target.PeriodAsDateTimePeriod(), dateOnlyPeriod.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 		}
 	}
 }

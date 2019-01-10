@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 
 		private static bool setupCulture()
 		{
-			if (TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional == null) return false;
+			if (TeleoptiPrincipal.CurrentPrincipal.Regional == null) return false;
 
 			Thread.CurrentThread.CurrentCulture =
-				TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			Thread.CurrentThread.CurrentUICulture =
-				TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture;
+				TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			return true;
 		}
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				_roleToPrincipalCommand.Execute(TeleoptiPrincipalForLegacy.CurrentPrincipal, repositoryFactory.CreatePersonRepository(uow), unitOfWorkFactory.Name);
+				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, repositoryFactory.CreatePersonRepository(uow));
 			}
 
 			if (result.Result)

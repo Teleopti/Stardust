@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
 
         private static void populateSystemProperties()
         {
-			if (TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity is ITeleoptiIdentity identity)
+			if (TeleoptiPrincipal.CurrentPrincipal.Identity is ITeleoptiIdentity identity)
             {
                 GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
                 GlobalContext.Properties["BUId"] = identity.BusinessUnit.Id;

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 			if (payrollExport == null) throw new ArgumentNullException(nameof(payrollExport));
 
 			var payrollResultId = SavePayrollResult(payrollExport);
-			var personId = TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId;
+			var personId = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(Guid.Empty);
 			var message = new RunPayrollExportEvent
 			{
 				PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var exportingPersonDomain = _personRepository.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId);
+				var exportingPersonDomain = TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository);
 				var payrollExportDomain = _payrollExportRepository.Get(payrollExport.Id.GetValueOrDefault(Guid.Empty));
 
 				var payrollResult = GetPayrollResult(payrollExportDomain, exportingPersonDomain, DateTime.UtcNow);

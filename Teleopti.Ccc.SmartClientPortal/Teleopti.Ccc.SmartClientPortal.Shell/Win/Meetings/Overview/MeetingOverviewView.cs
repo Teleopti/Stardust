@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 			SetTexts();
 			_eventAggregator.GetEvent<PersonSelectionFormHideEvent>().Subscribe(unCheckFilter);
 
-			UserTimeZone = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone;
+			UserTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			ScheduleGrid.DisplayStrings[4] = "";//hide the text area in all day area in day view
 			ScheduleGrid.DisplayStrings[3] = "";
 			scheduleControl1.Appearance.WorkWeekHeaderFormat = "d dddd";
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 			scheduleControl1.NavigationPanel.Width = 220;
 		   scheduleControl1.Calendar.Visible = false;
 			_calendarAndTextPanel.BringToFront();
-           scheduleControl1.Culture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+           scheduleControl1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 		   scheduleControl1.Appearance.WorkWeekHeaderFormat = "d dddd";
 		   selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
 		   if (scheduleControl1.RightToLeft == RightToLeft.Yes)
@@ -515,7 +515,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 
 		private static bool isPermittedToViewSchedules()
 		{
-			IPerson person = ((ITeleoptiPrincipalForLegacy)TeleoptiPrincipalForLegacy.CurrentPrincipal).UnsafePerson;
+			IPerson person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 			ITeam rightClickedPersonsTeam = person.MyTeam(DateOnly.Today);
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
 			{

@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var culture = CultureInfoFactory.CreateChineseCulture();
 			person.PermissionInformation.SetCulture(culture);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
 			CurrentTeleoptiPrincipal.Fake(principal);
 		}
 

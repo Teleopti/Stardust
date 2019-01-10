@@ -24,6 +24,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			IPerson tradeWithPerson = SetupFixtureForAssembly.loggedOnPerson;
 			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
+				PersonRepository.Add(tradeWithPerson);
+				uow.PersistAll();
+			}
+			//save
+			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+			{
 				IPersonRequest request = new PersonRequest(SetupFixtureForAssembly.loggedOnPerson);
 				IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
 						new List<IShiftTradeSwapDetail>

@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         	act.InWorkTime = true;
 			_ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_agent,
 				_scenario, act, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2000, 12, 31, 21, 0, 0),
-					new DateTime(2000, 12, 31, 22, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
+					new DateTime(2000, 12, 31, 22, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
 
 
             //create absences
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var start = new DateTime(2007, 10, 1, 6, 0, 0);
             var end = new DateTime(2007, 10, 1, 10, 0, 0);
-            _periodBounds = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start,end, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
+            _periodBounds = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start,end, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
             _nightlyRest = new TimeSpan(8, 0, 0);
 
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, new FullPermission());
 
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_agent,
-					_scenario, ActivityFactory.CreateActivity("sdfsdf"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 2, 6, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
+					_scenario, ActivityFactory.CreateActivity("sdfsdf"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 2, 6, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
 
             _scheduleRange.Add(_ass1);
             _scheduleRange.Add(ass);
@@ -192,8 +192,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 	    public void ShouldNotIncludePersonalActivityOutsideProjectionInToolTipAssignment()
 		{
-			var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 1, 13, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
-			var dateTimePeriodPersonal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 3, 0, 0), new DateTime(2001, 1, 1, 4, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
+			var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 1, 13, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var dateTimePeriodPersonal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 3, 0, 0), new DateTime(2001, 1, 1, 4, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			_param = new ScheduleParameters(_scenario, _agent, new DateTimePeriod(2000, 1, 1, 2001, 1, 5));
 			_scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, new FullPermission());
 
@@ -211,8 +211,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNotIncludePersonalActivityOutsideProjectionInPeriodTextWeekView()
 		{
-			var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 1, 13, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
-			var dateTimePeriodPersonal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 3, 0, 0), new DateTime(2001, 1, 1, 4, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
+			var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 1, 13, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var dateTimePeriodPersonal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 3, 0, 0), new DateTime(2001, 1, 1, 4, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			_param = new ScheduleParameters(_scenario, _agent, new DateTimePeriod(2000, 1, 1, 2001, 1, 5));
 			_scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker, new FullPermission());
 
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyGetToolTip()
         {
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_agent,
-				  _scenario, ActivityFactory.CreateActivity("sdfsdf"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 2, 0, 0), new DateTime(2001, 1, 1, 3, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
+				  _scenario, ActivityFactory.CreateActivity("sdfsdf"), TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 2, 0, 0), new DateTime(2001, 1, 1, 3, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
 
             _scheduleRange.Add(ass);
 
@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var start = new DateTime(2007, 10, 1, 23, 0, 0);
             var end = new DateTime(2007, 10, 2, 3, 0, 0);
-            var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(start, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone), TimeZoneHelper.ConvertToUtc(end, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone));
+            var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(start, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), TimeZoneHelper.ConvertToUtc(end, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 
             _destRect = new Rectangle(0, 0, 400, 40);
             
@@ -460,7 +460,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var start = new DateTime(2007, 10, 1, 7, 0, 0);
             var end = new DateTime(2007, 10, 1, 10, 0, 0);
-            var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(start, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone), TimeZoneHelper.ConvertToUtc(end, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone));
+            var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(start, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), TimeZoneHelper.ConvertToUtc(end, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 
             _destRect = new Rectangle(0, 0, 400, 40);
             _expectedRect = new Rectangle(0, 2, 300, 36);
@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         	var act = ActivityFactory.CreateActivity("sdfsdf");
         	act.InWorkTime = true;
             IPersonAssignment noRest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_agent,
-                  _scenario, act, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 4, 0, 0), new DateTime(2001, 1, 1, 21, 0, 0), TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
+                  _scenario, act, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 4, 0, 0), new DateTime(2001, 1, 1, 21, 0, 0), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), ShiftCategoryFactory.CreateShiftCategory("Morgon"));
 
             return noRest;
         }

@@ -109,7 +109,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 		public static void Login(IPerson person)
 		{
 			var principalContext = SelectivePrincipalContext.Make();
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(person, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest, null);
+			var principal = new TeleoptiPrincipalFactory().MakePrincipal(person, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest, null);
 			principalContext.SetCurrentPrincipal(principal);
 		}
 

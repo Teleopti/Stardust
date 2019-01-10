@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
 		public int CompareTo(object other)
 		{
 			var o = other as DayOfWeekDisplay;
-			return o != null ? string.Compare(DisplayName, o.DisplayName, true, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture) : -1;
+			return o != null ? string.Compare(DisplayName, o.DisplayName, true, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture) : -1;
 		}
 	}
 }

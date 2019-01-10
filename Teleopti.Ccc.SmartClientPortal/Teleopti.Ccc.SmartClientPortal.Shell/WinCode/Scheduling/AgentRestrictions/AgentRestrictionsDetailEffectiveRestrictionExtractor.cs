@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			preferenceCellData.DisplayShortName = description.ShortName;
 			preferenceCellData.DisplayColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person);
 			preferenceCellData.HasFullDayAbsence = true;
-			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(),TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
-			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
+			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(),TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
             return totalRestriction;
 		}
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			preferenceCellData.DisplayName = dayOff.Description.Name;
 			preferenceCellData.DisplayShortName = dayOff.Description.ShortName;
 			preferenceCellData.HasDayOff = true;
-			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(dayOffTemplate.TargetLength, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
+			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(dayOffTemplate.TargetLength, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			
 			return totalRestriction;
 		}
@@ -167,9 +167,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			preferenceCellData.DisplayName = assignment.ShiftCategory.Description.Name;
 			preferenceCellData.DisplayShortName = assignment.ShiftCategory.Description.ShortName;
 			preferenceCellData.DisplayColor = assignment.ShiftCategory.DisplayColor;
-			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(contractTime, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
+			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(contractTime, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			var period = projection.Period();
-			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
+			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
 			return totalRestriction;
 		}
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			if (!preferenceCellData.HasAbsenceOnContractDayOff && preferenceCellData.EffectiveRestriction.Absence.InContractTime) 
 				time = virtualSchedulePeriod.AverageWorkTimePerDay;
 
-			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(time, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
+			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(time, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			var totalRestriction = new EffectiveRestriction(preferenceCellData.EffectiveRestriction.StartTimeLimitation, preferenceCellData.EffectiveRestriction.EndTimeLimitation, new WorkTimeLimitation(time, time), preferenceCellData.EffectiveRestriction.ShiftCategory, preferenceCellData.EffectiveRestriction.DayOffTemplate, preferenceCellData.EffectiveRestriction.Absence, new List<IActivityRestriction>());
 			preferenceCellData.EffectiveRestriction = totalRestriction;
 		}

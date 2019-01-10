@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		public FakePersonRepository PersonRepository;
 		public FakeThreadPrincipalContext ThreadPrincipalContext;
 		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
-		public ILoggedOnUser LoggedOnUser;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			SiteRepository.Add(site1);
 			var team1 = new Team { Site = site1 }.WithDescription(new Description("team1")).WithId();
 			TeamRepository.Add(team1);
-			var person1 = LoggedOnUser.CurrentUser();
+			var person1 = ((IUnsafePerson)ThreadPrincipalContext.Current()).Person;
 			PersonRepository.Add(person1);
 			addTeamAndSiteToPerson(person1, team1);
 
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var team1 = new Team { Site = site1 }.WithDescription(new Description("team1")).WithId();
 			TeamRepository.Add(team1);
 
-			var person1 = LoggedOnUser.CurrentUser();
+			var person1 = ((IUnsafePerson)ThreadPrincipalContext.Current()).Person;
 			PersonRepository.Add(person1);
 			addTeamAndSiteToPerson(person1, team1);
 			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).AddFromPerson(person1);
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var team1 = new Team { Site = site1 }.WithDescription(new Description("team1")).WithId();
 			TeamRepository.Add(team1);
 
-			var person1 = LoggedOnUser.CurrentUser();
+			var person1 = ((IUnsafePerson)ThreadPrincipalContext.Current()).Person;
 			PersonRepository.Add(person1);
 			PersonFinderReadOnlyRepository.Has(person1);
 			addTeamAndSiteToPerson(person1, team1);

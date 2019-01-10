@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
 		
-			var loggedOnCulture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 			if (IsAscendingSort)
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
             if (CurrentSortColumn != column || !IsAscendingSort)
             {
-                var loggedOnCulture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+                var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 				if ((ColumnType)column == ColumnType.CurrentContractTimeColumn || (ColumnType)column == ColumnType.TargetContractTimeColumn)
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             }
             else
             {
-                var loggedOnCulture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+                var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 				if ((ColumnType)column == ColumnType.CurrentContractTimeColumn || (ColumnType)column == ColumnType.TargetContractTimeColumn)

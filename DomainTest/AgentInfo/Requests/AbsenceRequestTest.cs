@@ -405,7 +405,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(
 				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(loggedOnPerson, dataSource,
+			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, dataSource,
 				BusinessUnitFactory.BusinessUnitUsedInTest, null);
 			Thread.CurrentPrincipal = principal;
 		}

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_openAndSplitTarget = _mocks.StrictMock<IOpenAndSplitTargetSkill>();
 			var person = PersonFactory.CreatePerson(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			_target = new SplitImportForecastMessage(_analyzeQuery, _feedback, _openAndSplitTarget,
-				new CurrentIdentity(new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipalForLegacy(
+				new CurrentIdentity(new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(
 					new TeleoptiIdentity(person.Name.ToString(), new DummyDataSource("test"), BusinessUnitFactory.BusinessUnitUsedInTest, null,
 						""), person))));
 		}

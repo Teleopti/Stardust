@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 	        Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork());
             Expect.Call(_activityRepository.LoadAllSortByName()).Return(new List<IActivity> {activity});
-            Expect.Call(_personRepository.Get(Guid.Empty)).Return(SetupFixtureForAssembly.loggedOnPerson);
+            Expect.Call(_personRepository.Get(Guid.Empty)).Return(((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person);
             Expect.Call(_settingDataRepository.FindValueByKey("CommonNameDescription",
                                                               new CommonNameDescriptionSetting())).Return(
                                                                   new CommonNameDescriptionSetting()).IgnoreArguments();

@@ -19,18 +19,15 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IStardustSender _stardustSender;
-		private readonly ILoggedOnUser _loggedOnUser;
 
 		public ImportForecastsFileCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			IJobResultRepository jobResultRepository,
-			ICurrentBusinessUnit currentBusinessUnit, IStardustSender stardustSender,
-			ILoggedOnUser loggedOnUser)
+			ICurrentBusinessUnit currentBusinessUnit, IStardustSender stardustSender)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 			_stardustSender = stardustSender;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public void Handle(ImportForecastsFileCommandDto command)
@@ -42,9 +39,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				throw new FaultException("You're not authorized to run this command.");
 			}
 			Guid jobResultId;
+			var person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var person = _loggedOnUser.CurrentUser();
 				var jobResult = new JobResult(JobCategory.ForecastsImport, DateOnly.Today.ToDateOnlyPeriod(),
 														person, DateTime.UtcNow);
 				_jobResultRepository.Add(jobResult);

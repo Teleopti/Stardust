@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-				var exportingPersonDomain =	personRepository.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId);
+				var exportingPersonDomain =TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRepository);
 
 				var payrollExportRepository = _repositoryFactory.CreatePayrollExportRepository(uow);
 				payrollExport = payrollExportRepository.Load(payrollExport.Id.GetValueOrDefault());
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 
 				uow.PersistAll();
 				var payrollResultId = payrollResult.Id.GetValueOrDefault();
-				var personId = ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipalForLegacy.CurrentPrincipal).UnsafePerson.Id.GetValueOrDefault(Guid.Empty);
+				var personId = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(Guid.Empty);
 				var message = new RunPayrollExportEvent
 				{
 					PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),

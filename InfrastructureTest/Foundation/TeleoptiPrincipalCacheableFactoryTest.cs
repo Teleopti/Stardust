@@ -16,12 +16,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.BrazilTimeZoneInfo());
 
 			var internalsFactory = new TeleoptiPrincipalInternalsFactory();
-			var target = new TeleoptiPrincipalFactory(internalsFactory, internalsFactory, internalsFactory);
+			var target = new TeleoptiPrincipalCacheableFactory(internalsFactory, internalsFactory, internalsFactory);
 
 			var principal = target.MakePrincipal(person, new FakeDataSource("fake"), BusinessUnitFactory.CreateSimpleBusinessUnit("bu"), "token");
 
-//			(principal as TeleoptiPrincipalCacheable).Person.PermissionInformation.DefaultTimeZone()
-			principal.Regional.TimeZone
+			(principal as TeleoptiPrincipalCacheable).Person.PermissionInformation.DefaultTimeZone()
 				.Should()
 				.Be.EqualTo(TimeZoneInfoFactory.BrazilTimeZoneInfo());
 		}

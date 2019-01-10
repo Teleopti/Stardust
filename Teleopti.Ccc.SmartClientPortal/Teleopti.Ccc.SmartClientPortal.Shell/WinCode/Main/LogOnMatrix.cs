@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 				{
                     //have warning on view ??
                     _logonView.Warning(String.Format(CultureInfo.InvariantCulture, string.Concat(Resources.OperationCanNotProceedWithTheExternalMatrixSystem, "  "), ex.Message), Resources.ExternalSystemError);
-                    ((ITeleoptiIdentity)TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity).DataSource.RemoveAnalytics(); //Makes the factory return empty repository
+                    ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.RemoveAnalytics(); //Makes the factory return empty repository
 				}
 			}
 		}

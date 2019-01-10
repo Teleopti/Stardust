@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 
 			var personAbsence = result.PersonAbsenceCollection(true).First();
 
-			var scheduleDayLocalStartTime = _source.DateOnlyAsPeriod.Period().StartDateTimeLocal(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
-			personAbsence.Period.StartDateTimeLocal(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone).Should().Be.EqualTo(scheduleDayLocalStartTime);
+			var scheduleDayLocalStartTime = _source.DateOnlyAsPeriod.Period().StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			personAbsence.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).Should().Be.EqualTo(scheduleDayLocalStartTime);
 		}
 
 		[Test]
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 
 			var personAbsence = result.PersonAbsenceCollection(true).First();
 
-			var scheduleDayLocalEndDateTime = _source.DateOnlyAsPeriod.Period().EndDateTimeLocal(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
+			var scheduleDayLocalEndDateTime = _source.DateOnlyAsPeriod.Period().EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			
-			personAbsence.Period.EndDateTimeLocal(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone).Should().Be.EqualTo(scheduleDayLocalEndDateTime);
+			personAbsence.Period.EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).Should().Be.EqualTo(scheduleDayLocalEndDateTime);
 		}
 
 	}

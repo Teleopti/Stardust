@@ -21,15 +21,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
         private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly ICurrentScenario _scenarioRepository;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ScheduleMailFactory(IAssembler<IPerson, PersonDto> personAssembler, ICurrentScenario scenarioRepository, IScheduleStorageFactory scheduleStorageFactory, ILoggedOnUser loggedOnUser)
+	    public ScheduleMailFactory(IAssembler<IPerson, PersonDto> personAssembler, ICurrentScenario scenarioRepository, IScheduleStorageFactory scheduleStorageFactory)
         {
             _personAssembler = personAssembler;
             _scenarioRepository = scenarioRepository;
 	        _scheduleStorageFactory = scheduleStorageFactory;
-			_loggedOnUser = loggedOnUser;
-		}
+        }
 
         public void SendScheduleMail(IList<PersonDto> personCollection, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneInfoId)
         {
@@ -59,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
         private void SendEmailWithAttachedSchedule(DateOnlyPeriod datePeriod, IEnumerable<PersonWithScheduleStream> returnList)
         {
             SmtpClient smtpClient = new SmtpClient();
-            var senderAddress = _loggedOnUser.CurrentUser().Email;
+            var senderAddress = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Email;
             foreach (PersonWithScheduleStream personWithScheduleStream in returnList)
             {
                 if (string.IsNullOrEmpty(personWithScheduleStream.Person.Email)) continue;

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
             if ((cellInfo.ColIndex - cellInfo.RowHeaderCount) >= _intervals.Count) return;
             cellInfo.Style.BaseStyle = "Header";
         	cellInfo.Style.HorizontalAlignment = GridHorizontalAlignment.Center;
-        	cellInfo.Style.CellValue = _baseDate.Add(Time(cellInfo).Value).ToString("t", TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture);
+        	cellInfo.Style.CellValue = _baseDate.Add(Time(cellInfo).Value).ToString("t", TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
         }
 
         public void SaveCellInfo(CellInfo cellInfo)

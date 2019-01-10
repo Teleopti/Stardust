@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.FileImport
                     {
                         throw new FileImportException(
                             string.Format(
-                                TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture, UserTexts.Resources.InvalidDateTimeExceptionText,
+                                TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture, UserTexts.Resources.InvalidDateTimeExceptionText,
                                 importDataObject.Date + " " + importDataObject.Time, i));
                     }
                     DataRow row = dt.NewRow();

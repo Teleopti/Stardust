@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -36,9 +35,7 @@ namespace Teleopti.Wfm.Test
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
 				var testDataFactory = TestDataFactory.Make(uow, tenantUnitOfWorkManager);
-				Console.WriteLine("====== PersonThatCreatesTestData");
 				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
-				Console.WriteLine("====== /PersonThatCreatesTestData");
 				testDataFactory.Apply(new DefaultLicense());
 				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
 			}

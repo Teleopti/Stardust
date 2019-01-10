@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 {
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
         public void Execute(IDataSource dataSource, IPerson person, IPersonRepository personRepository)
         {
             var principal = new ClaimsOwner(person);
-            _roleToPrincipalCommand.Execute(new SingleOwnedPerson(person), principal, personRepository, dataSource.Application.Name);
+            _roleToPrincipalCommand.Execute(new SingleOwnedPerson(person), principal, dataSource.Application, personRepository);
             var permission = _principalAuthorizationFactory.FromClaimsOwner(principal);
 
             if (!permission.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShareCalendar))

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             target.DisplayColor = Color.Red;
             target.Confidential = true;
-            var loggedOn = TestWithStaticDependenciesDONOTUSEAttribute.loggedOnPerson;
+            var loggedOn = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
             Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(loggedOn));
             Assert.AreEqual(target.Description, target.ConfidentialDescription(loggedOn));
         }
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			targetPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-10), team));
 			targetPerson.TerminatePerson(DateOnly.Today.AddDays(-5), personAccountUpdater);
 
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", null, null, null, null), queryingPerson);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), queryingPerson);
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData");
 			var claimSet = new DefaultClaimSet(new[]

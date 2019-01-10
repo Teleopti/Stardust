@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 
 	    private static MessageBoxOptions rightToLeftOptions()
 	    {
-		    return (((ITeleoptiPrincipalForLegacy)TeleoptiPrincipalForLegacy.CurrentPrincipal).UnsafePerson.PermissionInformation.RightToLeftDisplay)
+		    return (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay)
 			           ? MessageBoxOptions.RtlReading |
 			             MessageBoxOptions.RightAlign
 			           : 0;

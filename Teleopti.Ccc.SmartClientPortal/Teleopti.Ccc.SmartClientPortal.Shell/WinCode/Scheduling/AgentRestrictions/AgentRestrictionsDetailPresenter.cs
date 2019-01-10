@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 				//"--Veckodag--";
 				_model.DetailData().TryGetValue(e.ColIndex - 1, out preferenceCellData);
 				if (preferenceCellData == null) e.Style.CellValue = string.Empty;
-				else e.Style.CellValue = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture.Calendar.GetDayOfWeek(preferenceCellData.TheDate.Date));	
+				else e.Style.CellValue = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar.GetDayOfWeek(preferenceCellData.TheDate.Date));	
 				
 				return;
 			}
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 				//"--VeckoNum--";
 				e.Style.CellType = "RestrictionWeekHeaderViewCellModel";
 				e.Style.CellValue = OnQueryWeekHeader(e.RowIndex);
-				e.Style.CultureInfo = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+				e.Style.CultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 				return;
 			}
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 			var minTime = TimeSpan.Zero;
 			var maxTime = TimeSpan.Zero;
 
-			var culture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var weekNumber = 0;
 
 			//var weekMax = new TimeSpan(0);

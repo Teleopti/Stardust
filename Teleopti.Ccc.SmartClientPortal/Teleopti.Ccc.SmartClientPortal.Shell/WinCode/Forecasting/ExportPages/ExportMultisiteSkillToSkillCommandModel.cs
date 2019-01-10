@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages
 
 		public ExportMultisiteSkillsToSkillEvent TransformToServiceBusMessage()
 		{
-			var personId = ((ITeleoptiPrincipalForLegacy)TeleoptiPrincipalForLegacy.CurrentPrincipal).UnsafePerson.Id.GetValueOrDefault(
+			var personId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
 				Guid.Empty);
 			var message = new ExportMultisiteSkillsToSkillEvent
 			{

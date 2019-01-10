@@ -4,10 +4,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
@@ -25,9 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_mocks = new MockRepository();
             _publisher = _mocks.DynamicMock<IEventPublisher>();
            // _publisher = new FakeEventPublisher();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(LogOn.loggedOnPerson);
-			_target = new RecalculateForecastOnSkillCommandHandler(_publisher, new DummyInfrastructureInfoPopulator(), loggedOnUser);
+			_target = new RecalculateForecastOnSkillCommandHandler(_publisher, new DummyInfrastructureInfoPopulator());
 		}
 
 		[Test]

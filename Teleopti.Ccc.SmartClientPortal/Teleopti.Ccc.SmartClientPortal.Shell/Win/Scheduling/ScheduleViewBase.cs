@@ -414,7 +414,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         public void AddWholeWeekAsSelected(int rowIndex, int colIndex)
         {
             if (_grid.Model.ColCount < colIndex) return;
-            var culture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             int weekNumWeekHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex, colIndex].Tag).Date, culture);
 			var weekColumns = new List<int>();
             for (int i = (int)ColumnType.StartScheduleColumns; i <= _grid.ColCount; i++)

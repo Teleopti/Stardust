@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Logon
 		private void setupClaims(string tenant)
 		{
 			var principal = _principal.Current();
-			var person  = _persons.Get(principal.PersonId);
+			var person = principal.GetPerson(_persons);
 			foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
 			{
 				principal.AddClaimSet(_claimSetForApplicationRole.Transform(applicationRole, tenant));

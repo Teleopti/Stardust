@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
                                                                    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                                                                        _period.StartDate.Date,
-                                                                       _period.EndDate.Date, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone));
+                                                                       _period.EndDate.Date, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
 
             workloadDaysLongTerm[0].CreateFromTemplate(dateTime, workload, templateLongTerm);
 

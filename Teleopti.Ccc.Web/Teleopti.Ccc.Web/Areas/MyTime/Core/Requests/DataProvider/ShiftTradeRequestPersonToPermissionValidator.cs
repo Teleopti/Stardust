@@ -14,18 +14,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
 	public class ShiftTradeRequestPersonToPermissionValidator : IShiftTradeRequestPersonToPermissionValidator
 	{
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentDataSource;
 		private readonly IPersonRepository _personRepository;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly IPrincipalAuthorizationFactory _authorizationFactory;
 
-		public ShiftTradeRequestPersonToPermissionValidator(
-			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+		public ShiftTradeRequestPersonToPermissionValidator(ICurrentUnitOfWorkFactory currentDataSource,
 			IPersonRepository personRepository,
-			IRoleToPrincipalCommand roleToPrincipalCommand, 
-			IPrincipalAuthorizationFactory authorizationFactory)
+			IRoleToPrincipalCommand roleToPrincipalCommand, IPrincipalAuthorizationFactory authorizationFactory)
 		{
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_currentDataSource = currentDataSource;
 			_personRepository = personRepository;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
 			_authorizationFactory = authorizationFactory;
@@ -34,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public bool IsSatisfied(IShiftTradeRequest shiftTradeRequest)
 		{
 			var principal = new ClaimsOwner(shiftTradeRequest.PersonTo);
-			_roleToPrincipalCommand.Execute(new SingleOwnedPerson(shiftTradeRequest.PersonTo), principal, _personRepository, _currentUnitOfWorkFactory.Current().Name);
+			_roleToPrincipalCommand.Execute(new SingleOwnedPerson(shiftTradeRequest.PersonTo), principal, _currentDataSource.Current(), _personRepository);
 			var authorisation = _authorizationFactory.FromClaimsOwner(principal);
 			var permissionProvider = new PermissionProvider(authorisation);
 			var checkDate = new DateOnly(shiftTradeRequest.Period.StartDateTime);

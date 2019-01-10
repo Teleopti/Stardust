@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -13,21 +12,18 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	{
 	    private readonly IEventPublisher _publisher;
 	    private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public RecalculateForecastOnSkillCommandHandler(IEventPublisher publisher,
-            IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator,
-			ILoggedOnUser loggedOnUser)
+	    public RecalculateForecastOnSkillCommandHandler(IEventPublisher publisher,
+            IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
 	    {
 	        _publisher = publisher;
 	        _eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
-			_loggedOnUser = loggedOnUser;
-		}
+	    }
 
 	    public void Handle(RecalculateForecastOnSkillCollectionCommandDto command)
 		{
-			var principal = TeleoptiPrincipalForLegacy.CurrentPrincipal;
-			var person = _loggedOnUser.CurrentUser();
+			var principal = TeleoptiPrincipal.CurrentPrincipal;
+			var person = ((IUnsafePerson)principal).Person;
 			var @event = new RecalculateForecastOnSkillCollectionEvent
 				{
 					SkillCollection = new Collection<RecalculateForecastOnSkill>(),

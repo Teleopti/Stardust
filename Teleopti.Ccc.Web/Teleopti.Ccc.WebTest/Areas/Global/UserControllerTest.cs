@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldGetTheCurrentIdentityName()
 		{
 			var person = PersonFactory.CreatePerson();
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
 			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session, new FakeUserTimeZone(currentPrinciple.Current().Regional.TimeZone));
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session);
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual("Pelle", result.UserName);
 		}
@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
 			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session, new FakeUserTimeZone(currentPrinciple.Current().Regional.TimeZone));
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session);
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(TimeZoneInfo.Local.DisplayName, result.DefaultTimeZoneName);
 		}
@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var uiCulture = CultureInfoFactory.CreateSwedishCulture();
 			person.PermissionInformation.SetCulture(culture);
 			person.PermissionInformation.SetUICulture(uiCulture);
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
 			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session, new FakeUserTimeZone(currentPrinciple.Current().Regional.TimeZone));
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session);
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(uiCulture.IetfLanguageTag, result.Language);
 			Assert.AreEqual(culture.Name, result.DateFormatLocale);
@@ -99,9 +99,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
 			var culture = CultureInfoFactory.CreateChineseCulture();
 			person.PermissionInformation.SetCulture(culture);
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
 			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session, new FakeUserTimeZone(currentPrinciple.Current().Regional.TimeZone));
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session);
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(result.FirstDayOfWeek, 1);
 		}
@@ -113,9 +113,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var person = PersonFactory.CreatePerson();
 			var culture = CultureInfoFactory.CreateChineseCulture();
 			person.PermissionInformation.SetCulture(culture);
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
 			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session, new FakeUserTimeZone(currentPrinciple.Current().Regional.TimeZone));
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session);
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(result.DayNames, culture.DateTimeFormat.DayNames);
 		}
@@ -127,9 +127,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
 			var culture = CultureInfoFactory.CreateChineseCulture();
 			person.PermissionInformation.SetCulture(culture);
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
 			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session, new FakeUserTimeZone(currentPrinciple.Current().Regional.TimeZone));
+			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider(), session);
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(result.DateTimeFormat.ShortTimePattern, culture.DateTimeFormat.ShortTimePattern);
 			Assert.AreEqual(result.DateTimeFormat.AMDesignator, culture.DateTimeFormat.AMDesignator);

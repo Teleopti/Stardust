@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -11,17 +10,15 @@ using Teleopti.Ccc.TestCommon.FakeData;
 namespace Teleopti.Ccc.DomainTest
 {
 	public class TestWithStaticDependenciesDONOTUSEAttribute : Attribute, ITestAction {
-		
-		public static IPerson loggedOnPerson;
 
 		public ActionTargets Targets => ActionTargets.Test;
 
 		public void BeforeTest(ITest test)
 		{
 			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
-			loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(loggedOnPerson, dataSource,
+			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, dataSource,
 				BusinessUnitFactory.BusinessUnitUsedInTest, null);
 			Thread.CurrentPrincipal = principal;
 

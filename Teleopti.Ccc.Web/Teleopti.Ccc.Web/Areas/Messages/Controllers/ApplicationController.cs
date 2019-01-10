@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			return Json(new
 			{
 				UserName = principal.Identity.Name,
-				PersonId = principal.PersonId,
+				PersonId = ((IUnsafePerson)principal).Person.Id,
 				IsMyTimeAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 				IsAnywhereAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)
 			}, JsonRequestBehavior.AllowGet);

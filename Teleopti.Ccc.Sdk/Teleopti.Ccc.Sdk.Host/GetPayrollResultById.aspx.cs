@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				Response.Write(result.FailReason);
 				return;
 			}
-			var logOnOff = new LogOnOff(null, null, null, null, null, new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalForLegacyFactory(), null);
+			var logOnOff = new LogOnOff(null, null, null, null, null, new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
 			logOnOff.LogOnWithoutPermissions(result.DataSource, result.Person, null);
 			
 			using (result.DataSource.Application.CreateAndOpenUnitOfWork())

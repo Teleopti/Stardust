@@ -1,51 +1,81 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Security.Principal;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public class TeleoptiPrincipal : GenericPrincipal, ITeleoptiPrincipal
+	public class TeleoptiPrincipal : GenericPrincipal, IUnsafePerson, ITeleoptiPrincipal
 	{
-		private readonly IList<ClaimSet> _claimSets = new List<ClaimSet>();
+		private static readonly CurrentTeleoptiPrincipal currentTeleoptiPrincipal = new CurrentTeleoptiPrincipal(new ThreadPrincipalContext());
 
-		private TeleoptiPrincipal(IIdentity identity)
-			: base(identity, new string[] { }) { }
-		
-		public static TeleoptiPrincipal Make(ITeleoptiIdentity identity, IPerson person)
+		public static ITeleoptiPrincipal CurrentPrincipal => currentTeleoptiPrincipal.Current();
+
+		private IClaimsOwner _claimsOwner;
+		private IPerson _person;
+		private IIdentity _identity;
+
+		public TeleoptiPrincipal(IIdentity identity, IPerson person) : base(identity, new string[] { })
 		{
-			return new TeleoptiPrincipal(identity)
-			{
-				_person = person,
-				_personId = person.Id.GetValueOrDefault(),
-				PersonName = person.Name
-			};
+            _person = person;
+			_claimsOwner = new ClaimsOwner(person);
+            InitializeFromPerson();
+        }
+
+		public void ChangePrincipal(TeleoptiPrincipal principal)
+		{
+			_person = principal._person;
+			_claimsOwner = principal._claimsOwner;
+			_identity = principal.Identity;
+
+			InitializeFromPerson();
 		}
 
-		private IPerson _person;
-		private Guid _personId;
-
-		public Guid PersonId
+		private void InitializeFromPerson()
 		{
-			get
+			if (_person != null)
 			{
-				if (_personId != Guid.Empty)
-					return _personId;
-				_personId = _person.Id.GetValueOrDefault();
-				return _personId;
+				Regional = Principal.Regional.FromPersonWithThreadCultureFallback(_person);
 			}
 		}
 
-		public Name PersonName { get; set; }
+		public override IIdentity Identity => _identity ?? base.Identity;
 
-		public IRegional Regional { get; set; }
-		public IOrganisationMembership Organisation { get; set; }
+		public IRegional Regional { get; private set; }
+		public IOrganisationMembership Organisation => _claimsOwner.Organisation;
+
+		public IEnumerable<ClaimSet> ClaimSets => _claimsOwner.ClaimSets;
+
+		public void AddClaimSet(ClaimSet claimSet) => _claimsOwner.AddClaimSet(claimSet);
+
+		public virtual IPerson GetPerson(IPersonRepository personRepository)
+		{
+			return personRepository.Get(_person.Id.GetValueOrDefault());
+		}
+
+		IPerson IUnsafePerson.Person => _person;
+	}
+
+	public class ClaimsOwner : IClaimsOwner
+	{
+		private readonly IList<ClaimSet> _claimSets = new List<ClaimSet>();
+
+		public ClaimsOwner(IPerson person)
+		{
+			Organisation = person == null ? new OrganisationMembership() : OrganisationMembership.FromPerson(person);
+		}
+
+		public IOrganisationMembership Organisation { get; }
 		public IEnumerable<ClaimSet> ClaimSets => _claimSets;
-
 		public void AddClaimSet(ClaimSet claimSet)
 		{
 			_claimSets.Add(claimSet);
 		}
 	}
+
+    public interface IUnsafePerson
+    {
+        IPerson Person { get; }
+    }
 }

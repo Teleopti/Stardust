@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private string getLocale()
 		{
 			var principal = _currentIdentity.Current();
-			var principalCacheable = principal as TeleoptiPrincipal;
+			var principalCacheable = principal as TeleoptiPrincipalCacheable;
 			var regionnal = principalCacheable != null ? principalCacheable.Regional : principal.Regional;
 			return regionnal.Culture.Name;
 		}

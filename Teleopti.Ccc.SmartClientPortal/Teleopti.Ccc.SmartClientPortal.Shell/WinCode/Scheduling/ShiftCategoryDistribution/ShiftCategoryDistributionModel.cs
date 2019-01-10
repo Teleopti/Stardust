@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 
 		public IList<IPerson> GetSortedPersons(bool ascending)
 		{
-			CultureInfo loggedOnCulture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+			CultureInfo loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 			var sortedFilteredPersons = _filteredPersons.OrderBy(CommonAgentName, comparer).ToList();

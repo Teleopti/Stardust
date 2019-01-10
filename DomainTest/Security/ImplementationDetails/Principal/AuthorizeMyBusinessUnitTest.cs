@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             AddTeamAndSiteToPerson(queryingPerson);
 
             queryingPersonMembership.AddFromPerson(queryingPerson);
-            target.Check(queryingPersonMembership, DateOnly.Today, ((ITeleoptiIdentity)TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity).BusinessUnit).Should().Be.True();
+            target.Check(queryingPersonMembership, DateOnly.Today, ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit).Should().Be.True();
         }
     }
 }

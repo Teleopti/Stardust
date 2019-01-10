@@ -50,7 +50,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 							)
 						);
 
-				roleToPrincipalCommand.Execute(TeleoptiPrincipalForLegacy.CurrentPrincipal, new PersonRepository(new ThisUnitOfWork(uow)), unitOfWorkFactory.Name);
+				roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal,TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, new PersonRepository(new ThisUnitOfWork(uow)));
 			}
 			return true;
 		}

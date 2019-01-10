@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				_loggedOnPerson.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
 				_loggedOnPerson.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
 
-				var principal = new TeleoptiPrincipalForLegacy(
+				var principal = new TeleoptiPrincipal(
 					new TeleoptiIdentity(
 						"Fake Login",
 						DataSourceForTenant.Tenant(DefaultTenantName),

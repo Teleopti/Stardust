@@ -21,7 +21,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -119,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(c);
 			PersistAndRemoveFromUnitOfWork(p);
 
-			using (FakeLogon.ToBusinessUnit(fakeBu, TestRepository(CurrUnitOfWork)))
+			using (FakeLogon.ToBusinessUnit(fakeBu))
 			{
 				target.FindAllSortByName().Should().Not.Contain(p);
 			}
@@ -175,7 +174,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				IPerson loaded = Session.Get<Person>(person.Id);
 				Assert.AreEqual(person, loaded);
 				Assert.AreEqual(new DateOnly(2000, 1, 1), loaded.PersonWriteProtection.PersonWriteProtectedDate);
-				Assert.AreEqual(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId, loaded.PersonWriteProtection.UpdatedBy.Id);
+				Assert.AreEqual(((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person,
+					loaded.PersonWriteProtection.UpdatedBy);
 				Assert.IsNotNull(loaded.PersonWriteProtection.UpdatedOn);
 				Assert.AreSame(loaded, loaded.PersonWriteProtection.BelongsTo);
 				var version = ((IVersioned) loaded).Version;

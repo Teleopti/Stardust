@@ -1667,7 +1667,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             var externalPersonList = _filteredPeopleHolder.ExternalLogOnViewAdapterCollection;
             var filterValue = externalFilteringTextBox.Text;
 
-            var cultureInfo = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+            var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             var lowerSearchText = filterValue.ToLower(cultureInfo);
             IList<ExternalLogOnModel> filteredPersons = (from externalLogOn in externalPersonList
                                                          where

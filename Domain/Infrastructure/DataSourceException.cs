@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		
         protected virtual ITeleoptiPrincipal GetCurrentPrincipal()
         {
-            return TeleoptiPrincipalForLegacy.CurrentPrincipal;
+            return TeleoptiPrincipal.CurrentPrincipal;
         }
 
 	    [SecurityCritical]

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime
             get
             {
                 return
-                    TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             }
         }
 

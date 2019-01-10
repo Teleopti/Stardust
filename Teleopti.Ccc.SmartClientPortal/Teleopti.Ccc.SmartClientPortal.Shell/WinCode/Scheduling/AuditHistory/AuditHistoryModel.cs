@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AuditHistory
 
 	            var historicalDay = _currentScheduleDay.ReFetch();
                 _auditHistoryScheduleDayCreator.Apply(historicalDay, result);
-                var changedOnLocal = TimeZoneHelper.ConvertFromUtc(revision.ModifiedAt, TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone);
+                var changedOnLocal = TimeZoneHelper.ConvertFromUtc(revision.ModifiedAt, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
                 var row = new RevisionDisplayRow{ScheduleDay = historicalDay, Name = revision.ModifiedBy.Name.ToString(), ChangedOn = changedOnLocal};
                 retList.Add(row);
             }

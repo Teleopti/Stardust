@@ -421,6 +421,7 @@
     </Compile>
     <Compile Include="Security\ImplementationDetails\Principal\PrincipalAuthorizationTest.cs" />
     <Compile Include="Security\ImplementationDetails\Principal\TeleoptiPrincipalTest.cs" />
+    <Compile Include="Security\ImplementationDetails\Principal\UnsafePersonProviderTest.cs" />
     <Compile Include="Security\ImplementationDetails\RaptorApplicationFunctionsSynchronizerTest.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Payroll;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 		    var payrollExportRepository = new FakePayrollExportRepository();
 		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
-			    new DateTimePeriodAssembler(), UpdatedBy.Make());
+			    new DateTimePeriodAssembler());
 
 		    var payrollExport = createDo(person);
 
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var payrollExport = createDo(person);
 
 		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, null,
-			    new DateTimePeriodAssembler(), UpdatedBy.Make());
+			    new DateTimePeriodAssembler());
 		    var result = target.DomainEntityToDto(payrollExport);
 		    Assert.AreEqual(payrollExport.Id, result.Id);
 		    Assert.AreEqual(payrollExport.Period.StartDate.Date, result.DatePeriod.StartDate.DateTime);
@@ -77,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var payrollExport = createDo(person);
 		    payrollExportRepository.Add(payrollExport);
 		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
-			    new DateTimePeriodAssembler(), UpdatedBy.Make());
+			    new DateTimePeriodAssembler());
 
 		    var payrollExportDto = createDto(payrollExport.Id.GetValueOrDefault(),person);
 		    var result = target.DtoToDomainEntity(payrollExportDto);
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 		    var payrollExportRepository = new FakePayrollExportRepository();
 		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
-			    new DateTimePeriodAssembler(), UpdatedBy.Make());
+			    new DateTimePeriodAssembler());
 
 		    var result = target.DtoToDomainEntity(new PayrollExportDto());
 		    Assert.IsNull(result);
@@ -116,7 +115,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var payrollExportRepository = new FakePayrollExportRepository();
 		    var payrollExport = createDo(person);
 		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
-			    new DateTimePeriodAssembler(), UpdatedBy.Make());
+			    new DateTimePeriodAssembler());
 
 		    var payrollExportDto = createDto(payrollExport.Id.GetValueOrDefault(), person);
 		    payrollExportDto.PersonCollection.Clear();

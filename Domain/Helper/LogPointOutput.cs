@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Helper
 
 	    private static ILog getLog()
 	    {
-		    var identity = TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity as ITeleoptiIdentity;
+		    var identity = TeleoptiPrincipal.CurrentPrincipal.Identity as ITeleoptiIdentity;
 		    var appConnString = new SqlConnectionStringBuilder(identity.DataSource.Application.ConnectionString);
 		    if (identity != null)
 		    {

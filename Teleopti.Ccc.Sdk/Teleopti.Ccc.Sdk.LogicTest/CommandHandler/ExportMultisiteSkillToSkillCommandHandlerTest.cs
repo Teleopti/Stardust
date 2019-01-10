@@ -9,13 +9,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
-using Teleopti.Ccc.Sdk.LogicTest.OldTests;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 
@@ -50,9 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
             _jobResultRepository = _mock.StrictMock<IJobResultRepository>();
 		    _eventInfrastructureInfoPopulator = _mock.StrictMock<IEventInfrastructureInfoPopulator>();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(LogOn.loggedOnPerson);
-			_target = new ExportMultisiteSkillToSkillCommandHandler(_busSender,_unitOfWorkFactory,_jobResultRepository,_eventInfrastructureInfoPopulator, loggedOnUser);
+			_target = new ExportMultisiteSkillToSkillCommandHandler(_busSender,_unitOfWorkFactory,_jobResultRepository,_eventInfrastructureInfoPopulator);
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
             _activity = ActivityFactory.CreateActivity("test activity");

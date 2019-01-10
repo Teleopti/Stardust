@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 			}
 			var domainPersonRequest = _personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
 			domainPersonRequest.TrySetMessage(personRequestDto.Message);
-			domainPersonRequest.Deny(nameof(UserTexts.Resources.RequestDenyReasonOtherPart), new SdkPersonRequestAuthorizationCheck(), _personRepository.Get(TeleoptiPrincipalForLegacy.CurrentPrincipal.PersonId));
+			domainPersonRequest.Deny(nameof(UserTexts.Resources.RequestDenyReasonOtherPart), new SdkPersonRequestAuthorizationCheck(), TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository));
 			unitOfWork.PersistAll();
 			return personRequestDto;
 		}

@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 			var application = new InitializeApplication(null);
 			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
-			var logOnOff = new LogOnOff(null, null, null, null, null, new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalForLegacyFactory(), null);
+			var logOnOff = new LogOnOff(null, null, null, null, null, new AppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
 			_logonService = new LogOnService(logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 		}
 

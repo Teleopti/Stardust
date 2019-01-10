@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public PublishScheduleDateView(IList<IScheduleDay> selectedSchedules)
 		{
 			InitializeComponent();
-			datePicker.Culture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+			datePicker.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			_presenter = new PublishScheduleDatePresenter(this, selectedSchedules);
 			_presenter.Initialize();
 			if (!DesignMode) SetTexts();

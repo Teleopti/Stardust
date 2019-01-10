@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 
         private void DrawDescription(string text, Rectangle rectangle)
         {
-            var culture = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             var brush = new PdfSolidBrush(Color.Gray);
             var format = new PdfStringFormat { RightToLeft = _rightToLeft, WordWrap = PdfWordWrapType.None };
             var font = PdfFontManager.GetFont(9f, PdfFontStyle.Regular, culture);

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
 		public IBusinessUnit BusinessUnit
 		{
-			get { return ((ITeleoptiIdentity)TeleoptiPrincipalForLegacy.CurrentPrincipal.Identity).BusinessUnit; }
+			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
 		}
 
 		public DateOnlyPeriod SelectedPeriod { get; private set; }

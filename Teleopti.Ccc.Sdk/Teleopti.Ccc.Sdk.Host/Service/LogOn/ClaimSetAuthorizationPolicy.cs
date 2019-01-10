@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
                 return true;
             }
 
-            var teleoptiPrincipal = obj as TeleoptiPrincipalForLegacy;
+            var teleoptiPrincipal = obj as TeleoptiPrincipal;
             if (string.IsNullOrEmpty(teleoptiPrincipal?.Identity.Name))
             {
                 return true;
@@ -42,11 +42,12 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
 
             lock (teleoptiPrincipal)
             {
-                var personId = teleoptiPrincipal.PersonId;
-                if (personId == Guid.Empty) return true;
+                var person = ((IUnsafePerson) teleoptiPrincipal).Person;
+                if (person == null) return true;
 
                 var unitOfWorkFactory = ((ITeleoptiIdentity) teleoptiPrincipal.Identity).DataSource.Application;
                 var personRepository = new PersonRepository(new FromFactory(() => unitOfWorkFactory));
+                var personId = person.Id.GetValueOrDefault();
 
                 using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
 			var personInRoleDetails = _personInRoleCache.Get(personId);
 			if (personInRoleDetails == null)
 			{
-				var person = personRepository.Get(teleoptiPrincipal.PersonId);
+				var person = teleoptiPrincipal.GetPerson(personRepository);
 				if (person == null) return null;
 
 				personInRoleDetails = new PersonInRoleCacheItem(person);

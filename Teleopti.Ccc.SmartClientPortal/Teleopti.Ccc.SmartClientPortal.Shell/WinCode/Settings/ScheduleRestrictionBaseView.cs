@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
         /// </summary>
         protected static CultureInfo UICulture
         {
-            get { return TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.UICulture; }
+            get { return TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture; }
         }
 
 		/// <summary>

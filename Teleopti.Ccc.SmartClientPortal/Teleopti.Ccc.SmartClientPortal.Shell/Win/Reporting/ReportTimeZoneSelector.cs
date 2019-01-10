@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
         public void LoadTimeZones()
         {
-            TimeZoneInfo defaultTimeZone = TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.TimeZone;
+            TimeZoneInfo defaultTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
             IList<TimeZoneInfo> timeZoneList = TimeZoneInfo.GetSystemTimeZones().Select(t => t).ToList();
 
             comboBoxAdvTimeZone.DisplayMember = "DisplayName";

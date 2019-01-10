@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPag
             SetTexts();
             SetColors();
             CultureInfo cultureInfo =
-                TeleoptiPrincipalForLegacy.CurrentPrincipal.Regional.Culture;
+                TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             percentTextBoxOffered.Setup(cultureInfo);
             percentTextBoxOverflowIn.Setup(cultureInfo);
             percentTextBoxOverflowOut.Setup(cultureInfo);

@@ -3,7 +3,6 @@ using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -19,15 +18,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPublisher _publisher;
 		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public QuickForecastCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IEventPublisher publisher, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, ILoggedOnUser loggedOnUser)
+		public QuickForecastCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IEventPublisher publisher, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
 			_publisher = publisher;
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public void Handle(QuickForecastCommandDto command)
@@ -40,7 +37,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			{
 				//Save start of processing to job history
 				var period = command.TargetPeriod.ToDateOnlyPeriod();
-				var jobResult = new JobResult(JobCategory.QuickForecast, period, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+				var jobResult = new JobResult(JobCategory.QuickForecast, period,
+											  ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
 				_jobResultRepository.Add(jobResult);
 				jobId = jobResult.Id.GetValueOrDefault();
 
