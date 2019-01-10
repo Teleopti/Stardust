@@ -202,18 +202,18 @@
 						<input type="text" ng-model="vm.approveEndTimeString"/>
 						</label>
 					</span>
-					<div ng-if="vm.invalidTime"
-						 class="error-msg-container alert-error notice-spacer time-picker-validation">
-						<i class="mdi mdi-alert-octagon"></i>
-						<span>{{vm.invalidTimeMessage | translate}}</span>
-					</div>
 					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelApprove()">
 						{{'Cancel' | translate}}
 					</button>
-					<button type="submit" ng-disabled="vm.invalidTime" class="approve-adherence-submit wfm-btn wfm-btn-invis-primary"
+					<button type="submit" class="approve-adherence-submit wfm-btn wfm-btn-invis-primary"
 							ng-click="vm.submitApprove()">
 						{{'ApproveAsInAdherence' | translate}}
 					</button>
+					<span ng-if="vm.invalidTimeMessage"
+						 class="error-msg-container alert-error notice-spacer time-picker-validation">
+						<i class="mdi mdi-alert-octagon"></i>
+						<span>{{vm.invalidTimeMessage | translate}}</span>
+					</span>
 				</div>
 			</div>
 

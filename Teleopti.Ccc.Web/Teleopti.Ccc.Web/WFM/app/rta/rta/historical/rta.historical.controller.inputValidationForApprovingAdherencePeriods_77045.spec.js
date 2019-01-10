@@ -24,7 +24,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			vm.submitApprove();
 		});
 
-		expect(vm.invalidTime).toBe(false);
 		expect(vm.invalidTimeMessage).toBe(undefined);
 	});
 
@@ -52,7 +51,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			vm.submitApprove();
 		});
 
-		expect(vm.invalidTime).toBe(true);
 		expect(vm.invalidTimeMessage).toBe("EndTimeMustBeGreaterOrEqualToStartTime");
 	});	
 	
@@ -80,7 +78,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			vm.submitApprove();
 		});
 
-		expect(vm.invalidTime).toBe(true);
 		expect(vm.invalidTimeMessage).toBe("IllegalTimeInput");
 	});
 
@@ -108,9 +105,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			vm.submitApprove();
 		});
 
-		expect(vm.invalidTime).toBe(true);
 		expect(vm.invalidTimeMessage).toBe("IllegalTimeInput");
-
 	});
 
 	it('should display validation message when end time is undefined', function (t) {
@@ -140,7 +135,58 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			vm.submitApprove();
 		});
 
-		expect(vm.invalidTime).toBe(true);
 		expect(vm.invalidTimeMessage).toBe("IllegalTimeInput");
 	});
+
+    it('should remove validation message for start time', function (t) {
+        t.stateParams.personId = '1';
+        t.backend.with.historicalAdherence({
+            Timeline: {
+                StartTime: '2019-01-10T07:00:00',
+                EndTime: '2019-01-10T17:00:00'
+            }
+        });
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.approveStartTime = undefined;
+        });
+        t.apply(function () {
+            vm.approveEndTime = moment('2019-01-10T10:00:00').toDate();
+        });
+        t.apply(function () {
+            vm.submitApprove();
+        });
+        t.apply(function () {
+            vm.approveStartTime = moment('2019-01-10T09:00:00').toDate();
+        });
+
+        expect(vm.invalidTimeMessage).toBe(undefined);
+    });
+
+    it('should remove validation message for end time', function (t) {
+        t.stateParams.personId = '1';
+        t.backend.with.historicalAdherence({
+            Timeline: {
+                StartTime: '2019-01-10T07:00:00',
+                EndTime: '2019-01-10T17:00:00'
+            }
+        });
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.approveStartTime = moment('2019-01-10T09:00:00').toDate();
+        });
+        t.apply(function () {
+            vm.approveEndTime = undefined;
+        });
+        t.apply(function () {
+            vm.submitApprove();
+        });
+        t.apply(function () {
+            vm.approveEndTime = moment('2019-01-10T10:00:00').toDate();
+        });
+
+        expect(vm.invalidTimeMessage).toBe(undefined);
+    });
 });
