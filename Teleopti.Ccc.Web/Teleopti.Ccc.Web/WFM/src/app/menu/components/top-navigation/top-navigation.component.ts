@@ -2,8 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { interval } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NavigationService, TogglesService } from 'src/app/core/services';
+import { AreaService } from '../../shared/area.service';
 import { ToggleMenuService } from '../../shared/toggle-menu.service';
-import { Area, AreaService } from '../../shared/area.service';
 
 @Component({
 	selector: 'top-navigation',
@@ -35,7 +35,7 @@ export class TopNavigationComponent {
 		});
 
 		areaService.getAreas().subscribe(areas => {
-			this.systemSettingArea = areas.filter(a => a.InternalName == 'systemSettings')[0];
+			this.systemSettingArea = areas.filter(a => a.InternalName === 'systemSettings')[0];
 		});
 	}
 

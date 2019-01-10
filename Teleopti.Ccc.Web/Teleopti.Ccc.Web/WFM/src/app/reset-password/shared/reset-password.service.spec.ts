@@ -11,8 +11,8 @@ describe('ResetPasswordService', () => {
 	});
 
 	it('should post token', () => {
-		let response: Partial<GenericResponse> = { success: true };
-		httpClientSpy.post.and.returnValue(of(response));
+		const mockResponse: Partial<GenericResponse> = { success: true };
+		httpClientSpy.post.and.returnValue(of(mockResponse));
 		resetPasswordService.isValidToken('thisisatokeniguess').subscribe(response => {
 			expect(response).toBe(true);
 		});
@@ -20,8 +20,8 @@ describe('ResetPasswordService', () => {
 	});
 
 	it('should post a resetRequest', () => {
-		let response: Partial<GenericResponse> = { success: true };
-		httpClientSpy.post.and.returnValue(of(response));
+		const mockResponse: Partial<GenericResponse> = { success: true };
+		httpClientSpy.post.and.returnValue(of(mockResponse));
 
 		const resetRequest: ResetRequest = {
 			NewPassword: 'password',
@@ -36,8 +36,8 @@ describe('ResetPasswordService', () => {
 	});
 
 	it('should post a reset password', () => {
-		let response: Partial<GenericResponse> = { success: true };
-		httpClientSpy.post.and.returnValue(of(response));
+		const mockResponse: Partial<GenericResponse> = { success: true };
+		httpClientSpy.post.and.returnValue(of(mockResponse));
 
 		const resetRequest: ResetRequest = {
 			NewPassword: 'password',

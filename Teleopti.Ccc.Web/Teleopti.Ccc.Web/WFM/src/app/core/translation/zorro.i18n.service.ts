@@ -1,52 +1,50 @@
-import { Injectable } from '@angular/core';
-import {
-	NzI18nService,
-	sv_SE,
-	en_GB,
-	ar_EG,
-	cs_CZ,
-	de_DE,
-	es_ES,
-	fa_IR,
-	fi_FI,
-	fr_FR,
-	it_IT,
-	ja_JP,
-	nl_NL,
-	nb_NO,
-	pl_PL,
-	pt_PT,
-	ru_RU,
-	sk_SK,
-	th_TH,
-	tr_TR,
-	vi_VN,
-	zh_CN,
-	zh_TW
-} from 'ng-zorro-antd';
-
 import { registerLocaleData } from '@angular/common';
-import sv from '@angular/common/locales/sv';
-import en from '@angular/common/locales/en';
 import ar from '@angular/common/locales/ar';
 import cs from '@angular/common/locales/cs';
 import de from '@angular/common/locales/de';
+import en from '@angular/common/locales/en';
 import es from '@angular/common/locales/es';
 import fa from '@angular/common/locales/fa';
 import fi from '@angular/common/locales/fi';
 import fr from '@angular/common/locales/fr';
 import it from '@angular/common/locales/it';
 import ja from '@angular/common/locales/ja';
-import nl from '@angular/common/locales/nl';
 import nb from '@angular/common/locales/nb';
+import nl from '@angular/common/locales/nl';
 import pl from '@angular/common/locales/pl';
 import pt from '@angular/common/locales/pt';
 import ru from '@angular/common/locales/ru';
 import sk from '@angular/common/locales/sk';
+import sv from '@angular/common/locales/sv';
 import th from '@angular/common/locales/th';
 import tr from '@angular/common/locales/tr';
 import vi from '@angular/common/locales/vi';
 import zh from '@angular/common/locales/zh';
+import { Injectable } from '@angular/core';
+import {
+	ar_EG,
+	de_DE,
+	en_GB,
+	es_ES,
+	fa_IR,
+	fi_FI,
+	fr_FR,
+	it_IT,
+	ja_JP,
+	nb_NO,
+	nl_NL,
+	NzI18nService,
+	pl_PL,
+	pt_PT,
+	ru_RU,
+	sk_SK,
+	sv_SE,
+	th_TH,
+	tr_TR,
+	vi_VN,
+	zh_CN,
+	zh_TW
+} from 'ng-zorro-antd';
 
 @Injectable()
 export class Zorroi18nService {
@@ -81,48 +79,70 @@ export class Zorroi18nService {
 		switch (userLanguage) {
 			case 'en-GB':
 				registerLocaleData(en);
+				break;
 			case 'sv-SE':
 				registerLocaleData(sv);
+				break;
 			case 'ar-EG':
 				registerLocaleData(ar);
+				break;
 			case 'cs-CZ':
 				registerLocaleData(cs);
+				break;
 			case 'de-DE':
 				registerLocaleData(de);
+				break;
 			case 'es-ES':
 				registerLocaleData(es);
+				break;
 			case 'fa-IR':
 				registerLocaleData(fa);
+				break;
 			case 'fi-FI':
 				registerLocaleData(fi);
+				break;
 			case 'fr-FR':
 				registerLocaleData(fr);
+				break;
 			case 'it-IT':
 				registerLocaleData(it);
+				break;
 			case 'ja-JP':
 				registerLocaleData(ja);
+				break;
 			case 'nl-NL':
 				registerLocaleData(nl);
+				break;
 			case 'nb-NO':
 				registerLocaleData(nb);
+				break;
 			case 'pl-PL':
 				registerLocaleData(pl);
+				break;
 			case 'pt-PT':
 				registerLocaleData(pt);
+				break;
 			case 'ru-RU':
 				registerLocaleData(ru);
+				break;
 			case 'sk-SK':
 				registerLocaleData(sk);
+				break;
 			case 'th-TH':
 				registerLocaleData(th);
+				break;
 			case 'tr-TR':
 				registerLocaleData(tr);
+				break;
 			case 'vi-VN':
 				registerLocaleData(vi);
+				break;
 			case 'zh-CN':
 				registerLocaleData(zh);
+				break;
 			case 'zh-TW':
 				registerLocaleData(zh);
+				break;
 			default:
 				registerLocaleData(en);
 		}

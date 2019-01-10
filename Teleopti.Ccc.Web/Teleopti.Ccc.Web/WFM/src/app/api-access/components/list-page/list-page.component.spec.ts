@@ -5,6 +5,12 @@ import { NzTableModule } from '../../../../../node_modules/ng-zorro-antd';
 import { ExternalApplicationService, fakeBackendProvider, NavigationService } from '../../services';
 import { ListPageComponent } from './list-page.component';
 
+class Page extends PageObject {
+	get resultRows() {
+		return this.queryAll('[data-test-app-item]');
+	}
+}
+
 describe('ListPageComponent', () => {
 	let component: ListPageComponent;
 	let fixture: ComponentFixture<ListPageComponent>;
@@ -37,9 +43,3 @@ describe('ListPageComponent', () => {
 		});
 	}));
 });
-
-class Page extends PageObject {
-	get resultRows() {
-		return this.queryAll('[data-test-app-item]');
-	}
-}
