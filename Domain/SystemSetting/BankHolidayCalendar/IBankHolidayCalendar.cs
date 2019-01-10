@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 {
 	public interface IBankHolidayCalendar : IAggregateRoot, IBelongsToBusinessUnit,IDeleteTag
 	{
-		string Name { get; set; }
+		string Name { get; set; } 
 	}
 }
