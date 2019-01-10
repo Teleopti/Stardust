@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			nonExistingUserWatch.Stop();
 
 			Math.Abs(existingUserWatch.Elapsed.Subtract(nonExistingUserWatch.Elapsed).TotalMilliseconds).Should().Be
-				.LessThanOrEqualTo(10);
+				.LessThanOrEqualTo(15);
 		}
 
 		[Test]
