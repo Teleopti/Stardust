@@ -70,12 +70,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.FakeData
 			_dataMartConnectionString = dataMartConnectionString;
 		}
 
-		public DateOnlyPeriod GetFactQueueAvailblePeriod(int datasourceId)
+		public DateOnlyPeriod GetFactQueueAvailablePeriod(int dataSourceId)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public DateOnlyPeriod GetFactAgentAvailblePeriod(int dataSourceId)
+		public DateOnlyPeriod GetFactAgentAvailablePeriod(int dataSourceId)
 		{
 			throw new System.NotImplementedException();
 		}
