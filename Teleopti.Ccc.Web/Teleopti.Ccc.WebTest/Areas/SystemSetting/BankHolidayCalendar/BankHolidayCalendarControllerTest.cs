@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 		}
 
-		private BankHolidayCalendar PrepareData()
+		private IBankHolidayCalendar PrepareData()
 		{
 			var calendar = new BankHolidayCalendar();
 			calendar.Name = "ChinaBankHoliday";
@@ -300,16 +300,14 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		public void ShouldGetAllSiteBankHolidayCalendars()
 		{
 			var expactedSiteId = Guid.NewGuid();
-			var expactedCalendarName = "China2019";
 			SiteBankHolidayCalendarRepository.Add(new SiteBankHolidayCalendar
 			{
 				Site = SiteFactory.CreateSiteWithId(expactedSiteId, "mySite"),
-				BankHolidayCalendarsForSite = new List<IBankHolidayCalendar> { new BankHolidayCalendar { Name = expactedCalendarName } }
+				BankHolidayCalendarsForSite = new List<IBankHolidayCalendar> { new BankHolidayCalendar { Name = "China2019" } }
 			});
 
 			var result = Target.GetAllSiteBankHolidayCalendars();
 			result.First().Site.Should().Be.EqualTo(expactedSiteId);
-			result.First().Calendars.First().Name.Should().Be.EqualTo(expactedCalendarName);
 		}
 
 		[Test]
@@ -378,9 +376,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			if (calendar != null) calendars.Add( calendar.Id.GetValueOrDefault());
 			return new SiteBankHolidayCalendarForm
 			{
-				Settings = new List<SiteBankHolidayCalendarsUpdateForm>
+				Settings = new List<SiteBankHolidayCalendarsViewModel>
 				{
-					new SiteBankHolidayCalendarsUpdateForm
+					new SiteBankHolidayCalendarsViewModel
 					{
 						Site = siteId,
 						Calendars = calendars

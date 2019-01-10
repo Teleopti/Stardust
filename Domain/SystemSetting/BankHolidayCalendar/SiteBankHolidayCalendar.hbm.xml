@@ -29,7 +29,7 @@
 		<bag name="BankHolidayCalendarsForSite"
 			 cascade="all-delete-orphan"
 			 order-by="Parent"
-			 lazy="true">
+			 lazy="false">
 			<key column="Parent" foreign-key="FK_BankHolidayCalendarsForSite_SiteBankHolidayCalendar"/>
 			<many-to-many column="BankHolidayCalendar" class="Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar.BankHolidayCalendar"/>
 		</bag>

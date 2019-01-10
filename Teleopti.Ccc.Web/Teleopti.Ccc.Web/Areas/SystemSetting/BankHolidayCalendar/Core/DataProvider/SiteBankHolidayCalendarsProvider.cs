@@ -29,15 +29,11 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			return allSettings.Select(siteBankHolidayCalendar => new SiteBankHolidayCalendarsViewModel
 				{
 					Site = siteBankHolidayCalendar.Site.Id.GetValueOrDefault(),
-					Calendars = siteBankHolidayCalendar.BankHolidayCalendarsForSite.Select(calendar => new BankHolidayCalendarInfoViewModel
-						{
-							Id = calendar.Id.GetValueOrDefault(),
-							Name = calendar.Name
-						})
+					Calendars = siteBankHolidayCalendar.BankHolidayCalendarsForSite.Select(calendar => calendar.Id.GetValueOrDefault())
 				});
 		}
 
-		public void UpdateCalendarsForSites(IEnumerable<SiteBankHolidayCalendarsUpdateForm> input)
+		public void UpdateCalendarsForSites(IEnumerable<SiteBankHolidayCalendarsViewModel> input)
 		{
 			var allCurrentSettings = _siteBankHolidayCalendarRepository.FindAllSiteBankHolidayCalendarsSortedBySite().ToList();
 			foreach (var siteBankHolidayCalendarsViewModel in input)
