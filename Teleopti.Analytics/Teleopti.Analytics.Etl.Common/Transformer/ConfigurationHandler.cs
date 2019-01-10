@@ -9,7 +9,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private IBaseConfiguration _baseConfiguration;
 		private readonly BaseConfigurationValidator _baseConfigurationValidator;
 
-		public ConfigurationHandler(IGeneralFunctions generalFunctions, BaseConfigurationValidator baseConfigurationValidator)
+		public ConfigurationHandler(IGeneralFunctions generalFunctions,
+			BaseConfigurationValidator baseConfigurationValidator)
 		{
 			_generalFunctions = generalFunctions;
 			_baseConfigurationValidator = baseConfigurationValidator;
@@ -31,6 +32,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		public void SetConnectionString(string dataMartConnectionString)
 		{
 			_generalFunctions.SetConnectionString(dataMartConnectionString);
+			_baseConfiguration = _generalFunctions.LoadBaseConfiguration();
 		}
 	}
 }
