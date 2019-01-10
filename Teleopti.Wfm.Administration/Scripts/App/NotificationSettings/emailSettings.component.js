@@ -13,6 +13,7 @@
 		vm.tenant = $routeParams.tenant;
 		vm.error = false;
 		vm.success = false;
+		vm.isAzure = false;
 		vm.tenantId = -1;
 		loadTenant();
 
@@ -31,6 +32,7 @@
 					//Error when fetching settings, should it be the same error as when the form fails?
 				} else {
 					vm.emailSettings = response.Data;
+					vm.isAzure = response.IsAzure;
 				}
 			});
 		}

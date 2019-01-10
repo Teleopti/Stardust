@@ -363,6 +363,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			//todo: 78242
 			var emailSettings = new EmailSettingsResultModel
 			{
+				IsAzure = InstallationEnvironment.IsAzure,
 				Message = "no message",
 				Success = true,
 				Data = new EmailSettings
@@ -512,6 +513,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class EmailSettingsResultModel : TenantResultModel
 	{
 		public EmailSettings Data { get; set; }
+		public bool IsAzure { get; internal set; }
 	}
 
 	public class SmsSettingsResultModel : TenantResultModel
