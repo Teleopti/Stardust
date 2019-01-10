@@ -675,7 +675,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 					if (wizard.ShowDialog(this) != DialogResult.OK) return;
 
 					var principal = TeleoptiPrincipal.CurrentPrincipal;
-					var person = ((IUnsafePerson)principal).Person;
+					var person = ((ITeleoptiPrincipalForLegacy)principal).UnsafePerson;
 					var @event = new RecalculateForecastOnSkillCollectionEvent
 					{
 						SkillCollection = new Collection<RecalculateForecastOnSkill>(),

@@ -695,7 +695,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					return TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
+					return new PersonRepository(new ThisUnitOfWork(unitOfWork))
+						.Get(TeleoptiPrincipal.CurrentPrincipal.PersonId);
 				}
 			}
 		}

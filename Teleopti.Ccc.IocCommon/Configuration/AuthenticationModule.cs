@@ -51,7 +51,28 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SelectivePrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
 			builder.RegisterType<CurrentProcess>().SingleInstance();
 			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
-			builder.RegisterType<TeleoptiPrincipalFactory>().As<IPrincipalFactory>().SingleInstance();
+
+
+			if (_configuration.Args().TeleoptiPrincipalForLegacy)
+			{
+				builder.RegisterType<TeleoptiPrincipalForLegacyFactory>().As<IPrincipalFactory>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<TeleoptiPrincipalFactory>().As<IPrincipalFactory>().SingleInstance();
+				builder.CacheByClassProxy<TeleoptiPrincipalInternalsFactory>()
+					.As<IMakeRegionalFromPerson>()
+					.As<IMakeOrganisationMembershipFromPerson>()
+					.As<IRetrievePersonNameForPerson>()
+					.SingleInstance();
+				_configuration.Args().Cache.This<TeleoptiPrincipalInternalsFactory>(b => b
+					.CacheMethod(m => m.MakeOrganisationMembership(null))
+					.CacheMethod(m => m.MakeRegionalFromPerson(null))
+					.CacheMethod(m => m.NameForPerson(null))
+				);
+			}
+
+
 			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();
 			builder.RegisterType<ApplicationFunctionsForRole>().As<ApplicationFunctionsForRole>().InstancePerDependency();
 			builder.RegisterType<ClaimSetForApplicationRole>().As<ClaimSetForApplicationRole>().InstancePerDependency();
@@ -61,16 +82,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AvailableBusinessUnitsProvider>().As<IAvailableBusinessUnitsProvider>().SingleInstance();
 
 			builder.Register<IPasswordPolicy>(c =>
-			{
-				if (c.Resolve<IApplicationData>().LoadPasswordPolicyService == null)
-					return new PasswordPolicyFake();
-				return new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>());
-			})
+				{
+					if (c.Resolve<IApplicationData>().LoadPasswordPolicyService == null)
+						return new PasswordPolicyFake();
+					return new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>());
+				})
 				.As<IPasswordPolicy>()
 				.SingleInstance();
 
 			builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
-			
+
 			builder.RegisterType<ApplicationFunctionsProvider>().As<IApplicationFunctionsProvider>().SingleInstance();
 			builder.RegisterType<ApplicationFunctionsToggleFilter>().As<IApplicationFunctionsToggleFilter>().SingleInstance();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
@@ -83,7 +104,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DataSourceForTenant>().As<IDataSourceForTenant>().SingleInstance();
 			//by default, don't load tenats on demand. Will be changed client-by-client in the future
 			builder.RegisterType<FindTenantByNameWithEnsuredTransactionFake>().As<IFindTenantByNameWithEnsuredTransaction>().SingleInstance();
-			
+
 			builder.Register(c =>
 			{
 				var passwordPolicyService = c.Resolve<IApplicationData>().LoadPasswordPolicyService;
@@ -101,7 +122,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
 			builder.RegisterType<LoggedOnUserIsPerson>().As<ILoggedOnUserIsPerson>().SingleInstance();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();
-			
+
 			builder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>().SingleInstance();
 			builder.RegisterType<UpdatedBy>()
 				.As<IUpdatedBy>()
@@ -112,4 +133,3 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		}
 	}
 }
-

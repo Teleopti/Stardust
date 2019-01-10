@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
                         var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
 
                     	var persons = new List<Guid>(_model.FilteredPersonsId);
-						var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRepository);
-						if (!persons.Contains(person.Id.GetValueOrDefault()) && _model.IncludeForOrganizer)
+						var person = TeleoptiPrincipal.CurrentPrincipal.PersonId;
+						if (!persons.Contains(person) && _model.IncludeForOrganizer)
 						{
-							persons.Add(person.Id.GetValueOrDefault());
+							persons.Add(person);
 						}
 
                     	new ScenarioRepository(unitOfWork).LoadAll();

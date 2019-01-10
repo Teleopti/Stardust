@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 			{
 				var token = _tokenIdentityProvider.RetrieveToken();
 				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, token?.OriginalToken);
-				_roleToPrincipalCommand.Execute(principal,principal, unitOfWorkFactory, personRepository);
+				_roleToPrincipalCommand.Execute(principal, personRepository, unitOfWorkFactory.Name);
 				return principal;
 			}
 			catch (PersonNotFoundException)

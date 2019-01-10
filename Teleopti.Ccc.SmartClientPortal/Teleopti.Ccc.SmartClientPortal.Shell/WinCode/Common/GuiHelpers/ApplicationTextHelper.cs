@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
 	    {
 		    get
 		    {
-			    return String.Concat(" ", ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Name);
+			    return String.Concat(" ", ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipal.CurrentPrincipal).UnsafePerson.Name);
 		    }
 	    }
     }

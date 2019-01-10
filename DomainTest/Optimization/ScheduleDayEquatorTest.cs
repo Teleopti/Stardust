@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
-			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
+			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, person);
 
 			Assert.IsTrue(_target.MainShiftBasicEquals(otherShift, currentShift));
 		}

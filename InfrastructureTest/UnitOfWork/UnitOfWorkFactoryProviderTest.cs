@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var expectedUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var dataSource = new FakeDataSource {Application = expectedUnitOfWorkFactory};
 			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, new Person());
+			var teleoptiPrincipal = new TeleoptiPrincipalForLegacy(identity, new Person());
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
 			identity.Expect(x => x.IsAuthenticated).Return(true);
 			identity.Expect(x => x.DataSource).Return(dataSource);

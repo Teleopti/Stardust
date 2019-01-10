@@ -3,6 +3,7 @@ using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,14 +21,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 	    private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ExportMultisiteSkillToSkillCommandHandler(IEventPublisher publisher, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
+		public ExportMultisiteSkillToSkillCommandHandler(IEventPublisher publisher, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, ILoggedOnUser loggedOnUser)
         {
             _publisher = publisher;
             _unitOfWorkFactory = unitOfWorkFactory;
             _jobResultRepository = jobResultRepository;
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
-        }
+			_loggedOnUser = loggedOnUser;
+		}
 
 		public void Handle(ExportMultisiteSkillToSkillCommandDto command)
         {
@@ -41,8 +44,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 //Save start of processing to job history
                 var period = command.Period.ToDateOnlyPeriod();
-                var jobResult = new JobResult(JobCategory.MultisiteExport, period,
-                                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+                var jobResult = new JobResult(JobCategory.MultisiteExport, period, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
                 _jobResultRepository.Add(jobResult);
                 jobId = jobResult.Id.GetValueOrDefault();
                 unitOfWork.PersistAll();
@@ -50,10 +52,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 //Prepare message to send to service bus
                 var message = new ExportMultisiteSkillsToSkillEvent
                                   {
-                                      OwnerPersonId =
-                                          ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
-                                              Guid.Empty),
-                                              JobId = jobId,
+                                      OwnerPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(Guid.Empty),
+									  JobId = jobId,
                                       PeriodStart = period.StartDate.Date,
 									  PeriodEnd = period.EndDate.Date
                                   };

@@ -19,27 +19,13 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Authentication
 			var currentPrincipal = new FakeCurrentTeleoptiPrincipal();
 			var user = new Person();
 			user.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
-			currentPrincipal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("user",null,null,null, null), user));
+			currentPrincipal.Fake(new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("user",null,null,null, null), user));
 			var target = new UserTimeZone(currentPrincipal);
 
 			var result = target.TimeZone();
 
 			result.Should().Be.EqualTo(user.PermissionInformation.DefaultTimeZone());
 		}
-
-		[Test]
-		public void ShouldUseCachedPersonTimezoneWhenApplicableToGetTheLatestTimezoneUpdateFromFatClient()
-		{
-			var person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.AustralianTimeZoneInfo());
-			var principal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("Pelle", null, null, null, null), person);
-			principal.Regional = new Regional(TimeZoneInfoFactory.ChinaTimeZoneInfo(), CultureInfo.CurrentCulture, CultureInfo.CurrentCulture);
-
-			var currentPrincipal = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserTimeZone(currentPrincipal);
-			target.TimeZone().Should().Be(TimeZoneInfoFactory.AustralianTimeZoneInfo());
-		}
-
 
 		[Test]
 		public void ShouldReturnNullIfNotLoggedOn()
