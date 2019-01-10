@@ -3,9 +3,9 @@
 
 	angular.module('smsSettingsModule').factory('smsSettingsService', smsSettingsService);
 
-	smsSettingsService.$inject = ['$http'];
+	smsSettingsService.$inject = ['$http', 'tokenHeaderService'];
 
-    function smsSettingsService($http) {
+	function smsSettingsService($http, tokenHeaderService) {
         var vm = this;
 
         var smsSettings = {
@@ -15,8 +15,15 @@
 
         return smsSettings;
 
-        function get() {
-			return $http.get('/smsnotificationSettings.json').then(getSmsSettings).catch(getSmsSettingsFailed);
+		function get(tenantId) {
+			var headersObj = tokenHeaderService.getHeaders();
+			return $http({
+				url: '/GetSmsSettings/tenant/' + tenantId,
+				method: 'GET',
+				headers: headersObj.headers
+			})
+				.then(getSmsSettings)
+				.catch(getSmsSettingsFailed);
 
             function getSmsSettings(response) {
                 return response.data;
@@ -30,28 +37,30 @@
             }
 		}
 
-		function post(data) {
+		function post(tenantId, data) {
+			var headersObj = tokenHeaderService.getHeaders();
+
+			var postData = {
+				TenantId: tenantId,
+				Settings: data
+			}
+
 			return $http(
 				{
-					url: '/smsnotificationSettings.json',
+					url: '/AddSmsSettings',
 					method: 'POST',
-					data: data
-				}
-			).then(postSmsSettings).catch(postSmsSettingsFailed);
+					data: postData,
+					headers: headersObj.headers
+				})
+				.then(postSmsSettings)
+				.catch(postSmsSettingsFailed);
 
 			function postSmsSettings(response) {
-				return {
-					error: false,
-					message: "Settings saved",
-					data: response.data
-				};
+				return response;
 			}
 
 			function postSmsSettingsFailed(error) {
-				return {
-					error: true,
-					message: "Something went wrong in saving data"
-				};
+				return response;
 			}
 		}
     }

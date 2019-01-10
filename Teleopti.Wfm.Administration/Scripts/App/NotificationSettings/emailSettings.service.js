@@ -16,7 +16,6 @@
 		return emailSettings;
 
 		function get(tenantId) {
-			console.log(tenantId);
 			var headersObj = tokenHeaderService.getHeaders();
 
 			return $http({

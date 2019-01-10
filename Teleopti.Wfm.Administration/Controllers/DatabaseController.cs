@@ -351,7 +351,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			//todo: 78242
 			return Json(new TenantResultModel
-				{ Message = $"Email settings saved", Success = true }
+				{ Message = $"SMTP settings saved", Success = true }
 			);
 		}
 
@@ -377,6 +377,46 @@ namespace Teleopti.Wfm.Administration.Controllers
 			};
 			
 			return Json(emailSettings);
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("AddSmsSettings")]
+		public virtual JsonResult<TenantResultModel> AddSmsSettingsToTenant(SmsSettingsPostModel model)
+		{
+			//todo: 78242
+			return Json(new TenantResultModel
+				{ Message = $"SMS settings saved", Success = true }
+			);
+		}
+
+		[HttpGet]
+		[TenantUnitOfWork]
+		[Route("GetSmsSettings/tenant/{id}")]
+		public virtual JsonResult<SmsSettingsResultModel> GetSmsSettingsToTenant(int id)
+		{
+			//todo: 78242
+			var smsSettings = new SmsSettingsResultModel
+			{
+				Message = "no message",
+				Success = true,
+				Data = new SmsSettings()
+				{
+					ApiId = "3388822",
+					Assembly = "Teleopti.Ccc.Domain",
+					Class = "Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender",
+					ErrorCode = "fault",
+					FindSuccessOrError = "Error",
+					From = "SmsSenderName",
+					Password = "pwd",
+					SkipSearch = true,
+					SuccessCode = "success",
+					Url = "http://api.clickatell.com/xml/xml?data=",
+					Data = "<![CDATA[ <clickAPI><sendMsg><user>{0}</user><password>{1}</password><api_id>{2}</api_id><to>{3}</to><from>{4}</from><text>{5}</text><unicode>{6}</unicode></sendMsg></clickAPI>]]>"
+				}
+			};
+
+			return Json(smsSettings);
 		}
 
 		private TenantResultModel checkFirstUserInternal(string name, string password)
@@ -474,11 +514,23 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public EmailSettings Data { get; set; }
 	}
 
+	public class SmsSettingsResultModel : TenantResultModel
+	{
+		public SmsSettings Data { get; set; }
+	}
+
 	public class EmailSettingsPostModel
 	{
 		public int TenantId { get; set; }
 
 		public EmailSettings Settings { get; set; }
+	}
+
+	public class SmsSettingsPostModel
+	{
+		public int TenantId { get; set; }
+
+		public SmsSettings Settings { get; set; }
 	}
 
 	public class EmailSettings
@@ -493,6 +545,29 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public string User { get; set; }
 
 		public string Password { get; set; }
+	}
+
+	public class SmsSettings
+	{
+		public string Assembly { get; set; }
+		public string Class { get; set; }
+		public string Url { get; set; }
+
+		public string Password { get; set; }
+
+		public string ApiId { get; set; }
+
+		public string From { get; set; }
+
+		public string FindSuccessOrError { get; set; }
+
+		public string ErrorCode { get; set; }
+
+		public string SuccessCode { get; set; }
+
+		public bool SkipSearch { get; set; }
+
+		public string Data { get; set; }
 	}
 
 	public class AddSuperUserToTenantModel

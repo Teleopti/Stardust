@@ -1,41 +1,50 @@
 ﻿(function () {
 	'use strict';
-	function SmsSettingsController($scope, smsSettingsService) {
+	function SmsSettingsController($scope, smsSettingsService, tenantService, $routeParams) {
 		var vm = this;
-		vm.error = false;
 
-		vm.LoadSmsSettings = function () {
-			console.log('sms', smsSettingsService);
-			return smsSettingsService.get().then(function (data) {
-				if (data.error) {
+		vm.tenant = $routeParams.tenant;
+		vm.error = false;
+		vm.success = false;
+		vm.tenantId = -1;
+		loadTenant();
+
+		function loadTenant() {
+			tenantService.loadTenant(vm.tenant).then(function (data) {
+				vm.tenantId = data.Id;
+				getSmsSettings();
+			});
+		}
+
+		function getSmsSettings() {
+			return smsSettingsService.get(vm.tenantId).then(function (response) {
+				if (!response.Success) {
 					vm.error = true;
-					vm.message = data.message;
+					vm.message = response.Message;
 					//Error when fetching settings, should it be the same error as when the form fails?
 				} else {
-					vm.smsSettings = data;
+					vm.smsSettings = response.Data;
 				}
 				
 				return vm.smsSettings;
 			});
 		}
 
-		vm.PostSmsSettings = function(data) {
-			return smsSettingsService.post(vm.smsSettings).then(function (data) {
-				if (data.error) {
+		vm.PostSmsSettings = function() {
+			return smsSettingsService.post(vm.tenantId, vm.smsSettings).then(function (response) {
+				if (!response.data.Success) {
 					vm.error = true;
-					vm.message = data.message;
+					vm.message = response.data.Message;
 				} else {
 					vm.success = true;
 					vm.error = false;
-					vm.message = data.message;
+					vm.message = response.data.Message;
 				}
 			});
 		}
-
-		vm.LoadSmsSettings();
 	}
 
-	SmsSettingsController.$inject = ['$scope', 'smsSettingsService'];
+	SmsSettingsController.$inject = ['$scope', 'smsSettingsService', 'tenantService', '$routeParams'];
 
 	angular.module('smsSettingsModule').component('smsSettings', {
 		templateUrl: '/Scripts/App/NotificationSettings/smsSettings.template.html',
