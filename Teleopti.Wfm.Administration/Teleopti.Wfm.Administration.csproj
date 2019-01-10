@@ -309,6 +309,15 @@
     <Content Include="Scripts\App\changePasswordController.js" />
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
+    <Content Include="Scripts\App\NotificationSettings\emailSettings.component.js" />
+    <Content Include="Scripts\App\NotificationSettings\emailSettings.module.js" />
+    <Content Include="Scripts\App\NotificationSettings\smsSettings.service.js" />
+    <Content Include="Scripts\App\NotificationSettings\emailSettings.service.js" />
+    <Content Include="Scripts\App\NotificationSettings\smsSettings.template.html" />
+    <Content Include="Scripts\App\NotificationSettings\emailSettings.template.html" />
+    <Content Include="Scripts\App\NotificationSettings\smsSettings.component.js" />
+    <Content Include="Scripts\App\NotificationSettings\smsSettings.module.js" />
+    <Content Include="Scripts\App\tenant.service.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
     <Content Include="Scripts\Chart.js" />
@@ -319,6 +328,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="smsnotificationSettings.json" />
     <None Include="packages.config" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\angular-animate.min.js.map" />
