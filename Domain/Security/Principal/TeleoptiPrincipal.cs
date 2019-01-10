@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			{
 				_person = person,
 				_personId = person.Id.GetValueOrDefault(),
-				PersonName = person.Name
 			};
 		}
 
@@ -39,8 +38,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				return _personId;
 			}
 		}
-
-		public Name PersonName { get; set; }
 
 		public IRegional Regional { get; set; }
 		public IOrganisationMembership Organisation { get; set; }

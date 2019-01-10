@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 			var personOnlyForUpdateBy = new Person();
 			personOnlyForUpdateBy.SetId(principal.PersonId);
-			personOnlyForUpdateBy.SetName(principal.PersonName);
 			return personOnlyForUpdateBy;
 
 			//return null;

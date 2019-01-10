@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public override IIdentity Identity => _identity ?? base.Identity;
 
 		public Guid PersonId => _person.Id.GetValueOrDefault();
-		public Name PersonName => _person.Name;
 		public IRegional Regional { get; set; }
 		public IOrganisationMembership Organisation => _claimsOwner.Organisation;
 
