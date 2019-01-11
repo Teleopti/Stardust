@@ -34,8 +34,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		private void initializeFromPerson()
 		{
-			if (_person != null)
-				Regional = Principal.Regional.FromPersonWithThreadCultureFallback(_person);
+			if (_person == null) return;
+			var info = _person.PermissionInformation;
+			Regional = new Regional(
+				info.DefaultTimeZone(),
+				info.CultureLCID() ?? System.Threading.Thread.CurrentThread.CurrentCulture.LCID,
+				info.UICultureLCID() ?? System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
 		}
 
 		public override IIdentity Identity => _identity ?? base.Identity;

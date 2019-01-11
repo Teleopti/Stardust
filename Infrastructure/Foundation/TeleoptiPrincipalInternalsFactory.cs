@@ -6,9 +6,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class TeleoptiPrincipalInternalsFactory : IMakeRegionalFromPerson, IMakeOrganisationMembershipFromPerson, IRetrievePersonNameForPerson
 	{
-		public virtual IRegional MakeRegionalFromPerson(IPerson loggedOnUser)
+		public virtual IRegional MakeRegionalFromPerson(IPerson person)
 		{
-			return Regional.FromPerson(loggedOnUser);
+			var info = person.PermissionInformation;
+			return new Regional(
+				info.DefaultTimeZone(),
+				info.CultureLCID() ?? 0,
+				info.UICultureLCID() ?? 0);
 		}
 
 		public virtual IOrganisationMembership MakeOrganisationMembership(IPerson loggedOnUser)

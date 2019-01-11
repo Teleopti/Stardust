@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldNotSetThreadCultureIfRegionalHasNoCulture()
 		{
 			var target = new SetThreadCulture();
-			var regional = new Regional(TimeZoneInfoFactory.StockholmTimeZoneInfo(), 0, 0);
+			var regional = new Regional(TimeZoneInfoFactory.StockholmTimeZoneInfo(), null, null);
 
 			target.SetCulture(regional);
 

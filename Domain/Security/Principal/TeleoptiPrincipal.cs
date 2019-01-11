@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Security.Principal;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
@@ -16,28 +15,17 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private TeleoptiPrincipal(IIdentity identity)
 			: base(identity, new string[] { }) { }
 		
-		public static TeleoptiPrincipal Make(ITeleoptiIdentity identity, IPerson person)
+		public static TeleoptiPrincipal Make(ITeleoptiIdentity identity, Func<Guid> personId)
 		{
 			return new TeleoptiPrincipal(identity)
 			{
-				_person = person,
-				_personId = person.Id.GetValueOrDefault(),
+				_personId = personId,
 			};
 		}
 
-		private IPerson _person;
-		private Guid _personId;
+		private Func<Guid> _personId;
 
-		public Guid PersonId
-		{
-			get
-			{
-				if (_personId != Guid.Empty)
-					return _personId;
-				_personId = _person.Id.GetValueOrDefault();
-				return _personId;
-			}
-		}
+		public Guid PersonId => _personId.Invoke();
 
 		public IRegional Regional { get; set; }
 		public IOrganisationMembership Organisation { get; set; }
