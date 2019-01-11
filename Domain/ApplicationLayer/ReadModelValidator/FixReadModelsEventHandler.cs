@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_readModelFixer = readModelFixer;
 		}
 
-		public void Handle(FixReadModelsEvent @event)
+		public virtual void Handle(FixReadModelsEvent @event)
 		{
 			if (@event.Targets.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{

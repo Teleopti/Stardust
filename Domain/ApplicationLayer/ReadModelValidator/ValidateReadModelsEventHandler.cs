@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_validator = validator;
 		}
 
-		public void Handle(ValidateReadModelsEvent @event)
+		public virtual void Handle(ValidateReadModelsEvent @event)
 		{
 			var mode = @event.Reinitialize
 				? ReadModelValidationMode.Reinitialize
