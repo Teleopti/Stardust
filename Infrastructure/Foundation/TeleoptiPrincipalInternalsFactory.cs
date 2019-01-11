@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				info.UICultureLCID() ?? 0);
 		}
 
-		public virtual IOrganisationMembership MakeOrganisationMembership(IPerson loggedOnUser)
+		public virtual IOrganisationMembership MakeOrganisationMembership(IPerson person)
 		{
-			return OrganisationMembership.FromPerson(loggedOnUser);
+			return new OrganisationMembership().InitializeFromPerson(person);
 		}
 
 		[DebuggerStepThrough]

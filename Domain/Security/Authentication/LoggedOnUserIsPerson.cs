@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		
 		public bool IsPerson(IPerson person)
 		{
-			var pricipal = _principal.Current();
-			return pricipal?.Organisation.IsUser(person) ?? false;
+			var principal = _principal.Current();
+			return principal?.Organisation.IsUser(person) ?? false;
 		}
 	}
 }
