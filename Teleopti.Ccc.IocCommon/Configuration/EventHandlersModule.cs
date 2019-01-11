@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
 			builder.RegisterType<UpdateFactSchedules>().SingleInstance().ApplyAspects();
-			if (_config.Toggle(Toggles.WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425))
+			if (_config.IsToggleEnabled(Toggles.WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425))
 			{
 				builder.RegisterType<UpdateAnalyticsScheduleLogger>().As<IUpdateAnalyticsScheduleLogger>().SingleInstance();
 			}

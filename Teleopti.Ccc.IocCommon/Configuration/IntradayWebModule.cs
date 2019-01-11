@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayStaffingApplicationService>();
 			builder.RegisterType<IntradayPerformanceApplicationService>();
 			builder.RegisterType<IntradayIncomingTrafficApplicationService>();
-			if (_configuration.Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153))
+			if (_configuration.IsToggleEnabled(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153))
 			{
 				builder.RegisterType<LoadSkillDaysWithPeriodFlexibilityToggleOn>().As<ILoadSkillDaysWithPeriodFlexibility>()
 					.SingleInstance();
