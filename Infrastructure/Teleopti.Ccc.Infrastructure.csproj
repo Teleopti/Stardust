@@ -562,7 +562,6 @@
     <Compile Include="Toggle\IToggleManager.cs" />
     <Compile Include="Toggle\PersistToggleOverride.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />
-    <Compile Include="Toggle\ToggleFillerDoNothing.cs" />
     <Compile Include="Toggle\ToggleQuerier.cs" />
     <Compile Include="Toggle\TogglesActive.cs" />
     <Compile Include="Licensing\CheckLicenseExists.cs" />
