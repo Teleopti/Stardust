@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public interface IMakeOrganisationMembershipFromPerson
 	{
-		IOrganisationMembership MakeOrganisationMembership(IPerson loggedOnUser);
+		IOrganisationMembership MakeOrganisationMembership(IPerson person);
 	}
 }
