@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IList<DateOnly> UnLockedDates()
 		{
-			var ret = _blockPeriod.DayCollection().Where(d => !_lockedDates.Contains(d)).ToList();
+			var ret = _blockPeriod.DayCollection().Except(_lockedDates).ToList();
 
 			return ret;
 		}

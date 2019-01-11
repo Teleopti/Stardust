@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private static void removeUnwantedScheduleRanges(ISchedulerStateHolder schedulerStateHolderTo)
 		{
-			foreach (var person in schedulerStateHolderTo.Schedules.Keys.Where(person => !schedulerStateHolderTo.SchedulingResultState.LoadedAgents.Contains(person)).ToList())
+			foreach (var person in schedulerStateHolderTo.Schedules.Keys.Except(schedulerStateHolderTo.SchedulingResultState.LoadedAgents).ToArray())
 			{
 				schedulerStateHolderTo.Schedules.Remove(person);
 			}

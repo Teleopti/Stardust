@@ -71,15 +71,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 							_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 						}
 						var people = getRecursively(rootGroup.ChildGroupCollection, rootGroup.PersonCollection.ToList()).Select(x => x.Id.GetValueOrDefault()).ToList();
-						var currentPersonCodesInGroupPage = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(rootGroupId, @event.LogOnBusinessUnitId);
-						var toBeAdded = people.Where(x => !currentPersonCodesInGroupPage.Contains(x)).ToList();
-						var toBeDeleted = currentPersonCodesInGroupPage.Where(x => !people.Contains(x)).ToList();
+						var currentPersonCodesInGroupPage = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(rootGroupId, @event.LogOnBusinessUnitId).ToArray();
+						var toBeAdded = people.Except(currentPersonCodesInGroupPage).ToArray();
+						var toBeDeleted = currentPersonCodesInGroupPage.Except(people).ToArray();
 
 						if (toBeAdded.Any())
-							logger.Debug($"Adding {toBeAdded.Count} people to group {rootGroupId}");
+							logger.Debug($"Adding {toBeAdded.Length} people to group {rootGroupId}");
 						_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(toBeAdded, rootGroupId, @event.LogOnBusinessUnitId);
 						if (toBeDeleted.Any())
-							logger.Debug($"Removing {toBeDeleted.Count} people from group {rootGroupId}");
+							logger.Debug($"Removing {toBeDeleted.Length} people from group {rootGroupId}");
 						_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePerson(toBeDeleted, rootGroupId, @event.LogOnBusinessUnitId);
 					}
 				}

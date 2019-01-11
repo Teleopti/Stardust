@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 			}
 
-			return requests.Where (request => !referredRequests.Contains (request));
+			return requests.Except(referredRequests);
 		}
 		
 		private bool permissionCheckPredicate(IPersonRequest request)

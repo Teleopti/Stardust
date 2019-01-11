@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				return
 					reqVersions.Any(
 						y => y.Key == x.Id.GetValueOrDefault() && y.Value != ((PersonRequest) x).Version.GetValueOrDefault());
-			});
+			}).Select(x => x.Id).ToArray();
 			foreach (var queuedAbsenceRequests in potentialBulk)
 			{
-				var bulk = queuedAbsenceRequests.Where(queuedAbsenceRequest => !dirtyRequests.Select(x => x.Id).Contains(queuedAbsenceRequest.PersonRequest)).ToList();
+				var bulk = queuedAbsenceRequests.Where(queuedAbsenceRequest => !dirtyRequests.Contains(queuedAbsenceRequest.PersonRequest)).ToList();
 				if (bulk.Any())
 					result.Add(bulk);
 			}
