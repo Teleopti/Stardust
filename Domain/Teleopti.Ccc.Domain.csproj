@@ -227,6 +227,7 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
+    <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendar.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
