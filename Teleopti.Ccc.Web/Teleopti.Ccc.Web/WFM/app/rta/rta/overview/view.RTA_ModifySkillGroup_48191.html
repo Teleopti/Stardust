@@ -31,7 +31,7 @@
 	<div class="con-row">
 		<div class="con-flex">
 			<md-progress-linear md-mode="indeterminate" ng-if="vm.loading()"></md-progress-linear>
-			<div class="panel material-depth-1 rta-filter-panel">
+			<div class="panel rta-filter-panel">
 				<div class="con-row">
 					<div class="con-flex">
 						<skill-picker skills="vm.skills" skill-areas="vm.skillAreas"
@@ -50,7 +50,7 @@
 
 	<div class="con-row" ng-if="vm.displayNoSitesMessage()">
 		<div class="con-flex">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<div class="con-row">
 					<div class="con-flex">
 						{{'NoRealTimeAdherenceResultMessage'|translate}}
@@ -96,7 +96,7 @@
 				<rta-card-body ng-click="$event.stopPropagation();">
 					<div class="con-fluid-row dense">
 						<div class="con-fluid-flex" ng-repeat="team in card.teams">
-							<div class="card panel material-depth-1 team" ng-class="team.ClassOnSelection">
+							<div class="card panel team" ng-class="team.ClassOnSelection">
 								<div class="sub-header flex" ng-click="vm.selectTeamOrSite(team)">
 									<h1 ng-attr-data-max="{{team.AgentsCount}}"
 										ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">

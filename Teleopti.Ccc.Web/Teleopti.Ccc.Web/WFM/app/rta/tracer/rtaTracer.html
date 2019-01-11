@@ -12,7 +12,7 @@
 
 	<div class="con-row">
 		<div class="con-flex">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<div class="con-row">
 					<div class="con-flex">
 						<label class="input-icon">
@@ -42,7 +42,7 @@
 	<h1>Tracers</h1>
 	<div class="con-row">
 		<div class="con-flex">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<table class="wfm-table">
 					<tr ng-repeat="tracer in vm.tracers" class="process">
 						<td width="200px" style="vertical-align: top">
@@ -96,7 +96,7 @@
 	<h1 ng-if="vm.exception">Exception</h1>
 	<div ng-if="vm.exception" class="con-row">
 		<div class="con-flex">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<div class="con-row">
 					<div class="con-flex">
 						{{vm.exception}}
@@ -110,7 +110,7 @@
 		<h1>{{tracedUser.user}}</h1>
 		<div class="con-row">
 			<div class="con-flex">
-				<div class="panel material-depth-1">
+				<div class="panel">
 					<table class="wfm-table">
 						<tr ng-repeat="state in tracedUser.states" class="trace">
 							<td width="200px" style="vertical-align: top">{{state.stateCode}}</td>

@@ -31,7 +31,7 @@
 	</div>
 
 	<md-progress-linear md-mode="indeterminate" ng-if="vm.loading()"></md-progress-linear>
-	<div class="panel material-depth-1 con-padding">
+	<div class="panel con-padding">
 		<div class="con-row">
 			<div class="con-flex wfm-form organization-picker">
 				<div class="form-input-wrap">
@@ -45,7 +45,7 @@
 
 				<div style="position: relative">
 					<div
-						class="wfm-dropdown-panel panel material-depth-1 full-padding"
+						class="wfm-dropdown-panel panel full-padding"
 						style="z-index: 999; position: absolute; width: 100%"
 						ng-if="vm.organizationPickerOpen"
 						outside-click="vm.organizationPickerOpen = false"
@@ -125,7 +125,7 @@
 					</div>
 					<div style="position: relative">
 						<div
-							class="wfm-dropdown-panel panel material-depth-1 full-padding"
+							class="wfm-dropdown-panel panel full-padding"
 							style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
 							ng-if="vm.skillPickerOpen"
 							outside-click="vm.skillPickerOpen = false"
@@ -169,7 +169,7 @@
 					</div>
 					<div style="position: relative">
 						<div
-							class="wfm-dropdown-panel panel material-depth-1 full-padding"
+							class="wfm-dropdown-panel panel full-padding"
 							style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
 							ng-if="vm.skillGroupPickerOpen"
 							outside-click="vm.skillGroupPickerOpen = false"
@@ -218,7 +218,7 @@
 
 				<div class="relative">
 					<div
-						class="wfm-dropdown-panel panel material-depth-1 full-padding"
+						class="wfm-dropdown-panel panel full-padding"
 						style="z-index: 999; position: absolute; width: 100%"
 						ng-if="vm.open"
 						outside-click="vm.open = false"
@@ -243,7 +243,7 @@
 
 	<div class="con-row" ng-if="vm.displayNoAgentsMessage()">
 		<div class="con-flex">
-			<div class="panel material-depth-1 con-padding">
+			<div class="panel con-padding">
 				<div class="con-row">
 					<div class="con-flex">{{ 'NoRealTimeAdherenceResultMessage' | translate }}</div>
 				</div>
@@ -251,7 +251,7 @@
 		</div>
 	</div>
 
-	<div class="panel material-depth-1">
+	<div class="panel">
 		<div class="con-row">
 			<table class="wfm-table cursor-pointer">
 				<tr>

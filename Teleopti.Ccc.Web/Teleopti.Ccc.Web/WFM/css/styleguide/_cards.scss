@@ -125,7 +125,7 @@
 // The card can have different colors by applying notice-info, notice-warning, notice-error and notice-success classes to the card element.
 //
 // Markup:
-//<div class="card panel material-depth-1">
+//<div class="card panel">
 //    <div class="sub-header">
 //      <h2>Card title</h2>
 //    </div>
@@ -158,7 +158,7 @@
 //<option>notice-warning</option>
 //</select>
 //</h3>
-//<div class="card panel material-depth-1" ng-class="selectedClass">
+//<div class="card panel" ng-class="selectedClass">
 //    <div class="sub-header">
 //      <h2>Colorful card title</h2>
 //    </div>

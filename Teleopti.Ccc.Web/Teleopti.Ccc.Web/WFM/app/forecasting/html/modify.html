@@ -18,7 +18,7 @@
 
 		<div class="con-row">
 			<div class="con-flex">
-				<div class="panel material-depth-1">
+				<div class="panel">
 					<div class="con-row">
 						<div class="con-flex">
 							<div class="center">
@@ -87,7 +87,7 @@
 	<form ng-submit="vm.applyCampaign()">
 		<div class="con-row animate-show" ng-show="vm.campaignPanel" ng-cloak>
 			<div class="con-flex">
-				<div class="panel material-depth-1">
+				<div class="panel">
 					<div class="sub-header">
 						<h2>{{ 'Campaign' | translate }}</h2>
 					</div>
@@ -135,7 +135,7 @@
 	<form ng-submit="vm.applyOverride(form)" class="wfm-form">
 		<div class="con-row animate-show" ng-show="vm.overridePanel" ng-cloak>
 			<div class="con-flex">
-				<div class="panel material-depth-1">
+				<div class="panel">
 					<div class="sub-header">
 						<h2>{{ 'CreateOverride' | translate }}</h2>
 					</div>
@@ -197,7 +197,7 @@
 	<div ng-if="vm.scenarioNotForecasted && !vm.selectedWorkload.SkillType.DoDisplayData">
 		<div class="con-row">
 			<div class="con-flex">
-				<div class="panel material-depth-1">
+				<div class="panel">
 					<div class="con-row">
 						<div class="con-flex">{{ 'SkillNotSupported' | translate }}</div>
 					</div>
@@ -209,7 +209,7 @@
 	<div ng-if="vm.scenarioNotForecasted && vm.selectedWorkload.SkillType.DoDisplayData">
 		<div class="con-row">
 			<div class="con-flex">
-				<div class="panel material-depth-1">
+				<div class="panel">
 					<div class="con-row">
 						<div class="con-flex">{{ 'NoForecastDateForCurrentScenario' | translate }}</div>
 					</div>
@@ -231,7 +231,7 @@
 <section>
 	<div class="con-row" ng-if="vm.isForecastRunning || vm.savingToScenario">
 		<div class="con-flex">
-			<div class="panel material-depth-1 full-padding">
+			<div class="panel full-padding">
 				<div><md-progress-linear md-mode="indeterminate"></md-progress-linear></div>
 			</div>
 		</div>
@@ -239,7 +239,7 @@
 
 	<div class="con-row" ng-if="vm.selectedWorkload.Days.length > 0 && !vm.savingToScenario">
 		<div class="con-flex">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<div class="sub-header">
 					<h2 ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{ 'SelectToModify' | translate }}</h2>
 					<h2 ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{ 'SkillNotSupported' | translate }}</h2>
@@ -591,7 +591,7 @@
 		</div>
 
 		<div class="con-flex">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<div class="con-row">
 					<div class="con-flex">
 						<h2>{{ 'PleaseSelectASkillFirst' | translate }}</h2>
