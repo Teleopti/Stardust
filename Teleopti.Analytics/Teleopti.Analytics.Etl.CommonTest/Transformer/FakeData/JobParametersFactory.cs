@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 
 		public static IJobParameters SimpleParameters(IJobHelper jobHelper, int intervalLength)
 		{
-			return SimpleParameters(new JobHelperForTest(new RaptorRepositoryForTest(), null), false, intervalLength, false);
+			return SimpleParameters(jobHelper, false, intervalLength, false);
 		}
 
 		public static IJobParameters SimpleParametersWithInsightsFlag(bool insightsEnabled)
