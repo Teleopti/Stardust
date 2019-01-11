@@ -29,6 +29,11 @@ namespace Teleopti.Ccc.TestCommon
 			return _person;
 		}
 
+		public string CurrentUserName()
+		{
+			throw new NotImplementedException();
+		}
+
 		public bool IsPerson(IPerson person)
 		{
 			return _person == person;

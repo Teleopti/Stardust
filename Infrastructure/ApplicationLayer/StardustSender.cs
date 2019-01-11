@@ -21,15 +21,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(StardustSender));
 		private readonly IPostHttpRequest _postHttpRequest;
-		private readonly IUpdatedBy _updatedBy;
+		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IConfigReader _configReader;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		
-		public StardustSender(IPostHttpRequest postHttpRequest, IUpdatedBy updatedBy, IConfigReader configReader, ICurrentDataSource currentDataSource, ICurrentBusinessUnit currentBusinessUnit)
+		public StardustSender(IPostHttpRequest postHttpRequest, ILoggedOnUser loggedOnUser, IConfigReader configReader, ICurrentDataSource currentDataSource, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_postHttpRequest = postHttpRequest;
-			_updatedBy = updatedBy;
+			_loggedOnUser = loggedOnUser;
 			_configReader = configReader;
 			_currentDataSource = currentDataSource;
 			_currentBusinessUnit = currentBusinessUnit;
@@ -37,10 +37,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public Guid Send(IEvent @event)
 		{
-			var userName = "Stardust";
-			if (_updatedBy.Person() != null)
-				userName = _updatedBy.Person().Name.ToString();
-
+			var userName = _loggedOnUser.CurrentUserName() ?? "Stardust";
+			
 			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();
 			var job = @event as IStardustJobInfo;

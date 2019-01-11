@@ -3,6 +3,7 @@
 	public interface ILoggedOnUser
 	{
 		IPerson CurrentUser();
+		string CurrentUserName();
 	}
 
 	public interface ILoggedOnUserIsPerson

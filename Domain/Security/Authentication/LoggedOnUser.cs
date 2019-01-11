@@ -23,5 +23,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 			return _personRepository?.Get(principal.PersonId);
 		}
 
+		public string CurrentUserName() =>
+			_currentTeleoptiPrincipal.Current()?.Identity.Name;
 	}
 }
