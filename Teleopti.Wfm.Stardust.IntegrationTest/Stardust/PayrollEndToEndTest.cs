@@ -108,15 +108,12 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			WithUnitOfWork.Do(() =>
 			{
-
-				PayrollFormatRepository.Add(new PayrollFormat() { Name = "Teleopti", FormatId = Guid.NewGuid() });
+				PayrollFormatRepository.Add(new PayrollFormat { Name = "Teleopti", FormatId = Guid.NewGuid() });
 			});
 
 			WithUnitOfWork.Do(() =>
 			{
-
 				PayrollExportRepository.Add(createAggregateWithCorrectBusinessUnit(period));
-
 			});
 			IPayrollExport payrollExport = null;
 			IPerson person = null;

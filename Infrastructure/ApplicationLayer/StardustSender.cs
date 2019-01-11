@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -37,29 +36,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public Guid Send(IEvent @event)
 		{
-			var userName = _loggedOnUser.CurrentUserName() ?? "Stardust";
-			
-			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();
 			var job = @event as IStardustJobInfo;
-			var policy = "";
-			if (job?.JobName != null)
+
+			var userName = job?.UserName ?? _loggedOnUser.CurrentUserName() ?? "Stardust";
+			var jobName = job?.JobName ?? type;
+			var policy = job?.Policy ?? "";
+
+			if (@event is ILogOnContext raptorDomainMessage)
 			{
-				jobName = job.JobName;
-			}
-			if (job?.UserName != null)
-			{
-				userName = job.UserName;
-			}
-			if (job?.Policy != null)
-			{
-				policy = job.Policy;
-			}
-			var datasource = "<unknown>";
-			var raptorDomainMessage = @event as ILogOnContext;
-			if (raptorDomainMessage != null)
-			{
-				datasource = raptorDomainMessage.LogOnDatasource;
+				var datasource = raptorDomainMessage.LogOnDatasource;
 				if (string.IsNullOrEmpty(datasource))
 					datasource = _currentDataSource.CurrentName();
 
