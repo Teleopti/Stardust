@@ -5101,6 +5101,10 @@
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
       <Name>Teleopti.Wfm.Adherence</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Win\Teleopti.Ccc.Win.csproj">
       <Project>{26c57cbe-e75f-42c9-9747-8016aeb305f2}</Project>
       <Name>Teleopti.Ccc.Win</Name>

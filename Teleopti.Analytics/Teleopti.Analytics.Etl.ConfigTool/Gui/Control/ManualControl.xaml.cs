@@ -142,7 +142,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 								ToDatePickerInitial.SelectedDate = DateTime.Now.AddYears(1);
 							}
 							_jobMultipleDatePeriods.Add(FromDatePickerInitial.SelectedDate.Value.Date,
-													ToDatePickerInitial.SelectedDate.Value.Date.AddDays(1),
+													ToDatePickerInitial.SelectedDate.Value.Date,
 													JobCategoryType.Initial);
 						}
 						break;
@@ -154,7 +154,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 							ToDatePickerAgentStats.SelectedDate = DateTime.Now;
 						}
 						_jobMultipleDatePeriods.Add(FromDatePickerAgentStats.SelectedDate.Value.Date,
-														ToDatePickerAgentStats.SelectedDate.Value.Date.AddDays(1),
+														ToDatePickerAgentStats.SelectedDate.Value.Date,
 														JobCategoryType.AgentStatistics);
 						break;
 					case JobCategoryType.QueueStatistics:
@@ -165,7 +165,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 							ToDatePickerQueueStats.SelectedDate = DateTime.Now;
 						}
 						_jobMultipleDatePeriods.Add(FromDatePickerQueueStats.SelectedDate.Value.Date,
-														ToDatePickerQueueStats.SelectedDate.Value.Date.AddDays(1),
+														ToDatePickerQueueStats.SelectedDate.Value.Date,
 														JobCategoryType.QueueStatistics);
 						break;
 					case JobCategoryType.Schedule:
@@ -176,7 +176,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 							ToDatePickerSchedule.SelectedDate = DateTime.Now;
 						}
 						_jobMultipleDatePeriods.Add(FromDatePickerSchedule.SelectedDate.Value.Date,
-														ToDatePickerSchedule.SelectedDate.Value.Date.AddDays(1),
+														ToDatePickerSchedule.SelectedDate.Value.Date,
 														JobCategoryType.Schedule);
 						break;
 					case JobCategoryType.Forecast:
@@ -187,7 +187,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 							ToDatePickerForecast.SelectedDate = DateTime.Now;
 						}
 						_jobMultipleDatePeriods.Add(FromDatePickerForecast.SelectedDate.Value.Date,
-														ToDatePickerForecast.SelectedDate.Value.Date.AddDays(1),
+														ToDatePickerForecast.SelectedDate.Value.Date,
 														JobCategoryType.Forecast);
 						break;
 				}

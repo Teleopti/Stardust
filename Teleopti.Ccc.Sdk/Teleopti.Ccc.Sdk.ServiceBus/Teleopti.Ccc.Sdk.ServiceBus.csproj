@@ -282,6 +282,10 @@
       <Project>{84C0328F-2AF7-42B6-8AB4-E9FDA5248374}</Project>
       <Name>Teleopti.Wfm.Azure.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
       <Project>{6116FC80-2475-447E-A90A-14B4DB59E2A7}</Project>
       <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>

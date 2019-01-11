@@ -307,6 +307,10 @@
       <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
       <Name>Teleopti.Ccc.UserTexts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.ConfigTool\Teleopti.Analytics.Etl.ConfigTool.csproj">
       <Project>{8a4806d6-8587-43f2-86fe-915b81c9f863}</Project>
       <Name>Teleopti.Analytics.Etl.ConfigTool</Name>

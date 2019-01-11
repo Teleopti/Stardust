@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
@@ -52,6 +53,50 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			Assert.AreEqual(message.IsFullRefresh, false);
 			Assert.AreEqual(message.Location, etlConfiguration.InsightsConfig.Location);
 			Assert.AreEqual(message.ModelName, etlConfiguration.InsightsConfig.ModelName);
+		}
+
+		[Test]
+		public void ShouldDoNothingIfInsightsConfigurationIsInvalid_1()
+		{
+			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			var topicClientFactory = new FakeTopicClientFactory();
+
+			var etlConfiguration = new BaseConfiguration(1052, 15, "Mountain Standard Time", false);
+
+			jobParameters.SetTenantBaseConfigValues(etlConfiguration);
+
+			var target = new TriggerInsightsDataRefreshJobStep(jobParameters, topicClientFactory);
+			target.Run(new List<IJobStep>(), null, new List<IJobResult>(), false);
+
+			topicClientFactory.TopicClient.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldDoNothingIfInsightsConfigurationIsInvalid_2()
+		{
+			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			var topicClientFactory = new FakeTopicClientFactory();
+
+			var etlConfiguration = new BaseConfiguration(1052, 15, "Mountain Standard Time", false)
+			{
+				InsightsConfig =
+				{
+					AnalysisService = null,
+					AnalyticsDatabase = "",
+					Location = "TestLocation",
+					ModelLocation = "TestModelLocation",
+					ModelName = "TestModelName",
+					ServiceBusAddress = "TestServiceBusAddress",
+					TopicName = "TestTopicName"
+				}
+			};
+
+			jobParameters.SetTenantBaseConfigValues(etlConfiguration);
+
+			var target = new TriggerInsightsDataRefreshJobStep(jobParameters, topicClientFactory);
+			target.Run(new List<IJobStep>(), null, new List<IJobResult>(), false);
+
+			topicClientFactory.TopicClient.Should().Be.Null();
 		}
 	}
 }
