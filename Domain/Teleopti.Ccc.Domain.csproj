@@ -22,6 +22,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+	  <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -232,6 +233,7 @@
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="FeatureFlags\UpdateTogglesAttribute.cs" />
+    <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendar.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
@@ -3600,7 +3602,6 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
-    <Compile Include="Notification\NotificationConfigDbReader.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

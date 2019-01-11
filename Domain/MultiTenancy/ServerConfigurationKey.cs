@@ -1,0 +1,32 @@
+﻿namespace Teleopti.Ccc.Domain.MultiTenancy
+{
+	public enum ServerConfigurationKey
+	{
+		FrameAncestors,
+		InstrumentationKey,
+		AS_DATABASE,
+		AS_SERVER_NAME,
+		PM_INSTALL,
+		PayrollSourcePath,
+		NotificationExtProviderApiId,
+		NotificationExtProviderAssembly,
+		NotificationExtProviderClass,
+		NotificationExtProviderData,
+		NotificationExtProviderErrorCode,
+		NotificationExtProviderFindSuccessOnError,
+		NotificationExtProviderFrom,
+		NotificationExtProviderPassword,
+		NotificationExtProviderSkipSearch,
+		NotificationExtProviderSuccessCode,
+		NotificationExtProviderUrl,
+		NotificationExtProviderUser,
+		NotificationSmtpHost,
+		NotificationSmtpPassword,
+		NotificationSmtpPort,
+		NotificationSmtpUser,
+		NotificationSmtpUseRelay,
+		NotificationSmtpUseSsl,
+		NotificationContentType,
+		NotificationEncodingName
+	}
+}

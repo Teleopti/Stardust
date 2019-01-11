@@ -3,6 +3,7 @@
 	public enum TenantApplicationConfigKey
 	{
 		MobileQRCodeUrl,
-		MaximumSessionTimeInMinutes
+		MaximumSessionTimeInMinutes,
+		NotificationApiKey
 	}
 }

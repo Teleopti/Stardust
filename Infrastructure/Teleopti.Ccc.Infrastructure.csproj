@@ -235,6 +235,7 @@
     <Compile Include="Authentication\LoadUserUnauthorizedFake.cs" />
     <Compile Include="Authentication\NonceInfo.cs" />
     <Compile Include="Authentication\NonceInfoRepository.cs" />
+    <Compile Include="Config\NotificationConfigDbReader.cs" />
     <Compile Include="Config\ThrowingLoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\BulkWriter.cs" />
     <Compile Include="Foundation\DatabaseCommand.cs" />
@@ -282,6 +283,7 @@
     <Compile Include="MultiTenancy\Server\CustomerDbConnector.cs" />
     <Compile Include="MultiTenancy\Server\IPasswordManager.cs" />
     <Compile Include="MultiTenancy\Server\PasswordManager.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\IApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoWithAuditTrail.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAccessAuditContext.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditActions.cs" />
@@ -448,7 +450,6 @@
     <Compile Include="MultiTenancy\Client\AuthenticationQuerier.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistLogonAttempt.cs" />
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQuery.cs" />
-    <Compile Include="MultiTenancy\Server\Queries\IApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\Client\IPostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistLogonAttempt.cs" />
