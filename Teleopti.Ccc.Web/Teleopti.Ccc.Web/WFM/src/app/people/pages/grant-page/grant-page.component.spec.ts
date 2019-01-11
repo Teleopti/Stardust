@@ -1,9 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { MockTranslationModule } from '@wfm/mocks/translation';
-import { configureTestSuite, PageObject } from '@wfm/test';
+import { configureTestSuite, MockComponent, PageObject } from '@wfm/test';
 import {
 	NzButtonModule,
 	NzCheckboxModule,
@@ -13,18 +12,11 @@ import {
 	NzToolTipModule
 } from 'ng-zorro-antd';
 import { BehaviorSubject } from 'rxjs';
-import { MockTitleBarModule } from '../../components';
 import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from '../../shared';
 import { countUniqueRolesFromPeople } from '../../utils';
 import { GrantPageComponent } from './grant-page.component';
 import { GrantPageService } from './grant-page.service';
-
-@Component({
-	selector: 'people-workspace',
-	template: `MockWorkspace`
-})
-class MockWorkspaceComponent {}
 
 class MockWorkspaceService implements Partial<WorkspaceService> {
 	people$ = new BehaviorSubject([adina, myles, eva]);
@@ -39,9 +31,12 @@ describe('GrantPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [GrantPageComponent, MockWorkspaceComponent],
+			declarations: [
+				GrantPageComponent,
+				MockComponent({ selector: 'people-workspace' }),
+				MockComponent({ selector: 'people-title-bar' })
+			],
 			imports: [
-				MockTitleBarModule,
 				MockTranslationModule,
 				HttpClientModule,
 				NzCheckboxModule,

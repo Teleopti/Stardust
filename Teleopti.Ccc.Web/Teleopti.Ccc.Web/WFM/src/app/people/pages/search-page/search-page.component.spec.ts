@@ -3,10 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
-import { configureTestSuite, PageObject } from '@wfm/test';
+import { configureTestSuite, MockComponent, PageObject } from '@wfm/test';
 import { NzButtonModule, NzFormModule, NzInputModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
-import { MockTitleBarModule, WorkspaceComponent } from '../../components';
 import { adina, eva, fakeBackendProvider, myles } from '../../mocks';
 import {
 	COLUMNS,
@@ -30,9 +29,12 @@ describe('SearchPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [SearchPageComponent, WorkspaceComponent],
+			declarations: [
+				SearchPageComponent,
+				MockComponent({ selector: 'people-workspace' }),
+				MockComponent({ selector: 'people-title-bar' })
+			],
 			imports: [
-				MockTitleBarModule,
 				MockTranslationModule,
 				HttpClientModule,
 				ReactiveFormsModule,
