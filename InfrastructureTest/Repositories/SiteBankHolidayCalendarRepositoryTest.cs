@@ -71,11 +71,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			PersistAndRemoveFromUnitOfWork(siteBankHolidayCalendar);
 
-			var result =
-				new SiteBankHolidayCalendarRepository(CurrUnitOfWork).FindSiteBankHolidayCalendar(_bankHolidayCalendar);
+			var result = new SiteBankHolidayCalendarRepository(CurrUnitOfWork).FindSiteBankHolidayCalendars(_bankHolidayCalendar.Id.Value);
 			Assert.AreEqual(1, result.Count());
-			Assert.AreEqual(_site.Id.Value, result.First().SiteId);
-			Assert.AreEqual(_bankHolidayCalendar.Id.Value, result.First().CalendarId);
+			Assert.AreEqual(_site.Id.Value, result.First().Site.Id.Value);
+			Assert.AreEqual(_bankHolidayCalendar.Id.Value, result.First().BankHolidayCalendarsForSite.First().Id.Value);
 		}
 
 		[Test]

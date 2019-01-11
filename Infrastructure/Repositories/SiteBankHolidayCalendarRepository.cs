@@ -1,7 +1,6 @@
 ﻿using NHibernate.Criterion;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -35,25 +34,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ret;
 		}
 
-		public IEnumerable<SiteBankHolidayCalendarMatchResult> FindSiteBankHolidayCalendar(IBankHolidayCalendar calendar)
+		public IEnumerable<SiteBankHolidayCalendar> FindSiteBankHolidayCalendars(Guid calendarId)
 		{
-			if (calendar == null)
-				return null;
-
-			const string sql = @"select a.BankHolidayCalendar,b.Site,b.Id from [dbo].[BankHolidayCalendarsForSite] as a 
-								inner join [dbo].[SiteBankHolidayCalendar] as b
-								on a.Parent=b.Id 
-								where a.BankHolidayCalendar=:BankHolidayCalendar";
-			var query = Session.CreateSQLQuery(sql)
-				.SetGuid("BankHolidayCalendar", calendar.Id.Value)
-				.SetReadOnly(true)
-				.List<object[]>()
-				.Select(s => new SiteBankHolidayCalendarMatchResult
-				{
-					CalendarId = (Guid)s[0],
-					SiteId = (Guid)s[1],
-					SiteBankHolidayCalendarId = (Guid)s[2]
-				});
+			var query = Session.CreateCriteria<SiteBankHolidayCalendar>()
+			   .CreateCriteria("BankHolidayCalendarsForSite", "cal")
+			   .Add(Restrictions.Eq("cal.Id", calendarId))
+			   .List<SiteBankHolidayCalendar>();
 
 			return query;
 		}
