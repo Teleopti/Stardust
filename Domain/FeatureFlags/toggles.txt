@@ -110,7 +110,7 @@ WFM_Forecaster_Preview_74801 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
 WFM_Connect_NewLandingPage_WEB_78578 = true
-WFM_Log_Analytics_Schedule_Change_Updater_78934 = RC
+WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425 = RC
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
