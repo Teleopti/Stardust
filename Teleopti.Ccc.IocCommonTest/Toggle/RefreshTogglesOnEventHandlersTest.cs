@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	[DomainTest]
-	[Ignore("#79699 To be fixed")]
 	public class RefreshTogglesOnEventHandlersTest : IExtendSystem, IIsolateSystem
 	{
 		public ToggleFiller Filler;
@@ -22,9 +21,9 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		
 		[TestCase(typeof(IHandleEvent<IStardustSingletonEvent>))]
 		[TestCase(typeof(IHandleEvent<IStardustEvent>))]
-		public void ShouldRefreshTogglesBeforeCreatingStardustEventHandler(Type eventType)
+		public void ShouldRefreshTogglesWhenStardustEventHandler(Type eventType)
 		{
-			Container.Resolve(eventType);
+			((dynamic)Container.Resolve(eventType)).Handle(null);
 			Filler.WasCalled.Should().Be.True();
 		}
 
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[InstancePerLifetimeScope]
 		public class StardustEventHandler : IRunOnStardust, IHandleEvent<IStardustEvent>
 		{
-			public void Handle(IStardustEvent @event)
+			public virtual void Handle(IStardustEvent @event)
 			{
 			}
 		}
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		[InstancePerLifetimeScope]
 		public class NonStardustEventHandler : IRunOnHangfire, IHandleEvent<INonStardustEvent>
 		{
-			public void Handle(INonStardustEvent @event)
+			public virtual void Handle(INonStardustEvent @event)
 			{
 			}
 		}
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		
 		public class StardustEventHandlerSingleton : IRunOnStardust, IHandleEvent<IStardustSingletonEvent>
 		{
-			public void Handle(IStardustSingletonEvent @event)
+			public virtual void Handle(IStardustSingletonEvent @event)
 			{
 			}
 		}
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		
 		public class NonStardustEventHandlerSingleton : IRunOnHangfire, IHandleEvent<INonStardustSingletonEvent>
 		{
-			public void Handle(INonStardustSingletonEvent @event)
+			public virtual void Handle(INonStardustSingletonEvent @event)
 			{
 			}
 		}
