@@ -1,12 +1,16 @@
 export interface GroupPage {
-	BusinessHierarchy: [GroupPageSite];
-	GroupPages: [GroupPageSite];
+	BusinessHierarchy: GroupPageSite[];
+	GroupPages: GroupPageSite[];
 }
 
 export interface GroupPageSite {
 	Id: string;
 	Name: string;
-	Children?: [GroupPageTeam];
+	Children?: GroupPageTeam[];
+}
+
+export interface GroupPageSiteItem extends GroupPageSite {
+	SelectedCalendarId: string;
 }
 
 export interface GroupPageTeam {

@@ -1,15 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { configureTestSuite } from '@wfm/test';
 import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarEditComponent } from './bank-holiday-calendar-edit.component';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
+import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
 
 describe('BankHolidayCalendarEditComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarEditComponent>;
@@ -21,16 +20,9 @@ describe('BankHolidayCalendarEditComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [BankHolidayCalendarEditComponent],
-			imports: [
-				TranslateModule.forRoot(),
-				NgZorroAntdModule.forRoot(),
-				FormsModule,
-				ReactiveFormsModule,
-				HttpClientTestingModule,
-				NoopAnimationsModule
-			],
+			imports: [MockTranslationModule, NgZorroAntdModule, FormsModule, HttpClientTestingModule],
 			providers: [
-				TranslateService,
+				MockTranslateService,
 				UserService,
 				{
 					provide: ToggleMenuService,
@@ -77,8 +69,8 @@ describe('BankHolidayCalendarEditComponent', () => {
 		};
 		fixture.detectChanges();
 
-		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let operationButtons = editBankHolidayCalendarPanel.getElementsByClassName('operation-buttons')[0];
+		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const operationButtons = editBankHolidayCalendarPanel.getElementsByClassName('operation-buttons')[0];
 
 		expect(operationButtons.getElementsByClassName('ant-btn').length).toBe(2);
 
@@ -123,8 +115,8 @@ describe('BankHolidayCalendarEditComponent', () => {
 		};
 		fixture.detectChanges();
 
-		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let dateRows = editBankHolidayCalendarPanel
+		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const dateRows = editBankHolidayCalendarPanel
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
@@ -156,8 +148,8 @@ describe('BankHolidayCalendarEditComponent', () => {
 		};
 		fixture.detectChanges();
 
-		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let dateRows = editBankHolidayCalendarPanel
+		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const dateRows = editBankHolidayCalendarPanel
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
@@ -202,8 +194,8 @@ describe('BankHolidayCalendarEditComponent', () => {
 		};
 		fixture.detectChanges();
 
-		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let dateRows = editBankHolidayCalendarPanel
+		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const dateRows = editBankHolidayCalendarPanel
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 
@@ -245,8 +237,8 @@ describe('BankHolidayCalendarEditComponent', () => {
 		};
 		fixture.detectChanges();
 
-		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
-		let dateRows = editBankHolidayCalendarPanel
+		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const dateRows = editBankHolidayCalendarPanel
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item');
 

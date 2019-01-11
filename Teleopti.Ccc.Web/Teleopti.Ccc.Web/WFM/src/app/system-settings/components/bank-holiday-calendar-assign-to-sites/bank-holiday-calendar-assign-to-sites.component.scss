@@ -1,5 +1,20 @@
+$primary: #0099ff;
+
 .bank-holiday-calendar-assign-to-sites {
 	min-height: 80px;
-	max-height: calc(100vh - 240px);
+	max-height: calc(100vh - 250px);
 	overflow: auto;
+}
+
+nz-list-item {
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+nz-list-item:hover {
+	border-bottom-color: $primary;
+}
+
+nz-select {
+	min-width: 200px;
 }
