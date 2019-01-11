@@ -20,24 +20,28 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		private const string reloadDatamartJobName = "Reload datamart (old nightly)";
 		private const string nightlyJobName = "Nightly";
 		private const string permissionJobName = "Permission";
+		private const string insightsDataRefreshJobName = "Insights data refresh";
 
 		private readonly IComponentContext _componentContext;
 		private readonly IPmInfoProvider _pmInfoProvider;
 		private readonly IConfigurationHandler _configurationHandler;
 		private readonly IConfigReader _configReader;
+		private readonly ITenants _tenants;
 		private readonly AnalyticsConnectionsStringExtractor _analyticsConnectionsStringExtractor;
 
 		public JobCollectionModelProvider(
-			IComponentContext componentContext, 
-			IPmInfoProvider pmInfoProvider, 
-			IConfigurationHandler configurationHandler, 
+			IComponentContext componentContext,
+			IPmInfoProvider pmInfoProvider,
+			IConfigurationHandler configurationHandler,
 			IConfigReader configReader,
+			ITenants tenants,
 			AnalyticsConnectionsStringExtractor analyticsConnectionsStringExtractor)
 		{
 			_componentContext = componentContext;
 			_pmInfoProvider = pmInfoProvider;
 			_configurationHandler = configurationHandler;
 			_configReader = configReader;
+			_tenants = tenants;
 			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 		}
 
@@ -77,13 +81,20 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		public static bool IsJobStepDependsOnTenant(string jobName, string stepName)
 		{
 			if (jobName == reloadDatamartJobName &&
-				(stepName == "AnalyticsIndexMaintenance" || stepName == "AppIndexMaintenance" || stepName == "AggIndexMaintenance"))
+				(stepName == "AnalyticsIndexMaintenance" || stepName == "AppIndexMaintenance" ||
+				 stepName == "AggIndexMaintenance"))
 			{
 				return true;
 			}
 
 			if ((jobName == nightlyJobName || jobName == permissionJobName || jobName == reloadDatamartJobName) &&
 				(stepName == "Process Cube" || stepName == "Performance Manager permissions"))
+			{
+				return true;
+			}
+
+			if ((jobName == nightlyJobName || jobName == insightsDataRefreshJobName) &&
+				(stepName == "Trigger Insights data refresh"))
 			{
 				return true;
 			}
@@ -112,11 +123,21 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 
 		private bool insightsEnabled(string tenantName, IBaseConfiguration baseConfiguration)
 		{
-			var licenseActivator = DefinedLicenseDataFactory.GetLicenseActivator(tenantName);
-			var insightsLicensed = licenseActivator?.EnabledLicenseOptionPaths?
-				.Contains(DefinedLicenseOptionPaths.TeleoptiWfmInsights) ?? false;
+			if (Tenants.IsAllTenants(tenantName))
+			{
+				var allTenants = _tenants.LoadedTenants();
+				return allTenants.Any(x => insightsLicensed(x.Name));
+			}
 
-			return insightsLicensed && (baseConfiguration.InsightsConfig?.IsValid() ?? false);
+			return insightsLicensed(tenantName) && (baseConfiguration.InsightsConfig?.IsValid() ?? false);
+		}
+
+		private bool insightsLicensed(string tenantName)
+		{
+			var licenseActivator = DefinedLicenseDataFactory.GetLicenseActivator(tenantName);
+			var licensed = licenseActivator?.EnabledLicenseOptionPaths?
+									   .Contains(DefinedLicenseOptionPaths.TeleoptiWfmInsights) ?? false;
+			return licensed;
 		}
 	}
 }
