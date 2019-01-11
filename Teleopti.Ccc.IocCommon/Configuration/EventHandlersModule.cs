@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -82,6 +83,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
 			builder.RegisterType<UpdateFactSchedules>().SingleInstance().ApplyAspects();
+			if (_config.Toggle(Toggles.WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425))
+			{
+				builder.RegisterType<UpdateAnalyticsScheduleLogger>().As<IUpdateAnalyticsScheduleLogger>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<UpdateAnalyticsScheduleLoggerDummy>().As<IUpdateAnalyticsScheduleLogger>().SingleInstance();
+			}
 
 			builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 				.As<IScheduleProjectionReadOnlyPersister>()

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				WindowsIdentity.GetCurrent(),
 				tokenIdentity
 				);
-			var principal = TeleoptiPrincipal.Make(identity, person);
+			var principal = TeleoptiPrincipal.Make(identity, () => person.Id.GetValueOrDefault());
 			principal.Regional = _makeRegionalFromPerson.MakeRegionalFromPerson(person);
 			principal.Organisation = _makeOrganisationMembershipFromPerson.MakeOrganisationMembership(person);
 			return principal;

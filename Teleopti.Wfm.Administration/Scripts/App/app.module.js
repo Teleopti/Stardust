@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'ngAria', 'ngclipboard', 'emailSettingsModule', 'smsSettingsModule'])
+		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'ngAria', 'ngclipboard'])
 		.config(function ($locationProvider, $routeProvider, $httpProvider) {
 
 			$locationProvider.hashPrefix('');

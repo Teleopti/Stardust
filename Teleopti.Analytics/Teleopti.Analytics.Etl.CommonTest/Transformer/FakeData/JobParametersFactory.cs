@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Autofac;
-using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
@@ -17,36 +16,35 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 	{
 		public static IJobParameters SimpleParameters(bool isPmInstalled)
 		{
-			var jobParameters = new JobParameters(
-				JobMultipleDateFactory.CreateJobMultipleDate(), 1, "W. Europe Standard Time", 5,
-				"Data Source=SSAS_Server;Initial Catalog=SSAS_DB",
-				isPmInstalled.ToString(CultureInfo.InvariantCulture),
-				CultureInfo.CurrentCulture,
-				new FakeContainerHolder(),
-				false
-			)
-			{
-				Helper = new JobHelperForTest(new RaptorRepositoryForTest(), null)
-			};
-
-
-			return jobParameters;
+			return SimpleParameters(new JobHelperForTest(new RaptorRepositoryForTest(), null), isPmInstalled, 5, false);
 		}
 
 		public static IJobParameters SimpleParameters(IJobHelper jobHelper, int intervalLength)
 		{
+			return SimpleParameters(new JobHelperForTest(new RaptorRepositoryForTest(), null), false, intervalLength, false);
+		}
+
+		public static IJobParameters SimpleParametersWithInsightsFlag(bool insightsEnabled)
+		{
+			return SimpleParameters(new JobHelperForTest(new RaptorRepositoryForTest(), null), false, 5, insightsEnabled);
+		}
+
+		private static IJobParameters SimpleParameters(IJobHelper jobHelper, bool isPmInstalled,
+			int intervalLength, bool insightsEnabled)
+		{
 			var jobParameters = new JobParameters(
-				JobMultipleDateFactory.CreateJobMultipleDate(), 1, "W. Europe Standard Time", intervalLength,
+				JobMultipleDateFactory.CreateJobMultipleDate(), 1, "W. Europe Standard Time",
+				intervalLength,
 				"Data Source=SSAS_Server;Initial Catalog=SSAS_DB",
-				"False",
+				isPmInstalled.ToString(CultureInfo.InvariantCulture),
 				CultureInfo.CurrentCulture,
 				new FakeContainerHolder(),
-				false
+				false,
+				insightsEnabled
 			)
 			{
 				Helper = jobHelper
 			};
-
 
 			return jobParameters;
 		}

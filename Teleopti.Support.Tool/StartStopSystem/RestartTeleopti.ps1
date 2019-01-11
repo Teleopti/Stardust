@@ -176,6 +176,9 @@ Try
 	}
 
     $isAzure = fnIsAzure
+    if ($isAzure){
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    }
     EventlogSource-Create "$JOB"
 
     $iis = Get-WmiObject Win32_Service -Filter "Name = 'W3SVC'"

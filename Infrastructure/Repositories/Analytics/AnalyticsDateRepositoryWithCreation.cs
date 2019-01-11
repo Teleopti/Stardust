@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using log4net;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IAnalyticsConfigurationRepository _analyticsConfigurationRepository;
 		private static bool shouldPublish;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(AnalyticsDateRepositoryWithCreation));
 
 		public AnalyticsDateRepositoryWithCreation(ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IAnalyticsConfigurationRepository analyticsConfigurationRepository,
@@ -152,7 +154,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				shouldPublish = false;
 			});
 
-			return dateInDb(dateDate);
+			var theFoundDate = dateInDb(dateDate);
+			if (theFoundDate == null)
+			{
+				_logger.Warn($"Failed to load newly created analytics date '{dateDate}'!");
+			}
+			return theFoundDate;
 		}
 	}
 }

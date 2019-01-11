@@ -22,7 +22,6 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -208,6 +207,7 @@
     <Compile Include="ApplicationLayer\Intraday\ISkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateAnalyticsScheduleLogger.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestAvailability.cs" />
     <Compile Include="Auditing\ITenantAudit.cs" />
     <Compile Include="Auditing\PurgeAuditRunner.cs" />
@@ -225,6 +225,9 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitId.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitIdWithoutChangeInfo.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
+    <Compile Include="Forecasting\WorkloadDayHelper.cs" />
+    <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
+    <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendar.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
@@ -724,6 +727,7 @@
     <Compile Include="Staffing\StaffingAudit.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendar.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayDate.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendarMatchResult.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />

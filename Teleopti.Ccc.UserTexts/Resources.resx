@@ -18153,4 +18153,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Assign calendars to sites</value>
     <comment>Assign calendars to sites</comment>
   </data>
+  <data name="SelectACalendarForSite" xml:space="preserve">
+    <value>Select a calendar for site</value>
+    <comment>Select a calendar for site</comment>
+  </data>
 </root>

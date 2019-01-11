@@ -194,7 +194,7 @@
 								<tr ng-if="job.Open" ng-repeat="step in job.JobStepsHistory track by $index">
 									<td class="subrow">
 										<span>&nbsp; &nbsp;{{step.Name}}</span>
-										<span class="pull-right" style="color: tomato" ng-if="step.DependsOnTenant">(Depends on configuration of tenant)</span>
+										<span class="pull-right" style="color: tomato" ng-if="step.DependsOnTenant">(Depends on license and configuration of tenant)</span>
 									</td>
 									<td></td>
 									<td></td>

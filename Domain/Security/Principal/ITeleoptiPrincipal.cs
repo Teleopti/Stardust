@@ -2,15 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Security.Principal;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {	
 	public interface ITeleoptiPrincipal : IPrincipal, IClaimsOwner
 	{
 		Guid PersonId { get; }
-		Name PersonName { get; }
 		IRegional Regional { get; }
 	}
 

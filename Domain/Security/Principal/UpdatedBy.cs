@@ -34,27 +34,13 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			if (principal == null)
 				return null;
 
-//			var person = (principal as ITeleoptiPrincipalForLegacy)?.UnsafePerson;
-//			if (person != null)
-//				return person;
-
 			var hasUnitOfWork = _unitOfWork?.Current()?.HasCurrentUnitOfWork() ?? false;
 			if (hasUnitOfWork && _persons != null)
 				return _persons.Load(principal.PersonId);
 
-//			if (principal.PersonId == Guid.Empty)
-//			{
-//				var systemUserOnlyForUpdatedBy = new Person();
-//				systemUserOnlyForUpdatedBy.SetId(SystemUser.Id);
-//				return systemUserOnlyForUpdatedBy;
-//			}
-
 			var personOnlyForUpdateBy = new Person();
 			personOnlyForUpdateBy.SetId(principal.PersonId);
-			personOnlyForUpdateBy.SetName(principal.PersonName);
 			return personOnlyForUpdateBy;
-
-			//return null;
 		}
 
 		public void OnThisThreadUse(IPerson person)

@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			Add(new JobBase(jobParameters, new UpgradeMaintenanceJobCollection(jobParameters), "Upgrade Maintenance", false, false));
 
-			if (jobParameters.ToggleManager.IsEnabled(Toggles.WFM_Insights_78059) && jobParameters.InsightsLicensed)
+			if (jobParameters.ToggleManager.IsEnabled(Toggles.WFM_Insights_78059) && jobParameters.InsightsEnabled)
 			{
 				Add(new JobBase(jobParameters, new InsightsDataRefreshJobCollection(jobParameters),
 					"Insights data refresh", false, false));

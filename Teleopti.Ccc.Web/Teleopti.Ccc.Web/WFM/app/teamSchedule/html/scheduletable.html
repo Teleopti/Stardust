@@ -81,15 +81,15 @@
 			</td>
 			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
-					<span class="dayoff absolute" ng-repeat="dayOff in ::personSchedule.DayOffs"
+					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs"
 						  ng-if="personSchedule.DayOffs.length > 0 && dayOff.Length > 0"
 						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
 						<md-tooltip ng-if="dayOff.DayOffName !=''">{{::dayOff.DayOffName}}</md-tooltip>
 					</span>
-					<div class="shift" ng-repeat="shift in ::personSchedule.Shifts">
+					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
 						<div class="layer absolute floatleft selectable projection-layer"
 							 projection-name="{{::projection.Description}}"
-							 ng-repeat="projection in ::shift.Projections"
+							 ng-repeat="projection in shift.Projections"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
 							 ng-class="{'overtime-light': projection.IsOvertime && projection.UseLighterBorder, 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder,
 							 personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,

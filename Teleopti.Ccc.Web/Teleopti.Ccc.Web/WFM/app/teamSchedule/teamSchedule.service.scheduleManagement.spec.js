@@ -195,4 +195,67 @@
 		expect(scheduleVm.Shifts[0].Projections[0].Start).toEqual(scheduleDate + " 11:00");
 	});
 
+
+	it('should adjust start position when time line length is changed by updating schedules', function () {
+		var scheduleForPerson1 = {
+			"PersonId": "person1",
+			"Name": "person1",
+			"Date": '2019-01-10',
+			"Projection": [
+				{
+					"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+					"Color": "#795548",
+					"Description": "Phone",
+					"StartInUtc": "2019-01-10 08:00",
+					"EndInUtc": "2019-01-10 16:00",
+					"IsOvertime": false
+				}
+			],
+			"DayOff": null
+		};
+		var scheduleForPerson2 = {
+			"PersonId": "person2",
+			"Name": "person2",
+			"Date": '2019-01-10',
+			"Projection": [
+				{
+					"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+					"Color": "#795548",
+					"Description": "Phone",
+					"StartInUtc": "2019-01-10 08:00",
+					"EndInUtc": "2019-01-10 16:00",
+					"IsOvertime": false
+				}
+			],
+			"DayOff": null
+		};
+
+		target.resetSchedules([scheduleForPerson1, scheduleForPerson2], '2019-01-10');
+
+
+		fakeTeamScheduleSvc.setSchedules([
+			{
+				"PersonId": "person2",
+				"Name": "person2",
+				"Date": '2019-01-10',
+				"Projection": [
+					{
+						"ShiftLayerIds": ["31ffe214-3384-4a80-a14c-a83800e23276"],
+						"Color": "#795548",
+						"Description": "Phone",
+						"StartInUtc": "2019-01-10 22:00",
+						"EndInUtc": "2019-01-11 07:00",
+						"IsOvertime": false
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			}
+		]);
+
+		target.updateScheduleForPeoples(["person2"], "2019-01-10");
+		expect(target.groupScheduleVm.Schedules[0].Shifts[0].Projections[0].StartPosition)
+			.toEqual(target.groupScheduleVm.TimeLine.LengthPercentPerMinute * 60);
+	});
+
 });

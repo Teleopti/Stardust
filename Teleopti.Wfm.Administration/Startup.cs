@@ -10,6 +10,8 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Modules;
 using System.Web.Http;
+using Teleopti.Analytics.Etl.Common;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 
 namespace Teleopti.Wfm.Administration
@@ -40,7 +42,19 @@ namespace Teleopti.Wfm.Administration
 			});
 
 			container.Resolve<HangfireDashboardStarter>().Start(app, ()=>new MvcAntiforgery());
-			container.Resolve<RecurrentEventTimer>().Init(TimeSpan.FromDays(1)); 
+			container.Resolve<RecurrentEventTimer>().Init(TimeSpan.FromDays(1));
+
+			initializeTenantLicenses(container);
+		}
+
+		private static void initializeTenantLicenses(IContainer container)
+		{
+			var licenseInitializer = container.Resolve<IInitializeLicenseServiceForTenant>();
+			var allTenants = container.Resolve<ITenants>().LoadedTenants();
+			foreach (var tenant in allTenants)
+			{
+				licenseInitializer.TryInitialize(tenant.DataSource);
+			}
 		}
 	}
 }

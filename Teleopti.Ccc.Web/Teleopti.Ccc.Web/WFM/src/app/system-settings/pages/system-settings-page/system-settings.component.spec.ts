@@ -1,21 +1,20 @@
 import { DOCUMENT } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { IStateService } from 'angular-ui-router';
-
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
 import { configureTestSuite } from '@wfm/test';
-import { UserService } from 'src/app/core/services';
+import { IStateService } from 'angular-ui-router';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { PasswordService } from 'src/app/authentication/services/password.service';
-import { SystemSettingsComponent } from './system-settings.component';
+import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarComponent } from '../../components/bank-holiday-calendar';
 import { BankHolidayCalendarAddComponent } from '../../components/bank-holiday-calendar-add';
-import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-calendar-edit';
 import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
+import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-calendar-edit';
+import { SystemSettingsComponent } from './system-settings.component';
 
-class mockStateService implements Partial<IStateService> {
+class MockStateService implements Partial<IStateService> {
 	public current: {
 		name: 'systemSettings';
 	};
@@ -42,8 +41,8 @@ describe('SystemSettings page', () => {
 				BankHolidayCalendarAssignToSitesComponent
 			],
 			imports: [
-				TranslateModule.forRoot(),
-				NgZorroAntdModule.forRoot(),
+				MockTranslationModule,
+				NgZorroAntdModule,
 				FormsModule,
 				ReactiveFormsModule,
 				HttpClientTestingModule
@@ -51,11 +50,11 @@ describe('SystemSettings page', () => {
 			providers: [
 				{
 					provide: '$state',
-					useClass: mockStateService
+					useClass: MockStateService
 				},
 				UserService,
 				PasswordService,
-				TranslateService
+				MockTranslateService
 			]
 		}).compileComponents();
 
@@ -70,7 +69,7 @@ describe('SystemSettings page', () => {
 	});
 
 	it('should show header title', () => {
-		var titleEle = document.getElementsByTagName('h1')[0];
+		const titleEle = document.getElementsByTagName('h1')[0];
 		expect(titleEle).toBeTruthy();
 		expect(titleEle.getElementsByTagName('i').length).toBe(1);
 		expect(titleEle.getElementsByTagName('i')[0].className).toBe('anticon anticon-setting');

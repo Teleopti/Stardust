@@ -351,12 +351,9 @@ Try
 		throw "User is not Admin!"
 	}
 	
-	log-info "Test1 if Env:TeleoptiIsAzure is sat to true: $Env:TeleoptiIsAzure"
-	if (!($Env:TeleoptiIsAzure -eq $true)) {
-		$Env:TeleoptiIsAzure = $true
-		log-info 'Test2 $Env:TeleoptiIsAzure = $true'
-	}
-	
+	$Env:TeleoptiIsAzure = $true
+	log-info "Environment variable 'TeleoptiIsAzure' is set to '$Env:TeleoptiIsAzure'"
+		
     #create event log source
     EventlogSource-Create "$JOB"
 	

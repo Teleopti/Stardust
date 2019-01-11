@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
@@ -21,7 +20,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
+	//[Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
+	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
 	public class ResourceCalculateWhen49DaysInReadmodel : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;

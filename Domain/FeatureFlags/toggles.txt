@@ -100,7 +100,8 @@ Wfm_AuditTrail_StaffingAuditTrail_78125 = RC
 Wfm_AuditTrail_GenericAuditTrail_74938 = RC
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
 WFM_ProbabilityView_ImproveResponseTime_80040 = RC
-WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = RC
+WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = false #Dont enable it. It was not a good optimization in Csharp
+WFM_Intraday_OptimizeSkillDayLoad_80153 = RC
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
@@ -110,6 +111,7 @@ WFM_Forecaster_Preview_74801 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
 WFM_Connect_NewLandingPage_WEB_78578 = true
+WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425 = RC
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true

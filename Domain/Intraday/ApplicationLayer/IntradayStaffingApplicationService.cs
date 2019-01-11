@@ -22,13 +22,14 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		//private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IEmailBacklogProvider _emailBacklogProvider;
 
 		private readonly IntradayReforecastingService _reforecastingService;
 		private readonly IntradayForecastingService _forecastingService;
 		private readonly IIntradayStaffingService _staffingService;
+		private readonly ILoadSkillDaysWithPeriodFlexibility _loadSkillDaysWithPeriodFlexibility;
 
 		public IntradayStaffingApplicationService(
 			INow now,
@@ -37,13 +38,12 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			IScenarioRepository scenarioRepository,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
 			ISkillTypeInfoProvider skillTypeInfoProvider,
-			ISkillDayLoadHelper skillDayLoadHelper,
+			//ISkillDayLoadHelper skillDayLoadHelper,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
 			IEmailBacklogProvider emailBacklogProvider,
 			IntradayForecastingService forecastingService,
 			IntradayReforecastingService reforecastingService,
-			IIntradayStaffingService staffingService
-			)
+			IIntradayStaffingService staffingService, ILoadSkillDaysWithPeriodFlexibility loadSkillDaysWithPeriodFlexibility)
 		{
 			_now = now;
 			_timeZone = timeZone;
@@ -51,13 +51,14 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			_scenarioRepository = scenarioRepository;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_skillTypeInfoProvider = skillTypeInfoProvider;
-			_skillDayLoadHelper = skillDayLoadHelper;
+			//_skillDayLoadHelper = skillDayLoadHelper;
 			_intradayQueueStatisticsLoader = intradayQueueStatisticsLoader;
 			_emailBacklogProvider = emailBacklogProvider;
 			
 			_forecastingService = forecastingService ?? throw new ArgumentNullException(nameof(forecastingService));
 			_reforecastingService = reforecastingService ?? throw new ArgumentNullException(nameof(reforecastingService));
 			_staffingService = staffingService ?? throw new ArgumentNullException(nameof(staffingService));
+			_loadSkillDaysWithPeriodFlexibility = loadSkillDaysWithPeriodFlexibility;
 		}
 
 		public IntradayStaffingViewModel GenerateStaffingViewModel(Guid[] skillIdList, int dayOffset)
@@ -84,8 +85,10 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			if (!skills.Any())
 				return new IntradayStaffingViewModel();
 
-			var skillDaysBySkills = 
-				_skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(new DateOnly(startOfDayUtc), new DateOnly(startOfDayUtc.AddDays(1))), skills, scenario);
+			//var skillDaysBySkills = 
+			//	_skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(new DateOnly(startOfDayUtc), new DateOnly(startOfDayUtc.AddDays(1))), skills, scenario);
+			var skillDaysBySkills =
+				_loadSkillDaysWithPeriodFlexibility.Load(new DateOnlyPeriod(new DateOnly(startOfDayUtc), new DateOnly(startOfDayUtc.AddDays(1))), skills, scenario);
 			var skillDays = skillDaysBySkills.SelectMany(x => x.Value);
 			
 			var forecast = _forecastingService.GenerateForecast(skillDays, startOfDayUtc, startOfDayUtc.AddDays(1), TimeSpan.FromMinutes(minutesPerInterval), useShrinkage);
@@ -237,9 +240,11 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			if (!skills.Any())
 				return new List<StaffingIntervalModel>();
 
+			//var skillDays =
+			//	_skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(new DateOnly(fromTimeUtc), new DateOnly(toTimeUtc)), skills, scenario)
 			var skillDays =
-				_skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(new DateOnly(fromTimeUtc), new DateOnly(toTimeUtc)), skills, scenario)
-					.SelectMany(x => x.Value);
+				_loadSkillDaysWithPeriodFlexibility.Load(new DateOnlyPeriod(new DateOnly(fromTimeUtc), new DateOnly(toTimeUtc)), skills, scenario)
+			.SelectMany(x => x.Value);
 
 			var forecast = skillDays
 				.SelectMany(x => x.SkillStaffPeriodViewCollection(resolution,useShrinkage).Select(i => new {SkillDay = x, StaffPeriod = i}))
@@ -275,4 +280,6 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				.ToList();
 		}
 	}
+
+	
 }

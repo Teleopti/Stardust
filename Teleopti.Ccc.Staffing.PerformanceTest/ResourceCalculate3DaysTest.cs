@@ -7,18 +7,21 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.TestCommon.IoC;
 
 
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
+	//[Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
+	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
 	public class ResourceCalculate3DaysTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;

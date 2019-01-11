@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             }
             using (mocks.Playback())
             {
-                organisationMembership.AddFromPerson(person);
+                organisationMembership.InitializeFromPerson(person);
                 Assert.IsTrue(authorization.IsPermitted(Function, DateOnly.Today, toCheck));
             }
         }
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         [Test]
         public void ShouldCheckPermissionsForFunction()
         {
-            organisationMembership.AddFromPerson(person);
+            organisationMembership.InitializeFromPerson(person);
             Assert.IsTrue(authorization.IsPermitted(Function));
         }
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             }
             using (mocks.Playback())
             {
-                organisationMembership.AddFromPerson(person);
+                organisationMembership.InitializeFromPerson(person);
                 Assert.IsTrue(authorization.IsPermitted(Function, DateOnly.Today, toCheck));
             }
         }
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             }
             using (mocks.Playback())
             {
-                organisationMembership.AddFromPerson(person);
+                organisationMembership.InitializeFromPerson(person);
                 Assert.IsTrue(authorization.IsPermitted(Function, DateOnly.Today, toCheck));
             }
         }
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         [Test]
         public void ShouldReturnGrantedFunctions()
         {
-            organisationMembership.AddFromPerson(person);
+            organisationMembership.InitializeFromPerson(person);
 			var result = authorization.GrantedFunctions();
             result.Count().Should().Be.EqualTo(1);
         }
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             }
             using (mocks.Playback())
             {
-                organisationMembership.AddFromPerson(person);
+                organisationMembership.InitializeFromPerson(person);
                 var result = authorization.EvaluateSpecification(specification);
                 result.Should().Be.True();
             }

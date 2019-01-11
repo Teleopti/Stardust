@@ -1,6 +1,6 @@
 import { of } from 'rxjs';
-import { AuditTrailService, AuditTrailsResponse, PersonByKeyWordResponse } from './audit-trail.service';
 import { AuditEntry, Person } from 'src/app/shared/types';
+import { AuditTrailService } from './audit-trail.service';
 
 describe('Audit-trail service', () => {
 	let httpClientSpy: { get: jasmine.Spy };
@@ -31,9 +31,9 @@ describe('Audit-trail service', () => {
 			Data: 'File name: template.csv',
 			TimeStamp: '2018-11-27T17:41:19.95'
 		};
-		const auditTrailData: AuditEntry[] = [mockAuditEntry];
+		const auditTrailMockData: AuditEntry[] = [mockAuditEntry];
 
-		httpClientSpy.get.and.returnValue(of(auditTrailData));
+		httpClientSpy.get.and.returnValue(of(auditTrailMockData));
 
 		auditTrailService
 			.getStaffingAuditTrail('1', '2018-11-27', '2018-11-27', 'Staffing')

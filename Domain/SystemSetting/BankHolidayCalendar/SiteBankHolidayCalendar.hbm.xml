@@ -27,7 +27,6 @@
 					not-null="true" />
 
 		<bag name="BankHolidayCalendarsForSite"
-			 cascade="all-delete-orphan"
 			 order-by="Parent"
 			 lazy="false">
 			<key column="Parent" foreign-key="FK_BankHolidayCalendarsForSite_SiteBankHolidayCalendar"/>

@@ -15,7 +15,9 @@ import { AppLogonPageComponent } from './app-logon-page.component';
 
 @Component({
 	selector: 'people-workspace',
-	template: `MockWorkspace`
+	template: `
+		MockWorkspace
+	`
 })
 class MockWorkspaceComponent {}
 
@@ -26,7 +28,6 @@ class MockWorkspaceService implements Partial<WorkspaceService> {
 describe('AppLogonPageComponent', () => {
 	let component: AppLogonPageComponent;
 	let fixture: ComponentFixture<AppLogonPageComponent>;
-	let workspaceService: WorkspaceService;
 	let page: Page;
 
 	configureTestSuite();
@@ -68,7 +69,7 @@ describe('AppLogonPageComponent', () => {
 
 	it('should display person app logon', () => {
 		fixture.detectChanges();
-		let input: HTMLInputElement = page.logonFields[0].nativeElement;
+		const input: HTMLInputElement = page.logonFields[0].nativeElement;
 		expect(input.value).toEqual(adinaLogon.LogonName);
 	});
 });

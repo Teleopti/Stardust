@@ -102,12 +102,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		[Test]
 		public void VerifyInsightsIsLicensed()
 		{
-			Assert.IsFalse(_target.InsightsLicensed);
+			Assert.IsFalse(_target.InsightsEnabled);
 
 			var licenseActivator = new FakeLicenseActivator("test customer");
 			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
 			DefinedLicenseDataFactory.SetLicenseActivator(UnitOfWorkFactory.Current.Name, licenseActivator);
-			Assert.IsTrue(_target.InsightsLicensed);
+			Assert.IsTrue(_target.InsightsEnabled);
 		}
 	}
 }

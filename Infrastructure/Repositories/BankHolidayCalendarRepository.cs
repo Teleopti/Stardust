@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ICollection<IBankHolidayCalendar> FindBankHolidayCalendars(IEnumerable<Guid> ids)
 		{
-			if (!ids.Any()) return new List<IBankHolidayCalendar>();
+			if (ids == null || !ids.Any()) return new List<IBankHolidayCalendar>();
 
 			var ret = Session.CreateCriteria<BankHolidayCalendar>()
 				.Add(Restrictions.InG("Id", ids))

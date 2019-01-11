@@ -36,23 +36,21 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					pmInfoProvider.Cube(),
 					pmInfoProvider.PmInstallation(),
 					CultureInfo.CurrentCulture,
-					new IocContainerHolder(App.Container), 
-					_baseConfiguration.RunIndexMaintenance
-					);
+					new IocContainerHolder(App.Container),
+					_baseConfiguration.RunIndexMaintenance,
+					_baseConfiguration.InsightsConfig?.IsValid() ?? false
+				);
 
 				_baseConfiguration.JobHelper = new JobHelper(
 					App.Container.Resolve<IAvailableBusinessUnitsProvider>(),
-					App.Container.Resolve<ITenants>(), 
+					App.Container.Resolve<ITenants>(),
 					App.Container.Resolve<IIndexMaintenanceRepository>(),
 					App.Container.Resolve<IMessageSender>(),
 					App.Container.Resolve<IAnalyticsPersonPeriodDateFixer>());
 
 				jobParameters.Helper = _baseConfiguration.JobHelper;
-
 				var jobCollection = new JobCollection(jobParameters);
-
 				var jobs = new ObservableCollection<IJob>(jobCollection);
-
 				return jobs;
 			}
 		}

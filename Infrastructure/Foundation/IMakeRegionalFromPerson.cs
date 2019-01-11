@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public interface IMakeRegionalFromPerson
 	{
-		IRegional MakeRegionalFromPerson(IPerson loggedOnUser);
+		IRegional MakeRegionalFromPerson(IPerson person);
 	}
 }

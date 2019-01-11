@@ -272,7 +272,7 @@
 
 		$scope.$on('teamSchedule.updateSchedule', function (a, d) {
 			hasScheduleUpdatedInEditor = true;
-			scheduleMgmtSvc.updateSchedulesByRawData(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, [d.personId], d.rawSchedules);
+			scheduleMgmtSvc.updateSchedulesByRawData(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, d.rawSchedules);
 			vm.checkValidationWarningForCommandTargets([d.personId]);
 			resetHavingScheduleChange([d.personId]);
 		});
@@ -510,7 +510,7 @@
 			}
 		};
 
-		vm.updateSchedules = function (personIdList) {
+		vm.updateSchedules = function (personIdList, dontUpdateScheduleForPersonInEditing) {
 			vm.isLoading = true;
 			resetHavingScheduleChange(personIdList);
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, function () {
@@ -518,7 +518,7 @@
 				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
-			});
+			}, dontUpdateScheduleForPersonInEditing ? personIdInEditing : null);
 		};
 
 		vm.selectAllForAllPages = function () {
@@ -558,7 +558,7 @@
 					hasScheduleUpdatedInEditor = false;
 				}
 				if (!!personIds.length) {
-					vm.updateSchedules(personIds);
+					vm.updateSchedules(personIds, true);
 					vm.checkValidationWarningForCommandTargets(personIds);
 				}
 			} else {

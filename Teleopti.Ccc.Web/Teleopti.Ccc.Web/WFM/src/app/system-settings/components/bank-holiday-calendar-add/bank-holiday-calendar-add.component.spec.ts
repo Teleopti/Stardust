@@ -1,15 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
-
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MockTranslationModule } from '@wfm/mocks/translation';
 import { configureTestSuite } from '@wfm/test';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { UserService } from 'src/app/core/services';
-import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.component';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
+import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.component';
 
 describe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
@@ -22,15 +21,14 @@ describe('BankHolidayCalendarAddComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [BankHolidayCalendarAddComponent],
 			imports: [
-				TranslateModule.forRoot(),
-				NgZorroAntdModule.forRoot(),
+				MockTranslationModule,
+				NgZorroAntdModule,
 				FormsModule,
 				ReactiveFormsModule,
 				HttpClientTestingModule,
 				NoopAnimationsModule
 			],
 			providers: [
-				TranslateService,
 				UserService,
 				{
 					provide: ToggleMenuService,
@@ -52,7 +50,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should render name and year input box', () => {
-		var addBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+		const addBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
 
 		expect(addBankHolidayCalendarPanel).toBeTruthy();
 		expect(addBankHolidayCalendarPanel.getElementsByClassName('ant-input').length).toBe(2);
@@ -60,7 +58,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should render cancel and save button', () => {
-		var addBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+		const addBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
 
 		expect(addBankHolidayCalendarPanel.getElementsByClassName('ant-btn').length).toBe(2);
 		expect(

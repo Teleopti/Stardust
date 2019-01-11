@@ -1,25 +1,20 @@
 import { DOCUMENT } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TranslateModule } from '@ngx-translate/core';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { configureTestSuite, MockComponent } from '@wfm/test';
 import { IStateService } from 'angular-ui-router';
+import { NzToolTipModule } from 'ng-zorro-antd';
 import { ReplaySubject } from 'rxjs';
-
-import { configureTestSuite } from '@wfm/test';
-import { ThemeService, NavigationService, TogglesService, UserService } from 'src/app/core/services';
 import { PasswordService } from 'src/app/authentication/services/password.service';
-import { ToggleMenuService } from '../../shared/toggle-menu.service';
-import { TopNavigationComponent } from './top-navigation.component';
-import { BusinessUnitSelectorComponent } from '../businessunit-selector';
-import { BusinessUnitService } from '../../shared/businessunit.service';
-import { FeedbackComponent } from '../feedback';
-import { SettingsMenuComponent } from '../settings-menu';
-import { ChangePasswordComponent } from 'src/app/authentication/components/change-password/change-password.component';
+import { NavigationService, ThemeService, TogglesService, UserService } from 'src/app/core/services';
 import { AreaService } from '../../shared/area.service';
+import { BusinessUnitService } from '../../shared/businessunit.service';
+import { ToggleMenuService } from '../../shared/toggle-menu.service';
+import { FeedbackComponent } from '../feedback';
+import { TopNavigationComponent } from './top-navigation.component';
+import { MockTranslationModule } from '@wfm/mocks/translation';
 
-class mockStateService implements Partial<IStateService> {
+class MockStateService implements Partial<IStateService> {
 	public current: {
 		name: 'systemSettings';
 	};
@@ -50,22 +45,15 @@ describe('TopNavigation', () => {
 		TestBed.configureTestingModule({
 			declarations: [
 				TopNavigationComponent,
-				BusinessUnitSelectorComponent,
 				FeedbackComponent,
-				SettingsMenuComponent,
-				ChangePasswordComponent
+				MockComponent({ selector: 'settings-menu' }),
+				MockComponent({ selector: 'business-unit-selector' })
 			],
-			imports: [
-				TranslateModule.forRoot(),
-				NgZorroAntdModule.forRoot(),
-				FormsModule,
-				ReactiveFormsModule,
-				HttpClientTestingModule
-			],
+			imports: [MockTranslationModule, NzToolTipModule, HttpClientTestingModule],
 			providers: [
 				{
 					provide: '$state',
-					useClass: mockStateService
+					useClass: MockStateService
 				},
 				{ provide: ToggleMenuService, useClass: MockToggleMenuService },
 				TogglesService,
@@ -91,21 +79,21 @@ describe('TopNavigation', () => {
 	});
 
 	it('should show system settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is on', () => {
-		let toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
+		const toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: true });
 		fixture.detectChanges();
 
-		var systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
+		const systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
 		expect(systemSettingsIconElement).toBeTruthy();
 		expect(systemSettingsIconElement.getElementsByTagName('i').length).toBe(1);
 	});
 
 	it('should not show system settings icon when toggle WFM_Setting_BankHolidayCalendar_Create_79297 is off', () => {
-		let toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
+		const toggleRequest = httpMock.expectOne('../ToggleHandler/AllToggles');
 		toggleRequest.flush({ WFM_Setting_BankHolidayCalendar_Create_79297: false });
 		fixture.detectChanges();
 
-		var systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
+		const systemSettingsIconElement = document.getElementsByClassName('system-settings-icon')[0];
 		expect(systemSettingsIconElement).toBeFalsy();
 	});
 });
