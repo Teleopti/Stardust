@@ -1,43 +1,36 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular
-		.module('adminApp')
-		.controller('detailsController', [
-			'$http',
-			'$routeParams',
-			'tokenHeaderService',
-			'$mdDialog',
-			'tenantService',
-			detailsController
-		]);
+		 .module('adminApp').controller('detailsController',
+		 ['$http', '$routeParams', 'tokenHeaderService', '$mdDialog', detailsController]);
 
-	function detailsController($http, $routeParams, tokenHeaderService, $mdDialog, tenantService) {
+	function detailsController($http, $routeParams, tokenHeaderService, $mdDialog) {
 		var vm = this;
 
 		vm.Tenant = $routeParams.tenant;
 		vm.OriginalName = $routeParams.tenant;
 		vm.TenantId = -1;
-		vm.Server = '';
-		vm.UserName = '';
-		vm.Password = '';
-		vm.AppDatabase = '';
-		vm.AnalyticsDatabase = '';
-		vm.AggregationDatabase = '';
+		vm.Server = "";
+		vm.UserName = "";
+		vm.Password = "";
+		vm.AppDatabase = "";
+		vm.AnalyticsDatabase = "";
+		vm.AggregationDatabase = "";
 		vm.Version = null;
-		vm.Active = true;
-		vm.TenantMessage = 'Enter a new name for the Tenant';
+	    vm.Active = true;
+		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
 		vm.AppDbOk = false;
-		vm.AppDbCheckMessage = 'Input Application database';
+		vm.AppDbCheckMessage = "Input Application database";
 
 		vm.AnalDbOk = false;
-		vm.AnalDbCheckMessage = 'Input Analytics database';
+		vm.AnalDbCheckMessage = "Input Analytics database";
 		vm.CommandTimeout = 0;
 		vm.MaximumSessionTime = undefined;
-		vm.Message = '';
+		vm.Message = "";
 		vm.AllowDelete = false;
-
+		
 		vm.CreateDbUser = '';
 		vm.CreateDbPassword = '';
 		vm.UseIntegratedSecurity = false;
@@ -49,48 +42,48 @@
 		vm.NewBuOk = true;
 		vm.Log = null;
 
-		vm.showConfirm = function(ev) {
+		vm.showConfirm = function (ev) {
 			// Appending dialog to document.body to cover sidenav in docs app
-			var confirm = $mdDialog
-				.confirm()
-				.title('Would you like to detach this Tenant?')
-				.textContent('No database will be removed. You can always import it again if you like.')
-				.targetEvent(ev)
-				.ok('Please do it!')
-				.cancel('No not now.');
-
-			$mdDialog.show(confirm).then(
-				function() {
-					vm.Delete();
-				},
-				function() {
-					//do nada;
-				}
-			);
-		};
-
-		vm.LoadTenant = function() {
-			tenantService.loadTenant(vm.Tenant).then(function(data) {
-				vm.TenantMessage = data.Message;
-				(vm.TenantId = data.Id), (vm.TenantOk = data.Success);
-				vm.Server = data.Server;
-				vm.UseIntegratedSecurity = data.UseIntegratedSecurity;
-				vm.AnalyticsDatabase = data.AnalyticsDatabase;
-				vm.AppDatabase = data.AppDatabase;
-				vm.AggregationDatabase = data.AggregationDatabase;
-				vm.Version = data.Version;
-				vm.CommandTimeout = data.CommandTimeout;
-				vm.Active = data.Active;
-				vm.MobileQRCodeUrl = data.MobileQRCodeUrl;
-				vm.MaximumSessionTime = data.MaximumSessionTime === 0 ? undefined : data.MaximumSessionTime;
-				//vm.CheckAppDb();
-				//vm.CheckAnalDb();
-				vm.CheckDelete();
-				vm.GetImportLog();
+			var confirm = $mdDialog.confirm()
+					.title('Would you like to detach this Tenant?')
+					.textContent('No database will be removed. You can always import it again if you like.')
+					.targetEvent(ev)
+					.ok('Please do it!')
+					.cancel('No not now.');
+					
+			$mdDialog.show(confirm).then(function () {
+				vm.Delete();
+			}, function () {
+				//do nada;
 			});
 		};
 
-		vm.ShowUpgrade = function() {
+		vm.LoadTenant = function() {
+			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
+				.then(function(response) {
+					vm.TenantMessage = response.data.Message;
+					vm.TenantId = response.data.Id,
+						vm.TenantOk = response.data.Success;
+					vm.Server = response.data.Server;
+					vm.UseIntegratedSecurity = response.data.UseIntegratedSecurity;
+					vm.AnalyticsDatabase = response.data.AnalyticsDatabase;
+					vm.AppDatabase = response.data.AppDatabase;
+					vm.AggregationDatabase = response.data.AggregationDatabase;
+					vm.Version = response.data.Version;
+					vm.CommandTimeout = response.data.CommandTimeout;
+					vm.Active = response.data.Active;
+					vm.MobileQRCodeUrl = response.data.MobileQRCodeUrl;
+					vm.MaximumSessionTime = response.data.MaximumSessionTime === 0
+						? undefined
+						: response.data.MaximumSessionTime;
+					//vm.CheckAppDb();
+					//vm.CheckAnalDb();
+					vm.CheckDelete();
+					vm.GetImportLog();
+				});
+		};
+
+		vm.ShowUpgrade = function () {
 			return true;
 			if (vm.Version === null) return false;
 			return vm.Version.AppVersionOk === false;
@@ -125,9 +118,11 @@
 				UseIntegratedSecurity: vm.UseIntegratedSecurity
 			};
 
-			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders()).then(function(response) {
-				(vm.SqlUserOk = response.data.Success), (vm.SqlUserOkMessage = response.data.Message);
-			});
+			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
+				.then(function(response) {
+					vm.SqlUserOk = response.data.Success,
+						vm.SqlUserOkMessage = response.data.Message;
+				});
 		};
 		//vm.CheckTenantName = function () {
 		//	$http.post('./api/Home/NameIsFree', {
@@ -145,22 +140,20 @@
 		//}
 
 		vm.CheckDelete = function() {
-			$http
-				.post('./TenantCanBeDeleted', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
+			$http.post('./TenantCanBeDeleted', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
 				.then(function(response) {
 					vm.AllowDelete = response.data.Success;
 				});
 		};
 
 		vm.Delete = function() {
-			$http
-				.post('./DeleteTenant', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
+			$http.post('./DeleteTenant', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
 				.then(function(response) {
 					if (response.data.Success === false) {
 						vm.Message = response.data.Message;
 						return;
 					}
-					window.location = '#';
+					window.location = "#";
 				});
 		};
 
@@ -171,23 +164,26 @@
 				AdminPassword: vm.CreateDbPassword,
 				UseIntegratedSecurity: vm.UseIntegratedSecurity
 			};
-			$http.post('./UpgradeTenant', model, tokenHeaderService.getHeaders()).then(function(response) {
-				if (response.data.Success === false) {
-					vm.Message = response.data.Message;
-					return;
-				}
-				window.location = '#';
-			});
+			$http.post('./UpgradeTenant', model, tokenHeaderService.getHeaders())
+				.then(function(response) {
+					if (response.data.Success === false) {
+						vm.Message = response.data.Message;
+						return;
+					}
+					window.location = "#";
+				});
 		};
 
 		vm.AddBu = function() {
 			var model = {
 				Tenant: vm.OriginalName,
 				BuName: vm.BuName
+
 			};
-			$http.post('./AddBusinessUnitToTenant', model, tokenHeaderService.getHeaders()).then(function(response) {
-				vm.NewBusinessUnitMessage = response.data.Message;
-			});
+			$http.post('./AddBusinessUnitToTenant', model, tokenHeaderService.getHeaders())
+				.then(function(response) {
+					vm.NewBusinessUnitMessage = response.data.Message;
+				});
 		};
 		vm.LoadTenant();
 
@@ -244,9 +240,7 @@
 			//	return;
 			//}
 
-			$http
-				.post(
-					'./UpdateTenant',
+			$http.post('./UpdateTenant',
 					{
 						OriginalName: vm.OriginalName,
 						NewName: vm.Tenant,
@@ -261,14 +255,13 @@
 						MobileQRCodeUrl: vm.MobileQRCodeUrl,
 						MaximumSessionTime: vm.MaximumSessionTime
 					},
-					tokenHeaderService.getHeaders()
-				)
-				.then(function(response) {
+					tokenHeaderService.getHeaders())
+				.then(function (response) {
 					if (response.data.Success === false) {
 						vm.Message = response.data.Message;
 						return;
 					}
-					window.location = '#';
+					window.location = "#";
 				})
 				.catch(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.status + xhr.responseText + thrownError;
@@ -277,9 +270,10 @@
 		};
 
 		vm.GetImportLog = function() {
-			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders()).then(function(response) {
-				vm.Log = response.data;
-			});
+			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders())
+				.then(function(response) {
+					vm.Log = response.data;
+				});
 		};
 	}
 })();
