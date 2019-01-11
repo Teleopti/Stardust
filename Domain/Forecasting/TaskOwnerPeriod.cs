@@ -4,18 +4,10 @@ using System.Linq;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-	/// <summary>
-	/// Aggregates the information for a workload to a defined level
-	/// </summary>
-	/// <remarks>
-	/// Created by: robink
-	/// Created date: 2007-12-17
-	/// </remarks>
 	public class TaskOwnerPeriod : ITaskOwnerPeriod
 	{
 		private TimeSpan _averageAfterTaskTime;
@@ -23,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private Percent _campaignAfterTaskTime;
 		private Percent _campaignTasks;
 		private Percent _campaignTaskTime;
-		private DateOnly _currentDate;
 		private bool _initialized;
 		private bool _isDirty;
 		private readonly IList<ITaskOwner> _parents = new List<ITaskOwner>();
@@ -38,96 +29,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private double _totalStatisticCalculatedTasks;
 		private double _totalTasks;
 		private bool _turnOffInternalRecalc;
-		private TaskOwnerPeriodType _typeOfTaskOwnerPeriod;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TaskOwnerPeriod"/> class.
-		/// </summary>
-		/// <param name="currentDate">The current date.</param>
-		/// <param name="taskOwnerDays">The task owner days.</param>
-		/// <param name="taskOwnerPeriodType">Type of the task owner period.</param>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
 		public TaskOwnerPeriod(DateOnly currentDate, IEnumerable<ITaskOwner> taskOwnerDays, TaskOwnerPeriodType taskOwnerPeriodType)
 		{
-			_currentDate = currentDate;
-			_typeOfTaskOwnerPeriod = taskOwnerPeriodType;
-			_taskOwnerDayCollection = new List<ITaskOwner>();
+			CurrentDate = currentDate;
+			TypeOfTaskOwnerPeriod = taskOwnerPeriodType;
+			_taskOwnerDayCollection = new List<ITaskOwner>(taskOwnerDays?.Count() ?? 0);
 			AddRange(taskOwnerDays);
 		}
-
-		/// <summary>
-		/// Gets the end date of the current month for the thread culture.
-		/// </summary>
-		/// <value>The end date.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
-		public DateOnly EndDate
-		{
-			get
-			{
-				return GetEndDate();
-			}
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether this instance is loaded.
-		/// </summary>
-		/// <value><c>true</c> if this instance is loaded; otherwise, <c>false</c>.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
-		public bool IsLoaded
-		{
-			get
-			{
-				return (_taskOwnerDayCollection != null &&
-						  _taskOwnerDayCollection.Count > 0);
-			}
-		}
-
-		/// <summary>
-		/// Gets the start date of the month of the current date for the thread culture.
-		/// </summary>
-		/// <value>The start date.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
-		public DateOnly StartDate
-		{
-			get
-			{
-				return GetStartDate();
-			}
-		}
-
-		/// <summary>
-		/// Gets the task owner day collection.
-		/// </summary>
-		/// <value>The task owner day collection.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
-		public ReadOnlyCollection<ITaskOwner> TaskOwnerDayCollection
-		{
-			get { return new ReadOnlyCollection<ITaskOwner>(_taskOwnerDayCollection); }
-		}
-
-		/// <summary>
-		/// Gets or sets the total tasks.
-		/// </summary>
-		/// <value>The total tasks.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 11/27/2007
-		/// </remarks>
+		
+		public DateOnly EndDate => GetEndDate();
+		
+		public bool IsLoaded => (_taskOwnerDayCollection?.Count > 0);
+		
+		public DateOnly StartDate => GetStartDate();
+		
+		public IList<ITaskOwner> TaskOwnerDayCollection => _taskOwnerDayCollection.ToArray();
+		
 		public virtual double TotalTasks
 		{
 			get
@@ -136,32 +54,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				return _totalTasks;
 			}
 		}
-
-		/// <summary>
-		/// Gets or sets the type of task owner period.
-		/// </summary>
-		/// <value>The type of task owner period.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
-		public TaskOwnerPeriodType TypeOfTaskOwnerPeriod
-		{
-			get { return _typeOfTaskOwnerPeriod; }
-			set
-			{
-				_typeOfTaskOwnerPeriod = value;
-			}
-		}
-
-		/// <summary>
-		/// Adds the specified task owner day.
-		/// </summary>
-		/// <param name="taskOwnerDay">The task owner day.</param>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
+		
+		public TaskOwnerPeriodType TypeOfTaskOwnerPeriod { get; set; }
+		
 		public void Add(ITaskOwner taskOwnerDay)
 		{
 			taskOwnerDay.AddParent(this);
@@ -169,15 +64,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			Initialize();
 		}
-
-		/// <summary>
-		/// Adds the range.
-		/// </summary>
-		/// <param name="taskOwnerDays">The task owner days.</param>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
+		
 		public void AddRange(IEnumerable<ITaskOwner> taskOwnerDays)
 		{
 			if (taskOwnerDays == null) return;
@@ -185,29 +72,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			taskOwnerDays.ForEach(Add);
 			Release();
 		}
-
-		/// <summary>
-		/// Clears this instance.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
+		
 		public void Clear()
 		{
-			IList<ITaskOwner> temporaryList = new List<ITaskOwner>(_taskOwnerDayCollection);
+			var temporaryList = _taskOwnerDayCollection.ToArray();
 			Lock();
 			temporaryList.ForEach(Remove);
 			Release();
 		}
-
-		/// <summary>
-		/// Called when [average task time changed].
-		/// </summary>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 10.12.2007
-		/// </remarks>
+		
 		private void OnAverageTaskTimeChanged()
 		{
 			if (!_turnOffInternalRecalc)
@@ -230,14 +103,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_isDirty = true;
 			}
 		}
-
-		/// <summary>
-		/// Called when [campaign average times changed].
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-04
-		/// </remarks>
+		
 		private void OnCampaignAverageTimesChanged()
 		{
 			if (!_turnOffInternalRecalc)
@@ -260,14 +126,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_isDirty = true;
 			}
 		}
-
-		/// <summary>
-		/// Called when [campaign tasks changed].
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-04
-		/// </remarks>
+		
 		private void OnCampaignTasksChanged()
 		{
 			if (!_turnOffInternalRecalc)
@@ -290,14 +149,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_isDirty = true;
 			}
 		}
-
-		/// <summary>
-		/// Called when [tasks changed].
-		/// </summary>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 10.12.2007
-		/// </remarks>
+		
 		private void OnTasksChanged()
 		{
 			if (!_turnOffInternalRecalc)
@@ -320,14 +172,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_isDirty = true;
 			}
 		}
-
-		/// <summary>
-		/// Recalcs the dayly average times.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-18
-		/// </remarks>
+		
 		public void RecalculateDailyAverageTimes()
 		{
 			if (!_turnOffInternalRecalc)
@@ -373,14 +218,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_isDirty = true;
 			}
 		}
-
-		/// <summary>
-		/// Recalcs the dayly tasks.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-18
-		/// </remarks>
+		
 		public void RecalculateDailyTasks()
 		{
 			if (!_turnOffInternalRecalc)
@@ -407,15 +245,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_isDirty = true;
 			}
 		}
-
-		/// <summary>
-		/// Removes the specified task owner day.
-		/// </summary>
-		/// <param name="taskOwnerDay">The task owner day.</param>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
+		
 		public virtual void Remove(ITaskOwner taskOwnerDay)
 		{
 			if (!_taskOwnerDayCollection.Contains(taskOwnerDay)) return;
@@ -425,20 +255,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			taskOwnerDay.RemoveParent(this);
 		}
-
-		/// <summary>
-		/// Gets the end date depending on type of workload period.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-19
-		/// </remarks>
+		
 		private DateOnly GetEndDate()
 		{
 			var returnDate = CurrentDate;
 
-			switch (_typeOfTaskOwnerPeriod)
+			switch (TypeOfTaskOwnerPeriod)
 			{
 				case TaskOwnerPeriodType.Month:
 					returnDate = new DateOnly(DateHelper.GetLastDateInMonth(CurrentDate.Date, CultureInfo.CurrentCulture));
@@ -454,20 +276,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			return returnDate;
 		}
-
-		/// <summary>
-		/// Gets the start date.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-19
-		/// </remarks>
+		
 		private DateOnly GetStartDate()
 		{
 			var returnDate = CurrentDate;
 
-			switch (_typeOfTaskOwnerPeriod)
+			switch (TypeOfTaskOwnerPeriod)
 			{
 				case TaskOwnerPeriodType.Month:
 					returnDate = new DateOnly(DateHelper.GetFirstDateInMonth(CurrentDate.Date, CultureInfo.CurrentCulture));
@@ -484,13 +298,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			return returnDate;
 		}
 
-		/// <summary>
-		/// Initializes this instance.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-08
-		/// </remarks>
 		private void Initialize()
 		{
 			RecalculateDailyTasks();
@@ -502,28 +309,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			_initialized = true;
 		}
-
-		/// <summary>
-		/// Tasks the owner day open collection.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
+		
 		private IList<ITaskOwner> TaskOwnerDayOpenCollection()
 		{
-			return _taskOwnerDayCollection.Where(wd => wd.OpenForWork.IsOpenForIncomingWork).ToList();
+			return _taskOwnerDayCollection.Where(wd => wd.OpenForWork.IsOpenForIncomingWork).ToArray();
 		}
-
-		/// <summary>
-		/// Gets or sets the average after task time.
-		/// </summary>
-		/// <value>The average after task time.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
+		
 		public TimeSpan AverageAfterTaskTime
 		{
 			get
@@ -557,15 +348,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			if (!IsLoaded)
 				throw new InvalidOperationException("The workload period must contain workload days before using this operation.");
 		}
-
-		/// <summary>
-		/// Gets or sets the average task time.
-		/// </summary>
-		/// <value>The average task time.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
+		
 		public TimeSpan AverageTaskTime
 		{
 			get
@@ -593,14 +376,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				OnAverageTaskTimeChanged();
 			}
 		}
-
-		/// <summary>
-		/// Locks this instance.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-22
-		/// </remarks>
+		
 		public void Lock()
 		{
 			_turnOffInternalRecalc = true;
@@ -609,14 +385,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				parent.Lock();
 			}
 		}
-
-		/// <summary>
-		/// Releases this instance.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-22
-		/// </remarks>
+		
 		public void Release()
 		{
 			if (_taskOwnerDayCollection.Any(w => w.IsLocked)) return;
@@ -632,14 +401,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				parent.Release();
 			}
 		}
-
-		/// <summary>
-		/// Sets the entity as dirty.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-23
-		/// </remarks>
+		
 		public void SetDirty()
 		{
 			_isDirty = true;
@@ -654,42 +416,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets a value indicating whether this instance is locked.
-		/// </summary>
-		/// <value><c>true</c> if this instance is locked; otherwise, <c>false</c>.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
-		public virtual bool IsLocked
-		{
-			get { return _turnOffInternalRecalc; }
-		}
+		public virtual bool IsLocked => _turnOffInternalRecalc;
 
-		/// <summary>
-		/// Updates the name of the template.
-		/// </summary>
-		/// <remarks>
-		/// Created by: peterwe
-		/// Created date: 2008-02-14
-		/// </remarks>
 		public void ClearTemplateName()
 		{
 			throw new NotImplementedException();
 		}
 
-		/// <summary>
-		/// Removes the parent.
-		/// </summary>
-		/// <param name="parent">The parent.</param>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
 		public virtual void RemoveParent(ITaskOwner parent)
 		{
-			if (_parents.Contains(parent))
 				_parents.Remove(parent);
 		}
 
@@ -698,44 +433,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_parents.Clear();
 		}
 
-		/// <summary>
-		/// Adds the parent.
-		/// </summary>
-		/// <param name="parent">The parent.</param>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-18
-		/// </remarks>
 		public void AddParent(ITaskOwner parent)
 		{
 			if (!_parents.Contains(parent))
 				_parents.Add(parent);
 		}
 
-		/// <summary>
-		/// Gets or sets the current date.
-		/// </summary>
-		/// <value>The current date.</value>
-		/// <remarks>
-		/// Start and end date for the month should be calculated based on this date.
-		/// 
-		/// Created by: robink
-		/// Created date: 2007-12-17
-		/// </remarks>
-		public DateOnly CurrentDate
-		{
-			get { return _currentDate; }
-			set { _currentDate = value; }
-		}
+		public DateOnly CurrentDate { get; set; }
 
-		/// <summary>
-		/// Gets the total statistic calculated tasks.
-		/// </summary>
-		/// <value>The total statistic calculated tasks.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-03
-		/// </remarks>
 		public double TotalStatisticCalculatedTasks
 		{
 			get
@@ -745,14 +450,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets the total statistic answered tasks.
-		/// </summary>
-		/// <value>The total statistic answered tasks.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-03
-		/// </remarks>
 		public double TotalStatisticAnsweredTasks
 		{
 			get
@@ -762,14 +459,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets the total statistic abandoned tasks.
-		/// </summary>
-		/// <value>The total statistic abandoned tasks.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-03
-		/// </remarks>
 		public double TotalStatisticAbandonedTasks
 		{
 			get
@@ -779,14 +468,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets the total statistic average task time.
-		/// </summary>
-		/// <value>The total statistic average task time.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-03
-		/// </remarks>
 		public TimeSpan TotalStatisticAverageTaskTime
 		{
 			get
@@ -796,14 +477,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets the total statistic average after task time.
-		/// </summary>
-		/// <value>The total statistic average after task time.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-03
-		/// </remarks>
 		public TimeSpan TotalStatisticAverageAfterTaskTime
 		{
 			get
@@ -813,18 +486,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Recalculates the daily average statistic times.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-03
-		/// </remarks>
 		public void RecalculateDailyAverageStatisticTimes()
 		{
 			if (!_turnOffInternalRecalc)
 			{
-				// TotalStatisticCalculatedTasks
 				double sumTasks = _taskOwnerDayCollection.Sum(t => t.TotalStatisticCalculatedTasks);
 				if (sumTasks > 0d)
 				{
@@ -855,13 +520,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Recalculates the daily statistic tasks.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-03
-		/// </remarks>
 		public void RecalculateDailyStatisticTasks()
 		{
 			if (!_turnOffInternalRecalc)
@@ -876,14 +534,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets the total average after task time.
-		/// </summary>
-		/// <value>The total average after task time.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-04
-		/// </remarks>
 		public TimeSpan TotalAverageAfterTaskTime
 		{
 			get
@@ -893,14 +543,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets the total average task time.
-		/// </summary>
-		/// <value>The total average task time.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-04
-		/// </remarks>
 		public TimeSpan TotalAverageTaskTime
 		{
 			get
@@ -910,14 +552,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the tasks.
-		/// </summary>
-		/// <value>The tasks.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-04
-		/// </remarks>
 		public double Tasks
 		{
 			get
@@ -939,14 +573,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the campaign tasks.
-		/// </summary>
-		/// <value>The campaign tasks.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-04
-		/// </remarks>
 		public Percent CampaignTasks
 		{
 			get
@@ -979,14 +605,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				throw new InvalidOperationException("Workload day must be open.");
 		}
 
-		/// <summary>
-		/// Gets or sets the campaign task time.
-		/// </summary>
-		/// <value>The campaign task time.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-04
-		/// </remarks>
 		public Percent CampaignTaskTime
 		{
 			get
@@ -1011,14 +629,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the campaign after task time.
-		/// </summary>
-		/// <value>The campaign after task time.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-03-04
-		/// </remarks>
 		public Percent CampaignAfterTaskTime
 		{
 			get
@@ -1043,14 +653,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets the forecasted incoming demand.
-		/// </summary>
-		/// <value>The forecasted incoming demand.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-09-05
-		/// </remarks>
 		public TimeSpan ForecastedIncomingDemand
 		{
 			get
@@ -1060,14 +662,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Gets the forecasted incoming demand with shrinkage.
-		/// </summary>
-		/// <value>The forecasted incoming demand with shrinkage.</value>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-09-05
-		/// </remarks>
 		public TimeSpan ForecastedIncomingDemandWithShrinkage
 		{
 			get
@@ -1077,13 +671,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Recalcs the daily tasks.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-18
-		/// </remarks>
 		public void RecalculateDailyCampaignTasks()
 		{
 			if (!_turnOffInternalRecalc)
@@ -1098,7 +685,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				}
 				_turnOffInternalRecalc = false;
 
-				//Inform parent about my changed value!
 				OnCampaignTasksChanged();
 			}
 			else
@@ -1107,13 +693,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			}
 		}
 
-		/// <summary>
-		/// Recalcs the daily average times.
-		/// </summary>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2007-12-18
-		/// </remarks>
 		public void RecalculateDailyAverageCampaignTimes()
 		{
 			if (!_turnOffInternalRecalc)
@@ -1134,8 +713,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					_campaignAfterTaskTime = Math.Abs(sumOfAfterTaskTime) < 0.000001 ? new Percent(0) : new Percent((totalCampaignAfterTaskTime / sumOfAfterTaskTime) - 1d);
 				}
 				_turnOffInternalRecalc = false;
-
-				//Inform parent about my changed value!
+				
 				OnCampaignAverageTimesChanged();
 			}
 			else
@@ -1143,13 +721,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_isDirty = true;
 			}
 		}
-		/// <summary>
-		/// Resets the task owner.
-		/// </summary>
-		/// <remarks>
-		/// Created by: zoet
-		/// Created date: 2008-05-26
-		/// </remarks>
+
 		public void ResetTaskOwner()
 		{
 			Tasks = 0;

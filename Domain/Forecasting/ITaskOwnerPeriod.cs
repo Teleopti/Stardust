@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// Created by: robink
 		/// Created date: 2008-01-25
 		/// </remarks>
-		ReadOnlyCollection<ITaskOwner> TaskOwnerDayCollection { get; }
+		IList<ITaskOwner> TaskOwnerDayCollection { get; }
 
 		/// <summary>
 		/// Gets or sets the type of task owner period.

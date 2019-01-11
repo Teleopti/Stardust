@@ -32,42 +32,41 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// <param name="skillType">Type of the skill.</param>
         public MultisiteSkill(string name, string description, Color displayColor, int defaultSolution, ISkillType skillType) :
             base(name, description, displayColor, defaultSolution, skillType)
-        {
-            _templateMultisiteWeekCollection = new Dictionary<int, IMultisiteDayTemplate>();
+		{
+			_templateMultisiteWeekCollection = Enum.GetValues(typeof(DayOfWeek)).OfType<DayOfWeek>().Select(dayOfWeek =>
+			{
+				string templateName =
+					string.Format(CultureInfo.CurrentUICulture, "<{0}>",
+						CultureInfo.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName(dayOfWeek).ToUpper(
+							CultureInfo.CurrentUICulture));
+				IMultisiteDayTemplate multisiteDayTemplate =
+					new MultisiteDayTemplate(templateName, new List<ITemplateMultisitePeriod>());
+				multisiteDayTemplate.SetParent(this);
+				return ((int) dayOfWeek, multisiteDayTemplate);
+			}).ToDictionary(k => k.Item1, v => v.Item2);
+		}
 
-            foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
-            {
-                string templateName =
-                    string.Format(CultureInfo.CurrentUICulture, "<{0}>",
-                                  CultureInfo.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName(dayOfWeek).ToUpper(
-                                      CultureInfo.CurrentUICulture));
-                IMultisiteDayTemplate multisiteDayTemplate = new MultisiteDayTemplate(templateName, new List<ITemplateMultisitePeriod>());
-                multisiteDayTemplate.SetParent(this);
-                _templateMultisiteWeekCollection.Add((int)dayOfWeek, multisiteDayTemplate);
-            }
-        }
-		
-        /// <summary>
-        /// Gets the child skills.
-        /// </summary>
-        /// <value>The child skills.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-18
-        /// </remarks>
-        public virtual ReadOnlyCollection<IChildSkill> ChildSkills => new ReadOnlyCollection<IChildSkill>(_childSkills.Where(c => !((IDeleteTag)c).IsDeleted).ToArray());
+		/// <summary>
+		/// Gets the child skills.
+		/// </summary>
+		/// <value>The child skills.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-04-18
+		/// </remarks>
+		public virtual ReadOnlyCollection<IChildSkill> ChildSkills => new ReadOnlyCollection<IChildSkill>(_childSkills.Where(c => !((IDeleteTag)c).IsDeleted).ToArray());
 
-	    /// <summary>
-        /// Sets the template at.
-        /// First 7 slots are the standard WeekDays
-        /// </summary>
-        /// <param name="templateIndex">Index of the template.</param>
-        /// <param name="dayTemplate">The day template.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-22
-        /// </remarks>
-        public override void SetTemplateAt(int templateIndex, IForecastDayTemplate dayTemplate)
+		/// <summary>
+		/// Sets the template at.
+		/// First 7 slots are the standard WeekDays
+		/// </summary>
+		/// <param name="templateIndex">Index of the template.</param>
+		/// <param name="dayTemplate">The day template.</param>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-04-22
+		/// </remarks>
+		public override void SetTemplateAt(int templateIndex, IForecastDayTemplate dayTemplate)
         {
             base.SetTemplateAt(templateIndex,dayTemplate);
 			if (dayTemplate is IMultisiteDayTemplate newTemplate)

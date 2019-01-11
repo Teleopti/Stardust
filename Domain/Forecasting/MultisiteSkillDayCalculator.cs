@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    public void SetChildSkillDays(IChildSkill childSkill, IList<ISkillDay> childSkillDays)
         {
             if (!_multisiteSkill.ChildSkills.Contains(childSkill)) throw new ArgumentException("The supplied child skill is not contained in this multisite skill.",nameof(childSkill));
-            if (_childSkillDays.ContainsKey(childSkill)) _childSkillDays.Remove(childSkill);
+            _childSkillDays.Remove(childSkill);
             foreach (var childSkillDay in childSkillDays)
             {
                 childSkillDay.SkillDayCalculator = this;
@@ -95,8 +95,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         currentDateTime < endDateTime; 
                         currentDateTime = currentDateTime.AddMinutes(skillResolution))
                     {
-                        ISkillStaffPeriod foundSkillStaffPeriod;
-                        if (!foundSkillStaffPeriods.TryGetValue(currentDateTime, out foundSkillStaffPeriod))
+						if (!foundSkillStaffPeriods.TryGetValue(currentDateTime, out var foundSkillStaffPeriod))
                             break;
                         if (!foundSkillStaffPeriod.IsAvailable) continue;
 
@@ -116,11 +115,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public override Percent GetPercentageForInterval(ISkill skill, DateTimePeriod period)
         {
             if (_multisiteSkill.Equals(skill)) return new Percent(1);
-            var childSkill = skill as IChildSkill;
-            if (childSkill==null) throw new ArgumentException("The supplied skill is not a child skill nor the parent multisite skill.");
+            if (!(skill is IChildSkill childSkill)) throw new ArgumentException("The supplied skill is not a child skill nor the parent multisite skill.");
             if (!_multisiteSkill.ChildSkills.Contains(childSkill)) throw new ArgumentException("The supplied child skill does not have the current multisite skill as parent.");
 
-            var localDateTime = TimeZoneHelper.ConvertFromUtc(period.StartDateTime, skill.TimeZone);
+            var localDateTime = period.StartDateTimeLocal(skill.TimeZone);
             var currentDay = _multisiteDays.FirstOrDefault(m => m.MultisiteDayDate.Date == localDateTime.Date);
             if (currentDay == null) return new Percent();
 
@@ -157,9 +155,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                               into childSkillDay
                                               where childSkillDay != null
                                               select childSkillDay)
-                {
-                    for (var childIndex = 0;
-                         childIndex < childSkillDay.CompleteSkillStaffPeriodCollection.Length;
+				{
+					var completeSkillStaffPeriodCollection = childSkillDay.CompleteSkillStaffPeriodCollection;
+					for (var childIndex = 0;
+                         childIndex < completeSkillStaffPeriodCollection.Length;
                          childIndex++)
                     {
 						if (!calculatedResources.TryGetValue(childIndex, out var staffingResource))
@@ -169,17 +168,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         }
 
                         staffingResource.CalculatedResource +=
-                            childSkillDay.CompleteSkillStaffPeriodCollection[childIndex].Payload.CalculatedResource;
+                            completeSkillStaffPeriodCollection[childIndex].Payload.CalculatedResource;
                         staffingResource.CalculatedLoggedOn +=
-                            childSkillDay.CompleteSkillStaffPeriodCollection[childIndex].Payload.CalculatedLoggedOn;
+                            completeSkillStaffPeriodCollection[childIndex].Payload.CalculatedLoggedOn;
                     }
-                }
+				}
+				var skillStaffPeriodCollection = skillDay.CompleteSkillStaffPeriodCollection;
                 for (var i = 0; i < calculatedResources.Count; i++)
                 {
 					if (!calculatedResources.TryGetValue(i, out var staffingResource)) continue;
-                    skillDay.CompleteSkillStaffPeriodCollection[i].SetCalculatedResource65(
+					skillStaffPeriodCollection[i].SetCalculatedResource65(
                         staffingResource.CalculatedResource);
-                    skillDay.CompleteSkillStaffPeriodCollection[i].Payload.CalculatedLoggedOn =
+                    skillStaffPeriodCollection[i].Payload.CalculatedLoggedOn =
                         staffingResource.CalculatedLoggedOn;
                 }
                 calculatedResources.Clear();

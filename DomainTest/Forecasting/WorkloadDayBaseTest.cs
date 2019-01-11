@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		public void VerifySetOpenHourList()
 		{
 			Assert.AreEqual(1, _workloadDayBase.OpenHourList.Count);
-			Assert.IsInstanceOf<ReadOnlyCollection<TimePeriod>>(_workloadDayBase.OpenHourList);
+			Assert.IsInstanceOf<IList<TimePeriod>>(_workloadDayBase.OpenHourList);
 		}
 
 		[Test]

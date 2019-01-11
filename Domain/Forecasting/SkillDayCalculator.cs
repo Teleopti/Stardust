@@ -199,8 +199,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 var endDateTime = skillDay.CurrentDate.AddDays(10).Date;
                 for (var currentDateTime = TimeZoneHelper.ConvertToUtc(skillDay.CurrentDate.Date, _skill.TimeZone); currentDateTime < endDateTime; currentDateTime = currentDateTime.AddMinutes(skillResolution))
                 {
-                    ISkillStaffPeriod foundSkillStaffPeriod;
-                    if (!_skillStaffPeriods.TryGetValue(currentDateTime, out foundSkillStaffPeriod))
+					if (!_skillStaffPeriods.TryGetValue(currentDateTime, out var foundSkillStaffPeriod))
                         break;
                     if (!foundSkillStaffPeriod.IsAvailable) continue;
 
