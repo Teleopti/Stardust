@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			foreach (var skillSet in affectedSkills)
 			{
-				var cascadingSkillsInSkillSet = cascadingSkillsForActivity.Where(x => skillSet.Skills.Contains(x)).ToArray();
+				var cascadingSkillsInSkillSet = cascadingSkillsForActivity.Intersect(skillSet.Skills).ToArray();
 				if(!cascadingSkillsInSkillSet.Any())
 					continue;
 
 				var lowestCascadingIndex = cascadingSkillsInSkillSet.Min(x => x.CascadingIndex.Value);
-				var primarySkills = cascadingSkillsInSkillSet.Where(x => x.CascadingIndex.Value==lowestCascadingIndex);
+				var primarySkills = cascadingSkillsInSkillSet.Where(x => x.CascadingIndex.Value==lowestCascadingIndex).ToArray();
 				var cascadingSubSkills = new List<SubSkillsWithSameIndex>();
-				foreach (var skillInSameChainAsPrimarySkill in cascadingSkillsInSkillSet.Where(x => !primarySkills.Contains(x)))
+				foreach (var skillInSameChainAsPrimarySkill in cascadingSkillsInSkillSet.Except(primarySkills))
 				{
 					var last = cascadingSubSkills.LastOrDefault();
 					if (last == null || !skillInSameChainAsPrimarySkill.CascadingIndex.Value.Equals(last.CascadingIndex))

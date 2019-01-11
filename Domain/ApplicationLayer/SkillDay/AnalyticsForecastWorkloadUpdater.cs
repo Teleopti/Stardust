@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		{
 			var newForecastWorkloads = createForecastWorkloads(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval).ToList();
 			var currentForecastWorkloads = getCurrentForecastWorkloads(skillDay, analyticsDateIds, intervalsPerDay, minutesPerInterval).ToList();
-			var workloadsToRemove = currentForecastWorkloads.Where(x => !newForecastWorkloads.Contains(x)).ToList();
+			var workloadsToRemove = currentForecastWorkloads.Except(newForecastWorkloads).ToArray();
 
 			addOrUpdateWorkloads(newForecastWorkloads);
 			removeWorkloads(workloadsToRemove);

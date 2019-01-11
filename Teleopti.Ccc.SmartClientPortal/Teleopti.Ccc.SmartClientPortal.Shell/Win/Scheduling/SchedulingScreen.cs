@@ -630,7 +630,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_last6KeyStrokes = _last6KeyStrokes.Substring(Math.Max(0, _last6KeyStrokes.Length - 6));
 			if (_last6KeyStrokes.ToUpper() == "TOGGLE")
 			{
-				MessageBox.Show(@"todo: här ska det laddas om togglar");
+				_container.Resolve<IToggleFiller>().RefetchToggles();
+				MessageBox.Show(@"Toggles reloaded!");
 			}
 			if (e.KeyCode == Keys.F8 && e.Modifiers == Keys.Shift)
 			{
@@ -2041,7 +2042,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (request == null) return;
 
 			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-			selectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(localDate));
+			_scheduleView?.SelectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(localDate));
 		}
 
 		private void setupRequestViewButtonStates()
@@ -3316,7 +3317,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						_scheduleView.RefreshRangeForAgentPeriod(e.ModifiedPerson, e.ModifiedPeriod);
 					if (e.Modifier == ScheduleModifier.UndoRedo)
 					{
-						selectCellFromPersonDate(e.ModifiedPerson, e.ModifiedPart.DateOnlyAsPeriod.DateOnly);
+						_scheduleView?.SelectCellFromPersonDate(e.ModifiedPerson, e.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 					}
 					if (e.Modifier != ScheduleModifier.MessageBroker)
 						enableSave();
@@ -3542,59 +3543,47 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void disableAllExceptCancelInRibbon()
 		{
-			_uIEnabled = false;
-			using (PerformanceOutput.ForOperation("disableAllExceptCancelInRibbon"))
-			{
-				toolStripTabItemHome.Panel.Enabled = false;
-				toolStripTabItemChart.Panel.Enabled = false;
-				toolStripTabItem1.Panel.Enabled = false;
-				toolStripMenuItemQuickAccessUndo.ShortcutKeys = Keys.None;
-				ControlBox = false;
-				toggleQuickButtonEnabledState(false);
-				contextMenuViews.Enabled = false;
-				toolStripButtonShrinkage.Enabled = false;
-				toolStripButtonValidation.Enabled = false;
-				toolStripButtonCalculation.Enabled = false;
-				schedulerSplitters1.Grid.Cursor = Cursors.WaitCursor;
-				schedulerSplitters1.Grid.Enabled = false;
-				schedulerSplitters1.Grid.Cursor = Cursors.WaitCursor;
-				schedulerSplitters1.DisableViewShiftCategoryDistribution();
-				schedulerSplitters1.ElementHost1.Enabled = false; //shifteditor
-				toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, true);
-				ribbonControlAdv1.Cursor = Cursors.AppStarting;
-				if (toolStripSpinningProgressControl1.SpinningProgressControl == null)
-					toolStripSpinningProgressControl1 = new ToolStripSpinningProgressControl();
-				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = true;
-				disableSave();
-				toolStripStatusLabelContractTime.Enabled = false;
-			}
+			enableOrDisableAllExceptCancelInRibbon(false);
+			toolStripMenuItemQuickAccessUndo.ShortcutKeys = Keys.None;
+			schedulerSplitters1.Grid.Cursor = Cursors.WaitCursor;
+			schedulerSplitters1.Grid.Enabled = false;
+			schedulerSplitters1.Grid.Cursor = Cursors.WaitCursor;
+			schedulerSplitters1.ElementHost1.Enabled = false; //shifteditor
+			ribbonControlAdv1.Cursor = Cursors.AppStarting;
+			disableSave();
+		}
+
+		private void enableOrDisableAllExceptCancelInRibbon(bool enable)
+		{
+			_uIEnabled = enable;
+			ControlBox = enable;
+			contextMenuViews.Enabled = enable;
+			toolStripTabItemHome.Panel.Enabled = enable;
+			toolStripTabItemChart.Panel.Enabled = enable;
+			toolStripTabItem1.Panel.Enabled = enable;
+			toolStripButtonShrinkage.Enabled = enable;
+			toolStripButtonValidation.Enabled = enable;
+			toolStripButtonCalculation.Enabled = enable;
+			toolStripStatusLabelContractTime.Enabled = enable;
+			if (toolStripSpinningProgressControl1.SpinningProgressControl == null)
+				toolStripSpinningProgressControl1 = new ToolStripSpinningProgressControl();
+			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = enable;
+			schedulerSplitters1.EnableOrDisableViewShiftCategoryDistribution(enable);
+
+			toggleQuickButtonEnabledState(enable);
+			toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, !enable);
 		}
 
 		private void enableAllExceptCancelInRibbon()
 		{
-			_uIEnabled = true;
-			toolStripTabItemHome.Panel.Enabled = true;
-			toolStripTabItemChart.Panel.Enabled = true;
-			toolStripTabItem1.Panel.Enabled = true;
-			toolStripButtonShrinkage.Enabled = true;
-			toolStripButtonValidation.Enabled = true;
-			toolStripButtonCalculation.Enabled = true;
+			enableOrDisableAllExceptCancelInRibbon(true);
 			toolStripMenuItemQuickAccessUndo.ShortcutKeys = Keys.Control | Keys.Z;
-			ControlBox = true;
-			contextMenuViews.Enabled = true;
-			toggleQuickButtonEnabledState(true);
-			toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, false);
 			enableUndoRedoButtons();
 			ribbonControlAdv1.Cursor = Cursors.Default;
 			updateRibbon(ControlType.SchedulerGridMain);
 			//av nån #%¤#¤%#¤% anledning tänds alla knappar i toggleQuick... ovan. Måste explicit tända/släcka igen.
 			_schedulerMessageBrokerHandler.NotifyMessageQueueSizeChange();
 			disableButtonsIfTeamLeaderMode();
-			schedulerSplitters1.EnableViewShiftCategoryDistribution();
-			toolStripStatusLabelContractTime.Enabled = true;
-			if (toolStripSpinningProgressControl1.SpinningProgressControl == null)
-				toolStripSpinningProgressControl1 = new ToolStripSpinningProgressControl();
-			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
 		}
 
 		private void disableButtonsIfTeamLeaderMode()
@@ -3835,25 +3824,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if (scheduleFilterView.ShowDialog() == DialogResult.OK)
 			{
-				SchedulerState.SchedulerStateHolder.FilterPersons(scheduleFilterView.SelectedAgentGuids());
-
-				toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
-
-				if (_scheduleView != null)
-				{
-					if (_scheduleView.Presenter.SortCommand == null || _scheduleView.Presenter.SortCommand is NoSortCommand)
-						_scheduleView.Presenter.ApplyGridSort();
-					else
-						_scheduleView.Sort(_scheduleView.Presenter.SortCommand);
-
-					schedulerSplitters1.Grid.Refresh();
-					GridHelper.GridlockWriteProtected(SchedulerState.SchedulerStateHolder, LockManager);
-					schedulerSplitters1.Grid.Refresh();
-				}
-				if (_requestView != null)
-					_requestView.FilterPersons(SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Keys);
+				_scheduleView?.ApplyFilter(scheduleFilterView.SelectedAgentGuids(), SchedulerState.SchedulerStateHolder, LockManager);
+				_requestView?.FilterPersons(SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Keys);
 				drawSkillGrid();
 			}
+
+			toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
 		}
 
 		private void prepareAgentRestrictionView(ScheduleViewBase detailView,
@@ -4212,6 +4188,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadBpos(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
+			if (_teamLeaderMode) return;
 			stateHolder.SchedulerStateHolder.SchedulingResultState.ExternalStaff = _container.Resolve<ExternalStaffProvider>().Fetch(stateHolder.SchedulerStateHolder.SchedulingResultState.Skills, stateHolder.SchedulerStateHolder.RequestedPeriod.Period());
 		}
 
@@ -4274,11 +4251,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			}
 			return 1;
-		}
-
-		private void selectCellFromPersonDate(IPerson person, DateOnly localDate)
-		{
-			_scheduleView?.SelectCellFromPersonDate(person, localDate);
 		}
 
 		private void reloadChart()
@@ -5194,7 +5166,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (_lastModifiedPart != null && _lastModifiedPart.ModifiedPart != null)
 			{
-				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson, _lastModifiedPart.ModifiedPart.DateOnlyAsPeriod.DateOnly);
+				_scheduleView?.SelectCellFromPersonDate(_lastModifiedPart.ModifiedPerson, _lastModifiedPart.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 			}
 
 			RecalculateResources();

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IHandleEvent<TEvent> where TEvent : IEvent
 	{
+		[UpdateToggles]
 		void Handle(TEvent @event);
 	}
 

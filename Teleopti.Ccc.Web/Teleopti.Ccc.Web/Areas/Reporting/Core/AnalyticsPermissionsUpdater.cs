@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 
 			var currentPermissions = new HashSet<AnalyticsPermission>(_permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId));
 			var currentAnalyticsPermissions = new HashSet<AnalyticsPermission>(_analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId));
-			var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Contains(p)).ToList();
-			var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Contains(p)).ToList();
+			var toBeAdded = currentPermissions.Except(currentAnalyticsPermissions).ToList();
+			var toBeDeleted = currentAnalyticsPermissions.Except(currentPermissions).ToList();
 			_analyticsPermissionRepository.InsertPermissions(toBeAdded);
 			_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
 		}

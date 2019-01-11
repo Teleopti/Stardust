@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			foreach (var groupMember in memberList)
 			{
 				var memberRuleSets = Filter(workShiftRuleSets, groupMember, dateOnly).ToList();
-				var toRemove = commonList.Where(workShiftRuleSet => !memberRuleSets.Contains(workShiftRuleSet)).ToList();
+				var toRemove = commonList.Except(memberRuleSets).ToArray();
 				foreach (var workShiftRuleSet in toRemove)
 				{
 					commonList.Remove(workShiftRuleSet);

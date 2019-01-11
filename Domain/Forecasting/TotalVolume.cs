@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                                                                  Where(
                                                                                  t =>
                                                                                  dates.Contains(t.CurrentDate)).
-                                                                                 ToList(), TaskOwnerPeriodType.Other);
+                                                                                 ToArray(), TaskOwnerPeriodType.Other);
                 if (taskOwnerPeriodHistory.TaskOwnerDayCollection.Count == 0) continue;
                 _outliersWithStatistics.Add(outlier, taskOwnerPeriodHistory);
             }

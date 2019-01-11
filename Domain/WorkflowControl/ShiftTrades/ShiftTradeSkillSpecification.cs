@@ -43,16 +43,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		private static IList<ISkill> getListOfSkills(IEnumerable<ISkill> listOne, IEnumerable<ISkill> listTwo)
 		{
-			IList<ISkill> listOfSkills = new List<ISkill>();
-			foreach (var skill in listOne.Where(skill => !listOfSkills.Contains(skill)))
-			{
-				listOfSkills.Add(skill);
-			}
-			foreach (var skill in listTwo.Where(skill => !listOfSkills.Contains(skill)))
-			{
-				listOfSkills.Add(skill);
-			}
-			return listOfSkills;
+			return listOne.Concat(listTwo).Distinct().ToList();
 		}
 
 		public string DenyReason => nameof(Resources.ShiftTradeSkillDenyReason);

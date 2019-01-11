@@ -21,6 +21,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+	  <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -161,6 +162,7 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoaderTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestFixtureTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestMethodTest.cs" />
+	  <Compile Include="Aop\EventHandlersNeedsToBeVirtualTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessorComplexFlowTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestFilterWithNoValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel.cs" />

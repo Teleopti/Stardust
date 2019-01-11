@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				uow.Reassociate(scheduleRange.Person);
 				var solved = solveConflicts(uow, diff, scheduleRange);
 				var unsavedWithoutConflicts = new DifferenceCollection<IPersistableScheduleData>();
-				diff.Where(x => !solved.Contains(x)).ForEach(x => unsavedWithoutConflicts.Add(x));
+				diff.Except(solved).ForEach(x => unsavedWithoutConflicts.Add(x));
 
 				_clearScheduleEvents.Execute(diff);
 				_persistScheduleChanges.Execute(unsavedWithoutConflicts, (IUnvalidatedScheduleRangeUpdate) scheduleRange);

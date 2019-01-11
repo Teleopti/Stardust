@@ -16,17 +16,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 
 		public IShiftCategoryDistributionModel Model { get; private set; }
 
-		public void DisableViewShiftCategoryDistribution()
-		{
-			if(Model != null)
-				Model.ShouldUpdateViews = false;
-		}
-
-		public void EnableViewShiftCategoryDistribution()
+		public void EnableOrDisableViewShiftCategoryDistribution(bool enable)
 		{
 			if (Model == null)
 				return;
-			Model.ShouldUpdateViews = true;
+			Model.ShouldUpdateViews = enable;
 		}
 
 		public void SetModel(IShiftCategoryDistributionModel model)

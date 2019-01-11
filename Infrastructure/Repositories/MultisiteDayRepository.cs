@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (uniqueDays.Count != multisiteDays.Count)
             {
                 var currentDateTimes = multisiteDays.Select(s => s.MultisiteDayDate);
-                var datesToProcess = uniqueDays.Where(u => !currentDateTimes.Contains(u));
+                var datesToProcess = uniqueDays.Except(currentDateTimes);
 
                 foreach (var uniqueDate in datesToProcess)
                 {

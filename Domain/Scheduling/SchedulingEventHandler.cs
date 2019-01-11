@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return Enumerable.Empty<IPerson>();
 			var schedules = _schedulerStateHolder().Schedules;
 			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
-			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod);
+			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod).ToArray();
 
 			foreach (var agent in filteredAgents)
 			{
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
 			var agentsWithWhiteSpotsAfterScheduling = _agentsWithWhiteSpots.Execute(schedules, filteredAgents, selectedPeriod);
 
-			return filteredAgents.Where(agent => !agentsWithWhiteSpotsAfterScheduling.Contains(agent)).ToList();
+			return filteredAgents.Except(agentsWithWhiteSpotsAfterScheduling).ToList();
 		}
 	}
 }
