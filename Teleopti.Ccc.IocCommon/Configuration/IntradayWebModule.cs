@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayStatisticsService>();
 			builder.RegisterType<IntradayStaffingService>().As<IIntradayStaffingService>();
 
-			if (_configuration.Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128))
+			if (_configuration.IsToggleEnabled(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128))
 			{
 				builder.RegisterType<SkillCombinationResourcesWithoutBpoToggleOn>().As<ISkillCombinationResourcesWithoutBpo>()
 					.SingleInstance();
