@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
@@ -59,6 +59,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new SiteBankHolidayCalendarRepository(CurrUnitOfWork).FindSiteBankHolidayCalendar(_site);
 			Assert.AreEqual("site", loadedSiteBankHolidayCalendars.Site.Description.Name);
 			Assert.AreEqual("ChinaBankHoliday2019", loadedSiteBankHolidayCalendars.BankHolidayCalendarsForSite.First().Name);
+		}
+
+		[Test]
+		public void VerifyCanLoadSiteBankHolidayCalendarMatchResultByCalendar()
+		{
+			var siteBankHolidayCalendar = new SiteBankHolidayCalendar
+			{
+				Site = _site,
+				BankHolidayCalendarsForSite = new List<IBankHolidayCalendar> { _bankHolidayCalendar }
+			};
+			PersistAndRemoveFromUnitOfWork(siteBankHolidayCalendar);
+
+			var result =
+				new SiteBankHolidayCalendarRepository(CurrUnitOfWork).FindSiteBankHolidayCalendar(_bankHolidayCalendar);
+			Assert.AreEqual(1, result.Count());
+			Assert.AreEqual(_site.Id.Value, result.First().SiteId);
+			Assert.AreEqual(_bankHolidayCalendar.Id.Value, result.First().CalendarId);
 		}
 
 		[Test]
