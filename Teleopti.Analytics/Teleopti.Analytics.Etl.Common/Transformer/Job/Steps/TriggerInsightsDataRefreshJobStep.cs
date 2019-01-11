@@ -34,6 +34,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			ITopicClient topicClient = null;
 
 			var insightsConfig = _jobParameters.InsightsConfig;
+			if (insightsConfig == null || !insightsConfig.IsValid())
+			{
+				return;
+			}
+
 			try
 			{
 				topicClient = _serviceBusTopicClientProvider.CreateTopicClient(insightsConfig.ServiceBusAddress,
