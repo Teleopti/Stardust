@@ -1,22 +1,18 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-import { configureTestSuite } from '@wfm/test';
+import { configureTestSuite, MockComponent } from '@wfm/test';
 import { IStateService } from 'angular-ui-router';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { NzToolTipModule } from 'ng-zorro-antd';
 import { ReplaySubject } from 'rxjs';
-import { ChangePasswordComponent } from 'src/app/authentication/components/change-password/change-password.component';
 import { PasswordService } from 'src/app/authentication/services/password.service';
 import { NavigationService, ThemeService, TogglesService, UserService } from 'src/app/core/services';
 import { AreaService } from '../../shared/area.service';
 import { BusinessUnitService } from '../../shared/businessunit.service';
 import { ToggleMenuService } from '../../shared/toggle-menu.service';
-import { BusinessUnitSelectorComponent } from '../businessunit-selector';
 import { FeedbackComponent } from '../feedback';
-import { SettingsMenuComponent } from '../settings-menu';
 import { TopNavigationComponent } from './top-navigation.component';
+import { MockTranslationModule } from '@wfm/mocks/translation';
 
 class MockStateService implements Partial<IStateService> {
 	public current: {
@@ -49,18 +45,11 @@ describe('TopNavigation', () => {
 		TestBed.configureTestingModule({
 			declarations: [
 				TopNavigationComponent,
-				BusinessUnitSelectorComponent,
 				FeedbackComponent,
-				SettingsMenuComponent,
-				ChangePasswordComponent
+				MockComponent({ selector: 'settings-menu' }),
+				MockComponent({ selector: 'business-unit-selector' })
 			],
-			imports: [
-				TranslateModule.forRoot(),
-				NgZorroAntdModule.forRoot(),
-				FormsModule,
-				ReactiveFormsModule,
-				HttpClientTestingModule
-			],
+			imports: [MockTranslationModule, NzToolTipModule, HttpClientTestingModule],
 			providers: [
 				{
 					provide: '$state',

@@ -16,7 +16,7 @@ import { BankCalendarDataService } from '../../shared';
 export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 	@Input() bankHolidayCalendarsList: BankHolidayCalendarItem[];
 
-	dateFormat: string = 'YYYY-MM-DD';
+	dateFormat = 'YYYY-MM-DD';
 	sitesList: GroupPageSiteItem[] = [];
 
 	constructor(
@@ -32,10 +32,10 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 
 			this.bankCalendarDataService.getSiteBankHolidayCalendars().subscribe(siteCalendars => {
 				this.sitesList.forEach(s => {
-					s.SelectedCalendarId = '';
-					let site = siteCalendars.filter(sc => sc.Site == s.Id)[0];
-					if (site) {
-						//Currently we only support setting one calendar to site
+					s.SelectedCalendarId = null;
+					const site = siteCalendars.filter(sc => sc.Site === s.Id)[0];
+					if (site && site.Calendars[0] && site.Calendars[0].length > 0) {
+						// Currently we only support setting one calendar to site
 						s.SelectedCalendarId = site.Calendars[0];
 					}
 				});
@@ -44,7 +44,7 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 	}
 
 	updateCalendarForSite(calId: string, site: GroupPageSiteItem) {
-		let cals: string[] = [];
+		const cals: string[] = [];
 
 		if (calId && calId.length > 0) {
 			cals.push(calId);
@@ -58,12 +58,12 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 			result => {
 				if (result) {
 				} else {
-					site.SelectedCalendarId = '';
+					site.SelectedCalendarId = null;
 					this.networkError();
 				}
 			},
 			error => {
-				site.SelectedCalendarId = '';
+				site.SelectedCalendarId = null;
 				this.networkError(error);
 			}
 		);

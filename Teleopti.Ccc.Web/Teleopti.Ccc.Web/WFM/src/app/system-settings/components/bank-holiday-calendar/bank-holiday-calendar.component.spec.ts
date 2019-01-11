@@ -1,22 +1,20 @@
-import { DOCUMENT } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { DOCUMENT, registerLocaleData } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-import { registerLocaleData } from '@angular/common';
-import zh from '@angular/common/locales/zh';
 import en from '@angular/common/locales/en';
+import zh from '@angular/common/locales/zh';
 
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { configureTestSuite } from '@wfm/test';
-import { UserService, TogglesService } from 'src/app/core/services';
-import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component';
-import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
-import { BankHolidayCalendarEditComponent } from '../bank-holiday-calendar-edit';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { TogglesService, UserService } from 'src/app/core/services';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
+import { BankHolidayCalendarAddComponent } from '../bank-holiday-calendar-add';
 import { BankHolidayCalendarAssignToSitesComponent } from '../bank-holiday-calendar-assign-to-sites';
+import { BankHolidayCalendarEditComponent } from '../bank-holiday-calendar-edit';
+import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component';
 
 describe('BankHolidayCalendarComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarComponent>;
@@ -39,7 +37,7 @@ describe('BankHolidayCalendarComponent', () => {
 			],
 			imports: [
 				TranslateModule.forRoot(),
-				NgZorroAntdModule.forRoot(),
+				NgZorroAntdModule,
 				FormsModule,
 				ReactiveFormsModule,
 				HttpClientTestingModule,
@@ -74,7 +72,7 @@ describe('BankHolidayCalendarComponent', () => {
 	}));
 
 	it('should render title', async(() => {
-		let bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
 
 		expect(bankHolidayCalendarSettings).toBeTruthy();
 		expect(bankHolidayCalendarSettings.getElementsByTagName('h2').length).toBe(1);
@@ -86,7 +84,7 @@ describe('BankHolidayCalendarComponent', () => {
 	it('should show add new bank holiday calendar panel after clicking plus icon', async(() => {
 		document.getElementsByClassName('add-bank-holiday-calendar-icon')[0].dispatchEvent(new Event('click'));
 
-		let addCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+		const addCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
 
 		expect(addCalendarPanel).toBeTruthy();
 	}));
@@ -120,8 +118,8 @@ describe('BankHolidayCalendarComponent', () => {
 
 		fixture.detectChanges();
 
-		let bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
-		let list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
 		expect(list.length).toBe(1);
 
@@ -131,10 +129,10 @@ describe('BankHolidayCalendarComponent', () => {
 				.length
 		).toBe(2);
 
-		let firstRow = list[0]
+		const firstRow = list[0]
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item')[0];
-		let secondRow = list[0]
+		const secondRow = list[0]
 			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
 			.getElementsByTagName('nz-list-item')[1];
 
@@ -184,8 +182,8 @@ describe('BankHolidayCalendarComponent', () => {
 
 		fixture.detectChanges();
 
-		let bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
-		let list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
 		expect(list.length).toBe(2);
 		expect(
@@ -226,8 +224,8 @@ describe('BankHolidayCalendarComponent', () => {
 
 		fixture.detectChanges();
 
-		let bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
-		let list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
 		expect(list.length).toBe(1);
 		expect(list[0].getElementsByClassName('anticon-delete').length).toBe(1);
@@ -281,8 +279,8 @@ describe('BankHolidayCalendarComponent', () => {
 
 		fixture.detectChanges();
 
-		let bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
-		let list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 
 		list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
@@ -337,12 +335,12 @@ describe('BankHolidayCalendarComponent', () => {
 
 		fixture.detectChanges();
 
-		let bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
-		let list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
 		list[0].getElementsByClassName('anticon-edit')[0].parentElement.dispatchEvent(new Event('click'));
 		fixture.detectChanges();
 
-		let editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
 		editBankHolidayCalendarPanel
 			.getElementsByClassName('operation-buttons')[0]
 			.childNodes[1].dispatchEvent(new Event('click'));
@@ -395,7 +393,7 @@ describe('BankHolidayCalendarComponent', () => {
 	});
 
 	it('should show site tab when WFM_Setting_AssignBankHolidayCalendarsToSites_79899 is turn on', async(() => {
-		let toggleReq = httpTestingController.match('../ToggleHandler/AllToggles');
+		const toggleReq = httpTestingController.match('../ToggleHandler/AllToggles');
 		toggleReq[0].flush({
 			WFM_Setting_BankHolidayCalendar_Create_79297: true,
 			WFM_Setting_AssignBankHolidayCalendarsToSites_79899: true

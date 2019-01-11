@@ -4,14 +4,13 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { configureTestSuite } from '@wfm/test';
 import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarAssignToSitesComponent } from './bank-holiday-calendar-assign-to-sites.component';
-
 import { GroupPageService } from 'src/app/shared/services/group-page-service';
+import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
 
 describe('BankHolidayCalendarAssignToSitesComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAssignToSitesComponent>;
@@ -25,14 +24,14 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [BankHolidayCalendarAssignToSitesComponent],
 			imports: [
-				TranslateModule.forRoot(),
-				NgZorroAntdModule.forRoot(),
+				MockTranslationModule,
+				NgZorroAntdModule,
 				FormsModule,
 				ReactiveFormsModule,
 				HttpClientTestingModule,
 				NoopAnimationsModule
 			],
-			providers: [TranslateService, UserService, GroupPageService]
+			providers: [MockTranslateService, UserService, GroupPageService]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BankHolidayCalendarAssignToSitesComponent);
@@ -67,15 +66,15 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 		fixture.detectChanges();
 
-		let container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
-		let list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
-		let listItems = list.getElementsByTagName('nz-list-item');
+		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
+		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
+		const listItems = list.getElementsByTagName('nz-list-item');
 
 		expect(listItems[0].innerHTML.indexOf('BTS') > -1).toBeTruthy();
 		expect(listItems[1].innerHTML.indexOf('Dubai') > -1).toBeTruthy();
 	});
 
-	it("should preset sites' selected calendar", () => {
+	it('should preset sites selected calendar', () => {
 		component.bankHolidayCalendarsList = [
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
@@ -185,9 +184,9 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 		fixture.detectChanges();
 
-		let container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
-		let list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
-		let listItems = list.getElementsByTagName('nz-list-item');
+		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
+		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
+		const listItems = list.getElementsByTagName('nz-list-item');
 
 		listItems[0].getElementsByTagName('input')[0].dispatchEvent(new Event('click'));
 
@@ -253,9 +252,9 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 		fixture.detectChanges();
 
-		let container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
-		let list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
-		let listItems = list.getElementsByTagName('nz-list-item');
+		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
+		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
+		const listItems = list.getElementsByTagName('nz-list-item');
 
 		listItems[0].getElementsByTagName('input')[0].dispatchEvent(new Event('click'));
 
@@ -267,6 +266,6 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 
 		fixture.detectChanges();
 
-		expect(component.sitesList[0].SelectedCalendarId).toBe('');
+		expect(component.sitesList[0].SelectedCalendarId).toBe(null);
 	});
 });
