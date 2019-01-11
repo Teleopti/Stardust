@@ -238,7 +238,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			item.SubItems.Add(agentCount.ToString(CultureInfo.InvariantCulture).PadLeft(8));
 			var agentPercent = new Percent(agentCount / (double)_personList.Count());
 			item.SubItems.Add(Math.Round(agentPercent.ValueAsPercent(), 2).ToString("F").PadLeft(5));
-			var forecastForSkill = _skillDayForecastForSkills[skill];
+			var forecastForSkill = TimeSpan.Zero;
+			_skillDayForecastForSkills.TryGetValue(skill, out forecastForSkill);
 			item.SubItems.Add(timeFormatter.GetLongHourMinuteTimeString(forecastForSkill).PadLeft(7));
 			var forecastPercent = _totalForecastedForDate == TimeSpan.Zero
 				? new Percent()

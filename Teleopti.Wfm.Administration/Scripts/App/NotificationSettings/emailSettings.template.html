@@ -1,0 +1,58 @@
+﻿<style>
+	.message {
+		padding: 15px;
+		margin-top: 10px;
+	}
+</style>
+
+<div ng-if="$ctrl.isAzure">
+	<p class="bg-info message">
+		This is an Azure-environment, so these settings do not apply.
+	</p>
+</div>
+
+<div class="importCaption">Host</div>
+<div>
+	<input class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-disabled="$ctrl.isAzure"  type="text" ng-model="$ctrl.emailSettings.Host" placeholder="SMTP Host" aria-invalid="false">
+</div>
+
+<div class="importCaption">Port</div>
+<div>
+	<input class="form-control ng-pristine ng-untouched ng-valid ng-empty" type="number" ng-disabled="$ctrl.isAzure" ng-model="$ctrl.emailSettings.Port" placeholder="SMTP Port" aria-invalid="false">
+</div>
+
+<div class="importCaption">UseSsl</div>
+<div>
+	<input class="ng-pristine ng-untouched ng-valid ng-empty" type="checkbox" ng-disabled="$ctrl.isAzure" ng-model="$ctrl.emailSettings.Ssl" ng-true-value="true" ng-false-value="false" placeholder="SMTP Use SSL" aria-invalid="false">
+</div>
+
+<div class="importCaption">UseRelay</div>
+<div>
+	<input class="ng-pristine ng-untouched ng-valid ng-empty" type="checkbox" ng-disabled="$ctrl.isAzure" ng-model="$ctrl.emailSettings.Relay" ng-true-value="true" ng-false-value="false" placeholder="SMTP Use Relay" aria-invalid="false">
+</div>
+
+<div class="importCaption">User</div>
+<div>
+	<input class="form-control ng-pristine ng-untouched ng-valid ng-empty" type="text" ng-disabled="$ctrl.isAzure" ng-model="$ctrl.emailSettings.User" placeholder="SMTP User" aria-invalid="false">
+</div>
+
+<div class="importCaption">Password</div>
+<div>
+	<input class="form-control ng-pristine ng-untouched ng-valid ng-empty" type="password" ng-disabled="$ctrl.isAzure" ng-model="$ctrl.emailSettings.Password" placeholder="SMTP password" aria-invalid="false">
+</div>
+
+<div ng-if="$ctrl.error">
+	<p class="bg-danger message">
+		{{$ctrl.message}}
+	</p>
+</div>
+
+<div ng-if="$ctrl.success">
+	<p class="bg-success message">
+		{{$ctrl.message}}
+	</p>
+</div>
+
+<div class="importCaption">
+	<button class="btn btn-primary btn-default" ng-click="$ctrl.postData()" ng-disabled="$ctrl.isAzure">Save</button>
+</div>

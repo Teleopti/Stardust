@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Owin;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -49,7 +50,10 @@ namespace Teleopti.Wfm.Api
 			
 			using (var uow = result.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var businessUnit = _repositoryFactory.CreateBusinessUnitRepository(uow).LoadAllBusinessUnitSortedByName().First();
+				var businessUnit = result.Person.PermissionInformation.HasAccessToAllBusinessUnits()
+					? _repositoryFactory.CreateBusinessUnitRepository(uow).LoadAllBusinessUnitSortedByName().First()
+					: result.Person.PermissionInformation.BusinessUnitAccessCollection().FirstOrDefault();
+
 				_logOnOff.LogOn(result.DataSource, result.Person, businessUnit);
 			}
 			

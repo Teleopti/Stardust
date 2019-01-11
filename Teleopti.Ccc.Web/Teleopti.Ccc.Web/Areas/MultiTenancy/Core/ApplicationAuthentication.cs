@@ -38,9 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 
 		public TenantAuthenticationResult Logon(string userName, string password)
 		{
-			var personInfo = _applicationUserQuery.Find(userName);
-			if (personInfo == null)
-				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
+			var personInfo = _applicationUserQuery.Find(userName) ?? generatePersonInfoToHandleTimingAttack();
 
 			var applicationLogonInfo = personInfo.ApplicationLogonInfo;
 
@@ -80,6 +78,14 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			};
 		}
 
+		private static PersonInfo generatePersonInfoToHandleTimingAttack()
+		{
+			var personInfo = new PersonInfo();
+			personInfo.ApplicationLogonInfo.SetEncryptedPasswordIfLogonNameExistButNoPassword(
+				"$2a$10$dgiqfELBa7ptsFj6vw1nTOMoVBoVxAvgh6Md.eLPbxyMgdd2tn6uS");
+			return personInfo;
+		}
+		
 		private static TenantAuthenticationResult createFailingResult(string failReason)
 		{
 			return new TenantAuthenticationResult

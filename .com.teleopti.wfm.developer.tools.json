@@ -22,6 +22,7 @@
 				"\"%PluginTemp%\\7Zip\\7z.exe\" x -y -o\"%Repo%\" \"%PluginTemp%\\DemoSales2017*.rar\"",
 				"\"Teleopti.Develop.Batflow\\bin\\Debug\\Teleopti.Develop.Batflow.exe\" flow",
 				"CD \"Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM\"",
+				"START /WAIT cmd /c ..\\.node\\npm install",
 				"START ..\\.node\\npm start",
 				"START ..\\.node\\npm run test:rta",
 				"EXIT"

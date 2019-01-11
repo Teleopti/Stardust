@@ -3,11 +3,11 @@ import { NzNotificationService } from 'ng-zorro-antd';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
+	BankHolidayCalendar,
+	BankHolidayCalendarItem,
 	BankHolidayCalendarYear,
 	BankHolidayCalendarYearItem,
-	BankHolidayCalendarDateItem,
-	BankHolidayCalendar,
-	BankHolidayCalendarItem
+	BankHolidayCalendarDateItem
 } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
@@ -23,16 +23,16 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	@Input() bankHolidayCalendarsList: BankHolidayCalendarItem[];
 	@Input() exitEdittingBankCalendar: Function;
 
-	yearFormat: string = 'YYYY';
-	dateFormat: string = 'YYYY-MM-DD';
+	yearFormat = 'YYYY';
+	dateFormat = 'YYYY-MM-DD';
 
-	nameAlreadyExisting: boolean = false;
+	nameAlreadyExisting = false;
 	selectedYearDate: Date;
-	edittingCalendarName: string;
+	edittingCalendarName;
 	edittingCalendarYears: BankHolidayCalendarYearItem[] = [];
 	editingCalendarTabIndex: number;
 	deletedYears: BankHolidayCalendarYearItem[] = [];
-	isDeleteYearModalVisible: boolean = false;
+	isDeleteYearModalVisible = false;
 	activedYearTab: BankHolidayCalendarYearItem;
 
 	constructor(
@@ -44,10 +44,10 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.edittingCalendarName = this.edittingCalendar.Name;
-		if (this.edittingCalendar.Years.length == 0) return;
+		if (this.edittingCalendar.Years.length === 0) return;
 
 		this.edittingCalendar.Years.forEach(y => {
-			let year: BankHolidayCalendarYearItem = {
+			const year: BankHolidayCalendarYearItem = {
 				Year: y.Year,
 				YearDate: new Date(y.Year.toString()),
 				Dates: y.Dates,
@@ -88,28 +88,28 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	checkNewCalendarName() {
 		this.nameAlreadyExisting =
-			this.edittingCalendarName != this.edittingCalendar.Name &&
+			this.edittingCalendarName !== this.edittingCalendar.Name &&
 			this.bankHolidayCalendarsList.some(c => c.Name === this.edittingCalendarName);
 	}
 
 	newYearTab(date: Date): void {
-		let newYearDate = new Date(
+		const newYearDate = new Date(
 			moment(date)
 				.startOf('year')
 				.format(this.dateFormat)
 		);
-		let yearStr = moment(newYearDate).format(this.yearFormat);
-		if (this.edittingCalendarYears.some(y => y.Year == yearStr)) {
+		const yearStr = moment(newYearDate).format(this.yearFormat);
+		if (this.edittingCalendarYears.some(y => y.Year === yearStr)) {
 			return;
 		}
 
 		this.edittingCalendarYears.forEach(y => (y.Active = false));
 
-		let newYearItem = {
+		const newYearItem = {
 			Year: yearStr,
 			YearDate: this.selectedYearDate,
-			DisabledDate: date => {
-				return moment(date) < moment(yearStr).startOf('year') || moment(date) > moment(yearStr).endOf('year');
+			DisabledDate: d => {
+				return moment(d) < moment(yearStr).startOf('year') || moment(d) > moment(yearStr).endOf('year');
 			},
 			Active: true,
 			Dates: [],
@@ -152,7 +152,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	dateChangeCallback(date: Date, year: BankHolidayCalendarYearItem) {
 		year.Dates.forEach(d => (d.IsLastAdded = false));
-		let index = year.SelectedDates.indexOf(date.getTime());
+		const index = year.SelectedDates.indexOf(date.getTime());
 
 		if (index > -1) {
 			year.Dates[index].IsLastAdded = true;
@@ -163,15 +163,15 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	}
 
 	addDateForYear(date: Date, year: BankHolidayCalendarYearItem) {
-		let newDate: BankHolidayCalendarDateItem = {
+		const newDate: BankHolidayCalendarDateItem = {
 			Date: moment(date).format(this.dateFormat),
 			Description: this.translate.instant('BankHoliday'),
 			IsLastAdded: true
 		};
 
 		if (year.ModifiedDates) {
-			let modifiedDate = year.ModifiedDates.filter(d => {
-				return d.Date == newDate.Date;
+			const modifiedDate = year.ModifiedDates.filter(d => {
+				return d.Date === newDate.Date;
 			})[0];
 			if (modifiedDate) {
 				modifiedDate.IsDeleted = false;
@@ -196,12 +196,12 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	}
 
 	removeDateOfYear(date: BankHolidayCalendarDateItem, year: BankHolidayCalendarYearItem) {
-		let index = year.Dates.indexOf(date);
-		let deletedDate = year.Dates.splice(index, 1)[0];
+		const index = year.Dates.indexOf(date);
+		const deletedDate = year.Dates.splice(index, 1)[0];
 		if (deletedDate.Id) {
 			deletedDate.IsDeleted = true;
-			let modifiedDate = year.ModifiedDates.filter(d => {
-				return d.Date == deletedDate.Date;
+			const modifiedDate = year.ModifiedDates.filter(d => {
+				return d.Date === deletedDate.Date;
 			})[0];
 
 			if (modifiedDate) modifiedDate.IsDeleted = true;
@@ -210,7 +210,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 		year.SelectedDates.splice(index, 1);
 		if (year.Dates[0]) {
-			let lastAddedItem = year.Dates.filter(d => {
+			const lastAddedItem = year.Dates.filter(d => {
 				return d.IsLastAdded;
 			})[0];
 			if (lastAddedItem) year.YearDate = new Date(lastAddedItem.Date);
@@ -252,7 +252,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			return moment(c.Year) < moment(n.Year) ? -1 : 1;
 		});
 
-		let bankHolidayCalendar: BankHolidayCalendar = {
+		const bankHolidayCalendar: BankHolidayCalendar = {
 			Id: this.edittingCalendar.Id,
 			Name: this.edittingCalendarName,
 			Years: this.buildYearsForPost(this.edittingCalendarYears.concat(this.deletedYears))
@@ -260,8 +260,8 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 		this.bankCalendarDataService.saveExistingHolidayCalendar(bankHolidayCalendar).subscribe(
 			result => {
-				let calItem = result as BankHolidayCalendarItem;
-				let curYear = moment().year();
+				const calItem = result as BankHolidayCalendarItem;
+				const curYear = moment().year();
 
 				calItem.CurrentYearIndex = 0;
 				calItem.Years.forEach((y, i) => {
@@ -269,7 +269,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 						d.Date = moment(d.Date).format(this.dateFormat);
 					});
 
-					if (moment(y.Year.toString()).year() == curYear) {
+					if (moment(y.Year.toString()).year() === curYear) {
 						calItem.CurrentYearIndex = i;
 					}
 				});
@@ -288,9 +288,9 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	}
 
 	buildYearsForPost(years: BankHolidayCalendarYearItem[]): BankHolidayCalendarYear[] {
-		let result: BankHolidayCalendarYear[] = [];
+		const result: BankHolidayCalendarYear[] = [];
 		years.forEach(y => {
-			let dates = [...y.ModifiedDates];
+			const dates = [...y.ModifiedDates];
 			dates.forEach(d => {
 				delete d.IsLastAdded;
 			});

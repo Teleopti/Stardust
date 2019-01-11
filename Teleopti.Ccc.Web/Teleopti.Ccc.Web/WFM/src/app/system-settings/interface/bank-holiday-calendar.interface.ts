@@ -31,3 +31,12 @@ export interface BankHolidayCalendarDate {
 export interface BankHolidayCalendarDateItem extends BankHolidayCalendarDate {
 	IsLastAdded?: boolean;
 }
+
+export interface SiteBankHolidayCalendars {
+	Site: string;
+	Calendars: string[];
+}
+
+export interface SiteBankHolidayCalendarsFormData {
+	Settings: SiteBankHolidayCalendars[];
+}

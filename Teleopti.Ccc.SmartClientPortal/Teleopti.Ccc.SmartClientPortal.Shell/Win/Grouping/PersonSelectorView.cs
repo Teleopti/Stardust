@@ -65,11 +65,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 
 		private void makeSureDropdownButtonWorksInRightToLeftCultures()
 		{
-			if (Thread.CurrentPrincipal is TeleoptiPrincipal)
+			if (Thread.CurrentPrincipal is TeleoptiPrincipalForLegacy)
 			{
 				xdtpDate.RightToLeft = RightToLeft.No;
 				xdtpDate.RightToLeft =
-					(((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay)
+					(((ITeleoptiPrincipalForLegacy) TeleoptiPrincipal.CurrentPrincipal).UnsafePerson.PermissionInformation.RightToLeftDisplay)
 						? RightToLeft.Yes
 						: RightToLeft.No;
 			}

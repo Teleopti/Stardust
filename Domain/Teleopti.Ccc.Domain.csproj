@@ -666,6 +666,8 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmGrantLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmInsightsLicenseOption.cs" />
+    <Compile Include="Security\Principal\ClaimsOwner.cs" />
+    <Compile Include="Security\Principal\PersonNotFoundException.cs" />
     <Compile Include="Security\SignedArgument.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\To Staffing\ScheduledStaffingViewModel.cs" />
@@ -723,6 +725,7 @@
     <Compile Include="Staffing\StaffingAudit.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendar.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayDate.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendarMatchResult.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
@@ -1311,7 +1314,6 @@
     <Compile Include="InterfaceLegacy\Domain\ITrackerCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITrueFalseRandomizer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUndoRedoContainer.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IUnsafePersonProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnsavedDaysInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnvalidatedScheduleRangeUpdate.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserTimeZone.cs" />
@@ -3270,9 +3272,8 @@
     <Compile Include="Logon\ClaimSetForApplicationRole.cs" />
     <Compile Include="Security\Principal\ITeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentity.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalForLegacy.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipal.cs" />
-    <Compile Include="Security\Principal\TeleoptiPrincipalCacheable.cs" />
-    <Compile Include="Security\Principal\UnsafePersonProvider.cs" />
     <Compile Include="Security\Principal\UserCulture.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\SystemUser.cs" />

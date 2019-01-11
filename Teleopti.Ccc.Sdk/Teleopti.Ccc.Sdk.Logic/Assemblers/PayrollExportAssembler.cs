@@ -15,14 +15,16 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private readonly IPersonRepository _personRepository;
         private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
+		private readonly IUpdatedBy _updatedBy;
 
-        public PayrollExportAssembler(IPayrollExportRepository payrollExportRepository, IPersonRepository personRepository, IAssembler<IPerson,PersonDto> personAssembler, IAssembler<DateTimePeriod,DateTimePeriodDto> dateTimePeriodAssembler)
+		public PayrollExportAssembler(IPayrollExportRepository payrollExportRepository, IPersonRepository personRepository, IAssembler<IPerson,PersonDto> personAssembler, IAssembler<DateTimePeriod,DateTimePeriodDto> dateTimePeriodAssembler, IUpdatedBy updatedBy)
         {
             _payrollExportRepository = payrollExportRepository;
             _personRepository = personRepository;
             _personAssembler = personAssembler;
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
-        }
+			_updatedBy = updatedBy;
+		}
 
         public override PayrollExportDto DomainEntityToDto(IPayrollExport entity)
         {
@@ -69,7 +71,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
                 payrollExport = new PayrollExport();
                 payrollExport.SetId(dto.Id);
-                SetCreatedBy(payrollExport, TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository));
+                SetCreatedBy(payrollExport, _updatedBy.Person());
+                //SetCreatedBy(payrollExport, TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository));
                 payrollExport.AddPersons(allPersonsForPayrollExport);
             }
             if (payrollExport == null) return null;

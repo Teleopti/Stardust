@@ -202,6 +202,7 @@
     <Compile Include="Transformer\FakeData\SkillFactory.cs" />
     <Compile Include="Transformer\FakeData\WorkloadFactory.cs" />
     <Compile Include="Transformer\FakeData\WorkloadQueueFactory.cs" />
+    <Compile Include="FakeData\FakeGeneralFunctions.cs" />
     <Compile Include="Transformer\ForecastWorkloadTransformerTest.cs" />
     <Compile Include="Transformer\GeneralFunctionsTest.cs" />
     <Compile Include="Transformer\GroupPagePersonTransformerTest.cs" />

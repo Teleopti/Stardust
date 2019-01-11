@@ -4,9 +4,10 @@
 	font-size: 13px;
 
 	.main-menu-link-wrapper {
-		height: 100%;
+		height: calc(100vh - 54px);
 		min-width: 200px;
 		overflow-y: auto;
+		padding-bottom: 10px;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -67,8 +68,8 @@
 	$main-menu-color: rgba(0, 0, 0, 0.87);
 	$main-menu-background-color: #e9e9e9;
 	$main-menu-link-hover-bgcolor: rgba(0, 0, 0, 0.06);
-	$main-menu-link-active-color: #0099ff;
-	$main-menu-link-active-bgcolor: #f4f4f4;
+	$main-menu-link-active-color: #0077c7;
+	$main-menu-link-active-bgcolor: #fcfcfc;
 
 	.main-menu {
 		a {
@@ -101,7 +102,7 @@
 	$main-menu-color: #d1d1d1;
 	$main-menu-background-color: #424242;
 	$main-menu-link-hover-bgcolor: #303030;
-	$main-menu-link-active-color: #0099ff;
+	$main-menu-link-active-color: #0a84d6;
 	$main-menu-link-active-bgcolor: #555;
 
 	.main-menu {

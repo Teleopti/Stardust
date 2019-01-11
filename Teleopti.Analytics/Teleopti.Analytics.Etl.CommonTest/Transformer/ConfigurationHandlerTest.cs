@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.CommonTest.FakeData;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 {
@@ -136,6 +137,25 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			var newConfig = new BaseConfiguration(1033, 30, "UTC", false);
 			_target.SaveBaseConfiguration(newConfig);
 
+			_target.BaseConfiguration.Should().Be.SameInstanceAs(newConfig);
+		}
+
+		[Test]
+		public void ShouldReloadConfigurationAfterSetConnectionString()
+		{
+			var generalFunctions = new FakeGeneralFunctions();
+			_target = new ConfigurationHandler(generalFunctions, new BaseConfigurationValidator());
+
+			var originalConfig = new BaseConfiguration(null, null, null, false);
+			generalFunctions.AddConfiguration("OldConnectionString", originalConfig);
+
+			var newConfig = new BaseConfiguration(1033, 30, "UTC", false);
+			generalFunctions.AddConfiguration("NewConnectionString", newConfig);
+
+			_target.SetConnectionString("OldConnectionString");
+			_target.BaseConfiguration.Should().Be.SameInstanceAs(originalConfig);
+
+			_target.SetConnectionString("NewConnectionString");
 			_target.BaseConfiguration.Should().Be.SameInstanceAs(newConfig);
 		}
 	}

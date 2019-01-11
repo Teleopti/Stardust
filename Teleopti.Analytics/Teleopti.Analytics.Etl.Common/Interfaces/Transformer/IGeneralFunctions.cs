@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-
 namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 {
 	public interface IGeneralFunctions
@@ -26,7 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int? LoadIntervalLengthInUse();
 		void SetConnectionString(string dataMartConnectionString);
 
-		DateOnlyPeriod GetFactQueueAvailblePeriod(int datasourceId);
-		DateOnlyPeriod GetFactAgentAvailblePeriod(int dataSourceId);
+		DateOnlyPeriod GetFactQueueAvailablePeriod(int dataSourceId);
+		DateOnlyPeriod GetFactAgentAvailablePeriod(int dataSourceId);
 	}
 }

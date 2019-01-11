@@ -56,7 +56,8 @@
 				<div title="{{detailsVm.SqlUserOkMessage}}">
 					<fieldset>
 						<legend ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">Credentials to upgrade</legend>
-						<div><input type="checkbox" ng-model="detailsVm.UseIntegratedSecurity" ng-change="detailsVm.CheckImportAdmin()"/> Use Integrated Security
+						<div>
+							<input type="checkbox" ng-model="detailsVm.UseIntegratedSecurity" ng-change="detailsVm.CheckImportAdmin()" /> Use Integrated Security
 						</div>
 
 						<div ng-hide="detailsVm.UseIntegratedSecurity">
@@ -71,64 +72,83 @@
 
 						</div>
 						<label ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.SqlUserOkMessage}}</label>
-						<br/>
+						<br />
 						<a class="btn btn-warning" ng-show="detailsVm.SqlUserOk" ng-click="detailsVm.UpgradeTenant()">Upgrade Tenant</a>
 					</fieldset>
-					<br/>
+					<br />
 					<fieldset>
 						<legend>Create a new Business Unit</legend>
 						<div class="importCaption">Name of the new Business Unit</div>
 						<div>
 							<input class=" form-control" type="text" ng-model="detailsVm.BuName" placeholder="New Business Unit">
 						</div>
-						<br/>
+						<br />
 						<a class="btn  btn-warning" ng-click="detailsVm.AddBu()">Save new Business Unit</a>
-						<br/>
+						<br />
 						<label ng-class="(detailsVm.NewBuOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.NewBusinessUnitMessage}}</label>
 					</fieldset>
 				</div>
 
-			</div>
+				<div class="row">
+					<div class="col-md-12">
+						<br />
 
-		</div>
+						<label for="chkShowLog">
+							<input type="checkbox" id="chkShowLog" ng-model="detailsVm.ShowLog" ng-change="detailsVm.ShowHide()" />
+							Show upgrade log
+						</label>
+					</div>
+			
+				</div>
 
-		<div class="col-md-12">
-			<div class="col-md-12">
-				<br />
+				<div class="row" ng-show="detailsVm.ShowTheLog">
+					<div class="col-md-12">
+						<h3>Database upgrade log</h3>
+						<table>
+							<thead>
+							<tr>
+								<td class="paddingTenantList">Name</td>
+								<td class="paddingTenantList">Time</td>
+								<td class="paddingTenantList">Level</td>
+								<td class="paddingTenantList">Message</td>
+							</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="row in detailsVm.Log" ng-class-odd="'oddRow'">
+								<td class="paddingTenantList">{{row.Tenant}} </td>
+								<td class="paddingTenantList">{{row.Time}} </td>
+								<td class="paddingTenantList">{{row.Level}} </td>
+								<td class="paddingTenantList">{{row.Message}} </td>
 
-				<label for="chkShowLog">
-					<input type="checkbox" id="chkShowLog" ng-model="detailsVm.ShowLog" ng-change="detailsVm.ShowHide()" />
-					Show upgrade log
-				</label>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				
+				</div>					
+
 			</div>
 			
-		</div>
 
-		<div class="col-md-12" ng-show="detailsVm.ShowTheLog">
 			<div class="col-md-12">
-				<h3>Database upgrade log</h3>
-				<table>
-					<thead>
-						<tr>
-							<td class="paddingTenantList">Name</td>
-							<td class="paddingTenantList">Time</td>
-							<td class="paddingTenantList">Level</td>
-							<td class="paddingTenantList">Message</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="row in detailsVm.Log" ng-class-odd="'oddRow'">
-							<td class="paddingTenantList">{{row.Tenant}} </td>
-							<td class="paddingTenantList">{{row.Time}} </td>
-							<td class="paddingTenantList">{{row.Level}} </td>
-							<td class="paddingTenantList">{{row.Message}} </td>
+				<h2>Notifications</h2>
+				<div class="row">
+					<div class="col-md-6">
+						<fieldset>
+							<legend>SMTP settings</legend>
+							<email-settings></email-settings>
+						</fieldset>
+					</div>
+					<div class="col-md-6">
+						<fieldset>
+							<legend>SMS settings</legend>
+							<sms-settings></sms-settings>
+						</fieldset>
+					</div>
+				</div>
+			</div>
 
-						</tr>
-					</tbody>
-				</table>
-			</div>
-				
-			</div>
+		</div>
 	</div>
 
 </div>

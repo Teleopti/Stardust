@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
@@ -47,6 +48,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			result.Success.Should().Be.False();
 			result.FailReason.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
+		}
+
+		[Test]
+		public void NonExistingUserShouldFailWithinSimilarTimeAsExistingUserWithWrongPassword()
+		{
+			var logonName = RandomName.Make();
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
+			ApplicationUserQuery.Has(personInfo);
+
+			var existingUserWatch = new Stopwatch();
+			existingUserWatch.Start();
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() })
+					.Result<TenantAuthenticationResult>();
+			existingUserWatch.Stop();
+
+			var nonExistingUserWatch = new Stopwatch();
+			nonExistingUserWatch.Start();
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = RandomName.Make(), Password = RandomName.Make() })
+					.Result<TenantAuthenticationResult>();
+			nonExistingUserWatch.Stop();
+
+			Math.Abs(existingUserWatch.Elapsed.Subtract(nonExistingUserWatch.Elapsed).TotalMilliseconds).Should().Be
+				.LessThanOrEqualTo(15);
 		}
 
 		[Test]

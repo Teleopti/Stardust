@@ -5,6 +5,12 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 	var toggles = ToggleProvider;
 
 	$stateProvider
+        .state('rta-adjust-adherence', {
+            url: '/rta/adjust-adherence',
+            templateUrl: function () {
+                return 'app/rta/rta/historical-overview/rta.adjust.adherence.html';
+            }
+        })
 		.state('rta-historical-overview', {
 			url: '/rta/historical-overview?siteIds&teamIds',
 			params: {

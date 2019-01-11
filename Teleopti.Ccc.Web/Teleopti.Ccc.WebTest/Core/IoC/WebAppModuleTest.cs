@@ -89,13 +89,17 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 		private ILifetimeScope buildContainer()
 		{
-			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader())));
+			var args = new IocArgs(new ConfigReader());
+			args.TeleoptiPrincipalForLegacy = false;
+			return buildContainer(CommonModule.ToggleManagerForIoc(args));
 		}
 
 		private ILifetimeScope buildContainer(IToggleManager toggleManager)
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager)));
+			var args = new IocArgs(new ConfigReader());
+			args.TeleoptiPrincipalForLegacy = false;
+			builder.RegisterModule(new WebAppModule(new IocConfiguration(args, toggleManager)));
 			builder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
 			builder.RegisterInstance(MockRepository.GenerateMock<IDataSourceForTenant>()).As<IDataSourceForTenant>();
 			builder.RegisterInstance(new FakeHttpContext("")).As<HttpContextBase>();

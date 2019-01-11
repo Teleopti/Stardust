@@ -28,7 +28,12 @@ namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 		{
 			_isDeleted = true;
 		}
-		
+
+		public virtual void Active()
+		{
+			_isDeleted = false;
+		}
+
 		public virtual IBankHolidayCalendar Calendar
 		{
 			get

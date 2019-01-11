@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecas
 			}
 
 			Guid jobResultId;
-			var person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
+			var person = ((ITeleoptiPrincipalForLegacy)TeleoptiPrincipal.CurrentPrincipal).UnsafePerson;
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),

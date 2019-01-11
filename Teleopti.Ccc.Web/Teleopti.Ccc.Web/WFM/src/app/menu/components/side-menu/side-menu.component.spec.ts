@@ -2,9 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite, PageObject } from '@wfm/test';
 import { IStateService } from 'angular-ui-router';
 import { Observable, of, ReplaySubject } from 'rxjs';
+import { MediaQueryService } from 'src/app/browser/services/media-query.service';
 import { Area, AreaService } from '../../shared/area.service';
-import { SideMenuComponent } from './side-menu.component';
 import { ToggleMenuService } from '../../shared/toggle-menu.service';
+import { SideMenuComponent } from './side-menu.component';
 
 const areaOne: Area = { InternalName: 'people' };
 const areaTwo: Area = { InternalName: 'permissions' };
@@ -21,6 +22,12 @@ class MockToggleMenuService implements Partial<ToggleMenuService> {
 	}
 	isMobileView() {
 		return false;
+	}
+}
+
+class MockMediaQueryService implements Partial<MediaQueryService> {
+	public get isMobileSize$() {
+		return new ReplaySubject<boolean>(1);
 	}
 }
 
@@ -47,7 +54,8 @@ describe('SideMenuComponent', () => {
 					useValue: mockStateService
 				},
 				{ provide: AreaService, useClass: MockAreaService },
-				{ provide: ToggleMenuService, useClass: MockToggleMenuService }
+				{ provide: ToggleMenuService, useClass: MockToggleMenuService },
+				{ provide: MediaQueryService, useClass: MockMediaQueryService }
 			]
 		}).compileComponents();
 	}));

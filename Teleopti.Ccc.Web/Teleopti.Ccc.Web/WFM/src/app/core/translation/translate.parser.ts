@@ -31,7 +31,7 @@ export class CustomTranslateParser extends TranslateParser {
 	}
 
 	getValue(target: any, key: string): any {
-		let keys = key.split('.');
+		const keys = key.split('.');
 		key = '';
 		do {
 			key += keys.shift();
@@ -62,7 +62,7 @@ export class CustomTranslateParser extends TranslateParser {
 		}
 
 		return expr.replace(this.templateMatcher, (substring: string, b: string) => {
-			let r = this.getValue(params, b);
+			const r = this.getValue(params, b);
 			return this.isDefined(r) ? r : substring;
 		});
 	}

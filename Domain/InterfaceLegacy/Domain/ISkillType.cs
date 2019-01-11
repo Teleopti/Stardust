@@ -66,6 +66,6 @@
         /// Created by: robink
         /// Created date: 2008-11-26
         /// </remarks>
-		IStaffingCalculatorServiceFacade StaffingCalculatorService { get; set; }
+		IStaffingCalculatorServiceFacade StaffingCalculatorService { get; }
     }
 }

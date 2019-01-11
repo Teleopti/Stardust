@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 				//Check history
 				Assert.IsNotNull(loaded.UpdatedOn);
-				Assert.AreSame(LoggedOnPerson, loaded.UpdatedBy);
+				Assert.AreEqual(LoggedOnPerson, loaded.UpdatedBy);
 
 				UnitOfWork.PersistAll();
 

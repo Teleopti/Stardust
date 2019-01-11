@@ -294,8 +294,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 						initialJobEnqueued = true;
 					}
 
-					var queuePeriod = _generalFunctions.GetFactQueueAvailblePeriod(dataSourceId);
-					var agentPeriod = _generalFunctions.GetFactAgentAvailblePeriod(dataSourceId);
+					var queuePeriod = _generalFunctions.GetFactQueueAvailablePeriod(dataSourceId);
+					var agentPeriod = _generalFunctions.GetFactAgentAvailablePeriod(dataSourceId);
 
 					if (queuePeriod.EndDate != DateOnly.MinValue)
 					{

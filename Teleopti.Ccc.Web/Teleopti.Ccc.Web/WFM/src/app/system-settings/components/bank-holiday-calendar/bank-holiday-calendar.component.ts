@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NzNotificationService } from 'ng-zorro-antd';
 import { TogglesService } from 'src/app/core/services';
-import { BankCalendarDataService } from '../../shared/bank-calendar-data.service';
 import { BankHolidayCalendarItem } from '../../interface';
+import { BankCalendarDataService } from '../../shared/bank-calendar-data.service';
 
 @Component({
 	selector: 'bank-holiday-calendar',
@@ -12,16 +12,16 @@ import { BankHolidayCalendarItem } from '../../interface';
 	providers: [BankCalendarDataService, TogglesService]
 })
 export class BankHolidayCalendarComponent implements OnInit {
-	yearFormat: string = 'YYYY';
-	dateFormat: string = 'YYYY-MM-DD';
+	yearFormat = 'YYYY';
+	dateFormat = 'YYYY-MM-DD';
 
 	bankHolidayCalendarsList: BankHolidayCalendarItem[] = [];
-	isAddingNewCalendar: boolean = false;
-	isEdittingCalendar: boolean = false;
+	isAddingNewCalendar = false;
+	isEdittingCalendar = false;
 	edittingCalendar: BankHolidayCalendarItem;
 	selectedCalendar: BankHolidayCalendarItem;
-	isDeleteCalendarModalVisible: boolean = false;
-	isAssignBankHolidayCalendarsToSitesEnabled: boolean = false;
+	isDeleteCalendarModalVisible = false;
+	isAssignBankHolidayCalendarsToSitesEnabled = false;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
@@ -32,8 +32,8 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.bankCalendarDataService.getBankHolidayCalendars().subscribe(calendars => {
-			let cals = calendars as BankHolidayCalendarItem[];
-			let curYear = moment().year();
+			const cals = calendars as BankHolidayCalendarItem[];
+			const curYear = moment().year();
 			cals.forEach(c => {
 				c.CurrentYearIndex = 0;
 
@@ -42,7 +42,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 						d.Date = moment(d.Date).format(this.dateFormat);
 					});
 
-					if (moment(y.Year.toString()).year() == curYear) {
+					if (moment(y.Year.toString()).year() === curYear) {
 						c.CurrentYearIndex = i;
 					}
 				});

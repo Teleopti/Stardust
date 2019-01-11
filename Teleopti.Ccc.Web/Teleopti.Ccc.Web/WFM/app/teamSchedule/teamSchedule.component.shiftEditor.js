@@ -68,7 +68,7 @@
 		vm.selectedShiftLayers = [];
 
 		vm.$onInit = function () {
-			$scope.$emit('teamSchedule.shiftEditor.editing', { personId: vm.personId, trackId: vm.trackId });
+			$scope.$emit('teamSchedule.shiftEditor.editing', { personId: vm.personId});
 			createScheduleVm(vm.rawSchedule);
 
 			ActivityService.fetchAvailableActivities().then(function (data) {

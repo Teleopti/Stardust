@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					meetingViewModel =
 						MeetingComposerPresenter.CreateDefaultMeeting(
-							TeleoptiPrincipal.CurrentPrincipal.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork)),
+							_repositoryFactory.CreatePersonRepository(unitOfWork).Get(TeleoptiPrincipal.CurrentPrincipal.PersonId),
 							_schedulingScreenState.SchedulerStateHolder, meetingStartOrToday,
 							selectedActivePersons, new Now());
 				}

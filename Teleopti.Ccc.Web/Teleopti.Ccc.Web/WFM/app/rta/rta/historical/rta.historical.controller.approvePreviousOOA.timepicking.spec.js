@@ -408,5 +408,26 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveStartTime === startTime).toBe(true);
 		expect(vm.approveEndTime === endTime).toBe(true);
 	});
+
+    it('should set end time to timeline end time when full day out of adherence', function (t) {
+        t.stateParams.personId = '1';
+        t.backend.with.historicalAdherence({
+            Timeline: {
+                StartTime: '2019-01-10T08:00:00',
+                EndTime: '2019-01-10T18:00:00'
+            },
+            RecordedOutOfAdherences: [{
+                StartTime: null,
+                EndTime: null
+            }]
+        });
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.recordedOutOfAdherences[0].click();
+        });
+
+        expect(vm.approveEndTime).toEqual(moment('2019-01-10T18:00:00').toDate());
+    });
 	
 });

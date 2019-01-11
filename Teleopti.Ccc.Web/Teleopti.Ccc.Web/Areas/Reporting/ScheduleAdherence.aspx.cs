@@ -1056,18 +1056,19 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					return;
 				Response.Redirect($"~/Reporting/Report/{ReportId}#{ReportId}");
 			}
-			var princip = (TeleoptiPrincipalCacheable)Thread.CurrentPrincipal;
+			var princip = (TeleoptiPrincipal)Thread.CurrentPrincipal;
 			var teleoptiIdentity = (TeleoptiIdentity)princip.Identity;
-			var loggedOnPerson = princip.Person;
-			var id = loggedOnPerson.Id;
+			var uiCulture = princip.Regional.UICulture;
+			var timeZone = princip.Regional.TimeZone;
+			Guid? id = princip.PersonId;
 			var dataSource = teleoptiIdentity.DataSource;
 			var bu = teleoptiIdentity.BusinessUnit.Id;
 
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
-			ParameterSelector.LanguageId = princip.Person.PermissionInformation.UICulture().LCID;
-			ParameterSelector.UserTimeZone = loggedOnPerson.PermissionInformation.DefaultTimeZone();
+			ParameterSelector.LanguageId = uiCulture.LCID;
+			ParameterSelector.UserTimeZone = timeZone;
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId))
 			{
 				ParameterSelector.DbTimeout = commonReports.DbTimeout;

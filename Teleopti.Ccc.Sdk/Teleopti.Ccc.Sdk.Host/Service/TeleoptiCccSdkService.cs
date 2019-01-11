@@ -1180,7 +1180,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			var repositoryFactory = new RepositoryFactory();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(repositoryFactory.CreatePersonRepository(uow));
+				var person = repositoryFactory.CreatePersonRepository(uow).Get(TeleoptiPrincipal.CurrentPrincipal.PersonId);
 				var extendedPreferenceTemplateRepository = repositoryFactory.CreateExtendedPreferenceTemplateRepository(uow);
 
 				var assembler = new ExtendedPreferenceTemplateAssembler(person,
@@ -1453,7 +1453,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 				var factory = _factoryProvider.CreatePersonRequestFactory(inner);
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
+					var person = new PersonRepository(new ThisUnitOfWork(unitOfWork)).Get(TeleoptiPrincipal.CurrentPrincipal.PersonId);
 					personRequest = factory.AcceptShiftTradeRequest(personRequest, unitOfWork, person);
 				}
 				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -1709,7 +1709,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		{
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
+				IPerson person = new PersonRepository(new ThisUnitOfWork(unitOfWork)).Get(TeleoptiPrincipal.CurrentPrincipal.PersonId);
 				DateTime localTime = GetPersonLocalTime(utcDate, person);
 				DateOnly localDate = new DateOnly(localTime);
 				ITeam loggedOnPersonsTeam = person.MyTeam(localDate);
@@ -1904,7 +1904,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 				new List<ApplicationFunctionDto>();
 			List<IApplicationFunction> afUnionCollection = new List<IApplicationFunction>();
 
-			if (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id == person.Id.GetValueOrDefault(Guid.Empty))
+			if (TeleoptiPrincipal.CurrentPrincipal.PersonId == person.Id.GetValueOrDefault(Guid.Empty))
 			{
 				afUnionCollection.AddRange(PrincipalAuthorization.Current().GrantedFunctions());
 			}

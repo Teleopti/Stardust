@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	{
 		private RequestContextInitializer _requestContextInitializer;
 		private HttpContextBase _httpContextBase;
-		private TeleoptiPrincipal _teleoptiPrincipal;
+		private TeleoptiPrincipalForLegacy _teleoptiPrincipal;
 	    private ISetThreadCulture _setThreadCulture;
 
 	    [SetUp]
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		    var person = PersonFactory.CreatePerson ("Test Person");
 			_httpContextBase = MockRepository.GenerateStub<HttpContextBase>();
 		    _setThreadCulture = MockRepository.GenerateMock<ISetThreadCulture>();
-			_teleoptiPrincipal = new TeleoptiPrincipal(new GenericIdentity("MyName"), person);
+			_teleoptiPrincipal = new TeleoptiPrincipalForLegacy(new GenericIdentity("MyName"), person);
 
 		    _requestContextInitializer = new RequestContextInitializer(
 			    new TestSessionPrincipalFactory(_teleoptiPrincipal),

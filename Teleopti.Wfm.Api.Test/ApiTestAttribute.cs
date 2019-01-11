@@ -90,6 +90,11 @@ namespace Teleopti.Wfm.Api.Test
 			isolate.UseTestDouble<FakeTokenVerifier>().For<ITokenVerifier>();
 			var person = PersonFactory.CreatePerson().WithId(FakeTokenVerifier.UserId);
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var availableData = new AvailableData().WithId();
+			availableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			var applicationRole = new ApplicationRole{AvailableData = availableData}.WithId();
+			applicationRole.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			person.PermissionInformation.AddApplicationRole(applicationRole);
 
 			var userUnauthorized = new LoadUserUnauthorizedFake();
 			userUnauthorized.Has(person);

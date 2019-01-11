@@ -58,5 +58,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = new BankHolidayCalendarRepository(CurrUnitOfWork).FindBankHolidayCalendars(ids);
 			Assert.AreEqual(result.Count, 0);
 		}
+
+		[Test]
+		public void ShouldGetEmptyListWhenInputNull()
+		{
+			var calendar1 = new BankHolidayCalendar { Name = "calendar1" };
+			var calendar2 = new BankHolidayCalendar { Name = "calendar2" };
+			PersistAndRemoveFromUnitOfWork(calendar1);
+			PersistAndRemoveFromUnitOfWork(calendar2);
+
+			var result = new BankHolidayCalendarRepository(CurrUnitOfWork).FindBankHolidayCalendars(null);
+			Assert.AreEqual(result.Count, 0);
+		}
 	}
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { UserService } from '../../../core/services';
+import { AuditEntry, Person } from '../../../shared/types';
 import { AuditTrailService } from '../../services';
-import { Person, AuditEntry } from '../../../shared/types';
 
 class AuditTrailValidator {
 	static INVALID_PERSON_ERROR = 'INVALID_PERSON_ERROR';
@@ -122,18 +122,18 @@ export class GeneralAuditTrailComponent implements OnInit {
 
 	addAuditEntriesToTable(AuditEntries): void {
 		this.initialSearchDone = true;
-		var parsedEntries = AuditEntries.map(row => {
-			return this.formatTimestampInRow(row);
-		});
+		// var parsedEntries = AuditEntries.map(row => {
+		// 	return this.formatTimestampInRow(row);
+		// });
 
 		this.auditTrailData = AuditEntries;
 	}
 
-	formatTimestampInRow(AuditEntry) {
-		AuditEntry.TimeStamp = moment(AuditEntry.TimeStamp)
+	formatTimestampInRow(auditEntry) {
+		auditEntry.TimeStamp = moment(auditEntry.TimeStamp)
 			.locale(this.locale)
 			.format('L LTS');
-		return AuditEntry;
+		return auditEntry;
 	}
 
 	notValidFields(): boolean {

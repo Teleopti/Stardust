@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -341,6 +342,84 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			return Json(new TenantResultModel { Message = $"Created new Business Unit wih name: {model.BuName}", Success = true });
 		}
+
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("AddEmailSettings")]
+		public virtual JsonResult<TenantResultModel> AddEmailSettingsToTenant(EmailSettingsPostModel model)
+		{
+			//todo: 78242
+			return Json(new TenantResultModel
+				{ Message = $"SMTP settings saved", Success = true }
+			);
+		}
+
+		[HttpGet]
+		[TenantUnitOfWork]
+		[Route("GetEmailSettings/tenant/{id}")]
+		public virtual JsonResult<EmailSettingsResultModel> GetEmailSettingsToTenant(int id)
+		{
+			//todo: 78242
+			var emailSettings = new EmailSettingsResultModel
+			{
+				IsAzure = InstallationEnvironment.IsAzure,
+				Message = "no message",
+				Success = true,
+				Data = new EmailSettings
+				{
+					Host = "",
+					Password = "",
+					Port = 0,
+					Relay = false,
+					Ssl = false,
+					User = ""
+				}
+			};
+			
+			return Json(emailSettings);
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("AddSmsSettings")]
+		public virtual JsonResult<TenantResultModel> AddSmsSettingsToTenant(SmsSettingsPostModel model)
+		{
+			//todo: 78242
+			return Json(new TenantResultModel
+				{ Message = $"SMS settings saved", Success = true }
+			);
+		}
+
+		[HttpGet]
+		[TenantUnitOfWork]
+		[Route("GetSmsSettings/tenant/{id}")]
+		public virtual JsonResult<SmsSettingsResultModel> GetSmsSettingsToTenant(int id)
+		{
+			//todo: 78242
+			var smsSettings = new SmsSettingsResultModel
+			{
+				Message = "no message",
+				Success = true,
+				Data = new SmsSettings()
+				{
+					ApiId = "",
+					Assembly = "",
+					Class = "",
+					ErrorCode = "",
+					FindSuccessOrError = "",
+					From = "",
+					Password = "",
+					SkipSearch = false,
+					SuccessCode = "",
+					Url = "",
+					Data = ""
+				}
+			};
+
+			return Json(smsSettings);
+		}
+
 		private TenantResultModel checkFirstUserInternal(string name, string password)
 		{
 
@@ -429,6 +508,68 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public string Message { get; set; }
 		public bool Success { get; set; }
 		public int TenantId { get; set; }
+	}
+
+	public class EmailSettingsResultModel : TenantResultModel
+	{
+		public EmailSettings Data { get; set; }
+		public bool IsAzure { get; internal set; }
+	}
+
+	public class SmsSettingsResultModel : TenantResultModel
+	{
+		public SmsSettings Data { get; set; }
+	}
+
+	public class EmailSettingsPostModel
+	{
+		public int TenantId { get; set; }
+
+		public EmailSettings Settings { get; set; }
+	}
+
+	public class SmsSettingsPostModel
+	{
+		public int TenantId { get; set; }
+
+		public SmsSettings Settings { get; set; }
+	}
+
+	public class EmailSettings
+	{
+		public string Host { get; set; }
+		public int Port { get; set; }
+
+		public bool Ssl { get; set; }
+
+		public bool Relay { get; set; }
+
+		public string User { get; set; }
+
+		public string Password { get; set; }
+	}
+
+	public class SmsSettings
+	{
+		public string Assembly { get; set; }
+		public string Class { get; set; }
+		public string Url { get; set; }
+
+		public string Password { get; set; }
+
+		public string ApiId { get; set; }
+
+		public string From { get; set; }
+
+		public string FindSuccessOrError { get; set; }
+
+		public string ErrorCode { get; set; }
+
+		public string SuccessCode { get; set; }
+
+		public bool SkipSearch { get; set; }
+
+		public string Data { get; set; }
 	}
 
 	public class AddSuperUserToTenantModel

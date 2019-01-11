@@ -57,6 +57,7 @@
 		"ng-image-input-with-preview": "1.0.0",
 		"ng-zorro-antd": "^1.8.1",
 		"ngstorage": "0.3.9",
+		"ngx-take-until-destroy": "^5.3.0",
 		"papaparse": "4.6.0",
 		"powerbi-client": "2.6.5",
 		"rxjs": "6.2.2",

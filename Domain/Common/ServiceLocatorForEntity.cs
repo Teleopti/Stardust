@@ -10,8 +10,15 @@ namespace Teleopti.Ccc.Domain.Common
 
 	public static class ServiceLocatorForLegacy
 	{
+		private static ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private static ICurrentAuthorization _currentAuthorization;
 		private static ITimeZoneGuard _timeZoneGuard;
+
+		public static ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal
+		{
+			get { return _currentTeleoptiPrincipal ?? Security.Principal.CurrentTeleoptiPrincipal.Make(); }
+			set { _currentTeleoptiPrincipal = value; }
+		}
 
 		public static ICurrentAuthorization CurrentAuthorization
 		{
