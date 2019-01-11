@@ -109,7 +109,10 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			Year: yearStr,
 			YearDate: this.selectedYearDate,
 			DisabledDate: d => {
-				return moment(d) < moment(yearStr).startOf('year') || moment(d) > moment(yearStr).endOf('year');
+				return (
+					moment(d) < moment(yearStr, 'YYYY').startOf('year') ||
+					moment(d) > moment(yearStr, 'YYYY').endOf('year')
+				);
 			},
 			Active: true,
 			Dates: [],
@@ -249,7 +252,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	saveEditingBankCalendar() {
 		this.edittingCalendarYears.sort((c, n) => {
-			return moment(c.Year) < moment(n.Year) ? -1 : 1;
+			return moment(c.Year, 'YYYY') < moment(n.Year, 'YYYY') ? -1 : 1;
 		});
 
 		const bankHolidayCalendar: BankHolidayCalendar = {
@@ -269,7 +272,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 						d.Date = moment(d.Date).format(this.dateFormat);
 					});
 
-					if (moment(y.Year.toString()).year() === curYear) {
+					if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
 						calItem.CurrentYearIndex = i;
 					}
 				});

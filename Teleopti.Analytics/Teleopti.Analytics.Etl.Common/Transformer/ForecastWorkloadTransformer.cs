@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				ReadOnlyCollection<IWorkloadDay> workloadDayCollection = skillDay.WorkloadDayCollection;
 				foreach (IWorkloadDay workloadDay in workloadDayCollection)
 				{
-					ReadOnlyCollection<ITemplateTaskPeriodView> templateTaskPeriodList = workloadDay.TemplateTaskPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
+					var templateTaskPeriodList = workloadDay.TemplateTaskPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
 					foreach (ITemplateTaskPeriodView taskPeriod in templateTaskPeriodList)
 					{
 						AddDataRowToDataTable(taskPeriod, skillDay.Skill, table);

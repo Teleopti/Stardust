@@ -109,10 +109,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			internal set { _calculatedOccupancy = value; }
 		}
 
-		public Percent CalculatedOccupancyPercent
-		{
-			get { return new Percent(_calculatedOccupancy); }
-		}
+		public Percent CalculatedOccupancyPercent => new Percent(_calculatedOccupancy);
 
 		/// <summary>
 		/// Gets or sets the calculated resource.
@@ -128,10 +125,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			internal set { _calculatedResource = value; }
 		}
 
-		public double ForecastedIncomingDemandWithoutShrinkage
-		{
-			get { return _forecastedIncomingDemand; }
-		}
+		public double ForecastedIncomingDemandWithoutShrinkage => _forecastedIncomingDemand;
 
 		/// <summary>
 		/// Gets the booked against incoming demand65.
@@ -319,7 +313,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     return 0;
                 return _forecastedIncomingDemand / (1 - _shrinkage.Value);
             }
-            //get { return _forecastedIncomingDemand * (1d + _shrinkage.Value); }
 		}
 
 		public bool UseShrinkage

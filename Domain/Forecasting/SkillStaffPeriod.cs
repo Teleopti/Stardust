@@ -280,25 +280,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			var resolutionFactor = periodLength.TotalMinutes / skillResolution.TotalMinutes;
 
-			IList<ISkillStaffPeriodView> newViews = new List<ISkillStaffPeriodView>();
-			IList<DateTimePeriod> newPeriods = Period.Intervals(periodLength);
-			foreach (DateTimePeriod newPeriod in newPeriods)
+			var newPeriods = Period.Intervals(periodLength);
+			return newPeriods.Select(newPeriod => (ISkillStaffPeriodView)new SkillStaffPeriodView
 			{
-				ISkillStaffPeriodView newView = new SkillStaffPeriodView
-				{
-					Period = newPeriod,
-					CalculatedResource = CalculatedResource,
-					ForecastedIncomingDemand = Payload.ForecastedIncomingDemand,
-					ForecastedTasks = Payload.TaskData.Tasks * resolutionFactor,
-					EstimatedServiceLevel = EstimatedServiceLevel,
-					EstimatedServiceLevelShrinkage = EstimatedServiceLevelShrinkage,
-					FStaff = FStaff,
-					AverageHandlingTaskTime = Payload.TaskData.AverageHandlingTaskTime
-				};
-				newViews.Add(newView);
-			}
-
-			return newViews;
+				Period = newPeriod,
+				CalculatedResource = CalculatedResource,
+				ForecastedIncomingDemand = Payload.ForecastedIncomingDemand,
+				ForecastedTasks = Payload.TaskData.Tasks * resolutionFactor,
+				EstimatedServiceLevel = EstimatedServiceLevel,
+				EstimatedServiceLevelShrinkage = EstimatedServiceLevelShrinkage,
+				FStaff = FStaff,
+				AverageHandlingTaskTime = Payload.TaskData.AverageHandlingTaskTime
+			}).ToArray();
 		}
 
 		public void SetDistributionValues(PopulationStatisticsCalculatedValues calculatedValues,
@@ -530,9 +523,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_sortedSegmentCollection.Clear();
 			for (int i = currentIndex; i < skillStaffPeriods.Count; i++)
 			{
-				SkillStaffPeriod period = skillStaffPeriods[i] as SkillStaffPeriod;
-
-				if (period == null) continue;
+				if (!(skillStaffPeriods[i] is SkillStaffPeriod period)) continue;
 				var belongsToThis = period.SegmentInThisCollection.Where(x => x.BelongsTo.Equals(this)).ToArray();
 				if (belongsToThis.Length == 0 && i > currentIndex)
 					break; //Because we do this sequential, we can stop when no more distributed segments are found
@@ -558,10 +549,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				return (ISkillStaffPeriod) skillStaffPeriods[0].NoneEntityClone();
 
 			DateTimePeriod period = skillStaffPeriods[0].Period;
+			var firstElapsedTime = period.ElapsedTime();
 			for (int index = 1; index < skillStaffPeriods.Count; index++)
 			{
 				TimeSpan elapsedTime = skillStaffPeriods[index].Period.ElapsedTime();
-				if (elapsedTime != period.ElapsedTime())
+				if (elapsedTime != firstElapsedTime)
 					InParameter.CheckTimeLimit(nameof(skillStaffPeriods), elapsedTime, 0);
 			}
 
@@ -742,9 +734,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			ISkillStaffSegmentPeriod newSegmentPeriod =
 				new SkillStaffSegmentPeriod(ourPeriod, currentPeriod, newSegment, currentPeriod.Period);
 			((SkillStaffPeriod) ourPeriod)._sortedSegmentCollection.Add(newSegmentPeriod.Period.StartDateTime, newSegmentPeriod);
-			((SkillStaffPeriod) currentPeriod)._segmentInThisCollection.Add(newSegmentPeriod);
-			((SkillStaffPeriod) currentPeriod)._bookedResource65 += newSegmentPeriod.BookedResource65;
 
+			var skillStaffPeriod = (SkillStaffPeriod) currentPeriod;
+			skillStaffPeriod._segmentInThisCollection.Add(newSegmentPeriod);
+			skillStaffPeriod._bookedResource65 += newSegmentPeriod.BookedResource65;
 		}
 
 		private void CreateSkillStaffSegments65(IList<ISkillStaffPeriod> sortedPeriods, int currentIndex)

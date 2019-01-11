@@ -6,7 +6,7 @@
 
 <div class="con-row">
   <div class="con-flex">
-    <div class="panel material-depth-1">
+    <div class="panel">
       <div class="con-row">
         <div class="con-flex">
           <label for="filter" class="input-icon">
@@ -24,7 +24,7 @@
 <!-- custom -->
 <div class="con-row" ng-repeat="report in reports.customTypes"  ng-if="report.childNodes.length>0 && (report.childNodes | filter:{Name:reportFilter}).length > 0">
   <div class="con-flex">
-    <div class="panel material-depth-1">
+    <div class="panel">
       <div class="con-row">
         <div class="con-flex">
           <b>{{report.Type}}</b>
@@ -50,7 +50,7 @@
 
 <div class="con-row" ng-repeat="report in reports.reports" ng-if="report.childNodes.length>0 && (report.childNodes | filter:{Name:reportFilter}).length > 0">
   <div class="con-flex">
-    <div class="panel material-depth-1">
+    <div class="panel">
       <div class="con-row">
         <div class="con-flex">
           <b>{{report.Type}}</b>

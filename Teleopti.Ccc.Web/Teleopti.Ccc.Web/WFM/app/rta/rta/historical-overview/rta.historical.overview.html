@@ -18,7 +18,7 @@
 	</div>
 
 	<md-progress-linear md-mode="indeterminate" ng-if="vm.loading"></md-progress-linear>
-	<div class="panel material-depth-1 con-padding">
+	<div class="panel con-padding">
 		<div class="con-row">
 			<div class="con-flex wfm-form organization-picker">
 				<div class="form-input-wrap">
@@ -29,7 +29,7 @@
 				</div>
 
 				<div style="position: relative">
-					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+					<div class="wfm-dropdown-panel panel full-padding"
 						 style="z-index: 999; position: absolute; width: 100%"
 						 ng-if="vm.organizationPickerOpen" outside-click="vm.closeOrganizationPicker()">
 						<div class="form-input-wrap filter">
@@ -82,7 +82,7 @@
 		</div>
 	</div>
 
-	<div class="panel material-depth-1 card-panel" ng-repeat="card in vm.cards">
+	<div class="panel card-panel" ng-repeat="card in vm.cards">
 		<div class="card-panel-header-wrapper pointer left-border" ng-click="card.toggle()">
 			<strong>{{card.Name}}</strong>
 		</div>

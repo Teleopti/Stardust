@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Forecasting.Template;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using TimePeriod = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.TimePeriod;
 
@@ -388,12 +387,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public virtual OpenForWork OpenForWork
-        {
-            get { return _isClosed; }
-        }
+        public virtual OpenForWork OpenForWork => _isClosed;
 
-        /// <summary>
+		/// <summary>
         /// Gets the workload.
         /// </summary>
         /// <value>The workload.</value>
@@ -401,12 +397,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: micke
         /// Created date: 11/27/2007
         /// </remarks>
-        public virtual IWorkload Workload
-        {
-            get { return _workload; }
-        }
+        public virtual IWorkload Workload => _workload;
 
-        /// <summary>
+		/// <summary>
         /// Gets the open hour list.
         /// </summary>
         /// <value>The open hour list.</value>
@@ -414,15 +407,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: micke
         /// Created date: 11/27/2007
         /// </remarks>
-        public virtual ReadOnlyCollection<TimePeriod> OpenHourList
-        {
-            get
-            {
-                return new ReadOnlyCollection<TimePeriod>(_openHourList.ToArray());
-            }
-        }
+        public virtual ReadOnlyCollection<TimePeriod> OpenHourList => new ReadOnlyCollection<TimePeriod>(_openHourList.ToArray());
 
-        /// <summary>
+		/// <summary>
         /// Gets the incoming open hours list.
         /// </summary>
         /// <value>The incoming open hours list.</value>
@@ -453,10 +440,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: micke
         /// Created date: 11/27/2007
         /// </remarks>
-        public virtual ReadOnlyCollection<ITemplateTaskPeriod> TaskPeriodList
-        {
-            get { return new ReadOnlyCollection<ITemplateTaskPeriod>(_taskPeriodList.ToList()); }
-        }
+        public virtual ReadOnlyCollection<ITemplateTaskPeriod> TaskPeriodList => new ReadOnlyCollection<ITemplateTaskPeriod>(_taskPeriodList.ToArray());
 
         /// <summary>
         /// Gets the task period list sorted by start times.
@@ -466,17 +450,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: micke
         /// Created date: 2008-01-14
         /// </remarks>
-        public virtual ReadOnlyCollection<ITemplateTaskPeriod> SortedTaskPeriodList
-        {
-            get
-            {
-                IList<ITemplateTaskPeriod> list = _taskPeriodList
-                    .OrderBy(tp => tp.Period.StartDateTime)
-                    .ToList();
-                return new ReadOnlyCollection<ITemplateTaskPeriod>(list);
-            }
-        }
-
+        public virtual ReadOnlyCollection<ITemplateTaskPeriod> SortedTaskPeriodList => new ReadOnlyCollection<ITemplateTaskPeriod>(_taskPeriodList.OrderBy(tp => tp.Period.StartDateTime).ToArray());
 
         /// <summary>
         /// Gets the TaskPeriodList period.
@@ -1531,8 +1505,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return !IsWithinOpenHours(templateTaskPeriod);
         }
 
-        public virtual ReadOnlyCollection<ITemplateTaskPeriod> OpenTaskPeriodList => new ReadOnlyCollection<ITemplateTaskPeriod>(
-			_taskPeriodList.Where(IsWithinOpenHours).ToList());
+        public virtual ReadOnlyCollection<ITemplateTaskPeriod> OpenTaskPeriodList => new ReadOnlyCollection<ITemplateTaskPeriod>(_taskPeriodList.Where(IsWithinOpenHours).ToArray());
 
 		/// <summary>
         /// Gets the parents. (Mostly for test reasons)
@@ -1557,8 +1530,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
 
 			var views = myPeriodLength >= periodLength
-				? SortedTaskPeriodList.SelectMany(period => period.Split(periodLength)).ToList()
-				: new List<ITemplateTaskPeriodView>();
+				? SortedTaskPeriodList.SelectMany(period => period.Split(periodLength)).ToArray()
+				: new ITemplateTaskPeriodView[0];
 
             return new ReadOnlyCollection<ITemplateTaskPeriodView>(views);
         }

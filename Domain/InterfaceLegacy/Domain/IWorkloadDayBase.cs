@@ -63,35 +63,35 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         IWorkload Workload { get; }
 
-        /// <summary>
-        /// Gets the open hour list.
-        /// </summary>
-        /// <value>The open hour list.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 11/27/2007
-        /// </remarks>
-        ReadOnlyCollection<TimePeriod> OpenHourList { get; }
+		/// <summary>
+		/// Gets the open hour list.
+		/// </summary>
+		/// <value>The open hour list.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 11/27/2007
+		/// </remarks>
+		ReadOnlyCollection<TimePeriod> OpenHourList { get; }
 
-        /// <summary>
-        /// Gets the task period list.
-        /// </summary>
-        /// <value>The task period list.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 11/27/2007
-        /// </remarks>
-        ReadOnlyCollection<ITemplateTaskPeriod> TaskPeriodList { get; }
+		/// <summary>
+		/// Gets the task period list.
+		/// </summary>
+		/// <value>The task period list.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 11/27/2007
+		/// </remarks>
+		ReadOnlyCollection<ITemplateTaskPeriod> TaskPeriodList { get; }
 
-        /// <summary>
-        /// Gets the task period list sorted by start times.
-        /// </summary>
-        /// <value>The sorted task period list.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-01-14
-        /// </remarks>
-        ReadOnlyCollection<ITemplateTaskPeriod> SortedTaskPeriodList { get; }
+		/// <summary>
+		/// Gets the task period list sorted by start times.
+		/// </summary>
+		/// <value>The sorted task period list.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-01-14
+		/// </remarks>
+		ReadOnlyCollection<ITemplateTaskPeriod> SortedTaskPeriodList { get; }
 
         /// <summary>
         /// Gets the TaskPeriodList period.
@@ -103,15 +103,15 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         DateTimePeriod TaskPeriodListPeriod { get; }
 
-        /// <summary>
-        /// Gets the open task period list.
-        /// </summary>
-        /// <value>The open task period list.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-09-17
-        /// </remarks>
-        ReadOnlyCollection<ITemplateTaskPeriod> OpenTaskPeriodList { get; }
+		/// <summary>
+		/// Gets the open task period list.
+		/// </summary>
+		/// <value>The open task period list.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-09-17
+		/// </remarks>
+		ReadOnlyCollection<ITemplateTaskPeriod> OpenTaskPeriodList { get; }
 
         /// <summary>
         /// Sets the task period collection.
@@ -172,18 +172,18 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         void Initialize();
 
-        /// <summary>
-        /// Splits SkillStaffPeriodCollection into a new collection of ISkillStaffPeriodViews.
-        /// The specified period length must be shorter than on this and the split must be even.
-        /// For example can not a collection of periods in 15 minutes period be split on 10. But 5.
-        /// </summary>
-        /// <param name="periodLength">Length of the period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-07-07    
-        /// </remarks>
-        ReadOnlyCollection<ITemplateTaskPeriodView> TemplateTaskPeriodViewCollection(TimeSpan periodLength);
+		/// <summary>
+		/// Splits SkillStaffPeriodCollection into a new collection of ISkillStaffPeriodViews.
+		/// The specified period length must be shorter than on this and the split must be even.
+		/// For example can not a collection of periods in 15 minutes period be split on 10. But 5.
+		/// </summary>
+		/// <param name="periodLength">Length of the period.</param>
+		/// <returns></returns>
+		/// <remarks>
+		///  Created by: Ola
+		///  Created date: 2009-07-07    
+		/// </remarks>
+		ReadOnlyCollection<ITemplateTaskPeriodView> TemplateTaskPeriodViewCollection(TimeSpan periodLength);
 
         /// <summary>
         /// Sets the queue statistics.

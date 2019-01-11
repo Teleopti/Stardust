@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			};
 		}
 
-		private static bool validateSkillOpenHours(DateOnly requestDay, ReadOnlyCollection<TimePeriod> openHoursForRequestDay, ISkill skill,
+		private static bool validateSkillOpenHours(DateOnly requestDay, IList<TimePeriod> openHoursForRequestDay, ISkill skill,
 			DateTimePeriod requestPeriod)
 		{
 			if(!openHoursForRequestDay.Any())

@@ -3,7 +3,7 @@
 	 ng-model="vm.searchOptions.keyword" ng-keyup="vm.searchTextInputKeyup($event)" ng-focus="vm.openAdvancedSearchOption($event)"
 	 ng-change="vm.searchTextChange()" ng-click="vm.openAdvancedSearchOption($event)" />
 	<div class="advanced-input-dropdown" ng-cloak ng-if="vm.showAdvancedSearchOption" outside-click="vm.turnOffAdvancedSearch($event);">
-		<div class="panel material-depth-1">
+		<div class="panel">
 			<div class="sub-header">
 				<h2>{{ 'Search' | translate }}</h2>
 			</div>

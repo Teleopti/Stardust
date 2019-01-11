@@ -13,7 +13,7 @@
 	</div>
 	<div class="con-row">
 		<div class="con-flex" style="flex: 2 1 0">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<div class="con-row align-row-center staffing-toolbar" ng-class="{'locked':vm.isSearchRequested}">
 					<the-skill-picker class="con-flex pull-left" skills="vm.allSkills" skill-groups="vm.allSkillAreas" on-skill-selected="vm.selectedSkillChange(skill)"
 					 on-skill-group-selected="vm.selectedAreaChange(skillGroup)" preselected-skill="vm.selectedSkill" preselected-skill-group="vm.selectedSkillArea">
@@ -59,7 +59,7 @@
 
 	<div class="con-row" ng-show="vm.staffingDataAvailable">
 		<div class="con-flex">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<md-progress-linear ng-show="vm.isRunning()" md-mode="indeterminate"></md-progress-linear>
 				<div class="sub-header">
 					<h2>{{'Staffing' | translate}} - {{vm.getDisplayDate() | amDateFormat:'L'}} </h2>
@@ -115,7 +115,7 @@
 	<div class="con-row">
 		<div class="con-flex">
 			<form novalidate ng-submit="vm.suggestOvertime(vm.overtimeForm)" name="vm.overtimeForm">
-				<div class="panel material-depth-1" ng-show="vm.showOverstaffSettings">
+				<div class="panel" ng-show="vm.showOverstaffSettings">
 					<div class="sub-header">
 						<h2>{{'OvertimeSettings' | translate}}</h2>
 					</div>

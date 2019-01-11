@@ -16,7 +16,7 @@
 
 		<div class="con-row" ng-if="vm.isLoadingHistoryData">
 			<div class="con-flex">
-				<div class="panel material-depth-1 full-padding">
+				<div class="panel full-padding">
 					<div>
 						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
@@ -26,7 +26,7 @@
 
 		<div class="con-row">
 			<div class="con-flex">
-				<div class="panel material-depth-1">
+				<div class="panel">
 					<div class="con-row" ng-if="vm.historyData.length > 0">
 						<div class="con-flex">
 							<forecast-history-chart chart-id="vm.selectedWorkload.ChartId"
@@ -59,7 +59,7 @@
 			</h1>
 		</div>
 		<div class="con-flex">
-			<div class="panel material-depth-1">
+			<div class="panel">
 				<div class="con-row">
 					<div class="con-flex">
 						<h2>{{'PleaseSelectASkillFirst'|translate}}</h2>

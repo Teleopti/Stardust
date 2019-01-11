@@ -42,7 +42,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 						d.Date = moment(d.Date).format(this.dateFormat);
 					});
 
-					if (moment(y.Year.toString()).year() === curYear) {
+					if (moment(y.Year.toString(), "YYYY").year() === curYear) {
 						c.CurrentYearIndex = i;
 					}
 				});
