@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -7,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IEnumerable<ISiteBankHolidayCalendar> FindAllSiteBankHolidayCalendarsSortedBySite();
 		ISiteBankHolidayCalendar FindSiteBankHolidayCalendar(ISite site);
+		IEnumerable<SiteBankHolidayCalendarMatchResult> FindSiteBankHolidayCalendar(IBankHolidayCalendar calendar);
 	}
 }
