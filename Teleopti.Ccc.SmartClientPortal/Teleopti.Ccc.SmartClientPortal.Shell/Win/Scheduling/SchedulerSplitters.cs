@@ -580,14 +580,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
 		}
 
-		public void DisableViewShiftCategoryDistribution()
+		public void EnableOrDisableViewShiftCategoryDistribution(bool enable)
 		{
-			shiftCategoryDistributionControl1.DisableViewShiftCategoryDistribution();
-		}
-
-		public void EnableViewShiftCategoryDistribution()
-		{
-			shiftCategoryDistributionControl1.EnableViewShiftCategoryDistribution();
+			shiftCategoryDistributionControl1.EnableOrDisableViewShiftCategoryDistribution(enable);
 		}
 
 		public void RefreshFilteredPersons(IEnumerable<IPerson> filteredPersons)

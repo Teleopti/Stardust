@@ -99,6 +99,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
+		public void ApplyFilter(HashSet<Guid> selectedAgentGuids, ISchedulerStateHolder stateholder,
+			IGridlockManager lockManager)
+		{
+			stateholder.FilterPersons(selectedAgentGuids);
+			if (Presenter.SortCommand == null || Presenter.SortCommand is NoSortCommand)
+				Presenter.ApplyGridSort();
+			else
+				Sort(Presenter.SortCommand);
+
+			ViewGrid.Refresh();
+			GridHelper.GridlockWriteProtected(stateholder, lockManager);
+			ViewGrid.Refresh();
+		}
+
 		public void Sort(IScheduleSortCommand command)
 		{
 			var selectedSchedulePart = SelectedSchedules().FirstOrDefault();
@@ -1385,9 +1399,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             }
 
             foreach(int i in rowList)
-                list.Add(Presenter.SchedulerState.FilteredCombinedAgentsDictionary[((IPerson)_grid.Model[i, 1].Tag).Id.Value]);
+			{
+				var guid = ((IPerson) _grid.Model[i, 1].Tag).Id;
+				if (guid != null)
+					list.Add(Presenter.SchedulerState.FilteredCombinedAgentsDictionary[
+						guid.Value]);
+			}
 
-            return list;
+			return list;
         }
 
 
@@ -1442,7 +1461,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             _isDesposing = true;
             Dispose(true);
             GC.SuppressFinalize(this);
-            return;
         }
 
         /// <summary>
