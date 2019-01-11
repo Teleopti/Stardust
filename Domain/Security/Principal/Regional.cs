@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	public class Regional : IRegional
 	{
 		public Regional(TimeZoneInfo timeZone, CultureInfo culture, CultureInfo uiCulture) :
-			this(timeZone, culture.LCID, uiCulture.LCID)
+			this(timeZone, culture?.LCID ?? 0, uiCulture?.LCID ?? 0)
 		{
 		}
 
