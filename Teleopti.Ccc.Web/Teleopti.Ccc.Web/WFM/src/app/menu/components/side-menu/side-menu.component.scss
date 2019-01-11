@@ -4,7 +4,7 @@
 	font-size: 13px;
 
 	.main-menu-link-wrapper {
-		height: calc(100% - 54px);
+		height: 100%;
 		min-width: 200px;
 		overflow-y: auto;
 		padding-bottom: 10px;
@@ -17,6 +17,7 @@
 			left: 0;
 			width: 100%;
 			z-index: 1010;
+			height: calc(100% - 54px);
 		}
 		.open-in-new {
 			display: none;
