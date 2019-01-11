@@ -4,4 +4,5 @@ export class ReportConfig {
 	ReportUrl: string;
 	TokenType: string;
 	AccessToken: string;
+	Expiration: Date;
 }

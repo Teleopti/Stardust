@@ -12,12 +12,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 {
 	public class FakeReports : IReports
 	{
+		private DateTime? tokenExpiration;
+
 		public string Token { get; private set; }
 		public Dictionary<string, List<Report>> ReportGroups { get; } = new Dictionary<string, List<Report>>();
 
 		public void SetAccessToken(string token)
 		{
 			Token = token;
+		}
+
+		public void SetTokenExpiration(DateTime expiration)
+		{
+			tokenExpiration = expiration;
 		}
 
 		public void AddReports(string groupId, params Report[] newReports)
@@ -182,7 +189,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 			Dictionary<string, List<string>> customHeaders = null,
 			CancellationToken cancellationToken = new CancellationToken())
 		{
-			var token = new EmbedToken {Token = Token};
+			var token = new EmbedToken
+			{
+				Token = Token,
+				Expiration = tokenExpiration ?? DateTime.Now.AddMinutes(60)
+			};
 			var result = new HttpOperationResponse<EmbedToken> {Body = token};
 			return await Task.FromResult(result);
 		}
