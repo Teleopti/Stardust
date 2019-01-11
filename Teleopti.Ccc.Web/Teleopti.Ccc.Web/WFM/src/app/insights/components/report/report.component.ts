@@ -14,7 +14,6 @@ import { NavigationService } from '../../core/navigation.service';
 })
 export class ReportComponent implements OnInit {
 	private pbiCoreService: any;
-
 	private action = 'view';
 
 	public initialized = false;
@@ -74,6 +73,34 @@ export class ReportComponent implements OnInit {
 		return <HTMLElement>document.getElementById('reportContainer');
 	}
 
+	updateToken(reportId) {
+		this.reportSvc.getReportConfig(reportId).then(config => {
+			const embedContainer = this.getReportContainer();
+			const report = this.pbiCoreService.get(embedContainer);
+
+			const self = this;
+			report.setAccessToken(config.AccessToken).then(function () {
+				self.setTokenExpirationListener(config.Expiration, 2, reportId);
+			});
+		});
+	}
+
+	setTokenExpirationListener(tokenExpiration, minutesToRefresh, reportId) {
+		const currentTime = Date.now();
+		const expiration = Date.parse(tokenExpiration);
+		const safetyInterval = minutesToRefresh * 60 * 1000;
+		const timeout = expiration - currentTime - safetyInterval;
+
+		const self = this;
+		if (timeout <= 0) {
+			self.updateToken(reportId);
+		} else {
+			setTimeout(function () {
+				self.updateToken(reportId);
+			}, timeout);
+		}
+	}
+
 	loadReport(config) {
 		// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 		const embedConfig = {
@@ -96,16 +123,14 @@ export class ReportComponent implements OnInit {
 			}
 		};
 
-		// Embed the report and display it within the div container.
 		const reportContainer = this.getReportContainer();
 		const report = this.pbiCoreService.embed(reportContainer, embedConfig);
 
-		// Report.off removes a given event handler if it exists.
+		const self = this;
 		report.off('loaded');
-
-		// Report.on will add an event handler which prints to Log window.
-		report.on('loaded', function() {
-			this.isLoading = false;
+		report.on('loaded', function () {
+			self.isLoading = false;
+			self.setTokenExpirationListener(config.Expiration, 2, config.ReportId);
 		});
 	}
 

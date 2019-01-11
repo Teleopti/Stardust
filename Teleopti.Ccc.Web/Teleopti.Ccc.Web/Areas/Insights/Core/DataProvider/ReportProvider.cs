@@ -72,16 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				//result.IsEffectiveIdentityRequired = datasets.IsEffectiveIdentityRequired;
 				//result.IsEffectiveIdentityRolesRequired = datasets.IsEffectiveIdentityRolesRequired;
 
-				var token = await generateAccessToken(client, report);
-
-				// Generate Embed Configuration.
-				result.TokenType = "Embed";
-				result.AccessToken = token.Token;
-				result.ReportId = report.Id;
-				result.ReportName = report.Name;
-				result.ReportUrl = report.EmbedUrl;
-
-				return result;
+				return await generateEmbedReportConfig(client, report);
 			}
 		}
 
@@ -105,15 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				var newReport = client.Reports.CloneReportInGroup(groupId, templateReport.Id,
 					new CloneReportRequest(newReportName));
 
-				var accessToken = await generateAccessToken(client, newReport);
-
-				result.TokenType = "Embed";
-				result.AccessToken = accessToken.Token;
-				result.ReportId = newReport.Id;
-				result.ReportName = newReport.Name;
-				result.ReportUrl = newReport.EmbedUrl;
-
-				return result;
+				return await generateEmbedReportConfig(client, newReport);
 			}
 		}
 
@@ -147,15 +130,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				var newReport = client.Reports.CloneReportInGroup(groupId, reportId,
 					new CloneReportRequest(targetReportName));
 
-				var accessToken = await generateAccessToken(client, newReport);
-
-				result.TokenType = "Embed";
-				result.AccessToken = accessToken.Token;
-				result.ReportId = newReport.Id;
-				result.ReportName = newReport.Name;
-				result.ReportUrl = newReport.EmbedUrl;
-
-				return result;
+				return await generateEmbedReportConfig(client, newReport);
 			}
 		}
 
@@ -185,7 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			}
 		}
 
-		private async Task<EmbedToken> generateAccessToken(IPowerBIClient client, Report report, string userName = null,
+		private async Task<EmbedReportConfig> generateEmbedReportConfig(IPowerBIClient client, Report report, string userName = null,
 			string roles = null)
 		{
 			GenerateTokenRequest generateTokenRequestParameters;
@@ -217,9 +192,24 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			if (token == null)
 			{
 				logger.Error("Failed to generate embed token.");
+				return new EmbedReportConfig();
 			}
 
-			return token;
+			var result = new EmbedReportConfig
+			{
+				TokenType = "Embed",
+				AccessToken = token.Token,
+				// The expiration got from PowerBI is earlier than now, set to Minimum Access Token Lifetime(10 minutes)
+				// Refer to https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-configurable-token-lifetimes#configurable-token-lifetime-properties
+				Expiration = token.Expiration < DateTime.Now
+					? DateTime.Now.AddMinutes(10)
+					: token.Expiration,
+				ReportId = report.Id,
+				ReportName = report.Name,
+				ReportUrl = report.EmbedUrl
+			};
+
+			return result;
 		}
 	}
 }

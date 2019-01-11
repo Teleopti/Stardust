@@ -106,8 +106,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			config.TokenType.Should().Be.NullOrEmpty();
 		}
 
-		[Test]
-		public void ShouldGetReportConfig()
+		[TestCase(10)]
+		[TestCase(-5)]
+		public void ShouldGetReportConfig(int tokenExpirationTimeSpanInMinutes)
 		{
 			const string token = "Test access token for report";
 			var groupId = Guid.NewGuid().ToString();
@@ -120,6 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			var reports = createReports(groupId, report);
 			reports.SetAccessToken(token);
+			reports.SetTokenExpiration(DateTime.Now.AddMinutes(tokenExpirationTimeSpanInMinutes));
 
 			var target = createReportProvider(reports, groupId);
 
@@ -127,6 +129,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			config.ReportId.Should().Be(report.Id);
 			config.ReportName.Should().Be(report.Name);
 			config.AccessToken.Should().Be(token);
+			(config.Expiration.Value - DateTime.Now).TotalMinutes.Should().Be.GreaterThan(0);
 		}
 
 		[Test]

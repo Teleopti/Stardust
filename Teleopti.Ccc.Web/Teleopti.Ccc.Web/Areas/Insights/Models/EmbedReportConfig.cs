@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Insights.Models
+﻿using System;
+
+namespace Teleopti.Ccc.Web.Areas.Insights.Models
 {
 	public class EmbedReportConfig
 	{
@@ -7,5 +9,6 @@
 		public string ReportUrl { get; set; }
 		public string TokenType { get; set; }
 		public string AccessToken { get; set; }
+		public DateTime? Expiration { get; set; }
 	}
 }
