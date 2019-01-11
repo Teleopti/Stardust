@@ -9,5 +9,16 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
 		public string AnalyticsDatabase { get; set; }
 		public string AnalysisService { get; set; }
 		public string Location { get; set; }
+
+		public bool IsValid()
+		{
+			return !string.IsNullOrEmpty(ServiceBusAddress) &&
+				   !string.IsNullOrEmpty(TopicName) &&
+				   !string.IsNullOrEmpty(ModelLocation) &&
+				   !string.IsNullOrEmpty(ModelName) &&
+				   !string.IsNullOrEmpty(AnalyticsDatabase) &&
+				   !string.IsNullOrEmpty(AnalysisService) &&
+				   !string.IsNullOrEmpty(Location);
+		}
 	}
 }

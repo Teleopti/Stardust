@@ -5,10 +5,8 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 {
@@ -18,7 +16,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			IJobMultipleDate jobCategoryDates, int dataSource, string timeZone,
 			int intervalLengthMinutes, string cubeConnectionString,
 			string pmInstall, CultureInfo currentCulture,
-			IContainerHolder containerHolder, bool runIndexMaintenance
+			IContainerHolder containerHolder, bool runIndexMaintenance,
+			bool insightsEnabled = false
 		)
 		{
 			DataSource = dataSource;
@@ -35,6 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			TenantLogonInfoLoader = containerHolder.TenantLogonInfoLoader;
 
 			RunIndexMaintenance = runIndexMaintenance;
+			InsightsEnabled = insightsEnabled;
 		}
 
 		public IContainerHolder ContainerHolder { get; set; }
@@ -80,19 +80,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 		public bool RunIndexMaintenance { get; private set; }
 
-		public bool InsightsLicensed
-		{
-			get
-			{
-				var dataSourceName = UnitOfWorkFactory.Current?.Name;
-				if (dataSourceName == null) return false;
-
-				var licenseActivator = DefinedLicenseDataFactory.GetLicenseActivator(dataSourceName);
-				var insightsLicensed = licenseActivator?.EnabledLicenseOptionPaths
-					.Contains(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
-				return insightsLicensed ?? false;
-			}
-		}
+		public bool InsightsEnabled { get; private set; }
 
 		public InsightsConfiguration InsightsConfig { get; private set; }
 

@@ -12,24 +12,31 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 		private readonly ILicensedFunctionsProvider _licensedFunctionsProvider;
 		private readonly ILog _logger;
 
-		public InitializeLicenseServiceForTenant(ILog logger, ILicenseVerifierFactory licenseVerifierFactory, ILicensedFunctionsProvider licensedFunctionsProvider)
+		public InitializeLicenseServiceForTenant(ILog logger, ILicenseVerifierFactory licenseVerifierFactory,
+			ILicensedFunctionsProvider licensedFunctionsProvider)
 		{
 			_logger = logger;
 			_licenseVerifierFactory = licenseVerifierFactory;
 			_licensedFunctionsProvider = licensedFunctionsProvider;
 		}
 
+		/// <summary>
+		/// Load license for tenant and fill it in a list in DefinedLicenseDataFactory,
+		/// Then we can get LicenseActivator of specific tenant.
+		/// </summary>
+		/// <see cref="DefinedLicenseDataFactory"/>
+		/// <param name="dataSource"></param>
+		/// <returns>License loaded and verified</returns>
 		public bool TryInitialize(IDataSource dataSource)
 		{
-			//don't really know what this does - extracted from web startup
-			if (dataSource.Application == null)
-				return false;
+			if (dataSource.Application == null) return false;
+
 			var licenseVerifier = _licenseVerifierFactory.Create(this, dataSource.Application);
 			using (dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var licenseService = licenseVerifier.LoadAndVerifyLicense();
-				if (licenseService == null) 
-					return false;
+				if (licenseService == null) return false;
+
 				clearCashedLicenseData(dataSource.DataSourceName);
 				LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
 				return true;

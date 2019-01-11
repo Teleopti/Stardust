@@ -10,6 +10,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core.EtlTool
@@ -56,7 +57,8 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 				_pmInfoProvider.PmInstallation(),
 				CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value),
 				new IocContainerHolder(_componentContext),
-				baseConfiguration.RunIndexMaintenance);
+				baseConfiguration.RunIndexMaintenance,
+				insightsEnabled(tenantName, baseConfiguration));
 
 			return new JobCollection(jobParameters)
 				.Select(job => new JobCollectionModel
@@ -106,6 +108,15 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			}
 
 			return returnList;
+		}
+
+		private bool insightsEnabled(string tenantName, IBaseConfiguration baseConfiguration)
+		{
+			var licenseActivator = DefinedLicenseDataFactory.GetLicenseActivator(tenantName);
+			var insightsLicensed = licenseActivator?.EnabledLicenseOptionPaths?
+				.Contains(DefinedLicenseOptionPaths.TeleoptiWfmInsights) ?? false;
+
+			return insightsLicensed && (baseConfiguration.InsightsConfig?.IsValid() ?? false);
 		}
 	}
 }

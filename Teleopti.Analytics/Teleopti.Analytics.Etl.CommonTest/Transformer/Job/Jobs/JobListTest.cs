@@ -22,44 +22,26 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Jobs
 			Assert.Greater(new JobCollection(jobParameters).Count, 0);
 		}
 		
-		[Ignore("TODO-xinfli: Flaky")]
-		[Test]
-		public void ShouldIncludeInsightsJobOnlyIfLicensedAndToggleEnabled()
+		[TestCase(true, true)]
+		[TestCase(true, false)]
+		[TestCase(false, true)]
+		[TestCase(false, false)]
+		public void InsightsJobShouldDependsOnLicensedAndToggle(bool insightsEnabled, bool toggleEnabled)
 		{
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			var jobParameters = JobParametersFactory.SimpleParametersWithInsightsFlag(insightsEnabled);
 
-			((JobParametersFactory.FakeContainerHolder) jobParameters.ContainerHolder).EnableToggle(
-				Toggles.WFM_Insights_78059);
+			if (toggleEnabled)
+			{
+				((JobParametersFactory.FakeContainerHolder) jobParameters.ContainerHolder).EnableToggle(
+					Toggles.WFM_Insights_78059);
+			}
 
 			var licenseActivator = new FakeLicenseActivator("test customer");
 			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
 			DefinedLicenseDataFactory.SetLicenseActivator(UnitOfWorkFactory.Current.Name, licenseActivator);
 
-			new JobCollection(jobParameters).Any(x=>x.Name == insightsJob).Should().Be.True();
-		}
-		
-		[Ignore("TODO-xinfli: Flaky")]
-		[Test]
-		public void ShouldExcludeInsightsJobIfNotLicensed()
-		{
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
-			((JobParametersFactory.FakeContainerHolder) jobParameters.ContainerHolder).EnableToggle(
-				Toggles.WFM_Insights_78059);
-			
-			new JobCollection(jobParameters).Any(x=>x.Name == insightsJob).Should().Be.False();
-		}
-		
-		[Ignore("TODO-xinfli: Flaky")]
-		[Test]
-		public void ShouldExcludeInsightsJobOnlyIfToggleNotEnabled()
-		{
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
-
-			var licenseActivator = new FakeLicenseActivator("test customer");
-			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
-			DefinedLicenseDataFactory.SetLicenseActivator(UnitOfWorkFactory.Current.Name, licenseActivator);
-
-			new JobCollection(jobParameters).Any(x=>x.Name == insightsJob).Should().Be.False();
+			var expectedResult = insightsEnabled & toggleEnabled;
+			new JobCollection(jobParameters).Any(x=>x.Name == insightsJob).Should().Be.EqualTo(expectedResult);
 		}
 	}
 }

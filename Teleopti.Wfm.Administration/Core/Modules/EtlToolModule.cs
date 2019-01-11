@@ -31,6 +31,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<Now>().As<INow>().SingleInstance();
 			builder.RegisterType<BaseConfigurationValidator>().SingleInstance();
 			builder.RegisterType<JobHistoryRepository>().As<IJobHistoryRepository>().SingleInstance();
+			builder.RegisterType<Tenants>().As<ITenants>().SingleInstance();
 		}
 	}
 }
