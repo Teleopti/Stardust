@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
@@ -33,10 +34,11 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 	{
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		//private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IntradayStatisticsService _intradayStatisticsService;
+		private readonly ILoadSkillDaysWithPeriodFlexibility _loadSkillDaysWithPeriodFlexibility;
 
 		public IntradayStaffingService(
 			ICurrentScenario currentScenario,
@@ -44,12 +46,12 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			IntradayStatisticsService intradayStatisticsService,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, 
 			ISkillRepository skillRepository,
-			ISkillDayLoadHelper skillDayLoadHelper
-			)
+			ISkillDayLoadHelper skillDayLoadHelper, ILoadSkillDaysWithPeriodFlexibility loadSkillDaysWithPeriodFlexibility)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository ?? throw new ArgumentNullException(nameof(skillCombinationResourceRepository));
 			_skillRepository = skillRepository ?? throw new ArgumentNullException(nameof(skillRepository));
-			_skillDayLoadHelper = skillDayLoadHelper;
+			//_skillDayLoadHelper = skillDayLoadHelper;
+			_loadSkillDaysWithPeriodFlexibility = loadSkillDaysWithPeriodFlexibility;
 			_currentScenario = currentScenario ?? throw new ArgumentNullException(nameof(currentScenario));
 			_resourceCalculation = resourceCalculation ?? throw new ArgumentNullException(nameof(resourceCalculation));
 			_intradayStatisticsService = intradayStatisticsService ?? throw new ArgumentNullException(nameof(intradayStatisticsService));
@@ -67,7 +69,8 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			var lastPeriodDateInSkillTimeZone = new DateOnly(skills.Select(x => TimeZoneInfo.ConvertTimeFromUtc(toUtc, x.TimeZone)).Max());
 			var dateOnlyPeriod = new DateOnlyPeriod(firstPeriodDateInSkillTimeZone, lastPeriodDateInSkillTimeZone);
 
-			var skillDays = _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, _currentScenario.Current()).Values.SelectMany(i => i).ToList();
+			//var skillDays = _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, _currentScenario.Current()).Values.SelectMany(i => i).ToList();
+			var skillDays = _loadSkillDaysWithPeriodFlexibility.Load(dateOnlyPeriod, skills, _currentScenario.Current()).Values.SelectMany(i => i).ToList();
 			var returnList = new HashSet<SkillStaffingInterval>();
 			foreach (var skillDay in skillDays)
 			{

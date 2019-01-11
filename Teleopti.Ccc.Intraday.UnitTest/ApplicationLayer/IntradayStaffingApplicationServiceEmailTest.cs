@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
@@ -19,7 +21,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 {
 	[DomainTest]
-	public class IntradayStaffingApplicationServiceEmailTest : IIsolateSystem, IExtendSystem
+	public abstract class IntradayStaffingApplicationServiceEmailBaseTest : IIsolateSystem, IExtendSystem
 	{
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
@@ -413,4 +415,17 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			extend.AddService<IntradayStaffingApplicationServiceTestHelper>();
 		}
 	}
+
+	[EnabledBy(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
+	public class IntradayStaffingApplicationServiceEmailToggleOnTest : IntradayStaffingApplicationServiceEmailBaseTest
+	{
+
+	}
+
+	[DisabledBy(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
+	public class IntradayStaffingApplicationServiceEmailToggleOffTest : IntradayStaffingApplicationServiceEmailBaseTest
+	{
+
+	}
+
 }
