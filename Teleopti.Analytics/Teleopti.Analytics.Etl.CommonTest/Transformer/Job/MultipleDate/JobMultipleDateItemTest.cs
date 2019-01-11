@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.MultipleDate
 
             // Utc floor and ceiling
             Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(_dt1, _TimeZoneInfo).Date, _jobMultipleDateItem.StartDateUtcFloor);
-            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(_dt2, _TimeZoneInfo).Date.AddDays(1).AddMilliseconds(-1),
+            Assert.AreEqual(TimeZoneInfo.ConvertTimeToUtc(_dt2, _TimeZoneInfo).Date.AddDays(2).AddMilliseconds(-1),
                             _jobMultipleDateItem.EndDateUtcCeiling);
         }
     }
