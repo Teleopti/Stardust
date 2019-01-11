@@ -198,29 +198,31 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 			Years: this.buildYearsForPost(this.newCalendarYears)
 		};
 
-		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(
-			result => {
-				if (result.Id.length > 0) {
-					result.Years.forEach(y => {
-						y.Dates.forEach(d => {
-							d.Date = moment(d.Date).format(this.dateFormat);
-						});
+		this.bankCalendarDataService.saveNewBankHolidayCalendar(bankHolidayCalendar).subscribe(result => {
+			if (result.Id.length > 0) {
+				let calItem = result as BankHolidayCalendarItem;
+				let curYear = moment().year();
+
+				calItem.CurrentYearIndex = 0;
+				calItem.Years.forEach((y, i) => {
+					y.Dates.forEach(d => {
+						d.Date = moment(d.Date).format(this.dateFormat);
 					});
 
-					this.bankHolidayCalendarsList.unshift(result as BankHolidayCalendarItem);
-					this.bankHolidayCalendarsList.sort((c, n) => {
-						return c.Name.localeCompare(n.Name);
-					});
-					this.exitAddNewBankCalendar();
-				}
-			},
-			error => {
-				this.noticeService.error(
-					this.translate.instant('Error'),
-					this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
-				);
+					if (moment(y.Year.toString()).year() == curYear) {
+						calItem.CurrentYearIndex = i;
+					}
+				});
+
+				this.bankHolidayCalendarsList.unshift(calItem);
+				this.bankHolidayCalendarsList.sort((c, n) => {
+					return c.Name.localeCompare(n.Name);
+				});
+				this.exitAddNewBankCalendar();
+			} else {
+				this.networkError();
 			}
-		);
+		}, this.networkError);
 	}
 
 	buildYearsForPost(years: BankHolidayCalendarYearItem[]): BankHolidayCalendarYear[] {
@@ -237,5 +239,12 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 			});
 		});
 		return result.filter(y => y.Dates.length > 0);
+	}
+
+	networkError(error?: any) {
+		this.noticeService.error(
+			this.translate.instant('Error'),
+			this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
+		);
 	}
 }

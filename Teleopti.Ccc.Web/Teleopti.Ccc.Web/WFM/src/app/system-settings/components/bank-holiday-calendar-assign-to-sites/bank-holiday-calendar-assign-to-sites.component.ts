@@ -4,7 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd';
 
 import { GroupPageService } from 'src/app/shared/services/group-page-service';
 import { GroupPageSiteItem } from 'src/app/shared/interface';
-import { BankHolidayCalendarItem, UpdateSiteBankHolidayCalendarsFormData } from '../../interface';
+import { BankHolidayCalendarItem } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 
 @Component({
@@ -16,7 +16,8 @@ import { BankCalendarDataService } from '../../shared';
 export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 	@Input() bankHolidayCalendarsList: BankHolidayCalendarItem[];
 
-	sitesList: GroupPageSiteItem[];
+	dateFormat: string = 'YYYY-MM-DD';
+	sitesList: GroupPageSiteItem[] = [];
 
 	constructor(
 		private translate: TranslateService,
@@ -25,46 +26,50 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 		private bankCalendarDataService: BankCalendarDataService
 	) {}
 
-	ngOnInit(): void {
+	ngOnInit() {
 		this.groupPageService.getAvailableGroupPagesForDate(moment().format('YYYY-MM-DD')).subscribe(result => {
 			this.sitesList = result.BusinessHierarchy as GroupPageSiteItem[];
 
 			this.bankCalendarDataService.getSiteBankHolidayCalendars().subscribe(siteCalendars => {
-				if (siteCalendars && siteCalendars.length > 0) {
-					this.sitesList.forEach(s => {
-						let site = siteCalendars.filter(sc => sc.Site == s.Id)[0];
-						if (site) {
-							s.SelectedCalendarId = site.Calendars[0].Id;
-						}
-					});
-				}
-			});
-		});
+				this.sitesList.forEach(s => {
+					s.SelectedCalendarId = '';
+					let site = siteCalendars.filter(sc => sc.Site == s.Id)[0];
+					if (site) {
+						//Currently we only support setting one calendar to site
+						s.SelectedCalendarId = site.Calendars[0];
+					}
+				});
+			}, this.networkError);
+		}, this.networkError);
 	}
 
 	updateCalendarForSite(calId: string, site: GroupPageSiteItem) {
-		let data: UpdateSiteBankHolidayCalendarsFormData = {
-			Settings: [{ Site: site.Id, Calendars: [calId] }]
+		let cals: string[] = [];
+
+		if (calId && calId.length > 0) {
+			cals.push(calId);
+		}
+
+		const formData = {
+			Settings: [{ Site: site.Id, Calendars: cals }]
 		};
-		this.bankCalendarDataService.updateCalendarForSite(data).subscribe(
+
+		this.bankCalendarDataService.updateCalendarForSite(formData).subscribe(
 			result => {
 				if (result) {
 				} else {
-					this.sitesList.forEach(s => {
-						if (s.Id == site.Id) {
-							s.SelectedCalendarId = '';
-						}
-					});
-					this.updateError();
+					site.SelectedCalendarId = '';
+					this.networkError();
 				}
 			},
 			error => {
-				this.updateError();
+				site.SelectedCalendarId = '';
+				this.networkError(error);
 			}
 		);
 	}
 
-	updateError() {
+	networkError(error?: any) {
 		this.noticeService.error(
 			this.translate.instant('Error'),
 			this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')

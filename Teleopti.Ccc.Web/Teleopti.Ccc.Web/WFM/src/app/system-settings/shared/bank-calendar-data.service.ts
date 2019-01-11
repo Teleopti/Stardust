@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BankHolidayCalendar, SiteBankHolidayCalendars, UpdateSiteBankHolidayCalendarsFormData } from '../interface';
+import { BankHolidayCalendar, SiteBankHolidayCalendars, SiteBankHolidayCalendarsFormData } from '../interface';
 
 @Injectable()
 export class BankCalendarDataService {
@@ -27,7 +27,7 @@ export class BankCalendarDataService {
 		return this.http.get('../api/SiteBankHolidayCalendars') as Observable<SiteBankHolidayCalendars[]>;
 	}
 
-	updateCalendarForSite(data: UpdateSiteBankHolidayCalendarsFormData): Observable<boolean> {
+	updateCalendarForSite(data: SiteBankHolidayCalendarsFormData): Observable<boolean> {
 		return this.http.post('../api/SiteBankHolidayCalendars/Update', data) as Observable<boolean>;
 	}
 }

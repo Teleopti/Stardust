@@ -32,7 +32,7 @@
 	>
 	</bank-holiday-calendar-edit>
 
-	<div *ngIf="!isAddingNewCalendar && !isEdittingCalendar">
+	<div [hidden]="isAddingNewCalendar || isEdittingCalendar">
 		<nz-tabset>
 			<nz-tab [nzTitle]="bankHolidayTabTitleTemplate">
 				<ng-template #bankHolidayTabTitleTemplate>

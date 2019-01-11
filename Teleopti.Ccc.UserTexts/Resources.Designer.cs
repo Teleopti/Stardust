@@ -31688,6 +31688,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a calendar for site.
+        /// </summary>
+        public static string SelectACalendarForSite {
+            get {
+                return ResourceManager.GetString("SelectACalendarForSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a category.
         /// </summary>
         public static string SelectACategory {
@@ -39362,7 +39371,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation are loading.
+        ///   Looks up a localized string similar to Validation in progress.
         /// </summary>
         public static string ValidationsAreLoading {
             get {
@@ -39371,7 +39380,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation are loading, this might take a few minutes.
+        ///   Looks up a localized string similar to Validation in progress, this might take a few minutes.
         /// </summary>
         public static string ValidationsAreLoadingTooltip {
             get {
