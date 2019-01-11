@@ -7,7 +7,6 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.States.Infrastructure

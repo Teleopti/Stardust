@@ -14,12 +14,12 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 	{
 		private readonly IRtaEventStore _store;
 		private readonly ICurrentDataSource _currentDataSource;
-		private readonly ISyncEventProcessingExceptionHandler _exceptionHandler;
+		private readonly IRtaEventPublisherExceptionHandler _exceptionHandler;
 
 		public RtaEventPublisher(
 			IRtaEventStore store,
 			ICurrentDataSource currentDataSource,
-			ISyncEventProcessingExceptionHandler exceptionHandler)
+			IRtaEventPublisherExceptionHandler exceptionHandler)
 		{
 			_exceptionHandler = exceptionHandler;
 			_store = store;

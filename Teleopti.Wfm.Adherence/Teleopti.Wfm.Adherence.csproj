@@ -113,6 +113,7 @@
     <Compile Include="Configuration\IRtaStateGroup.cs" />
     <Compile Include="Configuration\IRtaStateGroupRepository.cs" />
     <Compile Include="Configuration\IRtaStateHolder.cs" />
+    <Compile Include="Configuration\Repositories\Repository.cs" />
     <Compile Include="Configuration\Repositories\RtaMapRepository.cs" />
     <Compile Include="Configuration\Repositories\RtaRuleRepository.cs" />
     <Compile Include="Configuration\Repositories\RtaStateGroupRepository.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Historical\Infrastructure\HistoricalOverviewReadModelPersister.cs" />
     <Compile Include="Historical\Infrastructure\IHistoricalOverviewReadModelPersister.cs" />
     <Compile Include="Historical\Infrastructure\IRtaEventStore.cs" />
+    <Compile Include="Historical\Infrastructure\IRtaEventPublisherExceptionHandler.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventPublisher.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStore.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreTypeIdMapper.cs" />
@@ -239,6 +241,7 @@
     <Compile Include="States\Infrastructure\DeadLockVictimPriority.cs" />
     <Compile Include="States\Infrastructure\ExternalLogonReadModelPersister.cs" />
     <Compile Include="States\Infrastructure\IMappingReadModelPersister.cs" />
+    <Compile Include="States\Infrastructure\IQueryExtensions.cs" />
     <Compile Include="States\Infrastructure\MappingReadModelPersister.cs" />
     <Compile Include="States\Infrastructure\MappingReadModelReader.cs" />
     <Compile Include="States\Infrastructure\StateQueue.cs" />
@@ -303,9 +306,9 @@
       <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
-      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
-      <Name>Teleopti.Ccc.Infrastructure</Name>
+    <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
