@@ -36,20 +36,33 @@
 					})[0];
 			}
 
-			function recreateScheduleVm(queryDate, timezone, personIds) {
+			function recreateScheduleVm(queryDate, timezone, personIdInEditing) {
 				timezone = timezone || CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 				var createdGroupScheduleVm = groupScheduleFactory.Create(svc.rawSchedules, queryDate, timezone);
-				if (!personIds) {
+				if (!personIdInEditing) {
 					svc.groupScheduleVm = createdGroupScheduleVm;
 					return;
 				}
+
+				var isTimelineLengthChanged =
+					createdGroupScheduleVm.TimeLine && svc.groupScheduleVm.TimeLine
+					&& (svc.groupScheduleVm.TimeLine.LengthPercentPerMinute !== createdGroupScheduleVm.TimeLine.LengthPercentPerMinute);
+
 				createdGroupScheduleVm.Schedules.forEach(function (schedule, i) {
-					if (personIds.indexOf(schedule.PersonId) > -1) {
+					if (personIdInEditing === schedule.PersonId) {
+						if (isTimelineLengthChanged) {
+							Object.assign(svc.groupScheduleVm.Schedules[i], schedule);
+						}
+					} else {
 						svc.groupScheduleVm.Schedules[i] = schedule;
 					}
 				});
+
 				svc.groupScheduleVm.TimeLine = createdGroupScheduleVm.TimeLine;
+
 			}
+
+
 
 			function resetSchedules(schedules, queryDate, timezone) {
 				svc.rawSchedules = schedules;
@@ -65,14 +78,14 @@
 				};
 			}
 
-			function updateScheduleForPeoples(personIdList, queryDate, timezone, afterLoading) {
+			function updateScheduleForPeoples(personIdList, queryDate, timezone, afterLoading, personIdInEditing) {
 				teamScheduleSvc.getSchedules(queryDate, personIdList).then(function (result) {
-					updateSchedulesByRawData(queryDate, timezone, personIdList, result.Schedules);
+					updateSchedulesByRawData(queryDate, timezone, result.Schedules, personIdInEditing);
 					afterLoading && afterLoading();
 				});
 			}
 
-			function updateSchedulesByRawData(queryDate, timezone, personIdList, rawSchedules) {
+			function updateSchedulesByRawData(queryDate, timezone, rawSchedules, personIdInEditing) {
 				angular.forEach(rawSchedules, function (schedule) {
 					for (var i = 0; i < svc.rawSchedules.length; i++) {
 						if (schedule.PersonId === svc.rawSchedules[i].PersonId
@@ -82,7 +95,7 @@
 						}
 					}
 				});
-				recreateScheduleVm(queryDate, timezone, personIdList);
+				recreateScheduleVm(queryDate, timezone, personIdInEditing);
 			}
 
 			function resetSchedulesForPeople(personIds) {
