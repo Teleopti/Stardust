@@ -98,16 +98,5 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 				CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 			Assert.IsFalse(_target.IsPmInstalled);
 		}
-
-		[Test]
-		public void VerifyInsightsIsLicensed()
-		{
-			Assert.IsFalse(_target.InsightsEnabled);
-
-			var licenseActivator = new FakeLicenseActivator("test customer");
-			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmInsights);
-			DefinedLicenseDataFactory.SetLicenseActivator(UnitOfWorkFactory.Current.Name, licenseActivator);
-			Assert.IsTrue(_target.InsightsEnabled);
-		}
 	}
 }
