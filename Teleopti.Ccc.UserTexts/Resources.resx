@@ -18057,9 +18057,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Password policy error</value>
     <comment>Title of the password policy error box</comment>
   </data>
-  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
-    <value>Are you sure to delete this bank holiday calendar?</value>
-    <comment>Are you sure to delete this bank holiday calendar?</comment>
+  <data name="AreYouSureYouWantToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>Are you sure you want to delete this bank holiday calendar?</value>
+    <comment>Are you sure you want to delete this bank holiday calendar?</comment>
   </data>
   <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
     <value>Are you sure to delete year {0} from calendar {1}?</value>
@@ -18156,5 +18156,13 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="SelectACalendarForSite" xml:space="preserve">
     <value>Select a calendar for site</value>
     <comment>Select a calendar for site</comment>
+  </data>
+  <data name="NoCalendarsAvailable" xml:space="preserve">
+    <value>No calendars available.</value>
+    <comment>No calendars available.</comment>
+  </data>
+  <data name="XSitesUseThisCalendar" xml:space="preserve">
+    <value>{0} sites use this calendar:</value>
+    <comment>{0} sites use this calendar:</comment>
   </data>
 </root>

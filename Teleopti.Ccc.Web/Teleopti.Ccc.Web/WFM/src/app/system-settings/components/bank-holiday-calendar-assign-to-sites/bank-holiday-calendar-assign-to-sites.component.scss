@@ -5,16 +5,14 @@ $primary: #0099ff;
 	max-height: calc(100vh - 250px);
 	overflow: auto;
 }
-
 nz-list-item {
 	padding-left: 16px;
 	padding-right: 16px;
 }
-
 nz-list-item:hover {
 	border-bottom-color: $primary;
 }
-
 nz-select {
-	min-width: 200px;
+	min-width: 250px;
+	max-width: 500px;
 }

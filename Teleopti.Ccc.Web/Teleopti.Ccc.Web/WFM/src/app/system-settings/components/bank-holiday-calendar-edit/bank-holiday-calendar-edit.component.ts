@@ -261,33 +261,25 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			Years: this.buildYearsForPost(this.edittingCalendarYears.concat(this.deletedYears))
 		};
 
-		this.bankCalendarDataService.saveExistingHolidayCalendar(bankHolidayCalendar).subscribe(
-			result => {
-				const calItem = result as BankHolidayCalendarItem;
-				const curYear = moment().year();
+		this.bankCalendarDataService.saveExistingHolidayCalendar(bankHolidayCalendar).subscribe(result => {
+			const calItem = result as BankHolidayCalendarItem;
+			const curYear = moment().year();
 
-				calItem.CurrentYearIndex = 0;
-				calItem.Years.forEach((y, i) => {
-					y.Dates.forEach(d => {
-						d.Date = moment(d.Date).format(this.dateFormat);
-					});
-
-					if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
-						calItem.CurrentYearIndex = i;
-					}
+			calItem.CurrentYearIndex = 0;
+			calItem.Years.forEach((y, i) => {
+				y.Dates.forEach(d => {
+					d.Date = moment(d.Date).format(this.dateFormat);
 				});
 
-				this.bankHolidayCalendarsList[this.bankHolidayCalendarsList.indexOf(this.edittingCalendar)] = calItem;
-				this.resetEditSpace();
-				this.exitEdittingBankCalendar();
-			},
-			error => {
-				this.noticeService.error(
-					this.translate.instant('Error'),
-					this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
-				);
-			}
-		);
+				if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
+					calItem.CurrentYearIndex = i;
+				}
+			});
+
+			this.bankHolidayCalendarsList[this.bankHolidayCalendarsList.indexOf(this.edittingCalendar)] = calItem;
+			this.resetEditSpace();
+			this.exitEdittingBankCalendar();
+		}, this.networkError);
 	}
 
 	buildYearsForPost(years: BankHolidayCalendarYearItem[]): BankHolidayCalendarYear[] {
@@ -311,4 +303,11 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 		this.editingCalendarTabIndex = 0;
 		this.edittingCalendarYears = [];
 	}
+
+	networkError = (error?: any) => {
+		this.noticeService.error(
+			this.translate.instant('Error'),
+			this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
+		);
+	};
 }

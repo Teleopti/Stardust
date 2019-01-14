@@ -59,7 +59,7 @@
 	.ant-list-item {
 		padding: 0;
 	}
-	span {
+	span.inline-block {
 		font-weight: bold;
 	}
 }
@@ -79,6 +79,7 @@
 }
 .bank-holiday-date-text {
 	white-space: nowrap;
+	font-weight: bold;
 }
 .remove-date-icon {
 	min-width: 24px;

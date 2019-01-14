@@ -69,10 +69,10 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 		);
 	}
 
-	networkError(error?: any) {
+	networkError = (error?: any) => {
 		this.noticeService.error(
 			this.translate.instant('Error'),
 			this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
 		);
-	}
+	};
 }

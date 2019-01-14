@@ -241,10 +241,10 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 		return result.filter(y => y.Dates.length > 0);
 	}
 
-	networkError(error?: any) {
+	networkError = (error?: any) => {
 		this.noticeService.error(
 			this.translate.instant('Error'),
 			this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
 		);
-	}
+	};
 }

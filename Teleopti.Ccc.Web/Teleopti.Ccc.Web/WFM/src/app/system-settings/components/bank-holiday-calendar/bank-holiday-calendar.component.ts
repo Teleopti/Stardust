@@ -16,12 +16,13 @@ export class BankHolidayCalendarComponent implements OnInit {
 	dateFormat = 'YYYY-MM-DD';
 
 	bankHolidayCalendarsList: BankHolidayCalendarItem[] = [];
+	isAssignBankHolidayCalendarsToSitesEnabled = false;
 	isAddingNewCalendar = false;
 	isEdittingCalendar = false;
 	edittingCalendar: BankHolidayCalendarItem;
 	selectedCalendar: BankHolidayCalendarItem;
 	isDeleteCalendarModalVisible = false;
-	isAssignBankHolidayCalendarsToSitesEnabled = false;
+	confirmDeleteCalendarContent: string;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
@@ -42,7 +43,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 						d.Date = moment(d.Date).format(this.dateFormat);
 					});
 
-					if (moment(y.Year.toString(), "YYYY").year() === curYear) {
+					if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
 						c.CurrentYearIndex = i;
 					}
 				});
@@ -51,7 +52,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 			this.bankHolidayCalendarsList = cals.sort((c, n) => {
 				return c.Name.localeCompare(n.Name);
 			});
-		});
+		}, this.networkError);
 
 		this.toggleService.toggles$.subscribe(toggles => {
 			this.isAssignBankHolidayCalendarsToSitesEnabled =
@@ -66,34 +67,43 @@ export class BankHolidayCalendarComponent implements OnInit {
 	confirmDeleteHolidayCanlendar(event: Event, calendar: BankHolidayCalendarItem) {
 		event.stopPropagation();
 		this.selectedCalendar = calendar;
-		this.isDeleteCalendarModalVisible = true;
+
+		this.toggleService.toggles$.subscribe(toggles => {
+			this.isAssignBankHolidayCalendarsToSitesEnabled =
+				toggles.WFM_Setting_AssignBankHolidayCalendarsToSites_79899;
+
+			if (this.isAssignBankHolidayCalendarsToSitesEnabled) {
+				this.bankCalendarDataService.getSitesByCalendar(calendar.Id).subscribe(result => {
+					if (Array.isArray(result)) {
+						this.confirmDeleteCalendarContent = this.translate
+							.instant('XSitesUseThisCalendar')
+							.replace('{0}', result.length);
+						this.isDeleteCalendarModalVisible = true;
+					} else {
+						this.networkError();
+					}
+				}, this.networkError);
+			} else {
+				this.confirmDeleteCalendarContent = '';
+				this.isDeleteCalendarModalVisible = true;
+			}
+		});
 	}
 
 	deleteHolidayCalendar() {
 		this.isDeleteCalendarModalVisible = false;
-		this.bankCalendarDataService.deleteBankHolidayCalendar(this.selectedCalendar.Id).subscribe(
-			result => {
-				if (result === true) {
-					this.bankHolidayCalendarsList.splice(
-						this.bankHolidayCalendarsList.indexOf(this.selectedCalendar),
-						1
-					);
+		this.bankCalendarDataService.deleteBankHolidayCalendar(this.selectedCalendar.Id).subscribe(result => {
+			if (result === true) {
+				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(this.selectedCalendar), 1);
 
-					this.noticeService.success(
-						this.translate.instant('Success'),
-						this.translate
-							.instant('BankHolidayCalendarHasBeenSuccessfullyDeleted')
-							.replace('{0}', this.selectedCalendar.Name)
-					);
-				}
-			},
-			error => {
-				this.noticeService.error(
-					this.translate.instant('Error'),
-					this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
+				this.noticeService.success(
+					this.translate.instant('Success'),
+					this.translate
+						.instant('BankHolidayCalendarHasBeenSuccessfullyDeleted')
+						.replace('{0}', this.selectedCalendar.Name)
 				);
 			}
-		);
+		}, this.networkError);
 	}
 
 	closeDeleteHolidayCalendarModal() {
@@ -117,5 +127,12 @@ export class BankHolidayCalendarComponent implements OnInit {
 
 	exitEdittingBankCalendar = () => {
 		this.isEdittingCalendar = false;
+	};
+
+	networkError = (error?: any) => {
+		this.noticeService.error(
+			this.translate.instant('Error'),
+			this.translate.instant('AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain')
+		);
 	};
 }

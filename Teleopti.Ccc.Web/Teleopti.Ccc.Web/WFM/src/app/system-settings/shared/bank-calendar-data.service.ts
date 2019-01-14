@@ -23,6 +23,10 @@ export class BankCalendarDataService {
 		return this.http.delete('../api/BankHolidayCalendars/' + id) as Observable<BankHolidayCalendar>;
 	}
 
+	getSitesByCalendar(calendarId: string): Observable<string[]> {
+		return this.http.get(`../api/SitesByCalendar/?Id=${calendarId}`) as Observable<string[]>;
+	}
+
 	getSiteBankHolidayCalendars(): Observable<SiteBankHolidayCalendars[]> {
 		return this.http.get('../api/SiteBankHolidayCalendars') as Observable<SiteBankHolidayCalendars[]>;
 	}

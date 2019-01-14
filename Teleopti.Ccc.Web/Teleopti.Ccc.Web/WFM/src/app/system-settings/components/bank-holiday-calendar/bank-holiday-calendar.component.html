@@ -140,12 +140,18 @@
 	<nz-modal
 		*ngIf="isDeleteCalendarModalVisible && selectedCalendar"
 		[(nzVisible)]="isDeleteCalendarModalVisible"
-		[nzTitle]="'AreYouSureToDeleteThisBankHolidayCalendar' | translate"
-		[nzContent]="selectedCalendar.Name"
+		[nzTitle]="'AreYouSureYouWantToDeleteThisBankHolidayCalendar' | translate"
+		[nzContent]="confirmDeleteCalendarContentTemplate"
 		[nzOkText]="'Delete' | translate"
 		nzOkType="danger"
 		[nzCancelText]="'Cancel' | translate"
 		(nzOnOk)="deleteHolidayCalendar()"
 		(nzOnCancel)="closeDeleteHolidayCalendarModal()"
+		class="bank-holiday-calendar-modal"
 	></nz-modal>
+
+	<ng-template #confirmDeleteCalendarContentTemplate>
+		<span>{{ confirmDeleteCalendarContent }}</span
+		>&nbsp;<span class="calendar-name">{{ selectedCalendar.Name }}</span>
+	</ng-template>
 </div>

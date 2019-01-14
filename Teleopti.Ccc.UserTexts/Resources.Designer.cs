@@ -3259,15 +3259,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure to delete this bank holiday calendar?.
-        /// </summary>
-        public static string AreYouSureToDeleteThisBankHolidayCalendar {
-            get {
-                return ResourceManager.GetString("AreYouSureToDeleteThisBankHolidayCalendar", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure to delete year {0} from calendar {1}?.
         /// </summary>
         public static string AreYouSureToDeleteYearFromCalendar {
@@ -3525,6 +3516,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AreYouSureYouWantToDeleteTheSkillGroup {
             get {
                 return ResourceManager.GetString("AreYouSureYouWantToDeleteTheSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this bank holiday calendar?.
+        /// </summary>
+        public static string AreYouSureYouWantToDeleteThisBankHolidayCalendar {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeleteThisBankHolidayCalendar", resourceCulture);
             }
         }
         
@@ -21901,6 +21901,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoBudgetGroupFound {
             get {
                 return ResourceManager.GetString("NoBudgetGroupFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No calendars available..
+        /// </summary>
+        public static string NoCalendarsAvailable {
+            get {
+                return ResourceManager.GetString("NoCalendarsAvailable", resourceCulture);
             }
         }
         
@@ -40720,6 +40729,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string XRequests {
             get {
                 return ResourceManager.GetString("XRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} sites use this calendar:.
+        /// </summary>
+        public static string XSitesUseThisCalendar {
+            get {
+                return ResourceManager.GetString("XSitesUseThisCalendar", resourceCulture);
             }
         }
         

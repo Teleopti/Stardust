@@ -1,8 +1,14 @@
 <div class="bank-holiday-calendar-assign-to-sites">
 	<nz-list>
 		<nz-list-item>
-			<nz-list-item-meta [nzTitle]="'Sites' | translate"></nz-list-item-meta>
-			<nz-list-item-meta [nzTitle]="'Calendars' | translate"></nz-list-item-meta>
+			<nz-list-item-meta
+				[nzTitle]="'Sites' | translate"
+				class="bank-holiday-calendar-sites-header-field"
+			></nz-list-item-meta>
+			<nz-list-item-meta
+				[nzTitle]="'Calendars' | translate"
+				class="bank-holiday-calendar-sites-header-field"
+			></nz-list-item-meta>
 		</nz-list-item>
 	</nz-list>
 
@@ -15,8 +21,9 @@
 					<nz-select
 						nzShowSearch
 						nzAllowClear
-						[nzPlaceHolder]="'SelectACalendarForSite' | translate"
 						[(ngModel)]="site.SelectedCalendarId"
+						[nzPlaceHolder]="'SelectACalendarForSite' | translate"
+						[nzNotFoundContent]="'NoCalendarsAvailable' | translate"
 						(ngModelChange)="updateCalendarForSite($event, site)"
 					>
 						<nz-option
