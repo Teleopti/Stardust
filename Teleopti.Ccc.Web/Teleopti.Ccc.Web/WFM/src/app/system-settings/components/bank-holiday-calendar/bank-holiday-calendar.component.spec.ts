@@ -424,7 +424,7 @@ describe('BankHolidayCalendarComponent', () => {
 			WFM_Setting_AssignBankHolidayCalendarsToSites_79899: true
 		});
 		httpTestingController
-			.match('../api/SitesByCalendar/?Id=' + 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df')[0]
+			.match('../api/SitesByCalendar/' + 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df')[0]
 			.flush(['4aae67fd-af87-4377-b9d3-3c82c9f68f2f']);
 		fixture.detectChanges();
 
@@ -465,7 +465,7 @@ describe('BankHolidayCalendarComponent', () => {
 		});
 
 		httpTestingController
-			.match('../api/SitesByCalendar/?Id=' + 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df')[0]
+			.match('../api/SitesByCalendar/' + 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df')[0]
 			.flush(['4aae67fd-af87-4377-b9d3-3c82c9f68f2f']);
 
 		fixture.detectChanges();

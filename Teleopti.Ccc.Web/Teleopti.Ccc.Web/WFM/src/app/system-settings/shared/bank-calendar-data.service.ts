@@ -24,7 +24,7 @@ export class BankCalendarDataService {
 	}
 
 	getSitesByCalendar(calendarId: string): Observable<string[]> {
-		return this.http.get(`../api/SitesByCalendar/?Id=${calendarId}`) as Observable<string[]>;
+		return this.http.get(`../api/SitesByCalendar/${calendarId}`) as Observable<string[]>;
 	}
 
 	getSiteBankHolidayCalendars(): Observable<SiteBankHolidayCalendars[]> {
