@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public static bool BelongsToBusinessUnit(this IOrganisationMembership instance, IBusinessUnit businessUnit, DateOnly dateOnly) =>
 			instance.BelongsToBusinessUnit(businessUnit.Id.GetValueOrDefault(), dateOnly.Date);
 
-		public static bool BelongsToBusinessUnit(this IOrganisationMembership instance, Guid businessUnit, DateTime dateOnly) =>
+		public static bool BelongsToBusinessUnit(this IOrganisationMembership instance, Guid businessUnit, DateOnly dateOnly) =>
 			instance.BelongsToBusinessUnit(businessUnit, dateOnly.Date);
 
 		public static bool BelongsToSite(this IOrganisationMembership instance, ISite site, DateOnly dateOnly) =>
