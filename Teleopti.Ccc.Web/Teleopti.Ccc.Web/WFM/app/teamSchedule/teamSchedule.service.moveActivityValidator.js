@@ -212,7 +212,7 @@
 
 		function getEarlierStartDateInUnselected(scheduleDate, personSchedule) {
 			var unselected = getProjectionsBySelectStatus(scheduleDate, personSchedule, false);
-			return unselected.length && serviceDateFormatHelper.getDateOnly(unselected.map(function (p) { return p.StartMoment.clone(); }), 'isBefore'));
+			return unselected.length && serviceDateFormatHelper.getDateOnly(unselected.map(function (p) { return p.StartMoment.clone(); }), 'isBefore');
 		}
 
 		function getLatestScheduleEndMoment(scheduleDate, personSchedule, newStartMoment) {
