@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
 			builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceReader>().SingleInstance();
 
-			builder.RegisterType<SkillDayLoadHelper>().SingleInstance();
+			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();
 			builder.RegisterType<WeeklyRestSolverCommand>().ApplyAspects();
 			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();

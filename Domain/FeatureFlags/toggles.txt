@@ -41,9 +41,9 @@ RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
 RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
 RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
-RTA_RestrictModifySkillGroups_78568 = RC
+RTA_RestrictModifySkillGroups_78568 = true
 RTA_InputValidationForApprovingAdherencePeriods_77045 = RC
-RTA_ImproveUsabilityExpandableCards_79025 = RC
+RTA_ImproveUsabilityExpandableCards_79025 = true
 
 MessageBroker_HttpSenderThrottleRequests_79140 = true
 MessageBroker_VeganBurger_79140 = true
@@ -90,7 +90,7 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true #AF: OK for me to rem
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true #AF: OK for me to remove
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
-ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = RC
+ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = true
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = RC
@@ -99,10 +99,10 @@ WFM_Intraday_Redesign_77214 = RC
 WfmStaffing_AddOvertime_42524 = RC
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
 Wfm_Stardust_EnableScaleout_77366 = true
-Wfm_AuditTrail_StaffingAuditTrail_78125 = RC
-Wfm_AuditTrail_GenericAuditTrail_74938 = RC
+Wfm_AuditTrail_StaffingAuditTrail_78125 = true
+Wfm_AuditTrail_GenericAuditTrail_74938 = true
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
-WFM_ProbabilityView_ImproveResponseTime_80040 = RC
+WFM_ProbabilityView_ImproveResponseTime_80040 = true
 WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = false #Dont enable it. It was not a good optimization in Csharp
 WFM_Intraday_OptimizeSkillDayLoad_80153 = RC
 
@@ -132,8 +132,8 @@ MyTimeWeb_Request_CleanUpRequestHisotry_77776 = true
 MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446 = true
 WFM_Request_View_Permissions_77731 = true
 WFM_Request_Show_Feedback_Link_77733 = true
-WFM_Request_Show_Shift_for_Absence_Requests_79008 = RC
-WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = RC
+WFM_Request_Show_Shift_for_Absence_Requests_79008 = true
+WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = true
 WFM_Setting_BankHolidayCalendar_Create_79297 = RC
 WFM_Setting_AssignBankHolidayCalendarsToSites_79899 = RC
 

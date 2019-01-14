@@ -415,9 +415,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)).IsFullDayAbsence().Should().Be.True();
 		}
 
-		[Test]
-		[Ignore("79693 to be fixed")]
-		public void ShouldNotCreateDuplicateLayersOnRollback()
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldNotCreateDuplicateLayersOnRollback(bool defaultDelete)
 		{
 			var target = new DeleteSchedulePartService();
 			var date = new DateOnly(2018, 10, 1);
@@ -429,7 +429,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
 			var rollBackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(
 				new ScheduleChangesAffectedDates(TimeZoneGuard), () => stateHolder), new ScheduleTagSetter(new NullScheduleTag()));
-			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, new DeleteOption { Default = true }, rollBackService, new NoSchedulingProgress());
+			var deleteOption = new DeleteOption {Absence = !defaultDelete, Default = defaultDelete};
+			target.Delete(new[] { stateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)) }, deleteOption, rollBackService, new NoSchedulingProgress(), new FakeNewBusinessRuleCollection());
 
 			rollBackService.Rollback();
 

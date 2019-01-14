@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         private readonly ILazyLoadingManager _lazyManager;
         private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
         private readonly IPeopleLoader _peopleLoader;
-        private readonly SkillDayLoadHelper _skillDayLoadHelper;
+        private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IResourceCalculation _resourceOptimizationHelper;
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                                     ILazyLoadingManager lazyManager,
                                     IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
                                     IPeopleLoader peopleLoader,
-            SkillDayLoadHelper skillDayLoadHelper,
+            ISkillDayLoadHelper skillDayLoadHelper,
             IResourceCalculation resourceOptimizationHelper,
 						IScheduleStorageFactory scheduleStorageFactory,
 			CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)

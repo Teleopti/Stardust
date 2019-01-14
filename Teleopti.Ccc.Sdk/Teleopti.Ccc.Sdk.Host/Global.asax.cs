@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<WriteProtectionFactory>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>().InstancePerLifetimeScope();
-			builder.RegisterType<SkillDayLoadHelper>().InstancePerLifetimeScope();
+			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
 			
 			builder.RegisterType<ScheduleSaveHandler>().As<IScheduleSaveHandler>().InstancePerLifetimeScope();
 

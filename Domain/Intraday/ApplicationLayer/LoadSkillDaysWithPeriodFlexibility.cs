@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 {
 	public class LoadSkillDaysWithPeriodFlexibilityToggleOn : ILoadSkillDaysWithPeriodFlexibility
 	{
-		private readonly SkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 
-		public LoadSkillDaysWithPeriodFlexibilityToggleOn(SkillDayLoadHelper skillDayLoadHelper)
+		public LoadSkillDaysWithPeriodFlexibilityToggleOn(ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			_skillDayLoadHelper = skillDayLoadHelper;
 		}
@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 	public class LoadSkillDaysWithPeriodFlexibilityToggleOff : ILoadSkillDaysWithPeriodFlexibility
 	{
-		private readonly SkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 
-		public LoadSkillDaysWithPeriodFlexibilityToggleOff(SkillDayLoadHelper skillDayLoadHelper)
+		public LoadSkillDaysWithPeriodFlexibilityToggleOff(ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			_skillDayLoadHelper = skillDayLoadHelper;
 		}
