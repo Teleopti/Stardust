@@ -2441,6 +2441,11 @@
     <Content Include="WFM\src\app\shared\types\index.ts" />
     <Content Include="WFM\src\app\shared\types\Person.ts" />
     <Content Include="WFM\src\app\shared\types\Role.ts" />
+    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-add\bank-holiday-calendar-add.component.html" />
+    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-assign-to-sites\bank-holiday-calendar-assign-to-sites.component.html" />
+    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\bank-holiday-calendar-edit.component.html" />
+    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar\bank-holiday-calendar.component.html" />
+    <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.html" />
     <Content Include="WFM\src\assets\.gitkeep" />
     <Content Include="WFM\src\assets\ai.js" />
     <Content Include="WFM\src\assets\appInsights.js" />
@@ -3025,6 +3030,11 @@
     <Content Include="WFM\css\_requests.scss" />
     <Content Include="WFM\css\_reports.scss" />
     <Content Include="WFM\manifest.webmanifest.json" />
+    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-add\bank-holiday-calendar-add.component.scss" />
+    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-assign-to-sites\bank-holiday-calendar-assign-to-sites.component.scss" />
+    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\bank-holiday-calendar-edit.component.scss" />
+    <Content Include="WFM\src\app\system-settings\components\bank-holiday-calendar\bank-holiday-calendar.component.scss" />
+    <Content Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -3172,6 +3182,29 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-add\bank-holiday-calendar-add.component.spec.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-add\bank-holiday-calendar-add.component.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-add\index.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-assign-to-sites\bank-holiday-calendar-assign-to-sites.component.spec.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-assign-to-sites\bank-holiday-calendar-assign-to-sites.component.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-assign-to-sites\index.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\bank-holiday-calendar-edit.component.spec.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\bank-holiday-calendar-edit.component.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar-edit\index.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar\bank-holiday-calendar.component.spec.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar\bank-holiday-calendar.component.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\components\bank-holiday-calendar\index.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\interface\bank-holiday-calendar.interface.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\interface\index.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\pages\index.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\pages\system-settings-page\index.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.spec.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\pages\system-settings-page\system-settings.component.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\shared\bank-calendar-data.service.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\shared\index.ts" />
+    <TypeScriptCompile Include="WFM\src\app\system-settings\system-settings.module.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
