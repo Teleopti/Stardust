@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 	{
 		private readonly BudgetGroupMainModel _mainModel;
 		private readonly ISelectedBudgetDays _selectedBudgetDays;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly SkillDayLoadHelper _skillDayLoadHelper;
 
-		public BudgetingSkillStaffPeriodProvider(BudgetGroupMainModel mainModel, ISelectedBudgetDays selectedBudgetDays, ISkillDayLoadHelper skillDayLoadHelper)
+		public BudgetingSkillStaffPeriodProvider(BudgetGroupMainModel mainModel, ISelectedBudgetDays selectedBudgetDays, SkillDayLoadHelper skillDayLoadHelper)
 		{
 			_mainModel = mainModel;
 			_selectedBudgetDays = selectedBudgetDays;

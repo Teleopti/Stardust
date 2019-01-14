@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private readonly ScheduleOvertimeWithoutStateHolder _scheduleOvertimeWithoutStateHolder;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly SkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ICurrentScenario _currentScenario;
 		public ScheduleOvertimeExecuteWrapper(ScheduleOvertimeWithoutStateHolder scheduleOvertimeWithoutStateHolder,
-			ISkillCombinationResourceRepository skillCombinationResourceRepository, IIntervalLengthFetcher intervalLengthFetcher, ISkillDayLoadHelper skillDayLoadHelper, ICurrentScenario currentScenario)
+			ISkillCombinationResourceRepository skillCombinationResourceRepository, IIntervalLengthFetcher intervalLengthFetcher, SkillDayLoadHelper skillDayLoadHelper, ICurrentScenario currentScenario)
 		{
 			_scheduleOvertimeWithoutStateHolder = scheduleOvertimeWithoutStateHolder;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			IntradayStatisticsService intradayStatisticsService,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, 
 			ISkillRepository skillRepository,
-			ISkillDayLoadHelper skillDayLoadHelper, ILoadSkillDaysWithPeriodFlexibility loadSkillDaysWithPeriodFlexibility)
+			SkillDayLoadHelper skillDayLoadHelper, ILoadSkillDaysWithPeriodFlexibility loadSkillDaysWithPeriodFlexibility)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository ?? throw new ArgumentNullException(nameof(skillCombinationResourceRepository));
 			_skillRepository = skillRepository ?? throw new ArgumentNullException(nameof(skillRepository));

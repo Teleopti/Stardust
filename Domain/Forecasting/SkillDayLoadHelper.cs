@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -8,16 +7,16 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-	public interface ISkillDayLoadHelper
-	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
-		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDaysWithFlexablePeriod(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
-		IEnumerable<ISkillDay> LoadSchedulerSkillDaysFlat(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+	//public interface ISkillDayLoadHelper
+	//{
+	//	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+	//	IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+	//	IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDaysWithFlexablePeriod(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+	//	IEnumerable<ISkillDay> LoadSchedulerSkillDaysFlat(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
-	}
+	//	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+	//	IDictionary<ISkill, IEnumerable<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+	//}
 
 	/// <summary>
 	/// Helper for loading of skill days
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	/// Created by: robink
 	/// Created date: 2008-05-08
 	/// </remarks>
-	public class SkillDayLoadHelper : ISkillDayLoadHelper
+	public class SkillDayLoadHelper 
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IMultisiteDayRepository _multisiteDayRepository;

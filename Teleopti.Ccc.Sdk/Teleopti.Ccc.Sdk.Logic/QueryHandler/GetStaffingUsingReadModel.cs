@@ -20,14 +20,14 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ICurrentScenario _scenarioRepository;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly SkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 
 		public GetStaffingUsingReadModel(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			ISkillRepository skillRepository,
 			ICurrentScenario scenarioRepository,
-			ISkillDayLoadHelper skillDayLoadHelper,
+			SkillDayLoadHelper skillDayLoadHelper,
 			IActivityRepository activityRepository,
 			IScheduledStaffingProvider scheduledStaffingProvider)
 		{
