@@ -19,10 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 		public MethodInfo Method => _invocation.Method;
 		public object ReturnValue => _invocation.ReturnValue;
 		public Type TargetType => _invocation.TargetType;
-
-		public object Proxy => _invocation.Proxy;
-
-
+		
 		public List<Exception> Exceptions = new List<Exception>();
 		public void Proceed() => _invocation.Proceed();
 	}

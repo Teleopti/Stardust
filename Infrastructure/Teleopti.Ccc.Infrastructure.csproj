@@ -656,7 +656,6 @@
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkFactory.cs" />
-    <Compile Include="Toggle\UpdateTogglesAspect.cs" />
     <Compile Include="UnitOfWork\AnalyticsUnitOfWork.cs" />
     <Compile Include="UnitOfWork\ASMScheduleChangeTimePersister.cs" />
     <Compile Include="UnitOfWork\CompositeScheduleEventsPublisher.cs" />

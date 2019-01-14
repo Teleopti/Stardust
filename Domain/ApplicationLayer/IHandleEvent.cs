@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IHandleEvent<TEvent> where TEvent : IEvent
 	{
-		[UpdateToggles]
 		void Handle(TEvent @event);
 	}
 

@@ -9,6 +9,5 @@ namespace Teleopti.Ccc.Domain.Aop.Core
 		MethodInfo Method { get; }
 		object ReturnValue { get; }
 		Type TargetType { get; }
-		object Proxy { get; }
 	}
 }
