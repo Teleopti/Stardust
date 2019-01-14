@@ -140,6 +140,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		self.now.subscribe(function (currentMs) {
 			var yesterdayPlus2Days = moment(new Date(self.yesterday().getTime())).add('days', 2);
+
 			var nowString =
 				currentMs.year() +
 				'-' +
@@ -154,7 +155,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				currentMs.second();
 
 			if (moment(nowString) > yesterdayPlus2Days) {
-				var todayMinus1 = moment(new Date(currentMs))
+				var todayMinus1 = moment(nowString)
 					.add('days', -1)
 					.startOf('day')
 					.toDate();
