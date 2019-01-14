@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 
 	[StaffingPerformanceTest]
 	//[Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
-	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
+	//[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)] waiting for result from build
 	public class ResourceCalculateWhen49DaysInReadmodel : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;

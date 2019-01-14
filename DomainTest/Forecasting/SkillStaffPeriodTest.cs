@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _aggregateSkillStaffPeriod = _target;
             _populationStatisticsCalculatedValues = new PopulationStatisticsCalculatedValues(0,0);
 		    
-			_skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			_skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillTypePhone(), 15);
 		    _skillDay = SkillDayFactory.CreateSkillDay(_skill, DateOnly.Today);
 			_target.SetSkillDay(_skillDay);
 

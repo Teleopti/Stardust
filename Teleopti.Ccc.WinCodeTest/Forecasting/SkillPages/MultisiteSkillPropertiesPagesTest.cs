@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.SkillPages
         [SetUp]
         public void Setup()
         {
-            _skillType = SkillTypeFactory.CreateSkillType();
+            _skillType = SkillTypeFactory.CreateSkillTypePhone();
             _skill = SkillFactory.CreateMultisiteSkill("testSkill");
             _mocks = new MockRepository();
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();

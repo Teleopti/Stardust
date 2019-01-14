@@ -225,7 +225,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours, IActivity activity)
 		{
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			var skill = new Skill(skillName, skillName, Color.Empty, intervalLength, skillType)
 			{
 				TimeZone = TimeZoneInfo.Utc,

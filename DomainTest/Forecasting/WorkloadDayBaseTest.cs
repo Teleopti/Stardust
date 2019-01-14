@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[SetUp]
 		public void Setup()
 		{
-			_skill = SkillFactory.CreateSkill("testSkill", SkillTypeFactory.CreateSkillType(), 15);
+			_skill = SkillFactory.CreateSkill("testSkill", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			_skill.MidnightBreakOffset = TimeSpan.FromHours(2);
 			_workload = new Workload(_skill);
 
@@ -1145,7 +1145,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void CanAddPeriodsToWorkloadWithSkillWithAnotherMidnightBreak()
 		{
-			ISkill skill = SkillFactory.CreateSkill("testSkill", SkillTypeFactory.CreateSkillType(), 15, (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new TimeSpan(2, 0, 0));
+			ISkill skill = SkillFactory.CreateSkill("testSkill", SkillTypeFactory.CreateSkillTypePhone(), 15, (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new TimeSpan(2, 0, 0));
 
 			IWorkload workload = new Workload(skill);
 

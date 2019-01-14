@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [SetUp]
         public void Setup()
         {
-            target = new Skill(_name, _description, _displayColor, 15, SkillTypeFactory.CreateSkillType());
+            target = new Skill(_name, _description, _displayColor, 15, SkillTypeFactory.CreateSkillTypePhone());
 			_skillPriorityProvider = new SkillPriorityProvider();
         }
 
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanCreateSkillObject()
         {
-            target = new Skill(_name, _description, _displayColor, 15, SkillTypeFactory.CreateSkillType());
+            target = new Skill(_name, _description, _displayColor, 15, SkillTypeFactory.CreateSkillTypePhone());
             Assert.IsNotNull(target);
         }
 
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             const string skillName = "Tha Skill Name";
             const string skillDescription = "Tha Skill Description";
             Color skillColor = Color.DarkSlateGray;
-            SkillType skillType = SkillTypeFactory.CreateSkillType();
+            SkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             Activity activity = new Activity("Ehh. test activity?");
             TimeSpan midnightBreakOffset = new TimeSpan(2, 0, 0);
             
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanAddAndRemoveAggregateSkill()
         {
-            ISkillType type = SkillTypeFactory.CreateSkillType();
+            ISkillType type = SkillTypeFactory.CreateSkillTypePhone();
             ISkill skill = new Skill("EttSkill", "Summa", Color.DodgerBlue, 15, type);
             target.AddAggregateSkill(skill);
             Assert.AreEqual(1, target.AggregateSkills.Count);
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanClearAggregatedSkills()
         {
-            ISkillType type = SkillTypeFactory.CreateSkillType();
+            ISkillType type = SkillTypeFactory.CreateSkillTypePhone();
             ISkill skill = new Skill("EttSkill", "Summa", Color.DodgerBlue, 15, type);
             ISkill skill2 = new Skill("EttSkillTill", "SummaSumma", Color.DodgerBlue, 15, type);
             target.AddAggregateSkill(skill);
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void CanAddWorkload()
         {
             //Add a forecast
-            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillType(), 15);
+            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillTypePhone(), 15);
             IWorkload workload = new Workload(skill);
             target.AddWorkload(workload);
 
@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanSetDefaultColorWhenNoColor()
         {
-            target = new Skill(_name, _description, _displayColor, 15, SkillTypeFactory.CreateSkillType());
+            target = new Skill(_name, _description, _displayColor, 15, SkillTypeFactory.CreateSkillTypePhone());
             target.DisplayColor = Color.Empty;
             Assert.AreEqual(Color.Red.ToArgb(), target.DisplayColor.ToArgb());
         }
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void ThrowsExceptionIfTryingToRemoveWorkloadNotInList()
         {
-            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillType(), 15);
+            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			Assert.Throws<MissingMemberException>(() => target.RemoveWorkload(new Workload(skill)));
         }
         
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanAddForecast()
         {
-            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillType(), 15);
+            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillTypePhone(), 15);
             IWorkload workload = new Workload(skill);
             skill.AddWorkload(workload);
             Assert.Contains(workload, skill.WorkloadCollection.ToList());
@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanRemoveWorkload()
         {
-            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillType(), 15);
+            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillTypePhone(), 15);
             IWorkload workload = new Workload(skill);
             Assert.Contains(workload, skill.WorkloadCollection.ToList());
             skill.RemoveWorkload(workload);
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyReferenceBackToSkillWorksFromAForecast()
         {
-            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillType(), 15);
+            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillTypePhone(), 15);
 
             IWorkload workload = new Workload(skill);
             skill.AddWorkload(workload);
@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void NullForecastsAreNotAllowed()
         {
-            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillType(), 15);
+            ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			Assert.Throws<ArgumentNullException>(() => skill.AddWorkload(null));
         }
 

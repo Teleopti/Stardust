@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[SetUp]
 		public void Setup()
 		{
-			var skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
+			var skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillTypePhone(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
 			_outboundProductionPlanFactory = new OutboundProductionPlanFactory(new IncomingTaskFactory(new FlatDistributionSetter()));
 			_outboundScheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_outboundScheduledResourcesCacher = new FakeOutboundScheduledResourcesCacher();

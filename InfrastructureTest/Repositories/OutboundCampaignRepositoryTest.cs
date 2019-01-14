@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override void ConcreteSetup()
 		{			
-			_skillType = SkillTypeFactory.CreateSkillType();
+			_skillType = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(_skillType);
 			_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
 			PersistAndRemoveFromUnitOfWork(_activity);

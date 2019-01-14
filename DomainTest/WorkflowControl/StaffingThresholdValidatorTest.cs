@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var requestedDateTimePeriod1 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
 			var requestedDateTimePeriod2 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 02, 0, 0, 0, DateTimeKind.Utc), 1);
 
-			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
+			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			_skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(), new Percent(0.4));
 
 			var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod1.StartDateTime));
@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			var requestedDateTimePeriod1 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
 
-			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
+			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			_skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(), new Percent(0.4));
 
 			var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod1.StartDateTime));
@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 		private void createSkill()
 		{
-			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
+			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			_skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent());
 			_skill.WithId();
 		}
@@ -611,7 +611,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var start = new DateTime(2010, 02, 01, 7, 0, 0, DateTimeKind.Utc);
 			var requestedDateTimePeriod1 = new DateTimePeriod(start, start.AddHours(1));
 			
-			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
+			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			_skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(), new Percent(0.4));
 			((PersonPeriod)_person.PersonPeriodCollection.First()).AddPersonSkill((new PersonSkill(_skill, new Percent(1))));
 

@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private ISkill[] createAndPersistSkills()
 		{
-			var type = SkillTypeFactory.CreateSkillType();
+			var type = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(type);
 
 			var activity = new Activity("test");

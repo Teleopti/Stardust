@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static ISkill CreateSkillWithId(string name, int defaultSolution)
 		{
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			return CreateSkill(name, skillType, defaultSolution).WithId();
 		}
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// </remarks>
 		public static ISkill CreateSkill(string skillName)
         {
-            SkillType skillType = SkillTypeFactory.CreateSkillType();
+            SkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             ISkill skill = CreateSkill(skillName, skillType, 15);
 
             return skill;
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IMultisiteSkill CreateMultisiteSkill(string skillName)
         {
-            SkillType skillType = SkillTypeFactory.CreateSkillType();
+            SkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             IMultisiteSkill skill = CreateMultisiteSkill(skillName, skillType, 15);
 
             return skill;
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static ISkill CreateSiteSkill(string skillName)
 		{
-			SkillType skillType = SkillTypeFactory.CreateSkillType();
+			SkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
 			skillType.ForecastSource = ForecastSource.MaxSeatSkill;
 			ISkill skill = CreateSkill(skillName, skillType, 15);
 		    skill.TimeZone = TimeZoneInfo.Utc;
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static ISkill CreateNonBlendSkill(string skillName)
         {
-            SkillType skillType = SkillTypeFactory.CreateSkillType();
+            SkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             skillType.ForecastSource = ForecastSource.NonBlendSkill;
             ISkill skill = CreateSkill(skillName, skillType, 15);
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             //2. CreateProjection a workload and add it to the skill
             //3. Add some ctiQueues to the workload
             //4. Load historical data in Stat structure
-            SkillType skillType = SkillTypeFactory.CreateSkillType();
+            SkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             ISkill skill = CreateSkill("TestSkill", skillType,15);
             IWorkload workload = WorkloadFactory.CreateWorkload(skill);
 			workload.SetId(Guid.NewGuid());

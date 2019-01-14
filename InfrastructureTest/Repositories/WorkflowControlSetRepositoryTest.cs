@@ -224,8 +224,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldSaveOvertimeRequestWithMultiSkillTypes()
 		{
-			var skillType1 = SkillTypeFactory.CreateSkillType();
-			var skillType2 = SkillTypeFactory.CreateSkillType();
+			var skillType1 = SkillTypeFactory.CreateSkillTypePhone();
+			var skillType2 = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(skillType1);
 			PersistAndRemoveFromUnitOfWork(skillType2);
 
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldSaveOvertimeRequestMaximumContinuousWorkTimeSettings()
 		{
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(skillType);
 
 			var org = CreateAggregateWithCorrectBusinessUnit();

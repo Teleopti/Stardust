@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             PersistAndRemoveFromUnitOfWork(BusinessUnitFactory.BusinessUnitUsedInTest);
 
-            ISkillType type = SkillTypeFactory.CreateSkillType();
+            ISkillType type = SkillTypeFactory.CreateSkillTypePhone();
             PersistAndRemoveFromUnitOfWork(type);
 
 

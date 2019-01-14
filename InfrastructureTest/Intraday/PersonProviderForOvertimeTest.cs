@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			_businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("1");
 			BusinessUnitRepository.Add(_businessUnit);
 
-			_skillType = SkillTypeFactory.CreateSkillType();
+			_skillType = SkillTypeFactory.CreateSkillTypePhone();
 			SkillTypeRepository.Add(_skillType);
 
 			_activity = new Activity("activty");

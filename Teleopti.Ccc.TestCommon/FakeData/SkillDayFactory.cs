@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		public static ISkillDay CreateSkillDay(DateOnly dt)
 		{
-			ISkill skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillType());
+			ISkill skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillTypePhone());
 			return CreateSkillDay(skill, dt);
 		}
 

@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 		private ISkill persistSkill()
 		{
 			var activity = new Activity("act");
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			var skill = new Skill("skill", "skill", Color.Blue, 15, skillType)
 			{
 				TimeZone = TimeZoneInfo.Utc,

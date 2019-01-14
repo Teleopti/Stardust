@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
 			PersistAndRemoveFromUnitOfWork(_scenario);
 			_activity = new Activity("dummyActivity");
-			_skillType = SkillTypeFactory.CreateSkillType();
+			_skillType = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(_activity);
 			PersistAndRemoveFromUnitOfWork(_skillType);
 		}

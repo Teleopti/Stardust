@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	    public void VerifyThatRefreshWorksWithRemovedTemplate()
         {
             IUnitOfWork UnitOfWork2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-            ISkillType skillType = SkillTypeFactory.CreateSkillType();
+            ISkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             IActivity activity = ActivityFactory.CreateActivity("The test", Color.Honeydew);
             ISkill skill = SkillFactory.CreateSkill("Skill - Name", skillType, 15);
 

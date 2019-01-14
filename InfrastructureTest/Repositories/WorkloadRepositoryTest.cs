@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// </summary>
         protected override void ConcreteSetup()
         {
-            _skillType = SkillTypeFactory.CreateSkillType();
+            _skillType = SkillTypeFactory.CreateSkillTypePhone();
 						_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
             _skill = SkillFactory.CreateSkill("Skill - Name", _skillType, 15);
             _skill.MidnightBreakOffset = TimeSpan.FromHours(2);

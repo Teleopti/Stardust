@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISite site = SiteFactory.CreateSimpleSite();
 			site.AddTeam(team);
 			IActivity act = new Activity("for test");
-			ISkillType skType = SkillTypeFactory.CreateSkillType();
+			ISkillType skType = SkillTypeFactory.CreateSkillTypePhone();
 			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType)
 			{
 				Activity = act,

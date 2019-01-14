@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
-			var type = SkillTypeFactory.CreateSkillType();
+			var type = SkillTypeFactory.CreateSkillTypePhone();
 			var skill = SkillFactory.CreateSkill("aslfm", type, 15);
 			skill.Activity = activity;
 
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
 
-			var type = SkillTypeFactory.CreateSkillType();
+			var type = SkillTypeFactory.CreateSkillTypePhone();
 			var skill = SkillFactory.CreateSkill("aslfm", type, 15);
 			skill.Activity = activity;
 			var skill1 = SkillFactory.CreateSkill("aslfm", type, 15);
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var activity = ActivityFactory.CreateActivity("Activity1");
 			activity.RequiresSkill = true;
-			var type = SkillTypeFactory.CreateSkillType();
+			var type = SkillTypeFactory.CreateSkillTypePhone();
 
 			var activity2 = ActivityFactory.CreateActivity("Activity2");
 			activity2.RequiresSkill = false;
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
-			var type = SkillTypeFactory.CreateSkillType();
+			var type = SkillTypeFactory.CreateSkillTypePhone();
 			var skill = SkillFactory.CreateSkill("aslfm", type, 15);
 			skill.Activity = activity;
 

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         public void Setup()
         {
             _dt = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillType());
+            _skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillTypePhone());
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _skillDataPeriods = new List<ISkillDataPeriod>();
 			

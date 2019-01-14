@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		[SetUp]
 		public void Setup()
 		{
-			Skill skill = new Skill("test skill", "test", Color.Red, 15, SkillTypeFactory.CreateSkillType());
+			Skill skill = new Skill("test skill", "test", Color.Red, 15, SkillTypeFactory.CreateSkillTypePhone());
 			Percent percent = new Percent(1);
 			_target = new PersonSkill(skill, percent);
 		}
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		[Test]
 		public void ShouldNotBeEqualIfNotSameSkill()
 		{
-			var skill2 = new Skill("test skill", "test", Color.Red, 15, SkillTypeFactory.CreateSkillType());
+			var skill2 = new Skill("test skill", "test", Color.Red, 15, SkillTypeFactory.CreateSkillTypePhone());
 			var personSkill2 = new PersonSkill(skill2, new Percent(1));
 
 			_target.Equals(personSkill2).Should().Be.False();

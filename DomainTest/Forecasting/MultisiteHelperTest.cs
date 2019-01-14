@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [SetUp]
         public void Setup()
         {
-            var skillType = SkillTypeFactory.CreateSkillType();
+            var skillType = SkillTypeFactory.CreateSkillTypePhone();
             _multisiteSkill = SkillFactory.CreateMultisiteSkill("parent", skillType, 15);
             var childSkill1 = SkillFactory.CreateChildSkill("child1", _multisiteSkill);
             var childSkill2 = SkillFactory.CreateChildSkill("child2", _multisiteSkill);

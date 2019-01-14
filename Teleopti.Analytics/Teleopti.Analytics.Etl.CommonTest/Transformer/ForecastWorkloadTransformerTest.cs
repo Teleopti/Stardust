@@ -37,7 +37,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
         public void Setup()
         {
             _target = new ForecastWorkloadTransformer(96, _insertDateTime);
-            _skill1 = SkillFactory.CreateSkill("skill 1", SkillTypeFactory.CreateSkillType(), 15);
+            _skill1 = SkillFactory.CreateSkill("skill 1", SkillTypeFactory.CreateSkillTypePhone(), 15);
             _skill2 = SkillFactory.CreateSkill("skill 2", SkillTypeFactory.CreateSkillTypeBackoffice(), 15);
             _skill3 = SkillFactory.CreateSkill("skill 3", SkillTypeFactory.CreateSkillTypeEmail(), 60);
             _skill1.SetId(Guid.NewGuid());

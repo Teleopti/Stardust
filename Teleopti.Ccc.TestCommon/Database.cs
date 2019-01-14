@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.TestCommon
 			if (existing != null)
 				return existing;
 
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			_skillTypes.Add(skillType);
 			var staffingThresholds = new StaffingThresholds(new Percent(0.1), new Percent(0.2), new Percent(0.3));
 			var midnightBreakOffset = new TimeSpan(3, 0, 0);

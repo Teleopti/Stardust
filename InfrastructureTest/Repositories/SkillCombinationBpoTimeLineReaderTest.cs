@@ -530,7 +530,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private Guid persistSkill(IBusinessUnit businessUnit = null, string skillname = "skill")
 		{
 			var activity = new Activity("act");
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			var skill = new Skill(skillname, skillname, Color.Blue, 15, skillType)
 			{
 				TimeZone = TimeZoneInfo.Utc,

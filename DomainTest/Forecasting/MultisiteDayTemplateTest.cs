@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifySplitMultisitePeriodWithSkillAsParent()
         {
-            MultisiteSkill mySkill = new MultisiteSkill("newSkill", "newSkill", Color.Red, 5, SkillTypeFactory.CreateSkillType());
+            MultisiteSkill mySkill = new MultisiteSkill("newSkill", "newSkill", Color.Red, 5, SkillTypeFactory.CreateSkillTypePhone());
             mySkill.SetTemplateAt(10, target);
 
             Assert.AreEqual(1, target.TemplateMultisitePeriodCollection.Count);

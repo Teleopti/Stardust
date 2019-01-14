@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifySplitSkillDataPeriodWithSkillAsParent()
         {
-            ISkill mySkill = SkillFactory.CreateSkill("newSkill", SkillTypeFactory.CreateSkillType(), 5);
+            ISkill mySkill = SkillFactory.CreateSkill("newSkill", SkillTypeFactory.CreateSkillTypePhone(), 5);
             mySkill.SetTemplateAt(10, target);
 
             Assert.AreEqual(1, target.TemplateSkillDataPeriodCollection.Count);

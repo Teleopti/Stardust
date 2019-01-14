@@ -183,5 +183,121 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             result = Target.LoadSchedulerSkillDays(dtp, skills, null);
             Assert.AreEqual(0, result.Count);
         }
-    }
+
+		[Test]
+		public void VerifyPeriodInflationForEmailSkills()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var today = new DateOnly(2008, 7, 16);
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
+			var skills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("emailSkill", SkillTypeFactory.CreateSkillTypeEmail(), 5).WithId()
+			};
+			var skillDays = new List<ISkillDay>();
+			skillDays.AddRange(generateSkillDays(skills[0], today.AddDays(-10), 13, scenario));
+			SkillDayRep.AddRange(skillDays);
+
+			var result = Target.LoadSkillDaysWithFlexablePeriod(dtp, skills, scenario);
+
+			var resultSkillDays = result[skills[0]];
+			Assert.AreEqual(11, resultSkillDays.Count());
+			Assert.AreEqual(skillDays[2], resultSkillDays.ElementAt(0));
+			Assert.AreEqual(skillDays[3], resultSkillDays.ElementAt(1));
+			Assert.AreEqual(skillDays[4], resultSkillDays.ElementAt(2));
+			Assert.AreEqual(skillDays[5], resultSkillDays.ElementAt(3));
+			Assert.AreEqual(skillDays[6], resultSkillDays.ElementAt(4));
+			Assert.AreEqual(skillDays[7], resultSkillDays.ElementAt(5));
+			Assert.AreEqual(skillDays[8], resultSkillDays.ElementAt(6));
+			Assert.AreEqual(skillDays[9], resultSkillDays.ElementAt(7));
+			Assert.AreEqual(skillDays[10], resultSkillDays.ElementAt(8));
+			Assert.AreEqual(skillDays[11], resultSkillDays.ElementAt(9));
+			Assert.AreEqual(skillDays[12], resultSkillDays.ElementAt(10));
+		}
+
+		[Test]
+		public void VerifyPeriodInflationForBackofficeSkills()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var today = new DateOnly(2008, 7, 16);
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
+			var skills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("emailSkill", SkillTypeFactory.CreateSkillTypeBackoffice(), 5).WithId()
+			};
+			var skillDays = new List<ISkillDay>();
+			skillDays.AddRange(generateSkillDays(skills[0], today.AddDays(-10), 13, scenario));
+			SkillDayRep.AddRange(skillDays);
+
+			var result = Target.LoadSkillDaysWithFlexablePeriod(dtp, skills, scenario);
+
+			var resultSkillDays = result[skills[0]];
+			Assert.AreEqual(11, resultSkillDays.Count());
+			Assert.AreEqual(skillDays[2], resultSkillDays.ElementAt(0));
+			Assert.AreEqual(skillDays[3], resultSkillDays.ElementAt(1));
+			Assert.AreEqual(skillDays[4], resultSkillDays.ElementAt(2));
+			Assert.AreEqual(skillDays[5], resultSkillDays.ElementAt(3));
+			Assert.AreEqual(skillDays[6], resultSkillDays.ElementAt(4));
+			Assert.AreEqual(skillDays[7], resultSkillDays.ElementAt(5));
+			Assert.AreEqual(skillDays[8], resultSkillDays.ElementAt(6));
+			Assert.AreEqual(skillDays[9], resultSkillDays.ElementAt(7));
+			Assert.AreEqual(skillDays[10], resultSkillDays.ElementAt(8));
+			Assert.AreEqual(skillDays[11], resultSkillDays.ElementAt(9));
+			Assert.AreEqual(skillDays[12], resultSkillDays.ElementAt(10));
+		}
+
+
+		[Test]
+		public void VerifyPeriodInflationForMixedSkillsTypes()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			var today = new DateOnly(2008, 7, 16);
+			var dtp = new DateOnlyPeriod(new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
+			var skills = new List<ISkill>
+			{
+				SkillFactory.CreateSkill("emailSkill", SkillTypeFactory.CreateSkillTypeBackoffice(), 5).WithId(),
+				SkillFactory.CreateSkill("phone", SkillTypeFactory.CreateSkillTypePhone(), 5).WithId()
+
+			};
+			var emailSkillDays = generateSkillDays(skills[0], today.AddDays(-10), 13, scenario);
+			var phoneSkillDays = generateSkillDays(skills[1], today.AddDays(-10), 13, scenario);
+			SkillDayRep.AddRange(emailSkillDays);
+			SkillDayRep.AddRange(phoneSkillDays);
+
+			var result = Target.LoadSkillDaysWithFlexablePeriod(dtp, skills, scenario);
+
+			var resultSkillDays = result[skills[0]];
+			Assert.AreEqual(11, resultSkillDays.Count());
+			Assert.AreEqual(emailSkillDays[2], resultSkillDays.ElementAt(0));
+			Assert.AreEqual(emailSkillDays[3], resultSkillDays.ElementAt(1));
+			Assert.AreEqual(emailSkillDays[4], resultSkillDays.ElementAt(2));
+			Assert.AreEqual(emailSkillDays[5], resultSkillDays.ElementAt(3));
+			Assert.AreEqual(emailSkillDays[6], resultSkillDays.ElementAt(4));
+			Assert.AreEqual(emailSkillDays[7], resultSkillDays.ElementAt(5));
+			Assert.AreEqual(emailSkillDays[8], resultSkillDays.ElementAt(6));
+			Assert.AreEqual(emailSkillDays[9], resultSkillDays.ElementAt(7));
+			Assert.AreEqual(emailSkillDays[10], resultSkillDays.ElementAt(8));
+			Assert.AreEqual(emailSkillDays[11], resultSkillDays.ElementAt(9));
+			Assert.AreEqual(emailSkillDays[12], resultSkillDays.ElementAt(10));
+
+			resultSkillDays = result[skills[1]];
+			Assert.AreEqual(3, resultSkillDays.Count());
+			Assert.AreEqual(phoneSkillDays[9], resultSkillDays.ElementAt(0));
+			Assert.AreEqual(phoneSkillDays[10], resultSkillDays.ElementAt(1));
+			Assert.AreEqual(phoneSkillDays[11], resultSkillDays.ElementAt(2));
+
+
+		}
+
+		private IList<ISkillDay> generateSkillDays(ISkill skill, DateOnly startDate, int noOfDays, IScenario scenario)
+		{
+			IList<ISkillDay> skillDays = new List<ISkillDay>();
+			for (int i = 0; i <= noOfDays; i++)
+			{
+				skillDays.Add(SkillDayFactory.CreateSkillDay(skill, startDate.AddDays(i), scenario).WithId());
+			}
+
+			return skillDays;
+		}
+	}
 }

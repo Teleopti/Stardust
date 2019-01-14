@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 		{
 			var scenario = new Scenario("scenario") {DefaultScenario = true};
 			var activity = new Activity("act");
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			var skillWith15MinutesResolution = new Skill("skill", "skill", Color.Blue, 15, skillType)
 			{
 				TimeZone = TimeZoneInfo.Utc,

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		[SetUp]
 		public void Setup()
 		{
-			var skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
+			var skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillTypePhone(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
 			_skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
 			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			_createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();

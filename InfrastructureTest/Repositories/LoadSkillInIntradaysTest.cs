@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadExistingIntradaySkillWithAtLeastOneQueue()
 		{
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			var skillWithQueue = SkillFactory.CreateSkill("dummy", skillType, 15);
 			var skillWithoutQueue = SkillFactory.CreateSkill("dummy", skillType, 15);
 			var activity = new Activity("dummyActivity");
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotLoadDuplicateSkills()
 		{
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			var skillWithQueues = SkillFactory.CreateSkill("dummy", skillType, 15);
 			var activity = new Activity("dummyActivity");
 			skillWithQueues.Activity = activity;

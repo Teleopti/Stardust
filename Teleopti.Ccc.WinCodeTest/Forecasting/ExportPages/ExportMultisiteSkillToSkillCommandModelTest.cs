@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
 			var multisiteSkillSelectionModel = new MultisiteSkillSelectionModel();
 
 			multisiteSkillSelectionModel.MultisiteSkillModel = new MultisiteSkillModel(multisiteSkillGuid);
-			var selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType()).WithId(targetSkillGuid);
+			var selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillTypePhone()).WithId(targetSkillGuid);
 			var childSkillMappingModel = new ChildSkillMappingModel(sourceSkillGuid, selected.Id.GetValueOrDefault(),
 				selected.BusinessUnit.Name, selected.Name);
 

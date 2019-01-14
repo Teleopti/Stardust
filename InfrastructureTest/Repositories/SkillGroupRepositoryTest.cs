@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var queueSourceHelpdesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
 			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
 
-			_skillType = SkillTypeFactory.CreateSkillType();
+			_skillType = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(_skillType);
 			_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
 			PersistAndRemoveFromUnitOfWork(_activity);

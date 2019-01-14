@@ -664,7 +664,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IActivity act = new Activity("sdf");
 			PersistAndRemoveFromUnitOfWork(act);
-			ISkillType skType = SkillTypeFactory.CreateSkillType();
+			ISkillType skType = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(skType);
 			ISkill skillWithValidDays = SkillFactory.CreateSkill("skillWithValidDays", skType, 10);
 			skillWithValidDays.Activity = act;
@@ -697,7 +697,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scen);
 			IActivity act = new Activity("sdf");
 			PersistAndRemoveFromUnitOfWork(act);
-			ISkillType skType = SkillTypeFactory.CreateSkillType();
+			ISkillType skType = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(skType);
 			ISkill skillWithValidDays = new Skill("skillWithValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
 			ISkill skillWithNonValidDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
@@ -774,7 +774,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scen);
 			IActivity act = new Activity("sdf");
 			PersistAndRemoveFromUnitOfWork(act);
-			ISkillType skType = SkillTypeFactory.CreateSkillType();
+			ISkillType skType = SkillTypeFactory.CreateSkillTypePhone();
 			PersistAndRemoveFromUnitOfWork(skType);
 			ISkill skillWithValidDays1 = new Skill("skillWithValidDays1", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
 			ISkill skillWithValidDays2 = new Skill("skillWithValidDays2", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
@@ -894,7 +894,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISite site = SiteFactory.CreateSimpleSite();
 			site.AddTeam(team);
 			IActivity act = new Activity("for test");
-			ISkillType skType = SkillTypeFactory.CreateSkillType();
+			ISkillType skType = SkillTypeFactory.CreateSkillTypePhone();
 			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType);
 			ISkill skill2 = new Skill("for test2", "sdf", Color.Blue, 3, skType);
 			skill.Activity = act;

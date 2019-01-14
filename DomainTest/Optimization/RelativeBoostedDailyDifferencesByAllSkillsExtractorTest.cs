@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dailySkillForecastAndScheduledValueCalculator = _mocks.StrictMock<IDailySkillForecastAndScheduledValueCalculator>();
             _skillExtractor = _mocks.StrictMock<ISkillExtractor>();
             _skillList = new List<ISkill>();
-            _skill1 = SkillFactory.CreateSkill("skill1", SkillTypeFactory.CreateSkillType(), 15);
+            _skill1 = SkillFactory.CreateSkill("skill1", SkillTypeFactory.CreateSkillTypePhone(), 15);
             _skillList.Add(_skill1);
         }
 

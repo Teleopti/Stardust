@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrix = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
             _skillList = new List<ISkill>();
-            _skill1 = SkillFactory.CreateSkill("skill1", SkillTypeFactory.CreateSkillType(), 15);
+            _skill1 = SkillFactory.CreateSkill("skill1", SkillTypeFactory.CreateSkillTypePhone(), 15);
             _skillList.Add(_skill1);
             _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2010, 1, 1), _skillList);
             _target = new ScheduleMatrixPersonalSkillExtractor(_scheduleMatrix, new PersonalSkillsProvider());

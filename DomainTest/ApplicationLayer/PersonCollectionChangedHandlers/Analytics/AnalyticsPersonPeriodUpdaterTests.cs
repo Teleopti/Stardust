@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var r = newTestPersonPeriod(new DateTime(2015, 1, 1).AddDays(-1));
 
 			IActivity act = new Activity("for test");
-			ISkillType skType = SkillTypeFactory.CreateSkillType();
+			ISkillType skType = SkillTypeFactory.CreateSkillTypePhone();
 			var skill = new Domain.Forecasting.Skill("for test", "sdf", Color.Blue, 3, skType)
 			{
 				Activity = act,

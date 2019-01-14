@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IValidatedVolumeDay CreateAggregateWithCorrectBusinessUnit()
         {
-            ISkillType skillType = SkillTypeFactory.CreateSkillType();
+            ISkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             ISkill skill = SkillFactory.CreateSkill("dummy", skillType, 15);
             IActivity activity = new Activity("dummyActivity");
             skill.Activity = activity;

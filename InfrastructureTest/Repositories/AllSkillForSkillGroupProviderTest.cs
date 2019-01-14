@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadAllSkills()
 		{
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			var skillWithQueue = SkillFactory.CreateSkill("dummy1", skillType, 15);
 			var skillWithoutQueue = SkillFactory.CreateSkill("dummy2", skillType, 15);
 			var activity = new Activity("dummyActivity");
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotShowSubSkills()
 		{
-			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
 			var skillWithQueue = SkillFactory.CreateSkill("dummy1", skillType, 15);
 			var skillMultiSite = SkillFactory.CreateMultisiteSkill("multisite", skillType, 15);
 

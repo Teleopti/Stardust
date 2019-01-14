@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         //[Test]
         //public void ShouldSetMultisiteSkillSelection()
         //{
-        //    var multisiteSkill = SkillFactory.CreateMultisiteSkill("TestMulti", SkillTypeFactory.CreateSkillType(), 15);
+        //    var multisiteSkill = SkillFactory.CreateMultisiteSkill("TestMulti", SkillTypeFactory.CreateSkillTypePhone(), 15);
         //    var multisiteSkillModel = new MultisiteSkillModel(multisiteSkill.Id.GetValueOrDefault());
         //    var childSkillMappingModel = new ChildSkillMappingModel(SkillFactory.CreateChildSkill("Sub 1", multisiteSkill), multisiteSkill);
         //    var multisiteSkillSelectionModel = new MultisiteSkillSelectionModel{MultisiteSkillModel = multisiteSkillModel};
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         //[Test]
         //public void ShouldGetMultisiteSkillSelection()
         //{
-        //    var multisiteSkill = SkillFactory.CreateMultisiteSkill("TestMulti", SkillTypeFactory.CreateSkillType(), 15);
+        //    var multisiteSkill = SkillFactory.CreateMultisiteSkill("TestMulti", SkillTypeFactory.CreateSkillTypePhone(), 15);
         //    var multisiteSkillModel = new MultisiteSkillModel(multisiteSkill.Id.GetValueOrDefault());
         //    var childSkillMappingModel1 = new ChildSkillMappingModel(SkillFactory.CreateChildSkill("Sub 1", multisiteSkill), multisiteSkill);
         //    var childSkillMappingModel2 = new ChildSkillMappingModel(SkillFactory.CreateChildSkill("Sub 2", multisiteSkill), multisiteSkill);

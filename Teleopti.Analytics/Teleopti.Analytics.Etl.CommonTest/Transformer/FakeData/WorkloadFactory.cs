@@ -14,7 +14,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 	{
 		public static IList<IWorkload> CreateWorkloadList()
 		{
-			ISkillType skillType = SkillTypeFactory.CreateSkillType();
+			ISkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
 			skillType.SetId(Guid.NewGuid());
 
 			ISkill skill1 = new Skill("skill 1", "desc skill 1", Color.FromArgb(0), 15, skillType);

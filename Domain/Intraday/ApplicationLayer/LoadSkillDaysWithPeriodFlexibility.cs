@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 		public IDictionary<ISkill, IEnumerable<ISkillDay>> Load(DateOnlyPeriod period,IEnumerable<ISkill> skills, IScenario scenario)
 		{
-			return _skillDayLoadHelper.LoadSchedulerSkillDays2(period, skills, scenario);
+			return _skillDayLoadHelper.LoadSkillDaysWithFlexablePeriod(period, skills, scenario);
 		}
 	}
 

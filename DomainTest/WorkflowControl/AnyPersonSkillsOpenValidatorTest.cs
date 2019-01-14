@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 		public void ShouldHandleMultisiteSkill()
 		{
-			var skill = SkillFactory.CreateMultisiteSkill("multi", SkillTypeFactory.CreateSkillType(), 15).WithId();
+			var skill = SkillFactory.CreateMultisiteSkill("multi", SkillTypeFactory.CreateSkillTypePhone(), 15).WithId();
 			var child = SkillFactory.CreateChildSkill("child", skill).WithId();
 			setupOpenHours(skill, true);
 			var date = new DateOnly(2016, 4, 1);
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 		public void ShouldHandleMultisiteSkill()
 		{
-			var skill = SkillFactory.CreateMultisiteSkill("multi", SkillTypeFactory.CreateSkillType(), 15);
+			var skill = SkillFactory.CreateMultisiteSkill("multi", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			var child = SkillFactory.CreateChildSkill("child", skill);
 
 			var date = new DateOnly(2016, 4, 1);

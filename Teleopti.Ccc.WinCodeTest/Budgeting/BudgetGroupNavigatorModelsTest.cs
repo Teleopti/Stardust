@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void CanCreateSkillModel()
         {
-            var skill = new Skill("MySkill", "Description", Color.Beige, 15, SkillTypeFactory.CreateSkillType()); 
+            var skill = new Skill("MySkill", "Description", Color.Beige, 15, SkillTypeFactory.CreateSkillTypePhone()); 
             var skillModel = new SkillModel(skill);
             
             Assert.AreEqual(skill, skillModel.ContainedEntity);

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void Setup()
         {
             _mock = new MockRepository();
-            _skill1 = SkillFactory.CreateSkill("skill1", SkillTypeFactory.CreateSkillType(), 15);
+            _skill1 = SkillFactory.CreateSkill("skill1", SkillTypeFactory.CreateSkillTypePhone(), 15);
             _skillList = new List<ISkill>{_skill1};
             _skillStaffPeriod1 = _mock.StrictMock<ISkillStaffPeriod>();
             _skillStaffPeriod2 = _mock.StrictMock<ISkillStaffPeriod>();

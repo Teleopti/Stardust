@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void Setup()
 		{
 			_campaign = new Domain.Outbound.Campaign();
-			_campaign.Skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
+			_campaign.Skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillTypePhone(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
 			_campaignRepository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
 			_taskManager = MockRepository.GenerateMock<IOutboundCampaignTaskManager>();
 			_skippedDates = new List<DateOnly>();

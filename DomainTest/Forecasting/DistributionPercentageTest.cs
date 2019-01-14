@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             Target = new DistributionPercentage();
 
-            _testSkill = SkillFactory.CreateMultisiteSkill("test",SkillTypeFactory.CreateSkillType(),15);
+            _testSkill = SkillFactory.CreateMultisiteSkill("test",SkillTypeFactory.CreateSkillTypePhone(),15);
             _testSkill.TimeZone = (TimeZoneInfo.Utc);
         }
 

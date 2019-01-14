@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void ConcreteSetup()
         {
             _skill = SkillFactory.CreateSkill("skill");
-            var skillType = SkillTypeFactory.CreateSkillType();
+            var skillType = SkillTypeFactory.CreateSkillTypePhone();
             PersistAndRemoveFromUnitOfWork(skillType);
 
             var activity = new Activity("a");

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class SkillTypeFactory
     {
-        public static SkillType CreateSkillType()
+        public static SkillType CreateSkillTypePhone()
         {
             return new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony);
         }

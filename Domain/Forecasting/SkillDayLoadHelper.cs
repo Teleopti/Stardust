@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
-		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays2(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDaysWithFlexablePeriod(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
 		IEnumerable<ISkillDay> LoadSchedulerSkillDaysFlat(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
@@ -62,24 +62,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad,periodToLoad);
 		}
 
-		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays2(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDaysWithFlexablePeriod(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
 		{
 			if (skills == null || scenario == null) return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 
 			IDictionary<ISkill, IEnumerable<ISkillDay>> result = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+			var skillsToLoad = skills.Where(skill => !skill.IsChildSkill).ToArray();
 
-			var emailAndBackofficeSkills = skills.Where(x =>
+			var emailAndBackofficeSkills = skillsToLoad.Where(x =>
 				x.SkillType.ForecastSource == ForecastSource.Backoffice || x.SkillType.ForecastSource == ForecastSource.Email);
-			var skillsToLoad = emailAndBackofficeSkills.Where(skill => !skill.IsChildSkill).ToArray();
 			var periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-8), period.EndDate.AddDays(2));
-			result =  calculateSkillSkillDayDictionary(period, scenario, skillsToLoad,periodToLoad);
+			result =  calculateSkillSkillDayDictionary(period, scenario, emailAndBackofficeSkills, periodToLoad);
 
-			var otherSkills = skills.Where(x => !emailAndBackofficeSkills.Contains(x));
-			skillsToLoad = otherSkills.Where(skill => !skill.IsChildSkill).ToArray();
+			var otherSkills = skillsToLoad.Except(emailAndBackofficeSkills);
 			periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
-			var otherSkillsDays = calculateSkillSkillDayDictionary2(period, scenario, skillsToLoad, periodToLoad);
+			var otherSkillsDays = calculateSkillSkillDayDictionaryWithoutPeriodInflation(period, scenario, otherSkills, periodToLoad);
 
-			otherSkillsDays.ForEach(x => {result.Add(x.Key,x.Value); });
+			otherSkillsDays.ForEach(x => {result.Add(x.Key,x.Value);});
 			return result;
 		}
 
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			return work(period, scenario, skillsToLoad, periodToLoad, testSkillDays, calculators);
 		}
 
-		private IDictionary<ISkill, IEnumerable<ISkillDay>> calculateSkillSkillDayDictionary2(DateOnlyPeriod period, IScenario scenario, IEnumerable<ISkill> skillsToLoad, DateOnlyPeriod periodToLoad)
+		private IDictionary<ISkill, IEnumerable<ISkillDay>> calculateSkillSkillDayDictionaryWithoutPeriodInflation(DateOnlyPeriod period, IScenario scenario, IEnumerable<ISkill> skillsToLoad, DateOnlyPeriod periodToLoad)
 		{
 			IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
 			var testSkillDays = _skillDayRepository.FindReadOnlyRange(periodToLoad, skillsToLoad, scenario).ToLookup(k => k.Skill);

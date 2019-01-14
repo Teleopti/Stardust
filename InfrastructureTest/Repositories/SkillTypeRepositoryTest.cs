@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override ISkillType CreateAggregateWithCorrectBusinessUnit()
         {
-            return SkillTypeFactory.CreateSkillType();
+            return SkillTypeFactory.CreateSkillTypePhone();
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanFindAll()
         {         
-            SkillType skillType = SkillTypeFactory.CreateSkillType();
+            SkillType skillType = SkillTypeFactory.CreateSkillTypePhone();
             PersistAndRemoveFromUnitOfWork(skillType);
 
             SkillTypeRepository rep = new SkillTypeRepository(UnitOfWork);

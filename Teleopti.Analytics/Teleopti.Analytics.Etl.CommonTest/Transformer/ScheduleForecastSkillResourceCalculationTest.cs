@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_mocks = new MockRepository();
 			_schedulingResultService = _mocks.StrictMock<ISchedulingResultService>();
 
-			ISkill skill = SkillFactory.CreateSkill("Skill A", SkillTypeFactory.CreateSkillType(), 15);
+			ISkill skill = SkillFactory.CreateSkill("Skill A", SkillTypeFactory.CreateSkillTypePhone(), 15);
 			skill.SetId(Guid.NewGuid());
 
 			var period = new DateOnlyPeriod(2009, 9, 11, 2009, 9, 11);

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             const string multisiteName = "MultisiteSkill";
 	        var multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
 			var childSkill = new ChildSkill(childName, "desc", Color.Beige, multisiteSkill).WithId();
-            var selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
+            var selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillTypePhone());
             selected.SetId(Guid.NewGuid());
             var childSkillMappingModel = new ChildSkillMappingModel(Guid.NewGuid(),
                                                                     selected.Id.GetValueOrDefault(),
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             var guid = Guid.NewGuid();
 			var multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
             var childSkill = new ChildSkill(childName, "desc", Color.Beige, multisiteSkill).WithId(guid);
-            var selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
+            var selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillTypePhone());
             selected.SetId(Guid.NewGuid());
             var childSkillMappingModel = new ChildSkillMappingModel(guid,
                                                                     selected.Id.GetValueOrDefault(),

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void Setup()
         {
             _dt = new DateOnly(2007, 1, 1);
-            _skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillType()).WithId();
+            _skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillTypePhone()).WithId();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _skillDataPeriods = new List<ISkillDataPeriod>();
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifySkillInWorkloadDayMustBeSameAsinSkillDay()
         {
-            Skill newSkill = new Skill("skill1", "skill1", Color.Red, 15, SkillTypeFactory.CreateSkillType());
+            Skill newSkill = new Skill("skill1", "skill1", Color.Red, 15, SkillTypeFactory.CreateSkillTypePhone());
 			Assert.Throws<ArgumentException>(() => _skillDay = new SkillDay(_dt, newSkill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods));
         }
 

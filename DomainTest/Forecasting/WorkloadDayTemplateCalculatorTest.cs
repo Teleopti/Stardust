@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void Setup()
         {
             _mocks = new MockRepository();
-            _skillType = SkillTypeFactory.CreateSkillType();
+            _skillType = SkillTypeFactory.CreateSkillTypePhone();
             _skill = SkillFactory.CreateSkill("Skill - Name", _skillType, 15);
             _skill.MidnightBreakOffset = TimeSpan.FromHours(2);
 

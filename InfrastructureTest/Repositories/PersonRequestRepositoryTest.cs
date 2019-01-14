@@ -2097,7 +2097,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(absence);
 				var activity = new Activity("aktare");
 				PersistAndRemoveFromUnitOfWork(activity);
-				var skilltype = SkillTypeFactory.CreateSkillType();
+				var skilltype = SkillTypeFactory.CreateSkillTypePhone();
 				PersistAndRemoveFromUnitOfWork(skilltype);
 				var skill = SkillFactory.CreateSkill("skillet");
 				var skill2 = SkillFactory.CreateSkill("skill2");
@@ -2208,7 +2208,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(absence);
 				var activity = new Activity("aktare");
 				PersistAndRemoveFromUnitOfWork(activity);
-				var skilltype = SkillTypeFactory.CreateSkillType();
+				var skilltype = SkillTypeFactory.CreateSkillTypePhone();
 				PersistAndRemoveFromUnitOfWork(skilltype);
 				var skill = SkillFactory.CreateSkill("skillet");
 				var skill2 = SkillFactory.CreateSkill("skill2");

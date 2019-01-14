@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		  [SetUp]
 		  public void Setup()
 		  {
-				_skillType = SkillTypeFactory.CreateSkillType();
+				_skillType = SkillTypeFactory.CreateSkillTypePhone();
 				_skill = SkillFactory.CreateSkill("Inkommande", _skillType, 15);
 				_workload = WorkloadFactory.CreateWorkload(_skill);
 				_workloadDays = WorkloadDayFactory.GetWorkloadDaysForTest(_startDate, _endDate, _workload);
