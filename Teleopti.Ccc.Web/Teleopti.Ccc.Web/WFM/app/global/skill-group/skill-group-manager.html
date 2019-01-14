@@ -6,13 +6,6 @@
     </div>
     <div class="fab-wrapper">
         <button class="wfm-fab material-depth-1 grow-out pull-right"
-                id="save_all"
-                ng-show="vm.canSave"
-                ng-click="vm.saveAll()">
-            <i class="mdi mdi-content-save"></i>
-            <md-tooltip>{{'Save'|translate}}</md-tooltip>
-        </button>
-        <button class="wfm-fab material-depth-1 grow-out pull-right"
                 id="exit_sgm"
                 ng-click="vm.exitConfigMode();">
             <i class="mdi mdi-close"></i>
@@ -162,6 +155,12 @@
                  ng-show="vm.skillGroups[vm.selectedGroupIndex]">
                 <div class="sub-header">
                     <h2 style="display: inline; line-height: 44px">{{vm.skillGroups[vm.selectedGroupIndex].Name}}</h2>
+                    <button class="wfm-btn wfm-btn-invis-primary pull-right"
+                        id="save_all"
+                        ng-show="vm.canSave"
+                        ng-click="vm.saveAll()">
+                        {{'Save'|translate}}
+                    </button>
                 </div>
                 <div class="con-row">
                     <div class="con-flex">
