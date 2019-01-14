@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	[TestFixture]
 	public class TeleoptiPrincipalInternalsFactoryTest
 	{
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldMakeRegionalFromPerson()
 		{
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void ShouldThrowPersonNotFoundExceptionIfThePersonIsNotFound()
 		{
 			var person = MockRepository.GenerateMock<IPerson>();
-			person.Stub(x => x.Name).Throw(new NHibernate.ObjectNotFoundException(null, "Person"));
+			person.Stub(x => x.PrincipalName()).Throw(new NHibernate.ObjectNotFoundException(null, "Person"));
 			var target = new TeleoptiPrincipalInternalsFactory();
 
 			Assert.Throws<PersonNotFoundException>(() => target.NameForPerson(person));
