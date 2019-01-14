@@ -4,21 +4,17 @@ using System.Threading;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
 	public class CopyScheduleNodeHandler : IHandle<CopyScheduleEvent>
 	{
-		private readonly IDataSourceScope _dataSourceScope;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 		private readonly IHandleEvent<CopyScheduleEvent> _realEventHandler;
 
-		public CopyScheduleNodeHandler(IDataSourceScope dataSourceScope, IStardustJobFeedback stardustJobFeedback, IHandleEvent<CopyScheduleEvent> realEventHandler)
+		public CopyScheduleNodeHandler(IStardustJobFeedback stardustJobFeedback, IHandleEvent<CopyScheduleEvent> realEventHandler)
 		{
-			_dataSourceScope = dataSourceScope;
 			_stardustJobFeedback = stardustJobFeedback;
 			_realEventHandler = realEventHandler;
 		}
