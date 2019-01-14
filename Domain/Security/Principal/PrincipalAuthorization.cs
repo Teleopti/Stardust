@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public virtual IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
 		{
-			return new[] { period };
+			return new[] {period};
 		}
 
 		public IEnumerable<IApplicationFunction> GrantedFunctions()
@@ -136,10 +136,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 			return false;
 		}
-		
+
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
 		{
-			var owningPersonPeriods = _claimsOwner?.Organisation?.Periods() ?? new DateOnlyPeriod[0];
+			var owningPersonPeriods = _claimsOwner?.Organisation?.Periods().Select(x => new DateOnlyPeriod(x.StartDate, x.EndDate))
+									  ?? new DateOnlyPeriod[0];
 			owningPersonPeriods = owningPersonPeriods.Where(p => p.StartDate <= period.EndDate);
 
 			var checkPersonPeriods = person.PersonPeriods(period);
@@ -180,6 +181,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 						lastDateOfLastPeriod = endDate;
 					}
 				}
+
 				permittedPeriods.Add(new DateOnlyPeriod(lastDate, lastDateOfLastPeriod));
 			}
 
@@ -199,6 +201,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 						grantedFunctions.Add(applicationFunction);
 				}
 			}
+
 			return grantedFunctions;
 		}
 
@@ -216,7 +219,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			_teleoptiPrincipal = teleoptiPrincipal;
 		}
-		
+
 		public static IAuthorization Current()
 		{
 			return ServiceLocatorForLegacy.CurrentAuthorization.Current();
@@ -231,7 +234,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
 		{
-			return claimsAuthorization.IsPermitted(functionPath,dateOnly,person);
+			return claimsAuthorization.IsPermitted(functionPath, dateOnly, person);
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
@@ -274,7 +277,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			return claimsAuthorization.EvaluateSpecification(specification);
 		}
 	}
-
 
 
 	public class ModuleSpecification : Specification<IApplicationFunction>
@@ -326,6 +328,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 					}
 				}
 			}
+
 			return false;
 		}
 	}

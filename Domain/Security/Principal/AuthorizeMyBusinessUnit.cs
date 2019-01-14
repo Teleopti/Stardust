@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
@@ -48,17 +49,17 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
     	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorization authorization)
     	{
-    		return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly);
+    		return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly.Date);
     	}
 
 	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAuthorization authorization)
 	    {
-			return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly);
+			return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly.Date);
 		}
 
 	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAuthorization authorization)
 	    {
-			return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly);
+			return queryingPerson.BelongsToBusinessUnit(authorization.BusinessUnitId, dateOnly.Date);
 		}
 	}
 }
