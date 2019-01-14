@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.Api.Test
 		{
 			base.Extend(extend, configuration);
 
-			extend.AddModule(new ApiModule());
+			extend.AddModule(new ApiModule(configuration));
 			extend.AddModule(new clientModule());
 		}
 
@@ -60,12 +60,8 @@ namespace Teleopti.Wfm.Api.Test
 					return new ApiHttpClient(server.HttpClient);
 				}
 			}
-
-
 		}
-
-
-
+		
 		protected override void Isolate(IIsolate isolate)
 		{
 			base.Isolate(isolate);

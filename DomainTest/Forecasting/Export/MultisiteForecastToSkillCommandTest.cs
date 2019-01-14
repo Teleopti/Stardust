@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 		private MockRepository mocks;
 		private IJobResultFeedback jobResultFeedback;
 		private ISplitImportForecastMessage _splitImportForecastMessage;
-		private SkillDayLoadHelper skillDayLoadHelper;
+		private ISkillDayLoadHelper skillDayLoadHelper;
 		private IScenarioRepository scenarioRepository;
 
 		[SetUp]
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
 			jobResultFeedback = mocks.DynamicMock<IJobResultFeedback>();
 			_splitImportForecastMessage = mocks.DynamicMock<ISplitImportForecastMessage>();
-			skillDayLoadHelper = mocks.DynamicMock<SkillDayLoadHelper>();
+			skillDayLoadHelper = mocks.DynamicMock<ISkillDayLoadHelper>();
 			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
 
 			target = new MultisiteForecastToSkillAnalyzer(skillDayLoadHelper, scenarioRepository, jobResultFeedback, _splitImportForecastMessage);

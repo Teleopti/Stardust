@@ -196,27 +196,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticTask)));
 		}
 
-		private IQuery createSkillIntervalStatisticQuery(IStatelessUnitOfWork uow, DateOnly date)
-		{
-			return session(uow).CreateSQLQuery("exec mart.IntradaySkillStatistics @DateFrom=:DateFrom, @DateTo=:DateTo")
-				.AddScalar("SkillId", NHibernateUtil.Guid)
-				.AddScalar("SkillName", NHibernateUtil.String)
-				.AddScalar("Interval", NHibernateUtil.DateTime)
-				.AddScalar("StatAverageTaskTimeSeconds", NHibernateUtil.Double)
-				.AddScalar("StatAverageAfterTaskTimeSeconds", NHibernateUtil.Double)
-				.AddScalar("StatOfferedTasks", NHibernateUtil.Double)
-				.AddScalar("StatAnsweredTasks", NHibernateUtil.Double)
-				.AddScalar("StatAbandonedTasks", NHibernateUtil.Double)
-				.AddScalar("StatAbandonedShortTasks", NHibernateUtil.Double)
-				.AddScalar("StatAbandonedTasksWithinSL", NHibernateUtil.Double)
-				.AddScalar("StatOverflowOutTasks", NHibernateUtil.Double)
-				.AddScalar("StatOverflowInTasks", NHibernateUtil.Double)
-				.SetReadOnly(true)
-				.SetDateTime("DateFrom", date.Date)
-				.SetDateTime("DateTo", date.Date)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticTask)));
-		}
-
 		private static IQuery createQuery(IStatelessUnitOfWork uow, DateTimePeriod date, string queueList)
 		{
 			return session(uow).CreateSQLQuery("exec mart.raptor_statistics_load @DateFrom=:DateFrom,@DateTo=:DateTo, @QueueList=:QueueList")

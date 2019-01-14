@@ -4202,7 +4202,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_teamLeaderMode) return;
 			using (PerformanceOutput.ForOperation("Loading skill days"))
 			{
-				stateHolder.SchedulerStateHolder.SchedulingResultState.SkillDays = _container.Resolve<SkillDayLoadHelper>().LoadSchedulerSkillDays(
+				stateHolder.SchedulerStateHolder.SchedulingResultState.SkillDays = _container.Resolve<ISkillDayLoadHelper>().LoadSchedulerSkillDays(
 					new DateOnlyPeriod(stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8),
 						stateHolder.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8)), stateHolder.SchedulerStateHolder.SchedulingResultState.Skills,
 					stateHolder.SchedulerStateHolder.RequestedScenario);

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly ICurrentScenario _scenarioRepository;
-		private readonly SkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly BacklogSkillTypesForecastCalculator _backlogSkillTypesForecastCalculator;
 		private readonly IUserTimeZone _userTimeZone;
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			IScheduledStaffingProvider scheduledStaffingProvider,
 			IForecastedStaffingProvider forecastedStaffingProvider,
 			ICurrentScenario scenarioRepository, 
-			SkillDayLoadHelper skillDayLoadHelper, 
+			ISkillDayLoadHelper skillDayLoadHelper, 
 			BacklogSkillTypesForecastCalculator backlogSkillTypesForecastCalculator, 
 			IUserTimeZone userTimeZone
 			)

@@ -196,7 +196,7 @@
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
 				personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
-				var newStartMoment = moment("2016-05-13 02:00");
+				var newStartMoment = moment("2016-05-13 2:00");
 
 				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, defaultUserTimeZone);
 
@@ -749,58 +749,6 @@
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[1].Projections[0], personSchedule);
 
 				var newStartMoment = moment.tz("2019-01-10 01:00", "Etc/Utc");
-				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Etc/Utc");
-				expect(result).toBeTruthy();
-			});
-
-			it('should return true when moving multiple activities with same layer to next day', function () {
-				var todaySchedule = {
-					"PersonId": "221B-Baker-SomeoneElse",
-					"Name": "SomeoneElse",
-					"Date": "2019-01-10",
-					"Timezone": {
-						IanaId: "Europe/Berlin"
-					},
-					"Projection": [
-						{
-							"ShiftLayerIds": ["layer1"],
-							"ParentPersonAbsences": null,
-							"Color": "#80FF80",
-							"Description": "Email",
-							"StartInUtc": "2019-01-10 16:00",
-							"EndInUtc": "2019-01-10 17:00"
-						},
-						{
-							"ShiftLayerIds": ["layer2"],
-							"ParentPersonAbsences": null,
-							"Color": "#80FF80",
-							"Description": "Phone",
-							"StartInUtc": "2019-01-10 17:00",
-							"EndInUtc": "2019-01-10 18:00"
-						},
-						{
-							"ShiftLayerIds": ["layer1"],
-							"ParentPersonAbsences": null,
-							"Color": "#80FF80",
-							"Description": "Email",
-							"StartInUtc": "2019-01-10 18:00",
-							"EndInUtc": "2019-01-10 20:00"
-						}
-					],
-
-					"IsFullDayAbsence": false,
-					"DayOff": null
-				};
-
-
-				scheduleMgmt.resetSchedules([todaySchedule], "2019-01-10", "Etc/Utc");
-				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
-				personSchedule.Shifts[0].Projections[0].Selected = true;
-				personSchedule.Shifts[0].Projections[2].Selected = true;
-				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
-				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[2], personSchedule);
-
-				var newStartMoment = moment.tz("2019-01-11 08:00", "Etc/Utc");
 				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Etc/Utc");
 				expect(result).toBeTruthy();
 			});
