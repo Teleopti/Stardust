@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _siteBankHolidayCalendars.FirstOrDefault(siteCalendars =>
 				site.Id.GetValueOrDefault() == siteCalendars.Site.Id.GetValueOrDefault());
 		}
-
-		public IEnumerable<SiteBankHolidayCalendarMatchResult> FindSiteBankHolidayCalendar(IBankHolidayCalendar calendar)
+		
+		public IEnumerable<SiteBankHolidayCalendar> FindSiteBankHolidayCalendars(Guid calendarId)
 		{
 			throw new NotImplementedException();
 		}

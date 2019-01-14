@@ -733,7 +733,6 @@
     <Compile Include="Staffing\StaffingAudit.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendar.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayDate.cs" />
-    <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendarMatchResult.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Hints\ISchedulePostHint.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
