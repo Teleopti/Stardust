@@ -2,8 +2,7 @@
      ng-class="{'with-fab':vm.skillGroups.length > 0}">
     <div class="view-title">
         <h1>
-            <i class="mdi mdi-compass-outline"></i> {{'AllSkillGroups'|translate}}</h1>
-        <p>{{'ManageSkillGroups'|translate}}</p>
+            <i class="mdi mdi-compass-outline"></i> {{ 'ManageSkillGroups'|translate }}</h1>
     </div>
     <div class="fab-wrapper">
         <button class="wfm-fab material-depth-1 grow-out pull-right"
@@ -81,7 +80,6 @@
         <div class="con-flex">
             <div class="panel">
                 <div class="sub-header">
-                    <h2>{{'SelectSkillGroup'|translate}}</h2>
                     <div class="head-actions panel-menu">
                         <div tabindex=0
                              class="context-menu card-context grow-out"
@@ -90,6 +88,7 @@
                             <md-tooltip>{{'AddSkillGroup'|translate}}</md-tooltip>
                         </div>
                     </div>
+                    <h2 style="display: inline; line-height: 44px;">{{'AllSkillGroups'|translate}}</h2>
                 </div>
                 <div class="con-row">
                     <div class="con-flex">
@@ -164,9 +163,12 @@
         <div class="con-flex x3">
             <div class="panel"
                  ng-show="vm.skillGroups[vm.selectedGroupIndex]">
+                <div class="sub-header">
+                    <h2 style="display: inline; line-height: 44px">{{vm.skillGroups[vm.selectedGroupIndex].Name}}</h2>
+                </div>
                 <div class="con-row">
                     <div class="con-flex">
-                        <h2>{{'AvailableSkills'|translate}}</h2>
+                        <h3>{{'AvailableSkills'|translate}}</h3>
                         <div class="con-row">
                             <div class="con-flex">
                                 <label for="filter2"
@@ -200,12 +202,11 @@
                         </div>
                     </div>
                     <div class="con-flex x2">
-                        <h2>
-                            <strong>{{vm.skillGroups[vm.selectedGroupIndex].Name}}</strong>
-                        </h2>
-                        <p ng-cloak
-                           class="animate-show"
-                           ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length > 0">{{'IncludedSkills'|translate}}:</p>
+                        <h3 ng-cloak
+                        class="animate-show"
+                        ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length > 0">
+                            {{'IncludedSkills'|translate}}:
+                        </h3>
                         <span>
                             <i class="mdi mdi-alert"
                                ng-if="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0 || vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0"></i>
