@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
 		private readonly IPersonRepository _personRepository;
-		private readonly SkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IWorkloadRepository _workloadRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository,
 			IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage,
 			IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
-			SkillDayLoadHelper skillDayLoadHelper)
+			ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			_peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
 			_personRepository = personRepository;

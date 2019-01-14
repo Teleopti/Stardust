@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 		private readonly IntradayStatisticsService _statisticsService;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IntradayForecastingService _forecastingService;
-		private readonly SkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 
 		public IntradayPerformanceApplicationService(
 			INow now,
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
 			IntradayStatisticsService statisticsService,
 			IScenarioRepository scenarioRepository,
-			SkillDayLoadHelper skillDayLoadHelper,
+			ISkillDayLoadHelper skillDayLoadHelper,
 			IntradayForecastingService forecastingService)
 		{
 			_now = now ?? throw new ArgumentNullException(nameof(now));

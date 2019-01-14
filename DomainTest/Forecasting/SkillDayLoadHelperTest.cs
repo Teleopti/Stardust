@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public FakeMultisiteDayRepository MultisiteDayRep;
         public FakeSkillDayRepository SkillDayRep;
 		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
-		public SkillDayLoadHelper Target;
+		public ISkillDayLoadHelper Target;
 		
         [Test]
         public void VerifyLoadWithMultisiteDays()

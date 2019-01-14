@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
     public class MultisiteForecastToSkillAnalyzer : IMultisiteForecastToSkillCommand
     {
-        private readonly SkillDayLoadHelper _skillDayLoadHelper;
+        private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IJobResultFeedback _feedback;
 	    private readonly ISplitImportForecastMessage _splitImportForecastMessage;
 
-	    public MultisiteForecastToSkillAnalyzer( SkillDayLoadHelper skillDayLoadHelper, IScenarioRepository scenarioRepository, IJobResultFeedback feedback, ISplitImportForecastMessage splitImportForecastMessage)
+	    public MultisiteForecastToSkillAnalyzer( ISkillDayLoadHelper skillDayLoadHelper, IScenarioRepository scenarioRepository, IJobResultFeedback feedback, ISplitImportForecastMessage splitImportForecastMessage)
         {
            _skillDayLoadHelper = skillDayLoadHelper;
             _scenarioRepository = scenarioRepository;

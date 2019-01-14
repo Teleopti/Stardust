@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private LoadSchedulingStateHolderForResourceCalculation _target;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IPeopleAndSkillLoaderDecider _peopleAndSkillLoadDecider;
-		private SkillDayLoadHelper _skillDayLoadHelper;
+		private ISkillDayLoadHelper _skillDayLoadHelper;
 		private IPersonRepository _personRepository;
 		private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private ISkillRepository _skillRepository;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_peopleAndSkillLoadDecider = MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>();
-			_skillDayLoadHelper = MockRepository.GenerateMock<SkillDayLoadHelper>();
+			_skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_personAbsenceAccountRepository = MockRepository.GenerateMock<IPersonAbsenceAccountRepository>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
