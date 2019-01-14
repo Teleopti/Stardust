@@ -98,10 +98,10 @@
 
                 if (runningJobs.length > 0) {
                     runningJobs.forEach(function (j) {
-                        var jobStart = moment(j.startDate).toDate();
-                        var jobEnd = moment(j.endDate).toDate();
-                        var start = moment($ctrl.dateRange.startDate).toDate();
-                        var end = moment($ctrl.dateRange.endDate).toDate();
+                        var jobStart = moment(j.startDate,"MMM D, YYYY").toDate();
+                        var jobEnd = moment(j.endDate,"MMM D, YYYY").toDate();
+                        var start = moment($ctrl.dateRange.startDate,"MMM D, YYYY").toDate();
+                        var end = moment($ctrl.dateRange.endDate,"MMM D, YYYY").toDate();
 
                         if ((start >= jobStart && start <= jobEnd) || (end >= jobStart && end <= jobEnd) || (start <= jobStart && end >= jobEnd)) {
                             result = true;
