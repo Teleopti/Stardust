@@ -51,6 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			}
 		}
 
+		public IEnumerable<Guid> GetSitesByAssignedCalendar(Guid calendarId)
+		{
+			var allMetchedResults = _siteBankHolidayCalendarRepository.FindSiteBankHolidayCalendars(calendarId);
+			return allMetchedResults.Select(x => x.Site.Id.GetValueOrDefault());
+		}
+
 		private void addOrUpdateCalendars(ISiteBankHolidayCalendar existingSetting, ICollection<IBankHolidayCalendar> calendars, Guid newSettingSiteId)
 		{
 			if (existingSetting == null)

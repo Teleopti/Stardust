@@ -360,6 +360,19 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			result.Count().Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldGetSitesByAssignedCalendar()
+		{
+			var siteId = Guid.NewGuid();
+			var calendarId = Guid.NewGuid();
+			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, calendarId);
+			SiteBankHolidayCalendarRepository.Add(siteBankHolidayCalendar);
+
+			var result = Target.GetSitesByCalendar(calendarId);
+
+			result.ToList().First().Should().Be.EqualTo(siteId);
+		}
+
 		private ISiteBankHolidayCalendar createSiteAndBankHolidayCalendar(Guid siteId, Guid bankHolidayCalendarId)
 		{
 			var site = SiteFactory.CreateSiteWithId(siteId, "mySite");

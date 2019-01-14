@@ -51,6 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 			return _siteBankHolidayCalendarsProvider.GetAllSettings();
 		}
 
+		[HttpGet, Route("api/SitesByCalendar/{Id}"), UnitOfWork]
+		public virtual IEnumerable<Guid> GetSitesByCalendar(Guid calendarId)
+		{
+			return _siteBankHolidayCalendarsProvider.GetSitesByAssignedCalendar(calendarId);
+		}
+
 		[HttpPost, Route("api/SiteBankHolidayCalendars/Update"), UnitOfWork]
 		public virtual bool SetCalendarsToSite([FromBody]SiteBankHolidayCalendarForm input)
 		{

@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IEnumerable<ISiteBankHolidayCalendar> FindAllSiteBankHolidayCalendarsSortedBySite();
 		ISiteBankHolidayCalendar FindSiteBankHolidayCalendar(ISite site);
-		IEnumerable<SiteBankHolidayCalendar> FindSiteBankHolidayCalendars(Guid calendarId);
+		IEnumerable<ISiteBankHolidayCalendar> FindSiteBankHolidayCalendars(Guid calendarId);
 	}
 }

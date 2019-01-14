@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
 
 namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider
@@ -7,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 	{
 		IEnumerable<SiteBankHolidayCalendarsViewModel> GetAllSettings();
 		void UpdateCalendarsForSites(IEnumerable<SiteBankHolidayCalendarsViewModel> input);
+		IEnumerable<Guid> GetSitesByAssignedCalendar(Guid calendarId);
 	}
 }

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ret;
 		}
 
-		public IEnumerable<SiteBankHolidayCalendar> FindSiteBankHolidayCalendars(Guid calendarId)
+		public IEnumerable<ISiteBankHolidayCalendar> FindSiteBankHolidayCalendars(Guid calendarId)
 		{
 			var query = Session.CreateCriteria<SiteBankHolidayCalendar>()
 			   .CreateCriteria("BankHolidayCalendarsForSite", "cal")
