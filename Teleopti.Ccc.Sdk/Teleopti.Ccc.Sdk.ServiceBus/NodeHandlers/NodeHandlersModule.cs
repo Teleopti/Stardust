@@ -47,27 +47,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<PayrollFormatRepositoryFactory>().As<IPayrollFormatRepositoryFactory>().SingleInstance();
 			
 			builder.RegisterType<StardustHealthCheckHandler>().As<IHandle<StardustHealthCheckEvent>>().SingleInstance();
-			builder.RegisterType<ImportForecastFromFileHandler>().As<IHandle<ImportForecastsFileToSkillEvent>>().SingleInstance();
-			builder.RegisterType<ApproveRequestsWithValidatorsEventStardustHandler>().As<IHandle<ApproveRequestsWithValidatorsEvent>>().SingleInstance();
-			builder.RegisterType<ExportMultisiteSkillsToSkillEventHandler>().As<IHandle<ExportMultisiteSkillsToSkillEvent>>().SingleInstance();
-			builder.RegisterType<IndexMaintenanceHandler>().As<IHandle<IndexMaintenanceEvent>>().SingleInstance();
-			builder.RegisterType<PersonAbsenceRemovedHandler>().As<IHandle<PersonAbsenceRemovedEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<ExportPayrollHandler>().As<IHandle<RunPayrollExportEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<UpdateStaffingLevelReadModelHandler>().As<IHandle<UpdateStaffingLevelReadModelEvent>>().SingleInstance();
-			builder.RegisterType<ValidateReadModelsHandler>().As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<FixReadModelsHandler>().As<IHandle<FixReadModelsEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<MultiAbsenceRequestsHandler>().As<IHandle<NewMultiAbsenceRequestsCreatedEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<WebScheduleHandler>().As<IHandle<WebScheduleStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<WebIntradayOptimizationHandler>().As<IHandle<IntradayOptimizationOnStardustWasOrdered>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<WebClearScheduleHandler>().As<IHandle<WebClearScheduleStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<ImportAgentHandler>().As<IHandle<ImportAgentEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<ImportExternalPerformanceHandler>().As<IHandle<ImportExternalPerformanceInfoEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<ProcessWaitlistedRequestsHandler>().As<IHandle<ProcessWaitlistedRequestsEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<RecalculateBadgeHandler>().As<IHandle<RecalculateBadgeEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<RefreshPayrollFormatsHandler>().As<IHandle<RefreshPayrollFormatsEvent>>().SingleInstance();
-			builder.RegisterType<IntradayToolHandler>().As<IHandle<IntradayToolEvent>>().SingleInstance();
-			builder.RegisterType<ImportScheduleNodeHandler>().As<IHandle<ImportScheduleEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<CopyScheduleNodeHandler>().As<IHandle<CopyScheduleEvent>>().SingleInstance().ApplyAspects();
+			
+			//normally register handlers like this (=will refresh toggles
+			builder.RegisterType<ImportForecastFromFileHandler>().Named<IHandle<ImportForecastsFileToSkillEvent>>(NodeComponentName).SingleInstance();
+			builder.RegisterType<ApproveRequestsWithValidatorsEventStardustHandler>().Named<IHandle<ApproveRequestsWithValidatorsEvent>>(NodeComponentName).SingleInstance();
+			builder.RegisterType<ExportMultisiteSkillsToSkillEventHandler>().Named<IHandle<ExportMultisiteSkillsToSkillEvent>>(NodeComponentName).SingleInstance();
+			builder.RegisterType<IndexMaintenanceHandler>().Named<IHandle<IndexMaintenanceEvent>>(NodeComponentName).SingleInstance();
+			builder.RegisterType<PersonAbsenceRemovedHandler>().Named<IHandle<PersonAbsenceRemovedEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
+			builder.RegisterType<ExportPayrollHandler>().Named<IHandle<RunPayrollExportEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
+			builder.RegisterType<UpdateStaffingLevelReadModelHandler>().Named<IHandle<UpdateStaffingLevelReadModelEvent>>(NodeComponentName).SingleInstance();
+			builder.RegisterType<ValidateReadModelsHandler>().Named<IHandle<ValidateReadModelsEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
+			builder.RegisterType<FixReadModelsHandler>().Named<IHandle<FixReadModelsEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
+			builder.RegisterType<MultiAbsenceRequestsHandler>().Named<IHandle<NewMultiAbsenceRequestsCreatedEvent>>(NodeComponentName).InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<WebScheduleHandler>().Named<IHandle<WebScheduleStardustEvent>>(NodeComponentName).InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<WebIntradayOptimizationHandler>().Named<IHandle<IntradayOptimizationOnStardustWasOrdered>>(NodeComponentName).InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<WebClearScheduleHandler>().Named<IHandle<WebClearScheduleStardustEvent>>(NodeComponentName).InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<ImportAgentHandler>().Named<IHandle<ImportAgentEvent>>(NodeComponentName).InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<ImportExternalPerformanceHandler>().Named<IHandle<ImportExternalPerformanceInfoEvent>>(NodeComponentName).InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<ProcessWaitlistedRequestsHandler>().Named<IHandle<ProcessWaitlistedRequestsEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
+			builder.RegisterType<RecalculateBadgeHandler>().Named<IHandle<RecalculateBadgeEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
+			builder.RegisterType<RefreshPayrollFormatsHandler>().Named<IHandle<RefreshPayrollFormatsEvent>>(NodeComponentName).SingleInstance();
+			builder.RegisterType<IntradayToolHandler>().Named<IHandle<IntradayToolEvent>>(NodeComponentName).SingleInstance();
+			builder.RegisterType<ImportScheduleNodeHandler>().Named<IHandle<ImportScheduleEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
+			builder.RegisterType<CopyScheduleNodeHandler>().Named<IHandle<CopyScheduleEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
 			
 			builder.RegisterGenericDecorator(typeof(refreshTogglesDecorator<>), typeof(IHandle<>), NodeComponentName);
 		}
