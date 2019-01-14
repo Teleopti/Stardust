@@ -275,6 +275,10 @@
 			scheduleMgmtSvc.updateSchedulesByRawData(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), vm.currentTimezone, d.rawSchedules);
 			vm.checkValidationWarningForCommandTargets([d.personId]);
 			resetHavingScheduleChange([d.personId]);
+
+			if (vm.staffingEnabled) {
+				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
+			}
 		});
 
 		function getSkillsRowHeight() {
@@ -311,9 +315,6 @@
 			if (personIds) {
 				vm.updateSchedules(personIds);
 				vm.checkValidationWarningForCommandTargets(personIds);
-				if (vm.staffingEnabled) {
-					$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
-				}
 			}
 		};
 
@@ -519,6 +520,10 @@
 				vm.isLoading = false;
 				vm.hasSelectedAllPeopleInEveryPage = false;
 			}, dontUpdateScheduleForPersonInEditing ? personIdInEditing : null);
+
+			if (vm.staffingEnabled) {
+				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
+			}
 		};
 
 		vm.selectAllForAllPages = function () {
@@ -574,9 +579,6 @@
 			var personIds = Object.keys(personIdsHavingScheduleChange);
 			vm.updateSchedules(personIds);
 			vm.checkValidationWarningForCommandTargets(personIds);
-			if (vm.staffingEnabled) {
-				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
-			}
 		}
 
 		function resetHavingScheduleChange(personIds) {
