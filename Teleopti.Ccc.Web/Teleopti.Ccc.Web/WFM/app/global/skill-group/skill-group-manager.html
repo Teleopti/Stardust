@@ -1,17 +1,14 @@
-<div class="view-header with-desc with-fab"
-     ng-class="{'with-fab':vm.skillGroups.length > 0}">
-    <div class="view-title">
-        <h1>
-            <i class="mdi mdi-compass-outline"></i> {{ 'ManageSkillGroups'|translate }}</h1>
-    </div>
-    <div class="fab-wrapper">
-        <button class="wfm-fab material-depth-1 grow-out pull-right"
-                id="exit_sgm"
-                ng-click="vm.exitConfigMode();">
-            <i class="mdi mdi-close"></i>
-            <md-tooltip>{{'Close'|translate}}</md-tooltip>
-        </button>
-        <!--
+<div class="view-header with-desc with-fab" ng-class="{'with-fab':vm.skillGroups.length > 0}">
+	<div class="view-title">
+		<h1>
+			<i class="mdi mdi-compass-outline"></i> {{ 'ManageSkillGroups'|translate }}</h1>
+	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.exitConfigMode();">
+			<i class="mdi mdi-close"></i>
+			<md-tooltip>{{'Close'|translate}}</md-tooltip>
+		</button>
+		<!--
 		<button class="wfm-fab material-depth-1 grow-out" ng-if="vm.canSave" ng-click="vm.createSkillGroup($event)" id="save_all" ng-click="vm.saveAll()">
 		<i class="mdi mdi-content-save"></i>
 		<md-tooltip>{{'Save'|translate}}</md-tooltip>
@@ -20,290 +17,206 @@
 	<i class="mdi mdi-close"></i>
 	<md-tooltip>{{'YourChangesWillBeDiscarded'|translate}}</md-tooltip>
 	</button> -->
-    </div>
+	</div>
 </div>
 <!-- create skillgroup -->
-<modal-dialog show='vm.editGroupNameBox'
-              ng-cloak>
-    <h1 class="modal-title">{{'AddSkillGroup'|translate}}</h1>
-    <div class="modal-inner-content">
-        <div class="con-row">
-            <div class="con-flex">
-                <input id="groupNameBox"
-                       focus-me="vm.editGroupNameBox"
-                       autocomplete="off"
-                       type="text"
-                       placeholder="{{'Name'|translate}}"
-                       ng-model="vm.newGroupName"
-                       maxlength="{{vm.skillNameMaxLength}}"
-                       ng-maxlength="{{vm.skillNameMaxLength}}"
-                       id="skillGroupNameBox"
-                       ng-keypress="vm.nameBoxKeyPress($event)" />
-            </div>
-        </div>
-    </div>
-    <div class="modal-actions">
-        <aside>
-            <button id="confirmEditNameButton"
-                    ng-click="vm.saveNameEdit($event);"
-                    class="wfm-btn wfm-btn-invis-primary">{{'Add'|translate}}</button>
-        </aside>
-    </div>
+<modal-dialog show='vm.editGroupNameBox' ng-cloak>
+	<h1 class="modal-title">{{'AddSkillGroup'|translate}}</h1>
+	<div class="modal-inner-content">
+		<div class="con-row">
+			<div class="con-flex">
+				<input id="groupNameBox" focus-me="vm.editGroupNameBox" autocomplete="off" type="text" placeholder="{{'Name'|translate}}"
+				 ng-model="vm.newGroupName" maxlength="{{vm.skillNameMaxLength}}" ng-maxlength="{{vm.skillNameMaxLength}}" id="skillGroupNameBox"
+				 ng-keypress="vm.nameBoxKeyPress($event)" />
+			</div>
+		</div>
+	</div>
+	<div class="modal-actions">
+		<aside>
+			<button id="confirmEditNameButton" ng-click="vm.saveNameEdit($event);" class="wfm-btn wfm-btn-invis-primary">{{'Add'|translate}}</button>
+		</aside>
+	</div>
 </modal-dialog>
-<div class="con-row"
-     ng-if="vm.skillGroups.length <= 0"
-     ng-cloak>
-    <div class="con-flex">
-        <div class="line-center">
-            <i class="mdi mdi-information-outline huge-icon line-center"></i>
-            <h2>{{'NoSkillGroupsFound'|translate}}</h2>
-            <button class="wfm-btn wfm-btn-primary"
-                    id="create-skill-group-button"
-                    ng-click="vm.createSkillGroup($event)">{{'AddSkillGroup'|translate}}</button>
-        </div>
-    </div>
+<div class="con-row" ng-if="vm.skillGroups.length <= 0" ng-cloak>
+	<div class="con-flex">
+		<div class="line-center">
+			<i class="mdi mdi-information-outline huge-icon line-center"></i>
+			<h2>{{'NoSkillGroupsFound'|translate}}</h2>
+			<button class="wfm-btn wfm-btn-primary" id="create-skill-group-button" ng-click="vm.createSkillGroup($event)">{{'AddSkillGroup'|translate}}</button>
+		</div>
+	</div>
 </div>
-<form name="form"
-      class="wfm-form"
-      novalidate
-      ng-submit="vm.saveSkillGroup(form)"
-      ng-if="vm.skillGroups.length > 0"
-      ng-cloak>
-    <div class="con-row">
-        <div class="con-flex">
-            <div class="panel">
-                <div class="sub-header">
-                    <h2 style="display: inline; line-height: 44px;">{{'AllSkillGroups'|translate}}</h2>
-                    <button class="wfm-btn wfm-btn-invis-primary pull-right"
-                            ng-disabled="vm.canSave"
-                            ng-click="vm.createSkillGroup($event)">
-                        {{ 'Add'|translate }}
-                    </button>
-                </div>
-                <div class="con-row">
-                    <div class="con-flex">
-                        <label
-                               class="input-icon animate-show"
-                               ng-show="vm.skillGroups.length > 0">
-                            <i class="mdi mdi-filter-outline">
-                                <input type="text"
-                                       placeholder="{{'Filter'|translate}}"
-                                       autocomplete="off"
-                                       ng-model="groupFilter">
-                                <md-tooltip>{{'Filter'|translate}}</md-tooltip>
-                            </i>
-                        </label>
-                        <ul class="wfm-list"
-                            id="available_skill_groups_list" style="margin-top: 8px">
-                            <li ng-repeat="skillGroup in vm.skillGroups | filter:groupFilter track by skillGroup.Id"
-                                ng-click="vm.selectSkillGroup($index)">
-                                <span>
-                                    <span class="list-item-container"
-                                          ng-class="{'text-warning': !skillGroup.Saved}">
-                                        {{skillGroup.Name}}
-                                    </span>
-                                    <!-- <i ng-show="!skillGroup.Skills || skillGroup.Skills.length === 0" class="mdi mdi-alert" style="vertical-align: text-bottom"></i> SKILLGROUP HAS NO SKILLS -->
-                                    <span ng-cloak
-                                          ng-show="vm.skillGroups[vm.selectedGroupIndex].Id === skillGroup.Id"
-                                          class="list-dot"
-                                          ng-class="{'notice-warning': !skillGroup.Saved}"
-                                          style="border-radius: 50%;">
-                                        <b class="mdi mdi-check list-mark"
-                                           ng-if="skillGroup.Saved"></b>
-                                        <b class="mdi mdi-alert list-mark"
-                                           ng-if="!skillGroup.Saved"></b>
-                                    </span>
-                                    <md-tooltip ng-if="!skillGroup.Saved">{{'NotSaved'|translate}}</md-tooltip>
-                                </span>
-                                <div class="wfm-leave-behind wfm-leave-behind-3"
-                                     style="top:3px; opacity:1;">
-                                    <span>
-                                        <i class="mdi mdi-content-copy"
-                                           aria-label="Copy"
-                                           id="copySkillGroupButton"
-                                           ng-click="vm.copyGroupClicked(skillGroup, $event)">
-                                            <md-tooltip>
-                                                {{'Copy' | translate}}
-                                            </md-tooltip>
-                                        </i>
-                                        <i class="mdi mdi-pencil"
-                                           aria-label="Edit"
-                                           id="renameSkillGroupButton"
-                                           ng-click="vm.editNameClicked(skillGroup);">
-                                            <md-tooltip>
-                                                {{'Edit' | translate}}
-                                            </md-tooltip>
-                                        </i>
-                                        <i class="mdi mdi-delete"
-                                           aria-label="Delete"
-                                           id="deleteSkillGroupButton"
-                                           ng-click="vm.selectedGroupIndex = $index; vm.deleteConfirmation=true; $event.stopPropagation();">
-                                            <md-tooltip ng-hide="role.IsMyRole">
-                                                {{'Delete' | translate}}
-                                            </md-tooltip>
-                                        </i>
-                                    </span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="con-flex x3">
-            <div class="panel"
-                 ng-show="vm.skillGroups[vm.selectedGroupIndex]">
-                <div class="sub-header">
-                    <h2 style="display: inline; line-height: 44px">{{vm.skillGroups[vm.selectedGroupIndex].Name}}</h2>
-                    <button class="wfm-btn wfm-btn-invis-primary pull-right"
-                        id="save_all"
-                        ng-show="vm.canSave"
-                        ng-click="vm.saveAll()">
-                        {{'Save'|translate}}
-                    </button>
-                </div>
-                <div class="con-row">
-                    <div class="con-flex">
-                        <h3>{{'AvailableSkills'|translate}}</h3>
-                        <div class="con-row">
-                            <div class="con-flex">
-                                <label for="filter2"
-                                       class="input-icon">
-                                    <i class="mdi mdi-filter-outline">
-                                        <input type="text"
-                                               id="filter2"
-                                               placeholder="{{'FilterSkills'|translate}}"
-                                               autocomplete="off"
-                                               ng-model="skillFilter">
-                                        <md-tooltip>{{'FilterSkills'|translate}}</md-tooltip>
-                                    </i>
-                                </label>
-                                <ul class="wfm-list"
-                                    style="width: 100%; margin-top: 8px;"
-                                    id="available_skills_list">
-                                    <li ng-repeat="skill in vm.skills | filter:skillFilter"
-                                        ng-click="vm.selectSkill(skill)">
-                                        <span class="list-item-container"
-                                              style="margin-left: 0">
-                                            {{skill.Name}}
-                                        </span>
-                                        <span ng-cloak
-                                              ng-show="vm.skillIsSelected(skill)"
-                                              class="list-dot">
-                                            <b class="mdi mdi-check list-mark"></b>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="con-flex x2">
-                        <h3 ng-cloak
-                        class="animate-show"
-                        ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length > 0">
-                            {{'IncludedSkills'|translate}}:
-                        </h3>
-                        <span>
-                            <i class="mdi mdi-alert"
-                               ng-if="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0 || vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0"></i>
-                            <span ng-cloak
-                                  class="animate-show"
-                                  ng-show="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0">{{'NameRequired'|translate}}.</span>
-                            <span ng-cloak
-                                  class="animate-show"
-                                  ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0">{{'YouHaveToSelectAtLeastOneSkill'|translate}}</span>
-                        </span>
-                        <div class="con-row">
-                            <div class="con-flex">
-                                <div class="wfm-chip-wrap"
-                                     ng-repeat="skill in vm.skillGroups[vm.selectedGroupIndex].Skills | filter:areaFilter as filtered"
-                                     ng-click="vm.selectGroupSkill(skill)"
-                                     ng-hide="(selectedFilter==true && !!vm.groupSkillIsSelected(skill)) || (supportedFilter==false && !skill.DoDisplayData)">
-                                    <span class="wfm-chip">
-                                        <span class="chip-handle chip-warning"
-                                              ng-if="!skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
-                                            <i ng-class="vm.getSkillIcon(skill)"></i>
-                                        </span>
-                                        <span class="chip-handle"
-                                              ng-if="skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
-                                            <i ng-class="vm.getSkillIcon(skill)"></i>
-                                        </span>
-                                        <span class="chip-handle chip-success"
-                                              ng-if="vm.groupSkillIsSelected(skill)">
-                                            <i class="mdi mdi-check"></i>
-                                        </span>
-                                        <span class="chip-text skill-area-list">
-                                            {{skill.Name}}
-                                        </span>
-                                        <md-tooltip>
-                                            <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType
-                                                | translate}} - {{'MultisiteSkill' | translate}}</span>
-                                            <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType
-                                                | translate}}</span>
-                                            <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
-                                        </md-tooltip>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<form name="form" class="wfm-form" novalidate ng-submit="vm.saveSkillGroup(form)" ng-if="vm.skillGroups.length > 0"
+ ng-cloak>
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel">
+				<div class="sub-header">
+					<h2 style="display: inline; line-height: 44px;">{{'AllSkillGroups'|translate}}</h2>
+					<button type="button" class="wfm-btn wfm-btn-invis-primary pull-right" ng-disabled="vm.canSave" ng-click="vm.createSkillGroup($event)">
+						{{ 'Add'|translate }}
+					</button>
+				</div>
+				<div class="con-row">
+					<div class="con-flex">
+						<label class="input-icon animate-show" ng-show="vm.skillGroups.length > 0">
+							<i class="mdi mdi-filter-outline">
+								<input type="text" placeholder="{{'Filter'|translate}}" autocomplete="off" ng-model="groupFilter">
+								<md-tooltip>{{'Filter'|translate}}</md-tooltip>
+							</i>
+						</label>
+						<ul class="wfm-list" id="available_skill_groups_list" style="margin-top: 8px">
+							<li ng-repeat="skillGroup in vm.skillGroups | filter:groupFilter track by skillGroup.Id" ng-click="vm.selectSkillGroup($index)">
+								<span>
+									<span class="list-item-container" ng-class="{'text-warning': !skillGroup.Saved}">
+										{{skillGroup.Name}}
+									</span>
+									<!-- <i ng-show="!skillGroup.Skills || skillGroup.Skills.length === 0" class="mdi mdi-alert" style="vertical-align: text-bottom"></i> SKILLGROUP HAS NO SKILLS -->
+									<span ng-cloak ng-show="vm.skillGroups[vm.selectedGroupIndex].Id === skillGroup.Id" class="list-dot" ng-class="{'notice-warning': !skillGroup.Saved}"
+									 style="border-radius: 50%;">
+										<b class="mdi mdi-check list-mark" ng-if="skillGroup.Saved"></b>
+										<b class="mdi mdi-alert list-mark" ng-if="!skillGroup.Saved"></b>
+									</span>
+									<md-tooltip ng-if="!skillGroup.Saved">{{'NotSaved'|translate}}</md-tooltip>
+								</span>
+								<div class="wfm-leave-behind wfm-leave-behind-3" style="top:3px; opacity:1;">
+									<span>
+										<i class="mdi mdi-content-copy" aria-label="Copy" id="copySkillGroupButton" ng-click="vm.copyGroupClicked(skillGroup, $event)">
+											<md-tooltip>
+												{{'Copy' | translate}}
+											</md-tooltip>
+										</i>
+										<i class="mdi mdi-pencil" aria-label="Edit" id="renameSkillGroupButton" ng-click="vm.editNameClicked(skillGroup);">
+											<md-tooltip>
+												{{'Edit' | translate}}
+											</md-tooltip>
+										</i>
+										<i class="mdi mdi-delete" aria-label="Delete" id="deleteSkillGroupButton" ng-click="vm.selectedGroupIndex = $index; vm.deleteConfirmation=true; $event.stopPropagation();">
+											<md-tooltip ng-hide="role.IsMyRole">
+												{{'Delete' | translate}}
+											</md-tooltip>
+										</i>
+									</span>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="con-flex x3">
+			<div class="panel" ng-show="vm.skillGroups[vm.selectedGroupIndex]">
+				<div class="sub-header">
+					<h2 style="display: inline; line-height: 44px">{{vm.skillGroups[vm.selectedGroupIndex].Name}}</h2>
+					<button type="button" class="wfm-btn wfm-btn-invis-primary pull-right" id="save_all" ng-show="vm.canSave" ng-click="vm.saveAll()">
+						{{'Save'|translate}}
+					</button>
+				</div>
+				<div class="con-row">
+					<div class="con-flex">
+						<h3>{{'AvailableSkills'|translate}}</h3>
+						<div class="con-row">
+							<div class="con-flex">
+								<label for="filter2" class="input-icon">
+									<i class="mdi mdi-filter-outline">
+										<input type="text" id="filter2" placeholder="{{'FilterSkills'|translate}}" autocomplete="off" ng-model="skillFilter">
+										<md-tooltip>{{'FilterSkills'|translate}}</md-tooltip>
+									</i>
+								</label>
+								<ul class="wfm-list" style="width: 100%; margin-top: 8px;" id="available_skills_list">
+									<li ng-repeat="skill in vm.skills | filter:skillFilter" ng-click="vm.selectSkill(skill)">
+										<span class="list-item-container" style="margin-left: 0">
+											{{skill.Name}}
+										</span>
+										<span ng-cloak ng-show="vm.skillIsSelected(skill)" class="list-dot">
+											<b class="mdi mdi-check list-mark"></b>
+										</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="con-flex x2">
+						<h3 ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length > 0">
+							{{'IncludedSkills'|translate}}:
+						</h3>
+						<span>
+							<i class="mdi mdi-alert" ng-if="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0 || vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0"></i>
+							<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0">{{'NameRequired'|translate}}.</span>
+							<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0">{{'YouHaveToSelectAtLeastOneSkill'|translate}}</span>
+						</span>
+						<div class="con-row">
+							<div class="con-flex">
+								<div class="wfm-chip-wrap" ng-repeat="skill in vm.skillGroups[vm.selectedGroupIndex].Skills | filter:areaFilter as filtered"
+								 ng-click="vm.selectGroupSkill(skill)" ng-hide="(selectedFilter==true && !!vm.groupSkillIsSelected(skill)) || (supportedFilter==false && !skill.DoDisplayData)">
+									<span class="wfm-chip">
+										<span class="chip-handle chip-warning" ng-if="!skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
+											<i ng-class="vm.getSkillIcon(skill)"></i>
+										</span>
+										<span class="chip-handle" ng-if="skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
+											<i ng-class="vm.getSkillIcon(skill)"></i>
+										</span>
+										<span class="chip-handle chip-success" ng-if="vm.groupSkillIsSelected(skill)">
+											<i class="mdi mdi-check"></i>
+										</span>
+										<span class="chip-text skill-area-list">
+											{{skill.Name}}
+										</span>
+										<md-tooltip>
+											<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType
+												| translate}} - {{'MultisiteSkill' | translate}}</span>
+											<span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType
+												| translate}}</span>
+											<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+										</md-tooltip>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 </form>
 <!-- modals -->
-<div ng-cloak
-     class="modal-box">
-    <div ng-cloak
-         ng-show="vm.deleteConfirmation">
-        <div class="modalbg">
-            <div class="dialog-mini material-depth-1">
-                <div class="modal-inner-content">
-                    <h3 style="display: inline">{{'DoYouWantToDeleteSkillGroup'|translate}}</h3>
-                    <br /> {{'AreYouSureYouWantToDeleteTheSkillGroup'|translate}}
-                    "{{vm.skillGroups[vm.selectedGroupIndex].Name}}"?
-                </div>
-                <div class="modal-actions">
-                    <aside>
-                        <button type="button"
-                                id="confirmDeleteButton"
-                                focus-me="vm.deleteConfirmation"
-                                ng-click="vm.deleteConfirmation=false; vm.deleteSkillGroup(); $event.stopPropagation();"
-                                class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
-                        <button type="button"
-                                id="cancelDeleteButton"
-                                ng-click="vm.deleteConfirmation=false; $event.stopPropagation();"
-                                class="wfm-btn wfm-btn-invis-primary">{{'No'|translate}}</button>
-                    </aside>
-                </div>
-            </div>
-        </div>
-    </div>
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="vm.deleteConfirmation">
+		<div class="modalbg">
+			<div class="dialog-mini material-depth-1">
+				<div class="modal-inner-content">
+					<h3 style="display: inline">{{'DoYouWantToDeleteSkillGroup'|translate}}</h3>
+					<br /> {{'AreYouSureYouWantToDeleteTheSkillGroup'|translate}}
+					"{{vm.skillGroups[vm.selectedGroupIndex].Name}}"?
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button type="button" id="confirmDeleteButton" focus-me="vm.deleteConfirmation" ng-click="vm.deleteConfirmation=false; vm.deleteSkillGroup(); $event.stopPropagation();"
+						 class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
+						<button type="button" id="cancelDeleteButton" ng-click="vm.deleteConfirmation=false; $event.stopPropagation();"
+						 class="wfm-btn wfm-btn-invis-primary">{{'No'|translate}}</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div ng-cloak
-     class="modal-box">
-    <div ng-cloak
-         ng-show="vm.closeConfirmation">
-        <div class="modalbg">
-            <div class="dialog-mini material-depth-1">
-                <div class="modal-inner-content">
-                    <h3 style="display: inline">{{'ExitSGM'|translate}}</h3>
-                    <br />{{'AreYouSureYouWantToExitSGM'|translate}}
-                </div>
-                <div class="modal-actions">
-                    <aside>
-                        <button type="button"
-                                focus-me="vm.closeConfirmation"
-                                id="confirmExitButton"
-                                ng-click="vm.canSave=false; vm.exitConfigMode(); $event.stopPropagation();"
-                                class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
-                        <button type="button"
-                                id="cancelExitButton"
-                                ng-click="vm.stateName=''; vm.closeConfirmation=false; $event.stopPropagation();"
-                                class="wfm-btn wfm-btn-invis-primary">{{'No'|translate}}</button>
-                    </aside>
-                </div>
-            </div>
-        </div>
-    </div>
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="vm.closeConfirmation">
+		<div class="modalbg">
+			<div class="dialog-mini material-depth-1">
+				<div class="modal-inner-content">
+					<h3 style="display: inline">{{'ExitSGM'|translate}}</h3>
+					<br />{{'AreYouSureYouWantToExitSGM'|translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button type="button" focus-me="vm.closeConfirmation" id="confirmExitButton" ng-click="vm.canSave=false; vm.exitConfigMode(); $event.stopPropagation();"
+						 class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
+						<button type="button" id="cancelExitButton" ng-click="vm.stateName=''; vm.closeConfirmation=false; $event.stopPropagation();"
+						 class="wfm-btn wfm-btn-invis-primary">{{'No'|translate}}</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
