@@ -37,37 +37,38 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<SchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
+			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>();
+			builder.RegisterModule(new PayrollContainerInstaller(_configuration));
+			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
+			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<TenantAuthenticationAlwaysAuthenticated>().As<ITenantAuthentication>().SingleInstance();
+			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
+			builder.RegisterType<PayrollFormatRepositoryFactory>().As<IPayrollFormatRepositoryFactory>().SingleInstance();
+			
 			builder.RegisterType<StardustHealthCheckHandler>().As<IHandle<StardustHealthCheckEvent>>().SingleInstance();
 			builder.RegisterType<ImportForecastFromFileHandler>().As<IHandle<ImportForecastsFileToSkillEvent>>().SingleInstance();
 			builder.RegisterType<ApproveRequestsWithValidatorsEventStardustHandler>().As<IHandle<ApproveRequestsWithValidatorsEvent>>().SingleInstance();
 			builder.RegisterType<ExportMultisiteSkillsToSkillEventHandler>().As<IHandle<ExportMultisiteSkillsToSkillEvent>>().SingleInstance();
 			builder.RegisterType<IndexMaintenanceHandler>().As<IHandle<IndexMaintenanceEvent>>().SingleInstance();
 			builder.RegisterType<PersonAbsenceRemovedHandler>().As<IHandle<PersonAbsenceRemovedEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<SchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
-			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>();
 			builder.RegisterType<ExportPayrollHandler>().As<IHandle<RunPayrollExportEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterModule(new PayrollContainerInstaller(_configuration));
-			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
 			builder.RegisterType<UpdateStaffingLevelReadModelHandler>().As<IHandle<UpdateStaffingLevelReadModelEvent>>().SingleInstance();
 			builder.RegisterType<ValidateReadModelsHandler>().As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<FixReadModelsHandler>().As<IHandle<FixReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MultiAbsenceRequestsHandler>().As<IHandle<NewMultiAbsenceRequestsCreatedEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<WebScheduleHandler>().As<IHandle<WebScheduleStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<WebIntradayOptimizationHandler>().As<IHandle<IntradayOptimizationOnStardustWasOrdered>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<WebClearScheduleHandler>().As<IHandle<WebClearScheduleStardustEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<TenantAuthenticationAlwaysAuthenticated>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<ImportAgentHandler>().As<IHandle<ImportAgentEvent>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<ImportExternalPerformanceHandler>().As<IHandle<ImportExternalPerformanceInfoEvent>>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<ProcessWaitlistedRequestsHandler>().As<IHandle<ProcessWaitlistedRequestsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RecalculateBadgeHandler>().As<IHandle<RecalculateBadgeEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
 			builder.RegisterType<RefreshPayrollFormatsHandler>().As<IHandle<RefreshPayrollFormatsEvent>>().SingleInstance();
 			builder.RegisterType<IntradayToolHandler>().As<IHandle<IntradayToolEvent>>().SingleInstance();
 			builder.RegisterType<ImportScheduleNodeHandler>().As<IHandle<ImportScheduleEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<CopyScheduleNodeHandler>().As<IHandle<CopyScheduleEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<PayrollFormatRepositoryFactory>().As<IPayrollFormatRepositoryFactory>().SingleInstance();
-
+			
 			builder.RegisterGenericDecorator(typeof(refreshTogglesDecorator<>), typeof(IHandle<>), NodeComponentName);
 		}
 
