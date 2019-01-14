@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			_siteBankHolidayCalendarRepository = siteBankHolidayCalendarRepository;
 		}
 
-		private IBankHolidayCalendar PersistCalendar(BankHolidayCalendarForm input)
+		private IBankHolidayCalendar persistCalendar(BankHolidayCalendarForm input)
 		{
 			IBankHolidayCalendar calendar;
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			return calendar;
 		}
 
-		private List<IBankHolidayDate> PersistDates(IBankHolidayCalendar calendar, IEnumerable<BankHolidayDateForm> dates)
+		private List<IBankHolidayDate> persistDates(IBankHolidayCalendar calendar, IEnumerable<BankHolidayDateForm> dates)
 		{
 			var _dates = _bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == calendar.Id.Value).ToList();
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 			foreach (var d in dates)
 			{
-				var _d = CreateBankHolidayDate(calendar, d);
+				var _d = createBankHolidayDate(calendar, d);
 				if (_d == null || _dates.Contains(_d))
 					continue;
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			return _dates;
 		}
 
-		private IBankHolidayDate CreateBankHolidayDate(IBankHolidayCalendar calendar, BankHolidayDateForm input)
+		private IBankHolidayDate createBankHolidayDate(IBankHolidayCalendar calendar, BankHolidayDateForm input)
 		{
 			IBankHolidayDate date;
 			var inputDate = input.Date;
@@ -105,8 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 		public virtual BankHolidayCalendarViewModel Persist(BankHolidayCalendarForm input)
 		{
-			var calendar = PersistCalendar(input);
-			var dates = PersistDates(calendar, input.Years?.SelectMany(y => y.Dates));
+			var calendar = persistCalendar(input);
+			var dates = persistDates(calendar, input.Years?.SelectMany(y => y.Dates));
 			return _bankHolidayModelMapper.Map(calendar, dates);
 		}
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		{
 			try
 			{
-				UpdateCalendarsForSites(Id);
+				updateCalendarsForSites(Id);
 				var calendar = _bankHolidayCalendarRepository.Load(Id);
 				_bankHolidayCalendarRepository.Remove(calendar);
 				_bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == Id)?.ToList().ForEach(d => _bankHolidayDateRepository.Remove(d));
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 			return true;
 		}
 
-		private void UpdateCalendarsForSites(Guid Id)
+		private void updateCalendarsForSites(Guid Id)
 		{
 			var siteBankHolidayCalendars = _siteBankHolidayCalendarRepository.FindSiteBankHolidayCalendars(Id);
 			var settings = new List<SiteBankHolidayCalendarsViewModel>();
