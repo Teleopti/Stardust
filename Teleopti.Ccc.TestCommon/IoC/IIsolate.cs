@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		void AddService<TService>(bool instancePerLifeTimeScope = false);
 		void AddService<TService>(TService instance) where TService : class;
 		void AddModule(Module module);
+		void AddService<TService, TServiceName>(string name);
 	}
 }

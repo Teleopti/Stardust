@@ -66,6 +66,15 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_builder.RegisterModule(module);
 		}
 
+		public void AddService<TService, TServiceName>(string name)
+		{
+			_builder
+				.RegisterType<TService>()
+				.Named<TServiceName>(name)
+				.SingleInstance()
+				.ApplyAspects();
+		}
+
 		private class testDoubleFor<TTestDouble> : ITestDoubleFor where TTestDouble : class
 		{
 			private readonly ContainerBuilder _builder;
