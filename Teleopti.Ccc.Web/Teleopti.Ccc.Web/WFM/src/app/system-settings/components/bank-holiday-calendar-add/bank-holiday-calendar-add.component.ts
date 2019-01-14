@@ -53,7 +53,9 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 	}
 
 	checkNewCalendarName() {
-		this.nameAlreadyExisting = this.bankHolidayCalendarsList.some(c => c.Name === this.newCalendarName);
+		this.nameAlreadyExisting = this.bankHolidayCalendarsList.some(
+			c => c.Name.trim() === this.newCalendarName.trim()
+		);
 	}
 
 	newYearTab(date: Date): void {
@@ -164,6 +166,10 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 
 			if (modifiedDate) modifiedDate.IsDeleted = true;
 			else year.ModifiedDates.push(deletedDate);
+		} else {
+			if (year.ModifiedDates && year.ModifiedDates.length > 0) {
+				year.ModifiedDates.splice(year.ModifiedDates.indexOf(deletedDate), 1);
+			}
 		}
 
 		year.SelectedDates.splice(index, 1);

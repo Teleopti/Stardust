@@ -75,6 +75,41 @@ describe('BankHolidayCalendarAddComponent', () => {
 		).toBe('Save');
 	});
 
+	it('should trim space before and after when checking the existing name', () => {
+		component.bankHolidayCalendarsList = [
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				CurrentYearIndex: 0,
+				Years: [
+					{
+						Year: '2013',
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday1',
+								IsDeleted: false
+							},
+							{
+								Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+								Date: '2013-01-10',
+								Description: 'BankHoliday2',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		];
+
+		component.newCalendarName = 'Bank holiday calendar ';
+		component.checkNewCalendarName();
+		fixture.detectChanges();
+
+		expect(component.nameAlreadyExisting).toBe(true);
+	});
+
 	it('should not add duplicated date', () => {
 		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
 

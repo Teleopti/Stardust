@@ -2,13 +2,14 @@ import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { configureTestSuite } from '@wfm/test';
+import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
 import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarEditComponent } from './bank-holiday-calendar-edit.component';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
-import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
 
 describe('BankHolidayCalendarEditComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarEditComponent>;
@@ -20,7 +21,13 @@ describe('BankHolidayCalendarEditComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [BankHolidayCalendarEditComponent],
-			imports: [MockTranslationModule, NgZorroAntdModule, FormsModule, HttpClientTestingModule],
+			imports: [
+				MockTranslationModule,
+				NgZorroAntdModule,
+				FormsModule,
+				HttpClientTestingModule,
+				NoopAnimationsModule
+			],
 			providers: [
 				MockTranslateService,
 				UserService,
@@ -87,6 +94,66 @@ describe('BankHolidayCalendarEditComponent', () => {
 				.innerText.trim()
 		).toBe('Save');
 	}));
+
+	it('should trim space before and after when checking the existing name', () => {
+		component.bankHolidayCalendarsList = [
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				CurrentYearIndex: 0,
+				Years: [
+					{
+						Year: '2013',
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday1',
+								IsDeleted: false
+							},
+							{
+								Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+								Date: '2013-01-10',
+								Description: 'BankHoliday2',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		];
+		component.edittingCalendar = {
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2013',
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2013-01-09',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						},
+						{
+							Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+							Date: '2013-01-10',
+							Description: 'BankHoliday',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		};
+		fixture.detectChanges();
+
+		component.edittingCalendarName = 'Bank holiday calendar ';
+		component.checkNewCalendarName();
+		fixture.detectChanges();
+
+		expect(component.nameAlreadyExisting).toBe(true);
+	});
 
 	it('should render existing date rows', () => {
 		component.edittingCalendar = {
