@@ -391,12 +391,12 @@
 			background-color: orange;
 		}
 
-		.panel.material-depth-1.card-panel {
+		.panel.card-panel {
 			width: 900px;
 		}
 
 		@media screen and (max-width: 960px) {
-			.panel.material-depth-1.card-panel {
+			.panel.card-panel {
 				width: 100%;
 			}
 		}
