@@ -6,8 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHand
 {
 	public static class SqlCommandFactory
 	{
-		public const int DefaultCommandTimeoutSeconds = 60;
-
 		public static IDbCommand CreateCommand(IDbConnection connection)
 		{
 			if (connection == null)
