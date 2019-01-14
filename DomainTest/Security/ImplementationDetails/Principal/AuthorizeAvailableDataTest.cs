@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         {
             IPerson personToCheck = PersonFactory.CreatePerson();
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
             target = AuthorizeExternalAvailableData.Create(availableData);
             target.Check(queryingPersonMembership, DateOnly.Today, personToCheck).Should().Be.False();
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
 
             availableData.AddAvailableTeam(team);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
             target = AuthorizeExternalAvailableData.Create(availableData);
             target.Check(queryingPersonMembership, DateOnly.Today, personToCheck).Should().Be.True();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
 
             availableData.AddAvailableSite(team.Site);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
 			target.Check(queryingPersonMembership, DateOnly.Today, personToCheck).Should().Be.True();
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             team.Site = SiteFactory.CreateSimpleSite();
             personToCheck.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
 			target.Check(queryingPersonMembership, DateOnly.Today, personToCheck).Should().Be.False();
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             
             availableData.AddAvailableTeam(team);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
 			target.Check(queryingPersonMembership, DateOnly.Today, team).Should().Be.True();
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             
             availableData.AddAvailableSite(team.Site);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
 			target.Check(queryingPersonMembership, DateOnly.Today, team).Should().Be.True();
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             ITeam team = TeamFactory.CreateSimpleTeam();
             team.Site = SiteFactory.CreateSimpleSite();
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
 			target.Check(queryingPersonMembership, DateOnly.Today, team).Should().Be.False();
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
 
             availableData.AddAvailableSite(site);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
 			target.Check(queryingPersonMembership, DateOnly.Today, site).Should().Be.True();
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         {
             var site = SiteFactory.CreateSimpleSite();
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
 			target.Check(queryingPersonMembership, DateOnly.Today, site).Should().Be.False();
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         {
             availableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
 
 			target = AuthorizeExternalAvailableData.Create(availableData);
 			target.Check(queryingPersonMembership, DateOnly.Today, BusinessUnitFactory.BusinessUnitUsedInTest).Should().Be.True();

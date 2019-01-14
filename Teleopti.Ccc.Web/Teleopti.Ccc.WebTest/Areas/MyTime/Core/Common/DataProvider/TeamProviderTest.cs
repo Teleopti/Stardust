@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			PersonRepository.Add(person1);
 			addTeamAndSiteToPerson(person1, team1);
 
-			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).InitializeFromPerson(person1);
+			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).Initialize(person1);
 
 			setPermissions(DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var person1 = LoggedOnUser.CurrentUser();
 			PersonRepository.Add(person1);
 			addTeamAndSiteToPerson(person1, team1);
-			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).InitializeFromPerson(person1);
+			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).Initialize(person1);
 
 			var site2 = new Site("site2").WithId();
 			SiteRepository.Add(site2);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			PersonRepository.Add(person1);
 			PersonFinderReadOnlyRepository.Has(person1);
 			addTeamAndSiteToPerson(person1, team1);
-			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).InitializeFromPerson(person1);
+			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).Initialize(person1);
 			
 			var team2 = new Team { Site = site1 }.WithDescription(new Description("team2")).WithId();
 			TeamRepository.Add(team2);

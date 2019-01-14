@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
@@ -832,5 +833,16 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			AddEvent(() => @event);
 		}
+
+
+
+
+
+		public virtual Guid PrincipalPersonId() => Id.GetValueOrDefault();
+		public virtual string PrincipalName() => Name.ToString();
+		public virtual TimeZoneInfo PrincipalTimeZone() => PermissionInformation?.DefaultTimeZone();
+		public virtual int? PrincipalCultureLCID() => PermissionInformation.CultureLCID();
+		public virtual int? PrincipalUICultureLCID() => PermissionInformation.UICultureLCID();
+		public virtual IEnumerable<IPrincipalSourcePeriod> PrincipalPeriods() => PersonPeriodCollection;
 	}
 }

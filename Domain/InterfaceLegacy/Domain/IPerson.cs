@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -9,7 +10,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// Represent any person in the system
 	/// </summary>
 	public interface IPerson : IAggregateRoot,
-								IChangeInfo
+								IChangeInfo,
+								IPrincipalSource
 	{
 		/// <summary>
 		/// Gets the person's team at the given time.

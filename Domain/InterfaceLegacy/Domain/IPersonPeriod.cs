@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Defines where, in which team, under what conditions the person WILL, and also 
     /// in what skills the person CAN work.  
     /// </summary>
-    public interface IPersonPeriod : IAggregateEntity, ICloneableEntity<IPersonPeriod>
+    public interface IPersonPeriod : IAggregateEntity, ICloneableEntity<IPersonPeriod>, IPrincipalSourcePeriod
     {
         /// <summary>
         /// StartDate

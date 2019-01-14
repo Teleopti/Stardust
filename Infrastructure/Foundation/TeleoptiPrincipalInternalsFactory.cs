@@ -1,31 +1,31 @@
 using System.Diagnostics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class TeleoptiPrincipalInternalsFactory : IMakeRegionalFromPerson, IMakeOrganisationMembershipFromPerson, IRetrievePersonNameForPerson
 	{
-		public virtual IRegional MakeRegionalFromPerson(IPerson person)
+		public virtual IRegional MakeRegionalFromPerson(IPrincipalSource person)
 		{
-			var info = person.PermissionInformation;
 			return new Regional(
-				info.DefaultTimeZone(),
-				info.CultureLCID() ?? 0,
-				info.UICultureLCID() ?? 0);
+				person.PrincipalTimeZone(),
+				person.PrincipalCultureLCID() ?? 0,
+				person.PrincipalUICultureLCID() ?? 0);
 		}
 
-		public virtual IOrganisationMembership MakeOrganisationMembership(IPerson person)
+		public virtual IOrganisationMembership MakeOrganisationMembership(IPrincipalSource person)
 		{
-			return new OrganisationMembership().InitializeFromPerson(person);
+			return new OrganisationMembership().Initialize(person);
 		}
 
 		[DebuggerStepThrough]
-		public virtual string NameForPerson(IPerson person)
+		public virtual string NameForPerson(IPrincipalSource person)
 		{
 			try
 			{
-				return person?.Name.ToString() ?? string.Empty;
+				return person?.PrincipalName() ?? string.Empty;
 			}
 			catch (NHibernate.ObjectNotFoundException exception)
 			{
