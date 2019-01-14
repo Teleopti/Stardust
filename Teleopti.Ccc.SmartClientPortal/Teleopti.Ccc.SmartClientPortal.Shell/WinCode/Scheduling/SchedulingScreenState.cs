@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public CommonNameDescriptionSettingScheduleExport CommonNameDescriptionScheduleExport { get; private set; }
 		public IEnumerable<IWorkflowControlSet> WorkflowControlSets { get; private set; }
 		public ICollection<IWorkflowControlSet> ModifiedWorkflowControlSets { get; private set; }
-		public int DefaultSegmentLength { get; private set; }
+		public int DefaultSegmentLength { get; private set; } = new DefaultSegment().SegmentLength;
 		
 		
 		public bool AgentFilter()

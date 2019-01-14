@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -71,6 +72,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 		public void Teardown()
 		{
 			auth?.Dispose();
+		}
+		
+		[Test]
+
+		public void ShouldHaveCorrectDefaultSegmentLength()
+		{
+			var state = new SchedulingScreenState(null, null);
+
+			state.DefaultSegmentLength.Should().Be.EqualTo(new DefaultSegment().SegmentLength);
 		}
 		
 		[Test]
