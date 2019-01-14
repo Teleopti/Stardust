@@ -230,5 +230,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		}
 
 		#endregion
+		
+		
+		public virtual DateTime PrincipalStartDate() => StartDate.Date;
+		public virtual DateTime PrincipalEndDate() => EndDate().Date;
+		public virtual Guid? PrincipalTeamId() => Team?.Id.GetValueOrDefault();
+		public virtual Guid? PrincipalSiteId() => Team?.Site?.Id.GetValueOrDefault();
+		public virtual Guid? PrincipalBusinessUnitId() => Team?.Site?.BusinessUnit?.Id.GetValueOrDefault();
+
 	}
 }

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public ClaimsOwner(IPerson person)
 		{
-			Organisation = new OrganisationMembership().InitializeFromPerson(person);
+			Organisation = new OrganisationMembership().Initialize(person);
 		}
 
 		public IOrganisationMembership Organisation { get; }

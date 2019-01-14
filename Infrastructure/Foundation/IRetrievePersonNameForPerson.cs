@@ -1,9 +1,9 @@
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public interface IRetrievePersonNameForPerson
 	{
-		string NameForPerson(IPerson person);
+		string NameForPerson(IPrincipalSource person);
 	}
 }

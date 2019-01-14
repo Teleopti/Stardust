@@ -30,28 +30,28 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         {
             var targetPerson = PersonFactory.CreatePerson();
             
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
             target.Check(queryingPersonMembership, DateOnly.Today, targetPerson).Should().Be.False();
         }
 
         [Test]
         public void ShouldNotAuthorizeTeamWithoutPeriod()
         {
-            queryingPersonMembership.InitializeFromPerson(queryingPerson); 
+            queryingPersonMembership.Initialize(queryingPerson); 
             target.Check(queryingPersonMembership, DateOnly.Today, (ITeam)null).Should().Be.False();
         }
 
         [Test]
         public void ShouldNotAuthorizeSiteWithoutPeriod()
         {
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
             target.Check(queryingPersonMembership, DateOnly.Today, (ISite)null).Should().Be.False();
         }
 
         [Test]
         public void ShouldNotAuthorizeBusinessUnit()
         {
-            queryingPersonMembership.InitializeFromPerson(queryingPerson); 
+            queryingPersonMembership.Initialize(queryingPerson); 
             target.Check(queryingPersonMembership, DateOnly.Today, (IBusinessUnit)null).Should().Be.False();
         }
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             AddTeamAndSiteToPerson(queryingPerson);
             AddTeamAndSiteToPerson(targetPerson);
             
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
             target.Check(queryingPersonMembership, DateOnly.Today, targetPerson).Should().Be.True();
         }
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             SetStructure();
             AddTeamAndSiteToPerson(queryingPerson);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson); 
+            queryingPersonMembership.Initialize(queryingPerson); 
             target.Check(queryingPersonMembership, DateOnly.Today, team).Should().Be.True();
         }
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             SetStructure();
             AddTeamAndSiteToPerson(queryingPerson);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
             target.Check(queryingPersonMembership, DateOnly.Today, site).Should().Be.True();
         }
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             SetStructure();
             AddTeamAndSiteToPerson(queryingPerson);
 
-            queryingPersonMembership.InitializeFromPerson(queryingPerson);
+            queryingPersonMembership.Initialize(queryingPerson);
             target.Check(queryingPersonMembership, DateOnly.Today, ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit).Should().Be.False();
         }
     }

@@ -28,15 +28,16 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return new TeleoptiPrincipalFactory(internalsFactory, internalsFactory, internalsFactory);
 		}
 		
-		public ITeleoptiPrincipal MakePrincipal(IPerson person, IDataSource dataSource, IBusinessUnit businessUnit, string tokenIdentity)
+		public ITeleoptiPrincipal MakePrincipal(IPrincipalSource person, IDataSource dataSource, IBusinessUnit businessUnit, string tokenIdentity)
 		{
 			var identity = new TeleoptiIdentity(
 				_retrievePersonNameForPerson.NameForPerson(person),
-				dataSource, businessUnit,
+				dataSource, 
+				businessUnit,
 				WindowsIdentity.GetCurrent(),
 				tokenIdentity
 				);
-			var principal = TeleoptiPrincipal.Make(identity, () => person.Id.GetValueOrDefault());
+			var principal = TeleoptiPrincipal.Make(identity, person.PrincipalPersonId);
 			principal.Regional = _makeRegionalFromPerson.MakeRegionalFromPerson(person);
 			principal.Organisation = _makeOrganisationMembershipFromPerson.MakeOrganisationMembership(person);
 			return principal;
