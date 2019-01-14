@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 		public void UpdateCalendarsForSites(IEnumerable<SiteBankHolidayCalendarsViewModel> input)
 		{
+			if (input == null || !input.Any()) return;
+
 			var allCurrentSettings = _siteBankHolidayCalendarRepository.FindAllSiteBankHolidayCalendarsSortedBySite().ToList();
 			foreach (var siteBankHolidayCalendarsViewModel in input)
 			{
