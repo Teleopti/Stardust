@@ -389,6 +389,14 @@
 							"Description": "Email",
 							"StartInUtc": scheduleDate + " 17:00",
 							"EndInUtc": scheduleDate + " 20:00"
+						},
+						{
+							"ShiftLayerIds": ["layer2"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Phone",
+							"StartInUtc": scheduleDate + " 20:00",
+							"EndInUtc": scheduleDate + " 21:00"
 						}
 					],
 					"IsFullDayAbsence": false,
@@ -399,7 +407,7 @@
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.Shifts[0].Projections[0].Selected = true;
 				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0], personSchedule);
-				var newStartMoment = moment(nextDay + " 02:00");
+				var newStartMoment = moment.tz(nextDay + " 02:00", "Asia/Hong_Kong");
 
 				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
@@ -610,6 +618,138 @@
 
 				newStartMoment = moment.tz("2019-01-03 06:00", "Europe/Berlin");
 				result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Europe/Berlin");
+				expect(result).toBeTruthy();
+			});
+
+			it('should return false when change belong to date', function () {
+				var todaySchedule = {
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": "2019-01-10",
+					"Timezone": {
+						IanaId: "Europe/Berlin"
+					},
+					"Projection": [
+						{
+							"ShiftLayerIds": ["layer1"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"StartInUtc": "2019-01-10 16:00",
+							"EndInUtc": "2019-01-10 17:00"
+						},
+						{
+							"ShiftLayerIds": ["layer2"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Phone",
+							"StartInUtc": "2019-01-10 17:00",
+							"EndInUtc": "2019-01-10 21:00"
+						}
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				};
+
+				var previousSchedule = {
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": "2019-01-09",
+					"Timezone": {
+						IanaId: "Europe/Berlin"
+					},
+					"Projection": [
+						{
+							"ShiftLayerIds": ["layer3"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"StartInUtc": "2019-01-09 21:00",
+							"EndInUtc": "2019-01-10 05:00"
+						}
+
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				};
+
+				scheduleMgmt.resetSchedules([todaySchedule, previousSchedule], "2019-01-10", "Etc/Utc");
+				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+				personSchedule.Shifts[1].Projections[0].Selected = true;
+				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[1].Projections[0], personSchedule);
+
+				var newStartMoment = moment.tz("2019-01-10 07:00", "Etc/Utc");
+				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Etc/Utc");
+				expect(result).toBeFalsy();
+			});
+
+			it('should return true when moving overnight shift of yesterday if one activity of yesterday start 12:00 AM', function () {
+				var todaySchedule = {
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": "2019-01-10",
+					"Timezone": {
+						IanaId: "Europe/Berlin"
+					},
+					"Projection": [
+						{
+							"ShiftLayerIds": ["layer1"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"StartInUtc": "2019-01-10 16:00",
+							"EndInUtc": "2019-01-10 17:00"
+						},
+						{
+							"ShiftLayerIds": ["layer2"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Phone",
+							"StartInUtc": "2019-01-10 17:00",
+							"EndInUtc": "2019-01-10 21:00"
+						}
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				};
+
+				var previousSchedule = {
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": "2019-01-09",
+					"Timezone": {
+						IanaId: "Europe/Berlin"
+					},
+					"Projection": [
+						{
+							"ShiftLayerIds": ["layer3"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"StartInUtc": "2019-01-09 21:00",
+							"EndInUtc": "2019-01-10 00:00"
+						},
+						{
+							"ShiftLayerIds": ["layer4"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Phone",
+							"StartInUtc": "2019-01-10 00:00",
+							"EndInUtc": "2019-01-10 05:00"
+						}
+
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				};
+
+				scheduleMgmt.resetSchedules([todaySchedule, previousSchedule], "2019-01-10", "Etc/Utc");
+				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+				personSchedule.Shifts[1].Projections[0].Selected = true;
+				personSelection.updatePersonProjectionSelection(personSchedule.Shifts[1].Projections[0], personSchedule);
+
+				var newStartMoment = moment.tz("2019-01-10 01:00", "Etc/Utc");
+				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Etc/Utc");
 				expect(result).toBeTruthy();
 			});
 

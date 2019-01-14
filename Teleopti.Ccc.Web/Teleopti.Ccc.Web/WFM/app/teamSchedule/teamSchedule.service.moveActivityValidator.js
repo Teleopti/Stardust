@@ -71,7 +71,7 @@
 			if (selectedShift) return selectedShift.Date;
 			else return personSchedule.Date;
 		}
-		
+
 		function validateShiftsToMove(ScheduleMgmt, newStartMoment) {
 			invalidPeople = [];
 			var selectedPersonIds = PersonSelectionSvc.getSelectedPersonIdList();
@@ -134,27 +134,28 @@
 				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
 				var shiftDate = getShiftDate(personSchedule);
 
-				var newStartInAgentTimezone = newStartMoment.tz(personSchedule.Timezone.IanaId);
-				if (newStartInAgentTimezone.isBefore(shiftDate, 'day')) {
+				var newStartMomentInAgentTimezone = newStartMoment.tz(personSchedule.Timezone.IanaId);
+				if (getNewShiftStartDate(shiftDate, personSchedule, newStartMomentInAgentTimezone) != shiftDate) {
 					invalidPeople.push(personSchedule);
 					continue;
 				}
-				var newShiftStartMoment = getNewScheduleStartMoment(shiftDate, personSchedule, newStartMoment);
-				var newShiftStartInAgentTimezone = newShiftStartMoment.tz(personSchedule.Timezone.IanaId);
 
-				var newShiftEndInAgentTimezone = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
-				var scheduleLength = newShiftEndInAgentTimezone ? newShiftEndInAgentTimezone.diff(newShiftStartMoment, 'minutes') : 0;
+				var newShiftStartMomentInAgentTimezone = getNewScheduleStartMoment(shiftDate, personSchedule, newStartMoment);
+				var newShiftEndMomentInAgentTimezone = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
+				var scheduleLength = newShiftEndMomentInAgentTimezone ? newShiftEndMomentInAgentTimezone.diff(newShiftStartMomentInAgentTimezone, 'minutes') : 0;
+				if (scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
+					invalidPeople.push(personSchedule);
+					continue;
+				}
 
 				var hasConflict = personSchedule.Shifts.concat(personSchedule.ExtraShifts)
 					.some(function (shift) {
 						if (shift.Date === shiftDate || !shift.ProjectionTimeRange) return false;
-						return (shiftDate > shift.Date && newStartInAgentTimezone.isSameOrBefore(shift.ProjectionTimeRange.EndMoment, 'minute')) ||
-							(shiftDate < shift.Date && newShiftEndInAgentTimezone.isSameOrAfter(shift.ProjectionTimeRange.StartMoment, 'minute'));
+						return (shiftDate > shift.Date && newStartMomentInAgentTimezone.isSameOrBefore(shift.ProjectionTimeRange.EndMoment, 'minute')) ||
+							(shiftDate < shift.Date && newShiftEndMomentInAgentTimezone.isSameOrAfter(shift.ProjectionTimeRange.StartMoment, 'minute'));
 					});
 
-				if (serviceDateFormatHelper.getDateOnly(newShiftStartInAgentTimezone) != shiftDate
-					|| scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES
-					|| hasConflict) {
+				if (hasConflict) {
 					invalidPeople.push(personSchedule);
 				}
 			}
@@ -193,6 +194,16 @@
 			var starts = unselected.map(function (p) { return p.StartMoment.clone(); });
 			starts.push(newStartMoment);
 			return sortMoments(starts, 'isBefore');
+		}
+
+		function getNewShiftStartDate(scheduleDate, personSchedule, newStartMomentInAgentTimezone) {
+			var newStartDate = serviceDateFormatHelper.getDateOnly(newStartMomentInAgentTimezone);
+			if (newStartDate <= scheduleDate) {
+				return newStartDate;
+			}
+
+			var selected = getProjectionsBySelectStatus(scheduleDate, personSchedule, true);
+			return !!selected && !!selected.length && selected[0].StartMoment.isSame(selected[0].Parent.ProjectionTimeRange.StartMoment) ? newStartDate : scheduleDate
 		}
 
 		function getLatestScheduleEndMoment(scheduleDate, personSchedule, newStartMoment) {

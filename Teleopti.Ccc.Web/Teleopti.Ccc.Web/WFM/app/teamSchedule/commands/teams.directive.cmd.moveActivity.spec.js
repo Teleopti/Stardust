@@ -117,7 +117,7 @@
 				}]
 			},
 			{
-				Date: '2016-06-15',
+				Date: '2016-06-16',
 				PersonId: 'agent2',
 				Name: 'agent2',
 				Timezone: {
