@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_componentContext = componentContext;
 		}
 
-		[AsSystem]
 		public void Handle(IntradayOptimizationOnStardustWasOrdered parameters, 
 			CancellationTokenSource cancellationTokenSource, 
 			Action<string> sendProgress,

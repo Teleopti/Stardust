@@ -23,15 +23,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_realEventHandler = realEventHandler;
 		}
 
-		[AsSystem]
 		public void Handle(CopyScheduleEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress,
 			ref IEnumerable<object> returnObjects)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
-			using (_dataSourceScope.OnThisThreadUse(parameters.LogOnDatasource))
-			{
-				_realEventHandler.Handle(parameters);
-			}
+			_realEventHandler.Handle(parameters);
 			_stardustJobFeedback.SendProgress = null;
 		}
 	}

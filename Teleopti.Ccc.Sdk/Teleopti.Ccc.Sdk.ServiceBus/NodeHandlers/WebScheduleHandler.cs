@@ -23,17 +23,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_dataSourceScope = dataSourceScope;
 		}
 
-		[AsSystem]
 		public virtual void Handle(WebScheduleStardustEvent parameters, 
 			CancellationTokenSource cancellationTokenSource, 
 			Action<string> sendProgress,
 			ref IEnumerable<object> returnObjects)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
-			using (_dataSourceScope.OnThisThreadUse(parameters.LogOnDatasource))
-			{
-				_realEventHandler.Handle(parameters);
-			}
+			_realEventHandler.Handle(parameters);
 			_stardustJobFeedback.SendProgress = null;
 		}
 	}
