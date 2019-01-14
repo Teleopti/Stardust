@@ -203,7 +203,16 @@
 			}
 
 			var selected = getProjectionsBySelectStatus(scheduleDate, personSchedule, true);
-			return !!selected && !!selected.length && selected[0].StartMoment.isSame(selected[0].Parent.ProjectionTimeRange.StartMoment) ? newStartDate : scheduleDate
+			var projectionsCountInVm = (selected[0].Parent.Projections || []).length;
+
+			return  selected[0].Parent.ProjectionCount === projectionsCountInVm
+				&& getEarlierStartDateInUnselected(scheduleDate, personSchedule) !== scheduleDate
+				? newStartDate : scheduleDate
+		}
+
+		function getEarlierStartDateInUnselected(scheduleDate, personSchedule) {
+			var unselected = getProjectionsBySelectStatus(scheduleDate, personSchedule, false);
+			return unselected.length && serviceDateFormatHelper.getDateOnly(unselected.map(function (p) { return p.StartMoment.clone(); }), 'isBefore'));
 		}
 
 		function getLatestScheduleEndMoment(scheduleDate, personSchedule, newStartMoment) {

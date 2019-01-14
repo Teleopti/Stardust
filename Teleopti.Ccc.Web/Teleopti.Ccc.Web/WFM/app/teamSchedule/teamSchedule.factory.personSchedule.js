@@ -158,6 +158,7 @@
 				ProjectionTimeRange: getProjectionTimeRange(otherSchedule),
 				AbsenceCount: getPersonAbsencesCount,
 				ActivityCount: getPersonActivitiesCount,
+				ProjectionCount: (otherSchedule.Projection || []).length,
 				Parent: this
 			};
 
@@ -181,6 +182,7 @@
 				ProjectionTimeRange: getProjectionTimeRange(otherSchedule),
 				AbsenceCount: getPersonAbsencesCount,
 				ActivityCount: getPersonActivitiesCount,
+				ProjectionCount: (otherSchedule.Projection || []).length,
 				Parent: this
 			};
 
@@ -290,6 +292,7 @@
 			this.Parent = personSchedule;
 			this.Projections = [];
 			this.ProjectionTimeRange = getProjectionTimeRange(schedule);
+			this.ProjectionCount = (schedule.Projection || []).length;
 		}
 
 		ShiftViewModel.prototype.AbsenceCount = getPersonAbsencesCount;
