@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
 			var otherSkillsDays = calculateSkillSkillDayDictionaryWithoutPeriodInflation(period, scenario, otherSkills, periodToLoad);
 
-			otherSkillsDays.ForEach(x => {result.Add(x.Key,x.Value);});
+			result = result.Concat(otherSkillsDays).ToDictionary(x => x.Key, x => x.Value);
 			return result;
 		}
 
