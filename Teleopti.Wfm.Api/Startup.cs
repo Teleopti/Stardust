@@ -95,7 +95,7 @@ namespace Teleopti.Wfm.Api
 				DataSourceApplicationName = DataSourceApplicationName.ForApi()
 			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
-			builder.RegisterModule(new ApiModule());
+			builder.RegisterModule(new ApiModule(configuration));
 			builder.RegisterModule(new CommonModule(configuration));
 
 			return builder.Build();
