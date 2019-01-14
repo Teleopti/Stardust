@@ -201,7 +201,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
 		{
 			IList<IPerson> people = new List<IPerson> { person };
-			var uow = _currentUnitOfWork.Current();
 
 			ICollection<DateTimePeriod> searchPeriods = _personAbsenceRepository.AffectedPeriods(person, scenario, period, absence);
 			DateTimePeriod optimizedPeriod = searchPeriods.Count > 0 ?
@@ -243,7 +242,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var scheduleDictionary = new ScheduleDictionary(scenario, periodBasedOnSelectedPersons, new DifferenceEntityCollectionService<IPersistableScheduleData>(), _dataPermissionChecker, _authorization);
 
-			var uow = _currentUnitOfWork.Current();
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
 				loadSchedules(scenario, scheduleDictionaryLoadOptions, visiblePersons, scheduleDictionary, periodBasedOnSelectedPersons, personsInOrganization);
@@ -282,7 +280,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private void doLoadSchedulesPerPersons(IScenario scenario, ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDictionary scheduleDictionary, DateOnlyPeriod longDateOnlyPeriod, IEnumerable<IPerson> personsToLoad)
 		{
-			var uow = _currentUnitOfWork.Current();
 			addPersonAbsences(scheduleDictionary, _personAbsenceRepository.Find(personsToLoad, longDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc), scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
 			addPersonAssignments(scheduleDictionary, _personAssignmentRepository.Find(personsToLoad, longDateOnlyPeriod, scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
 			addPersonMeetings(scheduleDictionary, _meetingRepository.Find(personsToLoad, longDateOnlyPeriod, scenario, false), personsToLoad, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
