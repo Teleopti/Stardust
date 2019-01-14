@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 {
 	public class ForecastExportModelCreator
 	{
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly SkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 
 		public ForecastExportModelCreator(
-			ISkillDayLoadHelper skillDayLoadHelper,
+			SkillDayLoadHelper skillDayLoadHelper,
 			IScenarioRepository scenarioRepository,
 			IWorkloadRepository workloadRepository)
 		{

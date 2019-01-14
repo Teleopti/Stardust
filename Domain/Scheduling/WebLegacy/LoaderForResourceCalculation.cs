@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	public class LoaderForResourceCalculation 
 	{
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly SkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly IPersonRepository _personRepository;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private ICollection<IPerson> _agents;
 
 		public LoaderForResourceCalculation(IScenarioRepository scenarioRepository,
-					ISkillDayLoadHelper skillDayLoadHelper,
+					SkillDayLoadHelper skillDayLoadHelper,
 					IScheduleStorage scheduleStorage,
 					ICurrentTeleoptiPrincipal principal,
 					IPersonRepository personRepository,

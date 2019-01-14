@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 
 		private void providerWiring(ContainerBuilder builder)
 		{
-			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>();
+			builder.RegisterType<SkillDayLoadHelper>().As<SkillDayLoadHelper>();
 			
 			builder.RegisterType<BudgetingSkillStaffPeriodProvider>().As<IBudgetSkillStaffPeriodProvider>();
 			builder.RegisterType<BudgetPeopleProvider>().As<IBudgetPeopleProvider>();

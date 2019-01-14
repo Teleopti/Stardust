@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		public void ShouldCreateSkillStaffPeriodContainerFromTheProvider()
 		{
 			var selectedBudgetDays = mocks.StrictMock<ISelectedBudgetDays>();
-			var skillDayLoader = mocks.StrictMock<ISkillDayLoadHelper>();
+			var skillDayLoader = mocks.StrictMock<SkillDayLoadHelper>();
 			var skillDay1 = mocks.StrictMock<ISkillDay>();
 			var skillDay2 = mocks.StrictMock<ISkillDay>();
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		public void ShouldOnlyHaveSelectedChildSkillInSkillStaffPeriodContainerFromTheProvider()
 		{
 			var selectedBudgetDays = mocks.StrictMock<ISelectedBudgetDays>();
-			var skillDayLoader = mocks.StrictMock<ISkillDayLoadHelper>();
+			var skillDayLoader = mocks.StrictMock<SkillDayLoadHelper>();
 			var skillDay1 = mocks.StrictMock<ISkillDay>();
 			var skillDay2 = mocks.StrictMock<ISkillDay>();
 
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		public void ShouldCreateSkillStaffPeriodContainerFromTheProviderWithEmptySelection()
 		{
 			var selectedBudgetDays = mocks.StrictMock<ISelectedBudgetDays>();
-			var skillDayLoader = mocks.StrictMock<ISkillDayLoadHelper>();
+			var skillDayLoader = mocks.StrictMock<SkillDayLoadHelper>();
 
 			using (mocks.Record())
 			{
