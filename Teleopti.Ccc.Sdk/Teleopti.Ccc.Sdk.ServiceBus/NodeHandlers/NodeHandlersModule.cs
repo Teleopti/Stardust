@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			
 			builder.RegisterType<StardustHealthCheckHandler>().As<IHandle<StardustHealthCheckEvent>>().SingleInstance();
 			
-			//normally register handlers like this (=will refresh toggles
+			//normally register handlers like this (=will refresh toggles)
 			builder.RegisterType<ImportForecastFromFileHandler>().Named<IHandle<ImportForecastsFileToSkillEvent>>(NodeComponentName).SingleInstance();
 			builder.RegisterType<ApproveRequestsWithValidatorsEventStardustHandler>().Named<IHandle<ApproveRequestsWithValidatorsEvent>>(NodeComponentName).SingleInstance();
 			builder.RegisterType<ExportMultisiteSkillsToSkillEventHandler>().Named<IHandle<ExportMultisiteSkillsToSkillEvent>>(NodeComponentName).SingleInstance();
