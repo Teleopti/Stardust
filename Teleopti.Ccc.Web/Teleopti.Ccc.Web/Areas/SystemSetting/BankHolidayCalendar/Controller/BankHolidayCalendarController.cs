@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 		}
 
 		[HttpGet, Route("api/SitesByCalendar/{Id}"), UnitOfWork]
-		public virtual IEnumerable<Guid> GetSitesByCalendar(Guid calendarId)
+		public virtual IEnumerable<Guid> GetSitesByCalendar(Guid Id)
 		{
-			return _siteBankHolidayCalendarsProvider.GetSitesByAssignedCalendar(calendarId);
+			return _siteBankHolidayCalendarsProvider.GetSitesByAssignedCalendar(Id);
 		}
 
 		[HttpPost, Route("api/SiteBankHolidayCalendars/Update"), UnitOfWork]

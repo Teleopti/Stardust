@@ -421,5 +421,21 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			result.Years.First().Dates.First().IsDeleted.Should().Be.EqualTo(false);
 			result.Years.First().Dates.First().Date.Should().Be.EqualTo(_nationalDay);
 		}
+
+		[Test]
+		public void ShouldDeleteRelatedSiteBankHolidayCalendarsAfterDeletingCalendar()
+		{
+			var calendar = PrepareData();
+			var siteId = Guid.NewGuid();
+			var bankHolidayCalendarId = calendar.Id.Value;
+			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, bankHolidayCalendarId);
+			SiteBankHolidayCalendarRepository.Add(siteBankHolidayCalendar);
+
+			var result = Target.DeleteBankHolidayCalendarById(bankHolidayCalendarId);
+
+			result.Should().Be.Equals(true);
+
+			SiteBankHolidayCalendarRepository.LoadAll().Count().Should().Be.EqualTo(0);
+		}
 	}
 }

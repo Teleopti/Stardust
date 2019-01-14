@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var query = Session.CreateCriteria<SiteBankHolidayCalendar>()
 			   .CreateCriteria("BankHolidayCalendarsForSite", "cal")
 			   .Add(Restrictions.Eq("cal.Id", calendarId))
-			   .List<SiteBankHolidayCalendar>();
+			   .List<ISiteBankHolidayCalendar>();
 
 			return query;
 		}
