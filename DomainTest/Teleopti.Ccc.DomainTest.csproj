@@ -162,7 +162,6 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoaderTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestFixtureTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestMethodTest.cs" />
-	  <Compile Include="Aop\EventHandlersNeedsToBeVirtualTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessorComplexFlowTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestFilterWithNoValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel.cs" />
