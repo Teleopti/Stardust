@@ -971,6 +971,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			_gridrowInChartSetting.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
 
 			_skill = skill;
+			_skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 			_scenario = scenario;
 			_longterm = longterm;
 			_currentLocalDate = dateTimePeriod.StartDate;
@@ -1010,6 +1011,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 					_multisiteSkill = _skill as IMultisiteSkill;
 				}
 			}
+
+			if(_skill != null)
+				_skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 		}
 
 		private void setUpClipboard()

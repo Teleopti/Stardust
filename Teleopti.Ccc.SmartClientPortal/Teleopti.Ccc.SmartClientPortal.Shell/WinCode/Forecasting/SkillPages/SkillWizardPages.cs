@@ -96,7 +96,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
             if (_preselectedSkillType == null)
             {
 				_preselectedSkillType =
-					new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony);
+					new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony)
+					{
+						StaffingCalculatorService = _staffingCalculatorServiceFacade
+					};
 			}
             var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             var newSkill = new Skill(UserTexts.Resources.LessThanSkillNameGreaterThan,
@@ -119,6 +122,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
         public void SetSkillDefaultSettings(ISkill newSkill)
         {
             newSkill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			newSkill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
             var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             ServiceAgreement serviceAgreement = ServiceAgreement.DefaultValues();
             DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, newSkill.TimeZone);

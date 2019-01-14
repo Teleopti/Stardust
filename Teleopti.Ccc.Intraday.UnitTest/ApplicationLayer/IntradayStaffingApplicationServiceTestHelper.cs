@@ -75,6 +75,8 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, 
 			bool addSkillDataPeriodDuplicate, ServiceAgreement serviceAgreement, bool giveDemand = true)
 		{
+			skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
+
 			var demand = 3;
 			if (!giveDemand)
 				demand = -1;
@@ -111,6 +113,8 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours,
 			bool addSkillDataPeriodDuplicate, ServiceAgreement serviceAgreement, int tasks, bool giveDemand = true)
 		{
+			skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
+
 			var demand = 3;
 			if (!giveDemand)
 				demand = -1;
@@ -271,6 +275,8 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 				TimeZone = timeZone ?? TimeZoneInfo.Utc,
 				Activity = activity
 			}.WithId();
+
+			skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 
 			var childSkill1 = new ChildSkill(skillName + 1, skillName + 1, Color.Empty,
 				skill).WithId();

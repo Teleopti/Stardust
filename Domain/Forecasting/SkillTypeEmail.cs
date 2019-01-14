@@ -39,6 +39,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public override bool DisplayTimeSpanAsMinutes => true;
 
-		public override IStaffingCalculatorServiceFacade StaffingCalculatorService => new StaffingEmailCalculatorService();
-	}
+		public override IStaffingCalculatorServiceFacade StaffingCalculatorService
+        {
+			set {}
+            get { return new StaffingEmailCalculatorService(); }
+        }
+    }
 }
