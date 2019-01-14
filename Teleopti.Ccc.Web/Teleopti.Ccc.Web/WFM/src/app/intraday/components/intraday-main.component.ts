@@ -78,13 +78,13 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			this.selectedChartType = persisted.selectedChartType;
 			this.selectedDate = persisted.selectedDate;
 			this.selectedTabIndex = persisted.selectedTabIndex;
-			this.updateData(false);
+			this.updateData();
 		}
 	}
 
 	updateOnInterval = () => {
 		if (this.selectedOffset === 0 && this.selectedSkillOrGroup && this.loading === false) {
-			this.updateData(true);
+			this.updateData();
 		}
 	};
 
@@ -106,7 +106,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	onSelectSkill(e: SkillPickerItem) {
 		this.selectedSkillOrGroup = e;
-		this.updateData(false);
+		this.updateData();
 		this.setPersistedData();
 	}
 
@@ -115,7 +115,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		const chartTypes: IntradayChartType[] = ['traffic', 'performance', 'staffing'];
 		this.selectedChartType = chartTypes[index];
 
-		this.updateData(false);
+		this.updateData();
 	}
 
 	onSelectDate(e: number) {
@@ -124,7 +124,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		this.selectedOffset = e;
 		this.selectedDate = moment().add(e, 'days');
 		this.displayDate = this.selectedDate.format('LLLL');
-		this.updateData(true);
+		this.updateData();
 	}
 
 	onShowHideSkills() {
@@ -178,14 +178,14 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	}
 
 	onPickSubSkill() {
-		this.updateData(true);
+		this.updateData();
 	}
 
 	onSubSkillClick(event: any) {
 		event.stopPropagation();
 	}
 
-	updateData = (columnsOnly: boolean = true) => {
+	updateData = () => {
 		this.setPersistedData();
 		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
@@ -216,7 +216,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 									EndTime: data.LatestActualIntervalEnd
 								};
 							}
-							this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+							this.chartData = this.trafficDataToC3Data(data.DataSeries);
 						} else {
 							this.chartData = {};
 						}
@@ -244,7 +244,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 										EndTime: data.LatestActualIntervalEnd
 									};
 								}
-								this.chartData = this.trafficDataToC3Data(data.DataSeries, columnsOnly);
+								this.chartData = this.trafficDataToC3Data(data.DataSeries);
 							} else {
 								this.chartData = {};
 							}
@@ -276,7 +276,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 										EndTime: data.LatestActualIntervalEnd
 									};
 								}
-								this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+								this.chartData = this.performanceDataToC3Data(data.DataSeries);
 							} else {
 								this.chartData = {};
 							}
@@ -304,7 +304,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 										EndTime: data.LatestActualIntervalEnd
 									};
 								}
-								this.chartData = this.performanceDataToC3Data(data.DataSeries, columnsOnly);
+								this.chartData = this.performanceDataToC3Data(data.DataSeries);
 							} else {
 								this.chartData = {};
 							}
@@ -330,7 +330,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					.getStaffingData(selectedSkill.Id, this.selectedOffset)
 					.subscribe(
 						data => {
-							this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
+							this.chartData = this.staffingDataToC3Data(data.DataSeries);
 							this.loading = false;
 						},
 						() => {
@@ -346,7 +346,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 					.getGroupStaffingData(selectedSkill.Id, this.selectedOffset)
 					.subscribe(
 						data => {
-							this.chartData = this.staffingDataToC3Data(data.DataSeries, columnsOnly);
+							this.chartData = this.staffingDataToC3Data(data.DataSeries);
 							this.loading = false;
 						},
 						() => {
@@ -370,56 +370,43 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		location.hash = '#/intraday/skill-group-manager';
 	}
 
-	private trafficDataToC3Data(input: IntradayTrafficDataSeries, columnsOnly: boolean = false): c3.Data {
+	private trafficDataToC3Data(input: IntradayTrafficDataSeries): c3.Data {
 		if (input && input.Time !== null) {
 			const timeStamps = input.Time.map(item => {
 				return moment(item).format('YYYY-MM-DD HH:mm');
 			});
 			if (!timeStamps || timeStamps.length === 0) return {};
-			if (columnsOnly) {
-				return {
-					x: 'x',
-					xFormat: '%Y-%m-%d %H:%M',
-					columns: [
-						['x'].concat(timeStamps),
-						['Forecasted_calls'].concat(input.ForecastedCalls),
-						['Calls'].concat(input.CalculatedCalls),
-						['Forecasted_AHT'].concat(input.ForecastedAverageHandleTime),
-						['AHT'].concat(input.AverageHandleTime)
-					]
-				};
-			} else {
-				return {
-					x: 'x',
-					xFormat: '%Y-%m-%d %H:%M',
-					columns: [
-						['x'].concat(timeStamps),
-						['Forecasted_calls'].concat(input.ForecastedCalls),
-						['Calls'].concat(input.CalculatedCalls),
-						['Forecasted_AHT'].concat(input.ForecastedAverageHandleTime),
-						['AHT'].concat(input.AverageHandleTime)
-					],
-					type: 'area-spline',
-					colors: {
-						Forecasted_calls: '#99D6FF',
-						Calls: '#0099FF',
-						Forecasted_AHT: '#FFC285',
-						AHT: '#FB8C00'
-					},
-					names: {
-						Forecasted_calls: this.translate.instant('ForecastedVolume') + ' ←',
-						Calls: this.translate.instant('ActualVolume') + ' ←',
-						Forecasted_AHT: this.translate.instant('ForecastedAverageHandlingTime') + ' →',
-						AHT: this.translate.instant('ActualAverageHandlingTime') + ' →'
-					},
-					axes: {
-						Forecasted_AHT: 'y2',
-						AHT: 'y2',
-						Calls: 'y',
-						Forecasted_calls: 'y'
-					}
-				};
-			}
+
+			return {
+				x: 'x',
+				xFormat: '%Y-%m-%d %H:%M',
+				columns: [
+					['x'].concat(timeStamps),
+					['Forecasted_calls'].concat(input.ForecastedCalls),
+					['Calls'].concat(input.CalculatedCalls),
+					['Forecasted_AHT'].concat(input.ForecastedAverageHandleTime),
+					['AHT'].concat(input.AverageHandleTime)
+				],
+				type: 'area-spline',
+				colors: {
+					Forecasted_calls: '#99D6FF',
+					Calls: '#0099FF',
+					Forecasted_AHT: '#FFC285',
+					AHT: '#FB8C00'
+				},
+				names: {
+					Forecasted_calls: this.translate.instant('ForecastedVolume') + ' ←',
+					Calls: this.translate.instant('ActualVolume') + ' ←',
+					Forecasted_AHT: this.translate.instant('ForecastedAverageHandlingTime') + ' →',
+					AHT: this.translate.instant('ActualAverageHandlingTime') + ' →'
+				},
+				axes: {
+					Forecasted_AHT: 'y2',
+					AHT: 'y2',
+					Calls: 'y',
+					Forecasted_calls: 'y'
+				}
+			};
 		} else {
 			return {};
 		}
@@ -447,54 +434,41 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		}
 	}
 
-	private performanceDataToC3Data(input: IntradayPerformanceDataSeries, columnsOnly: boolean = false): c3.Data {
+	private performanceDataToC3Data(input: IntradayPerformanceDataSeries): c3.Data {
 		if (input && input.Time !== null) {
 			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
 			if (!timeStamps || timeStamps.length === 0) return {};
-			if (columnsOnly) {
-				return {
-					x: 'x',
-					xFormat: '%Y-%m-%d %H:%M',
-					columns: [
-						['x'].concat(timeStamps),
-						['ASA'].concat(input.AverageSpeedOfAnswer),
-						['Abandoned_rate'].concat(input.AbandonedRate),
-						['Service_level'].concat(input.ServiceLevel),
-						['ESL'].concat(input.EstimatedServiceLevels)
-					]
-				};
-			} else {
-				return {
-					x: 'x',
-					xFormat: '%Y-%m-%d %H:%M',
-					columns: [
-						['x'].concat(timeStamps),
-						['ASA'].concat(input.AverageSpeedOfAnswer),
-						['Abandoned_rate'].concat(input.AbandonedRate),
-						['Service_level'].concat(input.ServiceLevel),
-						['ESL'].concat(input.EstimatedServiceLevels)
-					],
-					type: 'area-spline',
-					colors: {
-						ASA: '#99D6FF',
-						Abandoned_rate: '#0099FF',
-						Service_level: '#FFC285',
-						ESL: '#FB8C00'
-					},
-					names: {
-						ASA: this.translate.instant('AverageSpeedOfAnswer') + ' ←',
-						Abandoned_rate: this.translate.instant('AbandonedRate') + ' ←',
-						Service_level: this.translate.instant('ServiceLevel') + ' →',
-						ESL: this.translate.instant('ESL') + ' →'
-					},
-					axes: {
-						Service_level: 'y2',
-						Abandoned_rate: 'y2',
-						ESL: 'y2',
-						ASA: 'y'
-					}
-				};
-			}
+
+			return {
+				x: 'x',
+				xFormat: '%Y-%m-%d %H:%M',
+				columns: [
+					['x'].concat(timeStamps),
+					['ASA'].concat(input.AverageSpeedOfAnswer),
+					['Abandoned_rate'].concat(input.AbandonedRate),
+					['Service_level'].concat(input.ServiceLevel),
+					['ESL'].concat(input.EstimatedServiceLevels)
+				],
+				type: 'area-spline',
+				colors: {
+					ASA: '#99D6FF',
+					Abandoned_rate: '#0099FF',
+					Service_level: '#FFC285',
+					ESL: '#FB8C00'
+				},
+				names: {
+					ASA: this.translate.instant('AverageSpeedOfAnswer') + ' ←',
+					Abandoned_rate: this.translate.instant('AbandonedRate') + ' ←',
+					Service_level: this.translate.instant('ServiceLevel') + ' →',
+					ESL: this.translate.instant('ESL') + ' →'
+				},
+				axes: {
+					Service_level: 'y2',
+					Abandoned_rate: 'y2',
+					ESL: 'y2',
+					ASA: 'y'
+				}
+			};
 		} else {
 			return {};
 		}
@@ -516,54 +490,41 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		}
 	}
 
-	private staffingDataToC3Data(input: IntradayStaffingDataSeries, columnsOnly: boolean = false): c3.Data {
+	private staffingDataToC3Data(input: IntradayStaffingDataSeries): c3.Data {
 		if (input && input.Time !== null) {
 			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
 			if (!timeStamps || timeStamps.length === 0) return {};
-			if (columnsOnly) {
-				return {
-					x: 'x',
-					xFormat: '%Y-%m-%d %H:%M',
-					columns: [
-						['x'].concat(timeStamps),
-						['Forecasted_staffing'].concat(input.ForecastedStaffing),
-						['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing),
-						['Actual_staffing'].concat(input.ActualStaffing),
-						['Scheduled_staffing'].concat(input.ScheduledStaffing)
-					]
-				};
-			} else {
-				return {
-					x: 'x',
-					xFormat: '%Y-%m-%d %H:%M',
-					columns: [
-						['x'].concat(timeStamps),
-						['Forecasted_staffing'].concat(input.ForecastedStaffing),
-						['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing),
-						['Actual_staffing'].concat(input.ActualStaffing),
-						['Scheduled_staffing'].concat(input.ScheduledStaffing)
-					],
-					type: 'area-spline',
-					colors: {
-						Forecasted_calls: '#99D6FF',
-						Calls: '#0099FF',
-						Forecasted_AHT: '#FFC285',
-						AHT: '#FB8C00'
-					},
-					names: {
-						Forecasted_staffing: this.translate.instant('ForecastedStaff') + ' ←',
-						Updated_forecasted_staffing: this.translate.instant('ReforecastedStaff') + ' ←',
-						Actual_staffing: this.translate.instant('RequiredStaff') + ' ←',
-						Scheduled_staffing: this.translate.instant('ScheduledStaff') + ' ←'
-					},
-					axes: {
-						Forecasted_staffing: 'y',
-						Updated_forecasted_staffing: 'y',
-						Actual_staffing: 'y',
-						Scheduled_staffing: 'y'
-					}
-				};
-			}
+
+			return {
+				x: 'x',
+				xFormat: '%Y-%m-%d %H:%M',
+				columns: [
+					['x'].concat(timeStamps),
+					['Forecasted_staffing'].concat(input.ForecastedStaffing),
+					['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing),
+					['Actual_staffing'].concat(input.ActualStaffing),
+					['Scheduled_staffing'].concat(input.ScheduledStaffing)
+				],
+				type: 'area-spline',
+				colors: {
+					Forecasted_calls: '#99D6FF',
+					Calls: '#0099FF',
+					Forecasted_AHT: '#FFC285',
+					AHT: '#FB8C00'
+				},
+				names: {
+					Forecasted_staffing: this.translate.instant('ForecastedStaff') + ' ←',
+					Updated_forecasted_staffing: this.translate.instant('ReforecastedStaff') + ' ←',
+					Actual_staffing: this.translate.instant('RequiredStaff') + ' ←',
+					Scheduled_staffing: this.translate.instant('ScheduledStaff') + ' ←'
+				},
+				axes: {
+					Forecasted_staffing: 'y',
+					Updated_forecasted_staffing: 'y',
+					Actual_staffing: 'y',
+					Scheduled_staffing: 'y'
+				}
+			};
 		} else {
 			return {};
 		}

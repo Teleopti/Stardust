@@ -63,97 +63,19 @@ export class IntradayChartComponent implements OnChanges {
 		if (this.chart) {
 			switch (this.chartType as IntradayChartType) {
 				case 'traffic':
-					this.loadTrafficChart(this.chartData);
+					this.initChart(this.chartData, true);
 					break;
 				case 'performance':
-					this.loadPerformanceChart(this.chartData);
+					this.initChart(this.chartData, true);
 					break;
 				case 'staffing':
-					this.loadStaffingChart(this.chartData);
+					this.initChart(this.chartData, false);
 					break;
 			}
 		} else {
 			this.initChart(this.chartData);
 		}
 		this.indicateLatestTime(this.latestTime);
-	}
-
-	private loadTrafficChart(value: c3.Data) {
-		if (value.columns && value.columns.slice(1).some(item => item.length > 0)) {
-			if (!this.chart.axis) {
-				this.initChart(this.chartData);
-			}
-			this.chart.axis.labels({
-				y: this.translate.instant('Volume'),
-				y2: this.translate.instant('AverageHandlingTime')
-			});
-			if (value.axes) {
-				this.chart.load({
-					columns: value.columns,
-					axes: value.axes,
-					names: value.names,
-					unload: true
-				});
-			} else {
-				this.chart.load({
-					columns: value.columns
-				});
-			}
-		} else {
-			this.chart.load({ unload: true });
-		}
-	}
-
-	private loadPerformanceChart(value: c3.Data) {
-		if (value.columns && value.columns.slice(1).some(item => item.length > 0)) {
-			if (!this.chart.axis) {
-				this.initChart(this.chartData);
-			}
-			this.chart.axis.labels({
-				y: this.translate.instant('SecondShort'),
-				y2: this.translate.instant('%')
-			});
-			if (value.axes) {
-				this.chart.load({
-					columns: value.columns,
-					axes: value.axes,
-					names: value.names,
-					unload: true
-				});
-			} else {
-				this.chart.load({
-					columns: value.columns
-				});
-			}
-		} else {
-			this.chart.load({ unload: true });
-		}
-	}
-
-	private loadStaffingChart(value: c3.Data) {
-		if (value.columns && value.columns.slice(1).some(item => item.length > 0)) {
-			if (!this.chart.axis) {
-				this.initChart(this.chartData);
-			}
-			this.chart.axis.labels({
-				y: this.translate.instant('Agents'),
-				y2: null
-			});
-			if (value.axes) {
-				this.chart.load({
-					columns: value.columns,
-					axes: value.axes,
-					names: value.names,
-					unload: true
-				});
-			} else {
-				this.chart.load({
-					columns: value.columns
-				});
-			}
-		} else {
-			this.chart.load({ unload: true });
-		}
 	}
 
 	private isEmptyObject(data: any) {
@@ -170,7 +92,10 @@ export class IntradayChartComponent implements OnChanges {
 		this.chart.hide(this.hiddenArray);
 	}
 
-	initChart(inData: c3.Data) {
+	initChart(inData: c3.Data, show_y2: boolean = true) {
+		if (this.chart) {
+			this.chart.destroy();
+		}
 		if (angular.isDefined(inData) && inData.columns) {
 			const chartObject: c3.ChartConfiguration = {
 				bindto: '#chart',
@@ -202,16 +127,18 @@ export class IntradayChartComponent implements OnChanges {
 							format: d3.format('.1f')
 						}
 					},
-					y2: {
-						label: {
-							text: 'y2',
-							position: 'outer-middle'
-						},
-						show: true,
-						tick: {
-							format: d3.format('.1f')
-						}
-					}
+					y2: show_y2
+						? {
+								label: {
+									text: 'y2',
+									position: 'outer-middle'
+								},
+								show: true,
+								tick: {
+									format: d3.format('.1f')
+								}
+						  }
+						: undefined
 				},
 				legend: {
 					item: {
