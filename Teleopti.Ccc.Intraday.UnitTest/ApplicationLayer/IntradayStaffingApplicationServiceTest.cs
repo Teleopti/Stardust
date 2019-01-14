@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 		public IntradayStaffingApplicationService Target;
 
 		private const int minutesPerInterval = 15;
-		
+	
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
@@ -479,7 +480,6 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 
 			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = createSkill(30, "skill", new TimePeriod(8, 0, 9, 0), false, 0);
-			skill.AbandonRate = Percent.Zero;
 			var skillDay = ViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 9, 0), false, ServiceAgreement.DefaultValues(), false);
 
 			var actualCalls = IntradayStaffingApplicationServiceTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
@@ -513,7 +513,6 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 
 			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = createSkill(30, "skill", new TimePeriod(8, 0, 9, 0), false, 0);
-			skill.AbandonRate = Percent.Zero;
 			var skillDay = ViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 9, 0), false, ServiceAgreement.DefaultValues(), false);
 
 			var actualCalls = IntradayStaffingApplicationServiceTestHelper.CreateStatistics(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
@@ -556,9 +555,6 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			var skill15 = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false, 0);
 			var skill30 = createSkill(2 * minutesPerInterval, "skill2", new TimePeriod(8, 0, 9, 0), false, 0);
 			
-			skill15.AbandonRate = Percent.Zero;
-			skill30.AbandonRate = Percent.Zero;
-
 			var skillDay15 = ViewModelCreatorTestHelper.CreateSkillDay(skill15, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), false);
 			var skillDay30 = ViewModelCreatorTestHelper.CreateSkillDay(skill30, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 9, 0), false, ServiceAgreement.DefaultValues(), false);
 
@@ -876,9 +872,6 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			var skill1 = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false, 0);
 			var skill2 = createSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30), false, 0);
 			
-			skill1.AbandonRate = Percent.Zero;
-			skill2.AbandonRate = Percent.Zero;
-
 			var skillDay1 = ViewModelCreatorTestHelper.CreateSkillDay(skill1, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), false);
 			var skillDay2 = ViewModelCreatorTestHelper.CreateSkillDay(skill2, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), false);
 
@@ -915,7 +908,6 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 
 			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var phoneSkill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false, 0);
-			phoneSkill.AbandonRate = Percent.Zero;
 			var outboundSkill = IntradayStaffingApplicationServiceTestHelper.CreateOutboundSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
 
 			var skillDayPhone = ViewModelCreatorTestHelper.CreateSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), tasks, false);
@@ -1484,6 +1476,18 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 
 	[DisabledBy(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
 	public class IntradayStaffingApplicationServiceToggleOffTest : IntradayStaffingApplicationServiceBaseTest
+	{
+
+	}
+	
+	[EnabledBy(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845)]
+	public class IntradayStaffingApplicationServiceErlangToggleOnTest : IntradayStaffingApplicationServiceBaseTest
+	{
+
+	}
+
+	[DisabledBy(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845)]
+	public class IntradayStaffingApplicationServiceErlangToggleOffTest : IntradayStaffingApplicationServiceBaseTest
 	{
 
 	}

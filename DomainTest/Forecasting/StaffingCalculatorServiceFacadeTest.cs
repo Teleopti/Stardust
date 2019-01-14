@@ -1,16 +1,32 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
 	[DomainTest]
+	[TestFixture(true, true, true)]
+	[TestFixture(true, true, false)]
+	[TestFixture(true, false, false)]
+	[TestFixture(false, false, false)]
 	
-	public class StaffingCalculatorServiceFacadeTest
+	public class StaffingCalculatorServiceFacadeTest:IConfigureToggleManager
 	{
 		public IStaffingCalculatorServiceFacade Target;
+		private readonly bool _useErlangA;
+		private readonly bool _useErlangAWithEsl;
+		private readonly bool _useErlangAWithAbandonRate;
+
+		public StaffingCalculatorServiceFacadeTest(bool useErlangA, bool useErlangAWithEsl, bool useErlangAWithAbandonRate)
+		{
+			_useErlangA = useErlangA;
+			_useErlangAWithEsl = useErlangAWithEsl;
+			_useErlangAWithAbandonRate = useErlangAWithAbandonRate;
+		}
 
 		[Test]
 		public void UtilizationShouldHandleChatAsWell()
@@ -18,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			var agentsAndOccupancy = Target.AgentsUseOccupancy(.8, 20, 5d, 550, TimeSpan.FromMinutes(15), .9, .9, 2,0);
 			var calculatedOcc = Target.Utilization(agentsAndOccupancy.Agents, 5d, 550, TimeSpan.FromMinutes(15), 2, agentsAndOccupancy.Occupancy);
 			calculatedOcc.Should().Be.IncludedIn(.89, .91);
+
 		}
 
 		[Test]
@@ -197,6 +214,26 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			Target.ServiceLevelAchievedOcc(agents, serviceLevelSeconds, callsPerInterval, averageHandelingTimeSeconds, TimeSpan.FromSeconds(intervalLengthInSeconds), targetServiceLevelPercentage,
 				forecastedAgents, 1, 0);
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_useErlangA)
+			{
+				if (_useErlangAWithEsl)
+				{
+					if (_useErlangAWithAbandonRate)
+					{
+						toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithFinitePatience_47738);
+					}
+					toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899);
+				}
+				toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
+			}
+			else
+			{
+				toggleManager.Disable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
+			}
 		}
 	}
 }

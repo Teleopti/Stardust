@@ -469,10 +469,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.SetChildSkillDays(_childSkillDays);
             _childSkillDays[0].SkillDayCalculator = calculator;
             _childSkillDays[1].SkillDayCalculator = calculator;
-			
-			_childSkillDays[0].Skill.AbandonRate = Percent.Zero;
-			_childSkillDays[1].Skill.AbandonRate = Percent.Zero;
-			_multisiteSkillDay.Skill.AbandonRate = Percent.Zero;
 
             _multisiteSkillDay.WorkloadDayCollection[0].Tasks = 750;
             _multisiteSkillDay.WorkloadDayCollection[1].Tasks = 750;
