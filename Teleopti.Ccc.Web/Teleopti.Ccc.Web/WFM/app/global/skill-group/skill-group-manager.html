@@ -80,15 +80,12 @@
         <div class="con-flex">
             <div class="panel">
                 <div class="sub-header">
-                    <div class="head-actions panel-menu">
-                        <div tabindex=0
-                             class="context-menu card-context grow-out"
-                             ng-click="vm.createSkillGroup($event)">
-                            <i class="mdi mdi-plus"></i>
-                            <md-tooltip>{{'AddSkillGroup'|translate}}</md-tooltip>
-                        </div>
-                    </div>
                     <h2 style="display: inline; line-height: 44px;">{{'AllSkillGroups'|translate}}</h2>
+                    <button class="wfm-btn wfm-btn-invis-primary pull-right"
+                            ng-disabled="vm.canSave"
+                            ng-click="vm.createSkillGroup($event)">
+                        {{ 'Add'|translate }}
+                    </button>
                 </div>
                 <div class="con-row">
                     <div class="con-flex">
