@@ -83,14 +83,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
 			builder.RegisterType<UpdateFactSchedules>().SingleInstance().ApplyAspects();
-			if (_config.IsToggleEnabled(Toggles.WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425))
-			{
-				builder.RegisterType<UpdateAnalyticsScheduleLogger>().As<IUpdateAnalyticsScheduleLogger>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<UpdateAnalyticsScheduleLoggerDummy>().As<IUpdateAnalyticsScheduleLogger>().SingleInstance();
-			}
+			builder.RegisterToggledComponent<UpdateAnalyticsScheduleLogger, UpdateAnalyticsScheduleLoggerDummy, IUpdateAnalyticsScheduleLogger>(Toggles.WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425).SingleInstance();
 
 			builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 				.As<IScheduleProjectionReadOnlyPersister>()
