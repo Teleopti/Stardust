@@ -104,6 +104,9 @@ Try
 		throw "User is not Admin!"
 	}
 	
+	#Stopping IIS to ensure no requests before system ready and environmental variable $Env:TeleoptiIsAzure needs to be set before IIS is started..
+	iisreset /stop /timeout:120
+	
 	#74478, #76734, #78787
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     $Cname = "$DataSourceName.teleopticloud.com"

@@ -1,8 +1,8 @@
 ﻿@RTA
-Feature: Top 50 agents
+Feature: Agents top 50
   In order to easier find agents without skill, site, team, excluding states selection
   As a real time analyst
-  I want to see top 50 agents for entire Bu
+  I want to see top 50 agents
 
   Background:
 	Given there is a switch
@@ -56,3 +56,4 @@ Feature: Top 50 agents
 	When the time is '2017-08-04 08:15:00'
 	Then I should see an agent 'Pierre Baldi'
 	And I should see an agent 'Ashley Andeen'
+	# And something about top 50 agents here !!

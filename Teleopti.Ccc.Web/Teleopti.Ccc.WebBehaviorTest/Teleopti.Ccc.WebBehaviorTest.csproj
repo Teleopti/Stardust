@@ -220,8 +220,8 @@
     <Compile Include="Adherence\Monitor\TerminatedPersons_36042.feature.cs">
       <DependentUpon>TerminatedPersons_36042.feature</DependentUpon>
     </Compile>
-    <Compile Include="Adherence\Monitor\Top50Agents.feature.cs">
-      <DependentUpon>Top50Agents.feature</DependentUpon>
+    <Compile Include="Adherence\Monitor\AgentsTop50.feature.cs">
+      <DependentUpon>AgentsTop50.feature</DependentUpon>
     </Compile>
     <Compile Include="Adherence\AgentHistoricalPageStepDefinitions.cs" />
     <Compile Include="Adherence\AgentsDefinitions.cs" />
@@ -1096,7 +1096,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TerminatedPersons_36042.feature.cs</LastGenOutput>
     </None>
-    <None Include="Adherence\Monitor\Top50Agents.feature">
+    <None Include="Adherence\Monitor\AgentsTop50.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AgentsForEntireBu.feature.cs</LastGenOutput>
     </None>
@@ -1200,6 +1200,7 @@
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Adherence\Historical\AdjustAdherenceToNeutral.feature" />
     <Content Include="Data\PasswordPolicy.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

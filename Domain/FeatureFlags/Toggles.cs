@@ -25,6 +25,7 @@
 		RTA_RestrictModifySkillGroups_78568,
 		RTA_InputValidationForApprovingAdherencePeriods_77045,
 		RTA_ImproveUsabilityExpandableCards_79025,
+		RTA_AdjustAdherenceToNeutral_80594,
 		
 		MessageBroker_HttpSenderThrottleRequests_79140,
 		MessageBroker_VeganBurger_79140,
