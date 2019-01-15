@@ -61,9 +61,10 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			var abandonRateSupported = skills.All(x => _skillTypeInfoProvider.GetSkillTypeInfo(x).SupportsAbandonRate);
 
-			var usersNowLocal = TimeZoneInfo.ConvertTimeFromUtc(nowUtc, _timeZone.TimeZone());
+			var timeZone = _timeZone.TimeZone();
+			var usersNowLocal = TimeZoneInfo.ConvertTimeFromUtc(nowUtc, timeZone);
 			var startOfDayLocal = usersNowLocal.Date;
-			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal, _timeZone.TimeZone());
+			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal, timeZone);
 			var endOfDayUtc = startOfDayUtc.AddDays(1);
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();
@@ -105,8 +106,8 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				.Select(offset => opensAtUtc.AddMinutes(offset * intervalLength))
 				.ToArray();
 
-			var opensAtLocal = TimeZoneHelper.ConvertFromUtc(opensAtUtc, _timeZone.TimeZone());
-			var closeAtLocal = TimeZoneHelper.ConvertFromUtc(closeAtUtc, _timeZone.TimeZone());
+			var opensAtLocal = TimeZoneHelper.ConvertFromUtc(opensAtUtc, timeZone);
+			var closeAtLocal = TimeZoneHelper.ConvertFromUtc(closeAtUtc, timeZone);
 			var timesInLocal = Enumerable
 				.Range(0, (int)Math.Ceiling((decimal)(closeAtLocal - opensAtLocal).TotalMinutes / intervalLength))
 				.Select(offset => opensAtLocal.AddMinutes(offset * intervalLength))
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				estServiceLevels = timesUtc
 				.Select(x => new
 				{
-					LocalTime = TimeZoneInfo.ConvertTimeFromUtc(x, _timeZone.TimeZone()),
+					LocalTime = TimeZoneInfo.ConvertTimeFromUtc(x, timeZone),
 					Esl = eslIntervals.Any(e => e.StartTime == x && e.Esl.HasValue) ? eslIntervals.Where(e => e.StartTime == x && e.Esl.HasValue).Sum(e => e.Esl * 100) : null
 				})
 				.GroupBy(x => x.LocalTime)
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				.ToList();
 			}
 
-			DateTime? timeOfLastIntervalWithData = timeOfLastIntervalWithDataUtc.HasValue ? (DateTime?)TimeZoneHelper.ConvertFromUtc(timeOfLastIntervalWithDataUtc.Value, _timeZone.TimeZone()) : null;
+			DateTime? timeOfLastIntervalWithData = timeOfLastIntervalWithDataUtc.HasValue ? (DateTime?)TimeZoneHelper.ConvertFromUtc(timeOfLastIntervalWithDataUtc.Value, timeZone) : null;
 			
 			var intervals = timesUtc.Select(t => intervalsWithUtcTimes.FirstOrDefault(x => x.Timestamp.Equals(t)));
 			var sumOfForecastedCalls = eslIntervals.Sum(x => x.ForecastedCalls);

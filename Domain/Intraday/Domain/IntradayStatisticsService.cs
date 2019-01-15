@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		}
 		public IntradayIncomingSummary GenerateStatisticsSummary(IEnumerable<IncomingIntervalModel> intervals, bool abandonRateSupported)
 		{
+			var intervalLength = _intervalLengthFetcher.GetIntervalLength();
 			var summary = new IntradayIncomingSummary();
 			var intervalsWithTime = intervals.Select(x => new
 			{
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 				x.AbandonedCalls,
 				x.ForecastedCalls,
 				x.ForecastedHandleTime,
-				IntervalDateTime = x.IntervalDate.Date.AddMinutes(x.IntervalId * _intervalLengthFetcher.GetIntervalLength())
+				IntervalDateTime = x.IntervalDate.Date.AddMinutes(x.IntervalId * intervalLength)
 			});
 			if (intervalsWithTime.Any())
 			{
