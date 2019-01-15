@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {get;}
 
 		public abstract IStaffingCalculatorServiceFacade StaffingCalculatorService
-        { get; set; }
+        { get; }
 
         public virtual bool IsDeleted
         {

@@ -133,7 +133,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			foreach (var skill in skillsToLoad)
 			{
-				skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 				var skillDays = testSkillDays[skill].OrderBy(s => s.CurrentDate).ToArray();
 
 				if (skill is IMultisiteSkill multisiteSkill)

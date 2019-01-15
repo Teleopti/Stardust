@@ -114,7 +114,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ExportPages
 				{
 					var skill = _repositoryFactory.CreateSkillRepository(uow).LoadSkill(commandModel.Skill);
 					
-					skill.SkillType.StaffingCalculatorService = _staffingCalculatorService;
 					var skillDays = _repositoryFactory.CreateSkillDayRepository(uow).FindRange(commandModel.Period,
 																							   skill,
 																							   commandModel.Scenario);
