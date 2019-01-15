@@ -136,6 +136,7 @@ WFM_Request_Show_Shift_for_Absence_Requests_79008 = true
 WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = true
 WFM_Setting_BankHolidayCalendar_Create_79297 = RC
 WFM_Setting_AssignBankHolidayCalendarsToSites_79899 = RC
+MyTimeWeb_Preference_Indicate_BankHoliday_79900 = DEV
 
 # Tech #
 WFM_ChatBot_77547 = RC
