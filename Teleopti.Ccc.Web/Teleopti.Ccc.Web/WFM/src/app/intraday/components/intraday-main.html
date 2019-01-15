@@ -41,8 +41,9 @@
 						>
 							<h2>{{ displayDate }} <i nz-icon [hidden]="!loading" type="loading"></i>&nbsp;</h2>
 						</div>
-						<div class="con-flex pull-right">
+						<div class="con-flex">
 							<button
+								class="pull-right"
 								[hidden]="!selectedSkillOrGroup"
 								(click)="exportToExcel()"
 								[nzLoading]="exporting"
