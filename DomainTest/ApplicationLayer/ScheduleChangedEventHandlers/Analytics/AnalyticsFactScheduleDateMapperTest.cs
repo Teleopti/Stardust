@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	[DomainTest]
 	public class AnalyticsFactScheduleDateMapperTest
 	{
-		public IAnalyticsFactScheduleDateMapper Target;
+		public AnalyticsFactScheduleDateMapper Target;
 		public FakeAnalyticsDateRepository AnalyticsDates;
 
 		private const int firstDateId = 1;

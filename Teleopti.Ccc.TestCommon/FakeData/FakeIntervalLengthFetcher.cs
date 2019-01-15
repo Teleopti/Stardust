@@ -4,11 +4,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeIntervalLengthFetcher : IIntervalLengthFetcher
 	{
-		public int IntervalLength { get; private set; }
+		private int intervalLength;
+
+		public int GetIntervalLength()
+		{
+			return intervalLength;
+		}
+
+		private void SetIntervalLength(int value)
+		{
+			intervalLength = value;
+		}
 
 		public void Has(int intervalLength)
 		{
-			IntervalLength = intervalLength;
+			SetIntervalLength(intervalLength);
 		}
 	}
 }

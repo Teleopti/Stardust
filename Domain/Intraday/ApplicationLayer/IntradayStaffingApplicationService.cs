@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, timeZone);
 
-			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
+			var minutesPerInterval = _intervalLengthFetcher.GetIntervalLength();
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();

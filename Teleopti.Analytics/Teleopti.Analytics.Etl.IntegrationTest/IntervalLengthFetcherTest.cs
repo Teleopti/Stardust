@@ -27,7 +27,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 
 			var target = new IntervalLengthFetcher(CurrentDataSource.Make());
-			target.IntervalLength.Should().Be.EqualTo(30);
+			target.GetIntervalLength().Should().Be.EqualTo(30);
 		}
 
 		[TearDown]

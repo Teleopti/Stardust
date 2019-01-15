@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			
 			container.Resolve<IIntervalLengthFetcher>().Should().Not.Be.Null();
 			container.Resolve<AnalyticsFactScheduleTimeMapper>().Should().Not.Be.Null();
-			container.Resolve<IAnalyticsFactScheduleDateMapper>().Should().Not.Be.Null();
+			container.Resolve<AnalyticsFactScheduleDateMapper>().Should().Not.Be.Null();
 			container.Resolve<IAnalyticsFactSchedulePersonMapper>().Should().Not.Be.Null();
 			container.Resolve<AnalyticsFactScheduleMapper>().Should().Not.Be.Null();
 			container.Resolve<IAnalyticsFactScheduleDayCountMapper>().Should().Not.Be.Null();

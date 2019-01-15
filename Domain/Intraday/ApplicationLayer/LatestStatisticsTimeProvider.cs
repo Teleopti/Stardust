@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			if (!intervalId.HasValue)
 				return null;
 
-			int minutesPerInterval = _intervalLengthFetcher.IntervalLength;
+			int minutesPerInterval = _intervalLengthFetcher.GetIntervalLength();
 
 			return new LatestStatitsticsTimeModel
 			{

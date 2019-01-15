@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				return BadRequest("Bad skill name");
 			var skills = _skillRepository.LoadAll();
 			var skill = skills.FirstOrDefault(x => x.Activity.Id == input.ActivityId);
-			var intervalLength = skill != null ? skill.DefaultResolution : _intervalLengthFetcher.IntervalLength;
+			var intervalLength = skill != null ? skill.DefaultResolution : _intervalLengthFetcher.GetIntervalLength();
 			var newSkill = new Skill(input.Name, "", Color.Azure, intervalLength, _skillTypeProvider.InboundTelephony())
 			{
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(input.TimezoneId),

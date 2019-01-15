@@ -4,18 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	public interface IAnalyticsFactScheduleDateMapper
-	{
-		IAnalyticsFactScheduleDate Map(
-			DateTime shiftStartDateUtc,
-			DateTime shiftEndDateUtc,
-			DateOnly shiftStartDateLocal,
-			ProjectionChangedEventLayer layer,
-			DateTime scheduleChangeTime,
-			int minutesPerInterval);
-	}
-
-	public class AnalyticsFactScheduleDateMapper : IAnalyticsFactScheduleDateMapper
+	public class AnalyticsFactScheduleDateMapper
 	{
 		private readonly AnalyticsDateMapper _analyticsDateMapper;
 
@@ -31,19 +20,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			ProjectionChangedEventLayer layer, 
 			DateTime scheduleChangeTime,
 			int minutesPerInterval)
-
 		{
-			int scheduleStartDateLocalId;
-			int activityStartDateId;
-			int activityEndDateId;
-			int shiftStartDateId;
-			int shiftEndDateId;
-
-			if (!_analyticsDateMapper.MapDateId(shiftStartDateLocal, out scheduleStartDateLocalId)) return null;
-			if (!_analyticsDateMapper.MapDateId(new DateOnly(layer.StartDateTime), out activityStartDateId)) return null;
-			if (!_analyticsDateMapper.MapDateId(new DateOnly(layer.EndDateTime), out activityEndDateId)) return null;
-			if (!_analyticsDateMapper.MapDateId(new DateOnly(shiftStartDateUtc), out shiftStartDateId)) return null;
-			if (!_analyticsDateMapper.MapDateId(new DateOnly(shiftEndDateUtc), out shiftEndDateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(shiftStartDateLocal, out var scheduleStartDateLocalId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(layer.StartDateTime), out var activityStartDateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(layer.EndDateTime), out var activityEndDateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(shiftStartDateUtc), out var shiftStartDateId)) return null;
+			if (!_analyticsDateMapper.MapDateId(new DateOnly(shiftEndDateUtc), out var shiftEndDateId)) return null;
 
 			return new AnalyticsFactScheduleDate
 			{

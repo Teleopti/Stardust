@@ -145,7 +145,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 				throw new NotImplementedException();
 			}
 
-			public int IntervalLength { get; } = 15;
+			private readonly int intervalLength = 15;
+
+			public int GetIntervalLength()
+			{
+				return intervalLength;
+			}
+
 			public int GetOrCreateSite(Guid siteCode, string siteName, int businessUnitId)
 			{
 				throw new NotImplementedException();

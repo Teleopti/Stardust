@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, _timeZone.TimeZone());
 
 			var vm = new IntradayIncomingViewModel();
-			var intervalLength = _intervalLengthFetcher.IntervalLength;
+			var intervalLength = _intervalLengthFetcher.GetIntervalLength();
 
 			var supportedSkills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			var abandonRateSupported = supportedSkills.All(x => _skillTypeInfoProvider.GetSkillTypeInfo(x).SupportsAbandonRate);

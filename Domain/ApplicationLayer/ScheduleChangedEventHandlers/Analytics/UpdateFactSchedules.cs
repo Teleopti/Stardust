@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository;
 		private readonly IAnalyticsActivityRepository _analyticsActivityRepository;
+		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly AnalyticsDateMapper _analyticsDateMapper;
 
 		public UpdateFactSchedules(AnalyticsFactScheduleMapper factScheduleMapper,
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			IProjectionChangedEventBuilder projectionChangedEventBuilder,
 			IAnalyticsDayOffRepository analyticsDayOffRepository,
 			IAnalyticsActivityRepository analyticsActivityRepository,
+			IIntervalLengthFetcher intervalLengthFetcher,
 			AnalyticsDateMapper analyticsDateMapper)
 		{
 			_factScheduleMapper = factScheduleMapper;
@@ -61,6 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
 			_analyticsActivityRepository = analyticsActivityRepository;
+			_intervalLengthFetcher = intervalLengthFetcher;
 			_analyticsDateMapper = analyticsDateMapper;
 		}
 
@@ -123,6 +127,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(true, false, true), new DateOnlyPeriod(dates.Min(), dates.Max()), scenario);
 
+			var intervalLength = _intervalLengthFetcher.GetIntervalLength();
 			var activities = _analyticsActivityRepository.Activities().ToDictionary(k => k.ActivityCode);
 
 			IList<AnalyticsDayOff> dayOffs = null;
@@ -165,8 +170,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					if (currentEventScheduleDay.Shift != null)
 						shiftCategoryId = getCategory(currentEventScheduleDay.ShiftCategoryId);
 					var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, analyticsScenario.ScenarioId, shiftCategoryId);
-					var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(currentEventScheduleDay, scheduleDay, personPart,
-						timestamp, shiftCategoryId, analyticsScenario.ScenarioId, scenario.Id.GetValueOrDefault(), activities,
+					var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(currentEventScheduleDay, scheduleDay, personPart, intervalLength,
+						timestamp, shiftCategoryId, analyticsScenario.ScenarioId, activities,
 						person.Id.GetValueOrDefault());
 
 					if (agentDaySchedule == null)

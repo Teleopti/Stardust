@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 		public IntradayPerformanceViewModel GeneratePerformanceViewModel(Guid[] skillIdList, DateTime nowUtc)
 		{
-			var intervalLength = _intervalLengthFetcher.IntervalLength;
+			var intervalLength = _intervalLengthFetcher.GetIntervalLength();
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			var abandonRateSupported = skills.All(x => _skillTypeInfoProvider.GetSkillTypeInfo(x).SupportsAbandonRate);
 
