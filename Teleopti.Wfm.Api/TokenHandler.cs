@@ -1,7 +1,7 @@
 ﻿using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Owin;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -31,8 +31,8 @@ namespace Teleopti.Wfm.Api
 				context.Response.StatusCode = 401;
 				return;
 			}
-
-			var token = auth.Replace("bearer", "").Replace("Bearer", "").Replace("BEARER", "").Replace(":", "").Trim();
+			
+			var token = new StringBuilder(auth).Replace("bearer", "").Replace("Bearer", "").Replace("BEARER", "").Replace(":", "").ToString().Trim();
 			var verified = await _tokenVerifier.TryGetUserAsync(token);
 			if (!verified.Item1)
 			{
