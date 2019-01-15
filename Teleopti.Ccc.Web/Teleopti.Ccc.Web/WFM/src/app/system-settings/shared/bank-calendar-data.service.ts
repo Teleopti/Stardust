@@ -1,11 +1,47 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { BankHolidayCalendar, SiteBankHolidayCalendars, SiteBankHolidayCalendarsFormData } from '../interface';
+import { Observable, BehaviorSubject } from 'rxjs';
+import {
+	BankHolidayCalendar,
+	SiteBankHolidayCalendars,
+	SiteBankHolidayCalendarsFormData,
+	BankHolidayCalendarItem
+} from '../interface';
 
 @Injectable()
 export class BankCalendarDataService {
-	constructor(private http: HttpClient) {}
+	public yearFormat = 'YYYY';
+	public dateFormat = 'YYYY-MM-DD';
+
+	public bankHolidayCalendarsList$: BehaviorSubject<BankHolidayCalendarItem[]> = new BehaviorSubject<
+		BankHolidayCalendarItem[]
+	>([]);
+
+	constructor(private http: HttpClient) {
+		this.getBankHolidayCalendars().subscribe(calendars => {
+			const cals = calendars as BankHolidayCalendarItem[];
+			const curYear = moment().year();
+			cals.forEach(c => {
+				c.CurrentYearIndex = 0;
+
+				c.Years.forEach((y, i) => {
+					y.Dates.forEach(d => {
+						d.Date = moment(d.Date).format(this.dateFormat);
+					});
+
+					if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
+						c.CurrentYearIndex = i;
+					}
+				});
+			});
+
+			this.bankHolidayCalendarsList$.next(
+				cals.sort((c, n) => {
+					return c.Name.localeCompare(n.Name);
+				})
+			);
+		});
+	}
 
 	getBankHolidayCalendars(): Observable<BankHolidayCalendar[]> {
 		return this.http.get('../api/BankHolidayCalendars') as Observable<BankHolidayCalendar[]>;

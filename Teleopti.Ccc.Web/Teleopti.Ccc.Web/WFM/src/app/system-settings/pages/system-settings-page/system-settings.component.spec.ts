@@ -7,12 +7,13 @@ import { configureTestSuite } from '@wfm/test';
 import { IStateService } from 'angular-ui-router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { PasswordService } from 'src/app/authentication/services/password.service';
-import { UserService } from 'src/app/core/services';
+import { UserService, TogglesService } from 'src/app/core/services';
 import { BankHolidayCalendarComponent } from '../../components/bank-holiday-calendar';
 import { BankHolidayCalendarAddComponent } from '../../components/bank-holiday-calendar-add';
 import { BankHolidayCalendarAssignToSitesComponent } from '../../components/bank-holiday-calendar-assign-to-sites';
 import { BankHolidayCalendarEditComponent } from '../../components/bank-holiday-calendar-edit';
 import { SystemSettingsComponent } from './system-settings.component';
+import { BankCalendarDataService } from '../../shared';
 
 class MockStateService implements Partial<IStateService> {
 	public current: {
@@ -54,7 +55,9 @@ describe('SystemSettings page', () => {
 				},
 				UserService,
 				PasswordService,
-				MockTranslateService
+				MockTranslateService,
+				TogglesService,
+				BankCalendarDataService
 			]
 		}).compileComponents();
 

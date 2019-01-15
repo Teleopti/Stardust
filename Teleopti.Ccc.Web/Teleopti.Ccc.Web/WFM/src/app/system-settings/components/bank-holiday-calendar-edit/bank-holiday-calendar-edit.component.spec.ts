@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
@@ -10,11 +10,14 @@ import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translat
 import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarEditComponent } from './bank-holiday-calendar-edit.component';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
+import { BankCalendarDataService } from '../../shared';
+import { BankHolidayCalendarItem } from '../../interface';
 
 describe('BankHolidayCalendarEditComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarEditComponent>;
 	let document: Document;
 	let component: BankHolidayCalendarEditComponent;
+	let httpTestingController: HttpTestingController;
 
 	configureTestSuite();
 
@@ -36,13 +39,15 @@ describe('BankHolidayCalendarEditComponent', () => {
 					useValue: new ToggleMenuService({
 						innerWidth: 1200
 					} as Window)
-				}
+				},
+				BankCalendarDataService
 			]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BankHolidayCalendarEditComponent);
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
+		httpTestingController = TestBed.get(HttpTestingController);
 	}));
 
 	it('should create component', () => {
@@ -96,36 +101,9 @@ describe('BankHolidayCalendarEditComponent', () => {
 	}));
 
 	it('should trim space before and after when checking the existing name', () => {
-		component.bankHolidayCalendarsList = [
-			{
-				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
-				Name: 'Bank holiday calendar',
-				CurrentYearIndex: 0,
-				Years: [
-					{
-						Year: '2013',
-						Dates: [
-							{
-								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
-								Date: '2013-01-09',
-								Description: 'BankHoliday1',
-								IsDeleted: false
-							},
-							{
-								Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
-								Date: '2013-01-10',
-								Description: 'BankHoliday2',
-								IsDeleted: false
-							}
-						]
-					}
-				]
-			}
-		];
-		component.edittingCalendar = {
+		const calendar = {
 			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 			Name: 'Bank holiday calendar',
-			CurrentYearIndex: 0,
 			Years: [
 				{
 					Year: '2013',
@@ -133,19 +111,22 @@ describe('BankHolidayCalendarEditComponent', () => {
 						{
 							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
 							Date: '2013-01-09',
-							Description: 'BankHoliday',
+							Description: 'BankHoliday1',
 							IsDeleted: false
 						},
 						{
 							Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
 							Date: '2013-01-10',
-							Description: 'BankHoliday',
+							Description: 'BankHoliday2',
 							IsDeleted: false
 						}
 					]
 				}
 			]
 		};
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([calendar]);
+		component.edittingCalendar = calendar as BankHolidayCalendarItem;
+		component.edittingCalendar.CurrentYearIndex = 0;
 		fixture.detectChanges();
 
 		component.edittingCalendarName = 'Bank holiday calendar ';

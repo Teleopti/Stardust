@@ -9,6 +9,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { UserService } from 'src/app/core/services';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
 import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.component';
+import { BankCalendarDataService } from '../../shared';
 
 describe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
@@ -35,7 +36,8 @@ describe('BankHolidayCalendarAddComponent', () => {
 					useValue: new ToggleMenuService({
 						innerWidth: 1200
 					} as Window)
-				}
+				},
+				BankCalendarDataService
 			]
 		}).compileComponents();
 

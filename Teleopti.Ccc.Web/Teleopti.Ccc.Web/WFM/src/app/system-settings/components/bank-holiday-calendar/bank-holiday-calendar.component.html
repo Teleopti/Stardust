@@ -18,17 +18,12 @@
 
 	<nz-divider></nz-divider>
 
-	<bank-holiday-calendar-add
-		*ngIf="isAddingNewCalendar"
-		[bankHolidayCalendarsList]="bankHolidayCalendarsList"
-		[exitAddNewBankCalendar]="exitAddNewBankCalendar"
-	></bank-holiday-calendar-add>
+	<bank-holiday-calendar-add *ngIf="isAddingNewCalendar" [exit]="backToBankCalendarsList"></bank-holiday-calendar-add>
 
 	<bank-holiday-calendar-edit
 		*ngIf="isEdittingCalendar"
 		[edittingCalendar]="edittingCalendar"
-		[bankHolidayCalendarsList]="bankHolidayCalendarsList"
-		[exitEdittingBankCalendar]="exitEdittingBankCalendar"
+		[exit]="backToBankCalendarsList"
 	>
 	</bank-holiday-calendar-edit>
 
@@ -130,9 +125,7 @@
 						<span>{{ 'AssignCalendarsToSites' | translate }}</span>
 					</div>
 				</ng-template>
-				<bank-holiday-calendar-assign-to-sites
-					[bankHolidayCalendarsList]="bankHolidayCalendarsList"
-				></bank-holiday-calendar-assign-to-sites>
+				<bank-holiday-calendar-assign-to-sites></bank-holiday-calendar-assign-to-sites>
 			</nz-tab>
 		</nz-tabset>
 	</div>
