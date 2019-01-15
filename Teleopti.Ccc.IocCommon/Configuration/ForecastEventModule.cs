@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
@@ -12,15 +11,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class ForecastEventModule : Module
 	{
-		private readonly IocConfiguration _configuration;
 
 		[ThreadStatic]
 		private static IJobResultFeedback jobResultFeedback;
-
-		public ForecastEventModule(IocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -43,30 +36,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StatisticHelper>().As<IStatisticHelper>();
 			builder.RegisterType<OpenAndSplitTargetSkill>().As<IOpenAndSplitTargetSkill>();
 			builder.RegisterType<ExportMultisiteSkillProcessor>().As<IExportMultisiteSkillProcessor>();
-
-			
-			if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
-			{
-				if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899))
-				{
-					if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_UseErlangAWithFinitePatience_47738))
-					{
-						builder.RegisterType<StaffingCalculatorServiceFacadeErlangAAbandon>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-					}
-					else
-					{
-						builder.RegisterType<StaffingCalculatorServiceFacadeErlangAWithEsl>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-					}
-				}
-				else
-				{
-					builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-				}		
-			}
-			else
-			{
-				builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-			}
+			builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
 		}
 
 		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)
