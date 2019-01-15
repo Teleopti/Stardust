@@ -61,9 +61,9 @@
 				</div>
 				<div class="con-row">
 					<div class="con-flex">
-						<label class="input-icon w100" ng-show="vm.skillGroups.length > 0">
+						<label class="input-icon w100" for="skill-group-filter" ng-show="vm.skillGroups.length > 0">
 							<i class="mdi mdi-filter-outline">
-								<input type="text" placeholder="{{ 'Filter' | translate }}" autocomplete="off" ng-model="groupFilter">
+								<input type="text" id="skill-group-filter" placeholder="{{ 'Filter' | translate }}" autocomplete="off" ng-model="groupFilter">
 								<md-tooltip>{{ 'Filter' | translate }}</md-tooltip>
 							</i>
 						</label>
@@ -119,9 +119,10 @@
 						<h3>{{ 'AvailableSkills' | translate }}</h3>
 						<div class="con-row">
 							<div class="con-flex">
-								<label for="filter2" class="input-icon w100">
+								<label for="skill-filter" class="input-icon w100">
 									<i class="mdi mdi-filter-outline">
-										<input type="text" id="filter2" placeholder="{{ 'FilterSkills' | translate }}" autocomplete="off" ng-model="skillFilter">
+										<input type="text" id="skill-filter" placeholder="{{ 'FilterSkills' | translate }}" autocomplete="off"
+										 ng-model="skillFilter">
 										<md-tooltip>{{ 'FilterSkills' | translate }}</md-tooltip>
 									</i>
 								</label>
