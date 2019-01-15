@@ -23,9 +23,13 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				teamIds: {array: true}
 			},
 			templateUrl: function () {
+                if (toggles.RTA_AdjustAdherenceToNeutral_80594)
+					return 'app/rta/rta/historical-overview/rta.historical.overview.adjustAdherenceToNeutral_80594.html';
 				return 'app/rta/rta/historical-overview/rta.historical.overview.html';
 			},
 			controllerProvider: function () {
+                if (toggles.RTA_AdjustAdherenceToNeutral_80594)
+					return 'RtaHistoricalOverviewController80594 as vm';
 				return 'RtaHistoricalOverviewController as vm';
 			}
 		})

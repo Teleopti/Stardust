@@ -1,0 +1,133 @@
+<div class="rta-view historical-overview">
+	<div class="view-header with-fab with-desc">
+		<div class="view-title">
+			<div class="pull-left">
+				<h1>
+					<i class="mdi mdi-alarm"></i> {{'Adherence'|translate}}
+				</h1>
+			</div>
+			<div class="rta-top-buttons-wrapper pull-left">
+				<span>
+					<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'MonitorOrganization'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default"
+							ng-click="vm.goToAgents()">{{'MonitorAgents'|translate}}</button>
+					<button class="wfm-btn wfm-btn-primary non-pointer">{{'HistoricalOverview'|translate}}</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<md-progress-linear md-mode="indeterminate" ng-if="vm.loading"></md-progress-linear>
+	<div class="panel con-padding">
+		<div class="con-row">
+			<div class="con-flex wfm-form organization-picker">
+				<div class="form-input-wrap">
+					<input type="text"
+						   placeholder="{{'SelectSitesTeams'|translate}}"
+						   ng-click="vm.toggleOrganizationPicker()"
+						   ng-value="vm.organizationPickerSelectionText"/>
+				</div>
+
+				<div style="position: relative">
+					<div class="wfm-dropdown-panel panel full-padding"
+						 style="z-index: 999; position: absolute; width: 100%"
+						 ng-if="vm.organizationPickerOpen" outside-click="vm.closeOrganizationPicker()">
+						<div class="form-input-wrap filter">
+							<input type="text"
+								   placeholder="{{'DataFilterThreeDots'|translate}}"
+								   ng-model="vm.organizationPickerSearchTerm"/>
+						</div>
+
+						<div>
+							<button class="wfm-btn wfm-btn-invis-primary"
+									ng-class="vm.clearEnabled ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
+									ng-click="vm.clearOrganizationSelection()">{{'ClearAll'|translate}}
+							</button>
+							<button class="wfm-btn wfm-btn-invis-primary"
+									ng-click="vm.closeOrganizationPicker()">{{'Close'|translate}}
+							</button>
+						</div>
+
+						<div ng-repeat="site in vm.sites | filter:vm.organizationPickerSearchTerm">
+							<div>
+								<span ng-click="site.isExpanded = !site.isExpanded">
+									<i class="mdi"
+									   ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
+								</span>
+								<md-checkbox style="display: inline-block"
+											 ng-checked="site.isChecked"
+											 aria-label="Checkbox"
+											 ng-class="site.isMarked ? 'marked' : ''"
+											 ng-click="site.toggle()">
+									<span>{{site.Name}}</span>
+								</md-checkbox>
+							</div>
+							<div style="margin-left: 50px"
+								 ng-show="site.isExpanded"
+								 ng-repeat="team in site.Teams">
+								<md-checkbox ng-checked="team.isChecked"
+											 aria-label="Checkbox"
+											 ng-click="team.toggle()">
+									<span>{{team.Name}}</span>
+								</md-checkbox>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="con-flex x3">
+				<div class="pull-right" ng-if="vm.hasAdjustAdherencePermission" style="margin-top:16px">
+					<a ui-sref="rta-adjust-adherence">Adjust Adherence</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel card-panel" ng-repeat="card in vm.cards">
+		<div class="card-panel-header-wrapper pointer left-border" ng-click="card.toggle()">
+			<strong>{{card.Name}}</strong>
+		</div>
+		<div class="card-panel-content-wrapper" ng-show="card.isOpen">
+			<table class="wfm-table">
+				<thead>
+				<tr>
+					<th style="width: 25%;">{{'Agent'|translate}}</th>
+					<th class="cell-header"
+						ng-repeat="day in card.DisplayDays">
+						{{day}}
+					</th>
+					<th style="width: 20%">{{'Adherence'|translate}}</th>
+					<th>{{'LateForWork'|translate}}</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="agent in card.Agents" style="background-color: transparent" class="agent-adherence-period" data-agent="{{agent.Name}}">
+					<td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">{{agent.Name}}</td>
+					<td ng-repeat="day in agent.Days" class="cell">
+						<div ng-class="day.WasLateForWork ? 'late-for-work-flag': ''"></div>
+						<div class="square" style="background-color: {{day.Color}};" >
+							<a ng-href="{{day.HistoricalAdherenceUrl}}" target="_blank" class="daily-adherence-percent" data-day="{{card.DisplayDays[$index]}}">
+								{{day.Adherence}}
+							</a>
+						</div>
+					</td>
+					<td>
+						<div class="adherence-bar-container">
+							<div class="adherence-bar" style="width:{{agent.AdherenceBarWidth}}%"></div>
+						</div>
+						<div class="adherence-value">{{agent.IntervalAdherence}}%</div>
+					</td>
+					<td>
+						<div ng-if="agent.LateForWork.Count > 0">
+							<span class="label late-for-work">{{agent.LateForWork.Count}}</span>
+							<span class="minutes-late-for-work">{{agent.LateForWork.TotalMinutes}}&nbsp;{{'Minutes'|translate}}</span>
+						</div>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>

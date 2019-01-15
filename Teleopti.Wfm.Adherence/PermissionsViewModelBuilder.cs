@@ -26,7 +26,8 @@ namespace Teleopti.Wfm.Adherence
 			{
 				HistoricalOverview = isPermitted(DefinedRaptorApplicationFunctionPaths.HistoricalOverview, date, person),
 				ModifyAdherence = isPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, date, person),
-				ModifySkillGroup = isPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup, date, person)
+				ModifySkillGroup = isPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup, date, person),
+				AdjustAdherence = true
 			};
 		}
 
@@ -42,6 +43,7 @@ namespace Teleopti.Wfm.Adherence
 			public bool HistoricalOverview;
 			public bool ModifyAdherence;
 			public bool ModifySkillGroup;
+			public bool AdjustAdherence;
 		}
 	}
 }
