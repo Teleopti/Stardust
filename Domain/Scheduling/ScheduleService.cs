@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,
-			                           null, rollbackService);
+			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, rollbackService);
 		}
 		
         private bool schedulePersonOnDay(
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             SchedulingOptions schedulingOptions,
             IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPerson person,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
@@ -69,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 }
 
                 var scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
-                person = person ?? schedulePart.Person;
 
                 if (effectiveRestriction == null)
                 {
@@ -81,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 using (PerformanceOutput.ForOperation("Finding the best shift in total"))
                 {
-                    _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, person, scheduleDateOnly);
+                    _shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, schedulePart.Person, scheduleDateOnly);
 
                     var matrixList = _scheduleMatrixListCreator.CreateMatrixListForSelection(_stateHolder().Schedules, new List <IScheduleDay> { schedulePart }).ToList();
                     if (matrixList.Count == 0)
