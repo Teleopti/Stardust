@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-rtaTester.fdescribe('RtaHistoricalOverviewController', function (it) {
+rtaTester.describe('RtaHistoricalOverviewController', function (it) {
 	it('should have permission to view adjust adherence', function (t) {
 		t.backend.with.permissions({
 			AdjustAdherence: true
