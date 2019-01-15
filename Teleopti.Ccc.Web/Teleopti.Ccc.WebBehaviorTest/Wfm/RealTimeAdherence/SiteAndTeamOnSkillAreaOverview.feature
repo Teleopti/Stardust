@@ -1,12 +1,12 @@
 ﻿@RTA
 Feature: Site And Team On SkillArea Overview
-	In order to quicker find what site or team manager to contact when skills belongs to skill area goes critical
-	As a real time analyst
-	I want to see how many agents with a skill area that are in alarm for sites or teams
+  In order to quicker find what site or team manager to contact when skills belongs to skill area goes critical
+  As a real time analyst
+  I want to see how many agents with a skill area that are in alarm for sites or teams
 
-Background:
+  Background:
 	Given there is a switch
-	And I have a role with full access	
+	And I have a role with full access
 	And there is an activity named 'Phone'
 	And there is a skill named 'Sales' with activity 'Phone'
 	And there is a skill named 'Support' with activity 'Phone'
@@ -18,49 +18,49 @@ Background:
 	And there is a site named 'Paris'
 	And there is a team named 'Paris Team 1' on site 'Paris'
 	And Pierre Baldi has a person period with
-	| Field      | Value        |
-	| Team       | Paris Team 1 |
-	| Start Date | 2016-01-01   |
-	| Skill      | Sales        |
+	  | Field      | Value        |
+	  | Team       | Paris Team 1 |
+	  | Start Date | 2016-01-01   |
+	  | Skill      | Sales        |
 	And Ashley Andeen has a person period with
-	| Field      | Value         |
-	| Team       | London Team 1 |
-	| Start Date | 2016-01-01    |
-	| Skill      | Support       |
+	  | Field      | Value         |
+	  | Team       | London Team 1 |
+	  | Start Date | 2016-01-01    |
+	  | Skill      | Support       |
 	And John King has a person period with
-	| Field      | Value         |
-	| Team       | London Team 2 |
-	| Start Date | 2016-01-01    |
-	| Skill      | Invoice       |
+	  | Field      | Value         |
+	  | Team       | London Team 2 |
+	  | Start Date | 2016-01-01    |
+	  | Skill      | Invoice       |
 	And Pierre Baldi has a shift with
-	| Field      | Value            |
-	| Activity   | Phone            |
-	| Start time | 2016-10-03 08:00 |
-	| End time   | 2016-10-03 17:00 |
+	  | Field      | Value            |
+	  | Activity   | Phone            |
+	  | Start time | 2016-10-03 08:00 |
+	  | End time   | 2016-10-03 17:00 |
 	And Ashley Andeen has a shift with
-	| Field      | Value            |
-	| Activity   | Phone            |
-	| Start time | 2016-10-03 08:00 |
-	| End time   | 2016-10-03 17:00 |
+	  | Field      | Value            |
+	  | Activity   | Phone            |
+	  | Start time | 2016-10-03 08:00 |
+	  | End time   | 2016-10-03 17:00 |
 	And John King has a shift with
-	| Field      | Value            |
-	| Activity   | Phone            |
-	| Start time | 2016-10-03 08:00 |
-	| End time   | 2016-10-03 17:00 |
-	And there is a rule with 
-	| Field       | Value        |
-	| Name        | Not adhering |
-	| Activity    | Phone        |
-	| Phone state | Pause        |
-	| Is alarm    | true         |
-	And there is a rule with 
-	| Field       | Value    |
-	| Name        | Adhering |
-	| Activity    | Phone    |
-	| Phone state | Ready    |
-	| Is alarm    | false    |
+	  | Field      | Value            |
+	  | Activity   | Phone            |
+	  | Start time | 2016-10-03 08:00 |
+	  | End time   | 2016-10-03 17:00 |
+	And there is a rule with
+	  | Field       | Value        |
+	  | Name        | Not adhering |
+	  | Activity    | Phone        |
+	  | Phone state | Pause        |
+	  | Is alarm    | true         |
+	And there is a rule with
+	  | Field       | Value    |
+	  | Name        | Adhering |
+	  | Activity    | Phone    |
+	  | Phone state | Ready    |
+	  | Is alarm    | false    |
 
-Scenario: See how many agents with a specific skill area that are in alarm for each site
+  Scenario: See how many agents with a specific skill area that are in alarm for each site
 	Given the time is '2016-10-03 08:01'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets her phone state to 'Pause'
@@ -74,7 +74,7 @@ Scenario: See how many agents with a specific skill area that are in alarm for e
 	Then I should see site 'Paris' with 0 of 1 agents in alarm
 	And I should see site 'London' with 0 of 1 agents in alarm
 
-Scenario: See how many agents with a specific skill area that are in alarm for each team
+  Scenario: See how many agents with a specific skill area that are in alarm for each team
 	Given the time is '2016-10-03 08:01'
 	And 'Ashley Andeen' sets her phone state to 'Ready'
 	And 'John King' sets his phone state to 'Pause'

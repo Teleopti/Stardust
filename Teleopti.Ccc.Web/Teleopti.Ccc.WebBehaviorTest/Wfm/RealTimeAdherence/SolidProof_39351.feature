@@ -1,6 +1,8 @@
 ﻿@RTA
 Feature: Solid proof
-  As an adherence analyst I need to see all OoA occurrences and the exact reason why,
+  In order to ...
+  As an adherence analyst
+  I want to see all OoA occurrences and the exact reason why,
   so that I have solid proof when I talk to team leads and agents about bad adherence.
   and so that I can find issues in the configured setup.
 
@@ -59,12 +61,12 @@ Feature: Solid proof
 	And the time is '2016-10-11 12:00:00'
 	When I view historical adherence for 'Mikkey Dee'
 	Then I should rule and state changes
-	| Time     | Activity | State     | Rule         | Adherence |
-	| 08:30:00 |          | LoggedOff | Neutral      | Neutral   |
-	| 09:00:00 | Phone    | LoggedOff | Not adhering | Out       |
-	| 11:00:00 | Lunch    | LoggedOff | Adhering     | In        |
+	  | Time     | Activity | State     | Rule         | Adherence |
+	  | 08:30:00 |          | LoggedOff | Neutral      | Neutral   |
+	  | 09:00:00 | Phone    | LoggedOff | Not adhering | Out       |
+	  | 11:00:00 | Lunch    | LoggedOff | Adhering     | In        |
 
-Scenario: See state changes
+  Scenario: See state changes
 	Given Mikkey Dee has a shift with
 	  | Field      | Value            |
 	  | Start time | 2016-10-11 09:00 |

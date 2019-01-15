@@ -726,8 +726,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Wfm\Permissions\PermissionsStepDefinitionsNew.cs" />
-    <Compile Include="Wfm\RealTimeAdherence\AgentsForEntireBu.feature.cs">
-      <DependentUpon>AgentsForEntireBu.feature</DependentUpon>
+    <Compile Include="Wfm\RealTimeAdherence\Top50Agents.feature.cs">
+      <DependentUpon>Top50Agents.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -786,10 +786,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RemoveApprovedOOA_47721.feature.cs">
+    <Compile Include="Wfm\RealTimeAdherence\RemoveApprovedOutOfAdherences_47721.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RemoveApprovedOOA_47721.feature</DependentUpon>
+      <DependentUpon>RemoveApprovedOutOfAdherences_47721.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Requests\OvertimeRequests.feature.cs">
       <DependentUpon>OvertimeRequests.feature</DependentUpon>
@@ -818,18 +818,18 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\AgentsOnOrganizationAndSkills_41586.feature.cs">
+    <Compile Include="Wfm\RealTimeAdherence\AgentsInOrganizationWithSkills_41586.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AgentsOnOrganizationAndSkills_41586.feature</DependentUpon>
+      <DependentUpon>AgentsInOrganizationWithSkills_41586.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\RealTimeAdherence\MonitorAgentsInPermittedOrganizaionlOnly.feature.cs">
       <DependentUpon>MonitorAgentsInPermittedOrganizaionlOnly.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RTA_QuicklyChangeAgentsSelection.feature.cs">
-      <DependentUpon>RTA_QuicklyChangeAgentsSelection.feature</DependentUpon>
+    <Compile Include="Wfm\RealTimeAdherence\QuicklyChangeAgentsSelection.feature.cs">
+      <DependentUpon>QuicklyChangeAgentsSelection.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -853,13 +853,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\MonitorBySkillArea_39337.feature.cs">
-      <DependentUpon>MonitorBySkillArea_39337.feature</DependentUpon>
+    <Compile Include="Wfm\RealTimeAdherence\MonitorAgentsBySkillArea_39337.feature.cs">
+      <DependentUpon>MonitorAgentsBySkillArea_39337.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\MonitorBySkill.feature.cs">
-      <DependentUpon>MonitorBySkill.feature</DependentUpon>
+    <Compile Include="Wfm\RealTimeAdherence\MonitorAgentsBySkill.feature.cs">
+      <DependentUpon>MonitorAgentsBySkill.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -903,8 +903,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\AgentsMultiTeams.feature.cs">
-      <DependentUpon>AgentsMultiTeams.feature</DependentUpon>
+    <Compile Include="Wfm\RealTimeAdherence\AgentsInMultipleTeams.feature.cs">
+      <DependentUpon>AgentsInMultipleTeams.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -913,8 +913,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\NeutralPolicy.feature.cs">
-      <DependentUpon>NeutralPolicy.feature</DependentUpon>
+    <Compile Include="Wfm\RealTimeAdherence\NeutralAdherencePolicy.feature.cs">
+      <DependentUpon>NeutralAdherencePolicy.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -1262,9 +1262,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PauseButton_39144.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\AgentsForEntireBu.feature">
+    <None Include="Wfm\RealTimeAdherence\Top50Agents.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentsForEntireBu.feature.cs</LastGenOutput>
+      <LastGenOutput>Top50Agents.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\MonitorAgentsViewInPermittedOrganizaionlOnly.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1294,9 +1294,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApproveOutOfAdherences_47230.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\RemoveApprovedOOA_47721.feature">
+    <None Include="Wfm\RealTimeAdherence\RemoveApprovedOutOfAdherences_47721.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RemoveApprovedOOA_47721.feature.cs</LastGenOutput>
+      <LastGenOutput>RemoveApprovedOutOfAdherences_47721.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Requests\OvertimeRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1318,17 +1318,17 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SolidProof_39351.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\AgentsOnOrganizationAndSkills_41586.feature">
+    <None Include="Wfm\RealTimeAdherence\AgentsInOrganizationWithSkills_41586.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentsOnOrganizationAndSkills_41586.feature.cs</LastGenOutput>
+      <LastGenOutput>AgentsInOrganizationWithSkills_41586.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\MonitorAgentsInPermittedOrganizaionlOnly.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MonitorAgentsInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\RTA_QuicklyChangeAgentsSelection.feature">
+    <None Include="Wfm\RealTimeAdherence\QuicklyChangeAgentsSelection.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RTA_QuicklyChangeAgentsSelection.feature.cs</LastGenOutput>
+      <LastGenOutput>QuicklyChangeAgentsSelection.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\SeeAllOutOfAdherencesToday_39146.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1346,13 +1346,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SiteAndTeamOnSkillAreaOverview.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\MonitorBySkillArea_39337.feature">
+    <None Include="Wfm\RealTimeAdherence\MonitorAgentsBySkillArea_39337.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorBySkillArea_39337.feature.cs</LastGenOutput>
+      <LastGenOutput>MonitorAgentsBySkillArea_39337.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\MonitorBySkill.feature">
+    <None Include="Wfm\RealTimeAdherence\MonitorAgentsBySkill.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorBySkill.feature.cs</LastGenOutput>
+      <LastGenOutput>MonitorAgentsBySkill.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\TeamsOverview.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1390,17 +1390,17 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Agents.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\AgentsMultiTeams.feature">
+    <None Include="Wfm\RealTimeAdherence\AgentsInMultipleTeams.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentsMultiTeams.feature.cs</LastGenOutput>
+      <LastGenOutput>AgentsInMultipleTeams.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\ChangeSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ChangeSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\NeutralPolicy.feature">
+    <None Include="Wfm\RealTimeAdherence\NeutralAdherencePolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>NeutralPolicy.feature.cs</LastGenOutput>
+      <LastGenOutput>NeutralAdherencePolicy.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\Percentage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

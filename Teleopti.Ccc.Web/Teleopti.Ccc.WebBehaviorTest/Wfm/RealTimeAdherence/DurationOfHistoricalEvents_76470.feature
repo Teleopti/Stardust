@@ -1,7 +1,8 @@
 ﻿@RTA
 Feature: Duration of historical events
-  As an adherence analyst I need to see duration spent in one event
-  so that I don't have to calculate it myself
+  In order to ...
+  As an adherence analyst
+  I want to see duration spent in one event so that I don't have to calculate it myself
 
   Background:
 	Given there is a switch

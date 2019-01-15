@@ -1,7 +1,8 @@
 ﻿@RTA
-
 Feature: Approve out of adherences
-  As a Manager I need to approve hours of Out of Adherence for a certain day and agent,
+  In order to ...
+  As a manager
+  I want to approve hours of Out of Adherence for a certain day and agent,
   so that the daily percentage adherence number is increased.
 
   Background:
@@ -24,7 +25,7 @@ Feature: Approve out of adherences
 	  | Activity    | Phone     |
 	  | Phone state | LoggedOff |
 	  | Adherence   | Out       |
-	
+
   Scenario: See recorded out of adherence
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 09:00' and '17:00'
 	And today is '2018-01-22'
@@ -39,7 +40,7 @@ Feature: Approve out of adherences
 	And Mikkey Dee has an approved period between '09:00' and '10:00'
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
 	Then I should see approved period between '09:00:00' and '10:00:00'
-	
+
   Scenario: Approve as in adherence
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 09:00' and '17:00'
 	And today is '2018-01-22'
