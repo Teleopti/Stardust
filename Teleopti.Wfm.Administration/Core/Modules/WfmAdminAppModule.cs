@@ -31,7 +31,10 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			var iocArgs = new IocArgs(new ConfigReader());
+			var iocArgs = new IocArgs(new ConfigReader())
+			{
+				TeleoptiPrincipalForLegacy = true
+			};
 			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
 			var iocConf = new IocConfiguration(iocArgs, toggleManager);
 

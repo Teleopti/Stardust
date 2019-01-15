@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			{
 				SharedContainer = sharedContainer,
 				DataSourceApplicationName = DataSourceApplicationName.ForServiceBus(),
-				OptimizeScheduleChangedEvents_DontUseFromWeb = true
+				OptimizeScheduleChangedEvents_DontUseFromWeb = true,
+				TeleoptiPrincipalForLegacy = true
 			}, _toggleManager);
 			build.RegisterModule(new CommonModule(configuration));
 			

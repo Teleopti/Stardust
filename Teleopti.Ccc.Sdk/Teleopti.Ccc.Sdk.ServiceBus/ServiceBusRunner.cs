@@ -60,7 +60,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true; //ignoreInvalidCertificate
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader())
+			{
+				TeleoptiPrincipalForLegacy = true
+			});
 			_sharedContainer = new ContainerBuilder().Build();
 			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
 			_sharedContainer.Resolve<IHangfireClientStarter>().Start();
@@ -162,7 +165,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
-				OptimizeScheduleChangedEvents_DontUseFromWeb = true
+				OptimizeScheduleChangedEvents_DontUseFromWeb = true,
+				TeleoptiPrincipalForLegacy = true
 			};
 
 			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);

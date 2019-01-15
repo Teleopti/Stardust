@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.IocCommon
 			DataSourceApplicationName = Infrastructure.NHibernateConfiguration.DataSourceApplicationName.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 			MessageBrokerUrl = configReader.AppConfig("MessageBroker");
-			TeleoptiPrincipalForLegacy = true;
+			TeleoptiPrincipalForLegacy = false;
 		}
 	}
 }

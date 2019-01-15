@@ -165,7 +165,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					MessageBrokerListeningEnabled = true,
 					ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory),
 					OptimizeScheduleChangedEvents_DontUseFromWeb = true,
-					IsFatClient = true
+					IsFatClient = true,
+					TeleoptiPrincipalForLegacy = true
 				};
 				var configuration = new IocConfiguration(
 					iocArgs,
@@ -294,7 +295,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			ITogglesActive toggles;
 			try
 			{
-				var iocArgs = new IocArgs(configReader);
+				var iocArgs = new IocArgs(configReader)
+				{
+					TeleoptiPrincipalForLegacy = true
+				};
 				var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
 				tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(
 					new CommonModule(new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs))));

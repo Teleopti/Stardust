@@ -123,7 +123,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
 				DataSourceApplicationName = DataSourceApplicationName.ForSdk(),
-				OptimizeScheduleChangedEvents_DontUseFromWeb = true
+				OptimizeScheduleChangedEvents_DontUseFromWeb = true,
+				TeleoptiPrincipalForLegacy = true
 			};
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			builder.RegisterModule(new CommonModule(configuration));
