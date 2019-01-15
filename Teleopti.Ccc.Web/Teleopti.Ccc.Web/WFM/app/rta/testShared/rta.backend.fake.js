@@ -103,7 +103,8 @@
 			clear: function () {
 				return {
 					HistoricalOverview: true,
-					ModifyAdherence: true
+					ModifyAdherence: true,
+                    AdjustAdherence: true
 				};
 			},
 			add: function (data, item) {

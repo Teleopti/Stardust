@@ -306,7 +306,7 @@ var rtaTester = (function () {
 		if (description === 'RtaTracerController')
 			setup(tests, '', 'RtaTracerController');
 		if (description === 'RtaHistoricalOverviewController')
-			setup(tests, '', 'RtaHistoricalOverviewController');
+			setup(tests, '', 'RtaHistoricalOverviewController80594');
 		
 	}
 

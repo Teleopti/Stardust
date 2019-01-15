@@ -1724,6 +1724,9 @@
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_MobileFriendlyCheckboxes_46758.html" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_ModifySkillGroup_48191.html" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.RTA_MobileFriendlyCheckboxes_46758.js" />
+    <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.adjustAdherenceToNeutral_80594.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.adjustAdherenceToNeutral_80594.html" />
+    <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.adjustAdherenceToNeutral_80594.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.organization.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.organization.picker.buttons.spec.js" />
