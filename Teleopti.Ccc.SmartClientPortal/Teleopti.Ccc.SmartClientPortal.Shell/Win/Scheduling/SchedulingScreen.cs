@@ -443,8 +443,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_backgroundWorkerOptimization.ProgressChanged += backgroundWorkerOptimizationProgressChanged;
 			_backgroundWorkerOptimization.RunWorkerCompleted += backgroundWorkerOptimizationRunWorkerCompleted;
 
-			//setPermissionOnControls();
-			setInitialClipboardControlState();
+			_clipboardControl?.SetButtonState(ClipboardAction.Paste, false);
+			_clipboardControlRestrictions?.SetButtonState(ClipboardAction.Paste, false);
 			setupContextMenuSkillGrid();
 			setupToolbarButtonsChartViews();
 			contextMenuViews.Opened += contextMenuViewsOpened;
@@ -793,19 +793,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			clipboardhost.Visible = false;
 		}
 
-		private void setInitialClipboardControlState()
-		{
-			if (_clipboardControl != null)
-			{
-				_clipboardControl.SetButtonState(ClipboardAction.Paste, false);
-			}
-
-			if (_clipboardControlRestrictions != null)
-			{
-				_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, false);
-			}
-		}
-
 		private void clipboardControlCutClicked(object sender, EventArgs e)
 		{
 			_cutPasteHandlerFactory.For(_controlType).Cut();
@@ -913,10 +900,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
 			_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
 
-
 			loadQuickAccessState();
 			disableAllExceptCancelInRibbon();
-
 
 			if (TestMode.Micke)
 			{
@@ -928,7 +913,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			backgroundWorkerLoadData.DoWork += backgroundWorkerLoadDataDoWork;
 			backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadDataRunWorkerCompleted;
 			backgroundWorkerLoadData.ProgressChanged += backgroundWorkerLoadDataProgressChanged;
-
 
 			var authorization = PrincipalAuthorization.Current();
 			toolStripMenuItemMeetingOrganizer.Enabled =
@@ -946,8 +930,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			setPermissionOnControls();
 			schedulerSplitters1.MultipleHostControl3.GotFocus += multipleHostControl3OnGotFocus;
-
-			//releaseEvents(this);
 
 			Show();
 			Application.DoEvents();
@@ -1171,16 +1153,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			scheduleSelected(false);
 		}
 
-		private void toolStripMenuItemScheduleSelectedClick(object sender, EventArgs e)
-		{
-			scheduleSelected(false);
-		}
-
-		private void toolStripButtonMainMenuSaveClick(object sender, EventArgs e)
-		{
-			save();
-		}
-
 		private void toolStripButtonMainMenuHelpClick(object sender, EventArgs e)
 		{
 			ViewBase.ShowHelp(this, false);
@@ -1388,11 +1360,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void toolStripSplitButtonLockButtonClick(object sender, EventArgs e)
-		{
-			lockSelection();
-		}
-
 		private void toolStripMenuItemLockSelectionClick(object sender, EventArgs e)
 		{
 			lockSelection();
@@ -1421,8 +1388,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var executer = new LockExecuter(schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>(), LockManager, this);
 			executer.LockAllRestrictions(e.Button);
 		}
-
-
 
 		#endregion
 
@@ -1644,7 +1609,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_backgroundWorkerValidatePersons.RunWorkerAsync();
 			Application.DoEvents();
 		}
-
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals",
 			MessageId = "result")]
@@ -4527,7 +4491,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
 				_dateNavigateControl.ClosedPopup -= dateNavigateControlClosedPopup;
 			}
-			backStageButtonMainMenuSave.Click -= toolStripButtonMainMenuSaveClick;
 			backStageButtonMainMenuHelp.Click -= toolStripButtonMainMenuHelpClick;
 			backStageButtonMainMenuClose.Click -= toolStripButtonMainMenuCloseClick;
 			backStageButtonOptions.Click -= toolStripButtonOptionsClick;
