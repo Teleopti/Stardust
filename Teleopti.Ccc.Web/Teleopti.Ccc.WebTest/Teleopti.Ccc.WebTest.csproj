@@ -259,6 +259,7 @@
     <Compile Include="Areas\MultiTenancy\ExternalApplicationAccessControllerTest.cs" />
     <Compile Include="Areas\MultiTenancy\IdLogonTest.cs" />
     <Compile Include="Areas\MultiTenancy\IdentityLogonTest.cs" />
+    <Compile Include="Areas\MultiTenancy\ApplicationConfigurationDbControllerTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoControllerTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromIdentitiesTest.cs" />

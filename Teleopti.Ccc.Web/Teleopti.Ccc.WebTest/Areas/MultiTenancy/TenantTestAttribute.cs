@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			isolate.UseTestDouble<FakePersistExternalApplicationAccess>().For<IPersistExternalApplicationAccess>();
 			isolate.UseTestDouble<FakeFindExternalApplicationAccess>().For<IFindExternalApplicationAccess>();
 			isolate.UseTestDouble<DataTokenManager>().For<IDataTokenManager>();
+			isolate.UseTestDouble<ApplicationConfigurationDbProviderFake>().For<IApplicationConfigurationDbProvider>();
 		}
 	}
 }
