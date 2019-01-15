@@ -14859,10 +14859,10 @@ Teleopti R&amp;D</value>
     <value>请输入有效的邮件地址</value>
   </data>
   <data name="ResetPasswordSuccess" xml:space="preserve">
-    <value>一个说明邮件已发送给您</value>
+    <value>重置密码说明邮件已发送给您</value>
   </data>
   <data name="ForgotYourPasswordInstruction" xml:space="preserve">
-    <value>请数据人用户名以获得充值密码说明</value>
+    <value>请输入用户名以获取重置密码说明</value>
   </data>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>出现了一些问题。请稍后重试。</value>
@@ -14874,7 +14874,7 @@ Teleopti R&amp;D</value>
     <value>复制班表</value>
   </data>
   <data name="CopyScheduleDescription" xml:space="preserve">
-    <value>从任意一个”非默认“的情景复制班表，选定周期内目标情景的班表将被覆盖</value>
+    <value>从任意一个“非默认”的情景复制班表，选定周期内目标情景的班表将被覆盖</value>
   </data>
   <data name="SelectSkillOrGroup" xml:space="preserve">
     <value>选择一个技能或技能组</value>
