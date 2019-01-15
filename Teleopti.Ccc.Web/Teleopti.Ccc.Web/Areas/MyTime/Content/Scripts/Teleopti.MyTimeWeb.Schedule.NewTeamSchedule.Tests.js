@@ -200,6 +200,29 @@
 		equal($($(selector)[0][1]).text(), 'London/Team Preferences');
 	});
 
+	test('should set correct selected team id when click "AllTeams" item', function () {
+		
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		$('.new-teamschedule-team-filter').click();
+		vm.loadGroupAndTeams(function () {
+			vm.isTeamsAndGroupsLoaded(true);
+		});
+
+		var selectedTeam = fakeAvailableTeamsData.allTeam;
+		$('#teams-and-groups-selector')
+			.select2('data', { id: selectedTeam.id, text: selectedTeam.text })
+			.trigger('change');
+
+		equal(vm.selectedTeamIds.length, 5);
+		equal(vm.selectedTeamIds[0], '2e92f1c8-a9cd-406b-ab08-6101e0be66aa');
+		equal(vm.selectedTeamIds[1], '98b34e25-bd10-4c5a-82a3-248b919d8bef');
+		equal(vm.selectedTeamIds[2], '44a12ef1-8db6-4f4f-8e60-00c08c97779a');
+		equal(vm.selectedTeamIds[3], 'de42aa3e-2faa-4437-ab54-11b822c63429');
+		equal(vm.selectedTeamIds[4], '23e29d14-21cf-43ad-a482-b4c5c6bb3890');
+	});
+
 	test('should not load sites and teams until user toggle the selection list on iPad', function () {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAniPad;
 		Teleopti.MyTimeWeb.Common.IsHostAniPad = function () {
@@ -679,8 +702,8 @@
 
 		equal(
 			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
-			.find('.text-name')
-			.text(),
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith1'
 		);
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 1);
@@ -1509,13 +1532,13 @@
 			teams: [
 				{
 					children: [
-						{ id: 'e5f968d7-6f6d-407c-81d5-9b5e015ab495', text: 'London/Students' },
-						{ id: 'd7a9c243-8cd8-406e-9889-9b5e015ab495', text: 'London/Team Flexible' },
-						{ id: 'a74e1f94-7662-4a7f-9746-a56e00a66f17', text: 'London/Team Outbound' },
-						{ id: '34590a63-6331-4921-bc9f-9b5e015ab495', text: 'London/Team Preferences' },
-						{ id: 'e7ce8892-4db3-49c8-bdf6-9b5e015ab495', text: 'London/Team Rotations' }
+						{ id: '2e92f1c8-a9cd-406b-ab08-6101e0be66aa', text: 'London/Students' },
+						{ id: '98b34e25-bd10-4c5a-82a3-248b919d8bef', text: 'London/Team Flexible' },
+						{ id: '44a12ef1-8db6-4f4f-8e60-00c08c97779a', text: 'London/Team Outbound' },
+						{ id: 'de42aa3e-2faa-4437-ab54-11b822c63429', text: 'London/Team Preferences' },
+						{ id: '23e29d14-21cf-43ad-a482-b4c5c6bb3890', text: 'London/Team Rotations' }
 					],
-					PageId: '6ce00b41-0722-4b36-91dd-0a3b63c545cf',
+					PageId: '7ce00b41-0722-4b36-91dd-0a3b63c545cf',
 					text: 'Business Hierarchy'
 				},
 				{
