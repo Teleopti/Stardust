@@ -78,7 +78,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		{
 			foreach (var jobMultipleDateItem in jobMultipleDate.AllDatePeriodCollection)
 			{
-				if (jobMultipleDateItem.StartDateLocal < jobMultipleDateItem.EndDateLocal) continue;
+				if (jobMultipleDateItem.StartDateLocal <= jobMultipleDateItem.EndDateLocal) continue;
 
 				const string message = "'Date from' cannot be set to a later date than 'Date to'. Change date selection and try again.";
 				const string caption = "Invalid date selection";
