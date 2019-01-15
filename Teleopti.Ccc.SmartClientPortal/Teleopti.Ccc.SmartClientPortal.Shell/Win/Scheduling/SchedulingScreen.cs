@@ -2102,7 +2102,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				if (_requestView != null && _requestView.NeedUpdate)
 				{
-
 					_requestView.UpdatePersonRequestViewModel();
 					_requestView.NeedUpdate = false;
 				}
@@ -2391,7 +2390,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if(skillGridControl is SkillDayGridControl)
 				schedulerSplitters1.Grid.ScrollCellInView(0, column + 1);
-
 		}
 
 		#endregion
@@ -3051,16 +3049,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				return;
 
 			SchedulerState.SchedulerStateHolder.ClearDaysToRecalculate();
+			var validationRunner = new ValidationRunner(SchedulerState.SchedulerStateHolder);
 
 			if (_validation)
-				validation();
+				validationRunner.ValidationOnLoad(new BackgroundWorkerWrapper(backgroundWorkerLoadData));
 
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXValidations"));
 			////TODO move into the else clause above
 			_detectedTimeZoneInfos.Add(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+
 			foreach (IPerson permittedPerson in SchedulerState.SchedulerStateHolder.ChoosenAgents)
 			{
-				validatePersonAccounts(permittedPerson);
+				validationRunner.ValidatePersonAccountsOnly(permittedPerson);
 				_detectedTimeZoneInfos.Add(permittedPerson.PermissionInformation.DefaultTimeZone());
 			}
 
@@ -3074,61 +3074,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				break;
 			}
 
-			
-
 			GridHelper.GridlockWriteProtected(SchedulerState.SchedulerStateHolder, LockManager);
 
 			_lastSaved = DateTime.Now;
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXLoadingFormThreeDots"));
-
-		}
-
-
-		private void validatePersonAccounts(IPerson person)
-		{
-			IScheduleRange range = SchedulerState.SchedulerStateHolder.SchedulingResultState.Schedules[person];
-			var rule = new NewPersonAccountRule(SchedulerState.SchedulerStateHolder.SchedulingResultState.Schedules,
-				SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts);
-			IList<IBusinessRuleResponse> exposedBusinessRuleResponseCollection =
-				((ScheduleRange)range).ExposedBusinessRuleResponseCollection();
-			var toRemove = exposedBusinessRuleResponseCollection.Where(businessRuleResponse => businessRuleResponse.TypeOfRule == rule.GetType()).ToArray();
-			foreach (var businessRuleResponse in toRemove)
-			{
-				exposedBusinessRuleResponseCollection.Remove(businessRuleResponse);
-			}
-
-			DateOnlyPeriod reqPeriod = SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
-			IEnumerable<IScheduleDay> allScheduleDays = range.ScheduledDayCollection(reqPeriod);
-			var dic = new Dictionary<IPerson, IScheduleRange> {{person, range}};
-			//TODO need to make the call twice, ugly fix for now /MD
-			rule.Validate(dic, allScheduleDays);
-		}
-
-		private void validation()
-		{
-			backgroundWorkerLoadData.ReportProgress(1,
-				string.Format(CultureInfo.CurrentCulture, LanguageResourceHelper.Translate("XXValidatingPersons"),
-					SchedulerState.SchedulerStateHolder.ChoosenAgents.Count));
-			_personsToValidate.Clear();
-			foreach (IPerson permittedPerson in SchedulerState.SchedulerStateHolder.ChoosenAgents)
-			{
-				_personsToValidate.Add(permittedPerson);
-			}
-			var rulesToRun = SchedulerState.SchedulerStateHolder.SchedulingResultState.GetRulesToRun();
-
-			var resolvedTranslatedString = LanguageResourceHelper.Translate("XXValidatingPersons2");
-			var validatedCount = 0;
-			foreach (var persons in _personsToValidate.Batch(100))
-			{
-				var batchedPeople = persons as IList<IPerson> ?? persons.ToList();
-				validatedCount += batchedPeople.Count;
-				backgroundWorkerLoadData.ReportProgress(0,
-					string.Format(CultureInfo.CurrentCulture, resolvedTranslatedString, validatedCount,
-						SchedulerState.SchedulerStateHolder.ChoosenAgents.Count));
-				SchedulerState.SchedulerStateHolder.Schedules.ValidateBusinessRulesOnPersons(batchedPeople, rulesToRun);
-			}
-
-			_personsToValidate.Clear();
 		}
 
 		private void setupRequestPresenter()

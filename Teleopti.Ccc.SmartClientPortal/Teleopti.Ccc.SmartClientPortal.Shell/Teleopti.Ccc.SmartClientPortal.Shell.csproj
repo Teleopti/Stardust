@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -3309,6 +3309,7 @@
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ShovelingAnalyzerView.Designer.cs">
       <DependentUpon>ShovelingAnalyzerView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Scheduling\SchedulingScreenInternals\ValidationRunner.cs" />
     <Compile Include="Win\Scheduling\SchedulingServiceModule.cs" />
     <Compile Include="Win\Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.cs">
       <SubType>UserControl</SubType>
@@ -5039,9 +5040,9 @@
     <None Include="Resources\Shifts_small.png" />
     <None Include="Resources\Teleopti-WFM-main_small.png" />
     <None Include="Win\Forecasting\Forms\Forecaster.cd" />
-		<ContentWithTargetPath Include="Resources\TeleoptiWFM.ico">
-    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-			<TargetPath>TeleoptiWFM.ico</TargetPath>
+    <ContentWithTargetPath Include="Resources\TeleoptiWFM.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>TeleoptiWFM.ico</TargetPath>
     </ContentWithTargetPath>
     <EmbeddedResource Include="Reports\report_auditing.rdlc">
       <SubType>Designer</SubType>
