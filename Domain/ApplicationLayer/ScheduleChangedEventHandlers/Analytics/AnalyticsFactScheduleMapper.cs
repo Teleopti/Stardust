@@ -1,33 +1,29 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	public interface IAnalyticsFactScheduleMapper
-	{
-		List<IFactScheduleRow> AgentDaySchedule(ProjectionChangedEventScheduleDay eventScheduleDay, IScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, DateTime scheduleChangeTime, int shiftCategoryId, int scenarioId, Guid scenarioCode, Guid personCode);
-	}
-
-	public class AnalyticsFactScheduleMapper : IAnalyticsFactScheduleMapper
+	public class AnalyticsFactScheduleMapper
 	{
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IAnalyticsFactScheduleDateMapper _dateMapper;
-		private readonly IAnalyticsFactScheduleTimeMapper _timeMapper;
+		private readonly AnalyticsFactScheduleTimeMapper _timeMapper;
 
 		public AnalyticsFactScheduleMapper(
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IAnalyticsFactScheduleDateMapper dateMapper,
-			IAnalyticsFactScheduleTimeMapper timeMapper)
+			AnalyticsFactScheduleTimeMapper timeMapper)
 		{
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_dateMapper = dateMapper;
 			_timeMapper = timeMapper;
 		}
 
-		public List<IFactScheduleRow> AgentDaySchedule(ProjectionChangedEventScheduleDay eventScheduleDay, IScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, DateTime scheduleChangeTime, int shiftCategoryId, int scenarioId, Guid scenarioCode, Guid personCode)
+		public List<IFactScheduleRow> AgentDaySchedule(ProjectionChangedEventScheduleDay eventScheduleDay, IScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, DateTime scheduleChangeTime, int shiftCategoryId, int scenarioId, Guid scenarioCode, IDictionary<Guid, AnalyticsActivity> activities, Guid personCode)
 		{
 			if (eventScheduleDay.Shift == null)
 				return new List<IFactScheduleRow>();
@@ -71,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						PersonPart = personPart,
 						DatePart = datePart,
-						TimePart = _timeMapper.Handle(layer, shiftCategoryId, scenarioId, shiftLengthId, plannedOvertime)
+						TimePart = _timeMapper.Handle(layer, activities, shiftCategoryId, scenarioId, shiftLengthId, plannedOvertime)
 					};
 					scheduleRows.Add(factScheduleRow);
 				}

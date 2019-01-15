@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -8,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddActivity(AnalyticsActivity activity);
 		void UpdateActivity(AnalyticsActivity activity);
 		AnalyticsActivity Activity(Guid code);
+		IList<AnalyticsActivity> Activities();
 	}
 }

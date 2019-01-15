@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			int[] retVal = null;
 			if (Iteration == InterceptorIteration.UpdateRoots)
 			{
-				var root = entity as IAggregateRoot;
-				if (root != null && rootsWithModifiedChildren.Contains(root) && !modifiedRootsContainsRoot(root))
+				if (entity is IAggregateRoot root && rootsWithModifiedChildren.Contains(root) && !modifiedRootsContainsRoot(root))
 				{
 					IDictionary<string, int> props = propertyIndexesForUpdate(propertyNames);
 					retVal = new[] { props[updatedByPropertyName], props[updatedOnPropertyName] };
@@ -67,8 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			var modifiedColl = (IPersistentCollection) collection;
 			var owner = modifiedColl.Owner;
-			var aggregateRoot = owner as IAggregateRoot;
-			if (aggregateRoot != null)
+			if (owner is IAggregateRoot aggregateRoot)
 			{
 				modifiedRoots.Add(new RootChangeInfo(aggregateRoot, DomainUpdateType.Update));
 			}
@@ -82,14 +80,13 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public override void OnDelete(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
-			var root = entity as IAggregateRoot;
-			if (root != null)
+			if (entity is IAggregateRoot root)
 			{
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Delete));
 				return;
 			}
-			var aggregateEntity = entity as IAggregateEntity;
-			if (aggregateEntity != null)
+
+			if (entity is IAggregateEntity aggregateEntity)
 			{
 				rootsWithModifiedChildren.Add(aggregateEntity.Root());
 			}
@@ -102,8 +99,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			var entityToCheck = entity as IRestrictionChecker;
 			entityToCheck?.CheckRestrictions();
 
-			var root = ent as IAggregateRoot;
-			if (root != null)
+			if (ent is IAggregateRoot root)
 			{
 				_currentPreCommitHooks.Current().ForEach(cph => cph.BeforeCommit(root, propertyNames, currentState));
 				setUpdatedInfo(root, currentState, propertyNames);
@@ -129,8 +125,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				ret = true;
 			}
 
-			var root = entity as IAggregateRoot;
-			if (root != null)
+			if (entity is IAggregateRoot root)
 			{
 				_currentPreCommitHooks.Current().ForEach(cph => cph.BeforeCommit(root, propertyNames, state));
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Insert));
@@ -178,8 +173,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private void markRoot(IEntity ent)
 		{
-			var aggEnt = ent as IAggregateEntity;
-			if (aggEnt == null) 
+			if (!(ent is IAggregateEntity aggEnt)) 
 				return;
 			var root = aggEnt.Root();
 			rootsWithModifiedChildren.Add(root);

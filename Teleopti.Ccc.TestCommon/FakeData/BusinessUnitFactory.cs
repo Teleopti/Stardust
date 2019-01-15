@@ -16,10 +16,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_businessUnitUsedInTest = new Lazy<IBusinessUnit>(() => CreateSimpleBusinessUnit(businessUnitUsedInTest).WithId());
 		}
 
-		public static IBusinessUnit BusinessUnitUsedInTest
-		{
-			get { return _businessUnitUsedInTest.Value; }
-		}
+		public static IBusinessUnit BusinessUnitUsedInTest => _businessUnitUsedInTest.Value;
 
 		public static BusinessUnit CreateSimpleBusinessUnit(string name)
 		{

@@ -68,11 +68,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_config.Args().Cache.This<AnalyticsAbsenceMapper>(b => b.CacheMethod(m => m.Map(Guid.Empty)));
 			builder.CacheByClassProxy<FetchAnalyticsScenarios>().SingleInstance();
 			_config.Args().Cache.This<FetchAnalyticsScenarios>(b => b.CacheMethod(m => m.Execute()));
-			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();
+			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().AsSelf().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleDateMapper>().As<IAnalyticsFactScheduleDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactSchedulePersonMapper>().As<IAnalyticsFactSchedulePersonMapper>().SingleInstance();
-			builder.RegisterType<AnalyticsFactScheduleMapper>().As<IAnalyticsFactScheduleMapper>().SingleInstance();
+			builder.RegisterType<AnalyticsFactScheduleMapper>().AsSelf().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleDayCountMapper>().As<IAnalyticsFactScheduleDayCountMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsScheduleRepository>().As<IAnalyticsScheduleRepository>().SingleInstance();
 			builder.RegisterType<AnalyticsScenarioRepository>().As<IAnalyticsScenarioRepository>().SingleInstance();
