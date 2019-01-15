@@ -1707,6 +1707,8 @@
     <Content Include="Areas\MyTime\Views\Schedule\MobileMonthPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.html" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.js" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.ReviewHistoricalAdherence_74770.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RestrictModifySkillGroups_78568.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
@@ -1722,7 +1724,6 @@
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_MobileFriendlyCheckboxes_46758.html" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_ModifySkillGroup_48191.html" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.RTA_MobileFriendlyCheckboxes_46758.js" />
-    <Content Include="WFM\app\rta\rta\historical-overview\rta.adjust.adherence.html" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.organization.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.organization.picker.buttons.spec.js" />
