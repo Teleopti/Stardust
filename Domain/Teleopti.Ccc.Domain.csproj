@@ -2334,7 +2334,6 @@
     <Compile Include="Scheduling\PeriodExctractorFromScheduleParts.cs" />
     <Compile Include="Scheduling\PersistConflict.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\SaveSchedulePartService.cs" />
-    <Compile Include="Scheduling\SchedulingResultModel.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDecider.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
