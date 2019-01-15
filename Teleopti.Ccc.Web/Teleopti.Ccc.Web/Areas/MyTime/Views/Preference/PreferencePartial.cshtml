@@ -193,7 +193,7 @@
 
 		<div id="Preference-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">
-				<li style="max-width: 55px;">&nbsp;</li>
+				<li>&nbsp;</li>
 				@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 				{
 					<li class="header-week-day" data-date='@weekDayName.Date.Date.ToString("yyyy-MM-dd")'></li>
@@ -203,11 +203,6 @@
 			@foreach (WeekViewModel week in Model.Weeks)
 			{
 				<ul class="calendarview-week" onselectstart="return false;">
-					<li style="height: 0; width: 0;">
-						<div>
-
-						</div>
-					</li>
 					<li data-mytime-week="week" style="width: 55px;" data-bind="css: { 'week-view-non-editable': !IsEditable() }">
 						<div class="day-header"></div>
 						<div class="day-content">

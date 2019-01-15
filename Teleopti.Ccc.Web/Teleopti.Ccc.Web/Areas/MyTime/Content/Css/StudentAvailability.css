@@ -1,18 +1,6 @@
-﻿#Student-availability-edit-form {
-	max-width: 965px;
+#Student-availability-edit-form {
+	max-width: 945px;
 	margin: auto;
-}
-
-#StudentAvailability-body-inner .calendarview-week li:first-child {
-	width: 27px;
-}
-
-#StudentAvailability-body-inner .weekdays {
-	padding-left: 27px;
-}
-
-#StudentAvailability-body-inner .calendarview-week:last-child {
-	margin-bottom: 5px;
 }
 
 #StudentAvailability-body-inner .calendarview-week li.date-is-selected .day-header,
@@ -42,11 +30,23 @@
 
 #StudentAvailability-period {
 	margin: 0 auto 10px auto;
-	width: 965px; /*same with #StudentAvailability-body*/
+}
+
+#StudentAvailability-period,
+#StudentAvailability-body {
+	width: 933px;
+}
+
+#StudentAvailability-body-inner {
+	width: 100%;
+	padding: 10px;
+}
+
+#StudentAvailability-body-inner > ul {
+	border-left: 1px solid #dfdfdf;
 }
 
 #StudentAvailability-body {
-	width: 965px;
 	margin: auto;
 }
 

@@ -1,4 +1,4 @@
-﻿/* 
+/* 
   HTML5 ✰ Boilerplate 
   
   style.css contains a reset, font normalization and some base styles.
@@ -1259,19 +1259,6 @@ select.time-input {
 /*** Views ***/
 .rtl .weekdays {
 	padding-left: 0;
-}
-
-.rtl .body-calendarview {
-	background: url('../Images/view_repeater_wide_bg.png') repeat-y scroll -966px bottom #f8f8f8;
-}
-
-.rtl .body-calendarview-inner {
-	background: url('../Images/view_top_wide_bg.png') no-repeat scroll -966px 0px transparent;
-}
-
-.rtl .calendarview-week {
-	background: url('../Images/calendarview_week_wide_bg.png') no-repeat scroll 874px top transparent;
-	padding-left: 0px;
 }
 
 .rtl .body-weekview-inner ul:first-child {

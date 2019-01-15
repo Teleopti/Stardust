@@ -86,12 +86,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 							var valuesString = $"\"tokenKey\":\"{accessToken}\",\"user\":\"{userName}\",\"id\":{id}";
 							valuesString = "{" + valuesString + "}";
 							var cook = new HttpCookie("WfmAdminAuth", Uri.EscapeDataString(valuesString)) { HttpOnly = true };
-							
+
+							if (HttpContext.Current == null)
+								return Json(new LoginResult {Success = true, Id = id, UserName = userName, AccessToken = accessToken});
 							if (HttpContext.Current.Request.IsSecureConnection)
 							{
 								cook.Secure = true;
 							}
 							HttpContext.Current.Response.Cookies.Add(cook);
+
 							return Json(new LoginResult { Success = true, Id = id, UserName = userName, AccessToken = accessToken });
 						}
 					}

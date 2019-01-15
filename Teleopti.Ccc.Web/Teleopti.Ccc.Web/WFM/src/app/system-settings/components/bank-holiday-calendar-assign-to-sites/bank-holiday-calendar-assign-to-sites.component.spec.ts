@@ -9,8 +9,9 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '@wfm/test';
 import { UserService } from 'src/app/core/services';
 import { BankHolidayCalendarAssignToSitesComponent } from './bank-holiday-calendar-assign-to-sites.component';
-import { GroupPageService } from 'src/app/shared/services/group-page-service';
 import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
+import { BankCalendarDataService } from '../../shared';
+import { GroupPageService } from 'src/app/shared/services/group-page-service';
 
 describe('BankHolidayCalendarAssignToSitesComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAssignToSitesComponent>;
@@ -31,7 +32,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 				HttpClientTestingModule,
 				NoopAnimationsModule
 			],
-			providers: [MockTranslateService, UserService, GroupPageService]
+			providers: [MockTranslateService, UserService, GroupPageService, BankCalendarDataService]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(BankHolidayCalendarAssignToSitesComponent);

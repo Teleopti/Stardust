@@ -15,6 +15,8 @@ import { BankHolidayCalendarAssignToSitesComponent } from '../bank-holiday-calen
 import { BankHolidayCalendarEditComponent } from '../bank-holiday-calendar-edit';
 import { BankHolidayCalendarComponent } from './bank-holiday-calendar.component';
 import { MockTranslationModule, MockTranslateService } from '@wfm/mocks/translation';
+import { BankCalendarDataService } from '../../shared';
+import { GroupPageService } from 'src/app/shared/services/group-page-service';
 
 describe('BankHolidayCalendarComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarComponent>;
@@ -52,7 +54,9 @@ describe('BankHolidayCalendarComponent', () => {
 						innerWidth: 1200
 					} as Window)
 				},
-				TogglesService
+				TogglesService,
+				GroupPageService,
+				BankCalendarDataService
 			]
 		}).compileComponents();
 

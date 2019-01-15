@@ -11,6 +11,7 @@ import { BankHolidayCalendarAddComponent } from './components/bank-holiday-calen
 import { BankHolidayCalendarEditComponent } from './components/bank-holiday-calendar-edit';
 import { BankCalendarDataService } from './shared/bank-calendar-data.service';
 import { BankHolidayCalendarAssignToSitesComponent } from './components/bank-holiday-calendar-assign-to-sites';
+import { TogglesService } from '../core/services';
 
 @NgModule({
 	declarations: [
@@ -21,7 +22,7 @@ import { BankHolidayCalendarAssignToSitesComponent } from './components/bank-hol
 		BankHolidayCalendarAssignToSitesComponent
 	],
 	imports: [SharedModule, TranslateModule.forChild()],
-	providers: [TranslateModule, BankCalendarDataService, GroupPageService],
+	providers: [TranslateModule, BankCalendarDataService, GroupPageService, TogglesService],
 	exports: [],
 	entryComponents: [SystemSettingsComponent]
 })

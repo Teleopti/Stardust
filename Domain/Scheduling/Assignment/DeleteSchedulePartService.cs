@@ -9,27 +9,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public interface IDeleteSchedulePartService
 	{
-		IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker);
-		IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService);
-		IEnumerable<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, INewBusinessRuleCollection businessRuleCollection);
+		IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options,
+			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker);
+
+		IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list,
+			ISchedulePartModifyAndRollbackService rollbackService);
+
+		IEnumerable<IScheduleDay> Delete(IEnumerable<IScheduleDay> list,
+			ISchedulePartModifyAndRollbackService rollbackService, INewBusinessRuleCollection businessRuleCollection);
 	}
 
 	public class DeleteSchedulePartService : IDeleteSchedulePartService
 	{
-		public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker)
+		public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options,
+			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker)
 		{
 			IList<IScheduleDay> returnList = new List<IScheduleDay>();
 			if (backgroundWorker == null)
 				throw new ArgumentNullException(nameof(backgroundWorker));
- 
-			foreach (var part in list)
+
+			foreach (IScheduleDay part in list)
 			{
-				var cloneParts = preparePart(options, part);
+				var clonePart = preparePart(options, part);
+				IList<IScheduleDay> cloneList = new List<IScheduleDay> {clonePart};
 
 				if (backgroundWorker.CancellationPending)
 					return returnList;
 
-				foreach (var scheduleDay in cloneParts)
+				//modify the original schedules
+				foreach (IScheduleDay scheduleDay in cloneList)
 				{
 					rollbackService.Modify(scheduleDay);
 				}
@@ -40,7 +48,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return returnList;
 		}
 
-		public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
+		public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, DeleteOption options,
+			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker,
+			INewBusinessRuleCollection newBusinessRuleCollection)
 		{
 			if (backgroundWorker == null)
 				throw new ArgumentNullException(nameof(backgroundWorker));
@@ -50,18 +60,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (backgroundWorker.CancellationPending)
 					return null;
 
-				var cloneParts = preparePart(options, part);
+				var clonePart = preparePart(options, part);
 
-				foreach (var scheduleDay in cloneParts)
-				{
-					rollbackService.Modify(scheduleDay, newBusinessRuleCollection);
-				}
+				rollbackService.Modify(clonePart, newBusinessRuleCollection);
+
+
+
 
 				return part.ReFetch();
 			}).Where(r => r != null).ToList();
 		}
 
-		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, DeleteOption deleteOption)
+		public IList<IScheduleDay> Delete(IList<IScheduleDay> list,
+			ISchedulePartModifyAndRollbackService rollbackService, DeleteOption deleteOption)
 		{
 			var bgWorker = new NoSchedulingProgress();
 			IList<IScheduleDay> retList = Delete(list, deleteOption, rollbackService, bgWorker);
@@ -69,7 +80,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retList;
 		}
 
-		public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
+		public IList<IScheduleDay> Delete(IEnumerable<IScheduleDay> list,
+			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var deleteOption = new DeleteOption {Default = true};
 			var bgWorker = new NoSchedulingProgress();
@@ -78,19 +90,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retList;
 		}
 
-		public IEnumerable<IScheduleDay> Delete(IEnumerable<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, INewBusinessRuleCollection businessRuleCollection)
+		public IEnumerable<IScheduleDay> Delete(IEnumerable<IScheduleDay> list,
+			ISchedulePartModifyAndRollbackService rollbackService, INewBusinessRuleCollection businessRuleCollection)
 		{
-			var deleteOption = new DeleteOption { Default = true };
+			var deleteOption = new DeleteOption {Default = true};
 			var bgWorker = new NoSchedulingProgress();
 			IList<IScheduleDay> retList = Delete(list, deleteOption, rollbackService, bgWorker, businessRuleCollection);
 
 			return retList;
 		}
 
-		private IList<IScheduleDay> preparePart(DeleteOption options, IScheduleDay part)
+		private IScheduleDay preparePart(DeleteOption options, IScheduleDay part)
 		{
-			var clonePart = part.ReFetch();
-			IScheduleDay partDayBefore = null;
+			IScheduleDay clonePart = part.ReFetch();
+
 
 			if (options.MainShift)
 				clonePart.DeleteMainShift();
@@ -102,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				clonePart.DeleteDayOff();
 			if (options.Absence)
 			{
-				partDayBefore = intersectingFullDayAbsenceDayBefore(part);
+
 				clonePart.DeleteFullDayAbsence(clonePart);
 			}
 
@@ -114,53 +127,50 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			if (options.StudentAvailability)
 				clonePart.DeleteStudentAvailabilityRestriction();
-			if(options.OvertimeAvailability)
+			if (options.OvertimeAvailability)
 				clonePart.DeleteOvertimeAvailability();
 
 			if (options.Default)
 			{
-				var view = clonePart.SignificantPartForDisplay();
+				SchedulePartView view = clonePart.SignificantPartForDisplay();
 
 				if (view == SchedulePartView.MainShift)
 				{
 					clonePart.DeleteMainShift();
+					return clonePart;
 				}
-					
-				else if (view == SchedulePartView.PersonalShift)
+
+				if (view == SchedulePartView.PersonalShift)
 				{
 					clonePart.DeletePersonalStuff();
+					return clonePart;
 				}
 
-				else if (view == SchedulePartView.FullDayAbsence || view == SchedulePartView.ContractDayOff)
+				if (view == SchedulePartView.FullDayAbsence || view == SchedulePartView.ContractDayOff)
 				{
-					partDayBefore = intersectingFullDayAbsenceDayBefore(part);
+
 					clonePart.DeleteFullDayAbsence(clonePart);
+					return clonePart;
 				}
 
-				else if (view == SchedulePartView.DayOff || view == SchedulePartView.ContractDayOff  && view != SchedulePartView.FullDayAbsence)
+				if (view == SchedulePartView.DayOff ||
+					view == SchedulePartView.ContractDayOff && view != SchedulePartView.FullDayAbsence)
 				{
 					clonePart.DeleteDayOff();
+					return clonePart;
 				}
-					
-				else if (view == SchedulePartView.Absence)
+
+				if (view == SchedulePartView.Absence)
 				{
 					clonePart.DeleteAbsence(false);
+					return clonePart;
 				}
-					
-				else if (view == SchedulePartView.Overtime)
+
+				if (view == SchedulePartView.Overtime)
 					clonePart.DeleteOvertime();
 			}
 
-			return partDayBefore != null ? new List<IScheduleDay> { partDayBefore, clonePart } : new List<IScheduleDay> { clonePart };
-		}
-
-		private IScheduleDay intersectingFullDayAbsenceDayBefore(IScheduleDay part)
-		{
-			if (!part.IsFullDayAbsence()) return null;
-			var visualPeriod = part.ProjectionService().CreateProjection().Period();
-			if (!visualPeriod.HasValue) return null;
-			return part.PersonAbsenceCollection().Any(x => x.Period.StartDateTime < part.Period.StartDateTime && x.Period.Contains(visualPeriod.Value)) 
-				? part.Owner[part.Person].ScheduledDay(part.DateOnlyAsPeriod.DateOnly.AddDays(-1)) : null;
+			return clonePart;
 		}
 	}
 }

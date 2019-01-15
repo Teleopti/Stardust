@@ -93,11 +93,6 @@ Layout = null;
 				@foreach (var week in Model.Weeks)
 				{
 				<ul class="calendarview-week" onselectstart="return false;">
-					<li style="height: 0">
-						<div>
-
-						</div>
-					</li>
 					@foreach (var day in week.Days)
 					{
 					<li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class='relative @(day.InPeriod ? "inperiod" : "non-editable")'

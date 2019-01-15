@@ -21,7 +21,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-	  <NoWarn>1591</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -323,6 +323,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
     <Compile Include="Repositories\Audit\StaffingAuditRepository.cs" />
+    <Compile Include="Repositories\BankHolidayCalendarSiteRepository.cs" />
     <Compile Include="Repositories\BankHolidayCalendarRepository.cs" />
     <Compile Include="Repositories\BankHolidayDateRepository.cs" />
     <Compile Include="Repositories\ExtensiveLogRepository.cs" />

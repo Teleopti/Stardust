@@ -410,13 +410,12 @@
 	}
 
 	function selectAllTeams() {
-		if (self.availableTeams()[1] && self.availableTeams()[1].children) {
-			self.selectedTeamIds = self.availableTeams()[1].children.map(function(a) {
-				return a.id;
-			});
-		} else {
-			self.availableTeams()[0].children.forEach(function(a, i) {
-				if (i > 0) self.selectedTeamIds.push(a.id);
+		self.selectedTeamIds = [];
+		if (self.availableTeams()[0] && self.availableTeams()[0].children) {
+			self.availableTeams()[0].children.forEach(function (a, i) {
+				if (i > 0) {
+					self.selectedTeamIds.push(a.id);
+				}
 			});
 		}
 	}

@@ -1,4 +1,4 @@
-﻿.teleopti-mytime-top-menu {
+.teleopti-mytime-top-menu {
 	border: none;
 	margin: 0;
 	background: #0099ff;
@@ -65,7 +65,7 @@
 	background: #0079ef;
 }
 .navbar-nav.navbar-user-setting {
-	margin-right: 2px 10px;
+	margin-right: 10px;
 	margin-left: 10px;
 }
 
@@ -188,7 +188,7 @@
 		padding-right: 5px;
 	}
 	.navbar-nav.navbar-user-setting {
-		margin: 8px 10px;
+		margin: 4px 0;
 		padding-right: 10px;
 	}
 	.navbar-nav.navbar-user-setting a {

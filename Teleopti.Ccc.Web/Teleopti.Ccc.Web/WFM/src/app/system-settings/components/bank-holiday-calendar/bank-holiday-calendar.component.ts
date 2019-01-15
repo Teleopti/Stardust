@@ -8,13 +8,9 @@ import { BankCalendarDataService } from '../../shared/bank-calendar-data.service
 @Component({
 	selector: 'bank-holiday-calendar',
 	templateUrl: './bank-holiday-calendar.component.html',
-	styleUrls: ['./bank-holiday-calendar.component.scss'],
-	providers: [BankCalendarDataService, TogglesService]
+	styleUrls: ['./bank-holiday-calendar.component.scss']
 })
 export class BankHolidayCalendarComponent implements OnInit {
-	yearFormat = 'YYYY';
-	dateFormat = 'YYYY-MM-DD';
-
 	bankHolidayCalendarsList: BankHolidayCalendarItem[] = [];
 	isAssignBankHolidayCalendarsToSitesEnabled = false;
 	isAddingNewCalendar = false;
@@ -32,27 +28,9 @@ export class BankHolidayCalendarComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		this.bankCalendarDataService.getBankHolidayCalendars().subscribe(calendars => {
-			const cals = calendars as BankHolidayCalendarItem[];
-			const curYear = moment().year();
-			cals.forEach(c => {
-				c.CurrentYearIndex = 0;
-
-				c.Years.forEach((y, i) => {
-					y.Dates.forEach(d => {
-						d.Date = moment(d.Date).format(this.dateFormat);
-					});
-
-					if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
-						c.CurrentYearIndex = i;
-					}
-				});
-			});
-
-			this.bankHolidayCalendarsList = cals.sort((c, n) => {
-				return c.Name.localeCompare(n.Name);
-			});
-		}, this.networkError);
+		this.bankCalendarDataService.bankHolidayCalendarsList$.subscribe(value => {
+			this.bankHolidayCalendarsList = value;
+		});
 
 		this.toggleService.toggles$.subscribe(toggles => {
 			this.isAssignBankHolidayCalendarsToSitesEnabled =
@@ -95,6 +73,7 @@ export class BankHolidayCalendarComponent implements OnInit {
 		this.bankCalendarDataService.deleteBankHolidayCalendar(this.selectedCalendar.Id).subscribe(result => {
 			if (result === true) {
 				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(this.selectedCalendar), 1);
+				this.bankCalendarDataService.bankHolidayCalendarsList$.next(this.bankHolidayCalendarsList);
 
 				this.noticeService.success(
 					this.translate.instant('Success'),
@@ -125,7 +104,8 @@ export class BankHolidayCalendarComponent implements OnInit {
 		this.isEdittingCalendar = true;
 	}
 
-	exitEdittingBankCalendar = () => {
+	backToBankCalendarsList = () => {
+		this.isAddingNewCalendar = false;
 		this.isEdittingCalendar = false;
 	};
 

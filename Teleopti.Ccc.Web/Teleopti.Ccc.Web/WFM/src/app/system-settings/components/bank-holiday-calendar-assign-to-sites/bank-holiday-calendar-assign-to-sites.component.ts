@@ -4,19 +4,17 @@ import { NzNotificationService } from 'ng-zorro-antd';
 
 import { GroupPageService } from 'src/app/shared/services/group-page-service';
 import { GroupPageSiteItem } from 'src/app/shared/interface';
-import { BankHolidayCalendarItem } from '../../interface';
+import { BankHolidayCalendarItem, SiteBankHolidayCalendars } from '../../interface';
 import { BankCalendarDataService } from '../../shared';
 
 @Component({
 	selector: 'bank-holiday-calendar-assign-to-sites',
 	templateUrl: './bank-holiday-calendar-assign-to-sites.component.html',
-	styleUrls: ['./bank-holiday-calendar-assign-to-sites.component.scss'],
-	providers: [GroupPageService, BankCalendarDataService]
+	styleUrls: ['./bank-holiday-calendar-assign-to-sites.component.scss']
 })
 export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
-	@Input() bankHolidayCalendarsList: BankHolidayCalendarItem[];
-
-	dateFormat = 'YYYY-MM-DD';
+	bankHolidayCalendarsList: BankHolidayCalendarItem[] = [];
+	siteCalendarsList: SiteBankHolidayCalendars[] = [];
 	sitesList: GroupPageSiteItem[] = [];
 
 	constructor(
@@ -27,20 +25,34 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.groupPageService.getAvailableGroupPagesForDate(moment().format('YYYY-MM-DD')).subscribe(result => {
-			this.sitesList = result.BusinessHierarchy as GroupPageSiteItem[];
+		this.bankCalendarDataService.bankHolidayCalendarsList$.subscribe(calendars => {
+			this.bankHolidayCalendarsList = calendars;
 
-			this.bankCalendarDataService.getSiteBankHolidayCalendars().subscribe(siteCalendars => {
-				this.sitesList.forEach(s => {
-					s.SelectedCalendarId = null;
-					const site = siteCalendars.filter(sc => sc.Site === s.Id)[0];
-					if (site && site.Calendars[0] && site.Calendars[0].length > 0) {
-						// Currently we only support setting one calendar to site
-						s.SelectedCalendarId = site.Calendars[0];
-					}
-				});
+			this.preSelectCalendarsForSite();
+		});
+
+		this.groupPageService
+			.getAvailableGroupPagesForDate(moment().format(this.bankCalendarDataService.dateFormat))
+			.subscribe(result => {
+				this.sitesList = result.BusinessHierarchy as GroupPageSiteItem[];
+
+				this.bankCalendarDataService.getSiteBankHolidayCalendars().subscribe(siteCalendars => {
+					this.siteCalendarsList = siteCalendars;
+
+					this.preSelectCalendarsForSite();
+				}, this.networkError);
 			}, this.networkError);
-		}, this.networkError);
+	}
+
+	preSelectCalendarsForSite() {
+		this.sitesList.forEach(s => {
+			s.SelectedCalendarId = null;
+			const site = this.siteCalendarsList.filter(sc => sc.Site === s.Id)[0];
+			if (site && site.Calendars[0] && site.Calendars[0].length > 0) {
+				// Currently we only support setting one calendar to site
+				s.SelectedCalendarId = site.Calendars[0];
+			}
+		});
 	}
 
 	updateCalendarForSite(calId: string, site: GroupPageSiteItem) {

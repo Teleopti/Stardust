@@ -1,42 +1,9 @@
-﻿.body-calendarview {
-	background: #f8f8f8 url(../Images/view_repeater_wide_bg.png) bottom left repeat-y;
-}
-.body-calendarview-inner {
-	background: transparent url(../Images/view_top_wide_bg.png) top left no-repeat;
-}
-
 .weekdays li,
 .calendarview-week li {
 	border-right: 1px solid #dfdfdf;
 }
-.rgba .weekdays li,
-.rgba .calendarview-week li {
-	border-right: 1px solid rgba(0, 0, 0, 0.15);
-}
-/* rgba on many elements makes scrolling very slow in chrome so lets use static */
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-	.rgba .weekdays li,
-	.rgba .calendarview-week li {
-		border-right: 1px solid #dfdfdf;
-	}
-}
-
-.calendarview-week li:first-child {
-	border-left-color: transparent;
-	color: #fff;
-	padding-bottom: 0px;
-	font-size: 11px;
-	text-align: center;
-	width: 18px;
-}
-.calendarview-week li:first-child > div {
-	margin-top: 58px;
-	padding-bottom: 0px;
-}
 .weekdays {
 	font-size: 0;
-	padding-top: 5px;
-	padding-left: 18px;
 	margin: 0;
 	line-height: normal;
 }
@@ -63,9 +30,6 @@
 	margin: 0;
 	line-height: normal;
 }
-.body-calendarview-inner ul:nth-child(2) {
-	background-image: none;
-}
 .calendarview-week li {
 	font-size: 12px;
 	display: inline-block;
@@ -80,12 +44,6 @@
 
 .calendarview-week li div.day-content {
 	background-color: white;
-}
-
-.calendarview-week li div.border-left {
-	border-left-style: solid;
-	border-left-width: 8px;
-	border-left-color: transparent;
 }
 
 .calendarview-week .today {

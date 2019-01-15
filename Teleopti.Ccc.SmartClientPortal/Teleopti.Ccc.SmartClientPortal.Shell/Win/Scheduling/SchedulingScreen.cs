@@ -165,7 +165,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private SchedulingScreenSettings _currentSchedulingScreenSettings;
 		private ZoomLevel _currentZoomLevel;
 		private ZoomLevel _previousZoomLevel;
-		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private bool _inUpdate;
 		private int _totalScheduled;
 		private readonly IPersonRequestCheckAuthorization _personRequestAuthorizationChecker;
@@ -353,7 +352,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
 			_daysOffPreferences = _container.Resolve<IDaysOffPreferences>();
 			_overriddenBusinessRulesHolder = _container.Resolve<IOverriddenBusinessRulesHolder>();
-			_workShiftWorkTime = _container.Resolve<IWorkShiftWorkTime>();
 			_temporarySelectedEntitiesFromTreeView = allSelectedEntities;
 			SchedulerState = new SchedulingScreenState(_container.Resolve<IDisableDeletedFilter>(), _container.Resolve<ISchedulerStateHolder>());
 			_groupPagesProvider = _container.Resolve<SchedulerGroupPagesProvider>();
@@ -1002,11 +1000,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				formClosingInProgress = false;
 			}
 
-
 			if (!e.Cancel)
 			{
 				Cursor.Current = Cursors.WaitCursor;
-
 				try
 				{
 					saveAllChartSetting();
@@ -3915,7 +3911,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					schedulerSplitters1.Grid.BringToFront();
 					_scheduleView = new AgentRestrictionsDetailView(schedulerSplitters1.Grid, SchedulerState.SchedulerStateHolder,
 						LockManager, SchedulePartFilter, ClipsHandlerSchedule, _overriddenBusinessRulesHolder, callback,
-						_defaultScheduleTag, _workShiftWorkTime, _undoRedo);
+						_defaultScheduleTag, _container.Resolve<IWorkShiftWorkTime>(), _undoRedo);
 					_scheduleView.ViewGrid.ContextMenuStrip = contextMenuStripRestrictionView;
 					prepareAgentRestrictionView(_scheduleView, selectedPersons, selectedPeriod);
 
