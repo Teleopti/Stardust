@@ -417,7 +417,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		[TestCase(true)]
 		[TestCase(false)]
-		[Ignore("_")]
 		public void ShouldNotCreateDuplicateLayersOnRollback(bool defaultDelete)
 		{
 			var target = new DeleteSchedulePartService();

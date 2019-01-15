@@ -20,21 +20,39 @@
 	</div>
 </div>
 <!-- create skillgroup -->
-<modal-dialog show='vm.editGroupNameBox' ng-cloak>
+<modal-dialog show='vm.addGroupBox' ng-cloak>
 	<h1 class="modal-title">{{ 'AddSkillGroup' | translate }}</h1>
 	<div class="modal-inner-content">
 		<div class="con-row">
 			<div class="con-flex">
-				<input id="groupNameBox" focus-me="vm.editGroupNameBox" autocomplete="off" type="text" placeholder="{{ 'Name' | translate }}"
-				 ng-model="vm.newGroupName" maxlength="{{ vm.skillNameMaxLength }}" ng-maxlength="{{ vm.skillNameMaxLength }}" id="skillGroupNameBox"
+				<input id="groupBox" focus-me="vm.addGroupBox" autocomplete="off" type="text" placeholder="{{ 'Name' | translate }}"
+				 ng-model="vm.newGroupName" maxlength="{{ vm.skillNameMaxLength }}" ng-maxlength="{{ vm.skillNameMaxLength }}"
 				 ng-keypress="vm.nameBoxKeyPress($event)" />
 			</div>
 		</div>
 	</div>
 	<div class="modal-actions">
 		<aside>
-			<button id="confirmEditNameButton" ng-click="vm.saveNameEdit($event);" class="wfm-btn wfm-btn-invis-primary">{{
-				'Add' | translate }}</button>
+			<button id="confirmEditNameButton" ng-click="vm.saveNameEdit($event);" class="wfm-btn wfm-btn-invis-primary">
+				{{ 'Add' | translate }}</button>
+		</aside>
+	</div>
+</modal-dialog>
+<modal-dialog show='vm.editGroupNameBox' ng-cloak>
+	<h1 class="modal-title">{{ 'Name' | translate }}</h1>
+	<div class="modal-inner-content">
+		<div class="con-row">
+			<div class="con-flex">
+				<input id="groupNameBox" focus-me="vm.editGroupNameBox" autocomplete="off" type="text" placeholder="{{ 'Name' | translate }}"
+				 ng-model="vm.newGroupName" maxlength="{{ vm.skillNameMaxLength }}" ng-maxlength="{{ vm.skillNameMaxLength }}"
+				 ng-keypress="vm.nameBoxKeyPress($event)" />
+			</div>
+		</div>
+	</div>
+	<div class="modal-actions">
+		<aside>
+			<button id="confirmEditNameButton" ng-click="vm.saveNameEdit($event);" class="wfm-btn wfm-btn-invis-primary">
+				{{ 'Edit' | translate }}</button>
 		</aside>
 	</div>
 </modal-dialog>
@@ -43,8 +61,8 @@
 		<div class="line-center">
 			<i class="mdi mdi-information-outline huge-icon line-center"></i>
 			<h2>{{ 'NoSkillGroupsFound' | translate }}</h2>
-			<button class="wfm-btn wfm-btn-primary" id="create-skill-group-button" ng-click="vm.createSkillGroup($event)">{{
-				'AddSkillGroup' | translate }}</button>
+			<button class="wfm-btn wfm-btn-primary" id="create-skill-group-button" ng-click="vm.createSkillGroup($event)">
+				{{ 'AddSkillGroup' | translate }}</button>
 		</div>
 	</div>
 </div>
@@ -145,10 +163,12 @@
 						</h3>
 						<span>
 							<i class="mdi mdi-alert" ng-if="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0 || vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0"></i>
-							<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0">{{
-								'NameRequired' | translate }}.</span>
-							<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0">{{
-								'YouHaveToSelectAtLeastOneSkill' | translate }}</span>
+							<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0">
+								{{ 'NameRequired' | translate }}.
+							</span>
+							<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0">
+								{{ 'YouHaveToSelectAtLeastOneSkill' | translate }}
+							</span>
 						</span>
 						<div class="con-row">
 							<div class="con-flex">
@@ -168,11 +188,15 @@
 											{{ skill.Name }}
 										</span>
 										<md-tooltip>
-											<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{ skill.SkillType
-												| translate }} - {{ 'MultisiteSkill' | translate }}</span>
-											<span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{ skill.SkillType
-												| translate }}</span>
-											<span ng-if="!skill.DoDisplayData">{{ 'UnsupportedSkill' | translate }}</span>
+											<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">
+												{{ skill.SkillType | translate }} - {{ 'MultisiteSkill' | translate }}
+											</span>
+											<span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">
+												{{ skill.SkillType | translate }}
+											</span>
+											<span ng-if="!skill.DoDisplayData">
+												{{ 'UnsupportedSkill' | translate }}
+											</span>
 										</md-tooltip>
 									</span>
 								</div>
