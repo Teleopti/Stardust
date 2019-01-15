@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly
 {
@@ -18,12 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 		{
 			_unitOfWork = unitOfWork;
 		}
-
-		public ScheduleProjectionReadOnlyPersister(IUnitOfWorkFactory unitOfWorkFactory)
-		{
-			_unitOfWork = new FromFactory(() => unitOfWorkFactory);
-		}
-
+		
 		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
 																	  IScenario scenario)
 		{
@@ -40,7 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 		
 		public bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId,  int version)
 		{
-
 			return _unitOfWork.Session().CreateSQLQuery(
 				"exec ReadModel.DeleteScheduleProjectionReadOnly @PersonId=:person, @ScenarioId=:scenario, @BelongsToDate=:date, @Version=:version")
 				.SetGuid("person", personId)
@@ -52,7 +45,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 
 		public void AddActivity(ScheduleProjectionReadOnlyModel model)
 		{
-			
 			_unitOfWork.Session().CreateSQLQuery(
 				@"exec ReadModel.UpdateScheduleProjectionReadOnly 
 					@PersonId=:PersonId,
@@ -80,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 				.SetString("ShortName", model.ShortName)
 				.SetInt32("DisplayColor", model.DisplayColor)
 				.SetDateTime("InsertedOn", DateTime.UtcNow)
-				.UniqueResult<int>();
+				.ExecuteUpdate();
 		}
 		
 		public bool IsInitialized()
