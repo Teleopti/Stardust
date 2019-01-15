@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			{
 				skillActivities.Add(skill.Activity);
 			}
-			
+
+			var skillDaysForPersonalSkillByActivity = skillDaysForPersonalSkill.ToLookup(s => s.Skill.Activity);
 			return skillActivities.ToDictionary(a => a,
-				skillActivity => _calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDaysForPersonalSkill,
-					skillActivity, minimumResolution));
+				skillActivity => _calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDaysForPersonalSkillByActivity[skillActivity], minimumResolution));
 		}
 	}
 }

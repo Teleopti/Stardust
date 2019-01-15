@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		{
 			var minOpen = TimeSpan.MaxValue;
 			var maxOpen = TimeSpan.MinValue;
-			foreach (var activity in dayIntervalDataPerActivityForDate.Keys)
+			foreach (var activity in dayIntervalDataPerActivityForDate)
 			{
-				var openPeriod = _skillIntervalDataOpenHour.GetOpenHours(dayIntervalDataPerActivityForDate[activity], dateOnly);
+				var openPeriod = _skillIntervalDataOpenHour.GetOpenHours(activity.Value, dateOnly);
 				if(!openPeriod.HasValue)
 					continue;
 

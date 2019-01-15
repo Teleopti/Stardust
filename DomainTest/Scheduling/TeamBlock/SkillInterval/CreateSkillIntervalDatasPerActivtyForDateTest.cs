@@ -6,8 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.TestCommon.FakeData;
 
-
-
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 {
 	[TestFixture]
@@ -53,9 +51,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 				Expect.Call(_skillDayForSkill1.CurrentDate).Return(date).Repeat.Any();
 				Expect.Call(_skillDayForSkill2.Skill).Return(_skill2).Repeat.Any();
 				Expect.Call(_skillDayForSkill2.CurrentDate).Return(date).Repeat.Any();
-				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDayList, _skill1.Activity, 15))
+				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(Arg<IEnumerable<ISkillDay>>.List.IsIn(_skillDayForSkill1),Arg<int>.Is.Equal(15)))
 					  .Return(new List<ISkillIntervalData> { skillIntervalData1 });
-				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDayList, _skill2.Activity, 15))
+				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(Arg<IEnumerable<ISkillDay>>.List.IsIn(_skillDayForSkill2), Arg<int>.Is.Equal(15)))
 					  .Return(new List<ISkillIntervalData> { skillIntervalData2});
 			}
 
@@ -64,10 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 				var result = _target.CreateFor(date, skillList, skillDayList);
 				Assert.AreEqual(2, result.Count);
 			}
-      
-      
-
 		}
-        
 	}
 }
