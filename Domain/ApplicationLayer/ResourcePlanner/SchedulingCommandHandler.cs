@@ -42,13 +42,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				if (_schedulingOptionsProvider.Fetch(null).UseTeam)
 				{
 					var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, command.AgentsToSchedule);
-					addEvent(events, command, command.AgentsToSchedule, agentsAndSkills.Agents, agentsAndSkills.Skills, userLocks);
+					addEvent(events, command, command.AgentsToSchedule, agentsAndSkills.Agents.ToHashSet(), agentsAndSkills.Skills, userLocks);
 				}
 				else
 				{
 					foreach (var island in islands)
 					{
-						var agentsInIslandIds = island.AgentsInIsland().Select(x => x.Id.Value).ToArray();
+						var agentsInIslandIds = island.AgentsInIsland().Select(x => x.Id.Value).ToHashSet();
 						addEvent(events, command, command.AgentsToSchedule, agentsInIslandIds, island.SkillIds(), userLocks);
 					}
 				}	
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		}
 
 		private static void addEvent(ICollection<SchedulingWasOrdered> events, SchedulingCommand command, IEnumerable<IPerson> allAgentsToSchedule, 
-			IEnumerable<Guid> agentsInIslandIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
+			HashSet<Guid> agentsInIslandIds, IEnumerable<Guid> skillsInIslandsIds, IEnumerable<LockInfo> userLocks)
 		{
 			var agentsToScheduleInIsland = allAgentsToSchedule.Where(x => agentsInIslandIds.Contains(x.Id.Value)).ToArray();
 			if (agentsToScheduleInIsland.Any())

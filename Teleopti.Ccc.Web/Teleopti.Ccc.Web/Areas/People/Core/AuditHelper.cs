@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			var persons = _personRepository.FindPeople(inputmodel.Persons);
 			var updatingUser = _loggonUser.CurrentUser();
 			var allRoles = _roleRepository.LoadAll();
-			var selectedRoles = allRoles.Where(x => inputmodel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+			var roledIds = inputmodel.Roles.ToHashSet();
+			var selectedRoles = allRoles.Where(x => roledIds.Contains(x.Id ?? Guid.Empty));
 			var correlationId = Guid.NewGuid();
 
 			foreach (var person in persons)

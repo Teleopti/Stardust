@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixes, SchedulingOptions schedulingOptions, Group group, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
 		{
 			var scheduleDictionary = _schedulingResultStateHolder().Schedules;
-			var groupMembers = group.GroupMembers.ToArray();
+			var groupMembers = group.GroupMembers.ToHashSet();
 			var restriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson(person,
 				scheduleDate, schedulingOptions,
 				scheduleDictionary);

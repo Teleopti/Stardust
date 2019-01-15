@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual IEnumerable<IPerson> LoadAgents(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
-			var allPeople = _personRepository.FindAllAgentsLight(period);
+			var allPeople = _personRepository.FindAllAgentsLight(period).ToHashSet();
 			return allPeople.Where(x => people.Contains(x.Id.Value));			
 		}
 	}

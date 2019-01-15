@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		{
 			var persons = personRepository.FindPeople(grantModel.Persons);
 			var allRoles = roleRepository.LoadAll();
-			var selectedRoles = allRoles.Where(x => grantModel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+			var roledIds = grantModel.Roles.ToHashSet();
+			var selectedRoles = allRoles.Where(x => roledIds.Contains(x.Id ?? Guid.Empty));
 
 			foreach (var person in persons)
 			{
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		{
 			var persons = personRepository.FindPeople(revokeModel.Persons);
 			var allRoles = roleRepository.LoadAll();
-			var selectedRoles = allRoles.Where(x => revokeModel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+			var roleIds = revokeModel.Roles.ToHashSet();
+			var selectedRoles = allRoles.Where(x => roleIds.Contains(x.Id ?? Guid.Empty));
 
 			foreach (var person in persons)
 			{
@@ -90,7 +92,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		{
 			var persons = personRepository.FindPeople(grantModel.Persons);
 			var allRoles = roleRepository.LoadAll();
-			var selectedRoles = allRoles.Where(x => grantModel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+			var roledIds = grantModel.Roles.ToHashSet();
+			var selectedRoles = allRoles.Where(x => roledIds.Contains(x.Id ?? Guid.Empty));
 
 			foreach (var person in persons)
 			{
@@ -107,7 +110,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		{
 			var persons = personRepository.FindPeople(revokeModel.Persons);
 			var allRoles = roleRepository.LoadAll();
-			var selectedRoles = allRoles.Where(x => revokeModel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+			var roledIds = revokeModel.Roles.ToHashSet();
+			var selectedRoles = allRoles.Where(x => roledIds.Contains(x.Id ?? Guid.Empty));
 
 			foreach (var person in persons)
 			{

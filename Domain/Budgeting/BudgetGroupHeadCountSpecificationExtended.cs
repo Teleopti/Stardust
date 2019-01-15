@@ -66,7 +66,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 			var budgetDaysToProcess = new List<IBudgetDay>();
 			var dayToProcess = new List<DateOnly>();
-			var stayAwayFromTheseDays = new List<DateOnly>();
+			var dayCollection = requestedPeriod.DayCollection();
+			var stayAwayFromTheseDays = new HashSet<DateOnly>();
 			foreach (var day in periodToConsider.DayCollection())
 			{
 				var scheduleDay = scheduleRange.ScheduledDay(day);
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 						}
 						
 					}
-					else if(requestedPeriod.DayCollection().Any(x => x == day) && !stayAwayFromTheseDays.Contains(day))
+					else if(dayCollection.Any(x => x == day) && !stayAwayFromTheseDays.Contains(day))
 					{
 						dayToProcess.Add(day);
 					}
@@ -97,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				}
 				else
 				{
-					if (requestedPeriod.DayCollection().Any(x => x == day) && !stayAwayFromTheseDays.Contains(day))
+					if (dayCollection.Any(x => x == day) && !stayAwayFromTheseDays.Contains(day))
 					{
 						dayToProcess.Add(day);
 					}

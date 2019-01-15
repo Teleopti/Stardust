@@ -19,9 +19,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public static IPerson[] Filter(this IEnumerable<IPerson> agents, IEnumerable<Guid> agentIds)
 		{
+			var hashAgentIds = agentIds?.ToHashSet();
 			return (agentIds == null ? 
 				agents : 
-				agents.Where(x => agentIds.Contains(x.Id.Value))).ToArray();
+				agents.Where(x => hashAgentIds.Contains(x.Id.Value))).ToArray();
 		}
 	}
 }

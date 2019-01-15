@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 
 				_activityRepository.LoadAll();
-				var allSkills = _skillRepository.LoadAll().ToList();
+				var allSkills = _skillRepository.LoadAll().ToHashSet();
 
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 
-				var skillIds = combinationResources.SelectMany(s => s.SkillCombination).Distinct().ToArray();
+				var skillIds = combinationResources.SelectMany(s => s.SkillCombination).Distinct().ToHashSet();
 				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.GetValueOrDefault())).Min(x => x.DefaultResolution);
 				
 				var shiftPeriodList = new List<DateTimePeriod>();
