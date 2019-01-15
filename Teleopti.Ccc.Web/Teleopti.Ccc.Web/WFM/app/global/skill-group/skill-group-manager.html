@@ -50,8 +50,8 @@
  ng-cloak>
 	<div class="con-row">
 		<div class="con-flex">
-			<div class="panel">
-				<div class="sub-header">
+			<div class="panel full-padding">
+				<div class="full-padding">
 					<h2 style="display: inline; line-height: 44px;">{{'AllSkillGroups'|translate}}</h2>
 					<button type="button" class="wfm-btn wfm-btn-invis-primary pull-right" ng-disabled="vm.canSave" ng-click="vm.createSkillGroup($event)">
 						{{ 'Add'|translate }}
@@ -105,8 +105,8 @@
 			</div>
 		</div>
 		<div class="con-flex x3">
-			<div class="panel" ng-show="vm.skillGroups[vm.selectedGroupIndex]">
-				<div class="sub-header">
+			<div class="panel full-padding" ng-show="vm.skillGroups[vm.selectedGroupIndex]">
+				<div class="full-padding">
 					<h2 style="display: inline; line-height: 44px">{{vm.skillGroups[vm.selectedGroupIndex].Name}}</h2>
 					<button type="button" class="wfm-btn wfm-btn-invis-primary pull-right" id="save_all" ng-show="vm.canSave" ng-click="vm.saveAll()">
 						{{'Save'|translate}}
