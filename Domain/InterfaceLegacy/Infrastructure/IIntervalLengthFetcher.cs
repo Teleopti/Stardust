@@ -2,6 +2,6 @@
 {
 	public interface IIntervalLengthFetcher
 	{
-		int IntervalLength { get; }
+		int GetIntervalLength();
 	}
 }

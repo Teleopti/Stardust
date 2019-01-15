@@ -12,15 +12,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_currentDataSource = currentDataSource;
 		}
 
-		public int IntervalLength
+		public int GetIntervalLength()
 		{
-			get
+			using (IStatelessUnitOfWork uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
-				using (IStatelessUnitOfWork uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
-				{
-					return uow.Session().CreateSQLQuery(@"mart.sys_interval_length_get")
-						.UniqueResult<int>();
-				}
+				return uow.Session().CreateSQLQuery(@"mart.sys_interval_length_get")
+					.UniqueResult<int>();
 			}
 		}
 	}

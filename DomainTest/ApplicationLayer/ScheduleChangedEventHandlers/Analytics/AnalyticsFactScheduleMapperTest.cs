@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		{
 			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var scheduleChangeTime = DateTime.Now;
-			var result = Target.AgentDaySchedule(new ProjectionChangedEventScheduleDay(), getBaseScheduleDay(scheduleChangeTime), null, scheduleChangeTime, 1, 1, scenarioCode, new Dictionary<Guid, AnalyticsActivity>(), personCode);
+			var result = Target.AgentDaySchedule(new ProjectionChangedEventScheduleDay(), getBaseScheduleDay(scheduleChangeTime), null, IntervalLength.GetIntervalLength(), scheduleChangeTime, 1, 1, new Dictionary<Guid, AnalyticsActivity>(), personCode);
 			result.Count.Should().Be.EqualTo(0);
 		}
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				}
 			};
 			var scheduleChangeTime = DateTime.Now;
-			Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), null, scheduleChangeTime, 1, 1, scenarioCode, new Dictionary<Guid, AnalyticsActivity>(), personCode);
+			Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), null, IntervalLength.GetIntervalLength(), scheduleChangeTime, 1, 1, new Dictionary<Guid, AnalyticsActivity>(), personCode);
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			IntervalLength.Has(15);
 			var scheduleChangeTime = DateTime.Now;
 
-			var result = Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), null, scheduleChangeTime, 1, 1, scenarioCode, new Dictionary<Guid, AnalyticsActivity>(), personCode);
+			var result = Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), null, IntervalLength.GetIntervalLength(), scheduleChangeTime, 1, 1, new Dictionary<Guid, AnalyticsActivity>(), personCode);
 
 			result.First().TimePart.ScheduledMinutes.Should().Be.EqualTo(5);
 			result.Last().TimePart.ScheduledMinutes.Should().Be.EqualTo(10);
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			AnalyticsDates.Clear();
 			var scheduleChangeTime = DateTime.Now;
 
-			var result = Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), null, scheduleChangeTime, 1, 1, scenarioCode, new Dictionary<Guid, AnalyticsActivity>(), personCode);
+			var result = Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), null, IntervalLength.GetIntervalLength(), scheduleChangeTime, 1, 1, new Dictionary<Guid, AnalyticsActivity>(), personCode);
 			result.Should().Be.Null();
 		}
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			IntervalLength.Has(15);
 			var scheduleChangeTime = DateTime.Now;
 
-			var result = Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), personPart, scheduleChangeTime, 1, 1, scenarioCode, new Dictionary<Guid, AnalyticsActivity>(), personCode);
+			var result = Target.AgentDaySchedule(eventScheduleDay, getBaseScheduleDay(scheduleChangeTime), personPart, IntervalLength.GetIntervalLength(), scheduleChangeTime, 1, 1, new Dictionary<Guid, AnalyticsActivity>(), personCode);
 
 			result.Count.Should().Be.EqualTo(4);
 			result[0].PersonPart.Should().Be.SameInstanceAs(personPart);
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				AbsenceCode = absenceId
 			});
 			
-			var result = Target.AgentDaySchedule(eventScheduleDay, baseScheduleDay, personPart, scheduleChangeTime, 1, 1, scenarioCode, new Dictionary<Guid, AnalyticsActivity>(), personCode);
+			var result = Target.AgentDaySchedule(eventScheduleDay, baseScheduleDay, personPart, IntervalLength.GetIntervalLength(), scheduleChangeTime, 1, 1, new Dictionary<Guid, AnalyticsActivity>(), personCode);
 
 			result.Count.Should().Be.EqualTo(4);
 			result[0].PersonPart.Should().Be.SameInstanceAs(personPart);
@@ -195,29 +195,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private IEnumerable<ProjectionChangedEventLayer> createLayers(DateTime startOfShift, IEnumerable<int> lengthCollection)
 		{
 			int accStart = 0;
-			var layerList = new List<ProjectionChangedEventLayer>();
-			
-
-			foreach (int length in lengthCollection)
+			return lengthCollection.Select(length =>
 			{
-				layerList.Add(
-					new ProjectionChangedEventLayer
-					{
-						StartDateTime = startOfShift.AddMinutes(accStart),
-						EndDateTime = startOfShift.AddMinutes(accStart).AddMinutes(length),
-						ContractTime = new TimeSpan(0, 0, length),
-						WorkTime = new TimeSpan(0, 0, length),
-						DisplayColor = Color.Brown.ToArgb(),
-						IsAbsence = true,
-						IsAbsenceConfidential = true,
-						Name = "Jonas",
-						ShortName = "JN",
-						PayloadId = absenceId
-					}
-					);
+				var item = new ProjectionChangedEventLayer
+				{
+					StartDateTime = startOfShift.AddMinutes(accStart),
+					EndDateTime = startOfShift.AddMinutes(accStart).AddMinutes(length),
+					ContractTime = new TimeSpan(0, 0, length),
+					WorkTime = new TimeSpan(0, 0, length),
+					DisplayColor = Color.Brown.ToArgb(),
+					IsAbsence = true,
+					IsAbsenceConfidential = true,
+					Name = "Jonas",
+					ShortName = "JN",
+					PayloadId = absenceId
+				};
 				accStart += length;
-			}
-			return layerList;
+				return item;
+			}).ToArray();
 		}
 	}
 }

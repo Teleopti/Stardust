@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 
 		public IList<EslInterval> CalculateEstimatedServiceLevels(IEnumerable<ISkillDay> skillDays, DateTime startOfPeriodUtc, DateTime endOfPeriodUtc)
 		{
-			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
+			var minutesPerInterval = _intervalLengthFetcher.GetIntervalLength();
 			var eslIntervals = new List<EslInterval>();
 
 			if (!skillDays.Any())

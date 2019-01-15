@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			skillRepository.Stub(x => x.LoadAll()).Return(new ISkill[] {});
 			var intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
-			intervalLengthFetcher.Stub(x => x.IntervalLength).Return(14);
+			intervalLengthFetcher.Stub(x => x.GetIntervalLength()).Return(14);
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			skillRepository.Stub(x => x.LoadAll()).Return(new ISkill[] { });
 			var intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
-			intervalLengthFetcher.Stub(x => x.IntervalLength).Return(14);
+			intervalLengthFetcher.Stub(x => x.GetIntervalLength()).Return(14);
 			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
 			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			skillRepository.Stub(x => x.LoadAll()).Return(new ISkill[] { });
 			var intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
-			intervalLengthFetcher.Stub(x => x.IntervalLength).Return(14);
+			intervalLengthFetcher.Stub(x => x.GetIntervalLength()).Return(14);
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			var skillTypeProvider = MockRepository.GenerateMock<ISkillTypeProvider>();
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			existingSkill.Activity = activity;
 			skillRepository.Stub(x => x.LoadAll()).Return(new[] { existingSkill });
 			var intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
-			intervalLengthFetcher.Stub(x => x.IntervalLength).Return(14);
+			intervalLengthFetcher.Stub(x => x.GetIntervalLength()).Return(14);
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			var queueSource = new QueueSource("testQ", "", 1);
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			skill.Activity = activity;
 			skillRepository.Stub(x => x.LoadAll()).Return(new[] {skill});
 			var intervalLengthFetcher = MockRepository.GenerateMock<IIntervalLengthFetcher>();
-			intervalLengthFetcher.Stub(x => x.IntervalLength).Return(30);
+			intervalLengthFetcher.Stub(x => x.GetIntervalLength()).Return(30);
 			var target = new SkillController(activityProvider, skillRepository, intervalLengthFetcher, null, null, null, MockRepository.GenerateMock<IWorkloadRepository>());
 			var result  = target.Activities();
 

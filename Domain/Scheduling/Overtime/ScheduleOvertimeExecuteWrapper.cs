@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 				var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items()
 					.Where(x => skillsToAddOvertime.Contains(x.Key));
-				var intervalLength = _intervalLengthFetcher.IntervalLength;
+				var intervalLength = _intervalLengthFetcher.GetIntervalLength();
 				foreach (var keyValuePair in xx)
 				{
 					var intervals = keyValuePair.Value.OnlyValues().Cast<SkillStaffingInterval>();

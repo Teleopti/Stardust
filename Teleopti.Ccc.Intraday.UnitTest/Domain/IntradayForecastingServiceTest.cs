@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.Domain
 			var endOfPeriodUtc = new DateTime(2018, 8, 27, 9, 0, 0, DateTimeKind.Utc);
 
 			var intervalFetcherMock = MockRepository.GenerateMock<IIntervalLengthFetcher>();
-			intervalFetcherMock.Stub(f => f.IntervalLength).Return(15);
+			intervalFetcherMock.Stub(f => f.GetIntervalLength()).Return(15);
 
 			var issMock = MockRepository.GenerateMock<IIntradayStaffingService>();
 

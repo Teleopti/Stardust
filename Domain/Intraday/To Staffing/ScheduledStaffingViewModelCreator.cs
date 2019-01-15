@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, _timeZone.TimeZone());
 
-			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
+			var minutesPerInterval = _intervalLengthFetcher.GetIntervalLength();
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
 			var forecastedStaffing = _intradayStaffingApplicationService.GetForecastedStaffing(skillIdList, startOfDayUtc,

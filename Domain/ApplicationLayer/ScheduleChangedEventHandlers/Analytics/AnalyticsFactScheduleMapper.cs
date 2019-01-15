@@ -2,33 +2,28 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	public class AnalyticsFactScheduleMapper
 	{
-		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly IAnalyticsFactScheduleDateMapper _dateMapper;
+		private readonly AnalyticsFactScheduleDateMapper _dateMapper;
 		private readonly AnalyticsFactScheduleTimeMapper _timeMapper;
 
 		public AnalyticsFactScheduleMapper(
-			IIntervalLengthFetcher intervalLengthFetcher,
-			IAnalyticsFactScheduleDateMapper dateMapper,
+			AnalyticsFactScheduleDateMapper dateMapper,
 			AnalyticsFactScheduleTimeMapper timeMapper)
 		{
-			_intervalLengthFetcher = intervalLengthFetcher;
 			_dateMapper = dateMapper;
 			_timeMapper = timeMapper;
 		}
 
-		public List<IFactScheduleRow> AgentDaySchedule(ProjectionChangedEventScheduleDay eventScheduleDay, IScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, DateTime scheduleChangeTime, int shiftCategoryId, int scenarioId, Guid scenarioCode, IDictionary<Guid, AnalyticsActivity> activities, Guid personCode)
+		public List<IFactScheduleRow> AgentDaySchedule(ProjectionChangedEventScheduleDay eventScheduleDay, IScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, int intervalLength, DateTime scheduleChangeTime, int shiftCategoryId, int scenarioId, IDictionary<Guid, AnalyticsActivity> activities, Guid personCode)
 		{
 			if (eventScheduleDay.Shift == null)
 				return new List<IFactScheduleRow>();
-
-			var intervalLength = _intervalLengthFetcher.IntervalLength;
+			
 			var shiftStart = eventScheduleDay.Shift.StartDateTime;
 			var intervalStart = shiftStart;
 			var shiftEnd = eventScheduleDay.Shift.EndDateTime;

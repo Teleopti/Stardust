@@ -118,6 +118,124 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adherence\Historical\ApproveOutOfAdherences_47230.feature.cs">
+      <DependentUpon>ApproveOutOfAdherences_47230.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\DurationOfHistoricalEvents_76470.feature.cs">
+      <DependentUpon>DurationOfHistoricalEvents_76470.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\EasilySpotLateForWork_75668.feature.cs">
+      <DependentUpon>EasilySpotLateForWork_75668.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\NeutralAdherencePolicy.feature.cs">
+      <DependentUpon>NeutralAdherencePolicy.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\Percentage.feature.cs">
+      <DependentUpon>Percentage.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\RemoveApprovedOutOfAdherences_47721.feature.cs">
+      <DependentUpon>RemoveApprovedOutOfAdherences_47721.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\RestrictModifyAdherenceWithPermission_74898.feature.cs">
+      <DependentUpon>RestrictModifyAdherenceWithPermission_74898.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\ReviewHistoricalAdherence_74770.feature.cs">
+      <DependentUpon>ReviewHistoricalAdherence_74770.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\SeeAllOutOfAdherencesToday_39146.feature.cs">
+      <DependentUpon>SeeAllOutOfAdherencesToday_39146.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\SeeHistoricalAdherenceFor7DaysBack_46826.feature.cs">
+      <DependentUpon>SeeHistoricalAdherenceFor7DaysBack_46826.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\SolidProof_39351.feature.cs">
+      <DependentUpon>SolidProof_39351.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Historical\TimeZone.feature.cs">
+      <DependentUpon>TimeZone.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\Agents.feature.cs">
+      <DependentUpon>Agents.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\AgentsInAlarm_34975.feature.cs">
+      <DependentUpon>AgentsInAlarm_34975.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\AgentsInMultipleTeams.feature.cs">
+      <DependentUpon>AgentsInMultipleTeams.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\AgentsInOrganizationWithSkills_41586.feature.cs">
+      <DependentUpon>AgentsInOrganizationWithSkills_41586.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\AlarmContext_29357.feature.cs">
+      <DependentUpon>AlarmContext_29357.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\ChangeSchedule.feature.cs">
+      <DependentUpon>ChangeSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\DeletedPersons_36041.feature.cs">
+      <DependentUpon>DeletedPersons_36041.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\HideSpecificStateGroup.feature.cs">
+      <DependentUpon>HideSpecificStateGroup.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\MonitorAgentsBySkill.feature.cs">
+      <DependentUpon>MonitorAgentsBySkill.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\MonitorAgentsBySkillArea_39337.feature.cs">
+      <DependentUpon>MonitorAgentsBySkillArea_39337.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\MonitorAgentsInPermittedOrganizaionlOnly.feature.cs">
+      <DependentUpon>MonitorAgentsInPermittedOrganizaionlOnly.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs">
+      <DependentUpon>MonitorAgentsViewInPermittedOrganizaionlOnly.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\PauseButton_39144.feature.cs">
+      <DependentUpon>PauseButton_39144.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\QuicklyChangeAgentsSelection.feature.cs">
+      <DependentUpon>QuicklyChangeAgentsSelection.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\RecentOutOfAdherences_39145.feature.cs">
+      <DependentUpon>RecentOutOfAdherences_39145.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\RestrictModifySkillGroups_78568.feature.cs">
+      <DependentUpon>RestrictModifySkillGroups_78568.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\SiteAndTeamOnSkillAreaOverview.feature.cs">
+      <DependentUpon>SiteAndTeamOnSkillAreaOverview.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\SiteAndTeamOnSkillOverview.feature.cs">
+      <DependentUpon>SiteAndTeamOnSkillOverview.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\SitesOverview.feature.cs">
+      <DependentUpon>SitesOverview.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\TeamChanges_36043.feature.cs">
+      <DependentUpon>TeamChanges_36043.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\TeamsOverview.feature.cs">
+      <DependentUpon>TeamsOverview.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\TerminatedPersons_36042.feature.cs">
+      <DependentUpon>TerminatedPersons_36042.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\Monitor\Top50Agents.feature.cs">
+      <DependentUpon>Top50Agents.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\AgentHistoricalPageStepDefinitions.cs" />
+    <Compile Include="Adherence\AgentsDefinitions.cs" />
+    <Compile Include="Adherence\HistoricalOverviewStepDefinitions.cs" />
+    <Compile Include="Adherence\OverviewDefinitions.cs" />
+    <Compile Include="Adherence\AdherencePageStepDefinitions.cs" />
+    <Compile Include="Adherence\ToolPageStepDefinitions.cs" />
+    <Compile Include="Adherence\TracerPageStepDefinitions.cs" />
+    <Compile Include="Adherence\RtaTool.feature.cs">
+      <DependentUpon>RtaTool.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Adherence\RtaTracer.feature.cs">
+      <DependentUpon>RtaTracer.feature</DependentUpon>
+    </Compile>
     <Compile Include="APIResponseStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ApprovedPeriodsStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\QueueSourceDefinitions.cs" />
@@ -128,7 +246,6 @@
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceHistoricalOverviewStepDefinitions.cs" />
     <Compile Include="BusinessUnitSelectionTest.cs" />
     <Compile Include="FullIntegrationTestAttribute.cs" />
     <Compile Include="MyTime\DaySchedule\80101_DayScheduleForStartPage.feature.cs">
@@ -176,17 +293,11 @@
     </Compile>
     <Compile Include="Wfm\People\RoleStepDefinition.cs" />
     <Compile Include="Wfm\People\PeopleStepDefinition.cs" />
-    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceAgentHistoricalPageStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceAgentsDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceOverviewDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\GlobalStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\IntradayStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\PermissionsStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceToolPageStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceTracerPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\ResourcePlannerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
     <Compile Include="Bindings\ITestInfo.cs" />
@@ -726,71 +837,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Wfm\Permissions\PermissionsStepDefinitionsNew.cs" />
-    <Compile Include="Wfm\RealTimeAdherence\AgentsForEntireBu.feature.cs">
-      <DependentUpon>AgentsForEntireBu.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RestrictModifySkillGroups_78568.feature.cs">
-      <DependentUpon>RestrictModifySkillGroups_78568.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\ReviewHistoricalAdherence_74770.feature.cs">
-      <DependentUpon>ReviewHistoricalAdherence_74770.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\DurationOfHistoricalEvents_76470.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DurationOfHistoricalEvents_76470.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\PauseButton_39144.feature.cs">
-      <DependentUpon>PauseButton_39144.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs">
-      <DependentUpon>MonitorAgentsViewInPermittedOrganizaionlOnly.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\EasilySpotLateForWork_75668.feature.cs">
-      <DependentUpon>EasilySpotLateForWork_75668.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RestrictModifyAdherenceWithPermission_74898.feature.cs">
-      <DependentUpon>RestrictModifyAdherenceWithPermission_74898.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RtaTracer.feature.cs">
-      <DependentUpon>RtaTracer.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RtaTool.feature.cs">
-      <DependentUpon>RtaTool.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\SeeHistoricalAdherenceFor7DaysBack_46826.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SeeHistoricalAdherenceFor7DaysBack_46826.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\ApproveOutOfAdherences_47230.feature.cs">
-      <DependentUpon>ApproveOutOfAdherences_47230.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RemoveApprovedOOA_47721.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RemoveApprovedOOA_47721.feature</DependentUpon>
-    </Compile>
     <Compile Include="Wfm\Requests\OvertimeRequests.feature.cs">
       <DependentUpon>OvertimeRequests.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -810,121 +856,6 @@
     <Compile Include="Wfm\ResourcePlanner\PlanningGroupStepDefinition.cs" />
     <Compile Include="Wfm\ResourcePlanner\PlanningPeriod.feature.cs">
       <DependentUpon>PlanningPeriod.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\SolidProof_39351.feature.cs">
-      <DependentUpon>SolidProof_39351.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\AgentsOnOrganizationAndSkills_41586.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AgentsOnOrganizationAndSkills_41586.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\MonitorAgentsInPermittedOrganizaionlOnly.feature.cs">
-      <DependentUpon>MonitorAgentsInPermittedOrganizaionlOnly.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RTA_QuicklyChangeAgentsSelection.feature.cs">
-      <DependentUpon>RTA_QuicklyChangeAgentsSelection.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\SeeAllOutOfAdherencesToday_39146.feature.cs">
-      <DependentUpon>SeeAllOutOfAdherencesToday_39146.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\HideSpecificStateGroup.feature.cs">
-      <DependentUpon>HideSpecificStateGroup.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\SiteAndTeamOnSkillOverview.feature.cs">
-      <DependentUpon>SiteAndTeamOnSkillOverview.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\SiteAndTeamOnSkillAreaOverview.feature.cs">
-      <DependentUpon>SiteAndTeamOnSkillAreaOverview.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\MonitorBySkillArea_39337.feature.cs">
-      <DependentUpon>MonitorBySkillArea_39337.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\MonitorBySkill.feature.cs">
-      <DependentUpon>MonitorBySkill.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\TeamsOverview.feature.cs">
-      <DependentUpon>TeamsOverview.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\SitesOverview.feature.cs">
-      <DependentUpon>SitesOverview.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\RecentOutOfAdherences_39145.feature.cs">
-      <DependentUpon>RecentOutOfAdherences_39145.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\DeletedPersons_36041.feature.cs">
-      <DependentUpon>DeletedPersons_36041.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\TeamChanges_36043.feature.cs">
-      <DependentUpon>TeamChanges_36043.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\AlarmContext_29357.feature.cs">
-      <DependentUpon>AlarmContext_29357.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\TerminatedPersons_36042.feature.cs">
-      <DependentUpon>TerminatedPersons_36042.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\AgentsInAlarm_34975.feature.cs">
-      <DependentUpon>AgentsInAlarm_34975.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\AgentsMultiTeams.feature.cs">
-      <DependentUpon>AgentsMultiTeams.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\ChangeSchedule.feature.cs">
-      <DependentUpon>ChangeSchedule.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\NeutralPolicy.feature.cs">
-      <DependentUpon>NeutralPolicy.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\Percentage.feature.cs">
-      <DependentUpon>Percentage.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\TimeZone.feature.cs">
-      <DependentUpon>TimeZone.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -1029,6 +960,154 @@
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Adherence\Historical\ApproveOutOfAdherences_47230.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ApproveOutOfAdherences_47230.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\DurationOfHistoricalEvents_76470.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>DurationOfHistoricalEvents_76470.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\EasilySpotLateForWork_75668.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EasilySpotLateForWork_75668.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\NeutralAdherencePolicy.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>NeutralPolicy.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\Percentage.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Percentage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\RemoveApprovedOutOfAdherences_47721.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RemoveApprovedOOA_47721.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\RestrictModifyAdherenceWithPermission_74898.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RestrictModifyAdherenceWithPermission_74898.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\ReviewHistoricalAdherence_74770.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ReviewHistoricalAdherence_74770.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\SeeAllOutOfAdherencesToday_39146.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SeeAllOutOfAdherencesToday_39146.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\SeeHistoricalAdherenceFor7DaysBack_46826.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SeeHistoricalAdherenceFor7DaysBack_46826.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\SolidProof_39351.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SolidProof_39351.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Historical\TimeZone.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TimeZone.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\Agents.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Agents.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\AgentsInAlarm_34975.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AgentsInAlarm_34975.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\AgentsInMultipleTeams.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AgentsMultiTeams.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\AgentsInOrganizationWithSkills_41586.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AgentsOnOrganizationAndSkills_41586.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\AlarmContext_29357.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AlarmContext_29357.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\ChangeSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ChangeSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\DeletedPersons_36041.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>DeletedPersons_36041.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\HideSpecificStateGroup.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>HideSpecificStateGroup.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\MonitorAgentsBySkill.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MonitorBySkill.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\MonitorAgentsBySkillArea_39337.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MonitorBySkillArea_39337.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\MonitorAgentsInPermittedOrganizaionlOnly.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MonitorAgentsInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\MonitorAgentsViewInPermittedOrganizaionlOnly.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\PauseButton_39144.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PauseButton_39144.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\QuicklyChangeAgentsSelection.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RTA_QuicklyChangeAgentsSelection.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\RecentOutOfAdherences_39145.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RecentOutOfAdherences_39145.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\RestrictModifySkillGroups_78568.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Agents.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\SiteAndTeamOnSkillAreaOverview.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SiteAndTeamOnSkillAreaOverview.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\SiteAndTeamOnSkillOverview.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SiteAndTeamOnSkillOverview.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\SitesOverview.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SitesOverview.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\TeamChanges_36043.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TeamChanges_36043.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\TeamsOverview.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TeamsOverview.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\TerminatedPersons_36042.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TerminatedPersons_36042.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\Monitor\Top50Agents.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AgentsForEntireBu.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\RtaTool.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RtaTool.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Adherence\RtaTracer.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RtaTracer.feature.cs</LastGenOutput>
+    </None>
     <None Include="MultiTenancy\Tenants.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Tenants.feature.cs</LastGenOutput>
@@ -1246,58 +1325,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PermissionsNew.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\RestrictModifySkillGroups_78568.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Agents.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\ReviewHistoricalAdherence_74770.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ReviewHistoricalAdherence_74770.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\DurationOfHistoricalEvents_76470.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>DurationOfHistoricalEvents_76470.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\PauseButton_39144.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PauseButton_39144.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\AgentsForEntireBu.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentsForEntireBu.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\MonitorAgentsViewInPermittedOrganizaionlOnly.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\EasilySpotLateForWork_75668.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>EasilySpotLateForWork_75668.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\RestrictModifyAdherenceWithPermission_74898.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RestrictModifyAdherenceWithPermission_74898.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\RtaTracer.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RtaTracer.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\RtaTool.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RtaTool.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\SeeHistoricalAdherenceFor7DaysBack_46826.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SeeHistoricalAdherenceFor7DaysBack_46826.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\ApproveOutOfAdherences_47230.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ApproveOutOfAdherences_47230.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\RemoveApprovedOOA_47721.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RemoveApprovedOOA_47721.feature.cs</LastGenOutput>
-    </None>
     <None Include="Wfm\Requests\OvertimeRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OvertimeRequests.feature.cs</LastGenOutput>
@@ -1313,102 +1340,6 @@
     <None Include="Wfm\ResourcePlanner\PlanningPeriod.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PlanningPeriod.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\SolidProof_39351.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SolidProof_39351.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\AgentsOnOrganizationAndSkills_41586.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentsOnOrganizationAndSkills_41586.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\MonitorAgentsInPermittedOrganizaionlOnly.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorAgentsInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\RTA_QuicklyChangeAgentsSelection.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RTA_QuicklyChangeAgentsSelection.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\SeeAllOutOfAdherencesToday_39146.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SeeAllOutOfAdherencesToday_39146.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\HideSpecificStateGroup.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>HideSpecificStateGroup.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\SiteAndTeamOnSkillOverview.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SiteAndTeamOnSkillOverview.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\SiteAndTeamOnSkillAreaOverview.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SiteAndTeamOnSkillAreaOverview.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\MonitorBySkillArea_39337.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorBySkillArea_39337.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\MonitorBySkill.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorBySkill.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\TeamsOverview.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TeamsOverview.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\SitesOverview.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SitesOverview.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\RecentOutOfAdherences_39145.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RecentOutOfAdherences_39145.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\DeletedPersons_36041.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>DeletedPersons_36041.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\TeamChanges_36043.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TeamChanges_36043.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\AlarmContext_29357.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AlarmContext_29357.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\TerminatedPersons_36042.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TerminatedPersons_36042.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\AgentsInAlarm_34975.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentsInAlarm_34975.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\Agents.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Agents.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\AgentsMultiTeams.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentsMultiTeams.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\ChangeSchedule.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ChangeSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\NeutralPolicy.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>NeutralPolicy.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\Percentage.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Percentage.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\TimeZone.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TimeZone.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\ResourcePlanner\PlanningGroup.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1640,7 +1571,6 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.WebbehaviorTest.config" "$(ProjectDir)App.config"

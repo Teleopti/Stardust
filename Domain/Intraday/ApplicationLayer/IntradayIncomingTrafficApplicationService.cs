@@ -45,11 +45,11 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 		}
 		public IntradayIncomingViewModel GenerateIncomingTrafficViewModel(Guid[] skillIdList, DateTime timeUtc)
 		{
-			var startOfDayLocal = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, _timeZone.TimeZone()).Date;
-			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, _timeZone.TimeZone());
-
-			var vm = new IntradayIncomingViewModel();
-			var intervalLength = _intervalLengthFetcher.IntervalLength;
+			var timeZone = _timeZone.TimeZone();
+			var startOfDayLocal = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, timeZone).Date;
+			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, timeZone);
+			
+			var intervalLength = _intervalLengthFetcher.GetIntervalLength();
 
 			var supportedSkills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			var abandonRateSupported = supportedSkills.All(x => _skillTypeInfoProvider.GetSkillTypeInfo(x).SupportsAbandonRate);
@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			if (orderedIntervals.Any())
 			{
 				var firstIntervalStartTimeLocal =
-					TimeZoneInfo.ConvertTimeFromUtc(orderedIntervals.Min(x => x.IntervalTime), _timeZone.TimeZone());
+					TimeZoneInfo.ConvertTimeFromUtc(orderedIntervals.Min(x => x.IntervalTime), timeZone);
 				
 				var lastIntervalStartTimeLocal =
-					TimeZoneInfo.ConvertTimeFromUtc(orderedIntervals.Max(x => x.IntervalTime), _timeZone.TimeZone());
+					TimeZoneInfo.ConvertTimeFromUtc(orderedIntervals.Max(x => x.IntervalTime), timeZone);
 
 				timesLocal = this.GenerateTimeSeries(firstIntervalStartTimeLocal, lastIntervalStartTimeLocal,
 					intervalLength);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 				foreach (var t in timesLocal)
 				{
-					var correspondingUtcTime = TimeZoneInfo.ConvertTimeToUtc(t, _timeZone.TimeZone());
+					var correspondingUtcTime = TimeZoneInfo.ConvertTimeToUtc(t, timeZone);
 					var correspondingorderedIntervals =
 						orderedIntervals.Where(x => x.IntervalTime.Equals(correspondingUtcTime));
 
@@ -138,12 +138,12 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 			var firstIntervalStartUtc = orderedIntervals?.FirstOrDefault()?.IntervalTime;
 			firstIntervalStartUtc = firstIntervalStartUtc.HasValue
-				? (DateTime?) TimeZoneInfo.ConvertTimeFromUtc(firstIntervalStartUtc.Value, _timeZone.TimeZone())
+				? (DateTime?) TimeZoneInfo.ConvertTimeFromUtc(firstIntervalStartUtc.Value, timeZone)
 				: null;
 
 			var latestActualIntervalStartUtc = orderedIntervals?.LastOrDefault(x => x.CalculatedCalls.HasValue)?.IntervalTime;
 			latestActualIntervalStartUtc = latestActualIntervalStartUtc.HasValue
-				? (DateTime?) TimeZoneInfo.ConvertTimeFromUtc(latestActualIntervalStartUtc.Value, _timeZone.TimeZone())
+				? (DateTime?) TimeZoneInfo.ConvertTimeFromUtc(latestActualIntervalStartUtc.Value, timeZone)
 				: null;
 			
 			return new IntradayIncomingViewModel()
