@@ -355,7 +355,6 @@
     <Compile Include="Areas\ResourcePlanner\GroupPagesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\FullSchedulingResultModelTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodControllerTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\ViolatedBusinessRulesTest.cs" />
     <Compile Include="Areas\Search\FakeNextPlanningPeriodProvider.cs" />
     <Compile Include="Areas\Search\GlobalSearchTestAttribute.cs" />
     <Compile Include="Areas\Search\PeopleSearchControllerTest .cs" />

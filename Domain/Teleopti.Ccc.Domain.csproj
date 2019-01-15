@@ -2339,7 +2339,6 @@
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRequiresSkillProjectionFilter.cs" />
     <Compile Include="Scheduling\SaveSchedulePart\BusinessRulesForPersonalAccountUpdate.cs" />
-    <Compile Include="Scheduling\ViolatedSchedulePeriodBusinessRule.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContextState.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderFromDatabase.cs" />
     <Compile Include="SeatPlanning\GroupSeatBookingRanker.cs" />
