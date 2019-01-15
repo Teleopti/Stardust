@@ -65,6 +65,7 @@
 		vm.skillNameMaxLength = 50;
 		vm.stateName = '';
 		vm.editGroupNameBox = false;
+		vm.addGroupBox = false;
 		vm.toggles = {};
 
 		//----------- scoped functions ----------------------------------------------------
@@ -110,7 +111,7 @@
 		vm.createSkillGroup = function(ev) {
 			vm.newGroup = Object.assign({}, { Name: '', Id: 'New' + _.uniqueId(), Skills: [], Saved: false });
 			vm.isNew = true;
-			vm.editGroupNameBox = true;
+			vm.addGroupBox = true;
 			ev && ev.stopPropagation();
 		};
 
@@ -223,6 +224,7 @@
 				ev.stopPropagation();
 			}
 			vm.editGroupNameBox = false;
+			vm.addGroupBox = false;
 			vm.newGroupName = '';
 		};
 

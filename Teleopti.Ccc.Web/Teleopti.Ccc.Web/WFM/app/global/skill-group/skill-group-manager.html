@@ -20,13 +20,13 @@
 	</div>
 </div>
 <!-- create skillgroup -->
-<modal-dialog show='vm.editGroupNameBox' ng-cloak>
+<modal-dialog show='vm.addGroupBox' ng-cloak>
 	<h1 class="modal-title">{{ 'AddSkillGroup' | translate }}</h1>
 	<div class="modal-inner-content">
 		<div class="con-row">
 			<div class="con-flex">
-				<input id="groupNameBox" focus-me="vm.editGroupNameBox" autocomplete="off" type="text" placeholder="{{ 'Name' | translate }}"
-				 ng-model="vm.newGroupName" maxlength="{{ vm.skillNameMaxLength }}" ng-maxlength="{{ vm.skillNameMaxLength }}" id="skillGroupNameBox"
+				<input id="groupBox" focus-me="vm.addGroupBox" autocomplete="off" type="text" placeholder="{{ 'Name' | translate }}"
+				 ng-model="vm.newGroupName" maxlength="{{ vm.skillNameMaxLength }}" ng-maxlength="{{ vm.skillNameMaxLength }}"
 				 ng-keypress="vm.nameBoxKeyPress($event)" />
 			</div>
 		</div>
@@ -35,6 +35,24 @@
 		<aside>
 			<button id="confirmEditNameButton" ng-click="vm.saveNameEdit($event);" class="wfm-btn wfm-btn-invis-primary">{{
 				'Add' | translate }}</button>
+		</aside>
+	</div>
+</modal-dialog>
+<modal-dialog show='vm.editGroupNameBox' ng-cloak>
+	<h1 class="modal-title">{{ 'Name' | translate }}</h1>
+	<div class="modal-inner-content">
+		<div class="con-row">
+			<div class="con-flex">
+				<input id="groupNameBox" focus-me="vm.editGroupNameBox" autocomplete="off" type="text" placeholder="{{ 'Name' | translate }}"
+				 ng-model="vm.newGroupName" maxlength="{{ vm.skillNameMaxLength }}" ng-maxlength="{{ vm.skillNameMaxLength }}"
+				 ng-keypress="vm.nameBoxKeyPress($event)" />
+			</div>
+		</div>
+	</div>
+	<div class="modal-actions">
+		<aside>
+			<button id="confirmEditNameButton" ng-click="vm.saveNameEdit($event);" class="wfm-btn wfm-btn-invis-primary">{{
+				'Edit' | translate }}</button>
 		</aside>
 	</div>
 </modal-dialog>
