@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 	public partial class SkillGeneral : BaseUserControl, IPropertyPage, ISkillGeneralView
     {
         private readonly IAbstractPropertyPages _propertyPages;
-		private readonly bool _showAbandonRate;
 		private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 		private SkillGeneralPresenter _presenter;
 
@@ -39,11 +38,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
             }
         }
 
-        public SkillGeneral(IAbstractPropertyPages propertyPages, bool showAbandonRate)
+        public SkillGeneral(IAbstractPropertyPages propertyPages)
             : this()
 		{
 			_propertyPages = propertyPages;
-			_showAbandonRate = showAbandonRate;
 		}
 
         public void Populate(IAggregateRoot aggregateRoot)
@@ -119,7 +117,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 	            label1.Visible = false;
 	        }
 
-			if ((skill.SkillType.ForecastSource.Equals(ForecastSource.Chat) || skill.SkillType.ForecastSource.Equals(ForecastSource.InboundTelephony)) && _showAbandonRate)
+			if (skill.SkillType.ForecastSource.Equals(ForecastSource.Chat) || skill.SkillType.ForecastSource.Equals(ForecastSource.InboundTelephony))
 			{
 				percentTextBoxAbandonRate.Visible = true;
 				labelAbandonRate.Visible = true;
@@ -251,14 +249,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
             thisSkill.TimeZone = (TimeZoneInfo)comboBoxTimeZones.SelectedItem;
             thisSkill.MidnightBreakOffset = office2007OutlookTimePickerMidnightOffsetBreak.TimeValue();
 		    thisSkill.MaxParallelTasks = (int)numericUpDownMaxParallel.Value;
-			if (_showAbandonRate)
-			{
-				thisSkill.AbandonRate = new Percent(percentTextBoxAbandonRate.DoubleValue);
-			}
-			else
-			{
-				thisSkill.AbandonRate = new Percent(0);
-			}
+			
+			thisSkill.AbandonRate = new Percent(percentTextBoxAbandonRate.DoubleValue);
 			
 
 			if (office2007OutlookTimePickerMidnightOffsetBreak.Enabled)
