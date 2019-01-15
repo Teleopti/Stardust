@@ -92,10 +92,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return new[] { Resources.CouldNotRemoveAbsenceFromProtectedSchedule };
 			}
 
-			personAbsence.RemovePersonAbsence(commandInfo);
-
 			var scheduleDay = scheduleRange.ScheduledDay(scheduleDate, true) as ExtractedSchedule;
-			
+
+			var isFromMidnight = new DateOnly(personAbsence.Period.StartDateTime) != scheduleDate;
+			if (isFromMidnight)
+			{
+				var personAssignment = scheduleDay.PersonAssignment();
+				var period = personAssignment == null || !personAssignment.ShiftLayers.Any() ? scheduleDay.Period : personAssignment.Period;
+				var eventPeriod = new DateTimePeriod(period.StartDateTime, personAbsence.Period.EndDateTime);
+				personAbsence.RemovePersonAbsence(commandInfo, eventPeriod);
+			}
+			else
+			{
+				personAbsence.RemovePersonAbsence(commandInfo, personAbsence.Period);
+			}
+
 			if (scheduleDay != null)
 			{
 				errorMessages = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsence, scheduleRange, scheduleDay);
@@ -120,6 +131,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					newAbsencePeriods, commandInfo, scheduleDay, scheduleRange).ToList());
 			}
 
+
 			return errorMessages;
 		}
 
@@ -135,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 			var errorMessages = _saveSchedulePartService.Save(scheduleDays, rules, KeepOriginalScheduleTag.Instance);
-			return errorMessages != null&&errorMessages.Any() ? errorMessages.ToList() : new List<string>();
+			return errorMessages != null && errorMessages.Any() ? errorMessages.ToList() : new List<string>();
 		}
 
 		private IEnumerable<string> createNewAbsencesForSplitAbsence(IPerson person,

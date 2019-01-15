@@ -20,6 +20,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return fakeActivities.Find(x => x.ActivityCode == code);
 		}
 
+		public IList<AnalyticsActivity> Activities()
+		{
+			return fakeActivities;
+		}
+
 		public void AddActivity(AnalyticsActivity activity)
 		{
 			activity.ActivityId = fakeActivities.Any() ? fakeActivities.Max(a => a.ActivityId) + 1 : 1;

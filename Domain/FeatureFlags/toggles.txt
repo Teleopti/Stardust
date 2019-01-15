@@ -90,7 +90,7 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true #AF: OK for me to rem
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true #AF: OK for me to remove
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
-ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = true
+ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = false
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = RC

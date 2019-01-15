@@ -79,6 +79,7 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 			},
 			Active: true,
 			Dates: [],
+			ModifiedDates: [],
 			SelectedDates: []
 		};
 		this.activedYearTab = newYear;
@@ -167,19 +168,10 @@ export class BankHolidayCalendarAddComponent implements OnInit {
 			if (modifiedDate) modifiedDate.IsDeleted = true;
 			else year.ModifiedDates.push(deletedDate);
 		} else {
-			if (year.ModifiedDates && year.ModifiedDates.length > 0) {
-				year.ModifiedDates.splice(year.ModifiedDates.indexOf(deletedDate), 1);
-			}
+			year.ModifiedDates.splice(year.ModifiedDates.indexOf(deletedDate), 1);
 		}
 
 		year.SelectedDates.splice(index, 1);
-		if (year.Dates[0]) {
-			const lastAddedItem = year.Dates.filter(d => {
-				return d.IsLastAdded;
-			})[0];
-			if (lastAddedItem) year.YearDate = new Date(lastAddedItem.Date);
-			else year.YearDate = new Date(year.Dates[0].Date);
-		}
 	}
 
 	selectTab(year: BankHolidayCalendarYearItem) {

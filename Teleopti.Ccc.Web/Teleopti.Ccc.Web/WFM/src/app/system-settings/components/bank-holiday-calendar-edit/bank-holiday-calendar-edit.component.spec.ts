@@ -306,15 +306,25 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(component.edittingCalendarYears[0].ModifiedDates[0].Description).toBe('new description');
 	});
 
-	it('should change the binding date of datepicker to last active date or first date in the list after removing a date', () => {
+	it('should keep the remaining dates in selected dates array after removing a date', () => {
+		component.edittingCalendar = {
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
+			Years: []
+		};
+		fixture.detectChanges();
 		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
 		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.edittingCalendarYears[0]);
 		component.dateChangeCallback(new Date('2015-01-11T00:00:00.000Z'), component.edittingCalendarYears[0]);
 
 		component.removeDateOfYear(component.edittingCalendarYears[0].Dates[1], component.edittingCalendarYears[0]);
 
-		expect(moment(component.edittingCalendarYears[0].YearDate).format('YYYY-MM-DD')).toBe(
-			moment(new Date(component.edittingCalendarYears[0].Dates[0].Date)).format('YYYY-MM-DD')
+		fixture.detectChanges();
+
+		expect(component.edittingCalendarYears[0].SelectedDates.length).toBe(1);
+		expect(component.edittingCalendarYears[0].SelectedDates[0]).toBe(
+			new Date('2015-01-10T00:00:00.000Z').getTime()
 		);
 	});
 });

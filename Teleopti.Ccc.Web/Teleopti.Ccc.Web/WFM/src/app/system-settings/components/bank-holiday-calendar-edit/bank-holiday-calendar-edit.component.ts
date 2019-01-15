@@ -214,13 +214,6 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 		}
 
 		year.SelectedDates.splice(index, 1);
-		if (year.Dates[0]) {
-			const lastAddedItem = year.Dates.filter(d => {
-				return d.IsLastAdded;
-			})[0];
-			if (lastAddedItem) year.YearDate = new Date(lastAddedItem.Date);
-			else year.YearDate = new Date(year.Dates[0].Date);
-		}
 	}
 
 	updateDateDescription(date: BankHolidayCalendarDateItem, year: BankHolidayCalendarYearItem) {

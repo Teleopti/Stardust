@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -119,6 +121,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsActivity)))
 				.SetReadOnly(true)
 				.UniqueResult<AnalyticsActivity>();
+		}
+
+		public IList<AnalyticsActivity> Activities()
+		{
+			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"select 
+					 a.[activity_id] {nameof(AnalyticsActivity.ActivityId)}
+					,a.[activity_code] {nameof(AnalyticsActivity.ActivityCode)}
+					,a.[activity_name] {nameof(AnalyticsActivity.ActivityName)}
+					,a.[display_color] {nameof(AnalyticsActivity.DisplayColor)}
+					,a.[in_ready_time] {nameof(AnalyticsActivity.InReadyTime)}
+					,a.[in_ready_time_name] {nameof(AnalyticsActivity.InReadyTimeName)}
+					,a.[in_contract_time] {nameof(AnalyticsActivity.InContractTime)}
+					,a.[in_contract_time_name] {nameof(AnalyticsActivity.InContractTimeName)}
+					,a.[in_paid_time] {nameof(AnalyticsActivity.InPaidTime)}
+					,a.[in_paid_time_name] {nameof(AnalyticsActivity.InPaidTimeName)}
+					,a.[in_work_time] {nameof(AnalyticsActivity.InWorkTime)}
+					,a.[in_work_time_name] {nameof(AnalyticsActivity.InWorkTimeName)}
+					,a.[business_unit_id] {nameof(AnalyticsActivity.BusinessUnitId)}
+					,a.[datasource_id] {nameof(AnalyticsActivity.DatasourceId)}
+					,a.[datasource_update_date] {nameof(AnalyticsActivity.DatasourceUpdateDate)}
+					,a.[is_deleted] {nameof(AnalyticsActivity.IsDeleted)}
+					,a.[display_color_html] {nameof(AnalyticsActivity.DisplayColorHtml)}
+					from mart.dim_activity a WITH (NOLOCK) INNER JOIN mart.dim_business_unit bu WITH (NOLOCK) ON bu.[business_unit_id] = a.[business_unit_id] WHERE bu.[business_unit_code] = :businessUnit")
+				.SetGuid("businessUnit",getBusinessUnitId())
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsActivity)))
+				.SetReadOnly(true)
+				.List<AnalyticsActivity>();
+		}
+
+		private Guid getBusinessUnitId()
+		{
+			return ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 		}
 
 		private string mapInReadyTimeText(bool inReadyTime)

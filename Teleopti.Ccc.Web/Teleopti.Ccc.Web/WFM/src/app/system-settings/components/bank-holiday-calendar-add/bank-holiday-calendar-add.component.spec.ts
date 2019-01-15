@@ -135,15 +135,14 @@ describe('BankHolidayCalendarAddComponent', () => {
 		expect(component.newCalendarYears[0].Active).toBe(true);
 	});
 
-	it('should change the binding date of datepicker to last active date or first date in the list after removing a date', () => {
+	it('should keep the remaining dates in selected dates array after removing a date', () => {
 		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
 		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
 		component.dateChangeCallback(new Date('2015-01-11T00:00:00.000Z'), component.newCalendarYears[0]);
 
 		component.removeDateOfYear(component.newCalendarYears[0].Dates[1], component.newCalendarYears[0]);
 
-		expect(moment(component.newCalendarYears[0].YearDate).format('YYYY-MM-DD')).toBe(
-			moment(new Date(component.newCalendarYears[0].Dates[0].Date)).format('YYYY-MM-DD')
-		);
+		expect(component.newCalendarYears[0].SelectedDates.length).toBe(1);
+		expect(component.newCalendarYears[0].SelectedDates[0]).toBe(new Date('2015-01-10T00:00:00.000Z').getTime());
 	});
 });

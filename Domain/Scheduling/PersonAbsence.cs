@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private IScenario _scenario;
 		private IAbsenceLayer _layer;
 		private DateTime? _lastChange;
-		
+
 		public PersonAbsence(IPerson agent, IScenario scenario, IAbsenceLayer layer) : this(scenario)
 		{
 			_person = agent;
 			_layer = layer;
 		}
-	
+
 		/// <summary>
 		/// Constructor for CommandHandlers
 		/// </summary>
@@ -62,17 +62,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var @events = PopAllEvents().ToList();
 
-			if(!@events.Any(e =>
-			{
-				var _e = e as FullDayAbsenceAddedEvent;
-				if(_e == null) return false;
-				return _e.AbsenceId == fullDayAbsenceAddedEvent.AbsenceId
-					   && _e.PersonId == fullDayAbsenceAddedEvent.PersonId
-					   && _e.StartDateTime == fullDayAbsenceAddedEvent.StartDateTime
-					   && _e.EndDateTime == fullDayAbsenceAddedEvent.EndDateTime
-					   && _e.ScenarioId == fullDayAbsenceAddedEvent.ScenarioId
-					   && _e.LogOnBusinessUnitId == fullDayAbsenceAddedEvent.LogOnBusinessUnitId;
-			}))
+			if (!@events.Any(e =>
+			 {
+				 var _e = e as FullDayAbsenceAddedEvent;
+				 if (_e == null) return false;
+				 return _e.AbsenceId == fullDayAbsenceAddedEvent.AbsenceId
+						&& _e.PersonId == fullDayAbsenceAddedEvent.PersonId
+						&& _e.StartDateTime == fullDayAbsenceAddedEvent.StartDateTime
+						&& _e.EndDateTime == fullDayAbsenceAddedEvent.EndDateTime
+						&& _e.ScenarioId == fullDayAbsenceAddedEvent.ScenarioId
+						&& _e.LogOnBusinessUnitId == fullDayAbsenceAddedEvent.LogOnBusinessUnitId;
+			 }))
 			{
 				@events.Add(fullDayAbsenceAddedEvent);
 			}
@@ -110,24 +110,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 																			  && addedEvent.LogOnBusinessUnitId ==
 																			  personAbsenceAddedEvent.LogOnBusinessUnitId)))
 			{
-				@events.Add(personAbsenceAddedEvent);				
+				@events.Add(personAbsenceAddedEvent);
 			}
 
 			@events.ForEach(AddEvent);
 		}
 
-		public virtual void RemovePersonAbsence(TrackedCommandInfo trackedCommandInfo)
+		public virtual void RemovePersonAbsence(TrackedCommandInfo trackedCommandInfo, DateTimePeriod? eventPeriod = null)
 		{
+			var period = eventPeriod ?? Period;
+
 			var personAbsenceRemovedEvent = new PersonAbsenceRemovedEvent
 			{
 				PersonId = Person.Id.GetValueOrDefault(),
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
-				StartDateTime = Period.StartDateTime,
-				EndDateTime = Period.EndDateTime,
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
 				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
-				
+
 			};
-			
+
 			if (trackedCommandInfo != null)
 			{
 				personAbsenceRemovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
@@ -196,7 +198,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			AddEvent(personAbsenceModifiedEvent);
 		}
-		
+
 		/// <summary>
 		/// Gets the layer.
 		/// </summary>
@@ -206,7 +208,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// Created date: 2008-02-15
 		/// </remarks>
 		public virtual IAbsenceLayer Layer => _layer;
-		
+
 		/// <summary>
 		/// Gets or sets the Person
 		/// </summary>
@@ -220,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual bool BelongsToScenario(IScenario scenario)
 		{
 			return Scenario.Equals(scenario);
-		}	
+		}
 
 		public virtual string FunctionPath => DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence;
 

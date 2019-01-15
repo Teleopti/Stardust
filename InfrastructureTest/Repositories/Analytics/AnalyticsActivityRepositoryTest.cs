@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
@@ -34,6 +37,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Persist();
 
 			var act = WithAnalyticsUnitOfWork.Get(() => Target.Activity(code));
+			act.ActivityId.Should().Be.EqualTo(10);
+		}
+
+		[Test]
+		public void ShouldFindActivities()
+		{
+			var businessUnit = new BusinessUnit(ServiceLocatorForEntity.CurrentBusinessUnit.Current(), 1,4);
+			var code = Guid.NewGuid();
+			var activity = new Activity(10, code, "Activity name", Color.AliceBlue, new ExistingDatasources(new UtcAndCetTimeZones()), 4);
+			analyticsDataFactory.Setup(activity);
+			analyticsDataFactory.Setup(businessUnit);
+			analyticsDataFactory.Persist();
+			
+			var act = WithAnalyticsUnitOfWork.Get(() => Target.Activities()).Single();
 			act.ActivityId.Should().Be.EqualTo(10);
 		}
 
