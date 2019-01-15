@@ -22,7 +22,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-	  <NoWarn>1591</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -231,8 +231,11 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
+    <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
+    <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendar.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
@@ -4069,6 +4072,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SystemSetting\BankHolidayCalendar\BankHolidayDate.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

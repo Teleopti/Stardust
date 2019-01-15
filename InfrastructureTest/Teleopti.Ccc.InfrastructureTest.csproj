@@ -255,6 +255,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />
+    <Compile Include="Repositories\BankHolidayCalendarSiteRepositoryTest.cs" />
     <Compile Include="Repositories\BankHolidayCalendarRepositoryTest.cs" />
     <Compile Include="Repositories\BankHolidayDateRepositoryTest.cs" />
     <Compile Include="Repositories\Bug47522.cs" />
