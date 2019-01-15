@@ -53,7 +53,7 @@
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="panel full-padding">
-				<div class="full-padding">
+				<div style="padding: 0 5px">
 					<h2 style="display: inline; line-height: 44px;">{{ 'AllSkillGroups' | translate }}</h2>
 					<button type="button" class="wfm-btn wfm-btn-invis-primary pull-right" ng-disabled="vm.canSave" ng-click="vm.createSkillGroup($event)">
 						{{ 'Add' | translate }}
@@ -108,7 +108,7 @@
 		</div>
 		<div class="con-flex x3">
 			<div class="panel full-padding" ng-show="vm.skillGroups[vm.selectedGroupIndex]">
-				<div class="full-padding">
+				<div style="padding: 0 5px">
 					<h2 style="display: inline; line-height: 44px">{{ vm.skillGroups[vm.selectedGroupIndex].Name }}</h2>
 					<button type="button" class="wfm-btn wfm-btn-invis-primary pull-right" id="save_all" ng-show="vm.canSave" ng-click="vm.saveAll()">
 						{{ 'Save' | translate }}
@@ -121,8 +121,7 @@
 							<div class="con-flex">
 								<label for="filter2" class="input-icon w100">
 									<i class="mdi mdi-filter-outline">
-										<input type="text" id="filter2" placeholder="{{ 'FilterSkills' | translate }}" autocomplete="off" ng-model="skillFilter"
-										 style="margin-left: 5px">
+										<input type="text" id="filter2" placeholder="{{ 'FilterSkills' | translate }}" autocomplete="off" ng-model="skillFilter">
 										<md-tooltip>{{ 'FilterSkills' | translate }}</md-tooltip>
 									</i>
 								</label>
