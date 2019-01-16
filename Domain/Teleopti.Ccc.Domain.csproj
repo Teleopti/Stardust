@@ -231,12 +231,13 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
+    <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
+    <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
+    <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
-    <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
-    <Compile Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendar.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Exceptions\BusinessRuleBrokenException.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\AccuracyModel.cs" />
@@ -270,7 +271,6 @@
     <Compile Include="InterfaceLegacy\Domain\IntervalDefinition.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonInfoModel.cs" />
     <Compile Include="InterfaceLegacy\Domain\IStateReader.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ISiteBankHolidayCalendar.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserCulture.cs" />
     <Compile Include="InterfaceLegacy\Domain\MinMax.cs" />
     <Compile Include="InterfaceLegacy\Domain\ParsedTimeOfDay.cs" />
@@ -287,7 +287,6 @@
     <Compile Include="InterfaceLegacy\Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarRepository.cs" />
     <Compile Include="Repositories\IBankHolidayDateRepository.cs" />
-    <Compile Include="Repositories\ISiteBankHolidayCalendarRepository.cs" />
     <Compile Include="Staffing\IStaffingAudit.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendar.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayDate.cs" />
@@ -4111,9 +4110,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\ForecastDayOverride.hbm.xml" />
-    <EmbeddedResource Include="SystemSetting\BankHolidayCalendar\SiteBankHolidayCalendar.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

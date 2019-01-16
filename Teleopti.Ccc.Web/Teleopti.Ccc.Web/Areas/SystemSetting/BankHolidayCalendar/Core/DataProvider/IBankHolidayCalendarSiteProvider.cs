@@ -4,10 +4,9 @@ using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
 
 namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider
 {
-	public interface ISiteBankHolidayCalendarsProvider
+	public interface IBankHolidayCalendarSiteProvider
 	{
 		IEnumerable<SiteBankHolidayCalendarsViewModel> GetAllSettings();
-		void UpdateCalendarsForSites(IEnumerable<SiteBankHolidayCalendarsViewModel> input);
 		IEnumerable<Guid> GetSitesByAssignedCalendar(Guid calendarId);
 	}
 }

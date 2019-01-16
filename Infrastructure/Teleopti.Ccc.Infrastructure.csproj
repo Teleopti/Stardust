@@ -278,6 +278,8 @@
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="MultiTenancy\AllTenantNames.cs" />
     <Compile Include="MultiTenancy\BehaviorTestTenants.cs" />
+    <Compile Include="MultiTenancy\Server\ApplicationConfigurationDbProviderFake.cs" />
+    <Compile Include="MultiTenancy\Server\ApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAttribute.cs" />
     <Compile Include="MultiTenancy\Server\CustomerDbConnector.cs" />
@@ -344,7 +346,6 @@
     <Compile Include="Repositories\Stardust\JobFilterModel.cs" />
     <Compile Include="Repositories\Stardust\StardustRepository.cs" />
     <Compile Include="Repositories\Stardust\WorkerNode.cs" />
-    <Compile Include="Repositories\SiteBankHolidayCalendarRepository.cs" />
     <Compile Include="Repositories\TenantAuditRepository.cs" />
     <Compile Include="Repositories\UserDeviceRepository.cs" />
     <Compile Include="Repositories\RequeueHangfireRepository.cs" />

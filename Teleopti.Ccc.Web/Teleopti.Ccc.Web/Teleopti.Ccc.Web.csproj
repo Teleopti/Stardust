@@ -405,6 +405,7 @@
     <Compile Include="Areas\Insights\Core\DataProvider\PowerBiClientFactory.cs" />
     <Compile Include="Areas\Insights\Core\DataProvider\ReportProvider.cs" />
     <Compile Include="Areas\Insights\Core\InsightsAreaModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\ApplicationConfigurationDbController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
@@ -417,12 +418,14 @@
     <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Controller\BankHolidayCalendarController.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarSitePersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarPersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarSiteProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarSitePersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarPersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarProvider.cs" />
-    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\ISiteBankHolidayCalendarsProvider.cs" />
-    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\SiteBankHolidayCalendarsProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarSiteProvider.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\IoC\BankHolidayAreaModule.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\BankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\IBankHolidayModelMapper.cs" />
@@ -2701,6 +2704,7 @@
     <Content Include="Areas\MyTime\Content\Images\gold.png" />
     <Content Include="Areas\MyTime\Content\Images\silver.png" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeLeaderBoardReport.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.Tests.js" />

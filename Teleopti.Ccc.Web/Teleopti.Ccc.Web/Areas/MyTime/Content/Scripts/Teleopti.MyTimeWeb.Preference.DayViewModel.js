@@ -1,13 +1,3 @@
-﻿if (typeof Teleopti === 'undefined') {
-	Teleopti = {};
-	if (typeof Teleopti.MyTimeWeb === 'undefined') {
-		Teleopti.MyTimeWeb = {};
-		if (typeof Teleopti.MyTimeWeb.Preference === 'undefined') {
-			Teleopti.MyTimeWeb.Preference = {};
-		}
-	}
-}
-
 Teleopti.MyTimeWeb.Preference.DayViewModel = function(ajaxForDate, feedBackData) {
 	var self = this;
 

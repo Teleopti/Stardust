@@ -1,12 +1,4 @@
-﻿if (typeof Teleopti === 'undefined') {
-	Teleopti = {};
-}
-if (typeof Teleopti.MyTimeWeb === 'undefined') {
-	Teleopti.MyTimeWeb = {};
-}
-
 Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
-	var loadingStarted = false;
 	var periodFeedbackViewModel = null;
 	var addExtendedPreferenceFormViewModel = null;
 	var preferencesAndScheduleViewModel = null;
@@ -255,33 +247,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 		});
 	}
 
-	//function loadNeighborFeedback() {
-	//	var dates = [];
-	//	$("#Preference-body-inner").find('li[data-mytime-date]').each(function (i, e) {
-	//		dates.push($(e).data('mytime-date'));
-	//	});
-
-	//	$(selectedDateSelectorStr).each(function (index, ele) {
-	//		var date = $(ele).data('mytime-date');
-	//		var curDateIndex = dates.indexOf(date);
-
-	//		var previousDayIndex = curDateIndex - 1;
-	//		var nextDayIndex = curDateIndex + 1;
-
-	//		if (nextDayIndex < dates.length) {
-	//			date = dates[nextDayIndex];
-	//			if (preferencesAndScheduleViewModel.DayViewModels[date])
-	//				preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
-	//		}
-
-	//		if (previousDayIndex >= 0) {
-	//			date = dates[previousDayIndex];
-	//			if (preferencesAndScheduleViewModel.DayViewModels[date])
-	//				preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
-	//		}
-	//	});
-	//}
-
 	function _setMustHave(mustHave, successCb) {
 		$(selectedDateSelectorStr).each(function(index, cell) {
 			var date = $(cell).data('mytime-date');
@@ -511,7 +476,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 				dayViewModels
 			);
 			selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(
-				dayViewModelsInPeriod,
 				$('#Preference-body').data('mytime-maxmusthave'),
 				_setMustHave,
 				_setPreference,

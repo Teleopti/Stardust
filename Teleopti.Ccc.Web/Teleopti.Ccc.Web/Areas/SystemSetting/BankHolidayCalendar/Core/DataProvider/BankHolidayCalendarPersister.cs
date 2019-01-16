@@ -15,18 +15,18 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		private readonly IBankHolidayCalendarRepository _bankHolidayCalendarRepository;
 		private readonly IBankHolidayModelMapper _bankHolidayModelMapper;
 		private readonly IBankHolidayDateRepository _bankHolidayDateRepository;
-		private readonly ISiteBankHolidayCalendarsProvider _siteBankHolidayCalendarsProvider;
-		private readonly ISiteBankHolidayCalendarRepository _siteBankHolidayCalendarRepository;
+		private readonly IBankHolidayCalendarSiteRepository _bankHolidayCalendarSiteRepository;
+		private readonly IBankHolidayCalendarSitePersister _bankHolidayCalendarSitePersister;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(BankHolidayCalendarPersister));
 
-		public BankHolidayCalendarPersister(IBankHolidayCalendarRepository bankHolidayCalendarRepository, IBankHolidayModelMapper bankHolidayModelMapper, IBankHolidayDateRepository bankHolidayDateRepository, ISiteBankHolidayCalendarsProvider siteBankHolidayCalendarsProvider, ISiteBankHolidayCalendarRepository siteBankHolidayCalendarRepository
-			)
+		public BankHolidayCalendarPersister(IBankHolidayCalendarRepository bankHolidayCalendarRepository, IBankHolidayModelMapper bankHolidayModelMapper, IBankHolidayDateRepository bankHolidayDateRepository,IBankHolidayCalendarSiteRepository bankHolidayCalendarSiteRepository,
+			IBankHolidayCalendarSitePersister bankHolidayCalendarSitePersister)
 		{
 			_bankHolidayCalendarRepository = bankHolidayCalendarRepository;
 			_bankHolidayModelMapper = bankHolidayModelMapper;
 			_bankHolidayDateRepository = bankHolidayDateRepository;
-			_siteBankHolidayCalendarsProvider = siteBankHolidayCalendarsProvider;
-			_siteBankHolidayCalendarRepository = siteBankHolidayCalendarRepository;
+			_bankHolidayCalendarSiteRepository = bankHolidayCalendarSiteRepository;
+			_bankHolidayCalendarSitePersister = bankHolidayCalendarSitePersister;
 		}
 
 		private IBankHolidayCalendar persistCalendar(BankHolidayCalendarForm input)
@@ -112,13 +112,14 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 		public virtual bool Delete(Guid Id)
 		{
+			bool updateCalendarsForSitesResult = false;
 			try
 			{
-				updateCalendarsForSites(Id);
+				updateCalendarsForSitesResult = updateCalendarsForSites(Id);
 				var calendar = _bankHolidayCalendarRepository.Load(Id);
 				_bankHolidayCalendarRepository.Remove(calendar);
 				_bankHolidayDateRepository.LoadAll().Where(d => d.Calendar.Id.Value == Id)?.ToList().ForEach(d => _bankHolidayDateRepository.Remove(d));
-				
+
 			}
 			catch (Exception ex)
 			{
@@ -126,19 +127,21 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 				return false;
 			}
 
-			return true;
+			return true && updateCalendarsForSitesResult;
 		}
 
-		private void updateCalendarsForSites(Guid Id)
+		private bool updateCalendarsForSites(Guid Id)
 		{
-			var siteBankHolidayCalendars = _siteBankHolidayCalendarRepository.FindSiteBankHolidayCalendars(Id);
+			var siteBankHolidayCalendars = _bankHolidayCalendarSiteRepository.LoadAll().Where(s => s.Calendar.Id.Value == Id);
 			var settings = new List<SiteBankHolidayCalendarsViewModel>();
-			siteBankHolidayCalendars?.ToList().ForEach(x => {
+			siteBankHolidayCalendars?.ToList().ForEach(x =>
+			{
 				var s = new SiteBankHolidayCalendarsViewModel { Site = x.Site.Id.Value };
-				s.Calendars = x.BankHolidayCalendarsForSite?.Where(b => b.Id != Id).Select(c => c.Id.Value);
+				var calendars = _bankHolidayCalendarSiteRepository.LoadAll().Where(c => c.Site.Id.Value == x.Site.Id.Value).Select(c=>c.Calendar.Id.Value);
+				s.Calendars = calendars.Where(id => id != Id);
 				settings.Add(s);
 			});
-			_siteBankHolidayCalendarsProvider.UpdateCalendarsForSites(settings);
+			return _bankHolidayCalendarSitePersister.UpdateCalendarsForSites(settings);
 		}
 
 	}

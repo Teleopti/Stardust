@@ -1,13 +1,3 @@
-﻿if (typeof Teleopti === 'undefined') {
-	Teleopti = {};
-	if (typeof Teleopti.MyTimeWeb === 'undefined') {
-		Teleopti.MyTimeWeb = {};
-		if (typeof Teleopti.MyTimeWeb.StudentAvailability === 'undefined') {
-			Teleopti.MyTimeWeb.StudentAvailability = {};
-		}
-	}
-}
-
 Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function(ajax, dayViewModels, date) {
 	var self = this;
 
