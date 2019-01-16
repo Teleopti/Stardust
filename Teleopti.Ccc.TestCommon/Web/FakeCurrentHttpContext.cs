@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.Web
 		{
 			var fakeHttpContext = new FakeHttpContext(string.Empty, string.Empty, null, null, null, null, null, new NameValueCollection());
 			var pi = new PersonInfo(new Tenant("_"), Guid.NewGuid());
-			fakeHttpContext.AddItem(WebTenantAuthenticationConfiguration.PersonInfo, pi);
+			fakeHttpContext.AddItem(WebTenantAuthenticationConfiguration.PersonInfoKey, pi);
 			_httpContextBase = fakeHttpContext;
 		}
 

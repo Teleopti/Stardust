@@ -235,6 +235,7 @@
     <Compile Include="MachineLearning\ShiftCategoryPredictionTest.cs" />
     <Compile Include="MessageBroker\MailboxNotSignedInTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerMailboxPurgerTest.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\ApplicationConfigurationDbProviderTest.cs" />
     <Compile Include="MultiTenancy\Admin\CustomerDbConnectorTest.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspectTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccessTest.cs" />

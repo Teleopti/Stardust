@@ -24,15 +24,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			};
 		}
 
-		public string TryGetServerValue(ServerConfigurationKey key, string defaultValue = "")
+		public string TryGetServerValue(string key, string defaultValue = "")
 		{
-			return _serverRepo?.Get(key.ToString()) ?? defaultValue;
+			return _serverRepo?.Get(key) ?? defaultValue;
 		}
 
-		public string TryGetTenantValue(TenantApplicationConfigKey key, string defaultValue = "")
+		public string TryGetTenantValue(string key, string defaultValue = "")
 		{
 			string value = string.Empty;
-			if (_currentTenant?.Current()?.ApplicationConfig?.TryGetValue(key.ToString(), out value) ?? false)
+			if (_currentTenant?.Current()?.ApplicationConfig?.TryGetValue(key, out value) ?? false)
 			{
 				return value;
 			}

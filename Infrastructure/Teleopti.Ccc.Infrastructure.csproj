@@ -282,6 +282,7 @@
     <Compile Include="MultiTenancy\Server\ApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAttribute.cs" />
+    <Compile Include="MultiTenancy\Server\CurrentTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\CustomerDbConnector.cs" />
     <Compile Include="MultiTenancy\Server\IPasswordManager.cs" />
     <Compile Include="MultiTenancy\Server\PasswordManager.cs" />

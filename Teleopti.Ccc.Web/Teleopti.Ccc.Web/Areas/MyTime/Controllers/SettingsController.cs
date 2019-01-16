@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[TenantUnitOfWork, HttpGet]
 		public virtual JsonResult MobileQRCodeUrl()
 		{
-			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl);
+			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString());
 			return Json(url, JsonRequestBehavior.AllowGet);
 		}
 	}
