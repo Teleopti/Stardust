@@ -106,16 +106,6 @@ namespace Teleopti.Ccc.TestCommon
 				.ToArray();
 		}
 
-		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim)
-		{
-			return Data
-				.Where(e => e.PersonId == personId &&
-							e.EndTime < timestamp)
-				.OrderBy(x => x.EndTime)
-				.LastOrDefault()
-				?.Event;
-		}
-
 		public LoadedEvents LoadForSynchronization(long fromEventId)
 		{
 			var rows = Data.Where(x => x.Id > fromEventId).ToArray();

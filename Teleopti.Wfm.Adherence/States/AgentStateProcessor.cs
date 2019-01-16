@@ -72,7 +72,7 @@ namespace Teleopti.Wfm.Adherence.States
 		private readonly ICurrentEventPublisher _currentEventPublisher;
 		private readonly LateForWorkEventPublisher _lateForWorkEventPublisher;
 		private readonly IRtaTracer _tracer;
-		private readonly IAdherenceDayStartEventPublisher _adherenceDayStartEventPublisher;
+		private readonly AdherenceDayStartEventPublisher _adherenceDayStartEventPublisher;
 
 		public AgentStateProcessor(
 			ShiftEventPublisher shiftEventPublisher,
@@ -84,7 +84,7 @@ namespace Teleopti.Wfm.Adherence.States
 			ICurrentEventPublisher currentEventPublisher,
 			LateForWorkEventPublisher lateForWorkEventPublisher,
 			IRtaTracer tracer,
-			IAdherenceDayStartEventPublisher adherenceDayStartEventPublisher)
+			AdherenceDayStartEventPublisher adherenceDayStartEventPublisher)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;

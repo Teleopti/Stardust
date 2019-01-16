@@ -127,13 +127,11 @@
     <Compile Include="Historical\AdjustAdherenceToNeutral\AdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePercentageCalculation.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePeriod.cs" />
-    <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoaderHistoricalOverview.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoaderSpeedUpRemoveLastBefore.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoadException.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDaySpeedUpRemoveLastBefore.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDaySpeedUpRemoveScheduleDependency.cs" />
-    <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayWithHistoricalOverview.cs" />
     <Compile Include="Historical\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="Historical\AgentAdherenceDay\HistoricalChangeModel.cs" />
     <Compile Include="Historical\AgentAdherenceDay\IAgentAdherenceDay.cs" />

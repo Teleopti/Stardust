@@ -153,18 +153,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))
 				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306))
-				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveLastBefore>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
-				builder.RegisterType<AgentAdherenceDayLoaderHistoricalOverview>().As<IAgentAdherenceDayLoader>().SingleInstance();
+				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveLastBefore>().As<IAgentAdherenceDayLoader>().SingleInstance();
 
 			builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
 
-			if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306))
-				builder.RegisterType<AdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
-			else
-				builder.RegisterType<NoAdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
-
+			builder.RegisterType<AdherenceDayStartEventPublisher>().SingleInstance();
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
 			builder.RegisterType<StateEventPublisher>().SingleInstance();

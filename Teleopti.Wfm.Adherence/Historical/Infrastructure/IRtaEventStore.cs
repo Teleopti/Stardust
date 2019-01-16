@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.States;
 
@@ -29,8 +28,6 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 	{
 		IEnumerable<IEvent> Load(Guid personId, DateTime @from, DateTime to);
 		IEnumerable<IEvent> Load(Guid personId, DateOnly date);
-		[RemoveMeWithToggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
-		IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim);
 		LoadedEvents LoadForSynchronization(long fromEventId);
 		long ReadLastId();
 	}
