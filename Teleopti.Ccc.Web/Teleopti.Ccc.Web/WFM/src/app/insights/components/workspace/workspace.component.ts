@@ -23,13 +23,11 @@ export class WorkspaceComponent implements OnInit {
 	public refNewReportNameModal: NzModalRef;
 
 	@ViewChild('newReportNameTemplate')
-	private newReportNameTempRef: TemplateRef<any>;
 	modalIsVisible = false;
 	private modalType = '';
 	modalReport: Report;
 
 	constructor(private reportSvc: ReportService,
-		private modalSvc: NzModalService,
 		public nav: NavigationService,
 		private notification: NzNotificationService) {
 		this.initialized = false;

@@ -45,12 +45,12 @@ export function insightsRouterConfig($stateProvider: IStateProvider, $urlRouterP
 			}
 		})
 		.state('insights.report', {
-			url: '/report',
+			url: '/report/:reportId/:action',
 			views: {
 				content: { template: '<ng2-insights-report-page></ng2-insights-report-page>' }
 			},
 			params: {
-				report: undefined,
+				reportId: undefined,
 				action: undefined
 			}
 		});
