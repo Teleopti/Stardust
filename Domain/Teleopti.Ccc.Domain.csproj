@@ -234,7 +234,7 @@
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
-    <Compile Include="Notification\TeamScheduleWeekViewChangeChecker.cs" />
+    <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="Security\Principal\ITeleoptiPrincipalForLegacy.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
