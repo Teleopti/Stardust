@@ -136,7 +136,7 @@
 					<div class="con-flex">
 						<h3>{{ 'AvailableSkills' | translate }}</h3>
 						<div class="con-row">
-							<div class="con-flex" style="margin-top: -10px">
+							<div class="con-flex">
 								<label for="skill-filter" class="input-icon w100">
 									<i class="mdi mdi-filter-outline">
 										<input type="text" id="skill-filter" placeholder="{{ 'FilterSkills' | translate }}" autocomplete="off"
@@ -170,7 +170,7 @@
 								{{ 'YouHaveToSelectAtLeastOneSkill' | translate }}
 							</span>
 						</span>
-						<div class="con-row">
+						<div class="con-row" style="margin-top: -10px">
 							<div class="con-flex">
 								<div class="wfm-chip-wrap" ng-repeat="skill in vm.skillGroups[vm.selectedGroupIndex].Skills | filter:areaFilter as filtered"
 								 ng-click="vm.selectGroupSkill(skill)" ng-hide="(selectedFilter==true && !!vm.groupSkillIsSelected(skill)) || (supportedFilter==false && !skill.DoDisplayData)">
