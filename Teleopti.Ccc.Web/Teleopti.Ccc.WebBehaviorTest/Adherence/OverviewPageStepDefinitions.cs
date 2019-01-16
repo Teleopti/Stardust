@@ -4,7 +4,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 {
 	[Binding]
-	public class OverviewDefinitions
+	public class OverviewPageStepDefinitions
 	{
 		[Then(@"I should see site '(.*)'")]
 		public void ThenIShouldSeeSite(string siteName)

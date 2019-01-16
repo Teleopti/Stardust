@@ -524,6 +524,7 @@
     <Compile Include="TestData\Core\AutofacSetupResolver.cs" />
     <Compile Include="TestData\GlobalPrincipalState.cs" />
     <Compile Include="TestData\MeetingConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\AdjustedAdherenceSetup.cs" />
     <Compile Include="TestData\Setups\Configurable\GamificationConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\OvertimeRequestConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ApprovedPeriodSetup.cs" />

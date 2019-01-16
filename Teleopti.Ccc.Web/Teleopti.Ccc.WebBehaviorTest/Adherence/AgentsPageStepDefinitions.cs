@@ -9,7 +9,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 {
 	[Binding]
-	public class AgentsDefinitions
+	public class AgentsPageStepDefinitions
 	{
 		[Then(@"I should see real time agent details for '(.*)'")]
 		public void ThenIShouldSeeRealTimeAgentDetailsFor(string name, Table table)

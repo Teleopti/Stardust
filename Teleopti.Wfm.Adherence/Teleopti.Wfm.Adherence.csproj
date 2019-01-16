@@ -124,6 +124,7 @@
     <Compile Include="Configuration\RtaStateHolder.cs" />
     <Compile Include="DateOnly.cs" />
     <Compile Include="DateTimePeriod.cs" />
+    <Compile Include="Historical\AdjustAdherenceToNeutral\AdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePercentageCalculation.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePeriod.cs" />

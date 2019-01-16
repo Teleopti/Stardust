@@ -542,7 +542,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage($"wfm/#/rta/agent-historical/{personId}/{date:yyyyMMdd}?open=true");
 		}
-
+		
+		public static void GoToHistoricalOverview(Guid teamId)
+		{
+			GoToPage($"wfm/#/rta/historical-overview?teamIds={teamId}");
+		}
+		
 		public static void GotoPageCiscoFinesse()
 		{
 			GoToPage("MyTime/ASMWidget");
@@ -627,11 +632,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		public static void GoToEditSchedulingSettingPageForPlanningGroup(Guid planningGroupId, Guid planningGroupSchedulingSettingId)
 		{
 			GoToPage($"wfm/#/resourceplanner/planninggroup/{planningGroupId}/setting/{planningGroupSchedulingSettingId}");
-		}
-
-		public static void GoToHistoricalOverview(Guid teamId)
-		{
-			GoToPage($"wfm/#/rta/historical-overview?teamIds={teamId}");
 		}
 
 		public static void GoToResetPassword(string token)

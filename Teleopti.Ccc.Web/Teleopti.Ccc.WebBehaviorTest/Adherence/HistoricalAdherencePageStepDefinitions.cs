@@ -12,11 +12,11 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 {
 	[Binding]
-	public class AgentHistoricalPageStepDefinitions
+	public class HistoricalAdherencePageStepDefinitions
 	{
 		private readonly IToggleManager _toggles;
 
-		public AgentHistoricalPageStepDefinitions(IToggleManager toggles)
+		public HistoricalAdherencePageStepDefinitions(IToggleManager toggles)
 		{
 			_toggles = toggles;
 		}
@@ -53,8 +53,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 			var text = Resources.ResourceManager.GetString("ApprovedAsInAdherence", DataMaker.Data().MyCulture);
 			Browser.Interactions.ClickContaining($"rta-card-panel-header", text);
 			Browser.Interactions.ClickContaining($"rta-card-panel-header", text);
-			
+
 			Browser.Interactions.Click($".remove-approved-period[data-starttime='{from}'][data-endtime='{to}']");
+		}
+
+		[Then(@"I should see adjusted period between'(.*)' and '(.*)'")]
+		public void ThenIShouldSeeAdjustedPeriodBetween(string from, string to)
+		{
+			Browser.Interactions.AssertAnyContains(".adjusted-period", from);
+			Browser.Interactions.AssertAnyContains(".adjusted-period", to);
+		}
+
+		[Then(@"I should see neutral adherence between'(.*)' and '(.*)'")]
+		public void ThenIShouldSeeNeutralAdherenceBetween(string from, string to)
+		{
+			Browser.Interactions.AssertExists(".neutral-adherence[data-starttime='{0}'][data-endtime='{1}']", from, to);
 		}
 
 		[Then(@"I should see out of adherences")]
@@ -119,10 +132,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		public void ThenIShouldSeeActivities(Table table)
 		{
 			var activities = table.CreateSet<StartEndTimePair>();
-			activities.ForEach(x =>
-			{
-				Browser.Interactions.AssertExists(".activity[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime);
-			});
+			activities.ForEach(x => { Browser.Interactions.AssertExists(".activity[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime); });
 		}
 
 		[Then(@"I should see adherence percentage of (.*)%")]
@@ -142,7 +152,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 		[Then(@"I should rule and state changes")]
 		public void ThenIShouldRuleAndStateChanges(Table table) =>
 			table.CreateSet<RuleAndStateChanges>().ForEach(assertRuleAndStateChange);
-		
+
 		[Then(@"I should see duration for historical events")]
 		public void ThenIShouldSeeDurationForHistoricalEvents(Table table) =>
 			table.CreateSet<RuleAndStateChanges>().ForEach(assertRuleAndStateChange);
@@ -164,7 +174,7 @@ var element = document.querySelector(""{selector}"");
 element.style.height = '50px';
 return 'OK';
 ";
-			
+
 			//because...
 			//this magic is needed because after adding padding on the wrapping div to fix some shadows
 			//behaviour tests started failing
@@ -173,7 +183,7 @@ return 'OK';
 //wrapper.style.padding = '0px';
 //return 'OK';
 //";
-			
+
 			Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
 			//Browser.Interactions.AssertJavascriptResultContains(removePadding, "OK");
 

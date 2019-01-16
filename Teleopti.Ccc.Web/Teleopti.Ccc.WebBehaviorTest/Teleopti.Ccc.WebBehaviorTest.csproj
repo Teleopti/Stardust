@@ -118,6 +118,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adherence\AdjustAdherencePageStepDefinitions.cs" />
+    <Compile Include="Adherence\AdjustedAdherenceStepDefinitions.cs" />
+    <Compile Include="Adherence\ApprovedPeriodsStepDefinitions.cs" />
     <Compile Include="Adherence\Historical\AdjustAdherenceToNeutral.feature.cs">
       <DependentUpon>AdjustAdherenceToNeutral.feature</DependentUpon>
     </Compile>
@@ -226,11 +229,12 @@
     <Compile Include="Adherence\Monitor\AgentsTop50.feature.cs">
       <DependentUpon>AgentsTop50.feature</DependentUpon>
     </Compile>
-    <Compile Include="Adherence\AgentHistoricalPageStepDefinitions.cs" />
-    <Compile Include="Adherence\AgentsDefinitions.cs" />
-    <Compile Include="Adherence\HistoricalOverviewStepDefinitions.cs" />
-    <Compile Include="Adherence\OverviewDefinitions.cs" />
+    <Compile Include="Adherence\HistoricalAdherencePageStepDefinitions.cs" />
+    <Compile Include="Adherence\AgentsPageStepDefinitions.cs" />
+    <Compile Include="Adherence\HistoricalOverviewPageStepDefinitions.cs" />
+    <Compile Include="Adherence\OverviewPageStepDefinitions.cs" />
     <Compile Include="Adherence\AdherencePageStepDefinitions.cs" />
+    <Compile Include="Adherence\PhoneStateStepDefinitions.cs" />
     <Compile Include="Adherence\ToolPageStepDefinitions.cs" />
     <Compile Include="Adherence\TracerPageStepDefinitions.cs" />
     <Compile Include="Adherence\RtaTool.feature.cs">
@@ -240,7 +244,6 @@
       <DependentUpon>RtaTracer.feature</DependentUpon>
     </Compile>
     <Compile Include="APIResponseStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\ApprovedPeriodsStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\QueueSourceDefinitions.cs" />
     <Compile Include="Bindings\Generic\RuleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Diagnosis\DiagnosisViewPageStepDefinition.cs" />
@@ -248,7 +251,6 @@
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="BusinessUnitSelectionTest.cs" />
     <Compile Include="FullIntegrationTestAttribute.cs" />
     <Compile Include="MyTime\DaySchedule\80101_DayScheduleForStartPage.feature.cs">

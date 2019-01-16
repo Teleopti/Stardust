@@ -9,7 +9,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 namespace Teleopti.Ccc.WebBehaviorTest.Adherence
 {
 	[Binding]
-	public class HistoricalOverviewStepDefinitions
+	public class HistoricalOverviewPageStepDefinitions
 	{
 		[When(@"I review historical adherence for team '(.*)'")]
 		public void WhenIReviewHistoricalOverviewForTeam(string name)
