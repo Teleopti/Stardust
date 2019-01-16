@@ -429,36 +429,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/intraday");
 		}
 
-		public static void GotoRealTimeAdherenceAgents()
-		{
-			GoToPage("wfm/#/rta/agents/?pollingInterval=100");
-		}
-
-		public static void GotoRealTimeAdherenceAllAgents()
-		{
-			GoToPage("wfm/#/rta/agents/?showAllAgents=true&pollingInterval=100");
-		}
-
-		public static void GotoRealTimeAdherenceSites()
+		public static void GotoRealTimeAdherenceOverview()
 		{
 			GoToPage("wfm/#/rta");
 		}
 
-		public static void GotoRealTimeAdherenceForTeamsOnSite(Guid siteId)
+		public static void GotoRealTimeAdherenceOverviewForTeamsOnSite(Guid siteId)
 		{
 			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&pollingInterval=100&open");
-		}
-
-		public static void GotoRealTimeAdherenceForSites(IEnumerable<Guid> siteIds)
-		{
-			var sites = string.Join("&siteIds=", siteIds);
-			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&pollingInterval=100");
-		}
-
-		public static void GotoRealTimeAdherenceForTeams(IEnumerable<Guid> teamIds)
-		{
-			var teams = string.Join("&teamIds=", teamIds);
-			GoToPage("wfm/#/rta/agents/?teamIds=" + teams + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillForTeamsOnSite(Guid skillId, Guid siteId)
@@ -466,19 +444,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillIds=" + skillId + "&pollingInterval=100&open");
 		}
 
-		public static void GotoRealTimeAdherenceForSkillForSites(Guid skillId)
+		public static void GotoRealTimeAdherenceOverviewForSkillForSites(Guid skillId)
 		{
 			GoToPage("wfm/#/rta/?skillIds=" + skillId + "&pollingInterval=100&open");
 		}
 
-		public static void GotoRealTimeAdherenceForSkillAreaForSites(Guid skillAreaId)
+		public static void GotoRealTimeAdherenceOverviewForSkillAreaForSites(Guid skillAreaId)
 		{
 			GoToPage("wfm/#/rta/?skillAreaId=" + skillAreaId + "&pollingInterval=100&open");
 		}
 
-		public static void GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(Guid skillAreaId, Guid siteId)
+		public static void GotoRealTimeAdherenceOverviewForSkillAreaForTeamsOnSite(Guid skillAreaId, Guid siteId)
 		{
 			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId + "&pollingInterval=100&open");
+		}
+
+		public static void GotoRealTimeAdherenceAgents()
+		{
+			GoToPage("wfm/#/rta/agents/?pollingInterval=100");
+		}
+
+		public static void GotoRealTimeAdherenceAgentsForSites(IEnumerable<Guid> siteIds)
+		{
+			var sites = string.Join("&siteIds=", siteIds);
+			GoToPage("wfm/#/rta/agents/?siteIds=" + sites + "&pollingInterval=100");
+		}
+
+		public static void GotoRealTimeAdherenceAgentsForTeams(IEnumerable<Guid> teamIds)
+		{
+			var teams = string.Join("&teamIds=", teamIds);
+			GoToPage("wfm/#/rta/agents/?teamIds=" + teams + "&pollingInterval=100");
 		}
 
 		public static void GotoRealTimeAdherenceAgentsOnTeam(Guid teamId)

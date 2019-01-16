@@ -18,7 +18,7 @@ Scenario: See agents for multiple sites
 	 | Field      | Value       |
 	 | Team       | Team London |
 	 | Start Date | 2014-01-21  |
-	Given I am viewing real time adherence on sites 'London, Paris' only
+	Given I am viewing real time adherence on sites 'London, Paris'
 	When I click the toggle to see all agents
 	Then I should see agent status for 'Pierre Baldi'
 	And I should see agent status for 'Ashley Andeen'

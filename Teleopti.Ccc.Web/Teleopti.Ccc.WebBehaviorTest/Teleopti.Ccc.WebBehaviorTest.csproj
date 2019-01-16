@@ -118,6 +118,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adherence\Historical\AdjustAdherenceToNeutral.feature.cs">
+      <DependentUpon>AdjustAdherenceToNeutral.feature</DependentUpon>
+    </Compile>
     <Compile Include="Adherence\Historical\ApproveOutOfAdherences_47230.feature.cs">
       <DependentUpon>ApproveOutOfAdherences_47230.feature</DependentUpon>
     </Compile>
@@ -184,11 +187,11 @@
     <Compile Include="Adherence\Monitor\MonitorAgentsBySkillArea_39337.feature.cs">
       <DependentUpon>MonitorAgentsBySkillArea_39337.feature</DependentUpon>
     </Compile>
-    <Compile Include="Adherence\Monitor\MonitorAgentsInPermittedOrganizaionlOnly.feature.cs">
-      <DependentUpon>MonitorAgentsInPermittedOrganizaionlOnly.feature</DependentUpon>
+    <Compile Include="Adherence\Monitor\OrganizaionOverviewWithPermission.feature.cs">
+      <DependentUpon>OrganizaionOverviewWithPermission.feature</DependentUpon>
     </Compile>
-    <Compile Include="Adherence\Monitor\MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs">
-      <DependentUpon>MonitorAgentsViewInPermittedOrganizaionlOnly.feature</DependentUpon>
+    <Compile Include="Adherence\Monitor\AgentsWithPermission.feature.cs">
+      <DependentUpon>AgentsWithPermission.feature</DependentUpon>
     </Compile>
     <Compile Include="Adherence\Monitor\PauseButton_39144.feature.cs">
       <DependentUpon>PauseButton_39144.feature</DependentUpon>
@@ -960,6 +963,10 @@
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Adherence\Historical\AdjustAdherenceToNeutral.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AdjustAdherenceToNeutral.feature.cs</LastGenOutput>
+    </None>
     <None Include="Adherence\Historical\ApproveOutOfAdherences_47230.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApproveOutOfAdherences_47230.feature.cs</LastGenOutput>
@@ -1048,13 +1055,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MonitorBySkillArea_39337.feature.cs</LastGenOutput>
     </None>
-    <None Include="Adherence\Monitor\MonitorAgentsInPermittedOrganizaionlOnly.feature">
+    <None Include="Adherence\Monitor\OrganizaionOverviewWithPermission.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorAgentsInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
+      <LastGenOutput>OrganizaionOverviewWithPermission.feature.cs</LastGenOutput>
     </None>
-    <None Include="Adherence\Monitor\MonitorAgentsViewInPermittedOrganizaionlOnly.feature">
+    <None Include="Adherence\Monitor\AgentsWithPermission.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
+      <LastGenOutput>AgentsWithPermission.feature.cs</LastGenOutput>
     </None>
     <None Include="Adherence\Monitor\PauseButton_39144.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1200,7 +1207,6 @@
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Adherence\Historical\AdjustAdherenceToNeutral.feature" />
     <Content Include="Data\PasswordPolicy.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
