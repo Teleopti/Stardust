@@ -1,13 +1,3 @@
-﻿if (typeof Teleopti === 'undefined') {
-	Teleopti = {};
-}
-if (typeof Teleopti.MyTimeWeb === 'undefined') {
-	Teleopti.MyTimeWeb = {};
-}
-if (typeof Teleopti.MyTimeWeb.Request === 'undefined') {
-	Teleopti.MyTimeWeb.Request = {};
-}
-
 Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 	var vm;
 	var vmBulletin;

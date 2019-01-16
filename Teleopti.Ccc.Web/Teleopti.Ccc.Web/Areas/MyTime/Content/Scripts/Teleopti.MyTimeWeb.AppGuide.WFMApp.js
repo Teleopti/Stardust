@@ -1,7 +1,4 @@
-﻿Teleopti = Teleopti || {};
-Teleopti.MyTimeWeb = Teleopti.MyTimeWeb || {};
-Teleopti.MyTimeWeb.AppGuide = Teleopti.MyTimeWeb.AppGuide || {};
-
+﻿Teleopti.MyTimeWeb.AppGuide = Teleopti.MyTimeWeb.AppGuide || {};
 Teleopti.MyTimeWeb.AppGuide.WFMApp = (function ($) {
 	var vm;
 

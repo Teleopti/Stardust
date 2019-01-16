@@ -1,10 +1,3 @@
-﻿if (typeof (Teleopti) === 'undefined') {
-	Teleopti = {};
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
-		Teleopti.MyTimeWeb = {};
-	}
-}
-
 Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownViewModel(startMoment, periodType) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var getEndMoment = function (startMoment, periodType) {

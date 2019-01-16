@@ -1,11 +1,3 @@
-﻿if (typeof Teleopti === 'undefined') {
-	Teleopti = {};
-
-	if (typeof Teleopti.MyTimeWeb === 'undefined') {
-		Teleopti.MyTimeWeb = {};
-	}
-}
-
 Teleopti.MyTimeWeb.Portal = (function($) {
 	var _settings = {};
 	var _partialViewInitCallback = {};

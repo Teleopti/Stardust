@@ -1,10 +1,3 @@
-﻿if (typeof (Teleopti) === 'undefined') {
-	Teleopti = {};
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
-		Teleopti.MyTimeWeb = {};
-	}
-}
-
 Teleopti.MyTimeWeb.TeamScheduleNew = (function ($) {
 
 	var portal = Teleopti.MyTimeWeb.Portal;
