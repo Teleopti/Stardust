@@ -4,7 +4,7 @@
 		<form name="moveActivityForm">
 			<md-progress-linear ng-if="vm.checkingCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'StartTime' | translate}}:</h3>
-			<teams-time-picker date="vm.getMoveToDate()"
+			<teams-time-picker class="focus-default" date="vm.getMoveToDate()"
 							   ng-model="vm.moveToTime"
 							   ng-change="vm.updateInvalidAgents(moveActivityForm.$valid)"
 							   required

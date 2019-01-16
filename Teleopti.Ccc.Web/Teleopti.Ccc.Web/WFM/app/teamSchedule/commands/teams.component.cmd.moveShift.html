@@ -4,7 +4,7 @@
 		<form name="moveShiftForm">
 			<md-progress-linear ng-if="$ctrl.processingCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'StartTime' | translate}}:</h3>
-			<teams-time-picker date="$ctrl.containerCtrl.getDate()"
+			<teams-time-picker class="focus-default" date="$ctrl.containerCtrl.getDate()"
 							   timezone="$ctrl.containerCtrl.getCurrentTimezone()"
 							   ng-model="$ctrl.moveToTime"
 							   ng-change="$ctrl.updateInvalidAgents(moveShiftForm.$valid)"

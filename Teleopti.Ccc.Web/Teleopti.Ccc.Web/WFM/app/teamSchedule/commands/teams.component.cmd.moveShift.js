@@ -121,13 +121,6 @@
 				var focusTarget = $element[0].querySelector('.focus-default input');
 				if (focusTarget) angular.element(focusTarget).focus();
 			});
-
-			var inputs = $element[0].querySelectorAll('input[type=text]');
-			angular.forEach(inputs, function (input) {
-				angular.element(input).on('focus', function (event) {
-					event.target.select();
-				});
-			});
 		}
 
 		function getMoveToStartTimeMoment() {
