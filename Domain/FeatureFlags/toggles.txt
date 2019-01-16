@@ -34,7 +34,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
-RTA_ReviewHistoricalAdherence_Domain_74770 = true
 RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = true
 RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
 RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true

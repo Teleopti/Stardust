@@ -15,7 +15,6 @@
 		Forecast_CopySettingsToWorkflow_11112,
 
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
-		RTA_ReviewHistoricalAdherence_Domain_74770,
 		RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306,
 		RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485,
 		RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485,

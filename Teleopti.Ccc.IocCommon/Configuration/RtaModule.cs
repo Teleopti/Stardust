@@ -155,16 +155,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306))
 				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveLastBefore>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else if (_config.IsToggleEnabled(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770))
+			else
 				builder.RegisterType<AgentAdherenceDayLoaderHistoricalOverview>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else
-				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
 
-			if (_config.IsToggleEnabled(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770))
-				builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
-			else
-				builder.RegisterType<ScheduleLoader>().As<IScheduleLoader>().SingleInstance();
-			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
+			builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
 
 			if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306))
 				builder.RegisterType<AdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
