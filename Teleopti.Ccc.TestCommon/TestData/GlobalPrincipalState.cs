@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public static class GlobalPrincipalState
 	{
-		public static TeleoptiPrincipalForLegacy Principal;
+		public static ITeleoptiPrincipal Principal;
 
 		public static void EnsureThreadPrincipal()
 		{

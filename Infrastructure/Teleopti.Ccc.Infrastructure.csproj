@@ -572,7 +572,6 @@
     <Compile Include="Licensing\XmlLicenseServiceFactory.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />
     <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
-    <Compile Include="Foundation\IMakeRegionalFromPerson.cs" />
     <Compile Include="Foundation\IRetrievePersonNameForPerson.cs" />
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalInternalsFactory.cs" />

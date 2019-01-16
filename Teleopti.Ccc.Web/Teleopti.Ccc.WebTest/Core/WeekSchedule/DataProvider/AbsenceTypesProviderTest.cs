@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var currentUser = PersonRepository.Get(personId);
 			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
-			var principal = new TeleoptiPrincipalForLegacy(
+			var principal = new TeleoptiPrincipal(
 				new TeleoptiIdentity(
 					"Fake Login",
 					null,

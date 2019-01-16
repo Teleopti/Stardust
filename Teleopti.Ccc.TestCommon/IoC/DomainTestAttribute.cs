@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Optimization;
@@ -317,6 +318,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
 
+		public IPrincipalFactory PrincipalFactory;
 		public IThreadPrincipalContext PrincipalContext;
 		public FakeDataSourceForTenant DataSourceForTenant;
 		public IDataSourceScope DataSourceScope;
@@ -357,16 +359,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				_loggedOnPerson.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
 				_loggedOnPerson.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
 
-				var principal = new TeleoptiPrincipalForLegacy(
-					new TeleoptiIdentity(
-						"Fake Login",
-						DataSourceForTenant.Tenant(DefaultTenantName),
-						new BusinessUnit("loggedOnBu").WithId(),
-						null,
-						null
-					),
-					_loggedOnPerson);
-
+				var principal = PrincipalFactory.MakePrincipal(
+					_loggedOnPerson,
+					DataSourceForTenant.Tenant(DefaultTenantName),
+					new BusinessUnit("loggedOnBu").WithId(),
+					null
+				);
 				PrincipalContext.SetCurrentPrincipal(principal);
 			}
 			else
