@@ -1,12 +1,3 @@
-﻿if (typeof (Teleopti) === 'undefined') {
-	Teleopti = {};
-
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
-		Teleopti.MyTimeWeb = {};
-	}
-}
-
-
 Teleopti.MyTimeWeb.Settings = (function ($) {
     var ajax = new Teleopti.MyTimeWeb.Ajax();
     var vm;

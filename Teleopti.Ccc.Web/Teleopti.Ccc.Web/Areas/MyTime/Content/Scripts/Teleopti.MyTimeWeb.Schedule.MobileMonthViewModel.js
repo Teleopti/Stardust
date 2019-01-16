@@ -1,13 +1,3 @@
-﻿if (typeof Teleopti === 'undefined') {
-	Teleopti = {};
-}
-if (typeof Teleopti.MyTimeWeb === 'undefined') {
-	Teleopti.MyTimeWeb = {};
-}
-if (typeof Teleopti.MyTimeWeb.Schedule === 'undefined') {
-	Teleopti.MyTimeWeb.Schedule = {};
-}
-
 Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 	var self = this;
 
