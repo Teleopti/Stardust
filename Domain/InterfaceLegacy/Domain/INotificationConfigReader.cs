@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		string SuccessCode { get; }
 		bool SkipSearch { get; }
 		string SmtpHost { get; }
+		bool SmtpEnabled { get; }
 		int SmtpPort { get; }
 		bool SmtpUseSsl { get; }
 		string SmtpUser { get; }
