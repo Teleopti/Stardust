@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -40,24 +41,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 				if (scheduleDay.Shift == null) continue;
 
-				foreach (var layer in scheduleDay.Shift.Layers)
-				{
-					_scheduleProjectionReadOnlyPersister.AddActivity(
-						new ScheduleProjectionReadOnlyModel
-						{
-							PersonId = @event.PersonId,
-							ScenarioId = @event.ScenarioId,
-							BelongsToDate = date,
-							PayloadId = layer.PayloadId,
-							WorkTime = layer.WorkTime,
-							ContractTime = layer.ContractTime,
-							StartDateTime = layer.StartDateTime,
-							EndDateTime = layer.EndDateTime,
-							Name = layer.Name,
-							ShortName = layer.ShortName,
-							DisplayColor = layer.DisplayColor
-						});
-				}
+				_scheduleProjectionReadOnlyPersister.AddActivity(
+					scheduleDay.Shift.Layers.Select(layer => new ScheduleProjectionReadOnlyModel
+					{
+						PersonId = @event.PersonId,
+						ScenarioId = @event.ScenarioId,
+						BelongsToDate = date,
+						PayloadId = layer.PayloadId,
+						WorkTime = layer.WorkTime,
+						ContractTime = layer.ContractTime,
+						StartDateTime = layer.StartDateTime,
+						EndDateTime = layer.EndDateTime,
+						Name = layer.Name,
+						ShortName = layer.ShortName,
+						DisplayColor = layer.DisplayColor
+					}));
 			}
 		}
 	}

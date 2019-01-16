@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonAssignmentRepository.Add(personAssignment);
 			personAssignment.ShiftLayers.Single().Payload.WithId();
 			Persister.AddActivity(
-				new ScheduleProjectionReadOnlyModel
+				new []{new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = "2016-01-01".Date(),
 					ScenarioId = scenario.Id.Value,
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					ContractTime = new TimeSpan(9, 0, 0),
 					Name = personAssignment.ShiftLayers.Single().Payload.Name,
 					ShortName = ""
-				});
+				}});
 
 			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
 			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleProjectionReadOnly().ToList();
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonAssignmentRepository.Add(personAssignment);
 			personAssignment.ShiftLayers.Single().Payload.WithId();
 			Persister.AddActivity(
-				new ScheduleProjectionReadOnlyModel
+				new []{new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = "2016-01-01".Date(),
 					ScenarioId = scenario.Id.Value,
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					ContractTime = new TimeSpan(9, 0, 0),
 					Name = personAssignment.ShiftLayers.Single().Payload.Name,
 					ShortName = ""
-				});
+				}});
 
 			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly, new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
 			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleProjectionReadOnly().ToList();

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -43,36 +45,61 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 				.UniqueResult<bool>();
 		}
 
-		public void AddActivity(ScheduleProjectionReadOnlyModel model)
+		public void AddActivity(IEnumerable<ScheduleProjectionReadOnlyModel> models)
 		{
-			_unitOfWork.Session().CreateSQLQuery(
-				@"exec ReadModel.UpdateScheduleProjectionReadOnly 
-					@PersonId=:PersonId,
-					@ScenarioId =:ScenarioId,
-					@BelongsToDate =:Date,
-					@PayloadId =:PayloadId,
-					@StartDateTime =:StartDateTime,
-					@EndDateTime =:EndDateTime,
-					@WorkTime =:WorkTime,
-					@ContractTime =:ContractTime,
-					@Name =:Name,
-					@ShortName =:ShortName,
-					@DisplayColor =:DisplayColor,
-					@PayrollCode = '',
-					@InsertedOn =:InsertedOn")
-				.SetGuid("PersonId", model.PersonId)
-				.SetGuid("ScenarioId", model.ScenarioId)
-				.SetDateOnly("Date", model.BelongsToDate)
-				.SetGuid("PayloadId", model.PayloadId)
-				.SetInt64("WorkTime", model.WorkTime.Ticks)
-				.SetInt64("ContractTime", model.ContractTime.Ticks)
-				.SetDateTime("StartDateTime", model.StartDateTime)
-				.SetDateTime("EndDateTime", model.EndDateTime)
-				.SetString("Name", model.Name)
-				.SetString("ShortName", model.ShortName)
-				.SetInt32("DisplayColor", model.DisplayColor)
-				.SetDateTime("InsertedOn", DateTime.UtcNow)
-				.ExecuteUpdate();
+			var connectionString = _unitOfWork.Current().Session().Connection.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+
+				var dt = new DataTable();
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.ScenarioId), typeof(Guid));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.PersonId), typeof(Guid));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.BelongsToDate), typeof(DateTime));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.PayloadId), typeof(Guid));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.StartDateTime), typeof(DateTime));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.EndDateTime), typeof(DateTime));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.WorkTime), typeof(long));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.Name), typeof(String));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.ShortName), typeof(String));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.DisplayColor), typeof(int));
+				dt.Columns.Add("PayrollCode", typeof(String));
+				dt.Columns.Add("InsertedOn", typeof(DateTime));
+				dt.Columns.Add(nameof(ScheduleProjectionReadOnlyModel.ContractTime), typeof(long));
+
+				var insertedOn = DateTime.UtcNow;
+
+				using (var transaction = connection.BeginTransaction())
+				{
+					foreach (var model in models)
+					{
+						var row = dt.NewRow();
+
+						row["ScenarioId"] = model.ScenarioId;
+						row["PersonId"] = model.PersonId;
+						row["BelongsToDate"] = model.BelongsToDate.Date;
+						row["PayloadId"] = model.PayloadId;
+						row["StartDateTime"] = model.StartDateTime;
+						row["EndDateTime"] = model.EndDateTime;
+						row["WorkTime"] = model.WorkTime.Ticks;
+						row["Name"] = model.Name;
+						row["ShortName"] = model.ShortName;
+						row["DisplayColor"] = model.DisplayColor;
+						row["PayrollCode"] = "";
+						row["InsertedOn"] = insertedOn;
+						row["ContractTime"] = model.ContractTime.Ticks;
+
+						dt.Rows.Add(row);
+					}
+
+					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+					{
+						sqlBulkCopy.DestinationTableName = "[ReadModel].[ScheduleProjectionReadOnly]";
+						sqlBulkCopy.WriteToServer(dt);
+					}
+					transaction.Commit();
+				}
+			}
 		}
 		
 		public bool IsInitialized()
