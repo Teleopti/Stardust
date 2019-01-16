@@ -30,7 +30,7 @@ const GROUPS: AreaGroup[] = [
 		{ InternalName: 'teams', icon: 'mdi mdi-account-multiple' },
 		{ InternalName: 'requests', icon: 'mdi mdi-numeric-9-plus-box-multiple-outline' },
 		{ InternalName: 'staffingModule', icon: 'mdi mdi-account-switch' },
-		{ InternalName: 'intraday', icon: 'mdi mdi-compass-outline', CustomStateName: 'intraday.intradayArea' },
+		{ InternalName: 'intraday', icon: 'mdi mdi-compass-outline', CustomStateName: 'intraday.index' },
 		{ InternalName: 'rta', icon: 'mdi mdi-alarm' }
 	],
 	[{ InternalName: 'seatPlan', icon: 'mdi mdi-tab-unselected' }, { InternalName: 'seatMap', icon: 'mdi mdi-tab' }],
