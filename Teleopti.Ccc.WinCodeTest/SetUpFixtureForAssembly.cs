@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCodeTest
 		public static IPerson loggedOnPerson;
 
 		[OneTimeSetUp]
-        public void RunBeforeAnyTest()
+        public void OneTimeSetUp()
         {
             var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
@@ -22,5 +22,12 @@ namespace Teleopti.Ccc.WinCodeTest
 			StateHolderProxyHelper.PrincipalFactory = new TeleoptiPrincipalForLegacyFactory();
             StateHolderProxyHelper.ClearAndSetStateHolder(loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest, StateHolderProxyHelper.CreateApplicationData(new MessageBrokerCompositeDummy()),dataSource, stateMock);
         }
+
+		[OneTimeTearDown]
+		public void OneTimeTearDown()
+		{
+			StateHolderProxyHelper.ClearStateHolder();
+		}
+        
     }
 }
