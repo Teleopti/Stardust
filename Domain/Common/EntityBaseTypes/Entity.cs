@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		{
 			if (newId.HasValue)
 			{
-				_hashCode = null;
 				_id = newId;
 			}
 			else
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		public virtual void ClearId()
 		{
 			_id = null;
-			_hashCode = null;
 		}
 
 
