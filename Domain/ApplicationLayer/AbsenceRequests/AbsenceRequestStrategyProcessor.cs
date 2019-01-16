@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			var timedOutRequestsTime = _now.UtcDateTime().AddMinutes(-60);
 			var allNewRequests = new List<IQueuedAbsenceRequest>();
-			allNewRequests.AddRange(requestsInQueue.Where(x => x.Sent == null || x.Sent < timedOutRequestsTime));
+			allNewRequests.AddRange(requestsInQueue.Where(x => x.Sent == null || x.Sent < timedOutRequestsTime).OrderBy(x => x.StartDateTime));
 
 			//filter out requests that is not in a period that is already beeing processed
 			var processingPeriods = getProcessingPeriods(requestsInQueue.Where(x => x.Sent != null && x.Sent >= timedOutRequestsTime));

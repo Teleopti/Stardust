@@ -71,6 +71,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 		}
 
+		public void Remove(List<Guid> ids)
+		{
+			var sentRequests = _queuedRequests.Where(y => ids.Contains(y.Id.GetValueOrDefault())).ToList();
+			foreach (var request in sentRequests)
+			{
+				_queuedRequests.Remove(request);
+			}
+		}
+
 		public void Send(List<Guid> queuedId, DateTime timeStamp)
 		{
 			foreach (var id in queuedId)
@@ -105,6 +114,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			{
 				request.Sent = null;
 			}
+		}
+
+		public void ResetSent(List<Guid> ids)
+		{
+			var sentRequests = _queuedRequests.Where(y => ids.Contains(y.Id.GetValueOrDefault()) ).ToList();
+			foreach (var request in sentRequests)
+			{
+				request.Sent = null;
+			}
+		}
+
+		public IList<IQueuedAbsenceRequest> FindByIds(IList<Guid> ids)
+		{
+			return _queuedRequests.Where(y => ids.Contains(y.Id.GetValueOrDefault())).ToList();
 		}
 	}
 }
