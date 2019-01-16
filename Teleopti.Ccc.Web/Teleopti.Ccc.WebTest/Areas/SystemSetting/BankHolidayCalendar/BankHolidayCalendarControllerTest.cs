@@ -300,14 +300,18 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		public void ShouldGetAllBankHolidayCalendarSites()
 		{
 			var expactedSiteId = Guid.NewGuid();
+			var expactedCalendarId = Guid.NewGuid();
+			var calendar = new BankHolidayCalendar { Name = "China2019" };
+			calendar.SetId(expactedCalendarId);
 			BankHolidayCalendarSiteRepository.Add(new BankHolidayCalendarSite
 			{
 				Site = SiteFactory.CreateSiteWithId(expactedSiteId, "mySite"),
-				Calendar = new BankHolidayCalendar { Name = "China2019" }
+				Calendar = calendar
 			});
 
 			var result = Target.GetAllSiteBankHolidayCalendars();
 			result.First().Site.Should().Be.EqualTo(expactedSiteId);
+			result.First().Calendars.First().Should().Be.EqualTo(expactedCalendarId);
 		}
 
 		[Test]
@@ -361,7 +365,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		}
 
 		[Test]
-		public void ShouldGetByAssignedCalendarSites()
+		public void ShouldGetSitesByAssignedCalendar()
 		{
 			var siteId = Guid.NewGuid();
 			var calendarId = Guid.NewGuid();

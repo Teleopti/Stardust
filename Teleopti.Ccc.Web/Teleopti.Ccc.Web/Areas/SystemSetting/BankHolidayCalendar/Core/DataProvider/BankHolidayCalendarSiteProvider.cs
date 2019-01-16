@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		public IEnumerable<SiteBankHolidayCalendarsViewModel> GetAllSettings()
 		{
 			var settings = _bankHolidayCalendarSiteRepository.LoadAll();
-			var result = settings.GroupBy(s=>s.Site.Id.Value).Select(g => new SiteBankHolidayCalendarsViewModel { Site = g.Key, Calendars = g.Select(x => x.Id.Value)});
+			var result = settings.GroupBy(s=>s.Site.Id.Value).Select(g => new SiteBankHolidayCalendarsViewModel { Site = g.Key, Calendars = g.Select(x => x.Calendar.Id.Value)});
 			return result;
 		}
 
