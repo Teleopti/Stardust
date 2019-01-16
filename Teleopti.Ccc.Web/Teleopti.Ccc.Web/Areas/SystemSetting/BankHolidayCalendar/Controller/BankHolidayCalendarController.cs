@@ -11,13 +11,16 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 	{
 		private readonly IBankHolidayCalendarPersister _bankHolidayCalendarPersister;
 		private readonly IBankHolidayCalendarProvider _bankHolidayCalendarProvider;
-		private readonly ISiteBankHolidayCalendarsProvider _siteBankHolidayCalendarsProvider;
+		private readonly IBankHolidayCalendarSiteProvider _bankHolidayCalendarSiteProvider;
+		private readonly IBankHolidayCalendarSitePersister _bankHolidayCalendarSitePersister;
 
-		public BankHolidayCalendarController(IBankHolidayCalendarPersister bankHolidayCalendarPersister, IBankHolidayCalendarProvider bankHolidayCalendarProvider, ISiteBankHolidayCalendarsProvider siteBankHolidayCalendarsProvider)
+		public BankHolidayCalendarController(IBankHolidayCalendarPersister bankHolidayCalendarPersister, IBankHolidayCalendarProvider bankHolidayCalendarProvider,IBankHolidayCalendarSiteProvider bankHolidayCalendarSiteProvider,
+			IBankHolidayCalendarSitePersister bankHolidayCalendarSitePersister)
 		{
 			_bankHolidayCalendarPersister = bankHolidayCalendarPersister;
 			_bankHolidayCalendarProvider = bankHolidayCalendarProvider;
-			_siteBankHolidayCalendarsProvider = siteBankHolidayCalendarsProvider;
+			_bankHolidayCalendarSiteProvider = bankHolidayCalendarSiteProvider;
+			_bankHolidayCalendarSitePersister = bankHolidayCalendarSitePersister;
 		}
 
 		[HttpGet, Route("api/BankHolidayCalendars"), UnitOfWork]
@@ -48,20 +51,19 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Controller
 		[HttpGet, Route("api/SiteBankHolidayCalendars"), UnitOfWork]
 		public virtual IEnumerable<SiteBankHolidayCalendarsViewModel> GetAllSiteBankHolidayCalendars()
 		{
-			return _siteBankHolidayCalendarsProvider.GetAllSettings();
+			return _bankHolidayCalendarSiteProvider.GetAllSettings();
 		}
 
 		[HttpGet, Route("api/SitesByCalendar/{Id}"), UnitOfWork]
 		public virtual IEnumerable<Guid> GetSitesByCalendar(Guid Id)
 		{
-			return _siteBankHolidayCalendarsProvider.GetSitesByAssignedCalendar(Id);
+			return _bankHolidayCalendarSiteProvider.GetSitesByAssignedCalendar(Id);
 		}
 
 		[HttpPost, Route("api/SiteBankHolidayCalendars/Update"), UnitOfWork]
 		public virtual bool SetCalendarsToSite([FromBody]SiteBankHolidayCalendarForm input)
 		{
-			_siteBankHolidayCalendarsProvider.UpdateCalendarsForSites(input.Settings);
-			return true;
+			return _bankHolidayCalendarSitePersister.UpdateCalendarsForSites(input.Settings);
 		}
 	}
 }

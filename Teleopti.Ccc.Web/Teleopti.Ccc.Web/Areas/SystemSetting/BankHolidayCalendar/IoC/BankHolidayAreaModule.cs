@@ -11,10 +11,10 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<BankHolidayCalendarPersister>().As<IBankHolidayCalendarPersister>().SingleInstance();
-			builder.RegisterType<BankHolidayDateRepository>().As<IBankHolidayDateRepository>().SingleInstance();
 			builder.RegisterType<BankHolidayCalendarProvider>().As<IBankHolidayCalendarProvider>().SingleInstance();
 			builder.RegisterType<BankHolidayModelMapper>().As<IBankHolidayModelMapper>().SingleInstance();
-			builder.RegisterType<SiteBankHolidayCalendarsProvider>().As<ISiteBankHolidayCalendarsProvider>().SingleInstance();
+			builder.RegisterType<BankHolidayCalendarSiteProvider>().As<IBankHolidayCalendarSiteProvider>().SingleInstance();
+			builder.RegisterType<BankHolidayCalendarSitePersister>().As<IBankHolidayCalendarSitePersister>().SingleInstance();
 		}
 	}
 }

@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		public BankHolidayCalendarController Target;
 		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
 		public FakeBankHolidayDateRepository BankHolidayDateRepository;
-		public FakeSiteBankHolidayCalendarRepository SiteBankHolidayCalendarRepository;
 		public FakeSiteRepository SiteRepository;
+		public FakeBankHolidayCalendarSiteRepository BankHolidayCalendarSiteRepository;
 
 		private DateOnly _nationalDay = new DateOnly(2018, 10, 1);
 		private DateOnly _springFestival = new DateOnly(2019, 2, 3);
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		{
 			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
 			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
-			isolate.UseTestDouble<FakeSiteBankHolidayCalendarRepository>().For<ISiteBankHolidayCalendarRepository>();
 			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarSiteRepository>().For<IBankHolidayCalendarSiteRepository>();
 		}
 
 		private IBankHolidayCalendar PrepareData()
@@ -297,13 +297,13 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		}
 
 		[Test]
-		public void ShouldGetAllSiteBankHolidayCalendars()
+		public void ShouldGetAllBankHolidayCalendarSites()
 		{
 			var expactedSiteId = Guid.NewGuid();
-			SiteBankHolidayCalendarRepository.Add(new SiteBankHolidayCalendar
+			BankHolidayCalendarSiteRepository.Add(new BankHolidayCalendarSite
 			{
 				Site = SiteFactory.CreateSiteWithId(expactedSiteId, "mySite"),
-				BankHolidayCalendarsForSite = new List<IBankHolidayCalendar> { new BankHolidayCalendar { Name = "China2019" } }
+				Calendar = new BankHolidayCalendar { Name = "China2019" }
 			});
 
 			var result = Target.GetAllSiteBankHolidayCalendars();
@@ -311,82 +311,82 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		}
 
 		[Test]
-		public void ShouldAddNewSiteBankHolidayCalendar()
+		public void ShouldAddNewBankHolidayCalendarSite()
 		{
 			var siteId = Guid.NewGuid();
 			var bankHolidayCalendarId = Guid.NewGuid();
-			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, bankHolidayCalendarId);
-			var input = createSiteBankHolidayCalendarForm(siteId, siteBankHolidayCalendar.BankHolidayCalendarsForSite.First());
+			var bankHolidayCalendarSite = createBankHolidayCalendarSite(siteId, bankHolidayCalendarId);
+			var input = createBankHolidayCalendarSiteForm(siteId, bankHolidayCalendarSite.Calendar);
 
 			Target.SetCalendarsToSite(input);
 
-			var result = SiteBankHolidayCalendarRepository.LoadAll();
+			var result = BankHolidayCalendarSiteRepository.LoadAll();
 			result.First().Site.Id.Should().Be.EqualTo(siteId);
-			result.First().BankHolidayCalendarsForSite.First().Id.Should().Be.EqualTo(bankHolidayCalendarId);
+			result.First().Calendar.Id.Should().Be.EqualTo(bankHolidayCalendarId);
 		}
 
 		[Test]
-		public void ShouldUpdateExistingSiteBankHolidayCalender()
+		public void ShouldUpdateExistingBankHolidayCalenderSite()
 		{
 			var bankHolidayCalendar2Id = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var bankHolidayCalendarId = Guid.NewGuid();
-			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, bankHolidayCalendarId);
-			SiteBankHolidayCalendarRepository.Add(siteBankHolidayCalendar);
+			var bankHolidayCalendarSite = createBankHolidayCalendarSite(siteId, bankHolidayCalendarId);
+			BankHolidayCalendarSiteRepository.Add(bankHolidayCalendarSite);
 			var bankHolidayCalendar2 = new BankHolidayCalendar { Name = "China2020" };
 			bankHolidayCalendar2.SetId(bankHolidayCalendar2Id);
 			BankHolidayCalendarRepository.Add(bankHolidayCalendar2);
-			var input = createSiteBankHolidayCalendarForm(siteId, bankHolidayCalendar2);
+			var input = createBankHolidayCalendarSiteForm(siteId, bankHolidayCalendar2);
 
 			Target.SetCalendarsToSite(input);
 
-			var result = SiteBankHolidayCalendarRepository.LoadAll();
+			var result = BankHolidayCalendarSiteRepository.LoadAll();
 			result.First().Site.Id.Should().Be.EqualTo(siteId);
-			result.First().BankHolidayCalendarsForSite.First().Id.Should().Be.EqualTo(bankHolidayCalendar2Id);
+			result.First().Calendar.Id.Should().Be.EqualTo(bankHolidayCalendar2Id);
 		}
 
 		[Test]
-		public void ShouldRemoveExistingSiteBankHolidayCalender()
+		public void ShouldRemoveExistingBankHolidayCalenderSite()
 		{
 			var siteId = Guid.NewGuid();
 			var bankHolidayCalendarId = Guid.NewGuid();
-			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, bankHolidayCalendarId);
-			SiteBankHolidayCalendarRepository.Add(siteBankHolidayCalendar);
-			var input = createSiteBankHolidayCalendarForm(siteId, null);
+			var bankHolidayCalendarSite = createBankHolidayCalendarSite(siteId, bankHolidayCalendarId);
+			BankHolidayCalendarSiteRepository.Add(bankHolidayCalendarSite);
+			var input = createBankHolidayCalendarSiteForm(siteId, null);
 
 			Target.SetCalendarsToSite(input);
 
-			var result = SiteBankHolidayCalendarRepository.LoadAll();
+			var result = BankHolidayCalendarSiteRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
-		public void ShouldGetSitesByAssignedCalendar()
+		public void ShouldGetByAssignedCalendarSites()
 		{
 			var siteId = Guid.NewGuid();
 			var calendarId = Guid.NewGuid();
-			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, calendarId);
-			SiteBankHolidayCalendarRepository.Add(siteBankHolidayCalendar);
+			var bankHolidayCalendarSite = createBankHolidayCalendarSite(siteId, calendarId);
+			BankHolidayCalendarSiteRepository.Add(bankHolidayCalendarSite);
 
 			var result = Target.GetSitesByCalendar(calendarId);
 
 			result.ToList().First().Should().Be.EqualTo(siteId);
 		}
 
-		private ISiteBankHolidayCalendar createSiteAndBankHolidayCalendar(Guid siteId, Guid bankHolidayCalendarId)
+		private IBankHolidayCalendarSite createBankHolidayCalendarSite(Guid siteId, Guid bankHolidayCalendarId)
 		{
 			var site = SiteFactory.CreateSiteWithId(siteId, "mySite");
 			SiteRepository.Add(site);
 			var bankHolidayCalendar = new BankHolidayCalendar { Name = "China2019" };
 			bankHolidayCalendar.SetId(bankHolidayCalendarId);
 			BankHolidayCalendarRepository.Add(bankHolidayCalendar);
-			return new SiteBankHolidayCalendar { Site = site, BankHolidayCalendarsForSite = new List<IBankHolidayCalendar> { bankHolidayCalendar } };
+			return new BankHolidayCalendarSite { Site = site, Calendar = bankHolidayCalendar };
 		}
 
-		private SiteBankHolidayCalendarForm createSiteBankHolidayCalendarForm(Guid siteId, IBankHolidayCalendar calendar)
+		private SiteBankHolidayCalendarForm createBankHolidayCalendarSiteForm(Guid siteId, IBankHolidayCalendar calendar)
 		{
 			var calendars = new List<Guid>();
-			if (calendar != null) calendars.Add( calendar.Id.GetValueOrDefault());
+			if (calendar != null) calendars.Add(calendar.Id.GetValueOrDefault());
 			return new SiteBankHolidayCalendarForm
 			{
 				Settings = new List<SiteBankHolidayCalendarsViewModel>
@@ -403,8 +403,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 		[Test]
 		public void ShouldCanAddSameDateAfterTheDateIsDeletedForCalendar()
 		{
-			var calendar=PrepareData();
-			var date=BankHolidayDateRepository.LoadAll().FirstOrDefault(d=>d.Date==_nationalDay&&d.Calendar.Id.Value== calendar.Id.Value);
+			var calendar = PrepareData();
+			var date = BankHolidayDateRepository.LoadAll().FirstOrDefault(d => d.Date == _nationalDay && d.Calendar.Id.Value == calendar.Id.Value);
 			date.SetDeleted();
 
 			var input = new BankHolidayCalendarForm
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 					new BankHolidayDateForm {Date=_nationalDay,  Description="Test" }
 				} } }
 			};
-			
+
 			var result = Target.SaveBankHolidayCalendar(input);
 			result.Years.First().Dates.First().IsDeleted.Should().Be.EqualTo(false);
 			result.Years.First().Dates.First().Date.Should().Be.EqualTo(_nationalDay);
@@ -428,14 +428,16 @@ namespace Teleopti.Ccc.WebTest.Areas.SystemSetting.BankHolidayCalendars
 			var calendar = PrepareData();
 			var siteId = Guid.NewGuid();
 			var bankHolidayCalendarId = calendar.Id.Value;
-			var siteBankHolidayCalendar = createSiteAndBankHolidayCalendar(siteId, bankHolidayCalendarId);
-			SiteBankHolidayCalendarRepository.Add(siteBankHolidayCalendar);
+			var bankHolidayCalendarSite = createBankHolidayCalendarSite(siteId, bankHolidayCalendarId);
+			BankHolidayCalendarSiteRepository.Add(bankHolidayCalendarSite);
 
 			var result = Target.DeleteBankHolidayCalendarById(bankHolidayCalendarId);
 
 			result.Should().Be.Equals(true);
 
-			SiteBankHolidayCalendarRepository.LoadAll().Count().Should().Be.EqualTo(0);
+			BankHolidayCalendarSiteRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
+
+
 	}
 }

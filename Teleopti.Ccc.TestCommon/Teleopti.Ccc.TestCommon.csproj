@@ -223,6 +223,7 @@
     <Compile Include="FakeRepositories\FakeAnalyticsSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeASMScheduleChangeTimeRepository.cs" />
     <Compile Include="FakeRepositories\FakeBadgeCalculationRepository.cs" />
+    <Compile Include="FakeRepositories\FakeBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeBankHolidayCalendarRepository.cs" />
     <Compile Include="FakeRepositories\FakeBankHolidayDateRepository.cs" />
     <Compile Include="FakeRepositories\FakeExtensiveLogRepository.cs" />
@@ -296,7 +297,6 @@
     <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="FakeRepositories\FakeShiftCategorySelectionRepository.cs" />
     <Compile Include="FakeRepositories\FakeShiftCategoryUsageFinder.cs" />
-    <Compile Include="FakeRepositories\FakeSiteBankHolidayCalendarRepository.cs" />
     <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillCombinationResourceReader.cs" />

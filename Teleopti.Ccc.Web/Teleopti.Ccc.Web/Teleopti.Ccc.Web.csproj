@@ -418,12 +418,14 @@
     <Compile Include="Areas\Insights\InsightsAreaRegistration.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestsPermissonsViewModel.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Controller\BankHolidayCalendarController.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarSitePersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarPersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\BankHolidayCalendarSiteProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarSitePersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarPersister.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarProvider.cs" />
-    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\ISiteBankHolidayCalendarsProvider.cs" />
-    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\SiteBankHolidayCalendarsProvider.cs" />
+    <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\DataProvider\IBankHolidayCalendarSiteProvider.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\IoC\BankHolidayAreaModule.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\BankHolidayModelMapper.cs" />
     <Compile Include="Areas\SystemSetting\BankHolidayCalendar\Core\Mapping\IBankHolidayModelMapper.cs" />

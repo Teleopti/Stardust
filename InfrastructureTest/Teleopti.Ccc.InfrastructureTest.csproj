@@ -276,7 +276,6 @@
     <Compile Include="Repositories\ScenarioRepositoryNoCurrentBusinessUnitTest.cs" />
     <Compile Include="Repositories\ShiftCategorySelectionRepositoryTest.cs" />
     <Compile Include="Repositories\ShiftCategoryUsageFinderTest.cs" />
-    <Compile Include="Repositories\SiteBankHolidayCalendarRepositoryTest.cs" />
     <Compile Include="Repositories\SkillCombinationBpoTimeLineReaderTest.cs" />
     <Compile Include="Repositories\SkillCombinationResourceReaderTest.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepositoryTest.cs" />

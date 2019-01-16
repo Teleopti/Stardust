@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using System.Linq;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -41,6 +42,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new BankHolidayCalendarSiteRepository(currentUnitOfWork);
 		}
 
-		
+		[Test]
+		public void ShouldFindSitesByCalendar()
+		{
+			var bankHolidayCalendaSite = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(bankHolidayCalendaSite);
+
+			var repository = new BankHolidayCalendarSiteRepository(CurrUnitOfWork);
+			var result = repository.FindSitesByCalendar(bankHolidayCalendaSite.Calendar.Id.Value);
+
+			result.Count().Should().Be.EqualTo(1);
+			result.FirstOrDefault().Should().Be.EqualTo(bankHolidayCalendaSite.Site.Id.Value);
+		}
+
+
+
 	}
 }
