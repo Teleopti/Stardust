@@ -26,7 +26,7 @@ $sites = @{
 foreach ($siteName in $sites.Keys) { 
     foreach ($vdKey in $sites[$siteName].Keys) {
         $relPath = $sites[$siteName][$vdKey]
-        $absolutePath = [System.IO.Path]::GetFullPath("$PSScriptRoot\..\..\$relPath")
+        $absolutePath = [System.IO.Path]::GetFullPath("$PSScriptRoot\..\..\..\..\$relPath")
         $app = $config.SelectSingleNode("//site[@name='$siteName'] //application[@path='$vdKey']")
         $app.virtualDirectory.physicalPath = $absolutePath
         Write-Output "$siteName"
