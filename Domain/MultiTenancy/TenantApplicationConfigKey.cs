@@ -1,9 +1,9 @@
 ﻿namespace Teleopti.Ccc.Domain.MultiTenancy
 {
-	public enum TenantApplicationConfigKey
+	public static class TenantApplicationConfigKey
 	{
-		MobileQRCodeUrl,
-		MaximumSessionTimeInMinutes,
-		NotificationApiKey
+		public static string MobileQRCodeUrl => nameof(MobileQRCodeUrl);
+		public static string MaximumSessionTimeInMinutes => nameof(MaximumSessionTimeInMinutes);
+		public static string NotificationApiKey => nameof(NotificationApiKey);
 	}
 }

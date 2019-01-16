@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			(result.Model as WFMAppGuideViewModel).UrlForMyTimeWeb.Should().Be
 				.EqualTo(CurrentTenant.Current()
-				.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString()));
+				.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl));
 		}
 
 	}

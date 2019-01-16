@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[TenantUnitOfWork]
 		public virtual PartialViewResult WFMApp()
 		{
-			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString());
+			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl);
 			return PartialView("WFMAppPartial", new WFMAppGuideViewModel
 			{
 				UrlForMyTimeWeb = url

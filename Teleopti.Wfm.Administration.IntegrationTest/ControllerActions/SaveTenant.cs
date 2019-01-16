@@ -128,7 +128,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
-				loadedTenant.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString()).Should().Be.EqualTo(QRCodeUrl);
+				loadedTenant.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl).Should().Be.EqualTo(QRCodeUrl);
 			}
 		}
 
@@ -159,7 +159,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
-				loadedTenant.GetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString()).Should().Be.EqualTo(maximumSessionTimeInMinutes.ToString());
+				loadedTenant.GetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes).Should().Be.EqualTo(maximumSessionTimeInMinutes.ToString());
 			}
 		}
 
