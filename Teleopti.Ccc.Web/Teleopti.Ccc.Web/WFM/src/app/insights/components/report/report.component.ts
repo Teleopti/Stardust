@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Inject, Injectable } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
+import { NzNotificationService } from 'ng-zorro-antd';
 
 import { Report } from '../../models/Report.model';
 import { Permission } from '../../models/Permission.model';
@@ -30,7 +31,8 @@ export class ReportComponent implements OnInit {
 	constructor(
 		@Inject('$state') private $state: IStateService,
 		private reportSvc: ReportService,
-		public nav: NavigationService) {
+		public nav: NavigationService,
+		private notification: NzNotificationService) {
 
 		const params = $state.params;
 		this.report = params.report;
@@ -163,7 +165,7 @@ export class ReportComponent implements OnInit {
 			if (deleted) {
 				this.nav.gotoInsights();
 			} else {
-				console.log('Failed to delete report "' + report.Name + '"');
+				this.notification.create('error', 'Failed to delete report', 'Failed to delete report "' + report.Name + '"');
 			}
 		});
 	}

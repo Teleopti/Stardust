@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NzNotificationService } from 'ng-zorro-antd';
 
 import { ReportConfig } from '../models/ReportConfig.model';
 import { Report } from '../models/Report.model';
@@ -7,7 +8,8 @@ import { Permission } from '../models/Permission.model';
 
 @Injectable()
 export class ReportService {
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient,
+		private notification: NzNotificationService) { }
 
 	private url_getReportConfig = '../api/Insights/ReportConfig';
 	private url_getReports = '../api/Insights/Reports';
@@ -78,7 +80,7 @@ export class ReportService {
 	}
 
 	private handleError(error: any): Promise<any> {
-		console.error('An error occurred', error);
+		this.notification.create('error', 'Web access failed', `Error message: "${error.messsage}"`);
 		return Promise.reject(error.message || error);
 	}
 }
