@@ -66,8 +66,7 @@
 		</div>
 	</div>
 </div>
-<form name="form" class="wfm-form" novalidate ng-submit="vm.saveSkillGroup(form)" ng-if="vm.skillGroups.length > 0"
- ng-cloak>
+<form name="form" novalidate ng-submit="vm.saveSkillGroup(form)" ng-if="vm.skillGroups.length > 0" ng-cloak>
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="panel full-padding">
@@ -79,7 +78,7 @@
 				</div>
 				<div class="con-row">
 					<div class="con-flex">
-						<label class="input-icon w100" for="skill-group-filter" ng-show="vm.skillGroups.length > 0">
+						<label class="input-icon" for="skill-group-filter" ng-show="vm.skillGroups.length > 0">
 							<i class="mdi mdi-filter-outline">
 								<input type="text" id="skill-group-filter" placeholder="{{ 'Filter' | translate }}" autocomplete="off" ng-model="groupFilter">
 								<md-tooltip>{{ 'Filter' | translate }}</md-tooltip>
@@ -137,7 +136,7 @@
 						<h3>{{ 'AvailableSkills' | translate }}</h3>
 						<div class="con-row">
 							<div class="con-flex">
-								<label for="skill-filter" class="input-icon w100">
+								<label for="skill-filter" class="input-icon">
 									<i class="mdi mdi-filter-outline">
 										<input type="text" id="skill-filter" placeholder="{{ 'FilterSkills' | translate }}" autocomplete="off"
 										 ng-model="skillFilter">
