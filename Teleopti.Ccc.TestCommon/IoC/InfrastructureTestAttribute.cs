@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 	}
 
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_StateQueueFloodPrevention_77710)]
