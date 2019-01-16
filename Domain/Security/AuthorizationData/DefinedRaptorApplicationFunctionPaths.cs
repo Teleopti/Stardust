@@ -140,6 +140,7 @@
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 		public const string ModifyAdherence = "Raptor/Anywhere/RealTimeAdherenceOverview/ModifyAdherence";
 		public const string HistoricalOverview = "Raptor/Anywhere/RealTimeAdherenceOverview/HistoricalOverview";
+		public const string AdjustAdherence = "Raptor/Anywhere/RealTimeAdherenceOverview/AdjustAdherence";
 		public const string EditShiftCategory = "Raptor/Anywhere/Schedules/EditShiftCategory";
 		public const string MoveInvalidOverlappedActivity = "Raptor/Anywhere/Schedules/MoveInvalidOverlappedActivity";
 		public const string RemoveOvertime = "Raptor/Anywhere/Schedules/RemoveOvertime";
