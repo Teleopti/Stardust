@@ -1,4 +1,4 @@
-if COL_LENGTH('Tenant.ServerConfiguration', 'columnName') is null
+if COL_LENGTH('Tenant.ServerConfiguration', 'Description') is null
 begin
     alter table Tenant.ServerConfiguration
     add	[Description] nvarchar(1024) not null
