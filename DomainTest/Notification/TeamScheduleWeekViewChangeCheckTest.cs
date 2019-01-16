@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		}
 
 		[Test]
-		public void ShouldBeRelevantChangeIfTheScheduleIsChangedToWorkingDayFromDayOff()
+		public void ShouldSendMessageIfTheScheduleIsChangedToWorkingDayFromDayOff()
 		{
 			var date = new DateOnly(2019, 01, 16);
 			var person = PersonFactory.CreatePerson("person", "1");
@@ -54,13 +54,21 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var result = Target.IsRelevantChange(date, person, newReadModel);
+			var model = new TeamScheduleWeekViewChangeCheckModel
+			{
+				Date = date,
+				Person = person,
+				NewReadModel = newReadModel,
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+			Target.InitiateNotify(model);
 
-			result.Should().Be.True();
+			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldBeRelevantChangeIfTheScheduleIsChangedToDayOffFromWorkingDay()
+		public void ShouldSendMessageIfTheScheduleIsChangedToDayOffFromWorkingDay()
 		{
 			var date = new DateOnly(2019, 01, 16);
 			var person = PersonFactory.CreatePerson("person", "1");
@@ -82,13 +90,21 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var result = Target.IsRelevantChange(date, person, newReadModel);
+			var model = new TeamScheduleWeekViewChangeCheckModel
+			{
+				Date = date,
+				Person = person,
+				NewReadModel = newReadModel,
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+			Target.InitiateNotify(model);
 
-			result.Should().Be.True();
+			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldBeRelevantChangeIfTheScheduleStartTimeIsChanged()
+		public void ShouldSendMessageIfTheScheduleStartTimeIsChanged()
 		{
 			var date = new DateOnly(2019, 01, 16);
 			var person = PersonFactory.CreatePerson("person", "1");
@@ -110,13 +126,21 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var result = Target.IsRelevantChange(date, person, newReadModel);
+			var model = new TeamScheduleWeekViewChangeCheckModel
+			{
+				Date = date,
+				Person = person,
+				NewReadModel = newReadModel,
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+			Target.InitiateNotify(model);
 
-			result.Should().Be.True();
+			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldBeRelevantChangeIfTheScheduleEndTimeIsChanged()
+		public void ShouldSendMessageIfTheScheduleEndTimeIsChanged()
 		{
 			var date = new DateOnly(2019, 01, 16);
 			var person = PersonFactory.CreatePerson("person", "1");
@@ -138,13 +162,21 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var result = Target.IsRelevantChange(date, person, newReadModel);
+			var model = new TeamScheduleWeekViewChangeCheckModel
+			{
+				Date = date,
+				Person = person,
+				NewReadModel = newReadModel,
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+			Target.InitiateNotify(model);
 
-			result.Should().Be.True();
+			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldBeRelevantChangeIfTheScheduleDescriptionIsChanged()
+		public void ShouldSendMessageIfTheScheduleDescriptionIsChanged()
 		{
 			var date = new DateOnly(2019, 01, 16);
 			var person = PersonFactory.CreatePerson("person", "1");
@@ -168,13 +200,21 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Label = "Late"
 			});
 
-			var result = Target.IsRelevantChange(date, person, newReadModel);
+			var model = new TeamScheduleWeekViewChangeCheckModel
+			{
+				Date = date,
+				Person = person,
+				NewReadModel = newReadModel,
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+			Target.InitiateNotify(model);
 
-			result.Should().Be.True();
+			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldNotBeRelevantChange()
+		public void ShouldNotSendMessageWhenTheChangeIsNotRelevant()
 		{
 			var date = new DateOnly(2019, 01, 16);
 			var person = PersonFactory.CreatePerson("person", "1");
@@ -196,9 +236,17 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var result = Target.IsRelevantChange(date, person, newReadModel);
+			var model = new TeamScheduleWeekViewChangeCheckModel
+			{
+				Date = date,
+				Person = person,
+				NewReadModel = newReadModel,
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+			Target.InitiateNotify(model);
 
-			result.Should().Be.False();
+			MessageBrokerComposite.GetMessages().Should().Be.Empty();
 		}
 
 		[Test]
@@ -244,5 +292,5 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			message.DomainType.Should().Be.EqualTo(nameof(ITeamScheduleWeekViewChange));
 		}
 	}
-	
+
 }

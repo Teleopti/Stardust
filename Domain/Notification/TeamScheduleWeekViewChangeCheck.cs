@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Notification
 {
 	public interface ITeamScheduleWeekViewChangeCheck
 	{
-		bool IsRelevantChange(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel);
 		void InitiateNotify(TeamScheduleWeekViewChangeCheckModel model);
 	}
 
@@ -49,19 +47,14 @@ namespace Teleopti.Ccc.Domain.Notification
 			}
 		}
 
-		public bool IsRelevantChange(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel)
+		private bool IsRelevantChange(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel)
 		{
 			var existingReadModel = _scheduleDayReadModelRepository.ForPerson(date, person.Id.GetValueOrDefault());
 
-			if (existingReadModel?.Workday != newReadModel?.Workday
+			return existingReadModel?.Workday != newReadModel?.Workday
 				|| existingReadModel?.StartDateTime != newReadModel?.StartDateTime
 				|| existingReadModel?.EndDateTime != newReadModel?.EndDateTime
-				|| existingReadModel?.Label != newReadModel?.Label)
-			{
-				return true;
-			}
-
-			return false;
+				|| existingReadModel?.Label != newReadModel?.Label;
 		}
 	}
 
