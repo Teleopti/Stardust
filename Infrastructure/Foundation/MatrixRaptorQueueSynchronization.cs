@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -81,12 +82,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return queuesToAdd.Count + updatedCount;
 		}
 
-		private bool findByLookup(ILookup<int, IQueueSource> matrixQueuesByAggId, IQueueSource raptorQueue, out IQueueSource matrixQueue)
+		private bool findByLookup(ILookup<string, IQueueSource> matrixQueuesByAggId, IQueueSource raptorQueue, out IQueueSource matrixQueue)
 		{
 			var validToFind = (raptorQueue.QueueMartId == -1 &&
-					 raptorQueue.QueueOriginalId == 0 &&
+					 raptorQueue.QueueOriginalId == "0" &&
 					 raptorQueue.DataSourceId == 0 &&
-					 raptorQueue.QueueAggId > 0);
+					 string.IsNullOrEmpty(raptorQueue.QueueAggId));
 
 			matrixQueue = matrixQueuesByAggId[raptorQueue.QueueAggId].FirstOrDefault();
 			return validToFind && matrixQueue != null;
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				if (!matrixQueues.TryGetValue(raptorQueue.QueueMartId, out matrixQueue))
 				{
 					raptorQueue.QueueMartId = -1;
-					raptorQueue.QueueOriginalId = 0;
+					raptorQueue.QueueOriginalId = "0";
 					raptorQueue.DataSourceId = 0;
 				}
 			}

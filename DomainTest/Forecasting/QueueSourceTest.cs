@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private IQueueSource _target2;
         private const string Name = "QueueSource - Name";
         private const string Description = "QueueSource - Description";
-        private const int QueueOriginalId = 14;
-        private const int QueueAggId = 111;
+        private const string QueueOriginalId = "14";
+        private const string QueueAggId = "111";
         private const string LogObjectName = "Log object name";
         private const int DataSourceId = 2;
         private const int QueueMartId = 999;

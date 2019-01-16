@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             string name = "Name of Queue";
             string description = "Description of the Queue";
-            int ctiQueueId = 17;
+            string ctiQueueId = "17";
 
             return new QueueSource(name, description, ctiQueueId);
         }
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             string name = "Inrikes";
             string description = "Inrikessamtal";
-            int ctiQueueId = 178;
+            string ctiQueueId = "178";
 
             return new QueueSource(name, description, ctiQueueId);
         }
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             string name = "HelpDesk";
             string description = "Helpdesk-samtal";
-            int ctiQueueId = 228;
+            string ctiQueueId = "228";
 
             return new QueueSource(name, description, ctiQueueId);
         }

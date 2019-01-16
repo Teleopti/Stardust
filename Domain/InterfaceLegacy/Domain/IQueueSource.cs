@@ -19,7 +19,7 @@
         /// Gets or sets the original CTI queue id.
         /// </summary>
         /// <value>The original cti queue id.</value>
-        int QueueOriginalId { get; set; }
+        string QueueOriginalId { get; set; }
 
         /// <summary>
         /// Gets the log object name.
@@ -39,7 +39,7 @@
         /// Created by: zoet
         /// Created date: 2008-05-07
         /// </remarks>
-        int QueueAggId { get; set; }
+        string QueueAggId { get; set; }
 
 
         /// <summary>

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifySynchronizeQueueSources()
         {
-            IQueueSource matrixQueue = new QueueSource("q 1", "queue 1", 1, 2, 3, 4);
+            IQueueSource matrixQueue = new QueueSource("q 1", "queue 1", "1", "2", 3, 4);
             IList<IQueueSource> matrixQueues = new List<IQueueSource>();
             matrixQueues.Add(matrixQueue);
 

@@ -107,10 +107,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyLoadSpecificDatesDateTimePeriod()
 		{
 			ICollection<IQueueSource> sources = new List<IQueueSource>();
-			sources.Add(new QueueSource("heja", "blåvitt", 191661));
-			sources.Add(new QueueSource("heja", "Änglarna", 191667));
-			sources.Add(new QueueSource("Kö 1", "Anmälan", 191666));
-			sources.Add(new QueueSource("Kö 2", "Ordrar", 191664));
+			sources.Add(new QueueSource("heja", "blåvitt", "191661"));
+			sources.Add(new QueueSource("heja", "Änglarna", "191667"));
+			sources.Add(new QueueSource("Kö 1", "Anmälan", "191666"));
+			sources.Add(new QueueSource("Kö 2", "Ordrar", "191664"));
 			target.LoadSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2));
 
 			//should we test this?
@@ -121,10 +121,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyLoadSpecificDatesDateTimePeriodArabic()
 		{
 			ICollection<IQueueSource> sources = new List<IQueueSource>();
-			sources.Add(new QueueSource("heja", "blåvitt", 191661));
-			sources.Add(new QueueSource("heja", "Änglarna", 191667));
-			sources.Add(new QueueSource("Kö 1", "Anmälan", 191666));
-			sources.Add(new QueueSource("Kö 2", "Ordrar", 191664));
+			sources.Add(new QueueSource("heja", "blåvitt", "191661"));
+			sources.Add(new QueueSource("heja", "Änglarna", "191667"));
+			sources.Add(new QueueSource("Kö 1", "Anmälan", "191666"));
+			sources.Add(new QueueSource("Kö 2", "Ordrar", "191664"));
 			target.LoadSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2));
 		}
 
@@ -132,10 +132,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyLoadDailyStatisticsForSpecificDates()
 		{
 			ICollection<IQueueSource> sources = new List<IQueueSource>();
-			sources.Add(new QueueSource("heja", "blåvitt", 191661));
-			sources.Add(new QueueSource("heja", "Änglarna", 191667));
-			sources.Add(new QueueSource("Kö 1", "Anmälan", 191666));
-			sources.Add(new QueueSource("Kö 2", "Ordrar", 191664));
+			sources.Add(new QueueSource("heja", "blåvitt", "191661"));
+			sources.Add(new QueueSource("heja", "Änglarna", "191667"));
+			sources.Add(new QueueSource("Kö 1", "Anmälan", "191666"));
+			sources.Add(new QueueSource("Kö 2", "Ordrar", "191664"));
 			target.LoadDailyStatisticForSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2), "utc", TimeSpan.FromHours(2));
 		}
 
@@ -143,10 +143,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyGetMostRecentDateForQueueStatistics()
 		{
 			ICollection<IQueueSource> sources = new List<IQueueSource>();
-			sources.Add(new QueueSource("heja", "blåvitt", 191661));
-			sources.Add(new QueueSource("heja", "Änglarna", 191667));
-			sources.Add(new QueueSource("Kö 1", "Anmälan", 191666));
-			sources.Add(new QueueSource("Kö 2", "Ordrar", 191664));
+			sources.Add(new QueueSource("heja", "blåvitt", "191661"));
+			sources.Add(new QueueSource("heja", "Änglarna", "191667"));
+			sources.Add(new QueueSource("Kö 1", "Anmälan", "191666"));
+			sources.Add(new QueueSource("Kö 2", "Ordrar", "191664"));
 			var date = target.QueueStatisticsUpUntilDate(sources);
 			date.HasValue.Should().Be.False();
 		}

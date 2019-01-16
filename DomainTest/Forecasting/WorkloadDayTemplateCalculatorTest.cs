@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
         private IWorkload LoadWorkload()
         {
-            IQueueSource q = new QueueSource("Q1", "Queue1", 1);
+            IQueueSource q = new QueueSource("Q1", "Queue1", "1");
             IWorkload workload = WorkloadFactory.CreateWorkload(_skill);
             workload.AddQueueSource(q);
             return workload;

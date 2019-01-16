@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			var skill = SkillFactory.CreateSkill("TestSkill").WithId();
 			var workload = WorkloadFactory.CreateWorkload(skill).WithId(workloadId);
 			workload.QueueAdjustments = new QueueAdjustment();
-			workload.AddQueueSource(new QueueSource("TestQueue", "Something", 1, 2, queueMartId, 4));
+			workload.AddQueueSource(new QueueSource("TestQueue", "Something", "1", "2", queueMartId, 4));
 			WorkloadRepository.Add(workload);
 			var analyticsSkill = new AnalyticsSkill
 			{
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			var skill = SkillFactory.CreateSkill("TestSkill").WithId();
 			var workload = WorkloadFactory.CreateWorkload(skill).WithId(workloadId);
 			workload.QueueAdjustments = new QueueAdjustment();
-			workload.AddQueueSource(new QueueSource("TestQueue", "Something", 1, 2, queueMartId, 4));
+			workload.AddQueueSource(new QueueSource("TestQueue", "Something", "1", "2", queueMartId, 4));
 			((Domain.Forecasting.Workload) workload).SetDeleted();
 			WorkloadRepository.Add(workload);
 

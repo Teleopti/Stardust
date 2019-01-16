@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
     {
         private string _name = string.Empty;
         private string _description = string.Empty;
-        private int _queueOriginalId;
-        private int _queueAggId;
+        private string _queueOriginalId = string.Empty;
+        private string _queueAggId = string.Empty;
         private string _logObjectName = string.Empty;
         private int _dataSourceId;
         private int _queueMartId;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// <param name="queueAggId">The queue id from aggregation database.</param>
         /// <param name="dataSourceId">The data source id from the data mart.</param>
         /// <param name="queueMartId">The data mart queue id.</param>
-        public QueueSource(string name, string description, int queueOriginalId, int queueAggId, int queueMartId, int dataSourceId)
+        public QueueSource(string name, string description, string queueOriginalId, string queueAggId, int queueMartId, int dataSourceId)
         {
             _name = name;
             _description = description;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// <param name="name">The name.</param>
         /// <param name="description">The custom description.</param>
         /// <param name="queueAggId">The queue id from aggregation database.</param>
-        public QueueSource(string name, string description, int queueAggId)
+        public QueueSource(string name, string description, string queueAggId)
         {
             _name = name;
             _description = description;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Gets or sets the original CTI queue id.
         /// </summary>
         /// <value>The original cti queue id.</value>
-        public virtual int QueueOriginalId
+        public virtual string QueueOriginalId
         {
             get { return _queueOriginalId; }
             set { _queueOriginalId = value; }
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: zoet
         /// Created date: 2008-05-07
         /// </remarks>
-        public virtual int QueueAggId
+        public virtual string QueueAggId
         {
             get { return _queueAggId; }
             set { _queueAggId = value; }
