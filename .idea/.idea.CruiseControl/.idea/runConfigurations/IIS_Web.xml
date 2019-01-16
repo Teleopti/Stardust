@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DefaultVS" type="DotNetProject" factoryName=".NET Project">
+  <configuration default="false" name="IIS Web" type="DotNetProject" factoryName=".NET Project">
     <option name="EXE_PATH" value="C:/Program Files (x86)/IIS Express/iisexpress.exe" />
     <option name="PROGRAM_PARAMETERS" value="/config:$PROJECT_DIR$/.idea/config/applicationhost.config /site:Teleopti.Ccc.Web-Site /apppool:Clr4IntegratedAppPool" />
     <option name="WORKING_DIRECTORY" value="C:/Program Files (x86)/IIS Express" />
