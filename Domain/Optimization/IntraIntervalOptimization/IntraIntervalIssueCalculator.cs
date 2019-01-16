@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			var result = new IntraIntervalIssues();
 			
-			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
-			var skillDaysOnDayAfter = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(1) });
+			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new HashSet<DateOnly> { dateOnly });
+			var skillDaysOnDayAfter = schedulingResultStateHolder.SkillDaysOnDateOnly(new HashSet<DateOnly> { dateOnly.AddDays(1) });
 
 			result.IssuesOnDay = _skillDayIntraIntervalIssueExtractor.ExtractOnIssues(skillDaysOnDay, skill);
 			result.IssuesOnDayAfter = _skillDayIntraIntervalIssueExtractor.ExtractOnIssues(skillDaysOnDayAfter, skill);

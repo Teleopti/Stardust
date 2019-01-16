@@ -173,14 +173,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new []{ skillEmail.Id.GetValueOrDefault() } ,
+					SkillCombination = new HashSet<Guid>{ skillEmail.Id.GetValueOrDefault() } ,
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(_skillResolution),
 					Resource = 2
 				},
 				new SkillCombinationResource
 				{
-					SkillCombination = new []{ skillEmail.Id.GetValueOrDefault() },
+					SkillCombination = new HashSet<Guid>{ skillEmail.Id.GetValueOrDefault() },
 					StartDateTime = userNow.AddMinutes(_skillResolution),
 					EndDateTime = userNow.AddMinutes(2*_skillResolution),
 					Resource = 2
@@ -231,14 +231,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new []{ skillEmail.Id.GetValueOrDefault() } ,
+					SkillCombination = new HashSet<Guid>{ skillEmail.Id.GetValueOrDefault() } ,
 					StartDateTime = userNow.AddDays(-1),
 					EndDateTime = userNow.AddDays(-1).AddMinutes(_skillResolution),
 					Resource = 10
 				},
 				new SkillCombinationResource
 				{
-					SkillCombination = new []{ skillEmail.Id.GetValueOrDefault() },
+					SkillCombination = new HashSet<Guid>{ skillEmail.Id.GetValueOrDefault() },
 					StartDateTime = userNow.AddDays(-1).AddMinutes(_skillResolution),
 					EndDateTime = userNow.AddDays(-1).AddMinutes(2*_skillResolution),
 					Resource = 20
@@ -360,14 +360,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new []{ skillBackoffice.Id.GetValueOrDefault() } ,
+					SkillCombination = new HashSet<Guid>{ skillBackoffice.Id.GetValueOrDefault() } ,
 					StartDateTime = userNow.AddDays(-1),
 					EndDateTime = userNow.AddDays(-1).AddMinutes(_skillResolution),
 					Resource = 10
 				},
 				new SkillCombinationResource
 				{
-					SkillCombination = new []{ skillBackoffice.Id.GetValueOrDefault() },
+					SkillCombination = new HashSet<Guid>{ skillBackoffice.Id.GetValueOrDefault() },
 					StartDateTime = userNow.AddDays(-1).AddMinutes(_skillResolution),
 					EndDateTime = userNow.AddDays(-1).AddMinutes(2*_skillResolution),
 					Resource = 20

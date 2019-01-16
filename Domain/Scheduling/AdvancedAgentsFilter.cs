@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public ICollection<IPerson> Filter(CultureInfo cultureInfo, string filterText, IList<IPerson> persons, IEnumerable<LogonInfoModel> logonInfoModels, bool filterUniques)
 		{
 			var lowerSearchText = filterText.ToLower(cultureInfo);
-			var guids = (from logonInfoModel in logonInfoModels where logonContains(logonInfoModel, lowerSearchText, cultureInfo, filterUniques) select logonInfoModel.PersonId).ToList();
+			var guids = (from logonInfoModel in logonInfoModels where logonContains(logonInfoModel, lowerSearchText, cultureInfo, filterUniques) select logonInfoModel.PersonId).ToHashSet();
 			var result = filterMultiple(cultureInfo, lowerSearchText, persons, guids);
 			if (result.Count > 1 && filterUniques)
 			{
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return result;
 		}
 
-		private static ICollection<IPerson> filterMultiple(CultureInfo cultureInfo, string lowerSearchText, IEnumerable<IPerson> persons, ICollection<Guid> guids)
+		private static ICollection<IPerson> filterMultiple(CultureInfo cultureInfo, string lowerSearchText, IEnumerable<IPerson> persons, HashSet<Guid> guids)
 		{
 			ICollection<IPerson> personQuery =
 			(from
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return personQuery;
 		}
 
-		private static ICollection<IPerson> filterMultipleEquals(CultureInfo cultureInfo, string lowerSearchText, IEnumerable<IPerson> persons, ICollection<Guid> guids)
+		private static ICollection<IPerson> filterMultipleEquals(CultureInfo cultureInfo, string lowerSearchText, IEnumerable<IPerson> persons, HashSet<Guid> guids)
 		{
 			ICollection<IPerson> personQuery =
 			(from

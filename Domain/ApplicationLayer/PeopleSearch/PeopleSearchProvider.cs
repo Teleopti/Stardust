@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 			return _personRepository.FindPeople(personIdList).ToList();
 		}
 
-		private List<Guid> getPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
+		private HashSet<Guid> getPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
 			string function)
 		{
 			var permittedPersonList =
@@ -75,15 +75,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 					r => r.RowNumber > 0 && _permissionProvider.HasOrganisationDetailPermission(function, currentDate, r));
 			return permittedPersonList
 				.Select(x => x.PersonId)
-				.ToList();
+				.ToHashSet();
 		}
 
-		public List<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate,
+		public HashSet<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate,
 			string function)
 		{
 			return GetPermittedPersonList(people, currentDate, function)
 				.Select(x => x.Id.GetValueOrDefault())
-				.ToList();
+				.ToHashSet();
 		}
 
 		public List<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly date, string function)

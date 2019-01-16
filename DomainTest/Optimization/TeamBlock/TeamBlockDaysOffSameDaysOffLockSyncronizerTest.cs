@@ -71,10 +71,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			Target.SyncLocks(selectedPeriod, optimizationPreferences, allTeamInfoListOnStartDate);
 
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockedDays.Length.Should().Be.EqualTo(1);
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).UnlockedDays.Length.Should().Be.EqualTo(1);
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockedDays.Count.Should().Be.EqualTo(1);
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).UnlockedDays.Count.Should().Be.EqualTo(1);
 
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockedDays[0].Day.Should()
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockedDays.First().Day.Should()
 				.Be.EqualTo(dateOnly.AddDays(1));
 		}
 
@@ -123,8 +123,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			Target.SyncLocks(selectedPeriod, optimizationPreferences, allTeamInfoListOnStartDate);
 
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockedDays.Length.Should().Be.EqualTo(2);
-			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).UnlockedDays.Length.Should().Be.EqualTo(2);
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockedDays.Count.Should().Be.EqualTo(2);
+			allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent2, dateOnly).UnlockedDays.Count.Should().Be.EqualTo(2);
 
 			var agentUnLockedDates =
 				allTeamInfoListOnStartDate[0].MatrixForMemberAndDate(agent1, dateOnly).UnlockedDays.Select(d => d.Day).ToList();

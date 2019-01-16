@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.UndoRedo;
+using DateOnly = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
@@ -190,7 +191,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private static UndoRedoContainer createRollbackState(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly datePoint)
 		{
 			var undoResCalcChanges = new UndoRedoContainer();
-			undoResCalcChanges.FillWith(skillDays.FilterOnDates(new[] {datePoint.AddDays(-1), datePoint, datePoint.AddDays(1)}));
+			undoResCalcChanges.FillWith(skillDays.FilterOnDates(new HashSet<DateOnly> {datePoint.AddDays(-1), datePoint, datePoint.AddDays(1)}));
 			return undoResCalcChanges;
 		}
 

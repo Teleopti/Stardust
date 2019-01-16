@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -54,13 +53,13 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 10,
-																					   SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																					   SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault()}
 																				   }
 																			   });
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
-			var staffingIntervals = Target.StaffingForSkills(new[] {skill.Id.GetValueOrDefault()},period, TimeSpan.FromHours(1), false);
+			var staffingIntervals = Target.StaffingForSkills(new Guid[] {skill.Id.GetValueOrDefault()},period, TimeSpan.FromHours(1), false);
 
 			staffingIntervals.Count.Should().Be.EqualTo(1);
 			staffingIntervals.Single().StaffingLevel.Should().Be.EqualTo(10);
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 10,
-																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
+																					   SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
 																				   }
 																			   });
 			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 10,
-																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
+																					   SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
 																				   }
 																			   });
 			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
@@ -153,14 +152,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 5,
-																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault() }
+																					   SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault() }
 																				   },
 																				   new SkillCombinationResource
 																				   {
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 5,
-																					   SkillCombination = new[] {skillB.Id.GetValueOrDefault() }
+																					   SkillCombination = new HashSet<Guid> {skillB.Id.GetValueOrDefault() }
 																				   }
 																			   });
 
@@ -195,14 +194,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.StartDateTime.AddMinutes(skillResolution),
 																					   Resource = 2,
-																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
+																					   SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
 																				   },
 																				   new SkillCombinationResource
 																				   {
 																					   StartDateTime = period.StartDateTime.AddMinutes(skillResolution),
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 4,
-																					  SkillCombination = new[] {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
+																					  SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
 																				   }
 																			   });
 			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
@@ -239,21 +238,21 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.StartDateTime.AddMinutes(30),
 																					   Resource = 2,
-																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault()}
+																					   SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault()}
 																				   },
 																				   new SkillCombinationResource
 																				   {
 																					   StartDateTime = period.StartDateTime.AddMinutes(30),
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 2,
-																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault()}
+																					   SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault()}
 																				   },
 																				   new SkillCombinationResource
 																				   {
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 4,
-																					   SkillCombination = new[] {skillB.Id.GetValueOrDefault()}
+																					   SkillCombination = new HashSet<Guid> {skillB.Id.GetValueOrDefault()}
 																				   }
 																			   });
 			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
@@ -292,7 +291,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 10,
-																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
+																					   SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
 																				   }
 																			   });
 
@@ -326,7 +325,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 5.7,
-																					   SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																					   SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault()}
 																				   }
 																			   });
 
@@ -337,14 +336,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																	  StartDateTime = period.StartDateTime,
 																	  EndDateTime = period.EndDateTime,
 																	  Resource = 1,
-																	  SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																	  SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault()}
 																  },
 																   new SkillCombinationResource
 																  {
 																	  StartDateTime = period.StartDateTime,
 																	  EndDateTime = period.EndDateTime,
 																	  Resource = 3,
-																	  SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+																	  SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault()}
 																  }
 															  });
 
@@ -377,14 +376,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 9,
-																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault()}
+																					   SkillCombination = new HashSet<Guid> {skillA.Id.GetValueOrDefault()}
 																				   },
 																					new SkillCombinationResource
 																				   {
 																					   StartDateTime = period.StartDateTime,
 																					   EndDateTime = period.EndDateTime,
 																					   Resource = 2.8,
-																					   SkillCombination = new[] {skillB.Id.GetValueOrDefault()}
+																					   SkillCombination = new HashSet<Guid> {skillB.Id.GetValueOrDefault()}
 																				   }
 																			   });
 
@@ -418,7 +417,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 					StartDateTime = period.StartDateTime.AddMinutes(-1),
 					EndDateTime = period.EndDateTime,
 					Resource = 5.7,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+					SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault()}
 				}
 			};
 

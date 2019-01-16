@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 			var personSkills2 = personPeriodTwo.PersonSkillCollection.Where(ps => ps.Active);
 
 			// ??? måste vi ta hänsyn till procenten, nej, Anders säger att vi skiter i det.
-			var skills1 = personSkills1.Select(personSkill => personSkill.Skill).ToArray();
-			var skills2 = personSkills2.Select(personSkill => personSkill.Skill).ToArray();
+			var skills1 = personSkills1.Select(personSkill => personSkill.Skill).ToHashSet();
+			var skills2 = personSkills2.Select(personSkill => personSkill.Skill).ToHashSet();
 			if (skills1.Any(skill => !skills2.Contains(skill)))
 			{
 				return false;

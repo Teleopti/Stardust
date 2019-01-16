@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -160,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -210,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -264,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 0.5)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 0.5)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -321,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 6)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 6)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -398,7 +399,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 13)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 10));
@@ -475,10 +476,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(0)), new[] {skill.Id.GetValueOrDefault()}, 13),
-				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(1)), new[] {skill.Id.GetValueOrDefault()}, 13),
-				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(2)), new[] {skill.Id.GetValueOrDefault()}, 13),
-				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(3)), new[] {skill.Id.GetValueOrDefault()}, 13)
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(0)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(1)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(2)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(3)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 10));
@@ -548,10 +549,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(0)), new[] {skill.Id.GetValueOrDefault()}, 13),
-				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(1)), new[] {skill.Id.GetValueOrDefault()}, 13),
-				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(2)), new[] {skill.Id.GetValueOrDefault()}, 13),
-				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(3)), new[] {skill.Id.GetValueOrDefault()}, 13)
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(0)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(1)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(2)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13),
+				createSkillCombinationResource(period0.MovePeriod(TimeSpan.FromHours(3)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 13)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 10));
@@ -610,7 +611,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(new DateTimePeriod(new DateTime( 2016, 12, 1, 8,0,0,DateTimeKind.Utc), new DateTime(2016, 12, 1, 9, 0, 0, DateTimeKind.Utc)), new[] {skill.Id.GetValueOrDefault()}, 5)
+				createSkillCombinationResource(new DateTimePeriod(new DateTime( 2016, 12, 1, 8,0,0,DateTimeKind.Utc), new DateTime(2016, 12, 1, 9, 0, 0, DateTimeKind.Utc)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 5)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -681,8 +682,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(new DateTimePeriod(new DateTime( 2016, 12, 1, 8,0,0,DateTimeKind.Utc), new DateTime(2016, 12, 1, 9, 0, 0, DateTimeKind.Utc)), new[] {skill.Id.GetValueOrDefault()}, 6),
-				createSkillCombinationResource(new DateTimePeriod(new DateTime( 2016, 12, 1, 8,0,0,DateTimeKind.Utc), new DateTime(2016, 12, 1, 9, 0, 0, DateTimeKind.Utc)), new[] {skillb.Id.GetValueOrDefault()}, 3)
+				createSkillCombinationResource(new DateTimePeriod(new DateTime( 2016, 12, 1, 8,0,0,DateTimeKind.Utc), new DateTime(2016, 12, 1, 9, 0, 0, DateTimeKind.Utc)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 6),
+				createSkillCombinationResource(new DateTimePeriod(new DateTime( 2016, 12, 1, 8,0,0,DateTimeKind.Utc), new DateTime(2016, 12, 1, 9, 0, 0, DateTimeKind.Utc)), new HashSet<Guid> { skillb.Id.GetValueOrDefault()}, 3)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -741,8 +742,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period1, new[] {skill.Id.GetValueOrDefault()}, 5),
-				createSkillCombinationResource(period2, new[] {skill.Id.GetValueOrDefault()}, 6)
+				createSkillCombinationResource(period1, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 5),
+				createSkillCombinationResource(period2, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 6)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period1.StartDateTime), 5).WithId());
@@ -816,8 +817,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period1, new[] {skill.Id.GetValueOrDefault()}, 8),
-				createSkillCombinationResource(period2, new[] {skill.Id.GetValueOrDefault()}, 8)
+				createSkillCombinationResource(period1, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 8),
+				createSkillCombinationResource(period2, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 8)
 			});
 
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, new DateOnly(period1.StartDateTime), 5);
@@ -876,8 +877,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(period2, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period2, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 1));
@@ -929,10 +930,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period2, new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(period2.MovePeriod(TimeSpan.FromHours(1)), new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(period2.MovePeriod(TimeSpan.FromHours(2)), new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(period2.MovePeriod(TimeSpan.FromHours(3)), new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period2, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period2.MovePeriod(TimeSpan.FromHours(1)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period2.MovePeriod(TimeSpan.FromHours(2)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period2.MovePeriod(TimeSpan.FromHours(3)), new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -988,7 +989,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -1037,7 +1038,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -1090,7 +1091,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -1141,7 +1142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> { skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -1155,7 +1156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			waitListedRequest.DenyReason.Should().Be.EqualTo("Work Hard!");
 		}
 
-		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
+		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, HashSet<Guid> skillCombinations, double resource)
 		{
 			return new SkillCombinationResource
 			{

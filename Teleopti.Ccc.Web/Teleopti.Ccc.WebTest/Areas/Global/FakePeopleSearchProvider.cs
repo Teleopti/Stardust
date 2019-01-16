@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns, currentDate);
 		}
 
-		public List<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
+		public HashSet<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
 		{
-			return GetPermittedPersonList(people, currentDate, function).Select(p => p.Id.GetValueOrDefault()).ToList();
+			return GetPermittedPersonList(people, currentDate, function).Select(p => p.Id.GetValueOrDefault()).ToHashSet();
 		}
 
 		public List<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate, string function)

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
-			var dateOnlyList = blockPeriod.DayCollection();
+			var dateOnlyList = blockPeriod.DayCollection().ToHashSet();
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
 			var minimumResolution = skills.IsEmpty() ? int.MaxValue : skills.Min(x => x.DefaultResolution);
 			dateOnlyList.Add(dateOnlyList.Max().AddDays(1));
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return _dayIntervalDataCalculator.Calculate(skillIntervalPerDayList, returnListDateOnly);
 		}
 
-		private IDictionary<DateOnly, IList<ISkillIntervalData>> getSkillIntervalListForEachDay(IList<DateOnly> dateOnlyList,
+		private IDictionary<DateOnly, IList<ISkillIntervalData>> getSkillIntervalListForEachDay(HashSet<DateOnly> dateOnlyList,
 			IList<ISkill> skills, int minimumResolution)
 		{
 			var result = new Dictionary<DateOnly, IList<ISkillIntervalData>>();

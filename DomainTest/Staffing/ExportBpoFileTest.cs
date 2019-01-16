@@ -87,14 +87,14 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					Resource = 8,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
 					Resource = 6,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault() }
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault() }
 				}
 			});
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					Resource = 8,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				}
 			});
 
@@ -167,14 +167,14 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					Resource = 20,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
 					Resource = 20,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				}
 			});
 
@@ -215,14 +215,14 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					StartDateTime = new DateTime(2017, 08, 15, 11, 0, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 11, 15, 0).Utc(),
 					Resource = 4,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 08, 15, 11, 15, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 11, 30, 0).Utc(),
 					Resource = 10,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				}
 			});
 
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					Resources = 2,
 					Source = "BPO",
-					SkillIds = new List<Guid>() {skill.Id.GetValueOrDefault()}
+					SkillIds = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
 					Resources = 4,
 					Source = "BPO",
-					SkillIds = new List<Guid>() {skill.Id.GetValueOrDefault()}
+					SkillIds = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				}
 			});
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
@@ -270,14 +270,14 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					Resource = 4.21515151,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
 					Resource = 3.21151515,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+					SkillCombination  = new HashSet<Guid> { skill.Id.GetValueOrDefault()}
 				}
 			});
 

@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2016, 12, 20, 0, 0, 0),
 					EndDateTime = new DateTime(2016, 12, 20, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {persistSkill()}
+					SkillCombination = new HashSet<Guid> {persistSkill()}
 				}
 			};
 
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2016, 12, 20, 0, 0, 0),
 					EndDateTime = new DateTime(2016, 12, 20, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {persistSkill()}
+					SkillCombination = new HashSet<Guid> {persistSkill()}
 				}
 			};
 
@@ -144,14 +144,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 09, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 09, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
@@ -188,14 +188,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -205,14 +205,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skillId},
+					SkillCombination = new HashSet<Guid> { skillId},
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 1
 				},
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skillId},
+					SkillCombination = new HashSet<Guid> { skillId},
 					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resource = 1
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 09, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 09, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skillId},
+					SkillCombination = new HashSet<Guid> { skillId},
 					StartDateTime = new DateTime(2017, 06, 09, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 09, 0, 15, 0),
 					Resource = 1
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2016, 12, 20, 0, 0, 0),
 					EndDateTime = new DateTime(2016, 12, 20, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = skillIds
+					SkillCombination = skillIds.ToHashSet()
 				}
 			};
 
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 2,
-					SkillCombination = new[] {skill}
+					SkillCombination = new HashSet<Guid> { skill}
 				}
 			};
 
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill},
+					SkillCombination = new HashSet<Guid> { skill},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 1
@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 2,
-					SkillCombination = new[] {skill}
+					SkillCombination = new HashSet<Guid> { skill}
 				}
 			};
 
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill},
+					SkillCombination = new HashSet<Guid> { skill},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 8
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill},
+					SkillCombination = new HashSet<Guid> { skill},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = -3
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = start.AddHours(1),
 					EndDateTime = end.AddHours(1),
 					Resource = 1,
-					SkillCombination = new[] {skill}
+					SkillCombination = new HashSet<Guid> { skill}
 				}
 			};
 
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill},
+					SkillCombination = new HashSet<Guid> { skill},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 1
@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 3,
-					SkillCombination = new[] {skill, skill2}
+					SkillCombination = new HashSet<Guid> { skill, skill2}
 				}
 			};
 
@@ -433,7 +433,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill, skill2},
+					SkillCombination = new HashSet<Guid> { skill, skill2},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = -1
@@ -462,14 +462,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 3,
-					SkillCombination = new[] {skill, skill2}
+					SkillCombination = new HashSet<Guid> { skill, skill2}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = start.AddMinutes(15),
 					EndDateTime = end.AddMinutes(15),
 					Resource = 3,
-					SkillCombination = new[] {skill, skill2}
+					SkillCombination = new HashSet<Guid> { skill, skill2}
 				}
 			};
 
@@ -479,7 +479,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill, skill2},
+					SkillCombination = new HashSet<Guid> { skill, skill2},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = -1
@@ -490,7 +490,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill, skill2},
+					SkillCombination = new HashSet<Guid> { skill, skill2},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = -1
@@ -517,7 +517,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -531,7 +531,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId}
+					SkillIds = new HashSet<Guid> { skillId}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -556,7 +556,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 05, 02, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId}
+					SkillIds = new HashSet<Guid> { skillId}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -570,7 +570,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 30, 0),
 					Resources = 6.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId}
+					SkillIds = new HashSet<Guid> { skillId}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -594,14 +594,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 2.1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 30, 0),
 					Resource = 6,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -615,7 +615,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 3.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId}
+					SkillIds = new HashSet<Guid> { skillId}
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
@@ -623,7 +623,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 30, 0),
 					Resources = 2.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId}
+					SkillIds = new HashSet<Guid> { skillId}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -649,7 +649,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId1}
+					SkillCombination = new HashSet<Guid> { skillId1}
 				}
 			};
 
@@ -663,7 +663,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId2}
+					SkillIds = new HashSet<Guid> { skillId2}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -687,7 +687,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -700,7 +700,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 2.3,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -725,7 +725,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
@@ -733,7 +733,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 30, 0),
 					Resources = 2.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -746,7 +746,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 1.5,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -773,7 +773,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId1}
+					SkillCombination = new HashSet<Guid> { skillId1}
 				}
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
@@ -785,7 +785,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId1}
+					SkillIds = new HashSet<Guid> { skillId1}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -804,7 +804,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 2,
-					SkillCombination = new[] {skillId2}
+					SkillCombination = new HashSet<Guid> { skillId2}
 				}
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
@@ -816,7 +816,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 2,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId2}
+					SkillIds = new HashSet<Guid> { skillId2}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -846,7 +846,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					//Resource = 1.1, this wont work
 					Resource = 1.1,
-					SkillCombination = new[] {skillId1}
+					SkillCombination = new HashSet<Guid> { skillId1}
 				}
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
@@ -859,7 +859,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					//Resources = 5.2, this wont work
 					Resources = 8.5,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId1}
+					SkillIds = new HashSet<Guid> { skillId1}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -878,7 +878,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 2.3,
-					SkillCombination = new[] {skillId2}
+					SkillCombination = new HashSet<Guid> { skillId2}
 				}
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
@@ -890,7 +890,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 2.4,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId2}
+					SkillIds = new HashSet<Guid> { skillId2}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -919,14 +919,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 2.1,
-					SkillCombination = new[] { skillId1 , skillId2}
+					SkillCombination = new HashSet<Guid> { skillId1 , skillId2}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 6,
-					SkillCombination = new[] { skillId1 }
+					SkillCombination = new HashSet<Guid> { skillId1 }
 				}
 			};
 
@@ -951,7 +951,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate,
 					EndDateTime = endDate,
 					Resources = 1,
-					SkillIds = new List<Guid>{persistSkill()},
+					SkillIds = new HashSet<Guid> { persistSkill()},
 					Source = "TPBrazil"
 				},
 				new ImportSkillCombinationResourceBpo
@@ -959,7 +959,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate.AddMinutes(15),
 					EndDateTime = endDate.AddMinutes(15),
 					Resources = 3.5,
-					SkillIds = new List<Guid>{persistSkill()},
+					SkillIds = new HashSet<Guid> { persistSkill()},
 					Source = "TPBrazil"
 				}
 			};
@@ -989,7 +989,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate,
 					EndDateTime = endDate,
 					Resources = 1,
-					SkillIds = new List<Guid>{persistSkill()},
+					SkillIds = new HashSet<Guid> { persistSkill()},
 					Source = " TPBrazil "
 				},
 				new ImportSkillCombinationResourceBpo
@@ -997,7 +997,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate.AddMinutes(15),
 					EndDateTime = endDate.AddMinutes(15),
 					Resources = 3.5,
-					SkillIds = new List<Guid>{persistSkill()},
+					SkillIds = new HashSet<Guid> { persistSkill()},
 					Source = "TPBrazil"
 				}
 			};
@@ -1028,7 +1028,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate,
 					EndDateTime = endDate,
 					Resources = 1,
-					SkillIds = new List<Guid>{persistSkill()},
+					SkillIds = new HashSet<Guid> { persistSkill()},
 					Source = "tpbrazil"
 				},
 				new ImportSkillCombinationResourceBpo
@@ -1036,7 +1036,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate.AddMinutes(15),
 					EndDateTime = endDate.AddMinutes(15),
 					Resources = 3.5,
-					SkillIds = new List<Guid>{persistSkill()},
+					SkillIds = new HashSet<Guid> { persistSkill()},
 					Source = "TPBrazil"
 				}
 			};
@@ -1066,7 +1066,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate,
 					EndDateTime = endDate,
 					Resources = 1,
-					SkillIds = new List<Guid>{persistSkill()},
+					SkillIds = new HashSet<Guid> { persistSkill()},
 					Source = "TPBrazil"
 				},
 				new ImportSkillCombinationResourceBpo
@@ -1074,7 +1074,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate,
 					EndDateTime = endDate,
 					Resources = 1,
-					SkillIds = new List<Guid>{persistSkill()},
+					SkillIds = new HashSet<Guid> { persistSkill()},
 					Source = "TPParis"
 				}
 			};
@@ -1103,7 +1103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate,
 					EndDateTime = endDate,
 					Resources = 1,
-					SkillIds = new List<Guid>{skill, skill2},
+					SkillIds = new HashSet<Guid> { skill, skill2},
 					Source = "TPBrazil"
 				}
 			};
@@ -1118,7 +1118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = startDate,
 					EndDateTime = endDate,
 					Resources = 1,
-					SkillIds = new List<Guid>{skill},
+					SkillIds = new HashSet<Guid> { skill},
 					Source = "TPBrazil"
 				}
 			};
@@ -1148,7 +1148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = start.AddDays(1),
 					EndDateTime = end.AddDays(1),
 					Resource = 0,
-					SkillCombination = new[] {skill}
+					SkillCombination = new HashSet<Guid> { skill}
 				}
 			};
 
@@ -1158,7 +1158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill},
+					SkillCombination = new HashSet<Guid> { skill},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 3
@@ -1168,7 +1168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill},
+					SkillCombination = new HashSet<Guid> { skill},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 1
@@ -1195,7 +1195,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>{skillId1, skillId2}
+					SkillIds = new HashSet<Guid> { skillId1, skillId2}
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
@@ -1203,7 +1203,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>{skillId1}
+					SkillIds = new HashSet<Guid> { skillId1}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -1229,7 +1229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1, skillId2}
+					SkillIds = new HashSet<Guid> { skillId1, skillId2}
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
@@ -1237,7 +1237,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>{skillId1}
+					SkillIds = new HashSet<Guid> { skillId1}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -1267,14 +1267,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 5.5,
-					SkillCombination = new List<Guid>{skillId1, skillId2}
+					SkillCombination = new HashSet<Guid> {skillId1, skillId2}
 				},
 				new SkillCombinationResource()
 				{
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resource = 5.1,
-					SkillCombination = new List<Guid>{skillId1}
+					SkillCombination = new HashSet<Guid>{skillId1}
 				}
 			};
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
@@ -1307,14 +1307,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = 1,
-					SkillCombination = new[] {skill, skill2}
+					SkillCombination = new HashSet<Guid> { skill, skill2}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = start.AddMinutes(15),
 					EndDateTime = end.AddMinutes(15),
 					Resource = 1,
-					SkillCombination = new[] {skill, skill2}
+					SkillCombination = new HashSet<Guid> { skill, skill2}
 				}
 			};
 
@@ -1324,7 +1324,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill, skill2},
+					SkillCombination = new HashSet<Guid> { skill, skill2},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = -1
@@ -1335,7 +1335,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new SkillCombinationResource
 				{
-					SkillCombination = new[] {skill, skill2},
+					SkillCombination = new HashSet<Guid> { skill, skill2},
 					StartDateTime = start,
 					EndDateTime = end,
 					Resource = -1
@@ -1363,7 +1363,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1}
+					SkillIds = new HashSet<Guid> { skillId1}
 
 				},
 				new ImportSkillCombinationResourceBpo()
@@ -1372,7 +1372,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1}
+					SkillIds = new HashSet<Guid> { skillId1}
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
@@ -1380,7 +1380,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 03, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1}
+					SkillIds = new HashSet<Guid> { skillId1}
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -1404,7 +1404,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 
 				},
 				new ImportSkillCombinationResourceBpo()
@@ -1413,7 +1413,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPBrazil",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -1438,7 +1438,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 
 				}
 			};
@@ -1458,7 +1458,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPBrazil",
-					SkillIds = new List<Guid>{ skillId2 }
+					SkillIds = new HashSet<Guid> { skillId2 }
 
 				}
 			};
@@ -1486,7 +1486,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 
 				},
 				new ImportSkillCombinationResourceBpo
@@ -1495,7 +1495,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 
 				}
 			};
@@ -1520,7 +1520,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 
 				},
 				new ImportSkillCombinationResourceBpo()
@@ -1529,7 +1529,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPBrazil",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -1563,7 +1563,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 
 				},
 				new ImportSkillCombinationResourceBpo()
@@ -1572,7 +1572,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 03, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPBrazil",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -1607,7 +1607,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 
 				},
 				new ImportSkillCombinationResourceBpo()
@@ -1616,7 +1616,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 
 				},
 				new ImportSkillCombinationResourceBpo()
@@ -1625,7 +1625,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 03, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
@@ -1633,7 +1633,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 4, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -1676,7 +1676,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 
 				},
 				new ImportSkillCombinationResourceBpo()
@@ -1685,7 +1685,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 
 				},
 				new ImportSkillCombinationResourceBpo()
@@ -1694,7 +1694,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 03, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
@@ -1702,7 +1702,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 4, 0, 15, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId }
+					SkillIds = new HashSet<Guid> { skillId }
 				}
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
@@ -1726,7 +1726,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 
 				},
 				new ImportSkillCombinationResourceBpo
@@ -1735,7 +1735,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 20, 0, 30, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 
 				}
 			};
@@ -1762,7 +1762,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 
 				},
 				new ImportSkillCombinationResourceBpo
@@ -1771,7 +1771,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 20, 0, 30, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{ skillId1 }
+					SkillIds = new HashSet<Guid> { skillId1 }
 
 				}
 			};
@@ -1797,7 +1797,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -1814,7 +1814,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resource = 2,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -1841,14 +1841,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -1865,7 +1865,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resource = 2,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -1892,14 +1892,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -1916,7 +1916,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resource = 2,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -1943,27 +1943,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 02, 22, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 02, 23, 0, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 02, 23, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 3, 0, 0, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 3, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 3, 1, 0, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 3, 1, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 3, 2, 0, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -1980,7 +1980,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 3, 1, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 3, 2, 0, 0),
 					Resource = 2,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -2008,21 +2008,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 6, 45, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 7, 0, 0),
 					Resource = 1,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 01, 7, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 7, 15, 0),
 					Resource = 2,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 06, 01, 7, 15, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 7, 30, 0),
 					Resource = 3,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 
@@ -2039,7 +2039,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = new DateTime(2017, 06, 01, 7, 15, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 7, 30, 0),
 					Resource = 2,
-					SkillCombination = new[] {skillId}
+					SkillCombination = new HashSet<Guid> { skillId}
 				}
 			};
 

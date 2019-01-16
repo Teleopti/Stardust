@@ -11,11 +11,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		public DateOnlyPeriod Execute(SchedulingWasOrdered @event, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod)
 		{
+			var agents = @event.Agents.ToHashSet();
 			if (@event.FromWeb && selectedPeriod.StartDate.Day == 1 && selectedPeriod.EndDate.AddDays(1).Day == 1)
 			{
-				var firstDaysOfWeek = new List<DayOfWeek>();
+				var firstDaysOfWeek = new HashSet<DayOfWeek>();
 				foreach (
-					var person in schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)))
+					var person in schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => agents.Contains(x.Id.Value)))
 				{
 					if (!firstDaysOfWeek.Contains(person.FirstDayOfWeek))
 					{
@@ -23,8 +24,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					}
 				}
 
-				var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, firstDaysOfWeek[0]);
-				var lastDateInPeriodLocal = DateHelper.GetLastDateInWeek(selectedPeriod.EndDate, firstDaysOfWeek[0]);
+				var workweekStartsAt = firstDaysOfWeek.First();
+				var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, workweekStartsAt);
+				var lastDateInPeriodLocal = DateHelper.GetLastDateInWeek(selectedPeriod.EndDate, workweekStartsAt);
 				foreach (var firstDayOfWeek in firstDaysOfWeek)
 				{
 					if (DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, firstDayOfWeek).CompareTo(firstDateInPeriodLocal) != 1)

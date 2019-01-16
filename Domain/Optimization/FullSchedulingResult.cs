@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;
 			var loadedSelectedAgents = resultStateHolder.LoadedAgents.Where(selectedAgents.Contains).ToArray();
 			var planningGroupSkills = loadedSelectedAgents
-				.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
+				.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).ToHashSet();
 			using (_resourceCalculationContextFactory.Create(resultStateHolder, true, period.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(period.Inflate(1),
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return result;
 		}
 
-		private static Dictionary<ISkill, IEnumerable<ISkillDay>> getAllSkillsForPlanningGroup(ISkill[] planningGroupSkills,
+		private static Dictionary<ISkill, IEnumerable<ISkillDay>> getAllSkillsForPlanningGroup(HashSet<ISkill> planningGroupSkills,
 			ISchedulingResultStateHolder resultStateHolder)
 		{
 			var planningGroupSkillsDictionary =

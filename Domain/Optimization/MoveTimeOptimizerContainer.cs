@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 					string unlocked = " (" +
 									  (int)
-									  (optimizer.Matrix.UnlockedDays.Length /
+									  (optimizer.Matrix.UnlockedDays.Count /
 									   (double)optimizer.Matrix.EffectivePeriodDays.Length * 100) + "%) ";
 					string who = Resources.OptimizingShiftLengths + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + unlocked + optimizer.ContainerOwner.Name.ToString(NameOrderOption.FirstNameLastName);
 					string success = !result ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -145,11 +146,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _target.AddDate(new DateOnly(2007, 12, 25));
             _target.AddDate(new DateOnly(2008, 12, 25));
             _target.AddDate(new DateOnly(2009, 12, 25));
-            IList<DateOnly> dateList = _target.GetDatesByPeriod(_period);
+            var dateList = _target.GetDatesByPeriod(_period);
 
             Assert.AreEqual(1, dateList.Count);
             Assert.AreEqual(3, _target.Dates.Count);
-            Assert.AreEqual(_target.Dates[1], dateList[0]);
+            Assert.AreEqual(_target.Dates[1], dateList.First());
         }
 
         /// <summary>

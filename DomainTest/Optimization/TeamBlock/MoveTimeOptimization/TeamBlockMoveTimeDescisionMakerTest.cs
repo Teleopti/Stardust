@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			Expect.Call(_scheduleMatrix.FullWeeksPeriodDays)
 				 .Return(fullWeekPeriodDictionary.Values.ToArray()).Repeat.Any();
 			Expect.Call(_scheduleMatrix.UnlockedDays)
-				 .Return(unlockedDaysDictionary.Values.ToArray()).Repeat.Any();
+				 .Return(unlockedDaysDictionary.Values.ToHashSet()).Repeat.Any();
 			addWorkShiftExpectationsToScheduleDay(_schedulePartShortMainShift, new TimeSpan());
 
 		}

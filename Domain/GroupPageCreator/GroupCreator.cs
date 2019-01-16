@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
 	public interface IGroupCreator
 	{
-		Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, IList<IPerson> allPermittedPersons);
+		Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, HashSet<IPerson> allPermittedPersons);
 	}
 
 	public class GroupCreator : IGroupCreator
 	{
-		public Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, IList<IPerson> allPermittedPersons)
+		public Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, HashSet<IPerson> allPermittedPersons)
 		{
 			var groupToReturn = new Group();
 
@@ -68,15 +69,9 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			return null;
 		}
 
-		private IList<IPerson> currentPersonsInGroup(IPersonGroup personGroup, IList<IPerson> allPermittedPersons)
+		private IList<IPerson> currentPersonsInGroup(IPersonGroup personGroup, HashSet<IPerson> allPermittedPersons)
 		{
-			//in group and also in ScheduleDictionary
-			IList<IPerson> personsToReturn = new List<IPerson>();
-			foreach (var person in personGroup.PersonCollection)
-			{
-				if(allPermittedPersons.Contains(person))
-					personsToReturn.Add(person);
-			}
+			var personsToReturn = personGroup.PersonCollection.Where(allPermittedPersons.Contains).ToList();
 			return personsToReturn;
 		}
 	}

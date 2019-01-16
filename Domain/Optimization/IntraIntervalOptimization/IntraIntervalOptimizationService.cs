@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var cultureInfo = _userCulture.GetCulture();
+			var agentsHash = selectedAgents.ToHashSet();
 
 			foreach (var skill in schedulingResultStateHolder.Skills)
 			{
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if (cancel) return;
 						var person = scheduleDay.Person;
 
-						if (!selectedAgents.Contains(person)) continue;
+						if (!agentsHash.Contains(person)) continue;
 
 						var progressPerson = person.Name.ToString();
 						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if (cancel) return;
 						var person = scheduleDay.Person;
 
-						if (!selectedAgents.Contains(person)) continue;
+						if (!agentsHash.Contains(person)) continue;
 
 						var progressPerson = person.Name.ToString();
 						schedulingOptions.ClearNotAllowedShiftProjectionCaches();

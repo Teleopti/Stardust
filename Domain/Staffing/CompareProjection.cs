@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				StartDateTime = activityResourceInterval.Interval.StartDateTime,
 				EndDateTime = activityResourceInterval.Interval.EndDateTime,
 				Resource = activityResourceInterval.Resource,
-				SkillCombination = personSkills.Skills.Where(x => x.Activity.Id == activityResourceInterval.Activity).Select(x => x.Id.GetValueOrDefault())
+				SkillCombination = personSkills.Skills.Where(x => x.Activity.Id == activityResourceInterval.Activity).Select(x => x.Id.GetValueOrDefault()).ToHashSet()
 			}).ToArray();
 			//Test from Denver
 		}

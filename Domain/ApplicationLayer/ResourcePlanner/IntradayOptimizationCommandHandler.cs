@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				foreach (var island in islands)
 				{
-					var agentsInIsland = island.AgentsInIsland();
-					var agentsToOptimize = command.AgentsToOptimize?.Where(x => agentsInIsland.Contains(x)).ToArray()
+					var agentsInIsland = island.AgentsInIsland().ToHashSet();
+					var agentsToOptimize = command.AgentsToOptimize?.Where(x => agentsInIsland.Contains(x)).ToHashSet()
 										   ?? agentsInIsland;
 
 					if (agentsToOptimize.Any())

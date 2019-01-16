@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_scheduleDay.Period)
 					.Return(_dayDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.UnlockedDays)
-					.Return(new [] { unlockedDayPro });
+					.Return(new HashSet<IScheduleDayPro> { unlockedDayPro });
 				Expect.Call(unlockedDayPro.DaySchedulePart())
 					.Return(unlockedDay).Repeat.AtLeastOnce();
 
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_scheduleDay.Period)
 					.Return(_dayDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.UnlockedDays)
-					.Return(new [] { unlockedDayPro });
+					.Return(new HashSet<IScheduleDayPro> { unlockedDayPro });
 				Expect.Call(unlockedDayPro.DaySchedulePart())
 					.Return(unlockedDay).Repeat.AtLeastOnce();
 				Expect.Call(unlockedDay.Period)

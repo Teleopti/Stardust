@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ISpecification<IEditableShift> specification = new All<IEditableShift>();
 				foreach (var unLockedDate in teamBlockInfo.BlockInfo.UnLockedDates())
 				{
-					var unlockedMembers = teamBlockInfo.TeamInfo.UnLockedMembers(unLockedDate).ToArray();
+					var unlockedMembers = teamBlockInfo.TeamInfo.UnLockedMembers(unLockedDate).ToHashSet();
 
 					foreach (var scheduleMatrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 					{

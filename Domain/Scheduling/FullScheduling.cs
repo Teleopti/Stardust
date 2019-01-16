@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public FullSchedulingResultModel DoSchedulingAndDO(Guid planningPeriodId, bool runDayOffOptimization = true)
 		{			
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
-			var agents = LoadAgents(schedulingInformation.Period, schedulingInformation.PersonIds).ToArray();
+			var agents = LoadAgents(schedulingInformation.Period, schedulingInformation.PersonIds.ToHashSet()).ToArray();
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
 				Period = schedulingInformation.Period,
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		[TestLog]
 		[UnitOfWork]
-		protected virtual IEnumerable<IPerson> LoadAgents(DateOnlyPeriod period, IEnumerable<Guid> people)
+		protected virtual IEnumerable<IPerson> LoadAgents(DateOnlyPeriod period, HashSet<Guid> people)
 		{
 			var allPeople = _personRepository.FindAllAgentsLight(period).ToHashSet();
 			return allPeople.Where(x => people.Contains(x.Id.Value));			

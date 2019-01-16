@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return ret;
 		}
 		
-		public static IEnumerable<ISkillDay> SkillDaysOnDateOnly(this ISchedulingResultStateHolder stateHolder, IEnumerable<DateOnly> theDateList)
+		public static IEnumerable<ISkillDay> SkillDaysOnDateOnly(this ISchedulingResultStateHolder stateHolder, HashSet<DateOnly> theDateList)
 		{
 			return stateHolder.SkillDays == null ? 
 				Enumerable.Empty<ISkillDay>() : 

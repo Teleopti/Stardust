@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	    public IScheduleDayPro[] EffectivePeriodDays => _effectivePeriodDays.Values.ToArray();
 
-	    public IScheduleDayPro[]  UnlockedDays => _unLockedDays.Values.ToArray();
+	    public HashSet<IScheduleDayPro> UnlockedDays => _unLockedDays.Values.ToHashSet();
 
 	    public void UnlockPeriod(DateOnlyPeriod period)
 		{

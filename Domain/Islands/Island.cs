@@ -24,18 +24,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public IEnumerable<Guid> SkillIds()
 		{
-			var ret = new HashSet<Guid>();
-			foreach (var skillSet in _skillSets)
-			{
-				foreach (var skillSetSkill in skillSet.Skills)
-				{
-					if (skillSetSkill.Id.HasValue)
-					{
-						ret.Add(skillSetSkill.Id.Value);
-					}
-				}
-			}
-			return ret;
+			return _skillSets.SelectMany(s => s.Skills).Where(s => s.Id.HasValue).Select(s => s.Id.Value).ToHashSet();
 		}
 
 		public static Island Merge(Island island1, Island island2)

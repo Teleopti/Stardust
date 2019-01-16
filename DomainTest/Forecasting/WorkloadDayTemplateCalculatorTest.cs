@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             var period = new DateOnlyPeriod(startDate, endDate);
             
-            var filteredDates = new List<DateOnly> { new DateOnly(2008, 2, 8) };
+            var filteredDates = new HashSet<DateOnly> { new DateOnly(2008, 2, 8) };
             using (_mocks.Record())
             {
                 Expect.Call(_statisticHelper.LoadStatisticData(period, workload)).Return(new List<IWorkloadDayBase>

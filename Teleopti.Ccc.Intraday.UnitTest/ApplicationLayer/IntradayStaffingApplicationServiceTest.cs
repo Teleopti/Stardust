@@ -1024,14 +1024,14 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
 					Resource = 34,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+					SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = userNow.AddMinutes(minutesPerInterval),
 					EndDateTime = userNow.AddMinutes(minutesPerInterval * 2),
 					Resource = 34,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+					SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
 				}
 			};
 			SkillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
@@ -1112,7 +1112,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(skill.DefaultResolution),
 					Resource = 34,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+					SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
 				}
 			};
 			SkillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
@@ -1319,21 +1319,21 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 				StartDateTime = userNow,
 				EndDateTime = userNow.AddMinutes(minutesPerInterval),
 				Resource = 1,
-				SkillCombination = new[] { multiSkill.Id.GetValueOrDefault() }
+				SkillCombination = new HashSet<Guid> { multiSkill.Id.GetValueOrDefault() }
 			});
 			skillCombinationResources.Add(new SkillCombinationResource
 			{
 				StartDateTime = userNow,
 				EndDateTime = userNow.AddMinutes(minutesPerInterval),
 				Resource = 2,
-				SkillCombination = new[] { skillChild1.Id.GetValueOrDefault() }
+				SkillCombination = new HashSet<Guid> { skillChild1.Id.GetValueOrDefault() }
 			});
 			skillCombinationResources.Add(new SkillCombinationResource
 			{
 				StartDateTime = userNow,
 				EndDateTime = userNow.AddMinutes(minutesPerInterval),
 				Resource = 3,
-				SkillCombination = new[] { skillChild2.Id.GetValueOrDefault() }
+				SkillCombination = new HashSet<Guid> { skillChild2.Id.GetValueOrDefault() }
 			});
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(userNow, skillCombinationResources);

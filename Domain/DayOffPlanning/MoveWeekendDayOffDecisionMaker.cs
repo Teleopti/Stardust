@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         {
             List<KeyValuePair<int, double>> tryList = new List<KeyValuePair<int, double>>();
 
-            IList<int> weekendDayIndexes =
+            var weekendDayIndexes =
                 ExtractWeekendDayIndexes(lockableBitArray.PeriodArea.Minimum, lockableBitArray.PeriodArea.Maximum);
 
             //should be an unlocked day off
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             //should be an unlocked no day off
             List<KeyValuePair<int, double>> test = new List<KeyValuePair<int, double>>();
 
-            IList<int> weekendDayIndexes =
+            var weekendDayIndexes =
                 ExtractWeekendDayIndexes(lockableBitArray.PeriodArea.Minimum, lockableBitArray.PeriodArea.Maximum);
 
             //should be an unlocked day off
@@ -144,10 +144,10 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 	        return test.Select(t => t.Key).ToList();
         }
 
-        private IList<int> ExtractWeekendDayIndexes(int minimumIndex, int maximumIndex)
+        private HashSet<int> ExtractWeekendDayIndexes(int minimumIndex, int maximumIndex)
         {
-            IList<int> result = new List<int>();
-            IList<int> officialWeekendDays = _officialWeekendDays.WeekendDayIndexesRelativeStartDayOfWeek();
+            var result = new HashSet<int>();
+            var officialWeekendDays = _officialWeekendDays.WeekendDayIndexesRelativeStartDayOfWeek();
 
             for (int i = minimumIndex; i <= maximumIndex; i++)
             {

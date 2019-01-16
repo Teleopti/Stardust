@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	    [Test]
         public void CanFilterOnEffectiveRestrictionAndNotAllowedShiftCategories()
         {
-            var ret = _target.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction, new List<IShiftCategory>());
+            var ret = _target.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction, new HashSet<IShiftCategory>());
             Assert.AreEqual(0, ret.Count);
         }
 
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void CanFilterOnNotAllowedCategoriesWithEmptyList()
         {
-            var ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory> { _category }, new List<ShiftProjectionCache>());
+            var ret = _target.FilterOnNotAllowedShiftCategories(new HashSet<IShiftCategory> { _category }, new List<ShiftProjectionCache>());
             Assert.IsNotNull(ret);
         }
 
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        var cache3 = new ShiftProjectionCache(workShift3, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 
             var caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
-            var categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
+            var categoriesNotAllowed = new HashSet<IShiftCategory> { shiftCategory2, shiftCategory3 };
 			using (_mocks.Record())
             {
                 Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 var ret = _target.FilterOnNotAllowedShiftCategories(categoriesNotAllowed, caches);
                 Assert.AreEqual(1, ret.Count);
                 Assert.AreEqual(shiftCategory1, ret[0].TheWorkShift.ShiftCategory);
-                ret = _target.FilterOnNotAllowedShiftCategories(new List<IShiftCategory>(), caches);
+                ret = _target.FilterOnNotAllowedShiftCategories(new HashSet<IShiftCategory>(), caches);
                 Assert.AreEqual(3, ret.Count);
             }
         }

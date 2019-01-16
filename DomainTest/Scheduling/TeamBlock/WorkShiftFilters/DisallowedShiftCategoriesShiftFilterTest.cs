@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void CanFilterOnNotAllowedCategoriesWithEmptyList()
 		{
 			IShiftCategory shiftCategory1 = new ShiftCategory("allowed");
-			var ret = _target.Filter(new List<IShiftCategory> { shiftCategory1 }, new List<ShiftProjectionCache>());
+			var ret = _target.Filter(new HashSet<IShiftCategory> { shiftCategory1 }, new List<ShiftProjectionCache>());
 			Assert.IsNotNull(ret);
 		}
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var cache3 = new ShiftProjectionCache(workShift3, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 
 			IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
-			IList<IShiftCategory> categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
+			var categoriesNotAllowed = new HashSet<IShiftCategory> { shiftCategory2, shiftCategory3 };
 			using (_mocks.Record())
 			{
 				Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				var ret = _target.Filter(categoriesNotAllowed, caches);
 				Assert.AreEqual(1, ret.Count);
 				Assert.AreEqual(shiftCategory1, ret[0].TheWorkShift.ShiftCategory);
-				ret = _target.Filter(new List<IShiftCategory>(), caches);
+				ret = _target.Filter(new HashSet<IShiftCategory>(), caches);
 				Assert.AreEqual(3, ret.Count);
 			}
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(new List<IShiftCategory>(), null);
+			var result = _target.Filter(new HashSet<IShiftCategory>(), null);
 			Assert.IsNull(result);
 		}
 	}

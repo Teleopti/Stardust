@@ -395,7 +395,7 @@ TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
 				Source = "BPO",
 				Resources = 10,
-				SkillIds = new List<Guid> { skill1 }
+				SkillIds = new HashSet<Guid> { skill1 }
 			};
 
 			var scr2 = new ImportSkillCombinationResourceBpo
@@ -404,7 +404,7 @@ TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
 				Source = "BPO",
 				Resources = 10,
-				SkillIds = new List<Guid> { skill1, skill2 }
+				SkillIds = new HashSet<Guid> { skill1, skill2 }
 			};
 
 			Assert.False(scr1.Equals(scr2));
@@ -421,7 +421,7 @@ TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
 				Source = "BPO",
 				Resources = 10,
-				SkillIds = new List<Guid> { skill1, skill2 }
+				SkillIds = new HashSet<Guid> { skill1, skill2 }
 			};
 
 			var scr2 = new ImportSkillCombinationResourceBpo
@@ -430,7 +430,7 @@ TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
 				Source = "BPO",
 				Resources = 10,
-				SkillIds = new List<Guid> { skill2, skill1 }
+				SkillIds = new HashSet<Guid> { skill2, skill1 }
 			};
 
 			Assert.True(scr1.Equals(scr2));
@@ -447,7 +447,7 @@ TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 				EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0),
 				Source = "BPO",
 				Resources = 11,
-				SkillIds = new List<Guid> { skill1, skill2 }
+				SkillIds = new HashSet<Guid> { skill1, skill2 }
 			};
 
 			var scr2 = new ImportSkillCombinationResourceBpo
@@ -456,7 +456,7 @@ TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
 				Source = "BPO",
 				Resources = 10,
-				SkillIds = new List<Guid> { skill2, skill1 }
+				SkillIds = new HashSet<Guid> { skill2, skill1 }
 			};
 
 			Assert.False(scr1.Equals(scr2));

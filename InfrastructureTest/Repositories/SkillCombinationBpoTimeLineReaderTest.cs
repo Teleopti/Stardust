@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				},
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				},
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 03, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				},
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPITALY",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				}
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170602_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170602_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				},
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 1, 15, 0),
 					Resources = 5.2,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170602_TPSWEDEN_NEW",
 					PersonId = person.Id.GetValueOrDefault()
 				}
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				}
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				},
@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 2.2,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId3},
+					SkillIds = new HashSet<Guid> { skillId3},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				}
@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSPAKISTAN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSPAKISTAN",
 					PersonId = person.Id.GetValueOrDefault()
 				}
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 29, 22, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -450,7 +450,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 29, 22, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
 					Resources = 5.5,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId1},
+					SkillIds = new HashSet<Guid> { skillId1},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 
@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 5.1,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId2},
+					SkillIds = new HashSet<Guid> { skillId2},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				},
@@ -512,7 +512,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
 					Resources = 2.2,
 					Source = "TPSWEDEN",
-					SkillIds = new List<Guid>{skillId3},
+					SkillIds = new HashSet<Guid> { skillId3},
 					ImportFileName = "20170601_TPSWEDEN",
 					PersonId = person.Id.GetValueOrDefault()
 				}

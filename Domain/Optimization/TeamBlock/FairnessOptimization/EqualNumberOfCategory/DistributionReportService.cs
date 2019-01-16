@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				_distributionForPersons.CreateSummary(
 					filterOnEqualNumberOfCategorySetting(allFilteredPersons), scheduleDictionary);
 			var personDistribution = _distributionForPersons.CreateSummary(new List<IPerson> {person}, scheduleDictionary);
-			var myTeam = _groupCreator.CreateGroupForPerson(person, groupPageForDate, scheduleDictionary.Keys.ToList());
+			var myTeam = _groupCreator.CreateGroupForPerson(person, groupPageForDate, scheduleDictionary.Keys.ToHashSet());
 			var teamDistribution =
 				_distributionForPersons.CreateSummary(filterOnEqualNumberOfCategorySetting(myTeam.GroupMembers), scheduleDictionary);
 

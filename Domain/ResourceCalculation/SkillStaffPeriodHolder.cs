@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			//Combine those with same activity
 			foreach (IActivity activity in activities)
 			{
-				IList<ISkill> oldSkills = new List<ISkill>();
+				HashSet<ISkill> oldSkills = new HashSet<ISkill>();
 				Dictionary<DateTime, ISkillStaffPeriodDataHolder> theData = null;
 				foreach (KeyValuePair<ISkill, Dictionary<DateTime, ISkillStaffPeriodDataHolder>> pair in tmp)
 				{
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return dictionaryToControl;
 		}
 
-		private static ISkill FindNextSkillWithSameActivity(IActivity activity, ICollection<ISkill> oldSkills, IEnumerable<KeyValuePair<ISkill, Dictionary<DateTime, ISkillStaffPeriodDataHolder>>> skills)
+		private static ISkill FindNextSkillWithSameActivity(IActivity activity, HashSet<ISkill> oldSkills, IEnumerable<KeyValuePair<ISkill, Dictionary<DateTime, ISkillStaffPeriodDataHolder>>> skills)
 		{
 			foreach (var skill in skills)
 			{
