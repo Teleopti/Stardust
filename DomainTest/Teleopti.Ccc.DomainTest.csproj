@@ -280,6 +280,7 @@
     <Compile Include="Notification\NotificationServiceClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePollerTest.cs" />
+    <Compile Include="Notification\TeamScheduleWeekViewChangeCheckerTest.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardustTest.cs" />
     <Compile Include="Optimization\PlanningGroupTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
