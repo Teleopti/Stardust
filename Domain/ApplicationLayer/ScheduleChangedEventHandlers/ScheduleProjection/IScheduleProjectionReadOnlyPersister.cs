@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		bool IsInitialized();
 
 		bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId, int version);
-		void AddActivity(IEnumerable<ScheduleProjectionReadOnlyModel> models);
+		void AddActivity(ScheduleProjectionReadOnlyModel model);
 
 		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario);
 		int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);

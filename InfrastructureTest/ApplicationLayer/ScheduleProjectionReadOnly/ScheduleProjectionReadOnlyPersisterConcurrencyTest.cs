@@ -110,14 +110,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 				_persister.BeginAddingSchedule(date, scenarioId, personId, version);
 				3.Times(() =>
 				{
-					_persister.AddActivity(new []{new ScheduleProjectionReadOnlyModel
+					_persister.AddActivity(new ScheduleProjectionReadOnlyModel
 					{
 						PersonId = personId,
 						ScenarioId = scenarioId,
 						BelongsToDate = date,
 						StartDateTime = "2016-05-04 08:00".Utc(),
 						EndDateTime = "2016-05-04 08:00".Utc()
-					}});
+					});
 				});
 			}
 

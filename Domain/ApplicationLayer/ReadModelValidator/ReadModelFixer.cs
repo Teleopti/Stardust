@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				logger.Error("Cannot add Schedule!", exception);
 			}		
 
-			_scheduleProjectionReadOnlyPersister.AddActivity(data.ScheduleProjectionReadOnly);
+			data.ScheduleProjectionReadOnly.ForEach(_scheduleProjectionReadOnlyPersister.AddActivity);
 		}
 
 		public void FixPersonScheduleDay(ReadModelData data)

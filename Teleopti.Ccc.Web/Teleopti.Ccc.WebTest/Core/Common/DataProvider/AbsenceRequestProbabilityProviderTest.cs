@@ -290,14 +290,17 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		private void addReadModelActivity(DateOnlyPeriod period)
 		{
 			var days = period.DayCollection();
-			ScheduleProjectionReadOnlyPersister.AddActivity(days.Select(day => new ScheduleProjectionReadOnlyModel
+			foreach (var day in days)
 			{
-				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				StartDateTime = day.Date,
-				EndDateTime = day.Date,
-				ContractTime = TimeSpan.FromMinutes(480),
-				BelongsToDate = day
-			}));
+				ScheduleProjectionReadOnlyPersister.AddActivity(new ScheduleProjectionReadOnlyModel
+				{
+					ScenarioId = _scenario.Id.GetValueOrDefault(),
+					StartDateTime = day.Date,
+					EndDateTime = day.Date,
+					ContractTime = TimeSpan.FromMinutes(480),
+					BelongsToDate = day
+				});
+			}
 		}
 
 		private void addBudgetDays(DateOnlyPeriod period, double shrinkedAllowance = 1, double fulltimeEquivalentHours = 0)

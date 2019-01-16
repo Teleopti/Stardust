@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
 	{
-		private readonly List<ScheduleProjectionReadOnlyModel> _data = new List<ScheduleProjectionReadOnlyModel>();
+		private readonly IList<ScheduleProjectionReadOnlyModel> _data = new List<ScheduleProjectionReadOnlyModel>();
 
 		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
 			IScenario scenario)
@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 									});
 		}
 
-		public void AddActivity(IEnumerable<ScheduleProjectionReadOnlyModel> models)
+		public void AddActivity(ScheduleProjectionReadOnlyModel model)
 		{
-			_data.AddRange(models);
+			_data.Add(model);
 		}
 
 		public bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId, int version)

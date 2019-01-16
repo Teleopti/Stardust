@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				ShortName = "xx",
 				DisplayColor = Color.Bisque.ToArgb()
 			};
-			scheduleProjectionReadOnlyRepository.AddActivity(new []{model});
+			scheduleProjectionReadOnlyRepository.AddActivity(model);
 		}
 	}
 }

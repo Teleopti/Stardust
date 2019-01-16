@@ -51,14 +51,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			var person = Guid.NewGuid();
 
 			Persister.AddActivity(
-				new []{new ScheduleProjectionReadOnlyModel
+				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = "2016-04-29".Date(),
 					ScenarioId = scenario,
 					PersonId = person,
 					StartDateTime = "2016-04-29 8:00".Utc(),
 					EndDateTime = "2016-04-29 17:00".Utc()
-				}});
+				});
 
 			Persister.ForPerson("2016-04-29".Date(), person, scenario).Should().Have.Count.EqualTo(1);
 		}
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			var payloadId = Guid.NewGuid();
 
 			Persister.AddActivity(
-				new []{new ScheduleProjectionReadOnlyModel
+				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = "2016-04-29".Date(),
 					ScenarioId = scenario,
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 					Name = "Phone",
 					ShortName = "Ph",
 					DisplayColor = 182,
-				}});
+				});
 
 			var model = Persister.ForPerson("2016-04-29".Date(), person, scenario).Single();
 			model.BelongsToDate.Should().Be("2016-04-29".Date());
@@ -236,28 +236,34 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			var illnessAbsence = getIllnessAbsence(absences);
 
 			Persister.AddActivity(
-				new []{new ScheduleProjectionReadOnlyModel
+				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = date,
 					PersonId = agents[0].Id.Value,
 					StartDateTime = DateTime.Now,
 					EndDateTime = DateTime.Now,
 					PayloadId = holidayAbsence.Id.Value
-				},new ScheduleProjectionReadOnlyModel
+				});
+
+			Persister.AddActivity(
+				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = date,
 					PersonId = agents[1].Id.Value,
 					StartDateTime = DateTime.Now,
 					EndDateTime = DateTime.Now,
 					PayloadId = illnessAbsence.Id.Value
-				},new ScheduleProjectionReadOnlyModel
+				});
+
+			Persister.AddActivity(
+				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = date,
 					PersonId = agents[2].Id.Value,
 					StartDateTime = DateTime.Now,
 					EndDateTime = DateTime.Now,
 					PayloadId = holidayAbsence.Id.Value
-				}});
+				});
 		}
 
 	}
