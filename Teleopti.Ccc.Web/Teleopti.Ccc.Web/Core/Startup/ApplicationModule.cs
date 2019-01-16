@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private static void appendServerVersionHeader()
 		{
 			var serverVersion = _systemVersion.Version();
-			var response = HttpContext.Current.Response;
-			response.AddOnSendingHeaders(context =>
+			var response = HttpContext.Current?.Response;
+			response?.AddOnSendingHeaders(context =>
 			{
 				if (context.Response.Headers["X-Server-Version"] == null)
 				{

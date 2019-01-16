@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		private static PersonInfo generatePersonInfoToHandleTimingAttack()
 		{
 			var personInfo = new PersonInfo();
+			personInfo.ApplicationLogonInfo.SetLogonName("fakeUserForTimingAttackPrevention");
 			personInfo.ApplicationLogonInfo.SetEncryptedPasswordIfLogonNameExistButNoPassword(
 				"$2a$10$dgiqfELBa7ptsFj6vw1nTOMoVBoVxAvgh6Md.eLPbxyMgdd2tn6uS");
 			return personInfo;

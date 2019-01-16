@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var personInfo = new PersonInfo();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make(), new OneWayEncryption());
 			ApplicationUserQuery.Has(personInfo);
-
+			
 			var existingUserWatch = new Stopwatch();
 			existingUserWatch.Start();
 			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() })
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			nonExistingUserWatch.Stop();
 
 			Math.Abs(existingUserWatch.Elapsed.Subtract(nonExistingUserWatch.Elapsed).TotalMilliseconds).Should().Be
-				.LessThanOrEqualTo(15);
+				.LessThanOrEqualTo(100);
 		}
 
 		[Test]
