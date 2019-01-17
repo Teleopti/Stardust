@@ -25,7 +25,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new IntradayFactAgentQueueJobStep(jobParameters)); // BU independent
 
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
-			Add(new FactScheduleDeviationJobStep(jobParameters, true));
+			if(jobParameters.ToggleManager.IsEnabled(Toggles.ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646))
+				Add(new FactScheduleDeviationJobStepStory79646(jobParameters, true));
+			else
+				Add(new FactScheduleDeviationJobStep(jobParameters, true));
 		}
 	}
 }

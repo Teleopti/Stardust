@@ -117,7 +117,8 @@
 		WFM_ProbabilityView_ImproveResponseTime_80040,
 		WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128,
 		WFM_Intraday_OptimizeSkillDayLoad_80153,
-		WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425
+		WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425,
+		ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646
 		// ReSharper restore InconsistentNaming
 	}
 }
