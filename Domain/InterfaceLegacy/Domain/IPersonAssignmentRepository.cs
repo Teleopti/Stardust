@@ -8,18 +8,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface IPersonAssignmentRepository : IRepository<IPersonAssignment>, ILoadAggregateFromBroker<IPersonAssignment>
 	{
-		/// <summary>
-		/// Finds the specified persons.
-		/// </summary>
-		/// <param name="persons">The persons.</param>
-		/// <param name="period">The period.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: Sumedah
-		/// Created date: 2008-03-06
-		/// </remarks>
-		ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons,
+		IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons,
 						    DateOnlyPeriod period,
 						    IScenario scenario);
 

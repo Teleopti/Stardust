@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public override ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		public override IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			using (SqlModificationScope.Create(new AddForceSeekOnAssignmentLayers()))
 			{
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		[RemoveMeWithToggle("make non virtual", Toggles.ResourcePlanner_QueryHintOnLayers_79780)]
-		public virtual ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		public virtual IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			InParameter.NotNull(nameof(persons), persons);
 			var retList = new List<IPersonAssignment>();

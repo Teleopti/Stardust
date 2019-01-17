@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(14);
+			assignments.Count().Should().Be.EqualTo(14);
 
 			foreach (var personAssignment in assignments)
 			{
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(14);
+			assignments.Count().Should().Be.EqualTo(14);
 
 			foreach (var personAssignment in assignments)
 			{
@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value, false);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(14);
+			assignments.Count().Should().Be.EqualTo(14);
 
 			var foundRestrictedAssignments = 0;
 			foreach (var personAssignment in assignments)

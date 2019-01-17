@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return _storage.LoadAll<IPersonAssignment>().First(x => x.Id == id);
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		public IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			throw SqlExceptionConstructor.CreateSqlException("Deadlock exception", 1205);
 		}
