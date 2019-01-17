@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Domain.FeatureFlags
+namespace Teleopti.Ccc.Domain.FeatureFlags
 {
 	//Yes, yes, I know. This should be named "Toggle" but too many name collisions
 	//with namespaces if changed now.
@@ -68,6 +68,7 @@
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
 		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
+		ResourcePlanner_QueryHintOnLayers_79780,
 
 		Wfm_DisplayOnlineHelp_39402,
 
