@@ -104,7 +104,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 				.ToArray();
 		}
 
-		private IEnumerable<ApprovedPeriodViewModel> buildApprovedPeriods(IEnumerable<ApprovedPeriod> periods)
+		private IEnumerable<ApprovedPeriodViewModel> buildApprovedPeriods(IEnumerable<AdherencePeriod> periods)
 		{
 			return periods
 				.Select(a => new ApprovedPeriodViewModel

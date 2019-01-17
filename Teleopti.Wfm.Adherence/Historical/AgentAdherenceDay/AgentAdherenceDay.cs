@@ -9,7 +9,6 @@ using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	// change type of ApprovedPeriods() to AdherencePeriod when removing toggle RTA_ReviewHistoricalAdherence_74770
 	public class AgentAdherenceDay
 	{
 		private readonly DateTime _now;
@@ -23,7 +22,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private DateTimePeriod? _calculatedDisplayPeriod;
 		private IEnumerable<AdherencePeriod> _calculatedRecordedOutOfAdherences;
 		private IEnumerable<AdherencePeriod> _calculatedOutOfAdherences;
-		private IEnumerable<ApprovedPeriod> _calculatedApprovedPeriods;
+		private IEnumerable<AdherencePeriod> _calculatedApprovedPeriods;
 		private IEnumerable<HistoricalChangeModel> _calculatedChanges;
 
 		private int? _adherencePercentage;
@@ -44,7 +43,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		public DateTimePeriod DisplayPeriod() => _calculatedDisplayPeriod.GetValueOrDefault();
 		public IEnumerable<HistoricalChangeModel> Changes() => _calculatedChanges;
 		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() => _calculatedRecordedOutOfAdherences.ToArray();
-		public IEnumerable<ApprovedPeriod> ApprovedPeriods() => _calculatedApprovedPeriods;
+		public IEnumerable<AdherencePeriod> ApprovedPeriods() => _calculatedApprovedPeriods;
 		public IEnumerable<AdherencePeriod> OutOfAdherences() => _calculatedOutOfAdherences;
 		public int? Percentage() => _adherencePercentage;
 		public int? SecondsInAdherence() => _secondsInAdherence;
@@ -225,12 +224,10 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
 				.ToArray();
 
-		private static IEnumerable<ApprovedPeriod> calculateApprovedPeriods(IEnumerable<openPeriod> approvedPeriods) =>
-			approvedPeriods.Select(x => new ApprovedPeriod
-			{
-				StartTime = x.StartTime.Value,
-				EndTime = x.EndTime.Value
-			}).ToArray();
+		private static IEnumerable<AdherencePeriod> calculateApprovedPeriods(IEnumerable<openPeriod> approvedPeriods) =>
+			approvedPeriods
+				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
+				.ToArray();
 
 		private static int? calculateSecondsInAdherence(
 			DateTimePeriod shift,

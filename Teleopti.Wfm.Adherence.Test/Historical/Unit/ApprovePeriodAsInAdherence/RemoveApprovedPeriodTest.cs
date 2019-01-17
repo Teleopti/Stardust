@@ -97,8 +97,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ApprovePeriodAsInAdherence
 				.ApprovedPeriods()
 				.OrderBy(x => x.StartTime);
 
-			result.Select(x => x.StartTime).Should().Have.SameSequenceAs(new[] {"2018-03-09 08:00:00".Utc(), "2018-03-09 15:00:00".Utc()});
-			result.Select(x => x.EndTime).Should().Have.SameSequenceAs(new[] {"2018-03-09 09:05:00".Utc(), "2018-03-09 17:00:00".Utc()});
+			result.Select(x => x.StartTime).Should().Have.SameSequenceAs("2018-03-09 08:00:00".Utc(), "2018-03-09 15:00:00".Utc());
+			result.Select(x => x.EndTime).Should().Have.SameSequenceAs("2018-03-09 09:05:00".Utc(), "2018-03-09 17:00:00".Utc());
 		}
 
 		[Test]
@@ -114,8 +114,8 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ApprovePeriodAsInAdherence
 			var result = Target.LoadUntilNow(person, "2018-03-09".Date())
 				.ApprovedPeriods();
 
-			result.Select(x => x.StartTime).Should().Have.SameSequenceAs(new[] {"2018-03-09 08:00:00".Utc(), "2018-03-09 08:00:00".Utc()});
-			result.Select(x => x.EndTime).Should().Have.SameSequenceAs(new[] {"2018-03-09 09:05:00".Utc(), "2018-03-09 09:05:00".Utc()});
+			result.Select(x => x.StartTime).Should().Have.SameSequenceAs("2018-03-09 08:00:00".Utc(), "2018-03-09 08:00:00".Utc());
+			result.Select(x => x.EndTime).Should().Have.SameSequenceAs("2018-03-09 09:05:00".Utc(), "2018-03-09 09:05:00".Utc());
 		}
 		
 		[Test]
