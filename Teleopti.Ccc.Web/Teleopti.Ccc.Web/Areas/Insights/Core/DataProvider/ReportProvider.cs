@@ -5,32 +5,31 @@ using System.Threading.Tasks;
 using Common.Logging;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
-using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.Insights.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 {
 	public class ReportProvider : IReportProvider
 	{
-		private const string templateReportName = "__WFM_Insights_Report_Template__";
-		private const string usageReportName = "Report Usage Metrics Report";
-		private readonly IConfigReader _configReader;
+		public const string TemplateReportName = "__WFM_Insights_Report_Template__";
+		public const string UsageReportName = "Report Usage Metrics Report";
+		private readonly IApplicationConfigurationDbProvider _appConfig;
 		private readonly IPowerBiClientFactory _powerBiClientFactory;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ReportProvider));
 
-		public ReportProvider(IConfigReader configReader,
-			IPowerBiClientFactory powerBiClientFactory)
+		public ReportProvider(IApplicationConfigurationDbProvider appConfig, IPowerBiClientFactory powerBiClientFactory)
 		{
-			_configReader = configReader;
+			_appConfig = appConfig;
 			_powerBiClientFactory = powerBiClientFactory;
 		}
 
 		public async Task<ReportModel[]> GetReports()
 		{
-			var excludedReports = new[] {usageReportName, templateReportName};
+			var excludedReports = new[] {UsageReportName, TemplateReportName};
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
-				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
 				return reports.Value.Where(r => !excludedReports.Contains(r.Name))
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				// Get a list of reports.
-				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
 				var report = string.IsNullOrEmpty(reportId)
@@ -84,12 +83,12 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				// Get a list of reports.
-				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
-				var templateReport = reports.Value.SingleOrDefault(r => r.Name == templateReportName);
+				var templateReport = reports.Value.SingleOrDefault(r => r.Name == TemplateReportName);
 				if (templateReport == null) {
-					logger.Error($"Template report \"{templateReportName}\" not found.");
+					logger.Error($"Template report \"{TemplateReportName}\" not found.");
 					return result;
 				}
 				
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				// Get a list of reports.
-				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
 				var report = reports.Value.FirstOrDefault(r => r.Id == reportId);
@@ -147,7 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				try
 				{
 					// Get a list of reports.
-					var groupId = _configReader.AppConfig("PowerBIGroupId");
+					var groupId = getPowerBiGroupId();
 					client.Reports.DeleteReport(groupId, reportId);
 				}
 				catch (Exception ex)
@@ -185,7 +184,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "Edit");
 			}
 
-			var groupId = _configReader.AppConfig("PowerBIGroupId");
+			var groupId = getPowerBiGroupId();
 			var token = await client.Reports.GenerateTokenInGroupAsync(groupId, report.Id,
 				generateTokenRequestParameters);
 
@@ -210,6 +209,11 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			};
 
 			return result;
+		}
+
+		private string getPowerBiGroupId()
+		{
+			return _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIGroupId, null);
 		}
 	}
 }

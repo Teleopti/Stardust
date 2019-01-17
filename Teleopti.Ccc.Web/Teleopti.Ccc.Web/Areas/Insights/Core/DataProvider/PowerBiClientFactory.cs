@@ -4,31 +4,30 @@ using Common.Logging;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.Rest;
-using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 {
 	public class PowerBiClientFactory : IPowerBiClientFactory
 	{
+		private readonly IApplicationConfigurationDbProvider _appConfig;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(PowerBiClientFactory));
-		private readonly IConfigReader _configReader;
 
 		const string azureAuthorityUrl = "https://login.microsoftonline.com/{0}/";
 		const string resourceUrl = "https://analysis.windows.net/powerbi/api";
 		const string apiUrl = "https://api.powerbi.com/";
 
-		public PowerBiClientFactory(IConfigReader configReader)
+		public PowerBiClientFactory(IApplicationConfigurationDbProvider appConfig)
 		{
-			_configReader = configReader;
+			_appConfig = appConfig;
 		}
 
 		public async Task<IPowerBIClient> CreatePowerBiClient()
 		{
-			// TODO: Should move these configurations into database (Tenant related)
-			var powerBiUsername = _configReader.AppConfig("PowerBIUsername");
-			var powerBiPassword = _configReader.AppConfig("PowerBIPassword");
-			var clientId = _configReader.AppConfig("PowerBIClientId");
-			var azureTenantId = _configReader.AppConfig("AzureTenantId");
+			var powerBiUsername = _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIUsername);
+			var powerBiPassword = _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIPassword);
+			var clientId = _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIClientId);
+			var azureTenantId = _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsAzureTenantId);
 
 			// Create a user password credentials.
 			var credential = new UserPasswordCredential(powerBiUsername, powerBiPassword);
