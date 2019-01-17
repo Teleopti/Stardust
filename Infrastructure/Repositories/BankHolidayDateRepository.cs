@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (calendar == null)
 				return null;
 
-			const string sql = @"select [Id], [Date] ,[Description], [IsDeleted] from [dbo].[BankHolidayDate] where Date=:Date and CalendarId=:CalendarId";
+			const string sql = @"select [Id], [Date] ,[Description], [IsDeleted] from [dbo].[BankHolidayDate] where Date=:Date and Calendar=:Calendar";
 			var query = _currentUnitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetDateOnly("Date", date)
-				.SetGuid("CalendarId", calendar.Id.Value)
+				.SetGuid("Calendar", calendar.Id.Value)
 				.SetReadOnly(true)
 				.UniqueResult<object[]>();
 
