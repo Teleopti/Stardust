@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture(true)]
 	[TestFixture(false)]
 	[InfrastructureTest]
-	[Ignore("#79780 To be fixed")]
 	public class CorrectHintsWhenLoadingAssignmentsTest : IConfigureToggleManager
 	{
 		private readonly bool _toggle;
