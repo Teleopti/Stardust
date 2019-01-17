@@ -1,50 +1,40 @@
-
-.perm-tree{
+.perm-tree {
 	border-top: 1px solid $gray012;
 }
 
-.perm-list{//fix this in the styleguide at some point
+.perm-list {
+	//fix this in the styleguide at some point
 	max-height: none;
 
 	.wfm-leave-behind {
-    top: 0;
-    margin-top: -5px;
+		top: 0;
+		margin-top: -5px;
 	}
 }
 
-.permissions-tabs{
-	md-tabs{
-		transition: height .01s!important;
-	}
-
-	md-tab-content, md-tabs-content-wrapper{
-		display: inline !important;
-	}
-}
-
-.open-leave-behind-for-testing{
+.open-leave-behind-for-testing {
 	width: 110px;
-	background: transparent!important;
+	background: transparent !important;
 }
 
-.slice-text{
+.slice-text {
 	text-overflow: ellipsis;
 	width: 80%;
 }
 
-.toggle-handle.open i{
+.toggle-handle.open i {
 	display: inline-block;
 }
 
-.scroll-free-tree{
-	max-height: none!important;
+.scroll-free-tree {
+	max-height: none !important;
 }
 
-.permission-radio-buttons{
-	md-radio-group{
+.permission-radio-buttons {
+	md-radio-group {
 		align-items: baseline;
 
-		md-radio-button{
+		md-radio-button {
 			margin: $full-padding;
 		}
 	}
