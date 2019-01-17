@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
@@ -9,15 +10,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private readonly INotificationValidationCheck _notificationValidationCheck;
 		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
+		private readonly ITeamScheduleWeekViewChangeCheck _teamScheduleWeekViewChangeCheck;
 
-		public ScheduleDayReadModelPersister(IPersonRepository personRepository, INotificationValidationCheck notificationValidationCheck, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IScheduleDayReadModelRepository scheduleDayReadModelRepository)
+		public ScheduleDayReadModelPersister(IPersonRepository personRepository,
+			INotificationValidationCheck notificationValidationCheck,
+			IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
+			IScheduleDayReadModelRepository scheduleDayReadModelRepository,
+			ITeamScheduleWeekViewChangeCheck teamScheduleWeekViewChangeCheck)
 		{
 			_personRepository = personRepository;
 			_notificationValidationCheck = notificationValidationCheck;
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
+			_teamScheduleWeekViewChangeCheck = teamScheduleWeekViewChangeCheck;
 		}
-		
+
 		public void Execute(ProjectionChangedEventBase message)
 		{
 			if (!message.IsDefaultScenario) return;
@@ -35,6 +42,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				{
 
 					_notificationValidationCheck.InitiateNotify(readModel, date, person);
+
+					if (message.IsDefaultScenario)
+						_teamScheduleWeekViewChangeCheck.InitiateNotify(new ScheduleChangeForWeekViewEvent
+						{
+							LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+							LogOnDatasource = message.LogOnDatasource,
+							Date = date,
+							Person = person,
+							NewReadModel = readModel
+						});
 
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}

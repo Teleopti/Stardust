@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
 			builder.RegisterType<EmailSender>().As<INotificationSender>();
 			builder.RegisterType<NotificationValidationCheck>().As<INotificationValidationCheck>();
+			builder.RegisterType<TeamScheduleWeekViewChangeCheck>().As<ITeamScheduleWeekViewChangeCheck>().SingleInstance();
 			builder.RegisterType<EmailConfiguration>().As<IEmailConfiguration>();
 			builder.RegisterType<NotificationChecker>().As<INotificationChecker>();
 			builder.RegisterType<MultipleNotificationSenderFactory>().As<INotificationSenderFactory>();

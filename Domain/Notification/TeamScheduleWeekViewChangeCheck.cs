@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 
@@ -9,10 +10,10 @@ namespace Teleopti.Ccc.Domain.Notification
 {
 	public interface ITeamScheduleWeekViewChangeCheck
 	{
-		void InitiateNotify(TeamScheduleWeekViewChangeCheckModel model);
+		void InitiateNotify(ScheduleChangeForWeekViewEvent model);
 	}
 
-	public interface ITeamScheduleWeekViewChange { }
+	public interface ITeamScheduleWeekViewChangedInDefaultScenario { }
 
 	public class TeamScheduleWeekViewChangeCheck : ITeamScheduleWeekViewChangeCheck
 	{
@@ -21,27 +22,27 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		public TeamScheduleWeekViewChangeCheck(
 			IScheduleDayReadModelRepository scheduleDayReadModelRepository,
-			ICurrentDataSource currentDataSource,
 			IMessageBrokerComposite messageBroker)
 		{
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 			_messageBroker = messageBroker;
 		}
 
-		public void InitiateNotify(TeamScheduleWeekViewChangeCheckModel model)
+		[EnabledBy(Toggles.WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242)]
+		public void InitiateNotify(ScheduleChangeForWeekViewEvent @event)
 		{
-			if (IsRelevantChange(model.Date, model.Person, model.NewReadModel))
+			if (IsRelevantChange(@event.Date, @event.Person, @event.NewReadModel))
 			{
 				_messageBroker.Send(
-					model.LogOnDatasource,
-					model.LogOnBusinessUnitId,
-					model.Date.Date,
-					model.Date.Date,
+					@event.LogOnDatasource,
+					@event.LogOnBusinessUnitId,
+					@event.Date.Date,
+					@event.Date.Date,
 					Guid.Empty,
-					model.Person.Id.GetValueOrDefault(),
+					@event.Person.Id.GetValueOrDefault(),
 					typeof(Person),
 					Guid.Empty,
-					typeof(ITeamScheduleWeekViewChange),
+					typeof(ITeamScheduleWeekViewChangedInDefaultScenario),
 					DomainUpdateType.NotApplicable,
 					null);
 			}
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		}
 	}
 
-	public class TeamScheduleWeekViewChangeCheckModel : EventWithLogOnContext
+	public class ScheduleChangeForWeekViewEvent : EventWithLogOnContext
 	{
 		public DateOnly Date { get; set; }
 		public IPerson Person { get; set; }

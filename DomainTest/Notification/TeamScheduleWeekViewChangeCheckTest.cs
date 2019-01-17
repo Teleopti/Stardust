@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var model = new TeamScheduleWeekViewChangeCheckModel
+			var @event = new ScheduleChangeForWeekViewEvent
 			{
 				Date = date,
 				Person = person,
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
-			Target.InitiateNotify(model);
+			Target.InitiateNotify(@event);
 
 			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var model = new TeamScheduleWeekViewChangeCheckModel
+			var @event = new ScheduleChangeForWeekViewEvent
 			{
 				Date = date,
 				Person = person,
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
-			Target.InitiateNotify(model);
+			Target.InitiateNotify(@event);
 
 			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var model = new TeamScheduleWeekViewChangeCheckModel
+			var @event = new ScheduleChangeForWeekViewEvent
 			{
 				Date = date,
 				Person = person,
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
-			Target.InitiateNotify(model);
+			Target.InitiateNotify(@event);
 
 			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var model = new TeamScheduleWeekViewChangeCheckModel
+			var @event = new ScheduleChangeForWeekViewEvent
 			{
 				Date = date,
 				Person = person,
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
-			Target.InitiateNotify(model);
+			Target.InitiateNotify(@event);
 
 			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Label = "Late"
 			});
 
-			var model = new TeamScheduleWeekViewChangeCheckModel
+			var @event = new ScheduleChangeForWeekViewEvent
 			{
 				Date = date,
 				Person = person,
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
-			Target.InitiateNotify(model);
+			Target.InitiateNotify(@event);
 
 			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
 		}
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var model = new TeamScheduleWeekViewChangeCheckModel
+			var @event = new ScheduleChangeForWeekViewEvent
 			{
 				Date = date,
 				Person = person,
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
-			Target.InitiateNotify(model);
+			Target.InitiateNotify(@event);
 
 			MessageBrokerComposite.GetMessages().Should().Be.Empty();
 		}
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var buId = Guid.NewGuid();
 
-			var model = new TeamScheduleWeekViewChangeCheckModel
+			var @event = new ScheduleChangeForWeekViewEvent
 			{
 				Date = date,
 				Person = person,
@@ -282,14 +282,14 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = buId
 			};
-			Target.InitiateNotify(model);
+			Target.InitiateNotify(@event);
 
 			var message = MessageBrokerComposite.GetMessages().Single();
 			message.DataSource.Should().Be.EqualTo("Teleopti");
 			message.BusinessUnitId.Should().Be.EqualTo(buId.ToString());
 			message.StartDate.Should().Be.EqualTo("D2019-01-16T00:00:00");
 			message.EndDate.Should().Be.EqualTo("D2019-01-16T00:00:00");
-			message.DomainType.Should().Be.EqualTo(nameof(ITeamScheduleWeekViewChange));
+			message.DomainType.Should().Be.EqualTo(nameof(ITeamScheduleWeekViewChangedInDefaultScenario));
 		}
 	}
 
