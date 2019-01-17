@@ -249,11 +249,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			throw SqlExceptionConstructor.CreateSqlException("Deadlock exception", 1205);
 		}
 
-		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
-		{
-			throw SqlExceptionConstructor.CreateSqlException("Deadlock exception", 1205);
-		}
-
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
 		{
 			throw new NotImplementedException();
@@ -273,24 +268,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			return _storage.LoadAll<IPersonAssignment>().Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId &&
 				period.Contains(pa.Date));
-		}
-
-		public IPersonAssignment GetSingle(DateOnly dateOnly)
-		{
-			return _storage.LoadAll<IPersonAssignment>().Single(pa => pa.Date == dateOnly);
-		}
-
-		public IPersonAssignment GetSingle(DateOnly dateOnly, IPerson agent)
-		{
-			return _storage.LoadAll<IPersonAssignment>().Single(pa => pa.Date == dateOnly && pa.Person.Equals(agent));
-		}
-
-		public void Clear()
-		{
-			foreach (var personAssignment in _storage.LoadAll<IPersonAssignment>())
-			{
-				_storage.Remove(personAssignment);
-			}
 		}
 	}
 }

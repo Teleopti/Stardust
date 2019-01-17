@@ -23,17 +23,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 						    DateOnlyPeriod period,
 						    IScenario scenario);
 
-		/// <summary>
-		/// Finds the specified period.
-		/// </summary>
-		/// <param name="period">The period.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: zoet
-		/// Created date: 2007-11-12
-		/// </remarks>
-		ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario);
 
 		IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person);
 

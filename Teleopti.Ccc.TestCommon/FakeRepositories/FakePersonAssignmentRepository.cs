@@ -103,11 +103,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				.ToList();
 		}
 
-		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
-		{
-			return _storage.LoadAll<IPersonAssignment>().Where(ass => ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario)).ToList();
-		}
-
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
 		{
 			return new[] {new DateScenarioPersonId(Guid.NewGuid(), period.StartDate.Date, scenario.Id.Value, person.Id.Value, 1)};

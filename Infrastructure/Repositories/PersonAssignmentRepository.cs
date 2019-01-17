@@ -56,24 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 		
-		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
-		{
-			InParameter.NotNull(nameof(scenario), scenario);
-			var crit = personAssignmentCriteriaLoader(period, scenario);
-			var retList = new List<IPersonAssignment>();
-			using (PerformanceOutput.ForOperation("Loading personassignments"))
-			{
-				retList.AddRange(crit.List<IPersonAssignment>());
-			}
-
-			foreach (var personAss in retList)
-			{
-				LazyLoadingManager.Initialize(personAss.DayOff());
-			}
-
-			return retList;
-		}
-
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
 		{
 			return Session.GetNamedQuery("fetchIdAndVersionPersonAssignment")

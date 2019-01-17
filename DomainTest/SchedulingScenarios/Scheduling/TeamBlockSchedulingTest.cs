@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
-			AssignmentRepository.Find(date.ToDateOnlyPeriod(), scenario)
+			AssignmentRepository.Find(new[]{agent1, agent2}, date.ToDateOnlyPeriod(), scenario)
 				.Should().Be.Empty();
 		}
 
