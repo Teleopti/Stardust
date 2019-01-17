@@ -18,18 +18,21 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 	{
 		public AgentStateReadModelMaintainer Target;
 		public FakeAgentStateReadModelPersister Persister;
-		
+
 		[Test]
 		public void ShouldInsertReadModel()
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = personId,
-				TeamId = Guid.NewGuid(),
-				Timestamp = "2016-10-04 08:10".Utc(),
-				ExternalLogons = new[] { new ExternalLogon() }
+				new PersonAssociationChangedEvent
+				{
+					PersonId = personId,
+					TeamId = Guid.NewGuid(),
+					Timestamp = "2016-10-04 08:10".Utc(),
+					ExternalLogons = new[] {new ExternalLogon()}
+				}
 			});
 
 			Persister.Load(personId).Should().Not.Be.Null();
@@ -42,11 +45,14 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 			var teamId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = personId,
-				TeamId = teamId,
-				ExternalLogons = new[] {new ExternalLogon()}
+				new PersonAssociationChangedEvent
+				{
+					PersonId = personId,
+					TeamId = teamId,
+					ExternalLogons = new[] {new ExternalLogon()}
+				}
 			});
 
 			Persister.Models.Single().TeamId.Should().Be(teamId);
@@ -59,12 +65,15 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 			var siteId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = personId,
-				TeamId = Guid.NewGuid(),
-				SiteId = siteId,
-				ExternalLogons = new[] {new ExternalLogon()}
+				new PersonAssociationChangedEvent
+				{
+					PersonId = personId,
+					TeamId = Guid.NewGuid(),
+					SiteId = siteId,
+					ExternalLogons = new[] {new ExternalLogon()}
+				}
 			});
 
 			Persister.Models.Single().SiteId.Should().Be(siteId);
@@ -77,13 +86,16 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 			var businessUnit = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = personId,
-				TeamId = Guid.NewGuid(),
-				SiteId = Guid.NewGuid(),
-				BusinessUnitId = businessUnit,
-				ExternalLogons = new[] {new ExternalLogon()}
+				new PersonAssociationChangedEvent
+				{
+					PersonId = personId,
+					TeamId = Guid.NewGuid(),
+					SiteId = Guid.NewGuid(),
+					BusinessUnitId = businessUnit,
+					ExternalLogons = new[] {new ExternalLogon()}
+				}
 			});
 
 			Persister.Models.Single().BusinessUnitId.Should().Be(businessUnit);
@@ -95,14 +107,17 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 			var personId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = personId,
-				TeamId = Guid.NewGuid(),
-				TeamName = "team",
-				SiteId = Guid.NewGuid(),
-				SiteName = "site",
-				ExternalLogons = new[] {new ExternalLogon()}
+				new PersonAssociationChangedEvent
+				{
+					PersonId = personId,
+					TeamId = Guid.NewGuid(),
+					TeamName = "team",
+					SiteId = Guid.NewGuid(),
+					SiteName = "site",
+					ExternalLogons = new[] {new ExternalLogon()}
+				}
 			});
 
 			Persister.Models.Single().TeamName.Should().Be("team");

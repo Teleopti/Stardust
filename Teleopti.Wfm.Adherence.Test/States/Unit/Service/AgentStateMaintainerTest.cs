@@ -24,15 +24,17 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				TeamId = Guid.NewGuid(),
-				ExternalLogons = new[] { new ExternalLogon() }
+				new PersonAssociationChangedEvent
+				{
+					PersonId = person,
+					TeamId = Guid.NewGuid(),
+					ExternalLogons = new[] {new ExternalLogon()}
+				}
 			});
 
 			Persister.ForPersonId(person).Should().Not.Be.Null();
 		}
-		
 	}
 }

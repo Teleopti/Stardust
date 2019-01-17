@@ -23,13 +23,16 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 			var personId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel {PersonId = personId});
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = personId,
-				TeamId = Guid.NewGuid(),
-				ExternalLogons = new[] {new ExternalLogon()},
-				FirstName = "bill",
-				LastName = "gates"
+				new PersonAssociationChangedEvent
+				{
+					PersonId = personId,
+					TeamId = Guid.NewGuid(),
+					ExternalLogons = new[] {new ExternalLogon()},
+					FirstName = "bill",
+					LastName = "gates"
+				}
 			});
 
 			var model = Persister.Models.Single();

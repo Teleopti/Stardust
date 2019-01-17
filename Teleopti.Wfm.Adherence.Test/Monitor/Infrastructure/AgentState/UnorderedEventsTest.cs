@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -30,7 +31,13 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			var personId = events.OfType<PersonAssociationChangedEvent>().Single().PersonId;
 
-			events.ForEach(e => Target.Handle((dynamic)e));
+			events.ForEach(e =>
+			{
+				if (e is PersonAssociationChangedEvent)
+					Target.Handle(e.AsArray());
+				else
+					Target.Handle((dynamic) e);
+			});
 			
 			var result = UnitOfWork.Get(() => Persister.Load(personId));
 			result.FirstName.Should().Be("Roger");
