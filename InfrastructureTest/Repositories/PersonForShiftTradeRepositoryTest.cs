@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(businessUnit);
 
 			// Handle businessunit change.
-			((TeleoptiIdentity) ClaimsPrincipal.Current.Identity).BusinessUnit = businessUnit;
+			//((ITeleoptiIdentity) ClaimsPrincipal.Current.Identity).ChangeBusinessUnit(businessUnit);
 			Session.EnableFilter("businessUnitFilter").SetParameter("businessUnitParameter", businessUnit.Id.GetValueOrDefault());
 
 			PersistAndRemoveFromUnitOfWork(site);

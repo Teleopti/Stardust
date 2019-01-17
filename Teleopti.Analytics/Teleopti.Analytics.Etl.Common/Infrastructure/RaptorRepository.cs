@@ -1088,7 +1088,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRequestRepository(uow);
-				uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
+				uow.Reassociate(((ITeleoptiIdentityForLegacy)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit());
 				personRequests = rep.FindPersonRequestWithinPeriod(period);
 			}
 			return personRequests;

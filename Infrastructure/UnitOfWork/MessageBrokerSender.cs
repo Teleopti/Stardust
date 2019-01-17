@@ -65,11 +65,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			if (eventMessages.Count > 0)
 			{
-				var businessUnitId = Guid.Empty;
-				var businessUnit = _businessUnit.Current();
-				if (businessUnit != null)
-					businessUnitId = businessUnit.Id.GetValueOrDefault();
-				messageBroker.Send(_dataSource.CurrentName(), businessUnitId, eventMessages.ToArray());
+				messageBroker.Send(
+					_dataSource.CurrentName(), 
+					_businessUnit.CurrentId().GetValueOrDefault(), 
+					eventMessages.ToArray());
 			}
 		}
 

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Helper
 		    var appConnString = new SqlConnectionStringBuilder(identity.DataSource.Application.ConnectionString);
 		    if (identity != null)
 		    {
-			    GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
+			    GlobalContext.Properties["BU"] = identity.BusinessUnitName;
 			    GlobalContext.Properties["DataSource"] = appConnString.DataSource;
 			    GlobalContext.Properties["InitialCatalog"] = appConnString.InitialCatalog;
 		    }
