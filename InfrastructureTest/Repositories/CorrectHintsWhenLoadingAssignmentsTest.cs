@@ -1,10 +1,12 @@
 using System.Text.RegularExpressions;
+using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -45,7 +47,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				}				
 			}
 		}
-
+		
+		[Test]
+		public void ShouldNotCreateHintByDefault()
+		{
+			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				using (var spy = new SqlSpy())
+				{
+					uow.FetchSession().CreateCriteria<PersonAssignment>()
+						.Fetch("ShiftLayers")
+						.List();
+					var log = spy.WholeLog();
+					log.Should().Not.Be.Empty();
+					log.Should().Not.Contain("WITH (");
+				}				
+			}
+		}
+		
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if(_toggle)
