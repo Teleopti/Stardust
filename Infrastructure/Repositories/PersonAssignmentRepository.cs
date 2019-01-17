@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.CreateSQLQuery("SELECT GETDATE()").UniqueResult<DateTime>();
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
+		public IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
 		{
 			InParameter.NotNull(nameof(persons), persons);
 			var retList = new List<IPersonAssignment>();

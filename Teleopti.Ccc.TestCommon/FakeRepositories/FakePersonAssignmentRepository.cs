@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return DateTime.UtcNow;
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
+		public IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
 		{
 			return Find(persons, period, scenario).Where(s => s.Source == source).ToList();
 		}

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		DateTime GetScheduleLoadedTime();
 
-		ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons,
+		IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons,
 			DateOnlyPeriod period,
 			IScenario scenario,
 			string source);
