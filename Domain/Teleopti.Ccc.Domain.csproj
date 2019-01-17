@@ -235,7 +235,6 @@
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
-    <Compile Include="Security\Principal\ITeleoptiPrincipalForLegacy.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
