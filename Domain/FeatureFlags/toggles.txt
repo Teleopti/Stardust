@@ -101,7 +101,7 @@ WFM_AbsenceRequest_ImproveThroughput_79139 = true
 WFM_ProbabilityView_ImproveResponseTime_80040 = true
 WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = false #Dont enable it. It was not a good optimization in Csharp
 WFM_Intraday_OptimizeSkillDayLoad_80153 = RC
-WRM_AbsenceRequest_Robust_Processing_79988= RC
+WRM_AbsenceRequest_Robust_Processing_79988= false
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
