@@ -442,13 +442,20 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			return {
 				x: 'x',
 				xFormat: '%Y-%m-%d %H:%M',
-				columns: [
-					['x'].concat(timeStamps),
-					['ASA'].concat(input.AverageSpeedOfAnswer),
-					['Abandoned_rate'].concat(input.AbandonedRate),
-					['Service_level'].concat(input.ServiceLevel),
-					['ESL'].concat(input.EstimatedServiceLevels)
-				],
+				columns: this.showReforecastedWarning
+					? [
+							['x'].concat(timeStamps),
+							['ASA'].concat(input.AverageSpeedOfAnswer),
+							['Service_level'].concat(input.ServiceLevel),
+							['ESL'].concat(input.EstimatedServiceLevels)
+					  ]
+					: [
+							['x'].concat(timeStamps),
+							['ASA'].concat(input.AverageSpeedOfAnswer),
+							['Abandoned_rate'].concat(input.AbandonedRate),
+							['Service_level'].concat(input.ServiceLevel),
+							['ESL'].concat(input.EstimatedServiceLevels)
+					  ],
 				type: 'area-spline',
 				colors: {
 					ASA: '#99D6FF',
@@ -498,13 +505,20 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			return {
 				x: 'x',
 				xFormat: '%Y-%m-%d %H:%M',
-				columns: [
-					['x'].concat(timeStamps),
-					['Forecasted_staffing'].concat(input.ForecastedStaffing),
-					['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing),
-					['Actual_staffing'].concat(input.ActualStaffing),
-					['Scheduled_staffing'].concat(input.ScheduledStaffing)
-				],
+				columns: this.showReforecastedWarning
+					? [
+							['x'].concat(timeStamps),
+							['Forecasted_staffing'].concat(input.ForecastedStaffing),
+							['Actual_staffing'].concat(input.ActualStaffing),
+							['Scheduled_staffing'].concat(input.ScheduledStaffing)
+					  ]
+					: [
+							['x'].concat(timeStamps),
+							['Forecasted_staffing'].concat(input.ForecastedStaffing),
+							['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing),
+							['Actual_staffing'].concat(input.ActualStaffing),
+							['Scheduled_staffing'].concat(input.ScheduledStaffing)
+					  ],
 				type: 'area-spline',
 				colors: {
 					Forecasted_calls: '#99D6FF',
