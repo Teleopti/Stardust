@@ -58,7 +58,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			
 			Add(new CalculateBadgesJobStep(jobParameters));
 
-			if (jobParameters.ToggleManager.IsEnabled(Toggles.WFM_Insights_78059) && jobParameters.InsightsEnabled)
+			if (jobParameters.ToggleManager.IsEnabled(Toggles.WFM_Insights_80704) && jobParameters.InsightsEnabled)
 			{
 				Add(new TriggerInsightsDataRefreshJobStep(jobParameters, new ServiceBusTopicClientFactory()));
 			}

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_Intraday_Redesign_77214,
 
 		WFM_ChatBot_77547,
-		WFM_Insights_78059,
+		WFM_Insights_80704,
 
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
 		Wfm_Stardust_EnableScaleout_77366,

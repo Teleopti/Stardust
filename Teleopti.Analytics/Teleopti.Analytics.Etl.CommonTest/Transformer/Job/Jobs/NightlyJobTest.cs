@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Jobs
 			if (toggleEnabled)
 			{
 				((JobParametersFactory.FakeContainerHolder) jobParameters.ContainerHolder).EnableToggle(
-					Toggles.WFM_Insights_78059);
+					Toggles.WFM_Insights_80704);
 			}
 
 			var expectedResult = insightsEnabled && toggleEnabled;
