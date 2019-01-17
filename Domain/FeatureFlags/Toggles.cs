@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Domain.FeatureFlags
+namespace Teleopti.Ccc.Domain.FeatureFlags
 {
 	//Yes, yes, I know. This should be named "Toggle" but too many name collisions
 	//with namespaces if changed now.
@@ -68,6 +68,7 @@
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
 		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
+		ResourcePlanner_QueryHintOnLayers_79780,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -118,7 +119,8 @@
 		WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128,
 		WFM_Intraday_OptimizeSkillDayLoad_80153,
 		WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425,
-		ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646
+		ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646,
+		WRM_AbsenceRequest_Robust_Processing_79988
 		// ReSharper restore InconsistentNaming
 	}
 }
