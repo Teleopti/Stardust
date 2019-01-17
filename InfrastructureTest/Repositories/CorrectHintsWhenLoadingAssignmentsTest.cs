@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -15,13 +16,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture(false)]
 	[InfrastructureTest]
 	[Ignore("#79780 To be fixed")]
-	public class CorrectHintsWhenLoadingAssignments : IConfigureToggleManager
+	public class CorrectHintsWhenLoadingAssignmentsTest : IConfigureToggleManager
 	{
 		private readonly bool _toggle;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 
-		public CorrectHintsWhenLoadingAssignments(bool toggle)
+		public CorrectHintsWhenLoadingAssignmentsTest(bool toggle)
 		{
 			_toggle = toggle;
 		}
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldForceSeekHintOnLayersWhenLoadingAssignments()
 		{
+			const string pattern = @"left outer join dbo.ShiftLayer\s+(\S+)\s+WITH \(FORCESEEK\)";
 			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				using (var spy = new SqlSpy())
@@ -38,8 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 					var log = spy.WholeLog();
 					log.Should().Not.Be.Empty();
-					//how reliable and "static" is "shiftlayer2_"? Better to use some regex here...
-					var queryContainsHint = log.Contains("left outer join dbo.ShiftLayer shiftlayer2_ WITH (FORCESEEK)");
+					var queryContainsHint = new Regex(pattern).Match(log).Success;
 					queryContainsHint.Should().Be.EqualTo(_toggle);
 				}				
 			}
