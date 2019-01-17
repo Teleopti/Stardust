@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 
 	[InstancePerLifetimeScope]
-	[EnabledBy(Toggles.WRM_AbsenceRequest_Robust_Processing_79988)]
+	[EnabledBy(Toggles.WFM_AbsenceRequest_Robust_Processing_79988)]
 	public class MultiAbsenceRequestsHandlerRobustToggleOn : IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>,
 		IRunOnStardust
 	{
@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_absenceRequestWaitlistProvider = absenceRequestWaitlistProvider;
 		}
 
+		[AsSystem]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			if (@event.Ids.IsNullOrEmpty())
@@ -209,8 +210,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 	}
 
+
+	[DisabledBy(Toggles.WFM_AbsenceRequest_Robust_Processing_79988)]
 	[InstancePerLifetimeScope]
-	[DisabledBy(Toggles.WRM_AbsenceRequest_Robust_Processing_79988)]
 	public class MultiAbsenceRequestsHandlerRobustToggleOff : IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>,
 		IRunOnStardust
 	{
@@ -243,6 +245,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_absenceRequestWaitlistProvider = absenceRequestWaitlistProvider;
 		}
 
+		[AsSystem]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			_feedback.SendProgress($"Received {@event.PersonRequestIds.Count} Absence Requests.");

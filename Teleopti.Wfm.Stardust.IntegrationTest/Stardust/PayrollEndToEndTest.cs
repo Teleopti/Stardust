@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 		private AssertRetryStrategy _assertRetryStrategy;
 
-		[Test, Ignore("Working on making it pass")]
+		[Test]
 		public void ShouldPublishAndProcessPayrollJob()
 		{
 			_assertRetryStrategy = new AssertRetryStrategy(100);

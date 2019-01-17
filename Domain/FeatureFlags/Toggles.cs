@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_Intraday_OptimizeSkillDayLoad_80153,
 		WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425,
 		ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646,
-		WRM_AbsenceRequest_Robust_Processing_79988
+		WFM_AbsenceRequest_Robust_Processing_79988
 		// ReSharper restore InconsistentNaming
 	}
 }
