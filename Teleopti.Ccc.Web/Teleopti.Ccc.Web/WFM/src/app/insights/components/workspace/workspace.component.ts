@@ -11,6 +11,8 @@ import { Report } from '../../models/Report.model';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
+	private errorNotificationOption = { nzDuration: 0 };
+
 	public initialized: boolean;
 	public isLoading: boolean;
 	public reportNameCriteria: string;
@@ -68,6 +70,8 @@ export class WorkspaceComponent implements OnInit {
 		this.reportSvc.getReports().then(reports => {
 			this.reports = reports.sort();
 			this.isLoading = false;
+		}).catch(error => {
+			this.notification.create('error', 'Failed to load reports', 'Error message: ' + error, this.errorNotificationOption);
 		});
 	}
 
@@ -91,11 +95,10 @@ export class WorkspaceComponent implements OnInit {
 
 		this.isLoading = true;
 		this.reportSvc.createReport(this.newReportName).then(newReport => {
-			this.nav.editReport({
-				Id: newReport.ReportId,
-				Name: newReport.ReportName
-			});
+			this.nav.editReport(newReport.ReportId);
 			return true;
+		}).catch(error => {
+			this.notification.create('error', 'Failed to create report', 'Error message: ' + error, this.errorNotificationOption);
 		});
 
 		this.newReportName = undefined;
@@ -114,6 +117,8 @@ export class WorkspaceComponent implements OnInit {
 		this.reportSvc.cloneReport(report.Id, this.newReportName).then(() => {
 			this.loadReportList();
 			return true;
+		}).catch(error => {
+			this.notification.create('error', 'Failed to clone reports', 'Error message: ' + error, this.errorNotificationOption);
 		});
 
 		this.newReportName = undefined;
@@ -140,13 +145,20 @@ export class WorkspaceComponent implements OnInit {
 
 	public deleteReport(report) {
 		this.isLoading = true;
+		let errorMessage;
 		this.reportSvc.deleteReport(report.Id).then(deleted => {
 			this.isLoading = false;
 			if (deleted) {
 				this.loadReportList();
 			} else {
-				this.notification.create('error', 'Failed to delete report', 'Failed to delete report "' + report.Name + '"');
+				errorMessage = 'Failed to delete report "' + report.Name + '"';
 			}
+		}).catch(error => {
+			errorMessage = 'Error message: ' + error;
 		});
+
+		if (errorMessage && errorMessage.length > 0) {
+			this.notification.create('error', 'Failed to delete report', errorMessage, this.errorNotificationOption);
+		}
 	}
 }

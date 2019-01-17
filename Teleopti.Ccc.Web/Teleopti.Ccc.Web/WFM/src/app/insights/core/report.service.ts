@@ -8,8 +8,7 @@ import { Permission } from '../models/Permission.model';
 
 @Injectable()
 export class ReportService {
-	constructor(private http: HttpClient,
-		private notification: NzNotificationService) { }
+	constructor(private http: HttpClient) { }
 
 	private url_getReportConfig = '../api/Insights/ReportConfig';
 	private url_getReports = '../api/Insights/Reports';
@@ -79,8 +78,7 @@ export class ReportService {
 			.catch(this.handleError);
 	}
 
-	private handleError(error: any): Promise<any> {
-		this.notification.create('error', 'Web access failed', `Error message: "${error.messsage}"`);
-		return Promise.reject(error.message || error);
+	private handleError(errorResponse: any): Promise<any> {
+		return Promise.reject(errorResponse.statusText || errorResponse);
 	}
 }

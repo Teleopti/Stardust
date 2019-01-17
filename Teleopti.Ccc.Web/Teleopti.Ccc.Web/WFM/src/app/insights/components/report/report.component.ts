@@ -17,6 +17,8 @@ export class ReportComponent implements OnInit {
 	private pbiCoreService: any;
 	private action = 'view';
 
+	private errorNotificationOption = { nzDuration: 0 };
+
 	public initialized = false;
 	public isLoading = false;
 	public isProcessing = false;
@@ -70,6 +72,8 @@ export class ReportComponent implements OnInit {
 			}
 
 			this.initialized = true;
+		}).catch(error => {
+			this.notification.create('error', 'Failed to open report', 'Error message: ' + error, this.errorNotificationOption);
 		});
 	}
 
@@ -86,6 +90,8 @@ export class ReportComponent implements OnInit {
 			report.setAccessToken(config.AccessToken).then(function () {
 				self.setTokenExpirationListener(config.Expiration, 2, reportId);
 			});
+		}).catch(error => {
+			console.error('Failed to update token for report, Error message: ' + error, this.errorNotificationOption);
 		});
 	}
 
@@ -156,18 +162,27 @@ export class ReportComponent implements OnInit {
 		this.reportSvc.cloneReport(reportId, this.newReportName).then(newReport => {
 			this.isProcessing = false;
 			this.nav.editReport(newReport.ReportId);
+		}).catch(error => {
+			this.notification.create('error', 'Failed to save as new report', 'Error message: ' + error, this.errorNotificationOption);
 		});
 	}
 
 	public deleteReport(reportId) {
+		let errorMessage;
 		this.isProcessing = true;
 		this.reportSvc.deleteReport(reportId).then(deleted => {
 			this.isProcessing = false;
 			if (deleted) {
 				this.nav.gotoInsights();
 			} else {
-				this.notification.create('error', 'Failed to delete report', 'Failed to delete report "' + this.reportName + '"');
+				errorMessage = 'Failed to delete report "' + this.reportName + '"';
 			}
+		}).catch(error => {
+			errorMessage = 'Error message: ' + error;
 		});
+
+		if (errorMessage && errorMessage.length > 0) {
+			this.notification.create('error', 'Failed to delete report', errorMessage, this.errorNotificationOption);
+		}
 	}
 }
