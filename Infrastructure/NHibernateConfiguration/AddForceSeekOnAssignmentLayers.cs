@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			const string pattern = @"left outer join dbo.ShiftLayer\s+(\S+)\s+";
 			var match = new Regex(pattern).Match(sqlString.ToString());
-			return sqlString.Replace(match.Value, match.Value + "WITH (FORCESEEK)");
+			return sqlString.Replace(match.Value, match.Value + "WITH (FORCESEEK) ");
 		}
 	}
 }
