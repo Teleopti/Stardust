@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		Wfm_Authentication_ChangePasswordMenu_76666,
 		Wfm_User_Password_Reset_74957,
 		Wfm_ReadNotificationConfigurationFromDb_78242,
+		Wfm_AutomaticNotificationEnrollment_79679,
 
 		WfmGlobalLayout_personalOptions_37114,
 
