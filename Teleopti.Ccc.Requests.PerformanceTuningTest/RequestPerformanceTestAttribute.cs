@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			isolate.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
+			isolate.UseTestDouble<MultiAbsenceRequestsHandlerRobustToggleOff>().For<MultiAbsenceRequestsHandlerRobustToggleOff>();
 			isolate.UseTestDouble<MutableNow>().For<INow>();
 		}
 
