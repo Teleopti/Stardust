@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	[TestFixture]
 	public class AdherencesTest
 	{
-		public IAgentAdherenceDayLoader Target;
+		public AgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

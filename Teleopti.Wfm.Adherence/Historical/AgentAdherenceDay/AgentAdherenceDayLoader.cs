@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -12,18 +11,18 @@ using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	public class AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency : IAgentAdherenceDayLoader
+	public class AgentAdherenceDayLoader
 	{
 		private readonly INow _now;
 		private readonly IRtaEventStoreReader _eventStore;
 		private readonly RtaEventStoreTypeIdMapper _typeIdMapper;
 		private readonly IJsonEventSerializer _serializer;
-		private readonly IScheduleLoader _scheduleLoader;
+		private readonly ScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
 
-		public AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency(
+		public AgentAdherenceDayLoader(
 			INow now,
-			IScheduleLoader scheduleLoader,
+			ScheduleLoader scheduleLoader,
 			IPersonRepository persons,
 			IRtaEventStoreReader eventStore,
 			RtaEventStoreTypeIdMapper typeIdMapper,
@@ -37,25 +36,25 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			_serializer = serializer;
 		}
 
-		public IAgentAdherenceDay Load(Guid personId, DateOnly date) => load(personId, date, DateTime.MaxValue.Utc());
+		public AgentAdherenceDay Load(Guid personId, DateOnly date) => load(personId, date, DateTime.MaxValue.Utc());
 
-		public IAgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date) => load(personId, date, _now.UtcDateTime());
+		public AgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date) => load(personId, date, _now.UtcDateTime());
 
-		private IAgentAdherenceDay load(Guid personId, DateOnly date, DateTime until)
+		private AgentAdherenceDay load(Guid personId, DateOnly date, DateTime until)
 		{
 			var person = _persons.Load(personId);
 
 			var time = TimeZoneInfo.ConvertTimeToUtc(date.Date, person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc);
 			var period = new DateTimePeriod(time, time.AddDays(1));
 			var events = _eventStore.Load(personId, date);
-			var saga = new AgentAdherenceDaySpeedUpRemoveScheduleDependency(until, period, () => shiftFromSchedule(personId, date));
+			var saga = new AgentAdherenceDay(until, period, () => shiftFromSchedule(personId, date));
 
 			applyAndVerboseLogErrors(events, saga);
 
 			return saga;
 		}
 
-		private void applyAndVerboseLogErrors(IEnumerable<IEvent> events, AgentAdherenceDaySpeedUpRemoveScheduleDependency saga)
+		private void applyAndVerboseLogErrors(IEnumerable<IEvent> events, AgentAdherenceDay saga)
 		{
 			try
 			{

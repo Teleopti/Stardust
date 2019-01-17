@@ -13,19 +13,19 @@ namespace Teleopti.Wfm.Adherence.Historical
 	public class HistoricalAdherenceViewModelBuilder
 	{
 		private readonly IPersonRepository _persons;
-		private readonly IScheduleLoader _schedule;
+		private readonly ScheduleLoader _schedule;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
+		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly int _displayPastDays;
 
 		public HistoricalAdherenceViewModelBuilder(
 			IPersonRepository persons,
-			IScheduleLoader schedule,
+			ScheduleLoader schedule,
 			INow now,
 			IUserTimeZone timeZone,
 			IConfigReader config,
-			IAgentAdherenceDayLoader agentAdherenceDayLoader
+			AgentAdherenceDayLoader agentAdherenceDayLoader
 		)
 		{
 			_persons = persons;

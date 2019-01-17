@@ -9,7 +9,8 @@ using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	public class AgentAdherenceDaySpeedUpRemoveScheduleDependency : IAgentAdherenceDay
+	// change type of ApprovedPeriods() to AdherencePeriod when removing toggle RTA_ReviewHistoricalAdherence_74770
+	public class AgentAdherenceDay
 	{
 		private readonly DateTime _now;
 		private readonly DateTimePeriod _fullDay;
@@ -29,7 +30,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private int? _secondsInAdherence;
 		private int? _secondsOutOfAdherence;
 
-		public AgentAdherenceDaySpeedUpRemoveScheduleDependency(
+		public AgentAdherenceDay(
 			DateTime now,
 			DateTimePeriod fullDay,
 			Func<DateTimePeriod?> shiftFromSchedule

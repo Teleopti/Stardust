@@ -7,14 +7,14 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	public class ScheduleLoaderHistoricalOverview : IScheduleLoader
+	public class ScheduleLoader
 	{
 		private readonly IPersonRepository _persons;
 		private readonly IBusinessUnitRepository _businessUnits;
 		private readonly IScenarioRepository _scenarios;
 		private readonly IScheduleStorage _scheduleStorage;
 
-		public ScheduleLoaderHistoricalOverview(
+		public ScheduleLoader(
 			IPersonRepository persons,
 			IBusinessUnitRepository businessUnits,
 			IScenarioRepository scenarios,

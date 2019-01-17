@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ApprovePeriodAsInAdherence
 	public class RemoveApprovedPeriodTest
 	{
 		public FakeDatabase Database;
-		public IAgentAdherenceDayLoader Target;
+		public AgentAdherenceDayLoader Target;
 
 		[Test]
 		public void ShouldRemove()

@@ -149,12 +149,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
-			if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))
-				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else
-				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveLastBefore>().As<IAgentAdherenceDayLoader>().SingleInstance();
-
-			builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
+			builder.RegisterType<AgentAdherenceDayLoader>().SingleInstance();
+			builder.RegisterType<ScheduleLoader>().SingleInstance();
 
 			builder.RegisterType<AdherenceDayStartEventPublisher>().SingleInstance();
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();

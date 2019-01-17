@@ -22,12 +22,11 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 	[Explicit]
 	[Category("LongRunning")]
 	[DatabaseTest]
-	[Toggle(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485)]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class MeasureEventStoreTest
 	{
 		public ConcurrencyRunner Run;
-		public IAgentAdherenceDayLoader Loader;
+		public AgentAdherenceDayLoader Loader;
 		public IEventPublisher Publisher;
 		public Database Database;
 		public WithUnitOfWork Uow;
