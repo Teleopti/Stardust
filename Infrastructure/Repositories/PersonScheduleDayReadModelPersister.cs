@@ -59,7 +59,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public int SaveReadModel(PersonScheduleDayReadModel model, bool initialLoad)
 		{
-			logger.Debug($"Trying to save model PersonScheduleDayReadModel on date {model.BelongsToDate} for person {model.PersonId}, Start {model.Start}, End {model.End}, LoadedScheduleTime {model.ScheduleLoadTimestamp}");
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug($"Trying to save model PersonScheduleDayReadModel on date {model.BelongsToDate} for person {model.PersonId}, Start {model.Start}, End {model.End}, LoadedScheduleTime {model.ScheduleLoadTimestamp}");
+			}
 
 			var updatedCount = _currentUnitOfWork.Session().CreateSQLQuery(
 				$@"EXEC ReadModel.UpdatePersonScheduleDay 
@@ -82,7 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetDateTime(nameof(model.ScheduleLoadTimestamp), model.ScheduleLoadTimestamp)
 				.SetBoolean(nameof(initialLoad), initialLoad)
 				.SetParameter(nameof(model.Version), model.Version)
-				.List<int>().FirstOrDefault();
+				.UniqueResult<int?>() ?? 0;
 			return updatedCount;
 		}
 

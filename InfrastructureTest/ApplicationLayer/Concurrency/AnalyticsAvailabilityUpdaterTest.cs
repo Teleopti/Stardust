@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 {
 	[Category("BucketB")]
-	[MultiDatabaseTestAttribute]
+	[MultiDatabaseTest]
 	public class AnalyticsAvailabilityUpdaterTest
 	{
 		public AnalyticsAvailabilityUpdater Target;
