@@ -101,14 +101,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 											select COUNT(*) NumberOfRequests, t.BelongsToDate 
 											from (
 											SELECT distinct sp.PersonId, sp.BelongsToDate
-											from Absence a
+											from Absence a WITH (NOLOCK)
 											inner join ReadModel.ScheduleProjectionReadOnly sp 
 											on a.Id = sp.PayloadId
-											inner join BudgetAbsenceCollection bd
+											inner join BudgetAbsenceCollection bd WITH (NOLOCK)
 											on bd.Absence = a.Id
-											inner join Person p
+											inner join Person p WITH (NOLOCK)
 											on sp.PersonId = p.Id
-											inner join PersonPeriod pp
+											inner join PersonPeriod pp WITH (NOLOCK)
 											on pp.Parent = p.Id
 											and pp.BudgetGroup = :budgetGroupId
 											and :currentDate BETWEEN pp.StartDate and pp.EndDate
