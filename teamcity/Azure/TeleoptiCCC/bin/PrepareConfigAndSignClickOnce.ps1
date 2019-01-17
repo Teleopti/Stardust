@@ -399,11 +399,6 @@ Try
 		Remove-Item "$tempTogglesFile"
 	}
 
-    if (Test-Path "$directory\$deltaToggleFile"){
-    Update-ToggleByDelta -DeltaToggleFile "$directory\$deltaToggleFile" -ToggleFile "$fullPathTogglesFileForWeb"
-    Update-ToggleByDelta -DeltaToggleFile "$directory\$deltaToggleFile" -ToggleFile "$fullPathTogglesFileForRta"
-    }
-	
 	SetDefaultSettings -fullPathsettingsFile "$fullPathsettingsFile" -DataSourceName "$DataSourceName"
 	
 	#Try to get machine key from BlogStorage, if cannot, support tool will generate one, and save back to BlogStorage at a later step, hope no other instance comes to this step before we save the first one.
