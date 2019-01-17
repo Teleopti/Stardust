@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		}
 
 		[AnalyticsUnitOfWork]
-		public virtual void Execute(IPerson person, DateOnly date, Dictionary<IScenario, IScheduleDictionary> schedules,
+		public virtual void Execute(IPerson person, DateOnly date, Func<Dictionary<IScenario, IScheduleDictionary>> schedules,
 			IEnumerable<IStudentAvailabilityDay> availabilityDays)
 		{
 			var analyticsDate = getAnalyticsDate(date);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 
 			// There should be only one record, but may exists multiple (Refer to bug #76978).
 			var availabilityDay = availabilityDays.OrderByDescending(x=>x.UpdatedOn).First();
-			foreach (var schedule in schedules)
+			foreach (var schedule in schedules())
 			{
 				var scheduledDay = schedule.Value[person].ScheduledDay(date);
 				var scheduledTime = scheduledWorkTime(scheduledDay);
