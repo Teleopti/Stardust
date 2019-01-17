@@ -25,7 +25,7 @@ export interface IntradayPerformanceSummaryItem {
 	Heading: string;
 	AverageSpeedOfAnswer: number;
 	ServiceLevel: number;
-	AbandonRate: number;
+	AbandonRate?: number;
 	EstimatedServiceLevel: number;
 }
 

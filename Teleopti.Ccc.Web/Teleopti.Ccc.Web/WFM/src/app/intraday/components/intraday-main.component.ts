@@ -483,15 +483,24 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	private performanceDataToSummaryData(input: IntradayPerformanceSummaryData): IntradayPerformanceSummaryItem[] {
 		if (input) {
-			return [
-				{
-					Heading: this.translate.instant('Average'),
-					ServiceLevel: input.ServiceLevel * 100,
-					EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
-					AbandonRate: input.AbandonRate,
-					AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
-				}
-			];
+			return this.showReforecastedWarning
+				? [
+						{
+							Heading: this.translate.instant('Average'),
+							ServiceLevel: input.ServiceLevel * 100,
+							EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
+							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
+						}
+				  ]
+				: [
+						{
+							Heading: this.translate.instant('Average'),
+							ServiceLevel: input.ServiceLevel * 100,
+							EstimatedServiceLevel: input.EstimatedServiceLevel * 100,
+							AbandonRate: input.AbandonRate,
+							AverageSpeedOfAnswer: input.AverageSpeedOfAnswer
+						}
+				  ];
 		} else {
 			return undefined;
 		}
