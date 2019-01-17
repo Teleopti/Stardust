@@ -293,6 +293,7 @@
 
 .preference {
 	height: 20px;
+	text-align: center;
 }
 .preference-text {
 	float: left;
@@ -352,29 +353,14 @@
 
 .calendarview-week li .loading-small-gray-blue {
 	position: absolute;
-	top: 20px;
-	right: 0;
+	top: 26px;
+	left: 50%;
 	height: 20px;
 	width: 20px;
+	transform: translateX(-50%);
 }
 .header-week-day {
 	min-height: 17px;
-}
-
-.day-header-text {
-	font-size: 12px;
-	height: 14px;
-	width: auto;
-	padding-top: 1px;
-	padding-right: 3px;
-	padding-left: 3px;
-	padding-bottom: 2px;
-	border-radius: 0;
-}
-
-.day-header-left {
-	margin-top: 2px;
-	margin-left: 2px;
 }
 
 .day-header-right {
@@ -387,6 +373,7 @@
 	height: 14px;
 	width: auto;
 	border-radius: 3px;
+	text-align: center;
 }
 
 .feedback-error {

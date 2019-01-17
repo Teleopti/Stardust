@@ -33,19 +33,44 @@
 .calendarview-week li {
 	font-size: 12px;
 	display: inline-block;
-	height: 87px;
+	height: 93px;
 	vertical-align: top;
 	width: 130px;
+	border-bottom: 1px solid #dfdfdf;
 }
 .ie7 .calendarview-week li {
 	zoom: 1;
 	display: inline;
 } /* IE7 inline-block fix */
-
+.day-header-month,
+.day-header-day {
+	font-size: 13px;
+	height: 22px;
+	width: 22px;
+	text-align: center;
+	line-height: 1;
+	margin: 2px;
+	padding: 3px 0;
+	border-radius: 50%;
+	border: 1px solid #00afff;
+	background: #00afff;
+	color: white;
+	cursor: default;
+}
+.day-header-month {
+	width: auto;
+	text-align: center;
+	padding: 2px;
+	border-radius: 3px;
+}
+.bank-holiday-day-shape.day-header-day {
+	border-color: red;
+	background: red;
+	cursor: pointer;
+}
 .calendarview-week li div.day-content {
 	background-color: white;
 }
-
 .calendarview-week .today {
 	background-position: 0 -1600px;
 	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
@@ -55,29 +80,30 @@
 	border-bottom: none;
 	background: gray;
 }
-.calendarview-week li.ui-selected .day-header-text {
-	background-color: #bce8f1;
-	color: white;
-	text-shadow: none;
+.calendarview-week li.ui-selected .day-header-day {
+	opacity: 0.3;
 }
 .calendarview-week li .day-header {
 	background-color: white;
-	line-height: 19px;
-	min-height: 19px;
+	line-height: 26px;
+	min-height: 26px;
 	border-bottom: none;
 }
 .calendarview-week .today .day-header {
 	background-color: gray;
 }
-
-.calendarview-week li.non-editable {
-	background-color: #eaeaea;
-	border-bottom: none;
-}
-.calendarview-week li.non-editable .day-header-text {
-	background-color: #9ccc33;
-	color: white;
+.calendarview-week li.non-editable .day-header-month,
+.calendarview-week li.non-editable .day-header-day {
 	text-shadow: none;
+	border-color: #555;
+	background: #fff;
+	opacity: 0.5;
+	color: black;
+}
+.calendarview-week li.non-editable .bank-holiday-day-shape.day-header-day {
+	background: red;
+	border-color: red;
+	color: white;
 }
 .calendarview-week li.non-editable .day-content-text {
 	color: black;

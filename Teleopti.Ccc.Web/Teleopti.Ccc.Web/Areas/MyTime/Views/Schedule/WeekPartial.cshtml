@@ -140,7 +140,7 @@ Layout = null;
 		<div class="week-schedule-ASM-permission-granted" data-bind="if : asmEnabled">yes</div>
 		<div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
 		<div class="body-weekview-inner clearfix">
-			<div class="weekview-timeline floatleft">
+			<div class="weekview-timeline floatleft clearfix">
 				<div class="weekview-day-time-indicator-small absolute">
 				</div>
 				<!-- ko foreach: timeLines -->
@@ -152,8 +152,8 @@ Layout = null;
 			<div class="weekview-day" data-bind="attr: {'data-mytime-date': fixedDate, 'data-mytime-state': state, 'data-mytime-dayofweek': dayOfWeek}">
 				<div class="weekview-day-header" data-bind="text: headerTitle"></div>
 				<div class="weekview-day-date clearfix">
-					<label class="weekview-day-month pull-left badge day-header-text" data-bind="text: headerDayDescription"></label>
-					<label class="weekview-day-dayofmonth pull-right badge day-header-text" data-bind="text: headerDayNumber"></label>
+					<label class="weekview-day-month pull-left badge day-header-month" data-bind="text: headerDayDescription"></label>
+					<label class="pull-right badge day-header-day" data-bind="text: headerDayNumber"></label>
 				</div>
 				<div data-bind="css: { 'show-request': requestPermission}, attr: { 'class': classForDaySummary },
 		            style: { backgroundColor: colorForDaySummary, color: textColor }, click: $parent.showAddRequestForm"
@@ -201,7 +201,7 @@ Layout = null;
 					</div>
 					<!-- /ko -->
 				</div>
-				<div>
+				<div class="weekview-day-schedule-container">
 					<div class="weekview-day-schedule relative" data-bind="style: {width: probabilities().length > 0 ? '116px' : '127px'}">
 						<div class="weekview-day-time-indicator relative" data-bind="style: {width: probabilities().length > 0 ? '114px' : '129px'}">
 						</div>

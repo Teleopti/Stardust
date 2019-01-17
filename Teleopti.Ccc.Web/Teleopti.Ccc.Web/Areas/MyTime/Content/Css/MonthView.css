@@ -61,12 +61,12 @@
 	text-align: center;
 }
 
-.cal-month-day .date-number {
+.cal-month-day .day-header-day {
 	position: absolute;
 	right: 0;
 	top: 0;
-	margin-right: 2px;
-	margin-top: 2px;
+	box-shadow: 0 0 1px 1px #dfdfdf;
+	cursor: pointer;
 }
 
 .cal-month-box [class*='cal-cell'] {
@@ -96,20 +96,6 @@
 	border-radius: 2px;
 }
 
-span[data-cal-date] {
-	font-size: 1.2em;
-	font-weight: normal;
-	opacity: 0.5;
-	cursor: pointer;
-	transition: all 0.3s ease-in-out;
-	-webkit-transition: all 0.1s ease-in-out;
-	-moz-transition: all 0.1s ease-in-out;
-	-ms-transition: all 0.1s ease-in-out;
-	-o-transition: all 0.1s ease-in-out;
-	margin-top: 15px;
-	margin-right: 15px;
-}
-
 .cal-day-outmonth {
 	opacity: 0.3;
 }
@@ -130,6 +116,49 @@ span[data-cal-date] {
 }
 .cal-month-day .absence .overtime {
 	padding: 0;
+}
+
+@media print {
+	.cal-month-day .visible-lg {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-xs {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-sm {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-md {
+		display: none !important;
+	}
+
+	.cal-month-day .label-default {
+		background-color: transparent !important;
+		border: none;
+	}
+
+	.cal-month-day .label {
+		color: black !important;
+	}
+
+	.cal-month-day span {
+		opacity: 1 !important;
+	}
+
+	* {
+		transition: none !important;
+	}
+
+	.cal-month-day .day-header-day {
+		color: #fff !important;
+	}
+
+	.label-default {
+		background-color: transparent !important;
+	}
 }
 
 .cal-weekday-header {

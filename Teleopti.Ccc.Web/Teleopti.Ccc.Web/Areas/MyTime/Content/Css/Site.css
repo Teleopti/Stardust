@@ -1570,49 +1570,6 @@ ul.select2-results li ul li.select2-result.select2-highlighted {
 .m-b-10 {
 	margin-bottom: 10px;
 }
-@media print {
-	.cal-month-day .visible-lg {
-		display: block !important;
-	}
-
-	.cal-month-day .hidden-xs {
-		display: block !important;
-	}
-
-	.cal-month-day .hidden-sm {
-		display: block !important;
-	}
-
-	.cal-month-day .hidden-md {
-		display: none !important;
-	}
-
-	.cal-month-day .label-default {
-		background-color: transparent !important;
-		border: none;
-	}
-
-	.cal-month-day .label {
-		color: black !important;
-	}
-
-	.cal-month-day span {
-		opacity: 1 !important;
-	}
-
-	* {
-		transition: none !important;
-	}
-
-	.cal-month-day .date-number {
-		color: #000 !important;
-	}
-
-	.label-default {
-		background-color: transparent !important;
-	}
-}
-
 .fab {
 	position: fixed;
 	bottom: 15px;
