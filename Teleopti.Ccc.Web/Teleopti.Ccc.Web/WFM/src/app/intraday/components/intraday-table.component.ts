@@ -16,6 +16,9 @@ export class IntradayTableComponent {
 	tableData: IntradayTrafficSummaryItem[] | IntradayPerformanceSummaryItem[];
 
 	public get hideAbandonRate(): boolean {
-		return (this.tableData as IntradayPerformanceSummaryItem[])[0].AbandonRate === undefined;
+		return (
+			(this.tableData as IntradayPerformanceSummaryItem[])[0] &&
+			(this.tableData as IntradayPerformanceSummaryItem[])[0].AbandonRate === undefined
+		);
 	}
 }
