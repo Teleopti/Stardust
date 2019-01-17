@@ -244,13 +244,10 @@
 	}
 
 	note-editor {
-		.md-tab {
-			text-transform: none;
-		}
-
 		textarea {
 			width: 100%;
 			min-height: 200px;
+			background: $white;
 		}
 	}
 
@@ -1050,12 +1047,6 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-}
-
-note-editor {
-	md-tabs .md-tab {
-		color: #d1d1d1;
-	}
 }
 
 .staffing-panel {
