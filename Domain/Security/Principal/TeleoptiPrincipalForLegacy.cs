@@ -6,9 +6,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public interface ITeleoptiPrincipalForLegacy
+	public static class TeleoptiPrincipalForLegacyExtensions
 	{
-		IPerson UnsafePerson { get; }
+		public static IPerson UnsafePerson(this ITeleoptiPrincipalForLegacy instance)
+		{
+			return instance.UnsafePersonObject() as IPerson;
+		}
 	}
 
 	public class TeleoptiPrincipalForLegacy : GenericPrincipal, ITeleoptiPrincipal, ITeleoptiPrincipalForLegacy
@@ -51,6 +54,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public IEnumerable<ClaimSet> ClaimSets => _claimsOwner.ClaimSets;
 		public void AddClaimSet(ClaimSet claimSet) => _claimsOwner.AddClaimSet(claimSet);
 
-		IPerson ITeleoptiPrincipalForLegacy.UnsafePerson => _person;
+		object ITeleoptiPrincipalForLegacy.UnsafePersonObject() => _person;
 	}
 }
