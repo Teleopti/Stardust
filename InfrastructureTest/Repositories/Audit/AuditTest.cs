@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				session.Save(PersonAssignment.ShiftCategory);
 				session.Save(PersonAssignment.MainActivities().First().Payload);
 				session.Save(PersonAbsence.Layer.Payload);
-				new PersonAssignmentRepository(uow).Add(PersonAssignment);
+				new PersonAssignmentRepository(new ThisUnitOfWork(uow)).Add(PersonAssignment);
 				session.Save(PersonAbsence);
 				session.Save(DayOffTemplate);
 				session.Save(MultiplicatorDefinitionSet);

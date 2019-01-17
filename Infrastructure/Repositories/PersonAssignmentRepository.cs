@@ -16,13 +16,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository,
 		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
 	{
-		public PersonAssignmentRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
 		public PersonAssignmentRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{

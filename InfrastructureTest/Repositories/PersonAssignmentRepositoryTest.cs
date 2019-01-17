@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void ConcreteSetup()
 		{
 			_dummyCat = ShiftCategoryFactory.CreateShiftCategory("dummyCat");
-			_rep = new PersonAssignmentRepository(UnitOfWork);
+			_rep = new PersonAssignmentRepository(CurrUnitOfWork);
 			_dummyActivity = new Activity("dummy") {DisplayColor = Color.DodgerBlue};
 			PersistAndRemoveFromUnitOfWork(_dummyActivity);
 			_dummyAgent = PersonFactory.CreatePerson("m");
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			TestRepository(CurrUnitOfWork).Add(ass);
 			Session.Flush();
 
-			IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
+			IPersonAssignment loaded = new PersonAssignmentRepository(CurrUnitOfWork).LoadAggregate(ass.Id.Value);
 			Assert.AreEqual(ass.Id, loaded.Id);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
 		}
@@ -97,10 +97,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadGraphByKey()
 		{
 			IPersonAssignment ass = CreateAggregateWithCorrectBusinessUnit();
-			new PersonAssignmentRepository(UnitOfWork).Add(ass);
+			new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
 			Session.Flush();
 	
-			IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(new PersonAssignmentKey
+			IPersonAssignment loaded = new PersonAssignmentRepository(CurrUnitOfWork).LoadAggregate(new PersonAssignmentKey
 			{
 				Date = ass.Date,
 				Scenario = ass.Scenario,
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(noHit2);
 			var noHit3 = new PersonAssignment(_dummyAgent2, _dummyScenario, new DateOnly(1900, 1, 1));
 			PersistAndRemoveFromUnitOfWork(noHit3);
-			var loaded = new PersonAssignmentRepository(UnitOfWork).FetchDatabaseVersions(new DateOnlyPeriod(1880, 1, 1, 1910, 1, 1), _dummyScenario, _dummyAgent);
+			var loaded = new PersonAssignmentRepository(CurrUnitOfWork).FetchDatabaseVersions(new DateOnlyPeriod(1880, 1, 1, 1910, 1, 1), _dummyScenario, _dummyAgent);
 			var assLoaded = loaded.Single();
 			assLoaded.Id.Should().Be.EqualTo(ass.Id.Value);
 		}
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyLoadGraphByIdReturnsNullIfNotExists()
 		{
-			IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(Guid.NewGuid());
+			IPersonAssignment loaded = new PersonAssignmentRepository(CurrUnitOfWork).LoadAggregate(Guid.NewGuid());
 			Assert.IsNull(loaded);
 		}
 
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldCreateRepositoryWithUnitOfWorkFactory()
 		{
-			IPersonAssignmentRepository personAssignmentRepository = new PersonAssignmentRepository(UnitOfWork);
+			IPersonAssignmentRepository personAssignmentRepository = new PersonAssignmentRepository(CurrUnitOfWork);
 			Assert.IsNotNull(personAssignmentRepository);
 		}
 
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldCheckIfAnyAgentsScheduled()
 		{
 			var ass = CreateAggregateWithCorrectBusinessUnit();
-			new PersonAssignmentRepository(UnitOfWork).Add(ass);
+			new PersonAssignmentRepository(CurrUnitOfWork).Add(ass);
 
 			var buWithoutAgentScheduled = new BusinessUnit("businessUnit");
 			PersistAndRemoveFromUnitOfWork(buWithoutAgentScheduled);
