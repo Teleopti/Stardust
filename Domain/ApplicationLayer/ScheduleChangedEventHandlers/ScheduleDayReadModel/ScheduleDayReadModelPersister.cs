@@ -1,4 +1,7 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -30,33 +33,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			if (!message.IsDefaultScenario) return;
 
 			var person = _personRepository.Get(message.PersonId);
+			var newReadModelDicByDate = message.ScheduleDays
+			.ToDictionary(scheduleDay => new DateOnly(scheduleDay.Date), scheduleDay => _scheduleDayReadModelsCreator.GetReadModel(scheduleDay, person));
 
-			foreach (var denormalizedScheduleDay in message.ScheduleDays)
+			if (message.IsDefaultScenario && !message.IsInitialLoad)
+				_teamScheduleWeekViewChangeCheck.InitiateNotify(new ScheduleChangeForWeekViewEvent
+				{
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+					LogOnDatasource = message.LogOnDatasource,
+					Person = person,
+					NewReadModels = newReadModelDicByDate
+				});
+
+			newReadModelDicByDate.ForEach(readModel =>
 			{
-				var date = new DateOnly(denormalizedScheduleDay.Date);
+				var date = readModel.Key;
 				var dateOnlyPeriod = new DateOnlyPeriod(date, date);
-
-				var readModel = _scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay, person);
-
 				if (!message.IsInitialLoad)
 				{
-
-					_notificationValidationCheck.InitiateNotify(readModel, date, person);
-
-					if (message.IsDefaultScenario)
-						_teamScheduleWeekViewChangeCheck.InitiateNotify(new ScheduleChangeForWeekViewEvent
-						{
-							LogOnBusinessUnitId = message.LogOnBusinessUnitId,
-							LogOnDatasource = message.LogOnDatasource,
-							Date = date,
-							Person = person,
-							NewReadModel = readModel
-						});
-
+					_notificationValidationCheck.InitiateNotify(readModel.Value, readModel.Key, person);
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}
-				_scheduleDayReadModelRepository.SaveReadModel(readModel);
-			}
+				_scheduleDayReadModelRepository.SaveReadModel(readModel.Value);
+			});
+
+
 		}
 	}
 }

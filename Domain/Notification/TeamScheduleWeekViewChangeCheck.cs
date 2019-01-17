@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
@@ -31,20 +33,27 @@ namespace Teleopti.Ccc.Domain.Notification
 		[EnabledBy(Toggles.WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242)]
 		public void InitiateNotify(ScheduleChangeForWeekViewEvent @event)
 		{
-			if (IsRelevantChange(@event.Date, @event.Person, @event.NewReadModel))
+			var dates = @event.NewReadModels
+				.Where(readModel => IsRelevantChange(readModel.Key, @event.Person, readModel.Value))
+				.Select(readModel => readModel.Key.Date);
+
+			if (dates.Any())
 			{
+				var changedDates = dates.ToList();
+				changedDates.Sort();
+
 				_messageBroker.Send(
-					@event.LogOnDatasource,
-					@event.LogOnBusinessUnitId,
-					@event.Date.Date,
-					@event.Date.Date,
-					Guid.Empty,
-					@event.Person.Id.GetValueOrDefault(),
-					typeof(Person),
-					Guid.Empty,
-					typeof(ITeamScheduleWeekViewChangedInDefaultScenario),
-					DomainUpdateType.NotApplicable,
-					null);
+						@event.LogOnDatasource,
+						@event.LogOnBusinessUnitId,
+						changedDates.First(),
+						changedDates.Last(),
+						Guid.Empty,
+						@event.Person.Id.GetValueOrDefault(),
+						typeof(Person),
+						Guid.Empty,
+						typeof(ITeamScheduleWeekViewChangedInDefaultScenario),
+						DomainUpdateType.NotApplicable,
+						null);
 			}
 		}
 
@@ -61,8 +70,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 	public class ScheduleChangeForWeekViewEvent : EventWithLogOnContext
 	{
-		public DateOnly Date { get; set; }
 		public IPerson Person { get; set; }
-		public ScheduleDayReadModel NewReadModel { get; set; }
+		public IDictionary<DateOnly, ScheduleDayReadModel> NewReadModels { get; set; }
 	}
 }

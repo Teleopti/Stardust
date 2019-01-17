@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
@@ -56,9 +57,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var @event = new ScheduleChangeForWeekViewEvent
 			{
-				Date = date,
 				Person = person,
-				NewReadModel = newReadModel,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
@@ -92,9 +92,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var @event = new ScheduleChangeForWeekViewEvent
 			{
-				Date = date,
 				Person = person,
-				NewReadModel = newReadModel,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
@@ -128,9 +127,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var @event = new ScheduleChangeForWeekViewEvent
 			{
-				Date = date,
 				Person = person,
-				NewReadModel = newReadModel,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
@@ -164,9 +162,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var @event = new ScheduleChangeForWeekViewEvent
 			{
-				Date = date,
 				Person = person,
-				NewReadModel = newReadModel,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
@@ -202,15 +199,134 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var @event = new ScheduleChangeForWeekViewEvent
 			{
-				Date = date,
 				Person = person,
-				NewReadModel = newReadModel,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
 			Target.InitiateNotify(@event);
 
 			MessageBrokerComposite.GetMessages().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldSendOnlyOneMessageWithCorrectStartAndEndIfTheScheduleChangesIsRelevantChangeForServeralDays()
+		{
+			var person = PersonFactory.CreatePerson("person", "1");
+			var newReadModel = new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 16, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 16, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = true,
+				Date = new DateOnly(2019, 01, 16).Date,
+				Label = "Early"
+			};
+			var newReadModelNextDay = new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 17, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 17, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = true,
+				Date = new DateOnly(2019, 01, 17).Date,
+				Label = "Early"
+			};
+
+			FakeScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 16, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 16, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = true,
+				Date = new DateOnly(2019, 01, 16).Date,
+				Label = "Late"
+			});
+			FakeScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 17, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 17, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = true,
+				Date = new DateOnly(2019, 01, 17).Date,
+				Label = "Late"
+			});
+
+			var @event = new ScheduleChangeForWeekViewEvent
+			{
+				Person = person,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> {
+					{ new DateOnly(2019, 01, 16), newReadModel },
+					{ new DateOnly(2019, 01, 17), newReadModelNextDay }
+				},
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+
+			Target.InitiateNotify(@event);
+
+			MessageBrokerComposite.GetMessages().Single().StartDate.Should().Be.EqualTo("D2019-01-16T00:00:00");
+			MessageBrokerComposite.GetMessages().Single().EndDate.Should().Be.EqualTo("D2019-01-17T00:00:00");
+
+		}
+
+		[Test]
+		public void ShouldSendMessageWithCorrectStartAndEndIfServeralDaysScheduleAreChangedButOnlySomeOfThemHasRelevantChange()
+		{
+			var person = PersonFactory.CreatePerson("person", "1");
+			var newReadModel = new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 16, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 16, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = true,
+				Date = new DateOnly(2019, 01, 16).Date,
+				Label = "Early"
+			};
+			var newReadModelNextDay = new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 17, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 17, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = true,
+				Date = new DateOnly(2019, 01, 17).Date,
+				Label = "Early"
+			};
+
+			FakeScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 16, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 16, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = true,
+				Date = new DateOnly(2019, 01, 16).Date,
+				Label = "Late"
+			});
+			FakeScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 17, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 17, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = true,
+				Date = new DateOnly(2019, 01, 17).Date,
+				Label = "Early"
+			});
+
+			var @event = new ScheduleChangeForWeekViewEvent
+			{
+				Person = person,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> {
+					{ new DateOnly(2019, 01, 16), newReadModel },
+					{ new DateOnly(2019, 01, 17), newReadModelNextDay }
+				},
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+
+			Target.InitiateNotify(@event);
+
+			MessageBrokerComposite.GetMessages().Single().StartDate.Should().Be.EqualTo("D2019-01-16T00:00:00");
+			MessageBrokerComposite.GetMessages().Single().EndDate.Should().Be.EqualTo("D2019-01-16T00:00:00");
+
 		}
 
 		[Test]
@@ -238,9 +354,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var @event = new ScheduleChangeForWeekViewEvent
 			{
-				Date = date,
 				Person = person,
-				NewReadModel = newReadModel,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = Guid.NewGuid()
 			};
@@ -276,9 +391,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var @event = new ScheduleChangeForWeekViewEvent
 			{
-				Date = date,
 				Person = person,
-				NewReadModel = newReadModel,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
 				LogOnDatasource = "Teleopti",
 				LogOnBusinessUnitId = buId
 			};
