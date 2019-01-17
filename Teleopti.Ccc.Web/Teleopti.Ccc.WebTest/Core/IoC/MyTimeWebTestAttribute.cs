@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 		public IAuthorizationScope AuthorizationScope;
 		public IAuthorization Authorization;
+		public IPrincipalFactory PrincipalFactory;
 		public IThreadPrincipalContext PrincipalContext;
 		public FakeDataSourceForTenant DataSourceForTenant;
 		public IDataSourceScope DataSourceScope;
@@ -145,16 +147,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				_loggedOnPerson.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
 				_loggedOnPerson.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
 
-				var principal = new TeleoptiPrincipalForLegacy(
-					new TeleoptiIdentity(
-						"Fake Login",
-						DataSourceForTenant.Tenant(DefaultTenantName),
-						new BusinessUnit("loggedOnBu").WithId(),
-						null,
-						null
-					),
-					_loggedOnPerson);
-
+				var principal = PrincipalFactory.MakePrincipal(
+					_loggedOnPerson,
+					DataSourceForTenant.Tenant(DefaultTenantName),
+					new BusinessUnit("loggedOnBu").WithId(),
+					null
+				);
 				PrincipalContext.SetCurrentPrincipal(principal);
 			}
 			else

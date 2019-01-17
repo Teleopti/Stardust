@@ -13,15 +13,6 @@ namespace Teleopti.Ccc.DomainTest.Security.License
 		public IApplicationFunctionsProvider ApplicationFunctions;
 
 		[Test]
-		public void ShouldEnableModifyAdherence()
-		{
-			var actual = ApplicationFunctions.AllFunctions();
-
-			actual.FindByFunctionPath(DefinedRaptorApplicationFunctionPaths.ModifyAdherence)
-				.IsLicensed.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldEnableManageRealTimeAdherence()
 		{
 			var actual = ApplicationFunctions.AllFunctions();
@@ -54,6 +45,24 @@ namespace Teleopti.Ccc.DomainTest.Security.License
 			var actual = ApplicationFunctions.AllFunctions();
 
 			actual.FindByFunctionPath(DefinedRaptorApplicationFunctionPaths.HistoricalOverview)
+				.IsLicensed.Should().Be.True();
+		}
+		
+		[Test]
+		public void ShouldEnableModifyAdherence()
+		{
+			var actual = ApplicationFunctions.AllFunctions();
+
+			actual.FindByFunctionPath(DefinedRaptorApplicationFunctionPaths.ModifyAdherence)
+				.IsLicensed.Should().Be.True();
+		}
+		
+		[Test]
+		public void ShouldEnableAdjustAdherence()
+		{
+			var actual = ApplicationFunctions.AllFunctions();
+
+			actual.FindByFunctionPath(DefinedRaptorApplicationFunctionPaths.AdjustAdherence)
 				.IsLicensed.Should().Be.True();
 		}
 	}

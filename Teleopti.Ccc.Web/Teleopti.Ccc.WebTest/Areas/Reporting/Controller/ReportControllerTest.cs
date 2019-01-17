@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 			var currentBusinessUnit = new FakeCurrentBusinessUnit();
 			currentBusinessUnit.FakeBusinessUnit(businessUnit);
 
-			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", new FakeDataSource
+			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", new FakeDataSource
 			{
 				Analytics = new FakeAnalyticsUnitOfWorkFactory {ConnectionString = ""}
 

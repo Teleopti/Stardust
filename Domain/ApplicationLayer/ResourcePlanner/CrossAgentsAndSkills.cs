@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				foreach (var island in allIslands)
 				{
-					var islandAgents = island.AgentsInIsland();
+					var islandAgents = island.AgentsInIsland().ToHashSet();
 					if (islandAgents.Contains(selectedAgent))
 					{
 						foreach (var agentId in islandAgents.Select(x => x.Id.Value))

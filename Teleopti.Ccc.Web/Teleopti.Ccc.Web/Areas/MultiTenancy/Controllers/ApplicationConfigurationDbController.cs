@@ -24,22 +24,14 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[HttpGet, Route("Configuration/TryGetServerValue")]
 		public virtual IHttpActionResult TryGetServerValue(string key, string defaultValue)
 		{
-			if (Enum.TryParse<ServerConfigurationKey>(key, out var serverConfigurationKey))
-			{
-				return Ok(_appConfig.TryGetServerValue(serverConfigurationKey, defaultValue));
-			}
-			return Ok(defaultValue);
+			return Ok(_appConfig.TryGetServerValue(key, defaultValue));
 		}
 
 		[TenantUnitOfWork]
 		[HttpGet, Route("Configuration/TryGetTenantValue")]
 		public virtual IHttpActionResult TryGetTenantValue(string key, string defaultValue)
 		{
-			if (Enum.TryParse<TenantApplicationConfigKey>(key, out var tenatConfigurationKey))
-			{
-				return Ok(_appConfig.TryGetTenantValue(tenatConfigurationKey, defaultValue));
-			}
-			return Ok(defaultValue);
+			return Ok(_appConfig.TryGetTenantValue(key, defaultValue));
 		}
 	}
 }

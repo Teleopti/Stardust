@@ -7,21 +7,21 @@ import { NavigationService as NavigationServiceCore } from './../../core/service
 export class NavigationService {
 	constructor(private navService: NavigationServiceCore) {}
 
-	public viewReport(report) {
-		this.openReport(report, 'view');
+	public viewReport(reportId) {
+		this.openReport(reportId, 'view');
 	}
 
-	public editReport(report) {
-		this.openReport(report, 'edit');
+	public editReport(reportId) {
+		this.openReport(reportId, 'edit');
 	}
 
 	public gotoInsights() {
 		this.navService.go('insights');
 	}
 
-	openReport(report, action) {
+	openReport(reportId, action) {
 		const parameters = {
-			report: report,
+			reportId: reportId,
 			action: action
 		};
 		this.navService.go('insights.report', parameters);

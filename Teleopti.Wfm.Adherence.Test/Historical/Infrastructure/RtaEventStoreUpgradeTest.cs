@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 	{
 		public IRtaEventStore Events;
 		public IRtaEventStoreTester EventsT;
-		public IRtaEventStoreUpgrader Target;
+		public RtaEventStoreUpgrader Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public Database Database;
 		public ILogOnOffContext Context;

@@ -3,19 +3,7 @@ using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.States
 {
-	public interface IAdherenceDayStartEventPublisher
-	{
-		void Publish(Context context);
-	}
-
-	public class NoAdherenceDayStartEventPublisher : IAdherenceDayStartEventPublisher
-	{
-		public void Publish(Context context)
-		{
-		}
-	}
-
-	public class AdherenceDayStartEventPublisher : IAdherenceDayStartEventPublisher
+	public class AdherenceDayStartEventPublisher
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
 

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	
 	public class SubscriptionRegistrator
 	{
-		private readonly IList<Type> subscriptions = new List<Type>();
+		private readonly HashSet<Type> subscriptions = new HashSet<Type>();
 
 		public void SubscribeTo<T>() where T : IEvent
 		{

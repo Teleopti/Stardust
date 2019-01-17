@@ -2,135 +2,349 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
+using Teleopti.Wfm.Adherence.Historical.Events;
+using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	public class AgentAdherenceDay : IAgentAdherenceDay
+	public class AgentAdherenceDay
 	{
-		private Guid _personId;
-		private DateTimePeriod _period;
-		private IEnumerable<HistoricalChangeModel> _changes;
-		private IEnumerable<DateTimePeriod> _outOfAdherences;
-		private IEnumerable<DateTimePeriod> _recordedOutOfAdherences;
-		private IEnumerable<DateTimePeriod> _approvedPeriods;
-		private int? _percentage;
+		private readonly DateTime _now;
+		private readonly DateTimePeriod _fullDay;
+		private readonly Func<DateTimePeriod?> _shiftFromSchedule;
 
-		public void Load(
-			Guid personId,
+		private DateTimePeriod? _collectedShift;
+		private readonly IList<openPeriod> _collectedApprovedPeriods = new List<openPeriod>();
+		private readonly IList<HistoricalChangeModel> _collectedChanges = new List<HistoricalChangeModel>();
+
+		private DateTimePeriod? _calculatedDisplayPeriod;
+		private IEnumerable<AdherencePeriod> _calculatedRecordedOutOfAdherences;
+		private IEnumerable<AdherencePeriod> _calculatedOutOfAdherences;
+		private IEnumerable<AdherencePeriod> _calculatedApprovedPeriods;
+		private IEnumerable<HistoricalChangeModel> _calculatedChanges;
+
+		private int? _adherencePercentage;
+		private int? _secondsInAdherence;
+		private int? _secondsOutOfAdherence;
+
+		public AgentAdherenceDay(
 			DateTime now,
-			DateTimePeriod period,
-			DateTimePeriod? shift,
-			IEnumerable<HistoricalChangeModel> changes,
-			IEnumerable<ApprovedPeriod> approvedPeriods)
+			DateTimePeriod fullDay,
+			Func<DateTimePeriod?> shiftFromSchedule
+		)
 		{
-			_personId = personId;
-			_period = period;
-			_changes = buildChanges(changes, period);
-			now = floorToSeconds(now);
-
-			_approvedPeriods = approvedPeriods.Select(a => new DateTimePeriod(a.StartTime, a.EndTime)).ToArray();
-			_recordedOutOfAdherences = buildPeriods(HistoricalChangeAdherence.Out, changes, now);
-
-			var recordedNeutralAdherences = buildPeriods(HistoricalChangeAdherence.Neutral, changes, now);
-
-			_outOfAdherences = subtractPeriods(_recordedOutOfAdherences, _approvedPeriods);
-
-			var neutralAdherences = subtractPeriods(recordedNeutralAdherences, _approvedPeriods);
-			var outOfAhderencesWithinShift = withinShift(shift, _outOfAdherences);
-			var neutralAdherencesWithinShift = withinShift(shift, neutralAdherences);
-
-			_percentage = new AdherencePercentageCalculator().Calculate(shift, neutralAdherencesWithinShift, outOfAhderencesWithinShift, now);
+			_fullDay = fullDay;
+			_shiftFromSchedule = shiftFromSchedule;
+			_now = floorToSeconds(now);
 		}
 
-		private static IEnumerable<HistoricalChangeModel> buildChanges(IEnumerable<HistoricalChangeModel> changes, DateTimePeriod period) =>
+		public DateTimePeriod DisplayPeriod() => _calculatedDisplayPeriod.GetValueOrDefault();
+		public IEnumerable<HistoricalChangeModel> Changes() => _calculatedChanges;
+		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() => _calculatedRecordedOutOfAdherences.ToArray();
+		public IEnumerable<AdherencePeriod> ApprovedPeriods() => _calculatedApprovedPeriods;
+		public IEnumerable<AdherencePeriod> OutOfAdherences() => _calculatedOutOfAdherences;
+		public int? Percentage() => _adherencePercentage;
+		public int? SecondsInAdherence() => _secondsInAdherence;
+		public int? SecondsOutOfAdherence() => _secondsOutOfAdherence;
+
+		public void Apply(PersonShiftStartEvent @event) => applyShift(@event);
+		public void Apply(PersonShiftEndEvent @event) => applyShift(@event);
+		public void Apply(PersonAdherenceDayStartEvent @event) => applySolidProof(@event);
+		public void Apply(PersonStateChangedEvent @event) => applySolidProof(@event);
+		public void Apply(PersonRuleChangedEvent @event) => applySolidProof(@event);
+
+		public void Apply(PersonArrivedLateForWorkEvent @event)
+		{
+			var model = applySolidProof(@event);
+			if (model != null)
+				model.LateForWorkMinutes = (int) Math.Round(new DateTimePeriod(@event.ShiftStart, @event.Timestamp).ElapsedTime().TotalMinutes);
+		}
+
+		public void Apply(PeriodApprovedAsInAdherenceEvent @event) =>
+			_collectedApprovedPeriods.Add(new openPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
+
+		public void Apply(ApprovedPeriodRemovedEvent @event) =>
+			_collectedApprovedPeriods.Remove(new openPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
+
+		public void ApplyDone() => calculate();
+
+		private void applyShift(dynamic @event) =>
+			_collectedShift = new DateTimePeriod(@event.ShiftStartTime, @event.ShiftEndTime);
+
+		private HistoricalChangeModel applySolidProof(ISolidProof @event)
+		{
+			// move duplication check and duration sum to calculate?
+			var lastProof = _collectedChanges.LastOrDefault();
+			if (lastProof != null && !isSameProof(lastProof, @event))
+				lastProof.Duration = floorToSeconds(@event.Timestamp).Subtract(floorToSeconds(lastProof.Timestamp)).ToString();
+
+			var needNewProof = (lastProof == null || !isSameProof(lastProof, @event));
+			if (needNewProof)
+			{
+				var proof = createProof(@event);
+				_collectedChanges.Add(proof);
+				return proof;
+			}
+
+			lastProof.Timestamp = @event.Timestamp;
+			return lastProof;
+		}
+
+		private static HistoricalChangeModel createProof(ISolidProof @event)
+		{
+			return new HistoricalChangeModel
+			{
+				StateName = @event.StateName,
+				ActivityName = @event.ActivityName,
+				ActivityColor = @event.ActivityColor,
+				RuleName = @event.RuleName,
+				RuleColor = @event.RuleColor,
+				Adherence = convertAdherence(@event.Adherence),
+				Timestamp = @event.Timestamp
+			};
+		}
+
+		private static bool isSameProof(HistoricalChangeModel model, ISolidProof @event) =>
+			model.Timestamp == @event.Timestamp &&
+			model.ActivityName == @event.ActivityName &&
+			model.ActivityColor == @event.ActivityColor &&
+			model.StateName == @event.StateName &&
+			model.RuleColor == @event.RuleColor &&
+			model.RuleName == @event.RuleName &&
+			model.Adherence == convertAdherence(@event.Adherence);
+
+		private void calculate()
+		{
+			var shift = calculateShift(_collectedShift, _shiftFromSchedule);
+			_calculatedDisplayPeriod = calculatePeriod(_fullDay, shift);
+			_calculatedChanges = calculateChanges(_collectedChanges, _calculatedDisplayPeriod.Value);
+
+			var recordedOutOfAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Out);
+
+			_calculatedRecordedOutOfAdherences = calculateRecordedOutOfAdherences(recordedOutOfAdherences);
+			_calculatedOutOfAdherences = calculateOutOfAdherences(recordedOutOfAdherences, _collectedApprovedPeriods);
+			_calculatedApprovedPeriods = calculateApprovedPeriods(_collectedApprovedPeriods);
+
+			if (!shift.HasValue)
+				return;
+
+			var recordedNeutralAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral);
+
+			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, recordedOutOfAdherences, recordedNeutralAdherences, _collectedApprovedPeriods);
+			_secondsOutOfAdherence = calculateSecondsOutOfAdherence(shift.Value, recordedOutOfAdherences, _collectedApprovedPeriods);
+			_adherencePercentage = AdherencePercentageCalculation.Calculate(_secondsInAdherence, _secondsOutOfAdherence);
+		}
+
+		private static DateTimePeriod? calculateShift(DateTimePeriod? shift, Func<DateTimePeriod?> shiftFromSchedule) =>
+			shift ?? shiftFromSchedule.Invoke();
+
+		private static DateTimePeriod calculatePeriod(DateTimePeriod fullDay, DateTimePeriod? shift) =>
+			shift == null ? fullDay : new DateTimePeriod(shift.Value.StartDateTime.AddHours(-1), shift.Value.EndDateTime.AddHours(1));
+
+		private static IEnumerable<HistoricalChangeModel> calculateChanges(IEnumerable<HistoricalChangeModel> changes, DateTimePeriod displayPeriod) =>
 			changes
-				.Where(x => period.ContainsPart(x.Timestamp))
-				.GroupBy(y => new
-				{
-					y.Timestamp,
-					y.ActivityName,
-					y.ActivityColor,
-					y.StateName,
-					y.RuleColor,
-					y.RuleName,
-					y.Adherence
-				})
-				.Select(x => x.First())
+				.Where(x => x.Timestamp >= displayPeriod.StartDateTime && x.Timestamp <= displayPeriod.EndDateTime)
 				.ToArray();
 
-		private class periodAccumulator
+		private static IEnumerable<openPeriod> calculateAdherences(DateTimePeriod displayPeriod, DateTime now, IEnumerable<HistoricalChangeModel> changes, HistoricalChangeAdherence adherence)
+		{
+			var adherences = buildPeriods(adherence, changes, displayPeriod);
+			closeOpenPeriod(displayPeriod, now, adherences);
+			adherences = removeTinyPeriods(adherences);
+			adherences = mergeAdjacentPeriods(adherences);
+			adherences = intersectsWithPeriod(displayPeriod, adherences);
+			return adherences;
+		}
+
+		private static IEnumerable<openPeriod> buildPeriods(HistoricalChangeAdherence adherence, IEnumerable<HistoricalChangeModel> changes, DateTimePeriod period)
+		{
+			var result = changes
+				.Select(change => new
+				{
+					Timestamp = floorToSeconds(change.Timestamp),
+					periodStarting = change.Adherence == adherence
+				})
+				.TransitionsOf(x => x.periodStarting)
+				.Aggregate(new List<openPeriod>(), (periods, change) =>
+				{
+					if (change.periodStarting)
+					{
+						DateTime? startTime = null;
+						if (change.Timestamp > period.StartDateTime)
+							startTime = change.Timestamp;
+						periods.Add(new openPeriod(startTime, null));
+					}
+					else if (periods.Any())
+						periods.Last().EndTime = change.Timestamp;
+
+					return periods;
+				});
+
+			return result;
+		}
+
+		private static void closeOpenPeriod(DateTimePeriod displayPeriod, DateTime now, IEnumerable<openPeriod> periods)
+		{
+			var period = periods.LastOrDefault();
+			if (period == null) return;
+			if (period.EndTime != null) return;
+			if (now > displayPeriod.EndDateTime) return;
+			period.EndTime = now;
+		}
+
+		private static IEnumerable<openPeriod> removeTinyPeriods(IEnumerable<openPeriod> periods) =>
+			(from p in periods
+				let openStart = p.StartTime == null
+				let openEnd = p.EndTime == null
+				let isNotTiny = p.EndTime - p.StartTime >= TimeSpan.FromSeconds(1)
+				where openStart || openEnd || isNotTiny
+				select p
+			).ToArray();
+
+		private static IEnumerable<openPeriod> mergeAdjacentPeriods(IEnumerable<openPeriod> periods) =>
+			periods.Aggregate(new List<openPeriod>(), (acc, i) =>
+			{
+				var lastPeriod = acc.LastOrDefault();
+				if (lastPeriod != null && lastPeriod.EndTime.Value == i.StartTime)
+					lastPeriod.EndTime = i.EndTime;
+				else
+					acc.Add(i);
+				return acc;
+			});
+
+		private static IEnumerable<AdherencePeriod> calculateRecordedOutOfAdherences(IEnumerable<openPeriod> recordedOutOfAdherences) =>
+			recordedOutOfAdherences
+				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
+				.ToArray();
+
+		private static IEnumerable<AdherencePeriod> calculateOutOfAdherences(IEnumerable<openPeriod> recordedOutOfAdherences, IEnumerable<openPeriod> approvedPeriods) =>
+			subtractPeriods(recordedOutOfAdherences, approvedPeriods)
+				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
+				.ToArray();
+
+		private static IEnumerable<AdherencePeriod> calculateApprovedPeriods(IEnumerable<openPeriod> approvedPeriods) =>
+			approvedPeriods
+				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
+				.ToArray();
+
+		private static int? calculateSecondsInAdherence(
+			DateTimePeriod shift,
+			DateTime now,
+			IEnumerable<openPeriod> outOfAdherences,
+			IEnumerable<openPeriod> neutralAdherences,
+			IEnumerable<openPeriod> approvedPeriods)
+		{
+			outOfAdherences = intersectsWithPeriod(shift, outOfAdherences);
+			outOfAdherences = subtractPeriods(outOfAdherences, approvedPeriods);
+			neutralAdherences = intersectsWithPeriod(shift, neutralAdherences);
+			neutralAdherences = subtractPeriods(neutralAdherences, approvedPeriods);
+
+			var timeOut = timeInShift(shift, outOfAdherences);
+			var timeNeutral = timeInShift(shift, neutralAdherences);
+
+			var calculateUntil = new[] {now, shift.EndDateTime}.Min();
+			var shiftTime = calculateUntil - shift.StartDateTime;
+			var timeIn = shiftTime - timeOut - timeNeutral;
+
+			return Convert.ToInt32(timeIn.TotalSeconds);
+		}
+
+		private static int? calculateSecondsOutOfAdherence(DateTimePeriod shift, IEnumerable<openPeriod> outOfAdherences, IEnumerable<openPeriod> approvedPeriods)
+		{
+			outOfAdherences = intersectsWithPeriod(shift, outOfAdherences);
+			outOfAdherences = subtractPeriods(outOfAdherences, approvedPeriods);
+			var timeOut = timeInShift(shift, outOfAdherences);
+			return Convert.ToInt32(timeOut.TotalSeconds);
+		}
+
+		private static TimeSpan timeInShift(DateTimePeriod shift, IEnumerable<openPeriod> periods)
+		{
+			var seconds = from p in periods
+				let startTime = (p.StartTime ?? DateTime.MinValue).Utc()
+				let endTime = (p.EndTime ?? DateTime.MaxValue).Utc()
+				let dateTimePeriod = new DateTimePeriod(startTime, endTime)
+				let intersection = shift.Intersection(dateTimePeriod)
+				where intersection != null
+				let t = intersection.Value.EndDateTime - intersection.Value.StartDateTime
+				select t.TotalSeconds;
+			return TimeSpan.FromSeconds(seconds.Sum());
+		}
+
+		private static IEnumerable<openPeriod> intersectsWithPeriod(DateTimePeriod period, IEnumerable<openPeriod> periods) =>
+			(from p in periods
+				let startTime = p.StartTime ?? DateTime.MinValue
+				let endTime = p.EndTime ?? DateTime.MaxValue
+				let endsBeforePeriodStarts = endTime < period.StartDateTime
+				let startsAfterPeriodEnds = startTime > period.EndDateTime
+				where !endsBeforePeriodStarts && !startsAfterPeriodEnds
+				select p
+			)
+			.ToArray();
+
+		private static DateTime floorToSeconds(DateTime dateTime) => dateTime.Truncate(TimeSpan.FromSeconds(1));
+
+		private static HistoricalChangeAdherence? convertAdherence(EventAdherence? adherence) =>
+			adherence != null ? (HistoricalChangeAdherence?) Enum.Parse(typeof(HistoricalChangeAdherence), adherence.ToString()) : null;
+
+		// refact into something we can understand
+		private static IEnumerable<openPeriod> subtractPeriods(IEnumerable<openPeriod> periods, IEnumerable<openPeriod> toSubtract) =>
+			toSubtract
+				.Aggregate(periods, (ps, approved) =>
+					ps.Aggregate(Enumerable.Empty<openPeriod>(), (r, recorded) =>
+						{
+							var recordedDateTimePeriod = new DateTimePeriod((recorded.StartTime ?? DateTime.MinValue).Utc(), (recorded.EndTime ?? DateTime.MaxValue).Utc());
+							var approvedDateTimePeriod = new DateTimePeriod(approved.StartTime.Value.Utc(), approved.EndTime.Value.Utc());
+							var subtractedDateTimePeriods = recordedDateTimePeriod.Subtract(approvedDateTimePeriod);
+							var subtracted = subtractedDateTimePeriods.Select(x =>
+							{
+								var start = x.StartDateTime == DateTime.MinValue ? (DateTime?) null : x.StartDateTime;
+								var end = x.EndDateTime == DateTime.MaxValue ? (DateTime?) null : x.EndDateTime;
+								return new openPeriod(start, end);
+							});
+							return r.Concat(subtracted);
+						}
+					)
+				)
+				.ToArray();
+
+		private class openPeriod
 		{
 			public DateTime? StartTime;
-			public readonly IList<DateTimePeriod> Periods = new List<DateTimePeriod>();
-		}
+			public DateTime? EndTime;
 
-		private static IEnumerable<DateTimePeriod> buildPeriods(HistoricalChangeAdherence adherence, IEnumerable<HistoricalChangeModel> adherenceChanges, DateTime now)
-		{
-			var result = adherenceChanges
-				.TransitionsOf(x => x.Adherence)
-				.Aggregate(new periodAccumulator(), (a, model) =>
+			public openPeriod()
+			{
+			}
+
+			public openPeriod(DateTime? startTime, DateTime? endTime)
+			{
+				StartTime = startTime;
+				EndTime = endTime;
+			}
+			
+			protected bool Equals(openPeriod other)
+			{
+				return StartTime.Equals(other.StartTime) && EndTime.Equals(other.EndTime);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if (ReferenceEquals(null, obj)) return false;
+				if (ReferenceEquals(this, obj)) return true;
+				if (obj.GetType() != this.GetType()) return false;
+				return Equals((openPeriod) obj);
+			}
+
+			public override int GetHashCode()
+			{
+				unchecked
 				{
-					var timestamp = floorToSeconds(model.Timestamp);
+					return (StartTime.GetHashCode() * 397) ^ EndTime.GetHashCode();
+				}
+			}
 
-					if (model.Adherence == adherence)
-						a.StartTime = timestamp;
-					else
-					{
-						if (a.StartTime != null && a.StartTime != timestamp)
-							a.Periods.Add(new DateTimePeriod(a.StartTime.Value, timestamp));
-						a.StartTime = null;
-					}
-
-					return a;
-				});
-			if (result.StartTime.HasValue && result.StartTime != now)
-				result.Periods.Add(new DateTimePeriod(result.StartTime.Value, now));
-
-			return result.Periods;
-		}
-
-		private static DateTime floorToSeconds(DateTime dateTime) =>
-			dateTime.AddMilliseconds(-dateTime.Millisecond);
-
-		private static IEnumerable<DateTimePeriod> subtractPeriods(IEnumerable<DateTimePeriod> periods, IEnumerable<DateTimePeriod> toSubtract) =>
-			toSubtract
-				.Aggregate(periods, (rs, approved) => rs.Aggregate(Enumerable.Empty<DateTimePeriod>(), (r, recorded) => r.Concat(recorded.Subtract(approved))))
-				.ToArray();
-
-		private static IEnumerable<DateTimePeriod> withinShift(DateTimePeriod? shift, IEnumerable<DateTimePeriod> periods) =>
-			periods
-				.Where(x => shift.HasValue)
-				.Where(x => shift.Value.Intersect(x))
-				.Select(x => shift.Value.Intersection(x).Value)
-				.ToArray();
-
-		public DateTimePeriod DisplayPeriod() => _period;
-		public IEnumerable<HistoricalChangeModel> Changes() => _changes;
-
-		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() =>
-			_recordedOutOfAdherences.Select(x => new AdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})
-				.ToArray();
-
-		public IEnumerable<ApprovedPeriod> ApprovedPeriods() =>
-			_approvedPeriods.Select(x => new ApprovedPeriod {PersonId = _personId, StartTime = x.StartDateTime, EndTime = x.EndDateTime})
-				.ToArray();
-
-		public IEnumerable<AdherencePeriod> OutOfAdherences() =>
-			_outOfAdherences
-				.Select(x => new AdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})
-				.ToArray();
-
-		public int? Percentage() => _percentage;
-		
-		public int? SecondsInAdherence()
-		{
-			throw new NotImplementedException();
-		}
-
-		public int? SecondsOutOfAdherence()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

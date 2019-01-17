@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Inject, Injectable } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
+import { NzNotificationService } from 'ng-zorro-antd';
 
 import { Report } from '../../models/Report.model';
 import { Permission } from '../../models/Permission.model';
@@ -24,17 +25,20 @@ export class ReportComponent implements OnInit {
 	public isConfirmingClone = false;
 	public newReportName: string = undefined;
 
-	public report: Report;
+	public reportId: string;
+	public reportName: string;
 	public permission: Permission;
 
 	constructor(
 		@Inject('$state') private $state: IStateService,
 		private reportSvc: ReportService,
-		public nav: NavigationService) {
+		public nav: NavigationService,
+		private notification: NzNotificationService) {
 
 		const params = $state.params;
-		this.report = params.report;
+		this.reportId = params.reportId;
 		this.action = params.action;
+
 		this.inEditing = this.action === 'edit';
 		this.permission = new Permission();
 		this.permission.CanViewReport = true;
@@ -49,7 +53,7 @@ export class ReportComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		if (!this.report) {
+		if (!this.reportId) {
 			return;
 		}
 
@@ -58,7 +62,7 @@ export class ReportComponent implements OnInit {
 			this.permission = permission;
 
 			if (this.permission.CanViewReport) {
-				this.reportSvc.getReportConfig(this.report.Id).then(config => {
+				this.reportSvc.getReportConfig(this.reportId).then(config => {
 					this.loadReport(config);
 				});
 			} else {
@@ -102,6 +106,8 @@ export class ReportComponent implements OnInit {
 	}
 
 	loadReport(config) {
+		this.reportName = config.ReportName;
+
 		// Refer to https://github.com/Microsoft/PowerBI-JavaScript/wiki/Embed-Configuration-Details for more details
 		const embedConfig = {
 			type: 'report',
@@ -142,28 +148,25 @@ export class ReportComponent implements OnInit {
 		this.isConfirmingClone = false;
 	}
 
-	public cloneReport(report) {
+	public cloneReport(reportId) {
 		if (!this.newReportName || this.newReportName.trim().length === 0) return;
 
 		this.isConfirmingClone = false;
 		this.isProcessing = true;
-		this.reportSvc.cloneReport(report.Id, this.newReportName).then(newReport => {
+		this.reportSvc.cloneReport(reportId, this.newReportName).then(newReport => {
 			this.isProcessing = false;
-			this.nav.editReport({
-				Id: newReport.ReportId,
-				Name: newReport.ReportName,
-			});
+			this.nav.editReport(newReport.ReportId);
 		});
 	}
 
-	public deleteReport(report) {
+	public deleteReport(reportId) {
 		this.isProcessing = true;
-		this.reportSvc.deleteReport(report.Id).then(deleted => {
+		this.reportSvc.deleteReport(reportId).then(deleted => {
 			this.isProcessing = false;
 			if (deleted) {
 				this.nav.gotoInsights();
 			} else {
-				console.log('Failed to delete report "' + report.Name + '"');
+				this.notification.create('error', 'Failed to delete report', 'Failed to delete report "' + this.reportName + '"');
 			}
 		});
 	}

@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 											  {
 												  StartDateTime = completeIntervalPeriod.StartDateTime,
 												  EndDateTime = completeIntervalPeriod.EndDateTime,
-												  SkillCombination = allSkills.ToArray(),
+												  SkillCombination = allSkills.ToHashSet(),
 												  Resource = resources.Value
 											  });
 								 });

@@ -160,6 +160,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, "xxModifyAdherence", DefinedRaptorApplicationFunctionForeignIds.ModifyAdherence);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.HistoricalOverview, "xxHistoricalOverview", DefinedRaptorApplicationFunctionForeignIds.HistoricalOverview);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AdjustAdherence, "xxAdjustAdherence", DefinedRaptorApplicationFunctionForeignIds.AdjustAdherence);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPlans, "xxPlans", DefinedRaptorApplicationFunctionForeignIds.WebPlans);

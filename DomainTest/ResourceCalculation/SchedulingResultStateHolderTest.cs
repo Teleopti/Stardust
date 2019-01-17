@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateOnly date1 = new DateOnly(2008, 2, 2);
             DateOnly date2 = new DateOnly(2008, 2, 3);
             DateOnly date3 = new DateOnly(2008, 2, 4);
-            IList<DateOnly> dateOnlys = new List<DateOnly> { date1, date2 };
+            var dateOnlys = new HashSet<DateOnly> { date1, date2 };
             ISkill skill = mocks.StrictMock<ISkill>();
 
             ISkillDay skillDay1 = mocks.StrictMock<ISkillDay>();

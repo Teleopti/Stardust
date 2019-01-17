@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		public void FillResult(HintResult validationResult, SchedulePostHintInput input)
 		{
 			var schedules = input.Schedules;
-			var agents = input.People;
+			var agents = input.People.ToHashSet();
 			var period = input.Period;
 			foreach (var item in schedules)
 			{

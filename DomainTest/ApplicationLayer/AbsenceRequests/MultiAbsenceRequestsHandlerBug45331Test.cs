@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public MultiAbsenceRequestsHandler Target;
+		public MultiAbsenceRequestsHandlerRobustToggleOff Target;
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepositoryThrowsLockException PersonAssignmentRepository;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
+			isolate.UseTestDouble<MultiAbsenceRequestsHandlerRobustToggleOff>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			isolate.UseTestDouble<FakePersonAssignmentRepositoryThrowsLockException>().For<IPersonAssignmentRepository>();
 			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();

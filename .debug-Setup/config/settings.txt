@@ -49,8 +49,3 @@ _replace_|c:\InfraTest.ini
 #VERSION#|1.0.0.0
 $(InstrumentationKey)|
 $(GrantBotDirectLineSecret)|4iLsDqwxH7w.cwA.GSo.KqnAG1hrW3hA4QIE7rCt4cFl3qnXN0lBybxUMh7MSTw
-$(AzureTenantId)|449a67e9-4f23-4e75-8bcc-f32dd77cefe0
-$(PowerBIClientId)|ecbaf7f5-dd3e-4ff0-9879-dab34b5a1c05
-$(PowerBIGroupId)|2801e9f0-6a69-439b-91ea-9f924b38f4a6
-$(PowerBIUserName)|SrvPMNextGenPowerBI@teleopti.com
-$(PowerBIPassword)|_46+Tf2UBA\~q&amp;ZX

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             if (skill.MidnightBreakOffset  > TimeSpan.Zero)
             {
                 var previousDay = dateOnly.AddDays(-1);
-                var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new[] { previousDay });
+                var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new HashSet<DateOnly> { previousDay });
                 foreach (var skillDay in skillDays)
                 {
                     if (skillDay.Skill != skill) continue;

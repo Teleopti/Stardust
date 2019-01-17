@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Wfm.Adherence.States;
-using Teleopti.Wfm.Adherence.States.Events;
 using Teleopti.Wfm.Adherence.States.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
@@ -191,33 +190,6 @@ ORDER BY [Id] ASC
 					.SetParameter("personId", personId)
 					.SetParameter("date", date.Date)
 			);
-
-		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp, DeadLockVictim deadLockVictim)
-		{
-			_deadLockVictimPriority.Specify(deadLockVictim);
-
-			return loadEvents(_unitOfWork.Current().Session()
-					.CreateSQLQuery(@"
-SELECT TOP 1 
-	[Type],
-	[Event] 
-FROM 
-	[rta].[Events] WITH (NOLOCK)
-WHERE 
-	[Type] IN (:Types) AND
-	PersonId = :PersonId AND 
-	[EndTime] < :Timestamp
-ORDER BY [Id] DESC
-")
-					.SetParameterList("Types", new[]
-					{
-						_typeMapper.EventTypeId<PersonStateChangedEvent>(),
-						_typeMapper.EventTypeId<PersonRuleChangedEvent>(),
-					})
-					.SetParameter("PersonId", personId)
-					.SetParameter("Timestamp", timestamp))
-				.SingleOrDefault();
-		}
 
 		public LoadedEvents LoadForSynchronization(long fromEventId)
 		{

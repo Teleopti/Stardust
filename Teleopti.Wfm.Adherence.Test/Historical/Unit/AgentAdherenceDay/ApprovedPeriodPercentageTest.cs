@@ -14,7 +14,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	[TestFixture]
 	public class ApprovedPeriodPercentageTest
 	{
-		public IAgentAdherenceDayLoader Target;
+		public AgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

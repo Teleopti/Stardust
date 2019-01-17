@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			return _fakeConfig;
 		}
 
-		public string TryGetServerValue(ServerConfigurationKey key, string defaultValue = "") => 
+		public string TryGetServerValue(string key, string defaultValue = "") => 
 			_fakeConfig.Server.TryGetValue(key.ToString(), out var value) ? value : defaultValue;
 
-		public string TryGetTenantValue(TenantApplicationConfigKey key, string defaultValue = "") => 
+		public string TryGetTenantValue(string key, string defaultValue = "") => 
 			_fakeConfig.Tenant.TryGetValue(key.ToString(), out var value) ? value : defaultValue;
 	}
 }

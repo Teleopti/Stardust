@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
 
-			var teleoptiPrincipal = new TeleoptiPrincipalForLegacy(identity, person);
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
 			teleoptiPrincipal.AddClaimSet(claimSet);
 
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
 
-			var teleoptiPrincipal = new TeleoptiPrincipalForLegacy(identity, person);
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
 			teleoptiPrincipal.AddClaimSet(claimSet);
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);

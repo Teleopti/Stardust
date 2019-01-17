@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
 				var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = _container.Resolve<IPersonAssignmentRepository>();
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 					accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
 				}
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = _container.Resolve<IPersonAssignmentRepository>();
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);

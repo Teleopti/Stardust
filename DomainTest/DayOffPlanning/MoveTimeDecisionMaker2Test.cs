@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDays)
                 .Return(fullWeekPeriodDictionary.Values.ToArray()).Repeat.Any();
             Expect.Call(_scheduleMatrix.UnlockedDays)
-                .Return(unlockedDaysDictionary.Values.ToArray()).Repeat.Any();
+                .Return(unlockedDaysDictionary.Values.ToHashSet()).Repeat.Any();
             addWorkShiftExpectationsToScheduleDay(_schedulePartShortMainShift, new TimeSpan());
 
         }
@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDays)
                 .Return(fullWeekPeriodDictionary.Values.ToArray()).Repeat.Any();
             Expect.Call(_scheduleMatrix.UnlockedDays)
-                .Return(unlockedDaysDictionary.Values.ToArray()).Repeat.Any();
+                .Return(unlockedDaysDictionary.Values.ToHashSet()).Repeat.Any();
 
             Expect.Call(_schedulePartDayOff.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
 

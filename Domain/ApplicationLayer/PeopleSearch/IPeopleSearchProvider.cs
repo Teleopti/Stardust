@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns);
 
-		List<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate,
+		HashSet<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate,
 			string function);
 
 		List<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate,

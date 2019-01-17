@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	public class TestBench
 	{
 		public FakeRtaEventStore Store;
-		public IAgentAdherenceDayLoader Loader;
+		public AgentAdherenceDayLoader Loader;
 		public IJsonEventDeserializer Deserializer;
 		public RtaEventStoreTypeIdMapper TypeMapper;
 

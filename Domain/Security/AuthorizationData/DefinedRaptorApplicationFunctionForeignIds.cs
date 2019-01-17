@@ -137,6 +137,7 @@
 		public const string RealTimeAdherenceOverview = "0092";
 		public const string ModifyAdherence = "0153";
 		public const string HistoricalOverview = "0162";
+		public const string AdjustAdherence = "0171";
 		public const string WebForecasts = "0121";
 		public const string WebPermissions = "0122";
 		public const string WebPlans = "0123";

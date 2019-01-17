@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public MultiAbsenceRequestsHandler Target;
+		public MultiAbsenceRequestsHandlerRobustToggleOff Target;
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
+			isolate.UseTestDouble<MultiAbsenceRequestsHandlerRobustToggleOff>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 		}
@@ -316,6 +316,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.IsApproved.Should().Be.EqualTo(true);
 		}
 
+		[Test]
 		public void ShouldFilterWaitlistedRequests()
 		{
 			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 0);
@@ -400,6 +401,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			requestUsingBudgetGroup.IsApproved.Should().Be.True();
 		}
 
+		[Test]
 		public void ShouldHandleRequestsWithSeconds()
 		{
 			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 0);
@@ -486,6 +488,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			requestUsingBudgetGroup.IsApproved.Should().Be.True();
 		}
 
+	  	[Test]
 		public void ShouldFilterWaitlistedRequestsAndSkipWithNoWCS_48682()
 		{
 			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 0);

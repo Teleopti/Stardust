@@ -4,6 +4,7 @@ using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var target = new WebTenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, sessionDataProvider);
 			target.Logon()
 				.Should().Be.True();
-			httpcontext.Items[WebTenantAuthentication.PersonInfoKey].Should().Be.SameInstanceAs(expected);
+			httpcontext.Items[WebTenantAuthenticationConfiguration.PersonInfoKey].Should().Be.SameInstanceAs(expected);
 		}
 
 		[Test]
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var target = new WebTenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, sessionDataProvider);
 			target.Logon()
 				.Should().Be.False();
-			httpcontext.Items[WebTenantAuthentication.PersonInfoKey].Should().Be.Null();
+			httpcontext.Items[WebTenantAuthenticationConfiguration.PersonInfoKey].Should().Be.Null();
 		}
 
 		[Test]
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var target = new WebTenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, MockRepository.GenerateMock<ISessionSpecificWfmCookieProvider>());
 			target.Logon()
 				.Should().Be.True();
-			httpcontext.Items[WebTenantAuthentication.PersonInfoKey].Should().Be.SameInstanceAs(expected);
+			httpcontext.Items[WebTenantAuthenticationConfiguration.PersonInfoKey].Should().Be.SameInstanceAs(expected);
 		}
 
 		[Test]
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var target = new WebTenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, MockRepository.GenerateMock<ISessionSpecificWfmCookieProvider>());
 			target.Logon()
 				.Should().Be.False();
-			httpcontext.Items[WebTenantAuthentication.PersonInfoKey].Should().Be.Null();
+			httpcontext.Items[WebTenantAuthenticationConfiguration.PersonInfoKey].Should().Be.Null();
 		}
 
 		private static HttpContextBase createHttpContextWithHeadersSet(Guid personId, string tenantPassword)

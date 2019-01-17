@@ -282,6 +282,7 @@
     <Compile Include="MultiTenancy\Server\ApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAttribute.cs" />
+    <Compile Include="MultiTenancy\Server\CurrentTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\CustomerDbConnector.cs" />
     <Compile Include="MultiTenancy\Server\IPasswordManager.cs" />
     <Compile Include="MultiTenancy\Server\PasswordManager.cs" />
@@ -300,6 +301,9 @@
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersisterFake.cs" />
+    <Compile Include="NHibernateConfiguration\AddForceSeekOnAssignmentLayers.cs" />
+    <Compile Include="NHibernateConfiguration\IModifySql.cs" />
+    <Compile Include="NHibernateConfiguration\SqlModificationScope.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\RetryingEventArgs.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlCommandFactory.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlXmlReader.cs" />
@@ -572,7 +576,6 @@
     <Compile Include="Licensing\XmlLicenseServiceFactory.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />
     <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
-    <Compile Include="Foundation\IMakeRegionalFromPerson.cs" />
     <Compile Include="Foundation\IRetrievePersonNameForPerson.cs" />
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalInternalsFactory.cs" />

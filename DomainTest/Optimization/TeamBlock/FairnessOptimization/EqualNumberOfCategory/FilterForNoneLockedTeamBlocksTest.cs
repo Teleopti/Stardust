@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_teamInfo.MatrixForMemberAndDate(_person, DateOnly.MinValue)).Return(_matrix);
 				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 				Expect.Call(_matrix.UnlockedDays)
-				      .Return(new []{_scheduleDayPro});
+				      .Return(new HashSet<IScheduleDayPro> { _scheduleDayPro});
 			}
 
 			using (_mocks.Playback())
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_teamInfo.MatrixForMemberAndDate(_person, DateOnly.MinValue)).Return(_matrix);
 				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
 				Expect.Call(_matrix.UnlockedDays)
-				      .Return(new IScheduleDayPro[0]);
+				      .Return(new HashSet<IScheduleDayPro>());
 			}
 
 			using (_mocks.Playback())

@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void StoreTicketForLongTimeUseMaximumSessionTimeInConfiguration()
 		{
-			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), "480");
+			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes, "480");
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
 
 			target.StoreInCookie(sessionSpecificData, true, false, sessionSpecificData.DataSourceName);
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void UseMaximumSessionTimeInConfigurationAsShortTimeIfMaximumSessionTimeInConfigurationLessThanDefault()
 		{
-			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), "29");
+			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes, "29");
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
 
 			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void UseDefaultAsShortTimeIfMaximumSessionTimeInConfigurationLargerThanDefault()
 		{
-			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), "31");
+			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes, "31");
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
 
 			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void ShouldNotSlideExpirationWhenHaveMaximumSessionTimeFromConfiguration()
 		{
-			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), "480");
+			_tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes, "480");
 			SessionSpecificData sessionSpecificData = generateSessionSpecificData();
 			target.StoreInCookie(sessionSpecificData, false, false, sessionSpecificData.DataSourceName);
 

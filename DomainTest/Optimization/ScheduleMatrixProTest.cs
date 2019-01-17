@@ -56,14 +56,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void VerifyAllDaysAreLockedWhenCreated()
 		{
-			Assert.AreEqual(0, _target.UnlockedDays.Length);
+			Assert.AreEqual(0, _target.UnlockedDays.Count);
 		}
 
 		[Test]
 		public void VerifyPeriodCouldBeUnlocked()
 		{
 			_target.UnlockPeriod(_period);
-			Assert.AreEqual(7, _target.UnlockedDays.Length);
+			Assert.AreEqual(7, _target.UnlockedDays.Count);
 		}
 
         [Test]

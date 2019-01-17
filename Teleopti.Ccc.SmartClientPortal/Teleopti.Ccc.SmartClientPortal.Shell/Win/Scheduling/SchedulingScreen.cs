@@ -2908,7 +2908,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				return;
 
 			var selectedPeriod = selection.Value;
-			var dateOnlyList = selectedPeriod.DayCollection();
+			var dateOnlyList = selectedPeriod.DayCollection().ToHashSet();
 			SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			var schedulingOptions = _container.Resolve<ISchedulingOptionsCreator>().CreateSchedulingOptions(optimizerPreferences);

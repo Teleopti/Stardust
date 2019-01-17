@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 		private IEnumerable<Tuple<int, int>> extractWeekendDayIndexes(int minimumIndex, int maximumIndex)
 		{
 			IList<Tuple<int, int>> result = new List<Tuple<int, int>>();
-			IList<int> officialWeekendDays = _officialWeekendDays.WeekendDayIndexesRelativeStartDayOfWeek();
+			var officialWeekendDays = _officialWeekendDays.WeekendDayIndexesRelativeStartDayOfWeek();
 
 			for (int i = minimumIndex; i <= maximumIndex; i++)
 			{

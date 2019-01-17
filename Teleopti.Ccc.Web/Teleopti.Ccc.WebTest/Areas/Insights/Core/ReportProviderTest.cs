@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi;
 
@@ -48,13 +50,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var usageReport = new Report
 			{
 				Id = Guid.NewGuid().ToString(),
-				Name = "Report Usage Metrics Report",
+				Name = ReportProvider.UsageReportName,
 				EmbedUrl = "https://someworkspace/stasticsreport"
 			};
 			var templateReport = new Report
 			{
 				Id = Guid.NewGuid().ToString(),
-				Name = "__WFM_Insights_Report_Template__",
+				Name = ReportProvider.TemplateReportName,
 				EmbedUrl = "https://someworkspace/templatereport"
 			};
 
@@ -159,8 +161,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			reportGroups.ContainsKey(groupId).Should().Be.True();
 			reportGroups[groupId].Count.Should().Be(2);
 
-			reportGroups[groupId].Any(x=>x.Id == report.Id).Should().Be.True();
-			reportGroups[groupId].Any(x=>x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
+			reportGroups[groupId].Any(x => x.Id == report.Id).Should().Be.True();
+			reportGroups[groupId].Any(x => x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
 		}
 
 		[Test]
@@ -171,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var report = new Report
 			{
 				Id = Guid.NewGuid().ToString(),
-				Name = "__WFM_Insights_Report_Template__",
+				Name = ReportProvider.TemplateReportName,
 				EmbedUrl = "https://someworkspace/templatereport"
 			};
 
@@ -190,8 +192,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			reportGroups.ContainsKey(groupId).Should().Be.True();
 			reportGroups[groupId].Count.Should().Be(2);
 
-			reportGroups[groupId].Any(x=>x.Id == report.Id).Should().Be.True();
-			reportGroups[groupId].Any(x=>x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
+			reportGroups[groupId].Any(x => x.Id == report.Id).Should().Be.True();
+			reportGroups[groupId].Any(x => x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
 		}
 
 		[Test]
@@ -223,10 +225,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var pbiClient = new FakePowerBiClient(reports);
 			var pbiClientFactory = new FakePowerBiClientFactory(pbiClient);
 
-			var configReader = new FakeConfigReader();
-			configReader.FakeSetting("PowerBIGroupId", groupId);
+			var appConfigDb = new ApplicationConfigurationDb
+			{
+				Tenant = new Dictionary<string, string>
+				{
+					{
+						TenantApplicationConfigKey.InsightsPowerBIGroupId, groupId
+					}
+				}
+			};
 
-			return new ReportProvider(configReader, pbiClientFactory);
+			var appConfigProvider = new ApplicationConfigurationDbProviderFake();
+			appConfigProvider.LoadFakeData(appConfigDb);
+
+			return new ReportProvider(appConfigProvider, pbiClientFactory);
 		}
 	}
 }

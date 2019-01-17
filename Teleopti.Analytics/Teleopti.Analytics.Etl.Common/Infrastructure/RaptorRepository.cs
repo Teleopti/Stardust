@@ -25,7 +25,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -1389,6 +1388,30 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_deviation_load",
 												parameterList,
 												_dataMartConnectionString);
+		}
+
+
+		public int FillScheduleDeviationDataMart_Story79646(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, int isIntraday, DateTime? nowUtc)
+		{
+			//Convert time back to local time before sp call
+			DateTime startDate = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, defaultTimeZone);
+			DateTime endDate = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, defaultTimeZone);
+
+			//Prepare sql parameters
+			var parameterList = new[]
+			{
+				new SqlParameter("start_date", startDate.Date),
+				new SqlParameter("end_date", endDate.Date),
+				new SqlParameter("business_unit_code", businessUnit.Id),
+				new SqlParameter("isIntraday", isIntraday),
+				new SqlParameter("is_delayed_job", 0),
+				new SqlParameter("now_utc", nowUtc)
+			};
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_deviation_load_79646",
+					parameterList,
+					_dataMartConnectionString);
 		}
 
 		public int FillFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)

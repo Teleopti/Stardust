@@ -55,7 +55,7 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 								EndDateTime = x.Key.EndDateTime.Utc(),
 								Resource = x.Key.Resource < 0 ? 0 : x.Key.Resource,
 								SkillCombinationId = x.Key.SkillCombinationId,
-								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToArray()
+								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToHashSet()
 							});
 
 			return mergedResult;
@@ -114,7 +114,7 @@ GROUP BY SkillCombinationId, StartDateTime, EndDateTime, SkillId
 								EndDateTime = x.Key.EndDateTime.Utc(),
 								Resource = x.Key.Resource < 0 ? 0 : x.Key.Resource,
 								SkillCombinationId = x.Key.SkillCombinationId,
-								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToArray()
+								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToHashSet()
 							});
 
 			return mergedResult;

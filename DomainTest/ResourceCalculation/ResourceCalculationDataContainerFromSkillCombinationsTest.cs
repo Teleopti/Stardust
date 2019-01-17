@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				StartDateTime = _period.StartDateTime,
 				EndDateTime = _period.EndDateTime,
-				SkillCombination = new[] { _skill.Id.GetValueOrDefault() },
+				SkillCombination = new HashSet<Guid> { _skill.Id.GetValueOrDefault() },
 				Resource = 10
 			};
 			_target = new ResourceCalculationDataContainerFromSkillCombinations(new List<SkillCombinationResource>() { resource }, new[] { _skill,_skill15Min }, false);

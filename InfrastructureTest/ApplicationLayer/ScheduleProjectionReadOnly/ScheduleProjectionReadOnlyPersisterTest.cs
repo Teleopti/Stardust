@@ -17,16 +17,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 
-
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionReadOnly
 {
 	[UnitOfWorkWithLoginTest]
 	public class ScheduleProjectionReadOnlyPersisterTest
 	{
 		public IScheduleProjectionReadOnlyPersister Persister;
-
 		public ICurrentUnitOfWork UnitOfWork;
-
 		public IAbsenceRepository AbsenceRepository;
 		public IPersonRepository PersonRepository;
 		public ITeamRepository TeamRepository;

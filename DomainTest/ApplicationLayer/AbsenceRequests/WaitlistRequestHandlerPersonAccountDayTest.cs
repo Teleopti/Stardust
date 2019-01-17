@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -124,14 +125,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(waitListedRequest2);
 
 			var hourPeriod = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			var skillCombinations = new HashSet<Guid> {skill.Id.GetValueOrDefault()};
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(hourPeriod, new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(1)), new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(2)), new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(3)), new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(4)), new[] {skill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(5)), new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(hourPeriod, skillCombinations, 10),
+				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(1)), skillCombinations, 10),
+				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(2)), skillCombinations, 10),
+				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(3)), skillCombinations, 10),
+				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(4)), skillCombinations, 10),
+				createSkillCombinationResource(hourPeriod.MovePeriod(TimeSpan.FromHours(5)), skillCombinations, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -216,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			dayAccount2.Remaining.Should().Be.EqualTo(TimeSpan.FromDays(0));
 		}
 
-		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
+		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, HashSet<Guid> skillCombinations, double resource)
 		{
 			return new SkillCombinationResource
 			{

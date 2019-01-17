@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			office2007OutlookTimePickerStartSlotPeriod.CreateAndBindList();
 			office2007OutlookTimePickerEndSlotPeriod.CreateAndBindList();
 
-			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory());
+			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder, new RepositoryFactory(), UnitOfWorkFactory.Current, new LazyLoadingManagerWrapper(), new ScheduleStorageFactory(new PersonAssignmentRepository(CurrentUnitOfWork.Make())));
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));

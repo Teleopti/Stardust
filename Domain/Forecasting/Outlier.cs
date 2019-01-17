@@ -93,12 +93,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-05-14
         /// </remarks>
-        public virtual IList<DateOnly> GetDatesByPeriod(DateOnlyPeriod period)
+        public virtual HashSet<DateOnly> GetDatesByPeriod(DateOnlyPeriod period)
         {
             IEnumerable<DateOnly> dates = _dates.Where(period.Contains);
 
-            return dates.ToList();
-        }
+			return dates.ToHashSet();
+		}
 
         /// <summary>
         /// Adds the date.

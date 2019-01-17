@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class SchedulingOptions
 	{
-		private IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
+		private HashSet<IShiftCategory> _notAllowedShiftCategories = new HashSet<IShiftCategory>();
 		private IList<ShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<ShiftProjectionCache>(); 
 
 		private bool _usePreferencesMustHaveOnly;
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             set { _workShiftLengthHintOption = value; }
         }
 		
-        public IList<IShiftCategory> NotAllowedShiftCategories => _notAllowedShiftCategories;
+        public HashSet<IShiftCategory> NotAllowedShiftCategories => _notAllowedShiftCategories;
 
 	    public bool ConsiderShortBreaks { get; set; } = true;
 
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public SchedulingOptions Clone()
 		{
 			var ret = (SchedulingOptions) MemberwiseClone();
-			ret._notAllowedShiftCategories = _notAllowedShiftCategories.ToList();
+			ret._notAllowedShiftCategories = _notAllowedShiftCategories.ToHashSet();
 			ret._notAllowedShiftProjectionCaches = _notAllowedShiftProjectionCaches.ToList();
             return ret;
         }

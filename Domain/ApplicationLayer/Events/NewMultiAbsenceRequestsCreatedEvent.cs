@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public List<Guid> PersonRequestIds { get; set; }
 		public DateTime Sent { get; set; }
+		public List<Guid> Ids { get; set; }
 	}
 }

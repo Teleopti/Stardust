@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Auditing
 					StartDateTime = DateTime.UtcNow,
 					EndDateTime = DateTime.UtcNow,
 					Resources = 1,
-					SkillIds = new List<Guid>{skill.Id.GetValueOrDefault()},
+					SkillIds = new HashSet<Guid>{skill.Id.GetValueOrDefault()},
 					Source=bpoName
 				}
 			};

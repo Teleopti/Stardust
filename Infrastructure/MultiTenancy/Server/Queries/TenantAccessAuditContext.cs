@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 		private void auditPersist(PersonInfo personInfo, PersistActionIntent intent)
 		{
-			var tenantUser = _currentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfo] as PersonInfo;
+			var tenantUser = _currentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfoKey] as PersonInfo;
 
 			var data = Newtonsoft.Json.JsonConvert.SerializeObject(new
 			{

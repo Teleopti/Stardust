@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				Resource = resource,
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime,
-				SkillCombination = skills.Select(x => x.Id.Value)
+				SkillCombination = skills.Select(x => x.Id.Value).ToHashSet()
 			});
 		}
 	}

@@ -110,6 +110,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int FillAcdLogOnDataMart(int dataSourceId);
 		int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, int isIntraday, DateTime? nowUtc);
 
+		int FillScheduleDeviationDataMart_Story79646(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, int isIntraday, DateTime? nowUtc);
+
 		//KPI
 		IList<IKeyPerformanceIndicator> LoadKpi();
 		int PersistKpi(DataTable dataTable);

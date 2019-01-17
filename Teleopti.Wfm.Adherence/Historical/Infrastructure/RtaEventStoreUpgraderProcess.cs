@@ -10,13 +10,13 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 {
 	public class RtaEventStoreUpgraderProcess : IBackgroundProcess
 	{
-		private readonly IRtaEventStoreUpgrader _upgrader;
+		private readonly RtaEventStoreUpgrader _upgrader;
 		private readonly ActiveTenants _tenants;
 		private readonly IDistributedLockAcquirer _distributedLock;
 		private readonly HashSet<string> _upgradedTenants = new HashSet<string>();
 
 		public RtaEventStoreUpgraderProcess(
-			IRtaEventStoreUpgrader upgrader,
+			RtaEventStoreUpgrader upgrader,
 			ActiveTenants tenants,
 			IDistributedLockAcquirer distributedLock)
 		{

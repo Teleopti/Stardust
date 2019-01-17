@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			var target = new TeleoptiPrincipalAuthorizeAttribute(new FakeAuthenticationModule(), MockRepository.GenerateMock<IIdentityProviderProvider>(), new CheckTenantUserExistsFake());
 			var filterTester = new FilterTester();
 			filterTester.ActionMethod(() => new ViewResult());
-			filterTester.IsUser(new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("_", null, null, null, null), null));
+			filterTester.IsUser(new TeleoptiPrincipal(new TeleoptiIdentity("_", null, null, null, null), null));
 
 			var result = filterTester.InvokeFilter(target);
 

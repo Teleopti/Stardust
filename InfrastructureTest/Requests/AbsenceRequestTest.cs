@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Requests
 						StartDateTime = new DateTime(2018, 03, 15, 10, 0, 0),
 						EndDateTime = new DateTime(2018, 03, 15, 11, 0, 0),
 						Resource = 100, //have 100
-						SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+						SkillCombination = new HashSet<Guid> {skill.Id.GetValueOrDefault()}
 					}
 				};
 

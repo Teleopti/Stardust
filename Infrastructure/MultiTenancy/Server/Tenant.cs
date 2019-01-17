@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual int Id { get; protected set; }
 		public virtual bool Active { get; set; }
 
-		public virtual string GetApplicationConfig(TenantApplicationConfigKey key)
+		public virtual string GetApplicationConfig(string key)
 		{
-			if (_applicationConfig.TryGetValue(key.ToString(), out var value))
+			if (_applicationConfig.TryGetValue(key, out var value))
 			{
 				return value;
 			}

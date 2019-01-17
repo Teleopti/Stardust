@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         void LoadWorkloadTemplates(IList<DateOnlyPeriod> dates, IWorkload workload);
         DateOnlyPeriod InitializeWorkPeriod(IScenario scenario, IWorkload workload);
         IList<ITaskOwner> GetWorkloadDays(IScenario scenario, IWorkload workload, DateOnlyPeriod period);
-        void ReloadFilteredWorkloadTemplates(IList<DateOnlyPeriod> selectedDates, IList<DateOnly> filteredDates, IWorkload workload, int templateIndex);
+        void ReloadFilteredWorkloadTemplates(IList<DateOnlyPeriod> selectedDates, HashSet<DateOnly> filteredDates, IWorkload workload, int templateIndex);
         IList<ITaskOwner> GetWorkloadDaysWithStatistics(DateOnlyPeriod period, IWorkload workload, IScenario scenario, IList<IValidatedVolumeDay> validatedVolumeDays);
         DateOnly FindLatestValidateDay(IWorkload workload);
         IList<IWorkloadDayBase> LoadStatisticData(DateOnlyPeriod period, IWorkload workload);

@@ -225,8 +225,8 @@
 						<li class='relative @(day.InPeriod ? "inperiod" : "non-editable")' data-mytime-date="@date" data-period-start-date='@Model.Weeks.First().Days.First().Date.Date.ToString("yyyy-MM-dd")'  data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
 							<div class="relative">
 								<div class="day-header">
-									<span class="day-header-left badge day-header-text floatleft" data-bind="text: MonthString"></span>
-									<span class="floatright day-header-right badge day-header-text" data-bind="text: DayString"></span>
+									<span class="badge day-header-month floatleft" data-bind="text: MonthString"></span>
+									<span class="floatright day-header-right badge day-header-day" data-bind="text: DayString, click: function(d,e){e.stopPropagation();}"></span>
 								</div>
 								<div class="day-content">
 									<figure class="cover-me" data-bind="visible: IsLoading()"><img src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")' alt="..." /></figure>

@@ -99,7 +99,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			            {
 							PersonRequestIds = absenceRequests.Select(x => x.PersonRequest).ToList(),
 							Sent = sent,
-							LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault()
+							LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(),
+							Ids = absenceRequests.Select(x => x.Id.GetValueOrDefault()).ToList()
 						};
 						multiAbsenceRequestsEvents.Add(multiAbsenceRequestsEvent);
 						

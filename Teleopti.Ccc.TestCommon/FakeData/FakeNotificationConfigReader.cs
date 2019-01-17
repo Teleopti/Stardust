@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				return false;
 			}
 		}
+		public bool SmtpEnabled => HasLoadedConfig && SmtpHost.Length > 0 && SmtpPort > -1;
 		public string SmtpHost { get; }
 		public int SmtpPort { get; }
 		public bool SmtpUseSsl { get; }

@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 								EndDateTime = x.Key.EndDateTime.Utc(),
 								Resource = x.Key.Resource,
 								SkillCombinationId = x.Key.SkillCombinationId,
-								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToArray()
+								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToHashSet()
 							});
 
 			return mergedResult.ToArray();
@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						StartDateTime = x.Key.StartDateTime.Utc(),
 						EndDateTime = x.Key.EndDateTime.Utc(),
 						Resource = x.Sum(y => y.Resource),
-						SkillCombination = x.Key.c.First
+						SkillCombination = x.Key.c.First.ToHashSet()
 					}).ToArray();
 		}
 		

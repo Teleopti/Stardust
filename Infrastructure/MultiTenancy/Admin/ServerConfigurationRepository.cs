@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 		public IEnumerable<ServerConfiguration> AllConfigurations()
 		{
 			return _currentTenantSession.CurrentSession()
-				.CreateSQLQuery("SELECT [Key], [Value] FROM [Tenant].[ServerConfiguration]")
+				.CreateSQLQuery("SELECT [Key], [Value], [Description] FROM [Tenant].[ServerConfiguration]")
 				.SetResultTransformer(Transformers.AliasToBean<ServerConfiguration>())
 				.List<ServerConfiguration>();
 		}

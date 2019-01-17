@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		{
 			var expected = new PersonInfo();
 			var httpContext = new FakeHttpContext();
-			httpContext.Items[WebTenantAuthentication.PersonInfoKey] = expected;
+			httpContext.Items[WebTenantAuthenticationConfiguration.PersonInfoKey] = expected;
 
 			new CurrentTenantUser(new FakeCurrentHttpContext(httpContext)).CurrentUser()
 					.Should().Be.SameInstanceAs(expected);

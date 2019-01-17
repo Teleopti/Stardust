@@ -23,6 +23,7 @@ Layout = null;
 
 	.tooltip {
 		margin: 0;
+		min-width: 100px;
 	}
 
 	.datepicker.dropdown-menu {
@@ -72,8 +73,14 @@ Layout = null;
 		<div class="mobile-month-box clearfix" data-bind="foreach: weekViewModels">
 			<div class="mobile-month-row-fluid clearfix" data-bind="foreach: dayViewModels, css: {'has-overtime-or-absence': $parent.hasAbsenceOrOvertime, 'has-overtime-and-absence': $parent.hasAbsenceAndOvertime}">
 				<div class="mobile-month-cell">
-					<div class="mobile-month-day" data-bind="click: navigateToDayView, css: {'mobile-month-day-outmonth': isOutsideMonth}">
-						<span data-bind="text: dayOfMonth, style: {background: currentDayColor}" class="date-number"></span>
+					<div class="mobile-month-day" data-bind="click: navigateToDayView, css: {'mobile-month-day-outmonth': isOutsideMonth, 'mobile-month-current-day': isCurrentDay}">
+						<!-- ko ifnot: isBankHoliday -->
+						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}" class="day-header-day"></span>
+						<!-- /ko -->
+						<!-- ko if: isBankHoliday -->
+						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}, tooltip: {title: bankHolidayDescription}" class="day-header-day mobile-month-bank-holiday-day"></span>
+						<!-- /ko -->
+
 						<!-- ko if: !hasShift && !isFullDayAbsence && !isDayOff-->
 						<div class="shift"></div>
 						<!-- /ko -->

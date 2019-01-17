@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(1053));
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("name", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, null), person);
 			isolate.UseTestDouble(new FakeCurrentTeleoptiPrincipal(principal)).For<ICurrentTeleoptiPrincipal>();
 		}
 

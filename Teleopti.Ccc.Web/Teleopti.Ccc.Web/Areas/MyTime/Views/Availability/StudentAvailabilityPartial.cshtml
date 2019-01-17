@@ -99,7 +99,10 @@ Layout = null;
 					 data-bind="css: { editable: Editable, 'non-editable': !Editable() }">
 						<div>
 							<div class="day-header">
-								<span class="floatleft badge day-header-left day-header-text">@day.Header.DayDescription</span><span class="floatright badge day-header-right day-header-text">@day.Header.DayNumber</span>
+								<span class="floatleft badge day-header-month">@day.Header.DayDescription</span>
+								<span class="floatright badge day-header-right day-header-day" data-bind="click: function(d,e){e.stopPropagation();}">
+									@day.Header.DayNumber
+								</span>
 							</div>
 							<div class="day-content">
 								<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")'
@@ -107,7 +110,9 @@ Layout = null;
 								<!-- ko if: AjaxError().length > 0 -->
 								<h2 class="error" data-bind="text: AjaxError"></h2>
 								<!-- /ko -->
-								<div class="fullwidth day-content-text" data-bind="visible: HasAvailability(), text: AvailableTimeSpan"></div>
+								<div class="fullwidth day-content-text" data-bind="visible: HasAvailability()">
+									<span data-bind="text: AvailableTimeSpan"></span>
+								</div>
 
 								<!-- ko if: !HasAvailability() && EditableIsInOpenPeriod -->
 								<div class="fullwidth day-content-text" style="padding-top: 15px">

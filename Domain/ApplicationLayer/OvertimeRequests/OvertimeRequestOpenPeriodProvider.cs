@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			if (personPeriod == null)
 				return null;
 
-			var personSkillTypeDescriptions = _personalSkills.PersonSkills(personPeriod).Select(p => p.Skill.SkillType.Description).ToList();
+			var personSkillTypeDescriptions = _personalSkills.PersonSkills(personPeriod).Select(p => p.Skill.SkillType.Description).ToHashSet();
 
 			var margedPeriod = _overtimeRequestOpenPeriodMerger.GetMergedOvertimeRequestOpenPeriods(person.WorkflowControlSet.OvertimeRequestOpenPeriods, person.PermissionInformation, date.ToDateOnlyPeriod());
 			if (margedPeriod.Any())

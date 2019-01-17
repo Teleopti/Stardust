@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
@@ -210,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                                                         _scheduleDayPro11,
                                                         _scheduleDayPro12
                                                     };
-            var unlockedList = new []
+            var unlockedList = new HashSet<IScheduleDayPro>
                                                       {
                                                           _scheduleDayPro11,
                                                           _scheduleDayPro12

@@ -377,6 +377,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
+		public int FillScheduleDeviationDataMart_Story79646(DateTimePeriod period, IBusinessUnit businessUnit,
+			TimeZoneInfo defaultTimeZone, int isIntraday, DateTime? nowUtc)
+		{
+			throw new NotImplementedException();
+		}
+
 		public int FillFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 		{
 			return 0;

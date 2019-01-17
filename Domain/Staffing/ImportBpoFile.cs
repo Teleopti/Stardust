@@ -317,9 +317,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 			return validatedDouble;
 		}
 
-		private List<Guid> lookupSkillIds(LineWithNumber lineWithNumber, string skillGroupString, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
+		private HashSet<Guid> lookupSkillIds(LineWithNumber lineWithNumber, string skillGroupString, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
 		{
-			var skillIds = new List<Guid>();
+			var skillIds = new HashSet<Guid>();
 			var skillStringList = skillGroupString.Split(skillSeparator);
 			var skillLookup = allSkills.ToLookup(s => s.Name.ToLower());
 			foreach (var skillString in skillStringList)
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public double Resources { get; set; }
-		public List<Guid> SkillIds { get; set; }
+		public HashSet<Guid> SkillIds { get; set; }
 		public string Source { get; set; }
 		public string ImportFileName { get; set; }
 		public Guid PersonId { get; set; }

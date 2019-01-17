@@ -227,6 +227,9 @@ namespace Teleopti.Ccc.Domain.Notification
 					: "";
 			}
 		}
+
+		public bool SmtpEnabled => HasLoadedConfig && SmtpHost.Length > 0 && SmtpPort > -1;
+
 		public int SmtpPort
 		{
 			get

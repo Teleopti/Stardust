@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_distributionForPersons.CreateSummary(new List<IPerson> { _person1 }, _scheduleDictionary))
 					  .Return(distributionSummary);
 				Expect.Call(_scheduleDictionary.Keys).Return(scheduleDicKeys);
-				Expect.Call(_groupCreator.CreateGroupForPerson(_person1, _groupPageForDate, scheduleDicKeys)).Return(group);
+				Expect.Call(_groupCreator.CreateGroupForPerson(Arg<IPerson>.Is.Equal(_person1), Arg<IGroupPage>.Is.Equal(_groupPageForDate), Arg<HashSet<IPerson>>.List.ContainsAll(scheduleDicKeys))).Return(group);
 				Expect.Call(_distributionForPersons.CreateSummary(group.GroupMembers, _scheduleDictionary))
 				      .Return(distributionSummary);
 			}

@@ -6,12 +6,14 @@ using SharpTestsEx;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.UndoRedo;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -26,11 +28,16 @@ using Teleopti.Ccc.TestCommon.Scheduling;
 namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 {
 	[DomainTest]
-	public class PasteBehaviorTest
+	public class PasteBehaviorTest : IIsolateSystem
     {
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		private PasteBehavior _targetStandard;
         private PasteBehaviorForTest _testPasteBehavior;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<TeleoptiPrincipalForLegacyFactory>().For<IPrincipalFactory>();
+		}
 
         [SetUp]
         public void Setup()

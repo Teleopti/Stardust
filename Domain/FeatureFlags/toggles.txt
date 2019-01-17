@@ -34,10 +34,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
-RTA_ReviewHistoricalAdherence_Domain_74770 = true
-RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = true
-RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
-RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
 RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
 RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
@@ -72,6 +68,7 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_Authentication_ChangePasswordMenu_76666 = true
 Wfm_User_Password_Reset_74957 = DEV
 Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
+Wfm_AutomaticNotificationEnrollment_79679 = DEV
 
 # China, can any of these be removed? #
 MyTimeWeb_NewTeamScheduleView_75989 = true
@@ -102,8 +99,9 @@ Wfm_AuditTrail_StaffingAuditTrail_78125 = true
 Wfm_AuditTrail_GenericAuditTrail_74938 = true
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
 WFM_ProbabilityView_ImproveResponseTime_80040 = true
-WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = false #Dont enable it. It was not a good optimization in Csharp
+WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = RC 
 WFM_Intraday_OptimizeSkillDayLoad_80153 = RC
+WRM_AbsenceRequest_Robust_Processing_79988= RC
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
@@ -114,6 +112,8 @@ WFM_Forecast_Show_History_Data_76432 = DEV
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
 WFM_Connect_NewLandingPage_WEB_78578 = true
 WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425 = RC
+ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646 = RC
+
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true

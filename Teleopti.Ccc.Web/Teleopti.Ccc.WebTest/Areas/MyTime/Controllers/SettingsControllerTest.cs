@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetMobileQRCodeUrl()
 		{
-			CurrentTenant.Current().SetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString(), "http://qrcode");
+			CurrentTenant.Current().SetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl, "http://qrcode");
 			Target.MobileQRCodeUrl().Data.Should().Be.EqualTo("http://qrcode");
 		}
 	}

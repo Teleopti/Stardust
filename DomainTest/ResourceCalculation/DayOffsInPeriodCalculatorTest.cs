@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new [] {scheduleDayPro1, scheduleDayPro2, scheduleDayPro3}).Repeat.AtLeastOnce();
+				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new HashSet<IScheduleDayPro> { scheduleDayPro1, scheduleDayPro2, scheduleDayPro3}).Repeat.AtLeastOnce();
 				Expect.Call(scheduleMatrixPro.OuterWeeksPeriodDays).Return(new [] {scheduleDayPro1, scheduleDayPro2, scheduleDayPro3}).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro1.Day).Return(dateOnly1).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro2.Day).Return(dateOnly2).Repeat.AtLeastOnce();

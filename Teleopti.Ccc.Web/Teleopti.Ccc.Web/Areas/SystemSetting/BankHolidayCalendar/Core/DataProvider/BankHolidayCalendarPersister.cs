@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 		private readonly IBankHolidayCalendarSitePersister _bankHolidayCalendarSitePersister;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(BankHolidayCalendarPersister));
 
-		public BankHolidayCalendarPersister(IBankHolidayCalendarRepository bankHolidayCalendarRepository, IBankHolidayModelMapper bankHolidayModelMapper, IBankHolidayDateRepository bankHolidayDateRepository,IBankHolidayCalendarSiteRepository bankHolidayCalendarSiteRepository,
+		public BankHolidayCalendarPersister(IBankHolidayCalendarRepository bankHolidayCalendarRepository, IBankHolidayModelMapper bankHolidayModelMapper, IBankHolidayDateRepository bankHolidayDateRepository, IBankHolidayCalendarSiteRepository bankHolidayCalendarSiteRepository,
 			IBankHolidayCalendarSitePersister bankHolidayCalendarSitePersister)
 		{
 			_bankHolidayCalendarRepository = bankHolidayCalendarRepository;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 				date.Description = des;
 				date.Active();
 			}
-			else if (_bankHolidayDateRepository.LoadAll().FirstOrDefault(d => d.Calendar.Id.Value == calendar.Id.Value && d.Date == inputDate) == null)
+			else if (date == null)
 			{
 				date = new BankHolidayDate { Date = inputDate, Description = des, Calendar = calendar };
 			}
@@ -132,16 +132,17 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 		private bool updateCalendarsForSites(Guid Id)
 		{
-			var siteBankHolidayCalendars = _bankHolidayCalendarSiteRepository.LoadAll().Where(s => s.Calendar.Id.Value == Id);
-			var settings = new List<SiteBankHolidayCalendarsViewModel>();
-			siteBankHolidayCalendars?.ToList().ForEach(x =>
+			var sites = _bankHolidayCalendarSiteRepository.FindSitesByCalendar(Id);//.LoadAll().Where(s => s.Calendar.Id.Value == Id);
+			var settings = _bankHolidayCalendarSiteRepository.LoadAll();
+			var input = new List<SiteBankHolidayCalendarsViewModel>();
+			sites?.ToList().ForEach(s =>
 			{
-				var s = new SiteBankHolidayCalendarsViewModel { Site = x.Site.Id.Value };
-				var calendars = _bankHolidayCalendarSiteRepository.LoadAll().Where(c => c.Site.Id.Value == x.Site.Id.Value).Select(c=>c.Calendar.Id.Value);
-				s.Calendars = calendars.Where(id => id != Id);
-				settings.Add(s);
+				var model = new SiteBankHolidayCalendarsViewModel { Site = s };
+				var calendars = settings.Where(c => c.Site.Id.Value == s).Select(c => c.Calendar.Id.Value);
+				model.Calendars = calendars.Where(id => id != Id);
+				input.Add(model);
 			});
-			return _bankHolidayCalendarSitePersister.UpdateCalendarsForSites(settings);
+			return _bankHolidayCalendarSitePersister.UpdateCalendarsForSites(input);
 		}
 
 	}

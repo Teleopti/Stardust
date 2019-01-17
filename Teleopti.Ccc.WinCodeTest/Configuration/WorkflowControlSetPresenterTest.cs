@@ -9,9 +9,11 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
+			isolate.UseTestDouble<TeleoptiPrincipalForLegacyFactory>().For<IPrincipalFactory>();
 		}
 
 		[TearDown]

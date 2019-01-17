@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 				};
 
 				var apiUrl = _serverConfiguration.Get(ServerConfigurationKey.NotificationApiEndpoint.ToString());
-				pi.Tenant.ApplicationConfig.TryGetValue(TenantApplicationConfigKey.NotificationApiKey.ToString(), out var apiKey);
+				pi.Tenant.ApplicationConfig.TryGetValue(TenantApplicationConfigKey.NotificationApiKey, out var apiKey);
 				//var apiKey = "notification.apiKey";
 				return _notification.SendEmail(mailMessage, apiUrl, apiKey);
 			}

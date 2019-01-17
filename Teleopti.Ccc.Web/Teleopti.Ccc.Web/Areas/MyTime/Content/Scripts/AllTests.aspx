@@ -42,6 +42,7 @@
 		%>
 
 	<script type="text/javascript" src="knockout.bindings.js?bust=<%=version%>"></script>
+	<script type="text/javascript" src="Teleopti.MyTimeWeb.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Ajax.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.MessageBroker.js?bust=<%=version%>"></script>

@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// </remarks>
 		public static IList<T> ExcludeOutliersFromStatistics<T>(DateOnlyPeriod period, IList<IOutlier> outliers, IEnumerable<T> workloadDays) where T : ITaskOwner
 		{
-			ICollection<DateOnly> allOutlierDates = Outlier.GetOutliersByDates(period, outliers).Keys;
+			var allOutlierDates = Outlier.GetOutliersByDates(period, outliers).Keys.ToHashSet();
 			return workloadDays.Where(w => !allOutlierDates.Contains(w.CurrentDate)).ToList();
 		}
 	}

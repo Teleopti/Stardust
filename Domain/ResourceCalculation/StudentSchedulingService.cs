@@ -213,16 +213,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return ret;
 		}
 
-		public virtual IList<DateOnly> GetAllDates(IList<IScheduleDay> selectedParts)
+		public virtual HashSet<DateOnly> GetAllDates(IList<IScheduleDay> selectedParts)
 		{
-			IList<DateOnly> ret = new List<DateOnly>();
-			foreach (IScheduleDay part in selectedParts)
-			{
-				var dateOnly = part.DateOnlyAsPeriod.DateOnly;
-				if (!ret.Contains(part.DateOnlyAsPeriod.DateOnly))
-					ret.Add(dateOnly);
-			}
-			return ret;
+			return selectedParts.Select(part => part.DateOnlyAsPeriod.DateOnly).ToHashSet();
 		}
 
 		public virtual IScheduleDay GetSchedulePartOnDateAndPerson(IList<IScheduleDay> selectedParts, IPerson thePerson, DateOnly theDate)
@@ -230,7 +223,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return selectedParts.FirstOrDefault(part => part.DateOnlyAsPeriod.DateOnly.Equals(theDate) && part.Person.Equals(thePerson));
 		}
 
-		public ISkillDay FindMostUnderstaffedSkillDay(IList<DateOnly> theDates, IList<ISkillDay> skillDaysExcluded)
+		public ISkillDay FindMostUnderstaffedSkillDay(HashSet<DateOnly> theDates, IList<ISkillDay> skillDaysExcluded)
 		{
 			ISkillDay retSkillDay = null;
 			double highestValue = double.MinValue;

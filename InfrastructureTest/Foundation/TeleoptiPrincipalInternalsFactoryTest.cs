@@ -12,33 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	[TestFixture]
 	public class TeleoptiPrincipalInternalsFactoryTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void ShouldMakeRegionalFromPerson()
-		{
-			var person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("ar-SA"));
-			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo("ar-SA"));
-			var target = new TeleoptiPrincipalInternalsFactory();
-
-			var regional = target.MakeRegionalFromPerson(person);
-
-			regional.Culture.Should().Be(CultureInfo.GetCultureInfo("ar-SA"));
-			regional.UICulture.Should().Be(CultureInfo.GetCultureInfo("ar-SA"));
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void ShouldMakeRegionalWithoutCulture()
-		{
-			var person = PersonFactory.CreatePerson();
-			var target = new TeleoptiPrincipalInternalsFactory();
-
-			var regional = target.MakeRegionalFromPerson(person);
-
-            Assert.That(regional.CultureLCID, Is.EqualTo(0));
-            Assert.That(regional.UICultureLCID, Is.EqualTo(0));
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldRetrieveThePersonsName()
 		{
 			var person = PersonFactory.CreatePerson();
@@ -50,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			name.Should().Be(person.Name.ToString());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldThrowPersonNotFoundExceptionIfThePersonIsNotFound()
 		{
 			var person = MockRepository.GenerateMock<IPerson>();

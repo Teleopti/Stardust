@@ -47,13 +47,13 @@ Feature: Sites overview
 	Given the time is '2016-08-18 13:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets her phone state to 'Ready'
-	When I view Real time adherence sites
+	When I monitor organization adherence
 	Then I should see site 'Paris' with 1 of 1 agents in alarm
 	And I should see site 'London' with 0 of 1 agents in alarm
 
   Scenario: See updates of how many agents that are in alarm for each site
 	Given the time is '2016-08-18 13:00'
-	When I view Real time adherence sites
+	When I monitor organization adherence
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And 'Ashley Andeen' sets her phone state to 'Ready'
 	Then I should see site 'Paris' with 1 of 1 agents in alarm

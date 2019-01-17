@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -30,6 +31,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_configuration = configuration;
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_QueryHintOnLayers_79780)]
+		private static void specialPersonAssignmentRegistration(ContainerBuilder builder)
+		{
+			builder
+				.RegisterToggledComponent<PersonAssignmentRepositoryWithQueryHint, PersonAssignmentRepository,
+					IPersonAssignmentRepository>(Toggles.ResourcePlanner_QueryHintOnLayers_79780).SingleInstance();
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			foreach (var type in typeof(PersonRepository).Assembly.GetExportedTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
@@ -48,6 +57,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.SingleInstance();
 				}
 			}
+			specialPersonAssignmentRegistration(builder);
 
 			typeof(RtaStateGroupRepository).Assembly
 				.GetExportedTypes()

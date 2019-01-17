@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                                            Person = p, pp.RuleSetBag
                                        }).ToLookup(k => k.RuleSetBag);
 
-			var connectedRuleSets = allPersonPeriods.Select(k => k.Key).ToArray();
+			var connectedRuleSets = allPersonPeriods.Select(k => k.Key).ToHashSet();
 
             foreach (IRuleSetBag ruleSetBag in entityCollection.OrderBy(c => c.Description.Name))
             {

@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService, NzNotificationService } from 'ng-zorro-antd';
 import { NavigationService } from '../../core/navigation.service';
 import { ReportService } from '../../core/report.service';
 import { Permission } from '../../models/Permission.model';
@@ -23,12 +23,13 @@ export class WorkspaceComponent implements OnInit {
 	public refNewReportNameModal: NzModalRef;
 
 	@ViewChild('newReportNameTemplate')
-	private newReportNameTempRef: TemplateRef<any>;
 	modalIsVisible = false;
 	private modalType = '';
 	modalReport: Report;
 
-	constructor(private reportSvc: ReportService, private modalSvc: NzModalService, public nav: NavigationService) {
+	constructor(private reportSvc: ReportService,
+		public nav: NavigationService,
+		private notification: NzNotificationService) {
 		this.initialized = false;
 	}
 
@@ -144,7 +145,7 @@ export class WorkspaceComponent implements OnInit {
 			if (deleted) {
 				this.loadReportList();
 			} else {
-				console.log('Failed to delete report "' + report.Name + '"');
+				this.notification.create('error', 'Failed to delete report', 'Failed to delete report "' + report.Name + '"');
 			}
 		});
 	}

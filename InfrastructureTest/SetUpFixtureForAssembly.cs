@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Autofac;
+using log4net.Config;
 using Teleopti.Ccc.Domain;
 using NHibernate;
 using NUnit.Framework;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		[OneTimeSetUp]
 		public void BeforeTestSuite()
 		{
+			XmlConfigurator.Configure();
 			var builder = new ContainerBuilder();
 			var toggles = new FakeToggleManager();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, toggles)));

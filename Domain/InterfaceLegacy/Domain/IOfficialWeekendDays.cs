@@ -11,6 +11,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Gets the weekend day indexes.
         /// </summary>
         /// <returns></returns>
-        IList<int> WeekendDayIndexesRelativeStartDayOfWeek();
+        HashSet<int> WeekendDayIndexesRelativeStartDayOfWeek();
     }
 }

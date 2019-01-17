@@ -7,27 +7,39 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository,
-		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_QueryHintOnLayers_79780)]
+	public class PersonAssignmentRepositoryWithQueryHint : PersonAssignmentRepository
 	{
-		public PersonAssignmentRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
+		public PersonAssignmentRepositoryWithQueryHint(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
 
+		public override ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		{
+			using (SqlModificationScope.Create(new AddForceSeekOnAssignmentLayers()))
+			{
+				return base.Find(persons, period, scenario);				
+			}
+		}
+	}
+	
+	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository,
+		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
+	{
 		public PersonAssignmentRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
 		}
 
+		[RemoveMeWithToggle("make non virtual", Toggles.ResourcePlanner_QueryHintOnLayers_79780)]
 		public virtual ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			InParameter.NotNull(nameof(persons), persons);

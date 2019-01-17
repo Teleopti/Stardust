@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             using(_mocks.Record())
             {
                 Expect.Call(_matrix.UnlockedDays)
-                    .Return(new [] { day1, day2, day3, day4 });
+                    .Return(new HashSet<IScheduleDayPro> { day1, day2, day3, day4 });
 
                 Expect.Call(day1.DaySchedulePart()).Return(dayOff);
                 Expect.Call(day2.DaySchedulePart()).Return(dayOff);
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private void mockExpectationsForAll(IExtractedRestrictionResult extractedRestrictionResult)
         {
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-            var unlockedDays = new []{scheduleDayPro};
+            var unlockedDays = new HashSet<IScheduleDayPro> { scheduleDayPro};
             Expect.Call(_matrix.UnlockedDays).Return(unlockedDays).Repeat.Any();
             Expect.Call(scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.Any();
             Expect.Call(_extractor.Extract(_schedulePart)).Return(extractedRestrictionResult).Repeat.Any();

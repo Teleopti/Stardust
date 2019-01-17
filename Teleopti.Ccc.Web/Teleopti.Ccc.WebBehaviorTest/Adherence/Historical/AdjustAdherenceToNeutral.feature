@@ -30,7 +30,7 @@ Feature: Adjust adherence to neutral
 	Given there was a technical issue in the adherence states feed between '2019-01-14 09:00' and '12:00'
 	And the time is '2019-01-15 08:00'
 	When I view adjust adherence
-	And I adjust adherence '2019-01-14 09:00' to '2019-01-14 12:00' as neutral adherence for all agents
+	And I adjust adherence '2019-01-14 09:00' to '2019-01-14 12:00' as neutral adherence
 	Then I should see adjusted period between '2019-01-14 09:00' and '2019-01-14 12:00'
 
   Scenario: Adjust adherence to neutral affecting historical adherence
@@ -38,8 +38,7 @@ Feature: Adjust adherence to neutral
 	And today is '2019-01-15'
 	And at '09:00' 'Ashley Andeen sets his phone state to 'LoggedOff'
 	And at '10:00' 'Ashley Andeen' sets his phone state to 'Ready'
-	When I view adjust adherence
-	And I adjust adherence '2019-01-14 09:00' to '2019-01-14 12:00' as neutral adherence for all agents
+	And the period between '2019-01-14 09:00' and '2019-01-14 12:00' is adjusted to neutral
 	When I view historical adherence for 'Ashley Andeen' on '2019-01-14'
 	Then I should see adjusted period between '09:00:00' and '12:00:00'
 	And I should not see any out of adherences

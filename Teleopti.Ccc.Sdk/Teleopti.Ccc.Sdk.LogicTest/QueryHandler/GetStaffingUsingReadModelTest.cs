@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					StartDateTime = intervalTime,
 					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
 					Resource = staffing,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault() }
+					SkillCombination = new HashSet<Guid> { skill.Id.GetValueOrDefault() }
 				});
 			}
 			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
