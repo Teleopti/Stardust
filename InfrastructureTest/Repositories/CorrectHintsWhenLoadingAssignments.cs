@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					var log = spy.WholeLog();
 					log.Should().Not.Be.Empty();
 					//how reliable and "static" is "shiftlayer2_"? Better to use some regex here...
-					var queryContainsHint = log.Contains("dbo.ShiftLayer shiftlayer2_ WITH (FORCESEEK)");
+					var queryContainsHint = log.Contains("left outer join dbo.ShiftLayer shiftlayer2_ WITH (FORCESEEK)");
 					queryContainsHint.Should().Be.EqualTo(_toggle);
 				}				
 			}
