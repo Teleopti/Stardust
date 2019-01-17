@@ -91,10 +91,7 @@ export class WorkspaceComponent implements OnInit {
 
 		this.isLoading = true;
 		this.reportSvc.createReport(this.newReportName).then(newReport => {
-			this.nav.editReport({
-				Id: newReport.ReportId,
-				Name: newReport.ReportName
-			});
+			this.nav.editReport(newReport.ReportId);
 			return true;
 		});
 
