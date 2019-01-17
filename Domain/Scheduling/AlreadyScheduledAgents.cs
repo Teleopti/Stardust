@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class AlreadyScheduledAgents
 	{
-		public IDictionary<IPerson, IEnumerable<DateOnly>> Execute(IScheduleDictionary schedules, DateOnlyPeriod period, IEnumerable<IPerson> agents)
+		public IDictionary<IPerson, HashSet<DateOnly>> Execute(IScheduleDictionary schedules, DateOnlyPeriod period, IEnumerable<IPerson> agents)
 		{
-			var ret = new Dictionary<IPerson, IEnumerable<DateOnly>>();
+			var ret = new Dictionary<IPerson, HashSet<DateOnly>>();
 			
 			foreach (var scheduleDay in schedules.SchedulesForPeriod(period, agents.ToArray()))
 			{
@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				{
 					if (!ret.TryGetValue(scheduleDay.Person, out var agentDates))
 					{
-						agentDates = new List<DateOnly>();
-						ret[scheduleDay.Person] = agentDates;
+						agentDates = new HashSet<DateOnly>();
+						ret.Add(scheduleDay.Person, agentDates);
 					}
-					((IList<DateOnly>)agentDates).Add(scheduleDay.DateOnlyAsPeriod.DateOnly);					
+					agentDates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);					
 				}
 			}
 
