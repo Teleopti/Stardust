@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		Forecast_CopySettingsToWorkflow_11112,
 
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
-		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 		RTA_RestrictModifySkillGroups_78568,
 		RTA_InputValidationForApprovingAdherencePeriods_77045,

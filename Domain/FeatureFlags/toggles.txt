@@ -34,7 +34,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
-RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
 RTA_RestrictModifySkillGroups_78568 = true
 RTA_InputValidationForApprovingAdherencePeriods_77045 = RC
