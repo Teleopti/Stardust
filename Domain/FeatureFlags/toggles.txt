@@ -139,4 +139,4 @@ MyTimeWeb_Preference_Indicate_BankHoliday_79900 = DEV
 
 # Tech #
 WFM_ChatBot_77547 = RC
-WFM_Insights_80704 = DEV
+WFM_Insights_80704 = RC
