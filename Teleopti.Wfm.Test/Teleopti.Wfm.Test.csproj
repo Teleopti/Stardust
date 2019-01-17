@@ -75,14 +75,16 @@
     <Compile Include="SingleSkilledBronzeAgentSameDayTest.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="SetupFixtureForAssembly.cs" />
-    <Compile Include="SpecialDatabaseTestAttribute.cs" />
-    <Compile Include="SpecialUnitOfWorkAttribute.cs" />
     <Compile Include="TestState.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.csproj">
+      <Project>{9bf4e24b-6110-4b87-841d-48580164bbf9}</Project>
+      <Name>Teleopti.Ccc.InfrastructureTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
@@ -115,11 +117,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Teleopti_RD.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
