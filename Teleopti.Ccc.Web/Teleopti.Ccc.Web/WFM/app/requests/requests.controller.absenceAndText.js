@@ -235,8 +235,6 @@
 
 			vm.initialized = true;
 			setupWatch();
-
-			uiGridUtilitiesService.updateTabInkBarStyles();
 		};
 
 		toggleService.togglesLoaded.then(vm.init);

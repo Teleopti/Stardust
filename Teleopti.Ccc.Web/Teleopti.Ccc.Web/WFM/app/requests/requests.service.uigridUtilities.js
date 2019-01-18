@@ -21,9 +21,7 @@
 		$locale,
 		requestsDefinitions,
 		requestCommandParamsHolder,
-		requestFiltersMgr,
-		$timeout,
-		$document
+		requestFiltersMgr
 	) {
 		var svc = this;
 
