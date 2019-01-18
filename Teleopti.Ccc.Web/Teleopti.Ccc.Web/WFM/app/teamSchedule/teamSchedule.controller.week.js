@@ -238,8 +238,11 @@
 		}
 
 		function monitorScheduleChanged() {
-			var options = { DomainType: 'IScheduleChangedInDefaultScenario' };
-			signalR.subscribeBatchMessage(options, scheduleChangedEventHandler, 300);
+			var options = {
+				DomainType: !toggles.WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242 ?
+					'IScheduleChangedInDefaultScenario' : 'ITeamScheduleWeekViewChangedInDefaultScenario'
+			};
+			signalR.subscribeBatchMessage(options, scheduleChangedEventHandler, 60 * 1000);
 		}
 
 		function scheduleChangedEventHandler(messages) {

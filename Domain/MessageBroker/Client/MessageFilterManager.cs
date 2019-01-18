@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Kpi;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -92,6 +93,10 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Client
 				{
 					typeof(IShiftTradeScheduleChangedInDefaultScenario),
 					new List<Type> { typeof(IShiftTradeScheduleChangedInDefaultScenario) }
+				},
+				{
+					typeof(ITeamScheduleWeekViewChangedInDefaultScenario),
+					new List<Type> { typeof(ITeamScheduleWeekViewChangedInDefaultScenario) }
 				},
 				{
 					typeof(IRunRequestWaitlistEventMessage),

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.Messaging;
 using Teleopti.Messaging.Client.Composite;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -412,80 +409,4 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		}
 	}
 
-	class FakeMessageBrokerComposite : IMessageBrokerComposite
-	{
-		private int _sendInvokedCount;
-		private bool _disabled;
-
-		public void Dispose()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ResetSendInvokedCount()
-		{
-			_sendInvokedCount = 0;
-		}
-
-		public void Disable()
-		{
-			_disabled = true;
-		}
-
-		public void Enable()
-		{
-			_disabled = false;
-		}
-
-		public int GetSendInvokedCount()
-		{
-			return _sendInvokedCount;			
-		}
-
-		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
-			Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType,
-			DomainUpdateType updateType, byte[] domainObject, Guid? trackId = null)
-		{
-			if (!_disabled) _sendInvokedCount++;
-		}
-
-		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
-			Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
-		{
-			if (!_disabled) _sendInvokedCount++;
-		}
-
-		public void Send(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
-		{
-			if (!_disabled) _sendInvokedCount++;
-		}
-
-		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Send(Message message)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SendMultiple(IEnumerable<Message> messages)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool IsAlive { get; private set; }
-		public bool IsPollingAlive { get; private set; }
-		public string ServerUrl { get; set; }
-		public void StartBrokerService(bool useLongPolling = false)
-		{
-			throw new NotImplementedException();
-		}
-	}
 }
