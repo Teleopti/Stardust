@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IBankHolidayDate> FetchByCalendarsAndPeriod(IEnumerable<IBankHolidayCalendar> calendars, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			return _bankHolidayDates.Where(d => d.Date >= period.StartDate && d.Date <= period.EndDate && calendars.Contains(d.Calendar));
 		}
 	}
 }
