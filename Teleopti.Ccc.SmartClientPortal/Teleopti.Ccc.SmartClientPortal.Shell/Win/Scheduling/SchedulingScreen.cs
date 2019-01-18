@@ -4441,6 +4441,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			backStageButtonSystemExit.Click -= toolStripButtonSystemExitClick;
 			backStageButtonManiMenuImport.Click -= backStageButtonManiMenuImportClick;
 			backStageButtonMainMenuCopy.Click -= backStageButtonMainMenuCopyClick;
+			backStageButtonMainMenuSave.Click -= toolStripButtonSaveLargeClick;
 			backStage1.VisibleChanged -= backStage1VisibleChanged;
 
 			if (flowLayoutExportToScenario != null && flowLayoutExportToScenario.ContainerControl != null)
