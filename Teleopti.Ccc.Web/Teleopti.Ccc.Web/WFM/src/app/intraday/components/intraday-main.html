@@ -16,7 +16,13 @@
 							[selectedItem]="selectedSkillOrGroup"
 						></app-angular-skill-picker>
 						<div class="con-flex" style="flex-basis: 15%">
-							<button nz-button (click)="goToGroupManager()" nzType="default" nzTitle="{{ 'ManageSkillGroups' | translate }}" nz-tooltip>
+							<button
+								nz-button
+								(click)="goToGroupManager()"
+								nzType="default"
+								nzTitle="{{ 'ManageSkillGroups' | translate }}"
+								nz-tooltip
+							>
 								<i nz-icon type="edit"></i>
 							</button>
 						</div>
@@ -125,6 +131,7 @@
 						[chartData]="chartData"
 						[chartType]="selectedChartType"
 						[latestTime]="latestTime"
+						[axisLabels]="axisLabels"
 					></app-intraday-chart>
 				</div>
 			</div>

@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import c3 from 'c3';
 import * as moment from 'moment';
 import { IntradayLatestTimeData } from '../../types';
-import { IntradayChartType } from '../../types/intraday-chart-type';
+import { IntradayChartType, IIntradayAxisLabels } from '../../types/intraday-chart-type';
 
 @Component({
 	selector: 'app-intraday-chart',
@@ -22,19 +22,27 @@ export class IntradayChartComponent implements OnChanges {
 	chartType: IntradayChartType;
 
 	@Input()
+	axisLabels: IIntradayAxisLabels;
+
+	@Input()
 	latestTime: IntradayLatestTimeData | undefined;
 
 	emptyChart = {
 		x: 'x',
 		xFormat: '%Y-%m-%d %H:%M',
 		type: 'area-spline',
-		columns: [],
+		columns: []
 		empty: { label: { text: this.translate.instant('NoDataAvailable') } }
 	};
 
 	ngOnChanges(changes: SimpleChanges) {
 		if (this.isEmptyObject(this.chartData)) {
 			this.initChart(this.emptyChart);
+			this.chart.axis.labels({
+				y: '',
+				y2: '',
+				x: ''
+			});
 		}
 		if (changes.chartData && (changes.chartData.currentValue as c3.Data).x) {
 			this.loadChart();
@@ -122,7 +130,7 @@ export class IntradayChartComponent implements OnChanges {
 					},
 					y: {
 						label: {
-							text: 'y',
+							text: this.axisLabels.yLabel,
 							position: 'outer-middle'
 						},
 						tick: {
@@ -132,7 +140,7 @@ export class IntradayChartComponent implements OnChanges {
 					y2: show_y2
 						? {
 								label: {
-									text: 'y2',
+									text: this.axisLabels.y2Label,
 									position: 'outer-middle'
 								},
 								show: true,
