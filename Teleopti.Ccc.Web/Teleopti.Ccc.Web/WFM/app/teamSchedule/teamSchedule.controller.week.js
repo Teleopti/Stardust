@@ -238,11 +238,15 @@
 		}
 
 		function monitorScheduleChanged() {
-			var options = {
-				DomainType: !toggles.WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242 ?
-					'IScheduleChangedInDefaultScenario' : 'ITeamScheduleWeekViewChangedInDefaultScenario'
-			};
-			signalR.subscribeBatchMessage(options, scheduleChangedEventHandler, 60 * 1000);
+			if (toggles.WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242) {
+				signalR.subscribeBatchMessage({
+					DomainType: 'ITeamScheduleWeekViewChangedInDefaultScenario'
+				}, scheduleChangedEventHandler, 60 * 1000);
+			} else {
+				signalR.subscribeBatchMessage({
+					DomainType: 'IScheduleChangedInDefaultScenario'
+				}, scheduleChangedEventHandler, 300);
+			}
 		}
 
 		function scheduleChangedEventHandler(messages) {
