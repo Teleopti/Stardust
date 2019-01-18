@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -16,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	[DomainTest]
 	public class MasterActivityThreadingTest
 	{
-		public ILifetimeScope Container;
+		public ShiftProjectionCacheFetcher Target;
 
 		[Test]
 		[Ignore("failed test for #80374")]
@@ -32,20 +30,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			{
 				tasks.Add(Task.Factory.StartNew(() =>
 				{
-					using (var scope = Container.BeginLifetimeScope())
-					{
-						var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity,
-							new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60),
-							new ShiftCategory().WithId())).WithId(ruleSetId);
-						return scope.Resolve<ShiftProjectionCacheManager>().ShiftProjectionCachesFromRuleSets(
-							new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc),
-							new[] {ruleSet}, false);		
-					}
+					var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(masterActivity,
+						new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+						new ShiftCategory().WithId())).WithId(ruleSetId);
+					return Target.Execute(ruleSet);		
 				}));
 			}
 		
 			Task.WaitAll(tasks.ToArray());
-
 		}
 	}
 }
