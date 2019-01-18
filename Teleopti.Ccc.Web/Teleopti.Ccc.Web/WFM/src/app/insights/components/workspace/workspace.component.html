@@ -44,8 +44,9 @@
 		[hidden]="!initialized || permission.CanViewReport" 
 		nzType="error"
 		nzMessage="Error"
-		nzDescription="You have no permission to view Insights report."
-		nzShowIcon>
+		nzDescription="You do not have permission to view Insights report."
+		nzShowIcon
+		nzBanner>
 	</nz-alert>
 
     <nz-modal [(nzVisible)]="modalIsVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">

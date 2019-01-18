@@ -38,8 +38,8 @@ export class ReportComponent implements OnInit {
 		private notification: NzNotificationService) {
 
 		const params = $state.params;
-		this.reportId = params.reportId;
-		this.action = params.action;
+		this.reportId = params.reportId.trim();
+		this.action = params.action.trim().toLowerCase();
 
 		this.inEditing = this.action === 'edit';
 		this.permission = new Permission();

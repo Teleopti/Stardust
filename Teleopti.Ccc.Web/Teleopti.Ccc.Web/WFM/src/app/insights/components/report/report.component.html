@@ -2,8 +2,14 @@
     <h1>
       <i class="mdi mdi-elevation-rise"></i>Insights - {{reportName}}
     </h1>
-
-    <div nz-row [nzGutter]="{ xs: 8, sm: 8, md: 8, lg: 8, xl: 8, xxl: 8 }" class="container">
+	<nz-alert
+		[hidden]="!initialized || permission.CanViewReport"
+		nzType="error"
+		nzMessage="You do not have permission to view Insights report."
+		nzShowIcon
+		nzBanner>
+	</nz-alert>
+    <div [hidden]="initialized && !permission.CanViewReport" nz-row [nzGutter]="{ xs: 8, sm: 8, md: 8, lg: 8, xl: 8, xxl: 8 }" class="container">
       <div nz-col nzSpan="6">
         <button nz-button nzType="default" (click)="nav.gotoInsights()"><i nz-icon type="left" theme="outline"></i> Back</button>
       </div>
@@ -32,7 +38,7 @@
       </nz-modal>
     </div>
     <div style="text-align: center;"><nz-spin *ngIf="isProcessing"></nz-spin></div>
-    <div class="panel con-flex material-depth-1">
+    <div [hidden]="initialized && !permission.CanViewReport" class="panel con-flex material-depth-1">
       <div id="reportContainer" style="height:75vh;"></div>
     </div>
 </div>
