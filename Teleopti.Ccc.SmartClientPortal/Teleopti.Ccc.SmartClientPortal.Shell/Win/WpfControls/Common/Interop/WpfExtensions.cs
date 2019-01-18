@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop
             {
                 //Set right to left:
                 window.FlowDirection =
-                    (((ITeleoptiPrincipalForLegacy)TeleoptiPrincipal.CurrentPrincipal).UnsafePerson.PermissionInformation.RightToLeftDisplay) ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+                    (((ITeleoptiPrincipalForLegacy)TeleoptiPrincipal.CurrentPrincipal).UnsafePerson().PermissionInformation.RightToLeftDisplay) ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
                 
                 //Set timezone:
                 //VisualTreeTimeZoneInfo.SetTimeZoneInfo(window, StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
