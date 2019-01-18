@@ -59,12 +59,12 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 	}
 
 	preSelectCalendarsForSite() {
-		this.sitesList.forEach(s => {
-			s.SelectedCalendarId = null;
-			const site = this.siteCalendarsList.filter(sc => sc.Site === s.Id)[0];
-			if (site && site.Calendars[0] && site.Calendars[0].length > 0) {
-				// Currently we only support setting one calendar to site
-				s.SelectedCalendarId = site.Calendars[0];
+		this.sitesList.forEach(site => {
+			site.SelectedCalendarId = null;
+			const siteCal = this.siteCalendarsList.filter(sc => sc.Site === site.Id)[0];
+			if (siteCal && siteCal.Calendars[0] && siteCal.Calendars[0].length > 0) {
+				// Note: currently we only support setting one calendar to a site
+				site.SelectedCalendarId = siteCal.Calendars[0];
 			}
 		});
 		this.sitesList = [...this.sitesList];
@@ -80,9 +80,16 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 		this.bankCalendarDataService.updateCalendarForSite({ Settings: [item] }).subscribe(
 			result => {
 				if (result === true) {
+					let isItemInList = false;
 					this.siteCalendarsList.forEach(sc => {
-						if (sc.Site === item.Site) sc.Calendars = item.Calendars;
+						if (sc.Site === item.Site) {
+							isItemInList = true;
+							sc.Calendars = item.Calendars;
+						}
 					});
+					if (!isItemInList) {
+						this.siteCalendarsList.push(item);
+					}
 				} else {
 					site.SelectedCalendarId = null;
 					this.networkError();
