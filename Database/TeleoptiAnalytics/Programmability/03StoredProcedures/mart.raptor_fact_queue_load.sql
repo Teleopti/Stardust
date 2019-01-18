@@ -18,6 +18,9 @@ GO
 -- when			who		what
 -- 2011-10-26	DavidJ	#16688
 -- =============================================
+
+--exec [mart].[raptor_fact_queue_load] 
+
 CREATE PROCEDURE [mart].[raptor_fact_queue_load] 
 AS
 BEGIN
@@ -95,7 +98,7 @@ INSERT INTO #queues
 SELECT queue_id
 FROM mart.dim_queue dq
 INNER JOIN #stg_queue stg
-	ON dq.queue_original_id = stg.queue_code COLLATE DATABASE_DEFAULT
+	ON dq.queue_original_id = stg.queue_code
 WHERE dq.datasource_id = @datasource_id 
 
 -- Delete rows for the queues imported from file
@@ -159,7 +162,7 @@ ON
 JOIN
 	mart.dim_queue		q
 ON
-	q.queue_original_id= stg.queue_code COLLATE DATABASE_DEFAULT
+	q.queue_original_id= stg.queue_code
 	AND q.datasource_id = @datasource_id
 
 END
