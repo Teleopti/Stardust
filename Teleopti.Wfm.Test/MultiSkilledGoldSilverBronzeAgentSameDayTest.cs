@@ -11,13 +11,12 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Ccc.UserTexts;
 
 
 namespace Teleopti.Wfm.Test
 {
-	[UnitOfWorkTest]
+	[SpecialUnitOfWork]
 	public class MultiSkilledGoldSilverBronzeAgentSameDayTest : SetUpCascadingShifts
 	{
 		public ICurrentUnitOfWork CurrentUnitOfWork;
