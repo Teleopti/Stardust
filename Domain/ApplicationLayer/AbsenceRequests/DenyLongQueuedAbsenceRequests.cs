@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_absenceRequestRepository = absenceRequestRepository;
 			_commandDispatcher = commandDispatcher;
 			_configReader = configReader;
-		}
+		} 
 
 		public IList<IQueuedAbsenceRequest> DenyAndRemoveLongRunningRequests(IEnumerable<IQueuedAbsenceRequest> allRequests)
 		{
-			var maxDaysForAbsenceRequest = _configReader.ReadValue("MaximumDayLengthForAbsenceRequest", 60);
+			var maxDaysForAbsenceRequest = _configReader.ReadValue("MaximumDayLengthForAbsenceRequest", 40);
 			var longRequests = allRequests.Where(x => x.EndDateTime.Subtract(x.StartDateTime).TotalDays >= maxDaysForAbsenceRequest).ToList();
 			
 			longRequests.ForEach(request =>
