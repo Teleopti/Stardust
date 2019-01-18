@@ -25,7 +25,7 @@
 						[nzPlaceHolder]="'SelectACalendarForSite' | translate"
 						[nzNotFoundContent]="'NoCalendarsAvailable' | translate"
 						(ngModelChange)="updateCalendarForSite($event, site)"
-						[class]="site.SelectedCalendarId ? '' : 'calendar-input-empty'"
+						[ngClass]="{ 'select-input-is-empty': !site.SelectedCalendarId }"
 					>
 						<nz-option
 							*ngFor="let cal of bankHolidayCalendarsList"
