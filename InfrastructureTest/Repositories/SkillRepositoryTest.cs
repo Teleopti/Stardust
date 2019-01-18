@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             multisiteSkill.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(multisiteSkill);
 
-            var q = new QueueSource("v�gar inte skriva s�nt", "peter", "1");
-            var q2 = new QueueSource("ft", "peter", "2");
+            var q = new QueueSource("v�gar inte skriva s�nt", "peter", 1);
+            var q2 = new QueueSource("ft", "peter", 2);
             PersistAndRemoveFromUnitOfWork(q);
             PersistAndRemoveFromUnitOfWork(q2);
 
@@ -130,8 +130,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
             
-            QueueSource q = new QueueSource("v�gar inte skriva s�nt", "peter", "1");
-            QueueSource q2 = new QueueSource("ft", "peter", "2");
+            QueueSource q = new QueueSource("v�gar inte skriva s�nt", "peter", 1);
+            QueueSource q2 = new QueueSource("ft", "peter", 2);
             PersistAndRemoveFromUnitOfWork(q);
             PersistAndRemoveFromUnitOfWork(q2);
 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
 
-            QueueSource q = new QueueSource("v�gar inte skriva s�nt", "peter", "1");
+            QueueSource q = new QueueSource("v�gar inte skriva s�nt", "peter", 1);
             PersistAndRemoveFromUnitOfWork(q); 
             
             Workload wl = new Workload(skill1);
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
 
-            IQueueSource q = new QueueSource("v�gar inte skriva s�nt", "peter", "1");
+            IQueueSource q = new QueueSource("v�gar inte skriva s�nt", "peter", 1);
             PersistAndRemoveFromUnitOfWork(q);
 
             Workload wl = new Workload(skill1);
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             
             PersistAndRemoveFromUnitOfWork(child1);
             
-            IQueueSource q = new QueueSource("v�gar inte skriva s�nt", "peter", "1");
+            IQueueSource q = new QueueSource("v�gar inte skriva s�nt", "peter", 1);
             PersistAndRemoveFromUnitOfWork(q);
 
             IWorkload wl = new Workload(skill1);
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill1.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill1);
 
-            IQueueSource q = new QueueSource("Q1", "Queue1", "1");
+            IQueueSource q = new QueueSource("Q1", "Queue1", 1);
             PersistAndRemoveFromUnitOfWork(q);
 
             IWorkload wl = new Workload(skill1);
@@ -410,7 +410,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(skill);
 
-            var q = new QueueSource("Queue 1", "Phone queue 1", "1");
+            var q = new QueueSource("Queue 1", "Phone queue 1", 1);
             PersistAndRemoveFromUnitOfWork(q);
 
             var wl = new Workload(skill);
@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IList<ISkill> children = new List<ISkill> { child1 };
             PersistAndRemoveFromUnitOfWork(children);
 
-            IQueueSource q = new QueueSource("Queue 1", "Phone Queue 1", "1");
+            IQueueSource q = new QueueSource("Queue 1", "Phone Queue 1", 1);
             PersistAndRemoveFromUnitOfWork(q);
 
             IWorkload wl = new Workload(skill1);
@@ -563,11 +563,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    };
 		    PersistAndRemoveFromUnitOfWork(skill);
 		    var wl = WorkloadFactory.CreateWorkload(skill);
-		    wl.AddQueueSource(new QueueSource{QueueAggId = "1"});
-            wl.AddQueueSource(new QueueSource { QueueAggId = "2" });
+		    wl.AddQueueSource(new QueueSource{QueueAggId = 1});
+            wl.AddQueueSource(new QueueSource { QueueAggId = 2 });
 		    var wl2 = WorkloadFactory.CreateWorkload(skill);
-		    wl2.AddQueueSource(new QueueSource{QueueAggId = "3"});
-            wl2.AddQueueSource(new QueueSource { QueueAggId = "4" });
+		    wl2.AddQueueSource(new QueueSource{QueueAggId = 3});
+            wl2.AddQueueSource(new QueueSource { QueueAggId = 4 });
 		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.First());
 		    PersistAndRemoveFromUnitOfWork(wl.QueueSourceCollection.Last());
 		    PersistAndRemoveFromUnitOfWork(wl2.QueueSourceCollection.First());

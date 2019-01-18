@@ -39,7 +39,7 @@
         /// Created by: zoet
         /// Created date: 2008-05-07
         /// </remarks>
-        string QueueAggId { get; set; }
+        int QueueAggId { get; set; }
 
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 		{
 			string name = "Name of Queue";
 			string description = "Description of the Queue";
-			string ctiQueueId = "17";
+			int ctiQueueId = 17;
 
 			return new QueueSource(name, description, ctiQueueId);
 		}
@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 		{
 			string name = "Inrikes";
 			string description = "Inrikessamtal";
-			string ctiQueueId = "178";
+			int ctiQueueId = 178;
 
 			return new QueueSource(name, description, ctiQueueId);
 		}
@@ -38,7 +38,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 		{
 			string name = "HelpDesk";
 			string description = "Helpdesk-samtal";
-			string ctiQueueId = "228";
+			int ctiQueueId = 228;
 
 			return new QueueSource(name, description, ctiQueueId);
 		}

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private const string Name = "QueueSource - Name";
         private const string Description = "QueueSource - Description";
         private const string QueueOriginalId = "14";
-        private const string QueueAggId = "111";
+        private const int QueueAggId = 111;
         private const string LogObjectName = "Log object name";
         private const int DataSourceId = 2;
         private const int QueueMartId = 999;
@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// </summary>
         [SetUp]
         public void Setup()
-        {
-            _target = new QueueSource(Name, Description, QueueOriginalId);
+		{
+			_target = new QueueSource(Name, Description, QueueAggId);// QueueOriginalId);
             _target2 = new QueueSource(Name, Description, QueueOriginalId, QueueAggId, QueueMartId, DataSourceId);
         }
 
@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// </summary>
         [Test]
         public void CanCreateQueueObject()
-        {
-            _target = new QueueSource(Name, Description, QueueOriginalId);
+		{
+			_target = new QueueSource(Name, Description, QueueAggId); //QueueOriginalId);
             Assert.IsNotNull(_target);
         }
 

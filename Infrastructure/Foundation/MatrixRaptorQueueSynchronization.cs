@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return queuesToAdd.Count + updatedCount;
 		}
 
-		private bool findByLookup(ILookup<string, IQueueSource> matrixQueuesByAggId, IQueueSource raptorQueue, out IQueueSource matrixQueue)
+		private bool findByLookup(ILookup<int, IQueueSource> matrixQueuesByAggId, IQueueSource raptorQueue, out IQueueSource matrixQueue)
 		{
 			var validToFind = (raptorQueue.QueueMartId == -1 &&
-					 raptorQueue.QueueOriginalId == "0" &&
-					 raptorQueue.DataSourceId == 0 &&
-					 string.IsNullOrEmpty(raptorQueue.QueueAggId));
+							   raptorQueue.QueueOriginalId == "0" &&
+							   raptorQueue.DataSourceId == 0 &&
+							   raptorQueue.QueueAggId > 0);
 
 			matrixQueue = matrixQueuesByAggId[raptorQueue.QueueAggId].FirstOrDefault();
 			return validToFind && matrixQueue != null;

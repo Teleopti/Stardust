@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private string _name = string.Empty;
         private string _description = string.Empty;
         private string _queueOriginalId = string.Empty;
-        private string _queueAggId = string.Empty;
+		private int _queueAggId;
         private string _logObjectName = string.Empty;
         private int _dataSourceId;
         private int _queueMartId;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// <param name="queueAggId">The queue id from aggregation database.</param>
         /// <param name="dataSourceId">The data source id from the data mart.</param>
         /// <param name="queueMartId">The data mart queue id.</param>
-        public QueueSource(string name, string description, string queueOriginalId, string queueAggId, int queueMartId, int dataSourceId)
+        public QueueSource(string name, string description, string queueOriginalId, int queueAggId, int queueMartId, int dataSourceId)
         {
             _name = name;
             _description = description;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// <param name="name">The name.</param>
         /// <param name="description">The custom description.</param>
         /// <param name="queueAggId">The queue id from aggregation database.</param>
-        public QueueSource(string name, string description, string queueAggId)
+        public QueueSource(string name, string description, int queueAggId)
         {
             _name = name;
             _description = description;
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: zoet
         /// Created date: 2008-05-07
         /// </remarks>
-        public virtual string QueueAggId
+        public virtual int QueueAggId
         {
             get { return _queueAggId; }
             set { _queueAggId = value; }

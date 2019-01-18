@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
-			IQueueSource raptorQueueInvalidMartData = new QueueSource("q1", "q1", "1", "2", 3, 4);
+			IQueueSource raptorQueueInvalidMartData = new QueueSource("q1", "q1", "1", 2, 3, 4);
 			
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueueInvalidMartData });
 			
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
 
-			IQueueSource raptorQueueCleared = new QueueSource("q1", "q1", "0", "2", 0, 0);
-			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "1", "2", 3, 4);
+			IQueueSource raptorQueueCleared = new QueueSource("q1", "q1", "0", 2, 0, 0);
+			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "1", 2, 3, 4);
 
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueueCleared });
 			
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
-			IQueueSource raptorQueueCleared = new QueueSource("q1", "q1", "0", "2", 0, 0);
-			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "1", "99", 3, 4);
+			IQueueSource raptorQueueCleared = new QueueSource("q1", "q1", "0", 2, 0, 0);
+			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "1", 99, 3, 4);
 
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueueCleared });
 			
@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
-			IQueueSource raptorQueue = new QueueSource("q1", "q1", "1", "2", 3, 4);
-			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "11", "22", 3, 44);
+			IQueueSource raptorQueue = new QueueSource("q1", "q1", "1", 2, 3, 4);
+			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "11", 22, 3, 44);
 
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueue });
 			
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
-			IQueueSource raptorQueue = new QueueSource("q1", "q1", "1", "2", 0, 4);
-			IQueueSource newRaptorQueue = new QueueSource("q2", "q2", "2", "3", 0, 4);
-			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "11", "22", 0, 4);
+			IQueueSource raptorQueue = new QueueSource("q1", "q1", "1", 2, 0, 4);
+			IQueueSource newRaptorQueue = new QueueSource("q2", "q2", "2", 3, 0, 4);
+			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "11", 22, 0, 4);
 
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueue, newRaptorQueue });
 			
@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var target = new MatrixRaptorQueueSynchronization(queueSourceRepository);
-			IQueueSource raptorQueue = new QueueSource("q1", "q1", "-11", "2", 0, 4);
-			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "-11", "2", 0, 4);
+			IQueueSource raptorQueue = new QueueSource("q1", "q1", "-11", 2, 0, 4);
+			IQueueSource matrixQueue = new QueueSource("mart q1", "mart q1 desc", "-11", 2, 0, 4);
 
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new List<IQueueSource> { raptorQueue });
 

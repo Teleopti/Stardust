@@ -21,11 +21,11 @@ GO
 CREATE TABLE dbo.Tmp_queues
 	(
 	queue int NOT NULL IDENTITY (1, 1),
-	orig_desc nvarchar(50) NULL,
+	orig_desc nvarchar(100) NULL,
 	log_object_id int NOT NULL,
 	orig_queue_id nvarchar(100) NULL,
-	display_desc nvarchar(50) NULL
-	)  ON [PRIMARY]
+	display_desc nvarchar(100) NULL
+	)
 GO
 ALTER TABLE dbo.Tmp_queues SET (LOCK_ESCALATION = TABLE)
 GO
@@ -60,14 +60,14 @@ ALTER TABLE dbo.queues ADD CONSTRAINT
 	PK_queues PRIMARY KEY CLUSTERED 
 	(
 	queue
-	) WITH( PAD_INDEX = OFF, FILLFACTOR = 90, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	)
 
 GO
 CREATE UNIQUE NONCLUSTERED INDEX uix_orig_queue_id ON dbo.queues
 	(
 	log_object_id,
 	orig_queue_id
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	)
 GO
 ALTER TABLE dbo.queues WITH NOCHECK ADD CONSTRAINT
 	FK_queues_log_object FOREIGN KEY
@@ -161,3 +161,14 @@ GO
 ALTER TABLE dbo.queue_logg SET (LOCK_ESCALATION = TABLE)
 GO
 COMMIT
+
+
+ALTER TABLE [dbo].[agent_info]
+ALTER COLUMN [orig_agent_id] nvarchar(100)
+
+ALTER TABLE [dbo].[agent_info]
+ALTER COLUMN [Agent_name] nvarchar(100)
+
+ALTER TABLE [dbo].[agent_logg]
+ALTER COLUMN [agent_name] nvarchar(100)
+GO

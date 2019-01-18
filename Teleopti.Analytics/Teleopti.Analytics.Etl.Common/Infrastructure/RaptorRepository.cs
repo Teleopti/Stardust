@@ -951,7 +951,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					string queueOriginalId = row["QueueOriginalId"] == DBNull.Value
 											  ? "-1"
 											  : (string)row["QueueOriginalId"];
-					string queueAgglId = row["QueueAggId"] == DBNull.Value ? "-1" : row["QueueAggId"].ToString();
+					int queueAgglId = row["QueueAggId"] == DBNull.Value ? -1 : (int)row["QueueAggId"];
 					int dsId = row["DataSourceId"] == DBNull.Value ? -1 : (short)row["DataSourceId"];
 
 					IQueueSource queue = new QueueSource((string)row["Name"], description, queueOriginalId, queueAgglId, (int)row["QueueMartId"], dsId);

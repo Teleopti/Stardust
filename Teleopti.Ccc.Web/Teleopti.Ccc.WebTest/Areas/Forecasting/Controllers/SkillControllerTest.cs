@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ServiceLevelSeconds = 20,
 				Shrinkage = 5
 			};
-			var queueSource = new QueueSource("testQ","","1");
+			var queueSource = new QueueSource("testQ","", 1);
 			queueSource.SetId(input.Queues[0]);
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] {queueSource});
 			var activity = ActivityFactory.CreateActivity("test1");
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				}
 			};
 
-			var queueSource = new QueueSource("testQ", "", "1");
+			var queueSource = new QueueSource("testQ", "", 1);
 			queueSource.SetId(input.Queues[0]);
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] { queueSource });
 			var activity = ActivityFactory.CreateActivity("test1");
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ServiceLevelSeconds =10,
 				Shrinkage= 21
 			};
-			var queueSource = new QueueSource("testQ", "", "1");
+			var queueSource = new QueueSource("testQ", "", 1);
 			queueSource.SetId(input.Queues[0]);
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] { queueSource });
 			var activity = ActivityFactory.CreateActivity("test1");
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			intervalLengthFetcher.Stub(x => x.GetIntervalLength()).Return(14);
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
 			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
-			var queueSource = new QueueSource("testQ", "", "1");
+			var queueSource = new QueueSource("testQ", "", 1);
 			queueSource.SetId(input.Queues[0]);
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] { queueSource });
 			activityRepository.Stub(x => x.Load(input.ActivityId)).Return(activity);
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldGetQueues()
 		{
 			var queueSourceRepository = MockRepository.GenerateMock<IQueueSourceRepository>();
-			var queueSource = new QueueSource("name1", "description1", "1");
+			var queueSource = new QueueSource("name1", "description1", 1);
 			queueSource.SetId(Guid.NewGuid());
 			queueSource.LogObjectName = "logObjectName1";
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] {queueSource});
