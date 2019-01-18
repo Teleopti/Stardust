@@ -14,8 +14,16 @@
 		var self = this;
 
 		this.getDateByFormat = function (date, format) {
-			var localeSafeMoment = moment(date).locale('en');
-			return localeSafeMoment.format(format);
+			var dateMoment = date;
+			if (!(date instanceof moment)) {
+				dateMoment = moment(date);
+			}
+
+			if (moment.locale() != 'en') {
+				dateMoment.locale('en');
+			}
+
+			return dateMoment.format(format);
 		}
 
 		this.getDateOnly = function (date) {

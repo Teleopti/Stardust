@@ -38,6 +38,7 @@
 		teamsBootstrapData
 	) {
 		var vm = this;
+		vm.permissions = teamsPermissions.all();
 
 		function buildAction(label, openSidePanel) {
 			return function () {
@@ -381,6 +382,12 @@
 			return vm.canRemoveActivity() || vm.canRemoveAbsence() || personSelectionSvc.anyAgentChecked();
 		};
 
+
+		vm.isMenuVisible = false;
+		vm.toggleMenu = function () {
+			vm.isMenuVisible = true;
+		}
+
 		function registerShortCuts() {
 			vm.commands.forEach(function (cmd) {
 				function wrappedAction() {
@@ -395,11 +402,6 @@
 		}
 
 		vm.init = function () {
-			vm.permissions = teamsPermissions.all();
-
-			vm.isMenuVisible = function () {
-				return true;
-			};
 			registerShortCuts();
 		};
 

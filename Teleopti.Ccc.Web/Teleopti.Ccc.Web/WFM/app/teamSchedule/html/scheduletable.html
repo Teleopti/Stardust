@@ -22,7 +22,7 @@
 			<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
 		</tr>
 	</thead>
-	<tbody ng-style="vm.tableStyle">
+	<tbody ng-style="::vm.tableStyle">
 		<tr ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}" ng-repeat-start="personSchedule in vm.scheduleVm.Schedules" ng-click="vm.togglePerson(personSchedule, $event)">
 			<td class="person-name-column">
 				<div ng-show="::vm.selectMode" class="inline-block">
@@ -107,7 +107,7 @@
 				</div>
 			</td>
 			<td class="schedule-tool-column">
-				<span class="editor" ng-if="vm.showEditButton(personSchedule)" ng-click="vm.clickEditButton(personSchedule)"><i class="mdi mdi-pencil"></i></span>
+				<span class="editor" ng-if="::vm.showEditButton(personSchedule)" ng-click="vm.clickEditButton(personSchedule)"><i class="mdi mdi-pencil"></i></span>
 			</td>
 			<td class="schedule-tool-column schedule-note-column" ng-click="vm.editScheduleNote(personSchedule.PersonId)">
 				<span ng-class="{noComment:!vm.getScheduleNoteForPerson(personSchedule.PersonId).internalNotes && !vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes}"><i class="mdi mdi-comment"></i></span>
