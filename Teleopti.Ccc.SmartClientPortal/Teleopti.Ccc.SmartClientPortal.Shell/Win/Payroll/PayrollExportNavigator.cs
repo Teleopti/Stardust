@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 
 				uow.PersistAll();
 				var payrollResultId = payrollResult.Id.GetValueOrDefault();
-				var personId = ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipal.CurrentPrincipal).UnsafePerson().Id.GetValueOrDefault(Guid.Empty);
+				var personId = ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipal.CurrentPrincipal).UnsafePerson.Id.GetValueOrDefault(Guid.Empty);
 				var message = new RunPayrollExportEvent
 				{
 					PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),

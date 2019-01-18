@@ -1,6 +1,5 @@
 ﻿using NHibernate.Envers;
 using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public void NewRevision(object revisionEntity)
 		{
 			var revision = (Revision) revisionEntity;
-			revision.SetRevisionData(_user.Person() as IPerson);
+			revision.SetRevisionData(_user.Person());
 		}
 	}
 }

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 		[UnitOfWork]
 		public virtual void Handle(CopyScheduleEvent @event)
 		{
-			_currentUnitOfWork.Current().Reassociate(_updatedBy.Person() as IAggregateRoot);
+			_currentUnitOfWork.Current().Reassociate(_updatedBy.Person());
 			var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 
 			var fromScenario = _scenarioRepository.Get(@event.FromScenario);
