@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd';
 
 import { GroupPageService } from 'src/app/shared/services/group-page-service';
@@ -27,7 +27,7 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 	ngOnInit() {
 		this.bankCalendarDataService.bankHolidayCalendarsList$.subscribe(calendars => {
 			this.bankHolidayCalendarsList = calendars;
-
+			this.updateSiteAndCalsList(calendars);
 			this.preSelectCalendarsForSite();
 		});
 
@@ -44,6 +44,20 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 			}, this.networkError);
 	}
 
+	updateSiteAndCalsList(calendars: BankHolidayCalendarItem[]) {
+		const calIds = calendars.map(c => {
+			return c.Id;
+		});
+
+		this.siteCalendarsList.forEach(sc => {
+			const cals = [];
+			sc.Calendars.forEach(c => {
+				if (calIds.indexOf(c) > -1) cals.push(c);
+			});
+			sc.Calendars = cals;
+		});
+	}
+
 	preSelectCalendarsForSite() {
 		this.sitesList.forEach(s => {
 			s.SelectedCalendarId = null;
@@ -53,22 +67,22 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 				s.SelectedCalendarId = site.Calendars[0];
 			}
 		});
+		this.sitesList = [...this.sitesList];
 	}
 
 	updateCalendarForSite(calId: string, site: GroupPageSiteItem) {
 		const cals: string[] = [];
-
 		if (calId && calId.length > 0) {
 			cals.push(calId);
 		}
+		const item = { Site: site.Id, Calendars: cals };
 
-		const formData = {
-			Settings: [{ Site: site.Id, Calendars: cals }]
-		};
-
-		this.bankCalendarDataService.updateCalendarForSite(formData).subscribe(
+		this.bankCalendarDataService.updateCalendarForSite({ Settings: [item] }).subscribe(
 			result => {
-				if (result) {
+				if (result === true) {
+					this.siteCalendarsList.forEach(sc => {
+						if (sc.Site === item.Site) sc.Calendars = item.Calendars;
+					});
 				} else {
 					site.SelectedCalendarId = null;
 					this.networkError();

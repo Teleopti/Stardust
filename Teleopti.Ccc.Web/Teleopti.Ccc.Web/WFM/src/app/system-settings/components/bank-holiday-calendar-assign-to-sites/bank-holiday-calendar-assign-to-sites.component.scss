@@ -1,4 +1,4 @@
-$primary: #0099ff;
+$table_highlight_bg: #e6f7ff;
 
 .bank-holiday-calendar-assign-to-sites {
 	min-height: 80px;
@@ -10,7 +10,7 @@ nz-list-item {
 	padding-right: 16px;
 }
 nz-list-item:hover {
-	border-bottom-color: $primary;
+	background: $table_highlight_bg;
 }
 nz-select {
 	width: 300px;

@@ -16,6 +16,7 @@ import { GroupPageService } from 'src/app/shared/services/group-page-service';
 describe('BankHolidayCalendarAssignToSitesComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAssignToSitesComponent>;
 	let document: Document;
+	let dataService: BankCalendarDataService;
 	let component: BankHolidayCalendarAssignToSitesComponent;
 	let httpTestingController: HttpTestingController;
 
@@ -38,6 +39,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 		fixture = TestBed.createComponent(BankHolidayCalendarAssignToSitesComponent);
 		document = TestBed.get(DOCUMENT);
 		component = fixture.componentInstance;
+		dataService = TestBed.get(BankCalendarDataService);
 		fixture.autoDetectChanges(true);
 		httpTestingController = TestBed.get(HttpTestingController);
 	}));
@@ -76,7 +78,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 	});
 
 	it('should preset sites selected calendar', () => {
-		component.bankHolidayCalendarsList = [
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 				Name: 'Bank holiday calendar',
@@ -101,7 +103,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 					}
 				]
 			}
-		];
+		]);
 
 		httpTestingController
 			.match('../api/GroupPage/AvailableGroupPages?date=' + moment().format('YYYY-MM-DD'))[0]
@@ -134,7 +136,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 	});
 
 	it('should be able to select a calendar for a site', () => {
-		component.bankHolidayCalendarsList = [
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 				Name: 'Bank holiday calendar',
@@ -159,7 +161,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 					}
 				]
 			}
-		];
+		]);
 
 		httpTestingController
 			.match('../api/GroupPage/AvailableGroupPages?date=' + moment().format('YYYY-MM-DD'))[0]
@@ -203,7 +205,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 	});
 
 	it('should clean the selected value if failed to update calendar for a site', () => {
-		component.bankHolidayCalendarsList = [
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
 				Name: 'Bank holiday calendar',
@@ -228,7 +230,7 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 					}
 				]
 			}
-		];
+		]);
 
 		httpTestingController
 			.match('../api/GroupPage/AvailableGroupPages?date=' + moment().format('YYYY-MM-DD'))[0]
@@ -268,5 +270,121 @@ describe('BankHolidayCalendarAssignToSitesComponent', () => {
 		fixture.detectChanges();
 
 		expect(component.sitesList[0].SelectedCalendarId).toBe(null);
+	});
+
+	it('should clean the selected value if calendar is delted', () => {
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				CurrentYearIndex: 0,
+				Years: [
+					{
+						Year: '2013',
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday1',
+								IsDeleted: false
+							},
+							{
+								Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+								Date: '2013-01-10',
+								Description: 'BankHoliday2',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		]);
+		httpTestingController
+			.match('../api/GroupPage/AvailableGroupPages?date=' + moment().format('YYYY-MM-DD'))[0]
+			.flush({
+				BusinessHierarchy: [
+					{
+						Children: [{ Name: 'BTS', Id: '9d013613-7c79-4621-b166-a39a00b9d634' }],
+						Id: '7a6c0754-4de8-48fb-8aee-a39a00b9d1c3',
+						Name: 'BTS'
+					},
+					{
+						Children: [{ Name: 'Dubai 1', Id: '3f6236f8-dfb0-4b44-93ed-a7ba00f816bf' }],
+						Id: '6bf99381-0110-4866-a3f6-a7ba00f7fdd4',
+						Name: 'Dubai'
+					}
+				],
+				GroupPages: []
+			});
+		httpTestingController
+			.match('../api/SiteBankHolidayCalendars')[0]
+			.flush([
+				{ Site: '7a6c0754-4de8-48fb-8aee-a39a00b9d1c3', Calendars: ['e0e97b97-1f4c-4834-9cc1-a9c3003b10df'] }
+			]);
+
+		fixture.detectChanges();
+		expect(component.sitesList[0].SelectedCalendarId).toBe('e0e97b97-1f4c-4834-9cc1-a9c3003b10df');
+
+		dataService.bankHolidayCalendarsList$.next([]);
+		fixture.detectChanges();
+		expect(component.sitesList[0].SelectedCalendarId).toBe(null);
+	});
+
+	it('should update the siteCalendarsList after updating calendar for a site', () => {
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar',
+				CurrentYearIndex: 0,
+				Years: []
+			},
+			{
+				Id: 'bab44a97-2f77-419e-a5bb-cd12a8c39300',
+				Name: 'Bank holiday calendar 2',
+				CurrentYearIndex: 0,
+				Years: []
+			}
+		]);
+		httpTestingController
+			.match('../api/GroupPage/AvailableGroupPages?date=' + moment().format('YYYY-MM-DD'))[0]
+			.flush({
+				BusinessHierarchy: [
+					{
+						Children: [{ Name: 'BTS', Id: '9d013613-7c79-4621-b166-a39a00b9d634' }],
+						Id: '7a6c0754-4de8-48fb-8aee-a39a00b9d1c3',
+						Name: 'BTS'
+					},
+					{
+						Children: [{ Name: 'Dubai 1', Id: '3f6236f8-dfb0-4b44-93ed-a7ba00f816bf' }],
+						Id: '6bf99381-0110-4866-a3f6-a7ba00f7fdd4',
+						Name: 'Dubai'
+					}
+				],
+				GroupPages: []
+			});
+		httpTestingController
+			.match('../api/SiteBankHolidayCalendars')[0]
+			.flush([
+				{ Site: '7a6c0754-4de8-48fb-8aee-a39a00b9d1c3', Calendars: ['e0e97b97-1f4c-4834-9cc1-a9c3003b10df'] }
+			]);
+
+		fixture.detectChanges();
+
+		expect(component.siteCalendarsList[0].Calendars[0]).toBe('e0e97b97-1f4c-4834-9cc1-a9c3003b10df');
+
+		const container = document.getElementsByClassName('bank-holiday-calendar-assign-to-sites')[0];
+		const list = container.getElementsByClassName('bank-holiday-calendar-sites-list')[0];
+		const listItems = list.getElementsByTagName('nz-list-item');
+
+		listItems[0].getElementsByTagName('input')[0].dispatchEvent(new Event('click'));
+		document.getElementsByClassName('ant-select-dropdown-menu-item')[1].dispatchEvent(new Event('click'));
+
+		httpTestingController
+			.expectOne('../api/SiteBankHolidayCalendars/Update')
+			.event(new HttpResponse<boolean>({ body: true }));
+		fixture.detectChanges();
+
+		expect(component.sitesList[0].SelectedCalendarId).toBe('bab44a97-2f77-419e-a5bb-cd12a8c39300');
+		expect(component.siteCalendarsList[0].Calendars[0]).toBe('bab44a97-2f77-419e-a5bb-cd12a8c39300');
 	});
 });
