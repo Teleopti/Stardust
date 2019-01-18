@@ -10,8 +10,8 @@ GO
 -- =============================================
 -- 
 CREATE PROCEDURE [mart].[ReturnQueueId]
-@queue_original_id nvarchar(50),
-@queue_name nvarchar(50),
+@queue_original_id nvarchar(100),
+@queue_name nvarchar(100),
 @datasource_id int
 AS
 

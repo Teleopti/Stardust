@@ -164,3 +164,7 @@ ALTER COLUMN [Agent_name] nvarchar(100)
 ALTER TABLE [dbo].[agent_logg]
 ALTER COLUMN [agent_name] nvarchar(100)
 GO
+
+ALTER TABLE [stage].[stg_queue]
+ALTER COLUMN [queue_name] nvarchar(100)
+GO

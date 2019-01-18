@@ -42,7 +42,7 @@ CREATE TABLE #stg_queue(
 	[date] [datetime] NOT NULL,
 	[interval] [nvarchar](50) NOT NULL,
 	[queue_code] [int] NULL,
-	[queue_name] [nvarchar](50) NOT NULL,
+	[queue_name] [nvarchar](100) NOT NULL,
 	[offd_direct_call_cnt] [int] NULL,
 	[overflow_in_call_cnt] [int] NULL,
 	[aband_call_cnt] [int] NULL,
@@ -95,7 +95,7 @@ INSERT INTO #queues
 SELECT queue_id
 FROM mart.dim_queue dq
 INNER JOIN #stg_queue stg
-	ON dq.queue_original_id = stg.queue_code
+	ON dq.queue_original_id = stg.queue_code COLLATE DATABASE_DEFAULT
 WHERE dq.datasource_id = @datasource_id 
 
 -- Delete rows for the queues imported from file
@@ -159,7 +159,7 @@ ON
 JOIN
 	mart.dim_queue		q
 ON
-	q.queue_original_id= stg.queue_code 
+	q.queue_original_id= stg.queue_code COLLATE DATABASE_DEFAULT
 	AND q.datasource_id = @datasource_id
 
 END

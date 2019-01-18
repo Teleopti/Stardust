@@ -97,12 +97,12 @@ ALTER COLUMN [queue_original_id] nvarchar(100)
 
 GO
 
-
---DROP VIEW [dbo].[v_ExternalLogon]
---DROP VIEW [dbo].[v_PersonOrganizationData]
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[v_ExternalLogon]'))
+	DROP VIEW [dbo].[v_ExternalLogon]
 GO
-
-ALTER TABLE [dbo].[ExternalLogOn]
-ALTER COLUMN [AcdLogOnOriginalId] nvarchar(100)
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[v_PersonOrganizationData]'))
+	DROP VIEW [dbo].[v_PersonOrganizationData]
 GO
-
+ALTER TABLE [dbo].[ExternalLogOn] 
+	ALTER COLUMN [AcdLogOnOriginalId] nvarchar(100)
+GO
