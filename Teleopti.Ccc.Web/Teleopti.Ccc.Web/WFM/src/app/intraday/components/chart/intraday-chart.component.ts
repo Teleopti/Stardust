@@ -31,7 +31,7 @@ export class IntradayChartComponent implements OnChanges {
 		x: 'x',
 		xFormat: '%Y-%m-%d %H:%M',
 		type: 'area-spline',
-		columns: []
+		columns: [],
 		empty: { label: { text: this.translate.instant('NoDataAvailable') } }
 	};
 
