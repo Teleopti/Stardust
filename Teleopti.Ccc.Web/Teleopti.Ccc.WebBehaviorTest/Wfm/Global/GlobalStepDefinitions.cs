@@ -29,7 +29,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[When(@"I open group pages picker")]
 		public void WhenIOpenGroupPagesPicker()
 		{
-			Browser.Interactions.Click("group-page-picker");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
+			{
+				Browser.Interactions.Click("group-page-picker");
+			});
 		}
 
 		[Then(@"I close group pages picker")]
@@ -47,7 +50,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[Then(@"I should see group pages picker tab")]
 		public void ThenIShouldSeeGroupPagesPickerTab()
 		{
-			Browser.Interactions.AssertExists(".group-page-picker-menu md-pagination-wrapper .md-tab > i.mdi.mdi-folder-account");
+			Browser.Interactions.AssertExists(
+				".group-page-picker-menu md-pagination-wrapper .md-tab > i.mdi.mdi-folder-account");
 		}
 
 		[Then(@"I click on group page picker icon")]
