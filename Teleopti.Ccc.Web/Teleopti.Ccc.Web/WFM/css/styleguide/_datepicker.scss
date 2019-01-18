@@ -31,7 +31,7 @@
 }
 
 .wfm-datepicker-wrap {
-	@extend .material-depth-1;
+	@extend .panel;
 	margin: $full-padding;
 	display: inline-block;
 	background-color: $white;
@@ -61,7 +61,8 @@
 	content: '»' !important;
 }
 
-.uib-datepicker, .wfm-datepicker {
+.uib-datepicker,
+.wfm-datepicker {
 	padding: 5px;
 
 	table th {
