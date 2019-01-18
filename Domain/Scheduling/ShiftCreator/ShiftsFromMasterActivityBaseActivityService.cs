@@ -12,10 +12,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			if (!hasMasterActivity(workShift))
 				return new[] {workShift};
 
+			var workShiftInner = workShift.EntityClone();
 			using (PerformanceOutput.ForOperation("Creating shifts from master activity"))
 			{
 				var finalList = new List<IWorkShift>();
-				Stack<IWorkShift> stack = new Stack<IWorkShift>(createShiftsFromShift(workShift, true, baseIsMaster));
+				Stack<IWorkShift> stack = new Stack<IWorkShift>(createShiftsFromShift(workShiftInner, true, baseIsMaster));
 				while (stack.Count > 0)
 				{
 					var shiftToTest = stack.Pop();

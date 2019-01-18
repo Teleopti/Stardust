@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public ShiftProjectionCacheFetcher Target;
 
 		[Test]
-		[Ignore("failed test for #80374")]
 		public void ShouldNotCrashWhenCacheShiftProjectWithMasterActivity()
 		{
 			var masterActivity = new MasterActivity();
