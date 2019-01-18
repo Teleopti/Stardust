@@ -14,23 +14,18 @@
 
 	<link href="Content/angular-material.min.css" rel="stylesheet" />
 	<link href="Content/jquery-ui.min.css" rel="stylesheet" />
-
 	<script src="Scripts/angular.min.js"></script>
 	<script src="Scripts/angular-animate.min.js"></script>
 	<script src="Scripts/angular-route.min.js"></script>
 	<script src="Scripts/angular-aria.min.js"></script>
 	<script src="Scripts/angular-cookies.min.js"></script>
-
-	<!--<script src="Scripts/angular-messages.min.js"></script>-->
-
 	<script src="Scripts/angular-material.js"></script>
-
 	<script src="Scripts/Chart.min.js"></script>
 
 </head>
 
 <body ng-app="adminApp" ng-controller="loginController as loginVm">
-	<div ng-show="loginVm.user != ''">
+	<div ng-if="user !== ''">
 		<div style="background-color: #428bca;" class="navbar  navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -40,14 +35,14 @@
 				</div>
 				<div style="margin-top: 10px" class="dropdown navbar-right">
 					<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
-						{{loginVm.user}}
+						{{user}}
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-						<li ng-show="loginVm.user != null" role="presentation"><a role="menuitem" tabindex="-1" href="#changepassword/{{loginVm.id}}">Change password</a></li>
+						<li ng-show="user != ''" role="presentation"><a role="menuitem" tabindex="-1" href="#changepassword/{{loginVm.id}}">Change password</a></li>
 						<li role="presentation" class="divider"></li>
-						<li ng-show="loginVm.user === ''" role="presentation"><a ng-click="loginVm.logout()" role="menuitem" tabindex="-1" href="#">Log in</a></li>
-						<li ng-show="loginVm.user != ''" role="presentation"><a ng-click="loginVm.logout()" role="menuitem" tabindex="-1" href="#">Log out</a></li>
+						<li ng-show="user === ''" role="presentation"><a ng-click="loginVm.logout()" role="menuitem" tabindex="-1" href="#">Log in</a></li>
+						<li ng-show="user != ''" role="presentation"><a ng-click="loginVm.logout()" role="menuitem" tabindex="-1" href="#">Log out</a></li>
 					</ul>
 				</div>
 
@@ -60,10 +55,9 @@
 		</div>
 	</div>
 
-	<div ng-show="loginVm.user != ''" style="background: #fff;">
+	<div ng-if="user !== ''" style="background: #fff;">
 		<div ng-view></div>
 	</div>
-
 
 	<div style="visibility: hidden">
 		<div id="modal-login" class="loginWrapper">
@@ -114,7 +108,7 @@
 	<script src="Scripts/StardustApp/jobDetailsController.js"></script>
 	<script src="Scripts/StardustApp/nodeDetailsController.js"></script>
 	<script src="Scripts/Hangfire/hangfireController.js"></script>
-<script src="Scripts/Hangfire/hangfireMonitoringController_LevelUp_HangfireStatistics_76139_76373.js"></script>
+	<script src="Scripts/Hangfire/hangfireMonitoringController_LevelUp_HangfireStatistics_76139_76373.js"></script>
 
 	<!-- etl -->
 	<script src="Scripts/moment.min.js"></script>

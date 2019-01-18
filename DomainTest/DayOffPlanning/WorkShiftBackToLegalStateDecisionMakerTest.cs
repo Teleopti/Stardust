@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldSuccess()
 		{
-			ILockableBitArray array = new LockableBitArray(7, false, false, null);
+			ILockableBitArray array = new LockableBitArray(7, false, false);
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleResultDataExtractor.Values(_dateOnlyPeriod)).Return(new List<double?> {0, 1, 0, 0, 1, 0, 1});
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldSuccessWithRaise()
 		{
-			ILockableBitArray array = new LockableBitArray(7, false, false, null);
+			ILockableBitArray array = new LockableBitArray(7, false, false);
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleResultDataExtractor.Values(_dateOnlyPeriod)).Return(new List<double?> { 0, 1, 0, 0, 1, 0, 1 });

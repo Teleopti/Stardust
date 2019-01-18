@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             _validator = _mocks.StrictMock<IDayOffLegalStateValidator>();
             _validators = new List<IDayOffLegalStateValidator> { _validator };
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _bitArray = new LockableBitArray(7, false, false, null);
+            _bitArray = new LockableBitArray(7, false, false);
             _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();

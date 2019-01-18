@@ -11,18 +11,16 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
     {
         private readonly bool _includesWeekBefore;
         private readonly bool _includesWeekAfter;
-        private readonly int? _terminalDateIndex;
         private BitArray _lockedBits;
         private BitArray _dayOffBits;
         private IList<int> _unlockedIndexes;
         private Random _rnd = new Random();
         private MinMax<int> _periodArea;
 
-        public LockableBitArray(int bitArrayCount, bool includesWeekBefore, bool includesWeekAfter, int? terminalDateIndex)
+        public LockableBitArray(int bitArrayCount, bool includesWeekBefore, bool includesWeekAfter)
         {
             _includesWeekBefore = includesWeekBefore;
             _includesWeekAfter = includesWeekAfter;
-            _terminalDateIndex = terminalDateIndex;
             _lockedBits = new BitArray(bitArrayCount);
             _dayOffBits = new BitArray(bitArrayCount);
             if(bitArrayCount > int.MinValue)
@@ -49,8 +47,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                 return _unlockedIndexes;
             }
         }
-
-        public int? TerminalDateIndex => _terminalDateIndex;
 
 	    public void Set(int index, bool value)
         {
