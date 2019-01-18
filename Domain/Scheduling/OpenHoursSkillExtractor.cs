@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -16,23 +15,42 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	public class OpenHoursSkillExtractor : IOpenHoursSkillExtractor
 	{
-		private readonly CreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
-		private readonly IOpenHourForDate _openHourForDate;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-		public OpenHoursSkillExtractor(CreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity, IOpenHourForDate openHourForDate, IGroupPersonSkillAggregator groupPersonSkillAggregator)
+		public OpenHoursSkillExtractor(IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
-			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
-			_openHourForDate = openHourForDate;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
 		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate)
 		{
-			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, skillDays, _groupPersonSkillAggregator, period);
 			var openHoursDictionary = period.DayCollection().ToDictionary(d => d, day =>
 			{
-				var openHours = _openHourForDate.OpenHours(day, skillIntervalDataPerDateAndActivity[day]);
+				var minOpen = TimeSpan.MaxValue;
+				var maxOpen = TimeSpan.MinValue;
+				var skills = _groupPersonSkillAggregator.AggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers, day.ToDateOnlyPeriod()).ToList();
+				var offsetUser = TimeZoneGuard.Instance.TimeZone.GetUtcOffset(day.Date);
+
+				foreach (var skillDay in skillDays)
+				{
+					if (!skills.Contains(skillDay.Skill) ||skillDay.CurrentDate != day) continue;
+					var offsetSkill = skillDay.Skill.TimeZone.GetUtcOffset(day.Date);
+
+					foreach (var timePeriod in skillDay.OpenHours())
+					{
+						var start = timePeriod.StartTime.Add(-offsetSkill + offsetUser);
+						if (start < minOpen)
+							minOpen = start;
+						
+						var end = timePeriod.EndTime.Add(-offsetSkill + offsetUser);
+						if (end > maxOpen)
+							maxOpen = end;			
+					}
+				}
+
+				TimePeriod? openHours = null;
+				if (minOpen < maxOpen) openHours = new TimePeriod(minOpen, maxOpen);
+
 				var restriction = new EffectiveRestriction(
 					new StartTimeLimitation(openHours?.StartTime, null),
 					new EndTimeLimitation(null, openHours?.EndTime),
@@ -72,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (OpenHoursDictionary == null) return TimeSpan.MaxValue;
 			if (!OpenHoursDictionary.TryGetValue(_currentDate, out var startEndRestriction)) return TimeSpan.MaxValue;
-			if (startEndRestriction.EndTimeLimitation.EndTime == null) return TimeSpan.MaxValue;
+			if (startEndRestriction?.EndTimeLimitation.EndTime == null) return TimeSpan.MaxValue;
 			return startEndRestriction.StartTimeLimitation.StartTime == null
 				? TimeSpan.MaxValue
 				: startEndRestriction.EndTimeLimitation.EndTime.Value.Subtract(startEndRestriction.StartTimeLimitation.StartTime.Value);
