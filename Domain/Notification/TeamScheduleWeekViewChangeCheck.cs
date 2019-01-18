@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -34,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		public void InitiateNotify(ScheduleChangeForWeekViewEvent @event)
 		{
 			var dates = @event.NewReadModels
-				.Where(readModel => IsRelevantChange(readModel.Key, @event.Person, readModel.Value))
+				.Where(readModel => isRelevantChange(readModel.Key, @event.Person, readModel.Value))
 				.Select(readModel => readModel.Key.Date);
 
 			if (dates.Any())
@@ -57,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			}
 		}
 
-		private bool IsRelevantChange(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel)
+		private bool isRelevantChange(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel)
 		{
 			var existingReadModel = _scheduleDayReadModelRepository.ForPerson(date, person.Id.GetValueOrDefault());
 
@@ -66,11 +64,5 @@ namespace Teleopti.Ccc.Domain.Notification
 				|| existingReadModel?.EndDateTime != newReadModel?.EndDateTime
 				|| existingReadModel?.Label != newReadModel?.Label;
 		}
-	}
-
-	public class ScheduleChangeForWeekViewEvent : EventWithLogOnContext
-	{
-		public IPerson Person { get; set; }
-		public IDictionary<DateOnly, ScheduleDayReadModel> NewReadModels { get; set; }
 	}
 }
