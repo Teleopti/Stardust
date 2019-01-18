@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         public ILockableBitArray CreateWeeklyBitArray(int weekIndex, IScheduleMatrixPro scheduleMatrix)
         {
             IList<IScheduleDayPro> daysList = scheduleMatrix.FullWeeksPeriodDays;
-            ILockableBitArray ret = new LockableBitArray(daysList.Count, false, false, null);
+            ILockableBitArray ret = new LockableBitArray(daysList.Count, false, false);
             var validWeekIndexes = new MinMax<int>(weekIndex * 7, weekIndex * 7 + 6);
             int index = -1;
             foreach (IScheduleDayPro scheduleDayPro in daysList)
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         public ILockableBitArray CreatePeriodBitArray(IScheduleMatrixPro scheduleMatrix)
         {
             IList<IScheduleDayPro> daysList = scheduleMatrix.FullWeeksPeriodDays;
-            ILockableBitArray ret = new LockableBitArray(daysList.Count, false, false, null);
+            ILockableBitArray ret = new LockableBitArray(daysList.Count, false, false);
             int index = -1;
             foreach (IScheduleDayPro scheduleDayPro in daysList)
             {

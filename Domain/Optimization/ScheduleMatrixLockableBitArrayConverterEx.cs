@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private static ILockableBitArray arrayFromList(IScheduleMatrixPro matrix, IList<IScheduleDayPro> list, bool useWeekBefore, bool useWeekAfter, IEnumerable<DateOnly> dontUseOnDates)
 		{
-			ILockableBitArray ret = new LockableBitArray(list.Count, useWeekBefore, useWeekAfter, null);
+			ILockableBitArray ret = new LockableBitArray(list.Count, useWeekBefore, useWeekAfter);
 			int index = 0;
 			foreach (IScheduleDayPro scheduleDayPro in list)
 			{
