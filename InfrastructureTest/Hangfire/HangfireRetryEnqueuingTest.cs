@@ -1,16 +1,14 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.States;
-using log4net;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Hangfire
@@ -65,14 +63,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Hangfire
 
 		public class backgroundJobClientThatThrows : IBackgroundJobClient
 		{
-			public int NumberOfTimesToThrow { get; set; }
-			public Exception ExceptionToThrow { get; set; } = new BackgroundJobClientException("_", null); 
+			private readonly ConcurrentDictionary<object,ConcurrentQueue<int>> throwQueue = new ConcurrentDictionary<object, ConcurrentQueue<int>>();
+			private int[] queue = new int[0];
 
-			private int _numberOfTimesIHaveThrown = 0;
+
+			public int NumberOfTimesToThrow
+			{
+				get => queue.Length;
+				set => queue = Enumerable.Repeat(1, value).ToArray();
+			}
+
+			public Exception ExceptionToThrow { get; set; } = new BackgroundJobClientException("_", null); 
 			
 			public string Create(Job job, IState state)
 			{
-				if (NumberOfTimesToThrow > _numberOfTimesIHaveThrown++)
+				if (throwQueue.GetOrAdd(job.Args[1], job1 => new ConcurrentQueue<int>(queue.ToArray())).TryDequeue(out _))
 					throw ExceptionToThrow;
 
 				return string.Empty;
