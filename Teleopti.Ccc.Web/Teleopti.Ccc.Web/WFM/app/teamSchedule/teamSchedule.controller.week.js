@@ -242,7 +242,7 @@
 				DomainType: !toggles.WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242 ?
 					'IScheduleChangedInDefaultScenario' : 'ITeamScheduleWeekViewChangedInDefaultScenario'
 			};
-			signalR.subscribeBatchMessage(options, scheduleChangedEventHandler, 300);
+			signalR.subscribeBatchMessage(options, scheduleChangedEventHandler, 60 * 1000);
 		}
 
 		function scheduleChangedEventHandler(messages) {
