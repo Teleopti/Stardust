@@ -87,6 +87,7 @@ ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true #AF: OK for me 
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
 ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = false
+ResourcePlanner_QueryHintOnLayers_79780 = RC
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = RC
