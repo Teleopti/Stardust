@@ -494,27 +494,6 @@ team-schedule-datepicker {
 			}
 		}
 
-		.wfm-datepicker-wrap {
-			position: absolute;
-			top: 40px;
-			left: 0;
-			z-index: 100;
-		}
-
-		& > button.toggle-datepicker {
-			margin-left: 10px;
-		}
-
-		& > button.wfm-btn-invis-primary:focus {
-			background-color: transparent;
-		}
-
-		& > button.wfm-btn-invis-primary:focus {
-			i {
-				color: $green-300;
-			}
-		}
-
 		& > button:not(:focus) {
 			outline: none !important;
 		}
@@ -553,10 +532,6 @@ team-schedule-datepicker {
 
 			&:active {
 				border: 1px solid $blue-500 !important;
-			}
-
-			& + .view-option {
-				// border-left-color: rgba(0, 0, 0, .12);
 			}
 
 			label {
@@ -1002,6 +977,7 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 .timezone-tip {
 	.mdi:before {
 		font-size: 12px !important;
+		margin-left: 3px;
 	}
 }
 // temp
@@ -1022,9 +998,8 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 	}
 
 	i.mdi.mdi-check {
-		color: $green-500;
+		color: $primary;
 		float: right;
-		display: inline-block;
 		padding-bottom: 0;
 		font-size: 14px;
 	}
