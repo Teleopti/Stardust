@@ -80,8 +80,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
-				PeriodResource interval;
-				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
+				if (!_dictionary.TryGetValue(dateTimePeriod, out var interval)) continue;
 
 				var detail = interval.GetFractionResources(activityKey, skillKey);
 				result.AddRange(detail);
@@ -104,8 +103,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var result = new PeriodResourceDetail();
 			foreach (var dateTimePeriod in periodSplit)
 			{
-				PeriodResource interval;
-				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
+				if (!_dictionary.TryGetValue(dateTimePeriod, out var interval)) continue;
 
 				var detail = interval.GetResources(skillKey, activityKey);
 				result = new PeriodResourceDetail(result.Count + detail.Count, result.Resource + detail.Resource);
@@ -122,8 +120,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
-				PeriodResource interval;
-				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
+				if (!_dictionary.TryGetValue(dateTimePeriod, out var interval)) continue;
 
 				resource += interval.GetResources(skillKey, activityKeys).Resource;
 
@@ -155,19 +152,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				foreach (var dateTimePeriod in periodSplit)
 				{
 					var adjustedPeriod = _activityDivider.FetchPeriodForSkill(dateTimePeriod, skillOffset.Value);
-					PeriodResource interval;
-					if (_dictionary.TryGetValue(adjustedPeriod, out interval))
+					if (_dictionary.TryGetValue(adjustedPeriod, out var interval))
 					{
 						foreach (var pair in interval.GetSkillKeyResources(activityKey))
 						{
-							IEnumerable<ISkill> skills;
-							if (_skills.TryGetValue(pair.SkillKey, out skills))
+							if (_skills.TryGetValue(pair.SkillKey, out var skills))
 							{
-								AffectedSkills value;
 								double previousResource = 0;
 								double previousCount = 0;
 								var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource/divider);
-								if (result.TryGetValue(pair.SkillKey, out value))
+								if (result.TryGetValue(pair.SkillKey, out var value))
 								{
 									previousResource = value.Resource;
 									previousCount = value.Count;
@@ -208,10 +202,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			foreach (var skill in skillEfficienciesForSkillCombination)
 			{
-				double effiency;
-				if (accumulatedEffiencies.TryGetValue(skill.Key, out effiency))
+				if (accumulatedEffiencies.TryGetValue(skill.Key, out var efficiency))
 				{
-					accumulatedEffiencies[skill.Key] = effiency + skill.Value;
+					accumulatedEffiencies[skill.Key] = efficiency + skill.Value;
 				}
 				else
 				{
