@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
@@ -41,12 +42,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
                 //if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
                 //    continue;
 			    
-                foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> keyValuePair in skillStaffPeriodDictionaryKeyValue.Value)
+                foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodDictionaryKeyValue.Value.FindUsingIndex(vcPeriod.Value).Distinct())
 				{
-					if (!keyValuePair.Key.Intersect(vcPeriod.Value))
-						continue;
-
-					ISkillStaffPeriod skillStaffPeriod = keyValuePair.Value;
                     // we don't check either this for speed reasons
                     //DateOnly dateOnly = _nonBlendSkillImpactOnPeriodForProjection.SkillStaffPeriodDate(skillStaffPeriod, person);
                     //if (!_nonBlendSkillImpactOnPeriodForProjection.CheckPersonSkill(skill, person, dateOnly))

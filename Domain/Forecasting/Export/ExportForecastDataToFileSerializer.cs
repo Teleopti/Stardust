@@ -17,10 +17,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
         {
             var loadSkillSchedule = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill, skillDays.ToList() } };
             var skillStaffPeriodHolder = new SkillStaffPeriodHolder(loadSkillSchedule);
-            ISkillStaffPeriodDictionary skillStaffPeriods;
-            var fileData = new List<string>();
+			var fileData = new List<string>();
 
-            if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriods))
+            if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out var skillStaffPeriods))
             {
                 foreach (var skillStaffPeriod in skillStaffPeriods.Values)
                 {

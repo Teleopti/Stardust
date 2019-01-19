@@ -120,19 +120,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private static double? skillDayDemand(ISkill skill, ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
         {
-			IResourceCalculationPeriodDictionary skillStaffPeriods;
-            bool anythingOpen = false;
-            if (!relevantSkillStaffPeriods.TryGetValue(skill, out skillStaffPeriods))
+			bool anythingOpen = false;
+            if (!relevantSkillStaffPeriods.TryGetValue(skill, out var skillStaffPeriods))
                 return null;
 
             double totalTime = 0;
 
-            foreach (var skillStaffPeriod in skillStaffPeriods.Items())
+            foreach (var skillStaffPeriod in skillStaffPeriods.FindUsingIndex(periodToCalculate))
             {
-                if (periodToCalculate.StartDateTime>skillStaffPeriod.Key.EndDateTime) continue;
-                if (periodToCalculate.EndDateTime<skillStaffPeriod.Key.StartDateTime) break;
-
-                DateTimePeriod? intersection = periodToCalculate.Intersection(skillStaffPeriod.Key);
+				var period = skillStaffPeriod.CalculationPeriod;
+				DateTimePeriod? intersection = periodToCalculate.Intersection(period);
 
                 if (intersection.HasValue)
                 {
@@ -141,11 +138,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	                    anythingOpen = true;
                     }
 
-                    double skillStaffPeriodSeconds = skillStaffPeriod.Key.ElapsedTime().TotalSeconds;
+                    double skillStaffPeriodSeconds = period.ElapsedTime().TotalSeconds;
                     double intersectPercent =
                         intersection.Value.ElapsedTime().TotalSeconds/
                         skillStaffPeriodSeconds;
-                    totalTime += skillStaffPeriod.Value.ForecastedDistributedDemand*
+                    totalTime += skillStaffPeriod.ForecastedDistributedDemand*
                                  skillStaffPeriodSeconds*intersectPercent;
                 }
             }

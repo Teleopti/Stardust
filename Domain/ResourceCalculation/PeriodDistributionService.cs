@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             foreach (var skillStaffPeriodDictionary in skillStaffPeriods.Items())
             {
-                foreach (var pair in skillStaffPeriodDictionary.Value.Items())
+                foreach (var pair in skillStaffPeriodDictionary.Value.OnlyValues())
                 {
-                    var period = pair.Key;
-                    var demandedTraff = pair.Value.FStaff;
+                    var period = pair.CalculationPeriod;
+                    var demandedTraff = pair.FStaff;
                     var periodDistribution =
-                        new PeriodDistribution(pair.Value, skillStaffPeriodDictionary.Key.Activity, period, _intraIntervalLengthToSplitOn, demandedTraff);
+                        new PeriodDistribution(pair, skillStaffPeriodDictionary.Key.Activity, period, _intraIntervalLengthToSplitOn, demandedTraff);
 
-                    pair.Value.ClearIntraIntervalDistribution();
+                    pair.ClearIntraIntervalDistribution();
 
 					periodDistribution.ProcessLayers(relevantProjections, skillStaffPeriodDictionary.Key);
                 }

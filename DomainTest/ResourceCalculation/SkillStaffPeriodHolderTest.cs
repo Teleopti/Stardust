@@ -168,7 +168,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2).Repeat.AtLeastOnce();
 				Expect.Call(period1.Period).Return(dateTimePeriodoutside).Repeat.AtLeastOnce();
 				Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
+				Expect.Call(period2.CalculationPeriod).Return(dateTimePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
+				Expect.Call(period3.CalculationPeriod).Return(dateTimePeriod3).Repeat.AtLeastOnce();
 			}
 
 			using (mocks.Playback())

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Collection
 	{
         private Lazy<IList<DateTimePeriod>> _openHoursCollection;
         private readonly IDictionary<DateTimePeriod, ISkillStaffPeriod> _wrappedDictionary = new Dictionary<DateTimePeriod, ISkillStaffPeriod>();
+		private readonly IDictionary<DateTime, HashSet<DateTimePeriod>> _index = new Dictionary<DateTime, HashSet<DateTimePeriod>>();
         private readonly IAggregateSkill _skill;
 
 	    private SkillStaffPeriodDictionary()
@@ -19,16 +21,16 @@ namespace Teleopti.Ccc.Domain.Collection
 		    _openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
 	    }
 
-        public SkillStaffPeriodDictionary(IAggregateSkill skill)
-            : this()
+        public SkillStaffPeriodDictionary(IAggregateSkill skill) : this()
         {
             _skill = skill;
         }
 
-		public SkillStaffPeriodDictionary(IAggregateSkill skill,
-			IDictionary<DateTimePeriod, ISkillStaffPeriod> wrappedDictionary) : this(skill)
+		public SkillStaffPeriodDictionary(IAggregateSkill skill, IDictionary<DateTimePeriod, ISkillStaffPeriod> wrappedDictionary) : this(skill)
 		{
 			_wrappedDictionary = wrappedDictionary;
+			_index = wrappedDictionary.Keys.SelectMany(k => k.Keys().Select(p => (p, k))).GroupBy(k => k.Item1)
+				.ToDictionary(k => k.Key, v => v.Select(i => i.Item2).ToHashSet());
 		}
 
         #region Implementation of ISkillStaffPeriodDictionary
@@ -80,8 +82,19 @@ namespace Teleopti.Ccc.Domain.Collection
         {
 			var remove = _wrappedDictionary.Remove(key);
 	        if (remove)
-	        {
-		        _openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
+			{
+				key.Keys().ForEach(k =>
+				{
+					if (_index.TryGetValue(k, out var periods))
+					{
+						periods.Remove(key);
+						if (periods.Count == 0)
+						{
+							_index.Remove(k);
+						}
+					}
+				});
+				_openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
 	        }
 	        return remove;
         }
@@ -125,15 +138,9 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: rogerkr
         /// Created date: 2007-11-30
         /// </remarks>
-        public ICollection<DateTimePeriod> Keys
-        {
-            get
-            {
-                return _wrappedDictionary.Keys;
-            }
-        }
+        public ICollection<DateTimePeriod> Keys => _wrappedDictionary.Keys;
 
-        /// <summary>
+		/// <summary>
         /// Gets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing the values in the <see cref="T:System.Collections.Generic.IDictionary`2"/>.
         /// </summary>
         /// <value></value>
@@ -142,15 +149,9 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: rogerkr
         /// Created date: 2007-11-30
         /// </remarks>
-        public ICollection<ISkillStaffPeriod> Values
-        {
-            get
-            {
-                return _wrappedDictionary.Values;
-            }
-        }
+        public ICollection<ISkillStaffPeriod> Values => _wrappedDictionary.Values;
 
-        /// <summary>
+		/// <summary>
         ///                     Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
         /// <returns>
@@ -175,23 +176,17 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: micke
         /// Created date: 2009-01-23
         /// </remarks>
-        public int Count
-        {
-            get { return _wrappedDictionary.Count; }
-        }
+        public int Count => _wrappedDictionary.Count;
 
-        /// <summary>
+		/// <summary>
         ///                     Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
         /// </summary>
         /// <returns>
         /// true if the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only; otherwise, false.
         /// </returns>
-        public bool IsReadOnly
-        {
-            get { return _wrappedDictionary.IsReadOnly; }
-        }
+        public bool IsReadOnly => _wrappedDictionary.IsReadOnly;
 
-        /// <summary>
+		/// <summary>
         /// Adds the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -203,7 +198,7 @@ namespace Teleopti.Ccc.Domain.Collection
         public void Add(DateTimePeriod key, ISkillStaffPeriod value)
         {
             Add(new KeyValuePair<DateTimePeriod, ISkillStaffPeriod>(key, value));
-        }
+		}
 
         /// <summary>
         ///                     Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
@@ -220,6 +215,17 @@ namespace Teleopti.Ccc.Domain.Collection
                 throw new InvalidConstraintException("item.key must equal item.value.period");
 
             _wrappedDictionary.Add(item);
+			item.Key.Keys().ForEach(k =>
+			{
+				if (_index.TryGetValue(k, out var periods))
+				{
+					periods.Add(item.Key);
+				}
+				else
+				{
+					_index.Add(k, new HashSet<DateTimePeriod> { item.Key });
+				}
+			});
 			_openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
         }
 
@@ -236,12 +242,9 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: micke
         /// Created date: 2009-02-12
         /// </remarks>
-        public IAggregateSkill Skill
-        {
-            get { return _skill; }
-        }
+        public IAggregateSkill Skill => _skill;
 
-        /// <summary>
+		/// <summary>
         /// Clears this instance.
         /// </summary>
         /// <remarks>
@@ -251,6 +254,7 @@ namespace Teleopti.Ccc.Domain.Collection
         public void Clear()
         {
             _wrappedDictionary.Clear();
+			_index.Clear();
 			_openHoursCollection = new Lazy<IList<DateTimePeriod>>(createOpenHourCollection);
         }
 
@@ -286,12 +290,9 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: micke
         /// Created date: 2009-01-23
         /// </remarks>
-        public ReadOnlyCollection<DateTimePeriod> SkillOpenHoursCollection
-        {
-	        get { return new ReadOnlyCollection<DateTimePeriod>(_openHoursCollection.Value); }
-        }
+        public ReadOnlyCollection<DateTimePeriod> SkillOpenHoursCollection => new ReadOnlyCollection<DateTimePeriod>(_openHoursCollection.Value);
 
-        #endregion
+		#endregion
 
 		private IList<DateTimePeriod> createOpenHourCollection()
         {
@@ -344,11 +345,27 @@ namespace Teleopti.Ccc.Domain.Collection
 			return _wrappedDictionary.Select(w => new KeyValuePair<DateTimePeriod, IResourceCalculationPeriod>(w.Key, w.Value));
 		}
 
+		public IEnumerable<IResourceCalculationPeriod> FindUsingIndex(DateTimePeriod period)
+		{
+			var keys = period.Keys();
+			foreach (var key in keys)
+			{
+				if (!_index.TryGetValue(key, out var innerKeys)) continue;
+				foreach (var innerKey in innerKeys)
+				{
+					if (innerKey.Intersect(period) && _wrappedDictionary.TryGetValue(innerKey, out var skillStaffPeriod))
+					{
+						yield return skillStaffPeriod;
+					}
+				}
+			}
+		}
+
 		public bool TryGetValue(DateTimePeriod dateTimePeriod, out IResourceCalculationPeriod resourceCalculationPeriod)
 		{
-			if (_wrappedDictionary.ContainsKey(dateTimePeriod))
+			if (_wrappedDictionary.TryGetValue(dateTimePeriod, out var found))
 			{
-				resourceCalculationPeriod = _wrappedDictionary[dateTimePeriod];
+				resourceCalculationPeriod = found;
 				return true;
 
 			}
@@ -359,6 +376,19 @@ namespace Teleopti.Ccc.Domain.Collection
 		IEnumerable<IResourceCalculationPeriod> IResourceCalculationPeriodDictionary.OnlyValues()
 		{
 			return _wrappedDictionary.Values;
+		}
+	}
+
+	public static class DateTimePeriodKeyExtensions
+	{
+		public static IEnumerable<DateTime> Keys(this DateTimePeriod period)
+		{
+			var hour = period.StartDateTime.Truncate(TimeSpan.FromHours(1));
+			while (hour<period.EndDateTime)
+			{
+				yield return hour;
+				hour = hour.AddHours(1);
+			}
 		}
 	}
 
@@ -377,6 +407,5 @@ namespace Teleopti.Ccc.Domain.Collection
 
 			return source.TryGetValue(adjustedKey, out value);
 		}
-
 	}
 }

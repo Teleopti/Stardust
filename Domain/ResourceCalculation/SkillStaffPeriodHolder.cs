@@ -31,11 +31,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
 
-					foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> pair in skillStaffPeriods)
+					foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods.FindUsingIndex(onPeriod).Distinct())
 					{
-						if (pair.Key.Intersect(onPeriod))
-						{
-							ISkillStaffPeriod skillStaffPeriod = pair.Value;
 							int maximumPersons = skillStaffPeriod.Payload.SkillPersonData.MaximumPersons;
 							int minimumPersons = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons;
 
@@ -55,7 +52,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 																									skillPriorityProvider.GetPriorityValue(skill));
 
 							dataHolders.Add(skillStaffPeriod.Period.StartDateTime, dataHolder);
-						}
 					}
 					if (dataHolders.Count > 0)
 					{
@@ -190,11 +186,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (_internalDictionary.TryGetValue(skill, out var content))
 				{
-					foreach (var dictionary in content)
-					{
-						if (utcPeriod.Intersect(dictionary.Key))
-							skillStaffPeriods.Add(dictionary.Value);
-					}
+					skillStaffPeriods.AddRange(content.FindUsingIndex(utcPeriod).OfType<ISkillStaffPeriod>().Distinct());
 				}
 			});
 			return skillStaffPeriods;
@@ -206,13 +198,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (_internalDictionary.TryGetValue(skill, out var content))
 				{
-					foreach (var dictionary in content)
-					{
-						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
-						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) break; //perf, will only work when ordered by datetime (which always seems to be the case)
-
-						skillStaffPeriods.Add(dictionary.Value);
-					}
+					skillStaffPeriods.AddRange(content.FindUsingIndex(utcPeriod).OfType<ISkillStaffPeriod>().Distinct());
 				}
 			});
 			return skillStaffPeriods;
@@ -226,8 +212,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (_internalDictionary.TryGetValue(skill, out var content))
 				{
 					var newDictionary = new SkillStaffPeriodDictionary(skill,
-						content.Where(c => c.Key.EndDateTime > utcPeriod.StartDateTime && c.Key.StartDateTime < utcPeriod.EndDateTime)
-							.ToDictionary(k => k.Key, v => v.Value));
+						content.FindUsingIndex(utcPeriod).Distinct().ToDictionary(k => k.CalculationPeriod, v => (ISkillStaffPeriod)v));
 					if (newDictionary.Count > 0)
 						skillStaffPeriods.Add(skill, newDictionary);
 				}
@@ -248,10 +233,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 					if (aggregateSkill.DefaultResolution > minimumResolution)
 					{
-						var relevantSkillStaffPeriodList = content.Where(c => utcPeriod.Contains(c.Key)).Select(c => c.Value);
+						var relevantSkillStaffPeriodList = content.FindUsingIndex(utcPeriod).OfType<ISkillStaffPeriod>().Distinct();
 						var skillStaffPeriodsSplitList = new List<ISkillStaffPeriod>();
 						double factor = minimumResolution / aggregateSkill.DefaultResolution;
-						foreach (ISkillStaffPeriod skillStaffPeriod in relevantSkillStaffPeriodList)
+						foreach (var skillStaffPeriod in relevantSkillStaffPeriodList)
 						{
 							skillStaffPeriodsSplitList.AddRange(SplitSkillStaffPeriod(skillStaffPeriod, factor, TimeSpan.FromMinutes(minimumResolution)));
 						}
@@ -269,15 +254,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					}
 					else
 					{
-						foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> pair in content.Where(c => utcPeriod.Contains(c.Key)))
+						foreach (var pair in content.FindUsingIndex(utcPeriod).OfType<ISkillStaffPeriod>().Distinct())
 						{
-							if (!skillStaffPeriods.TryGetValue(pair.Key, out var foundList))
+							if (!skillStaffPeriods.TryGetValue(pair.Period, out var foundList))
 							{
 								foundList = new List<ISkillStaffPeriod>();
-								skillStaffPeriods.Add(pair.Key, foundList);
+								skillStaffPeriods.Add(pair.Period, foundList);
 							}
 
-							foundList.Add(pair.Value);
+							foundList.Add(pair);
 						}
 					}
 				}
