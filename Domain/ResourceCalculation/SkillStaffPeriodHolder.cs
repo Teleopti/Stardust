@@ -211,10 +211,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (_internalDictionary.TryGetValue(skill, out var content))
 				{
-					var newDictionary = new SkillStaffPeriodDictionary(skill,
-						content.FindUsingIndex(utcPeriod).Distinct().ToDictionary(k => k.CalculationPeriod, v => (ISkillStaffPeriod)v));
-					if (newDictionary.Count > 0)
-						skillStaffPeriods.Add(skill, newDictionary);
+					skillStaffPeriods.Add(skill, content);
 				}
 			}
 			return skillStaffPeriods;
