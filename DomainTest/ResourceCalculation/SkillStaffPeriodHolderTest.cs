@@ -168,7 +168,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2).Repeat.AtLeastOnce();
 				Expect.Call(period1.Period).Return(dateTimePeriodoutside).Repeat.AtLeastOnce();
 				Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
+				Expect.Call(period2.CalculationPeriod).Return(dateTimePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
+				Expect.Call(period3.CalculationPeriod).Return(dateTimePeriod3).Repeat.AtLeastOnce();
 			}
 
 			using (mocks.Playback())
@@ -184,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																		dateTimePeriod1.ChangeEndTime(
 																			TimeSpan.FromMinutes(30)));
 				Assert.AreEqual(2, list.Count);
-				Assert.That(list[skill1].Count, Is.EqualTo(3));
+				Assert.That(list[skill1].Count, Is.EqualTo(2));
 
 				list = _skillStaffPeriodHolder.SkillStaffPeriodDictionary(new List<ISkill> { skill1 },
 																		dateTimePeriod1.ChangeEndTime(

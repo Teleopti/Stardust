@@ -272,12 +272,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
                     skillStaffPeriods = new SkillStaffPeriodDictionary(skill);
             }
             else
-			{
-				var periods = dateTimePeriods.SelectMany(period =>
-					stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill,
-						period,
-						true)).ToDictionary(k => k.Key, v => v.Value);
-                skillStaffPeriods = new SkillStaffPeriodDictionary(skill, periods);
+            {
+                skillStaffPeriods = new SkillStaffPeriodDictionary(skill);
+                foreach (DateTimePeriod period in dateTimePeriods)
+                {
+                    ISkillStaffPeriodDictionary temp = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill,
+                                                                                                  period,
+                                                                                                  true);
+                    foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> keyValuePair in temp)
+                    {
+                        skillStaffPeriods.Add(keyValuePair);
+                    }
+                }
             }
 
             IDictionary<DateTime, IList<ISkillStaffPeriod>> returnDictionary = new Dictionary<DateTime, IList<ISkillStaffPeriod>>();

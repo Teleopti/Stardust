@@ -9,16 +9,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ResourceCalculationData(ISchedulingResultStateHolder schedulingResultStateHolder, 
 																bool considerShortBreaks, 
 																bool doIntraIntervalCalculation)
-			: this(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.SkillDays, schedulingResultStateHolder.SkillStaffPeriodHolder, considerShortBreaks, doIntraIntervalCalculation)
+			: this(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.SkillDays, considerShortBreaks, doIntraIntervalCalculation)
 		{
 			SkipResourceCalculation = schedulingResultStateHolder.TeamLeaderMode || schedulingResultStateHolder.SkipResourceCalculation;
 		}
 
-		public ResourceCalculationData(IScheduleDictionary scheduleDictionary,
-			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
-			ISkillStaffPeriodHolder skillStaffPeriodHolder,
-			bool considerShortBreaks,
-			bool doIntraIntervalCalculation)
+		public ResourceCalculationData(IScheduleDictionary scheduleDictionary, 
+																	IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
+																	bool considerShortBreaks, 
+																	bool doIntraIntervalCalculation)
 		{
 			ConsiderShortBreaks = considerShortBreaks;
 			DoIntraIntervalCalculation = doIntraIntervalCalculation;
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkillCombinationHolder = new SkillCombinationHolder();
 			SkillDays = skillDays;
 			SkillResourceCalculationPeriodDictionary =
-				new SkillResourceCalculationPeriodWrapper((skillStaffPeriodHolder ?? new SkillStaffPeriodHolder(skillDays)).SkillSkillStaffPeriodDictionary);
+				new SkillResourceCalculationPeriodWrapper(new SkillStaffPeriodHolder(skillDays).SkillSkillStaffPeriodDictionary);
 		}
 		public ResourceCalculationData(IEnumerable<ISkill> skills, ISkillResourceCalculationPeriodDictionary skillResourceCalculationPeriodDictionary)
 		{
