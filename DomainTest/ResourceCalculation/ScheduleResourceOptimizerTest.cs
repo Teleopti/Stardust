@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+                activityDivider.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), _personSkillService.AffectedSkills.ToLookup(s => s.Activity), _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             var furnessDataConverter = new FurnessDataConverter(dividedActivityData);
             IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();
             _furnessEvaluator = new FurnessEvaluator(furnessData);

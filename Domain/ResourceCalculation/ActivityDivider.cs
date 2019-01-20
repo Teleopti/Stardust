@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created date: 2008-02-07
         /// </remarks>
         IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-                                                             IAffectedPersonSkillService affectedPersonSkillService,
+                                                             ILookup<IActivity,ISkill> affectedPersonSkillService,
                                                            IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
                                                            DateTimePeriod periodToCalculate);
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class ActivityDivider : IActivityDivider
 	{
         public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-            IAffectedPersonSkillService affectedPersonSkillService,
+			ILookup<IActivity, ISkill> affectedPersonSkillService,
             IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
             DateTimePeriod periodToCalculate)
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var dividedActivity = new DividedActivityData();
             var elapsedToCalculate = periodToCalculate.ElapsedTime();
 
-            IEnumerable<ISkill> skillsForActivity = skillsInActivity(affectedPersonSkillService,activity);
+            var skillsForActivity = affectedPersonSkillService[activity].ToHashSet();
             foreach (ISkill skill in skillsForActivity)
 			{
 				var periodToCalculateAdjusted = FetchPeriodForSkill(periodToCalculate, skill.TimeZone);
@@ -153,11 +153,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return null;
 
 			return totalTime / periodToCalculate.ElapsedTime().TotalSeconds;
-        }
-
-        private static IEnumerable<ISkill> skillsInActivity(IAffectedPersonSkillService affectedPersonSkillService, IActivity activity)
-        {
-            return new HashSet<ISkill>(affectedPersonSkillService.AffectedSkills.Where(s => s.Activity.Id == activity.Id));
         }
     }
 }
