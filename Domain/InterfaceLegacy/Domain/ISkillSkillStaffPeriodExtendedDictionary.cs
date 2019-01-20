@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IEnumerable<KeyValuePair<DateTimePeriod,IResourceCalculationPeriod>>  Items();
 		bool TryGetValue(DateTimePeriod dateTimePeriod, out IResourceCalculationPeriod resourceCalculationPeriod);
 		IEnumerable<IResourceCalculationPeriod> OnlyValues();
-		IEnumerable<IResourceCalculationPeriod> FindUsingIndex(DateTimePeriod period);
 	}
 
 	/// <summary>

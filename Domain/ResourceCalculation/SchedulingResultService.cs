@@ -92,11 +92,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			foreach (var periodCollection in items.Select(x => x.Value))
 			{
-				var values = periodCollection.OnlyValues().ToArray();
-				if (values.Any())
+				if (periodCollection.Items().Any())
 				{
-					var currentMinTime = values.Min(p => p.CalculationPeriod.StartDateTime);
-					var currentMaxTime = values.Max(p => p.CalculationPeriod.EndDateTime);
+					var currentMinTime = periodCollection.Items().Min(p => p.Key.StartDateTime);
+					var currentMaxTime = periodCollection.Items().Max(p => p.Key.EndDateTime);
 					if (!maxTime.HasValue || currentMaxTime > maxTime.Value)
 					{
 						maxTime = currentMaxTime;
@@ -133,7 +132,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public bool TryGetValue(ISkill skill, out IResourceCalculationPeriodDictionary resourceCalculationPeriods)
 		{
-			if (_wrappedDictionary.TryGetValue(skill, out var thisDic))
+			IResourceCalculationPeriodDictionary thisDic;
+			if (_wrappedDictionary.TryGetValue(skill, out thisDic))
 			{
 				resourceCalculationPeriods = thisDic;
 				return true;

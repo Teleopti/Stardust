@@ -73,10 +73,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			foreach (ISkill skill in skills)
 			{
-				if (_skillStaffPeriods.TryGetValue(skill, out var skillStaffPeriodDic))
+				IResourceCalculationPeriodDictionary skillStaffPeriodDic;
+				if (_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDic))
 				{
+					IResourceCalculationPeriod skillStaffPeriod;
 					var completeIntervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(completeIntervalPeriod, skill.TimeZone);
-					if (skillStaffPeriodDic.TryGetValue(completeIntervalPeriodAdjusted, out var skillStaffPeriod))
+					if (skillStaffPeriodDic.TryGetValue(completeIntervalPeriodAdjusted, out skillStaffPeriod))
 					{
 						skillStaffPeriod.SetCalculatedResource65(0);
 						skillStaffPeriod.SetCalculatedLoggedOn(0);

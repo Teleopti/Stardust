@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
                     _feedback.ReportProgress(0,
                         string.Format(CultureInfo.InvariantCulture, "Processing subskill {0}.", skillExportCombination.SourceSkill.Name));
-					if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillExportCombination.SourceSkill, out var skillStaffPeriods))
+                    ISkillStaffPeriodDictionary skillStaffPeriods;
+                    if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillExportCombination.SourceSkill, out skillStaffPeriods))
                     {
                         _feedback.ReportProgress(0,
 							string.Format(CultureInfo.InvariantCulture, "Saving forecast to {0}.", skillExportCombination.TargetSkill.Name));

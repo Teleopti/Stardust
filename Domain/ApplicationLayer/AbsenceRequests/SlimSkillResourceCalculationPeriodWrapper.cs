@@ -19,8 +19,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public bool IsOpen(ISkill skill, DateTimePeriod periodToCalculate)
 		{
-			return _relevantSkillStaffPeriods.TryGetValue(skill, out var resources) &&
-					resources.TryGetValue(periodToCalculate, out _);
+			IResourceCalculationPeriodDictionary resources;
+			IResourceCalculationPeriod items;
+			return _relevantSkillStaffPeriods.TryGetValue(skill, out resources) &&
+					resources.TryGetValue(periodToCalculate, out items);
 		}
 
 		public IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> Items()
@@ -30,9 +32,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public bool TryGetDataForInterval(ISkill skill, DateTimePeriod period, out IShovelResourceDataForInterval dataForInterval)
 		{
-			if (_relevantSkillStaffPeriods.TryGetValue(skill, out var wrappedDictionary))
+			if (_relevantSkillStaffPeriods.ContainsKey(skill))
 			{
-				if (wrappedDictionary.TryGetValue(period, out var skillStaffPeriod))
+				var wrappedDictionary = _relevantSkillStaffPeriods[skill];
+
+				IResourceCalculationPeriod skillStaffPeriod;
+				if (wrappedDictionary.TryGetValue(period, out skillStaffPeriod))
 				{
 					dataForInterval = (IShovelResourceDataForInterval) skillStaffPeriod;
 					return true;
