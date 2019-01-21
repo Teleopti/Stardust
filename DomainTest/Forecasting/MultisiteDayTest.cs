@@ -8,6 +8,8 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 using System.Drawing;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting
@@ -498,14 +500,36 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                     _childSkillDays[1].SkillStaffPeriodCollection[40].Payload.ForecastedIncomingDemand, 3));
         }
 
-        /// <summary>
-        /// Calculates the multisite data with out child skill days.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-06
-        /// </remarks>
-        [Test]
+		[Test]
+		public void ShouldDistributeManualAgents()
+		{
+			target.SetChildSkillDays(_childSkillDays);
+			_childSkillDays[0].SkillDayCalculator = calculator;
+			_childSkillDays[1].SkillDayCalculator = calculator;
+
+			_childSkillDays[0].Skill.AbandonRate = Percent.Zero;
+			_childSkillDays[1].Skill.AbandonRate = Percent.Zero;
+			_multisiteSkillDay.Skill.AbandonRate = Percent.Zero;
+
+			_multisiteSkillDay.WorkloadDayCollection[0].Tasks = 750;
+			_multisiteSkillDay.WorkloadDayCollection[1].Tasks = 750;
+			_multisiteSkillDay.SkillStaffPeriodCollection.First().Payload.ManualAgents = 1000;
+
+			target.MultisiteSkillDay = _multisiteSkillDay;
+			target.RedistributeChilds();
+
+			Assert.AreEqual(600, Math.Round(_childSkillDays[0].SkillStaffPeriodCollection.First().Payload.ForecastedIncomingDemand, 2));
+			Assert.AreEqual(400, Math.Round(_childSkillDays[1].SkillStaffPeriodCollection.First().Payload.ForecastedIncomingDemand, 2));
+		}
+
+		/// <summary>
+		/// Calculates the multisite data with out child skill days.
+		/// </summary>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-05-06
+		/// </remarks>
+		[Test]
         public void CalculateMultisiteDataWithoutChildSkillDays()
         {
             target.MultisiteSkillDay = _multisiteSkillDay;

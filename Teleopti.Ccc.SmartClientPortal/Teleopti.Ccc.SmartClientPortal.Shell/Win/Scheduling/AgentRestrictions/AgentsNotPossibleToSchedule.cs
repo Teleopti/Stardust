@@ -108,6 +108,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			if (listViewResult.Items.Count == 0 || listViewResult.SelectedItems.Count == 0)
 				return;
 
+			if (listViewResult.SelectedItems.Count > 1)
+				return;
+
 			var selected = listViewResult.SelectedItems[0];
 			var matrix = ((RestrictionsNotAbleToBeScheduledResult)selected.Tag).Matrix;
 			_detailView.LoadDetails(matrix, _restrictionExtractor);
@@ -206,7 +209,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		private void copyListBox()
 		{
+			var externalExceptionHandler = new ExternalExceptionHandler();
+			externalExceptionHandler.AttemptToUseExternalResource(Clipboard.Clear);
 			StringBuilder sb = new StringBuilder();
+			foreach (ColumnHeader header in listViewResult.Columns)
+			{
+				sb.Append(header.Text + "\t");
+			}
+			sb.AppendLine();
+
 			foreach (var item in listViewResult.SelectedItems)
 			{
 				if (item is ListViewItem l)
@@ -214,18 +225,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 						sb.Append(sub.Text + "\t");
 				sb.AppendLine();
 			}
-			Clipboard.SetDataObject(sb.ToString());
+			var dataObject = new DataObject();
+			dataObject.SetData(DataFormats.Text, true, sb);
+			externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetDataObject(dataObject, true));
 
 		}
 
 		private void selectAll()
 		{
+			listViewResult.SelectedIndexChanged -= listViewResultSelectedIndexChanged;
 			listViewResult.SuspendLayout();
 			foreach (ListViewItem item in listViewResult.Items)
 			{
 				item.Selected = true;
 			}
 			listViewResult.ResumeLayout(true);
+			listViewResult.SelectedIndexChanged += listViewResultSelectedIndexChanged;
 		}
 
 		private void listViewResultSelectedIndexChanged(object sender, EventArgs e)

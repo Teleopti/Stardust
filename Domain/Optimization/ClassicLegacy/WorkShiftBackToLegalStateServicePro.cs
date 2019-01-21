@@ -5,12 +5,10 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 {
-	public class WorkShiftBackToLegalStateServicePro : IWorkShiftBackToLegalStateServicePro
+	public class WorkShiftBackToLegalStateServicePro
     {
         private readonly IWorkShiftBackToLegalStateStep _workShiftBackToLegalStateStep;
         private readonly IWorkShiftMinMaxCalculator _workShiftRangeCalculator;
-        private readonly IList<DateOnly> _removedDays = new List<DateOnly>();
-		private readonly IList<IScheduleDay> _removedSchedules = new List<IScheduleDay>();
 
         public WorkShiftBackToLegalStateServicePro(
             IWorkShiftBackToLegalStateStep workShiftBackToLegalStateStep,
@@ -20,10 +18,9 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
             _workShiftRangeCalculator = workShiftRangeCalculator;
         }
 
-		public bool Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+		public IEnumerable<DateOnly> Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
-            _removedDays.Clear();
-			_removedSchedules.Clear();
+           var removedDays = new List<DateOnly>();
             _workShiftRangeCalculator.ResetCache();
 
             //for each week
@@ -40,9 +37,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
                 {
                     IScheduleDay removedDay = _workShiftBackToLegalStateStep.ExecuteWeekStep(weekIndex, matrix, rollbackService);
                     if (removedDay == null)
-                        return false;
-                    _removedDays.Add(removedDay.DateOnlyAsPeriod.DateOnly);
-					_removedSchedules.Add(removedDay);
+                        return removedDays;
+                    removedDays.Add(removedDay.DateOnlyAsPeriod.DateOnly);
                 }
             }
 
@@ -53,25 +49,12 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
                 bool raise = legalStateStatus < 0;
 				IScheduleDay removedDay = _workShiftBackToLegalStateStep.ExecutePeriodStep(raise, matrix, rollbackService);
 				if (removedDay == null)
-                    return false;
-				_removedDays.Add(removedDay.DateOnlyAsPeriod.DateOnly);
-				_removedSchedules.Add(removedDay);
+                    return removedDays;
+				removedDays.Add(removedDay.DateOnlyAsPeriod.DateOnly);
             }
-            return true;
-        }
-
-       
-
-        public IList<DateOnly> RemovedDays
-        {
-            get { return _removedDays; }
-        }
-
-    	public IList<IScheduleDay> RemovedSchedules
-    	{
-			get {return _removedSchedules; }
-    	}
-
+			return removedDays;
+		}
+		
 		private static DateOnly firstDateInWeekIndex(int weekIndex, IScheduleMatrixPro matrix)
 		{
 			return matrix.FullWeeksPeriodDays[weekIndex * 7].Day;

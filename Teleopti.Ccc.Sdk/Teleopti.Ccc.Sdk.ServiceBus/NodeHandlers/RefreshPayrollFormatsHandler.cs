@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 				string sourcePayrollDirectory;
 				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				{
-					sourcePayrollDirectory = _serverConfigurationRepository.Get("PayrollSourcePath");
+					sourcePayrollDirectory = _serverConfigurationRepository.Get(ServerConfigurationKey.PayrollSourcePath);
 				}
 				//use default if not set in ServerConfiguration
 				if (string.IsNullOrEmpty(sourcePayrollDirectory))

@@ -26,18 +26,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_deleteService = deleteService;
 		}
 
-		public IWorkShiftBackToLegalStateServicePro Create()
+		public WorkShiftBackToLegalStateServicePro Create()
 		{
 			var bitArrayCreator = new WorkShiftBackToLegalStateBitArrayCreator();
 			// when we move the period to the method we can have all this in autofac
 			var dataExtractor = new RelativeDailyDifferencesByAllSkillsExtractor(_dailySkillForecastAndScheduledValueCalculator, _allSkillExtractor);
 			var decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, _dayIndexCalculator);
 			var workShiftBackToLegalStateStep = new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, _deleteService);
-			return CreateInstance(workShiftBackToLegalStateStep);
-		}
-
-		protected virtual IWorkShiftBackToLegalStateServicePro CreateInstance(WorkShiftBackToLegalStateStep workShiftBackToLegalStateStep)
-		{
 			return new WorkShiftBackToLegalStateServicePro(workShiftBackToLegalStateStep, _workShiftMinMaxCalculator);
 		}
 	}

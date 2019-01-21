@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IResourceCalculationDataContainer _relevantProjections;
 		private readonly ISkillResourceCalculationPeriodDictionary _skillStaffPeriods;
 		private readonly AffectedPersonSkillService _personSkillService;
-		private readonly IActivityDivider _activityDivider;
+		private readonly ActivityDivider _activityDivider;
 		private readonly HashSet<IActivity> _distinctActivities;
 
 		private const double _quotient = 1d; // the outer quotient: default = 1
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ScheduleResourceOptimizer(IResourceCalculationDataContainer relevantProjections,
 										 ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
 										 AffectedPersonSkillService personSkillService,
-										 bool clearSkillStaffPeriods, IActivityDivider activityDivider)
+										 bool clearSkillStaffPeriods, ActivityDivider activityDivider)
 		{
 			_relevantProjections = relevantProjections;
 			_skillStaffPeriods = relevantSkillStaffPeriods;
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod, ResourceCalculationData resourceCalculationData)
 		{
-			IDividedActivityData dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
+			var dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
 																					   currentActivity, _relevantProjections,
 																					   completeIntervalPeriod);
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				IFurnessEvaluator furnessEvaluator = new FurnessEvaluator(furnessData);
 				furnessEvaluator.Evaluate(_quotient, _maximumIteration, Calculation.Variances.StandardDeviation);
-				IDividedActivityData optimizedActivityData = furnessDataConverter.ConvertFurnessDataBackToActivity();
+				var optimizedActivityData = furnessDataConverter.ConvertFurnessDataBackToActivity();
 
 				if (resourceCalculationData?.SkillCombinationHolder != null)
 				{
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private static void setFurnessResultsToSkillStaffPeriods(DateTimePeriod completeIntervalPeriod, IDictionary<ISkill, IResourceCalculationPeriod> relevantSkillStaffPeriods, IDividedActivityData optimizedActivityData)
+		private static void setFurnessResultsToSkillStaffPeriods(DateTimePeriod completeIntervalPeriod, IDictionary<ISkill, IResourceCalculationPeriod> relevantSkillStaffPeriods, DividedActivityData optimizedActivityData)
 		{
 			foreach (var skillPair in relevantSkillStaffPeriods)
 			{

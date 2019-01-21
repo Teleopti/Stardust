@@ -5,29 +5,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public interface IActivityDivider
-    {
-        /// <summary>
-        /// Extracts the important data from the input parameters and divides them
-        /// into a digestable data structure that can be fed to FurnessDataConverter.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Tamas
-        /// Created date: 2008-02-07
-        /// </remarks>
-        IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-                                                             AffectedPersonSkillService affectedPersonSkillService,
-                                                           IActivity activity,
-			IResourceCalculationDataContainer filteredProjections,
-                                                           DateTimePeriod periodToCalculate);
-
-		DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, TimeZoneInfo timeZone);
-	}
-
-    public class ActivityDivider : IActivityDivider
+    public class ActivityDivider
 	{
-        public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
+        public DividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
 			AffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
@@ -53,7 +33,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var headCount = periodResource.Value.Count;
 
 				var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
-				var relativePersonSkillResourceRow = new Dictionary<ISkill, double>();
 				var personSkillResourceRow = new Dictionary<ISkill, double>();
 
 				foreach (var skill in skills)
@@ -73,8 +52,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					double personSkillResourceValue = traff;
 					double bitwiseSkillEfficiencyValue = skillEfficiencyValue == 0 ? 0d : 1d;
 					double relativePersonSkillResourceValue = traff * bitwiseSkillEfficiencyValue;
-
-					relativePersonSkillResourceRow.Add(skill, relativePersonSkillResourceValue);
 					personSkillResourceRow.Add(skill, personSkillResourceValue);
 					personSkillEfficiencyRow.Add(skill, skillEfficiencyValue);
 
@@ -94,7 +71,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					dividedActivity.KeyedSkillResourceEfficiencies.Add(periodResource.Key, personSkillEfficiencyRow);
 					dividedActivity.WeightedRelativeKeyedSkillResourceResources.Add(periodResource.Key, personSkillResourceRow);
-					dividedActivity.RelativeKeyedSkillResourceResources.Add(periodResource.Key, relativePersonSkillResourceRow);
 					dividedActivity.RelativePersonResources.Add(periodResource.Key, periodResource.Value.Resource);
 
 					double targetResourceValue = elapsedToCalculate.TotalMinutes * periodResource.Value.Resource;

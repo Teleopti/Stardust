@@ -99,12 +99,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		)
         {
 			var person = currentSchedulePeriod.Person;
-        	IList<IWorkShiftCalculationResultHolder> allValues = _workShiftCalculatorsManager.RunCalculators(person,
+        	var allValues = _workShiftCalculatorsManager.RunCalculators(person,
         	                                                                                                 shiftProjectionCaches,
 																											 dataHolders, 
         	                                                                                                 nonBlendSkillPeriods,
         	                                                                                                 schedulingOptions);
-            if (allValues.Count == 0)
+            if (!allValues.Any())
                 return null;
 
 			IWorkShiftCalculationResultHolder[] foundValues = { };

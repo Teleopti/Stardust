@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var preserveLogonAttemptsDays = 30;
 			using (manager.EnsureUnitOfWorkIsStarted())
 			{
-				if (!int.TryParse(_serverConfigurationRepository.Get("PreserveLogonAttemptsDays"),
+				if (!int.TryParse(_serverConfigurationRepository.Get(ServerConfigurationKey.PreserveLogonAttemptsDays),
 					out preserveLogonAttemptsDays))
 					preserveLogonAttemptsDays = 30;
 			}
@@ -45,13 +45,9 @@ namespace Teleopti.Wfm.Administration.Core
 					//a small delay to not to have table deadlock
 					Thread.Sleep(2000);
 				}
-
 			} while (rowsEffected > 0);
-
 		}
-
 	}
-
 
 	public interface IPurgeOldSignInAttempts
 	{

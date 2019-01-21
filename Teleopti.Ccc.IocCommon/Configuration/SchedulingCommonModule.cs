@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>().As<ILongestPeriodForAssignmentCalculator>().SingleInstance();
 			builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
 			builder.RegisterType<ShiftsFromMasterActivityBaseActivityService>().As<IShiftFromMasterActivityService>().SingleInstance();			
-			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().SingleInstance();
+			builder.RegisterType<RuleSetDeletedActivityChecker>().SingleInstance();
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
 				.As<IRuleSetDeletedShiftCategoryChecker>()
 				.SingleInstance();

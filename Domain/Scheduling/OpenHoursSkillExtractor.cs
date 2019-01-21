@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate)
 		{
+			var skillDaysBySkillAndDay = skillDays.ToDictionary(s => (s.Skill, s.CurrentDate));
 			var openHoursDictionary = period.DayCollection().ToDictionary(d => d, day =>
 			{
 				var minOpen = TimeSpan.MaxValue;
@@ -31,10 +32,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var skills = _groupPersonSkillAggregator.AggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers, day.ToDateOnlyPeriod()).ToList();
 				var offsetUser = TimeZoneGuard.Instance.TimeZone.GetUtcOffset(day.Date);
 
-				foreach (var skillDay in skillDays)
+				foreach (var skill in skills)
 				{
-					if (!skills.Contains(skillDay.Skill) ||skillDay.CurrentDate != day) continue;
-					var offsetSkill = skillDay.Skill.TimeZone.GetUtcOffset(day.Date);
+					if (!skillDaysBySkillAndDay.TryGetValue((skill,day),out var skillDay)) continue;
+
+					var offsetSkill = skill.TimeZone.GetUtcOffset(day.Date);
 
 					foreach (var timePeriod in skillDay.OpenHours())
 					{

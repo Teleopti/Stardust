@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
@@ -38,7 +35,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("Configuration")]
 		public virtual JsonResult<string> GetConfiguration([FromBody]string key)
 		{
-			return Json(_serverConfigurationRepository.Get(key));
+			if (Enum.TryParse<ServerConfigurationKey>(key, out var enumKey))
+			{
+				return Json(_serverConfigurationRepository.Get(enumKey));
+
+			}
+			return Json<string>(null);
 		}
 
 		[HttpPost]
