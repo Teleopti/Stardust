@@ -191,12 +191,8 @@ namespace Teleopti.Ccc.Domain.Collection
 		//borde göras om till en IProjectionMerger
 		public IFilteredVisualLayerCollection FilterLayers(IPayload payloadToSearch)
 		{
-			IList<IVisualLayer> retColl = new List<IVisualLayer>();
-			foreach (IVisualLayer layer in UnMergedCollection)
-			{
-				if (layer.Payload.OptimizedEquals(payloadToSearch))
-					retColl.Add(layer);
-			}
+			IList<IVisualLayer> retColl =
+				UnMergedCollection.Where(layer => layer.Payload.OptimizedEquals(payloadToSearch)).ToArray();
 			return new FilteredVisualLayerCollection(retColl, (IProjectionMerger)_merger.Clone(),this);
 		}
 
