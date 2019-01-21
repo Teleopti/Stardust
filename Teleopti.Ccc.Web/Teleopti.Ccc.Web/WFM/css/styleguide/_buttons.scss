@@ -196,6 +196,7 @@ div.wfm-btn {
 	}
 }
 
+.wfm-fab.wfm-fab-danger,
 .wfm-btn-invis-danger {
 	color: $red-800;
 	background-color: $gray-100;
@@ -230,6 +231,7 @@ div.wfm-btn {
 
 .wfm-btn-invis-default[disabled],
 .wfm-btn-invis-primary[disabled],
+.wfm-btn-invis-danger[disabled],
 .wfm-btn-invis-disabled {
 	color: $text-color-muted;
 	background-color: $gray-300;
