@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			try
 			{
 				var hangfireEventJobs = jobsFor(events).ToArray();
-				Console.WriteLine(hangfireEventJobs.Length);
 				Parallel.ForEach(hangfireEventJobs, j => _client.Enqueue(j));
 			}
 			catch (AggregateException e)
