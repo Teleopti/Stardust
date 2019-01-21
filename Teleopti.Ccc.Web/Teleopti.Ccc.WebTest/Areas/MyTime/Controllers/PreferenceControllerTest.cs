@@ -66,7 +66,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var team = new Team { Site = _site }.WithDescription(new Description("team")).WithId();
 			TeamRepository.Add(team);
 			logonUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+			var schedule = ScheduleDayFactory.Create(date, LoggedOnUser.CurrentUser());
+			ScheduleProvider.AddScheduleDay(schedule);
+		}
 
+		private void createBankHolidayCalendarData(DateOnly date, Guid calendarId, string calendarName, string description)
+		{
+			var calendar = new BankHolidayCalendar { Name = calendarName };
+			calendar.SetId(calendarId);
+			BankHolidayCalendarRepository.Add(calendar);
+			var calendarDate = new BankHolidayDate { Calendar = calendar, Date = date, Description = description };
+			BankHolidayDateRepository.Add(calendarDate);
+			BankHolidayCalendarSiteRepository.Add(new BankHolidayCalendarSite { Site = _site, Calendar = calendar });
 		}
 
 		[Test]
@@ -74,18 +85,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var date = DateOnly.Today;
 			prepareData(date);
-
-			var schedule = ScheduleDayFactory.Create(date, LoggedOnUser.CurrentUser());
-			ScheduleProvider.AddScheduleDay(schedule);
 			var calendarId = Guid.NewGuid();
 			var calendarName = "ChinaBankHoliday";
-			var calendar = new BankHolidayCalendar { Name = calendarName };
-			calendar.SetId(calendarId);
-			BankHolidayCalendarRepository.Add(calendar);
 			var description = "New Year";
-			var calendarDate = new BankHolidayDate { Calendar = calendar, Date = date, Description = description };
-			BankHolidayDateRepository.Add(calendarDate);
-			BankHolidayCalendarSiteRepository.Add(new BankHolidayCalendarSite { Site = _site, Calendar = calendar });
+			createBankHolidayCalendarData(date, calendarId, calendarName, description);
 
 			var result = Target.PreferencesAndSchedules(date.AddDays(-1), date.AddDays(1)).Data as IEnumerable<PreferenceAndScheduleDayViewModel>;
 			result.First().BankHolidayCalendar.CalendarId.Should().Be.EqualTo(calendarId);
@@ -93,6 +96,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.First().BankHolidayCalendar.DateDescription.Should().Be.EqualTo(description);
 		}
 
+		[Test]
+		public void ShouldGetNullIfThereIsNoCalendar()
+		{
+			var date = DateOnly.Today;
+			prepareData(date);
+
+			var result = Target.PreferencesAndSchedules(date.AddDays(-1), date.AddDays(1)).Data as IEnumerable<PreferenceAndScheduleDayViewModel>;
+			result.First().BankHolidayCalendar.Should().Be.Null();
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnPreferencePartialView()
