@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -214,6 +214,47 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(dateRows[1].innerHTML.indexOf('2013-01-10') > -1).toBeTruthy();
 		expect(dateRows[1].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
 	});
+
+	it('should be able to add a date back after removing it', fakeAsync(() => {
+		component.edittingCalendar = {
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2013',
+					Dates: []
+				}
+			]
+		};
+		fixture.detectChanges();
+
+		component.dateChangeCallback(new Date('2013-01-10'), component.edittingCalendarYears[0]);
+		fixture.detectChanges();
+
+		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const dateRows = editBankHolidayCalendarPanel
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item');
+
+		expect(dateRows.length).toBe(1);
+		expect(component.edittingCalendarYears[0].Dates.length).toBe(1);
+		expect(dateRows[0].innerHTML.indexOf('2013-01-10') > -1).toBeTruthy();
+		expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+
+		component.removeDateOfYear(component.edittingCalendarYears[0].Dates[0], component.edittingCalendarYears[0]);
+		fixture.detectChanges();
+
+		expect(component.edittingCalendarYears[0].Dates.length).toBe(0);
+
+		component.dateClick(component.edittingCalendarYears[0]);
+		fixture.detectChanges();
+		tick(500);
+
+		fixture.whenStable().then(() => {
+			expect(component.edittingCalendarYears[0].Dates.length).toBe(1);
+		});
+	}));
 
 	it('should set IsDeleted to true when removing a date', () => {
 		component.edittingCalendar = {
