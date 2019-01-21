@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 
 		private string getPowerBiGroupId()
 		{
-			return _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIGroupId);
+			return _appConfig.GetTenantValue(TenantApplicationConfigKey.InsightsPowerBIGroupId);
 		}
 	}
 }

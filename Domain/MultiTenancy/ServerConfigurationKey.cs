@@ -8,6 +8,7 @@
 		AS_SERVER_NAME,
 		PM_INSTALL,
 		PayrollSourcePath,
+		PreserveLogonAttemptsDays,
 		NotificationApiEndpoint,
 		NotificationExtProviderApiId,
 		NotificationExtProviderAssembly,

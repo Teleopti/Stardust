@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 
 		public async Task<IPowerBIClient> CreatePowerBiClient()
 		{
-			var powerBiUsername = _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIUsername);
-			var powerBiPassword = _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIPassword);
-			var clientId = _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIClientId);
-			var azureTenantId = _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsAzureTenantId);
+			var powerBiUsername = _appConfig.GetTenantValue(TenantApplicationConfigKey.InsightsPowerBIUsername);
+			var powerBiPassword = _appConfig.GetTenantValue(TenantApplicationConfigKey.InsightsPowerBIPassword);
+			var clientId = _appConfig.GetTenantValue(TenantApplicationConfigKey.InsightsPowerBIClientId);
+			var azureTenantId = _appConfig.GetTenantValue(TenantApplicationConfigKey.InsightsAzureTenantId);
 
 			// Create a user password credentials.
 			var credential = new UserPasswordCredential(powerBiUsername, powerBiPassword);

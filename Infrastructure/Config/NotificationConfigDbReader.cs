@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Config
 
 		private void addConfigEntry(ServerConfigurationKey key)
 		{
-			var dbValue = _serverRepo.Get(key.ToString()) ?? string.Empty;
+			var dbValue = _serverRepo.Get(key) ?? string.Empty;
 			_config.Add(key, dbValue);
 		}
 

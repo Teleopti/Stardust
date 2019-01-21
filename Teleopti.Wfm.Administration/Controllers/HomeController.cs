@@ -77,7 +77,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Server = builder.DataSource,
 				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
 				CommandTimeout = int.Parse(tenant.ApplicationConfig[Environment.CommandTimeout]),
-				MobileQRCodeUrl = tenant.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl),
+				MobileQRCodeUrl = tenant.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl) ?? string.Empty,
 				MaximumSessionTime =
 					string.IsNullOrEmpty(maximumSessionTimeInMinutes)
 						? 0
