@@ -19,6 +19,10 @@
         vm.toggleEndSelection = function() {
             vm.displayAdjustToNeutralEnd = !vm.displayAdjustToNeutralEnd;
             vm.displayAdjustToNeutralStart = false;
+        };
+        
+        vm.adjustToNeutral = function() {
+            vm.showAdjustToNeutralSection = !vm.showAdjustToNeutralSection;
         }
     }
 })();

@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="panel card-panel con-padding" style="width:480px">
+    <div class="panel card-panel con-padding" style="width:680px">
         <div class="con-row">
             <div class="con-flex">
                 <h3 style="padding-top: 10px">Adjusted Periods</h3>
@@ -35,32 +35,36 @@
 
         <div class="con-row" style="border-top: 1px solid lightgrey"
              ng-show="vm.showAdjustToNeutralSection">
-            <div class="con-flex">
-                <label>
-                    <span>From:</span>
-                    <input type="text"
-                           class="pointer"
-                           ng-click="vm.toggleStartSelection()"
-                           ng-model="vm.adjustToNeutralStart"
-                           placeholder="yyyy-mm-dd hh:mm"
-                           style="width: 150px">
-                </label>
+            <div class="con-flex wfm-form">
+                <div class="form-input-wrap">
+                    <label>
+                        <span>From:</span>
+                        <input type="text"
+                               class="pointer"
+                               ng-click="vm.toggleStartSelection()"
+                               ng-model="vm.adjustToNeutralStart"
+                               placeholder="yyyy-mm-dd hh:mm"
+                               style="width: 150px">
+                    </label>
+                </div>
+            </div>
+            <div class="con-flex wfm-form">
+                <div class="form-input-wrap">
+                    <label>
+                        <span>To:</span>
+                        <input type="text"
+                               class="pointer"
+                               ng-click="vm.toggleStartSelection()"
+                               ng-model="vm.adjustToNeutralEnd"
+                               placeholder="yyyy-mm-dd hh:mm"
+                               style="width: 150px">
+                    </label>
+                </div>
             </div>
             <div class="con-flex">
-                <label>
-                    <span>To:</span>
-                    <input type="text"
-                           class="pointer"
-                           ng-click="vm.toggleEndSelection()"
-                           ng-model="vm.adjustToNeutralStart"
-                           placeholder="yyyy-mm-dd hh:mm"
-                           style="width: 150px">
-                </label>
-            </div>
-            <div class="con-flex">
-                <div class="pull-right" style="padding-top:13px">
+                <div class="pull-right" style="padding-top:5px">
                     <button class="wfm-btn wfm-btn-primary"
-                            ng-click="vm.showAdjustToNeutralSection = !vm.showAdjustToNeutralSection">Adjust to Neutral
+                            ng-click="vm.adjustToNeutral()">Adjust to Neutral
                     </button>
                 </div>
             </div>
@@ -69,33 +73,33 @@
         <div style="position: relative" ng-show="vm.displayAdjustToNeutralStart">
             <div class="wfm-dropdown-panel panel full-padding"
                  style="z-index: 999; position: absolute; width: 100%; display: flex; align-items: center;">
-                <div uib-datepicker
-                     ng-model="vm.adjustToNeutralStartDate"
-                     class="well well-sm">
+                <div style="padding-right:25px; border-right: 1px solid lightgrey; margin: 12px 0">
+                    <div uib-datepicker
+                         ng-model="vm.adjustToNeutralStartDate"
+                         class="well well-sm">
+                    </div>
+                    <div uib-timepicker
+                         ng-model="vm.adjustToNeutralStartTime"
+                         hour-step="1"
+                         minute-step="1"
+                         template-url="app\rta\rta\adjust-adherence\timepicker.template.html"
+                         class="full-padding"
+                         style="width: 290px">
+                    </div>
                 </div>
-                <div uib-timepicker
-                     ng-model="vm.adjustToNeutralStartTime"
-                     hour-step="1"
-                     minute-step="1"
-                     template-url="app\rta\rta\adjust-adherence\timepicker.template.html"
-                     class="full-padding">
-                </div>
-            </div>
-        </div>
-
-        <div style="position: relative" ng-show="vm.displayAdjustToNeutralEnd">
-            <div class="wfm-dropdown-panel panel full-padding"
-                 style="z-index: 999; position: absolute; width: 100%; display: flex; align-items: center;">
-                <div uib-datepicker
-                     ng-model="vm.adjustToNeutralEndDate"
-                     class="well well-sm">
-                </div>
-                <div uib-timepicker
-                     ng-model="vm.adjustToNeutralEndTime"
-                     hour-step="1"
-                     minute-step="1"
-                     template-url="app\rta\rta\adjust-adherence\timepicker.template.html"
-                     class="full-padding">
+                <div style="padding-left:25px; margin: 12px 0">
+                    <div uib-datepicker
+                         ng-model="vm.adjustToNeutralEndDate"
+                         class="well well-sm">
+                    </div>
+                    <div uib-timepicker
+                         ng-model="vm.adjustToNeutralEndTime"
+                         hour-step="1"
+                         minute-step="1"
+                         template-url="app\rta\rta\adjust-adherence\timepicker.template.html"
+                         class="full-padding"
+                         style="width: 290px">
+                    </div>
                 </div>
             </div>
         </div>
@@ -109,16 +113,16 @@
             </thead>
             <tbody>
             <tr>
-                <td>2019-01-07 10:00</td>
-                <td>2019-01-07 14:00</td>
+                <td>2019-01-07 10:00 AM</td>
+                <td>2019-01-07 14:00 PM</td>
             </tr>
             <tr>
-                <td>2019-01-05 11:00</td>
-                <td>2019-01-05 12:00</td>
+                <td>2019-01-05 11:00 AM</td>
+                <td>2019-01-05 12:00 PM</td>
             </tr>
             <tr>
-                <td>2019-01-02 01:00</td>
-                <td>2019-01-03 08:00</td>
+                <td>2019-01-02 01:00 AM</td>
+                <td>2019-01-03 08:00 AM</td>
             </tr>
             </tbody>
         </table>
