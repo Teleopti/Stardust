@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IResourceCalculationDataContainer _relevantProjections;
 		private readonly ISkillResourceCalculationPeriodDictionary _skillStaffPeriods;
 		private readonly AffectedPersonSkillService _personSkillService;
-		private readonly IActivityDivider _activityDivider;
+		private readonly ActivityDivider _activityDivider;
 		private readonly HashSet<IActivity> _distinctActivities;
 
 		private const double _quotient = 1d; // the outer quotient: default = 1
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ScheduleResourceOptimizer(IResourceCalculationDataContainer relevantProjections,
 										 ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
 										 AffectedPersonSkillService personSkillService,
-										 bool clearSkillStaffPeriods, IActivityDivider activityDivider)
+										 bool clearSkillStaffPeriods, ActivityDivider activityDivider)
 		{
 			_relevantProjections = relevantProjections;
 			_skillStaffPeriods = relevantSkillStaffPeriods;

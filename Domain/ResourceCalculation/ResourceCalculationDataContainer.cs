@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class ResourceCalculationDataContainer : IResourceCalculationDataContainerWithSingleOperation
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
-		private readonly IActivityDivider _activityDivider;
+		private readonly ActivityDivider _activityDivider;
 		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
 		private readonly ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>>();
 		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 		private const double heads = 1d;
 
-		public ResourceCalculationDataContainer(IEnumerable<ExternalStaff> bpoResources, IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode, IActivityDivider activityDivider)
+		public ResourceCalculationDataContainer(IEnumerable<ExternalStaff> bpoResources, IPersonSkillProvider personSkillProvider, int minSkillResolution, bool primarySkillMode, ActivityDivider activityDivider)
 		{
 			_personSkillProvider = personSkillProvider;
 			_activityDivider = activityDivider;

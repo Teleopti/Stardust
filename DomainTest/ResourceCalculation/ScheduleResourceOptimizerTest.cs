@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
         private DateTime _startTime;
         private AffectedPersonSkillService _personSkillService;
-        private IActivityDivider _activityDivider;
+        private ActivityDivider _activityDivider;
 	    private IPersonSkillProvider _personSkillProvider;
 		private IResourceCalculationDataContainerWithSingleOperation _resources;
 

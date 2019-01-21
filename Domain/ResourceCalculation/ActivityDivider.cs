@@ -5,27 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public interface IActivityDivider
-    {
-        /// <summary>
-        /// Extracts the important data from the input parameters and divides them
-        /// into a digestable data structure that can be fed to FurnessDataConverter.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Tamas
-        /// Created date: 2008-02-07
-        /// </remarks>
-        DividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-                                                             AffectedPersonSkillService affectedPersonSkillService,
-                                                           IActivity activity,
-			IResourceCalculationDataContainer filteredProjections,
-                                                           DateTimePeriod periodToCalculate);
-
-		DateTimePeriod FetchPeriodForSkill(DateTimePeriod period, TimeZoneInfo timeZone);
-	}
-
-    public class ActivityDivider : IActivityDivider
+    public class ActivityDivider
 	{
         public DividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
 			AffectedPersonSkillService affectedPersonSkillService,
