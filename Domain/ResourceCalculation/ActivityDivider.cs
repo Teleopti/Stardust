@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created date: 2008-02-07
         /// </remarks>
         IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-                                                             ILookup<IActivity,ISkill> affectedPersonSkillService,
+                                                             AffectedPersonSkillService affectedPersonSkillService,
                                                            IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
                                                            DateTimePeriod periodToCalculate);
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class ActivityDivider : IActivityDivider
 	{
         public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-			ILookup<IActivity, ISkill> affectedPersonSkillService,
+			AffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
             DateTimePeriod periodToCalculate)
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var dividedActivity = new DividedActivityData();
             var elapsedToCalculate = periodToCalculate.ElapsedTime();
 
-            var skillsForActivity = affectedPersonSkillService[activity].ToHashSet();
+            var skillsForActivity = affectedPersonSkillService.ActivityLookup[activity].ToHashSet();
             foreach (ISkill skill in skillsForActivity)
 			{
 				var periodToCalculateAdjusted = FetchPeriodForSkill(periodToCalculate, skill.TimeZone);

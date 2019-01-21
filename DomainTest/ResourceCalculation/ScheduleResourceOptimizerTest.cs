@@ -2,12 +2,10 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Calculation;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Secrets.Furness;
 using Teleopti.Ccc.TestCommon.FakeData;
-
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private DateTimePeriod _inPeriod;
         private ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
         private DateTime _startTime;
-        private IAffectedPersonSkillService _personSkillService;
+        private AffectedPersonSkillService _personSkillService;
         private IActivityDivider _activityDivider;
 	    private IPersonSkillProvider _personSkillProvider;
 		private IResourceCalculationDataContainerWithSingleOperation _resources;
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), _personSkillService.AffectedSkills.ToLookup(s => s.Activity), _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+                activityDivider.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_personSkillService.AffectedSkills), _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             var furnessDataConverter = new FurnessDataConverter(dividedActivityData);
             IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();
             _furnessEvaluator = new FurnessEvaluator(furnessData);
