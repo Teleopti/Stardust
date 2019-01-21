@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 						if (authorizeExternalAvailableData != null)
 						{
-							if (authorizeExternalAvailableData.Check(principal.Organisation, DateOnly.Today, identity.BusinessUnit))
+							if (authorizeExternalAvailableData.Check(principal.Organisation, DateOnly.Today, identity.BusinessUnitId.GetValueOrDefault()))
 								return true;
 						}
 					}

@@ -57,15 +57,15 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             }
 
             IBusinessUnit businessUnit = site.BusinessUnit;
-            return Check(queryingPerson, dateOnly, businessUnit);
+            return Check(queryingPerson, dateOnly, businessUnit.Id.GetValueOrDefault());
         }
 
-        public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IBusinessUnit businessUnit)
-        {
-            var result = checkBusinessUnit(businessUnit);
+		public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, Guid businessUnitId)
+		{
+            var result = checkBusinessUnit(businessUnitId);
 
             return result.GetValueOrDefault(false);
-        }
+		}
 
     	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorization authorization)
     	{
@@ -115,14 +115,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return null;
         }
 
-        private bool? checkBusinessUnit(IBusinessUnit businessUnit)
+        private bool? checkBusinessUnit(Guid businessUnitId)
         {
-            if (businessUnit == null)
+            if (businessUnitId == Guid.Empty)
             {
                 return false;
             }
 
-            if (_availableBusinessUnits.Contains(businessUnit.Id.GetValueOrDefault()))
+            if (_availableBusinessUnits.Contains(businessUnitId))
             {
                 return true;
             }

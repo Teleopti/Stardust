@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return queryingPerson.BelongsToBusinessUnit(site.BusinessUnit,dateOnly);
         }
 
-        public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IBusinessUnit businessUnit)
+        public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, Guid businessUnitId)
         {
-            if (businessUnit == null)
+            if (businessUnitId == Guid.Empty)
             {
                 return false;
             }
 
-            return queryingPerson.BelongsToBusinessUnit(businessUnit,dateOnly);
+            return queryingPerson.BelongsToBusinessUnit(businessUnitId,dateOnly);
         }
 
     	public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IPersonAuthorization authorization)

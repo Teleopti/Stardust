@@ -47,7 +47,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		private void setup()
 		{
 			var teleoptiIdentity = AppDomainPrincipalContext.Current().Identity as TeleoptiIdentity;
-			BusinessUnitRepository.Has(teleoptiIdentity.BusinessUnit);
+			var businessUnit = new Domain.Common.BusinessUnit(teleoptiIdentity.BusinessUnitName);
+			businessUnit.SetId(teleoptiIdentity.BusinessUnitId);
+			BusinessUnitRepository.Has(businessUnit);
 			Tenants.Has(teleoptiIdentity.DataSource.DataSourceName);
 			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
 			PersonRepository.Add(person);

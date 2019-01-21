@@ -234,8 +234,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			Cursor = Cursors.WaitCursor;
 			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
 			_mainStatusStrip.Refresh();
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
-			var loggedOnBu = identity.BusinessUnit;
+			var identity = (ITeleoptiIdentityForLegacy)TeleoptiPrincipal.CurrentPrincipal.Identity;
+			var loggedOnBu = identity.BusinessUnit();
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 
 			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;

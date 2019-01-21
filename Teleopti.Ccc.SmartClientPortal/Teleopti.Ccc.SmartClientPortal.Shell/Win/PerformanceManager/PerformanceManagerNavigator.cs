@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager
             if (LogonPresenter.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
                 forceFormsLogin = "false";
 
-            var bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.ToString();
+            var bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnitId.ToString();
 
             var proc = new Process {EnableRaisingEvents = false, StartInfo = {FileName = "iexplore.exe"}};
 

@@ -1062,7 +1062,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			var timeZone = princip.Regional.TimeZone;
 			Guid? id = princip.PersonId;
 			var dataSource = teleoptiIdentity.DataSource;
-			var bu = teleoptiIdentity.BusinessUnit.Id;
+			var bu = teleoptiIdentity.BusinessUnitId;
 
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();

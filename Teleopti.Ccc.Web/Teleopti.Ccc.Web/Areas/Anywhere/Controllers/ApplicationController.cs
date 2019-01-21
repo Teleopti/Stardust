@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 			var principal = _currentTeleoptiPrincipal.Current();
 			var currentUserName = principal.Identity.Name;
-			var currentBusinessUnit = (principal.Identity as ITeleoptiIdentity)?.BusinessUnit.Name;
+			var currentBusinessUnit = (principal.Identity as ITeleoptiIdentity)?.BusinessUnitName;
 			var resAnywhereMigrated = string.Format(UserTexts.Resources.AnywhereMigrated, "<a href='./WFM'>", "</a>");
 			var resPageWillBeRedirected = string.Format(UserTexts.Resources.PageWillBeRedirected,
 				"<span id='pendingTime'>" + waitingTimeInSecond + "</span>");

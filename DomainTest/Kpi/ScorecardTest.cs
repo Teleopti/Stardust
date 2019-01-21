@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Kpi
             Assert.AreEqual(1,target.KeyPerformanceIndicatorCollection.Count);
             Assert.AreEqual(kpi2,target.KeyPerformanceIndicatorCollection[0]);
 
-            Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
+            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
 
         }
         [Test]

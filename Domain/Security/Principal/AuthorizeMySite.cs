@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			return queryingPerson.BelongsToSite(site,dateOnly);
 		}
 
-		public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IBusinessUnit businessUnit)
+		public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, Guid businessUnitId)
 		{
 			return false;
 		}

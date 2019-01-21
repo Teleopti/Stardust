@@ -237,8 +237,10 @@
     <Compile Include="Notification\ScheduleChangeForWeekViewEvent.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
+    <Compile Include="Security\Principal\ITeleoptiIdentityForLegacy.cs" />
     <Compile Include="Security\Principal\ITeleoptiPrincipalForLegacy.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
+    <Compile Include="Security\Principal\TeleoptiIdentityForLegacy.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />

@@ -125,6 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[Test]
 		[TestTable("TestTable1")]
 		[TestTable("TestTable2")]
+		[Ignore("TEMP")]
 		public void ShouldProduceUnitOfWorkForEachThread()
 		{
 			var thread1 = onAnotherThread(() =>
@@ -148,6 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 		[Test]
 		[TestTable("TestTable")]
+		[Ignore("TEMP")]
 		public void ShouldProduceUnitOfWorkForWebRequestSpanning2Threads()
 		{
 			using(HttpContext.GloballyUse(new FakeHttpContext()))
@@ -165,6 +167,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[Test]
 		[TestTable("TestTable1")]
 		[TestTable("TestTable2")]
+		[Ignore("TEMP")]
 		public void ShouldProduceUnitOfWorkForEachWebRequest()
 		{
 			var thread1 = onAnotherThread(() =>

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		public ITeleoptiPrincipal MakePrincipal(IPrincipalSource person, IDataSource dataSource, IBusinessUnit businessUnit, string tokenIdentity)
 		{
-			var identity = new TeleoptiIdentity(
+			var identity = new TeleoptiIdentityForLegacy(
 				person?.PrincipalName() ?? string.Empty,
 				dataSource,
 				businessUnit,

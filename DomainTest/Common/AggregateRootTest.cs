@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyBusinessUnitCanBeRead()
         {
 			VersionedAggregateRootWithBusinessUnit target = new AggRootWithBusinessUnit();
-            Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
+            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
         }
 
 

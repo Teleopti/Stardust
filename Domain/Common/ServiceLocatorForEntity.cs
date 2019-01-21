@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -35,15 +36,26 @@ namespace Teleopti.Ccc.Domain.Common
 
 	public static class ServiceLocatorForEntity
 	{
-		private static ICurrentBusinessUnit _currentBusinessUnit;
+		private static readonly Stack<ICurrentBusinessUnit> _currentBusinessUnit = new Stack<ICurrentBusinessUnit>();
 		private static IUpdatedBy _updatedBy;
 		private static ILoggedOnUserIsPerson _loggedOnUserIsPerson;
 		private static INow _now;
 
 		public static ICurrentBusinessUnit CurrentBusinessUnit
 		{
-			get { return _currentBusinessUnit ?? Common.CurrentBusinessUnit.Make(); }
-			set { _currentBusinessUnit = value; }
+			get
+			{
+				if (_currentBusinessUnit.Count == 0)
+					_currentBusinessUnit.Push(Common.CurrentBusinessUnit.Make());
+				return _currentBusinessUnit.Peek();
+			}
+			set
+			{
+				if (value == null)
+					_currentBusinessUnit.Pop();
+				else
+					_currentBusinessUnit.Push(value);
+			}
 		}
 
 		public static IUpdatedBy UpdatedBy

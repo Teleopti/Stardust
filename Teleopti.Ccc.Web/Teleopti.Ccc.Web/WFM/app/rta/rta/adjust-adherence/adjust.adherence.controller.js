@@ -8,6 +8,17 @@
 	function RtaAdjustAdherenceToNeutralController() {
 
         var vm = this;
-        console.log('ctrl');
+        vm.adjustToNeutralStartTime = new Date();
+        vm.adjustToNeutralEndTime = new Date();
+
+        vm.toggleStartSelection = function() {
+            vm.displayAdjustToNeutralStart = !vm.displayAdjustToNeutralStart;
+            vm.displayAdjustToNeutralEnd = false;
+        }; 
+        
+        vm.toggleEndSelection = function() {
+            vm.displayAdjustToNeutralEnd = !vm.displayAdjustToNeutralEnd;
+            vm.displayAdjustToNeutralStart = false;
+        }
     }
 })();

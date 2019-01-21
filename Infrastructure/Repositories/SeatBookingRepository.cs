@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			object businessUnitId;
 			if (!filter.Parameters.TryGetValue("businessUnitParameter", out businessUnitId))
 			{
-				return ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+				return ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnitId.GetValueOrDefault();
 			}
 			return Guid.Parse(businessUnitId.ToString());
 		}
