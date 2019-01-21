@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var identity = new TeleoptiIdentity(
 				_retrievePersonNameForPerson.NameForPerson(person),
 				dataSource, 
-				businessUnit,
+				businessUnit.Id,
+				businessUnit.Name,
 				WindowsIdentity.GetCurrent(),
 				tokenIdentity
 				);

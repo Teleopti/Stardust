@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 					var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
 					Thread.CurrentPrincipal =
 						new TeleoptiPrincipalForLegacy(
-							new TeleoptiIdentity(person.Name.FirstName, _dataSourceState.Get(), bu, null, @event.LogOnDatasource), person);
+							new TeleoptiIdentity(person.Name.FirstName, _dataSourceState.Get(), bu.Id, bu.Name, null, @event.LogOnDatasource), person);
 
 					var jobResult = _jobResultRepository.Get(@event.JobId);
 					var skill = _skillRepository.Get(@event.TargetSkillId);

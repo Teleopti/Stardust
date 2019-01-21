@@ -154,8 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 	    private void changeBusinessUnit(IBusinessUnit businessUnit,IPerson person)
 	    {
-			 var identity = new TeleoptiIdentity("test user", new FakeDataSource(), businessUnit, WindowsIdentity.GetCurrent(), null);
-			 //var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
+			 var identity = new TeleoptiIdentity("test user", new FakeDataSource(), businessUnit.Id, businessUnit.Name, WindowsIdentity.GetCurrent(), null);
 			 var principalForTest = new TeleoptiPrincipalForLegacy(identity, person);
 			 Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(identity, person);
 			 ((TeleoptiPrincipalForLegacy)TeleoptiPrincipal.CurrentPrincipal).ChangePrincipal(principalForTest);
