@@ -68,8 +68,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             VerifyTargetDemandsData(dividedActivity);
 
-            VerifyRelativePersonSkillResourcesData(dividedActivity);
-
             VerifyRelativePersonSkillResourcesSumData(dividedActivity);
       
         }
@@ -252,31 +250,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(1, skillResourceEfficiencyMatrix[person2][_testContainer.ContainedSkills["PhoneB"]]);
             Assert.AreEqual(1, skillResourceEfficiencyMatrix[person4].Count);
             Assert.AreEqual(1, skillResourceEfficiencyMatrix[person4][_testContainer.ContainedSkills["PhoneB"]]);
-        }
-
-        private void VerifyRelativePersonSkillResourcesData(DividedActivityData dividedActivity)
-		{
-			var person1 =
-				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
-			var person2 =
-				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
-			var person4 =
-				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
-
-            KeyedSkillResourceDictionary resourceMatrix = dividedActivity.RelativeKeyedSkillResourceResources;
-            Assert.IsNotNull(resourceMatrix);
-            Assert.AreEqual(2, resourceMatrix.Count);
-            Assert.AreEqual(2, resourceMatrix[person1].Count);
-            Assert.AreEqual(1.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
-            Assert.AreEqual(1.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-            Assert.AreEqual(2, resourceMatrix[person2].Count);
-            Assert.AreEqual(1.3333, resourceMatrix[person2][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
-            Assert.AreEqual(1.3333, resourceMatrix[person2][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-            Assert.AreEqual(1, resourceMatrix[person4].Count);
-            Assert.AreEqual(0.6666, resourceMatrix[person4][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
         }
 
         private void VerifyPersonSkillResourcesData(DividedActivityData dividedActivity)

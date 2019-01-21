@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         private readonly KeyedSkillResourceDictionary _keyedSkillResourceEfficiencies;
         private readonly KeyedSkillResourceDictionary _weightedRelativeKeyedSkillResourceResources;
-        private readonly KeyedSkillResourceDictionary _relativeKeyedSkillResourceResources;
         private readonly Dictionary<ISkill, double> _targetDemands;
 		private readonly Dictionary<DoubleGuidCombinationKey, double> _personResources;
 		private readonly Dictionary<DoubleGuidCombinationKey, double> _relativePersonResources;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             _keyedSkillResourceEfficiencies = new KeyedSkillResourceDictionary();
             _weightedRelativeKeyedSkillResourceResources = new KeyedSkillResourceDictionary();
-            _relativeKeyedSkillResourceResources = new KeyedSkillResourceDictionary();
             _targetDemands = new Dictionary<ISkill, double>();
             _personResources = new Dictionary<DoubleGuidCombinationKey, double>();
             _relativePersonResources = new Dictionary<DoubleGuidCombinationKey, double>();
@@ -59,12 +57,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </summary>
         /// <value>The weighted relative person - skill resources summa values.</value>
         public IDictionary<ISkill, double> WeightedRelativePersonSkillResourcesSum => _weightedRelativePersonSkillResourcesSum;
-
-	    /// <summary>
-        /// Gets the relative person resources, also called TRAFF, spent on each skill in the activity.
-        /// </summary>
-        /// <value>The relative person - skill resource matrix.</value>
-        public KeyedSkillResourceDictionary RelativeKeyedSkillResourceResources => _relativeKeyedSkillResourceResources;
 
 	    /// <summary>
         /// Gets the relative person - skill resources (also called traff) sum for each skill in the activity.
