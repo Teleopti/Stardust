@@ -33,11 +33,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var dataExtractor = new RelativeDailyDifferencesByAllSkillsExtractor(_dailySkillForecastAndScheduledValueCalculator, _allSkillExtractor);
 			var decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, _dayIndexCalculator);
 			var workShiftBackToLegalStateStep = new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, _deleteService);
-			return CreateInstance(workShiftBackToLegalStateStep);
-		}
-
-		protected virtual WorkShiftBackToLegalStateServicePro CreateInstance(WorkShiftBackToLegalStateStep workShiftBackToLegalStateStep)
-		{
 			return new WorkShiftBackToLegalStateServicePro(workShiftBackToLegalStateStep, _workShiftMinMaxCalculator);
 		}
 	}
