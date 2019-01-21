@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Collection
     {
         private readonly ILayerCollectionOwner<T> _owner;
 
-        internal LayerCollection(ILayerCollectionOwner<T> owner, IList<ILayer<T>> layerList) : base(layerList)
+        internal LayerCollection(ILayerCollectionOwner<T> owner, List<ILayer<T>> layerList) : base(layerList)
         {
             _owner = owner;
         }
@@ -32,7 +32,22 @@ namespace Teleopti.Ccc.Domain.Collection
 		    itemAsPersistedLayer?.SetParent((IEntity) _owner);
 	    }
 
-	    public DateTimePeriod? Period()
+		public virtual void AddRange(IEnumerable<ILayer<T>> items)
+		{
+			InParameter.NotNull(nameof(items), items);
+			foreach (var item in items)
+			{
+				_owner?.OnAdd(item);
+			}
+			((List<ILayer<T>>)Items).AddRange(items);
+			foreach (var item in items)
+			{
+				var itemAsPersistedLayer = item as IAggregateEntity;
+				itemAsPersistedLayer?.SetParent((IEntity)_owner);
+			}
+		}
+
+		public DateTimePeriod? Period()
         {
 	        return Items.OuterPeriod();
         }
