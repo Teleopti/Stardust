@@ -63,16 +63,12 @@
 			</div>
 			<div class="con-flex panel">
 				<label style="margin: 5px"><b>{{'PlanGroupScheduling' | translate}}:</b></label>
-                <div class="con-row">
-                    <div class="con-flex ">
-                        <div class="con-row align-row-center">
-                            <div class="con-flex x3 align-row-center">
-                                <button class="wfm-btn wfm-btn-invis-default" id="createSchedulingSetting" ng-click="vm.goCreateSchedulingSetting()">
-                                    <i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+				<div class="con-row align-row-center">
+					<div class="con-flex x3 align-row-center">
+						<button class="wfm-btn wfm-btn-invis-default" id="createSchedulingSetting" ng-click="vm.goCreateSchedulingSetting()">
+							<i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
+					</div>
+				</div>
 				<planning-group-settings-overview settings="vm.editPlanningGroup.Settings" preference-percent="vm.editPlanningGroup.PreferencePercent"></planning-group-settings-overview>
 			</div>
 			<div class="wfm-card-content" style="height: 62px;border-top: 1px solid rgba(0, 0, 0, 0.16);">
