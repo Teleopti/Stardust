@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
         private readonly IWorkShiftBackToLegalStateStep _workShiftBackToLegalStateStep;
         private readonly IWorkShiftMinMaxCalculator _workShiftRangeCalculator;
         private readonly IList<DateOnly> _removedDays = new List<DateOnly>();
-		private readonly IList<IScheduleDay> _removedSchedules = new List<IScheduleDay>();
 
         public WorkShiftBackToLegalStateServicePro(
             IWorkShiftBackToLegalStateStep workShiftBackToLegalStateStep,
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 		public bool Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
             _removedDays.Clear();
-			_removedSchedules.Clear();
             _workShiftRangeCalculator.ResetCache();
 
             //for each week
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
                     if (removedDay == null)
                         return false;
                     _removedDays.Add(removedDay.DateOnlyAsPeriod.DateOnly);
-					_removedSchedules.Add(removedDay);
                 }
             }
 
@@ -55,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 				if (removedDay == null)
                     return false;
 				_removedDays.Add(removedDay.DateOnlyAsPeriod.DateOnly);
-				_removedSchedules.Add(removedDay);
             }
             return true;
         }
@@ -66,11 +62,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
         {
             get { return _removedDays; }
         }
-
-    	public IList<IScheduleDay> RemovedSchedules
-    	{
-			get {return _removedSchedules; }
-    	}
 
 		private static DateOnly firstDateInWeekIndex(int weekIndex, IScheduleMatrixPro matrix)
 		{
