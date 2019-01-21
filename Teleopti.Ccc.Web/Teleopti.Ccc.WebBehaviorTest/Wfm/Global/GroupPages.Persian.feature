@@ -5,7 +5,7 @@ Feature: GroupPages_Persian
 	I should be able to search agents using group pages picker in Teams
 
 Background: 
-Given I am persian
+	Given I am persian
 	And there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
 	And there is an activity named 'MyActivity'
@@ -33,4 +33,3 @@ Scenario: search agents using group pages picker in teams
 	And I close group pages picker
 	And I click button to search for schedules
 	Then I should see agent 'I' in the table
-

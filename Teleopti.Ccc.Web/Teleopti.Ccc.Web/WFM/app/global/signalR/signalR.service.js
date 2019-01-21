@@ -30,15 +30,15 @@
 			if ($.connection.hub.state === $.signalR.connectionState.connected) {
 				$.connection.hub.stop();
 			}
-				
+
 			hub.client.onEventMessage = function (message) {
 				pendingMessage.push(message);
-				messageHandlingTimeout !== null && $timeout.cancel(messageHandlingTimeout);
-
-				messageHandlingTimeout = $timeout(function () {
-					messageHandler(pendingMessage);
-					resetPendingMessages();
-				}, timeout);
+				if (messageHandlingTimeout == null) {
+					messageHandlingTimeout = $timeout(function () {
+						messageHandler(pendingMessage);
+						resetPendingMessages();
+					}, timeout);
+				}
 			}
 			setNegotiationLocation();
 			connectToServerAddSubscription(options);

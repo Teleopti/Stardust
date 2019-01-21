@@ -921,7 +921,6 @@
     <Compile Include="InterfaceLegacy\Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IActivityRestriction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IActivityRestrictionTemplate.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAffectedPersonSkillService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeTransactionRepository.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeWithRank.cs" />

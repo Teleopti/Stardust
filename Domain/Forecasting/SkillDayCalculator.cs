@@ -81,12 +81,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
                 foreach (var workload in _skill.WorkloadCollection)
                 {
-                    Dictionary<DateOnly,IWorkloadDay> foundList;
-                    if (!_workloadDaysCache.TryGetValue(workload, out foundList))
+					if (!_workloadDaysCache.TryGetValue(workload, out var foundList))
                         continue;
 
-                    IWorkloadDay workloadDay;
-                    if (!foundList.TryGetValue(skillDay.CurrentDate,out workloadDay))
+					if (!foundList.TryGetValue(skillDay.CurrentDate,out var workloadDay))
                         continue;
 
                     var unsortedOpenTaskPeriods = workloadDay.OpenTaskPeriodList.ToList();
