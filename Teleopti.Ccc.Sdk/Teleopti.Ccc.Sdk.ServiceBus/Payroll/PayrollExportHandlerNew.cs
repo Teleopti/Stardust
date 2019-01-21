@@ -92,6 +92,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 						var wrapper = new AppdomainCreatorWrapper();
 						var searchPath = new SearchPath();
 						var dto = createDto(payrollExport, @event, personDtos);
+						
+						PayrollDllCopy.CopyFiles(searchPath.PayrollDeployNewPath, searchPath.Path, @event.LogOnDatasource);
+						
 						var result = wrapper.RunPayroll(_sdkServiceFactory, dto, @event, payrollResult.Id.GetValueOrDefault(),
 							_serviceBusPayrollExportFeedback, searchPath.Path);
 						if (result != null)

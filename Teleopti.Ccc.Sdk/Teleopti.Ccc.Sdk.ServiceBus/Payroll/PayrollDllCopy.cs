@@ -90,6 +90,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 			return addedFiles;
 		}
+		
+		public static void CopyFiles(string sourcePath, string destinationPath,
+			string subdirectoryPath)
+		{
+			var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
+			var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
+
+			copyFiles(fullSourcePath, fullDestinationPath);
+		}
 
 		private static void copyFiles(string source, string destination)
 		{
@@ -115,8 +124,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 				if (totalSleepTime == 500)
 				{
-					Log.Warn(string.Format("File {0} have been in use for {1} milliseconds, skipping file", fileInfo.FullName,
-										   totalSleepTime));
+					Log.Warn($"File {fileInfo.FullName} have been in use for {totalSleepTime} milliseconds, skipping file");
 					continue;
 				}
 
@@ -126,14 +134,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 					while (!xmlFileDestination.EndsWith("\\Payroll", StringComparison.OrdinalIgnoreCase))
 						xmlFileDestination = Directory.GetParent(xmlFileDestination).ToString();
 					xmlFileDestination = Path.GetFullPath(xmlFileDestination + "\\" + Path.GetFileName(file));
-					Log.Info(string.Format("Copying {0} to {1}", file, xmlFileDestination));
+					Log.Info($"Copying {file} to {xmlFileDestination}");
 					File.Copy(file, xmlFileDestination, true);
 				}
 
 				else
 				{
 					var fileDestination = Path.GetFullPath(destination + "\\" + Path.GetFileName(file));
-					Log.Info(string.Format("Copying {0} to {1}", file, fileDestination));
+					Log.Info($"Copying {file} to {fileDestination}");
 					File.Copy(file, fileDestination, true);
 				}
 			}

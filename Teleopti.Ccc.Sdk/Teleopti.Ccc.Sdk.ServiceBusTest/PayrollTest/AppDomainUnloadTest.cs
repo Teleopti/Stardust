@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 
-		[Test]
+		[Test, Ignore("WIP")]
 		public void ShouldFindDefaultPayrollFilesOnPayrollRootDirWhenUsingTenantSpecificDir()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;

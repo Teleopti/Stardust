@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 				//use default if not set in ServerConfiguration
 				if (string.IsNullOrEmpty(sourcePayrollDirectory))
 					sourcePayrollDirectory = _searchPath.PayrollDeployNewPath;
-
-				CopyFiles(sourcePayrollDirectory, _searchPath.Path, parameters.TenantName);
+				
+				PayrollDllCopy.CopyFiles(sourcePayrollDirectory, _searchPath.Path, parameters.TenantName);
 			}
 
 			_initializePayrollFormats.RefreshOneTenant(parameters.TenantName);
@@ -66,20 +66,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			}
 		}
 
-		private static void CopyFiles(string sourcePath, string destinationPath,
-			string subdirectoryPath)
-		{
-			var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
-			var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
-
-			if (!Directory.Exists(fullDestinationPath))
-				Directory.CreateDirectory(fullDestinationPath);
-
-			foreach (var sourceFile in Directory.GetFiles(fullSourcePath))
-			{
-				var fullDestinationFilename = Path.Combine(fullDestinationPath, Path.GetFileName(sourceFile));
-				File.Copy(sourceFile, fullDestinationFilename, true);
-			}
-		}
+	
 	}
 }
