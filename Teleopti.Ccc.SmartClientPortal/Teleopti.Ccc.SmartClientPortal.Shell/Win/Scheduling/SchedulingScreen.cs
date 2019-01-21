@@ -3306,11 +3306,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			state.Fill(uow);
 		}
 
-		private void disableSave()
-		{
-			toolStripButtonSaveLarge.Enabled = false;
-		}
-
 		private void enableSave()
 		{
 			toolStripButtonSaveLarge.Enabled = true;
@@ -3459,7 +3454,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulerSplitters1.Grid.Cursor = Cursors.WaitCursor;
 			schedulerSplitters1.ElementHost1.Enabled = false; //shifteditor
 			ribbonControlAdv1.Cursor = Cursors.AppStarting;
-			disableSave();
+			toolStripButtonSaveLarge.Enabled = false;
 		}
 
 		private void enableOrDisableAllExceptCancelInRibbon(bool enable)
@@ -3476,7 +3471,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripStatusLabelContractTime.Enabled = enable;
 			if (toolStripSpinningProgressControl1.SpinningProgressControl == null)
 				toolStripSpinningProgressControl1 = new ToolStripSpinningProgressControl();
-			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = enable;
+			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = !enable;
 			schedulerSplitters1.EnableOrDisableViewShiftCategoryDistribution(enable);
 
 			toggleQuickButtonEnabledState(enable);
