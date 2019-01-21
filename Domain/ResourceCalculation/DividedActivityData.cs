@@ -3,68 +3,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-
-    public interface IDividedActivityData
-    {
-        /// <summary>
-        /// Gets the person - skill efficiency matrix.
-        /// </summary>
-        /// <value>The skill efficiency matrix.</value>
-        KeyedSkillResourceDictionary KeyedSkillResourceEfficiencies { get; }
-
-        /// <summary>
-        /// Gets the weighted relative person - skill resource matrix.
-        /// </summary>
-        /// <value>The weighted relative person - skill resource matrix.</value>
-        KeyedSkillResourceDictionary WeightedRelativeKeyedSkillResourceResources { get; }
-
-        /// <summary>
-        /// Gets the target demands.
-        /// </summary>
-        /// <value>The target demands.</value>
-        IDictionary<ISkill, double> TargetDemands { get; }
-
-        /// <summary>
-        /// Gets the summa of weighted relative person - skill resources spent for a skill.
-        /// </summary>
-        /// <value>The weighted relative person - skill resources summa values.</value>
-        IDictionary<ISkill, double> WeightedRelativePersonSkillResourcesSum { get; }
-
-        /// <summary>
-        /// Gets the relative person resources, also called TRAFF, spent on each skill in the activity.
-        /// </summary>
-        /// <value>The relative person - skill resource matrix.</value>
-        KeyedSkillResourceDictionary RelativeKeyedSkillResourceResources { get; }
-
-        /// <summary>
-        /// Gets the relative person - skill resources (also called traff) sum for each skill in the activity.
-        /// </summary>
-        /// <value>The relative person - skill resource values sum.</value>
-        IDictionary<ISkill, double> RelativePersonSkillResourcesSum { get; }
-
-        /// <summary>
-        /// Gets the absolut person resources, the time, spent on the activity.
-        /// </summary>
-        /// <value>The absolut person resources.</value>
-		IDictionary<DoubleGuidCombinationKey, double> PersonResources { get; }
-
-        /// <summary>
-        /// Gets the relative person resources, also called TRAFF, spent on the activity.
-        /// </summary>
-        /// <value>The relative person resources.</value>
-		IDictionary<DoubleGuidCombinationKey, double> RelativePersonResources { get; }
-
-        /// <summary>
-        /// Calculates the person resources summa for final result.
-        /// </summary>
-        void CalculatePersonResourcesSummaForReadingResultFromFurness();
-
-        /// <summary>
-        /// Calculates the person resources summa for initialization.
-        /// </summary>
-        void CalculatePersonResourcesSummaForFurnessInitialization();
-
-    }
     /// <summary>
     /// Takes the input domain classes and a activity and creates a structure that 
     /// can be fed to FurnessData object.
@@ -72,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// <remarks>
     /// For more information on the properties see the ResourceOptimizerTestSet.xls Business logic sheet.
     /// </remarks>
-    public class DividedActivityData : IDividedActivityData
+    public class DividedActivityData
     {
         private readonly KeyedSkillResourceDictionary _keyedSkillResourceEfficiencies;
         private readonly KeyedSkillResourceDictionary _weightedRelativeKeyedSkillResourceResources;

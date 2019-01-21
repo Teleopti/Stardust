@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: Tamas
         /// Created date: 2008-02-07
         /// </remarks>
-        IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
+        DividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
                                                              AffectedPersonSkillService affectedPersonSkillService,
                                                            IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     public class ActivityDivider : IActivityDivider
 	{
-        public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
+        public DividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
 			AffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
