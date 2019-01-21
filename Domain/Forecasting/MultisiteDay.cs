@@ -425,7 +425,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                                                                           Payload.
                                                                                           CalculatedOccupancy)));
 
-                    skillStaffPeriod.Payload.Shrinkage = content.SkillStaffPeriod.Payload.Shrinkage;
+					var multiSiteStaffPeriod =
+						_multisiteSkillDay.SkillStaffPeriodCollection.FirstOrDefault(x =>
+							x.Period == content.SkillStaffPeriod.Period);
+					var manualAgents = multiSiteStaffPeriod?.Payload.ManualAgents;
+					if (manualAgents.HasValue)
+					{
+						skillStaffPeriod.Payload.ManualAgents = manualAgents * factor.Value;
+					}
+
+					skillStaffPeriod.Payload.Shrinkage = content.SkillStaffPeriod.Payload.Shrinkage;
                     skillStaffPeriod.Payload.Efficiency = content.SkillStaffPeriod.Payload.Efficiency;
                     skillStaffPeriod.Payload.SkillPersonData = period.SkillPersonData;
                     skillStaffPeriod.IsAvailable = true;
