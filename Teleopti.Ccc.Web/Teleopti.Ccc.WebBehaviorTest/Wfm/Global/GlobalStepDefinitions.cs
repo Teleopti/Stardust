@@ -1,4 +1,4 @@
-﻿using TechTalk.SpecFlow;
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -50,14 +50,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[Then(@"I should see group pages picker tab")]
 		public void ThenIShouldSeeGroupPagesPickerTab()
 		{
-			Browser.Interactions.AssertExists(
-				".group-page-picker-menu md-pagination-wrapper .md-tab > i.mdi.mdi-folder-account");
+			Browser.Interactions.AssertExistsUsingJQuery(
+				".group-page-picker-menu md-pagination-wrapper .md-tab:nth-child(2)");
 		}
 
 		[Then(@"I click on group page picker icon")]
 		public void ThenIClickOnGroupPagePickerIcon()
 		{
-			Browser.Interactions.ClickVisibleOnly(".group-page-picker-menu md-pagination-wrapper .md-tab > i.mdi.mdi-folder-account");
+			Browser.Interactions.WaitScopeCondition(".group-page-picker-menu md-tabs-content-wrapper",
+				"$parent.$ctrl.isDataAvailable", true,
+				() =>
+				{
+					Browser.Interactions.ClickUsingJQuery(
+						".group-page-picker-menu md-pagination-wrapper .md-tab:nth-child(2)");
+				});
 		}
 
 		[Then(@"I select all skills on group page picker")]
@@ -66,6 +72,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 			Browser.Interactions.WaitScopeCondition(".group-page-picker-menu md-tabs-content-wrapper", "$parent.$ctrl.isDataAvailable", true,
 				() =>
 				{
+					Browser.Interactions.ClickUsingJQuery(
+						".group-page-picker-menu md-pagination-wrapper .md-tab:nth-child(2)");
+
 					Browser.Interactions.ClickContaining(".group-page-picker-menu .virtual-repeat .repeated-item .md-button",
 						Resources.Skill);
 				}
