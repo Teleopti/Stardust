@@ -281,8 +281,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private IEnumerable<DateOnly> removeIllegalWorkTimeDays(SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			_workTimeBackToLegalStateService.Execute(_matrix, schedulingOptions, rollbackService);
-			var removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;
+			var removedIllegalDates = _workTimeBackToLegalStateService.Execute(_matrix, schedulingOptions, rollbackService);
 			//resource calculate removed days
 			foreach (DateOnly dateOnly in removedIllegalDates)
 			{
