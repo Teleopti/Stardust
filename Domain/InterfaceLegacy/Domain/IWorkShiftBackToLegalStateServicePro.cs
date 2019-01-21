@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="schedulingOptions">The scheduling options.</param>
 		/// <param name="rollbackService">The rollback service.</param>
 		/// <returns></returns>
-		bool Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
+		void Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService);
 
         /// <summary>
         /// Gets the removed days during the Execute.
