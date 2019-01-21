@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -15,6 +16,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			StateHolderProxyHelper.PrincipalFactory = new TeleoptiPrincipalForLegacyFactory();
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
