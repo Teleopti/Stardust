@@ -9,13 +9,8 @@
 
 <div class="test-campaign-edit" ng-show="isCampaignLoaded()">
 
-	<div class="panel">
-		<button class="wfm-btn wfm-btn-invis-default back-to-overview" ng-click="backToList()" ng-disabled="isCreating">
-			<i class="mdi mdi-reply"></i>
-			<md-tooltip md-direction="right">{{'BackToList' | translate}}</md-tooltip>
-		</button>
-
-		<form name="form" class="wfm-form">
+	<form name="form" class="wfm-form">
+		<div class="panel">
 			<div class="con-row">
 				<div class="con-flex">
 					<dl>
@@ -157,18 +152,23 @@
 				</div>
 			</div>
 			<div class="con-footer">
+				<div class="pull-left">
+					<button class="wfm-btn wfm-btn-invis-danger test-delete-campaign" ng-click="removeCampaign()">
+						<span translate>Delete</span>
+					</button>
+					<button class="wfm-btn wfm-btn-invis-default" ng-click="reset()">
+						<span translate>Reset</span>
+					</button>
+				</div>
+				<button class="wfm-btn wfm-btn-invis-default back-to-overview" ng-click="backToList()" ng-disabled="isCreating">
+					{{'Cancel' | translate}}
+				</button>
 				<button class="wfm-btn test-campaign-edit-submit" ng-click="editCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary': isInputValid()}">
 					<span translate>Save</span>
 				</button>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="reset()">
-					<span translate>Reset</span>
-				</button>
-				<button class="wfm-btn wfm-btn-invis-primary test-delete-campaign" ng-click="removeCampaign()">
-					<span translate>Delete</span>
-				</button>
 			</div>
-		</form>
-	</div>
+		</div>
+	</form>
 
 	<div ng-cloak class="modal-box">
 		<div ng-cloak ng-show="showRemoveCampaignConfirmDialog">
@@ -185,7 +185,7 @@
 					<div class="modal-actions">
 						<aside>
 							<button ng-click="cancelRemoveCampaign()" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
-							<button ng-click="remove()" class="wfm-btn wfm-btn-invis-primary test-confirm-delete" translate>Delete</button>
+							<button ng-click="remove()" class="wfm-btn wfm-btn-invis-danger test-confirm-delete" translate>Delete</button>
 						</aside>
 					</div>
 				</div>
