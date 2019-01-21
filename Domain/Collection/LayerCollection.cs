@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -40,10 +41,9 @@ namespace Teleopti.Ccc.Domain.Collection
 				_owner?.OnAdd(item);
 			}
 			((List<ILayer<T>>)Items).AddRange(items);
-			foreach (var item in items)
+			foreach (var item in items.OfType<IAggregateEntity>())
 			{
-				var itemAsPersistedLayer = item as IAggregateEntity;
-				itemAsPersistedLayer?.SetParent((IEntity)_owner);
+				item.SetParent((IEntity)_owner);
 			}
 		}
 
