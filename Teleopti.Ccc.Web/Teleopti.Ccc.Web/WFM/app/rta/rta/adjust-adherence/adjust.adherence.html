@@ -52,7 +52,7 @@
                     <input type="text"
                            class="pointer"
                            ng-click="vm.toggleEndSelection()"
-                           ng-model="vm.adjustToNeutralStart"
+                           ng-model="vm.adjustToNeutralEnd"
                            placeholder="yyyy-mm-dd hh:mm"
                            style="width: 150px">
                 </label>
@@ -60,7 +60,7 @@
             <div class="con-flex">
                 <div class="pull-right" style="padding-top:13px">
                     <button class="wfm-btn wfm-btn-primary"
-                            ng-click="vm.showAdjustToNeutralSection = !vm.showAdjustToNeutralSection">Adjust to Neutral
+                            ng-click="vm.adjustToNeutral()">Adjust to Neutral
                     </button>
                 </div>
             </div>
@@ -109,16 +109,16 @@
             </thead>
             <tbody>
             <tr>
-                <td>2019-01-07 10:00</td>
-                <td>2019-01-07 14:00</td>
+                <td>2019-01-07 10:00 AM</td>
+                <td>2019-01-07 14:00 PM</td>
             </tr>
             <tr>
-                <td>2019-01-05 11:00</td>
-                <td>2019-01-05 12:00</td>
+                <td>2019-01-05 11:00 AM</td>
+                <td>2019-01-05 12:00 PM</td>
             </tr>
             <tr>
-                <td>2019-01-02 01:00</td>
-                <td>2019-01-03 08:00</td>
+                <td>2019-01-02 01:00 AM</td>
+                <td>2019-01-03 08:00 AM</td>
             </tr>
             </tbody>
         </table>
