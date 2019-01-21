@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly ScheduleChangesAffectedDates _decider;
 		private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
-		private readonly IWorkShiftBackToLegalStateServicePro _workTimeBackToLegalStateService;
+		private readonly WorkShiftBackToLegalStateServicePro _workTimeBackToLegalStateService;
 		private readonly INightRestWhiteSpotSolverService _nightRestWhiteSpotSolverService;
 		private readonly IList<IDayOffLegalStateValidator> _validatorList;
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			ScheduleChangesAffectedDates decider,
 			IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
-			IWorkShiftBackToLegalStateServicePro workTimeBackToLegalStateService,
+			WorkShiftBackToLegalStateServicePro workTimeBackToLegalStateService,
 			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService,
 			IList<IDayOffLegalStateValidator> validatorList,
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,

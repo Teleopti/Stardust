@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						deleteAndResourceCalculateService,
 						scheduleServiceForFlexibleAgents, resourceCalculateDelayer);
 
-				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
+				var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 
 				IDayOffsInPeriodCalculator dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator();
 

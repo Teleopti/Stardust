@@ -1345,7 +1345,6 @@
     <Compile Include="InterfaceLegacy\Domain\IWorkloadDayTemplate.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShift.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftAddCallback.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftExtender.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftLimiter.cs" />

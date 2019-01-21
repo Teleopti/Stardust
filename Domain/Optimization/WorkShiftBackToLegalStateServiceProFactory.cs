@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_deleteService = deleteService;
 		}
 
-		public IWorkShiftBackToLegalStateServicePro Create()
+		public WorkShiftBackToLegalStateServicePro Create()
 		{
 			var bitArrayCreator = new WorkShiftBackToLegalStateBitArrayCreator();
 			// when we move the period to the method we can have all this in autofac
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return CreateInstance(workShiftBackToLegalStateStep);
 		}
 
-		protected virtual IWorkShiftBackToLegalStateServicePro CreateInstance(WorkShiftBackToLegalStateStep workShiftBackToLegalStateStep)
+		protected virtual WorkShiftBackToLegalStateServicePro CreateInstance(WorkShiftBackToLegalStateStep workShiftBackToLegalStateStep)
 		{
 			return new WorkShiftBackToLegalStateServicePro(workShiftBackToLegalStateStep, _workShiftMinMaxCalculator);
 		}

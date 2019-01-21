@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 {
-	public class WorkShiftBackToLegalStateServicePro : IWorkShiftBackToLegalStateServicePro
+	public class WorkShiftBackToLegalStateServicePro
     {
         private readonly IWorkShiftBackToLegalStateStep _workShiftBackToLegalStateStep;
         private readonly IWorkShiftMinMaxCalculator _workShiftRangeCalculator;
