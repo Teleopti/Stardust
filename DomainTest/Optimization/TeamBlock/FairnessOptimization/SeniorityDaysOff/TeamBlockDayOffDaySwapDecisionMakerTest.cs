@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_dayOffsToGiveAway = new List<DateOnly> {_dateBefore};
-			_seniorBitArray = new LockableBitArray(21, true, true, null);
-			_juniorBitArray = new LockableBitArray(21, true, true, null);
+			_seniorBitArray = new LockableBitArray(21, true, true);
+			_juniorBitArray = new LockableBitArray(21, true, true);
 			_scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 
@@ -217,8 +217,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			var scheduleDaySeniorToGiveAway = _mocks.StrictMock<IScheduleDay>();
 			var scheduleDayJuniorToAccept = _mocks.StrictMock<IScheduleDay>();
-			var clonedBitArrayOfSenior = new LockableBitArray(21, true, true, null);
-			var clonedBitArrayOfJunior = new LockableBitArray(21, true, true, null);
+			var clonedBitArrayOfSenior = new LockableBitArray(21, true, true);
+			var clonedBitArrayOfJunior = new LockableBitArray(21, true, true);
 			using (_mocks.Record())
 			{
 				commonMocks();
@@ -256,8 +256,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			var scheduleDaySeniorToGiveAway = _mocks.StrictMock<IScheduleDay>();
 			var scheduleDayJuniorToAccept = _mocks.StrictMock<IScheduleDay>();
-			var clonedBitArrayOfSenior = new LockableBitArray(21, true, true, null);
-			var clonedBitArrayOfJunior = new LockableBitArray(21, true, true, null);
+			var clonedBitArrayOfSenior = new LockableBitArray(21, true, true);
+			var clonedBitArrayOfJunior = new LockableBitArray(21, true, true);
 			using (_mocks.Record())
 			{
 				commonMocks();

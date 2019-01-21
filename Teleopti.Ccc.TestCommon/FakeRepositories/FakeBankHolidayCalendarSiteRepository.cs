@@ -38,9 +38,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _bankHolidayCalendarSites;
 		}
 
-		public IEnumerable<System.Guid> FindSitesByCalendar(Guid calendarId)
+		public IEnumerable<Guid> FindSitesByCalendar(Guid calendarId)
 		{
 			return _bankHolidayCalendarSites.Where(s => s.Calendar.Id.Value == calendarId).Select(c=>c.Site.Id.Value);
+		}
+
+		public IEnumerable<IBankHolidayCalendar> FetchBankHolidayCalendars(Guid siteId)
+		{
+			return _bankHolidayCalendarSites.Where(cs => cs.Site.Id.GetValueOrDefault() == siteId).Select(cs => cs.Calendar);
 		}
 	}
 }

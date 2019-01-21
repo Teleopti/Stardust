@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		Forecast_CopySettingsToWorkflow_11112,
 
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
-		RTA_TooManyPersonAssociationChangedEvents_Packages_78669,
-		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 		RTA_RestrictModifySkillGroups_78568,
 		RTA_InputValidationForApprovingAdherencePeriods_77045,
@@ -106,7 +104,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_Intraday_Redesign_77214,
 
 		WFM_ChatBot_77547,
-		WFM_Insights_78059,
+		WFM_Insights_80704,
 
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
 		Wfm_Stardust_EnableScaleout_77366,
@@ -120,7 +118,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_Intraday_OptimizeSkillDayLoad_80153,
 		WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425,
 		ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646,
-		WRM_AbsenceRequest_Robust_Processing_79988
+		WFM_AbsenceRequest_Robust_Processing_79988
 		// ReSharper restore InconsistentNaming
 	}
 }

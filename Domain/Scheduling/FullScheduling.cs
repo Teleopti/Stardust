@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public FullSchedulingResultModel DoSchedulingAndDO(Guid planningPeriodId, bool runDayOffOptimization = true)
 		{			
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
-			var agents = LoadAgents(schedulingInformation.Period, schedulingInformation.PersonIds.ToHashSet()).ToArray();
+			var agents = LoadAgents(schedulingInformation.Period, schedulingInformation.PersonIds.ToHashSet()).ToHashSet();
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
 				Period = schedulingInformation.Period,

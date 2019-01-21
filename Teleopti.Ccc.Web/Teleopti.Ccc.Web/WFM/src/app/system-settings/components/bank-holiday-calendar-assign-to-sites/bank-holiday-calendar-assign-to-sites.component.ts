@@ -1,5 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd';
 
 import { GroupPageService } from 'src/app/shared/services/group-page-service';
@@ -27,7 +27,7 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 	ngOnInit() {
 		this.bankCalendarDataService.bankHolidayCalendarsList$.subscribe(calendars => {
 			this.bankHolidayCalendarsList = calendars;
-
+			this.updateSiteAndCalsList(calendars);
 			this.preSelectCalendarsForSite();
 		});
 
@@ -44,31 +44,52 @@ export class BankHolidayCalendarAssignToSitesComponent implements OnInit {
 			}, this.networkError);
 	}
 
+	updateSiteAndCalsList(calendars: BankHolidayCalendarItem[]) {
+		const calIds = calendars.map(c => {
+			return c.Id;
+		});
+
+		this.siteCalendarsList.forEach(sc => {
+			const cals = [];
+			sc.Calendars.forEach(c => {
+				if (calIds.indexOf(c) > -1) cals.push(c);
+			});
+			sc.Calendars = cals;
+		});
+	}
+
 	preSelectCalendarsForSite() {
-		this.sitesList.forEach(s => {
-			s.SelectedCalendarId = null;
-			const site = this.siteCalendarsList.filter(sc => sc.Site === s.Id)[0];
-			if (site && site.Calendars[0] && site.Calendars[0].length > 0) {
-				// Currently we only support setting one calendar to site
-				s.SelectedCalendarId = site.Calendars[0];
+		this.sitesList.forEach(site => {
+			site.SelectedCalendarId = null;
+			const siteCal = this.siteCalendarsList.filter(sc => sc.Site === site.Id)[0];
+			if (siteCal && siteCal.Calendars[0] && siteCal.Calendars[0].length > 0) {
+				// Note: currently we only support setting one calendar to a site
+				site.SelectedCalendarId = siteCal.Calendars[0];
 			}
 		});
+		this.sitesList = [...this.sitesList];
 	}
 
 	updateCalendarForSite(calId: string, site: GroupPageSiteItem) {
 		const cals: string[] = [];
-
 		if (calId && calId.length > 0) {
 			cals.push(calId);
 		}
+		const item = { Site: site.Id, Calendars: cals };
 
-		const formData = {
-			Settings: [{ Site: site.Id, Calendars: cals }]
-		};
-
-		this.bankCalendarDataService.updateCalendarForSite(formData).subscribe(
+		this.bankCalendarDataService.updateCalendarForSite({ Settings: [item] }).subscribe(
 			result => {
-				if (result) {
+				if (result === true) {
+					let isItemInList = false;
+					this.siteCalendarsList.forEach(sc => {
+						if (sc.Site === item.Site) {
+							isItemInList = true;
+							sc.Calendars = item.Calendars;
+						}
+					});
+					if (!isItemInList) {
+						this.siteCalendarsList.push(item);
+					}
 				} else {
 					site.SelectedCalendarId = null;
 					this.networkError();

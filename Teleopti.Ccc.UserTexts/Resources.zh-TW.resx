@@ -15170,4 +15170,103 @@ Teleopti R&amp;D</value>
   <data name="CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios" xml:space="preserve">
     <value>由於您沒有修改受限情景的許可權因此您無法更改申請狀態。</value>
   </data>
+  <data name="AuditTrailGeneralAuditTrailReport" xml:space="preserve">
+    <value>常規審核跟蹤</value>
+  </data>
+  <data name="AuditTrailReportGroup" xml:space="preserve">
+    <value>審核跟蹤</value>
+  </data>
+  <data name="AuditTrailSearchFilter" xml:space="preserve">
+    <value>搜索篩選器</value>
+  </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>系統設置</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>常規設置</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
+    <value>您已修改了班次．您想要關閉並不保存嗎？</value>
+  </data>
+  <data name="PasswordPolicyError" xml:space="preserve">
+    <value>密碼策略錯誤</value>
+  </data>
+  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>您確定要刪除此公共假日日曆嗎？</value>
+  </data>
+  <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
+    <value>您確定要從日曆 {1} 中刪除 {0} 年度？</value>
+  </data>
+  <data name="BankHolidayCalendarHasBeenSuccessfullyDeleted" xml:space="preserve">
+    <value>公共假日日曆 {0} 已成功刪除。</value>
+  </data>
+  <data name="BankHolidayCalendars" xml:space="preserve">
+    <value>公共假日日曆</value>
+  </data>
+  <data name="DeleteThisYear" xml:space="preserve">
+    <value>刪除該年度</value>
+  </data>
+  <data name="NameAlreadyExisting" xml:space="preserve">
+    <value>名稱已存在</value>
+  </data>
+  <data name="NewCalendarName" xml:space="preserve">
+    <value>新的日曆名稱</value>
+  </data>
+  <data name="AddANewYear" xml:space="preserve">
+    <value>添加一個新的年度</value>
+  </data>
+  <data name="ThisCalendarHasNoDatesAdded" xml:space="preserve">
+    <value>該日曆中沒有添加日期。</value>
+  </data>
+  <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">
+    <value>這個年度沒有定義公共假日。從日曆選擇一個日期以添加公共假日。</value>
+  </data>
+  <data name="BankHoliday" xml:space="preserve">
+    <value>公共假日</value>
+  </data>
+  <data name="NoBankHolidays" xml:space="preserve">
+    <value>沒有公共假日</value>
+  </data>
+  <data name="AddNewBankHolidayCalendar" xml:space="preserve">
+    <value>添加新的公共假日日曆</value>
+  </data>
+  <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
+    <value>發生一個錯誤。請檢查網路連接並重試。如果持續出現錯誤，請聯繫您的管理員。</value>
+  </data>
+  <data name="NumberOfAgents" xml:space="preserve">
+    <value>{0} 個座席代表</value>
+  </data>
+  <data name="OneAgent" xml:space="preserve">
+    <value>1個座席代表</value>
+  </data>
+  <data name="DayOffRulesColon" xml:space="preserve">
+    <value>休息日規則：</value>
+  </data>
+  <data name="ScheduledAgents" xml:space="preserve">
+    <value>已排定的座席代表</value>
+  </data>
+  <data name="ValidationIssues" xml:space="preserve">
+    <value>驗證問題</value>
+  </data>
+  <data name="ValidationsAreLoading" xml:space="preserve">
+    <value>正在進行驗證</value>
+  </data>
+  <data name="ValidationsAreLoadingTooltip" xml:space="preserve">
+    <value>正在進行驗證，請稍等一會</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
+    <value>此規劃組中沒有座席代表。請檢查篩選器。</value>
+  </data>
+  <data name="ManageCalendars" xml:space="preserve">
+    <value>管理日曆</value>
+  </data>
+  <data name="AssignCalendarsToSites" xml:space="preserve">
+    <value>分配日曆到網站</value>
+  </data>
+  <data name="MonthOrMonths" xml:space="preserve">
+    <value>月</value>
+  </data>
 </root>

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
-			UpdatedBy.Person().Id.Value.Should().Be(SystemUser.Id);
+			(UpdatedBy.Person() as IPerson).Id.Value.Should().Be(SystemUser.Id);
 		}
 
 		[Test]

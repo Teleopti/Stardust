@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class FurnessDataConverter
     {
         private IFurnessData _furnessData;
-        private readonly IDividedActivityData _dividedActivityData;
+        private readonly DividedActivityData _dividedActivityData;
 
         private IDictionary<ISkill, int> _skillIndexRegister = new Dictionary<ISkill, int>();
         private IDictionary<DoubleGuidCombinationKey, int> _personIndexRegister = new Dictionary<DoubleGuidCombinationKey, int>();
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </summary>
         /// <param name="dividedActivityData">The divided activity data.</param>
         public FurnessDataConverter(
-            IDividedActivityData dividedActivityData)
+            DividedActivityData dividedActivityData)
         {
             _dividedActivityData = dividedActivityData;
         }
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Converts the furness data result back to the divided activity classes.
         /// </summary>
         /// <returns></returns>
-        public IDividedActivityData ConvertFurnessDataBackToActivity()
+        public DividedActivityData ConvertFurnessDataBackToActivity()
         {
             convertPersonSkillResourceMatrixBack();
             _dividedActivityData.CalculatePersonResourcesSummaForReadingResultFromFurness();

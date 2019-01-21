@@ -389,13 +389,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     }
                     if (period==null) continue;
 
-                    Percent factor;
-                    if (!content.MultisitePeriod.Distribution.TryGetValue((IChildSkill) skillDay.Skill, out factor)) continue;
+					if (!content.MultisitePeriod.Distribution.TryGetValue((IChildSkill) skillDay.Skill, out var factor)) continue;
                     
                     double tasks = content.SkillStaffPeriod.Payload.TaskData.Tasks*factor.Value;
-                    
-                    IList<ISkillStaffPeriod> skillDayStaffPeriods;
-                    if (!skillDayContent.TryGetValue(skillDay, out skillDayStaffPeriods))
+
+					if (!skillDayContent.TryGetValue(skillDay, out var skillDayStaffPeriods))
                     {
                         skillDayStaffPeriods = new List<ISkillStaffPeriod>();
                         skillDayContent.Add(skillDay, skillDayStaffPeriods);

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				shift.MainShiftProjection()
 					.Where(c => c.Payload.Id == schedulingOptions.CommonActivity.Id)
 					.Select(c => c.Period)
-					.ToArray()
+					.ToHashSet()
 				where effectiveRestriction.CommonActivity.Periods.All(visualLayerPeriodList.Contains)
 				select shift).ToList();
 			return retList;

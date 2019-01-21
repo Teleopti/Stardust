@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
+using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider;
 
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceTemplateProvider _preferenceTemplateProvider;
 		private readonly IPreferenceWeeklyWorkTimeSettingProvider _preferenceWeeklyWorkTimeSettingProvider;
+		private readonly IBankHolidayCalendarProvider _bankHolidayCalendarProvider;
 		private readonly PreferenceAndScheduleDayViewModelMapper _preferenceAndScheduleMapper;
 		private readonly PreferenceDayViewModelMapper _preferenceDayMapper;
 		private readonly PreferenceDayFeedbackViewModelMapper _feedbackMapper;
@@ -28,7 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			IPreferenceWeeklyWorkTimeSettingProvider preferenceWeeklyWorkTimeSettingProvider,
 			PreferenceAndScheduleDayViewModelMapper preferenceAndScheduleMapper, PreferenceDayViewModelMapper preferenceDayMapper,
 			PreferenceDayFeedbackViewModelMapper feedbackMapper, PreferenceViewModelMapper preferenceViewMapper,
-			PreferenceDomainDataMapper preferenceDomainMapper, ExtendedPreferenceTemplateMapper templateMapper)
+			PreferenceDomainDataMapper preferenceDomainMapper, ExtendedPreferenceTemplateMapper templateMapper, 
+			IBankHolidayCalendarProvider bankHolidayCalendarProvider)
 		{
 			_preferenceProvider = preferenceProvider;
 			_scheduleProvider = scheduleProvider;
@@ -40,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			_preferenceViewMapper = preferenceViewMapper;
 			_preferenceDomainMapper = preferenceDomainMapper;
 			_templateMapper = templateMapper;
+			_bankHolidayCalendarProvider = bankHolidayCalendarProvider;
 		}
 
 		public PreferenceViewModel CreateViewModel(DateOnly date)
@@ -70,7 +75,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var period = new DateOnlyPeriod(from, to);
 			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period);
-			return scheduleDays.Select(_preferenceAndScheduleMapper.Map).ToArray();
+			var calendarDates = _bankHolidayCalendarProvider.GetMySiteBankHolidayDates(period).ToList();
+
+			return (from scheduleDay in scheduleDays
+				let bankHolidayDate = calendarDates.FirstOrDefault(cd => cd.Date == scheduleDay.DateOnlyAsPeriod.DateOnly)
+				select _preferenceAndScheduleMapper.Map(scheduleDay, bankHolidayDate)).ToArray();
 		}
 
 		public IEnumerable<PreferenceTemplateViewModel> CreatePreferenceTemplateViewModels()

@@ -7,12 +7,30 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_QueryHintOnLayers_79780)]
+	public class PersonAssignmentRepositoryWithQueryHint : PersonAssignmentRepository
+	{
+		public PersonAssignmentRepositoryWithQueryHint(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		{
+		}
+
+		public override IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		{
+			using (SqlModificationScope.Create(new AddForceSeekOnAssignmentLayers()))
+			{
+				return base.Find(persons, period, scenario);				
+			}
+		}
+	}
+	
 	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository,
 		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
 	{
@@ -21,7 +39,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public virtual ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		[RemoveMeWithToggle("make non virtual", Toggles.ResourcePlanner_QueryHintOnLayers_79780)]
+		public virtual IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			InParameter.NotNull(nameof(persons), persons);
 			var retList = new List<IPersonAssignment>();
@@ -37,24 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 		
-		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
-		{
-			InParameter.NotNull(nameof(scenario), scenario);
-			var crit = personAssignmentCriteriaLoader(period, scenario);
-			var retList = new List<IPersonAssignment>();
-			using (PerformanceOutput.ForOperation("Loading personassignments"))
-			{
-				retList.AddRange(crit.List<IPersonAssignment>());
-			}
-
-			foreach (var personAss in retList)
-			{
-				LazyLoadingManager.Initialize(personAss.DayOff());
-			}
-
-			return retList;
-		}
-
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
 		{
 			return Session.GetNamedQuery("fetchIdAndVersionPersonAssignment")
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.CreateSQLQuery("SELECT GETDATE()").UniqueResult<DateTime>();
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
+		public IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
 		{
 			InParameter.NotNull(nameof(persons), persons);
 			var retList = new List<IPersonAssignment>();

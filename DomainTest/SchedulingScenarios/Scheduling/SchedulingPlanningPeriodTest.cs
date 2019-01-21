@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
-			AssignmentRepository.Find(new[] { agent }, period, scenario).Count.Should().Be.EqualTo(31);
+			AssignmentRepository.Find(new[] { agent }, period, scenario).Count().Should().Be.EqualTo(31);
 		}
 		
 		

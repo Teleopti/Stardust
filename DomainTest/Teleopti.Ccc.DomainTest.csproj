@@ -280,6 +280,7 @@
     <Compile Include="Notification\NotificationServiceClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePollerTest.cs" />
+    <Compile Include="Notification\TeamScheduleWeekViewChangeCheckTest.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardustTest.cs" />
     <Compile Include="Optimization\PlanningGroupTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
@@ -349,6 +350,7 @@
     <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationScenario.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilterTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceActivityServiceTest.cs" />
+    <Compile Include="Scheduling\MasterActivityThreadingTest.cs" />
     <Compile Include="Scheduling\OpenHoursSkillExtractorTest.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandlerTest.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidationTest.cs" />

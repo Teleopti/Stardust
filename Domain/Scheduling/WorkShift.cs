@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class WorkShift : IWorkShift
 	{
 		private IVisualLayerCollection _visualLayerCollection;
-		private IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
+		private List<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
         public WorkShift(IShiftCategory category)
 		{
@@ -36,10 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var retObj = (WorkShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
-			foreach (var newLayer in _layerCollection.Select(layer => ((WorkShiftActivityLayer)layer).NoneEntityClone()))
-			{
-				retObj._layerCollection.Add(newLayer);
-			}
+			retObj._layerCollection.AddRange(_layerCollection.Select(layer => ((WorkShiftActivityLayer)layer).NoneEntityClone()));
 			return retObj;
 		}
 
@@ -47,10 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var retObj = (WorkShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
-			foreach (var newLayer in _layerCollection.Select(layer => ((WorkShiftActivityLayer)layer).EntityClone()))
-			{
-				retObj._layerCollection.Add(newLayer);
-			}
+			retObj._layerCollection.AddRange(_layerCollection.Select(layer => ((WorkShiftActivityLayer)layer).EntityClone()));
 			return retObj;
 		}
 

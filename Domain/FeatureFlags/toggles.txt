@@ -34,8 +34,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
-RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
-RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
 RTA_RestrictModifySkillGroups_78568 = true
 RTA_InputValidationForApprovingAdherencePeriods_77045 = RC
@@ -51,7 +49,7 @@ MessageBroker_ScheduleChangedMessagePackaging_79140 = true
 WfmTeamSchedule_SuggestShiftCategory_152 = RC
 WfmTeamSchedule_ShiftEditorInDayView_78295 = RC
 WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = RC
-WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242 = DEV
+WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242 = RC
 
 # Code Monkeys, can any of these be removed? #
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
@@ -86,7 +84,8 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true #AF: OK for me to rem
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true #AF: OK for me to remove
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
-ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = false
+ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
+ResourcePlanner_QueryHintOnLayers_79780 = RC
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = RC
@@ -99,9 +98,9 @@ Wfm_AuditTrail_StaffingAuditTrail_78125 = true
 Wfm_AuditTrail_GenericAuditTrail_74938 = true
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
 WFM_ProbabilityView_ImproveResponseTime_80040 = true
-WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = false #Dont enable it. It was not a good optimization in Csharp
+WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = RC 
 WFM_Intraday_OptimizeSkillDayLoad_80153 = RC
-WRM_AbsenceRequest_Robust_Processing_79988= false
+WFM_AbsenceRequest_Robust_Processing_79988= RC
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
@@ -139,4 +138,4 @@ MyTimeWeb_Preference_Indicate_BankHoliday_79900 = DEV
 
 # Tech #
 WFM_ChatBot_77547 = RC
-WFM_Insights_78059 = DEV
+WFM_Insights_80704 = RC

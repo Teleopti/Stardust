@@ -1,46 +1,44 @@
-<div class="panel">
-	<div class="wfm-slide-tabs tabbed-panel">
-		<md-content class="md-padding">
-			<md-tabs md-selected="$ctrl.selectedTab" md-dynamic-height md-border-bottom>
-				<md-tab md-on-select="$ctrl.onSelectTab('setting')" label="{{ 'GamificationSettings'|translate }}">
-					<md-content class="md-padding">
-						<div class="con-row">
-							<div class="con-flex">
-								<gamification-settings></gamification-settings>
-							</div>
+<div class="wfm-slide-tabs tabbed-panel">
+	<md-content class="md-padding">
+		<md-tabs md-selected="$ctrl.selectedTab" md-dynamic-height md-border-bottom>
+			<md-tab md-on-select="$ctrl.onSelectTab('setting')" label="{{ 'GamificationSettings'|translate }}">
+				<md-content class="md-padding">
+					<div class="con-row">
+						<div class="con-flex">
+							<gamification-settings></gamification-settings>
 						</div>
-					</md-content>
-				</md-tab>
-				<md-tab md-on-select="$ctrl.onSelectTab('targets');$ctrl.setElementHeightToCoverRestOfViewport()" label="{{ 'SetGamificationTargets'|translate }}"
-				 md-on-deselect="$ctrl.resetElementHeight()">
-					<md-content class="md-padding">
-						<div class="con-row">
-							<div class="con-flex">
-								<gamification-targets></gamification-targets>
-							</div>
+					</div>
+				</md-content>
+			</md-tab>
+			<md-tab md-on-select="$ctrl.onSelectTab('targets');$ctrl.setElementHeightToCoverRestOfViewport()" label="{{ 'SetGamificationTargets'|translate }}"
+				md-on-deselect="$ctrl.resetElementHeight()">
+				<md-content class="md-padding">
+					<div class="con-row">
+						<div class="con-flex">
+							<gamification-targets></gamification-targets>
 						</div>
-					</md-content>
-				</md-tab>
-				<md-tab md-on-select="$ctrl.onSelectTab('import')" label="{{ 'ImportExternalData'|translate }}">
-					<md-content class="md-padding">
-						<div class="con-row">
-							<div class="con-flex">
-								<gamification-import></gamification-import>
-							</div>
+					</div>
+				</md-content>
+			</md-tab>
+			<md-tab md-on-select="$ctrl.onSelectTab('import')" label="{{ 'ImportExternalData'|translate }}">
+				<md-content class="md-padding">
+					<div class="con-row">
+						<div class="con-flex">
+							<gamification-import></gamification-import>
 						</div>
-					</md-content>
-				</md-tab>
+					</div>
+				</md-content>
+			</md-tab>
 
-				<md-tab ng-if="$ctrl.toggle['WFM_Gamification_Recalculate_Badges_Within_Period_48403'] === true" md-on-select="$ctrl.onSelectTab('calculation')" label="{{ 'BadgeCalculation'|translate }}">
-					<md-content class="md-padding">
-						<div class="con-row">
-							<div class="con-flex">
-								<badge-calculation></badge-calculation>
-							</div>
+			<md-tab ng-if="$ctrl.toggle['WFM_Gamification_Recalculate_Badges_Within_Period_48403'] === true" md-on-select="$ctrl.onSelectTab('calculation')" label="{{ 'BadgeCalculation'|translate }}">
+				<md-content class="md-padding">
+					<div class="con-row">
+						<div class="con-flex">
+							<badge-calculation></badge-calculation>
 						</div>
-					</md-content>
-				</md-tab>
-			</md-tabs>
-		</md-content>
-	</div>
+					</div>
+				</md-content>
+			</md-tab>
+		</md-tabs>
+	</md-content>
 </div>

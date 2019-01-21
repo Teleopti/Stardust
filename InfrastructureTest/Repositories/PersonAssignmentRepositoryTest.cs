@@ -135,58 +135,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsNull(loaded);
 		}
 
-		[Test]
-		public void CannotUseNullAsScenario()
-		{
-			Assert.Throws<ArgumentNullException>(() => _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), null));
-		}
-
-		[Test]
-		public void CanFindAssignmentsByDatesAndScenario()
-		{
-			var notToFindScenario = new Scenario("NotToFind");
-			var searchPeriod = new DateOnlyPeriod(2007, 1, 1, 2007, 1, 2);
-
-			////////////setup////////////////////////////////////////////////////////////////
-			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent,
-				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)), _dummyCategory);
-			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-			agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-			agAssValid.AddOvertimeActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet);
-
-			IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(_dummyAgent,
-				notToFindScenario, _dummyActivity, new DateTimePeriod(2006, 12, 31, 2007, 1, 1));
-
-			PersistAndRemoveFromUnitOfWork(notToFindScenario);
-			TestRepository(CurrUnitOfWork).Add(agAssValid);
-			TestRepository(CurrUnitOfWork).Add(agAssInvalid);
-			Session.Flush();
-			Session.Clear();
-			/////////////////////////////////////////////////////////////////////////////////
-
-			var retList = _rep.Find(searchPeriod, _dummyScenario).ToArray();
-
-			Assert.IsTrue(retList.Contains(agAssValid));
-			Assert.AreEqual(1, retList.Length);
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].ShiftLayers));
-		}
-
-		[Test]
-		public void VerifyAssignmentsCannotBeReadForDeletedPerson()
-		{
-			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent,
-				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)), _dummyCategory);
-			TestRepository(CurrUnitOfWork).Add(agAssValid);
-			Session.Flush();
-			new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Remove(_dummyAgent);
-			PersistAndRemoveFromUnitOfWork(_dummyAgent);
-
-			Assert.AreEqual(0, _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2010, 1, 1), _dummyScenario).Count);
-		}
-
 		/// <summary>
 		/// Determines whether this instance [can find agent assignments by dates and scenario].
 		/// </summary>
@@ -229,9 +177,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			#endregion
 
 			IList<IPerson> persons = new List<IPerson> {_dummyAgent};
-			ICollection<IPersonAssignment> retList = _rep.Find(persons, searchPeriod, _dummyScenario);
+			var retList = _rep.Find(persons, searchPeriod, _dummyScenario);
 			Assert.IsTrue(retList.Contains(agAssValid));
-			Assert.AreEqual(1, retList.Count);
+			Assert.AreEqual(1, retList.Count());
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyActivity));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyCategory));
 		}
@@ -272,9 +220,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			#endregion
 
 			IList<IPerson> persons = new List<IPerson> { _dummyAgent, _dummyAgent2 };
-			ICollection<IPersonAssignment> retList = _rep.Find(persons, searchPeriod, _dummyScenario, ScheduleSource.WebScheduling);
+			var retList = _rep.Find(persons, searchPeriod, _dummyScenario, ScheduleSource.WebScheduling);
 			Assert.IsTrue(retList.Contains(agAssValid));
-			Assert.AreEqual(1, retList.Count);
+			Assert.AreEqual(1, retList.Count());
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyActivity));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(_dummyCategory));
 		}
@@ -378,8 +326,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenarioWrongBu);
 			var ass = new PersonAssignment(_dummyAgent, scenarioWrongBu, new DateOnly(2000, 1, 1));
 			PersistAndRemoveFromUnitOfWork(ass);
-
-			_rep.Find(new DateOnlyPeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
+			
 			_rep.Find(new[] {_dummyAgent}, new DateOnlyPeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
 		}
 

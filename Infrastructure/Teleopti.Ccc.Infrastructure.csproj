@@ -301,6 +301,9 @@
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersisterFake.cs" />
+    <Compile Include="NHibernateConfiguration\AddForceSeekOnAssignmentLayers.cs" />
+    <Compile Include="NHibernateConfiguration\IModifySql.cs" />
+    <Compile Include="NHibernateConfiguration\SqlModificationScope.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\RetryingEventArgs.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlCommandFactory.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlXmlReader.cs" />

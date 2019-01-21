@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: Tamas
         /// Created date: 2008-02-07
         /// </remarks>
-        IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-                                                             IAffectedPersonSkillService affectedPersonSkillService,
+        DividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
+                                                             AffectedPersonSkillService affectedPersonSkillService,
                                                            IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
                                                            DateTimePeriod periodToCalculate);
@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     public class ActivityDivider : IActivityDivider
 	{
-        public IDividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-            IAffectedPersonSkillService affectedPersonSkillService,
+        public DividedActivityData DivideActivity(ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
+			AffectedPersonSkillService affectedPersonSkillService,
             IActivity activity,
 			IResourceCalculationDataContainer filteredProjections,
             DateTimePeriod periodToCalculate)
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var dividedActivity = new DividedActivityData();
             var elapsedToCalculate = periodToCalculate.ElapsedTime();
 
-            IEnumerable<ISkill> skillsForActivity = skillsInActivity(affectedPersonSkillService,activity);
+            var skillsForActivity = affectedPersonSkillService.ActivityLookup[activity].ToHashSet();
             foreach (ISkill skill in skillsForActivity)
 			{
 				var periodToCalculateAdjusted = FetchPeriodForSkill(periodToCalculate, skill.TimeZone);
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var headCount = periodResource.Value.Count;
 
 				var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
-				var relativePersonSkillResourceRow = new Dictionary<ISkill, double>();
 				var personSkillResourceRow = new Dictionary<ISkill, double>();
 
 				foreach (var skill in skills)
@@ -73,8 +72,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					double personSkillResourceValue = traff;
 					double bitwiseSkillEfficiencyValue = skillEfficiencyValue == 0 ? 0d : 1d;
 					double relativePersonSkillResourceValue = traff * bitwiseSkillEfficiencyValue;
-
-					relativePersonSkillResourceRow.Add(skill, relativePersonSkillResourceValue);
 					personSkillResourceRow.Add(skill, personSkillResourceValue);
 					personSkillEfficiencyRow.Add(skill, skillEfficiencyValue);
 
@@ -94,7 +91,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					dividedActivity.KeyedSkillResourceEfficiencies.Add(periodResource.Key, personSkillEfficiencyRow);
 					dividedActivity.WeightedRelativeKeyedSkillResourceResources.Add(periodResource.Key, personSkillResourceRow);
-					dividedActivity.RelativeKeyedSkillResourceResources.Add(periodResource.Key, relativePersonSkillResourceRow);
 					dividedActivity.RelativePersonResources.Add(periodResource.Key, periodResource.Value.Resource);
 
 					double targetResourceValue = elapsedToCalculate.TotalMinutes * periodResource.Value.Resource;
@@ -153,11 +149,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return null;
 
 			return totalTime / periodToCalculate.ElapsedTime().TotalSeconds;
-        }
-
-        private static IEnumerable<ISkill> skillsInActivity(IAffectedPersonSkillService affectedPersonSkillService, IActivity activity)
-        {
-            return new HashSet<ISkill>(affectedPersonSkillService.AffectedSkills.Where(s => s.Activity.Id == activity.Id));
         }
     }
 }

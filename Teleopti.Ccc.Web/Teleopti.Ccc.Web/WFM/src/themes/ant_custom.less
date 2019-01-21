@@ -34,8 +34,8 @@ a:focus {
 }
 
 /** This is to remove the extraneous 8px horizontal padding on ant table headers **/
-.ant-table > .ant-table-content > .ant-table-body table {
-	padding: 0 0;
+.ant-table > .ant-table-content > .ant-table-body {
+	margin: 0;
 }
 
 // Make all normal inputs look like ant inputs
@@ -101,4 +101,10 @@ select {
 	height: 0;
 	padding: 0;
 	border: none;
+}
+
+//Hide input close icon when value is empty
+nz-select.select-input-is-empty .ant-select-selection:hover .ant-select-selection__clear {
+	display: none;
+	opacity: 0;
 }

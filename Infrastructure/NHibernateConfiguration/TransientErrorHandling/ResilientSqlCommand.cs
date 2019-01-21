@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHand
 {
 	/// <summary>
 	/// An <see cref="IDbCommand"/> implementation that wraps a <see cref="SqlCommand"/> object such that any
-	/// queries that are executed are executed via a <see cref="ReliableSqlConnection"/>.
+	/// queries that are executed are executed via a ReliableSqlConnection.
 	/// </summary>
 	/// <remarks>
-	/// Note: For this to work it requires that the Connection property be set with a <see cref="ReliableSqlConnection"/> object.
+	/// Note: For this to work it requires that the Connection property be set with a ReliableSqlConnection object.
 	/// </remarks>
 	public class ResilientSqlCommand : DbCommand
 	{

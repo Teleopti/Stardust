@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(1);
+			assignments.Count().Should().Be.EqualTo(1);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.Should().Be.Empty();
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(1);
+			assignments.Count().Should().Be.EqualTo(1);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.Should().Be.Empty();
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(1);
+			assignments.Count().Should().Be.EqualTo(1);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.Should().Be.Empty();

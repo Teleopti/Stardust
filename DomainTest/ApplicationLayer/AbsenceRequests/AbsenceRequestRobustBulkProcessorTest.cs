@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var queueId = addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator, sent);
 
-			var secondDay= new DateOnly(2016, 12, 15);
+			var secondDay = new DateOnly(2016, 12, 15);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, secondDay, 0));
 
 			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2016, 12, 15, 10, 2016, 12, 16, 20));
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator, sent);
-			
+
 
 			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent
 			{
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			QueuedAbsenceRequestRepository.Add(queued);
 
 			var requestList = new List<Guid> { Guid.Empty };
-			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent { PersonRequestIds = requestList, Ids = new List<Guid>{queued.Id.GetValueOrDefault()} });
+			Target.Handle(new NewMultiAbsenceRequestsCreatedEvent { PersonRequestIds = requestList, Ids = new List<Guid> { queued.Id.GetValueOrDefault() } });
 			personRequestWaitlisted.IsWaitlisted.Should().Be.True();
 			requestUsingBudgetGroup.IsApproved.Should().Be.True();
 		}

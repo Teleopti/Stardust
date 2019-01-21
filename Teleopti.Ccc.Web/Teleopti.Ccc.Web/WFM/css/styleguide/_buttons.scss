@@ -176,7 +176,7 @@ div.wfm-btn {
 .wfm-btn-invis-default {
 	color: $text-color-standard;
 	background-color: $white;
-	border: 1px solid $gray012;
+	border: 1px solid $gray-300;
 
 	&:not([disabled]):not(.wfm-btn-invis-disabled):hover {
 		color: $primary;
@@ -193,6 +193,18 @@ div.wfm-btn {
 		color: $btn-white;
 		background-color: $secondary;
 		border-color: $secondary;
+	}
+}
+
+.wfm-btn-invis-danger {
+	color: $red-800;
+	background-color: $gray-100;
+	border: 1px solid $gray-300;
+
+	&:not([disabled]):not(.wfm-btn-invis-disabled):hover {
+		color: $btn-white;
+		background-color: $red-800;
+		border-color: $red-800;
 	}
 }
 
@@ -363,7 +375,7 @@ div.wfm-btn {
 	.first {
 		border-top-left-radius: 4px;
 		border-bottom-left-radius: 4px;
-		border-left: 1px solid $gray012;
+		border-left: 1px solid $gray-300;
 	}
 
 	.last {

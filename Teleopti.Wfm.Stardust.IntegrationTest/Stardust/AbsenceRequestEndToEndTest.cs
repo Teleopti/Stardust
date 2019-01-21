@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public TestLog TestLog;
 
 
-		[Test, Ignore("Working on making it pass")]
+		[Test]
 		public void ShouldRunEndToEndAbsenceRequest()//[Range(1, 50, 1)] int rangeCount
 		{
 			StardustManagerPingHelper.WaitForStarDustManagerToStart(TestLog);

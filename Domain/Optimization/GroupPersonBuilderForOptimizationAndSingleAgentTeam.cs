@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public Group BuildGroup(IEnumerable<IPerson> personsInOrganisation, IPerson person, DateOnly dateOnly)
 		{
-			return new Group(new [] { person }, person.Name.ToString());
+			return new Group(new List<IPerson> {person}, person.Name.ToString());
 		}
 	}
 }

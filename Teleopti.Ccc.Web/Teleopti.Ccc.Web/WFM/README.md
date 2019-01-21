@@ -1,5 +1,17 @@
 # Teleopti WFM Web
 
+- [Teleopti WFM Web](#teleopti-wfm-web)
+	- [Gotcha's](#gotchas)
+- [Overview of project files](#overview-of-project-files)
+- [Scripts for frontend development](#scripts-for-frontend-development)
+- [Angular](#angular)
+	- [Module structure](#module-structure)
+	- [Testing](#testing)
+		- [Running tests](#running-tests)
+		- [Mocks](#mocks)
+		- [Examples](#examples)
+	- [Translation](#translation)
+
 ## Gotcha's
 
 -   The project uses a 32-bit version of Node.js. If you want to use your own local version of Node.JS make sure it matches with the one in the project. See _Scripts for frontend development_ for how to use the projects Node.JS env.
@@ -8,7 +20,7 @@
 
 -   Remember to **commit your `package-lock.json`** file
 
-## Overview of project files
+# Overview of project files
 
 | Folder | Comment                                          |
 | ------ | ------------------------------------------------ |
@@ -19,7 +31,7 @@
 | test   | karma configs                                    |
 | vendor | vendor dependencies (prefer npm package install) |
 
-## Scripts for frontend development
+# Scripts for frontend development
 
 | Script                    | What                                  |
 | ------------------------- | ------------------------------------- |
@@ -31,14 +43,14 @@
 | `npm run dev:build`       | Build the entire frontend in dev env  |
 | `npm run prod:build`      | Build the entire frontend in prod env |
 
-## Angular
+# Angular
 
 -   What is core module?
     -   Services and configs that needs to be available to all modules in the project is stored here.
 -   What is shared?
     -   Some argue for the use of shared for _"stuff that is sometimes needed"_ but this provides no specificity and could amount to a mess. Avoid putting things in the global shared folder, break them out into modules instead.
 
-### Module structure
+## Module structure
 
 | Folder / File | Comment                                         |
 | ------------- | ----------------------------------------------- |
@@ -72,7 +84,7 @@ import { mymoduleRouterConfig } from './my.module';
 routerHelper(mymoduleRouterConfig);
 ```
 
-### Testing
+## Testing
 
 -   Take a look at [the Angular docs on testing](https://angular.io/guide/testing)
 -   Make sure to test DOM interaction
@@ -80,13 +92,13 @@ routerHelper(mymoduleRouterConfig);
     -   Use Mocks and Spies
 -   Avoid fake backends and global dependencies
 
-#### Running tests
+### Running tests
 
 -   Rename `describe` to `fdescribe` to run a spec file.
 -   Rename `it` to `fit` to run a single spec.
 -   Rename `it` to `xit` to ignore a single spec. _(Avoid this)_
 
-#### Mocks
+### Mocks
 
 We have application-wide mocks defined in `src/mocks/*` and these can be imported from `@wfm/mocks`.
 
@@ -100,12 +112,12 @@ class MockAreaService implements Partial<AreaService> {
 }
 ```
 
-#### Examples
+### Examples
 
 -   `src\app\menu\components\side-menu\side-menu.component.spec.ts`
     -   Uses Mocks for services and PageObject for DOM interaction
 
-### Translation
+## Translation
 
 Each module should import the TranslationModule - after which translationService among other things are accessible to the module.
 
@@ -116,32 +128,3 @@ When searching for translations you might need to look at these potential transl
 -   `<div>{{ 'HELLO' | translate:param }}</div>`
 -   `<div [translate]="'HELLO'" [translateParams]="{value: 'world'}"></div>`
 -   `<div translate [translateParams]="{value: 'world'}">HELLO</div>`
-
-# Update favicon
-
-```powershell
-npm install -g cli-real-favicon
-
-# Make sure cwd is the WFM folder
-
-# Generate icons based on the config
-real-favicon generate src/assets/favicon/faviconConfig.json src/assets/favicon/faviconData.json src/assets/favicon/
-```
-
-## Make sure html references are correct
-
-Update the versioning (`?v=N`) to match the faviconConfig.json.
-
-```html
-<!-- Favicon -->
-<link rel="apple-touch-icon" sizes="180x180" href="dist/ng2/assets/favicon/apple-touch-icon.png?v=2" />
-<link rel="icon" type="image/png" sizes="32x32" href="dist/ng2/assets/favicon/favicon-32x32.png?v=2" />
-<link rel="icon" type="image/png" sizes="16x16" href="dist/ng2/assets/favicon/favicon-16x16.png?v=2" />
-<link rel="manifest" href="dist/ng2/assets/favicon/site.webmanifest?v=2" />
-<link rel="mask-icon" href="dist/ng2/assets/favicon/safari-pinned-tab.svg?v=2" color="#0099ff" />
-<link rel="shortcut icon" href="dist/ng2/assets/favicon/favicon.ico?v=2" />
-<meta name="msapplication-TileColor" content="#0099ff" />
-<meta name="msapplication-config" content="dist/ng2/assets/favicon/browserconfig.xml?v=2" />
-<meta name="theme-color" content="#ffffff" />
-<!-- Favicon end -->
-```

@@ -13,16 +13,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentInitiatorIdentifier _initiatorIdentifier;
 		private readonly INow _now;
 
-		public static IEventInfrastructureInfoPopulator Make()
-		{
-			return new EventInfrastructureInfoPopulator(
-				CurrentBusinessUnit.Make(),
-				CurrentDataSource.Make(),
-				new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()),
-				new Now()
-				);
-		}
-
 		public EventInfrastructureInfoPopulator(
 			ICurrentBusinessUnit businessUnit, 
 			ICurrentDataSource dataSource, 
@@ -37,7 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void PopulateEventContext(params object[] events)
 		{
-			var businessUnitFetcher = new Lazy<IBusinessUnit>(()=> _businessUnit?.Current());
 			foreach (var @event in events)
 			{
 				if (@event is ITimestamped timestamped)
@@ -45,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				if (@event is IInitiatorContext initiatorInfo)
 					setInitiator(initiatorInfo);
 				if (@event is ILogOnContext logOnInfo)
-					setLogOnInfo(logOnInfo, businessUnitFetcher);
+					setLogOnInfo(logOnInfo);
 			}
 		}
 
@@ -64,18 +53,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				@event.InitiatorId = initiatorIdentifier.InitiatorId;
 		}
 
-		private void setLogOnInfo(ILogOnContext @event, Lazy<IBusinessUnit> businessUnitFetcher)
+		private void setLogOnInfo(ILogOnContext @event)
 		{
 			if (!string.IsNullOrEmpty(@event.LogOnDatasource))
 				return;
 
 			if (@event.LogOnBusinessUnitId.Equals(Guid.Empty))
 			{
-				var businessUnit = businessUnitFetcher.Value;
-				if (businessUnit != null)
-				{
-					@event.LogOnBusinessUnitId = businessUnit.Id.Value;
-				}
+				var businessUnitId = _businessUnit.CurrentId();
+				if (businessUnitId.HasValue)
+					@event.LogOnBusinessUnitId = businessUnitId.Value;
 			}
 
 			if (string.IsNullOrEmpty(@event.LogOnDatasource))

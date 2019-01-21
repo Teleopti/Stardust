@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
@@ -14,6 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string BorderColor { get; set; }
 		public IEnumerable<MeetingViewModel> Meetings { get; set; }
 		public IEnumerable<PersonalShiftViewModel> PersonalShifts { get; set; }
+		public BankHolidayCalendarViewModel BankHolidayCalendar { get; set; }
+	}
+
+	public class BankHolidayCalendarViewModel
+	{
+		public Guid CalendarId { get; set; }
+		public string CalendarName { get; set; }
+		public string DateDescription { get; set; }
 	}
 
 	public class PersonalShiftViewModel

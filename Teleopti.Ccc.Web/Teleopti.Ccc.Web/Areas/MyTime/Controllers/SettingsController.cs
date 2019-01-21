@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -155,7 +154,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[TenantUnitOfWork, HttpGet]
 		public virtual JsonResult MobileQRCodeUrl()
 		{
-			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl);
+			var url = _currentTenant.Current().GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl) ?? string.Empty;
 			return Json(url, JsonRequestBehavior.AllowGet);
 		}
 	}

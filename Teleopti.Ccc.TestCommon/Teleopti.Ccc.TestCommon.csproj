@@ -439,6 +439,7 @@
     <Compile Include="IoC\UseRealPersonRequestPermissionCheckAttribute.cs" />
     <Compile Include="LegacyFakeEventPublisher.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
+    <Compile Include="Messaging\FakeMessageBrokerComposite.cs" />
     <Compile Include="Messaging\FakeUrl.cs" />
     <Compile Include="Messaging\MessageBrokerServerBridge.cs" />
     <Compile Include="Messaging\MessagingTestAttribute.cs" />

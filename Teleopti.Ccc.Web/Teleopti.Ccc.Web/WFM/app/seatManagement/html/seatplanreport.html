@@ -12,87 +12,85 @@
 
 		<span class="turn-off-filter-blank" ng-click="vm.isFilterOpened = false"></span>
 
-		<div class="seatplan-report-filter" ng-show="vm.isFilterOpened">
-			<div class="panel">
-				<div class="wfm-slide-tabs tabbed-panel">
-					<md-content class="md-padding">
-						<md-tabs md-dynamic-height md-border-bottom>
-							<md-tab label="{{'Filter' | translate}}">
-								<md-content class="md-padding">
-									<div class="con-row report-options">
+		<div class="seatplan-report-filter panel" ng-show="vm.isFilterOpened">
+			<div class="wfm-slide-tabs tabbed-panel">
+				<md-content class="md-padding">
+					<md-tabs md-dynamic-height md-border-bottom>
+						<md-tab label="{{'Filter' | translate}}">
+							<md-content class="md-padding">
+								<div class="con-row report-options">
+									<div>
+										<label>
+											{{'DateRange' | translate}}
+										</label>
+
+										<div class="date-picker">
+											<date-range-picker ng-model="vm.selectedPeriod"></date-range-picker>
+										</div>
+									</div>
+									<div class="con-flex report-show-options report-filter-panel">
+
+										<label>
+											{{'ReportOptions' | translate}}
+										</label>
+
 										<div>
-											<label>
-												{{'DateRange' | translate}}
-											</label>
-
-											<div class="date-picker">
-												<date-range-picker ng-model="vm.selectedPeriod"></date-range-picker>
+											<div class="wfm-radio">
+												<input type="radio" name="unseated-agents-toggle" id="showAllToggle" checked ng-click="vm.setShowAllAgents(true)" />
+												<label for="showAllToggle">
+													<span class="wfm-radio-toggle"></span>
+													<span class="wfm-radio-label">{{'ShowAll' | translate}}</span>
+												</label>
 											</div>
-										</div>
-										<div class="con-flex report-show-options report-filter-panel">
-
-											<label>
-												{{'ReportOptions' | translate}}
-											</label>
-
-											<div>
-												<div class="wfm-radio">
-													<input type="radio" name="unseated-agents-toggle" id="showAllToggle" checked ng-click="vm.setShowAllAgents(true)" />
-													<label for="showAllToggle">
-														<span class="wfm-radio-toggle"></span>
-														<span class="wfm-radio-label">{{'ShowAll' | translate}}</span>
-													</label>
-												</div>
-												<div class="wfm-radio">
-													<input type="radio" name="unseated-agents-toggle" id="showUnseatedToggle" ng-click="vm.setShowAllAgents(false)" />
-													<label for="showUnseatedToggle">
-														<span class="wfm-radio-toggle"></span>
-														<span class="wfm-radio-label">{{'ShowOnlyAgentsWithNoSeat' | translate}}</span>
-													</label>
-												</div>
+											<div class="wfm-radio">
+												<input type="radio" name="unseated-agents-toggle" id="showUnseatedToggle" ng-click="vm.setShowAllAgents(false)" />
+												<label for="showUnseatedToggle">
+													<span class="wfm-radio-toggle"></span>
+													<span class="wfm-radio-label">{{'ShowOnlyAgentsWithNoSeat' | translate}}</span>
+												</label>
 											</div>
 										</div>
 									</div>
-									<div class="con-footer">
-										<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelFilter()">{{'Cancel' | translate}}</button>
-										<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.dateFilterIsValid() ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
-										 ng-click="vm.applyFilter()">{{'Apply' | translate}}</button>
-									</div>
-								</md-content>
-							</md-tab>
-							<md-tab label="{{'Team' | translate}}">
-								<md-content class="md-padding">
-									<div class="con-row demo-outline">
-										<div class="con-flex report-filter-panel">
-											<div class="team-picker">
-												<team-picker selected-teams="vm.selectedTeams"></team-picker>
-											</div>
+								</div>
+								<div class="con-footer">
+									<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelFilter()">{{'Cancel' | translate}}</button>
+									<button class="wfm-btn wfm-btn-invis-primary" ng-class="vm.dateFilterIsValid() ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
+										ng-click="vm.applyFilter()">{{'Apply' | translate}}</button>
+								</div>
+							</md-content>
+						</md-tab>
+						<md-tab label="{{'Team' | translate}}">
+							<md-content class="md-padding">
+								<div class="con-row demo-outline">
+									<div class="con-flex report-filter-panel">
+										<div class="team-picker">
+											<team-picker selected-teams="vm.selectedTeams"></team-picker>
 										</div>
 									</div>
-									<div class="con-footer">
-										<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelFilter()">{{'Cancel' | translate}}</button>
-										<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.applyFilter()">{{'Apply' | translate}}</button>
-									</div>
-								</md-content>
-							</md-tab>
-							<md-tab label="{{'Location' | translate}}">
-								<md-content class="md-padding">
-									<div class="con-row demo-outline">
-										<div class="con-flex report-filter-panel">
-											<div class="location-picker">
-												<location-picker selected-locations="vm.selectedLocations"></location-picker>
-											</div>
+								</div>
+								<div class="con-footer">
+									<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelFilter()">{{'Cancel' | translate}}</button>
+									<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.applyFilter()">{{'Apply' | translate}}</button>
+								</div>
+							</md-content>
+						</md-tab>
+						<md-tab label="{{'Location' | translate}}">
+							<md-content class="md-padding">
+								<div class="con-row demo-outline">
+									<div class="con-flex report-filter-panel">
+										<div class="location-picker">
+											<location-picker selected-locations="vm.selectedLocations"></location-picker>
 										</div>
 									</div>
-									<div class="con-footer">
-										<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelFilter()">{{'Cancel' | translate}}</button>
-										<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.applyFilter()">{{'Apply' | translate}}</button>
-									</div>
-								</md-content>
-							</md-tab>
-						</md-tabs>
-					</md-content>
-				</div>
+								</div>
+								<div class="con-footer">
+									<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelFilter()">{{'Cancel' | translate}}</button>
+									<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.applyFilter()">{{'Apply' | translate}}</button>
+								</div>
+							</md-content>
+						</md-tab>
+					</md-tabs>
+				</md-content>
 			</div>
 		</div>
 	</div>

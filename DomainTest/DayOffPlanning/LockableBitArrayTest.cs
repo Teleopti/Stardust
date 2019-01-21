@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 {
@@ -18,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         [SetUp]
         public void Setup()
         {
-            _target = new LockableBitArray(7, false, false, 2);
+            _target = new LockableBitArray(7, false, false);
         }
 
         [Test]
@@ -168,12 +166,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         }
 
         [Test]
-        public void VerifyTerminalDateIndex()
-        {
-            Assert.AreEqual(2, _target.TerminalDateIndex);
-        }
-
-        [Test]
         public void VerifyToLongBitArray()
         {
             _target.Set(0, true);
@@ -182,20 +174,20 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Assert.AreEqual(21, longBitArray.Count);
             Assert.IsTrue(longBitArray[7]);
             Assert.IsTrue(longBitArray[13]);
-            _target = new LockableBitArray(7, true, true, null);
+            _target = new LockableBitArray(7, true, true);
             _target.Set(0, true);
             _target.Set(6, true);
             longBitArray = _target.ToLongBitArray();
             Assert.AreEqual(7, longBitArray.Count);
             Assert.IsTrue(longBitArray[0]);
             Assert.IsTrue(longBitArray[6]);
-            _target = new LockableBitArray(7, false, false, null);
+            _target = new LockableBitArray(7, false, false);
             longBitArray = _target.ToLongBitArray();
             Assert.AreEqual(21, longBitArray.Count);
-            _target = new LockableBitArray(14, true, false, null);
+            _target = new LockableBitArray(14, true, false);
             longBitArray = _target.ToLongBitArray();
             Assert.AreEqual(21, longBitArray.Count);
-            _target = new LockableBitArray(14, false, true, null);
+            _target = new LockableBitArray(14, false, true);
             longBitArray = _target.ToLongBitArray();
             Assert.AreEqual(21, longBitArray.Count);
         }
@@ -203,8 +195,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldNotHasSameDayOffsDifferentElements()
 		{
-			var target1 = new LockableBitArray(1, false, false, null);
-			var target2 = new LockableBitArray(1, false, false, null);
+			var target1 = new LockableBitArray(1, false, false);
+			var target2 = new LockableBitArray(1, false, false);
 			target1.SetAll(true);
 			target2.SetAll(false);
 			target1.HasSameDayOffs(target2).Should().Be.False();
@@ -213,8 +205,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldHasSameDayOffsSameElements()
 		{
-			var target1 = new LockableBitArray(1, false, false, null);
-			var target2 = new LockableBitArray(1, false, false, null);
+			var target1 = new LockableBitArray(1, false, false);
+			var target2 = new LockableBitArray(1, false, false);
 			target1.SetAll(true);
 			target2.SetAll(true);
 			target1.HasSameDayOffs(target2).Should().Be.True();
@@ -223,8 +215,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldNotHasSameDayOffsIfDifferentLengths()
 		{
-			var target1 = new LockableBitArray(2, false, false, null);
-			var target2 = new LockableBitArray(1, false, false, null);
+			var target1 = new LockableBitArray(2, false, false);
+			var target2 = new LockableBitArray(1, false, false);
 			target1.HasSameDayOffs(target2).Should().Be.False();
 		}
 	}

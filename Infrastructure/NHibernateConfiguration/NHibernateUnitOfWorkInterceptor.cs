@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Collection;
+using NHibernate.SqlCommand;
 using NHibernate.Type;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -223,6 +224,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				return true;
 			}
 			return false;
+		}
+
+		public override SqlString OnPrepareStatement(SqlString sql)
+		{
+			return SqlModificationScope.Current().Execute(sql);
 		}
 	}
 }

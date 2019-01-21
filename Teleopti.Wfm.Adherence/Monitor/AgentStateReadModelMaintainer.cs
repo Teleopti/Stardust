@@ -12,7 +12,6 @@ using Teleopti.Wfm.Adherence.States;
 namespace Teleopti.Wfm.Adherence.Monitor
 {
 	public class AgentStateReadModelMaintainer :
-		IHandleEvent<PersonAssociationChangedEvent>,
 		IHandleEvents,
 		IHandleEvent<SiteNameChangedEvent>,
 		IHandleEvent<TeamNameChangedEvent>,
@@ -30,16 +29,14 @@ namespace Teleopti.Wfm.Adherence.Monitor
 			registrator.SubscribeTo<PersonAssociationChangedEvent>();
 		}
 
-		[EnabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
 		public void Handle(IEnumerable<IEvent> events)
 		{
 			events.OfType<PersonAssociationChangedEvent>()
-				.ForEach(Handle);
+				.ForEach(UpsertAssociation);
 		}
 		
-		[DisabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
 		[UnitOfWork]
-		public virtual void Handle(PersonAssociationChangedEvent @event)
+		protected virtual void UpsertAssociation(PersonAssociationChangedEvent @event)
 		{
 			if (!@event.TeamId.HasValue)
 			{

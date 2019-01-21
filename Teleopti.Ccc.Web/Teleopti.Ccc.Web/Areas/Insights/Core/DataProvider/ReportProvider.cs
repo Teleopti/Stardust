@@ -194,26 +194,27 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				return new EmbedReportConfig();
 			}
 
-			var result = new EmbedReportConfig
+			// The expiration got from PowerBI is earlier than now, set to Minimum Access Token Lifetime(10 minutes)
+			// Refer to https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-configurable-token-lifetimes#configurable-token-lifetime-properties
+			var tenMinutesLater = DateTime.Now.AddMinutes(10);
+			var expiration = token.Expiration < tenMinutesLater
+				? tenMinutesLater
+				: token.Expiration;
+
+			return new EmbedReportConfig
 			{
 				TokenType = "Embed",
 				AccessToken = token.Token,
-				// The expiration got from PowerBI is earlier than now, set to Minimum Access Token Lifetime(10 minutes)
-				// Refer to https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-configurable-token-lifetimes#configurable-token-lifetime-properties
-				Expiration = token.Expiration < DateTime.Now
-					? DateTime.Now.AddMinutes(10)
-					: token.Expiration,
+				Expiration = expiration,
 				ReportId = report.Id,
 				ReportName = report.Name,
 				ReportUrl = report.EmbedUrl
 			};
-
-			return result;
 		}
 
 		private string getPowerBiGroupId()
 		{
-			return _appConfig.TryGetTenantValue(TenantApplicationConfigKey.InsightsPowerBIGroupId, null);
+			return _appConfig.GetTenantValue(TenantApplicationConfigKey.InsightsPowerBIGroupId);
 		}
 	}
 }

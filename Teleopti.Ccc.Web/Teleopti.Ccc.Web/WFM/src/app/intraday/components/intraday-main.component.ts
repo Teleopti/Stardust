@@ -20,7 +20,8 @@ import {
 	IntradayTrafficSummaryItem,
 	Skill,
 	SkillPickerItem,
-	SkillPickerItemType
+	SkillPickerItemType,
+	IIntradayAxisLabels
 } from '../types';
 
 @Component({
@@ -58,6 +59,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	timer: any;
 	showSkills = true;
 	showReforecastedWarning = false;
+	axisLabels: IIntradayAxisLabels = { yLabel: '-', y2Label: '-' };
 
 	ngOnInit() {
 		this.startTimer();
@@ -378,7 +380,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				return moment(item).format('YYYY-MM-DD HH:mm');
 			});
 			if (!timeStamps || timeStamps.length === 0) return {};
-
+			this.axisLabels.yLabel = this.translate.instant('Volume');
+			this.axisLabels.y2Label = this.translate.instant('AverageHandlingTime');
 			return {
 				x: 'x',
 				xFormat: '%Y-%m-%d %H:%M',
@@ -440,7 +443,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		if (input && input.Time !== null) {
 			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
 			if (!timeStamps || timeStamps.length === 0) return {};
-
+			this.axisLabels.yLabel = this.translate.instant('SecondShort');
+			this.axisLabels.y2Label = this.translate.instant('%');
 			return {
 				x: 'x',
 				xFormat: '%Y-%m-%d %H:%M',
@@ -512,7 +516,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		if (input && input.Time !== null) {
 			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
 			if (!timeStamps || timeStamps.length === 0) return {};
-
+			this.axisLabels.yLabel = this.translate.instant('Agents');
 			return {
 				x: 'x',
 				xFormat: '%Y-%m-%d %H:%M',

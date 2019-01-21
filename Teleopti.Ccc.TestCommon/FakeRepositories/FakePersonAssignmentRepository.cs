@@ -96,16 +96,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.Get<IPersonAssignment>(id);
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		public IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			return _storage.LoadAll<IPersonAssignment>()
 				.Where(ass => persons.Any(x => ass.Person.Equals(x)) && ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario))
 				.ToList();
-		}
-
-		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
-		{
-			return _storage.LoadAll<IPersonAssignment>().Where(ass => ass.BelongsToPeriod(period) && ass.Scenario.Equals(scenario)).ToList();
 		}
 
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
@@ -118,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return DateTime.UtcNow;
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
+		public IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
 		{
 			return Find(persons, period, scenario).Where(s => s.Source == source).ToList();
 		}

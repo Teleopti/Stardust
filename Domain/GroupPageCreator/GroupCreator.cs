@@ -15,12 +15,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 		{
 			var groupToReturn = new Group();
 
-			var rootGroups = pageOnDate.RootGroupCollection;
-			var rootPersonGroups = new List<IPersonGroup>();
-			foreach (var rootPersonGroup in rootGroups)
-			{
-				rootPersonGroups.Add(rootPersonGroup);
-			}
+			var rootPersonGroups = pageOnDate.RootGroupCollection.ToList();
 
 			IPersonGroup personGroup = currentGroupForPerson(rootPersonGroups, person);
 			if (personGroup != null)
@@ -38,11 +33,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			}
 
 			var personsInGroup = currentPersonsInGroup(personGroup, allPermittedPersons);
-			foreach (var personInGroup in personsInGroup)
-			{
-				groupToReturn.AddMember(personInGroup);
-			}
-
+			groupToReturn.AddMembers(personsInGroup);
+			
 			return groupToReturn;
 		}
 
@@ -55,12 +47,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 					return personGroup;
 				}
 
-				var childGroups = new List<IPersonGroup>();
-				foreach (var rootPersonGroup in personGroup.ChildGroupCollection)
-				{
-					childGroups.Add(rootPersonGroup);
-				}
-
+				var childGroups = personGroup.ChildGroupCollection.ToList();
 				IPersonGroup result = currentGroupForPerson(childGroups, person);
 				if (result != null)
 					return result;

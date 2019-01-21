@@ -12,7 +12,6 @@ namespace Teleopti.Wfm.Adherence.States
 {
 	public class AgentStateMaintainer :
 		IRunOnHangfire,
-		IHandleEvent<PersonAssociationChangedEvent>,
 		IHandleEvents
 	{
 		private readonly IAgentStatePersister _persister;
@@ -27,16 +26,14 @@ namespace Teleopti.Wfm.Adherence.States
 			registrator.SubscribeTo<PersonAssociationChangedEvent>();
 		}
 
-		[EnabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
 		public void Handle(IEnumerable<IEvent> events)
 		{
 			events.OfType<PersonAssociationChangedEvent>()
-				.ForEach(Handle);
+				.ForEach(Prepare);
 		}
-
-		[DisabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
+		
 		[UnitOfWork]
-		public virtual void Handle(PersonAssociationChangedEvent @event)
+		protected virtual void Prepare(PersonAssociationChangedEvent @event)
 		{
 			if (!@event.TeamId.HasValue)
 			{

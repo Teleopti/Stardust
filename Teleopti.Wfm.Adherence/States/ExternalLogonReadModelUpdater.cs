@@ -15,7 +15,6 @@ namespace Teleopti.Wfm.Adherence.States
 	public class ExternalLogonReadModelUpdater : 
 		IRunOnHangfire,
 		IHandleEvents,
-		IHandleEvent<PersonAssociationChangedEvent>,
 		IHandleEvent<TenantMinuteTickEvent>
 	{
 		private readonly IExternalLogonReadModelPersister _persister;
@@ -37,16 +36,14 @@ namespace Teleopti.Wfm.Adherence.States
 			registrator.SubscribeTo<PersonAssociationChangedEvent>();
 		}
 
-		[EnabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
 		public void Handle(IEnumerable<IEvent> events)
 		{
 			events.OfType<PersonAssociationChangedEvent>()
-				.ForEach(Handle);
+				.ForEach(Add);
 		}
 		
-		[DisabledBy(Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
 		[ReadModelUnitOfWork]
-		public virtual void Handle(PersonAssociationChangedEvent @event)
+		protected virtual void Add(PersonAssociationChangedEvent @event)
 		{
 			_persister.Delete(@event.PersonId);
 

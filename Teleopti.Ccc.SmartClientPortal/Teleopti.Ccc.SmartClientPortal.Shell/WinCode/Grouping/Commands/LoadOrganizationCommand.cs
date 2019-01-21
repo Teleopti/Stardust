@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
             }
             //Create treeviewnoder of what we have left
             var nodes = new List<TreeNodeAdv>();
-            var root = new TreeNodeAdv(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Name) { LeftImageIndices = new[] { 0 }, Expanded = true, Tag = new List<Guid>(), TagObject = new List<Guid>() };
+            var root = new TreeNodeAdv(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnitName) { LeftImageIndices = new[] { 0 }, Expanded = true, Tag = new List<Guid>(), TagObject = new List<Guid>() };
             nodes.Add(root);
             var usersNode = new TreeNodeAdv(Resources.UserName) { LeftImageIndices = new[] { 1 } ,Tag = new List<Guid>()};
             var currSite = new TreeNodeAdv("");

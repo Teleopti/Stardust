@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			_unitOfWork = unitOfWork;
 		}
 
-		public IPerson Person()
+		public object Person()
 		{
 			if (_threadPerson.Value != null)
 				return _threadPerson.Value;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				return null;
 
 			if (principal is ITeleoptiPrincipalForLegacy principalWithPerson)
-				return principalWithPerson.UnsafePerson;
+				return principalWithPerson.UnsafePersonObject();
 			
 			var hasUnitOfWork = _unitOfWork?.Current()?.HasCurrentUnitOfWork() ?? false;
 			if (hasUnitOfWork && _persons != null)

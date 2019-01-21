@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				Tenant = new Dictionary<string, string>
 				{
 					{
-						TenantApplicationConfigKey.InsightsPowerBIGroupId, groupId
+						TenantApplicationConfigKey.InsightsPowerBIGroupId.ToString(), groupId
 					}
 				}
 			};

@@ -244,12 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return _storage.LoadAll<IPersonAssignment>().First(x => x.Id == id);
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
-		{
-			throw SqlExceptionConstructor.CreateSqlException("Deadlock exception", 1205);
-		}
-
-		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
+		public IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			throw SqlExceptionConstructor.CreateSqlException("Deadlock exception", 1205);
 		}
@@ -264,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return DateTime.UtcNow;
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
+		public IEnumerable<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, string source)
 		{
 			return Find(persons, period, scenario).Where(s => s.Source == source).ToList();
 		}
@@ -273,24 +268,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			return _storage.LoadAll<IPersonAssignment>().Any(pa => pa.Person.PersonPeriodCollection.First().Team.Site.BusinessUnit.Id == businessUnitId &&
 				period.Contains(pa.Date));
-		}
-
-		public IPersonAssignment GetSingle(DateOnly dateOnly)
-		{
-			return _storage.LoadAll<IPersonAssignment>().Single(pa => pa.Date == dateOnly);
-		}
-
-		public IPersonAssignment GetSingle(DateOnly dateOnly, IPerson agent)
-		{
-			return _storage.LoadAll<IPersonAssignment>().Single(pa => pa.Date == dateOnly && pa.Person.Equals(agent));
-		}
-
-		public void Clear()
-		{
-			foreach (var personAssignment in _storage.LoadAll<IPersonAssignment>())
-			{
-				_storage.Remove(personAssignment);
-			}
 		}
 	}
 }
