@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.RibbonControlAdvFixed();
 			this.textBoxAbout = new System.Windows.Forms.TextBox();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			this.label1 = new System.Windows.Forms.Label();
 			this.labelProductName = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.labelProductVersion = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.labelCopyright = new System.Windows.Forms.Label();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.labelActiveAgentsInUse = new System.Windows.Forms.Label();
 			this.labelActiveAgentsOrSeats = new System.Windows.Forms.Label();
+			this.textBoxVersion = new System.Windows.Forms.TextBox();
 			this.gradientPanel2 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonAdvLegalNotice = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -99,12 +99,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxAbout.BackColor = System.Drawing.Color.White;
 			this.textBoxAbout.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBoxAbout.Location = new System.Drawing.Point(12, 18);
+			this.textBoxAbout.Location = new System.Drawing.Point(12, 6);
 			this.textBoxAbout.Multiline = true;
 			this.textBoxAbout.Name = "textBoxAbout";
 			this.textBoxAbout.ReadOnly = true;
 			this.textBoxAbout.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBoxAbout.Size = new System.Drawing.Size(434, 274);
+			this.textBoxAbout.Size = new System.Drawing.Size(434, 271);
 			this.textBoxAbout.TabIndex = 4;
 			// 
 			// gradientPanel1
@@ -130,12 +130,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.labelProductName, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.labelProductVersion, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.labelCopyright, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 2, 0);
 			this.tableLayoutPanel1.Controls.Add(this.labelActiveAgentsInUse, 1, 3);
 			this.tableLayoutPanel1.Controls.Add(this.labelActiveAgentsOrSeats, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.textBoxVersion, 1, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(458, 121);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
@@ -173,7 +174,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			this.label1.Location = new System.Drawing.Point(15, 12);
 			this.label1.Margin = new System.Windows.Forms.Padding(3);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(130, 15);
+			this.label1.Size = new System.Drawing.Size(129, 15);
 			this.label1.TabIndex = 1;
 			this.label1.Text = "xxProductVersionColon";
 			// 
@@ -197,17 +198,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			this.label2.Size = new System.Drawing.Size(123, 15);
 			this.label2.TabIndex = 2;
 			this.label2.Text = "xxProductNameColon";
-			// 
-			// labelProductVersion
-			// 
-			this.labelProductVersion.AutoSize = true;
-			this.labelProductVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelProductVersion.Location = new System.Drawing.Point(169, 12);
-			this.labelProductVersion.Margin = new System.Windows.Forms.Padding(3);
-			this.labelProductVersion.Name = "labelProductVersion";
-			this.labelProductVersion.Size = new System.Drawing.Size(48, 13);
-			this.labelProductVersion.TabIndex = 0;
-			this.labelProductVersion.Text = "version";
 			// 
 			// label3
 			// 
@@ -263,6 +253,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			this.labelActiveAgentsOrSeats.TabIndex = 5;
 			this.labelActiveAgentsOrSeats.Text = "xxActiveAgentsInUseColon";
 			// 
+			// textBoxVersion
+			// 
+			this.textBoxVersion.BackColor = System.Drawing.Color.White;
+			this.textBoxVersion.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBoxVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
+			this.textBoxVersion.Location = new System.Drawing.Point(172, 12);
+			this.textBoxVersion.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
+			this.textBoxVersion.Name = "textBoxVersion";
+			this.textBoxVersion.ReadOnly = true;
+			this.textBoxVersion.Size = new System.Drawing.Size(178, 13);
+			this.textBoxVersion.TabIndex = 8;
+			this.textBoxVersion.Text = "version";
+			this.textBoxVersion.WordWrap = false;
+			// 
 			// gradientPanel2
 			// 
 			this.gradientPanel2.BackColor = System.Drawing.Color.Transparent;
@@ -305,7 +309,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			this.buttonAdvLegalNotice.BeforeTouchSize = new System.Drawing.Size(101, 27);
 			this.buttonAdvLegalNotice.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvLegalNotice.IsBackStageButton = false;
-			this.buttonAdvLegalNotice.Location = new System.Drawing.Point(123, 8);
+			this.buttonAdvLegalNotice.Location = new System.Drawing.Point(58, 8);
 			this.buttonAdvLegalNotice.Name = "buttonAdvLegalNotice";
 			this.buttonAdvLegalNotice.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvLegalNotice.Size = new System.Drawing.Size(101, 27);
@@ -321,13 +325,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			this.buttonAdvApplyProductActivationKey.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonAdvApplyProductActivationKey.AutoSize = true;
 			this.buttonAdvApplyProductActivationKey.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvApplyProductActivationKey.BeforeTouchSize = new System.Drawing.Size(108, 27);
+			this.buttonAdvApplyProductActivationKey.BeforeTouchSize = new System.Drawing.Size(173, 27);
 			this.buttonAdvApplyProductActivationKey.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvApplyProductActivationKey.IsBackStageButton = false;
-			this.buttonAdvApplyProductActivationKey.Location = new System.Drawing.Point(230, 8);
+			this.buttonAdvApplyProductActivationKey.Location = new System.Drawing.Point(165, 8);
 			this.buttonAdvApplyProductActivationKey.Name = "buttonAdvApplyProductActivationKey";
 			this.buttonAdvApplyProductActivationKey.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvApplyProductActivationKey.Size = new System.Drawing.Size(108, 27);
+			this.buttonAdvApplyProductActivationKey.Size = new System.Drawing.Size(173, 27);
 			this.buttonAdvApplyProductActivationKey.TabIndex = 4;
 			this.buttonAdvApplyProductActivationKey.Text = "xxApplyProductActivationKey";
 			this.buttonAdvApplyProductActivationKey.UseVisualStyle = true;
@@ -393,7 +397,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 		private RibbonControlAdvFixed ribbonControlAdv1;
 		private System.Windows.Forms.TextBox textBoxAbout;
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
-		private System.Windows.Forms.Label labelProductVersion;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label labelProductName;
@@ -409,5 +412,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvApplyProductActivationKey;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvLegalNotice;
+		private System.Windows.Forms.TextBox textBoxVersion;
 	}
 }
