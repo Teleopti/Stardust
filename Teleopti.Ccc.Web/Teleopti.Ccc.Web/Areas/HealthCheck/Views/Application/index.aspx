@@ -22,7 +22,7 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 	  <script>var require = { urlArgs: 'v=<%=1%>' };</script>
 	<script type="text/javascript">
 		Teleopti = {
-			BusinessUnitId: '<%= identity.BusinessUnit.Id.ToString() %>',
+			BusinessUnitId: '<%= identity.BusinessUnitId.ToString() %>',
 			DataSource: '<%= identity.DataSource.Application.Name %>'
 		}
 	</script>
