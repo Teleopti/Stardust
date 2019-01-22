@@ -1,4 +1,3 @@
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -22,7 +21,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static IVisualLayer[] cloneUnMergedCollection(IVisualLayer[] unmergedCollection)
 		{
-			return unmergedCollection.Select(layer => (IVisualLayer) layer.EntityClone()).ToArray();
+			var layers = new IVisualLayer[unmergedCollection.Length];
+			for (int i = 0; i < unmergedCollection.Length; i++)
+			{
+				layers[i] = (IVisualLayer)unmergedCollection[i].EntityClone();
+			}
+			return layers;
 		}
 	}
 }
