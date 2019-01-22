@@ -41,12 +41,19 @@
 @border-color-base : #666; // base border outline a component
 @border-color-split : #666; // split border inside a component
 
+// Backgrounds
+@background-color-base : @telop-black;
+
 // Buttons
 @btn-primary-color : @telop-white;
 @btn-primary-bg : @primary-color;
 @btn-default-bg : @telop-black;
 @btn-disable-bg : @disabled-bg;
 @btn-default-border : #999;
+
+@btn-danger-color : @error-color;
+@btn-danger-bg : @background-color-base;
+@btn-danger-border : @error-color;
 
 // Table
 @table-row-hover-bg: #555;
@@ -84,11 +91,6 @@
 	&-warning {
 		background-color: @telop-dimmed-yellow;
 	}
-}
-
-.ant-btn-danger {
-	color: @normal-color;
-	background: @btn-default-bg;
 }
 
 .ant-calendar-selected-day .ant-calendar-date {
