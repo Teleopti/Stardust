@@ -73,6 +73,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	        _visualLayerCollection = null;
         }
 
+        public void OnAdd(IEnumerable<ILayer<IActivity>> layers)
+        {
+            if (!layers.All(layer => layer is WorkShiftActivityLayer))
+                throw new ArgumentException("Only WorkShiftActivityLayers can be added to a WorkShift");
+	        _visualLayerCollection = null;
+        }
+
 		public IVisualLayerCollection Projection => _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection());
 
 	    public IEditableShift ToEditorShift(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, TimeZoneInfo localTimeZone)

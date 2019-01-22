@@ -211,8 +211,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				proj.Add(MainActivities(), visualLayerFactory);
 				var validPeriods = new HashSet<DateTimePeriod>(MainActivities().PeriodBlocks());
-				var overtimeShiftLayers = OvertimeActivities().ToArray();
-				foreach (var overtimeLayer in overtimeShiftLayers)
+				foreach (var overtimeLayer in OvertimeActivities())
 				{
 					var overTimePeriod = overtimeLayer.Period;
 					proj.Add(new []{overtimeLayer}, new VisualLayerOvertimeFactory());
