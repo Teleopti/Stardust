@@ -599,6 +599,8 @@
 			subscribeBatchMessage: function (options, messageHandler, timeout) {
 				mockSignalRBackendServer.subscriptions.push(options);
 				mockSignalRBackendServer.notifyClients = messageHandler;
+			},
+			resetPendingMessages: function() {
 			}
 		};
 	}
