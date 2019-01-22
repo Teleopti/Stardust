@@ -73,7 +73,7 @@
 
 		$http.get("./LoggedInUser")
 			.then(function (response) {
-				if (response.data.Name !== '') {
+				if (response.data.Name !== null && response.data.Name !== '') {
 					//vm.user = response.data.Name;
 					$rootScope.user = response.data.Name;
 					vm.id = response.data.Id;
