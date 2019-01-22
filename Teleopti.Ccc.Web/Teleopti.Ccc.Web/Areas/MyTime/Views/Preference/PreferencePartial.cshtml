@@ -226,7 +226,13 @@
 							<div class="relative">
 								<div class="day-header">
 									<span class="badge day-header-month floatleft" data-bind="text: MonthString"></span>
-									<span class="floatright day-header-right badge day-header-day" data-bind="text: DayString, click: function(d,e){e.stopPropagation();}"></span>
+									<!-- ko ifnot: HasBankHolidayCalendar -->
+									<span class="pull-right day-header-right badge day-header-day" data-bind="text: DayString, click: function(d,e){e.stopPropagation();}"></span>
+									<!-- /ko -->
+
+									<!-- ko if: HasBankHolidayCalendar -->
+									<span class="pull-right day-header-right badge day-header-day bank-holiday-day-shape" data-bind="text: DayString, click: function(d,e){e.stopPropagation();}, tooltip:{title: DateDescription, html: true}"></span>
+									<!-- /ko -->
 								</div>
 								<div class="day-content">
 									<figure class="cover-me" data-bind="visible: IsLoading()"><img src='@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")' alt="..." /></figure>
@@ -299,13 +305,6 @@
 										<div class="absence">
 											<span class="displayblock fullwidth" data-bind="text: Absence"></span>
 											<span class="absence-contract-time displayblock fullwidth" data-bind="text: AbsenceContractTime"></span>
-										</div>
-										<!-- /ko -->
-										<!-- ko if: HasBankHolidayCalendar -->
-										<div class="BankHolidayCalendar">
-											<span class="displayblock fullwidth" data-bind="text: CalendarId"></span>
-											<span class="displayblock fullwidth" data-bind="text: CalendarName"></span>
-											<span class="displayblock fullwidth" data-bind="text: DateDescription"></span>
 										</div>
 										<!-- /ko -->
 										<!-- ko if: HasPersonAssignmentShiftCategory -->
