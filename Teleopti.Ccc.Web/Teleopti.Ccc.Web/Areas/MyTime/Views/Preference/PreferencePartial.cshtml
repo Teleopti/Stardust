@@ -301,6 +301,13 @@
 											<span class="absence-contract-time displayblock fullwidth" data-bind="text: AbsenceContractTime"></span>
 										</div>
 										<!-- /ko -->
+										<!-- ko if: HasBankHolidayCalendar -->
+										<div class="BankHolidayCalendar">
+											<span class="displayblock fullwidth" data-bind="text: CalendarId"></span>
+											<span class="displayblock fullwidth" data-bind="text: CalendarName"></span>
+											<span class="displayblock fullwidth" data-bind="text: DateDescription"></span>
+										</div>
+										<!-- /ko -->
 										<!-- ko if: HasPersonAssignmentShiftCategory -->
 										<div class="scheduled day-content-text">
 											<span class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentShiftCategory"></span>
@@ -311,23 +318,23 @@
 										@if (day.InPeriod)
 										{
 											<!-- ko if: Feedback -->
-												<!-- ko if: DisplayFeedbackError -->
-													<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
-												<!-- /ko -->
-												<!-- ko if: DisplayFeedback -->
-													<div class="possible-start-times time-limitation clearleftfloat">
-														<span class="glyphicon glyphicon-step-backward"></span>
-														<span data-bind="text: PossibleStartTimes"></span>
-													</div>
-													<div class="possible-end-times time-limitation clearleftfloat">
-														<span class="glyphicon glyphicon-step-forward"></span>
-														<span data-bind="text: PossibleEndTimes"></span>
-													</div>
-													<div class="possible-contract-times time-limitation clearleftfloat">
-														<span class="glyphicon glyphicon-resize-horizontal"></span>
-														<span data-bind="text: PossibleContractTimes"></span>
-													</div>
-												<!-- /ko -->
+											<!-- ko if: DisplayFeedbackError -->
+											<div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
+											<!-- /ko -->
+											<!-- ko if: DisplayFeedback -->
+											<div class="possible-start-times time-limitation clearleftfloat">
+												<span class="glyphicon glyphicon-step-backward"></span>
+												<span data-bind="text: PossibleStartTimes"></span>
+											</div>
+											<div class="possible-end-times time-limitation clearleftfloat">
+												<span class="glyphicon glyphicon-step-forward"></span>
+												<span data-bind="text: PossibleEndTimes"></span>
+											</div>
+											<div class="possible-contract-times time-limitation clearleftfloat">
+												<span class="glyphicon glyphicon-resize-horizontal"></span>
+												<span data-bind="text: PossibleContractTimes"></span>
+											</div>
+											<!-- /ko -->
 											<!-- /ko -->
 										}
 									</div>
