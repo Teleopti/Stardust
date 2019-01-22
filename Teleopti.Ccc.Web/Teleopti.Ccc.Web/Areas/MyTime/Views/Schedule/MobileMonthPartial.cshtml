@@ -72,7 +72,7 @@ Layout = null;
 		</div>
 		<div class="mobile-month-box clearfix" data-bind="foreach: weekViewModels">
 			<div class="mobile-month-row-fluid clearfix" data-bind="foreach: dayViewModels, css: {'has-overtime-or-absence': $parent.hasAbsenceOrOvertime, 'has-overtime-and-absence': $parent.hasAbsenceAndOvertime}">
-				<div class="mobile-month-cell">
+				<div class="mobile-month-cell" data-bind="attr:{'date': date}">
 					<div class="mobile-month-day" data-bind="click: navigateToDayView, css: {'mobile-month-day-outmonth': isOutsideMonth, 'mobile-month-current-day': isCurrentDay}">
 						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}" class="day-header-day"></span>
 

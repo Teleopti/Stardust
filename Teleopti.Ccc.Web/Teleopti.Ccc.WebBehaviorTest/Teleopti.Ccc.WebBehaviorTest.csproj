@@ -269,6 +269,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DayScheduleProbabilityForStartPage.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\MobileMonth.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileMonth.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\MobileMonthStepDefinitions.cs" />
     <Compile Include="MyTime\ShiftTradeRequestViewShowingMultipleShifts.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1136,6 +1142,10 @@
     <None Include="MyTime\DaySchedule\DayScheduleProbabilityForStartPage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DayScheduleProbabilityForStartPage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\MobileMonth.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MobileMonth.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\OvertimeRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
