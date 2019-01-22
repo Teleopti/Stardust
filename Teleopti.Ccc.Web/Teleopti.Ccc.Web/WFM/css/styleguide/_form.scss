@@ -296,11 +296,15 @@ md-select {
 		color: $text-color-standard;
 		-webkit-appearance: none;
 		-moz-appearance: none;
-		background: $white;
+		background: $input-white;
 		min-height: 32px;
 		padding: 4px 11px;
 		border-radius: 4px;
 		position: static;
+
+		&:not([disabled]):hover {
+			border-color: $primary;
+		}
 	}
 
 	.md-select-icon {

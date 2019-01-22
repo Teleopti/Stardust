@@ -6,11 +6,11 @@
 		</md-select-value>
 	</form>
 	<div class="_off-screen">
-		<group-pages-panel class="group-page-picker-menu wfm-slide-tabs tabbed-panel">
+		<group-pages-panel class="group-page-picker-menu wfm-slide-tabs tabbed-panel full-padding">
 			<div class="longest-name">{{$ctrl.longestName}}</div>
 			<form>
 				<md-content>
-					<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height md-no-pagination="true">
+					<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height md-border-bottom md-no-pagination="true">
 						<md-tab ng-repeat="tab in $ctrl.tabs">
 							<md-tab-label><i title="{{tab.title|translate}}" class="mdi mdi-{{tab.icon}} group-pages-icon"></i></md-tab-label>
 							<md-tab-body>
@@ -26,7 +26,7 @@
 												<div flex layout="row">
 													<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-class="{'indeterminate': o.isIndeterminate()}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()"
 																 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
-													<span class="md-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleGroup(o)"></span>
+													<span class="md-checkbox-label" tabindex="-1" ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleGroup(o)"></span>
 													<div id="toggle-{{o.id}}" class="group-toggle"
 														 ng-click="$ctrl.collapseGroup(o)" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)">
 														<span class="md-toggle-icon">
@@ -41,7 +41,7 @@
 												<div flex layout="row">
 													<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"
 																 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
-													<span class="md-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleSubGroup(o)"></span>
+													<span class="md-checkbox-label" tabindex="-1"	 ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleSubGroup(o)"></span>
 												</div>
 											</label>
 										</div>
