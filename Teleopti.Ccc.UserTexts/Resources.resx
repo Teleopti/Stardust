@@ -18173,4 +18173,20 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>No skill group created</value>
     <comment>Placeholder in skill group picker if no skill group is created</comment>
   </data>
+	  <data name="AdjustedPeriods" xml:space="preserve">
+    <value>Adjusted Periods</value>
+    <comment>Subtitle in the adjust adherence page</comment>
+  </data>	  
+	<data name="AdjustAdherenceLink" xml:space="preserve">
+    <value>Adjust Adherence</value>
+    <comment>Link to the adjust adherence page</comment>
+  </data>	
+	<data name="AdjustToNeutral" xml:space="preserve">
+    <value>Adjust To Neutral</value>
+    <comment>Button text for adjusting adherence to neutral</comment>
+  </data>	
+	<data name="AddPeriod" xml:space="preserve">
+    <value>Add Period</value>
+    <comment>Button text for displaying adjust adherence form</comment>
+  </data>
 </root>
