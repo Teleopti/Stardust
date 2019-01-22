@@ -274,6 +274,7 @@
     <Compile Include="Repositories\JobStartTimeTest.cs" />
     <Compile Include="Intraday\PersonProviderForOvertimeTest.cs" />
     <Compile Include="Repositories\PersonRequestRepositoryOvertimeTest.cs" />
+    <Compile Include="Repositories\PersonRequestRepositoryWaitlistedAbsenceRequestTest.cs" />
     <Compile Include="Repositories\PurgeSettingRepositoryTest.cs" />
     <Compile Include="Repositories\RequeueHangfireRepositoryTest.cs" />
     <Compile Include="Repositories\ScenarioRepositoryNoCurrentBusinessUnitTest.cs" />

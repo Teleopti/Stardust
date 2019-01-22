@@ -58,11 +58,17 @@ namespace Teleopti.Ccc.Domain.Notification
 		private bool isRelevantChange(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel)
 		{
 			var existingReadModel = _scheduleDayReadModelRepository.ForPerson(date, person.Id.GetValueOrDefault());
-
 			return existingReadModel?.Workday != newReadModel?.Workday
-				|| existingReadModel?.StartDateTime != newReadModel?.StartDateTime
-				|| existingReadModel?.EndDateTime != newReadModel?.EndDateTime
+				|| isStartOrEndChangedForWorkday(newReadModel, existingReadModel)
 				|| existingReadModel?.Label != newReadModel?.Label;
+		}
+
+		private bool isStartOrEndChangedForWorkday(ScheduleDayReadModel newReadModel, ScheduleDayReadModel existingReadModel)
+		{
+			var areWorkday = existingReadModel != null && existingReadModel.Workday && newReadModel != null && newReadModel.Workday;
+			if (!areWorkday) return false;
+			return existingReadModel.StartDateTime != newReadModel.StartDateTime
+					|| existingReadModel.EndDateTime != newReadModel.EndDateTime;
 		}
 	}
 }

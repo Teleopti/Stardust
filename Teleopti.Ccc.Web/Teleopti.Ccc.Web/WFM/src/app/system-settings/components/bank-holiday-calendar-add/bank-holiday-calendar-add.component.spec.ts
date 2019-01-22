@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
@@ -155,7 +155,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 
 		component.dateClick(component.newCalendarYears[0]);
 		fixture.detectChanges();
-		tick(500);
+		flush();
 
 		fixture.whenStable().then(() => {
 			expect(component.newCalendarYears[0].Dates.length).toBe(1);

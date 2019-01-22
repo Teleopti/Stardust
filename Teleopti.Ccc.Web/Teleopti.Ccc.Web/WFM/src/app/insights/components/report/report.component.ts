@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Inject, Injectable } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Inject } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
 import { NzNotificationService } from 'ng-zorro-antd';
 
-import { Report } from '../../models/Report.model';
 import { Permission } from '../../models/Permission.model';
 import { ReportService } from '../../core/report.service';
 import { NavigationService } from '../../core/navigation.service';
+import { IPowerBiElement } from 'service';
 
 @Component({
 	selector: 'app-report',
@@ -38,8 +38,8 @@ export class ReportComponent implements OnInit {
 		private notification: NzNotificationService) {
 
 		const params = $state.params;
-		this.reportId = params.reportId;
-		this.action = params.action;
+		this.reportId = params.reportId.trim();
+		this.action = params.action.trim().toLowerCase();
 
 		this.inEditing = this.action === 'edit';
 		this.permission = new Permission();
@@ -84,14 +84,20 @@ export class ReportComponent implements OnInit {
 	updateToken(reportId) {
 		this.reportSvc.getReportConfig(reportId).then(config => {
 			const embedContainer = this.getReportContainer();
-			const report = this.pbiCoreService.get(embedContainer);
+
+			// If redirect to other page on update token, since the report container will be destroyed,
+			// the container will not be a embed report, it will failed to get the embed container and cause problem.
+			// Refer to test issue #80713: Error when edit a report
+			const powerBiElement = <IPowerBiElement>embedContainer;
+			if (!powerBiElement.powerBiEmbed) return;
 
 			const self = this;
+			const report = this.pbiCoreService.get(embedContainer);
 			report.setAccessToken(config.AccessToken).then(function () {
 				self.setTokenExpirationListener(config.Expiration, 2, reportId);
 			});
 		}).catch(error => {
-			console.error('Failed to update token for report, Error message: ' + error, this.errorNotificationOption);
+			console.error('Failed to update token for report, Error message: ' + error);
 		});
 	}
 
@@ -165,6 +171,7 @@ export class ReportComponent implements OnInit {
 		}).catch(error => {
 			this.notification.create('error', 'Failed to save as new report', 'Error message: ' + error, this.errorNotificationOption);
 		});
+
 	}
 
 	public deleteReport(reportId) {

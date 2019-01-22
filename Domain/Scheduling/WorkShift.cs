@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class WorkShift : IWorkShift
 	{
+		private static readonly IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 		private IVisualLayerCollection _visualLayerCollection;
 		private List<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService();
-			proj.Add(LayerCollection, new VisualLayerFactory());
+			proj.Add(LayerCollection, visualLayerFactory);
 			return proj;
 		}
 
@@ -68,6 +69,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public void OnAdd(ILayer<IActivity> layer)
         {
             if (!(layer is WorkShiftActivityLayer))
+                throw new ArgumentException("Only WorkShiftActivityLayers can be added to a WorkShift");
+	        _visualLayerCollection = null;
+        }
+
+        public void OnAdd(IEnumerable<ILayer<IActivity>> layers)
+        {
+            if (!layers.All(layer => layer is WorkShiftActivityLayer))
                 throw new ArgumentException("Only WorkShiftActivityLayers can be added to a WorkShift");
 	        _visualLayerCollection = null;
         }

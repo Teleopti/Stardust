@@ -46,7 +46,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ConfigurableBusinessRuleProvider>().As<IBusinessRuleProvider>();
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();
-			builder.RegisterType<AbsenceRequestWaitlistProvider>().As<IAbsenceRequestWaitlistProvider>().SingleInstance();
+
+			registerType
+				<IAbsenceRequestWaitlistProvider, AbsenceRequestWaitlistProvider80131On, AbsenceRequestWaitlistProvider>(builder,
+					Toggles.MyTimeWeb_NewAbsenceRequestWaitlistPosition_80131);
 			builder.RegisterType<WriteProtectedScheduleCommandValidator>().As<IWriteProtectedScheduleCommandValidator>().SingleInstance();
 			builder.RegisterType<CancelAbsenceRequestCommandValidator>().As<ICancelAbsenceRequestCommandValidator>().SingleInstance();
 			builder.RegisterType<CheckingPersonalAccountDaysProvider>().As<ICheckingPersonalAccountDaysProvider>().SingleInstance();

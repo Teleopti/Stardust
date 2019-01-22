@@ -86,8 +86,9 @@
 .calendarview-week li .day-header {
 	background-color: white;
 	line-height: 26px;
-	min-height: 26px;
+	height: 26px;
 	border-bottom: none;
+	width: 100%;
 }
 .calendarview-week .today .day-header {
 	background-color: gray;

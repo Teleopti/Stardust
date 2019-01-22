@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, flush } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -249,7 +249,7 @@ describe('BankHolidayCalendarEditComponent', () => {
 
 		component.dateClick(component.edittingCalendarYears[0]);
 		fixture.detectChanges();
-		tick(500);
+		flush();
 
 		fixture.whenStable().then(() => {
 			expect(component.edittingCalendarYears[0].Dates.length).toBe(1);

@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
+		private static readonly VisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 		private IList<ShiftLayer> _shiftLayers;
 		private IPerson _person;
 		private IScenario _scenario;
@@ -208,14 +209,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var proj = new VisualLayerProjectionService();
 			if (hasProjection())
 			{
-				proj.Add(MainActivities(), new VisualLayerFactory());
-				var validPeriods = new HashSet<DateTimePeriod>(MainActivities().OfType<ShiftLayer>()
-					.Concat(OvertimeActivities()).PeriodBlocks());
-				proj.Add(OvertimeActivities(), new VisualLayerOvertimeFactory());
-				proj.Add(
-					PersonalActivities().Where(personalLayer => validPeriods.Any(validPeriod =>
-						validPeriod.Intersect(personalLayer.Period) || validPeriod.AdjacentTo(personalLayer.Period))),
-					new VisualLayerFactory());
+				proj.Add(MainActivities(), visualLayerFactory);
+				var validPeriods = new HashSet<DateTimePeriod>(MainActivities().PeriodBlocks());
+				foreach (var overtimeLayer in OvertimeActivities())
+				{
+					var overTimePeriod = overtimeLayer.Period;
+					proj.Add(new []{overtimeLayer}, new VisualLayerOvertimeFactory());
+					validPeriods.Add(overTimePeriod);
+				}
+				foreach (var personalLayer in PersonalActivities())
+				{
+					if (validPeriods.Any(validPeriod => validPeriod.Intersect(personalLayer.Period) || validPeriod.AdjacentTo(personalLayer.Period)))
+					{
+						proj.Add(new []{personalLayer}, visualLayerFactory);
+					}
+				}
 			}
 
 			return proj;

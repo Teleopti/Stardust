@@ -128,14 +128,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 		}
 
-		private IEnumerable<IPerson> runSchedulingWithoutPreferences(
+		private HashSet<IPerson> runSchedulingWithoutPreferences(
 			IDictionary<IPerson, HashSet<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event,IEnumerable<IPerson> agents,
 			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions,
 			ISchedulingCallback schedulingCallback, ISchedulingProgress schedulingProgress,
 			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			if (!@event.ScheduleWithoutPreferencesForFailedAgents) 
-				return Enumerable.Empty<IPerson>();
+				return new HashSet<IPerson>();
 			var schedules = _schedulerStateHolder().Schedules;
 			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
 			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod).ToArray();
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
 			var agentsWithWhiteSpotsAfterScheduling = _agentsWithWhiteSpots.Execute(schedules, filteredAgents, selectedPeriod);
 
-			return filteredAgents.Except(agentsWithWhiteSpotsAfterScheduling).ToList();
+			return filteredAgents.Except(agentsWithWhiteSpotsAfterScheduling).ToHashSet();
 		}
 	}
 }

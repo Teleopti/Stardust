@@ -28,18 +28,29 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			if (!schedulingOptions.UseAverageShiftLengths && !usingTeamBlockAndSameShift)
 				return shiftList;
 
+			//PERFORMANCE TEST NEW
+			ILookup<TimeSpan, ShiftProjectionCache> contractTimes;
 			if (openHoursSkillResult != null)
 			{
-				shiftList = shiftList.Select(s => new { Period = s.MainShiftProjection().Period(), s })
-					.Where(s => s.Period.HasValue && s.Period?.ElapsedTime() <= openHoursSkillResult.ForCurrentDate())
-					.Select(s => s.s)
-					.ToList();
+				var currentTime = openHoursSkillResult.ForCurrentDate();
+				contractTimes = shiftList.Where(s => s.WorkShiftProjectionPeriod().ElapsedTime() <= currentTime).ToLookup(s => s.WorkShiftProjectionContractTime());
+			}
+			else
+			{
+				contractTimes = shiftList.ToLookup(s => s.WorkShiftProjectionContractTime());
 			}
 
+			//PERFORMANCE TEST OLD
+			//var poo = shiftList.Select(s => new { Period = s.MainShiftProjection().Period(), s })
+			//	.Where(s => s.Period.HasValue && s.Period?.ElapsedTime() <= openHoursSkillResult.ForCurrentDate())
+			//	.Select(s => s.s)
+			//	.ToList();
+
 			//ta reda på alla skiftlängder i _shiftList, som en lista
-			var contractTimes = shiftList.ToLookup(s => s.WorkShiftProjectionContractTime());
+			//var contractTimes = shiftList.ToLookup(s => s.WorkShiftProjectionContractTime());
+
 			var resultingTimes = contractTimes.Select(x => x.Key).ToArray();
-			
+
 			//hämta önskad skiftlängd
 			var shiftLength = _desiredShiftLengthCalculator.FindAverageLength(workShiftMinMaxCalculator, matrix, schedulingOptions, openHoursSkillResult);
 
@@ -61,7 +72,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 				//filtrera på den
 				var selectedTime = resultingList[selectedIndex];
 				var resultList = contractTimes[selectedTime].ToList();
-				
+
 				//om ingen träff kör på näst närmaste o.s.v
 				if (resultList.Count > 0)
 					return resultList;

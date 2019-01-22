@@ -365,6 +365,40 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		}
 
 		[Test]
+		public void ShouldNotSendMessageWhenAddOvetimeActivityToDayOff() {
+			var date = new DateOnly(2019, 01, 22);
+			var person = PersonFactory.CreatePerson("person", "1");
+			var newReadModel = new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 22, 17, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 22, 18, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = false,
+				Date = date.Date
+			};
+
+			FakeScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
+			{
+				StartDateTime = new DateTime(2019, 01, 22, 8, 0, 0),
+				EndDateTime = new DateTime(2019, 01, 23, 17, 0, 0),
+				PersonId = person.Id.GetValueOrDefault(),
+				Workday = false,
+				Date = date.Date
+			});
+
+			var @event = new ScheduleChangeForWeekViewEvent
+			{
+				Person = person,
+				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
+				LogOnDatasource = "Teleopti",
+				LogOnBusinessUnitId = Guid.NewGuid()
+			};
+			Target.InitiateNotify(@event);
+
+			MessageBrokerComposite.GetMessages().Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldSendCorrectMessage()
 		{
 			var date = new DateOnly(2019, 01, 16);

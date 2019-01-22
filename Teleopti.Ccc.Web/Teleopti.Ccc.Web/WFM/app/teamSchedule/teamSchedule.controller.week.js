@@ -124,7 +124,7 @@
 
 		vm.loadSchedules = function () {
 			vm.isLoading = true;
-			vm.havingScheduleChanged = false;
+			resetScheduleChangedStatus();
 			var inputForm = getParamsForLoadingSchedules();
 
 			weekViewScheduleSvc.getSchedules(inputForm).then(function (data) {
@@ -134,6 +134,7 @@
 				vm.scheduleFullyLoaded = true;
 				vm.searchOptions.focusingSearch = false;
 				vm.total = data.Total;
+
 			}, function () {
 				vm.isLoading = false;
 				vm.searchOptions.focusingSearch = false;
@@ -198,7 +199,6 @@
 		};
 
 		vm.getGroupPagesAsync = function () {
-			var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 			var startOfWeek = Util.getFirstDayOfWeek(vm.scheduleDate);
 			var endOfWeek = serviceDateFormatHelper.getDateOnly(moment(startOfWeek).add(6, 'days'));
 			groupPageService.fetchAvailableGroupPages(startOfWeek, endOfWeek).then(function (data) {
@@ -217,6 +217,11 @@
 		function resetFocus() {
 			$scope.$broadcast("resetFocus", "organizationPicker");
 		};
+
+		function resetScheduleChangedStatus() {
+			vm.havingScheduleChanged = false;
+			signalR.resetPendingMessages();
+		}
 
 		function openSelectedAgentDayInNewWindow(personId, scheduleDate) {
 			if (!vm.enableClickableCell) return;
@@ -308,9 +313,10 @@
 					vm.selectedGroups.groupIds = [loggedonUsersTeamId].slice(0);
 				}
 				vm.resetSchedulePage();
+
+				monitorScheduleChanged();
 			});
 
-			monitorScheduleChanged();
 		}
 
 		init();

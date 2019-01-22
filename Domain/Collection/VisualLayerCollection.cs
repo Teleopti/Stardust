@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Domain.Collection
 	/// </remarks>
 	public class VisualLayerCollection : IVisualLayerCollection
 	{
+		private static readonly IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
+
 		private readonly IProjectionMerger _merger;
 		private readonly Lazy<IEnumerable<IVisualLayer>> _mergedCollection;
 		
@@ -199,7 +201,6 @@ namespace Teleopti.Ccc.Domain.Collection
 		//borde göras om till en IProjectionMerger
 		public IFilteredVisualLayerCollection FilterLayers(DateTimePeriod periodToSearch)
 		{
-			IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 			IList<IVisualLayer> retColl = new List<IVisualLayer>();
 			var collCount = UnMergedCollection.Length;
 			if (collCount > 0)

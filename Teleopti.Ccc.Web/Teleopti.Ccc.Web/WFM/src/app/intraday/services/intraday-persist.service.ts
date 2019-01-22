@@ -4,7 +4,6 @@ import { SkillPickerItem, IntradayChartType, Skill } from '../types';
 
 export interface IntradayPersistedData {
 	selectedSkillOrGroup: SkillPickerItem;
-	selectedSubSkill: Skill;
 	selectedSubSkillId: string;
 	selectedOffset: number;
 	selectedChartType: IntradayChartType;

@@ -1,9 +1,9 @@
 Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function(ajax, dayViewModels) {
 	var self = this;
 
-	this.DayViewModels = dayViewModels;
-
-	this.LoadPreferencesAndSchedules = function(from, to) {
+	self.ShowCalendar = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_Preference_Indicate_BankHoliday_79900');
+	self.DayViewModels = dayViewModels;
+	self.LoadPreferencesAndSchedules = function(from, to) {
 		var deferred = $.Deferred();
 		if (!from || !to) {
 			deferred.reject();
@@ -31,6 +31,9 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function(ajax, 
 						}
 						if (element.PersonalShifts) {
 							dayViewModel.PersonalShifts(element.PersonalShifts);
+						}
+						if (self.ShowCalendar && element.BankHolidayCalendar) {
+							dayViewModel.ReadBankHolidayCalendar(element.BankHolidayCalendar);
 						}
 					});
 					deferred.resolve();

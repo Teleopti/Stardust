@@ -127,6 +127,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
+    <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider80131On.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
     <Compile Include="AgentInfo\AbsenceStaffingPossibilityCalculator.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="Security\Principal\ITeleoptiIdentityForLegacy.cs" />
     <Compile Include="Security\Principal\ITeleoptiPrincipalForLegacy.cs" />
+    <Compile Include="Repositories\PersonWaitlistedAbsenceRequest.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentityForLegacy.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />

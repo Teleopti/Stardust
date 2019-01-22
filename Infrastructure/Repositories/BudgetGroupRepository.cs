@@ -15,5 +15,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 		    
 	    }
-    }
+	}
 }

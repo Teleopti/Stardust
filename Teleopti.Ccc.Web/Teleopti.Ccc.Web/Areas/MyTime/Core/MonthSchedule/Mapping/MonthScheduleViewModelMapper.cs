@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
@@ -49,7 +51,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				Overtimes = overtimes,
 				SeatBookings = s.SeatBookingInformation,
 				IsDayOff = isDayOff(s),
-				Shift = shift(s, mobileMonth)
+				Shift = shift(s, mobileMonth),
+				BankHolidayCalendarInfo = mapBankHolidayCalendar(s.BankHolidayDate)
+			};
+		}
+
+		private BankHolidayCalendarViewModel mapBankHolidayCalendar(IBankHolidayDate bankHolidayDate)
+		{
+			if (bankHolidayDate == null) return null;
+
+			return new BankHolidayCalendarViewModel
+			{
+				CalendarId = bankHolidayDate.Calendar.Id.GetValueOrDefault(),
+				CalendarName = bankHolidayDate.Calendar.Name,
+				DateDescription = bankHolidayDate.Description
 			};
 		}
 

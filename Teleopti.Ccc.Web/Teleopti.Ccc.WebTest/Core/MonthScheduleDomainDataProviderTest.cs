@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		{
 			var today = DateOnly.Today;
 
-			var result = Target.Get(today, true);
+			var result = Target.GetMonthData(today);
 
 			result.CurrentDate.Should().Be.EqualTo(today);
 		}
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var date = new DateOnly(2014, 1, 11);
 			addPersonSchedule(new DateOnly(2013, 12, 30), TimeSpan.FromHours(1), TimeSpan.FromHours(2));
 
-			var result = Target.Get(date, true);
+			var result = Target.GetMonthData(date);
 
 			result.Days.Count().Should().Be(35);
 			result.Days.ElementAt(0).ScheduleDay.DateOnlyAsPeriod.DateOnly.Should().Be(new DateOnly(2013, 12, 30));
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = Target.Get(today, true);
+			var result = Target.GetMonthData(today);
 
 			result.AsmEnabled.Should().Be.True();
 		}
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(false));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = Target.Get(today, true);
+			var result = Target.GetMonthData(today);
 
 			result.AsmEnabled.Should().Be.False();
 		}
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = Target.Get(today, true);
+			var result = Target.GetMonthData(today);
 
 			result.AsmEnabled.Should().Be.False();
 		}

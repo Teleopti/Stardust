@@ -60,6 +60,10 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function(scheduleDate, selectedD
 		: 'black';
 
 	self.isOutsideMonth = selectedDate.month() != currentDate.month();
+	self.isCurrentDay =
+		moment().year() == currentDate.year() &&
+		moment().month() == currentDate.month() &&
+		self.dayOfMonth == new Date().getDate();
 	self.currentDayColor =
 		moment().year() == currentDate.year() &&
 		moment().month() == currentDate.month() &&

@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
 		MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640,
+		MyTimeWeb_NewAbsenceRequestWaitlistPosition_80131,
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
@@ -100,6 +101,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		MyTimeWeb_Request_CleanUpRequestHisotry_77776,
 		MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446,
 		MyTimeWeb_Preference_Indicate_BankHoliday_79900,
+		MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901,
 
 		WFM_Intraday_Redesign_77214,
 
