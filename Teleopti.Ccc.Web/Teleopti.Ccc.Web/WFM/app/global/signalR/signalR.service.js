@@ -16,6 +16,7 @@
 
 		this.subscribe = subscribe;
 		this.subscribeBatchMessage = subscribeBatchMessage;
+		this.resetPendingMessages = resetPendingMessages;
 
 		function subscribe(options, messsageHandler) {
 			messageHandlers[options.DomainType] = messsageHandler;
@@ -45,7 +46,7 @@
 			setNegotiationLocation();
 			connectToServerAddSubscription(options);
 		}
-
+		
 		function resetPendingMessages() {
 			pendingMessage = [];
 			messageHandlingTimeout = null;
