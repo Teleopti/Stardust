@@ -164,7 +164,7 @@
 	opacity: 0.4;
 }
 .mobile-month-current-day {
-	border: 1px solid #aaa;
+	border: 1px solid green;
 }
 .mobile-month-day .day-header-day.mobile-month-bank-holiday-day {
 	background: red;
