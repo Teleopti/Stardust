@@ -54,11 +54,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			_mergedCollection = new Lazy<IEnumerable<IVisualLayer>>(() => merger.MergedCollection(UnMergedCollection).ToList());
 		}
 
-		public static IVisualLayerCollection CreateEmptyProjection(IPerson assignedPerson)
-		{
-			return new VisualLayerCollection(Enumerable.Empty<IVisualLayer>(), new NoProjectionMerger());
-		}
-
 		public bool HasLayers { get; }
 		
 		public IFilterOnPeriodOptimizer PeriodOptimizer
