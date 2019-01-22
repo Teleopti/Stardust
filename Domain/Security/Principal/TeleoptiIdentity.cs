@@ -1,4 +1,5 @@
 using System;
+using System.IdentityModel.Tokens;
 using System.Security.Principal;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -6,24 +7,25 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	public class TeleoptiIdentity : GenericIdentity, ITeleoptiIdentity
 	{
-		private IBusinessUnit _businessUnit;
+		private readonly Func<Guid?> _businessUnitId = () => null;
 
-		public TeleoptiIdentity(
-			string name,
+		public TeleoptiIdentity(string name,
 			IDataSource dataSource,
-			IBusinessUnit businessUnit,
+			Func<Guid?> businessUnitId,
+			string businessUnitName,
 			WindowsIdentity windowsIdentity,
 			string tokenIdentity)
 			: base(name)
 		{
+			_businessUnitId = businessUnitId ?? _businessUnitId;
+			BusinessUnitName = businessUnitName;
 			DataSource = dataSource;
-			_businessUnit = businessUnit;
 			WindowsIdentity = windowsIdentity;
 			TokenIdentity = tokenIdentity;
 		}
 
-		public Guid? BusinessUnitId => _businessUnit?.Id.GetValueOrDefault();
-		public string BusinessUnitName => _businessUnit?.Name;
+		public Guid? BusinessUnitId => _businessUnitId.Invoke();
+		public string BusinessUnitName { get; }
 		public string TokenIdentity { get; set; }
 		public IDataSource DataSource { get; set; }
 		public WindowsIdentity WindowsIdentity { get; set; }

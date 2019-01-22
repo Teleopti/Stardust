@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			 const string url = "http://my.url.com/start/Url/RedirectToWebLogin";
 			 const string applicationPath = "/TeleoptiCCC/Web/";
 			 System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-					 new TeleoptiIdentity("test", null, null, null, null), person);
+					 new TeleoptiIdentity("test", null, null, null, null, null), person);
 			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
 			 var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, signatureCreator, new Now());
 			 var result = ((RedirectResult) target.RedirectToWebLogin(""));
