@@ -25,16 +25,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created date: 2008-01-25
         /// </remarks>
         void OnAdd(ILayer<T> layer);
-
-		/// <summary>
-		/// Called before layer is added to collection.
-		/// </summary>
-		/// <param name="layer">The layer.</param>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2008-01-25
-		/// </remarks>
-		void OnAdd(IEnumerable<ILayer<T>> layers);
 	}
 
 	/// <summary>

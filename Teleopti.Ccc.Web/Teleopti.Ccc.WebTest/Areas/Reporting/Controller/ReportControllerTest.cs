@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 			{
 				Analytics = new FakeAnalyticsUnitOfWorkFactory {ConnectionString = ""}
 
-			}, null, null, null, null), person);
+			}, null, null, null), person);
 			var target = new ReportController(reportsNavigationProvider,
 				new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())),
 				new FakeLoggedOnUser(person), currentBusinessUnit, new TrueToggleManager(), analyticsPermissionsUpdater,

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         public void Setup()
         {
             person = PersonFactory.CreatePerson();
-			identity = new TeleoptiIdentity("test", null, null, null, null, null);
+			identity = new TeleoptiIdentity("test", null, null, null, null);
 
             target = new TeleoptiPrincipalForLegacy(identity, person);
         }
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             }
             using (mocks.Playback())
             {
-				var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
+				var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
                 var newTarget = new TeleoptiPrincipalForLegacy(newIdentity, newPerson);
 
                 target.ChangePrincipal(newTarget);

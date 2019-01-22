@@ -319,8 +319,9 @@ var rtaTester = (function () {
 		fdescribe: function (description, tests) {
 			return fdescribe(description, function () {
 				setupByDescription(description, tests);
-			});
-		}
+			})
+		},
+		xdescribe: xdescribe
 	}
 
 })();

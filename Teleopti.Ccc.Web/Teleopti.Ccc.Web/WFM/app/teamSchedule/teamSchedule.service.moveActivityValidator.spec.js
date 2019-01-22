@@ -86,8 +86,8 @@
 				personSelection.updatePersonSelection(personSchedule);
 				personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
 				var timeRange = {
-					startTime: moment("2016-05-01 2:00"),
-					endTime: moment("2016-05-08 2:00")
+					startTime: moment("2016-05-01T02:00"),
+					endTime: moment("2016-05-08T02:00")
 				};
 
 				var result = target.validateInputForOvertime(scheduleMgmt, timeRange, definitionSetId, defaultUserTimeZone);
@@ -196,7 +196,7 @@
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
 				personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
-				var newStartMoment = moment("2016-05-13 2:00");
+				var newStartMoment = moment("2016-05-13T02:00");
 
 				var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, defaultUserTimeZone);
 

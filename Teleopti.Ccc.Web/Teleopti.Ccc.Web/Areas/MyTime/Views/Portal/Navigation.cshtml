@@ -141,7 +141,7 @@
 								return dl.postActivity(newActivity);
 							}
 						});
-					window.WebChat.renderWebChat({ directLine: dlWithChannelData, styleOptions: styleOptions },
+					window.WebChat.renderWebChat({ directLine: dlWithChannelData, styleOptions: styleOptions, userID: "@Model.CurrentLogonAgentId" },
 						botContainer);
 
 					$.when(deferred).done(function () {

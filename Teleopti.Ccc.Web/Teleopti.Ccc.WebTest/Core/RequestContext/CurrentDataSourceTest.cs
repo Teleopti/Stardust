@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var identityProvider = MockRepository.GenerateMock<ICurrentIdentity>();
 			var target = new CurrentDataSource(identityProvider, new DataSourceState());
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var identity = new TeleoptiIdentity("hej", dataSource, null, null, null, null);
+			var identity = new TeleoptiIdentity("hej", dataSource, null, null, null);
 
 			identityProvider.Stub(x => x.Current()).Return(identity);
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var target = new CurrentDataSource(identityProvider, new DataSourceState());
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			dataSource.Stub(x => x.DataSourceName).Return("datasource");
-			var identity = new TeleoptiIdentity("hej", dataSource, null, null, null, null);
+			var identity = new TeleoptiIdentity("hej", dataSource, null, null, null);
 
 			identityProvider.Stub(x => x.Current()).Return(identity);
 
