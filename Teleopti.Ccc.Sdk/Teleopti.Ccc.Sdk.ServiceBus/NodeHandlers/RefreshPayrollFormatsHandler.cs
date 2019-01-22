@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
@@ -54,7 +55,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 				if (string.IsNullOrEmpty(sourcePayrollDirectory))
 					sourcePayrollDirectory = _searchPath.PayrollDeployNewPath;
 				
-				PayrollDllCopy.CopyFiles(sourcePayrollDirectory, _searchPath.Path, parameters.TenantName);
+				if(!InstallationEnvironment.IsAzure)
+					PayrollDllCopy.CopyFiles(sourcePayrollDirectory, _searchPath.Path, parameters.TenantName);
 			}
 
 			_initializePayrollFormats.RefreshOneTenant(parameters.TenantName);
