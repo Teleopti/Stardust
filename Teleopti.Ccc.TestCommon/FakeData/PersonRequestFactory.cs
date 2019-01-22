@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			var shiftTradeSwapDetails = new IShiftTradeSwapDetail[]
 			{
-				new ShiftTradeSwapDetail(Person, personTo, requestDateOnly, requestDateOnly) 
+				new ShiftTradeSwapDetail(Person, personTo, requestDateOnly, requestDateOnly)
 			};
 			Person = personTo;
 			Request = new ShiftTradeRequest(shiftTradeSwapDetails);
@@ -52,30 +52,31 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return request;
 		}
 
-        public IPersonRequest CreatePersonShiftTradeRequest(IPerson personFrom, IPerson personTo, DateOnly requestDateOnly)
-        {
-            var shiftTradeSwapDetails = new IShiftTradeSwapDetail[]
-            {
-                new ShiftTradeSwapDetail(personFrom, personTo, requestDateOnly, requestDateOnly)
-            };
-            Person = personTo;
-            Request = new ShiftTradeRequest(shiftTradeSwapDetails);
+		public IPersonRequest CreatePersonShiftTradeRequest(IPerson personFrom, IPerson personTo,
+			DateOnly requestDateOnly)
+		{
+			var shiftTradeSwapDetails = new IShiftTradeSwapDetail[]
+			{
+				new ShiftTradeSwapDetail(personFrom, personTo, requestDateOnly, requestDateOnly)
+			};
+			Person = personTo;
+			Request = new ShiftTradeRequest(shiftTradeSwapDetails);
 
-            var request = CreateNewPersonRequest();
-            request.Pending();
-            return request;
-        }
+			var request = CreateNewPersonRequest();
+			request.Pending();
+			return request;
+		}
 
-        public IAbsenceRequest CreateAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
+		public IAbsenceRequest CreateAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			Request = new AbsenceRequest(absence, dateTimePeriod);
-			return (IAbsenceRequest)CreatePersonRequest().Request;
+			return (IAbsenceRequest) CreatePersonRequest().Request;
 		}
 
 		public IAbsenceRequest CreateNewAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			Request = new AbsenceRequest(absence, dateTimePeriod);
-			return (IAbsenceRequest)CreateNewPersonRequest().Request;
+			return (IAbsenceRequest) CreateNewPersonRequest().Request;
 		}
 
 		public IPersonRequest CreateApprovedPersonRequest()
@@ -84,6 +85,53 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
 
 			return personRequest;
+		}
+
+		public static IPersonRequest CreateNewPersonRequest(IPerson person, IAbsence absence, DateTimePeriod period,
+			string subject = "New Person Request")
+		{
+			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, period);
+			IPersonRequest personRequest = new PersonRequest(person, absenceRequest1)
+			{
+				Subject = subject
+			};
+			return personRequest;
+		}
+
+		public static IPersonRequest CreatePendingPersonRequest(IPerson person, IAbsence absence, DateTimePeriod period,
+			string subject = "Pending Person Request")
+		{
+			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, period);
+			IPersonRequest personRequest = new PersonRequest(person, absenceRequest1)
+			{
+				Subject = subject
+			};
+			personRequest.Pending();
+			return personRequest;
+		}
+
+		public static IPersonRequest CreateDeniedPersonRequest(IPerson person, IAbsence absence, DateTimePeriod period)
+		{
+			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, period);
+			IPersonRequest personRequest = new PersonRequest(person, absenceRequest1);
+			personRequest.Pending();
+			personRequest.Deny("-", new PersonRequestCheckAuthorization(), person,
+				PersonRequestDenyOption.RequestExpired);
+			return personRequest;
+		}
+
+		public static IPersonRequest CreateWaitlistedPersonRequest(IPerson person, IAbsence absence,
+			DateTimePeriod period, string subject = "WaitList Person Request")
+		{
+			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, period);
+			IPersonRequest personRequest = new PersonRequest(person, absenceRequest1)
+			{
+				Subject = subject
+			};
+			personRequest.Pending();
+			personRequest.Deny("-", new PersonRequestCheckAuthorization(), person, PersonRequestDenyOption.AutoDeny);
+			return personRequest;
+
 		}
 	}
 }

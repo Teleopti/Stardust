@@ -927,6 +927,63 @@ AND ps.Skill in(:list)")
 
 			return cnt> 0;
 		}
+
+		public IList<PersonWaitlistedAbsenceRequest> GetPendingAndWaitlistedAbsenceRequests(DateTimePeriod period,
+			Guid? budgetGroupId,
+			WaitlistProcessOrder waitlistProcessOrder = WaitlistProcessOrder.FirstComeFirstServed)
+		{
+			var sql = @"select pr.Id as PersonRequestId, pr.RequestStatus
+						from dbo.PersonRequest pr 
+						inner join dbo.Request r on r.Parent = pr.Id 
+						inner join dbo.AbsenceRequest ar on r.Id=ar.Request 
+						inner join dbo.Person p on p.id=pr.Person
+						inner join dbo.PersonPeriod pp on pp.Parent = pr.Person 
+						inner join dbo.WorkflowControlSet wcs on wcs.Id = p.WorkflowControlSet
+						{0}
+						where pr.BusinessUnit = :businessUnit
+						and p.IsDeleted = :isDeleted
+						and pr.IsDeleted = :isDeleted 
+						and wcs.IsDeleted = :isDeleted
+						and  r.EndDateTime > :startDate and r.StartDateTime < :endDate
+						and :withInPersonPeriod BETWEEN pp.StartDate AND pp.EndDate
+						and RequestStatus in (0,5)
+						{1}
+						{2}";
+
+			string joinSql, budgetGroupSql, orderSql;
+			if (waitlistProcessOrder == WaitlistProcessOrder.BySeniority)
+			{
+				joinSql = @"inner join (SELECT Parent, FirstStart = min(pp_inner.StartDate) 
+						          FROM dbo.PersonPeriod pp_inner
+						          GROUP BY Parent) as pps
+						     ON (pr.Person = pps.Parent)";
+				orderSql = "order by pps.FirstStart, pr.CreatedOn";
+			}
+			else
+			{
+				joinSql = "";
+				orderSql = "order by pr.CreatedOn";
+			}
+
+			if (budgetGroupId.HasValue)
+			{
+				budgetGroupSql = $"and pp.BudgetGroup= '{budgetGroupId.Value}'";
+			}
+			else
+			{
+				budgetGroupSql = "and pp.BudgetGroup is null";
+			}
+
+			return Session.CreateSQLQuery(string.Format(sql, joinSql, budgetGroupSql, orderSql))
+				.SetDateTime("startDate", period.StartDateTime)
+				.SetDateTime("endDate", period.EndDateTime)
+				.SetDateTime("withInPersonPeriod", period.StartDateTime.Date)
+				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetBoolean("isDeleted", false)
+				.SetResultTransformer(Transformers.AliasToBean<PersonWaitlistedAbsenceRequest>())
+				.List<PersonWaitlistedAbsenceRequest>();
+		}
+
 		private static AbstractCriterion createPersonInCriterion(string propertyName, IReadOnlyCollection<IPerson> people)
 		{
 			if (people.Count <= 1000)

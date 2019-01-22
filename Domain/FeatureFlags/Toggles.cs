@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
 		MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640,
+		MyTimeWeb_NewAbsenceRequestWaitlistPosition_80131,
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,

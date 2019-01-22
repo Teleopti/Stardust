@@ -90,3 +90,4 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		}
 	}
 }
+
