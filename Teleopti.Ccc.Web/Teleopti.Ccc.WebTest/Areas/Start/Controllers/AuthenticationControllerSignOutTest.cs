@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var person = new Person();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			var personPersister = MockRepository.GenerateMock<IPersonPersister>();
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, null), person);
 			var currentTeleoptiPrincipal = new FakeCurrentTeleoptiPrincipal(principal);
 			
 			var target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificWfmCookieProvider, _authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null, loggedOnUser, personPersister, currentTeleoptiPrincipal);

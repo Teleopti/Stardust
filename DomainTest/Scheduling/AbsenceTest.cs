@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			targetPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-10), team));
 			targetPerson.TerminatePerson(DateOnly.Today.AddDays(-5), personAccountUpdater);
 
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", null, null, null, null, null), queryingPerson);
+			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", null, null, null, null), queryingPerson);
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData");
 			var claimSet = new DefaultClaimSet(new[]

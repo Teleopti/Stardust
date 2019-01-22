@@ -111,13 +111,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var currentUser = PersonRepository.Get(personId);
 			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
-			var businessUnit = BusinessUnitRepository.LoadAll().FirstOrDefault();
 			var principal = new TeleoptiPrincipal(
 				new TeleoptiIdentity(
 					"Fake Login",
 					null,
-					businessUnit.Id,
-					businessUnit.Name,
+					BusinessUnitRepository.LoadAll().FirstOrDefault(),
 					null,
 					null
 				),

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Authentication
 
 		private static ICurrentTeleoptiPrincipal fakeCurrentTeleoptiPrincipal(IPerson person)
 		{
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("name", null, null, null, null, null), person);
+			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("name", null, null, null, null), person);
 			return new FakeCurrentTeleoptiPrincipal(principal);
 		}
 	}
