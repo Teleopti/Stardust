@@ -1,12 +1,14 @@
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public abstract class ProjectionMerger : IProjectionMerger
 	{
-		private IVisualLayer[] _mergedCollection;
+		private IEnumerable<IVisualLayer>  _mergedCollection;
 
-		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection)
+		public IEnumerable<IVisualLayer>  MergedCollection(IEnumerable<IVisualLayer>  unmergedCollection)
 		{
 			if (_mergedCollection == null)
 			{
@@ -16,17 +18,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _mergedCollection;
 		}
 
-		protected abstract IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection);
+		protected abstract IEnumerable<IVisualLayer> ModifyCollection(IEnumerable<IVisualLayer> clonedUnmergedCollection);
 		public abstract object Clone();
 
-		private static IVisualLayer[] cloneUnMergedCollection(IVisualLayer[] unmergedCollection)
+		private static IEnumerable<IVisualLayer> cloneUnMergedCollection(IEnumerable<IVisualLayer>  unmergedCollection)
 		{
-			var layers = new IVisualLayer[unmergedCollection.Length];
-			for (int i = 0; i < unmergedCollection.Length; i++)
-			{
-				layers[i] = (IVisualLayer)unmergedCollection[i].EntityClone();
-			}
-			return layers;
+			return unmergedCollection.Select(layer => (IVisualLayer) layer.EntityClone()).ToArray();
 		}
 	}
 }

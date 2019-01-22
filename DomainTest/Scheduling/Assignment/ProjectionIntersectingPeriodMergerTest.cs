@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			             		createLayer(new DateTimePeriod(2001, 1, 1, 2002, 1, 1)),
 			             		createLayer(new DateTimePeriod(2004, 1, 1, 2005, 1, 1))
 			             	}.ToArray();
-			Assert.AreEqual(2, target.MergedCollection(layers).Length);
+			Assert.AreEqual(2, target.MergedCollection(layers).Count());
 		}
 
 		[Test]

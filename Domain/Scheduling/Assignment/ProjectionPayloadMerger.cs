@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	/// </summary>
 	public class ProjectionPayloadMerger : ProjectionMerger
 	{
-		protected override IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection)
+		protected override IEnumerable<IVisualLayer> ModifyCollection(IEnumerable<IVisualLayer> clonedUnmergedCollection)
 		{
 			var result = clonedUnmergedCollection.ToList();
 			for (var i = result.Count - 1; i > 0; i--)
