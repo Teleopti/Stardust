@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService();
-			proj.Add(LayerCollection, visualLayerFactory);
+			LayerCollection.ForEach(l => proj.Add(l, visualLayerFactory));
 			return proj;
 		}
 

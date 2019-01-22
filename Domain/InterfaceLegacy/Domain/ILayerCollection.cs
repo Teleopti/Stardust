@@ -13,7 +13,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <returns></returns>
         DateTimePeriod? Period();
-
-		void AddRange(IEnumerable<ILayer<T>> items);
 	}
 }
