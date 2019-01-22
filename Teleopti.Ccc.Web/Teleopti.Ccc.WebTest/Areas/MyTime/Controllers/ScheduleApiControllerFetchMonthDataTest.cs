@@ -21,7 +21,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Ccc.WebTest.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			_bankHolidayCalendarProvider = bankHolidayCalendarProvider;
 		}
 
-		public MonthScheduleDomainData Get(DateOnly date, bool loadSeatBooking, bool isLoadBankHolidayCalendar)
+		private MonthScheduleDomainData get(DateOnly date, bool loadSeatBooking, bool isLoadBankHolidayCalendar)
 		{
 			var firstDate = DateHelper.GetFirstDateInMonth(date.Date, CultureInfo.CurrentCulture);
 			firstDate = DateHelper.GetFirstDateInWeek(firstDate, CultureInfo.CurrentCulture);
@@ -73,6 +73,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				AsmEnabled = asmPermission && isAsmLicenseAvailable()
 			};
 		}
+
+		public MonthScheduleDomainData GetMonthData(DateOnly date)
+		{
+			return get(date, true, false);
+		}
+
+		public MonthScheduleDomainData GetMobileMonthData(DateOnly date)
+		{
+			return get(date, false, true);
+		}
+
 		private bool isAsmLicenseAvailable()
 		{
 			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
