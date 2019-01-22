@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {
 	public interface IMonthScheduleDomainDataProvider
 	{
-		MonthScheduleDomainData Get(DateOnly date, bool loadSeatBooking);
+		MonthScheduleDomainData Get(DateOnly date, bool loadSeatBooking, bool isLoadBankHolidayCalendar);
 	}
 }

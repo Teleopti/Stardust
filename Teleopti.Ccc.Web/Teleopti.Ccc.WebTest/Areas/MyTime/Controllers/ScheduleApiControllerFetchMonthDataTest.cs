@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -13,16 +14,15 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.SeatPlanning;
-using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Ccc.WebTest.Core.IoC;
-
-
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
-		public ILoggedOnUser User;
+		public FakeLoggedOnUser User;
 		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
@@ -41,11 +41,36 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSeatBookingRepository SeatBookingRepository;
 		public FakeSeatMapRepository SeatMapRepository;
 		public FakePushMessageDialogueRepository PushMessageDialogueRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
+		public FakeBankHolidayCalendarSiteRepository BankHolidayCalendarSiteRepository;
+		public FakeBankHolidayCalendarRepository BankHolidayCalendarRepository;
+		public FakeBankHolidayDateRepository BankHolidayDateRepository;
+		private ISite _site;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeSeatMapRepository>().For<ISeatMapLocationRepository>();
 			isolate.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarSiteRepository>().For<IBankHolidayCalendarSiteRepository>();
+			isolate.UseTestDouble<FakeBankHolidayCalendarRepository>().For<IBankHolidayCalendarRepository>();
+			isolate.UseTestDouble<FakeBankHolidayDateRepository>().For<IBankHolidayDateRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		}
+
+		private void prepareData(DateOnly date)
+		{
+			var logonUser = PersonFactory.CreatePersonWithGuid("logon", "user");
+			User.SetFakeLoggedOnUser(logonUser);
+			PersonRepository.Add(logonUser);
+			_site = new Site("site").WithId();
+			SiteRepository.Add(_site);
+			var team = new Team { Site = _site }.WithDescription(new Description("team")).WithId();
+			TeamRepository.Add(team);
+			logonUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
 		}
 
 		[Test]
@@ -247,7 +272,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[SetCulture("en-US")]
 		public void ShouldNotLoadSeatBookingForMobileMonthView()
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 1));
+			var date = new DateOnly(2014, 12, 1);
+			prepareData(date);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
 			assignment.AddActivity(new Activity("a") {InWorkTime = true, InContractTime = true}, period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
@@ -270,7 +297,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[SetCulture("en-US")]
 		public void ShouldMapOvertimesForMobileMonthView()
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 1));
+			var date = new DateOnly(2014, 12, 01);
+			prepareData(date);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
 			assignment.AddActivity(new Activity("a") {InWorkTime = true, InContractTime = true}, period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
@@ -288,7 +317,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapDayOffNameAndShortNameForMobileMonthView()
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
+			var date = new DateOnly(2014, 12, 01);
+			prepareData(date);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
 			ScheduleData.Add(assignment);
 
@@ -301,6 +332,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapUnReadMessageCountForMobileMonthView()
 		{
+			prepareData(DateOnly.Today);
 			PushMessageDialogueRepository.Add(new PushMessageDialogue(new PushMessage(), User.CurrentUser()));
 
 			var result = Target.FetchMobileMonthData(null);
@@ -312,8 +344,65 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldMapAsmEnabledForMobileMonthView()
 		{
+			prepareData(DateOnly.Today);
 			var result = Target.FetchMobileMonthData(null);
 			result.AsmEnabled.Should().Be.True();
+		}
+
+		private void createBankHolidayCalendarData(DateOnly date, Guid calendarId, string calendarName, string description)
+		{
+			var calendar = new BankHolidayCalendar { Name = calendarName };
+			calendar.SetId(calendarId);
+			BankHolidayCalendarRepository.Add(calendar);
+			var calendarDate = new BankHolidayDate { Calendar = calendar, Date = date, Description = description };
+			BankHolidayDateRepository.Add(calendarDate);
+			BankHolidayCalendarSiteRepository.Add(new BankHolidayCalendarSite { Site = _site, Calendar = calendar });
+		}
+
+		[Test]
+		public void ShouldMapBankHolidayCalendarDataForMobileMonthView()
+		{
+			var date = DateOnly.Today;
+			prepareData(date);
+			var calendarId = Guid.NewGuid();
+			var calendarName = "ChinaBankHoliday";
+			var description = "New Year";
+			createBankHolidayCalendarData(date, calendarId, calendarName, description);
+
+			var monthDaysData = Target.FetchMobileMonthData(date).ScheduleDays.ToList();
+
+			var result = monthDaysData.First(m => m.Date == date.Date);
+			result.BankHolidayCalendarInfo.CalendarId.Should().Be.EqualTo(calendarId);
+			result.BankHolidayCalendarInfo.CalendarName.Should().Be.EqualTo(calendarName);
+			result.BankHolidayCalendarInfo.DateDescription.Should().Be.EqualTo(description);
+		}
+
+		[Test]
+		public void ShouldMapNullForMobileMonthViewIfThereIsNoBankHolidayCalendar()
+		{
+			var date = DateOnly.Today;
+			prepareData(date);
+
+			var monthDaysData = Target.FetchMobileMonthData(date).ScheduleDays.ToList();
+
+			var result = monthDaysData.First(m => m.Date == date.Date);
+			result.BankHolidayCalendarInfo.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldMapBankHolidayCalendarAsNullForMonthView()
+		{
+			var date = DateOnly.Today;
+			prepareData(date);
+			var calendarId = Guid.NewGuid();
+			var calendarName = "ChinaBankHoliday";
+			var description = "New Year";
+			createBankHolidayCalendarData(date, calendarId, calendarName, description);
+
+			var monthDaysData = Target.FetchMonthData(date).ScheduleDays.ToList();
+
+			var result = monthDaysData.First(m => m.Date == date.Date);
+			result.BankHolidayCalendarInfo.Should().Be.Null();
 		}
 	}
 }

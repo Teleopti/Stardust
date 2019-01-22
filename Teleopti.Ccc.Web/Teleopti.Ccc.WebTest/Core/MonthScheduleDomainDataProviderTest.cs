@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		{
 			var today = DateOnly.Today;
 
-			var result = Target.Get(today, true);
+			var result = Target.Get(today, true, false);
 
 			result.CurrentDate.Should().Be.EqualTo(today);
 		}
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var date = new DateOnly(2014, 1, 11);
 			addPersonSchedule(new DateOnly(2013, 12, 30), TimeSpan.FromHours(1), TimeSpan.FromHours(2));
 
-			var result = Target.Get(date, true);
+			var result = Target.Get(date, true, false);
 
 			result.Days.Count().Should().Be(35);
 			result.Days.ElementAt(0).ScheduleDay.DateOnlyAsPeriod.DateOnly.Should().Be(new DateOnly(2013, 12, 30));
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = Target.Get(today, true);
+			var result = Target.Get(today, true, false);
 
 			result.AsmEnabled.Should().Be.True();
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(false));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = Target.Get(today, true);
+			var result = Target.Get(today, true, false);
 
 			result.AsmEnabled.Should().Be.False();
 		}
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = Target.Get(today, true);
+			var result = Target.Get(today, true, false);
 
 			result.AsmEnabled.Should().Be.False();
 		}
