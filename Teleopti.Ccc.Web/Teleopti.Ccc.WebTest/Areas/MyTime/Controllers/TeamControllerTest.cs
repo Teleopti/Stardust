@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			teamRepository.Add(team);
 
 			var person = PersonFactory.CreatePerson().WithId();
-			var identity = new TeleoptiIdentity("test", null, null, null, null);
+			var identity = new TeleoptiIdentity("test", null, null, null, null, null);
 
 			var mockAuthorize = MockRepository.GenerateMock<IAuthorizeAvailableData>();
 			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, team)).IgnoreArguments().Return(true);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var site = new Site(siteName);
 			site.SetId(Guid.NewGuid());
 			site.SetBusinessUnit(businessUnit);
-			var identity = new TeleoptiIdentity("test", null, null, null, null);
+			var identity = new TeleoptiIdentity("test", null, null, null, null, null);
 			var person = PersonFactory.CreatePerson();
 			var team1 = new Team();
 			team1.Site = site;

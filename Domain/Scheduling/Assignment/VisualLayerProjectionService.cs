@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -23,19 +22,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_layerCollectionOriginal = new LayerCollection<IPayload>();
 		}
 
-		public void Add(IEnumerable<ILayer<IActivity>> layers, IVisualLayerFactory visualLayerFactory)
+		public void Add(ILayer<IActivity> layer, IVisualLayerFactory visualLayerFactory)
 		{
-			_layerCollectionOriginal.AddRange(layers.Select(visualLayerFactory.CreateShiftSetupLayer));
+			_layerCollectionOriginal.Add(visualLayerFactory.CreateShiftSetupLayer(layer));
 		}
 		
 		public void Add(IVisualLayer layer)
 		{
 			_layerCollectionOriginal.Add(layer);
-		}
-
-		public void AddRange(IEnumerable<IVisualLayer> layers)
-		{
-			_layerCollectionOriginal.AddRange(layers);
 		}
 
 		public IVisualLayerCollection CreateProjection()

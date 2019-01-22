@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				if (meeting.Person.Equals(ScheduleDay.Person))
 				{
-					projectionService.AddRange(createMeetingProjection(meeting, assignmentProjection));
+					createMeetingProjection(meeting, assignmentProjection).ForEach(projectionService.Add);
 				}
 			}
 		}
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private static VisualLayerProjectionService projectionServiceWithAssignmentLayers(IEnumerable<IVisualLayer> assignmentLayers)
 		{
 			var svc = new VisualLayerProjectionService();
-			svc.AddRange(assignmentLayers);
+			assignmentLayers.ForEach(svc.Add);
 			return svc;
 		}
 	}

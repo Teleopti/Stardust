@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Collection
             _owner = owner;
         }
 
-        public LayerCollection() : base(new List<ILayer<T>>())
+        public LayerCollection() : base(new List<ILayer<T>>(6))
         {
         }
 
@@ -32,20 +31,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		    var itemAsPersistedLayer = item as IAggregateEntity;
 		    itemAsPersistedLayer?.SetParent((IEntity) _owner);
 	    }
-
-		public virtual void AddRange(IEnumerable<ILayer<T>> items)
-		{
-			InParameter.NotNull(nameof(items), items);
-			((List<ILayer<T>>)Items).AddRange(items);
-			var parent = _owner as IEntity;
-			foreach (var item in items)
-			{
-				_owner?.OnAdd(item);
-				var itemAsPersistedLayer = item as IAggregateEntity;
-				itemAsPersistedLayer?.SetParent(parent);
-			}
-		}
-
+		
 		public DateTimePeriod? Period()
         {
 	        return Items.OuterPeriod();

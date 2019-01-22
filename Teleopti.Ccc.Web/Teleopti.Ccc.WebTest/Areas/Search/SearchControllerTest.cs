@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), person);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null, null), person);
 			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)Target.GetResult("Next");
 			result.Content.Count().Should().Be.EqualTo(1);
 		}

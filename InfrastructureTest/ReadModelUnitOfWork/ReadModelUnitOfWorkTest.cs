@@ -125,7 +125,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[Test]
 		[TestTable("TestTable1")]
 		[TestTable("TestTable2")]
-		[Ignore("TEMP")]
 		public void ShouldProduceUnitOfWorkForEachThread()
 		{
 			var thread1 = onAnotherThread(() =>
@@ -149,7 +148,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 		[Test]
 		[TestTable("TestTable")]
-		[Ignore("TEMP")]
 		public void ShouldProduceUnitOfWorkForWebRequestSpanning2Threads()
 		{
 			using(HttpContext.GloballyUse(new FakeHttpContext()))
@@ -167,7 +165,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[Test]
 		[TestTable("TestTable1")]
 		[TestTable("TestTable2")]
-		[Ignore("TEMP")]
 		public void ShouldProduceUnitOfWorkForEachWebRequest()
 		{
 			var thread1 = onAnotherThread(() =>
@@ -213,10 +210,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 				using (var dataSource1 = factory.Create("One", InfraTestConfigReader.ConnectionString, null))
 				using (var dataSource2 = factory.Create("Two", InfraTestConfigReader.AnalyticsConnectionString, null))
 				{
-					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null, null), null));
+					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null, null, null), null));
 					TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
-					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null, null), null));
+					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null, null, null), null));
 					TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
 					TestTable.Values("TestTable", InfraTestConfigReader.ConnectionString).Count().Should().Be(1);

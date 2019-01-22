@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 						 isKeepActivityLengthAffecting(optimizationPreferences, projection) ||
 						 !_correctAlteredBetween.Execute(scheduleDay.DateOnlyAsPeriod.DateOnly,
 										 projection,
-										 VisualLayerCollection.CreateEmptyProjection(scheduleDay.Person),
+										 new VisualLayerCollection(Enumerable.Empty<IVisualLayer>(), new NoProjectionMerger()),
 										 _optimizerActivitiesPreferencesFactory.Create(optimizationPreferences));
 		}
 

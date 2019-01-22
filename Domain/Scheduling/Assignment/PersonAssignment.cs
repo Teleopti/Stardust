@@ -209,19 +209,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var proj = new VisualLayerProjectionService();
 			if (hasProjection())
 			{
-				proj.Add(MainActivities(), visualLayerFactory);
+				MainActivities().ForEach(l => proj.Add(l, visualLayerFactory));
 				var validPeriods = new HashSet<DateTimePeriod>(MainActivities().PeriodBlocks());
 				foreach (var overtimeLayer in OvertimeActivities())
 				{
 					var overTimePeriod = overtimeLayer.Period;
-					proj.Add(new []{overtimeLayer}, new VisualLayerOvertimeFactory());
+					proj.Add(overtimeLayer, new VisualLayerOvertimeFactory());
 					validPeriods.Add(overTimePeriod);
 				}
 				foreach (var personalLayer in PersonalActivities())
 				{
 					if (validPeriods.Any(validPeriod => validPeriod.Intersect(personalLayer.Period) || validPeriod.AdjacentTo(personalLayer.Period)))
 					{
-						proj.Add(new []{personalLayer}, visualLayerFactory);
+						proj.Add(personalLayer, new VisualLayerFactory());
 					}
 				}
 			}

@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				return personRequest;
 			}).ToArray();
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				return new[] { personRequest1, personRequest2 };
 			}).ToArray();
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				return personRequest;
 			}).ToArray();
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				return personRequest;
 			}).ToArray();
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
@@ -511,7 +511,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				return personRequest;
 			}).ToArray();
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
@@ -574,7 +574,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				return personRequest;
 			}).ToArray();
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
@@ -635,7 +635,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				reqs.Add(personRequest);
 			}
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
@@ -698,7 +698,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				reqs.Add(personRequest);
 			}
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
@@ -764,7 +764,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 			reqs.Add(personRequest);
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			Target.UpdateAbsenceRequest(reqs.Select(x => x.Id.GetValueOrDefault()).ToList());
