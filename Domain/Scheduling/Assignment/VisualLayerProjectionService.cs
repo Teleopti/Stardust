@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void Add(IEnumerable<ILayer<IActivity>> layers, IVisualLayerFactory visualLayerFactory)
 		{
-			_layerCollectionOriginal.AddRange(layers.Select(visualLayerFactory.CreateShiftSetupLayer).ToArray());
+			_layerCollectionOriginal.AddRange(layers.Select(visualLayerFactory.CreateShiftSetupLayer));
 		}
 		
 		public void Add(IVisualLayer layer)
