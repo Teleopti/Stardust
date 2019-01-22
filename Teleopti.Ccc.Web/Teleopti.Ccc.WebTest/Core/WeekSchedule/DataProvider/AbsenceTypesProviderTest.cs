@@ -116,8 +116,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 				new TeleoptiIdentity(
 					"Fake Login",
 					null,
-					businessUnit.Id,
-					businessUnit.Name,
+					() => businessUnit?.Id,
+					businessUnit?.Name,
 					null,
 					null
 				),
