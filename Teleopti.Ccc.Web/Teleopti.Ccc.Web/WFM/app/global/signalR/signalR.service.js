@@ -27,6 +27,8 @@
 		}
 
 		function subscribeBatchMessage(options, messageHandler, timeout) {
+			pendingMessage = [];
+			messageHandlingTimeout = null;
 			if ($.connection.hub.state === $.signalR.connectionState.connected) {
 				$.connection.hub.stop();
 			}

@@ -134,6 +134,9 @@
 				vm.scheduleFullyLoaded = true;
 				vm.searchOptions.focusingSearch = false;
 				vm.total = data.Total;
+
+				monitorScheduleChanged();
+
 			}, function () {
 				vm.isLoading = false;
 				vm.searchOptions.focusingSearch = false;
@@ -309,8 +312,6 @@
 				}
 				vm.resetSchedulePage();
 			});
-
-			monitorScheduleChanged();
 		}
 
 		init();
