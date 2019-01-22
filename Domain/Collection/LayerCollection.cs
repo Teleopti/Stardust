@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.Domain.Collection
 		public virtual void AddRange(IEnumerable<ILayer<T>> items)
 		{
 			InParameter.NotNull(nameof(items), items);
-			var enumerable = items as ILayer<T>[] ?? items.ToArray();
-			_owner?.OnAdd(enumerable);
-			((List<ILayer<T>>)Items).AddRange(enumerable);
-			var parent = (IEntity)_owner;
-			foreach (var item in enumerable.OfType<IAggregateEntity>())
+			((List<ILayer<T>>)Items).AddRange(items);
+			var parent = _owner as IEntity;
+			foreach (var item in items)
 			{
-				item.SetParent(parent);
+				_owner?.OnAdd(item);
+				var itemAsPersistedLayer = item as IAggregateEntity;
+				itemAsPersistedLayer?.SetParent(parent);
 			}
 		}
 
