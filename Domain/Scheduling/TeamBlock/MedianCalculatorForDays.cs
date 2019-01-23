@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public Dictionary<DateTime, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>> days, double resolution, DateOnly returnListDateOnly)
 		{
-			var result = new Dictionary<DateTime, ISkillIntervalData>();
 			var temp = new Dictionary<TimeSpan, IList<ISkillIntervalData>>();
 			foreach (var dateOnlyList in days)
 			{
@@ -51,17 +50,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 			}
 
-			foreach (var interval in temp)
-			{
-				var skillIntervalData = _medianCalculatorForSkillInterval.CalculateMedian(interval.Key,
+			return temp.Select(interval => _medianCalculatorForSkillInterval.CalculateMedian(interval.Key,
 					interval.Value,
 					resolution,
-					returnListDateOnly);
-				if (skillIntervalData != null)
-					result.Add(skillIntervalData.Period.StartDateTime, skillIntervalData);
-			}
-
-			return result;
+					returnListDateOnly)).Where(interval => interval != null)
+				.ToDictionary(k => k.Period.StartDateTime, v => v);
 		}
     }
 }

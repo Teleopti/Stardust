@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback, string payrollBasePath)
 		{
 			var tenantName = payrollExportDto.Name;
-			var appDomainArguements = new InterAppDomainArguments
+			var appDomainArguments = new InterAppDomainArguments
 			{
 				PayrollExportDto = JsonConvert.SerializeObject(payrollExportDto),
 				BusinessUnitId = @event.LogOnBusinessUnitId,
@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				PayrollBasePath = payrollBasePath,
 				TenantName = tenantName
 			};
-
+			
 			var appDomain = createAppdomain(tenantName);
-			appDomain.SetData(InterAppDomainParameters.AppDomainArgumentsParameter, appDomainArguements);
+			appDomain.SetData(InterAppDomainParameters.AppDomainArgumentsParameter, appDomainArguments);
 			appDomain.DoCallBack(runPayroll);
 			
 			var payrollResultString = appDomain.GetData(InterAppDomainParameters.PayrollResultParameter) as string;

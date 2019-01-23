@@ -45,5 +45,21 @@ namespace Teleopti.Wfm.Adherence.Test
 			Target.Build(null, null)
 				.ModifySkillGroup.Should().Be.False();
 		}
+		
+		[Test]
+		public void ShouldHaveAdjustAdherencePermission()
+		{
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.AdjustAdherence);
+
+			Target.Build(null, null)
+				.AdjustAdherence.Should().Be.True();
+		}
+		
+		[Test]
+		public void ShouldNotHaveAdjustAdherencePermission()
+		{
+			Target.Build(null, null)
+				.AdjustAdherence.Should().Be.False();
+		}
 	}
 }

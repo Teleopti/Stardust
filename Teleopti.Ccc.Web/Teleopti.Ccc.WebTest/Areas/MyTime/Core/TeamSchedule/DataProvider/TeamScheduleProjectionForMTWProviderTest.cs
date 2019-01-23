@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -34,8 +35,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			principalBefore = System.Threading.Thread.CurrentPrincipal;
 			person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(timeZone);
-			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(
-					 new TeleoptiIdentity("test", null, null, null, null), person);
+			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
+					 new TeleoptiIdentity("test", null, null, null, null, null), new PersonAndBusinessUnit(person, null));
 		}
 
 		[Test]

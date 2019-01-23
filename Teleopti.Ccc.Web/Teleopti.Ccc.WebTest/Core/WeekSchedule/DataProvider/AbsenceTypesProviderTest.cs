@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -111,15 +112,17 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		{
 			var currentUser = PersonRepository.Get(personId);
 			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
-			var principal = new TeleoptiPrincipalForLegacy(
+			var businessUnit = BusinessUnitRepository.LoadAll().FirstOrDefault();
+			var principal = new TeleoptiPrincipal(
 				new TeleoptiIdentity(
 					"Fake Login",
 					null,
-					BusinessUnitRepository.LoadAll().FirstOrDefault(),
+					() => businessUnit?.Id,
+					businessUnit?.Name,
 					null,
 					null
 				),
-				currentUser);
+				new PersonAndBusinessUnit(currentUser, null));
 			ThreadPrincipalContext.SetCurrentPrincipal(principal);
 		}
 	}

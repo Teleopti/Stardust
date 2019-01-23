@@ -161,6 +161,18 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function(ajaxForDate, feedBackData)
 		self.ReadPreference({});
 	};
 
+	self.CalendarId = ko.observable('');
+	self.CalendarName = ko.observable('');
+	self.DateDescription = ko.observable('');
+	self.HasBankHolidayCalendar = ko.computed(function () {
+		return self.CalendarId() != '';
+	});
+	self.ReadBankHolidayCalendar = function (data) {
+		self.CalendarId(data.CalendarId);
+		self.CalendarName(data.CalendarName);
+		self.DateDescription(data.DateDescription);
+	};
+
 	self.ReadPreference = function(data) {
 		if (!data) return;
 

@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -38,11 +39,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 			var currentBusinessUnit = new FakeCurrentBusinessUnit();
 			currentBusinessUnit.FakeBusinessUnit(businessUnit);
 
-			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", new FakeDataSource
+			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", new FakeDataSource
 			{
 				Analytics = new FakeAnalyticsUnitOfWorkFactory {ConnectionString = ""}
 
-			}, null, null, null), person);
+			}, null, null, null, null), new PersonAndBusinessUnit(person, null));
 			var target = new ReportController(reportsNavigationProvider,
 				new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())),
 				new FakeLoggedOnUser(person), currentBusinessUnit, new TrueToggleManager(), analyticsPermissionsUpdater,

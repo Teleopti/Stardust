@@ -1,6 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import en from '@angular/common/locales/en';
+import zh from '@angular/common/locales/zh';
+
+import { async, ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockTranslationModule } from '@wfm/mocks/translation';
@@ -10,6 +13,7 @@ import { UserService } from 'src/app/core/services';
 import { ToggleMenuService } from 'src/app/menu/shared/toggle-menu.service';
 import { BankHolidayCalendarAddComponent } from './bank-holiday-calendar-add.component';
 import { BankCalendarDataService } from '../../shared';
+import { registerLocaleData } from '@angular/common';
 
 describe('BankHolidayCalendarAddComponent', () => {
 	let fixture: ComponentFixture<BankHolidayCalendarAddComponent>;
@@ -17,6 +21,10 @@ describe('BankHolidayCalendarAddComponent', () => {
 	let component: BankHolidayCalendarAddComponent;
 
 	configureTestSuite();
+
+	beforeAll(() => {
+		registerLocaleData(zh);
+	});
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
@@ -46,6 +54,10 @@ describe('BankHolidayCalendarAddComponent', () => {
 		component = fixture.componentInstance;
 		fixture.autoDetectChanges(true);
 	}));
+
+	afterAll(() => {
+		registerLocaleData(en);
+	});
 
 	it('should create component', () => {
 		expect(component).toBeTruthy();
@@ -120,6 +132,35 @@ describe('BankHolidayCalendarAddComponent', () => {
 
 		expect(component.newCalendarYears[0].Dates.length).toBe(1);
 	});
+
+	it('should be able to add a date back after removing it', fakeAsync(() => {
+		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
+		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		fixture.detectChanges();
+
+		const addNewBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
+		const dateRows = addNewBankHolidayCalendarPanel
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item');
+
+		expect(dateRows.length).toBe(1);
+		expect(component.newCalendarYears[0].Dates.length).toBe(1);
+		expect(dateRows[0].innerHTML.indexOf('2015-01-10') > -1).toBeTruthy();
+		expect(dateRows[0].innerHTML.indexOf('BankHoliday') > -1).toBeTruthy();
+
+		component.removeDateOfYear(component.newCalendarYears[0].Dates[0], component.newCalendarYears[0]);
+		fixture.detectChanges();
+
+		expect(component.newCalendarYears[0].Dates.length).toBe(0);
+
+		component.dateClick(component.newCalendarYears[0]);
+		fixture.detectChanges();
+		flush();
+
+		fixture.whenStable().then(() => {
+			expect(component.newCalendarYears[0].Dates.length).toBe(1);
+		});
+	}));
 
 	it('should focus to another year after deleting one year tab', () => {
 		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));

@@ -4,6 +4,11 @@
 	{
 		MobileQRCodeUrl,
 		MaximumSessionTimeInMinutes,
-		NotificationApiKey
+		NotificationApiKey,
+		InsightsAzureTenantId,
+		InsightsPowerBIClientId,
+		InsightsPowerBIGroupId,
+		InsightsPowerBIUsername,
+		InsightsPowerBIPassword
 	}
 }

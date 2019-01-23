@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 		public void FillResult(HintResult hintResult, SchedulePostHintInput input)
 		{
-			var people = input.People;
+			var people = input.People.ToHashSet();
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
 			if (blockPreferenceProvider == null)

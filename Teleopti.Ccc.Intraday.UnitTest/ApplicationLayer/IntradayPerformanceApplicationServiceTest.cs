@@ -199,25 +199,25 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			var scheduledStaffingList = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource {
-					SkillCombination = new [] {skill1.Id.Value},
+					SkillCombination = new HashSet<Guid> {skill1.Id.Value},
 					StartDateTime = skillBaseTime,
 					EndDateTime = skillBaseTime.AddMinutes(minutesPerInterval),
 					Resource = 19
 				},
 				new SkillCombinationResource {
-					SkillCombination =  new [] {skill1.Id.Value},
+					SkillCombination =  new HashSet<Guid> {skill1.Id.Value},
 					StartDateTime = skillBaseTime.AddMinutes(minutesPerInterval),
 					EndDateTime = skillBaseTime.AddMinutes(2*minutesPerInterval),
 					Resource = 18
 				},
 				new SkillCombinationResource {
-					SkillCombination =  new [] {skill2.Id.Value},
+					SkillCombination =  new HashSet<Guid> {skill2.Id.Value},
 					StartDateTime = skillBaseTime.AddMinutes(-minutesPerInterval),
 					EndDateTime = skillBaseTime,
 					Resource = 20
 				},
 				new SkillCombinationResource {
-					SkillCombination =  new [] {skill2.Id.Value},
+					SkillCombination =  new HashSet<Guid> {skill2.Id.Value},
 					StartDateTime = skillBaseTime,
 					EndDateTime = skillBaseTime.AddMinutes(minutesPerInterval),
 					Resource = 21
@@ -896,31 +896,31 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			var scheduledStaffingList = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource {
-					SkillCombination =  new [] {skill.Id.Value},
+					SkillCombination =  new HashSet<Guid> {skill.Id.Value},
 					StartDateTime = userNow.AddMinutes(-(minutesPerInterval*3)),
 					EndDateTime = userNow.AddMinutes(-(minutesPerInterval*2)),
 					Resource = 3
 				},
 				new SkillCombinationResource {
-					SkillCombination =  new [] {skill.Id.Value},
+					SkillCombination =  new HashSet<Guid> {skill.Id.Value},
 					StartDateTime = userNow.AddMinutes(-(minutesPerInterval*2)),
 					EndDateTime = userNow.AddMinutes(-minutesPerInterval),
 					Resource = 8
 				},
 				new SkillCombinationResource {
-					SkillCombination =  new [] {skill.Id.Value},
+					SkillCombination =  new HashSet<Guid> {skill.Id.Value},
 					StartDateTime = userNow.AddMinutes(-minutesPerInterval),
 					EndDateTime = userNow,
 					Resource = 15
 				},
 				new SkillCombinationResource {
-					SkillCombination = new [] {skill.Id.Value},
+					SkillCombination = new HashSet<Guid> {skill.Id.Value},
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
 					Resource = 19
 				},
 				new SkillCombinationResource {
-					SkillCombination =  new [] {skill.Id.Value},
+					SkillCombination =  new HashSet<Guid> {skill.Id.Value},
 					StartDateTime = userNow.AddMinutes(minutesPerInterval),
 					EndDateTime = userNow.AddMinutes(2*minutesPerInterval),
 					Resource = 14
@@ -965,7 +965,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			{
 				scheduledStats.Add(new SkillCombinationResource
 				{
-					SkillCombination = new [] {skillDay.Skill.Id.GetValueOrDefault()},
+					SkillCombination = new HashSet<Guid> { skillDay.Skill.Id.GetValueOrDefault()},
 					StartDateTime = intervalTime,
 					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
 					Resource = 18 * random.Next(100, 110) / 100d

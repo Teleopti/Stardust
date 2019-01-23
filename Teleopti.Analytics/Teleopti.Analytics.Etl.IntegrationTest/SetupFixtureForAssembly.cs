@@ -3,6 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -30,6 +31,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			TestState.BusinessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
 			TestState.BusinessUnit.Name = "BusinessUnit";
 
+			StateHolderProxyHelper.PrincipalFactory = new TeleoptiPrincipalForLegacyFactory();
 			StateHolderProxyHelper.SetupFakeState(DataSource, personThatCreatesTestData, TestState.BusinessUnit);
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 

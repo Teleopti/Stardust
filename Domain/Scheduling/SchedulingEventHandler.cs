@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		private IEnumerable<IPerson> runSchedulingWithoutPreferences(
-			IDictionary<IPerson, IEnumerable<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event,IEnumerable<IPerson> agents,
+			IDictionary<IPerson, HashSet<DateOnly>> alreadyScheduledAgents, SchedulingWasOrdered @event, IEnumerable<IPerson> agents,
 			DateOnlyPeriod selectedPeriod, SchedulingOptions schedulingOptions,
 			ISchedulingCallback schedulingCallback, ISchedulingProgress schedulingProgress,
 			IBlockPreferenceProvider blockPreferenceProvider)
@@ -140,17 +140,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var agentsWithPreferences = _agentsWithPreferences.Execute(schedules, agents, selectedPeriod);
 			var filteredAgents = _agentsWithWhiteSpots.Execute(schedules, agentsWithPreferences, selectedPeriod).ToArray();
 
+			var dayCollection = selectedPeriod.DayCollection();
 			foreach (var agent in filteredAgents)
 			{
 				var range = schedules[agent];
-				foreach (var date in selectedPeriod.DayCollection())
+				foreach (var date in dayCollection)
 				{
 					if(alreadyScheduledAgents.TryGetValue(agent, out var alreadyScheduleDates) && alreadyScheduleDates.Contains(date))
 						continue;
 						
 					var scheduleDay = range.ScheduledDay(date);
-					scheduleDay.PersonAssignment(true).ClearMainActivities();
-					scheduleDay.PersonAssignment().SetDayOff(null);
+					var personAssignment = scheduleDay.PersonAssignment(true);
+					personAssignment.ClearMainActivities();
+					personAssignment.SetDayOff(null);
 
 					//Correct, res calc numbers?!?!?
 					schedules.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
@@ -160,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, schedulingProgress, filteredAgents, selectedPeriod, blockPreferenceProvider);
 			var agentsWithWhiteSpotsAfterScheduling = _agentsWithWhiteSpots.Execute(schedules, filteredAgents, selectedPeriod);
 
-			return filteredAgents.Except(agentsWithWhiteSpotsAfterScheduling).ToList();
+			return filteredAgents.Except(agentsWithWhiteSpotsAfterScheduling).ToHashSet();
 		}
 	}
 }

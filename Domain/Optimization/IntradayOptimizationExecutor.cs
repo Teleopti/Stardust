@@ -82,10 +82,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				var lastJobResult = _planningPeriodRepository.Get(planningPeriodId).GetLastSchedulingJob();
 				var agentIdsWithPreferenceHints = lastJobResult == null
-					? Enumerable.Empty<Guid>()
+					? new HashSet<Guid>()
 					: JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message)
 						.BusinessRulesValidationResults.Where(x => x.ValidationErrors.Any(y => y.ResourceType == ValidationResourceType.Preferences))
-						.Select(x => x.ResourceId);
+						.Select(x => x.ResourceId).ToHashSet();
 				var agentsToOptimizeWithoutPreferences = agents.Where(agent => agentIdsWithPreferenceHints.Contains(agent.Id.Value)).ToList();
 				var agentsToOptimizeWithOriginalPreferenceValues = agents.Except(agentsToOptimizeWithoutPreferences).ToArray();
 				using (allSettingsForPlanningGroup.DontUsePreferences())

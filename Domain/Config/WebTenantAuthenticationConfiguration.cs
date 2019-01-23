@@ -2,6 +2,6 @@
 {
 	public class WebTenantAuthenticationConfiguration
 	{
-		public static string  PersonInfo = "personinfo";
+		public static string  PersonInfoKey = "personinfo";
 	}
 }

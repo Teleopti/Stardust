@@ -22,15 +22,18 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						DataSourceId = 2,
-						UserCode = "usercode"
+						new ExternalLogon
+						{
+							DataSourceId = 2,
+							UserCode = "usercode"
+						}
 					}
 				}
 			});
@@ -47,20 +50,23 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						DataSourceId = 1,
-						UserCode = "usercode1"
-					},
-					new ExternalLogon
-					{
-						DataSourceId = 2,
-						UserCode = "usercode2"
+						new ExternalLogon
+						{
+							DataSourceId = 1,
+							UserCode = "usercode1"
+						},
+						new ExternalLogon
+						{
+							DataSourceId = 2,
+							UserCode = "usercode2"
+						}
 					}
 				}
 			});
@@ -76,25 +82,28 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						UserCode = "usercode1"
+						new ExternalLogon
+						{
+							UserCode = "usercode1"
+						}
 					}
-				}
-			});
-			Target.Handle(new PersonAssociationChangedEvent
-			{
-				PersonId = person,
-				ExternalLogons = new[]
+				},
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						UserCode = "usercode2"
+						new ExternalLogon
+						{
+							UserCode = "usercode2"
+						}
 					}
 				}
 			});
@@ -108,22 +117,25 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						DataSourceId = 2,
-						UserCode = "usercode"
+						new ExternalLogon
+						{
+							DataSourceId = 2,
+							UserCode = "usercode"
+						}
 					}
+				},
+				new PersonAssociationChangedEvent
+				{
+					PersonId = person,
+					ExternalLogons = Enumerable.Empty<ExternalLogon>()
 				}
-			});
-			Target.Handle(new PersonAssociationChangedEvent
-			{
-				PersonId = person,
-				ExternalLogons = Enumerable.Empty<ExternalLogon>()
 			});
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -135,16 +147,22 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 2, UserCode = "usercode"}}
+				new PersonAssociationChangedEvent
+				{
+					PersonId = person,
+					ExternalLogons = new[] {new ExternalLogon {DataSourceId = 2, UserCode = "usercode"}}
+				}
 			});
 			Target.Handle(new TenantMinuteTickEvent());
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = Enumerable.Empty<ExternalLogon>()
+				new PersonAssociationChangedEvent
+				{
+					PersonId = person,
+					ExternalLogons = Enumerable.Empty<ExternalLogon>()
+				}
 			});
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -157,15 +175,18 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						DataSourceId = 2,
-						UserCode = "usercode"
+						new ExternalLogon
+						{
+							DataSourceId = 2,
+							UserCode = "usercode"
+						}
 					}
 				}
 			});
@@ -178,20 +199,23 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						DataSourceId = 1,
-						UserCode = "usercode1"
-					},
-					new ExternalLogon
-					{
-						DataSourceId = 2,
-						UserCode = "usercode2"
+						new ExternalLogon
+						{
+							DataSourceId = 1,
+							UserCode = "usercode1"
+						},
+						new ExternalLogon
+						{
+							DataSourceId = 2,
+							UserCode = "usercode2"
+						}
 					}
 				}
 			});
@@ -204,26 +228,32 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						UserCode = "usercode1"
+						new ExternalLogon
+						{
+							UserCode = "usercode1"
+						}
 					}
 				}
 			});
 			Target.Handle(new TenantMinuteTickEvent());
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						UserCode = "usercode2"
+						new ExternalLogon
+						{
+							UserCode = "usercode2"
+						}
 					}
 				}
 			});
@@ -236,23 +266,29 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					ExternalLogons = new[]
 					{
-						DataSourceId = 2,
-						UserCode = "usercode"
+						new ExternalLogon
+						{
+							DataSourceId = 2,
+							UserCode = "usercode"
+						}
 					}
 				}
 			});
 			Target.Handle(new TenantMinuteTickEvent());
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				ExternalLogons = Enumerable.Empty<ExternalLogon>()
+				new PersonAssociationChangedEvent
+				{
+					PersonId = person,
+					ExternalLogons = Enumerable.Empty<ExternalLogon>()
+				}
 			});
 
 			Persister.Read().Single().UserCode.Should().Be("usercode");
@@ -263,16 +299,19 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new[]
 			{
-				PersonId = person,
-				TimeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo().Id,
-				ExternalLogons = new[]
+				new PersonAssociationChangedEvent
 				{
-					new ExternalLogon
+					PersonId = person,
+					TimeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo().Id,
+					ExternalLogons = new[]
 					{
-						DataSourceId = 2,
-						UserCode = "usercode"
+						new ExternalLogon
+						{
+							DataSourceId = 2,
+							UserCode = "usercode"
+						}
 					}
 				}
 			});

@@ -9,52 +9,51 @@
 	margin-left: 35px;
 }
 
-.non-selectable-list-item:hover{
+.non-selectable-list-item:hover {
 	background-color: inherit !important;
 	cursor: not-allowed !important;
 }
 
 md-autocomplete-parent-scope > .wfm-chip-wrap {
-	margin:0;
+	margin: 0;
 }
 
-.chip-text .mdi-close{
+.chip-text .mdi-close {
 	position: relative;
 	top: 2px;
 }
 
-.filter-boxes{
-	display:block;
-	width:auto;
-	float:left;
+.filter-boxes {
+	display: block;
+	width: auto;
+	float: left;
 	margin: 5px;
-	min-width:20rem;
-	border-top:8px solid;
+	min-width: 20rem;
+	border-top: 8px solid;
 
-	.head-actions{
-		margin-top:0;
+	.head-actions {
+		margin-top: 0;
 		float: none;
 		padding: 5px 10px;
-		background-color: rgba(0,0,0,0.04);
+		background-color: rgba(0, 0, 0, 0.04);
 		height: auto;
 	}
 }
-
 
 /*refactor me: heat map*/
 
 .resourceplanner-box {
 	background: 0 0;
-    /* outline: gray solid 1px; */
-    text-align: center;
+	/* outline: gray solid 1px; */
+	text-align: center;
 	position: relative;
-    cursor: pointer;
-    margin: 2px;
+	cursor: pointer;
+	margin: 2px;
 }
 
-.floater-box{
+.floater-box {
 	visibility: hidden;
-	background:rgba(0,0,0,0.6);
+	background: rgba(0, 0, 0, 0.6);
 	display: inline-block;
 	background-color: $white;
 	top: -1px;
@@ -63,90 +62,88 @@ md-autocomplete-parent-scope > .wfm-chip-wrap {
 	position: absolute;
 	padding: 5px;
 	margin-top: 17px;
-	opacity:0;
+	opacity: 0;
 	transition-delay: 0.3s;
 	transition: 0.2s all ease-in-out;
-	z-index:9000;
+	z-index: 9000;
 }
 
-.resourceplanner-box:hover > .floater-box{
+.resourceplanner-box:hover > .floater-box {
 	visibility: visible;
 	color: $text-color-standard;
 	opacity: 1;
 }
 
-.resourceplanner-box:hover{
-	outline:1px rgba(0,0,0,0.6) dashed ;
+.resourceplanner-box:hover {
+	outline: 1px rgba(0, 0, 0, 0.6) dashed;
 }
 
-.dayNode{
+.dayNode {
 	display: inline-flex;
 }
 
-.understaffed{
-	background: #FC0!important;
+.understaffed {
+	background: #fc0 !important;
 }
 
-.critUnderstaffed{
-	background: $red-600!important;
+.critUnderstaffed {
+	background: $red-600 !important;
 }
 
-.wfm-options{
+.wfm-options {
 	padding-left: 5px;
-	.wfm-option{
+	.wfm-option {
 		padding-right: 5px;
 	}
 }
 
-.closed{
-background-color: #cacaca;
+.closed {
+	background-color: #cacaca;
 }
 
-.overstaffed{
-  background: $blue-100!important;
-
+.overstaffed {
+	background: $blue-100 !important;
 }
 
-.weekend{
+.weekend {
 	background-color: rgba(255, 165, 0, 0.37);
-
 }
 
-.weekstart{
-  background: black!important;
+.weekstart {
+	background: black !important;
 }
 
-.legends{
-padding-bottom: 10px;
+.legends {
+	padding-bottom: 10px;
 
-	ul{
+	ul {
 		padding-left: 0;
 	}
-	li{
+	li {
 		list-style: none;
 		padding-left: 0;
 	}
-	.legend{
-	width: 10px;
-	height: 7px;
-	margin-left:10px;
-	display: inline-block;
+	.legend {
+		width: 10px;
+		height: 7px;
+		margin-left: 10px;
+		display: inline-block;
 	}
 }
 
 @media (max-width: 600px) {
-	.legends{
-		display:block;
+	.legends {
+		display: block;
 	}
 }
 
-.grid-scroll-wrap{
-	width:100%;
-	overflow:auto;
+.grid-scroll-wrap {
+	width: 100%;
+	overflow: auto;
 	min-height: 370px;
 }
 
-.result-container{
+.result-container {
 	width: 100%;
 }
 
@@ -156,30 +153,30 @@ table.overview {
 	margin-top: 25px;
 }
 
-.overview{
-  	border-collapse: separate;
-  	padding: 5px;
-	margin-bottom:35px;
-  	width: 100%;
-  	empty-cells: show;
+.overview {
+	border-collapse: separate;
+	padding: 5px;
+	margin-bottom: 35px;
+	width: 100%;
+	empty-cells: show;
 
-	td{
-	width:10px;
-	 }
-	 th{
-	   visibility: hidden;
-	   width:10px;
-	 }
-	 th:nth-child(2n){
-	   visibility: visible!important;
-	 }
+	td {
+		width: 10px;
+	}
+	th {
+		visibility: hidden;
+		width: 10px;
+	}
+	th:nth-child(2n) {
+		visibility: visible !important;
+	}
 }
 
-.skillname{
-	max-width: 20em!important;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+.skillname {
+	max-width: 20em !important;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .tabledate {
@@ -225,46 +222,47 @@ table.overview {
 
 .result-container .legends {
 	padding: 10px;
-	border-bottom: 1px solid $gray026 ;
+	border-bottom: 1px solid $gray026;
 }
 /*refactor me: heat map*/
 
 .pp-scheduled {
-	background-color: $green-100  !important;
+	background-color: $green-100 !important;
 }
 
 .pp-scheduled-failed-label {
-	color: $orange-400  !important;
+	color: $orange-400 !important;
 }
 
 .pp-label {
 	color: $gray087;
 
 	.pp-scheduled-failed {
-		background-color: $orange-400  !important;
+		background-color: $orange-400 !important;
 	}
 
 	.pp-scheduled-label {
-		color: $green-100  !important;
+		color: $green-100 !important;
 	}
 }
 
 .pp-status {
-  padding: 4px;
-  background-color: $orange-500 ;
-  border-radius: 3px;
-  margin-left: 10px;
+	padding: 4px;
+	background-color: $orange-500;
+	border-radius: 3px;
+	margin-left: 10px;
 }
 
-.pp-modal>.modal-box .modalbg .dialog {
-	md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {
-		color: $blue-500 ;
+.pp-modal > .modal-box .modalbg .dialog {
+	md-tabs.md-default-theme md-ink-bar,
+	md-tabs md-ink-bar {
+		color: $blue-500;
 		background: $blue-500;
 	}
 
 	.pp-calendar-wrapper {
-	  display: table;
-	  margin: 0 auto;
+		display: table;
+		margin: 0 auto;
 	}
 }
 
@@ -283,35 +281,43 @@ table.overview {
 .list-content {
 	padding: 0 !important;
 	background-color: $white;
+	border: 1px solid $gray-300;
+	border-radius: 3px;
+	margin-bottom: 10px;
+
 	.list-header {
 		padding: 5px 10px;
-		background-color: rgba(0, 0, 0, 0.04);
+		background-color: $gray-100;
 		height: 100px;
 		position: relative;
+		border-radius: 3px 3px 0 0;
 	}
-	
+
 	.list-header-content {
 		overflow: hidden;
-	  	min-height: 44px;
+		min-height: 44px;
 	}
 }
 
 .wfm-toolbar {
 	background-color: $white;
+	border: 1px solid $gray-300;
+	border-radius: 3px;
+	margin-bottom: 10px;
 
 	.wfm-toolbar-group-container {
 		margin: 5px 0px;
 		padding: 0px 5px;
-		border-right: 1px solid $gray-500 ;
+		border-right: 1px solid $gray-500;
 		display: inline-block;
 	}
 
 	.plan-filter-container {
-		margin:5px;
+		margin: 5px;
 	}
 
-	.pp-scheduling-setting-open{
-		border-left: 1px solid $gray-500 ;
+	.pp-scheduling-setting-open {
+		border-left: 1px solid $gray-500;
 		margin: 5px;
 		padding: 5px 5px 5px 10px;
 		color: $gray054;
@@ -319,47 +325,47 @@ table.overview {
 }
 
 .wfm-btn-invis-default.active {
-    background-color: $gray-300 !important;
+	background-color: $gray-300 !important;
 }
 
 .icon-botton-primary {
-	color:$blue-500;
+	color: $blue-500;
 }
 
 .pp-tabContent {
-	overflow:hidden;
+	overflow: hidden;
 
 	.pp-overview-dashborad-header {
 		margin: 0 5px;
-		padding:5px;
+		padding: 5px;
 		border-bottom: 1px solid $gray026;
 	}
 }
 
 .pp-tabContent.active {
-	display:block;
-	overflow:hidden;
+	display: block;
+	overflow: hidden;
 }
 
 .pp-validation-color {
 	border-color: $red-600 !important;
 }
 
-.selected{
-  transition-property: width, height;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-out;
-  .chevron{
-	transition: $transition-timing;
-	transform:rotate(90deg);
-  }
+.selected {
+	transition-property: width, height;
+	transition-duration: 0.2s;
+	transition-timing-function: ease-out;
+	.chevron {
+		transition: $transition-timing;
+		transform: rotate(90deg);
+	}
 }
 
 card-panel-header {
 	.pp-validation-progress {
 		position: absolute;
-		top:0;
-		left:0;
+		top: 0;
+		left: 0;
 	}
 
 	.pp-validation-number {
@@ -378,17 +384,17 @@ card-panel-header {
 
 	.pg-setting-info {
 		padding: 5px;
-		background-color: $blue-100 ;
+		background-color: $blue-100;
 		border-radius: 15px;
 	}
 }
 
 card-panel-content {
 	.pg-setting-mini-card-wrapper {
-		background: $white ;
+		background: $white;
 		width: 100%;
 		height: 100%;
-		border: 5px solid $white ;
+		border: 5px solid $white;
 		border-radius: 5px;
 
 		.pg-setting-mini-card-title {
@@ -403,24 +409,22 @@ card-panel-content {
 	}
 }
 
+.setting-group {
+	background: $white;
 
+	.dayoff-rules-setting {
+		margin-bottom: 15px;
 
-.setting-group{
-  background: $white ;
+		.wfm-option {
+			padding-top: 0;
+			padding-bottom: 0;
+		}
 
-  .dayoff-rules-setting{
-	margin-bottom: 15px;
-	
-	.wfm-option{
-	  padding-top: 0;
-	  padding-bottom: 0;
+		.con-flex {
+			margin-top: 0;
+			margin-bottom: 0;
+		}
 	}
-
-	.con-flex {
-	  margin-top: 0;
-	  margin-bottom: 0;
-	}
-  }
 }
 
 .pg-setting-priority-scale {
@@ -429,24 +433,24 @@ card-panel-content {
 	height: 0;
 	position: relative;
 	border-bottom: 20px solid red;
-	border-image: linear-gradient(90deg, rgb(128, 0, 128), rgba(156, 39, 176, 0.05 ));
-	border-right: 70px solid transparent!important;
+	border-image: linear-gradient(90deg, rgb(128, 0, 128), rgba(156, 39, 176, 0.05));
+	border-right: 70px solid transparent !important;
 }
 
-.pg-setting-priority-scale:after{
+.pg-setting-priority-scale:after {
 	position: absolute;
-	content: "";
+	content: '';
 	width: 0;
 	height: 0;
 	border-bottom: 20px solid transparent;
-	border-right: 70px solid  $gray-300 !important;
+	border-right: 70px solid $gray-300 !important;
 }
 
 .pg-setting-priority-label {
 	background-color: $gray-300;
 	padding: 5px;
 	margin: 5px;
-	border: 5px  $gray-300 solid;
+	border: 5px $gray-300 solid;
 	border-radius: 5px;
 }
 
@@ -458,48 +462,57 @@ card-panel-content {
 }
 
 @keyframes pgListCardAnimate {
-	0%, 100% {
-		transform: perspective(1px) scale(1.0);
+	0%,
+	100% {
+		transform: perspective(1px) scale(1);
 	}
-	20%, 60%, 80% {
+	20%,
+	60%,
+	80% {
 		transform: perspective(1px) scale(1.01);
 	}
 }
-
-
 
 .filter-hidden {
 	display: none;
 	// background-color: pink;
 }
 
-.manage-schedule-period-picker wfm-date-range-picker{
-  z-index: 40;
+.manage-schedule-period-picker wfm-date-range-picker {
+	z-index: 40;
 }
 
-.plan-group:hover{
-  cursor: pointer;
-  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+.plan-group:hover {
+	cursor: pointer;
+	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 }
 
-.plan-group-pp:hover{
-  cursor: pointer;
-  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+.plan-group-pp:hover {
+	cursor: pointer;
+	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
 }
 
-.wfm-form{
-  background-color: $white;
+.wfm-form {
+	background-color: $white;
 }
 
-.date-info-wrapper .disabled h1{
-  color: $white !important;
+.date-info-wrapper .disabled h1 {
+	color: $white !important;
 }
 
-.wfm-badge{
+.wfm-badge {
 	position: unset;
 	margin-left: 5px;
 }
 
-planning-group-settings-overview .card-panel-header-wrapper{
+planning-group-settings-overview .card-panel-header-wrapper {
 	border-left: none !important;
+	background: $gray-100;
+}
+
+.scheduling-setting .wfm-table {
+	td,
+	th {
+		border: none;
+	}
 }

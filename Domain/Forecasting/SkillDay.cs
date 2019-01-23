@@ -454,8 +454,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private void recalculateStaff()
         {
-            var forthcomingSkillStaffPeriods = _skillDayCalculator.GetSkillStaffPeriodsForDayCalculation(this).ToList();
-			if (forthcomingSkillStaffPeriods.Count == 0)
+            var forthcomingSkillStaffPeriods = _skillDayCalculator.GetSkillStaffPeriodsForDayCalculation(this).ToArray();
+			if (forthcomingSkillStaffPeriods.Length == 0)
 			{
 				triggerRecalculateEvent();
 				return;

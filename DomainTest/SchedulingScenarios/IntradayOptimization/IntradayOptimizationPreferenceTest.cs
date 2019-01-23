@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(planningPeriod.Id.GetValueOrDefault());
 
-			return PersonAssignmentRepository.Find(planningPeriod.Range, scenario).Count(x => x.Period.StartDateTime.Minute == 15);
+			return PersonAssignmentRepository.Find(new []{agent}, planningPeriod.Range, scenario).Count(x => x.Period.StartDateTime.Minute == 15);
 		}
 
 		[Test]
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(planningPeriod.Id.GetValueOrDefault());
 
-			var numberOfMovedShifts = PersonAssignmentRepository.Find(planningPeriod.Range, scenario).Count(x => x.Period.StartDateTime.Minute == 15);
+			var numberOfMovedShifts = PersonAssignmentRepository.Find(new []{agent}, planningPeriod.Range, scenario).Count(x => x.Period.StartDateTime.Minute == 15);
 			numberOfMovedShifts.Should().Be.EqualTo(1);
 		}
 		

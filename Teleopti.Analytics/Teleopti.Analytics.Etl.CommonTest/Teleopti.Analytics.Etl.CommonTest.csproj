@@ -176,6 +176,7 @@
     <Compile Include="Service\NotReallyEtlServiceHangfireEventPublisherTest.cs" />
     <Compile Include="Service\ResolveTest.cs" />
     <Compile Include="Service\SchedulePriorityTest.cs" />
+    <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="Transformer\AbsenceTransformerTest.cs" />
     <Compile Include="Transformer\ActivityTransformerTest.cs" />
     <Compile Include="Transformer\BusinessUnitTransformerTest.cs" />

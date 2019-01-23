@@ -60,7 +60,7 @@
 								<div
 									class="ant-calendar-date"
 									[class.border]="year.SelectedDates.indexOf(currentDate.getTime()) > -1"
-									(click)="dateClick(currentDate, year)"
+									(click)="dateClick(year)"
 								>
 									{{ currentDate.getDate() }}
 								</div>

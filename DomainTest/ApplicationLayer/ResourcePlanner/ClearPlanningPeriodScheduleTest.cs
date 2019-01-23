@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, new DateOnlyPeriod(startDate, endDate), scenario);
-			assignments.Count.Should().Be.EqualTo(1);
+			assignments.Count().Should().Be.EqualTo(1);
 			assignments.First().ShiftLayers.Count().Should().Be.EqualTo(1);
 			assignments.First().ShiftLayers.First().Should().Be.OfType<PersonalShiftLayer>();
 		}
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, new DateOnlyPeriod(startDate, endDate), scenario);
-			assignments.Count.Should().Be.EqualTo(1);
+			assignments.Count().Should().Be.EqualTo(1);
 			assignments.First().ShiftLayers.Count().Should().Be.EqualTo(1);
 			assignments.First().ShiftLayers.First().Should().Be.OfType<PersonalShiftLayer>();
 			assignments.First().AssignedWithDayOff(dayOffTemplate).Should().Be.False();

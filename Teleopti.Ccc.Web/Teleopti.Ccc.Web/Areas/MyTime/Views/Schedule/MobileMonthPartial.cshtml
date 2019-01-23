@@ -21,10 +21,6 @@ Layout = null;
 		-webkit-overflow-scrolling: touch;
 	}
 
-	.tooltip {
-		margin: 0;
-	}
-
 	.datepicker.dropdown-menu {
 		position: fixed;
 		z-index: 199;
@@ -71,9 +67,14 @@ Layout = null;
 		</div>
 		<div class="mobile-month-box clearfix" data-bind="foreach: weekViewModels">
 			<div class="mobile-month-row-fluid clearfix" data-bind="foreach: dayViewModels, css: {'has-overtime-or-absence': $parent.hasAbsenceOrOvertime, 'has-overtime-and-absence': $parent.hasAbsenceAndOvertime}">
-				<div class="mobile-month-cell">
-					<div class="mobile-month-day" data-bind="click: navigateToDayView, css: {'mobile-month-day-outmonth': isOutsideMonth}">
-						<span data-bind="text: dayOfMonth, style: {background: currentDayColor}" class="date-number"></span>
+				<div class="mobile-month-cell" data-bind="attr:{'date': date}">
+					<div class="mobile-month-day" data-bind="click: navigateToDayView, css: {'mobile-month-day-outmonth': isOutsideMonth, 'mobile-month-current-day': isCurrentDay}">
+						<!--ko ifnot: bankHoliday -->
+						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}" class="day-header-day"></span>
+						<!-- /ko -->
+						<!--ko if: bankHoliday -->
+						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}, tooltip:{title: bankHoliday.dateDescription, html: true, trigger: 'click'}, adjustTooltipPositionOnMobile: true" class="day-header-day bank-holiday-day-shape"></span>
+						<!-- /ko -->
 						<!-- ko if: !hasShift && !isFullDayAbsence && !isDayOff-->
 						<div class="shift"></div>
 						<!-- /ko -->

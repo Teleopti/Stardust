@@ -309,6 +309,7 @@
     <Compile Include="Core\DayScheduleDomainDataProviderDayScheduleTest.cs" />
     <Compile Include="Core\Gamification\GamificationSettingProviderTest.cs" />
     <Compile Include="Core\Gamification\GamificationSettingPersisterTest.cs" />
+    <Compile Include="Core\IoC\WebModuleTest.cs" />
     <Compile Include="Core\MonthScheduleDomainDataProviderTest.cs" />
     <Compile Include="Core\Requests\DataProvider\OvertimeRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
@@ -517,7 +518,6 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\SettingsPermissionViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\MessageBrokerTaskTest.cs" />
     <Compile Include="Core\TimeSpanModelBinderTest.cs" />
-    <Compile Include="Areas\MyTime\Core\Settings\DataProvider\PersonPersisterTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\TeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionForMTWProviderTest.cs" />

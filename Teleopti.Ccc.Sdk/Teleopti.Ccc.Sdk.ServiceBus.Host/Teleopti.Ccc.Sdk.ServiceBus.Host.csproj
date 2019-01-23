@@ -197,7 +197,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\" /y</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll.DeployNew\" /y
+copy "$(ProjectDir)..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.Payroll\bin\$(ConfigurationName)\Teleopti.Ccc.Payroll.dll"  "$(TargetDir)Payroll\" /y</PostBuildEvent>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusHost.config" "$(ProjectDir)App.config"
 if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\..\BuildArtifacts\AppApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"</PreBuildEvent>
   </PropertyGroup>

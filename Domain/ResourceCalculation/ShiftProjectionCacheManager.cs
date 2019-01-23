@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class ShiftProjectionCacheManager : IDisposable
 	{
         private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();
-        private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
+        private readonly RuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
 	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
 		private readonly ShiftProjectionCacheFetcher _shiftProjectionCacheFetcher;
 		private readonly ShiftProjectionCacheFactory _shiftProjectionCacheFactory;
 
-		public ShiftProjectionCacheManager(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
+		public ShiftProjectionCacheManager(RuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
 			IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
 			IWorkShiftFromEditableShift workShiftFromEditableShift,
 			ShiftProjectionCacheFetcher shiftProjectionCacheFetcher,

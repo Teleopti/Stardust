@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.UndoRedo;
+using DateOnly = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.DateOnly;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
@@ -106,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
+			var skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDays);
 			var callback = _currentOptimizationCallback.Current();
 			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, schedulingOptions);
 			var totalTeamBlockInfos = sortedTeamBlockInfos.Count;
@@ -148,7 +150,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var orgAssignmentsForTeamBlock = scheduleDictionary.SchedulesForPeriod(teamBlockInfo.BlockInfo.BlockPeriod, teamBlockInfo.TeamInfo.GroupMembers.ToArray())
 					.Select(x => x.PersonAssignment()).Where(x => x != null).ToArray();
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
-				var resCalcData = new ResourceCalculationData(scheduleDictionary, skillDays, schedulingOptions.ConsiderShortBreaks, false);
+				
+				var resCalcData = new ResourceCalculationData(scheduleDictionary, skillDays, skillStaffPeriodHolder, schedulingOptions.ConsiderShortBreaks, false);
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(orgAssignmentsForTeamBlock, new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays, scheduleDictionary, resCalcData, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
@@ -190,7 +193,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private static UndoRedoContainer createRollbackState(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly datePoint)
 		{
 			var undoResCalcChanges = new UndoRedoContainer();
-			undoResCalcChanges.FillWith(skillDays.FilterOnDates(new[] {datePoint.AddDays(-1), datePoint, datePoint.AddDays(1)}));
+			undoResCalcChanges.FillWith(skillDays.FilterOnDates(new HashSet<DateOnly> {datePoint.AddDays(-1), datePoint, datePoint.AddDays(1)}));
 			return undoResCalcChanges;
 		}
 

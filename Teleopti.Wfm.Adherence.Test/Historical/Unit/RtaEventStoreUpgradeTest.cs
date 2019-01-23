@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 		public FakeRtaEventStore Events;
 		public FakeDatabase Database;
 		public FakeKeyValueStorePersister KeyValues;
-		public IRtaEventStoreUpgrader Target;
+		public RtaEventStoreUpgrader Target;
 
 		[Test]
 		public void ShouldUpdateDate()

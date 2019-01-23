@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldNotSeeTheStudentAvailabilityOn(DateTime date)
 		{
 			var cell = CalendarCells.DateSelector(date);
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0} .{1}:empty", cell, "day-content-text"));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0} .{1}:empty", cell, "day-content-text span"));
 		}
 
 		[Then(@"I should see the student availability with")]

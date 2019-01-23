@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 		public void TenantAuditAspectShouldSavesAuditInformation()
 		{
 			var personInfo = new PersonInfo(new Tenant("_"), Guid.NewGuid());
-			CurrentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfo] = personInfo;
+			CurrentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfoKey] = personInfo;
 
 			using (TenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
 			{

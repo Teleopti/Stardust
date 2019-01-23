@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				new PersonAssignmentRepository(uow).Remove(PersonAssignment);
+				new PersonAssignmentRepository(new ThisUnitOfWork(uow)).Remove(PersonAssignment);
 				uow.PersistAll();
 			}
 

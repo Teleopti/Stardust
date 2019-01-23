@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
@@ -14,51 +14,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 {
 	public class HandleOneAnalyticsAvailabilityDay
 	{
-		private readonly IStudentAvailabilityDayRepository _availabilityDayRepository;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
-		private readonly IPersonRepository _personRepository;
-		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IAnalyticsHourlyAvailabilityRepository _analyticsHourlyAvailabilityRepository;
-		private readonly IScenarioRepository _scenarioRepository;
 		private readonly FetchAnalyticsScenarios _fetchAnalyticsScenarios;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(HandleOneAnalyticsAvailabilityDay));
 
-		public HandleOneAnalyticsAvailabilityDay(IStudentAvailabilityDayRepository availabilityDayRepository,
-			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsDateRepository analyticsDateRepository,
-			IPersonRepository personRepository,
-			IScheduleStorage scheduleStorage, IAnalyticsHourlyAvailabilityRepository analyticsHourlyAvailabilityRepository,
-			IScenarioRepository scenarioRepository, FetchAnalyticsScenarios fetchAnalyticsScenarios)
+		public HandleOneAnalyticsAvailabilityDay(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsDateRepository analyticsDateRepository,
+			IAnalyticsHourlyAvailabilityRepository analyticsHourlyAvailabilityRepository,
+			FetchAnalyticsScenarios fetchAnalyticsScenarios)
 		{
-			_availabilityDayRepository = availabilityDayRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsDateRepository = analyticsDateRepository;
-			_personRepository = personRepository;
-			_scheduleStorage = scheduleStorage;
 			_analyticsHourlyAvailabilityRepository = analyticsHourlyAvailabilityRepository;
-			_scenarioRepository = scenarioRepository;
 			_fetchAnalyticsScenarios = fetchAnalyticsScenarios;
 		}
 
 		[AnalyticsUnitOfWork]
-		public virtual void Execute(Guid personId, DateOnly date)
+		public virtual void Execute(IPerson person, DateOnly date, Func<Dictionary<IScenario, IScheduleDictionary>> schedules,
+			IEnumerable<IStudentAvailabilityDay> availabilityDays)
 		{
-			var person = _personRepository.Get(personId);
-			if (person == null)
-			{
-				logger.Debug($"No person found for personId {personId}");
-				return;
-			}
-			var availabilityDays = _availabilityDayRepository.Find(date, person);
 			var analyticsDate = getAnalyticsDate(date);
-			var scenarios = _fetchAnalyticsScenarios.Execute();
+			var scenarios = _fetchAnalyticsScenarios.Execute().ToDictionary(s => s.ScenarioCode.Value);
 
 			if (!availabilityDays.Any())
 			{
 				foreach (var scenario in scenarios)
 				{
-					logger.Debug($"Deleting availability for Date:{analyticsDate.DateId}, Scenario:{scenario.ScenarioId}");
-					_analyticsHourlyAvailabilityRepository.Delete(personId, analyticsDate.DateId, scenario.ScenarioId);
+					logger.Debug($"Deleting availability for Date:{analyticsDate.DateId}, Scenario:{scenario.Key}");
+					_analyticsHourlyAvailabilityRepository.Delete(person.Id.Value, analyticsDate.DateId, scenario.Value.ScenarioId);
 				}
 				return;
 			}
@@ -66,34 +50,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			var analyticsPersonPeriod = getAnalyticsPersonPeriod(date, person);
 			if (analyticsPersonPeriod == null)
 			{
-				logger.Debug($"No person period found in application for person {personId} on date {date}");
+				logger.Debug($"No person period found in application for person {person.Id.Value} on date {date}");
 				return;
 			}
 
 			// There should be only one record, but may exists multiple (Refer to bug #76978).
 			var availabilityDay = availabilityDays.OrderByDescending(x=>x.UpdatedOn).First();
-			foreach (var scenario in scenarios)
+			foreach (var schedule in schedules())
 			{
-				var scheduledDay = getScheduledDay(availabilityDay, scenario.ScenarioCode.GetValueOrDefault());
-				if (scheduledDay == null)
-				{
-					logger.Debug($"No schedule day found for scenario {scenario.ScenarioCode.GetValueOrDefault()} and day {availabilityDay.RestrictionDate}");
-					continue;
-				}
+				var scheduledDay = schedule.Value[person].ScheduledDay(date);
 				var scheduledTime = scheduledWorkTime(scheduledDay);
 
+				var analyticsScenario = scenarios[schedule.Key.Id.Value];
 				var analyticsHourlyAvailability = new AnalyticsHourlyAvailability
 				{
 					AvailableDays = 1,
 					AvailableTimeMinutes = getMaxAvailable(availabilityDay),
-					BusinessUnitId = scenario.BusinessUnitId,
+					BusinessUnitId = analyticsScenario.BusinessUnitId,
 					DateId = analyticsDate.DateId,
 					PersonId = analyticsPersonPeriod.PersonId,
-					ScenarioId = scenario.ScenarioId,
+					ScenarioId = analyticsScenario.ScenarioId,
 					ScheduledDays = Convert.ToInt32(scheduledTime > 0),
 					ScheduledTimeMinutes = scheduledTime
 				};
-				logger.Debug($"Adding or updating availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{analyticsDate.DateId}, Scenario:{scenario.ScenarioId}");
+				if (logger.IsDebugEnabled)
+				{
+					logger.Debug($"Adding or updating availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{analyticsDate.DateId}, Scenario:{analyticsScenario.ScenarioId}");
+				}
 				_analyticsHourlyAvailabilityRepository.AddOrUpdate(analyticsHourlyAvailability);
 			}
 		}
@@ -116,33 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 				throw new DateMissingInAnalyticsException(date.Date);
 			return analyticsDate;
 		}
-
-		private IScheduleDay getScheduledDay(IStudentAvailabilityDay availabilityDay, Guid scenarioId)
-		{
-			var scenario = _scenarioRepository.Get(scenarioId);
-			if (scenario == null)
-			{
-				logger.Warn($"Scenario {scenarioId} does not exist in Application database, skipping.");
-				return null;
-			}
-			if (!scenario.EnableReporting)
-			{
-				logger.Debug($"Scenario {scenarioId} is not reportable, skipping.");
-				return null;
-			}
-			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false, false)
-			{
-				LoadDaysAfterLeft = true
-			};
-			var day = availabilityDay.RestrictionDate;
-			var period = day.ToDateOnlyPeriod();
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(availabilityDay.Person,
-				scheduleDictionaryLoadOptions,
-				period, scenario);
-			var scheduledDay = scheduleDictionary[availabilityDay.Person].ScheduledDay(day);
-			return scheduledDay;
-		}
-
+		
 		private static int getMaxAvailable(IStudentAvailabilityDay availabilityDay)
 		{
 			var availRestriction = availabilityDay.RestrictionCollection.FirstOrDefault();

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public class DisallowedShiftCategoriesShiftFilter
 	{
-        public IList<ShiftProjectionCache> Filter(IList<IShiftCategory> categories, IList<ShiftProjectionCache> shiftList)
+        public IList<ShiftProjectionCache> Filter(HashSet<IShiftCategory> categories, IList<ShiftProjectionCache> shiftList)
         {
 	        if (shiftList == null) return null;
 		    if (shiftList.Count == 0)

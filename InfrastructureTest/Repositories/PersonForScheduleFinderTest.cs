@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private Guid getBusinessUnitId()
 		{
-			return ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+			return ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnitId.GetValueOrDefault();
 		}
 
 		private void persistReadModel(Guid personId, Guid teamId, Guid siteId, Guid groupId)

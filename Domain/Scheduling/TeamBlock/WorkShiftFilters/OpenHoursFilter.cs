@@ -20,11 +20,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays, IPerson person, DateOnly datePointer)
 		{
 			var agentTimeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-			var personalSkills = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(person.Period(datePointer)).ToList();
-			var skillDays = allSkillDays.Where(x => (x.CurrentDate == datePointer ||
-													x.CurrentDate == datePointer.AddDays(-1) ||
-													x.CurrentDate == datePointer.AddDays(1)) &&
-													personalSkills.Any(y => y.Skill.Equals(x.Skill))).ToList();
+			var personalSkills = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(person.Period(datePointer)).Select(s => s.Skill).ToHashSet();
+			var period = datePointer.ToDateOnlyPeriod().Inflate(1);
+			var skillDays = allSkillDays.Where(x => period.Contains(x.CurrentDate) && personalSkills.Contains(x.Skill)).ToList();
 
 			return shifts.Select(shiftProjectionCache => new
 			{

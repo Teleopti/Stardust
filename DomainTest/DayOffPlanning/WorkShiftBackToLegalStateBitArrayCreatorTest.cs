@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -133,8 +135,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         {
             var person = PersonFactory.CreatePerson();
 
-            var unlockedList = new []
-                                                        {
+            var unlockedList = new HashSet<IScheduleDayPro>
+														{
                                                             _scheduleDayPro1,
                                                             _scheduleDayPro2,
                                                             _scheduleDayPro3,
@@ -212,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             for (int i = 0; i < 21; i++)
             {
-                IScheduleDayPro day = unlockedList[i];
+                IScheduleDayPro day = unlockedList.ElementAt(i);
                 Expect.Call(day.Day).Return(new DateOnly(2010, 4, 5).AddDays(i)).Repeat.Any();
             }
 

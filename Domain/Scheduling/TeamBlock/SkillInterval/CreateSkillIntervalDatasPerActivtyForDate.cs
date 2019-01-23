@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
 	public interface ICreateSkillIntervalDatasPerActivtyForDate
 	{
-		Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, List<ISkill> skills, IEnumerable<ISkillDay> allSkillDays);
+		Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, HashSet<ISkill> skills, IEnumerable<ISkillDay> allSkillDays);
 	}
 
 	public class CreateSkillIntervalDatasPerActivtyForDate : ICreateSkillIntervalDatasPerActivtyForDate
@@ -19,28 +19,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			_calculateAggregatedDataForActivtyAndDate = calculateAggregatedDataForActivtyAndDate;
 		}
 
-		public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, List<ISkill> skills, IEnumerable<ISkillDay> allSkillDays)
+		public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, HashSet<ISkill> skills, IEnumerable<ISkillDay> allSkillDays)
 		{
 			var minimumResolution = int.MaxValue;
 			if (skills.Any())
 				minimumResolution = skills.Min(x => x.DefaultResolution);
 			var skilldaysForDate = allSkillDays.FilterOnDate(dateOnly);
-			var skillDaysForPersonalSkill = new List<ISkillDay>();
-			foreach (var skillDay in skilldaysForDate)
-			{
-				if (skills.Contains(skillDay.Skill))
-					skillDaysForPersonalSkill.Add(skillDay);
-			}
+			var skillDaysForPersonalSkill = skilldaysForDate.Where(s => skills.Contains(s.Skill));
 
-			var skillActivities = new HashSet<IActivity>();
-			foreach (var skillDay in skillDaysForPersonalSkill)
-			{
-				skillActivities.Add(skillDay.Skill.Activity);
-			}
-			foreach (var skill in skills)
-			{
-				skillActivities.Add(skill.Activity);
-			}
+			var skillActivities = skills.Select(s => s.Activity).ToHashSet();
 
 			var skillDaysForPersonalSkillByActivity = skillDaysForPersonalSkill.ToLookup(s => s.Skill.Activity);
 			return skillActivities.ToDictionary(a => a,

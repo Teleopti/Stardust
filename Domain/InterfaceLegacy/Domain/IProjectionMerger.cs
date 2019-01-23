@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -8,6 +9,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface IProjectionMerger : ICloneable
 	{
-		IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection);
+		IEnumerable<IVisualLayer> MergedCollection(IEnumerable<IVisualLayer>  unmergedCollection);
 	}
 }

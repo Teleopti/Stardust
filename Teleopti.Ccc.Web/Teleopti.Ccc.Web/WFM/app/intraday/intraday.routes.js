@@ -16,7 +16,7 @@
 			template: '<div><section ui-view></section></div>'
 		};
 		const intradayArea = {
-			name: 'intraday.intradayArea',
+			name: 'intraday.index',
 			url: '/intraday',
 			parent: intraday,
 			params: {
@@ -33,7 +33,7 @@
 			name: 'intraday.skill-group-manager',
 			parent: intraday,
 			params: {
-				returnState: 'intraday.intradayArea',
+				returnState: 'intraday.index',
 				isNewSkillArea: false,
 				selectedGroup: {}
 			},

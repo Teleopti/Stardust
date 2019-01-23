@@ -22,10 +22,10 @@
 		<ng-template #item let-item>
 			<nz-list-item [nzContent]="reportName" [hidden]="reportNameCriteria && !item.Name.toLowerCase().includes(reportNameCriteria.toLowerCase())" [nzActions]="[editAction,cloneAction,deleteAction]"></nz-list-item>
 			<ng-template #reportName>
-				<a (click)="nav.viewReport(item)"><strong>{{item.Name}}</strong></a>
+				<a (click)="nav.viewReport(item.Id)"><strong>{{item.Name}}</strong></a>
 			</ng-template>
 			<ng-template #editAction>
-				<a (click)="nav.editReport(item)" *ngIf="permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i> Edit</a>
+				<a (click)="nav.editReport(item.Id)" *ngIf="permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i> Edit</a>
 				<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i> Edit</span>
 			</ng-template>
 			<ng-template #cloneAction>
@@ -44,8 +44,9 @@
 		[hidden]="!initialized || permission.CanViewReport" 
 		nzType="error"
 		nzMessage="Error"
-		nzDescription="You have no permission to view Insights report."
-		nzShowIcon>
+		nzDescription="You do not have permission to view Insights report."
+		nzShowIcon
+		nzBanner>
 	</nz-alert>
 
     <nz-modal [(nzVisible)]="modalIsVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">

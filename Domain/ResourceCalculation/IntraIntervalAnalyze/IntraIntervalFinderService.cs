@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 
 		public void Execute(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly dateOnly, IResourceCalculationDataContainer resourceCalculationDataContainer)
 		{
-			foreach (var skillDay in skillDays.FilterOnDates(new[] { dateOnly }))
+			foreach (var skillDay in skillDays.FilterOnDates(new HashSet<DateOnly>{ dateOnly }))
 			{
 				var forcastSource = skillDay.Skill.SkillType.ForecastSource;
 				if (forcastSource != ForecastSource.InboundTelephony && forcastSource != ForecastSource.Chat)

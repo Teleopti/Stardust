@@ -55,7 +55,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.FirstOrDefault().Should().Be.EqualTo(bankHolidayCalendaSite.Site.Id.Value);
 		}
 
+		[Test]
+		public void ShouldFindBankHolidayCalendars()
+		{
+			var bankHolidayCalendaSite = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(bankHolidayCalendaSite);
 
+			var repository = new BankHolidayCalendarSiteRepository(CurrUnitOfWork);
+			var result = repository.FetchBankHolidayCalendars(_site.Id.GetValueOrDefault());
 
+			result.First().Name.Should().Be.EqualTo("calendar");
+		}
 	}
 }

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
 	public class Group
 	{
-		private readonly IList<IPerson> _groupMembers = new List<IPerson>();
+		private readonly List<IPerson> _groupMembers = new List<IPerson>();
 		private string _name;
 
 		/// <summary>
@@ -17,25 +17,24 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 		public Group()
 		{}
 
-		public Group(IList<IPerson> groupMembers, string name)
+		public Group(List<IPerson> groupMembers, string name)
 		{
 			_groupMembers = groupMembers;
 			_name = name;
 		}
 
-		public IEnumerable<IPerson> GroupMembers
-		{
-			get { return _groupMembers; }
-		}
+		public IEnumerable<IPerson> GroupMembers => _groupMembers;
 
-		public string Name
-		{
-			get { return _name; }
-		}
+		public string Name => _name;
 
 		public void AddMember(IPerson person)
 		{
 			_groupMembers.Add(person);
+		}
+
+		public void AddMembers(IEnumerable<IPerson> people)
+		{
+			_groupMembers.AddRange(people);
 		}
 
 		public void SetName(string name)

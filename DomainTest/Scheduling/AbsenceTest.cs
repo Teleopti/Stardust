@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(Color.DarkSalmon.ToArgb(), target.DisplayColor.ToArgb());
             Assert.AreEqual("Sjuk", target.Description.Name);
             Assert.AreEqual("SJ", target.Description.ShortName);
-            Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
+            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
             Assert.AreEqual(37, target.Priority);
             Assert.IsFalse(target.Requestable);
             target.Requestable = true;
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			targetPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-10), team));
 			targetPerson.TerminatePerson(DateOnly.Today.AddDays(-5), personAccountUpdater);
 
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", null, null, null, null), queryingPerson);
+			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", null, null, null, null, null), queryingPerson);
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData");
 			var claimSet = new DefaultClaimSet(new[]

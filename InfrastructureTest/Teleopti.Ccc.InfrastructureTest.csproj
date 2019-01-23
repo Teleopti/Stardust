@@ -229,12 +229,14 @@
     <Compile Include="Foundation\DatabaseVersionTest.cs" />
     <Compile Include="Foundation\DataSourceExceptionTest.cs" />
     <Compile Include="Foundation\InitializeMessageBrokerTest.cs" />
-    <Compile Include="Foundation\TeleoptiPrincipalCacheableFactoryTest.cs" />
+    <Compile Include="Foundation\TeleoptiPrincipalFactoryTest.cs" />
     <Compile Include="Hangfire\HangfireRetryEnqueuingTest.cs" />
+    <Compile Include="Helper\SqlSpy.cs" />
     <Compile Include="Helper\StardustRepositoryTestHelper.cs" />
     <Compile Include="MachineLearning\ShiftCategoryPredictionTest.cs" />
     <Compile Include="MessageBroker\MailboxNotSignedInTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerMailboxPurgerTest.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\ApplicationConfigurationDbProviderTest.cs" />
     <Compile Include="MultiTenancy\Admin\CustomerDbConnectorTest.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspectTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccessTest.cs" />
@@ -259,6 +261,7 @@
     <Compile Include="Repositories\BankHolidayCalendarRepositoryTest.cs" />
     <Compile Include="Repositories\BankHolidayDateRepositoryTest.cs" />
     <Compile Include="Repositories\Bug47522.cs" />
+    <Compile Include="Repositories\CorrectHintsWhenLoadingAssignmentsTest.cs" />
     <Compile Include="Repositories\ExtensiveLogRepositoryTest.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepositoryTest.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepositoryTest.cs" />
@@ -271,6 +274,7 @@
     <Compile Include="Repositories\JobStartTimeTest.cs" />
     <Compile Include="Intraday\PersonProviderForOvertimeTest.cs" />
     <Compile Include="Repositories\PersonRequestRepositoryOvertimeTest.cs" />
+    <Compile Include="Repositories\PersonRequestRepositoryWaitlistedAbsenceRequestTest.cs" />
     <Compile Include="Repositories\PurgeSettingRepositoryTest.cs" />
     <Compile Include="Repositories\RequeueHangfireRepositoryTest.cs" />
     <Compile Include="Repositories\ScenarioRepositoryNoCurrentBusinessUnitTest.cs" />
@@ -485,7 +489,6 @@
     <Compile Include="Foundation\ConstraintViolationExceptionTest.cs" />
     <Compile Include="Foundation\PurgeApplicationDataTest.cs" />
     <Compile Include="Foundation\ForeignKeyExceptionTest.cs" />
-    <Compile Include="Foundation\TeleoptiPrincipalInternalsFactoryTest.cs" />
     <Compile Include="Foundation\GeneralPersistTest.cs">
       <SubType>Code</SubType>
     </Compile>

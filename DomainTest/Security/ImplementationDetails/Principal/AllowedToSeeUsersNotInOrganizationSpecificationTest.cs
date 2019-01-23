@@ -2,6 +2,7 @@
 using System.IdentityModel.Claims;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -47,7 +48,10 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         public void ShouldAllowClaimWithCurrentBusinessUnitToSeePeople()
         {
             var availableData = new AvailableData();
-            availableData.AddAvailableBusinessUnit(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
+			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+			var businessUnit = new BusinessUnit(identity.BusinessUnitName);
+			businessUnit.SetId(identity.BusinessUnitId);
+			availableData.AddAvailableBusinessUnit(businessUnit);
             var claimSet = PrepareClaimSet(AuthorizeExternalAvailableData.Create(availableData));
             target.IsSatisfiedBy(new[] { claimSet }).Should().Be.True();
         }

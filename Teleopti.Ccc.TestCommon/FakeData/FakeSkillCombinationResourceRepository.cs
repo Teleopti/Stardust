@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new ImportSkillCombinationResourceBpo()
 			{
-				SkillIds = new List<Guid>(skillComb.SkillCombination),
+				SkillIds = new HashSet<Guid>(skillComb.SkillCombination),
 				Source = skillComb.Source,
 				StartDateTime = skillComb.StartDateTime,
 				EndDateTime = skillComb.EndDateTime,

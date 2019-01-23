@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
             return workloadDays;
         }
 
-        public void ReloadFilteredWorkloadTemplates(IList<DateOnlyPeriod> selectedDates, IList<DateOnly> filteredDates, IWorkload workload, int templateIndex)
+        public void ReloadFilteredWorkloadTemplates(IList<DateOnlyPeriod> selectedDates, HashSet<DateOnly> filteredDates, IWorkload workload, int templateIndex)
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {

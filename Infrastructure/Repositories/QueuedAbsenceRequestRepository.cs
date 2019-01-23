@@ -66,6 +66,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			sqlQuery.ExecuteUpdate();
 		}
 
+		public void Remove(List<Guid> ids)
+		{
+			var hql = @"DELETE FROM QueuedAbsenceRequest WHERE Id IN(:ids)";
+			var sqlQuery = Session.CreateSQLQuery(hql);
+			sqlQuery.SetParameterList("ids", ids);
+			sqlQuery.ExecuteUpdate();
+		}
+
 		public int UpdateRequestPeriod(Guid id, DateTimePeriod period)
 		{
 			var hql = @"update [dbo].[QueuedAbsenceRequest] set StartDateTime = :startDateTime,
@@ -84,6 +92,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var sqlQuery = Session.CreateSQLQuery(hql);
 			sqlQuery.SetDateTimeNoMs("sent", eventSent);
 			sqlQuery.ExecuteUpdate();
+		}
+
+		public void ResetSent(List<Guid> ids)
+		{
+			var hql = @"update [dbo].[QueuedAbsenceRequest] set [Sent] = null where Id in(:ids)";
+			var sqlQuery = Session.CreateSQLQuery(hql);
+			sqlQuery.SetParameterList("ids", ids);
+			sqlQuery.ExecuteUpdate();
+		}
+
+		public IList<IQueuedAbsenceRequest> FindByIds(IList<Guid> ids)
+		{
+			var returnQueuedAbsenceRequests = new List<IQueuedAbsenceRequest>();
+			foreach (var idBatch in ids.Batch(1000))
+			{
+				returnQueuedAbsenceRequests.AddRange(Session.CreateCriteria(typeof(QueuedAbsenceRequest), "req")
+					.Add(Restrictions.In("Id", idBatch.ToArray()))
+					.List<IQueuedAbsenceRequest>());
+			}
+			return returnQueuedAbsenceRequests;
 		}
 	}
 }

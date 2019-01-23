@@ -73,8 +73,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new[] {daySchedule}, rollbackService, true, true);
 
-			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
-			var skillDaysOnDayAfter = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(1) });
+			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new HashSet<DateOnly> { dateOnly });
+			var skillDaysOnDayAfter = schedulingResultStateHolder.SkillDaysOnDateOnly(new HashSet<DateOnly> { dateOnly.AddDays(1) });
 
 			var allSkillstaffPeriodsOnDay = _skillDayIntraIntervalIssueExtractor.ExtractAll(skillDaysOnDay, skill);
 			var allSkillStaffPeriodsOnDayAfter = _skillDayIntraIntervalIssueExtractor.ExtractAll(skillDaysOnDayAfter, skill);

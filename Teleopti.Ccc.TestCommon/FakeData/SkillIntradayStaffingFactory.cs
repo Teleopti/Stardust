@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 						StartDateTime = intervals[i].StartDateTime,
 						EndDateTime = intervals[i].EndDateTime,
 						Resource = scheduledStaffing,
-						SkillCombination = new[] { skill.Id.Value }
+						SkillCombination = new HashSet<Guid> { skill.Id.Value }
 					}
 				);
 			}

@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Optimization;
@@ -55,12 +56,6 @@ using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306)]
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485)]
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485)]
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_StateQueueFloodPrevention_77710)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
@@ -296,6 +291,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
 				isolate.UseTestDouble<FakeStaffingAuditRepository>().For<IStaffingAuditRepository>();
 				isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
+				isolate.UseTestDouble<FakePayrollExportRepository>().For<IPayrollExportRepository>();
+				isolate.UseTestDouble<FakePayrollResultRepository>().For<IPayrollResultRepository>();
 			}
 
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
@@ -317,6 +314,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
 
+		public IPrincipalFactory PrincipalFactory;
 		public IThreadPrincipalContext PrincipalContext;
 		public FakeDataSourceForTenant DataSourceForTenant;
 		public IDataSourceScope DataSourceScope;
@@ -357,16 +355,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				_loggedOnPerson.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
 				_loggedOnPerson.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
 
-				var principal = new TeleoptiPrincipalForLegacy(
-					new TeleoptiIdentity(
-						"Fake Login",
-						DataSourceForTenant.Tenant(DefaultTenantName),
-						new BusinessUnit("loggedOnBu").WithId(),
-						null,
-						null
-					),
-					_loggedOnPerson);
-
+				var principal = PrincipalFactory.MakePrincipal(
+					_loggedOnPerson,
+					DataSourceForTenant.Tenant(DefaultTenantName),
+					new BusinessUnit("loggedOnBu").WithId(),
+					null
+				);
 				PrincipalContext.SetCurrentPrincipal(principal);
 			}
 			else

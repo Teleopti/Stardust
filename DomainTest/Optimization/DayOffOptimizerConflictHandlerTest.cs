@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_scheduleDay.ReFetch()).Return(_scheduleDay);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions,_effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).Return(true);
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new [] {_scheduleDayPro});
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new HashSet<IScheduleDayPro> { _scheduleDayPro});
             }
 
             using (_mock.Playback())
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_scheduleDay.ReFetch()).Return(_scheduleDay);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).Return(false);
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new [] {_scheduleDayPro});
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new HashSet<IScheduleDayPro> { _scheduleDayPro});
                 Expect.Call(() => _rollbackService.Rollback());
 
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_scheduleDay.ReFetch()).Return(_scheduleDay);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).Return(true);
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new [] { _scheduleDayPro });
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new HashSet<IScheduleDayPro> { _scheduleDayPro });
             }
 
             using (_mock.Playback())
@@ -124,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
 	            Expect.Call(_scheduleDay.ReFetch()).Return(_scheduleDay);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).Return(false);
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new [] { _scheduleDayPro });
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new HashSet<IScheduleDayPro> { _scheduleDayPro });
                 Expect.Call(() => _rollbackService.Rollback());
 
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_scheduleDay.ReFetch()).Return(_scheduleDay);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).Return(false);
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new [] { _scheduleDayPro });
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new HashSet<IScheduleDayPro> { _scheduleDayPro });
                 Expect.Call(() => _rollbackService.Rollback());
 	            _resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false);
 				LastCall.Repeat.Times(2);
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(-1))).Return(_scheduleDayPro);
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(1))).Return(_scheduleDayPro);
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new IScheduleDayPro[] {}).Repeat.Twice();
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(new HashSet<IScheduleDayPro>()).Repeat.Twice();
             }
 
             using (_mock.Playback())

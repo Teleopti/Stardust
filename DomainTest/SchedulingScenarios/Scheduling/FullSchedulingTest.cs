@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario)
-				.Count.Should().Be.EqualTo(7);
+				.Count().Should().Be.EqualTo(7);
 		}
 
 		[Test]

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public double Resource { get; set; }
-		public IEnumerable<Guid> SkillCombination { get; set; }
+		public HashSet<Guid> SkillCombination { get; set; }
 		private DateTimePeriod? _period;
 
 		public TimeSpan GetTimeSpan()

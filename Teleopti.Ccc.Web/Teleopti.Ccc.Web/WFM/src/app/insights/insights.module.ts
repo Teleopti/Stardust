@@ -1,29 +1,30 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DowngradeableComponent } from '@wfm/types';
-import { NgZorroAntdModule, NzModalService } from 'ng-zorro-antd';
-import { IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
-import { ReportService } from './core/report.service';
+import { IStateParamsService, IStateProvider, IUrlRouterProvider } from 'angular-ui-router';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { WorkspaceComponent } from './components';
 import { ReportComponent } from './components/report/report.component';
-import { IStateParamsService } from 'angular-ui-router';
+import { ReportService } from './core/report.service';
 
 @NgModule({
 	declarations: [WorkspaceComponent, ReportComponent],
 	imports: [CommonModule, FormsModule, NgZorroAntdModule, RouterModule],
-	providers: [ReportService, NzModalService,
+	providers: [
+		ReportService,
 		{
 			provide: '$stateParams',
 			useFactory: (i: any): IStateParamsService => i.get('$stateParams'),
 			deps: ['$injector']
-		}],
+		}
+	],
 	exports: [],
 	entryComponents: [WorkspaceComponent, ReportComponent]
 })
 export class InsightsModule {
-	ngDoBootstrap() { }
+	ngDoBootstrap() {}
 }
 
 export const insightsComponents: DowngradeableComponent[] = [
@@ -45,12 +46,12 @@ export function insightsRouterConfig($stateProvider: IStateProvider, $urlRouterP
 			}
 		})
 		.state('insights.report', {
-			url: '/report',
+			url: '/report/:reportId/:action',
 			views: {
 				content: { template: '<ng2-insights-report-page></ng2-insights-report-page>' }
 			},
 			params: {
-				report: undefined,
+				reportId: undefined,
 				action: undefined
 			}
 		});

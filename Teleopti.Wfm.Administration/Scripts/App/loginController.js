@@ -3,7 +3,7 @@
 
 	angular
 		.module('adminApp')
-		.controller('loginController', loginController, ['$scope', '$http'])
+		.controller('loginController', loginController, ['$scope', '$http', '$rootScope'])
 		.directive('menuItem', function () {
 			return {
 				scope: {
@@ -30,7 +30,7 @@
 			};
 		});
 
-	function loginController($scope, $http) {
+	function loginController($scope, $http, $rootScope) {
 		var firstUser = false;
 		var isAzure = false;
 		var vm = this;
@@ -42,7 +42,8 @@
 		vm.loginPassword = "";
 		vm.Message = '';
 		vm.ErrorMessage = '';
-		
+		$rootScope.user = "";
+
 		$scope.state = {
 			selected: 1
 		};
@@ -70,11 +71,28 @@
 			}
 		];
 
+		$http.get("./LoggedInUser")
+			.then(function (response) {
+				if (response.data.Name !== null && response.data.Name !== '') {
+					//vm.user = response.data.Name;
+					$rootScope.user = response.data.Name;
+					vm.id = response.data.Id;
+				} else {
+					vm.user = "";
+					$rootScope.user = "";
+					vm.id = null;
+					window.location = "#/login";
+				}
+			}).catch(function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			});
+
 		$http.get("./HasNoUser")
 			.then(function (response) {
 				firstUser = response.data;
 				if (firstUser) {
 					vm.user = '';
+					$rootScope.user = "";
 					window.location = "firstuser.html";
 				} else {
 					if (!vm.id) {
@@ -101,25 +119,14 @@
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
 
-		$http.get("./LoggedInUser")
-			.then(function (response) {
-				if (response.data.Name !== '') {
-					vm.user = response.data.Name;
-					vm.id = response.data.Id;
-				} else {
-					vm.user = "";
-					vm.id = null;
-					window.location = "#/login";
-				}
-			}).catch(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
+		
 
 		function showError(jqXHR) {
 			vm.ErrorMessage = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}
 
 		function saveUser(data) {
+			$rootScope.user = data.UserName;
 			vm.user = data.UserName;
 			vm.id = data.Id;
 			vm.Message = 'Successful log in...';

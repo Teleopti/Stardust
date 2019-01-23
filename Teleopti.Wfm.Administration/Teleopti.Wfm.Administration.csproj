@@ -420,7 +420,6 @@
     <Compile Include="Core\Stardust\IPingNode.cs" />
     <Compile Include="Core\Stardust\PingNode.cs" />
     <Compile Include="Core\Modules\StardustModule.cs" />
-    <Compile Include="Models\ConfigurationModel.cs" />
     <Compile Include="Controllers\HangfireController.cs" />
     <Compile Include="Models\UpdateConfigurationModel.cs" />
     <Compile Include="Models\UpdateConfigurationResultModel.cs" />

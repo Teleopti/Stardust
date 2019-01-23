@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					StartDateTime = now.AddDays(-1),
 					EndDateTime = now.AddDays(1),
 					Resources = 1,
-					SkillIds = new List<Guid>{skill.Id.Value},
+					SkillIds = new HashSet<Guid>{skill.Id.Value},
 					Source="_"
 				}
 			};

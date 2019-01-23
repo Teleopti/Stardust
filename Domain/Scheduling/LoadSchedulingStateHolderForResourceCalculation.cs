@@ -50,8 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			result.FilterPeople(schedulingResultStateHolder.LoadedAgents);
 			schedulingResultStateHolder.SetSkills(result, skills);
 
+			var loadedAgents = schedulingResultStateHolder.LoadedAgents?.ToHashSet() ?? new HashSet<IPerson>();
 			var personsToAdd = from p in requestedPersons
-							   where !schedulingResultStateHolder.LoadedAgents.Contains(p)
+							   where !loadedAgents.Contains(p)
 			                   select p;
 			personsToAdd.ForEach(p => schedulingResultStateHolder.LoadedAgents.Add(p));
 

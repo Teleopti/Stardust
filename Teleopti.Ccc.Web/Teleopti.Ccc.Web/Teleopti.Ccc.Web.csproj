@@ -408,6 +408,7 @@
     <Compile Include="Areas\MultiTenancy\Controllers\ApplicationConfigurationDbController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceRequestFormExtensions.cs" />
+    <Compile Include="Areas\MyTime\Models\Shared\BankHolidayCalendarViewModel.cs" />
     <Compile Include="Areas\Reports\Controllers\AuditTrailController.cs" />
     <Compile Include="Areas\Rta\Controllers\PermissionsController.cs" />
     <Compile Include="Areas\Search\Controllers\PersonSearchController.cs" />
@@ -570,7 +571,6 @@
     <Compile Include="Areas\SkillGroup\SkillGroupController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />
     <Compile Include="Areas\MultiTenancy\Controllers\PasswordController.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUser.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthentication.cs" />
@@ -1712,6 +1712,8 @@
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.html" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.js" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.spec.js" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\timepicker.template.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.ReviewHistoricalAdherence_74770.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RestrictModifySkillGroups_78568.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
@@ -2727,6 +2729,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyReport.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Month.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthDayViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.UserInfo.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.visible.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js" />
@@ -2763,7 +2767,7 @@
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\header_bg_2x.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.SelectionViewModel.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessageDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessage.List.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessage.js" />

@@ -1,13 +1,16 @@
 (function () {
-	'use strict';
+    'use strict';
 
-	angular
-		.module('wfm.rta')
-		.controller('RtaAdjustAdherenceToNeutralController', RtaAdjustAdherenceToNeutralController);
+    angular
+        .module('wfm.rta')
+        .controller('AdjustAdherenceController', AdjustAdherenceController);
 
-	function RtaAdjustAdherenceToNeutralController() {
-
+    function AdjustAdherenceController() {
         var vm = this;
-        console.log('ctrl');
+        vm.showAdjustToNeutralForm = false;
+        
+        vm.toggleAdjustToNeutralForm = function() {
+            vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;
+        }
     }
 })();

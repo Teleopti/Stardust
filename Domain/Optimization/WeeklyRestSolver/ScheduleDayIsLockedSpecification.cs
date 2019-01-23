@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		{
 			if (scheduleDay == null)
 				return false;
-			IList<DateTimePeriod> unlockeDays = scheduleMatrixPro.UnlockedDays.Select(day => day.DaySchedulePart().Period).ToList();
+			var unlockeDays = scheduleMatrixPro.UnlockedDays.Select(day => day.DaySchedulePart().Period).ToHashSet();
 			if (!unlockeDays.Contains(scheduleDay.Period))
 				return true;
 			return false;

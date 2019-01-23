@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> {skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(period, new HashSet<Guid> {skill.Id.GetValueOrDefault()}, 10)
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
@@ -198,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.Should().Be.Null();
 		}
 
-		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
+		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, HashSet<Guid> skillCombinations, double resource)
 		{
 			return new SkillCombinationResource
 			{

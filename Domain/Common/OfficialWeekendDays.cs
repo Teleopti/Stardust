@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.Domain.Common
 {
     public class OfficialWeekendDays : IOfficialWeekendDays
     {
-    	public IList<int> WeekendDayIndexesRelativeStartDayOfWeek()
-    	{
-    		return new[] {5, 6};
-    	}
+    	public HashSet<int> WeekendDayIndexesRelativeStartDayOfWeek()
+		{
+			return new HashSet<int>(new[] { 5, 6 });
+		}
     }
 }

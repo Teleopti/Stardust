@@ -27,7 +27,7 @@
             <div class="form-input-wrap">
                 <div style="position: relative">
                     <input ng-click="$ctrl.skillGroupPickerOpen = !$ctrl.skillGroupPickerOpen" ng-keypress="$ctrl.skillGroupPickerOpen=true"
-                        ng-model="$ctrl.skillGroupPickerText" type="text" placeholder="{{'SelectSkillGroup'|translate}}">
+                        ng-model="$ctrl.skillGroupPickerText" type="text" placeholder="{{skillGroupCreated ? 'SelectSkillGroup' : 'NoSkillGroupCreated' |translate}}" class="skill-group-picker" ng-disabled="$ctrl.skillGroupCreated()">
                     <i class="mdi mdi-close pointer" ng-click="$ctrl.clearSkillGroupSelection()" ng-show="$ctrl.skillGroupPickerText" style="position: absolute; top: 3px; right: 10px;">
                         <md-tooltip>{{'Clear'|translate}}</md-tooltip>
                     </i>

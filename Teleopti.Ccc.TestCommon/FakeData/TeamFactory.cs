@@ -64,5 +64,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return CreateSimpleTeam().WithId(teamId);
 		}
+
+		public static Team CreateTeamWithSite(string teamName, Site site)
+		{
+			var team = CreateSimpleTeam(teamName);
+			team.Site = site;
+			return team;
+		}
 	}
 }

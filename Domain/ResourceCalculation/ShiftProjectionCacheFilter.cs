@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
     	public IList<ShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, 
-            IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IList<IShiftCategory> notAllowedCategories)
+            IList<ShiftProjectionCache> shiftList, IEffectiveRestriction restriction, HashSet<IShiftCategory> notAllowedCategories)
         {
             if (restriction == null)
             {
@@ -223,7 +222,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return ret;
         }
 
-        public IList<ShiftProjectionCache> FilterOnNotAllowedShiftCategories(IList<IShiftCategory> categories, IList<ShiftProjectionCache> shiftList)
+        public IList<ShiftProjectionCache> FilterOnNotAllowedShiftCategories(HashSet<IShiftCategory> categories, IList<ShiftProjectionCache> shiftList)
         {
             if (categories.Count == 0)
                 return shiftList;

@@ -14,6 +14,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.AdjustAdherenceToNeutral;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
@@ -44,21 +45,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateQueueWorker>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
 
-			if (_config.IsToggleEnabled(Toggles.RTA_StateQueueFloodPrevention_77710))
+			if (_config.Args().BehaviorTestServer)
 			{
-				if (_config.Args().BehaviorTestServer)
-				{
-					builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
-				}
-				else
-				{
-					builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
-					builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
-				}
+				builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
+				builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
+				builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			}
 
 			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
@@ -120,6 +114,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriodCommandHandler>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriod>().SingleInstance();
+			builder.RegisterType<AdjustAdherenceToNeutral>().SingleInstance();
 			builder.RegisterType<BelongsToDateMapper>().SingleInstance();
 
 			builder.RegisterType<RtaEventStore>()
@@ -129,11 +124,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRtaEventStoreUpgradeWriter>()
 				.SingleInstance();
 			builder.RegisterType<RtaEventStoreTypeIdMapper>().SingleInstance();
-			if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485))
-			{
-				builder.RegisterType<RtaEventStoreUpgrader>().As<IRtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
-				builder.RegisterType<RtaEventStoreUpgraderProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
-			}
+
+			builder.RegisterType<RtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
+			builder.RegisterType<RtaEventStoreUpgraderProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 
 			if (_config.IsToggleEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
@@ -149,26 +142,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
-			if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))
-				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306))
-				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveLastBefore>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else if (_config.IsToggleEnabled(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770))
-				builder.RegisterType<AgentAdherenceDayLoaderHistoricalOverview>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else
-				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			builder.RegisterType<AgentAdherenceDayLoader>().SingleInstance();
+			builder.RegisterType<ScheduleLoader>().SingleInstance();
 
-			if (_config.IsToggleEnabled(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770))
-				builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
-			else
-				builder.RegisterType<ScheduleLoader>().As<IScheduleLoader>().SingleInstance();
-			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
-
-			if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306))
-				builder.RegisterType<AdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
-			else
-				builder.RegisterType<NoAdherenceDayStartEventPublisher>().As<IAdherenceDayStartEventPublisher>().SingleInstance();
-
+			builder.RegisterType<AdherenceDayStartEventPublisher>().SingleInstance();
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
 			builder.RegisterType<StateEventPublisher>().SingleInstance();

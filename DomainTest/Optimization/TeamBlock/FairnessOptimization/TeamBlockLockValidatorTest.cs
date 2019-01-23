@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
 				Expect.Call(_teamInfo1.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(new List<IScheduleMatrixPro> {_scheduleMatrixPro1});
 				Expect.Call(_teamInfo2.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro2 });
-				Expect.Call(_scheduleMatrixPro1.UnlockedDays).Return(new [] {_scheduleDayPro1});
-				Expect.Call(_scheduleMatrixPro2.UnlockedDays).Return(new [] {_scheduleDayPro2});
+				Expect.Call(_scheduleMatrixPro1.UnlockedDays).Return(new HashSet<IScheduleDayPro> { _scheduleDayPro1});
+				Expect.Call(_scheduleMatrixPro2.UnlockedDays).Return(new HashSet<IScheduleDayPro> { _scheduleDayPro2});
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);
 				Expect.Call(_scheduleDayPro2.Day).Return(_dateOnly);
 			}
@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
 				Expect.Call(_teamInfo1.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro1 });
 				Expect.Call(_teamInfo2.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro2 });
-				Expect.Call(_scheduleMatrixPro1.UnlockedDays).Return(new [] { _scheduleDayPro1 });
-				Expect.Call(_scheduleMatrixPro2.UnlockedDays).Return(new IScheduleDayPro[0]);
+				Expect.Call(_scheduleMatrixPro1.UnlockedDays).Return(new HashSet<IScheduleDayPro> { _scheduleDayPro1 });
+				Expect.Call(_scheduleMatrixPro2.UnlockedDays).Return(new HashSet<IScheduleDayPro>());
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly);
 			}
 

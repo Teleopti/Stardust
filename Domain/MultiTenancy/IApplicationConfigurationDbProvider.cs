@@ -3,7 +3,7 @@
 	public interface IApplicationConfigurationDbProvider
 	{
 		ApplicationConfigurationDb GetConfiguration();
-		string TryGetServerValue(ServerConfigurationKey key, string defaultValue = "");
-		string TryGetTenantValue(TenantApplicationConfigKey key, string defaultValue = "");
+		string GetServerValue(ServerConfigurationKey key);
+		string GetTenantValue(TenantApplicationConfigKey key);
 	}
 }

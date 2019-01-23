@@ -21,9 +21,7 @@
 		$locale,
 		requestsDefinitions,
 		requestCommandParamsHolder,
-		requestFiltersMgr,
-		$timeout,
-		$document
+		requestFiltersMgr
 	) {
 		var svc = this;
 
@@ -190,21 +188,6 @@
 				});
 			}
 			return selectedRequestStatuses;
-		};
-
-		svc.updateTabInkBarStyles = function() {
-			$timeout(function() {
-				var canvas = $document.find('md-tabs-canvas');
-				for (var i = 0; i < canvas.length; i++) {
-					if (canvas[i].innerText) {
-						angular
-							.element(canvas[i])
-							.scope()
-							.$mdTabsCtrl.updateInkBarStyles();
-						break;
-					}
-				}
-			}, 50);
 		};
 
 		function setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, isShiftTradeView) {

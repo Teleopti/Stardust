@@ -5,7 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -173,7 +172,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 					StartDateTime = intervalTime,
 					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
 					Resource = staffing,
-					SkillCombination = new[] { skill.Id.GetValueOrDefault() }
+					SkillCombination = new HashSet<Guid> { skill.Id.GetValueOrDefault() }
 				});
 			}
 			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);

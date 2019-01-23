@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.TerminatePerson(new DateOnly(2001,1,31), new PersonAccountUpdaterDummy(), new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
 
 			PersonAssignmentRepository.Find(Enumerable.Repeat(person, 1), new DateOnlyPeriod(2001, 1, 1, 2001, 2, 28), scenario)
-				.Count.Should()
+				.Count().Should()
 				.Be.EqualTo(1);
 		}
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.TerminatePerson(new DateOnly(2001, 1, 31), new PersonAccountUpdaterDummy(), new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
 
 			PersonAssignmentRepository.Find(Enumerable.Repeat(person, 1), new DateOnlyPeriod(2001, 1, 1, 2001, 2, 28), scenario)
-				.Count.Should()
+				.Count().Should()
 				.Be.EqualTo(1);
 		}
 	}

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: robink
         /// Created date: 2008-05-14
         /// </remarks>
-        IList<DateOnly> GetDatesByPeriod(DateOnlyPeriod period);
+        HashSet<DateOnly> GetDatesByPeriod(DateOnlyPeriod period);
 
         /// <summary>
         /// Adds the date.

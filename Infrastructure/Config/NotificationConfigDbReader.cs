@@ -32,10 +32,11 @@ namespace Teleopti.Ccc.Infrastructure.Config
 			addConfigEntry(ServerConfigurationKey.NotificationExtProviderErrorCode);
 			addConfigEntry(ServerConfigurationKey.NotificationExtProviderSuccessCode);
 			addConfigEntry(ServerConfigurationKey.NotificationExtProviderSkipSearch);
+			addConfigEntry(ServerConfigurationKey.NotificationSmtpEnabled);
 			addConfigEntry(ServerConfigurationKey.NotificationSmtpHost);
 			addConfigEntry(ServerConfigurationKey.NotificationSmtpPort);
 			addConfigEntry(ServerConfigurationKey.NotificationSmtpUseSsl);
-			addConfigEntry(ServerConfigurationKey.NotificationSmtpUser);
+			addConfigEntry(ServerConfigurationKey.NotificationSmtpUsername);
 			addConfigEntry(ServerConfigurationKey.NotificationSmtpPassword);
 			addConfigEntry(ServerConfigurationKey.NotificationSmtpUseRelay);
 			addConfigEntry(ServerConfigurationKey.NotificationContentType);
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Config
 
 		private void addConfigEntry(ServerConfigurationKey key)
 		{
-			var dbValue = _serverRepo.Get(key.ToString()) ?? string.Empty;
+			var dbValue = _serverRepo.Get(key) ?? string.Empty;
 			_config.Add(key, dbValue);
 		}
 
@@ -100,12 +101,14 @@ namespace Teleopti.Ccc.Infrastructure.Config
 		public bool SkipSearch => bool.TryParse(readConfig(ServerConfigurationKey.NotificationExtProviderSkipSearch), out var value) && value;
 
 		public string SmtpHost => readConfig(ServerConfigurationKey.NotificationSmtpHost);
+		
+		public bool SmtpEnabled => bool.TryParse(readConfig(ServerConfigurationKey.NotificationSmtpEnabled), out var value) && value;
 
 		public int SmtpPort => int.TryParse(readConfig(ServerConfigurationKey.NotificationSmtpPort), out var value) ? value : -1;
 
 		public bool SmtpUseSsl => bool.TryParse(readConfig(ServerConfigurationKey.NotificationSmtpUseSsl), out var value) && value;
 
-		public string SmtpUser => readConfig(ServerConfigurationKey.NotificationSmtpUser);
+		public string SmtpUser => readConfig(ServerConfigurationKey.NotificationSmtpUsername);
 
 		public string SmtpPassword => readConfig(ServerConfigurationKey.NotificationSmtpPassword);
 

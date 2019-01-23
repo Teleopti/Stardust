@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		public void ShouldCreateOneListPerSkillIfDifferentActivity()
 		{
 			var date = DateOnly.Today;
-			var skillList = new List<ISkill> {_skill1, _skill2};
+			var skillList = new HashSet<ISkill> {_skill1, _skill2};
 			var skillDayList = new List<ISkillDay> {_skillDayForSkill1, _skillDayForSkill2};
 			var skillIntervalData1 =
 				new SkillIntervalData(

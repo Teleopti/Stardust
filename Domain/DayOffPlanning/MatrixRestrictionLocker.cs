@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             _extractor = extractor;
         }
 
-        public IList<DateOnly> Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
+        public IEnumerable<DateOnly> Execute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             var ret = new List<DateOnly>();
             foreach (IScheduleDayPro scheduleDayPro in matrix.UnlockedDays)

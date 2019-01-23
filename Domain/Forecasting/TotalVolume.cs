@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _outliersWithStatistics = new Dictionary<IOutlier, TaskOwnerPeriod>();
             foreach (IOutlier outlier in outliers)
             {
-                IList<DateOnly> dates = outlier.GetDatesByPeriod(wholePeriod);
+                var dates = outlier.GetDatesByPeriod(wholePeriod);
                 TaskOwnerPeriod taskOwnerPeriodHistory = new TaskOwnerPeriod(wholePeriod.StartDate,
                                                                              _historicalDepth.TaskOwnerDayCollection.
                                                                                  Where(
@@ -265,9 +265,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public void RemoveOutlier(IOutlier outlier)
         {
-            IEnumerable<DateOnly> dates = (from od in _outliersByDate
+            var dates = (from od in _outliersByDate
                                           where od.Value.Equals(outlier)
-                                          select od.Key).ToList();
+                                          select od.Key).ToHashSet();
 
             if (_outliersWithStatistics.ContainsKey(outlier))
             {
@@ -297,9 +297,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     _historicalDepth.TaskOwnerDayCollection.Min(t => t.CurrentDate),
                     _workloadDayPeriod.TaskOwnerDays.Max(w => w.CurrentDate));
 
-            IList<DateOnly> dates = (from o in _outliersByDate
+            var dates = (from o in _outliersByDate
                                           where o.Value.Equals(outlier)
-                                          select o.Key).ToList();
+                                          select o.Key).ToHashSet();
 
             IEnumerable<TotalDayItem> totalDayItems =
                 _totalDayItemCollection.Where(t => dates.Contains(t.CurrentDate));
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        private void ReplaceOutliersByDate(IOutlier outlier, DateOnlyPeriod wholePeriod, IEnumerable<DateOnly> dates)
+        private void ReplaceOutliersByDate(IOutlier outlier, DateOnlyPeriod wholePeriod, HashSet<DateOnly> dates)
         {
             _outliersByDate = _outliersByDate.Except(
                 _outliersByDate.Where(o => dates.Contains(o.Key))).ToDictionary(o => o.Key, v => v.Value);

@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldHandleSpecialCaseWhenMaxFiveWorkdaysAndBadInitialDaysOff()
 		{
-			LockableBitArray ret = new LockableBitArray(21, true, true, null);
+			LockableBitArray ret = new LockableBitArray(21, true, true);
 			ret.SetAll(false);
 			ret.Set(1, true);
 			ret.Set(12, true);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
 		private static LockableBitArray array1()
 		{
-			LockableBitArray ret = new LockableBitArray(28, true, true, null);
+			LockableBitArray ret = new LockableBitArray(28, true, true);
 			ret.SetAll(false);
 			ret.Set(0, true);
 			ret.Set(1, true);

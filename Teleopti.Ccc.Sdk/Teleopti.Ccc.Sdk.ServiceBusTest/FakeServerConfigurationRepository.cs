@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework.Interfaces;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
@@ -23,11 +20,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			throw new NotImplementedException();
 		}
 
-		public string Get(string key)
+		public string Get(ServerConfigurationKey key)
 		{
-			if (!Configuration.ContainsKey(key))
+			if (!Configuration.ContainsKey(key.ToString()))
 				return "";
-			return Configuration[key];
+			return Configuration[key.ToString()];
 		}
 	}
 }

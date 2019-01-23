@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IFindPersonInfoByCredentials _findPersonByCredentials;
 		private readonly ISessionSpecificWfmCookieProvider _sessionWfmCookieProvider;
-		public static string PersonInfoKey = WebTenantAuthenticationConfiguration.PersonInfo;
 
 		public WebTenantAuthentication(ICurrentHttpContext currentHttpContext, IFindPersonInfoByCredentials findPersonByCredentials, ISessionSpecificWfmCookieProvider sessionWfmCookieProvider)
 		{
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				tenantUser = _findPersonByCredentials.Find(Guid.Parse(personId), tenantpassword);
 			}
 
-			httpContext.Items[PersonInfoKey] = tenantUser;
+			httpContext.Items[WebTenantAuthenticationConfiguration.PersonInfoKey] = tenantUser;
 			return tenantUser != null;
 		}
 	}

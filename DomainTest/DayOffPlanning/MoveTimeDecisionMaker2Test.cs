@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDays)
                 .Return(fullWeekPeriodDictionary.Values.ToArray()).Repeat.Any();
             Expect.Call(_scheduleMatrix.UnlockedDays)
-                .Return(unlockedDaysDictionary.Values.ToArray()).Repeat.Any();
+                .Return(unlockedDaysDictionary.Values.ToHashSet()).Repeat.Any();
             addWorkShiftExpectationsToScheduleDay(_schedulePartShortMainShift, new TimeSpan());
 
         }
@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Expect.Call(_scheduleMatrix.FullWeeksPeriodDays)
                 .Return(fullWeekPeriodDictionary.Values.ToArray()).Repeat.Any();
             Expect.Call(_scheduleMatrix.UnlockedDays)
-                .Return(unlockedDaysDictionary.Values.ToArray()).Repeat.Any();
+                .Return(unlockedDaysDictionary.Values.ToHashSet()).Repeat.Any();
 
             Expect.Call(_schedulePartDayOff.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
 
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
         private static ILockableBitArray createBitArray()
         {
-            ILockableBitArray bitArray = new LockableBitArray(7, false, false, null);
+            ILockableBitArray bitArray = new LockableBitArray(7, false, false);
             bitArray.PeriodArea = new MinMax<int>(1, 4);
             bitArray.Lock(0, true);
             bitArray.Lock(5, true);

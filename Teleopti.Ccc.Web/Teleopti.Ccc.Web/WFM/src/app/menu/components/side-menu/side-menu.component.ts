@@ -30,7 +30,7 @@ const GROUPS: AreaGroup[] = [
 		{ InternalName: 'teams', icon: 'mdi mdi-account-multiple' },
 		{ InternalName: 'requests', icon: 'mdi mdi-numeric-9-plus-box-multiple-outline' },
 		{ InternalName: 'staffingModule', icon: 'mdi mdi-account-switch' },
-		{ InternalName: 'intraday', icon: 'mdi mdi-compass-outline', CustomStateName: 'intraday.intradayArea' },
+		{ InternalName: 'intraday', icon: 'mdi mdi-compass-outline', CustomStateName: 'intraday.index' },
 		{ InternalName: 'rta', icon: 'mdi mdi-alarm' }
 	],
 	[{ InternalName: 'seatPlan', icon: 'mdi mdi-tab-unselected' }, { InternalName: 'seatMap', icon: 'mdi mdi-tab' }],
@@ -95,8 +95,9 @@ export class SideMenuComponent implements OnInit, OnDestroy {
 		return group.filter(permissionToViewAreFilter);
 	}
 
-	go(event: Event, area: AreaWithConfig) {
+	go(event: MouseEvent, area: AreaWithConfig) {
 		if (area.inNewTab) return;
+		if (event.ctrlKey) return; // Allow open in new page when ctrl click
 		event.preventDefault();
 		const stateName = area.CustomStateName ? area.CustomStateName : area.InternalName;
 		this.mediaQueryService.isMobileSize$.pipe(first()).subscribe(isMobileView => {

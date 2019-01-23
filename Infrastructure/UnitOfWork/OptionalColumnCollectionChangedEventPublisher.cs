@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			// we are signed in with a transient BU and cant publish events
-			var bu = _businessUnit.Current();
-			if (bu == null || !bu.Id.HasValue)
+			var businessUnitId = _businessUnit.CurrentId();
+			if (!businessUnitId.HasValue)
 				return;
 
 			var affectedInterfaces = from r in modifiedRoots
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			foreach (var optionalColumnList in affectedInterfaces.Batch(25))
 			{
 				var idsAsString = optionalColumnList.Where(p => p.Id.HasValue).Select(p => p.Id.GetValueOrDefault()).ToArray();
-				var message = new OptionalColumnCollectionChangedEvent {LogOnBusinessUnitId = bu.Id.Value};
+				var message = new OptionalColumnCollectionChangedEvent {LogOnBusinessUnitId = businessUnitId.Value};
 				message.SetOptionalColumnIdCollection(idsAsString);
 				_eventsPublisher.Publish(message);
 			}

@@ -4,9 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	/// <summary>
-	/// Interface for Repository factory
-	/// </summary>
+	//LEGACY! DO NOT USE! Inject the repositories you need explicitly instead!
 	public interface IRepositoryFactory
 	{
 		/// <summary>

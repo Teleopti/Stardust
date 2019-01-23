@@ -19,7 +19,6 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 	[TestFixture]
 	[DatabaseTest]
 	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770)]
-	[Toggle(Toggles.RTA_ReviewHistoricalAdherence_Domain_74770)]
 	public class RtaEventStoreSynchronizerTest : IIsolateSystem
 	{
 		public MutableNow Now;

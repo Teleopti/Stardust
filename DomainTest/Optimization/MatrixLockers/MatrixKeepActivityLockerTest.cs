@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 		private IList<IActivity> _activities;
 		private DateOnly _dateOnly;
 		private IScheduleDayPro _scheduleDayPro;
-		private IScheduleDayPro[] _unlockedScheduleDayPros;
+		private HashSet<IScheduleDayPro> _unlockedScheduleDayPros;
 		private IScheduleDay _scheduleDay;
 		private DateTimePeriod _period;
 		private IProjectionService _projectionService;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 			_target = new MatrixKeepActivityLocker(_scheduleMatrixPros, _activities);
 			_dateOnly = new DateOnly(2014, 1, 1);
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
-			_unlockedScheduleDayPros = new []{_scheduleDayPro};
+			_unlockedScheduleDayPros = new HashSet<IScheduleDayPro> { _scheduleDayPro};
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_period = new DateTimePeriod(new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 			_projectionService = _mock.StrictMock<IProjectionService>();

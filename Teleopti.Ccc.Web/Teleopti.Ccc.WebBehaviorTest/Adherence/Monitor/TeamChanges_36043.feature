@@ -63,7 +63,7 @@ Feature: Team changes
 
   Scenario: Exclude person that changed team to different site
 	Given the time is '2016-02-01 09:00:00'
-	When I view Real time adherence sites
+	When I monitor organization adherence
 	And 'Ashely Andeen' sets her phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	Then I should see site 'Paris' with 2 agents in alarm

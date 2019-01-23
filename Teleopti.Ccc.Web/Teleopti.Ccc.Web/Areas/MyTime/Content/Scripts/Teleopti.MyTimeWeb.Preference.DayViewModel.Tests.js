@@ -69,6 +69,21 @@
 		equal(viewModelDay.ContractTimeMinutes(), 'PersonAssignmentContractTimeMinutes');
 	});
 
+	test('should read bankholidaycalendar', function () {
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
+
+		viewModelDay.ReadBankHolidayCalendar({
+			CalendarId: '2567c32a-3c08-4930-a9c5-433bf6228caf',
+			CalendarName: 'ChinaBankHolidayCalendar',
+			DateDescription:'NewYear'
+		});
+
+		equal(viewModelDay.CalendarId(), '2567c32a-3c08-4930-a9c5-433bf6228caf');
+		equal(viewModelDay.CalendarName(), 'ChinaBankHolidayCalendar');
+		equal(viewModelDay.DateDescription(), 'NewYear');
+
+	});
+
 	test('should load preference', function() {
 		var ajax = function(model, options) {
 			equal(options.data.Date, '2012-06-11');

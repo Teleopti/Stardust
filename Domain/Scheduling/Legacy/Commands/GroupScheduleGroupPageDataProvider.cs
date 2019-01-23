@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    public void RemoveNotLoadedPersonsFromCollection(IEnumerable<IGroupPage> groupPages, IScheduleDictionary schedules)
 		{
 			if(groupPages == null) return;
-			var keys = schedules.Keys;
+			var keys = schedules.Keys.ToHashSet();
 			foreach (var groupPage in groupPages)
 			{
 				foreach (var rootGroupPage in groupPage.RootGroupCollection)
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		private static void removeNotLoadedPersons(IChildPersonGroup personGroup, ICollection<IPerson> keys)
+		private static void removeNotLoadedPersons(IChildPersonGroup personGroup, HashSet<IPerson> keys)
 		{
 			var toRemove = new List<IPerson>();
 			foreach (var person in personGroup.PersonCollection)

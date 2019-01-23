@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldCallValidators()
 		{
-			ILockableBitArray array = new LockableBitArray(21, false, false, null);
+			ILockableBitArray array = new LockableBitArray(21, false, false);
 			array.Set(7, true);
 			BitArray longBitArray = array.ToLongBitArray();
 			using (_mocks.Record())
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldReturnFalseIfAnyValidatorFails()
 		{
-			ILockableBitArray array = new LockableBitArray(21, false, false, null);
+			ILockableBitArray array = new LockableBitArray(21, false, false);
 			array.Set(7, true);
 			BitArray longBitArray = array.ToLongBitArray();
 			using (_mocks.Record())

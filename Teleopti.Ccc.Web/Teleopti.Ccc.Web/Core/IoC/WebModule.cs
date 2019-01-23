@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
@@ -170,6 +171,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<UserTextTranslator>().As<IUserTextTranslator>().SingleInstance();
 			builder.RegisterType<GroupPageViewModelFactory>().SingleInstance();
 			builder.RegisterType<DataTokenManager>().As<IDataTokenManager>();
+			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
 		}
 
 		private static void tenantWebSpecificTypes(ContainerBuilder builder)

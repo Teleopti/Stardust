@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NzNotificationService } from 'ng-zorro-antd';
 
 import { ReportConfig } from '../models/ReportConfig.model';
 import { Report } from '../models/Report.model';
@@ -77,8 +78,7 @@ export class ReportService {
 			.catch(this.handleError);
 	}
 
-	private handleError(error: any): Promise<any> {
-		console.error('An error occurred', error);
-		return Promise.reject(error.message || error);
+	private handleError(errorResponse: any): Promise<any> {
+		return Promise.reject(errorResponse.statusText || errorResponse);
 	}
 }

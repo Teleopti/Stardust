@@ -23,12 +23,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         IList<int> UnlockedIndexes { get; }
 
         /// <summary>
-        /// Gets the index of the terminal date.
-        /// </summary>
-        /// <value>The index of the terminal date.</value>
-        int? TerminalDateIndex { get; }
-
-        /// <summary>
         /// Sets the specified index.
         /// </summary>
         /// <param name="index">The index.</param>

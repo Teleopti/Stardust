@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			},
 			{
 				DefinedRaptorApplicationFunctionPaths.Insights,
-				Toggles.WFM_Insights_78059
+				Toggles.WFM_Insights_80704
 			}
 		};
 

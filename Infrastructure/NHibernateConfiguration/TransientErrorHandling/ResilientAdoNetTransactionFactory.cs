@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHand
 	/// An NHibernate transaction factory that provides retry logic for transient errors when executing transactions.
 	/// </summary>
 	/// <remarks>
-	/// Requires the connection to be a <see cref="ReliableSqlDbConnection"/>
+	/// Requires the connection to be a ReliableSqlDbConnection
 	/// </remarks>
 	public class ResilientAdoNetTransactionFactory : AdoNetTransactionFactory, ITransactionFactory
 	{

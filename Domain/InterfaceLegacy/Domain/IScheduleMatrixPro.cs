@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Gets the unlocked days.
         /// </summary>
         /// <value>The un locked days.</value>
-        IScheduleDayPro[] UnlockedDays { get; }
+        HashSet<IScheduleDayPro> UnlockedDays { get; }
 
         /// <summary>
         /// Gets the full weeks period days.

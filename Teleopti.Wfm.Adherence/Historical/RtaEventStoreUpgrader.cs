@@ -7,7 +7,7 @@ using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical
 {
-	public class RtaEventStoreUpgrader : IRtaEventStoreUpgrader
+	public class RtaEventStoreUpgrader
 	{
 		private readonly IRtaEventStoreUpgradeWriter _writer;
 		private readonly BelongsToDateMapper _mapper;

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 			rootPersonGroup.AddPerson(person1);
 			rootPersonGroup.AddPerson(person2);
 			groupPageForDate.AddRootPersonGroup(rootPersonGroup);
-			var allPermittedPersons = new List<IPerson> {person1, person2};
+			var allPermittedPersons = new HashSet<IPerson>{person1, person2};
 
 			var result = _target.CreateGroupForPerson(person1, groupPageForDate, allPermittedPersons);
 			Assert.That(result.Name == "g1");
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		{
 			var person1 = PersonFactory.CreatePerson("p1");
 			var groupPageForDate = new GroupPage("page1");
-			var allPermittedPersons = new List<IPerson> { person1 };
+			var allPermittedPersons = new HashSet<IPerson> { person1 };
 
 			var result = _target.CreateGroupForPerson(person1, groupPageForDate, allPermittedPersons);
 			Assert.That(result.Name == "p1 p1");
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		{
 			var person1 = PersonFactory.CreatePerson("p1");
 			var groupPageForDate = new GroupPage("page1");
-			var allPermittedPersons = new List<IPerson> ();
+			var allPermittedPersons = new HashSet<IPerson> ();
 
 			var result = _target.CreateGroupForPerson(person1, groupPageForDate, allPermittedPersons);
 			Assert.IsNull(result);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 			rootPersonGroup.AddPerson(person1);
 			rootPersonGroup.AddPerson(person2);
 			groupPageForDate.AddRootPersonGroup(rootPersonGroup);
-			var allPermittedPersons = new List<IPerson> { person2 };
+			var allPermittedPersons = new HashSet<IPerson> { person2 };
 
 			var result = _target.CreateGroupForPerson(person1, groupPageForDate, allPermittedPersons);
 			Assert.That(result.Name == "g1");

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
 
 			httpContext.User =
-				new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("", null, null, null, "http://fakeschema.com/TOPTINET#kunningm"), null);
+				new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, null, "http://fakeschema.com/TOPTINET#kunningm"), null);
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo(@"TOPTINET\kunningm");
 			target.RetrieveToken().OriginalToken.Should().Be.EqualTo(@"http://fakeschema.com/TOPTINET#kunningm");
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var httpContext = new FakeHttpContext();
 			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
 
-			httpContext.User = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("", null, null, null, "http://fakeschema.com/kunningm@"), null);
+			httpContext.User = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, null, "http://fakeschema.com/kunningm@"), null);
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
 			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier);
 		}
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var httpContext = new FakeHttpContext();
 			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
 
-			httpContext.User = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("asdf",null,null,null,null),null);
+			httpContext.User = new TeleoptiPrincipal(new TeleoptiIdentity("asdf",null,null, null,null,null),null);
 
 			target.RetrieveToken().Should().Be.Null();
 		}

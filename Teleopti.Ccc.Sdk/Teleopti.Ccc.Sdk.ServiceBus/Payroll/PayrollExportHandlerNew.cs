@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Wfm.Azure.Common;
 using DateOnly = Teleopti.Interfaces.Domain.DateOnly;
 using DateOnlyPeriod = Teleopti.Interfaces.Domain.DateOnlyPeriod;
 
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback,
 			IPayrollPeopleLoader payrollPeopleLoader, IDomainAssemblyResolver domainAssemblyResolver,
 			ITenantPeopleLoader tenantPeopleLoader, IStardustJobFeedback stardustJobFeedback, IBusinessUnitScope businessUnitScope, 
-			IBusinessUnitRepository businessUnitRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ISdkServiceFactory sdkServiceFactory)
+			IBusinessUnitRepository businessUnitRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ISdkServiceFactory sdkServiceFactory
+			)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_payrollExportRepository = payrollExportRepository;
@@ -60,64 +62,68 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 		[AsSystem]
 		public virtual void Handle(RunPayrollExportEvent @event)
 		{
-				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				try
 				{
-					try
+					_stardustJobFeedback.SendProgress(
+						$@"Received message for Payroll Export with Id = {
+								@event.PayrollExportId
+							}. (Message timestamp = {@event.Timestamp})");
+
+					var origPeriod = new DateOnlyPeriod(new DateOnly(@event.ExportStartDate), new DateOnly(@event.ExportEndDate));
+					_stardustJobFeedback.SendProgress($@"Payroll Export period = {origPeriod}");
+
+					var payrollExport = _payrollExportRepository.Get(@event.PayrollExportId);
+					var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
+
+					_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
+
+					_serviceBusPayrollExportFeedback.ReportProgress(1, "Payroll export initiated.");
+
+					_stardustJobFeedback.SendProgress("Payroll export initiated");
+					IEnumerable<IPerson> people;
+					var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
+					using (_businessUnitScope.OnThisThreadUse(bu))
 					{
-						_stardustJobFeedback.SendProgress(
-							$@"Received message for Payroll Export with Id = {
-									@event.PayrollExportId
-								}. (Message timestamp = {@event.Timestamp})");
-
-						var origPeriod = new DateOnlyPeriod(new DateOnly(@event.ExportStartDate), new DateOnly(@event.ExportEndDate));
-						_stardustJobFeedback.SendProgress($@"Payroll Export period = {origPeriod}");
-
-						var payrollExport = _payrollExportRepository.Get(@event.PayrollExportId);
-						var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
-
-						_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
-
-						_serviceBusPayrollExportFeedback.ReportProgress(1, "Payroll export initiated.");
-
-						_stardustJobFeedback.SendProgress("Payroll export initiated");
-						IEnumerable<IPerson> people;
-						var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
-						using (_businessUnitScope.OnThisThreadUse(bu))
-						{
-							people = _payrollPeopleLoader.GetPeopleForExport(@event, origPeriod, _currentUnitOfWork.Current());
-						}
-
-						var personDtos = _personBusAssembler.CreatePersonDto(people, _tenantPeopleLoader);
-
-						var wrapper = new AppdomainCreatorWrapper();
-						var searchPath = new SearchPath();
-						var dto = createDto(payrollExport, @event, personDtos);
-						var result = wrapper.RunPayroll(_sdkServiceFactory, dto, @event, payrollResult.Id.GetValueOrDefault(),
-							_serviceBusPayrollExportFeedback, searchPath.Path);
-						if (result != null)
-							payrollResult.XmlResult.SetResult(result);
-						payrollResult.FinishedOk = true;
+						people = _payrollPeopleLoader.GetPeopleForExport(@event, origPeriod, _currentUnitOfWork.Current());
 					}
-					catch (Exception exception)
-					{
+
+					var personDtos = _personBusAssembler.CreatePersonDto(people, _tenantPeopleLoader);
+
+					var wrapper = new AppdomainCreatorWrapper();
+					var searchPath = new SearchPath();
+					var dto = createDto(payrollExport, @event, personDtos);
 					
-						//a very unusual way of reporting error but we need that to make the UI more responsive
-						var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
-						_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
-						_stardustJobFeedback.SendProgress("An error occurred while running the payroll export. " + exception.StackTrace);
-						_serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
-						logger.Error("An error occurred while running the payroll export. ", exception);
-					}
-					finally
-					{
-						_serviceBusPayrollExportFeedback.Dispose();
-						_serviceBusPayrollExportFeedback = null;
-
-						AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
-					}
-
-				uow.PersistAll();
+					if(!InstallationEnvironment.IsAzure)
+						PayrollDllCopy.CopyFiles(searchPath.PayrollDeployNewPath, searchPath.Path, @event.LogOnDatasource);
+					
+					var result = wrapper.RunPayroll(_sdkServiceFactory, dto, @event, payrollResult.Id.GetValueOrDefault(),
+						_serviceBusPayrollExportFeedback, searchPath.Path);
+					if (result != null)
+						payrollResult.XmlResult.SetResult(result);
+					payrollResult.FinishedOk = true;
 				}
+				catch (Exception exception)
+				{
+				
+					//a very unusual way of reporting error but we need that to make the UI more responsive
+					var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
+					_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
+					_stardustJobFeedback.SendProgress("An error occurred while running the payroll export. " + exception.StackTrace);
+					_serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
+					logger.Error("An error occurred while running the payroll export. ", exception);
+				}
+				finally
+				{
+					_serviceBusPayrollExportFeedback.Dispose();
+					_serviceBusPayrollExportFeedback = null;
+
+					AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
+				}
+
+			uow.PersistAll();
+			}
 		}
 
 		private static PayrollExportDto createDto(IPayrollExport payrollExport, RunPayrollExportEvent @event, IEnumerable<PersonDto> personDtos)

@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			return new SchedulingOptions
 			{
-				UseAvailability = false,
-				UsePreferences = false,
-				UseRotations = false,
+				UseAvailability = true,
+				UsePreferences = true,
+				UseRotations = true,
 				UseStudentAvailability = false,
 				DayOffTemplate = defaultDayOffTemplate,
 				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 				TagToUseOnScheduling = NullScheduleTag.Instance,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 				UseTeam = true,
 				TeamSameShiftCategory = true
 			};

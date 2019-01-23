@@ -380,11 +380,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
+			var startDate = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc);
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 5, 01, 0, 0, 0, DateTimeKind.Utc),
-				Created = now.AddMinutes(-2).AddHours(-1),
+				EndDateTime = startDate.AddDays(40),
+				Created = now.AddMinutes(-13),
 				PersonRequest = Guid.NewGuid()
 			});
 

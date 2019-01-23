@@ -32,7 +32,7 @@
 
 		
 
-		<many-to-one name="Calendar" column="CalendarId"
+		<many-to-one name="Calendar" column="Calendar"
 					 class="Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar.BankHolidayCalendar"
 					 not-null="true"
 					 foreign-key="FK_BankHolidayDate_BankHolidayCalendar"/>
@@ -48,7 +48,7 @@
 
 		<filter name="businessUnitFilter"
           condition="exists(select 1 from BankHolidayDate 
-                                inner join BankHolidayCalendar on BankHolidayDate.CalendarId=BankHolidayCalendar.Id 
+                                inner join BankHolidayCalendar on BankHolidayDate.Calendar=BankHolidayCalendar.Id 
                           where Id=BankHolidayDate.Id and BankHolidayCalendar.BusinessUnit=:businessUnitParameter)" />
 		
 	</class>

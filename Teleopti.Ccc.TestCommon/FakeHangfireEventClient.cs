@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon
 			public bool Minutely;
 		}
 
-		private readonly List<JobInfo> _enqueuedJobs = new List<JobInfo>();
+		private readonly System.Collections.Concurrent.ConcurrentBag<JobInfo> _enqueuedJobs = new System.Collections.Concurrent.ConcurrentBag<JobInfo>();
 		private readonly List<JobInfo> _recurringJobs = new List<JobInfo>();
 
 		public IEnumerable<string> DisplayNames { get { return _enqueuedJobs.Select(x => x.DisplayName); } }

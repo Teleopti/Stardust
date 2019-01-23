@@ -235,22 +235,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var startDateTime = new DateTime(2008, 7, 10, 10, 0, 0, DateTimeKind.Utc);
 			var endDateTime = new DateTime(2008, 7, 14, 9, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(startDateTime, endDateTime);
-			var personRequest = new PersonRequest(_person);
-			var absenceRequest = new AbsenceRequest(_absence ?? _absence, period);
-			personRequest.Request = absenceRequest;
-			personRequest.Pending();
 
 			var sent = DateTime.Now;
 
-			PersistAndRemoveFromUnitOfWork(personRequest);
-
 			var queued = new QueuedAbsenceRequest
 			{
-				PersonRequest = personRequest.Id.GetValueOrDefault(),
-				StartDateTime = absenceRequest.Period.StartDateTime,
-				EndDateTime = absenceRequest.Period.EndDateTime,
-				Created = personRequest.CreatedOn.GetValueOrDefault(),
+				PersonRequest = Guid.NewGuid(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime,
+				Created = DateTime.Now,
 				Sent = sent
 			};
 			PersistAndRemoveFromUnitOfWork(queued);
@@ -261,5 +254,110 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var queuedRequest = target.LoadAll().FirstOrDefault();
 			queuedRequest.Sent.HasValue.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldResetSentColumnFromIds()
+		{
+			var startDateTime = new DateTime(2008, 7, 10, 10, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2008, 7, 14, 9, 0, 0, DateTimeKind.Utc);
+
+			var sent = DateTime.Now;
+
+			var queued = new QueuedAbsenceRequest
+			{
+				PersonRequest = Guid.NewGuid(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime,
+				Created = DateTime.Now,
+				Sent = sent
+			};
+			var queued2 = new QueuedAbsenceRequest
+			{
+				PersonRequest = Guid.NewGuid(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime,
+				Created = DateTime.Now,
+				Sent = sent
+			};
+			PersistAndRemoveFromUnitOfWork(queued);
+			PersistAndRemoveFromUnitOfWork(queued2);
+
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			var queuedRequest = target.LoadAll().FirstOrDefault();
+			queuedRequest.Sent.HasValue.Should().Be.True();
+
+			target.ResetSent(new List<Guid>{queued.Id.GetValueOrDefault(), queued2.Id.GetValueOrDefault()});
+
+			UnitOfWork.Clear();
+			queuedRequest = target.LoadAll().FirstOrDefault();
+			queuedRequest.Sent.HasValue.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldRemoveQueuedAbsenceRequestsOnIds()
+		{
+			var startDateTime = new DateTime(2008, 7, 10, 10, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2008, 7, 14, 9, 0, 0, DateTimeKind.Utc);
+
+			var sent = DateTime.Now;
+
+			var queued = new QueuedAbsenceRequest
+			{
+				PersonRequest = Guid.NewGuid(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime,
+				Created = DateTime.Now,
+				Sent = sent
+			};
+			var queued2 = new QueuedAbsenceRequest
+			{
+				PersonRequest = Guid.NewGuid(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime,
+				Created = DateTime.Now,
+				Sent = sent
+			};
+			PersistAndRemoveFromUnitOfWork(queued);
+			PersistAndRemoveFromUnitOfWork(queued2);
+
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			target.Remove(new List<Guid>{ queued.Id.GetValueOrDefault()});
+			var result = target.LoadAll();
+			result.Count().Should().Be.EqualTo(1);
+			result.First().Id.Value.Should().Be(queued2.Id);
+		}
+
+		[Test]
+		public void ShouldFindQueuedAbsenceRequestsByIds()
+		{
+			var startDateTime = new DateTime(2008, 7, 10, 10, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2008, 7, 14, 9, 0, 0, DateTimeKind.Utc);
+			var sent = DateTime.UtcNow;
+
+			var queued = new QueuedAbsenceRequest
+			{
+				PersonRequest = Guid.NewGuid(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime,
+				Created = DateTime.Now,
+				Sent = sent
+			};
+			var queued2 = new QueuedAbsenceRequest
+			{
+				PersonRequest = Guid.NewGuid(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime,
+				Created = DateTime.Now,
+				Sent = sent
+			};
+			PersistAndRemoveFromUnitOfWork(queued);
+			PersistAndRemoveFromUnitOfWork(queued2);
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			var queuedAbsenceRequests = target.FindByIds(new List<Guid> { queued.Id.GetValueOrDefault(), queued2.Id.GetValueOrDefault() });
+
+			queuedAbsenceRequests.Count.Should().Be(2);
+			
+		}
 	}
 }
+

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (var date in _period.DayCollection())
 			{
 				IList<IPerson> singleSkilledPersons = new List<IPerson>(_persons);
-				IList<ISkill> notSingleSkills = new List<ISkill>();
+				HashSet<ISkill> notSingleSkills = new HashSet<ISkill>();
 				
 				foreach (var person in _persons)
 				{

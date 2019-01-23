@@ -11,7 +11,7 @@ using NHibernate.Exceptions;
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling
 {
 	/// <summary>
-	/// Exposes <see cref="SqlClientBatchingBatcher"/> functionality when a <see cref="ReliableSqlDbConnection"/>
+	/// Exposes <see cref="SqlClientBatchingBatcher"/> functionality when a ReliableSqlDbConnection
 	/// connection is being used.
 	/// </summary>
 	public class ResilientSqlClientBatchingBatcher : SqlClientBatchingBatcher

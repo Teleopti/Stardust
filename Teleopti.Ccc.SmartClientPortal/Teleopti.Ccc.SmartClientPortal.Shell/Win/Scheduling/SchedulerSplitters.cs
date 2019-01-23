@@ -42,6 +42,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private ISchedulerStateHolder _schedulerStateHolder;
 		private TeleoptiGridControl _skillGridControl;
 		private DateOnly _currentIntradayDate;
+		private SkillDayGridControl _skillDayGridControl;
+		private SkillIntradayGridControl _skillIntradayGridControl;
+		private SkillWeekGridControl _skillWeekGridControl;
+		private SkillMonthGridControl _skillMonthGridControl;
+		private SkillFullPeriodGridControl _skillFullPeriodGridControl;
 
 		public SchedulerSplitters()
         {
@@ -126,6 +131,31 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             get { return grid; }
         }
+
+		public SkillDayGridControl DayGridControl
+		{
+			get { return _skillDayGridControl; }
+		}
+
+		public SkillIntradayGridControl IntradayGridControl
+		{
+			get { return _skillIntradayGridControl; }
+		}
+
+		public SkillWeekGridControl WeekGridControl
+		{
+			get { return _skillWeekGridControl; }
+		}
+
+		public SkillMonthGridControl MonthGridControl
+		{
+			get { return _skillMonthGridControl; }
+		}
+
+		public SkillFullPeriodGridControl FullPeriodGridControl
+		{
+			get { return _skillFullPeriodGridControl; }
+		}
 
 		public void ShowGraph(bool show)
 		{
@@ -338,6 +368,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						defaultDistance;
 			}
         }
+
+		public void InitializeSkillResultGrids(ILifetimeScope container)
+		{
+			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>());
+			_skillWeekGridControl = new SkillWeekGridControl();
+			_skillMonthGridControl = new SkillMonthGridControl();
+			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
+			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", container.Resolve<ISkillPriorityProvider>());
+
+		}
 
 		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder, SchedulerGroupPagesProvider schedulerGroupPagesProvider, IEnumerable<IOptionalColumn> optionalColumns)
 		{
@@ -615,6 +655,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void gridResize(object sender, EventArgs e)
 		{
 			Grid.Invalidate();
+		}
+
+		public TeleoptiGridControl ResolveControlFromSkillResultViewSetting(SkillResultViewSetting skillResultViewSetting)
+		{
+			if (skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+				return IntradayGridControl;
+
+			if (skillResultViewSetting.Equals(SkillResultViewSetting.Day))
+				return DayGridControl;
+
+			if (skillResultViewSetting.Equals(SkillResultViewSetting.Week))
+				return WeekGridControl;
+
+			if (skillResultViewSetting.Equals(SkillResultViewSetting.Month))
+				return MonthGridControl;
+
+			if (skillResultViewSetting.Equals(SkillResultViewSetting.Period))
+				return FullPeriodGridControl;
+
+			return null;
 		}
 
 	}

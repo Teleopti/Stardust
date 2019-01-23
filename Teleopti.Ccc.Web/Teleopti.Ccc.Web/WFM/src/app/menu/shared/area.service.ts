@@ -23,7 +23,8 @@ export class AreaService {
 	joinAreaWithRouteConfig(area: Area): Area {
 		const state = this.$state.get(area.InternalName);
 		if (!state) return area;
-		const url = this.$state.href(area.InternalName);
+		const url = this.$state.href(area.InternalName) || this.$state.href(`${area.InternalName}.index`);
+		if (url === null) console.warn('Could not get url for', area);
 		return { ...area, url };
 	}
 }

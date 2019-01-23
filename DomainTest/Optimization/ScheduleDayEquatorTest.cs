@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var otherShift = EditableShiftFactory.CreateEditorShift(activity, period2, shiftCategory);
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, person);
 
 			Assert.IsTrue(_target.MainShiftBasicEquals(otherShift, currentShift));

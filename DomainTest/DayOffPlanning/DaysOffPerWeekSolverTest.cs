@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
         private static LockableBitArray array1()
         {
-            LockableBitArray ret = new LockableBitArray(28, true, true, null);
+            LockableBitArray ret = new LockableBitArray(28, true, true);
             ret.SetAll(false);
             ret.Set(0, true);
             ret.Set(1, true);

@@ -316,9 +316,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
             filteredData.FilteredDates.ForEach(f => AddOrUpdate(f.Key, f.Value));
         }
 
-        public IList<DateOnly> FilteredDateList()
+        public HashSet<DateOnly> FilteredDateList()
         {
-            var filteredDates = new List<DateOnly>();
+            var filteredDates = new HashSet<DateOnly>();
             _filteredDates.ForEach(d => { if (!d.Value) filteredDates.Add(d.Key); });
             return filteredDates;
         }
@@ -330,6 +330,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
         bool Contains(DateOnly dateOnly);
         void AddOrUpdate(DateOnly dateOnly, bool included);
         void Merge(IFilteredData filteredData);
-        IList<DateOnly> FilteredDateList();
+        HashSet<DateOnly> FilteredDateList();
     }
 }

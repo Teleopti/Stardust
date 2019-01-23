@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IBankHolidayCalendarSiteRepository : IRepository<IBankHolidayCalendarSite>
 	{
 		IEnumerable<Guid> FindSitesByCalendar(Guid calendarId);
+		IEnumerable<IBankHolidayCalendar> FetchBankHolidayCalendars(Guid siteId);
 	}
 }

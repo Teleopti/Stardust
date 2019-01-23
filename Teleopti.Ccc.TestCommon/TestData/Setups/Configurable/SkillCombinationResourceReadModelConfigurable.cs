@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					StartDateTime = _theDate.Date.AddHours(8),
 					EndDateTime = _theDate.Date.AddHours(8).AddMinutes(15),
 					Resource = 4,
-					SkillCombination = new[] {theSkill.Id.GetValueOrDefault()}
+					SkillCombination = new HashSet<Guid> {theSkill.Id.GetValueOrDefault()}
 				}
 			};
 			var updateStaffingDateSetting = new UpdateStaffingLevelReadModelStartDate();

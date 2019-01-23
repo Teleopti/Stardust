@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting
             Assert.IsNotNull(s.BusinessUnit);
 
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
-            Assert.AreSame(identity.BusinessUnit, s.BusinessUnit);
+            Assert.AreEqual(identity.BusinessUnitId, s.BusinessUnit.Id);
             IBusinessUnit bu = new BusinessUnit("df");
             s.SetBu(bu);
             Assert.AreSame(bu, s.BusinessUnit);

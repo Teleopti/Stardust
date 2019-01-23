@@ -289,15 +289,6 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Matrix
 
         }
 
-
-        /// <summary>
-        /// Creates the available datas.
-        /// </summary>
-        /// <param name="adminAvailableData">The admin available data.</param>
-        /// <param name="agentAvailableData">The agent available data.</param>
-        /// <param name="siteAvailableData">The site available data.</param>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         private IList<IAvailableData> CreateAvailableDatas()
         {
             // create three available data objects and add them to a list

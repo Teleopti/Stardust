@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NHibernate.Criterion;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -8,7 +10,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class BankHolidayDateRepository : Repository<IBankHolidayDate>, IBankHolidayDateRepository
 	{
-
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public BankHolidayDateRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
@@ -21,25 +22,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (calendar == null)
 				return null;
 
-			const string sql = @"select [Id], [Date] ,[Description], [IsDeleted] from [dbo].[BankHolidayDate] where Date=:Date and CalendarId=:CalendarId";
-			var query = _currentUnitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetDateOnly("Date", date)
-				.SetGuid("CalendarId", calendar.Id.Value)
-				.SetReadOnly(true)
-				.UniqueResult<object[]>();
+			_currentUnitOfWork.Current().Session().DisableFilter("deletedFlagFilter");
 
-			if (query == null)
-				return null;
+			var result = _currentUnitOfWork.Current().Session()
+				.QueryOver<IBankHolidayDate>()
+				.Where(d => d.Date == date && d.Calendar == calendar)
+				.SingleOrDefault<IBankHolidayDate>();
 
-			var result = new BankHolidayDate
-			{
-				Calendar = calendar,
-				Date = new DateOnly(Convert.ToDateTime(query[1])),
-				Description = query[2].ToString()
-			};
+			_currentUnitOfWork.Current().Session().EnableFilter("deletedFlagFilter");
 
-			result.SetId((Guid)query[0]);
-			if (Convert.ToBoolean(query[3])) result.SetDeleted();
+			return result;
+		}
+
+		public IEnumerable<IBankHolidayDate> FetchByCalendarsAndPeriod(IEnumerable<IBankHolidayCalendar> calendars, DateOnlyPeriod period)
+		{
+			if (calendars == null || !calendars.Any())
+				return Enumerable.Empty<IBankHolidayDate>();
+
+			var result = _currentUnitOfWork.Current().Session()
+				.QueryOver<IBankHolidayDate>()
+				.Where(Restrictions.In("Calendar", calendars.ToArray()))
+				.Where(d => d.Date >= period.StartDate && d.Date <= period.EndDate)
+				.List<IBankHolidayDate>();
 
 			return result;
 		}

@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 	    public ICollection<BusinessUnitDto> Handle(GetCurrentBusinessUnitQueryDto query)
         {
-            var currentBusinessUnit = ((ITeleoptiIdentity)_currentTeleoptiPrincipal.Current().Identity).BusinessUnit;
-            return new[] {new BusinessUnitDto{Id = currentBusinessUnit.Id,Name = currentBusinessUnit.Name}};
+			var identity = ((ITeleoptiIdentity)_currentTeleoptiPrincipal.Current().Identity);
+            return new[] {new BusinessUnitDto{Id = identity.BusinessUnitId,Name = identity.BusinessUnitName}};
         }
     }
 }

@@ -306,7 +306,9 @@ var rtaTester = (function () {
 		if (description === 'RtaTracerController')
 			setup(tests, '', 'RtaTracerController');
 		if (description === 'RtaHistoricalOverviewController')
-			setup(tests, '', 'RtaHistoricalOverviewController80594');
+			setup(tests, '', 'RtaHistoricalOverviewController80594');		
+		if (description === 'AdjustAdherenceController')
+			setup(tests, '', 'AdjustAdherenceController');
 		
 	}
 
@@ -319,8 +321,9 @@ var rtaTester = (function () {
 		fdescribe: function (description, tests) {
 			return fdescribe(description, function () {
 				setupByDescription(description, tests);
-			});
-		}
+			})
+		},
+		xdescribe: xdescribe
 	}
 
 })();

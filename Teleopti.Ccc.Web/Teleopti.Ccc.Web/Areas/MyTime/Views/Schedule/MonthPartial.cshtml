@@ -53,8 +53,8 @@
 						<!-- ko if: hasAbsence -->
 						<div class="absence" data-bind="css: { 'part-time': hasShift && !isFullDayAbsence, 'dayoff': isDayOff }">
 							<!-- ko if: !hasShift || isFullDayAbsence -->
-							<strong class="visible-lg" data-bind="text: absenceName" />
-							<strong class="visible-md" data-bind="text: absenceName" />
+							<strong class="visible-lg" data-bind="text: absenceName"></strong>
+							<strong class="visible-md" data-bind="text: absenceName"></strong>
 							<div class="hidden-md hidden-lg">
 								<strong data-bind="text: absenceShortName"></strong>
 
@@ -118,7 +118,7 @@
 						</div>
 						<!-- /ko -->
 
-						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
+						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="day-header-day label label-default"></span>
 					</div>
 				</div>
 			</div>

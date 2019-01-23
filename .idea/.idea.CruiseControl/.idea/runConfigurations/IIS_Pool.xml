@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="IIS Pool" type="DotNetProject" factoryName=".NET Project">
+    <option name="EXE_PATH" value="C:/Program Files (x86)/IIS Express/iisexpress.exe" />
+    <option name="PROGRAM_PARAMETERS" value="/config:$PROJECT_DIR$/.idea/config/applicationhost.config /apppool:Clr4IntegratedAppPool" />
+    <option name="WORKING_DIRECTORY" value="C:/Program Files (x86)/IIS Express" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <option name="USE_MONO" value="0" />
+    <option name="RUNTIME_ARGUMENTS" value="" />
+    <option name="PROJECT_PATH" value="$PROJECT_DIR$/Teleopti.Ccc.Web/Teleopti.Ccc.Web/Teleopti.Ccc.Web.csproj" />
+    <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+    <option name="PROJECT_ARGUMENTS_TRACKING" value="0" />
+    <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+    <option name="PROJECT_KIND" value="Web" />
+    <option name="PROJECT_TFM" value=".NETFramework,Version=v4.7.2" />
+    <browser start="true" url="http://localhost:52858/TeleoptiWFM/Web/" />
+    <method v="2">
+      <option name="Build" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			_datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(5, 5);
 			_datDaysOffPreferences.ConsiderWeekBefore = true;
 			_datDaysOffPreferences.ConsiderWeekAfter = true;
-			_bitArray = new LockableBitArray(42, true, true, null);
+			_bitArray = new LockableBitArray(42, true, true);
 			_bitArray.SetAll(false);
 			_bitArray.Set(2, true);
 			_bitArray.Set(3, true);
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
         private static LockableBitArray array1()
         {
-            LockableBitArray ret = new LockableBitArray(28, true, true, null);
+            LockableBitArray ret = new LockableBitArray(28, true, true);
             ret.SetAll(false);
             ret.Set(0, true);
             ret.Set(1, true);
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
         private static LockableBitArray array2()
         {
-            LockableBitArray ret = new LockableBitArray(14, true, true, null);
+            LockableBitArray ret = new LockableBitArray(14, true, true);
             ret.SetAll(false);
             ret.Set(5, true);//sa
             ret.Set(6, true);//su
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
         private static LockableBitArray array3()
         {
-            LockableBitArray ret = new LockableBitArray(7, false, false, null);
+            LockableBitArray ret = new LockableBitArray(7, false, false);
             ret.SetAll(false);
             ret.Set(4, true);//fr
             ret.Set(5, true);//sa

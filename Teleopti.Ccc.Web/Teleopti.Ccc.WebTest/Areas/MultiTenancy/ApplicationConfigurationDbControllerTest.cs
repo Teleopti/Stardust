@@ -50,29 +50,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void ShouldGetConfigurationDataByKey()
 		{
 			ConfigDbProvider.LoadFakeData(_fakeConfig);
-			var serverData = Target.TryGetServerValue(ServerConfigurationKey.NotificationSmtpPort.ToString(), null).Result<string>();
+			var serverData = Target.GetServerValue(ServerConfigurationKey.NotificationSmtpPort.ToString()).Result<string>();
 			Assert.AreEqual(serverData, _fakeConfig.Server[ServerConfigurationKey.NotificationSmtpPort.ToString()]);
 		
-			var tenantData = Target.TryGetTenantValue(TenantApplicationConfigKey.NotificationApiKey.ToString(), null).Result<string>();
+			var tenantData = Target.GetTenantValue(TenantApplicationConfigKey.NotificationApiKey.ToString()).Result<string>();
 			Assert.AreEqual(tenantData, _fakeConfig.Tenant[TenantApplicationConfigKey.NotificationApiKey.ToString()]);
 		}
 
 		[Test]
-		public void ShouldReturDefaultValueIfKeyIsMissing()
+		public void ShouldReturNullIfKeyIsMissing()
 		{
 			ConfigDbProvider.LoadFakeData(_fakeConfig);
-			var defVal = "DEFAULT";
-			var tenantData = Target.TryGetTenantValue(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), defVal).Result<string>();
-			Assert.AreEqual(tenantData, defVal);
+			var tenantData = Target.GetTenantValue(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString()).Result<string>();
+			Assert.AreEqual(tenantData, null);
 
-			tenantData = Target.TryGetTenantValue("RandomKey", defVal).Result<string>();
-			Assert.AreEqual(tenantData, defVal);
+			tenantData = Target.GetTenantValue("RandomKey").Result<string>();
+			Assert.AreEqual(tenantData, null);
 
-			var serverData = Target.TryGetServerValue(ServerConfigurationKey.AS_DATABASE.ToString(), defVal).Result<string>();
-			Assert.AreEqual(serverData, defVal);
+			var serverData = Target.GetServerValue(ServerConfigurationKey.AS_DATABASE.ToString()).Result<string>();
+			Assert.AreEqual(serverData, null);
 
-			serverData = Target.TryGetServerValue("RandomKey", defVal).Result<string>();
-			Assert.AreEqual(serverData, defVal);
+			serverData = Target.GetServerValue("RandomKey").Result<string>();
+			Assert.AreEqual(serverData, null);
 		}
 	}
 }

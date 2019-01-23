@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public ISkillIntervalData CalculateMedian(TimeSpan key, IList<ISkillIntervalData> skillIntervalDataList, double resolution, DateOnly baseDate)
         {
-            var forecastedDemands = new List<double>();
-            var currentDemands = new List<double>();
+            var forecastedDemands = new List<double>(skillIntervalDataList.Count);
+            var currentDemands = new List<double>(skillIntervalDataList.Count);
 			var minMaxBoostFactor = 0d;
 			var minMaxBoostFactorForStandardDeviation = 0d;
 

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var groupPagePerDateHolder = _groupPagePerDateHolder();
 			var pageOnDate = groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
-			var group = _groupCreator.CreateGroupForPerson(person, pageOnDate, personsInOrganisation.ToList());
+			var group = _groupCreator.CreateGroupForPerson(person, pageOnDate, personsInOrganisation.ToHashSet());
 
 			return group;
 		}

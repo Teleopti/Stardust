@@ -16031,9 +16031,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="PasswordPolicyError" xml:space="preserve">
     <value>Lösenordspolicyfel</value>
   </data>
-  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort denna helgdagskalender?</value>
-  </data>
   <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
     <value>Är du säker på att du vill ta bort år {0} från kalender {1}?</value>
   </data>
@@ -16135,5 +16132,20 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="PublishSchedulePlans" xml:space="preserve">
     <value>Publicera schema</value>
+  </data>
+  <data name="SelectACalendarForSite" xml:space="preserve">
+    <value>Välj en kalender för enheten</value>
+  </data>
+  <data name="NoCalendarsAvailable" xml:space="preserve">
+    <value>Inga tillgängliga kalendrar. </value>
+  </data>
+  <data name="XSitesUseThisCalendar" xml:space="preserve">
+    <value>{0} enheter använder denna kalender:</value>
+  </data>
+  <data name="AdjustAdherence" xml:space="preserve">
+    <value>Justera adherence (till neutral pga. tekniska problem)</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort den här helgdagskalendern?</value>
   </data>
 </root>

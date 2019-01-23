@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private static LockableBitArray array1()
         {
 
-            LockableBitArray ret = new LockableBitArray(28, true, true, null);
+            LockableBitArray ret = new LockableBitArray(28, true, true);
             ret.SetAll(false);
             ret.Set(0, true);
             ret.Set(1, true);
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private static LockableBitArray array2()
         {
 
-            LockableBitArray ret = new LockableBitArray(28, true, true, null);
+            LockableBitArray ret = new LockableBitArray(28, true, true);
             ret.SetAll(false);
             ret.Set(0, false);
             ret.Set(1, true);
@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		private static LockableBitArray array3()
 		{
 
-            LockableBitArray ret = new LockableBitArray(21, true, true, null);
+            LockableBitArray ret = new LockableBitArray(21, true, true);
 			ret.SetAll(false);
 			ret.Set(5, true);//sa
 			ret.Set(6, true);//su
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private static LockableBitArray array4()
         {
 
-            LockableBitArray ret = new LockableBitArray(35, true, true, null);
+            LockableBitArray ret = new LockableBitArray(35, true, true);
             ret.SetAll(false);
             ret.Set(5, true);
             ret.Set(8, true);
@@ -418,7 +418,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
 		private static LockableBitArray weekBeforeAndAfterEmpty(int dayOffIndex)
 		{
-			LockableBitArray ret = new LockableBitArray(21, true, true, null);
+			LockableBitArray ret = new LockableBitArray(21, true, true);
 			ret.SetAll(false);
 			ret.Set(dayOffIndex, true);
 
@@ -427,7 +427,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
 		private static LockableBitArray weekAfterNotEmpty()
 		{
-			LockableBitArray ret = new LockableBitArray(21, true, true, null);
+			LockableBitArray ret = new LockableBitArray(21, true, true);
 			ret.SetAll(false);
 			ret.Set(7, true);
 			ret.Set(9, true);

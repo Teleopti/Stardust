@@ -118,6 +118,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adherence\AdjustAdherencePageStepDefinitions.cs" />
+    <Compile Include="Adherence\AdjustedAdherenceStepDefinitions.cs" />
+    <Compile Include="Adherence\ApprovedPeriodsStepDefinitions.cs" />
+    <Compile Include="Adherence\Historical\AdjustAdherenceToNeutral.feature.cs">
+      <DependentUpon>AdjustAdherenceToNeutral.feature</DependentUpon>
+    </Compile>
     <Compile Include="Adherence\Historical\ApproveOutOfAdherences_47230.feature.cs">
       <DependentUpon>ApproveOutOfAdherences_47230.feature</DependentUpon>
     </Compile>
@@ -184,11 +190,11 @@
     <Compile Include="Adherence\Monitor\MonitorAgentsBySkillArea_39337.feature.cs">
       <DependentUpon>MonitorAgentsBySkillArea_39337.feature</DependentUpon>
     </Compile>
-    <Compile Include="Adherence\Monitor\MonitorAgentsInPermittedOrganizaionlOnly.feature.cs">
-      <DependentUpon>MonitorAgentsInPermittedOrganizaionlOnly.feature</DependentUpon>
+    <Compile Include="Adherence\Monitor\OrganizaionOverviewWithPermission.feature.cs">
+      <DependentUpon>OrganizaionOverviewWithPermission.feature</DependentUpon>
     </Compile>
-    <Compile Include="Adherence\Monitor\MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs">
-      <DependentUpon>MonitorAgentsViewInPermittedOrganizaionlOnly.feature</DependentUpon>
+    <Compile Include="Adherence\Monitor\AgentsWithPermission.feature.cs">
+      <DependentUpon>AgentsWithPermission.feature</DependentUpon>
     </Compile>
     <Compile Include="Adherence\Monitor\PauseButton_39144.feature.cs">
       <DependentUpon>PauseButton_39144.feature</DependentUpon>
@@ -223,11 +229,12 @@
     <Compile Include="Adherence\Monitor\AgentsTop50.feature.cs">
       <DependentUpon>AgentsTop50.feature</DependentUpon>
     </Compile>
-    <Compile Include="Adherence\AgentHistoricalPageStepDefinitions.cs" />
-    <Compile Include="Adherence\AgentsDefinitions.cs" />
-    <Compile Include="Adherence\HistoricalOverviewStepDefinitions.cs" />
-    <Compile Include="Adherence\OverviewDefinitions.cs" />
+    <Compile Include="Adherence\HistoricalAdherencePageStepDefinitions.cs" />
+    <Compile Include="Adherence\AgentsPageStepDefinitions.cs" />
+    <Compile Include="Adherence\HistoricalOverviewPageStepDefinitions.cs" />
+    <Compile Include="Adherence\OverviewPageStepDefinitions.cs" />
     <Compile Include="Adherence\AdherencePageStepDefinitions.cs" />
+    <Compile Include="Adherence\PhoneStateStepDefinitions.cs" />
     <Compile Include="Adherence\ToolPageStepDefinitions.cs" />
     <Compile Include="Adherence\TracerPageStepDefinitions.cs" />
     <Compile Include="Adherence\RtaTool.feature.cs">
@@ -237,7 +244,6 @@
       <DependentUpon>RtaTracer.feature</DependentUpon>
     </Compile>
     <Compile Include="APIResponseStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\ApprovedPeriodsStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\QueueSourceDefinitions.cs" />
     <Compile Include="Bindings\Generic\RuleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Diagnosis\DiagnosisViewPageStepDefinition.cs" />
@@ -245,7 +251,6 @@
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="BusinessUnitSelectionTest.cs" />
     <Compile Include="FullIntegrationTestAttribute.cs" />
     <Compile Include="MyTime\DaySchedule\80101_DayScheduleForStartPage.feature.cs">
@@ -264,6 +269,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DayScheduleProbabilityForStartPage.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\MobileMonth.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileMonth.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\MobileMonthStepDefinitions.cs" />
     <Compile Include="MyTime\ShiftTradeRequestViewShowingMultipleShifts.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -960,6 +971,10 @@
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Adherence\Historical\AdjustAdherenceToNeutral.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AdjustAdherenceToNeutral.feature.cs</LastGenOutput>
+    </None>
     <None Include="Adherence\Historical\ApproveOutOfAdherences_47230.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ApproveOutOfAdherences_47230.feature.cs</LastGenOutput>
@@ -1048,13 +1063,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MonitorBySkillArea_39337.feature.cs</LastGenOutput>
     </None>
-    <None Include="Adherence\Monitor\MonitorAgentsInPermittedOrganizaionlOnly.feature">
+    <None Include="Adherence\Monitor\OrganizaionOverviewWithPermission.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorAgentsInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
+      <LastGenOutput>OrganizaionOverviewWithPermission.feature.cs</LastGenOutput>
     </None>
-    <None Include="Adherence\Monitor\MonitorAgentsViewInPermittedOrganizaionlOnly.feature">
+    <None Include="Adherence\Monitor\AgentsWithPermission.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
+      <LastGenOutput>AgentsWithPermission.feature.cs</LastGenOutput>
     </None>
     <None Include="Adherence\Monitor\PauseButton_39144.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1128,6 +1143,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DayScheduleProbabilityForStartPage.feature.cs</LastGenOutput>
     </None>
+    <None Include="MyTime\MobileMonth.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MobileMonth.feature.cs</LastGenOutput>
+    </None>
     <None Include="MyTime\OvertimeRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OvertimeRequests.feature.cs</LastGenOutput>
@@ -1200,7 +1219,6 @@
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Adherence\Historical\AdjustAdherenceToNeutral.feature" />
     <Content Include="Data\PasswordPolicy.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

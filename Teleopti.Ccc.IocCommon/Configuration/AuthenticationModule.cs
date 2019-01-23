@@ -61,17 +61,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<TeleoptiPrincipalFactory>().As<IPrincipalFactory>().SingleInstance();
 				builder.CacheByClassProxy<TeleoptiPrincipalInternalsFactory>()
-					.As<IMakeRegionalFromPerson>()
 					.As<IMakeOrganisationMembershipFromPerson>()
-					.As<IRetrievePersonNameForPerson>()
 					.SingleInstance();
 				_configuration.Args().Cache.This<TeleoptiPrincipalInternalsFactory>(b => b
 					.CacheMethod(m => m.MakeOrganisationMembership(null))
-					.CacheMethod(m => m.MakeRegionalFromPerson(null))
-					.CacheMethod(m => m.NameForPerson(null))
 				);
 			}
-
 
 			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();
 			builder.RegisterType<ApplicationFunctionsForRole>().As<ApplicationFunctionsForRole>().InstancePerDependency();

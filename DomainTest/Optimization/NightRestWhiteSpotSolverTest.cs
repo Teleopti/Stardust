@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(0, result.DaysToReschedule().Count());
         }
 
-        private void mockExpectations(IScheduleDayPro[] unlockedList)
+        private void mockExpectations(HashSet<IScheduleDayPro> unlockedList)
         {
             IPerson person = PersonFactory.CreatePerson();
 
@@ -353,10 +353,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_schedulePartShift).Repeat.Any();
         }
 
-        private IScheduleDayPro[] allUnlocked()
+		private HashSet<IScheduleDayPro> allUnlocked()
         {
-	        return new[]
-	        {
+	        return new HashSet<IScheduleDayPro>
+			{
 		        _scheduleDayPro1,
 		        _scheduleDayPro2,
 		        _scheduleDayPro3,
@@ -368,10 +368,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        };
         }
 
-        private IScheduleDayPro[] lockDay2()
+        private HashSet<IScheduleDayPro> lockDay2()
         {
-	        return new[]
-	        {
+	        return new HashSet<IScheduleDayPro>
+			{
 		        _scheduleDayPro1,
 		        _scheduleDayPro3,
 		        _scheduleDayPro4,
@@ -382,10 +382,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        };
         }
 
-        private IScheduleDayPro[] lockDay3()
+        private HashSet<IScheduleDayPro> lockDay3()
         {
-	        return new[]
-	        {
+	        return new HashSet<IScheduleDayPro>
+			{
 		        _scheduleDayPro1,
 		        _scheduleDayPro2,
 		        _scheduleDayPro4,

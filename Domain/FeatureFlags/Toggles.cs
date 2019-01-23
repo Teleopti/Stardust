@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Domain.FeatureFlags
+namespace Teleopti.Ccc.Domain.FeatureFlags
 {
 	//Yes, yes, I know. This should be named "Toggle" but too many name collisions
 	//with namespaces if changed now.
@@ -15,12 +15,6 @@
 		Forecast_CopySettingsToWorkflow_11112,
 
 		RTA_KillFattyIntradayUntilItDies_74939, //remove april 2019
-		RTA_ReviewHistoricalAdherence_Domain_74770,
-		RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306,
-		RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485,
-		RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485,
-		RTA_TooManyPersonAssociationChangedEvents_Packages_78669,
-		RTA_StateQueueFloodPrevention_77710,
 		RTA_ReviewHistoricalAdherence_74770,
 		RTA_RestrictModifySkillGroups_78568,
 		RTA_InputValidationForApprovingAdherencePeriods_77045,
@@ -36,6 +30,7 @@
 		MyTimeWeb_NewTeamScheduleViewDesktop_76313,
 		MyTimeWeb_TrafficLightOnMobileDayView_77447,
 		MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640,
+		MyTimeWeb_NewAbsenceRequestWaitlistPosition_80131,
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
@@ -58,6 +53,7 @@
 		Wfm_Authentication_ChangePasswordMenu_76666,
 		Wfm_User_Password_Reset_74957,
 		Wfm_ReadNotificationConfigurationFromDb_78242,
+		Wfm_AutomaticNotificationEnrollment_79679,
 
 		WfmGlobalLayout_personalOptions_37114,
 
@@ -71,6 +67,7 @@
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
 		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
+		ResourcePlanner_QueryHintOnLayers_79780,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -104,11 +101,12 @@
 		MyTimeWeb_Request_CleanUpRequestHisotry_77776,
 		MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446,
 		MyTimeWeb_Preference_Indicate_BankHoliday_79900,
+		MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901,
 
 		WFM_Intraday_Redesign_77214,
 
 		WFM_ChatBot_77547,
-		WFM_Insights_78059,
+		WFM_Insights_80704,
 
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
 		Wfm_Stardust_EnableScaleout_77366,
@@ -120,7 +118,9 @@
 		WFM_ProbabilityView_ImproveResponseTime_80040,
 		WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128,
 		WFM_Intraday_OptimizeSkillDayLoad_80153,
-		WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425
+		WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425,
+		ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646,
+		WFM_AbsenceRequest_Robust_Processing_79988
 		// ReSharper restore InconsistentNaming
 	}
 }

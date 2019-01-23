@@ -38,12 +38,18 @@ namespace Teleopti.Ccc.Domain.Common
 			if (_threadBusinessUnit.Value != null)
 				return _threadBusinessUnit.Value;
 
+			var identity = _identity.Current();
+			var businessUnitId = _businessUnitIdForRequest?.Get() ?? identity?.BusinessUnitId;
+			if (businessUnitId == null)
+				return null;
+			
 			var hasUnitOfWork = _unitOfWork?.Current()?.HasCurrentUnitOfWork() ?? false;
-			var id = _businessUnitIdForRequest?.Get();
-			if (id.HasValue && hasUnitOfWork && _businessUnitRepository != null)
-				return _businessUnitRepository.Load(id.Value);
+			if (hasUnitOfWork && _businessUnitRepository != null)
+				return _businessUnitRepository.Load(businessUnitId.Value);
 
-			return _identity.Current()?.BusinessUnit;
+			var businessUnitOnlyForEntities = new BusinessUnit(identity.BusinessUnitName);
+			businessUnitOnlyForEntities.SetId(businessUnitId);
+			return businessUnitOnlyForEntities;
 		}
 
 		public Guid? CurrentId()
@@ -51,11 +57,7 @@ namespace Teleopti.Ccc.Domain.Common
 			if (_threadBusinessUnit.Value != null)
 				return _threadBusinessUnit.Value.Id;
 
-			var businessUnit = _businessUnitIdForRequest?.Get();
-			if (businessUnit != null)
-				return businessUnit;
-
-			return _identity.Current()?.BusinessUnit?.Id;
+			return _businessUnitIdForRequest?.Get() ?? _identity.Current()?.BusinessUnitId;
 		}
 
 		public IDisposable OnThisThreadUse(IBusinessUnit businessUnit)

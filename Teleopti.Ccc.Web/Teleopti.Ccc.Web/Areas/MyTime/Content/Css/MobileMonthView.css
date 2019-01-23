@@ -127,16 +127,15 @@
 	border-radius: 4px;
 }
 
-.mobile-month-day .date-number {
-	background: #555;
-	color: white;
+.mobile-month-day .day-header-day {
+	background: white;
+	color: black;
 	width: 24px;
 	height: 24px;
-	border-radius: 50%;
-	padding: 1px 0;
+	border-color: #555;
 	position: absolute;
 	left: 50%;
-	top: 2px;
+	top: 0;
 	font-size: 1em;
 	font-weight: bold;
 	opacity: 0.7;
@@ -146,6 +145,7 @@
 	-o-transform: translateX(-50%);
 	transform: translateX(-50%);
 	z-index: 1;
+	cursor: pointer;
 }
 
 .mobile-month-view .shift {
@@ -160,10 +160,13 @@
 	overflow-y: auto;
 }
 
-.mobile-month-day-outmonth {
+.mobile-month-day-outmonth .day-header-day,
+.mobile-month-day-outmonth .shift {
 	opacity: 0.4;
 }
-
+.mobile-month-current-day {
+	border: 1px solid green;
+}
 .mobile-month-view .shift.is-day-off {
 	background-color: beige;
 }

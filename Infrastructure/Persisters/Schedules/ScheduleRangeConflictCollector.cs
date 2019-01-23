@@ -41,13 +41,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			foreach (var diffItem in modifiedAndDeletedEntities)
 			{
 				var inMemoryEntity = diffItem.OriginalItem;
-				var inMemoryVersion = inMemoryEntity as IVersioned;
-				if(inMemoryVersion==null)
+				if(!(inMemoryEntity is IVersioned inMemoryVersion))
 					continue;
 
 				int? databaseVersion;
-				var inMemoryEntityAsAssignment = inMemoryEntity as IPersonAssignment;
-				if (inMemoryEntityAsAssignment != null)
+				if (inMemoryEntity is IPersonAssignment inMemoryEntityAsAssignment)
 				{
 					var assInDbVersion = personAssignmentsInDb.FirstOrDefault(p => p.EqualWith(inMemoryEntityAsAssignment));
 					if (assInDbVersion != null)
@@ -74,8 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			{
 				if (diffItem.Status == DifferenceStatus.Added)
 				{
-					var currentAss = diffItem.CurrentItem as IPersonAssignment;
-					if(currentAss==null)
+					if(!(diffItem.CurrentItem is IPersonAssignment currentAss))
 						continue;
 					foreach (var assignmentInDb in personAssignmentsInDb)
 					{

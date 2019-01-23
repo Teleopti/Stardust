@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_nonBlendWorkShiftCalculator = nonBlendWorkShiftCalculator;
 		}
 
-		public IList<IWorkShiftCalculationResultHolder> RunCalculators(IPerson person,
-				IList<ShiftProjectionCache> shiftProjectionCaches,
+		public IEnumerable<IWorkShiftCalculationResultHolder> RunCalculators(IPerson person,
+				IEnumerable<ShiftProjectionCache> shiftProjectionCaches,
 				IWorkShiftCalculatorSkillStaffPeriodData dataHolders,
 				IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
 				SchedulingOptions schedulingOptions)
@@ -71,42 +71,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					}
 				}
 			}
-
-			
-
-			//var allValues = shiftProjectionCaches.Select(shiftProjection =>
-			//{
-			//	var v = new
-			//	{
-			//		shiftProjection,
-			//		shiftValueAndLength = _workShiftCalculator.CalculateShiftValue(((IWorkShiftCalculatableProjection)shiftProjection).WorkShiftCalculatableLayers,
-			//			dataHolders,
-			//			schedulingOptions.WorkShiftLengthHintOption,
-			//			schedulingOptions.UseMinimumStaffing,
-			//			schedulingOptions.UseMaximumStaffing),
-			//		nonBlendValue = shouldCalculateNonBlendValue
-			//			? _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
-			//				shiftProjection.MainShiftProjection,
-			//				nonBlendSkillPeriods,
-			//				schedulingOptions.WorkShiftLengthHintOption,
-			//				schedulingOptions.UseMinimumStaffing,
-			//				schedulingOptions.UseMaximumStaffing)
-			//			: null
-			//	};
-			//	double value = v.shiftValueAndLength.Value;
-			//	if (v.nonBlendValue.HasValue)
-			//	{
-			//		if (v.shiftValueAndLength.Value.Equals(double.MinValue))
-			//		{
-			//			value = v.nonBlendValue.Value;
-			//		}
-			//		else
-			//		{
-			//			value += v.nonBlendValue.Value;
-			//		}
-			//	}
-			//	return (IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult { ShiftProjection = v.shiftProjection, Value = value, LengthInMinutes = v.shiftValueAndLength.LengthInMinutes};
-			//}).Where(w => w.Value > double.MinValue).ToList();
 
 			return allValues;
 		}

@@ -1,13 +1,11 @@
 using System;
-using Autofac;
-using Autofac.Core.Registration;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -32,8 +30,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			_notificationValidationCheck = MockRepository.GenerateMock<INotificationValidationCheck>();
 			_scheduleDayReadModelsCreator = MockRepository.GenerateMock<IScheduleDayReadModelsCreator>();
 			_scheduleDayReadModelRepository = MockRepository.GenerateMock<IScheduleDayReadModelRepository>();
+			var teamScheduleWeekViewChangeCheck = MockRepository.GenerateMock<ITeamScheduleWeekViewChangeCheck>();
 			var persister = new ScheduleDayReadModelPersister(_personRepository,
-				_notificationValidationCheck, _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
+				_notificationValidationCheck, _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository, teamScheduleWeekViewChangeCheck);
 			_target = new ScheduleReadModelWrapperHandler(persister, null, null, null);
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		[Test]
 		public void ShouldSkipOutIfNotDefaultScenario()
 		{
-			_target.Handle(new ProjectionChangedEventNew {IsDefaultScenario = false});
+			_target.Handle(new ProjectionChangedEventNew { IsDefaultScenario = false });
 			_personRepository.AssertWasNotCalled(x => x.Get(Arg<Guid>.Is.Anything));
 		}
 
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				PersonId = _person.Id.GetValueOrDefault(),
 				IsDefaultScenario = true,
 				IsInitialLoad = false,
-				ScheduleDays = new[] {denormalizedScheduleDay}
+				ScheduleDays = new[] { denormalizedScheduleDay }
 			};
 			_personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			_scheduleDayReadModelsCreator.Stub(x => x.GetReadModel(denormalizedScheduleDay, _person)).Return(model);
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				PersonId = _person.Id.GetValueOrDefault(),
 				IsDefaultScenario = true,
 				IsInitialLoad = true,
-				ScheduleDays = new[] {denormalizedScheduleDay}
+				ScheduleDays = new[] { denormalizedScheduleDay }
 			};
 			_personRepository.Stub(x => x.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			_scheduleDayReadModelsCreator.Stub(x => x.GetReadModel(denormalizedScheduleDay, _person)).Return(model);

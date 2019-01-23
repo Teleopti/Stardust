@@ -64,8 +64,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the absolute difference time between forecasted and scheduled in the specified <see cref="ISkillStaffPeriod"/> list.
         /// </summary>
         /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <param name="considerMinStaffing">if set to <c>true</c> consider min staffing.</param>
-        /// <param name="considerMaxStaffing">if set to <c>true</c> consider max staffing.</param>
         /// <returns></returns>
         /// <remarks>
         /// This method is used for getting the absolute difference time for a day, preceding by a method
@@ -197,7 +195,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Calculates the root mean square.
         /// </summary>
         /// <param name="intradayDifferences">The intraday differences (can be either absolut or relative).</param>
-        /// <param name="highestIntraIntervalDeviation">The highest intra interval deviation.</param>
         /// <returns></returns>
         public static double? CalculateRootMeanSquare(IEnumerable<double> intradayDifferences)
         {

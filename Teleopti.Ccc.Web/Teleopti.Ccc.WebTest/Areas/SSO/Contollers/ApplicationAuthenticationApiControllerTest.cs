@@ -11,7 +11,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Models;

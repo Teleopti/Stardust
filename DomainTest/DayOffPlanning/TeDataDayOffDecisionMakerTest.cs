@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldSolveTheCaseWithTwoWeeks()
 		{
-			_array = new LockableBitArray(14, false, false, null);
+			_array = new LockableBitArray(14, false, false);
 			_array.Set(5, true);
 			_array.Set(6, true);
 			_array.Set(12, true);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldSolveTheCaseWithMoreThanTwoWeeksAndHandleLocks()
 		{
-			_array = new LockableBitArray(21, false, false, null);
+			_array = new LockableBitArray(21, false, false);
 			_array.Set(5, true);
 			_array.Set(6, true);
 			_array.Set(12, true);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void ShouldReturnToWeekIndexZeroIfRequired()
 		{
-			_array = new LockableBitArray(28, false, false, null);
+			_array = new LockableBitArray(28, false, false);
 			_array.Set(5, true);
 			_array.Set(6, true);
 			_array.Set(12, true);

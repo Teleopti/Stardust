@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ShiftCategoryRestrictionShiftFilter _shiftCategoryRestrictionShiftFilter;
 		private readonly TimeLimitsRestrictionShiftFilter _timeLimitsRestrictionShiftFilter;
 		private readonly WorkTimeLimitationShiftFilter _workTimeLimitationShiftFilter;
-		private readonly IShiftLengthDecider _shiftLengthDecider;
+		private readonly ShiftLengthDecider _shiftLengthDecider;
 		private readonly IWorkShiftMinMaxCalculator _minMaxCalculator;
 		private readonly CommonActivityFilter _commonActivityFilter;
         private readonly RuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessabilityFilter;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ShiftCategoryRestrictionShiftFilter shiftCategoryRestrictionShiftFilter,
 			TimeLimitsRestrictionShiftFilter timeLimitsRestrictionShiftFilter,
 			WorkTimeLimitationShiftFilter workTimeLimitationShiftFilter,
-			IShiftLengthDecider shiftLengthDecider,
+			ShiftLengthDecider shiftLengthDecider,
 			IWorkShiftMinMaxCalculator minMaxCalculator,
 			CommonActivityFilter commonActivityFilter, 
 			RuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter,
@@ -178,8 +179,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	            var matrixForPerson = matrixList.FirstOrDefault(scheduleMatrixPro => scheduleMatrixPro.Person.Equals(person));
 	            if (matrixForPerson != null)
 	            {
-					var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, skillDays, new DateOnlyPeriod(matrixForPerson.FullWeeksPeriodDays.Min(x => x.Day), matrixForPerson.FullWeeksPeriodDays.Max(x => x.Day)), dateOnly);
-					shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions, openHoursResult);
+					var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo.TeamInfo.GroupMembers, skillDays, new DateOnlyPeriod(matrixForPerson.FullWeeksPeriodDays.Min(x => x.Day), matrixForPerson.FullWeeksPeriodDays.Max(x => x.Day)));
+					shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixForPerson, schedulingOptions, openHoursResult, dateOnly);
 				}
 			}
 

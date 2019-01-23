@@ -61,12 +61,12 @@
 	text-align: center;
 }
 
-.cal-month-day .date-number {
+.cal-month-day .day-header-day {
 	position: absolute;
 	right: 0;
 	top: 0;
-	margin-right: 2px;
-	margin-top: 2px;
+	box-shadow: 0 0 1px 1px #dfdfdf;
+	cursor: pointer;
 }
 
 .cal-month-box [class*='cal-cell'] {
@@ -96,40 +96,69 @@
 	border-radius: 2px;
 }
 
-span[data-cal-date] {
-	font-size: 1.2em;
-	font-weight: normal;
-	opacity: 0.5;
-	cursor: pointer;
-	transition: all 0.3s ease-in-out;
-	-webkit-transition: all 0.1s ease-in-out;
-	-moz-transition: all 0.1s ease-in-out;
-	-ms-transition: all 0.1s ease-in-out;
-	-o-transition: all 0.1s ease-in-out;
-	margin-top: 15px;
-	margin-right: 15px;
-}
-
 .cal-day-outmonth {
 	opacity: 0.3;
 }
 
 .cal-month-day .absence {
 	background-image: url(../Images/stripe.png);
-	height: 120px;
-	padding-top: 30px;
+	height: 100%;
+	padding-top: 24px;
 }
 
 .cal-month-day .dayoff {
-	height: 120px;
-	padding-top: 40px;
+	height: 100%;
+	padding-top: 24px;
 }
 
 .cal-month-day .overtime {
-	padding-top: 40px;
+	padding-top: 24px;
 }
 .cal-month-day .absence .overtime {
 	padding: 0;
+}
+
+@media print {
+	.cal-month-day .visible-lg {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-xs {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-sm {
+		display: block !important;
+	}
+
+	.cal-month-day .hidden-md {
+		display: none !important;
+	}
+
+	.cal-month-day .label-default {
+		background-color: transparent !important;
+		border: none;
+	}
+
+	.cal-month-day .label {
+		color: black !important;
+	}
+
+	.cal-month-day span {
+		opacity: 1 !important;
+	}
+
+	* {
+		transition: none !important;
+	}
+
+	.cal-month-day .day-header-day {
+		color: #fff !important;
+	}
+
+	.label-default {
+		background-color: transparent !important;
+	}
 }
 
 .cal-weekday-header {
@@ -140,13 +169,13 @@ span[data-cal-date] {
 }
 
 .shift {
-	height: 120px;
-	padding-top: 20px;
+	height: 100%;
+	padding-top: 24px;
 	font-size: 14px;
 }
 
 .shift.part-time {
-	height: 90px;
+	height: calc(100% - 30px);
 	padding-top: 0;
 	padding-bottom: 5px;
 	font-size: 13px;

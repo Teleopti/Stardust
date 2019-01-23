@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Handle(new PersonAssociationChangedEvent { PersonId = personId });
+			Target.Handle(new[] {new PersonAssociationChangedEvent { PersonId = personId }});
 
 			Persister.Models.Single().PersonId.Should().Be(personId);
 		}

@@ -29,5 +29,26 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 			return workflowControlSet;
 		}
+
+		public static WorkflowControlSet CreateWorkFlowControlSetWithWaitlist(IAbsence absence, WaitlistProcessOrder waitlistProcessOrder)
+		{
+			var wcs = new WorkflowControlSet
+			{
+				Name = "-",
+				AbsenceRequestWaitlistEnabled = true,
+				AbsenceRequestWaitlistProcessOrder = waitlistProcessOrder
+			};
+			wcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
+				Period = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			return wcs;
+		}
 	}
 }

@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						continue;
 					}
 					var resCalcState = new UndoRedoContainer();
-					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
+					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays().ToHashSet()));
 					var result = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,

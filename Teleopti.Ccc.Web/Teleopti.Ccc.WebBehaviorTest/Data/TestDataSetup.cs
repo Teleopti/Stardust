@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
 				DefaultBusinessUnit.BusinessUnit
 				);
-			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipalForLegacy;
+			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
 
 			LocalSystem.Start();
 

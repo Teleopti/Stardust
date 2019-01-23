@@ -34,12 +34,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
-RTA_ReviewHistoricalAdherence_Domain_74770 = true
-RTA_SpeedUpHistoricalAdherence_RemoveLastBefore_78306 = true
-RTA_SpeedUpHistoricalAdherence_EventStoreUpgrader_78485 = true
-RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485 = true
-RTA_TooManyPersonAssociationChangedEvents_Packages_78669 = true
-RTA_StateQueueFloodPrevention_77710 = true
 RTA_ReviewHistoricalAdherence_74770 = true
 RTA_RestrictModifySkillGroups_78568 = true
 RTA_InputValidationForApprovingAdherencePeriods_77045 = RC
@@ -55,7 +49,7 @@ MessageBroker_ScheduleChangedMessagePackaging_79140 = true
 WfmTeamSchedule_SuggestShiftCategory_152 = RC
 WfmTeamSchedule_ShiftEditorInDayView_78295 = RC
 WfmTeamSchedule_DisableAutoRefreshSchedule_79826 = RC
-WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242 = DEV
+WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242 = RC
 
 # Code Monkeys, can any of these be removed? #
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
@@ -72,12 +66,14 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_Authentication_ChangePasswordMenu_76666 = true
 Wfm_User_Password_Reset_74957 = DEV
 Wfm_ReadNotificationConfigurationFromDb_78242 = DEV
+Wfm_AutomaticNotificationEnrollment_79679 = DEV
 
 # China, can any of these be removed? #
 MyTimeWeb_NewTeamScheduleView_75989 = true
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = true
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = true
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = true
+MyTimeWeb_NewAbsenceRequestWaitlistPosition_80131 = DEV
 
 # Kittens, Bugs&Roses and Micke #
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release just yet
@@ -89,7 +85,8 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true #AF: OK for me to rem
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true #AF: OK for me to remove
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
-ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = false
+ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
+ResourcePlanner_QueryHintOnLayers_79780 = RC
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = RC
@@ -102,8 +99,9 @@ Wfm_AuditTrail_StaffingAuditTrail_78125 = true
 Wfm_AuditTrail_GenericAuditTrail_74938 = true
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
 WFM_ProbabilityView_ImproveResponseTime_80040 = true
-WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = false #Dont enable it. It was not a good optimization in Csharp
+WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = RC 
 WFM_Intraday_OptimizeSkillDayLoad_80153 = RC
+WFM_AbsenceRequest_Robust_Processing_79988= RC
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
@@ -114,6 +112,8 @@ WFM_Forecast_Show_History_Data_76432 = DEV
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
 WFM_Connect_NewLandingPage_WEB_78578 = true
 WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425 = RC
+ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646 = RC
+
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
@@ -135,8 +135,9 @@ WFM_Request_Show_Shift_for_Absence_Requests_79008 = true
 WFM_Request_Show_Shift_for_ShiftTrade_Requests_79412 = true
 WFM_Setting_BankHolidayCalendar_Create_79297 = RC
 WFM_Setting_AssignBankHolidayCalendarsToSites_79899 = RC
-MyTimeWeb_Preference_Indicate_BankHoliday_79900 = DEV
+MyTimeWeb_Preference_Indicate_BankHoliday_79900 = RC #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
+MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901 = DEV #Depending on WFM_Setting_BankHolidayCalendar_Create_79297
 
 # Tech #
 WFM_ChatBot_77547 = RC
-WFM_Insights_78059 = DEV
+WFM_Insights_80704 = RC

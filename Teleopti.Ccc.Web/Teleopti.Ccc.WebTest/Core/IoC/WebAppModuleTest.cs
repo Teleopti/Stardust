@@ -500,23 +500,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void ShouldResolveMakeRegionalFromPerson()
-		{
-			var result = requestContainer.Resolve<IMakeRegionalFromPerson>();
-			result.Should().Not.Be.Null();
-		}
-
-		[Test]
 		public void ShouldResolveMakeOrganizationMembershipFromPerson()
 		{
 			var result = requestContainer.Resolve<IMakeOrganisationMembershipFromPerson>();
-			result.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldResolveRetrievePersonNameForPerson()
-		{
-			var result = requestContainer.Resolve<IRetrievePersonNameForPerson>();
 			result.Should().Not.Be.Null();
 		}
 

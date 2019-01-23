@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			    schedulingOptions.ConsiderShortBreaks, false);
 
 		    bool success = false;
-		    var daysInConsideration = solverResult.DaysToReschedule().ToList();
+		    var daysInConsideration = solverResult.DaysToReschedule().ToHashSet();
 		    foreach (var dateOnly in solverResult.DaysToReschedule())
 		    {
 			    if (!daysInConsideration.Contains(dateOnly)) continue;
