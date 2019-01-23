@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)]
 	public interface IOpenHoursSkillExtractor
 	{
-		OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period);
+		OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period);
 	}
 
 	public class OpenHoursSkillExtractor : IOpenHoursSkillExtractor
@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
+		public OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
 		{
 			var skillDaysBySkillAndDay = skillDays.ToDictionary(s => (s.Skill, s.CurrentDate));
 			var openHoursDictionary = period.DayCollection().ToDictionary(d => d, day =>
 			{
 				var minOpen = TimeSpan.MaxValue;
 				var maxOpen = TimeSpan.MinValue;
-				var skills = _groupPersonSkillAggregator.AggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers, day.ToDateOnlyPeriod()).ToList();
+				var skills = _groupPersonSkillAggregator.AggregatedSkills(agentsInTeam, day.ToDateOnlyPeriod()).ToList();
 				var offsetUser = _timeZoneGuard.CurrentTimeZone().GetUtcOffset(day.Date);
 
 				foreach (var skill in skills)
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)]
 	public class OpenHoursSkillExtractorDoNothing : IOpenHoursSkillExtractor
 	{
-		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
+		public OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
 		{
 			return null;
 		}

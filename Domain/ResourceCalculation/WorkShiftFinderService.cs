@@ -205,11 +205,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
 				{
-					var group = new Group(new List<IPerson> {person}, string.Empty);
-					var teamInfo = new TeamInfo(group, new List<IList<IScheduleMatrixPro>>());
-					var blockInfo = new BlockInfo(dateOnly.ToDateOnlyPeriod());
-					var teamBlockInfo = new TeamBlockInfo(teamInfo, blockInfo);
-					var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, _resultStateHolder().SkillDays.ToSkillDayEnumerable(), new DateOnlyPeriod(matrix.FullWeeksPeriodDays.Min(x => x.Day), matrix.FullWeeksPeriodDays.Max(x => x.Day)));
+					var openHoursResult = _openHoursSkillExtractor.Extract(new [] {person}, _resultStateHolder().SkillDays.ToSkillDayEnumerable(), new DateOnlyPeriod(matrix.FullWeeksPeriodDays.Min(x => x.Day), matrix.FullWeeksPeriodDays.Max(x => x.Day)));
 					shiftList = _shiftLengthDecider.FilterList(shiftList, _workShiftMinMaxCalculator(), matrix, schedulingOptions, openHoursResult, dateOnly);
 					if (shiftList.Count == 0)
 						return null;
