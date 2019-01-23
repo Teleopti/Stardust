@@ -492,8 +492,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 		[Test]
 		public void ShouldConsiderOpenHourUsingDifferentTimeZones(
-			[Values("W. Europe Standard Time", "UTC", "E. South America Standard Time")] string userTimeZone,
-			[Values("W. Europe Standard Time", "UTC", "E. South America Standard Time")] string skillTimeZone
+			[Values("W. Europe Standard Time", "UTC", "E. South America Standard Time")] string userTimeZone, //this should not matter
+			[Values("W. Europe Standard Time", "UTC", "E. South America Standard Time")] string skillTimeZone,
+			[Values("W. Europe Standard Time", "UTC", "E. South America Standard Time")] string agentTimeZone
 			)
 		{
 			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118))
@@ -502,7 +503,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var date = new DateOnly(2018, 10, 1);
 			var timeZoneSkill = TimeZoneInfo.FindSystemTimeZoneById(skillTimeZone);
 			var timeZoneUser = TimeZoneInfo.FindSystemTimeZoneById(userTimeZone);
+			var timeZoneAgent = TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone);
 			TimeZoneGuard.SetTimeZone(timeZoneUser);
+			var diffAgentSkillTimeZones = timeZoneAgent.GetUtcOffset(date.Date).Subtract(timeZoneSkill.GetUtcOffset(date.Date)).Hours;
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var activity = new Activity { RequiresSkill = true }.WithId();
 			var scenario = new Scenario();
@@ -515,17 +518,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				{DayOfWeek.Sunday, new TimePeriod(8, 12)}
 			};
 			var skill = new Skill().For(activity).WithId().InTimeZone(timeZoneSkill).IsOpen(days);
-
-			var offsetUser = TimeZoneGuard.TimeZone.GetUtcOffset(date.Date).Hours;
-			var offsetSkill = timeZoneSkill.GetUtcOffset(date.Date).Hours;
-			var ruleSet8And9 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8 - offsetSkill + offsetUser, 0, 8 - offsetSkill + offsetUser, 0, 60), new TimePeriodWithSegment(16 - offsetSkill + offsetUser, 0, 17 - offsetSkill + offsetUser, 0, 60), new ShiftCategory().WithId()));
-			var ruleSet4 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8 - offsetSkill + offsetUser, 0, 8 - offsetSkill + offsetUser, 0, 60), new TimePeriodWithSegment(12 - offsetSkill + offsetUser, 0, 12 - offsetSkill + offsetUser, 0, 60), new ShiftCategory().WithId()));
-			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(11), TimeSpan.FromHours(36)) };
-			var agent = new Person().WithId().InTimeZone(timeZoneUser).WithPersonPeriod(new RuleSetBag(ruleSet8And9, ruleSet4), contract, skill).WithSchedulePeriodOneWeek(date);
+			var ruleSet8And9 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8 + diffAgentSkillTimeZones, 0, 8 + diffAgentSkillTimeZones, 0, 60), new TimePeriodWithSegment(16 + diffAgentSkillTimeZones, 0, 17 + diffAgentSkillTimeZones, 0, 60), new ShiftCategory().WithId()));
+			var ruleSet4 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8 + diffAgentSkillTimeZones, 0, 8 + diffAgentSkillTimeZones, 0, 60), new TimePeriodWithSegment(12 + diffAgentSkillTimeZones, 0, 12 + diffAgentSkillTimeZones, 0, 60), new ShiftCategory().WithId()));
+			var contractThatShouldBeFulfilled = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(11), TimeSpan.FromHours(36)) };
+			var agent = new Person().WithId().InTimeZone(timeZoneAgent).WithPersonPeriod(new RuleSetBag(ruleSet8And9, ruleSet4), contractThatShouldBeFulfilled, skill).WithSchedulePeriodOneWeek(date);
 			agent.SchedulePeriod(date).SetDaysOff(2);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(2), 10, 10, 10, 10, 10);
-			var assDayOff1 = new PersonAssignment(agent, scenario, date).WithDayOff(new DayOffTemplate());
-			var assDayOff2 = new PersonAssignment(agent, scenario, date.AddDays(1)).WithDayOff(new DayOffTemplate());
+			var assDayOff1 = new PersonAssignment(agent, scenario, date).WithDayOff();
+			var assDayOff2 = new PersonAssignment(agent, scenario, date.AddDays(1)).WithDayOff();
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assDayOff1, assDayOff2 }, skillDays);
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions { UseAverageShiftLengths = true }, new NoSchedulingProgress(), new[] { agent }, period);
