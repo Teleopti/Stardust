@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             scenario = mocks.StrictMock<IScenario>();
             gridlockManager = new GridlockManager();
             clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
-			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date, _date), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
+			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date, _date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
             _scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
             target = new DayPresenter(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             GridQueryCellInfoEventArgs eventArgs = new GridQueryCellInfoEventArgs(0, -1, new GridStyleInfo());
             ((DayPresenterTestClass)target).CreateDayHeaderTest(eventArgs);
 
-            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             eventArgs = new GridQueryCellInfoEventArgs(0, (int)ColumnType.StartScheduleColumns,new GridStyleInfo());
             ((DayPresenterTestClass)target).CreateDayHeaderTest(eventArgs);
             Assert.AreEqual(target.SelectedPeriod.DateOnlyPeriod.StartDate, eventArgs.Style.Tag);

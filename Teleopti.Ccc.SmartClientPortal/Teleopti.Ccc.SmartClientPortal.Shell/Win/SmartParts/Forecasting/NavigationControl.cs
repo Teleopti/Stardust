@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
         {
 
                 var culture =
-                    TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _previousDate = DateOnly.Today;
                 int dayOfYear = culture.Calendar.GetDayOfYear(_previousDate.Date);
                 _previousDate = new DateOnly(culture.Calendar.AddDays(_previousDate.Date, -dayOfYear + 1));
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
         private void buttonNext_Click(object sender, EventArgs e)
         {
                 var culture =
-                    TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate.Date,1));
                 _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate.Date, 1));
                 autoLabelYear.Text = culture.Calendar.GetYear(_nextDate.Date).ToString(culture);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
         private void buttonPrevious_Click(object sender, EventArgs e)
         {
                 var culture =
-                    TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate.Date, -1));
                 _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate.Date, -1));
                 autoLabelYear.Text = culture.Calendar.GetYear(_nextDate.Date).ToString(culture);

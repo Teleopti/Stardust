@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			 var identity = new TeleoptiIdentity("test user", new FakeDataSource(), () => businessUnit?.Id, businessUnit?.Name, WindowsIdentity.GetCurrent(), null);
 			 var principalForTest = new TeleoptiPrincipalForLegacy(identity, person);
 			 Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(identity, person);
-			 ((TeleoptiPrincipalForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).ChangePrincipal(principalForTest);
+			 ((TeleoptiPrincipalForLegacy)TeleoptiPrincipal.CurrentPrincipal).ChangePrincipal(principalForTest);
 	    }
 
         private static testData dummyValue()

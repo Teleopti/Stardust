@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
 
         private static void populateSystemProperties()
         {
-			if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity is ITeleoptiIdentity identity)
+			if (TeleoptiPrincipal.CurrentPrincipal.Identity is ITeleoptiIdentity identity)
             {
                 GlobalContext.Properties["BU"] = identity.BusinessUnitName;
                 GlobalContext.Properties["BUId"] = identity.BusinessUnitId;

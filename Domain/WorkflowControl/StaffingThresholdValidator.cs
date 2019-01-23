@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return result;
 
 			var calculatedPeriod = absenceRequest.Period;
-			var datesToResourceCalculate = calculatedPeriod.ToDateOnlyPeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+			var datesToResourceCalculate = calculatedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
 			var resCalcData = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.ToResourceOptimizationData(true,
 				false);

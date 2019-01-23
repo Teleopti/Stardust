@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPag
                 if(!_isClosed && startTime >= endTime)
                 {
                     errorProvider1.SetError(chbClose,
-                                            string.Format(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture, UserTexts.Resources.StartTimeShouldBeEarlierThanEndTimeDot,
+                                            string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture, UserTexts.Resources.StartTimeShouldBeEarlierThanEndTimeDot,
                                                           DateTime.MinValue.Add(startTime).ToShortTimeStringWithDays(),
                                                           DateTime.MinValue.Add(endTime).ToShortTimeStringWithDays()));
                     return false;

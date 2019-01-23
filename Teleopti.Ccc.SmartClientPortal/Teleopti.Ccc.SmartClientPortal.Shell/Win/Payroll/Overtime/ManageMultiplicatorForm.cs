@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.Overtime
             get
             {
                 return
-                    TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             }
         }
 

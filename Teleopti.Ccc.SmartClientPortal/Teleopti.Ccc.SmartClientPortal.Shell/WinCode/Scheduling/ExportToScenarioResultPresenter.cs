@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public void PrepareForExport()
 		{
-			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			_view.SetScenarioText(string.Format(culture,
 												Resources.ExportFromAndToScenario,
 												_schedulePartsToExport.First().Scenario.Description.Name,

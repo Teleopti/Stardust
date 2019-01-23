@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
            {
                SetOkStatus();
            }
-            var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture; 
+            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture; 
            if (timeValue < _minimumValue)
                SetErrorStatus(string.Format(culture, UserTexts.Resources.MinimumIsParameterHoursDot, _minimumValue.TotalHours));
            else if (timeValue > _maximumValue)

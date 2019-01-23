@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             get
             {
                 return
-                    TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             }
         }
     }

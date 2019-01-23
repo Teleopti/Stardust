@@ -211,8 +211,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
 				e.Content = "";
 			else
 				e.Content =
-					TimeZoneHelper.ConvertFromUtc(utcTime, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone)
-								.ToString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+					TimeZoneHelper.ConvertFromUtc(utcTime, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)
+								.ToString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 		}
 
 		private void PinnedColumn_OnCopyingCellClipboardContent(object sender, DataGridCellClipboardEventArgs e)

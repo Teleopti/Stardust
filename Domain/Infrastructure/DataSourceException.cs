@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		
         protected virtual ITeleoptiPrincipal GetCurrentPrincipal()
         {
-            return TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
+            return TeleoptiPrincipal.CurrentPrincipal;
         }
 
 	    [SecurityCritical]

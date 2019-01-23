@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
         public void VerifyConvert()
         {
             TimeSpan timeSpan = new TimeSpan(0, 5, 30, 25);
-            object value = _target.Convert(timeSpan, null, null, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+            object value = _target.Convert(timeSpan, null, null, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
             Assert.AreEqual("5:30", value);
         }

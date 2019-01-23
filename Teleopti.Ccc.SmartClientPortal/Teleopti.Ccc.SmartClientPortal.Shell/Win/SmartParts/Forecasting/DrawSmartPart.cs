@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
             if (periods.Count > 0)
             {
                 var startDate = period.StartDate;
-                Calendar calendar = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture.Calendar;
+                Calendar calendar = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar;
                 int totalDays = calendar.GetDaysInYear(calendar.GetYear(startDate.Date));
                 double unitOfDraw = drawProperties.DrawingWidth / (totalDays * 1.0);
 
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 
             string lastUpdated = string.Empty;
             if (entityUpdateInformation.LastUpdate.HasValue)
-                lastUpdated = entityUpdateInformation.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+                lastUpdated = entityUpdateInformation.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
             lastUpdated = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.LastUpdated, lastUpdated);
             string lastChangedByName = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.ChangedBy,
                                                      (entityUpdateInformation.Name.HasValue)

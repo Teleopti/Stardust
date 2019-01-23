@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public void DefaultPreferencePeriods(IWorkflowControlSetModel model, DateTime today)
 		{
-			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var startDate = new DateOnly(today.AddMonths(1).Year, today.AddMonths(1).Month, 1);
 			var endDate = new DateOnly(today.AddMonths(1).Year, today.AddMonths(1).Month,
 				DateHelper.GetLastDateInMonth(today.AddMonths(1), culture).Day);
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public void DefaultStudentAvailabilityPeriods(IWorkflowControlSetModel model, DateTime today)
 		{
-			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var startDate = new DateOnly(today.AddMonths(1).Year, today.AddMonths(1).Month, 1);
 			var endDate = new DateOnly(today.AddMonths(1).Year, today.AddMonths(1).Month,
 				DateHelper.GetLastDateInMonth(today.AddMonths(1), culture).Day);
@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public void SetCulture()
 		{
-			_view.SetCalendarCultureInfo(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+			_view.SetCalendarCultureInfo(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 		}
 
 		public void SetPublishedToDate(DateTime? dateTime)

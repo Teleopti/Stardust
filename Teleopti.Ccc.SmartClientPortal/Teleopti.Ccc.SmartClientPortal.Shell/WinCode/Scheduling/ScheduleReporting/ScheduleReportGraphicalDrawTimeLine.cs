@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 				string timeString;
 
 				if (_rightToLeft)
-					timeString = TimeZoneHelper.ConvertFromUtc(timelinePeriod.EndDateTime.AddHours(-i), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortTimeString();
+					timeString = TimeZoneHelper.ConvertFromUtc(timelinePeriod.EndDateTime.AddHours(-i), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString();
 				else
-					timeString = TimeZoneHelper.ConvertFromUtc(timelinePeriod.StartDateTime.AddHours(i), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortTimeString();
+					timeString = TimeZoneHelper.ConvertFromUtc(timelinePeriod.StartDateTime.AddHours(i), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString();
 
 				const float fontSize = 6f;
 				var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, _culture);
@@ -229,8 +229,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 
             if (startDateTime.Equals(endDateTime))
             {
-                startDateTime = TimeZoneHelper.ConvertToUtc(day.Date.AddHours(8), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
-                endDateTime = TimeZoneHelper.ConvertToUtc(day.Date.AddHours(17), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+                startDateTime = TimeZoneHelper.ConvertToUtc(day.Date.AddHours(8), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+                endDateTime = TimeZoneHelper.ConvertToUtc(day.Date.AddHours(17), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             }
 
             return new DateTimePeriod(startDateTime, endDateTime);

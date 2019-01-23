@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             scenario = mocks.StrictMock<IScenario>();
             gridlockManager = new GridlockManager();
             clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
-			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
+			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
             _scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
             _scaleCalculator = mocks.StrictMock<IDayPresenterScaleCalculator>();
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(() => viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null)).IgnoreArguments
                     ();
                 Expect.Call(viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
-                Expect.Call(schedulerState1.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone));
+                Expect.Call(schedulerState1.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
                 Expect.Call(schedulerState1.FilteredCombinedAgentsDictionary).Return(persons).Repeat.AtLeastOnce();
                 Expect.Call(schedulerState1.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary[person]).Return(range);

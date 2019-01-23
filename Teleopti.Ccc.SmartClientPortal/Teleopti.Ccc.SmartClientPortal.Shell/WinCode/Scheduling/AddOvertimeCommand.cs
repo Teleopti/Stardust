@@ -38,10 +38,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             var defaultPeriod = new DateTimePeriod();
             if (scheduleDay != null)
             {
-	            var startDateTimeLocal = scheduleDay.Period.StartDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+	            var startDateTimeLocal = scheduleDay.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 	            defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                         startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour)),
-                        startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour)), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+                        startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour)), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             }
             return defaultPeriod;    
         }

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 		{
 			InitializeComponent();
 
-			var cultureInfo = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			percentTextBoxOverstaffing.Setup(cultureInfo);
 			percentTextBoxSeriousUnderstaffing.Setup(cultureInfo);
 			percentTextBoxUnderstaffing.Setup(cultureInfo);

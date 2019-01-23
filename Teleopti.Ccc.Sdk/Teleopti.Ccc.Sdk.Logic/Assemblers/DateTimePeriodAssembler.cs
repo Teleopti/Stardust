@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
 		private TimeZoneInfo timeZone()
 		{
-			return TimeZone ?? TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
+			return TimeZone ?? TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 		}
 		
         public override DateTimePeriodDto DomainEntityToDto(DateTimePeriod entity)

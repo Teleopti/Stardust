@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _personTime.BalanceIn = TimeSpan.FromHours(100);
             _person = PersonFactory.CreatePerson("First", "Last");
             _person.PermissionInformation.SetDefaultTimeZone(
-								TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+								TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             _personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2005, 1, 1), TeamFactory.CreateSimpleTeam());
             _person.AddPersonPeriod(_personPeriod);
             _eventAggregator = new EventAggregator();

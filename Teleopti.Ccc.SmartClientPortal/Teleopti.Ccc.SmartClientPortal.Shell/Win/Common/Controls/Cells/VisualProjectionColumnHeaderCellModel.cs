@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 	        var cellModel = style.CellModel as VisualProjectionColumnHeaderCellModel;
 	        TimeZoneInfo timeZoneInfo = (cellModel != null && cellModel.TimeZoneInfo != null)
 		        ? cellModel.TimeZoneInfo
-		        : TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
+		        : TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
 	        var timePeriod = (DateTimePeriod)style.Tag;
             var pixelConverter = new LengthToTimeCalculator(timePeriod, cellRectangle.Width);

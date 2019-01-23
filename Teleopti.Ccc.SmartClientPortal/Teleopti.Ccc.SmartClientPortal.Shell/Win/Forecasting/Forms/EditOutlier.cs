@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		public void MessageDateContainsOutlier(string outlierName)
 		{
 			CultureInfo culture =
-				  TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
+				  TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 
 			ViewBase.ShowInformationMessage(string.Format(culture, Resources.TheSpecialEventParameterContainsThisDate, outlierName),Resources.DateAlreadyExists);
 		}

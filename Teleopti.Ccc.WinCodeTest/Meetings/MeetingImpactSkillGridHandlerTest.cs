@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
         	Expect.Call(_schedulerStateHolder.RequestedPeriod).Return(
         		new DateOnlyPeriodAsDateTimePeriod(
-        			_requestedPeriod.ToDateOnlyPeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone),
-        			TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone));
+        			_requestedPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone),
+        			TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
             Expect.Call(_meetingViewModel.Meeting).Return(meeting);
             Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>{new MeetingPerson(new Person(),false)}));
             

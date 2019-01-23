@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					if ((string)item.Tag == validationAlert.TypeName && item.Checked)
 					{
-						var listItem = new ListViewItem {Text = validationAlert.Date.ToShortDateString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture)};
+						var listItem = new ListViewItem {Text = validationAlert.Date.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture)};
 						listItem.SubItems.Add(validationAlert.PersonName);
 						listItem.SubItems.Add(validationAlert.Alert);
 						listItem.Tag = new Tuple<DateOnly, IPerson>(validationAlert.Date, validationAlert.Person);

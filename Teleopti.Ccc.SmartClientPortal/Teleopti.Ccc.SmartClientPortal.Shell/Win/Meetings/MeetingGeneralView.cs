@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 			dateTimePickerAdvStartDate.SetSafeBoundary();
 			dateTimePickerAdvEndDate.SetSafeBoundary();
 			
-			dateTimePickerAdvStartDate.SetCultureInfoSafe(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
-			dateTimePickerAdvEndDate.SetCultureInfoSafe(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+			dateTimePickerAdvStartDate.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+			dateTimePickerAdvEndDate.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
 			dateTimePickerAdvStartDate.ValueChanged += dateTimePickerAdvStartDateValueChanged;
 		}

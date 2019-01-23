@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                                                                                                            scenario, activity, period);
             var ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
             var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
-        	var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly,TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+        	var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly,TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
             using (_mocks.Record())
             {

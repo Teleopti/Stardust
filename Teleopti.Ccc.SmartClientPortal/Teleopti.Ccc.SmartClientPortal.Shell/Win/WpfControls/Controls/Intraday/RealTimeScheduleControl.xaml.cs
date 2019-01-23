@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Intraday
         public RealTimeScheduleControl()
         {
             InitializeComponent();
-            if (StateHolderReader.IsInitialized) VisualTreeTimeZoneInfo.SetTimeZoneInfo(this, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+            if (StateHolderReader.IsInitialized) VisualTreeTimeZoneInfo.SetTimeZoneInfo(this, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
         }
 
         public RealTimeScheduleViewModel Model

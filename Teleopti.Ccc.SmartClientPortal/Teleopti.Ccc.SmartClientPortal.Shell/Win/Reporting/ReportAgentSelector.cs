@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		public void UpdateComboWithSelectedAgents()
 		{
-			var currentCultureInfo = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			var currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 
 			var builder = new StringBuilder();
 

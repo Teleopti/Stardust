@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			var loggedOnPerson = ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson();
+			var loggedOnPerson = ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipal.CurrentPrincipal).UnsafePerson();
 			_presenter = new ChangePasswordPresenter(this, _container.Resolve<IChangePassword>(), loggedOnPerson);
 			_presenter.Initialize();
 			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ", loggedOnPerson.Name);

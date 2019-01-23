@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 			}
 			var domainPersonRequest = _personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
 			domainPersonRequest.TrySetMessage(personRequestDto.Message);
-			domainPersonRequest.Deny(nameof(UserTexts.Resources.RequestDenyReasonOtherPart), new SdkPersonRequestAuthorizationCheck(), _personRepository.Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId));
+			domainPersonRequest.Deny(nameof(UserTexts.Resources.RequestDenyReasonOtherPart), new SdkPersonRequestAuthorizationCheck(), _personRepository.Get(TeleoptiPrincipal.CurrentPrincipal.PersonId));
 			unitOfWork.PersistAll();
 			return personRequestDto;
 		}

@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.Payload.ConfidentialDescription(revisionDisplayRow.ScheduleDay.Person) + "  " +
-                                                      layer.Period.TimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortTimeString());
+                                                      layer.Period.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortTimeString());
                         tipDatas.Add(tipData);
                     }
 

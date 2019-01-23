@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public static string ToLocalStartEndTimeString(DateTimePeriod period, TimeZoneInfo timeZoneInfo)
 		{
-			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			const string separator = " - ";
 
 			return string.Concat(TimeHelper.TimeOfDayFromTimeSpan(period.StartDateTimeLocal(timeZoneInfo).TimeOfDay, culture),
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public static string ToLocalStartEndTimeStringAbsences(DateTimePeriod partPeriod, DateTimePeriod absencePeriod,
 			TimeZoneInfo timeZoneInfo)
 		{
-			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			const string separator = " - ";
 			DateTimePeriod startTimePeriod = absencePeriod;
 			DateTimePeriod endTimePeriod = absencePeriod;
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public static string GetToolTipDayOff(IScheduleDay cell)
 		{
 			var sb = new StringBuilder();
-			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var ass = cell.PersonAssignment();
 			if (ass != null)
 			{

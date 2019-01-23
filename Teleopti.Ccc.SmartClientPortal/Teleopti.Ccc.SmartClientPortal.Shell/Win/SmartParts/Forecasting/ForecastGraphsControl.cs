@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
 
             _drawing = drawingBehavior;
             _drawSmartPart = drawSmartPart;
-            _monthNames = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture.DateTimeFormat.AbbreviatedMonthNames;
+            _monthNames = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.AbbreviatedMonthNames;
 
             InitializeDrawingGrid();
         }

@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
                 if (resolution != expectedResolution)
                 {
                     errorProvider1.SetError(comboBoxAdvIntervalLength,
-                                            string.Format(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture,
+                                            string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture,
                                                 UserTexts.Resources.
                                                     TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot,
                                                 expectedResolution));

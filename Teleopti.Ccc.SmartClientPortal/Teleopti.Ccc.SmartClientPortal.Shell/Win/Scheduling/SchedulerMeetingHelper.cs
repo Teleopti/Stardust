@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					meetingViewModel =
 						MeetingComposerPresenter.CreateDefaultMeeting(
-							_repositoryFactory.CreatePersonRepository(unitOfWork).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId),
+							_repositoryFactory.CreatePersonRepository(unitOfWork).Get(TeleoptiPrincipal.CurrentPrincipal.PersonId),
 							_schedulingScreenState.SchedulerStateHolder, meetingStartOrToday,
 							selectedActivePersons, new Now());
 				}
@@ -187,9 +187,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					unitOfWork.Reassociate(persons);
 
 					var period = meeting.MeetingPeriod(meeting.StartDate);
-					var start = period.StartDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
-					var end = period.EndDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
-					meeting.TimeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
+					var start = period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					var end = period.EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					meeting.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 					meeting.StartTime = start.TimeOfDay;
 					meeting.EndTime = end.TimeOfDay;
 

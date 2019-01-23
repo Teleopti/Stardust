@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 
 		private void calculateVisibleWeek()
 		{
-			VisibleWeek = DateHelper.GetWeekPeriod(SelectedDate, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+			VisibleWeek = DateHelper.GetWeekPeriod(SelectedDate, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 		}
 
 		private void initializeSelectedBudgetGroup(IBudgetGroup budgetGroup)

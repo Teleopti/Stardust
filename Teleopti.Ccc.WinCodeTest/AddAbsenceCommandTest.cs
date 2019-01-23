@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			_dateOnlyPeriod = new DateOnlyPeriod(2012, 7, 16, 2012, 7, 16);
 			_schedulePart = MockRepository.GenerateMock<IScheduleDay>();
 			_scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_dateOnlyPeriod, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_dateOnlyPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
 			_selectedItem = MockRepository.GenerateMock<IAbsence>();
 			_schedulePresenterBase = MockRepository.GenerateMock<ISchedulePresenterBase>();
 			_authorization = MockRepository.GenerateMock<IAuthorization>();

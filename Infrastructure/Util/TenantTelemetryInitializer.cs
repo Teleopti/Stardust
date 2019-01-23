@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 				return dataSource.DataSourceName;
 			}
 
-			var principal = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
+			var principal = TeleoptiPrincipal.CurrentPrincipal;
 			return !(principal?.Identity is ITeleoptiIdentity identity) ? "N/A" : identity.DataSource.DataSourceName;
 		}
 	}

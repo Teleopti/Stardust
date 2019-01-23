@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                 {
                     return CultureInfo.CurrentUICulture;
                 }
-                return TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
+                return TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
             }
         }
     }

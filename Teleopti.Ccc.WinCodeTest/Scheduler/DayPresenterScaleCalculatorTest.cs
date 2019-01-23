@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 new DateTimePeriod(new DateTime(2011, 1, 2, 7, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
             Assert.AreEqual(new DateTime(2011, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc), result.StartDateTime);
-            Assert.AreEqual(expected.EndDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), result.EndDateTime);
+            Assert.AreEqual(expected.EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), result.EndDateTime);
         }
 
         [Test]
@@ -207,8 +207,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var expected =
                 new DateTimePeriod(new DateTime(2011, 1, 2, 6, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2011, 1, 2, 16, 0, 0, 0, DateTimeKind.Utc));
-            Assert.AreEqual(expected.StartDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), result.StartDateTime);
-            Assert.AreEqual(expected.EndDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), result.EndDateTime);
+            Assert.AreEqual(expected.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), result.StartDateTime);
+            Assert.AreEqual(expected.EndDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), result.EndDateTime);
         }
 
         [Test]

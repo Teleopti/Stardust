@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_person = PersonFactory.CreatePerson();
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
 			Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
-			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone)).Repeat.Any();
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)).Repeat.Any();
 			_mocks.ReplayAll();
 			var personMeeting = createPersonMeeting(_period);
 			_layerWithPayload = personMeeting.ToLayer();

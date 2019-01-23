@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
         public static void ModifySelectionInput(GridControl grid, IList<double> list)
         {
             GridRangeInfoList rangelist;
-            var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             if (grid.Selections.GetSelectedRanges(out rangelist, true))
             {
                 int top;
@@ -1068,7 +1068,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                     {
                         IMeeting selectedMeeting;
                         using (MeetingPicker meetingPicker = new MeetingPicker(clip.ClipValue.Person.Name + " " +
-                            clip.ClipValue.Period.StartDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortDateString(), personMeetingsFromClip))
+                            clip.ClipValue.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortDateString(), personMeetingsFromClip))
                         {
                             meetingPicker.ShowDialog();
                             selectedMeeting = meetingPicker.SelectedMeeting();

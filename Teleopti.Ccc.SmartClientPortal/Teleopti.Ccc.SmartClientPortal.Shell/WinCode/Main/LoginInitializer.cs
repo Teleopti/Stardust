@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 
 		private static bool setupCulture()
 		{
-			if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional == null) return false;
+			if (TeleoptiPrincipal.CurrentPrincipal.Regional == null) return false;
 
 			Thread.CurrentThread.CurrentCulture =
-				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			Thread.CurrentThread.CurrentUICulture =
-				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
+				TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			return true;
 		}
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				_roleToPrincipalCommand.Execute(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal, repositoryFactory.CreatePersonRepository(uow), unitOfWorkFactory.Name);
+				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, repositoryFactory.CreatePersonRepository(uow), unitOfWorkFactory.Name);
 			}
 
 			if (result.Result)
