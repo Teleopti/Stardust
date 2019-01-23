@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		private NotesEditor notesEditor1;
 		private IntradayPresenter _presenter;
 		private GridChartManager _gridChartManager;
-		private SkillIntradayGridControl _skillIntradayGridControl;
+		private SkillIntraDayGridControl _skillIntradayGridControl;
 		private IIntradayView _owner;
 		private readonly GridlockManager _gridLockManager = new GridlockManager();
 		private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule = new ClipHandler<IScheduleDay>();
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_backgroundWorkerResources.RunWorkerCompleted += backgroundWorkerResourcesRunWorkerCompleted;
 			_backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
-			_skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting, _skillPriorityProvider);
+			_skillIntradayGridControl = new SkillIntraDayGridControl(_settingManager.ChartSetting, _skillPriorityProvider);
 			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControlSelectionChanged;
 			InitializeIntradayViewContent();
 		}

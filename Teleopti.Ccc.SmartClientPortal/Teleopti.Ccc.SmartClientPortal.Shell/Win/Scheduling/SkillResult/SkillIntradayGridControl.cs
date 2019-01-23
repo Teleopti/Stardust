@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -15,13 +14,13 @@ using Teleopti.Ccc.WinCode.Common.Chart;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 {
-	public class SkillIntradayGridControl : TeleoptiGridControl, IHelpContext, ITaskOwnerGrid
+	public class SkillIntraDayGridControl : TeleoptiGridControl, IHelpContext, ITaskOwnerGrid
     {
         private const int headerWidth = 200;
         private const int headerHeight12HourClock = 26;
         private readonly SkillIntradayGridPresenter _presenter;
 
-        public SkillIntradayGridControl(ChartSettings chartSettings, ISkillPriorityProvider skillPriorityProvider)
+        public SkillIntraDayGridControl(ChartSettings chartSettings, ISkillPriorityProvider skillPriorityProvider)
         {
             _presenter = new SkillIntradayGridPresenter(this, chartSettings, skillPriorityProvider);
             QueryCellInfo += gridSkillDataQueryCellInfo;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 	        TeleoptiStyling = true;
         }
 
-        public SkillIntradayGridControl(string settingName, ISkillPriorityProvider skillPriorityProvider)
+        public SkillIntraDayGridControl(string settingName, ISkillPriorityProvider skillPriorityProvider)
         {
             _presenter = new SkillIntradayGridPresenter(this, settingName, skillPriorityProvider);
             QueryCellInfo += gridSkillDataQueryCellInfo;
@@ -68,11 +67,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         {
             _presenter.SetDataSource(skillStaffPeriods, skill, includeStatistics, stateHolder);
         }
-    	public SkillIntradayGridPresenter Presenter
-    	{
-			get { return _presenter; }
-    	}
-        public void SetRowsAndCols()
+    	public SkillIntradayGridPresenter Presenter => _presenter;
+
+		public void SetRowsAndCols()
         {
             RowCount = _presenter.GridRows.Count - 1;
             ColCount = _presenter.Intervals.Count;
@@ -80,31 +77,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
         public void RefreshGrid()
         {
-            using (PerformanceOutput.ForOperation("Refreshing SkillIntradayGridControl"))
-            {
-                Refresh();
-            }
+			Refresh();
         }
 
         public AbstractDetailView Owner { get; set; }
 
         public event EventHandler<DateChangedEventArgs> DateChanged;
 
-        /// <summary>
-        /// Goes to date.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-31
-        /// </remarks>
         public void GoToDate(DateOnly theDate)
-        {
-            if (DateChanged != null)
-            {
-                DateChanged.Invoke(this, new DateChangedEventArgs { NewDate = theDate });
-            }
-        }
+		{
+			DateChanged?.Invoke(this, new DateChangedEventArgs { NewDate = theDate });
+		}
 
         public void SetRowVisibility(string key, bool enabled)
         {
@@ -116,23 +99,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             throw new NotImplementedException();
         }
 
-        public IDictionary<int, GridRow> EnabledChartGridRows
-        {
-            get
-            {
-                return _presenter.EnabledChartGridRows;
-            }
-        }
+        public IDictionary<int, GridRow> EnabledChartGridRows => _presenter.EnabledChartGridRows;
 
-        public ReadOnlyCollection<GridRow> AllGridRows
-        {
-            get
-            {
-                return new ReadOnlyCollection<GridRow>(new List<GridRow>(_presenter.GridRows.OfType<GridRow>()));
-            }
-        }
+		public ReadOnlyCollection<GridRow> AllGridRows => new ReadOnlyCollection<GridRow>(new List<GridRow>(_presenter.GridRows.OfType<GridRow>()));
 
-        public void ReloadChartSettings(ChartSettings chartSettings)
+		public void ReloadChartSettings(ChartSettings chartSettings)
         {
             _presenter.ReloadChartSettings(chartSettings);
         }
@@ -142,17 +113,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             _presenter.SaveChartSettings();
         }
 
-        public int MainHeaderRow
-        {
-            get { return 0; }
-        }
+        public int MainHeaderRow => 0;
 
-        public IList<GridRow> EnabledChartGridRowsMicke65()
+		public IList<GridRow> EnabledChartGridRowsMicke65()
         {
             IList<GridRow> ret = new List<GridRow>();
-            foreach (string key in _presenter.ChartSettings.SelectedRows)
+            foreach (var key in _presenter.ChartSettings.SelectedRows)
             {
-                foreach (GridRow gridRow in _presenter.GridRows.OfType<GridRow>())
+                foreach (var gridRow in _presenter.GridRows.OfType<GridRow>())
                 {
                     if (gridRow.DisplayMember == key)
                         ret.Add(gridRow);
@@ -162,12 +130,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             return ret;
         }
 
-        public bool HasColumns
-        {
-            get { return _presenter.Intervals.Count > 0; }
-        }
+        public bool HasColumns => _presenter.Intervals.Count > 0;
 
-        public GridRow CurrentSelectedGridRow
+		public GridRow CurrentSelectedGridRow
         {
             get
             {
@@ -183,18 +148,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
         #region IHelpContext Members
 
-        public bool HasHelp
-        {
-            get { return _presenter.HasHelp; }
-        }
+        public bool HasHelp => _presenter.HasHelp;
 
-		public string HelpId
-		{
-			get
-			{
-				return Name;
-			}
-		}
+		public string HelpId => Name;
 
 		#endregion
     }

@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_contextMenuSkillGrid.Dispose();
 				if (_splitterManager != null)
 					_splitterManager.Dispose();
-				if (_gridChartManager != null)
-					_gridChartManager.Dispose();
+				if (GridChartManager != null)
+					GridChartManager.Dispose();
 
 			}
 
@@ -62,19 +62,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulerSplitters));
 			this.lessIntellegentSplitContainerAdvMain = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.lessIntellegentSplitContainerAdvResultGraph = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
-			this.chartControlSkillData = new Syncfusion.Windows.Forms.Chart.ChartControl();
+			this.ChartControlSkillData = new Syncfusion.Windows.Forms.Chart.ChartControl();
 			this.tabSkillData = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.PinnedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPageAdv1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
-			this.teleoptiLessIntellegentSplitContainerView = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
+			this.SplitContainerView = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.agentsNotPossibleToSchedule1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions.AgentsNotPossibleToSchedule();
-			this.grid = new Syncfusion.Windows.Forms.Grid.GridControl();
-			this.elementHostRequests = new System.Windows.Forms.Integration.ElementHost();
-			this.handlePersonRequestView1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views.HandlePersonRequestView();
-			this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-			this.multipleHostControl1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop.MultipleHostControl();
+			this.Grid = new Syncfusion.Windows.Forms.Grid.GridControl();
+			this.ElementHostRequests = new System.Windows.Forms.Integration.ElementHost();
+			this.HandlePersonRequestView1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views.HandlePersonRequestView();
+			this.ElementHost1 = new System.Windows.Forms.Integration.ElementHost();
+			this.MultipleHostControl3 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Common.Interop.MultipleHostControl();
 			this.tabInfoPanels = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvAgentInfo = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPageAdvShiftCategoryDistribution = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
@@ -98,11 +98,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.SuspendLayout();
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.SuspendLayout();
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.teleoptiLessIntellegentSplitContainerView)).BeginInit();
-			this.teleoptiLessIntellegentSplitContainerView.Panel1.SuspendLayout();
-			this.teleoptiLessIntellegentSplitContainerView.Panel2.SuspendLayout();
-			this.teleoptiLessIntellegentSplitContainerView.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.SplitContainerView)).BeginInit();
+			this.SplitContainerView.Panel1.SuspendLayout();
+			this.SplitContainerView.Panel2.SuspendLayout();
+			this.SplitContainerView.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.tabInfoPanels)).BeginInit();
 			this.tabInfoPanels.SuspendLayout();
 			this.tabPageAdvShiftCategoryDistribution.SuspendLayout();
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// lessIntellegentSplitContainerAdvResultGraph.Panel1
 			// 
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
-			this.lessIntellegentSplitContainerAdvResultGraph.Panel1.Controls.Add(this.chartControlSkillData);
+			this.lessIntellegentSplitContainerAdvResultGraph.Panel1.Controls.Add(this.ChartControlSkillData);
 			this.lessIntellegentSplitContainerAdvResultGraph.Panel1MinSize = 0;
 			// 
 			// lessIntellegentSplitContainerAdvResultGraph.Panel2
@@ -172,24 +172,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			// chartControlSkillData
 			// 
-			this.chartControlSkillData.ChartArea.BackInterior = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
-			this.chartControlSkillData.ChartArea.CursorLocation = new System.Drawing.Point(0, 0);
-			this.chartControlSkillData.ChartArea.CursorReDraw = false;
-			this.chartControlSkillData.DataSourceName = "";
-			this.chartControlSkillData.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chartControlSkillData.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.chartControlSkillData.IsWindowLess = false;
+			this.ChartControlSkillData.ChartArea.BackInterior = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.White);
+			this.ChartControlSkillData.ChartArea.CursorLocation = new System.Drawing.Point(0, 0);
+			this.ChartControlSkillData.ChartArea.CursorReDraw = false;
+			this.ChartControlSkillData.DataSourceName = "";
+			this.ChartControlSkillData.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ChartControlSkillData.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.ChartControlSkillData.IsWindowLess = false;
 			// 
 			// 
 			// 
-			this.chartControlSkillData.Legend.Location = new System.Drawing.Point(226, 75);
-			this.chartControlSkillData.Localize = null;
-			this.chartControlSkillData.Location = new System.Drawing.Point(0, 0);
-			this.chartControlSkillData.Name = "chartControlSkillData";
-			this.chartControlSkillData.PrimaryXAxis.Crossing = double.NaN;
-			this.chartControlSkillData.PrimaryXAxis.Margin = true;
-			this.chartControlSkillData.PrimaryYAxis.Crossing = double.NaN;
-			this.chartControlSkillData.PrimaryYAxis.Margin = true;
+			this.ChartControlSkillData.Legend.Location = new System.Drawing.Point(226, 75);
+			this.ChartControlSkillData.Localize = null;
+			this.ChartControlSkillData.Location = new System.Drawing.Point(0, 0);
+			this.ChartControlSkillData.Name = "ChartControlSkillData";
+			this.ChartControlSkillData.PrimaryXAxis.Crossing = double.NaN;
+			this.ChartControlSkillData.PrimaryXAxis.Margin = true;
+			this.ChartControlSkillData.PrimaryYAxis.Crossing = double.NaN;
+			this.ChartControlSkillData.PrimaryYAxis.Margin = true;
 			chartSeries1.FancyToolTip.ResizeInsideSymbol = true;
 			chartSeries1.Name = "Default";
 			chartSeries1.Points.Add(0D, ((double)(54D)), ((double)(319D)), ((double)(249D)), ((double)(127D)));
@@ -215,18 +215,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			chartSeries1.Style.TextShape = chartCustomShapeInfo1;
 			chartSeries1.Text = "Default";
 			chartSeries1.Type = Syncfusion.Windows.Forms.Chart.ChartSeriesType.Line;
-			this.chartControlSkillData.Series.Add(chartSeries1);
-			this.chartControlSkillData.Size = new System.Drawing.Size(330, 127);
-			this.chartControlSkillData.Skins = Syncfusion.Windows.Forms.Chart.Skins.Metro;
-			this.chartControlSkillData.TabIndex = 1;
-			this.chartControlSkillData.Text = "Skill";
+			this.ChartControlSkillData.Series.Add(chartSeries1);
+			this.ChartControlSkillData.Size = new System.Drawing.Size(330, 127);
+			this.ChartControlSkillData.Skins = Syncfusion.Windows.Forms.Chart.Skins.Metro;
+			this.ChartControlSkillData.TabIndex = 1;
+			this.ChartControlSkillData.Text = "Skill";
 			// 
 			// 
 			// 
-			this.chartControlSkillData.Title.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.chartControlSkillData.Title.Name = "Default";
-			this.chartControlSkillData.Titles.Add(this.chartControlSkillData.Title);
-			this.chartControlSkillData.Visible = false;
+			this.ChartControlSkillData.Title.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.ChartControlSkillData.Title.Name = "Default";
+			this.ChartControlSkillData.Titles.Add(this.ChartControlSkillData.Title);
+			this.ChartControlSkillData.Visible = false;
 			// 
 			// tabSkillData
 			// 
@@ -294,12 +294,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.BackColor = System.Drawing.SystemColors.Control;
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
-			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.Controls.Add(this.teleoptiLessIntellegentSplitContainerView);
+			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel1.Controls.Add(this.SplitContainerView);
 			// 
 			// teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2
 			// 
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
-			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.Controls.Add(this.elementHost1);
+			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.Controls.Add(this.ElementHost1);
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2MinSize = 100;
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Size = new System.Drawing.Size(330, 417);
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.SplitterDistance = 310;
@@ -310,37 +310,37 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			// teleoptiLessIntellegentSplitContainerView
 			// 
-			this.teleoptiLessIntellegentSplitContainerView.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.teleoptiLessIntellegentSplitContainerView.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.teleoptiLessIntellegentSplitContainerView.BackColor = System.Drawing.SystemColors.Control;
-			this.teleoptiLessIntellegentSplitContainerView.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
-			this.teleoptiLessIntellegentSplitContainerView.BeforeTouchSize = 3;
-			this.teleoptiLessIntellegentSplitContainerView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.teleoptiLessIntellegentSplitContainerView.Location = new System.Drawing.Point(0, 0);
-			this.teleoptiLessIntellegentSplitContainerView.Name = "teleoptiLessIntellegentSplitContainerView";
-			this.teleoptiLessIntellegentSplitContainerView.Orientation = System.Windows.Forms.Orientation.Vertical;
+			this.SplitContainerView.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.SplitContainerView.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.SplitContainerView.BackColor = System.Drawing.SystemColors.Control;
+			this.SplitContainerView.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.Silver);
+			this.SplitContainerView.BeforeTouchSize = 3;
+			this.SplitContainerView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.SplitContainerView.Location = new System.Drawing.Point(0, 0);
+			this.SplitContainerView.Name = "SplitContainerView";
+			this.SplitContainerView.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
 			// teleoptiLessIntellegentSplitContainerView.Panel1
 			// 
-			this.teleoptiLessIntellegentSplitContainerView.Panel1.BackColor = System.Drawing.SystemColors.Control;
-			this.teleoptiLessIntellegentSplitContainerView.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
-			this.teleoptiLessIntellegentSplitContainerView.Panel1.Controls.Add(this.agentsNotPossibleToSchedule1);
-			this.teleoptiLessIntellegentSplitContainerView.Panel1MinSize = 140;
+			this.SplitContainerView.Panel1.BackColor = System.Drawing.SystemColors.Control;
+			this.SplitContainerView.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
+			this.SplitContainerView.Panel1.Controls.Add(this.agentsNotPossibleToSchedule1);
+			this.SplitContainerView.Panel1MinSize = 140;
 			// 
 			// teleoptiLessIntellegentSplitContainerView.Panel2
 			// 
-			this.teleoptiLessIntellegentSplitContainerView.Panel2.BackColor = System.Drawing.SystemColors.Control;
-			this.teleoptiLessIntellegentSplitContainerView.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
-			this.teleoptiLessIntellegentSplitContainerView.Panel2.Controls.Add(this.grid);
-			this.teleoptiLessIntellegentSplitContainerView.Panel2.Controls.Add(this.elementHostRequests);
-			this.teleoptiLessIntellegentSplitContainerView.Panel2.MinimumSize = new System.Drawing.Size(30, 0);
-			this.teleoptiLessIntellegentSplitContainerView.Panel2MinSize = 0;
-			this.teleoptiLessIntellegentSplitContainerView.Size = new System.Drawing.Size(330, 310);
-			this.teleoptiLessIntellegentSplitContainerView.SplitterDistance = 140;
-			this.teleoptiLessIntellegentSplitContainerView.SplitterWidth = 3;
-			this.teleoptiLessIntellegentSplitContainerView.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
-			this.teleoptiLessIntellegentSplitContainerView.TabIndex = 0;
-			this.teleoptiLessIntellegentSplitContainerView.Text = "teleoptiLessIntellegentSplitContainer1";
+			this.SplitContainerView.Panel2.BackColor = System.Drawing.SystemColors.Control;
+			this.SplitContainerView.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
+			this.SplitContainerView.Panel2.Controls.Add(this.Grid);
+			this.SplitContainerView.Panel2.Controls.Add(this.ElementHostRequests);
+			this.SplitContainerView.Panel2.MinimumSize = new System.Drawing.Size(30, 0);
+			this.SplitContainerView.Panel2MinSize = 0;
+			this.SplitContainerView.Size = new System.Drawing.Size(330, 310);
+			this.SplitContainerView.SplitterDistance = 140;
+			this.SplitContainerView.SplitterWidth = 3;
+			this.SplitContainerView.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Default;
+			this.SplitContainerView.TabIndex = 0;
+			this.SplitContainerView.Text = "teleoptiLessIntellegentSplitContainer1";
 			// 
 			// agentsNotPossibleToSchedule1
 			// 
@@ -373,62 +373,62 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
 			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
 			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			this.grid.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
+			this.Grid.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
             gridBaseStyle1,
             gridBaseStyle2,
             gridBaseStyle3,
             gridBaseStyle4});
-			this.grid.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
+			this.Grid.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
-			this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grid.ExcelLikeCurrentCell = true;
-			this.grid.ExcelLikeSelectionFrame = true;
-			this.grid.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.grid.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2003;
-			this.grid.Location = new System.Drawing.Point(0, 0);
-			this.grid.MinResizeColSize = 5;
-			this.grid.Name = "grid";
-			this.grid.NumberedColHeaders = false;
-			this.grid.NumberedRowHeaders = false;
+			this.Grid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.Grid.ExcelLikeCurrentCell = true;
+			this.Grid.ExcelLikeSelectionFrame = true;
+			this.Grid.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.Grid.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2003;
+			this.Grid.Location = new System.Drawing.Point(0, 0);
+			this.Grid.MinResizeColSize = 5;
+			this.Grid.Name = "Grid";
+			this.Grid.NumberedColHeaders = false;
+			this.Grid.NumberedRowHeaders = false;
 			gridRangeStyle1.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(1, 1, 10, 2);
 			gridRangeStyle1.StyleInfo.BaseStyle = "Standard";
-			this.grid.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
+			this.Grid.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
             gridRangeStyle1});
-			this.grid.ReadOnly = true;
-			this.grid.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.grid.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
+			this.Grid.ReadOnly = true;
+			this.Grid.RightToLeft = System.Windows.Forms.RightToLeft.No;
+			this.Grid.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
             new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
-			this.grid.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
-			this.grid.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.grid.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.AlwaysVisible;
-			this.grid.Size = new System.Drawing.Size(330, 167);
-			this.grid.SmartSizeBox = false;
-			this.grid.TabIndex = 3;
-			this.grid.Text = "xxPeriodViewPROTOTYPE";
-			this.grid.ThemesEnabled = true;
-			this.grid.UseRightToLeftCompatibleTextBox = true;
-			this.grid.Resize += new System.EventHandler(this.gridResize);
+			this.Grid.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
+			this.Grid.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
+			this.Grid.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.AlwaysVisible;
+			this.Grid.Size = new System.Drawing.Size(330, 167);
+			this.Grid.SmartSizeBox = false;
+			this.Grid.TabIndex = 3;
+			this.Grid.Text = "xxPeriodViewPROTOTYPE";
+			this.Grid.ThemesEnabled = true;
+			this.Grid.UseRightToLeftCompatibleTextBox = true;
+			this.Grid.Resize += new System.EventHandler(this.gridResize);
 			// 
 			// elementHostRequests
 			// 
-			this.elementHostRequests.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.elementHostRequests.Location = new System.Drawing.Point(0, 0);
-			this.elementHostRequests.Name = "elementHostRequests";
-			this.elementHostRequests.Size = new System.Drawing.Size(330, 167);
-			this.elementHostRequests.TabIndex = 5;
-			this.elementHostRequests.Child = this.handlePersonRequestView1;
+			this.ElementHostRequests.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ElementHostRequests.Location = new System.Drawing.Point(0, 0);
+			this.ElementHostRequests.Name = "ElementHostRequests";
+			this.ElementHostRequests.Size = new System.Drawing.Size(330, 167);
+			this.ElementHostRequests.TabIndex = 5;
+			this.ElementHostRequests.Child = this.HandlePersonRequestView1;
 			// 
 			// elementHost1
 			// 
-			this.elementHost1.AutoSize = true;
-			this.elementHost1.BackColor = System.Drawing.Color.Transparent;
-			this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.elementHost1.Location = new System.Drawing.Point(0, 0);
-			this.elementHost1.Name = "elementHost1";
-			this.elementHost1.Size = new System.Drawing.Size(330, 104);
-			this.elementHost1.TabIndex = 1;
-			this.elementHost1.Text = "elementHost1";
-			this.elementHost1.Child = this.multipleHostControl1;
+			this.ElementHost1.AutoSize = true;
+			this.ElementHost1.BackColor = System.Drawing.Color.Transparent;
+			this.ElementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ElementHost1.Location = new System.Drawing.Point(0, 0);
+			this.ElementHost1.Name = "ElementHost1";
+			this.ElementHost1.Size = new System.Drawing.Size(330, 104);
+			this.ElementHost1.TabIndex = 1;
+			this.ElementHost1.Text = "elementHost1";
+			this.ElementHost1.Child = this.MultipleHostControl3;
 			// 
 			// tabInfoPanels
 			// 
@@ -578,11 +578,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.teleoptiLessIntelligentSplitContainerLessIntelligent1)).EndInit();
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1.ResumeLayout(false);
-			this.teleoptiLessIntellegentSplitContainerView.Panel1.ResumeLayout(false);
-			this.teleoptiLessIntellegentSplitContainerView.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.teleoptiLessIntellegentSplitContainerView)).EndInit();
-			this.teleoptiLessIntellegentSplitContainerView.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
+			this.SplitContainerView.Panel1.ResumeLayout(false);
+			this.SplitContainerView.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.SplitContainerView)).EndInit();
+			this.SplitContainerView.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.tabInfoPanels)).EndInit();
 			this.tabInfoPanels.ResumeLayout(false);
 			this.tabPageAdvShiftCategoryDistribution.ResumeLayout(false);
@@ -600,19 +600,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvMain;
         private TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvMainContainer;
         private TeleoptiLessIntelligentSplitContainer lessIntellegentSplitContainerAdvResultGraph;
-        private Syncfusion.Windows.Forms.Chart.ChartControl chartControlSkillData;
-        private Syncfusion.Windows.Forms.Tools.TabControlAdv tabSkillData;
+		private Syncfusion.Windows.Forms.Tools.TabControlAdv tabSkillData;
         private Syncfusion.Windows.Forms.Tools.TabControlAdv tabInfoPanels;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdv1;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvAgentInfo;
         private TeleoptiLessIntelligentSplitContainer teleoptiLessIntelligentSplitContainerLessIntelligent1;
-        private TeleoptiLessIntelligentSplitContainer teleoptiLessIntellegentSplitContainerView;
-        private Syncfusion.Windows.Forms.Grid.GridControl grid;
-        private System.Windows.Forms.Integration.ElementHost elementHostRequests;
-        private HandlePersonRequestView handlePersonRequestView1;
-        private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private MultipleHostControl multipleHostControl1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem PinnedToolStripMenuItem;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvShiftCategoryDistribution;
 		private PropertyPanel.ShiftCategoryDistributionControl shiftCategoryDistributionControl1;
