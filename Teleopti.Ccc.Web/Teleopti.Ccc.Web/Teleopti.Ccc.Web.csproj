@@ -2728,6 +2728,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyReport.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Month.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthDayViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.UserInfo.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.visible.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js" />
