@@ -21,6 +21,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
 			if (disposing)
 			{
+				if(ChartControlSkillData != null)
+				{
+					ChartControlSkillData.ChartRegionClick -= chartControlSkillDataChartRegionClick;
+					ChartControlSkillData.ChartRegionMouseHover -= chartControlSkillDataChartRegionMouseHover;
+				}
+
 				if (components != null)
 					components.Dispose();
 
@@ -28,6 +34,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_contextMenuSkillGrid.Dispose();
 				if (_splitterManager != null)
 					_splitterManager.Dispose();
+				if (_gridChartManager != null)
+					_gridChartManager.Dispose();
+
 			}
 
 			base.Dispose(disposing);

@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
@@ -26,6 +27,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Vie
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling;
 
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private SkillMonthGridControl _skillMonthGridControl;
 		private SkillFullPeriodGridControl _skillFullPeriodGridControl;
 		private SkillResultViewSetting _skillResultViewSetting;
+		private GridChartManager _gridChartManager;
 
 		public SchedulerSplitters()
 		{
@@ -66,6 +69,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				GridEditorSplitter = teleoptiLessIntelligentSplitContainerLessIntelligent1,
 				RestrictionViewSplitter = SplitContainerView
 			};
+			_gridChartManager = new GridChartManager(ChartControlSkillData, true, true, true);
+			GridChartManager.Create();
+			ChartControlSkillData.ChartRegionClick += chartControlSkillDataChartRegionClick;
+			ChartControlSkillData.ChartRegionMouseHover += chartControlSkillDataChartRegionMouseHover;
 		}
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs>
@@ -167,6 +174,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			get { return _skillResultViewSetting; }
 			set { _skillResultViewSetting = value; }
+		}
+
+		public GridChartManager GridChartManager
+		{
+			get { return _gridChartManager; }
 		}
 
 		public void ShowGraph(bool show)
@@ -735,5 +747,55 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			MonthGridControl.Invalidate(true);
 			FullPeriodGridControl.Invalidate(true);
 		}
+
+		public void ReloadChart(string chartDescription)
+		{
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Week))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Week, chartDescription);
+				_gridChartManager.ReloadChart(WeekGridControl, description);
+			}
+
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Month))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Month, chartDescription);
+				_gridChartManager.ReloadChart(MonthGridControl, description);
+			}
+
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Period))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Period, chartDescription);
+				_gridChartManager.ReloadChart(FullPeriodGridControl, description);
+			}
+
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Intraday, chartDescription);
+				_gridChartManager.ReloadChart(IntradayGridControl, description);
+			}
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Day))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Day, chartDescription);
+				_gridChartManager.ReloadChart(DayGridControl, description);
+			}
+			ChartControlSkillData.Visible = true;
+		}
+
+
+		private void chartControlSkillDataChartRegionMouseHover(object sender, ChartRegionMouseEventArgs e)
+		{
+			GridChartManager.SetChartToolTip(e.Region, ChartControlSkillData);
+		}
+
+		private void chartControlSkillDataChartRegionClick(object sender, ChartRegionMouseEventArgs e)
+		{
+			int column = Math.Max(1, (int)GridChartManager.GetIntervalValueForChartPoint(ChartControlSkillData, e.Point));
+			var skillGridControl = ResolveControlFromSkillResultViewSetting();
+			skillGridControl.ScrollCellInView(0, column);
+
+			if (skillGridControl is SkillDayGridControl)
+				Grid.ScrollCellInView(0, column + 1);
+		}
+
 	}
 }

@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                     schedulerSplitters1.Dispose();
                     schedulerSplitters1 = null;
                 }
-                if (_gridChartManager != null)
-                    _gridChartManager.Dispose();
                 
                 if (_schedulerMessageBrokerHandler!=null)
                     _schedulerMessageBrokerHandler.Dispose();

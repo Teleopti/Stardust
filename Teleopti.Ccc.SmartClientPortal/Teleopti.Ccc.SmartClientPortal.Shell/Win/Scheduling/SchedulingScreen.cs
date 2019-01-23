@@ -114,7 +114,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private RequestView _requestView;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
 		private readonly IList<IEntity> _temporarySelectedEntitiesFromTreeView;
-		private GridChartManager _gridChartManager;
 		private string _chartDescription;
 		private GridRowInChartSettingButtons _gridrowInChartSettingButtons;
 		private GridRow _currentSelectedGridRow;
@@ -2321,12 +2320,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void gridrowInChartSettingLineInChartEnabledChanged(object sender, GridlineInChartButtonEventArgs e)
 		{
-			_gridChartManager.UpdateChartSettings(_currentSelectedGridRow, _gridrowInChartSettingButtons, e.Enabled);
+			schedulerSplitters1.GridChartManager.UpdateChartSettings(_currentSelectedGridRow, _gridrowInChartSettingButtons, e.Enabled);
 		}
 
 		private void gridlinesInChartSettingsLineInChartSettingsChanged(object sender, GridlineInChartButtonEventArgs e)
 		{
-			_gridChartManager.UpdateChartSettings(_currentSelectedGridRow, e.Enabled, e.ChartSeriesStyle, e.GridToChartAxis,
+			schedulerSplitters1.GridChartManager.UpdateChartSettings(_currentSelectedGridRow, e.Enabled, e.ChartSeriesStyle, e.GridToChartAxis,
 				e.LineColor);
 		}
 
@@ -2357,21 +2356,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripButtonGridInChartClick(object sender, EventArgs e)
 		{
 			reloadChart();
-		}
-
-		private void chartControlSkillDataChartRegionMouseHover(object sender, ChartRegionMouseEventArgs e)
-		{
-			GridChartManager.SetChartToolTip(e.Region, schedulerSplitters1.ChartControlSkillData);
-		}
-
-		private void chartControlSkillDataChartRegionClick(object sender, ChartRegionMouseEventArgs e)
-		{
-			int column = Math.Max(1, (int)GridChartManager.GetIntervalValueForChartPoint(schedulerSplitters1.ChartControlSkillData, e.Point));
-			var skillGridControl = schedulerSplitters1.ResolveControlFromSkillResultViewSetting();
-			skillGridControl.ScrollCellInView(0, column);
-
-			if(skillGridControl is SkillDayGridControl)
-				schedulerSplitters1.Grid.ScrollCellInView(0, column + 1);
 		}
 
 		#endregion
@@ -2783,7 +2767,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			try
 			{
-				_gridChartManager.ReloadChart();
+				schedulerSplitters1.GridChartManager.ReloadChart();
 			}
 			catch (NullReferenceException ex)
 			{
@@ -3620,8 +3604,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var chartsetteinghost = new ToolStripControlHost(_gridrowInChartSettingButtons);
 			toolStripExGridRowInChartButtons.Items.Add(chartsetteinghost);
 			_gridrowInChartSettingButtons.SetButtons();
-			_gridChartManager = new GridChartManager(schedulerSplitters1.ChartControlSkillData, true, true, true);
-			_gridChartManager.Create();
 			ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdv1);
 			ribbonControlAdv1.MenuButtonText = Resources.File;
 		}
@@ -4088,35 +4070,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void reloadChart()
 		{
-			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Week))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Week, _chartDescription);
-				_gridChartManager.ReloadChart(schedulerSplitters1.WeekGridControl, description);
-			}
-
-			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Month))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Month, _chartDescription);
-				_gridChartManager.ReloadChart(schedulerSplitters1.MonthGridControl, description);
-			}
-
-			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Period))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Period, _chartDescription);
-				_gridChartManager.ReloadChart(schedulerSplitters1.FullPeriodGridControl, description);
-			}
-
-			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Intraday, _chartDescription);
-				_gridChartManager.ReloadChart(schedulerSplitters1.IntradayGridControl, description);
-			}
-			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Day))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Day, _chartDescription);
-				_gridChartManager.ReloadChart(schedulerSplitters1.DayGridControl, description);
-			}
-			schedulerSplitters1.ChartControlSkillData.Visible = true;
+			schedulerSplitters1.ReloadChart(_chartDescription);
 		}
 
 		private void schedulerSplitters1RestrictionsNotAbleToBeScheduledProgress(object sender,
@@ -4185,8 +4139,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_gridrowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettingsLineInChartSettingsChanged;
 			_gridrowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
-			schedulerSplitters1.ChartControlSkillData.ChartRegionMouseHover += chartControlSkillDataChartRegionMouseHover;
-			schedulerSplitters1.ChartControlSkillData.ChartRegionClick += chartControlSkillDataChartRegionClick;
+			
 			_undoRedo.ChangedHandler += undoRedoChanged;
 
 			#region eventaggregator
@@ -4575,12 +4528,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				_gridrowInChartSettingButtons.LineInChartSettingsChanged -= gridlinesInChartSettingsLineInChartSettingsChanged;
 				_gridrowInChartSettingButtons.LineInChartEnabledChanged -= gridrowInChartSettingLineInChartEnabledChanged;
-			}
-
-			if (schedulerSplitters1 != null && schedulerSplitters1.ChartControlSkillData != null)
-			{
-				schedulerSplitters1.ChartControlSkillData.ChartRegionMouseHover -= chartControlSkillDataChartRegionMouseHover;
-				schedulerSplitters1.ChartControlSkillData.ChartRegionClick -= chartControlSkillDataChartRegionClick;
 			}
 
 			if (_clipboardControl != null)
