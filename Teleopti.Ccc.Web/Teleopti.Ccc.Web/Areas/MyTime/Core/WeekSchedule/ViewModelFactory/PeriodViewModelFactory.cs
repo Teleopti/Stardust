@@ -49,13 +49,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					Summary =
 						TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
 							CultureInfo.CurrentUICulture),
-					Title = visualLayer.Payload.ConfidentialDescription(person).Name,
+					Title = visualLayer.Payload.ConfidentialDescription_DONTUSE(person).Name,
 					TimeSpan = visualLayer.Period.TimePeriod(timezone).ToShortTimeString(),
 					StartTime = visualLayer.Period.StartDateTimeLocal(timezone),
 					EndTime = visualLayer.Period.EndDateTimeLocal(timezone),
-					StyleClassName = colorToString(visualLayer.Payload.ConfidentialDisplayColor(person)),
+					StyleClassName = colorToString(visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person)),
 					Meeting = meetingModel,
-					Color = visualLayer.Payload.ConfidentialDisplayColor(person).ToCSV(),
+					Color = visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person).ToCSV(),
 					StartPositionPercentage = positionPercentage.Start,
 					EndPositionPercentage = positionPercentage.End,
 					IsOvertime = isOvertimeLayer
@@ -99,13 +99,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					Summary =
 						TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
 							CultureInfo.CurrentUICulture),
-					Title = visualLayer.Payload.ConfidentialDescription(person).Name,
+					Title = visualLayer.Payload.ConfidentialDescription_DONTUSE(person).Name,
 					TimeSpan = visualLayer.Period.TimePeriod(timezone).ToShortTimeString(),
 					StartTime = visualLayer.Period.StartDateTimeLocal(timezone),
 					EndTime = visualLayer.Period.EndDateTimeLocal(timezone),
-					StyleClassName = colorToString(visualLayer.Payload.ConfidentialDisplayColor(person)),
+					StyleClassName = colorToString(visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person)),
 					Meeting = meetingModel,
-					Color = visualLayer.Payload.ConfidentialDisplayColor(person).ToCSV(),
+					Color = visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person).ToCSV(),
 					StartPositionPercentage = positionPercentage.Start,
 					EndPositionPercentage = positionPercentage.End,
 					IsOvertime = isOvertimeLayer

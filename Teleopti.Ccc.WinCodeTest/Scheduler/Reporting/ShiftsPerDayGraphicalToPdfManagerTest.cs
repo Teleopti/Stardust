@@ -268,8 +268,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			Expect.Call(_layer2.Period).Return(new DateTimePeriod(dateTime1, dateTime3)).Repeat.AtLeastOnce();
 			Expect.Call(_layer1.Payload).Return(_payload);
 			Expect.Call(_layer2.Payload).Return(_payload);
-			Expect.Call(_payload.ConfidentialDisplayColor(_person1)).Return(Color.Blue);
-			Expect.Call(_payload.ConfidentialDisplayColor(_person2)).Return(Color.Blue);
+			Expect.Call(_payload.ConfidentialDisplayColor_DONTUSE(_person1)).Return(Color.Blue);
+			Expect.Call(_payload.ConfidentialDisplayColor_DONTUSE(_person2)).Return(Color.Blue);
 
 			var dateOnlyAsPeriod1 = new DateOnlyAsDateTimePeriod(day1, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 			var dateOnlyAsPeriod2 = new DateOnlyAsDateTimePeriod(day2, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);

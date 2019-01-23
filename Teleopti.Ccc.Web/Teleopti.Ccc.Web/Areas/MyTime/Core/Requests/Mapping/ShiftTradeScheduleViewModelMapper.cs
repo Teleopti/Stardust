@@ -339,8 +339,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (isFulldayAbsence)
 			{
 				var payload = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload;
-				categoryName = payload.ConfidentialDescription(person).Name;
-				var absenceColor = payload.ConfidentialDisplayColor(person);
+				categoryName = payload.ConfidentialDescription_DONTUSE(person).Name;
+				var absenceColor = payload.ConfidentialDisplayColor_DONTUSE(person);
 				displayColor = mapColor(absenceColor.ToArgb());
 				shortName = payload.Description.ShortName;
 			}
@@ -349,8 +349,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (isIntradayAbsence)
 			{
 				var payload = scheduleDay.PersonAbsenceCollection().First().Layer.Payload;
-				intradayCategory.ShortName = payload.ConfidentialDescription(person).ShortName;
-				intradayCategory.Color = mapColor(payload.ConfidentialDisplayColor(person).ToArgb());
+				intradayCategory.ShortName = payload.ConfidentialDescription_DONTUSE(person).ShortName;
+				intradayCategory.Color = mapColor(payload.ConfidentialDisplayColor_DONTUSE(person).ToArgb());
 			}
 
 			return new ShiftTradeAddPersonScheduleViewModel

@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		private Guid getBusinessUnitId()
 		{
-			return ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
+			return ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 		}
 
 		private string mapInReadyTimeText(bool inReadyTime)

@@ -43,12 +43,12 @@ namespace Teleopti.Wfm.Api.Query
 						Date = p.DateOnlyAsPeriod.DateOnly.Date,
 						Shift = p.ProjectionService().CreateProjection().Select(l => new ShiftLayerDto
 						{
-							Name = l.Payload.ConfidentialDescription(currentUser).Name,
+							Name = l.Payload.ConfidentialDescription_DONTUSE(currentUser).Name,
 							StartTime = l.Period.StartDateTime,
 							EndTime = l.Period.EndDateTime,
 							PayloadId = l.Payload.Id.GetValueOrDefault(),
 							IsAbsence = l.Payload is IAbsence,
-							DisplayColor = l.Payload.ConfidentialDisplayColor(currentUser).ToArgb()
+							DisplayColor = l.Payload.ConfidentialDisplayColor_DONTUSE(currentUser).ToArgb()
 						}).ToArray(),
 						PersonId = person.Id.GetValueOrDefault(),
 						TimeZoneId = timeZone.Id

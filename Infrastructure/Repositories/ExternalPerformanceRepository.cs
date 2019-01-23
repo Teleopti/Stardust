@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IExternalPerformance> FindAllExternalPerformances()
 		{
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			var businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 			return Session.CreateCriteria(typeof(ExternalPerformance))
 				.Add(Restrictions.Eq("BusinessUnit", businessUnit))
 				.AddOrder(Order.Asc("Name"))
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IExternalPerformance FindExternalPerformanceByExternalId(int externalId)
 		{
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			var businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 			return Session.CreateCriteria<ExternalPerformance>()
 				.Add(Restrictions.Eq("BusinessUnit", businessUnit))
 				.Add(Restrictions.Eq("ExternalId", externalId))

@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var stubs = new StubFactory();
 			var personAssignment = MockRepository.GenerateMock<IPersonAssignment>();
 			var payload = MockRepository.GenerateMock<IActivity>();
-			payload.Stub(x => x.ConfidentialDescription(new Person())).IgnoreArguments().Return(new Description("activity"));
+			payload.Stub(x => x.ConfidentialDescription_DONTUSE(new Person())).IgnoreArguments().Return(new Description("activity"));
 			
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today);
 			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<PersonalShiftLayer>{new PersonalShiftLayer(payload, new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)))});

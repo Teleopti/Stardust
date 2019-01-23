@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (!identityList.Any()) return result;
 
 			var uow = _currentUnitOfWork.Current();
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			var businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 
 			foreach (var identitiesInBatch in identityList.Batch(batchSize))
 			{
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
 				.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
 				.SetInt32("culture", cultureId)
-				.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("business_unit_id", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 				.SetDateOnly("belongs_to_date", personFinderSearchCriteria.BelongsToDate)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
 				.SetReadOnly(true)
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetInt32("end_row", personFinderSearchCriteria.EndRow)
 					.SetString("order_by", orderByString)
 					.SetInt32("culture", cultureId)
-					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetGuid("business_unit_id", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					.SetDateOnly("belongs_to_date", personFinderSearchCriteria.BelongsToDate)
 					.SetString("teamIds", teamIdsString)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var searchString = createSearchString(searchCriteria);
 				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
 						"exec [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_ids=:group_ids")
-					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetGuid("business_unit_id", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					.SetString("search_criterias", searchString)
 					.SetDateOnly("start_date", period.StartDate)
 					.SetDateOnly("end_date", period.EndDate)
@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var searchString = createSearchString(searchCriteria);
 				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
 						"exec [ReadModel].[PersonFinderWithCriteriaAndDynamicOptionalGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_page_id=:group_page_id, @dynamic_values=:dynamic_values")
-					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetGuid("business_unit_id", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					.SetString("search_criterias", searchString)
 					.SetDateOnly("start_date", period.StartDate)
 					.SetDateOnly("end_date", period.EndDate)

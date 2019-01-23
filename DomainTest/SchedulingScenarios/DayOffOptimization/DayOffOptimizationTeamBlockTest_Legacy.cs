@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var team = new Team { Site = new Site("site") }.WithDescription("_").WithId();
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
 			var contractToSchedule = new Contract("_").WithId();
 			var contractNotToSchedule = new Contract("_").WithId();
 			var planningGroup = new PlanningGroup().AddFilter(new ContractFilter(contractToSchedule));

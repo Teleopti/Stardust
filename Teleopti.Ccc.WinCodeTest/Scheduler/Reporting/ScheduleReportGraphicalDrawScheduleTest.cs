@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				Expect.Call(_layer.Period).Return(new DateTimePeriod(dateTime1, dateTime3)).Repeat.AtLeastOnce();
 				Expect.Call(_layer.Payload).Return(_payload);
 				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_payload.ConfidentialDisplayColor(_person)).Return(Color.Blue);
+				Expect.Call(_payload.ConfidentialDisplayColor_DONTUSE(_person)).Return(Color.Blue);
 			    Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(_personPeriod);
 			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
 			    Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.ContractDayOff).Repeat.AtLeastOnce();
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_layer.Period).Return(new DateTimePeriod(dateTime1, dateTime3)).Repeat.AtLeastOnce();
                 Expect.Call(_layer.Payload).Return(_payload);
                 Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_payload.ConfidentialDisplayColor(_person)).Return(Color.Blue);
+                Expect.Call(_payload.ConfidentialDisplayColor_DONTUSE(_person)).Return(Color.Blue);
                 Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(_personPeriod);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();

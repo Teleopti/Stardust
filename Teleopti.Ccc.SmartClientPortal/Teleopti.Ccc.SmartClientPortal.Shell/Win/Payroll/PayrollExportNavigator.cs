@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 					PayrollExportFormatId = payrollExport.PayrollFormatId,
 					PayrollResultId = payrollResultId,
 					InitiatorId = personId,
-					LogOnBusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault()
+					LogOnBusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault()
 				};
 				if (payrollExport.Persons == null || payrollExport.Persons.Count == 0)
 				{

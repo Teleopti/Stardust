@@ -214,9 +214,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				let length = visualLayer.Period.ElapsedTime().TotalMinutes
 				select new ShiftTradeEditScheduleLayerViewModel
 				{
-					Payload = visualLayer.Payload.ConfidentialDescription(person).Name,
+					Payload = visualLayer.Payload.ConfidentialDescription_DONTUSE(person).Name,
 					LengthInMinutes = (int)length,
-					Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(person)),
+					Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person)),
 					TitleTime = createTitle(startDate, endDate),
 					ElapsedMinutesSinceShiftStart = (int)startDate.Subtract(TimeZoneHelper.ConvertFromUtc(shiftStartTime, timeZone)).TotalMinutes
 				}).ToList();

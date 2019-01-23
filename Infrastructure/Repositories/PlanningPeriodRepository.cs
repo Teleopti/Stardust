@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var uniqueSchedulePeriods = Session.GetNamedQuery("UniqueSchedulePeriods")
 				.SetDateTime("date", now.UtcDateTime())
-				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("businessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
 				.List<AggregatedSchedulePeriod>();
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				Session.GetNamedQuery("UniqueSchedulePeriodsForPeople")
 					.SetDateTime("date", now.UtcDateTime())
-					.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetGuid("businessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					.SetParameterList("personIds", peopleBatch)
 					.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
 					.List<AggregatedSchedulePeriod>().ForEach(asp =>

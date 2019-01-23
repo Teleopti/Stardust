@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.UniqueResult<IScenario>();
 			if (defaultScenario == null)
 			{
-				var businessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId();
+				var businessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.CurrentId();
 				throw new NoDefaultScenarioException(string.Format(CultureInfo.CurrentCulture,
 					"Business unit '{0}' has no default scenario", businessUnitId));
 			}

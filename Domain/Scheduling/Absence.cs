@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -114,30 +115,29 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-        public virtual Description ConfidentialDescription(IPerson assignedPerson)
+        public virtual Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization)
         {
-            return isPermittedToSeePayloadInfo(assignedPerson) 
+            return isPermittedToSeePayloadInfo(assignedPerson, authorization) 
                     ? Description : ConfidentialPayloadValues.Description;
         }
 
-		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
+		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization)
         {
-            return isPermittedToSeePayloadInfo(assignedPerson)
+            return isPermittedToSeePayloadInfo(assignedPerson, authorization)
                        ? DisplayColor : ConfidentialPayloadValues.DisplayColor;
         }
 
-		private bool isPermittedToSeePayloadInfo(IPerson assignedPerson)
+		private bool isPermittedToSeePayloadInfo(IPerson assignedPerson, ICurrentAuthorization authorization)
 		{
 			if (!Confidential)
 				return true;
-			if (ServiceLocatorForEntity.LoggedOnUserIsPerson.IsPerson(assignedPerson))
+			if (ServiceLocator_DONTUSE.LoggedOnUserIsPerson.IsPerson(assignedPerson))
 				return true;
 
 			var dateOnly = DateOnly.Today;
 			if (assignedPerson != null && assignedPerson.IsTerminated() && assignedPerson.PersonPeriodCollection.Count > 0)
 				dateOnly = assignedPerson.PersonPeriodCollection.Last().EndDate();
-			return ServiceLocatorForLegacy.CurrentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, dateOnly, assignedPerson);
-
+			return authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, dateOnly, assignedPerson);
 		}
 
 		public virtual object Clone()

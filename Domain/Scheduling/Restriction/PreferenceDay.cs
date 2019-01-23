@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 					{
 						PersonId = Person.Id.GetValueOrDefault(),
 						RestrictionDates = new List<DateTime> {RestrictionDate.Date},
-						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
+						Timestamp = ServiceLocator_DONTUSE.Now.UtcDateTime()
 					});
 					break;
 				case DomainUpdateType.Insert:
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 					{
 						PersonId = Person.Id.GetValueOrDefault(),
 						RestrictionDates = new List<DateTime> {RestrictionDate.Date},
-						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
+						Timestamp = ServiceLocator_DONTUSE.Now.UtcDateTime()
 					});
 					break;
 				case DomainUpdateType.Update:
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 					{
 						PersonId = Person.Id.GetValueOrDefault(),
 						RestrictionDates = new List<DateTime> {RestrictionDate.Date},
-						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
+						Timestamp = ServiceLocator_DONTUSE.Now.UtcDateTime()
 					});
 					break;
 			}

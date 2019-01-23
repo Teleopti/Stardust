@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual bool IsExpired()
 		{
-			return Date <= ServiceLocatorForEntity.Now.CurrentLocalDate(_person.PermissionInformation.DefaultTimeZone());
+			return Date <= ServiceLocator_DONTUSE.Now.CurrentLocalDate(_person.PermissionInformation.DefaultTimeZone());
 		}				
 	}
 }

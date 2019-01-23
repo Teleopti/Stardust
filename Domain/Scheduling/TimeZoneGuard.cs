@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_timeZone = timeZone;
 		}
 
-		public static ITimeZoneGuard Instance => ServiceLocatorForLegacy.TimeZoneGuard;
+		public static ITimeZoneGuard Instance => ServiceLocator_DONTUSE.TimeZoneGuard;
 
 		public TimeZoneInfo CurrentTimeZone()
 		{

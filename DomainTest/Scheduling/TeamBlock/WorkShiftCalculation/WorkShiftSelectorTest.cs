@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			var cache3 = new ShiftProjectionCache(workShift3, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
 			var caches = new List<ShiftProjectionCache> {cache1, cache2, cache3};
 			
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			var businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 			BusinessUnitRepository.Add(businessUnit);
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);

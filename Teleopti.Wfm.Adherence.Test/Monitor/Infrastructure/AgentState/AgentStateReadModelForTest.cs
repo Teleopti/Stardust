@@ -10,7 +10,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 		{
 			ReceivedTime = DateTime.UtcNow;
 			IsRuleAlarm = true;
-			BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value;
+			BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value;
 		}
 	}
 
@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 	{
 		public AssociationInfoForTest()
 		{
-			BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value;
+			BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value;
 		}
 	}
 }

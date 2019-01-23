@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotRollBackIfSingleAgentSingleDayAndPeriodValueIsNotBetter()
 		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var date = new DateOnly(2014, 4, 1);
 			var scenario = new Scenario("Default").WithId();
 			var shiftCategory = new ShiftCategory("DY").WithId();

@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -56,14 +57,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-		public Description ConfidentialDescription(IPerson assignedPerson)
+		public Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization)
         {
-            return _meeting.Activity.ConfidentialDescription(assignedPerson);
+            return _meeting.Activity.ConfidentialDescription(assignedPerson, authorization);
         }
 
-		public Color ConfidentialDisplayColor(IPerson assignedPerson)
+		public Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization)
         {
-            return _meeting.Activity.ConfidentialDisplayColor(assignedPerson);
+            return _meeting.Activity.ConfidentialDisplayColor(assignedPerson, authorization);
         }
 
         public override IPayload UnderlyingPayload

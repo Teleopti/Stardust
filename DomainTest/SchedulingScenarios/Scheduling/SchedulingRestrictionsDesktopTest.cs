@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldNotScheduleShiftsForRestrictionsOnlyWhenNoRestrictionExists()
 		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var date = new DateOnly(2017, 1, 10);
 			var activity = new Activity("_").WithId();
 			var otherActivity = new Activity("_").WithId();

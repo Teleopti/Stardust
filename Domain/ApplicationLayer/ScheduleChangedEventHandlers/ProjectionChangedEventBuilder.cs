@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					absence = absencePayload;
 				}
 
-				var description = absence?.Description ?? layer.Payload.ConfidentialDescription(person);
+				var description = absence?.Description ?? layer.Payload.ConfidentialDescription_DONTUSE(person);
 				var contractTime = projection.ContractTime(layer.Period);
 				var overTime = projection.Overtime(layer.Period);
 				var paidTime = projection.PaidTime(layer.Period);
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					MultiplicatorDefinitionSetId = layer.DefinitionSet?.Id ?? Guid.Empty,
 					PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 					IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
-					DisplayColor = absence?.DisplayColor.ToArgb() ?? layer.Payload.ConfidentialDisplayColor(person).ToArgb(),
+					DisplayColor = absence?.DisplayColor.ToArgb() ?? layer.Payload.ConfidentialDisplayColor_DONTUSE(person).ToArgb(),
 					RequiresSeat = requiresSeat,
 					WorkTime = workTime,
 					PaidTime = paidTime,

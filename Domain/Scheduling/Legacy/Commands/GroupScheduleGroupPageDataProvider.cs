@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
 							var repository = _repositoryFactory.CreateBusinessUnitRepository(uow.Uow);
-							var businessUnit = repository.Get(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+							var businessUnit = repository.Get(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault());
 							businessUnit = repository.LoadHierarchyInformation(businessUnit);
 							_businessUnit = businessUnit;
 						}

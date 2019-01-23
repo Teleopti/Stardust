@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public static IAuthorization Current()
 		{
-			return ServiceLocatorForLegacy.CurrentAuthorization.Current();
+			return ServiceLocator_DONTUSE.CurrentAuthorization.Current();
 		}
 
 		private ClaimsAuthorization claimsAuthorization => new ClaimsAuthorization(_teleoptiPrincipal.Current());

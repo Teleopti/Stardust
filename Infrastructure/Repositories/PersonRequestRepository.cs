@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return query.SetDateTime("StartDateTime", period.StartDateTime)
 				.SetDateTime("EndDateTime", period.EndDateTime)
 				.SetBoolean("IsDeleted", false)
-				.SetGuid("BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("BusinessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 				.SetGuid("Person", person.Id.GetValueOrDefault())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(RequestPeriod)))
 				.SetReadOnly(true)
@@ -979,7 +979,7 @@ AND ps.Skill in(:list)")
 				.SetDateTime("startDate", period.StartDateTime)
 				.SetDateTime("endDate", period.EndDateTime)
 				.SetDateTime("withInPersonPeriod", period.StartDateTime.Date)
-				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+				.SetGuid("businessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault());
 
 			if (budgetGroupId.HasValue)
 			{

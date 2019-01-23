@@ -132,13 +132,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory.ScheduleReporting
             }
             else
             {
-                Graphics.DrawString(visualLayer.Payload.ConfidentialDescription(agent).Name, font, Brush, nameRect, Format);
+                Graphics.DrawString(visualLayer.Payload.ConfidentialDescription_DONTUSE(agent).Name, font, Brush, nameRect, Format);
             }
 
             float lineStart = timeRect.Top;
             float lineEnd = nameRect.Bottom;
 
-            Graphics.DrawLine(new PdfPen(visualLayer.Payload.ConfidentialDisplayColor(agent), 5), 7, lineStart, 7, lineEnd);
+            Graphics.DrawLine(new PdfPen(visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(agent), 5), 7, lineStart, 7, lineEnd);
 
             return nameRect.Bottom + 2;
             //return top + fontSize + 2 + RowSpace;

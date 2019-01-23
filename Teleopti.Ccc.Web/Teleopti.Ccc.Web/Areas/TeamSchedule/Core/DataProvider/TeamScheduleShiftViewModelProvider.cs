@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						? (isAbsenceConfidential && !canViewConfidential
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
-						: layer.Payload.ConfidentialDescription(person);
+						: layer.Payload.ConfidentialDescription_DONTUSE(person);
 
 					var matchedPersonalLayers = _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer);
 					var needSplitPersonalLayers = _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 													? (isAbsenceConfidential && !canViewConfidential
 														? ConfidentialPayloadValues.DisplayColorHex
 														: ((IAbsence)layer.Payload).DisplayColor.ToHtml())
-													: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToHtml(),
+													: layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDay.Person).ToHtml(),
 							Start = startDateTimeInUserTimeZone.ToServiceDateTimeFormat(),
 							StartInUtc = layer.Period.StartDateTime.ToServiceDateTimeFormat(),
 							End = endDateTimeInUserTimeZone.ToServiceDateTimeFormat(),
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						? (isAbsenceConfidential && !isPermittedToViewConfidential
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
-						: layer.Payload.ConfidentialDescription(person);
+						: layer.Payload.ConfidentialDescription_DONTUSE(person);
 					var expectedTime = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
 						startDateTimeInUserTimeZone.ToShortTimeString(), endDateTimeInUserTimeZone.ToShortTimeString());
 
@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? (isAbsenceConfidential && !isPermittedToViewConfidential
 								? ConfidentialPayloadValues.DisplayColorHex
 								: (layer.Payload as IAbsence).DisplayColor.ToCSV())
-							: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToCSV(),
+							: layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDay.Person).ToCSV(),
 						Start = startDateTimeInUserTimeZone,
 						End = endDateTimeInUserTimeZone,
 						LengthInMinutes = (int)endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,

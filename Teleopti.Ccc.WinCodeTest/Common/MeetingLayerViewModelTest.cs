@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			var payloadFromLayer = (IPayload)_layerWithPayload.Payload;
 
-			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor(_person), _target.DisplayColor);
-			Assert.AreEqual(payloadFromLayer.ConfidentialDescription(_person).Name, _target.Description);
+			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor_DONTUSE(_person), _target.DisplayColor);
+			Assert.AreEqual(payloadFromLayer.ConfidentialDescription_DONTUSE(_person).Name, _target.Description);
 			Assert.AreEqual(_layerWithPayload.Period, _target.Period);
 			Assert.AreEqual(TimeSpan.FromMinutes(15), _target.Interval);
 			Assert.IsFalse(_target.IsChanged);

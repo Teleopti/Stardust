@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get => _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			get => _businessUnit ?? (_businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			protected set => _businessUnit = value;
 		}
 	}

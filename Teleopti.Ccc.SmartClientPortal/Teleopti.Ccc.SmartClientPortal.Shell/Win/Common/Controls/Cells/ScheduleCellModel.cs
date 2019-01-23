@@ -215,16 +215,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
                     using (
-                        Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.Payload.ConfidentialDisplayColor(scheduleDisplayRow.ScheduleDay.Person), 90, false))
+                        Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDisplayRow.ScheduleDay.Person), 90, false))
                     {
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
-                                                      layer.Payload.ConfidentialDescription(scheduleDisplayRow.ScheduleDay.Person) + "  " +
+                                                      layer.Payload.ConfidentialDescription_DONTUSE(scheduleDisplayRow.ScheduleDay.Person) + "  " +
                                                       layer.Period.TimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 
-                    using (var sBrush = new SolidBrush(layer.Payload.ConfidentialDisplayColor(scheduleDisplayRow.ScheduleDay.Person)))
+                    using (var sBrush = new SolidBrush(layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDisplayRow.ScheduleDay.Person)))
                     {
                         g.FillRectangle(sBrush, lowerRect);
                     }
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                 var lowerRect = new RectangleF(rect.X, rect.Y + rect.Height / 2 - 5, rect.Width, rect.Height / 2 + 5);
                 if (!rect.IsEmpty)
                 {
-                    var color = Color.FromArgb(80, layer.Payload.ConfidentialDisplayColor(scheduleDisplayRow.ScheduleDayBefore.Person));
+                    var color = Color.FromArgb(80, layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDisplayRow.ScheduleDayBefore.Person));
                     var colorSmoke = Color.FromArgb(80, Color.WhiteSmoke);
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                     {
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
-                                                      layer.Payload.ConfidentialDescription(scheduleDisplayRow.ScheduleDayBefore.Person) + "  " +
+                                                      layer.Payload.ConfidentialDescription_DONTUSE(scheduleDisplayRow.ScheduleDayBefore.Person) + "  " +
                                                       period.TimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                 var lowerRect = new RectangleF(rect.X, rect.Y + rect.Height / 2 - 5, rect.Width, rect.Height / 2 + 5);
                 if (!rect.IsEmpty)
                 {
-                    var color = Color.FromArgb(80, layer.Payload.ConfidentialDisplayColor(scheduleDisplayRow.ScheduleDayAfter.Person));
+                    var color = Color.FromArgb(80, layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDisplayRow.ScheduleDayAfter.Person));
                     var colorSmoke = Color.FromArgb(80, Color.WhiteSmoke);
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                     {
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
-                                                      layer.Payload.ConfidentialDescription(scheduleDisplayRow.ScheduleDayAfter.Person) + "  " +
+                                                      layer.Payload.ConfidentialDescription_DONTUSE(scheduleDisplayRow.ScheduleDayAfter.Person) + "  " +
                                                       period.TimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }

@@ -546,7 +546,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)
 		{
 			var extractor = GetExtractorForAbsence(absenceRequest.Absence);
-			var now = ServiceLocatorForEntity.Now.UtcDateTime();
+			var now = ServiceLocator_DONTUSE.Now.UtcDateTime();
 			var personTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var personNow = new DateOnly(TimeZoneHelper.ConvertFromUtc(now, personTimeZone));
 			extractor.ViewpointDate = personNow;

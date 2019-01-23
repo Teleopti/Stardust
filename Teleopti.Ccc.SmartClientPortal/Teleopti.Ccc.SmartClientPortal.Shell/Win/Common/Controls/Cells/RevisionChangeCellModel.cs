@@ -172,16 +172,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
                     using (
-                        Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.Payload.ConfidentialDisplayColor(revisionDisplayRow.ScheduleDay.Person), 90, false))
+                        Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.Payload.ConfidentialDisplayColor_DONTUSE(revisionDisplayRow.ScheduleDay.Person), 90, false))
                     {
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
-                                                      layer.Payload.ConfidentialDescription(revisionDisplayRow.ScheduleDay.Person) + "  " +
+                                                      layer.Payload.ConfidentialDescription_DONTUSE(revisionDisplayRow.ScheduleDay.Person) + "  " +
                                                       layer.Period.TimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortTimeString());
                         tipDatas.Add(tipData);
                     }
 
-                    using (var sBrush = new SolidBrush(layer.Payload.ConfidentialDisplayColor(revisionDisplayRow.ScheduleDay.Person)))
+                    using (var sBrush = new SolidBrush(layer.Payload.ConfidentialDisplayColor_DONTUSE(revisionDisplayRow.ScheduleDay.Person)))
                     {
                         g.FillRectangle(sBrush, lowerRect);
                     } 
