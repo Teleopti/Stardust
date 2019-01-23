@@ -2,7 +2,6 @@
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
-using PersonAndBusinessUnit = Teleopti.Ccc.Domain.Logon.PersonAndBusinessUnit;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
@@ -16,9 +15,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.BrazilTimeZoneInfo());
 
 			var internalsFactory = new TeleoptiPrincipalInternalsFactory();
-			var target = new TeleoptiPrincipalFactory(internalsFactory);
+			var target = new TeleoptiPrincipalFactory(internalsFactory, internalsFactory);
 
-			var principal = target.MakePrincipal(new PersonAndBusinessUnit(person, BusinessUnitFactory.CreateSimpleBusinessUnit("bu")), new FakeDataSource("fake"), "token");
+			var principal = target.MakePrincipal(person, new FakeDataSource("fake"), BusinessUnitFactory.CreateSimpleBusinessUnit("bu"), "token");
 
 			principal.Regional.TimeZone
 				.Should()

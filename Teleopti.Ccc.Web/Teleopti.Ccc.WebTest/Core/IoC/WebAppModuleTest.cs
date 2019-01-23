@@ -507,6 +507,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldResolveRetrievePersonNameForPerson()
+		{
+			var result = requestContainer.Resolve<IRetrievePersonNameForPerson>();
+			result.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldCacheTeleoptiPrincipalInternalsFactory()
 		{
 			var mbCacheFactory = requestContainer.Resolve<IMbCacheFactory>();

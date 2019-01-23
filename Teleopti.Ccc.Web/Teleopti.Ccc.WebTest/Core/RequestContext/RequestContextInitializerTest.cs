@@ -3,7 +3,6 @@ using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		    var person = PersonFactory.CreatePerson ("Test Person");
 			_httpContextBase = MockRepository.GenerateStub<HttpContextBase>();
 		    _setThreadCulture = MockRepository.GenerateMock<ISetThreadCulture>();
-			_teleoptiPrincipal = new TeleoptiPrincipal(new GenericIdentity("MyName"), new PersonAndBusinessUnit(person, null));
+			_teleoptiPrincipal = new TeleoptiPrincipal(new GenericIdentity("MyName"), person);
 
 		    _requestContextInitializer = new RequestContextInitializer(
 			    new TestSessionPrincipalFactory(_teleoptiPrincipal),

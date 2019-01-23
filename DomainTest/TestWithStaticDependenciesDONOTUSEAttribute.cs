@@ -3,7 +3,6 @@ using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -22,7 +21,8 @@ namespace Teleopti.Ccc.DomainTest
 			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
 			loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(new PersonAndBusinessUnit(loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest), dataSource, null);
+			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(loggedOnPerson, dataSource,
+				BusinessUnitFactory.BusinessUnitUsedInTest, null);
 			Thread.CurrentPrincipal = principal;
 
 			StateHolderProxyHelper.ClearStateHolder();

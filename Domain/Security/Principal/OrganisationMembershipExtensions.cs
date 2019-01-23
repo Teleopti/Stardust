@@ -7,13 +7,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	public static class OrganisationMembershipExtensions
 	{
-		public static IOrganisationMembership Initialize(this OrganisationMembership instance, IPerson person)
-		{
-			if (person == null)
-				return instance;
-			return instance.Initialize(new PersonAndBusinessUnit(person, null));
-		}
-		
 		public static IOrganisationMembership Initialize(this OrganisationMembership instance, IPrincipalSource person)
 		{
 			if (person == null)

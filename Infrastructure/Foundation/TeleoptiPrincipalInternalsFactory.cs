@@ -5,12 +5,24 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	public class TeleoptiPrincipalInternalsFactory : IMakeOrganisationMembershipFromPerson
+	public class TeleoptiPrincipalInternalsFactory : IMakeOrganisationMembershipFromPerson, IRetrievePersonNameForPerson
 	{
 		public virtual IOrganisationMembership MakeOrganisationMembership(IPrincipalSource person)
 		{
 			return new OrganisationMembership().Initialize(person);
 		}
 
+		[DebuggerStepThrough]
+		public virtual string NameForPerson(IPrincipalSource person)
+		{
+			try
+			{
+				return person?.PrincipalName() ?? string.Empty;
+			}
+			catch (NHibernate.ObjectNotFoundException exception)
+			{
+				throw new PersonNotFoundException("Person not found lazy loading the name", exception);
+			}
+		}
 	}
 }

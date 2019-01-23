@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(testLcid));
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(testLcid));
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, null, null), new PersonAndBusinessUnit(person, null));
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, null, null), person);
 			return principal;
 		}
 

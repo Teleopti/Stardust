@@ -7,7 +7,6 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -522,7 +521,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
 			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-				new TeleoptiIdentity("test", null, () => businessUnit.Id, businessUnit.Name, null, null), new PersonAndBusinessUnit(PersonFactory.CreatePerson(), null));			
+				new TeleoptiIdentity("test", null, () => businessUnit.Id, businessUnit.Name, null, null), PersonFactory.CreatePerson());			
 			var site = SiteFactory.CreateSimpleSite();
 
 			businessUnit.SetId(site.BusinessUnit.Id);
@@ -668,7 +667,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
 			System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-				new TeleoptiIdentity("test", null, () => businessUnit.Id, businessUnit.Name, null, null), new PersonAndBusinessUnit(PersonFactory.CreatePerson(), null));			
+				new TeleoptiIdentity("test", null, () => businessUnit.Id, businessUnit.Name, null, null), PersonFactory.CreatePerson());			
 			var site = SiteFactory.CreateSimpleSite();
 
 			businessUnit.SetId(site.BusinessUnit.Id);

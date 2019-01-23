@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
 
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, new PersonAndBusinessUnit(person, null));
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
 			teleoptiPrincipal.AddClaimSet(claimSet);
 
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
 
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, new PersonAndBusinessUnit(person, null));
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
 			teleoptiPrincipal.AddClaimSet(claimSet);
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);

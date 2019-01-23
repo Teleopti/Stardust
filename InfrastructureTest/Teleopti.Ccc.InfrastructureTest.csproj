@@ -489,6 +489,7 @@
     <Compile Include="Foundation\ConstraintViolationExceptionTest.cs" />
     <Compile Include="Foundation\PurgeApplicationDataTest.cs" />
     <Compile Include="Foundation\ForeignKeyExceptionTest.cs" />
+    <Compile Include="Foundation\TeleoptiPrincipalInternalsFactoryTest.cs" />
     <Compile Include="Foundation\GeneralPersistTest.cs">
       <SubType>Code</SubType>
     </Compile>

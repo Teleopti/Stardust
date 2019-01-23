@@ -232,8 +232,6 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
-    <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
-    <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />

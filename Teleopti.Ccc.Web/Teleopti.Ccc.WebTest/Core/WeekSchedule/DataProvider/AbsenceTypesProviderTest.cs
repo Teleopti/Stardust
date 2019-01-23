@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 					null,
 					null
 				),
-				new PersonAndBusinessUnit(currentUser, null));
+				currentUser);
 			ThreadPrincipalContext.SetCurrentPrincipal(principal);
 		}
 	}
