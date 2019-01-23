@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
@@ -17,21 +16,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IGridlockManager _gridLockManager;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		private readonly CreateIslands _createIslands;
-		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
-		private readonly IPlanningGroupSettingsProvider _planningGroupSettingsProvider;
+		
+		private readonly ISchedulingUseTeamProvider _schedulingUseTeamProvider;
 
 		public SchedulingCommandHandler(IEventPublisher eventPublisher, 
 				IGridlockManager gridLockManager,
-				ISchedulingOptionsProvider schedulingOptionsProvider,
 				CrossAgentsAndSkills crossAgentsAndSkills,
-				CreateIslands createIslands, IPlanningGroupSettingsProvider planningGroupSettingsProvider)
+				CreateIslands createIslands, ISchedulingUseTeamProvider schedulingUseTeamProvider)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
-			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
 			_createIslands = createIslands;
-			_planningGroupSettingsProvider = planningGroupSettingsProvider;
+			_schedulingUseTeamProvider = schedulingUseTeamProvider;
 		}
 
 		[TestLog]
@@ -42,10 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				var userLocks = _gridLockManager.LockInfos();
 				var islands = CreateIslands(command.Period, command);
-				var allSettingsForPlanningGroup = _planningGroupSettingsProvider.Execute(command.PlanningPeriodId);
-				var useTeam = allSettingsForPlanningGroup != null
-					? allSettingsForPlanningGroup.TeamSettings.GroupPageType != GroupPageType.SingleAgent
-					: _schedulingOptionsProvider.Fetch(null).UseTeam;
+
+				var useTeam = _schedulingUseTeamProvider.Fetch(command.PlanningPeriodId);
 				if (useTeam)
 				{
 					var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, command.AgentsToSchedule);

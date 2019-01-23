@@ -472,6 +472,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<NoUpdateForDesktop>().As<IUpdateSchedulingOptionsWithTeamSettings>().SingleInstance();
 				}
 			}
+			
+			if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_TeamSchedulingInPlans_79283))
+			{
+				builder.RegisterType<SchedulingUseTeamProvider>().As<ISchedulingUseTeamProvider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<SchedulingUseTeamProviderOld>().As<ISchedulingUseTeamProvider>().SingleInstance();
+			}
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope();
 			builder
