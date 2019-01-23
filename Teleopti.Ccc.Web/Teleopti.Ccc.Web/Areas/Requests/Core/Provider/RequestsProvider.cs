@@ -16,13 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly IShiftTradeSwapScheduleDetailsMapper _shiftTradeSwapScheduleDetailsMapper;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public RequestsProvider(IPersonRequestRepository repository, IPermissionProvider permissionProvider, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IShiftTradeSwapScheduleDetailsMapper shiftTradeSwapScheduleDetailsMapper )
+		public RequestsProvider(IPersonRequestRepository repository, IPermissionProvider permissionProvider, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IShiftTradeSwapScheduleDetailsMapper shiftTradeSwapScheduleDetailsMapper, ILoggedOnUser loggedOnUser)
 		{
 			_repository = repository;
 			_permissionProvider = permissionProvider;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 			_shiftTradeSwapScheduleDetailsMapper = shiftTradeSwapScheduleDetailsMapper;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public IEnumerable<IPersonRequest> RetrieveAbsenceAndTextRequests(RequestFilter filter, out int totalCount)
@@ -56,7 +58,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				var shiftTradeRequest = (IShiftTradeRequest) request.Request;
 				if (request.IsPending || request.IsNew)
 				{
-					var shiftTradeRequestStatus = shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker);
+					IShiftTradeRequestStatusChecker checker = new EmptyShiftTradeRequestChecker();
+					if (_loggedOnUser.CurrentUser() == shiftTradeRequest.PersonFrom
+						|| _loggedOnUser.CurrentUser() == shiftTradeRequest.PersonTo)
+						checker = _shiftTradeRequestStatusChecker;
+					var shiftTradeRequestStatus = shiftTradeRequest.GetShiftTradeStatus(checker);
 					if (shiftTradeRequestStatus == ShiftTradeStatus.Referred) referredRequests.Add(request);
 				}
 				else
