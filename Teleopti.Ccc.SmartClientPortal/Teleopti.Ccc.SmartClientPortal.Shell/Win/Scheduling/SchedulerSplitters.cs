@@ -377,6 +377,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
 			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", container.Resolve<ISkillPriorityProvider>());
 
+			DayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			IntradayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			WeekGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			MonthGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			FullPeriodGridControl.ContextMenuStrip = ContextMenuSkillGrid;
 		}
 
 		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder, SchedulerGroupPagesProvider schedulerGroupPagesProvider, IEnumerable<IOptionalColumn> optionalColumns)
@@ -677,5 +682,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return null;
 		}
 
+		public void SaveAllChartSetting()
+		{
+			IntradayGridControl.SaveSetting();
+			DayGridControl.SaveSetting();
+			WeekGridControl.SaveSetting();
+			MonthGridControl.SaveSetting();
+			FullPeriodGridControl.SaveSetting();
+		}
+
+		public void InvalidateSkillResultGrids()
+		{
+			IntradayGridControl.Invalidate(true);
+			DayGridControl.Invalidate(true);
+			WeekGridControl.Invalidate(true);
+			MonthGridControl.Invalidate(true);
+			FullPeriodGridControl.Invalidate(true);
+		}
 	}
 }

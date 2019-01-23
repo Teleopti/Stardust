@@ -978,7 +978,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				Cursor.Current = Cursors.WaitCursor;
 				try
 				{
-					saveAllChartSetting();
+					schedulerSplitters1.SaveAllChartSetting();
 					saveQuickAccessState();
 					_currentSchedulingScreenSettings.EditorSnapToResolution = wpfShiftEditor1.Interval;
 					_currentSchedulingScreenSettings.HideEditor = !_showEditor;
@@ -1747,15 +1747,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			}
 			gridSelectionChangedRunning = false;
-		}
-
-		private void saveAllChartSetting()
-		{
-			schedulerSplitters1.IntradayGridControl.SaveSetting();
-			schedulerSplitters1.DayGridControl.SaveSetting();
-			schedulerSplitters1.WeekGridControl.SaveSetting();
-			schedulerSplitters1.MonthGridControl.SaveSetting();
-			schedulerSplitters1.FullPeriodGridControl.SaveSetting();
 		}
 
 		public async void RunActionWithDelay(System.Action action, int milliseconds)
@@ -2699,11 +2690,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripStatusLabelStatus.Text = statusText;
 			schedulerSplitters1.Grid.Invalidate();
 			refreshSummarySkillIfActive();
-			schedulerSplitters1.IntradayGridControl.Invalidate(true);
-			schedulerSplitters1.DayGridControl.Invalidate(true);
-			schedulerSplitters1.WeekGridControl.Invalidate(true);
-			schedulerSplitters1.MonthGridControl.Invalidate(true);
-			schedulerSplitters1.FullPeriodGridControl.Invalidate(true);
+			schedulerSplitters1.InvalidateSkillResultGrids();
 			refreshChart();
 			statusStrip1.Refresh();
 			Application.DoEvents();
@@ -2727,11 +2714,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					schedulerSplitters1.Grid.Invalidate();
 					refreshSummarySkillIfActive();
-					schedulerSplitters1.IntradayGridControl.Invalidate(true);
-					schedulerSplitters1.DayGridControl.Invalidate(true);
-					schedulerSplitters1.WeekGridControl.Invalidate(true);
-					schedulerSplitters1.MonthGridControl.Invalidate(true);
-					schedulerSplitters1.FullPeriodGridControl.Invalidate(true);
+					schedulerSplitters1.InvalidateSkillResultGrids();
 					refreshChart();
 					_scheduleCounter = 0;
 				}
@@ -2764,11 +2747,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				schedulerSplitters1.Grid.Cursor = Cursors.Default;
 				schedulerSplitters1.Grid.Enabled = true;
 				schedulerSplitters1.Grid.Cursor = Cursors.Default;
-				schedulerSplitters1.IntradayGridControl.Invalidate(true);
-				schedulerSplitters1.DayGridControl.Invalidate(true);
-				schedulerSplitters1.WeekGridControl.Invalidate(true);
-				schedulerSplitters1.MonthGridControl.Invalidate(true);
-				schedulerSplitters1.FullPeriodGridControl.Invalidate(true);
+				schedulerSplitters1.InvalidateSkillResultGrids();
 				refreshChart();
 
 				if (_scheduleView != null)
@@ -3570,12 +3549,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			new SkillGridContextMenuBuilder().Build(_skillResultViewSetting, schedulerSplitters1.ContextMenuSkillGrid, _shrinkage,
 				skillGridMenuItemPeriodClick, toolStripMenuItemUseShrinkageClick);
-
-			schedulerSplitters1.DayGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
-			schedulerSplitters1.IntradayGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
-			schedulerSplitters1.WeekGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
-			schedulerSplitters1.MonthGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
-			schedulerSplitters1.FullPeriodGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
 		}
 
 		private void skillGridMenuItemAnalyzeResorceChangesClick(object sender, EventArgs e)
