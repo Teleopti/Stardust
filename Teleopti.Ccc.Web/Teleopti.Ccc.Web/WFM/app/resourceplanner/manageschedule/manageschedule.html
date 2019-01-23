@@ -5,9 +5,9 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
 		<h1>
-			<i class="mdi mdi-calendar"></i> {{ vm.CopyScheduleOrImportSchedule | translate}}
+			<i class="mdi mdi-calendar"></i>{{ vm.CopyScheduleOrImportSchedule | translate}}
 		</h1>
-		<p> {{ vm.CopyScheduleOrImportSchedule + 'Description' | translate}}</p>
+		<p>{{ vm.CopyScheduleOrImportSchedule + 'Description' | translate}}</p>
 	</div>
 	<div class="fab-wrapper">
 		<button id="manage-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)"

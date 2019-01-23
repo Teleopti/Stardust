@@ -586,7 +586,7 @@
 
 <section>
 	<div ng-cloak ng-if="vm.noWorkloadFound">
-		<div class="view-header with-desc">
+		<div class="view-header">
 			<h1>{{ 'Forecasts' | translate }}</h1>
 		</div>
 
@@ -596,10 +596,9 @@
 					<div class="con-flex">
 						<h2>{{ 'PleaseSelectASkillFirst' | translate }}</h2>
 					</div>
-
-					<div class="con-footer">
-						<button class="wfm-btn wfm-btn-invis-primary" ui-sref="forecast">{{ 'Ok' | translate }}</button>
-					</div>
+				</div>
+				<div class="con-footer">
+					<button class="wfm-btn wfm-btn-invis-primary" ui-sref="forecast">{{ 'Ok' | translate }}</button>
 				</div>
 			</div>
 		</div>

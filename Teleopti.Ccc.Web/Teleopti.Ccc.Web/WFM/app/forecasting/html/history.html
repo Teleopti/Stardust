@@ -49,14 +49,12 @@
 			</div>
 		</div>
 	</div>
-</section>
 
-<section>
 	<div ng-cloak ng-if="!vm.workloadFound">
-		<div class="view-header with-desc">
-			<h1>
-				<span>{{'HistoricalData' | translate}}</span>
-			</h1>
+		<div class="view-header">
+			<div class="view-title">
+				<h1>{{'HistoricalData' | translate}}</h1>
+			</div>
 		</div>
 		<div class="con-flex">
 			<div class="panel">
@@ -64,11 +62,11 @@
 					<div class="con-flex">
 						<h2>{{'PleaseSelectASkillFirst'|translate}}</h2>
 					</div>
-					<div class="con-footer">
-						<button class="wfm-btn wfm-btn-invis-primary" ui-sref="forecast">
-							{{'Ok' | translate}}
-						</button>
-					</div>
+				</div>
+				<div class="con-footer">
+					<button class="wfm-btn wfm-btn-invis-primary" ui-sref="forecast">
+						{{'Ok' | translate}}
+					</button>
 				</div>
 			</div>
 		</div>

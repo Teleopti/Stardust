@@ -1,14 +1,7 @@
 <div class="view-header">
 	<div class="view-title">
-		<div class="con-flex">
-			<div class="pull-left">
-				<i class="mdi mdi mdi-numeric-9-plus-box-multiple-outline"></i>
-				<h1 class="inline-block">{{'Requests' | translate }}</h1>
-			</div>
-			<div ng-if="vm.showFeedbackLink" class="pull-right">
-				<ng2-feedback-message [feedback-type]="'newRelease'" [component-name]="'Requests' | translate"></ng2-feedback-message>
-			</div>
-		</div>
+		<h1 class="inline-block"><i class="mdi mdi mdi-numeric-9-plus-box-multiple-outline"></i>{{'Requests' | translate }}</h1>
+		<ng2-feedback-message ng-if="vm.showFeedbackLink" class="pull-right" [feedback-type]="'newRelease'" [component-name]="'Requests' | translate"></ng2-feedback-message>
 	</div>
 </div>
 

@@ -1,147 +1,141 @@
-<div class="con-row">
-	<div class="con-flex">
-		<div class="con-row view-header with-fab with-desc">
-			<div class="con-flex view-title">
-				<h1><i nz-icon type="compass"></i> {{ 'Intraday' | translate }}</h1>
-			</div>
-		</div>
-		<div class="sub-header">
-			<div class="con-row" style="flex-wrap: wrap;">
-				<div class="con-flex" style="flex-basis: 40%; padding: 0;">
-					<div class="con-row">
-						<app-angular-skill-picker
-							class="con-flex"
-							style="margin: 0; padding: 0;"
-							(selected)="onSelectSkill($event)"
-							[selectedItem]="selectedSkillOrGroup"
-						></app-angular-skill-picker>
-						<div class="con-flex" style="flex-basis: 15%">
-							<button
-								nz-button
-								(click)="goToGroupManager()"
-								nzType="default"
-								nzTitle="{{ 'ManageSkillGroups' | translate }}"
-								nz-tooltip
-							>
-								<i nz-icon type="edit"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-				<div class="con-flex">
-					<intraday-date-selector
-						[hidden]="!selectedSkillOrGroup"
-						[value]="selectedOffset + ''"
-						(selected)="onSelectDate($event)"
-					>
-					</intraday-date-selector>
-				</div>
-			</div>
-			<div class="con-row">
-				<div class="con-flex" style="padding:0">
-					<div class="con-row">
-						<div
-							class="con-flex"
-							*ngIf="displayDate && displayDate.length > 0"
-							[hidden]="!selectedSkillOrGroup"
-						>
-							<h2>{{ displayDate }} <i nz-icon [hidden]="!loading" type="loading"></i>&nbsp;</h2>
-						</div>
-						<div class="con-flex">
-							<button
-								class="pull-right"
-								[hidden]="!selectedSkillOrGroup"
-								(click)="exportToExcel()"
-								[nzLoading]="exporting"
-								nz-button
-							>
-								{{ translate.instant('ExportToExcel') }}
-							</button>
-						</div>
-					</div>
-					<div
-						style="margin-top: 10px"
-						*ngIf="
-							selectedSkillOrGroup &&
-							selectedSkillOrGroup.Skills &&
-							selectedSkillOrGroup.Skills.length > 0
-						"
-					>
-						<nz-collapse nzAccordion>
-							<nz-collapse-panel
-								id="skill-panel"
-								nzHeader="{{ translate.instant('Skills') }}"
-								[nzActive]="showSkills"
-								(click)="onShowHideSkills()"
-							>
-								<nz-radio-group
-									[(ngModel)]="selectedSubSkillId"
-									(ngModelChange)="onPickSubSkill()"
-									nzSize="small"
-								>
-									<label nz-radio-button nzValue="all" (click)="onSubSkillClick($event)">
-										<i nz-icon type="appstore" theme="outline"></i> {{ translate.instant('All') }}
-									</label>
-									<label
-										*ngFor="let skill of selectedSkillOrGroup.Skills"
-										nz-radio-button
-										nzValue="{{ skill.Id }}"
-										(click)="onSubSkillClick($event)"
-									>
-										<i nz-icon type="{{ skillIcons.getIcon(skill) }}" theme="outline"></i>
-										{{ skill.Name }}
-									</label>
-								</nz-radio-group>
-							</nz-collapse-panel>
-						</nz-collapse>
-					</div>
-				</div>
-			</div>
-
-			<div class="con-row" [hidden]="!selectedSkillOrGroup">
-				<div class="con-flex">
-					<div>
-						<nz-tabset
-							[nzTabPosition]="'top'"
-							[nzType]="'card'"
-							(nzSelectedIndexChange)="onClickTab($event)"
-							[nzSelectedIndex]="selectedTabIndex"
-						>
-							<nz-tab nzTitle="{{ translate.instant('IncomingTraffic') }}" [nzDisabled]="loading">
-							</nz-tab>
-							<nz-tab nzTitle="{{ translate.instant('Performance') }}" [nzDisabled]="loading"> </nz-tab>
-							<nz-tab nzTitle="{{ translate.instant('Staffing') }}" [nzDisabled]="loading"> </nz-tab>
-						</nz-tabset>
-					</div>
-				</div>
-			</div>
-			<div class="con-row" [hidden]="!showReforecastedWarning || loading">
-				<div class="con-flex">
-					<p><i nz-icon type="warning"></i> {{ getEmailOrBackofficeWarning() }}</p>
-				</div>
-			</div>
-			<div class="con-row" [hidden]="!error">
-				<div class="con-flex">
-					<p><i nz-icon type="warning"></i> {{ errorMessage }}</p>
-				</div>
-			</div>
-			<div class="con-row" [hidden]="!selectedSkillOrGroup || error">
-				<div class="con-flex">
-					<app-intraday-chart
-						[chartData]="chartData"
-						[chartType]="selectedChartType"
-						[latestTime]="latestTime"
-						[axisLabels]="axisLabels"
-					></app-intraday-chart>
-				</div>
-			</div>
-			<div class="con-row" [hidden]="!selectedSkillOrGroup || loading || error">
-				<div class="con-flex"></div>
-				<div class="con-flex">
-					<intraday-table [chartType]="selectedChartType" [tableData]="summaryData"></intraday-table>
-				</div>
-				<div class="con-flex"></div>
+<div class="view-header">
+	<div class="view-title">
+		<h1><i nz-icon type="compass"></i>{{ 'Intraday' | translate }}</h1>
+	</div>
+</div>
+<div class="con-row" style="flex-wrap: wrap;">
+	<div class="con-flex" style="flex-basis: 40%; padding: 0;">
+		<div class="con-row">
+			<app-angular-skill-picker
+				class="con-flex"
+				style="margin: 0; padding: 0;"
+				(selected)="onSelectSkill($event)"
+				[selectedItem]="selectedSkillOrGroup"
+			></app-angular-skill-picker>
+			<div class="con-flex" style="flex-basis: 15%">
+				<button
+					nz-button
+					(click)="goToGroupManager()"
+					nzType="default"
+					nzTitle="{{ 'ManageSkillGroups' | translate }}"
+					nz-tooltip
+				>
+					<i nz-icon type="edit"></i>
+				</button>
 			</div>
 		</div>
 	</div>
+	<div class="con-flex">
+		<intraday-date-selector
+			[hidden]="!selectedSkillOrGroup"
+			[value]="selectedOffset + ''"
+			(selected)="onSelectDate($event)"
+		>
+		</intraday-date-selector>
+	</div>
+</div>
+<div class="con-row">
+	<div class="con-flex" style="padding:0">
+		<div class="con-row">
+			<div
+				class="con-flex"
+				*ngIf="displayDate && displayDate.length > 0"
+				[hidden]="!selectedSkillOrGroup"
+			>
+				<h2>{{ displayDate }} <i nz-icon [hidden]="!loading" type="loading"></i>&nbsp;</h2>
+			</div>
+			<div class="con-flex">
+				<button
+					class="pull-right"
+					[hidden]="!selectedSkillOrGroup"
+					(click)="exportToExcel()"
+					[nzLoading]="exporting"
+					nz-button
+				>
+					{{ translate.instant('ExportToExcel') }}
+				</button>
+			</div>
+		</div>
+		<div
+			style="margin-top: 10px"
+			*ngIf="
+				selectedSkillOrGroup &&
+				selectedSkillOrGroup.Skills &&
+				selectedSkillOrGroup.Skills.length > 0
+			"
+		>
+			<nz-collapse nzAccordion>
+				<nz-collapse-panel
+					id="skill-panel"
+					nzHeader="{{ translate.instant('Skills') }}"
+					[nzActive]="showSkills"
+					(click)="onShowHideSkills()"
+				>
+					<nz-radio-group
+						[(ngModel)]="selectedSubSkillId"
+						(ngModelChange)="onPickSubSkill()"
+						nzSize="small"
+					>
+						<label nz-radio-button nzValue="all" (click)="onSubSkillClick($event)">
+							<i nz-icon type="appstore" theme="outline"></i> {{ translate.instant('All') }}
+						</label>
+						<label
+							*ngFor="let skill of selectedSkillOrGroup.Skills"
+							nz-radio-button
+							nzValue="{{ skill.Id }}"
+							(click)="onSubSkillClick($event)"
+						>
+							<i nz-icon type="{{ skillIcons.getIcon(skill) }}" theme="outline"></i>
+							{{ skill.Name }}
+						</label>
+					</nz-radio-group>
+				</nz-collapse-panel>
+			</nz-collapse>
+		</div>
+	</div>
+</div>
+
+<div class="con-row" [hidden]="!selectedSkillOrGroup">
+	<div class="con-flex">
+		<div>
+			<nz-tabset
+				[nzTabPosition]="'top'"
+				[nzType]="'card'"
+				(nzSelectedIndexChange)="onClickTab($event)"
+				[nzSelectedIndex]="selectedTabIndex"
+			>
+				<nz-tab nzTitle="{{ translate.instant('IncomingTraffic') }}" [nzDisabled]="loading">
+				</nz-tab>
+				<nz-tab nzTitle="{{ translate.instant('Performance') }}" [nzDisabled]="loading"> </nz-tab>
+				<nz-tab nzTitle="{{ translate.instant('Staffing') }}" [nzDisabled]="loading"> </nz-tab>
+			</nz-tabset>
+		</div>
+	</div>
+</div>
+<div class="con-row" [hidden]="!showReforecastedWarning || loading">
+	<div class="con-flex">
+		<p><i nz-icon type="warning"></i> {{ getEmailOrBackofficeWarning() }}</p>
+	</div>
+</div>
+<div class="con-row" [hidden]="!error">
+	<div class="con-flex">
+		<p><i nz-icon type="warning"></i> {{ errorMessage }}</p>
+	</div>
+</div>
+<div class="con-row" [hidden]="!selectedSkillOrGroup || error">
+	<div class="con-flex">
+		<app-intraday-chart
+			[chartData]="chartData"
+			[chartType]="selectedChartType"
+			[latestTime]="latestTime"
+			[axisLabels]="axisLabels"
+		></app-intraday-chart>
+	</div>
+</div>
+<div class="con-row" [hidden]="!selectedSkillOrGroup || loading || error">
+	<div class="con-flex"></div>
+	<div class="con-flex">
+		<intraday-table [chartType]="selectedChartType" [tableData]="summaryData"></intraday-table>
+	</div>
+	<div class="con-flex"></div>
 </div>

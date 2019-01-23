@@ -1,17 +1,10 @@
 <div class="view-header">
 	<div class="view-title">
-		<h1>
-			<i class="mdi mdi-phone-forward"></i>
-			<span translate>CreateCampaign</span>
-		</h1>
+		<h1><i class="mdi mdi-phone-forward"></i><span translate>CreateCampaign</span></h1>
 	</div>
 </div>
 
 <div class="panel campaign-create">
-	<button class="wfm-btn wfm-btn-invis-default back-to-overview" ng-click="backToList()" ng-disabled="isCreating">
-		<i class="mdi mdi-reply"></i>
-		<md-tooltip md-direction="right">{{'BackToList' | translate}}</md-tooltip>
-	</button>
 	<form name="form" class="wfm-form">
 		<div class="con-row">
 			<div class="con-flex">
@@ -154,6 +147,7 @@
 			</div>
 		</div>
 		<div class="con-footer">
+			<button class="wfm-btn wfm-btn-invis-default back-to-overview" ng-click="backToList()" ng-disabled="isCreating">{{'Cancel' | translate}}</button>
 			<button type="submit" class="wfm-btn wfm-btn-invis-primary campaign-create-submit" ng-click="addCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary':isInputValid()}"
 			 ng-disabled="isCreating">
 				<span translate>Save</span>
