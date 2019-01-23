@@ -14,7 +14,7 @@ CREATE TABLE mart.Tmp_dim_queue_excluded
 	(
 	queue_original_id nvarchar(100) NOT NULL,
 	datasource_id smallint NOT NULL
-	)  ON MART
+	) 
 GO
 ALTER TABLE mart.Tmp_dim_queue_excluded SET (LOCK_ESCALATION = TABLE)
 GO
