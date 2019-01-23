@@ -3,20 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class AllSettingsForPlanningGroup : IEnumerable<PlanningGroupSettings>
 	{
 		private readonly IEnumerable<PlanningGroupSettings> _planningGroupSettings;
+		public Percent PreferenceValue { get; private set; }
+		public TeamSettings TeamSettings { get; }
 
-		public AllSettingsForPlanningGroup(IEnumerable<PlanningGroupSettings> planningGroupSettings, Percent preferenceValue)
+		public AllSettingsForPlanningGroup(IEnumerable<PlanningGroupSettings> planningGroupSettings,
+			Percent preferenceValue, TeamSettings teamSettings)
 		{
 			PreferenceValue = preferenceValue;
+			TeamSettings = teamSettings;
 			_planningGroupSettings = planningGroupSettings.OrderByDescending(x=>x.Priority).ToArray();
 		}
-		
-		public Percent PreferenceValue { get; private set; }
 
 		public PlanningGroupSettings ForAgent(IPerson person, DateOnly dateOnly)
 		{

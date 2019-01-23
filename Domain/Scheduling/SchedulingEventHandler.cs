@@ -12,8 +12,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -37,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly AgentsWithWhiteSpots _agentsWithWhiteSpots;
 		private readonly RemoveNonPreferenceDaysOffs _removeNonPreferenceDaysOffs;
 		private readonly IPlanningGroupSettingsProvider _planningGroupSettingsProvider;
+		private readonly IUpdateSchedulingOptionsWithTeamSettings _updateSchedulingOptionsWithTeamSettings;
 
 		protected SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -53,7 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						AgentsWithPreferences agentsWithPreferences, 
 						AgentsWithWhiteSpots agentsWithWhiteSpots,
 						RemoveNonPreferenceDaysOffs removeNonPreferenceDaysOffs,
-						IPlanningGroupSettingsProvider planningGroupSettingsProvider)
+						IPlanningGroupSettingsProvider planningGroupSettingsProvider,
+						IUpdateSchedulingOptionsWithTeamSettings updateSchedulingOptionsWithTeamSettings)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_agentsWithWhiteSpots = agentsWithWhiteSpots;
 			_removeNonPreferenceDaysOffs = removeNonPreferenceDaysOffs;
 			_planningGroupSettingsProvider = planningGroupSettingsProvider;
+			_updateSchedulingOptionsWithTeamSettings = updateSchedulingOptionsWithTeamSettings;
 		}
 
 		[TestLog]
@@ -97,6 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var schedulingCallback = _currentSchedulingCallback.Current();
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
 			var schedulingOptions = _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate);
+			_updateSchedulingOptionsWithTeamSettings.Execute(schedulingOptions, allSettingsForPlanningGroup);
+			
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(allSettingsForPlanningGroup);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 			var agentsToSchedule = @event.Agents.ToHashSet();

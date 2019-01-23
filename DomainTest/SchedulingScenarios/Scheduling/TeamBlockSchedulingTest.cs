@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
@@ -47,6 +48,51 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 
+		[Test]
+		public void ShouldTeamSchedulingUseSameShiftCategoryForHierarchy()
+		{
+			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_TeamSchedulingInPlans_79283))
+				Assert.Ignore("only works with toggle on");
+			DayOffTemplateRepository.Add(new DayOffTemplate());
+			var date = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has(activity);
+			var scenario = ScenarioRepository.Has();
+			var team = new Team().WithDescription(new Description("team1")).WithId();
+			
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
+			var shiftCategory1 = new ShiftCategory().WithId();
+			var shiftCategory2 = new ShiftCategory().WithId();
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory1));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory2));
+			var bag = new RuleSetBag(ruleSet1, ruleSet2);
+			PersonRepository.Has(team, new SchedulePeriod(date, SchedulePeriodType.Week, 1), bag, skill);
+			PersonRepository.Has(team, new SchedulePeriod(date, SchedulePeriodType.Week, 1), bag, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 2));
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+			planningPeriod.PlanningGroup.SetTeamSettings(new TeamSettings
+			{
+				GroupPageType = GroupPageType.Hierarchy,
+				TeamSameType = TeamSameType.ShiftCategory
+			});
+
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value, false);
+
+			Assert.Multiple(() =>
+			{
+				var allAssesWithLayers = AssignmentRepository.LoadAll().Where(x => x.ShiftLayers.Any());
+				allAssesWithLayers.Select(x => x.ShiftCategory).ToHashSet().Count
+					.Should().Be.EqualTo(2);
+				foreach (var day in DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1).DayCollection())
+				{
+					var assesOnDay = AssignmentRepository.LoadAll().Where(x => x.Date == day);
+					assesOnDay.First().ShiftCategory
+						.Should().Be.EqualTo(assesOnDay.Last().ShiftCategory);
+				}
+			});
+		}
+		
 		[Test]
 		public void ShouldHandleTeamUsingShiftOverMidnight()
 		{

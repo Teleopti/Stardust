@@ -440,6 +440,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<MoveSchedulesToOriginalStateHolderAfterIsland>()
 					.As<ISynchronizeSchedulesAfterIsland>()
 					.SingleInstance();
+				builder.RegisterType<NoUpdateForDesktop>().As<IUpdateSchedulingOptionsWithTeamSettings>().SingleInstance();
 			}
 			else
 			{
@@ -462,6 +463,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
 				builder.RegisterType<PlanningGroupSettingsProvider>().As<IPlanningGroupSettingsProvider>().SingleInstance();
+				if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_TeamSchedulingInPlans_79283))
+				{
+					builder.RegisterType<UpdateSchedulingOptionsWithTeamSettings>().As<IUpdateSchedulingOptionsWithTeamSettings>().SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<NoUpdateForDesktop>().As<IUpdateSchedulingOptionsWithTeamSettings>().SingleInstance();
+				}
 			}
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope();

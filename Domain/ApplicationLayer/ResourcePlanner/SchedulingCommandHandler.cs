@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
@@ -17,18 +18,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		private readonly CreateIslands _createIslands;
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
+		private readonly IPlanningGroupSettingsProvider _planningGroupSettingsProvider;
 
 		public SchedulingCommandHandler(IEventPublisher eventPublisher, 
 				IGridlockManager gridLockManager,
 				ISchedulingOptionsProvider schedulingOptionsProvider,
 				CrossAgentsAndSkills crossAgentsAndSkills,
-				CreateIslands createIslands)
+				CreateIslands createIslands, IPlanningGroupSettingsProvider planningGroupSettingsProvider)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
 			_createIslands = createIslands;
+			_planningGroupSettingsProvider = planningGroupSettingsProvider;
 		}
 
 		[TestLog]
@@ -39,7 +42,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				var userLocks = _gridLockManager.LockInfos();
 				var islands = CreateIslands(command.Period, command);
-				if (_schedulingOptionsProvider.Fetch(null).UseTeam)
+				var allSettingsForPlanningGroup = _planningGroupSettingsProvider.Execute(command.PlanningPeriodId);
+				var useTeam = allSettingsForPlanningGroup != null
+					? allSettingsForPlanningGroup.TeamSettings.GroupPageType != GroupPageType.SingleAgent
+					: _schedulingOptionsProvider.Fetch(null).UseTeam;
+				if (useTeam)
 				{
 					var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, command.AgentsToSchedule);
 					addEvent(events, command, command.AgentsToSchedule, agentsAndSkills.Agents.ToHashSet(), agentsAndSkills.Skills, userLocks);
