@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('skillPickerComponent', function() {
+describe('skillPickerComponent', function() {
 	var $componentController,
 		$translate,
 		skillIconService = {
