@@ -3,9 +3,14 @@
 
     angular
         .module('wfm.rta')
-        .controller('RtaAdjustAdherenceToNeutralController', RtaAdjustAdherenceToNeutralController);
+        .controller('AdjustAdherenceController', AdjustAdherenceController);
 
-    function RtaAdjustAdherenceToNeutralController() {
+    function AdjustAdherenceController() {
         var vm = this;
+        vm.showAdjustToNeutralForm = false;
+        
+        vm.toggleAdjustToNeutralForm = function() {
+            vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;
+        }
     }
 })();

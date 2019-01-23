@@ -63,10 +63,13 @@
 	padding: 2px;
 	border-radius: 3px;
 }
+/*This red backround is used in other calendar views as well*/
+.bank-holiday-day-shape,
 .bank-holiday-day-shape.day-header-day {
-	border-color: red;
-	background: red;
-	cursor: pointer;
+	border-color: red !important;
+	background: red !important;
+	cursor: pointer !important;
+	color: white !important;
 }
 .calendarview-week li div.day-content {
 	background-color: white;

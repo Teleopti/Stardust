@@ -79,7 +79,7 @@ INSERT INTO mart.dim_queue_excluded
 	datasource_id
 	)
 SELECT
-	queue_original_id	= -1,
+	queue_original_id	= '-1',
 	datasource_id		= ds.datasource_id
 FROM
 	mart.sys_datasource ds

@@ -199,7 +199,7 @@ END
 		a.LogObjectName		= dbo.Character_Scramble(a.LogObjectName),
 		a.Name				= dbo.Character_Scramble(a.Name),
 		a.Description		= dbo.Character_Scramble(a.Description),
-		a.QueueOriginalId	= dbo.Numeric_Variance(a.QueueOriginalId,0.2)
+		a.QueueOriginalId	= dbo.Character_Scramble(a.QueueOriginalId)
 	from QueueSource a
 	select * from QueueSource
 

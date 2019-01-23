@@ -28,16 +28,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var skill = new Skill().For(activity).WithId().InTimeZone(TimeZoneInfo.Utc).IsOpenBetween(8, 16);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
-			var group = new Group(new List<IPerson> { agent }, "_");
-			var teamInfo = new TeamInfo(group, new List<IList<IScheduleMatrixPro>>());
-			var blockInfo = new BlockInfo(date.ToDateOnlyPeriod());
-			var teamBlockInfo = new TeamBlockInfo(teamInfo, blockInfo);
 
-			var result = Target.Extract(teamBlockInfo, new[] { skillDay }, date.ToDateOnlyPeriod(), date);
+			var result = Target.Extract(new []{agent}, new[] { skillDay }, date.ToDateOnlyPeriod());
 
 			result.OpenHoursDictionary[date].StartTimeLimitation.StartTime.Should().Be.EqualTo(TimeSpan.FromHours(8));
 			result.OpenHoursDictionary[date].EndTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(16));
-			result.ForCurrentDate().TotalHours.Should().Be.EqualTo(8);
+			result.ForCurrentDate(date).TotalHours.Should().Be.EqualTo(8);
 		}
 	}
 }

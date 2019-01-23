@@ -157,7 +157,7 @@ CREATE TABLE #tmp_alogg (
 	date_from smalldatetime NOT NULL ,
 	interval int NOT NULL,
 	agent_id int NOT NULL, 
-	agent_name nvarchar(50) NULL,
+	agent_name nvarchar(100) NULL,
 	avail_dur int NULL,
 	tot_work_dur int NULL,
 	talking_call_dur int NULL,	

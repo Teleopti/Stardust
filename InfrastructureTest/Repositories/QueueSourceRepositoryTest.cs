@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void MustBeUniqueMartAggOrgData()
         {
-            var qs1 = new QueueSource {QueueMartId = 1, QueueAggId = 2, QueueOriginalId = 3, DataSourceId = 4};
-            var qs2 = new QueueSource {QueueMartId = 1, QueueAggId = 2, QueueOriginalId = 3, DataSourceId = 4};
+            var qs1 = new QueueSource {QueueMartId = 1, QueueAggId = 2, QueueOriginalId = "3", DataSourceId = 4};
+            var qs2 = new QueueSource {QueueMartId = 1, QueueAggId = 2, QueueOriginalId = "3", DataSourceId = 4};
             PersistAndRemoveFromUnitOfWork(qs1);
             Assert.Throws<ConstraintViolationException>(() => PersistAndRemoveFromUnitOfWork(qs2));
         }

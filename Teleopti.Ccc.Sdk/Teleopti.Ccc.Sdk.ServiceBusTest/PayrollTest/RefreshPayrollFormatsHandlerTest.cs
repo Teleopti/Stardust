@@ -22,14 +22,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 	[TestFixture]
 	public class RefreshPayrollFormatsHandlerTest
 	{
-
-		//[OneTimeSetUp]
-		//public void SetupFixture()
-		//{
-		//	copyFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Payroll.DeployNew"),
-		//		Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"), "TestTenant");
-		//}
-
 		[Test]
 		public void CopyPayrollFilesFromSourceToDestination()
 		{

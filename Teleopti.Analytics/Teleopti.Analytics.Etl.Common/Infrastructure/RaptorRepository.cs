@@ -947,9 +947,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				foreach (DataRow row in dataSet.Tables[0].Rows)
 				{
 					string description = row["Description"] == DBNull.Value ? string.Empty : (string)row["Description"];
-					int queueOriginalId = row["QueueOriginalId"] == DBNull.Value
-											  ? -1
-											  : int.Parse((string)row["QueueOriginalId"], CultureInfo.InvariantCulture);
+					string queueOriginalId = row["QueueOriginalId"] == DBNull.Value
+											  ? "-1"
+											  : (string)row["QueueOriginalId"];
 					int queueAgglId = row["QueueAggId"] == DBNull.Value ? -1 : (int)row["QueueAggId"];
 					int dsId = row["DataSourceId"] == DBNull.Value ? -1 : (short)row["DataSourceId"];
 

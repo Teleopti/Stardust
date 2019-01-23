@@ -92,7 +92,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					break;
 				case SchedulePartView.FullDayAbsence:
 					eventScheduleDay.IsFullDayAbsence = true;
-					eventScheduleDay.ShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
+					var absenceCollection = scheduleDay.PersonAbsenceCollection();
+					if (absenceCollection.Length > 1) {
+						absenceCollection = absenceCollection.OrderBy(a => a.Layer.Payload.Priority)
+						.ThenByDescending(a => absenceCollection.IndexOf(a)).ToArray();
+					}
+					eventScheduleDay.ShortName = absenceCollection.First().Layer.Payload.Description.ShortName;
 					break;
 				case SchedulePartView.DayOff:
 					var dayOff = scheduleDay.PersonAssignment().DayOff();

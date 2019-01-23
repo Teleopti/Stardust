@@ -16,6 +16,7 @@
 
 		this.subscribe = subscribe;
 		this.subscribeBatchMessage = subscribeBatchMessage;
+		this.resetPendingMessages = resetPendingMessages;
 
 		function subscribe(options, messsageHandler) {
 			messageHandlers[options.DomainType] = messsageHandler;
@@ -27,8 +28,7 @@
 		}
 
 		function subscribeBatchMessage(options, messageHandler, timeout) {
-			pendingMessage = [];
-			messageHandlingTimeout = null;
+			resetPendingMessages();
 			if ($.connection.hub.state === $.signalR.connectionState.connected) {
 				$.connection.hub.stop();
 			}
@@ -48,7 +48,10 @@
 
 		function resetPendingMessages() {
 			pendingMessage = [];
-			messageHandlingTimeout = null;
+			if (messageHandlingTimeout) {
+				$timeout.cancel(messageHandlingTimeout);
+				messageHandlingTimeout = null;
+			}
 		}
 
 		function setNegotiationLocation() {

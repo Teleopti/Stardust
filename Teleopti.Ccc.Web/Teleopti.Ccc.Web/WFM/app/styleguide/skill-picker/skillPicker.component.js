@@ -21,6 +21,7 @@
 
 		ctrl.selectedSkill = '';
 		ctrl.selectedSkillGroup = '';
+		ctrl.disabled = false;
 		ctrl.getSkillIcon = function(skill) {
 			if (!skill.DoDisplayData) {
 				return 'mdi mdi-alert';
@@ -85,11 +86,7 @@
 		};
 
 		ctrl.skillGroupCreated = function() {
-			if (ctrl.skillGroups && ctrl.skillGroups.length === 0) {
-				return false;
-			}
-
-			return true;
+			return ctrl.skillGroups && ctrl.skillGroups.length === 0;
 		};
 
 		ctrl.$onChanges = function(changesObj) {

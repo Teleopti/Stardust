@@ -171,9 +171,14 @@
     <Compile Include="Container\RefreshTogglesOnEventHandlersTest.cs" />
     <Compile Include="FakeServerConfigurationRepository.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
+    <Compile Include="PayrollTest\FakePayrollExport.cs" />
+    <Compile Include="PayrollTest\FakePayrollPeopleLoader.cs" />
+    <Compile Include="PayrollTest\FakePersonBusAssembler.cs" />
     <Compile Include="PayrollTest\FakeTeleoptiSchedulingService.cs" />
+    <Compile Include="PayrollTest\FakeTenantPeopleLoader.cs" />
     <Compile Include="PayrollTest\PayrollDataExtractorTest.cs" />
     <Compile Include="PayrollTest\PayrollExportConsumerTest.cs" />
+    <Compile Include="PayrollTest\PayrollExportHandlerNewTest.cs" />
     <Compile Include="PayrollTest\PayrollPeopleLoaderTest.cs" />
     <Compile Include="PayrollTest\AppDomainUnloadTest.cs" />
     <Compile Include="PayrollTest\PlugInLoaderTest.cs" />
@@ -225,6 +230,10 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+      <Project>{94841D3A-191A-4AFB-8E4E-78AF8138BFE6}</Project>
+      <Name>Teleopti.Wfm.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
       <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
       <Name>Teleopti.Ccc.Sdk.Common</Name>
@@ -266,6 +275,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Payroll.DeployNew\TestTenant\Teleopti.Ccc.Payroll.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll.DeployNew\DirectoryEmptyTenant\Teleopti.Ccc.Payroll.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Payroll\Telia\Config.RelesayTeliaSonera.xml">

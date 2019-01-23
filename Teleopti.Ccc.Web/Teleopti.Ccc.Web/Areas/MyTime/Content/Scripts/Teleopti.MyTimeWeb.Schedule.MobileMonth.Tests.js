@@ -1,8 +1,10 @@
 ﻿$(document).ready(function() {
 	var hash = '',
 		ajax,
+		vm,
 		fakeMonthData,
 		fakeUserData,
+		mobileMonthHtml,
 		fetchMonthDataRequestCount = 0;
 
 	module('Teleopti.MyTimeWeb.Schedule.MobileMonth', {
@@ -11,57 +13,40 @@
 		},
 		teardown: function() {
 			hash = '';
+			$('#page').remove();
 		}
 	});
 
 	test('should use short month name', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
-
 		equal(vm.formattedSelectedDate(), moment().format('MMM YYYY'));
 	});
 
 	test('should show short week day names', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
-
 		equal(vm.weekDayNames().length, 7);
 		equal(vm.weekDayNames()[0].ShortName, 'Sun');
 	});
 
 	test('should show shift category name in white when shift background color is dark', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		equal(vm.weekViewModels()[0].dayViewModels()[0].shiftTextColor, 'white');
 	});
 
 	test('should show absence text name in white when absence background color is dark', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		equal(vm.weekViewModels()[0].dayViewModels()[0].absenceTextColor, 'white');
 	});
 
 	test('should show ellipsis when there are multiple absences', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		equal(vm.weekViewModels()[0].dayViewModels()[0].hasMultipleAbsences, true);
 	});
 
 	test('should show overtime text name in white when overtime background color is dark', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		equal(vm.weekViewModels()[0].dayViewModels()[1].overtimeTextColor, 'white');
 	});
 
 	test('should show ellipsis when there are multiple overtimes', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		equal(vm.weekViewModels()[0].dayViewModels()[1].hasMultipleOvertimes, true);
 	});
 
 	test('should navigate to corresponding date after tapping on a date cell', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		vm.weekViewModels()[0]
 			.dayViewModels()[0]
 			.navigateToDayView();
@@ -70,11 +55,6 @@
 	});
 
 	test('should navigate to previous month when swiping right', function() {
-		var html = '<div class="mobile-month-view"><div class="pagebody"></div></div>';
-		$('body').append(html);
-
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		var expectSelectedDate = moment(vm.selectedDate()).add('months', -1);
 
 		$('.mobile-month-view .pagebody')
@@ -86,11 +66,6 @@
 	});
 
 	test('should navigate to next month when swiping left', function() {
-		var html = '<div class="mobile-month-view"><div class="pagebody"></div></div>';
-		$('body').append(html);
-
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		var expectSelectedDate = moment(vm.selectedDate()).add('months', 1);
 
 		$('.mobile-month-view .pagebody')
@@ -102,7 +77,6 @@
 	});
 
 	test('should reload data when schedules change within period', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		fetchMonthDataRequestCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
 			StartDate: 'D2017-10-01T00:00:00',
@@ -113,7 +87,6 @@
 	});
 
 	test('should not reload data when schedules change outside period', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
 		fetchMonthDataRequestCount = 0;
 		Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener({
 			StartDate: 'D2017-10-08T00:00:00',
@@ -124,8 +97,6 @@
 	});
 
 	test('should reload data in viewing month', function() {
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		vm.selectedDate(moment('2017-10-12'));
 
 		fetchMonthDataRequestCount = 0;
@@ -158,10 +129,21 @@
 	});
 
 	test('should show message icon when asmEnabled', function() {
-		fakeMonthData.AsmEnabled = true;
-		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
-		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 		equal(vm.asmEnabled(), true);
+	});
+
+	test('should show bank holidays in mobile month', function() {
+		vm.selectedDate(moment('2017-10-12'));
+
+		equal(fetchMonthDataRequestCount, 1);
+		equal($('.mobile-month-view .mobile-month-box .mobile-month-cell').length, 7);
+		equal($('.mobile-month-view .mobile-month-box .bank-holiday-day-shape').length, 1);
+		equal(
+			$('.mobile-month-view .mobile-month-box .mobile-month-cell:nth-child(1) .bank-holiday-day-shape').data(
+				'bs.tooltip'
+			).options.title,
+			'Bank holiday calendar date'
+		);
 	});
 
 	function getDefaultSetting() {
@@ -191,11 +173,16 @@
 		fetchMonthDataRequestCount = 0;
 		initAjax();
 		initContext();
-		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = false;
+		initHtml();
+
 		Teleopti.MyTimeWeb.Portal.Init(getDefaultSetting(), getFakeWindow(), ajax);
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
+
+		vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
 	}
 
 	function initAjax() {
+		//Only 7 days data for testing
 		fakeMonthData = {
 			ScheduleDays: [
 				{
@@ -215,6 +202,11 @@
 							ShortName: 'IL'
 						}
 					],
+					BankHolidayCalendarInfo: {
+						CalendarId: '63b6db25-e400-4b28-9473-a9dd000f7961',
+						CalendarName: '2017',
+						DateDescription: 'Bank holiday calendar date'
+					},
 					IsDayOff: true,
 					Shift: {
 						Name: 'Late',
@@ -241,6 +233,7 @@
 							Color: 'rgb(255,0,0)'
 						}
 					],
+					BankHolidayCalendarInfo: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Early',
@@ -256,6 +249,7 @@
 					FixedDate: '2017-10-03',
 					Absences: null,
 					Overtimes: null,
+					BankHolidayCalendarInfo: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Early',
@@ -271,6 +265,7 @@
 					FixedDate: '2017-10-04',
 					Absences: null,
 					Overtimes: null,
+					BankHolidayCalendarInfo: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Early',
@@ -286,6 +281,7 @@
 					FixedDate: '2017-10-05',
 					Absences: null,
 					Overtimes: null,
+					BankHolidayCalendarInfo: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Day',
@@ -301,6 +297,7 @@
 					FixedDate: '2017-10-06',
 					Absences: null,
 					Overtimes: null,
+					BankHolidayCalendarInfo: null,
 					IsDayOff: false,
 					Shift: {
 						Name: 'Day',
@@ -316,6 +313,7 @@
 					FixedDate: '2017-10-07',
 					Absences: null,
 					Overtimes: null,
+					BankHolidayCalendarInfo: null,
 					IsDayOff: true,
 					Shift: {
 						Name: null,
@@ -327,7 +325,7 @@
 					SeatBookings: null
 				}
 			],
-			AsmEnabled: false,
+			AsmEnabled: true,
 			CurrentDate: '2017-10-12T00:00:00',
 			FixedDate: '2017-10-12',
 			DayHeaders: [
@@ -409,8 +407,114 @@
 				whenLoadedCallBack(data);
 			}
 		};
-		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = {
-			defaultFulldayStartTime: ''
-		};
+	}
+
+	function initHtml() {
+		mobileMonthHtml = [
+			'<div class="mobile-month-view">',
+			'	<div class="navbar teleopti-toolbar subnavbar">',
+			'		<div class="container mobile-month-view-nav">',
+			'			<ul class="nav navbar-nav teleopti-toolbar row submenu">',
+			'				<li class="mobile-month-datepicker">',
+			'					<a class="text-center formatted-date-text" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1, calendarPlacement: \'right\' }, text: formattedSelectedDate"></a>',
+			'					<a class="mobile-month-calendar-icon" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1, calendarPlacement: \'center\' }">',
+			'						<i class="glyphicon glyphicon-calendar"></i>',
+			'					</a>',
+			'				</li>',
+			'				<li>',
+			'					<a href="#Schedule/MobileDay">',
+			'						<i class="glyphicon glyphicon-home"></i>',
+			'					</a>',
+			'				</li>',
+			'				<li data-bind="visible: asmEnabled()">',
+			'					<a href="#MessageTab">',
+			'						<i class="glyphicon glyphicon-envelope"></i>',
+			'						<span id="MobileDayView-message" class="badge" data-bind="visible: unreadMessageCount() > 0, text: unreadMessageCount"></span>',
+			'					</a>',
+			'				</li>',
+			'				<li>',
+			'					<a href="#Requests/Index">',
+			'						<i class="glyphicon glyphicon-comment"></i>',
+			'					</a>',
+			'				</li>',
+			'			</ul>',
+			'		</div>',
+			'	</div>',
+			'	<div class="container pagebody">',
+			'		<!-- ko if: isLoading -->',
+			'		<img class="data-loading-gif" src=\'@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")\' alt="...">',
+			'		<!-- /ko -->',
+			'		<!-- ko if: !isLoading() -->',
+			'		<div class="mobile-month-row-fluid mobile-month-row-head clearfix" data-bind="foreach: weekDayNames">',
+			'			<div class="mobile-month-cell mobile-month-weekday-header weekday-shortname" data-bind="text: ShortName"></div>',
+			'		</div>',
+			'		<div class="mobile-month-box clearfix" data-bind="foreach: weekViewModels">',
+			'			<div class="mobile-month-row-fluid clearfix" data-bind="foreach: dayViewModels, css: {\'has-overtime-or-absence\': $parent.hasAbsenceOrOvertime, \'has-overtime-and-absence\': $parent.hasAbsenceAndOvertime}">',
+			'				<div class="mobile-month-cell" data-bind="attr:{\'date\': date}">',
+			'					<div class="mobile-month-day" data-bind="click: navigateToDayView, css: {\'mobile-month-day-outmonth\': isOutsideMonth, \'mobile-month-current-day\': isCurrentDay}">',
+			'						<!--ko ifnot: bankHoliday -->',
+			'						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}" class="day-header-day"></span>',
+			'						<!-- /ko -->',
+			'						<!--ko if: bankHoliday -->',
+			'						<span data-bind="text: dayOfMonth, click: function(d,e){e.stopPropagation();}, tooltip:{title: bankHoliday.dateDescription, html: true}" class="day-header-day bank-holiday-day-shape"></span>',
+			'						<!-- /ko -->',
+			'						',
+			'						<!-- ko if: !hasShift && !isFullDayAbsence && !isDayOff-->',
+			'						<div class="shift"></div>',
+			'						<!-- /ko -->',
+			'						<!-- ko if: hasShift && !isFullDayAbsence -->',
+			'						<div class="shift" data-bind="css: {\'is-day-off\': isDayOff}">',
+			'							<div data-bind="style: {backgroundColor: shiftColor, color: shiftTextColor}">',
+			'								<div data-bind="css: {\'dayoff\': isDayOff}">',
+			'									<strong data-bind="text: shiftShortName"></strong>',
+			'								</div>',
+			'							</div>',
+			'							<div class="shift-timespan" data-bind="ifnot: isDayOff">',
+			'								<span data-bind="text: shiftStartTime"></span>',
+			'								<p> - </p>',
+			'								<span data-bind="text: shiftEndTime"></span>',
+			'							</div>',
+			'							<div class="absence-and-overtime">',
+			'								<!-- ko if: hasAbsence -->',
+			'								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor, color: absenceTextColor}">',
+			'									<strong data-bind="text: absenceShortName"></strong>',
+			'									<span data-bind="visible: hasMultipleAbsences">..</span>',
+			'								</div>',
+			'								<!-- /ko -->',
+			'								<!-- ko if: hasOvertime -->',
+			'								<div class="overtime-info-cell" data-bind="style: {backgroundColor:overtimeColor, color: overtimeTextColor}">',
+			'									<strong>@Resources.OvertimeShortName</strong>',
+			'									<span data-bind="visible: hasMultipleOvertimes">..</span>',
+			'								</div>',
+			'								<!-- /ko -->',
+			'							</div>',
+			'						</div>',
+			'						<!-- /ko -->',
+			'						<!-- ko if: isFullDayAbsence -->',
+			'						<div class="shift absence">',
+			'							<div class="absence-and-overtime">',
+			'								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor, color: absenceTextColor}">',
+			'									<strong data-bind="text: absenceShortName"></strong>',
+			'								</div>',
+			'								<!-- ko if: hasOvertime -->',
+			'								<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">',
+			'									<strong>@Resources.OvertimeShortName</strong>',
+			'									<span data-bind="visible: hasMultipleOvertimes">..</span>',
+			'								</div>',
+			'								<!-- /ko -->',
+			'							</div>',
+			'						</div>',
+			'						<!-- /ko -->',
+			'					</div>',
+			'				</div>',
+			'			</div>',
+			'		</div>',
+			'		<!-- /ko -->',
+			'	</div>',
+			'</div>'
+		].join('');
+
+		mobileMonthHtml = '<div id="page"> ' + mobileMonthHtml + '</div>';
+		$('body').append(mobileMonthHtml);
 	}
 });

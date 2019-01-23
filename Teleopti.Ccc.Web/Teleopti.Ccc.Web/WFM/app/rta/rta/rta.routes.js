@@ -13,7 +13,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
             },
             controllerProvider: function () {
                 if (toggles.RTA_AdjustAdherenceToNeutral_80594)
-                	return 'RtaAdjustAdherenceToNeutralController as vm';
+                	return 'AdjustAdherenceController as vm';
             }
         })
 		.state('rta-historical-overview', {

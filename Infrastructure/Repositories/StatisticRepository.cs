@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return session(uow).CreateSQLQuery("exec mart.raptor_load_queues")
 				 .AddScalar("Name", NHibernateUtil.String)
 				 .AddScalar("Description", NHibernateUtil.String)
-				 .AddScalar("QueueOriginalId", NHibernateUtil.Int32)
+				 .AddScalar("QueueOriginalId", NHibernateUtil.String)
 				 .AddScalar("DataSourceId", NHibernateUtil.Int32)
 				 .AddScalar("QueueAggId", NHibernateUtil.Int32)
 				 .AddScalar("LogObjectName", NHibernateUtil.String)

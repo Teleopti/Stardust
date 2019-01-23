@@ -1260,7 +1260,6 @@
     <Compile Include="InterfaceLegacy\Domain\IShiftExchangeCriteria.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftExchangeOffer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftFromMasterActivityService.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IShiftLengthDecider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeApproveService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeBusinessRuleConfig.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeMaxSeatValidator.cs" />
