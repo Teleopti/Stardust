@@ -12,29 +12,13 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeEventPublisher : IEventPublisher, ITestDoubleWithoutState
+	public class FakeEventPublisher : IEventPublisher
 	{
-		private readonly IRtaEventPublisher _rtaEventPublisher;
-		private readonly ICurrentDataSource _dataSource;
-		private readonly ResolveEventHandlers _resolveEventHandlers;
-		private readonly CommonEventProcessor _commonEventProcessor;
-		
 		private readonly List<Type> _handlerTypes = new List<Type>();
 		private ConcurrentQueue<IEvent> queuedEvents = new ConcurrentQueue<IEvent>();
 
 		public IEvent[] PublishedEvents => queuedEvents.ToArray();
 
-		public FakeEventPublisher(
-			IRtaEventPublisher rtaEventPublisher, 
-			ICurrentDataSource dataSource, 
-			ResolveEventHandlers resolveEventHandlers,
-			CommonEventProcessor commonEventProcessor)
-		{
-			_rtaEventPublisher = rtaEventPublisher;
-			_dataSource = dataSource;
-			_resolveEventHandlers = resolveEventHandlers;
-			_commonEventProcessor = commonEventProcessor;
-		}
 		public void Clear()
 		{
 			queuedEvents = new ConcurrentQueue<IEvent>();
@@ -52,16 +36,19 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void Publish(params IEvent[] events)
 		{
-			_rtaEventPublisher.Publish(events);
+			ServiceLocatorForFakes.Resolve<IRtaEventPublisher>()
+				.Publish(events);
 
 			events.ForEach(queuedEvents.Enqueue);
 
 			if (_handlerTypes.IsEmpty())
 				return;
 
-			var tenant = _dataSource.CurrentName();
+			var tenant = ServiceLocatorForFakes.Resolve<ICurrentDataSource>()
+				.CurrentName();
 
-			var jobs = _resolveEventHandlers.ResolveAllJobs(events);
+			var jobs = ServiceLocatorForFakes.Resolve<ResolveEventHandlers>()
+				.ResolveAllJobs(events);
 
 			// run in order of handlers added, sometimes the test is order dependent
 			_handlerTypes.ForEach(handlerType =>
@@ -73,7 +60,8 @@ namespace Teleopti.Ccc.TestCommon
 						onAnotherThread(() =>
 						{
 							//
-							_commonEventProcessor.Process(tenant, job.Event, job.Package, job.HandlerType);
+							ServiceLocatorForFakes.Resolve<CommonEventProcessor>()
+								.Process(tenant, job.Event, job.Package, job.HandlerType);
 						});
 					});
 			});

@@ -61,6 +61,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.SingleInstance();
 		}
 
+		public void AddModule(Module module)
+		{
+			_builder.RegisterModule(module);
+		}
+
 		public void AddService<TService, TServiceName>(string name)
 		{
 			_builder
@@ -68,11 +73,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.Named<TServiceName>(name)
 				.SingleInstance()
 				.ApplyAspects();
-		}
-
-		public void AddModule(Module module)
-		{
-			_builder.RegisterModule(module);
 		}
 
 		private class testDoubleFor<TTestDouble> : ITestDoubleFor where TTestDouble : class
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			public void For<T1, T2, T3, T4, T5>()
 			{
-				register(typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5));
+				register(typeof (T1), typeof (T2), typeof (T3), typeof (T4), typeof (T5));
 			}
 
 			public void For(Type type)
@@ -128,103 +128,80 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			private void register(params Type[] asTypes)
 			{
-				if (_instance != null)
-					registerInstance(asTypes);
-				else if (_type != null)
-					registerType(asTypes);
+				if (_instance == null)
+				{
+					if (_type != null)
+					{
+						var registration = _testDoubles.Register(b =>
+						{
+							b.RegisterType(_type)
+								.SingleInstance()
+								.AsSelf()
+								.As(asTypes);
+						}, null);
+						_builder
+							.RegisterType(_type)
+							.SingleInstance()
+							.AsSelf()
+							.As(asTypes)
+							.ExternallyOwned()
+							.OnActivated(c =>
+							{
+								registration.Action = b =>
+								{
+									b.RegisterInstance(c.Instance)
+										.SingleInstance()
+										.AsSelf()
+										.As(asTypes);
+								};
+								registration.Instance = c.Instance;
+							});
+					}
+					else
+					{
+						var registration = _testDoubles.Register(b =>
+						{
+							b.RegisterType<TTestDouble>()
+								.SingleInstance()
+								.AsSelf()
+								.As(asTypes);
+						}, null);
+						_builder
+							.RegisterType<TTestDouble>()
+							.SingleInstance()
+							.AsSelf()
+							.As(asTypes)
+							.ExternallyOwned()
+							.OnActivated(c =>
+							{
+								registration.Action = b =>
+								{
+									b.RegisterInstance(c.Instance)
+										.SingleInstance()
+										.AsSelf()
+										.As(asTypes);
+								};
+								registration.Instance = c.Instance;
+							});
+					}
+				}
 				else
-					registerGenericType(asTypes);
-			}
-
-			private void registerGenericType(Type[] asTypes)
-			{
-				var registration = new TestDoubleRegistration
 				{
-					RegistrationAction = b =>
-					{
-						b.RegisterType<TTestDouble>()
-							.SingleInstance()
-							.AsSelf()
-							.As(asTypes);
-					}
-				};
-				_testDoubles.Registrations.Add(registration);
-				_builder
-					.RegisterType<TTestDouble>()
-					.SingleInstance()
-					.AsSelf()
-					.As(asTypes)
-					.ExternallyOwned()
-					.OnActivated(c =>
-					{
-						if (c.Instance is ITestDoubleWithoutState)
-							return;
-						registration.RegistrationAction = b =>
-						{
-							b.RegisterInstance(c.Instance)
-								.SingleInstance()
-								.AsSelf()
-								.As(asTypes);
-						};
-						registration.Instance = c.Instance;
-					});
-			}
-
-			private void registerType(Type[] asTypes)
-			{
-				var registration = new TestDoubleRegistration
-				{
-					RegistrationAction = b =>
-					{
-						b.RegisterType(_type)
-							.SingleInstance()
-							.AsSelf()
-							.As(asTypes);
-					}
-				};
-				_testDoubles.Registrations.Add(registration);
-				_builder
-					.RegisterType(_type)
-					.SingleInstance()
-					.AsSelf()
-					.As(asTypes)
-					.ExternallyOwned()
-					.OnActivated(c =>
-					{
-						if (c.Instance is ITestDoubleWithoutState)
-							return;
-						registration.RegistrationAction = b =>
-						{
-							b.RegisterInstance(c.Instance)
-								.SingleInstance()
-								.AsSelf()
-								.As(asTypes);
-						};
-						registration.Instance = c.Instance;
-					});
-			}
-
-			private void registerInstance(Type[] asTypes)
-			{
-				var registration = new TestDoubleRegistration
-				{
-					RegistrationAction = b =>
+					_testDoubles.Register(b =>
 					{
 						b.RegisterInstance(_instance)
 							.SingleInstance()
 							.AsSelf()
 							.As(asTypes);
-					},
-					Instance = _instance
-				};
-				_testDoubles.Registrations.Add(registration);
-				_builder
-					.RegisterInstance(_instance)
-					.SingleInstance()
-					.AsSelf()
-					.As(asTypes)
-					.ExternallyOwned()
-					;
+					}, _instance);
+					_builder
+						.RegisterInstance(_instance)
+						.SingleInstance()
+						.AsSelf()
+						.As(asTypes)
+						.ExternallyOwned()
+						;
+				}
 			}
 		}
 	}

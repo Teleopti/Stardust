@@ -412,7 +412,6 @@
     <Compile Include="IoC\DefaultDataAttribute.cs" />
     <Compile Include="IoC\DontSendEventsAtPersistAttribute.cs" />
     <Compile Include="IoC\FakePermissionsAttribute.cs" />
-    <Compile Include="IoC\ITestDoubleWithoutState.cs" />
     <Compile Include="IoC\IIoCTestContext.cs" />
     <Compile Include="IoC\InfrastructureTestAttribute.cs" />
     <Compile Include="IoC\INotCompatibleWithIoCTest.cs" />
@@ -426,6 +425,7 @@
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
     <Compile Include="IoC\MustNotBeUsedException.cs" />
     <Compile Include="IoC\ServiceBusTestAttribute.cs" />
+    <Compile Include="IoC\ServiceLocatorForFakesModule.cs" />
     <Compile Include="IoC\SetupThrowingTestDoubles.cs" />
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />

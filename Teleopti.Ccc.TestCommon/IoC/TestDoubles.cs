@@ -6,30 +6,41 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public class TestDoubles : IDisposable
 	{
-		public readonly List<TestDoubleRegistration> Registrations = new List<TestDoubleRegistration>();
+		public class Registration
+		{
+			public Action<ContainerBuilder> Action;
+			public object Instance;
+		}
+
+		private readonly List<Registration> _registrations = new List<Registration>();
+
+		public Registration Register(Action<ContainerBuilder> action, object instance)
+		{
+			var registration = new Registration
+			{
+				Action = action,
+				Instance = instance
+			};
+			_registrations.Add(registration);
+			return registration;
+		}
 
 		public void RegisterFromPreviousContainer(ContainerBuilder builder)
 		{
-			Registrations.ForEach(r =>
+			_registrations.ForEach(r =>
 			{
-				r.RegistrationAction?.Invoke(builder);
+				r.Action?.Invoke(builder);
 			});
 		}
 
 		public void Dispose()
 		{
-			Registrations.ForEach(r =>
+			_registrations.ForEach(r =>
 			{
 				var disposable = r.Instance as IDisposable;
 				disposable?.Dispose();
 			});
-			Registrations.Clear();
+			_registrations.Clear();
 		}
-	}
-
-	public class TestDoubleRegistration
-	{
-		public Action<ContainerBuilder> RegistrationAction;
-		public object Instance;
 	}
 }
