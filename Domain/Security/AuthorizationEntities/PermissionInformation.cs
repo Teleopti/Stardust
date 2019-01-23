@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		public CultureInfo Culture()
 		{
 
-			if (TeleoptiPrincipal.CurrentPrincipal == null || !TeleoptiPrincipal.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
+			if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal == null || !TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
 			{
 				if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
 
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		public CultureInfo UICulture()
 		{
 
-			if (TeleoptiPrincipal.CurrentPrincipal == null || !TeleoptiPrincipal.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
+			if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal == null || !TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
 			{
 				if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
 

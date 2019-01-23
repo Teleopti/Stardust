@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 
 		public static void ValidateBusinessUnitConsistency(this IBelongsToBusinessUnit belongsToBusinessUnit)
 		{
-			var currentBusinessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnitId.GetValueOrDefault();
+			var currentBusinessUnit = ((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnitId.GetValueOrDefault();
 			if (belongsToBusinessUnit.BusinessUnit != null && currentBusinessUnit != belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault())
 			{
 				throw new FaultException(

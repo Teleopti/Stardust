@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
             {
 	            return String.Concat(" ",
 		            DefinedLicenseDataFactory.GetLicenseActivator(
-			            ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName).CustomerName);
+			            ((ITeleoptiIdentity) TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).DataSource.DataSourceName).CustomerName);
             }
         }
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
 	    {
 		    get
 		    {
-			    return String.Concat(" ", ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipal.CurrentPrincipal).UnsafePerson().Name);
+			    return String.Concat(" ", ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson().Name);
 		    }
 	    }
     }

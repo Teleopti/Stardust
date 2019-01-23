@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_toggleManager = toggleManager;
 		}
 
-		protected override CultureInfo CurrentCulture => TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+		protected override CultureInfo CurrentCulture => TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
 
 		protected abstract bool canValidate(OvertimeRequestPeriodModel dataItem);
 

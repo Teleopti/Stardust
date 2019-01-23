@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Filter
                 return _allItems;
 
             var splitted = filterOn.Split(new []{" "},StringSplitOptions.RemoveEmptyEntries);
-            var info = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+            var info = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
 
             var toBeFiltered = new List<ListViewItem>(_allItems);
 

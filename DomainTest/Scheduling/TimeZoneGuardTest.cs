@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShoudHaveDefaultTimeZone()
 		{
 			var target = TimeZoneGuard.Instance;
-			Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, target.TimeZone);
+			Assert.AreEqual(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone, target.TimeZone);
 		}
 
 		[Test]

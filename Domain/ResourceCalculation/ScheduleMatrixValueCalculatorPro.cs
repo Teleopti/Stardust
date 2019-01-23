@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private double? dayValueForSkillsForDayOffOptimization(DateOnly scheduleDay, IEnumerable<ISkill> skillList)
 		{
 			DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-				scheduleDay.Date, scheduleDay.Date.AddDays(1), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+				scheduleDay.Date, scheduleDay.Date.AddDays(1), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
 			IList<ISkillStaffPeriod> skillStaffPeriods =
 				_stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);

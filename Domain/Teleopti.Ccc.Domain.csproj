@@ -245,6 +245,7 @@
     <Compile Include="Repositories\PersonWaitlistedAbsenceRequest.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentityForLegacy.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />

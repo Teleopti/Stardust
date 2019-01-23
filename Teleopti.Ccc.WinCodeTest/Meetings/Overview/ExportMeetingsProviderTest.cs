@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             var fromScenario = _mocks.StrictMock<IScenario>();
             var dateOnlyPeriod = new DateOnlyPeriod(start, end);
             var dateTimePeriod =
-                dateOnlyPeriod.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+                dateOnlyPeriod.ToDateTimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
             var meeting = _mocks.StrictMock<IMeeting>();
             var meetings = new List<IMeeting> { meeting };
             var meetingId = Guid.NewGuid();
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             var fromScenario = _mocks.StrictMock<IScenario>();
             var dateOnlyPeriod = new DateOnlyPeriod(start, end);
             var dateTimePeriod =
-                dateOnlyPeriod.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+                dateOnlyPeriod.ToDateTimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
             var meeting = _mocks.StrictMock<IMeeting>();
             var meetings = new List<IMeeting> { meeting };
             var meetingId = Guid.NewGuid();

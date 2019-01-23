@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+			var identity = ((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity);
 			return identity.DataSource.Analytics;
 		}
 	}

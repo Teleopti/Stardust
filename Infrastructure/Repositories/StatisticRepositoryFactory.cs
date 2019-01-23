@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public static IStatisticRepository Create()
 		{
 			ITeleoptiIdentity identity = null;
-			var principal = TeleoptiPrincipal.CurrentPrincipal;
+			var principal = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
 			if (principal != null)
 			{
 				identity = principal.Identity as ITeleoptiIdentity;

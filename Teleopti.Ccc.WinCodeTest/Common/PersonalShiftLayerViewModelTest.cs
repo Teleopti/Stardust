@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
 			_layerWithPayload = new PersonalShiftLayer(_payload, _period);
 			Expect.Call(_scheduleDay.Person).Return(person).Repeat.Any();
-			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)).Repeat.Any();
+			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
 

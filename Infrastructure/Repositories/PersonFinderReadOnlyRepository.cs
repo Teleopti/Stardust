@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
 		{
 			personFinderSearchCriteria.TotalRows = 0;
-			var cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			var cultureId = Domain.Security.Principal.TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.LCID;
 
 			var minDate = new DateOnly(1753, 1, 1);
 			if (personFinderSearchCriteria.TerminalDate < minDate)
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void FindInTeams(IPersonFinderSearchCriteria personFinderSearchCriteria, Guid[] teamIds)
 		{
 			personFinderSearchCriteria.TotalRows = 0;
-			var cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			var cultureId = Domain.Security.Principal.TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.LCID;
 			if (teamIds.Length == 0)
 			{
 				return;
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void FindPeople(IPeoplePersonFinderSearchCriteria personFinderSearchCriteria)
 		{
-			int cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			int cultureId = Domain.Security.Principal.TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.LCID;
 			if (personFinderSearchCriteria.TerminalDate < new DateOnly(1753, 1, 1))
 				personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
 
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void FindPeopleWithDataPermission(IPeoplePersonFinderSearchWithPermissionCriteria personFinderSearchCriteria)
 		{
-			int cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			int cultureId = Domain.Security.Principal.TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.LCID;
 			if (personFinderSearchCriteria.TerminalDate < new DateOnly(1753, 1, 1))
 				personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
 
