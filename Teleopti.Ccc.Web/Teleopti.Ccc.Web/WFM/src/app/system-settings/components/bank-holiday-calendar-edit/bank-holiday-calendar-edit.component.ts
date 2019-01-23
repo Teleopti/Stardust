@@ -21,6 +21,9 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	@Input() edittingCalendar: BankHolidayCalendarItem;
 	@Input() exit: Function;
 
+	yearFormat = this.bankCalendarDataService.yearFormat;
+	dateFormat = this.bankCalendarDataService.dateFormat;
+
 	bankHolidayCalendarsList: BankHolidayCalendarItem[];
 	nameAlreadyExisting = false;
 	selectedYearDate: Date;
@@ -54,8 +57,8 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 				ModifiedDates: [],
 				DisabledDate: date => {
 					return (
-						moment(date) < moment(year.YearDate).startOf('year') ||
-						moment(date) > moment(year.YearDate).endOf('year')
+						moment(date, this.dateFormat) < moment(year.YearDate, this.dateFormat).startOf('year') ||
+						moment(date, this.dateFormat) > moment(year.YearDate, this.dateFormat).endOf('year')
 					);
 				},
 				SelectedDates: y.Dates.map(d => {
@@ -94,11 +97,11 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	newYearTab(date: Date): void {
 		const newYearDate = new Date(
-			moment(date)
+			moment(date, this.dateFormat)
 				.startOf('year')
-				.format(this.bankCalendarDataService.dateFormat)
+				.format(this.dateFormat)
 		);
-		const yearStr = moment(newYearDate).format(this.bankCalendarDataService.yearFormat);
+		const yearStr = moment(newYearDate, this.dateFormat).format(this.yearFormat);
 		if (this.edittingCalendarYears.some(y => y.Year === yearStr)) {
 			return;
 		}
@@ -110,8 +113,8 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			YearDate: this.selectedYearDate,
 			DisabledDate: d => {
 				return (
-					moment(d) < moment(yearStr, 'YYYY').startOf('year') ||
-					moment(d) > moment(yearStr, 'YYYY').endOf('year')
+					moment(d, this.dateFormat) < moment(yearStr, this.yearFormat).startOf('year') ||
+					moment(d, this.dateFormat) > moment(yearStr, this.yearFormat).endOf('year')
 				);
 			},
 			Active: true,
@@ -165,7 +168,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	addDateForYear(date: Date, year: BankHolidayCalendarYearItem) {
 		const newDate: BankHolidayCalendarDateItem = {
-			Date: moment(date).format(this.bankCalendarDataService.dateFormat),
+			Date: moment(date, this.dateFormat).format(this.dateFormat),
 			Description: this.translate.instant('BankHoliday'),
 			IsLastAdded: true
 		};
@@ -185,13 +188,13 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 		year.Dates.push(newDate);
 		year.Dates.sort((c, n) => {
-			return moment(c.Date) < moment(n.Date) ? -1 : 1;
+			return moment(c.Date, this.dateFormat) < moment(n.Date, this.dateFormat) ? -1 : 1;
 		});
 		year.Dates = [...year.Dates];
 
 		year.SelectedDates.push(date.getTime());
 		year.SelectedDates.sort((c, n) => {
-			return moment(c) < moment(n) ? -1 : 1;
+			return moment(c, this.dateFormat) < moment(n, this.dateFormat) ? -1 : 1;
 		});
 		year.SelectedDates = [...year.SelectedDates];
 	}
@@ -245,7 +248,7 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 
 	saveEditingBankCalendar() {
 		this.edittingCalendarYears.sort((c, n) => {
-			return moment(c.Year, 'YYYY') < moment(n.Year, 'YYYY') ? -1 : 1;
+			return moment(c.Year, this.yearFormat) < moment(n.Year, this.yearFormat) ? -1 : 1;
 		});
 
 		const bankHolidayCalendar: BankHolidayCalendar = {
@@ -261,10 +264,10 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 			calItem.CurrentYearIndex = 0;
 			calItem.Years.forEach((y, i) => {
 				y.Dates.forEach(d => {
-					d.Date = moment(d.Date).format(this.bankCalendarDataService.dateFormat);
+					d.Date = moment(d.Date, this.dateFormat).format(this.dateFormat);
 				});
 
-				if (moment(y.Year.toString(), 'YYYY').year() === curYear) {
+				if (moment(y.Year.toString(), this.yearFormat).year() === curYear) {
 					calItem.CurrentYearIndex = i;
 				}
 			});

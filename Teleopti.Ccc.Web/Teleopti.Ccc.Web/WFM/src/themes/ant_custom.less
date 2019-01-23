@@ -93,10 +93,6 @@ select {
 	background: #f5f5f5;
 }
 
-//Bank holiday calendar modal
-.bank-holiday-calendar-modal .calendar-name {
-	font-weight: 500;
-}
 .bank-holiday-delete-year-tab-modal .ant-modal-header {
 	border: none;
 }
@@ -107,6 +103,8 @@ select {
 }
 
 //Hide input close icon when value is empty
+//Link https://github.com/NG-ZORRO/ng-zorro-antd/issues/2823
+//Remove this when updated to new ng-zorro-antd release which will fix this problem.
 nz-select.select-input-is-empty .ant-select-selection:hover .ant-select-selection__clear {
 	display: none;
 	opacity: 0;
