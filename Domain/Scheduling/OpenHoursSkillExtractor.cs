@@ -16,10 +16,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class OpenHoursSkillExtractor : IOpenHoursSkillExtractor
 	{
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public OpenHoursSkillExtractor(IGroupPersonSkillAggregator groupPersonSkillAggregator)
+		public OpenHoursSkillExtractor(IGroupPersonSkillAggregator groupPersonSkillAggregator, ITimeZoneGuard timeZoneGuard)
 		{
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate)
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var minOpen = TimeSpan.MaxValue;
 				var maxOpen = TimeSpan.MinValue;
 				var skills = _groupPersonSkillAggregator.AggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers, day.ToDateOnlyPeriod()).ToList();
-				var offsetUser = TimeZoneGuard.Instance.TimeZone.GetUtcOffset(day.Date);
+				var offsetUser = _timeZoneGuard.CurrentTimeZone().GetUtcOffset(day.Date);
 
 				foreach (var skill in skills)
 				{
