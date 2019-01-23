@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		                                        IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 		                                        IScheduleMatrixPro matrix, 
 		                                        SchedulingOptions schedulingOptions,
-												OpenHoursSkillResult openHoursResult);
+												OpenHoursSkillResult openHoursResult,
+												DateOnly date);
 	}
 }

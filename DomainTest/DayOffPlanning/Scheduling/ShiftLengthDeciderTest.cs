@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> { c1, c2, c3 };
 			_schedulingOptions.UseAverageShiftLengths = false;
 
-			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
+			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null, DateOnly.Today);
 			Assert.AreEqual(3, result.Count);
 		}
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> { c1, c2, c3 };
 			_schedulingOptions.UseAverageShiftLengths = false;
 
-			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
+			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null, DateOnly.Today);
 			Assert.AreEqual(3, result.Count);
 		}
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			_desiredShiftLengthCalculator.Stub(x => x.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions, null))
 				.Return(new TimeSpan(7, 36, 0));
 			
-			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
+			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null, DateOnly.Today);
 			Assert.AreEqual(2, result.Count);
 		}
 
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
 			_desiredShiftLengthCalculator.Stub(x => x.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions, null)).Return(new TimeSpan(8, 0, 0));
 		
-			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
+			var result = _target.FilterList(shiftList, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null, DateOnly.Today);
 			
 			Assert.AreEqual(1, result.Count);
 			Assert.AreSame(c2, result[0]);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result =_target.FilterList(null, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null);
+			var result =_target.FilterList(null, _workShiftMinMaxCalculator, _matrix, _schedulingOptions, null, DateOnly.Today);
 			Assert.IsNull(result);
 		}
 	}

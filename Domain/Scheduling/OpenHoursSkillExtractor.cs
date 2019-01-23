@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface IOpenHoursSkillExtractor
 	{
-		OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate);
+		OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period);
 	}
 
 	public class OpenHoursSkillExtractor : IOpenHoursSkillExtractor
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate)
+		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
 		{
 			var skillDaysBySkillAndDay = skillDays.ToDictionary(s => (s.Skill, s.CurrentDate));
 			var openHoursDictionary = period.DayCollection().ToDictionary(d => d, day =>
@@ -79,14 +79,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return (IEffectiveRestriction)restriction;
 			});
 
-			return new OpenHoursSkillResult(openHoursDictionary, currentDate);
+			return new OpenHoursSkillResult(openHoursDictionary);
 		}
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)]
 	public class OpenHoursSkillExtractorDoNothing : IOpenHoursSkillExtractor
 	{
-		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period, DateOnly currentDate)
+		public OpenHoursSkillResult Extract(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
 		{
 			return null;
 		}
@@ -94,20 +94,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	public class OpenHoursSkillResult
 	{
-		private readonly DateOnly _currentDate;
-
-		public OpenHoursSkillResult(Dictionary<DateOnly, IEffectiveRestriction> openHoursDictionary, DateOnly currentDate)
+		public OpenHoursSkillResult(Dictionary<DateOnly, IEffectiveRestriction> openHoursDictionary)
 		{
-			_currentDate = currentDate;
 			OpenHoursDictionary = openHoursDictionary;
 		}
 
 		public Dictionary<DateOnly, IEffectiveRestriction> OpenHoursDictionary { get; }
 
-		public TimeSpan ForCurrentDate()
+		public TimeSpan ForCurrentDate(DateOnly date)
 		{
 			if (OpenHoursDictionary == null) return TimeSpan.MaxValue;
-			if (!OpenHoursDictionary.TryGetValue(_currentDate, out var startEndRestriction)) return TimeSpan.MaxValue;
+			if (!OpenHoursDictionary.TryGetValue(date, out var startEndRestriction)) return TimeSpan.MaxValue;
 			if (startEndRestriction?.EndTimeLimitation.EndTime == null) return TimeSpan.MaxValue;
 			return startEndRestriction.StartTimeLimitation.StartTime == null
 				? TimeSpan.MaxValue

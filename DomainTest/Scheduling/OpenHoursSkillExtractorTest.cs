@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var blockInfo = new BlockInfo(date.ToDateOnlyPeriod());
 			var teamBlockInfo = new TeamBlockInfo(teamInfo, blockInfo);
 
-			var result = Target.Extract(teamBlockInfo, new[] { skillDay }, date.ToDateOnlyPeriod(), date);
+			var result = Target.Extract(teamBlockInfo, new[] { skillDay }, date.ToDateOnlyPeriod());
 
 			result.OpenHoursDictionary[date].StartTimeLimitation.StartTime.Should().Be.EqualTo(TimeSpan.FromHours(8));
 			result.OpenHoursDictionary[date].EndTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(16));
-			result.ForCurrentDate().TotalHours.Should().Be.EqualTo(8);
+			result.ForCurrentDate(date).TotalHours.Should().Be.EqualTo(8);
 		}
 	}
 }

@@ -208,8 +208,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					var teamInfo = new TeamInfo(group, new List<IList<IScheduleMatrixPro>>());
 					var blockInfo = new BlockInfo(dateOnly.ToDateOnlyPeriod());
 					var teamBlockInfo = new TeamBlockInfo(teamInfo, blockInfo);
-					var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, _resultStateHolder().SkillDays.ToSkillDayEnumerable(), new DateOnlyPeriod(matrix.FullWeeksPeriodDays.Min(x => x.Day), matrix.FullWeeksPeriodDays.Max(x => x.Day)), dateOnly);
-					shiftList = _shiftLengthDecider.FilterList(shiftList, _workShiftMinMaxCalculator(), matrix, schedulingOptions, openHoursResult);
+					var openHoursResult = _openHoursSkillExtractor.Extract(teamBlockInfo, _resultStateHolder().SkillDays.ToSkillDayEnumerable(), new DateOnlyPeriod(matrix.FullWeeksPeriodDays.Min(x => x.Day), matrix.FullWeeksPeriodDays.Max(x => x.Day)));
+					shiftList = _shiftLengthDecider.FilterList(shiftList, _workShiftMinMaxCalculator(), matrix, schedulingOptions, openHoursResult, dateOnly);
 					if (shiftList.Count == 0)
 						return null;
 				}
