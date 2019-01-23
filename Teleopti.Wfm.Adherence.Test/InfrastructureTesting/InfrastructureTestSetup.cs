@@ -3,6 +3,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -109,7 +110,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 		public static void Login(IPerson person)
 		{
 			var principalContext = SelectivePrincipalContext.Make();
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(person, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest, null);
+			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(new PersonAndBusinessUnit(person, BusinessUnitFactory.BusinessUnitUsedInTest), DataSource, null);
 			principalContext.SetCurrentPrincipal(principal);
 		}
 

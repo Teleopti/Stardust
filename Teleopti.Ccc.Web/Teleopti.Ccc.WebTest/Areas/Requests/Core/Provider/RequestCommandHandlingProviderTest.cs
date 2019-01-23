@@ -25,6 +25,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
+using PersonAndBusinessUnit = Teleopti.Ccc.Domain.Logon.PersonAndBusinessUnit;
 
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
@@ -947,8 +948,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(
 				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(loggedOnPerson, dataSource,
-				BusinessUnitFactory.BusinessUnitUsedInTest, null);
+			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(new PersonAndBusinessUnit(loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest), dataSource, null);
 			Thread.CurrentPrincipal = principal;
 
 			StateHolderProxyHelper.ClearStateHolder();

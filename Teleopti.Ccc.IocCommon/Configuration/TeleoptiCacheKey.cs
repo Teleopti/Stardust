@@ -2,6 +2,7 @@ using System.Globalization;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -34,6 +35,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					return "callback";
 				case IDateOnlyAsDateTimePeriod period:
 					return period.DateOnly.ToShortDateString() + period.TimeZone().DisplayName;
+				case IPrincipalSource principalSource:
+					return principalSource.PrincipalPersonId().ToString();
 			}
 
 			return base.ParameterValue(parameter);
