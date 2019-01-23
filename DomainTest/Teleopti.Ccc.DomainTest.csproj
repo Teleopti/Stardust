@@ -186,6 +186,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterUnnecessaryLoadTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\FetchAnalyticsScenariosCacheTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModelUpdaterPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventForShiftExchangeOfferTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationNewTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioTest.cs" />
