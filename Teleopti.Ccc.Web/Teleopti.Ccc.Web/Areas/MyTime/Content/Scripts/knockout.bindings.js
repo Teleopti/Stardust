@@ -115,8 +115,18 @@ var TooltipBinding = function() {
 		ko.utils.extend(options, ko.bindingHandlers.tooltip.options);
 		ko.utils.extend(options, local);
 
+		var ua = navigator.userAgent;
+		var mobile = /Mobile/i.test(ua) && /iPhone/i.test(ua);
+		var ipad = /ipad/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua));
+		if (mobile || ipad) {
+			options.trigger = 'click';
+		}
+
 		$(element).tooltip(options);
 		$(element).attr({ 'binding-tooltip': true });
+		$(element).mouseleave(function(event) {
+			$(this).tooltip('hide');
+		});
 
 		ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 			$(element).tooltip('destroy');
@@ -201,25 +211,6 @@ ko.bindingHandlers.selected = {
 	}
 };
 
-ko.bindingHandlers.hideTooltipAfterMouseLeave = {
-	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-		if (valueAccessor()) {
-			$(element).mouseleave(function(event) {
-				$(this).tooltip('hide');
-			});
-			$(document).on('touchmove', function() {
-				$(element).tooltip('hide');
-			});
-			$('.pagebody').on('scroll', function() {
-				$(element).tooltip('hide');
-			});
-			$(window).on('orientationchange', function() {
-				$(element).tooltip('hide');
-			});
-		}
-	}
-};
-
 ko.bindingHandlers.scrollIntoViewWhenClick = {
 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 		$(element).click(function(event) {
@@ -279,7 +270,7 @@ ko.bindingHandlers.adjustMyActivityTooltipPositionInTeamSchedule = {
 ko.bindingHandlers.adjustAgentActivityTooltipPositionInTeamSchedule = {
 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 		if (valueAccessor()) {
-			$(element).on('click mouseenter', function(event) {
+			$(element).on('click', function(event) {
 				var tooltipEle = $(this)
 					.siblings()
 					.filter('.tooltip.in')[0];
@@ -329,51 +320,59 @@ ko.bindingHandlers.adjustAgentActivityTooltipPositionInTeamSchedule = {
 ko.bindingHandlers.adjustTooltipPositionOnMobile = {
 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 		if (valueAccessor()) {
-			$(element).on('click mouseenter', function(event) {
+			$(element).on('click', function(event) {
 				var tooltipEle = $(this)
 					.siblings()
 					.filter('.tooltip.in')[0];
 
 				if (!tooltipEle) return;
 
-				var targetWidth = event.currentTarget.offsetWidth;
-				var targetHeight = event.currentTarget.offsetHeight;
-				var targetOffsetTop = $(event.currentTarget).offset().top;
-				var targetOffsetLeft = $(event.currentTarget).offset().left;
+				setTimeout(function() {
+					var ua = navigator.userAgent;
+					var mobile = /Mobile/i.test(ua) && /iPhone/i.test(ua);
+					var ipad = /ipad/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua));
+					if (!mobile && !ipad) return;
 
-				var tooltipWidth = $(tooltipEle).width();
-				var tooltipHeight = $(tooltipEle).height();
-				var tooltipArrowWidth = 10;
-				var tooltipArrowHeight = 5;
-				var topMarginBetweenTooltipAndTarget = 5;
+					var targetWidth = event.currentTarget.offsetWidth;
+					var targetHeight = event.currentTarget.offsetHeight;
+					var targetOffsetTop = $(event.currentTarget).offset().top;
+					var targetOffsetLeft = $(event.currentTarget).offset().left;
 
-				var positionLeft = targetOffsetLeft + targetWidth / 2 - tooltipWidth / 2;
-				if (positionLeft < 0) {
-					positionLeft = 0;
-				}
-				$(tooltipEle)
-					.find('.tooltip-arrow')
-					.css({
-						'margin-left': -tooltipArrowWidth / 2
-					});
+					var tooltipWidth = $(tooltipEle).width();
+					var tooltipHeight = $(tooltipEle).height();
+					var tooltipArrowWidth = 10;
+					var tooltipArrowHeight = 5;
+					var topMarginBetweenTooltipAndTarget = 5;
 
-				if (positionLeft + tooltipWidth > window.innerWidth) {
-					var marginRight = positionLeft + tooltipWidth - window.innerWidth;
-
-					positionLeft = positionLeft - marginRight;
+					var positionLeft = targetOffsetLeft + targetWidth / 2 - tooltipWidth / 2;
+					if (positionLeft < 0) {
+						positionLeft = 0;
+					}
 					$(tooltipEle)
 						.find('.tooltip-arrow')
 						.css({
-							'margin-left': marginRight - tooltipArrowWidth / 2
+							'margin-left': -tooltipArrowWidth / 2
 						});
-				}
 
-				$(tooltipEle).css({
-					position: 'fixed',
-					left: positionLeft,
-					top: targetOffsetTop - tooltipHeight - tooltipArrowHeight - topMarginBetweenTooltipAndTarget,
-					width: tooltipWidth
-				});
+					if (positionLeft + tooltipWidth > window.innerWidth) {
+						var marginRight = positionLeft + tooltipWidth - window.innerWidth;
+
+						positionLeft = positionLeft - marginRight;
+						$(tooltipEle)
+							.find('.tooltip-arrow')
+							.css({
+								left: '50%',
+								'margin-left': marginRight - tooltipArrowWidth / 2
+							});
+					}
+
+					$(tooltipEle).css({
+						position: 'fixed',
+						left: positionLeft,
+						top: targetOffsetTop - tooltipHeight - tooltipArrowHeight - topMarginBetweenTooltipAndTarget,
+						width: tooltipWidth
+					});
+				}, 0);
 			});
 		}
 	}
