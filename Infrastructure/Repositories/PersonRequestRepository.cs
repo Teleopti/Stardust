@@ -967,20 +967,28 @@ AND ps.Skill in(:list)")
 
 			if (budgetGroupId.HasValue)
 			{
-				budgetGroupSql = $"and pp.BudgetGroup= '{budgetGroupId.Value}'";
+				budgetGroupSql = "and pp.BudgetGroup= :budgetGroupId";
 			}
 			else
 			{
 				budgetGroupSql = "and pp.BudgetGroup is null";
 			}
 
-			return Session.CreateSQLQuery(string.Format(sql, joinSql, budgetGroupSql, orderSql))
+			var rawSql = string.Format(sql, joinSql, budgetGroupSql, orderSql);
+
+			var iSqlQuery = Session.CreateSQLQuery(rawSql)
 				.SetDateTime("startDate", period.StartDateTime)
 				.SetDateTime("endDate", period.EndDateTime)
 				.SetDateTime("withInPersonPeriod", period.StartDateTime.Date)
 				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
-				.SetBoolean("isDeleted", false)
-				.SetResultTransformer(Transformers.AliasToBean<PersonWaitlistedAbsenceRequest>())
+				.SetBoolean("isDeleted", false);
+
+			if (budgetGroupId.HasValue)
+			{
+				iSqlQuery.SetGuid(nameof(budgetGroupId), budgetGroupId.Value);
+			}
+
+			return iSqlQuery.SetResultTransformer(Transformers.AliasToBean<PersonWaitlistedAbsenceRequest>())
 				.List<PersonWaitlistedAbsenceRequest>();
 		}
 

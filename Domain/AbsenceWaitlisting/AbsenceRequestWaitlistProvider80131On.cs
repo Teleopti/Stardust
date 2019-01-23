@@ -38,17 +38,18 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			var budgetGroupId = getAbsenceRequestPersonFirstBudgetGroup(absenceRequest);
 			var processOrder = absenceRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistProcessOrder;
 			var requests = _personRequestRepository.GetPendingAndWaitlistedAbsenceRequests(period, budgetGroupId, processOrder);
-
-			var waitlistedRequests = requests.Where(requestIsAutoGrant).Select(x => x.PersonRequestId);
+			var list = _personRequestRepository.Find(requests.Select(x => x.PersonRequestId));
+			var personRequestDic = list.ToDictionary(personRequest => personRequest.Id.Value);
+			var waitlistedRequests = requests.Where(x=>requestIsAutoGrant(x,personRequestDic)).Select(x => x.PersonRequestId);
 			return waitlistedRequests;
 		}
 
-		private bool requestIsAutoGrant(PersonWaitlistedAbsenceRequest personWaitlistedAbsenceRequest)
+		private bool requestIsAutoGrant(PersonWaitlistedAbsenceRequest personWaitlistedAbsenceRequest,Dictionary<Guid,IPersonRequest> personRequestDic)
 		{
 			if (personWaitlistedAbsenceRequest.RequestStatus == PersonRequestStatus.Waitlisted)
 				return true;
 
-			var request = _personRequestRepository.Find(personWaitlistedAbsenceRequest.PersonRequestId);
+			var request = personRequestDic[personWaitlistedAbsenceRequest.PersonRequestId];
 			var wcs = request.Person.WorkflowControlSet;
 
 			var isAutoGrant = wcs.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)request.Request)
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		{
 			var period = request.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
 			var requestPerson = request.Person;
-			var personPeriod = requestPerson.PersonPeriods(period.ToDateOnlyPeriod(requestPerson.PermissionInformation.DefaultTimeZone())).ToArray().FirstOrDefault();
+			var personPeriod = requestPerson.PersonPeriods(period.ToDateOnlyPeriod(requestPerson.PermissionInformation.DefaultTimeZone())).FirstOrDefault();
 
 			Guid? budgetGroupId = null;
 			if (personPeriod?.BudgetGroup?.Id != null)
