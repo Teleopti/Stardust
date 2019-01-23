@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
-	public class ShiftLengthDecider : IShiftLengthDecider
+	public class ShiftLengthDecider
 	{
 		private readonly IDesiredShiftLengthCalculator _desiredShiftLengthCalculator;
 

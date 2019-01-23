@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			builder.RegisterType<GroupPagePerDateHolder>().As<IGroupPagePerDateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().SingleInstance();
-			builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().SingleInstance();
+			builder.RegisterType<ShiftLengthDecider>().SingleInstance();
 			builder.RegisterType<PersonSkillDayCreator>().SingleInstance();
 
 			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();

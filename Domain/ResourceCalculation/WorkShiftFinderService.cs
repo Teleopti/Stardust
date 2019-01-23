@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly Func<PreSchedulingStatusChecker> _preSchedulingStatusChecker;
         private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
         private readonly FairnessAndMaxSeatCalculatorsManager28317 _fairnessAndMaxSeatCalculatorsManager;
-    	private readonly IShiftLengthDecider _shiftLengthDecider;
+    	private readonly ShiftLengthDecider _shiftLengthDecider;
 	    private readonly PersonSkillDayCreator _personSkillDayCreator;
 		private readonly IOpenHoursSkillExtractor _openHoursSkillExtractor;
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             ,ShiftProjectionCacheFilter shiftProjectionCacheFilter, Func<IPersonSkillPeriodsDataHolderManager> personSkillPeriodsDataHolderManager,  
 			ShiftProjectionCacheManager shiftProjectionCacheManager ,  WorkShiftCalculatorsManager workShiftCalculatorsManager,  
             Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator, FairnessAndMaxSeatCalculatorsManager28317 fairnessAndMaxSeatCalculatorsManager,
-			IShiftLengthDecider shiftLengthDecider, PersonSkillDayCreator personSkillDayCreator, IOpenHoursSkillExtractor openHoursSkillExtractor)
+			ShiftLengthDecider shiftLengthDecider, PersonSkillDayCreator personSkillDayCreator, IOpenHoursSkillExtractor openHoursSkillExtractor)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;

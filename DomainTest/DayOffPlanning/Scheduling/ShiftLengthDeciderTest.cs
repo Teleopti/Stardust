@@ -8,13 +8,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 
-
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 {
 	[TestFixture]
 	public class ShiftLengthDeciderTest
 	{
-		private IShiftLengthDecider _target;
+		private ShiftLengthDecider _target;
 		private IDesiredShiftLengthCalculator _desiredShiftLengthCalculator;
 		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private IScheduleMatrixPro _matrix;
