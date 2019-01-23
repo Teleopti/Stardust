@@ -102,6 +102,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 		private static void copyFiles(string source, string destination)
 		{
+
+			if (!Directory.Exists(destination))
+				Directory.CreateDirectory(destination);
+
 			foreach (var folder in Directory.GetDirectories(source))
 			{
 				var newFolderPath = Path.GetFullPath(destination + Path.GetFileName(folder));
