@@ -128,7 +128,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			extend.AddModule(new CommonModule(configuration));
 			extend.AddModule(new DataFactoryModule());
-			extend.AddModule(new ServiceLocatorForFakesModule());
 
 			Extend(extend, configuration);
 			QueryAllExtensions<IExtendSystem>()
