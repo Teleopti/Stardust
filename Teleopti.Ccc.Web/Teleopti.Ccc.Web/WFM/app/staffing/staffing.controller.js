@@ -235,7 +235,7 @@
 		}
 
 		function navigateToNewDay(date) {
-			if(!date) return;
+			if (!date) return;
 
 			$window.sessionStorage.staffingSelectedDate = moment(date).format('YYYY-MM-DD');
 			if (vm.hasSuggestionData) {
@@ -460,8 +460,8 @@
 			vm.exporting = true;
 			var request = staffingService.exportStaffingData.get({
 				skillId: vm.selectedSkill.Id,
-				stringExportStartDate:  moment(vm.exportStaffingDataDate.startDate).format('YYYY-MM-DD') ,
-				stringExportEndDate: moment(vm.exportStaffingDataDate.endDate).format('YYYY-MM-DD') ,
+				stringExportStartDate: moment(vm.exportStaffingDataDate.startDate).format('YYYY-MM-DD'),
+				stringExportEndDate: moment(vm.exportStaffingDataDate.endDate).format('YYYY-MM-DD'),
 				useShrinkage: vm.useShrinkage
 			});
 			request.$promise.then(function(response) {
