@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				foreach (var skill in skills)
 				{
-					if (!skillDaysBySkillAndDay.TryGetValue((skill,day),out var skillDay)) continue;
-
+					if (!skillDaysBySkillAndDay.TryGetValue((skill, day), out var skillDay)) continue;
 					var offsetSkill = skill.TimeZone.GetUtcOffset(day.Date);
 
 					foreach (var timePeriod in skillDay.OpenHours())
@@ -43,10 +42,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						var start = timePeriod.StartTime.Add(-offsetSkill + offsetUser);
 						if (start < minOpen)
 							minOpen = start;
-						
+
 						var end = timePeriod.EndTime.Add(-offsetSkill + offsetUser);
 						if (end > maxOpen)
-							maxOpen = end;			
+							maxOpen = end;
+					}
+
+					if (!skillDaysBySkillAndDay.TryGetValue((skill, day.AddDays(1)), out var skillDayNextDay)) continue;
+
+					foreach (var timePeriod in skillDayNextDay.OpenHours())
+					{
+						var start = timePeriod.StartTime.Add(-offsetSkill + offsetUser).Add(TimeSpan.FromDays(1));
+						if(start > maxOpen) continue;
+						var end = timePeriod.EndTime.Add(-offsetSkill + offsetUser).Add(TimeSpan.FromDays(1));
+						if (end <= maxOpen) continue;
+						var maxEnd = TimeSpan.FromDays(2).Subtract(TimeSpan.FromMinutes(1));
+						if (end > maxEnd)
+							end = maxEnd;
+
+						maxOpen = end;
 					}
 				}
 
