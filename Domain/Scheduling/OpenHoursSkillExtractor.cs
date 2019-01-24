@@ -17,12 +17,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class OpenHoursSkillExtractor : IOpenHoursSkillExtractor
 	{
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public OpenHoursSkillExtractor(IGroupPersonSkillAggregator groupPersonSkillAggregator, ITimeZoneGuard timeZoneGuard)
+		public OpenHoursSkillExtractor(IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
-			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
