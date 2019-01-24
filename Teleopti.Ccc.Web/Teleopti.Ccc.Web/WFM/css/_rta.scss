@@ -14,29 +14,12 @@
 }
 
 .rta-view {
-	padding: $full-padding;
-
 	$out-of-adherence-color: darkred;
 	$in-adherence-color: darkgreen;
 	$out-of-adherence-height: 4px;
 
 	.label-alert {
 		background-color: #fb8c00;
-	}
-
-	// con padding/margin reset
-	.con-row {
-		padding: 0;
-		margin: 0;
-	}
-
-	.con-flex {
-		padding: 0;
-		margin: 0;
-	}
-
-	.con-padding .con-flex {
-		padding: $full-padding;
 	}
 
 	@media screen and (min-width: 768px) {
@@ -344,10 +327,10 @@
 			cursor: pointer;
 			margin: 0 8px;
 		}
-	  
-	  	.time-picker-validation {
-		  width: 360px;
-		  margin-top: 10px;
+
+		.time-picker-validation {
+			width: 360px;
+			margin-top: 10px;
 		}
 	}
 

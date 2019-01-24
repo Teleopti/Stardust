@@ -251,144 +251,142 @@
 		</div>
 	</div>
 
-	<div class="panel">
-		<div class="con-row">
-			<table class="wfm-table cursor-pointer">
-				<tr>
-					<th style="width: 8.5%" ng-click="vm.sort('Name')">
-						{{ 'Name' | translate }}
-						<i
-							ng-show="vm.orderBy == 'Name'"
-							class="mdi"
-							ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
-						></i>
-					</th>
-					<th style="width: 10.5%" ng-click="vm.sort('SiteAndTeamName')">
-						{{ 'SiteTeam' | translate }}
-						<i
-							ng-show="vm.orderBy == 'SiteAndTeamName'"
-							class="mdi"
-							ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
-						></i>
-					</th>
-					<th class="blank-header" style="border-right: none">
-						<div class="timeline" style="height: 20px">
-							<div
-								class="label label-info time"
-								ng-repeat="time in vm.timeline"
-								ng-attr-style="left: {{ time.Offset }};"
-							>
-								{{ time.Time }}
-							</div>
-						</div>
-					</th>
-					<th class="blank-header" style="width: 3.5%; border-left: none;"></th>
-					<th style="width: 8.5%" ng-click="vm.sort('Rule')">
-						{{ 'Rule' | translate }}
-						<i
-							ng-show="vm.orderBy == 'Rule'"
-							class="mdi"
-							ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
-						></i>
-					</th>
-					<th style="width: 8.5%" ng-click="vm.sort('TimeOutOfAdherence')">
-						{{ 'TimeOOA' | translate }}
-						<i
-							ng-show="vm.orderBy == 'TimeOutOfAdherence'"
-							class="mdi"
-							ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
-						></i>
-					</th>
-					<th style="width: 8.5%" ng-click="vm.sort('TimeInAlarm')">
-						{{ 'TimeInAlarm' | translate }}
-						<i
-							ng-show="vm.orderBy == 'TimeInAlarm'"
-							class="mdi"
-							ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
-						></i>
-					</th>
-					<th style="width: 8.5%" ng-click="vm.sort('TimeInState')">
-						{{ 'TimeInState' | translate }}
-						<i
-							ng-show="vm.orderBy == 'TimeInState'"
-							class="mdi"
-							ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
-						></i>
-					</th>
-					<th style="width: 8.5%" ng-click="vm.sort('State')">
-						{{ 'State' | translate }}
-						<i
-							ng-show="vm.orderBy == 'State'"
-							class="mdi"
-							ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
-						></i>
-					</th>
-				</tr>
-				<tr ng-repeat="agentState in vm.agentStates" ng-attr-agentid="{{ agentState.PersonId }}">
-					<td>{{ agentState.Name }}</td>
-					<td>{{ agentState.SiteAndTeamName }}</td>
-					<td class="shift-column">
-						<div class="shift" style="height: 31px">
-							<div
-								ng-repeat="outOfAdherence in agentState.OutOfAdherences"
-								class="out-of-adherence"
-								ng-attr-style="left: {{ outOfAdherence.Offset }}; width: {{ outOfAdherence.Width }};"
-							>
-								<md-tooltip md-direction="top">
-									{{ outOfAdherence.StartTime }} - {{ outOfAdherence.EndTime }}
-								</md-tooltip>
-							</div>
-
-							<div class="current-time" style="left: 25%"></div>
-
-							<div
-								ng-repeat="activity in agentState.Shift"
-								class="activity {{ activity.Class }}"
-								ng-attr-style="height: 25px; margin-top: 3px; width: {{ activity.Width }}; left: {{
-									activity.Offset
-								}}; background-color: {{ activity.Color }};"
-								ng-attr-name="{{ activity.Name }}"
-							>
-								<md-tooltip>
-									<div>{{ activity.Name }}</div>
-									<div>{{ activity.Time }}</div>
-								</md-tooltip>
-							</div>
-						</div>
-					</td>
-					<td style="border-left: none">
-						<a
-							href="{{ vm.changeScheduleUrl(agentState.PersonId) }}"
-							target="_blank"
-							style="margin-left: 6px;"
-							class="mdi mdi-calendar-clock flex-1 change-schedule"
-						>
-							<md-tooltip>{{ 'ModifySchedule' | translate }}</md-tooltip>
-						</a>
-						<a
-							href="{{ vm.historicalAdherenceUrl(agentState.PersonId) }}"
-							target="_blank"
-							style="margin-left: 8px;"
-							class="mdi mdi-history"
-						>
-							<md-tooltip>{{ 'AgentHistoricalAdherence' | translate }}</md-tooltip>
-						</a>
-					</td>
-					<td>
+	<div class="con-row">
+		<table class="wfm-table cursor-pointer">
+			<tr>
+				<th style="width: 8.5%" ng-click="vm.sort('Name')">
+					{{ 'Name' | translate }}
+					<i
+						ng-show="vm.orderBy == 'Name'"
+						class="mdi"
+						ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
+					></i>
+				</th>
+				<th style="width: 10.5%" ng-click="vm.sort('SiteAndTeamName')">
+					{{ 'SiteTeam' | translate }}
+					<i
+						ng-show="vm.orderBy == 'SiteAndTeamName'"
+						class="mdi"
+						ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
+					></i>
+				</th>
+				<th class="blank-header" style="border-right: none">
+					<div class="timeline" style="height: 20px">
 						<div
-							ng-if="agentState.Rule"
-							class="label"
-							ng-attr-style="background-color: {{ agentState.Color }}"
+							class="label label-info time"
+							ng-repeat="time in vm.timeline"
+							ng-attr-style="left: {{ time.Offset }};"
 						>
-							{{ agentState.Rule }}
+							{{ time.Time }}
 						</div>
-					</td>
-					<td>{{ agentState.TimeOutOfAdherence }}</td>
-					<td>{{ agentState.TimeInAlarm }}</td>
-					<td>{{ agentState.TimeInState }}</td>
-					<td>{{ agentState.State }}</td>
-				</tr>
-			</table>
-		</div>
+					</div>
+				</th>
+				<th class="blank-header" style="width: 3.5%; border-left: none;"></th>
+				<th style="width: 8.5%" ng-click="vm.sort('Rule')">
+					{{ 'Rule' | translate }}
+					<i
+						ng-show="vm.orderBy == 'Rule'"
+						class="mdi"
+						ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
+					></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('TimeOutOfAdherence')">
+					{{ 'TimeOOA' | translate }}
+					<i
+						ng-show="vm.orderBy == 'TimeOutOfAdherence'"
+						class="mdi"
+						ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
+					></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('TimeInAlarm')">
+					{{ 'TimeInAlarm' | translate }}
+					<i
+						ng-show="vm.orderBy == 'TimeInAlarm'"
+						class="mdi"
+						ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
+					></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('TimeInState')">
+					{{ 'TimeInState' | translate }}
+					<i
+						ng-show="vm.orderBy == 'TimeInState'"
+						class="mdi"
+						ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
+					></i>
+				</th>
+				<th style="width: 8.5%" ng-click="vm.sort('State')">
+					{{ 'State' | translate }}
+					<i
+						ng-show="vm.orderBy == 'State'"
+						class="mdi"
+						ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"
+					></i>
+				</th>
+			</tr>
+			<tr ng-repeat="agentState in vm.agentStates" ng-attr-agentid="{{ agentState.PersonId }}">
+				<td>{{ agentState.Name }}</td>
+				<td>{{ agentState.SiteAndTeamName }}</td>
+				<td class="shift-column">
+					<div class="shift" style="height: 31px">
+						<div
+							ng-repeat="outOfAdherence in agentState.OutOfAdherences"
+							class="out-of-adherence"
+							ng-attr-style="left: {{ outOfAdherence.Offset }}; width: {{ outOfAdherence.Width }};"
+						>
+							<md-tooltip md-direction="top">
+								{{ outOfAdherence.StartTime }} - {{ outOfAdherence.EndTime }}
+							</md-tooltip>
+						</div>
+
+						<div class="current-time" style="left: 25%"></div>
+
+						<div
+							ng-repeat="activity in agentState.Shift"
+							class="activity {{ activity.Class }}"
+							ng-attr-style="height: 25px; margin-top: 3px; width: {{ activity.Width }}; left: {{
+								activity.Offset
+							}}; background-color: {{ activity.Color }};"
+							ng-attr-name="{{ activity.Name }}"
+						>
+							<md-tooltip>
+								<div>{{ activity.Name }}</div>
+								<div>{{ activity.Time }}</div>
+							</md-tooltip>
+						</div>
+					</div>
+				</td>
+				<td style="border-left: none">
+					<a
+						href="{{ vm.changeScheduleUrl(agentState.PersonId) }}"
+						target="_blank"
+						style="margin-left: 6px;"
+						class="mdi mdi-calendar-clock flex-1 change-schedule"
+					>
+						<md-tooltip>{{ 'ModifySchedule' | translate }}</md-tooltip>
+					</a>
+					<a
+						href="{{ vm.historicalAdherenceUrl(agentState.PersonId) }}"
+						target="_blank"
+						style="margin-left: 8px;"
+						class="mdi mdi-history"
+					>
+						<md-tooltip>{{ 'AgentHistoricalAdherence' | translate }}</md-tooltip>
+					</a>
+				</td>
+				<td>
+					<div
+						ng-if="agentState.Rule"
+						class="label"
+						ng-attr-style="background-color: {{ agentState.Color }}"
+					>
+						{{ agentState.Rule }}
+					</div>
+				</td>
+				<td>{{ agentState.TimeOutOfAdherence }}</td>
+				<td>{{ agentState.TimeInAlarm }}</td>
+				<td>{{ agentState.TimeInState }}</td>
+				<td>{{ agentState.State }}</td>
+			</tr>
+		</table>
 	</div>
 </div>
