@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			result.OpenHoursDictionary[date].StartTimeLimitation.StartTime.Should().Be.EqualTo(TimeSpan.FromHours(8));
 			result.OpenHoursDictionary[date].EndTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(16));
-			result.ForCurrentDate(date).TotalHours.Should().Be.EqualTo(8);
+			result.ForDate(date).TotalHours.Should().Be.EqualTo(8);
 		}
 	}
 }

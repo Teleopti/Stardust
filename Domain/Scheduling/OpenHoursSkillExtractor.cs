@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public Dictionary<DateOnly, IEffectiveRestriction> OpenHoursDictionary { get; }
 
-		public TimeSpan ForCurrentDate(DateOnly date)
+		public TimeSpan ForDate(DateOnly date)
 		{
 			if (OpenHoursDictionary == null) return TimeSpan.MaxValue;
 			if (!OpenHoursDictionary.TryGetValue(date, out var startEndRestriction)) return TimeSpan.MaxValue;

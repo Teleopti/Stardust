@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 			ILookup<TimeSpan, ShiftProjectionCache> contractTimes;
 			if (openHoursSkillResult != null)
 			{
-				var currentTime = openHoursSkillResult.ForCurrentDate(date);
+				var currentTime = openHoursSkillResult.ForDate(date);
 				contractTimes = shiftList.Where(s => s.WorkShiftProjectionPeriod().ElapsedTime() <= currentTime).ToLookup(s => s.WorkShiftProjectionContractTime());
 			}
 			else
