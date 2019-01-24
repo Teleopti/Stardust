@@ -12,13 +12,11 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
@@ -408,10 +406,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				GroupPageType = GroupPageType.Hierarchy,
 				TeamSameType = TeamSameType.ShiftCategory
-			});
-			SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(planningPeriod, new SchedulingOptions
-			{
-				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
