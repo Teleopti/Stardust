@@ -16,7 +16,8 @@ describe('planningGroupSettingEditController', function() {
 			filterId: '8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb'
 		},
 		defaultSettingInfo,
-		nonDefaultSettingInfo;
+		nonDefaultSettingInfo,
+		teamSettings;
 
 	beforeEach(function() {
 		module('wfm.resourceplanner');
@@ -109,6 +110,11 @@ describe('planningGroupSettingEditController', function() {
 			Priority: 5,
 			PreferencePercent: 23
 		};
+
+		teamSettings = {
+			GroupPageType: 0,
+			TeamSameType: 0
+		}
 	}));
 
 	afterEach(function() {
@@ -117,7 +123,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should call function with debounce 250', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams }, {settingInfo: defaultSettingInfo});
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams }, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -126,7 +132,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should get filter results', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams }, {settingInfo: defaultSettingInfo});
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams }, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -137,13 +143,13 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should display preference value', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo}, {settingInfo: defaultSettingInfo});
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo}, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
 
 		expect(vm.settingInfo.PreferencePercent).toEqual(23);
 	});
 
 	it('should add one filter from filter results', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams }, {settingInfo: defaultSettingInfo});
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams }, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -155,7 +161,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should remove one filter from filter results', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams }, {settingInfo: defaultSettingInfo});
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams }, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
 		vm.searchString = 'skill';
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -167,7 +173,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should load selected undefault scheduling setting', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo }, {settingInfo: nonDefaultSettingInfo});
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo }, {settingInfo: nonDefaultSettingInfo, teamSettings: teamSettings});
 
 		expect(vm.settingInfo.Id).toEqual('8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb');
 		expect(vm.settingInfo.Name).toEqual('Scheduling setting 101');
@@ -175,7 +181,7 @@ describe('planningGroupSettingEditController', function() {
 	});
 
 	it('should load default scheduling setting', function() {
-		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo }, {settingInfo: defaultSettingInfo});
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo }, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
 
 		expect(vm.settingInfo.Id).toEqual('33f52ff4-0314-4a9e-80fa-5c958c57c92f');
 		expect(vm.settingInfo.Name).toEqual('Default');
