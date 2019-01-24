@@ -29,7 +29,10 @@
 		<component name="_preferenceValue" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent, Teleopti.Ccc.Domain" access="field">
 			<property name="Value" column="PreferenceValue"/>
 		</component>
-
+		<component name="_teamSettings" class="Teleopti.Ccc.Domain.Scheduling.TeamSettings, Teleopti.Ccc.Domain" access="field">
+			<property name="TeamSameType" access="property"/>
+			<property name="GroupPageType" access="property"/>
+		</component>
 
     <set name="Filters" table="PlanningGroupFilters" cascade="all-delete-orphan">
       <key column="PlanningGroup" />

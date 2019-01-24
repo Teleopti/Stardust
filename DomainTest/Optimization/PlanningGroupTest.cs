@@ -50,5 +50,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var planningGroup = new PlanningGroup();
 			planningGroup.Settings.PreferenceValue.Should().Be.EqualTo(new Percent(0.8));
 		}
+		
+		[Test]
+		public void ShouldHaveCorrectDefaultTeamSettings()
+		{
+			var planningGroup = new PlanningGroup();
+			planningGroup.Settings.TeamSettings.GroupPageType.Should().Be.EqualTo(GroupPageType.SingleAgent);
+		}
 	}
 }
