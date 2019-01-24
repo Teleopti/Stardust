@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (isDayOff(scheduleDay))
 		        return null;
 
-			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod( TimeZoneGuard.Instance.CurrentTimeZone());
+			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod;
 			var personStartDate = DateOnly.MaxValue;
 			foreach (var personPeriod in person.PersonPeriodCollection)
