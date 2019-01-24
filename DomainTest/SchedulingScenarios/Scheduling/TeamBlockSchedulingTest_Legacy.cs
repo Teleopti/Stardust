@@ -18,9 +18,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	/*  DONT ADD MORE TESTS HERE! - LEGACY TESTS HERE!
-	 *  Web supports (limited) block (not team) scheduling only.
-	 *  If you want to add simple (web) block scheduling tests that PlanningGroup supports, add it to SchedulingBlockTest
-	 *  If you want to add a team scheduling tests, add it as a desktop test (until web supports it)
+	 *  Web supports (limited) block and team scheduling only.
+	 *  If you want to add simple plan block scheduling tests, add it to SchedulingBlockTest
+	 *  If you want to add simple plan team scheduling tests, add it to TeamBlockSchedulingTest
+	 *  If you want to add a mix of these or other cases not supported in plans, add it to a desktop test
 	 */
 	[DomainTest]
 	public class TeamBlockSchedulingTest_Legacy : SchedulingScenario, IIsolateSystem

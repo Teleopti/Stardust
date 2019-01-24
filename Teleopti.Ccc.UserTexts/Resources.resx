@@ -12294,6 +12294,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Team Scheduling</value>
     <comment>New name of team scheduling</comment>
   </data>
+  <data name="TeamSchedulingColon" xml:space="preserve">
+    <value>Team Scheduling:</value>
+	<comment>Used in Plans: Edit planning group</comment>
+  </data>
   <data name="BlockFinderTypeSingleDay" xml:space="preserve">
     <value>&lt;No Block&gt;</value>
     <comment>No block option in team scheduling/optimization</comment>
