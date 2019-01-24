@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 {
 	public class ApplicationConfigurationDb
 	{
-		public Dictionary<string, string> Server { get; set; }
-		public Dictionary<string, string> Tenant { get; set; }
+		public Dictionary<ServerConfigurationKey, string> Server { get; set; }
+		public Dictionary<TenantApplicationConfigKey, string> Tenant { get; set; }
 	}
 }

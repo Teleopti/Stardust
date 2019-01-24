@@ -1,9 +1,11 @@
 ﻿namespace Teleopti.Ccc.Domain.MultiTenancy
 {
-	public interface IApplicationConfigurationDbProvider
+	public interface IApplicationConfigurationDbTenantClient
 	{
 		ApplicationConfigurationDb GetAll();
+
 		string GetServerValue(ServerConfigurationKey key);
+
 		string GetTenantValue(TenantApplicationConfigKey key);
 	}
 }

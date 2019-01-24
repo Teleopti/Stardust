@@ -50,17 +50,17 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			using (HttpContext.OnThisThreadUse(fakeContext))
 			{
-				var appConfig = Target.GetConfiguration();
+				var appConfig = Target.GetAll();
 
-				var serverKey = "ServerKey";
-				var tenantKey = "TenantKey";
+				var serverKey = ServerConfigurationKey.NotificationContentType;
+				var tenantKey = TenantApplicationConfigKey.NotificationApiKey;
 				var serverRepo = new ServerConfigurationRepository(tenantUnitOfWorkManager);
-				serverRepo.Update(serverKey, "ServerValue");
+				serverRepo.Update(serverKey.ToString(), "ServerValue");
 				personInfo.Tenant.SetApplicationConfig(tenantKey, "TenantValue");
 				Persist.Persist(personInfo.Tenant);
 				tenantUnitOfWorkManager.CurrentSession().Flush();
 
-				var acAfterUpdate = Target.GetConfiguration();
+				var acAfterUpdate = Target.GetAll();
 
 				Assert.AreEqual(acAfterUpdate.Server.Count, appConfig.Server.Count + 1);
 				Assert.AreEqual(acAfterUpdate.Tenant.Count, appConfig.Tenant.Count + 1);

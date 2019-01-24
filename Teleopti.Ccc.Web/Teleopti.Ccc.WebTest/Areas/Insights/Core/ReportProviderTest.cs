@@ -227,10 +227,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			var appConfigDb = new ApplicationConfigurationDb
 			{
-				Tenant = new Dictionary<string, string>
+				Tenant = new Dictionary<TenantApplicationConfigKey, string>
 				{
 					{
-						TenantApplicationConfigKey.InsightsPowerBIGroupId.ToString(), groupId
+						TenantApplicationConfigKey.InsightsPowerBIGroupId, groupId
 					}
 				}
 			};

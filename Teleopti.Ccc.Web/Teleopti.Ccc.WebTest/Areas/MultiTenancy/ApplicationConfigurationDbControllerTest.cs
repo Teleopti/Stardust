@@ -19,15 +19,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			_fakeConfig = new ApplicationConfigurationDb
 			{
-				Server = new Dictionary<string, string>
+				Server = new Dictionary<ServerConfigurationKey, string>
 				{
-					{ ServerConfigurationKey.NotificationApiEndpoint.ToString(), "http://api.teleopti.com" },
-					{ ServerConfigurationKey.NotificationSmtpPort.ToString(), "25" }
+					{ ServerConfigurationKey.NotificationApiEndpoint, "http://api.teleopti.com" },
+					{ ServerConfigurationKey.NotificationSmtpPort, "25" }
 				},
-				Tenant = new Dictionary<string, string>
+				Tenant = new Dictionary<TenantApplicationConfigKey, string>
 				{
-					{ TenantApplicationConfigKey.NotificationApiKey.ToString(), "<key>"},
-					{ TenantApplicationConfigKey.MobileQRCodeUrl.ToString(), "http://www.teleopti.com"}
+					{ TenantApplicationConfigKey.NotificationApiKey, "<key>"},
+					{ TenantApplicationConfigKey.MobileQRCodeUrl, "http://www.teleopti.com"}
 				}
 			};
 		}
@@ -38,10 +38,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			ConfigDbProvider.LoadFakeData(_fakeConfig);
 
 			var configData = Target.GetAll().Result<ApplicationConfigurationDb>();
-			Assert.IsTrue(configData.Tenant.ContainsKey(TenantApplicationConfigKey.NotificationApiKey.ToString()));
-			Assert.IsTrue(configData.Tenant.ContainsKey(TenantApplicationConfigKey.MobileQRCodeUrl.ToString()));
-			Assert.IsTrue(configData.Server.ContainsKey(ServerConfigurationKey.NotificationApiEndpoint.ToString()));
-			Assert.IsTrue(configData.Server.ContainsKey(ServerConfigurationKey.NotificationSmtpPort.ToString()));
+			Assert.IsTrue(configData.Tenant.ContainsKey(TenantApplicationConfigKey.NotificationApiKey));
+			Assert.IsTrue(configData.Tenant.ContainsKey(TenantApplicationConfigKey.MobileQRCodeUrl));
+			Assert.IsTrue(configData.Server.ContainsKey(ServerConfigurationKey.NotificationApiEndpoint));
+			Assert.IsTrue(configData.Server.ContainsKey(ServerConfigurationKey.NotificationSmtpPort));
 			Assert.AreEqual(configData.Server.Count, 2);
 			Assert.AreEqual(configData.Tenant.Count, 2);
 		}
@@ -51,10 +51,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			ConfigDbProvider.LoadFakeData(_fakeConfig);
 			var serverData = Target.GetServerValue(ServerConfigurationKey.NotificationSmtpPort.ToString()).Result<string>();
-			Assert.AreEqual(serverData, _fakeConfig.Server[ServerConfigurationKey.NotificationSmtpPort.ToString()]);
+			Assert.AreEqual(serverData, _fakeConfig.Server[ServerConfigurationKey.NotificationSmtpPort]);
 		
 			var tenantData = Target.GetTenantValue(TenantApplicationConfigKey.NotificationApiKey.ToString()).Result<string>();
-			Assert.AreEqual(tenantData, _fakeConfig.Tenant[TenantApplicationConfigKey.NotificationApiKey.ToString()]);
+			Assert.AreEqual(tenantData, _fakeConfig.Tenant[TenantApplicationConfigKey.NotificationApiKey]);
 		}
 
 		[Test]

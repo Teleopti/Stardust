@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_fakeConfig = fakeConfig;
 		}
 
-		public ApplicationConfigurationDb GetConfiguration()
+		public ApplicationConfigurationDb GetAll()
 		{
 			return _fakeConfig;
 		}
 
 		public string GetServerValue(ServerConfigurationKey key) => 
-			_fakeConfig.Server.TryGetValue(key.ToString(), out var value) ? value : null;
+			_fakeConfig.Server.TryGetValue(key, out var value) ? value : null;
 
 		public string GetTenantValue(TenantApplicationConfigKey key) => 
-			_fakeConfig.Tenant.TryGetValue(key.ToString(), out var value) ? value : null;
+			_fakeConfig.Tenant.TryGetValue(key, out var value) ? value : null;
 	}
 }

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[HttpGet,Route("Configuration/GetAll")]
 		public virtual IHttpActionResult GetAll()
 		{
-			return Ok(_appConfig.GetConfiguration());
+			return Ok(_appConfig.GetAll());
 		}
 
 		[TenantUnitOfWork]
