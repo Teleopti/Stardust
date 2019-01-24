@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	public enum GroupPageType
 	{
+		SingleAgent,
 		Hierarchy,
 		Contract,
 		ContractSchedule,
@@ -61,7 +62,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		Note,
 		RuleSetBag,
 		Skill,
-		SingleAgent,
 		UserDefined
 	}
 }

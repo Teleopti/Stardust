@@ -16,19 +16,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IGridlockManager _gridLockManager;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		private readonly CreateIslands _createIslands;
-		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
+		
+		private readonly ISchedulingUseTeamProvider _schedulingUseTeamProvider;
 
 		public SchedulingCommandHandler(IEventPublisher eventPublisher, 
 				IGridlockManager gridLockManager,
-				ISchedulingOptionsProvider schedulingOptionsProvider,
 				CrossAgentsAndSkills crossAgentsAndSkills,
-				CreateIslands createIslands)
+				CreateIslands createIslands, ISchedulingUseTeamProvider schedulingUseTeamProvider)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
-			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_crossAgentsAndSkills = crossAgentsAndSkills;
 			_createIslands = createIslands;
+			_schedulingUseTeamProvider = schedulingUseTeamProvider;
 		}
 
 		[TestLog]
@@ -39,7 +39,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				var userLocks = _gridLockManager.LockInfos();
 				var islands = CreateIslands(command.Period, command);
-				if (_schedulingOptionsProvider.Fetch(null).UseTeam)
+
+				var useTeam = _schedulingUseTeamProvider.Fetch(command.PlanningPeriodId);
+				if (useTeam)
 				{
 					var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, command.AgentsToSchedule);
 					addEvent(events, command, command.AgentsToSchedule, agentsAndSkills.Agents.ToHashSet(), agentsAndSkills.Skills, userLocks);
