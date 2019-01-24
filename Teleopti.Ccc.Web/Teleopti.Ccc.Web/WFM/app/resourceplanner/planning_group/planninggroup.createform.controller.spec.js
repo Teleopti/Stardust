@@ -28,7 +28,11 @@ describe('planningGroupFormController', function () {
 				MaxConsecutiveDayOffs: 3,
 				Priority: 0,
 				Filters: []
-			}]
+			}],
+			TeamSettings:{
+				GroupPageType: 0,
+				TeamSameType: 0
+			}
 		},
 		stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' };
 
@@ -154,11 +158,12 @@ describe('planningGroupFormController', function () {
 		var filter = vm.editPlanningGroup.Filters;
 		var settings  = vm.editPlanningGroup.Settings;
 		var preferencePercent = vm.editPlanningGroup.PreferencePercent;
+		var teamSettings = vm.editPlanningGroup.TeamSettings;
 		vm.name = 'Plan Group 3';
 		vm.persist();
 		$httpBackend.flush();
 
-		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({ Id: id, Name: vm.name, Filters: filter, Settings: settings, PreferencePercent: preferencePercent });
+		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({ Id: id, Name: vm.name, Filters: filter, Settings: settings, PreferencePercent: preferencePercent, TeamSettings: teamSettings });
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.overview');
 	});
 
@@ -202,7 +207,7 @@ describe('planningGroupFormController', function () {
 		vm.persist();
 		$httpBackend.flush();
 		
-		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({ Id: vm.editPlanningGroup.Id, Name: vm.name, Filters: vm.editPlanningGroup.Filters, Settings: vm.editPlanningGroup.Settings, PreferencePercent: vm.editPlanningGroup.PreferencePercent });
+		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({ Id: vm.editPlanningGroup.Id, Name: vm.name, Filters: vm.editPlanningGroup.Filters, Settings: vm.editPlanningGroup.Settings, PreferencePercent: vm.editPlanningGroup.PreferencePercent, TeamSettings: vm.editPlanningGroup.TeamSettings });
 
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.overview');
 	});
@@ -214,7 +219,7 @@ describe('planningGroupFormController', function () {
 		vm.persist();
 		$httpBackend.flush();
 
-		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({ Id: vm.editPlanningGroup.Id, Name: vm.name, Filters: vm.editPlanningGroup.Filters, Settings: vm.editPlanningGroup.Settings, PreferencePercent: vm.editPlanningGroup.PreferencePercent });
+		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({ Id: vm.editPlanningGroup.Id, Name: vm.name, Filters: vm.editPlanningGroup.Filters, Settings: vm.editPlanningGroup.Settings, PreferencePercent: vm.editPlanningGroup.PreferencePercent, TeamSettings: vm.editPlanningGroup.TeamSettings });
 
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.planningperiodoverview', {groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', ppId: 'a557210b-99cc-4128-8ae0-138d812974b6'});
 	});
