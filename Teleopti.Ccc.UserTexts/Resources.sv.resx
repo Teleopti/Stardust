@@ -14952,7 +14952,7 @@ Vill du registrera dig?</value>
     <value>Din övertidsförfrågan kan inte godkännas. Vissa datum är för närvarande inte öppna för förfrågningar. </value>
   </data>
   <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Godkännande av övertidsförfrågningar är inte aktiverat av administratören för hela eller delar av den period förfrågan gäller.</value>
+    <value>Hela eller delar av den period din förfrågan gäller är inte öppen för övertidsförfrågningar. </value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
     <value>Starttiden {0:HH:mm} den {1:d} finns inte i skiftpåsen {2}.</value>
@@ -15440,7 +15440,7 @@ Applikationen kommer nu att stängas. </value>
     <value>Lägg till kompetensgrupp</value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Godkännande av frånvaroförfrågningar är inte aktiverat av administratören för hela eller delar av den period förfrågan gäller.</value>
+    <value>Hela eller delar av den period din förfrågan gäller är inte öppen för frånvaroförfrågningar. </value>
   </data>
   <data name="NoNonOverwritableActivities" xml:space="preserve">
     <value>Inga icke överskrivningsbara aktiviteter</value>
