@@ -1226,6 +1226,20 @@ select.time-input {
 }
 
 /*
+* Tooltip
+*/
+.tooltip {
+	margin: 0;
+	width: 140px;
+}
+
+.tooltip-inner {
+	white-space: normal;
+	word-wrap: break-word;
+	width: 140px;
+}
+
+/*
  * CSS alterations in order to get RTL-direction to work properly
  */
 
@@ -1297,16 +1311,6 @@ select.time-input {
 .rtl .tooltip-container dl dd,
 .rtl .tooltip-container dl dt {
 	float: right;
-}
-
-.tooltip {
-	margin: 0;
-	width: 140px;
-}
-
-.tooltip-inner {
-	white-space: normal;
-	width: 140px;
 }
 
 .ie7 .rtl .weekview-day {
