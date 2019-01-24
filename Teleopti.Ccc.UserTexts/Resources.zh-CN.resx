@@ -15233,9 +15233,6 @@ Teleopti R&amp;D</value>
   <data name="PasswordPolicyError" xml:space="preserve">
     <value>密码策略错误</value>
   </data>
-  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
-    <value>您确定要删除此公共假日日历吗？</value>
-  </data>
   <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
     <value>您确定要从日历 {1} 中删除 {0} 年度？</value>
   </data>

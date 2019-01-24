@@ -16148,4 +16148,19 @@ Applikationen kommer nu att stängas. </value>
   <data name="AreYouSureYouWantToDeleteThisBankHolidayCalendar" xml:space="preserve">
     <value>Är du säker på att du vill ta bort den här helgdagskalendern?</value>
   </data>
+  <data name="NoSkillGroupCreated" xml:space="preserve">
+    <value>Ingen kompetensgrupp har skapats</value>
+  </data>
+  <data name="AdjustedPeriods" xml:space="preserve">
+    <value>Justerade perioder</value>
+  </data>
+  <data name="AdjustAdherenceLink" xml:space="preserve">
+    <value>Justera adherence</value>
+  </data>
+  <data name="AdjustToNeutral" xml:space="preserve">
+    <value>Justera till neutral</value>
+  </data>
+  <data name="AddPeriod" xml:space="preserve">
+    <value>Lägg till period</value>
+  </data>
 </root>
