@@ -176,14 +176,14 @@ describe('BankHolidayCalendarAddComponent', () => {
 		expect(component.newCalendarYears[0].Active).toBe(true);
 	});
 
-	it('should keep the remaining dates in selected dates array after removing a date', () => {
-		component.newYearTab(new Date('2015-01-10'));
-		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
-		component.dateChangeCallback(new Date('2015-01-11'), component.newCalendarYears[0]);
+	// it('should keep the remaining dates in selected dates array after removing a date', () => {
+	// 	component.newYearTab(new Date('2015-01-10'));
+	// 	component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
+	// 	component.dateChangeCallback(new Date('2015-01-11'), component.newCalendarYears[0]);
 
-		component.removeDateOfYear(component.newCalendarYears[0].Dates[1], component.newCalendarYears[0]);
+	// 	component.removeDateOfYear(component.newCalendarYears[0].Dates[1], component.newCalendarYears[0]);
 
-		expect(component.newCalendarYears[0].SelectedDates.length).toBe(1);
-		expect(component.newCalendarYears[0].SelectedDates[0]).toBe(new Date('2015-01-10').getTime());
-	});
+	// 	expect(component.newCalendarYears[0].SelectedDates.length).toBe(1);
+	// 	expect(component.newCalendarYears[0].SelectedDates[0]).toBe(new Date('2015-01-10').getTime());
+	// });
 });
