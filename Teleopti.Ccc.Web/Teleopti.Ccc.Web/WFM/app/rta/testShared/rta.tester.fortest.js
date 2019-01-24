@@ -290,6 +290,7 @@ var rtaTester = (function () {
 				state.$sessionStorage.$reset();
 			state.lastGoParams = undefined;
 			state.lastNotice = undefined;
+            jasmine.clock().uninstall();
 		});
 
 		var bagOfCandy = controllerName == 'RtaAgentsController78568';

@@ -6,16 +6,16 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
 
         expect(vm.showAdjustToNeutralForm).toBe(false);
     });
-    
-	it('should show adjust section', function (t) {
-		var vm = t.createController();
 
-		t.apply(function () {
+    it('should show adjust section', function (t) {
+        var vm = t.createController();
+
+        t.apply(function () {
             vm.toggleAdjustToNeutralForm();
-		});
+        });
 
         expect(vm.showAdjustToNeutralForm).toBe(true);
-	});
+    });
 
     it('should not show adjust section', function (t) {
         var vm = t.createController();
@@ -29,21 +29,31 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
 
         expect(vm.showAdjustToNeutralForm).toBe(false);
     });
-    
-    // it('should have preselected date', function (t) {
-    //     var vm = t.createController();
-    //    
-    //     expect(vm.startDate).toBe(false);
-    // });
-    
-    // it('should show foo', function (t) {
-    //     t.backend.with.neutralizedAdherence([{
-    //         StartTime: '2019-01-23T07:00:00',
-    //         EndTime: '2019-01-23T08:00:00'
-    //     }]);
-    //     var vm = t.createController();
-    //
-    //     expect(vm.neutralizedPeriods[0].StartTime).toEqual(moment('2019-01-23T07:00:00').format('YYYY-MM-DD hh:mm'));
-    //     expect(vm.neutralizedPeriods[0].EndTime).toEqual(moment('2019-01-23T07:00:00').format('YYYY-MM-DD hh:mm'));
-    // });
+
+    it('should preselect yesterday', function (t) {
+        var now = new Date('2019-01-22T08:00:00');
+        jasmine.clock().mockDate(now);
+
+        var vm = t.createController();
+
+        expect(moment(vm.startDate).format('YYYY-MM-DD')).toEqual('2019-01-21');
+        expect(moment(vm.endDate).format('YYYY-MM-DD')).toEqual('2019-01-21');
+    });
+
+    it('should preselect start and end time', function (t) {
+        var vm = t.createController();
+
+        expect(moment(vm.startTime).format('HH:mm')).toEqual('08:00');
+        expect(moment(vm.endTime).format('HH:mm')).toEqual('18:00');
+    });
+
+    it('should show meridian', function (t) {
+        t.backend.with.currentUserInfo({
+            DateTimeFormat: {ShortTimePattern: "h:mm tt"}
+        });
+        
+        var vm = t.createController();
+
+        expect(vm.showMeridian).toBe(true);
+    })
 });
