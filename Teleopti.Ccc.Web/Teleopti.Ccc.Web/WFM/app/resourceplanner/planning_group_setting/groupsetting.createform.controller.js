@@ -19,14 +19,26 @@
 			"BlockFinderTypeBetweenDayOff",
 			"BlockFinderTypeSchedulePeriod"
 		];
-		vm.blockFinderType = vm.blockFinderTypeOptions[0];
-        
+        vm.blockFinderType = vm.blockFinderTypeOptions[0];
+
         vm.blockComparisonTypeOptions = [
-        	"BlockSameShiftCategory",
-			"BlockSameStartTime",
-			"BlockSameShift"
-		];
-		vm.blockComparisonType = vm.blockComparisonTypeOptions[0];
+            "BlockSameShiftCategory",
+            "BlockSameStartTime",
+            "BlockSameShift"
+        ];
+        vm.blockComparisonType = vm.blockComparisonTypeOptions[0];
+
+
+        vm.teamGroupPageTypeOptions = [
+            "Off",
+            "Main"
+        ];
+		vm.teamGroupPageType = vm.teamGroupPageTypeOptions[0];
+
+        vm.teamComparisonTypeOptions = [
+            "SameShiftCategory",
+        ];
+		vm.teamComparisonType = vm.teamComparisonTypeOptions[0];
 
         vm.requestSent = false;
         vm.selectedItem = undefined;
@@ -43,7 +55,9 @@
         vm.selectResultItem = selectResultItem;
         vm.removeSelectedFilter = removeSelectedFilter;
         vm.blockFinderTypeOptionChanged = blockFinderTypeOptionChanged;
+        vm.teamFinderTypeOptionChanged = teamFinderTypeOptionChanged;
         vm.blockComparisonTypeOptionChanged = blockComparisonTypeOptionChanged;
+        vm.teamComparisonTypeOptionChanged = teamComparisonTypeOptionChanged;
 
         checkIfEditDefaultRule();
 
@@ -61,6 +75,9 @@
 			if(vm.settingInfo.BlockSameShift){
 				vm.blockComparisonType = vm.blockComparisonTypeOptions[2];
 			}
+
+            vm.teamGroupPageType = vm.teamGroupPageTypeOptions[vm.teamSettings.GroupPageType];
+            vm.teamComparisonType = vm.teamComparisonTypeOptions[vm.teamSettings.TeamSameType];
         }
 
         function inputFilterData() {
@@ -173,6 +190,15 @@
 				vm.settingInfo[vm.blockComparisonTypeOptions[i]] = (vm.blockComparisonType===vm.blockComparisonTypeOptions[i]);
 			}
 		}
+
+		
+        function teamFinderTypeOptionChanged(){
+            vm.teamSettings.GroupPageType = vm.teamGroupPageTypeOptions.indexOf(vm.teamGroupPageType);
+        }
+        
+        function teamComparisonTypeOptionChanged(){
+            vm.teamSettings.TeamSameType = vm.teamComparisonTypeOptions.indexOf(vm.teamComparisonType);
+        }
     }
 
 	function planningGroupSettingDirective() {
@@ -180,7 +206,8 @@
 			restrict: 'EA',
 			scope: {
 				settingInfo: '=',
-				preferencePercent: '='
+				preferencePercent: '=',
+                teamSettings: '='
 			},
 			templateUrl: 'app/resourceplanner/planning_group_setting/groupsetting.createform.html',
 			controller: 'planningGroupSettingEditController as vm',

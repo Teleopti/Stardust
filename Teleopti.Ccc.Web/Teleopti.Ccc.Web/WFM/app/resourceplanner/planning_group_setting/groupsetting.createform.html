@@ -158,6 +158,25 @@
 								   placeholder="Preference Percentage" min="0" max="100" step="10"/>
 						</div>
 					</div>
+					<div class="con-flex">
+						<b>{{'Team' | translate}}</b>
+					</div>
+					<div class="con-row" style="padding-left: 5px">
+						<div class="con-flex">
+							<md-radio-group ng-model="vm.teamGroupPageType" ng-change="vm.teamFinderTypeOptionChanged()">
+								<md-radio-button ng-repeat="option in vm.teamGroupPageTypeOptions" ng-value="option">
+									<span>{{ option | translate}}</span>
+								</md-radio-button>
+							</md-radio-group>
+						</div>
+						<div class="con-flex split-3-1" ng-if="vm.teamGroupPageType !== 'Off'">
+							<md-radio-group ng-model="vm.teamComparisonType" ng-change="vm.teamComparisonTypeOptionChanged()">
+								<md-radio-button ng-repeat="option in vm.teamComparisonTypeOptions" ng-value="option">
+									<span>{{ option | translate}}</span>
+								</md-radio-button>
+							</md-radio-group>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>
