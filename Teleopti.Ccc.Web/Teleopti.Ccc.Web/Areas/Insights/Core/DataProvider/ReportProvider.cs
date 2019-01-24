@@ -79,6 +79,11 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		{
 			var result = new EmbedReportConfig();
 
+			if (!isValidReportName(newReportName))
+			{
+				return result;
+			}
+
 			// Create a Power BI Client object. It will be used to call Power BI APIs.
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
@@ -103,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		{
 			var result = new EmbedReportConfig();
 
-			if (string.IsNullOrEmpty(reportId))
+			if (string.IsNullOrEmpty(reportId) || !isValidReportName(newReportName))
 			{
 				return result;
 			}
@@ -123,11 +128,8 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 					return result;
 				}
 
-				var targetReportName = string.IsNullOrEmpty(newReportName)
-					? report.Name + " - Copy"
-					: newReportName;
 				var newReport = client.Reports.CloneReportInGroup(groupId, reportId,
-					new CloneReportRequest(targetReportName));
+					new CloneReportRequest(newReportName));
 
 				return await generateEmbedReportConfig(client, newReport);
 			}
@@ -157,6 +159,11 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 
 				return true;
 			}
+		}
+
+		private bool isValidReportName(string newReportName)
+		{
+			return !string.IsNullOrEmpty(newReportName);
 		}
 
 		private async Task<EmbedReportConfig> generateEmbedReportConfig(IPowerBIClient client, Report report, string userName = null,
