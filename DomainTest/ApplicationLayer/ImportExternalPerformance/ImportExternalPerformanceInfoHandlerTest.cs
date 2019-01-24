@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			isolate.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 			isolate.UseTestDouble<ImportJobArtifactValidator>().For<IImportJobArtifactValidator>();
 			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
-			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
+			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManagerClient>();
 			isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 			isolate.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
 			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			using (var container = builder.Build())
 			{
-				container.Resolve<IAuthenticationQuerier>()
+				container.Resolve<IAuthenticationTenantClient>()
 					.Should().Not.Be.Null();
 			}
 		}

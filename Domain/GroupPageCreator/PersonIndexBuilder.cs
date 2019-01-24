@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 	{
 		private readonly IApplicationFunction _applicationFunction;
 		private readonly IEnumerable<IPerson> _personToIndex;
-		private readonly ITenantLogonDataManager _tenantDataManager;
+		private readonly ITenantLogonDataManagerClient _tenantDataManager;
 
-		public PersonIndexBuilder(IApplicationFunction applicationFunction, IEnumerable<IPerson> personToIndex, ITenantLogonDataManager tenantDataManager)
+		public PersonIndexBuilder(IApplicationFunction applicationFunction, IEnumerable<IPerson> personToIndex, ITenantLogonDataManagerClient tenantDataManager)
 		{
 			_applicationFunction = applicationFunction;
 			_personToIndex = personToIndex;

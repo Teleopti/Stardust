@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 
 			_view = view;
 			_model = model;
-			var personIndexBuilder = new PersonIndexBuilder(applicationFunction, _model.Persons, container.Resolve<ITenantLogonDataManager>());
+			var personIndexBuilder = new PersonIndexBuilder(applicationFunction, _model.Persons, container.Resolve<ITenantLogonDataManagerClient>());
 			_personFinderService = new PersonFinderService(personIndexBuilder);
 			_findPersonPeriodHandler = new FindPersonPeriodHandler(_model, _view);
 		}

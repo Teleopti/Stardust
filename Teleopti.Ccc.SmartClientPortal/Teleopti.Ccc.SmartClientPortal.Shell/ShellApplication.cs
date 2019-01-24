@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					var webSettings = new WebSettings
 					{
 						Settings =
-							c.Resolve<ISharedSettingsQuerier>()
+							c.Resolve<ISharedSettingsTenantClient>()
 								.GetSharedSettings()
 								.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary())
 					};

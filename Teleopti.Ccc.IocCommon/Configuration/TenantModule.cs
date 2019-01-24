@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
-				builder.RegisterType<AuthenticationQuerier>().As<IAuthenticationQuerier>().SingleInstance();
-				builder.RegisterType<TenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
+				builder.RegisterType<AuthenticationTenantClient>().As<IAuthenticationTenantClient>().SingleInstance();
+				builder.RegisterType<TenantLogonDataManagerClient>().As<ITenantLogonDataManagerClient>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<AuthenticationFromFileQuerier>().As<IAuthenticationQuerier>().SingleInstance();
+				builder.RegisterType<AuthenticationFromFileTenantClient>().As<IAuthenticationTenantClient>().SingleInstance();
 				// must still register this to work from sikuli
-				builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
+				builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManagerClient>().SingleInstance();
 			}
 			builder.RegisterType<PostHttpRequest>().As<IPostHttpRequest>().SingleInstance();
 			builder.RegisterType<GetHttpRequest>().As<IGetHttpRequest>().SingleInstance();
@@ -56,19 +56,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			var configServer = _configuration.Args().ConfigServer;
 			if (isRunFromTest(configServer) || configServer.IsAnUrl())
 			{
-				builder.Register(c => new SharedSettingsQuerier(configServer))
-					.As<ISharedSettingsQuerier>()
+				builder.Register(c => new SharedSettingsTenantClient(configServer))
+					.As<ISharedSettingsTenantClient>()
 					.SingleInstance();
 			}
 			else
 			{
-				builder.Register(c => new SharedSettingsQuerierForNoWeb(configServer))
-					.As<ISharedSettingsQuerier>()
+				builder.Register(c => new SharedSettingsTenantClientForNoWeb(configServer))
+					.As<ISharedSettingsTenantClient>()
 					.SingleInstance();
 			}
-			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
+			builder.RegisterType<ChangePasswordTenantClient>().As<IChangePasswordTenantClient>().SingleInstance();
 			builder.RegisterType<ResponseException>().As<IResponseException>();
-			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
+			builder.RegisterType<TenantDataManagerClient>().As<ITenantDataManagerClient>().SingleInstance();
 
 			if (_configuration.Args().BehaviorTestServer)
 				builder.RegisterType<BehaviorTestTenants>().As<IAllTenantNames>().SingleInstance();
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			return server == null;
 		}
 
-		private class emptyTenantLogonDataManager : ITenantLogonDataManager
+		private class emptyTenantLogonDataManager : ITenantLogonDataManagerClient
 		{
 			public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
 			{

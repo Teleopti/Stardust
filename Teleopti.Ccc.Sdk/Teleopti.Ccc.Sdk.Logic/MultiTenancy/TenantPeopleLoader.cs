@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Sdk.Logic.MultiTenancy
 
 	public class TenantPeopleLoader : ITenantPeopleLoader
 	{
-		private readonly ITenantLogonDataManager _tenantLogonDataManager;
+		private readonly ITenantLogonDataManagerClient _tenantLogonDataManager;
 
-		public TenantPeopleLoader(ITenantLogonDataManager tenantLogonDataManager)
+		public TenantPeopleLoader(ITenantLogonDataManagerClient tenantLogonDataManager)
 		{
 			_tenantLogonDataManager = tenantLogonDataManager;
 		}

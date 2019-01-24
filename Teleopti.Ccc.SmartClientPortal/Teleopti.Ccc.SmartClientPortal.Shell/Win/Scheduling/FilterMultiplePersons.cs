@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class FilterMultiplePersons : BaseDialogForm
 	{
-		private ITenantLogonDataManager _tenantLogonDataManager;
+		private ITenantLogonDataManagerClient _tenantLogonDataManager;
 		private readonly ArrayList _persons = new ArrayList();
 		private List<IPerson> _searchablePersons;
 		private ArrayList _userSelectedPersonList;
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return null;
 		}
 
-		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons, ITenantLogonDataManager tenantLogonDataManager, AdvancedAgentsFilter advancedAgentsFilter)
+		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons, ITenantLogonDataManagerClient tenantLogonDataManager, AdvancedAgentsFilter advancedAgentsFilter)
 		{
 			_tenantLogonDataManager = tenantLogonDataManager;
 			_searchablePersons = searchablePersons.ToList();

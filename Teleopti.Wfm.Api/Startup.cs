@@ -45,7 +45,7 @@ namespace Teleopti.Wfm.Api
 			{
 				var webSettings = new WebSettings
 				{
-					Settings = container.Resolve<ISharedSettingsQuerier>()
+					Settings = container.Resolve<ISharedSettingsTenantClient>()
 						.GetSharedSettings()
 						.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary())
 				};
@@ -80,7 +80,7 @@ namespace Teleopti.Wfm.Api
 			app.UseSwaggerUi3(swaggerUiSettings);
 
 			app.UseCustomToken(container.Resolve<ITokenVerifier>(), container.Resolve<IRepositoryFactory>(),
-				container.Resolve<ILogOnOff>(), container.Resolve<IAuthenticationQuerier>());
+				container.Resolve<ILogOnOff>(), container.Resolve<IAuthenticationTenantClient>());
 
 			app.UseWebApi(httpConfiguration);
 			container.Resolve<IHangfireClientStarter>().Start();

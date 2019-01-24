@@ -55,11 +55,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 		public class MultiTenancyPayrollLogon : IPayrollLogon
 		{
-			private readonly IAuthenticationQuerier _authenticationQuerier;
+			private readonly IAuthenticationTenantClient _authenticationQuerier;
 			private readonly IWindowsUserProvider _windowsUserProvider;
 			public const string UserAgent = "SDKPayroll";
 
-			public MultiTenancyPayrollLogon(IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider)
+			public MultiTenancyPayrollLogon(IAuthenticationTenantClient authenticationQuerier, IWindowsUserProvider windowsUserProvider)
 			{
 				_authenticationQuerier = authenticationQuerier;
 				_windowsUserProvider = windowsUserProvider;

@@ -2371,7 +2371,7 @@
     <Compile Include="Security\LicenseOptions\TeleoptiWfmVNextPilotLicenseOption.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdLogonClientModel.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQuerierResult.cs" />
-    <Compile Include="Security\MultiTenancyAuthentication\ITenantDataManager.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ITenantDataManagerClient.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\TenantAuthenticationData.cs" />
     <Compile Include="MessageBroker\Server\IBeforeSubscribe.cs" />
     <Compile Include="MessageBroker\Server\IMessageBrokerServer.cs" />
@@ -3253,10 +3253,10 @@
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationInternalQuerierResult.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\ChangePasswordInput.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\ChangePasswordResult.cs" />
-    <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
-    <Compile Include="Security\MultiTenancyAuthentication\IChangePassword.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationTenantClient.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\IChangePasswordTenantClient.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdentityLogonClientModel.cs" />
-    <Compile Include="Security\MultiTenancyAuthentication\ITenantLogonDataManager.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ITenantLogonDataManagerClient.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\LogonInfoModel.cs" />
     <Compile Include="Security\DataSourceConfigDecryption.cs" />
     <Compile Include="Security\PasswordPolicy.cs" />
