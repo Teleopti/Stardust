@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="TeleoptiCCC" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*">
+  <Role name="TeleoptiCCC">
+    <Instances count="2" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="RnD" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIICLgYJKoZIhvcNAQcDoIICHzCCAhsCAQAxggHfMIIB2wIBADCBwjCBtDELMAkGA1UEBhMCVVMxEDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoTEUdvRGFkZHkuY29tLCBJbmMuMS0wKwYDVQQLEyRodHRwOi8vY2VydHMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeS8xMzAxBgNVBAMTKkdvIERhZGR5IFNlY3VyZSBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgLSBHMgIJAO5kXei14EmqMA0GCSqGSIb3DQEBAQUABIIBADuCZvTTFLc4Ml3z0++3L6SDVvofsHB9+ph11uzNNElF8Z7yVnGYzBsP2uNRPOQW5S/uBTKKj7x+FWtsHZ//ZN8O27kR/2zRiwpHe83gIVdVQTf4TqGw1a9gYBE5RFlKrXtbEHVRuKlTU1CAjE6Iap31ZE0PyLNpy7CNOXvUUgSI5nzRsyCJ9q3CaWMVBiaWtLeIyM8IBexfOzlKjgp6vHo6mawqiatQTQBO/x0cuu2X4sYWwGpvJbjxIgLAXapT0GJtn/P3mJHNrkdc70L3sQaVbdiwfjOyEEcCCgroHnQZpK1yxVqs/92JQ6eu3ydsaqP4ICNfixvyxgZCvWROi7swMwYJKoZIhvcNAQcBMBQGCCqGSIb3DQMHBAgDi+FS7dSkWIAQjhKvpnTfIeOlwyYsUqsk5w==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2020-12-31T23:59:59.0000000+01:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+	  <Setting name="TeleoptiDriveMap.BlobPath" value="http://teleopticcc7.blob.core.windows.net/" />
+      <Setting name="TeleoptiDriveMap.AccountName" value="" />
+      <Setting name="TeleoptiDriveMap.AccountKey" value="IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ==" />
+      <Setting name="TeleoptiDriveMap.ContainerName" value="teleopticcc/Payroll" />
+      <Setting name="TeleoptiDriveMap.DataSourceName" value="ServiceDeskUS" />
+	  <Setting name="TeleoptiSetting.VmSize" value="Standard_A2_v2" />
+    </ConfigurationSettings>
+    <Certificates>
+	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="570BFA116439CAB373E61D53053F13D96FB4EC11" thumbprintAlgorithm="sha1" />
+	  <Certificate name="fakedress.teleopticloud.com" thumbprint="570BFA116439CAB373E61D53053F13D96FB4EC11" thumbprintAlgorithm="sha1"/>
+    </Certificates>
+  </Role>
+   <NetworkConfiguration> 
+    <AccessControls> 
+      <AccessControl name="RDPRestrict"> 
+        <Rule action="permit" description="PermitRDPTeleoptiDenver" order="100" remoteSubnet="174.16.142.1/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiBeijing2" order="101" remoteSubnet="119.40.52.69/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiBeijing" order="102" remoteSubnet="119.40.52.66/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiSthlm" order="103" remoteSubnet="195.67.17.194/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiStrangnas" order="104" remoteSubnet="195.234.150.69/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiGavle" order="105" remoteSubnet="213.80.113.174/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiShenzhen" order="106" remoteSubnet="14.20.88.85/32" /> 
+        <Rule action="permit" description="PermitRDPTeleoptiDenver" order="107" remoteSubnet="65.132.155.82/32" />
+<Rule action="deny" description="DenyRDP" order="200" remoteSubnet="0.0.0.0/0" /> 
+      </AccessControl> 
+    </AccessControls> 
+    <EndpointAcls> 
+      <EndpointAcl role="TeleoptiCCC" endPoint="Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput" accessControl="RDPRestrict" /> 
+    </EndpointAcls> 
+  </NetworkConfiguration>
+</ServiceConfiguration>
