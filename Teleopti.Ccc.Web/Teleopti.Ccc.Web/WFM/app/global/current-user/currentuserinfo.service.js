@@ -71,7 +71,7 @@
         }
 
         function CurrentUserInfo() {
-            return loadedData;
+            return loadedData || {};
         }
 
         function SetCurrentUserInfo(data) {

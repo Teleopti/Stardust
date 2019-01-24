@@ -15,6 +15,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				if (allSettingsForPlanningGroup.TeamSettings.TeamSameType == TeamSameType.ShiftCategory)
 				{
 					schedulingOptions.TeamSameShiftCategory = true;
+				}else if (allSettingsForPlanningGroup.TeamSettings.TeamSameType == TeamSameType.StartTime)
+				{
+					schedulingOptions.TeamSameStartTime = true;
+				}else if (allSettingsForPlanningGroup.TeamSettings.TeamSameType == TeamSameType.EndTime)
+				{
+					schedulingOptions.TeamSameEndTime = true;
 				}
 			}
 		}

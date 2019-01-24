@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -156,6 +157,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Forecast
 			isolate.UseTestDouble<ForecastProvider>().For<ForecastProvider>();
+			isolate.UseTestDouble<SkillDayChangedEventBuilder>().For<SkillDayChangedEventBuilder>();
 			isolate.UseTestDouble<ForecastDayModelMapper>().For<ForecastDayModelMapper>();
 			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
 

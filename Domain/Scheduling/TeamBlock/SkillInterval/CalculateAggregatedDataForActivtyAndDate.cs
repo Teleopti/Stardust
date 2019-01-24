@@ -15,22 +15,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		private readonly ISkillIntervalDataSkillFactorApplier _skillIntervalDataSkillFactorApplier;
 		private readonly ISkillIntervalDataAggregator _intervalDataAggregator;
 		private readonly ISkillIntervalDataDivider _intervalDataDivider;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public CalculateAggregatedDataForActivtyAndDate(
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier,
 			ISkillIntervalDataAggregator intervalDataAggregator,
-			ISkillIntervalDataDivider intervalDataDivider)
+			ISkillIntervalDataDivider intervalDataDivider,
+			ITimeZoneGuard timeZoneGuard)
 		{
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_skillIntervalDataSkillFactorApplier = skillIntervalDataSkillFactorApplier;
 			_intervalDataAggregator = intervalDataAggregator;
 			_intervalDataDivider = intervalDataDivider;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public IList<ISkillIntervalData> CalculateFor(IEnumerable<ISkillDay> skillDaysForPersonalSkill, int resolution)
 		{
-			var currentTimeZone = TimeZoneGuard.Instance.CurrentTimeZone();
+			var currentTimeZone = _timeZoneGuard.CurrentTimeZone();
 			var skillIntervalDatasForActivity = new List<IList<ISkillIntervalData>>();
 			foreach (var skillDay in skillDaysForPersonalSkill)
 			{

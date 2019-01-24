@@ -365,6 +365,7 @@
     <Compile Include="Repositories\QueuedAbsenceRequestRepositoryTest.cs" />
     <Compile Include="Repositories\ProjectionVersionPersisterTest.cs" />
     <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
+    <Compile Include="Repositories\SkillForecastReadModelRepositoryTest.cs" />
     <Compile Include="Repositories\SkillGroupRepositoryTest.cs" />
     <Compile Include="Repositories\StaffingAuditRepositoryTest.cs" />
     <Compile Include="Repositories\StardustRepositoryTest.cs" />

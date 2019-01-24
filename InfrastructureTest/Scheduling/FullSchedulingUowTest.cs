@@ -1,10 +1,11 @@
-﻿using NUnit.Framework;
+﻿﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
+ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -130,9 +132,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		}
 	}
 	
-	[TestFixture]
-	public class FullSchedulingUowTeamTest : FullSchedulingUowTest
+	[TestFixture(true)]
+	[TestFixture(false)]
+	public class FullSchedulingUowTeamTest : FullSchedulingUowTest, IConfigureToggleManager
 	{
+		private readonly bool _toggle;
+
+		public FullSchedulingUowTeamTest(bool toggle)
+		{
+			_toggle = toggle;
+		}
+		
 		public override void Isolate(IIsolate isolate)
 		{
 			base.Isolate(isolate);
@@ -155,5 +165,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				};
 			}
 		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if(_toggle)
+			{
+				toggleManager.Enable(Toggles.ResourcePlanner_TeamSchedulingInPlans_79283);
+			}
+		}
 	}
+	
+	
 }

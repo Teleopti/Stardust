@@ -122,7 +122,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public SkillResultViewSetting SkillResultViewSetting
 		{
 			get => _skillResultViewSetting;
-			set => _skillResultViewSetting = value;
+			set
+			{
+				_skillResultViewSetting = value;
+				foreach (var item in ContextMenuSkillGrid.Items)
+				{
+					if (!((item as ToolStripMenuItem)?.Tag is SkillResultViewSetting)) continue;
+					var itemTag = ((ToolStripMenuItem) item).Tag;
+					(item as ToolStripMenuItem).Checked = ((SkillResultViewSetting)itemTag).Equals(_skillResultViewSetting);
+				}
+			}
 		}
 
 		public GridChartManager GridChartManager { get; }
@@ -173,7 +182,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_pinnedSkillHelper.PinSlashUnpinTab(tab);
 		}
 
-		public void PinSavedSkills(ISchedulingScreenSettings currentSchedulingScreenSettings)
+		private void pinSavedSkills(ISchedulingScreenSettings currentSchedulingScreenSettings)
 		{
 			_pinnedSkillHelper.InitialSetup(tabSkillData, currentSchedulingScreenSettings);
 
@@ -181,7 +190,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				tabSkillData.SelectedTab = _pinnedSkillHelper.PinnedPage();
 		}
 
-		public ISkill CreateSkillSummery(IEnumerable<ISkill> allSkills)
+		private ISkill createSkillSummery(IEnumerable<ISkill> allSkills)
 		{
 			using (var skillSummery = new SkillSummary(allSkills))
 			{
@@ -227,7 +236,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 					else
 					{
-						RemoveVirtualSkill(newSkill);
+						removeVirtualSkill(newSkill);
 					}
 				}
 			}
@@ -235,7 +244,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return ret;
 		}
 
-		public void RemoveVirtualSkill(IAggregateSkill virtualSkill)
+		private void removeVirtualSkill(IAggregateSkill virtualSkill)
 		{
 			virtualSkill.ClearAggregateSkill();
 			removeVirtualSkill((Skill) virtualSkill);
@@ -482,12 +491,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				TabSkillData.TabPages.Add(tab);
 			}
 
-			PinSavedSkills(currentSchedulingScreenSettings);
+			pinSavedSkills(currentSchedulingScreenSettings);
 		}
 
 		private void skillGridMenuItemClick(object sender, EventArgs e)
 		{
-			var virtualSkill = CreateSkillSummery(_schedulerStateHolder.SchedulingResultState.Skills);
+			var virtualSkill = createSkillSummery(_schedulerStateHolder.SchedulingResultState.Skills);
 			if (virtualSkill != null)
 			{
 				enableEditVirtualSkill(virtualSkill);
@@ -517,7 +526,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var menuItem = (ToolStripMenuItem) sender;
 			var virtualSkill = (IAggregateSkill) menuItem.Tag;
-			RemoveVirtualSkill(virtualSkill);
+			removeVirtualSkill(virtualSkill);
 		}
 
 		private void skillGridMenuItemEditClick(object sender, EventArgs e)

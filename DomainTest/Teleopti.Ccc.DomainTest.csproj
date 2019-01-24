@@ -175,6 +175,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerWithBetterShiftCategorySelectionTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\SkillDayChangedEventBuilderTest.cs" />
     <Compile Include="ApplicationLayer\MultipleChangeScheduleCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorAtLeastOneCriticalUnderStaffedSkillTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStaffingCheckMethodTest.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerIoCTest.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\TerminatePersonHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeEventHandlerTest.cs" />
@@ -523,7 +525,6 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeMaxSeatValidationTests.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerNoMockTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTestHelper.cs" />
-    <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\TickEvent\TenantDayTickEventTest.cs" />
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdaterTest.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModelTest.cs" />

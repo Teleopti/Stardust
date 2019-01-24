@@ -209,11 +209,15 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\SkillDayChangedEventBuilder.cs" />
     <Compile Include="ApplicationLayer\Intraday\ISkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateAnalyticsScheduleLogger.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestAvailability.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastUpdater.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\ISkillDayChangedEventHandler.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\SkillDayChangedEventHandler.cs" />
     <Compile Include="Auditing\ITenantAudit.cs" />
     <Compile Include="Auditing\PurgeAuditRunner.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />

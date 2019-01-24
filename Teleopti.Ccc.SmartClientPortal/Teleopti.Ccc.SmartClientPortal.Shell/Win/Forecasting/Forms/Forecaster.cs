@@ -185,15 +185,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			var dirtySkillDays = new List<ISkillDay>();
 			dirtySkillDays.AddRange(dirtyList);
-			foreach (var skillDay in dirtySkillDays)
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				foreach (var skillDay in dirtySkillDays)
 				{
 					try
 					{
 						var skillDayRepository = new SkillDayRepository(uow);
 						skillDayRepository.Add(skillDay);
-						uow.PersistAll();
+						
 						removeSkillDayFromDirtyList(skillDay);
 					}
 					catch (OptimisticLockException)
@@ -204,8 +204,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 					{
 						addUnsavedDay(skillDay.CurrentDate);
 					}
+					reportSavingProgress(1);
 				}
-				reportSavingProgress(1);
+				uow.PersistAll();
 			}
 		}
 
