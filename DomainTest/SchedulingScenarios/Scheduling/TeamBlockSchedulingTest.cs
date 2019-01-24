@@ -308,41 +308,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 		}
 
-		[Test, Ignore("#40904")]
-		public void ShouldNotPlaceShiftThatDoesntMatchAllGroupsInvolvedSkillsOpenHour()
-		{
-			var date = DateOnly.Today;
-			var activity = ActivityRepository.Has("_");
-			var skill1 = SkillRepository.Has("skill open only during lunch", activity, new TimePeriod(12, 0, 13, 0));
-			var skill2 = SkillRepository.Has("open skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
-			var agent1 = PersonRepository.Has(new Contract("_"), new SchedulePeriod(date, SchedulePeriodType.Day, 1), skill1);
-			var agent2 = PersonRepository.Has(new Contract("_"), new SchedulePeriod(date, SchedulePeriodType.Day, 1), skill1, skill2);
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) { Description = new Description("_") };
-			RuleSetBagRepository.Has(ruleSetBag);
-			agent1.Period(date).RuleSetBag = ruleSetBag;
-			agent2.Period(date).RuleSetBag = ruleSetBag;
-			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, date, 10), skill2.CreateSkillDayWithDemand(scenario, date, 10));
-			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
-			DayOffTemplateRepository.Add(dayOffTemplate);
-			var planningPeriod = PlanningPeriodRepository.Has(date,SchedulePeriodType.Day, 1);
-			SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(planningPeriod, new SchedulingOptions
-			{
-				DayOffTemplate = dayOffTemplate,
-				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.RuleSetBag),
-				UseTeam = true,
-				TeamSameShiftCategory = true,
-				TagToUseOnScheduling = NullScheduleTag.Instance
-			});
-			
-			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
-
-			AssignmentRepository.Find(new[]{agent1, agent2}, date.ToDateOnlyPeriod(), scenario)
-				.Should().Be.Empty();
-		}
-
 		[Test]
 		public void TeamBlockSchedulingShouldUseShiftsMarkedForRestrictionOnlyWhenThereIsRestriction()
 		{
@@ -400,37 +365,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					foundRestrictedAssignments++;
 			}
 			foundRestrictedAssignments.Should().Be.EqualTo(1);
-		}
-
-		[Test, Ignore("Bug in teamblock scheduling? Works on Mondays but not on Tuesdays.")]
-		public void ShouldNotMatterIfSchedulingMondayOrTuesday([Values] bool isFirstDayOfWeek)
-		{
-			var currentDay = new DateOnly(2016, 10, 24);
-			if (!isFirstDayOfWeek)
-				currentDay = currentDay.AddDays(1);
-			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(currentDay, 1);
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
-			var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(currentDay, SchedulePeriodType.Day, 1), ruleSet, skill);
-			SkillDayRepository.Add(skill.CreateSkillDayWithDemand(scenario, currentDay, 1));
-
-			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
-			DayOffTemplateRepository.Add(dayOffTemplate);
-			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
-			SchedulingOptionsProvider.SetFromTest_LegacyDONOTUSE(planningPeriod, new SchedulingOptions
-			{
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
-				UseTeam = true,
-				TagToUseOnScheduling = NullScheduleTag.Instance
-			});
-			
-			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
-
-			AssignmentRepository.GetSingle(currentDay, agent)
-				.Should().Not.Be.Null();
 		}
 
 		[TestCase("AFirst")]
