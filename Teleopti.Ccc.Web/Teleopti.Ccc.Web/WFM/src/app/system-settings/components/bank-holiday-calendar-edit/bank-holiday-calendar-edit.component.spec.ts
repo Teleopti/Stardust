@@ -355,17 +355,15 @@ describe('BankHolidayCalendarEditComponent', () => {
 			Years: []
 		};
 		fixture.detectChanges();
-		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
-		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.edittingCalendarYears[0]);
-		component.dateChangeCallback(new Date('2015-01-11T00:00:00.000Z'), component.edittingCalendarYears[0]);
+		component.newYearTab(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2015-01-10'), component.edittingCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-11'), component.edittingCalendarYears[0]);
 
 		component.removeDateOfYear(component.edittingCalendarYears[0].Dates[1], component.edittingCalendarYears[0]);
 
 		fixture.detectChanges();
 
 		expect(component.edittingCalendarYears[0].SelectedDates.length).toBe(1);
-		expect(component.edittingCalendarYears[0].SelectedDates[0]).toBe(
-			new Date('2015-01-10T00:00:00.000Z').getTime()
-		);
+		expect(component.edittingCalendarYears[0].SelectedDates[0]).toBe(new Date('2015-01-10').getTime());
 	});
 });

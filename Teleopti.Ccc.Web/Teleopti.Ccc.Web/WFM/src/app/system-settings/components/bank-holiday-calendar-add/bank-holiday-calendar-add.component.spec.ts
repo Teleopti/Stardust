@@ -125,17 +125,17 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should not add duplicated date', () => {
-		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
+		component.newYearTab(new Date('2015-01-10'));
 
-		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
-		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
 
 		expect(component.newCalendarYears[0].Dates.length).toBe(1);
 	});
 
 	it('should be able to add a date back after removing it', fakeAsync(() => {
-		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
-		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.newYearTab(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
 		fixture.detectChanges();
 
 		const addNewBankHolidayCalendarPanel = document.getElementsByClassName('add-new-bank-holiday-calendar')[0];
@@ -163,11 +163,11 @@ describe('BankHolidayCalendarAddComponent', () => {
 	}));
 
 	it('should focus to another year after deleting one year tab', () => {
-		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
-		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.newYearTab(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
 
-		component.newYearTab(new Date('2016-01-10T00:00:00.000Z'));
-		component.dateChangeCallback(new Date('2016-01-10T00:00:00.000Z'), component.newCalendarYears[1]);
+		component.newYearTab(new Date('2016-01-10'));
+		component.dateChangeCallback(new Date('2016-01-10'), component.newCalendarYears[1]);
 
 		component.deleteYearTab(component.newCalendarYears[1]);
 
@@ -177,13 +177,13 @@ describe('BankHolidayCalendarAddComponent', () => {
 	});
 
 	it('should keep the remaining dates in selected dates array after removing a date', () => {
-		component.newYearTab(new Date('2015-01-10T00:00:00.000Z'));
-		component.dateChangeCallback(new Date('2015-01-10T00:00:00.000Z'), component.newCalendarYears[0]);
-		component.dateChangeCallback(new Date('2015-01-11T00:00:00.000Z'), component.newCalendarYears[0]);
+		component.newYearTab(new Date('2015-01-10'));
+		component.dateChangeCallback(new Date('2015-01-10'), component.newCalendarYears[0]);
+		component.dateChangeCallback(new Date('2015-01-11'), component.newCalendarYears[0]);
 
 		component.removeDateOfYear(component.newCalendarYears[0].Dates[1], component.newCalendarYears[0]);
 
 		expect(component.newCalendarYears[0].SelectedDates.length).toBe(1);
-		expect(component.newCalendarYears[0].SelectedDates[0]).toBe(new Date('2015-01-10T00:00:00.000Z').getTime());
+		expect(component.newCalendarYears[0].SelectedDates[0]).toBe(new Date('2015-01-10').getTime());
 	});
 });
