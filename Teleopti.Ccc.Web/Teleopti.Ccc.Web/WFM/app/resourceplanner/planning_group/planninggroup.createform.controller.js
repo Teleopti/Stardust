@@ -20,6 +20,7 @@
 		vm.isEditGroup = !!editPlanningGroup;
 		vm.editPlanningGroup = editPlanningGroup? editPlanningGroup:{
 			PreferencePercent: 80,
+			TeamSettings: {GroupPageType: 0, TeamSameType: 0},
 			Settings:[{
 				BlockFinderType: 0,
 				BlockSameShift: false,
@@ -157,12 +158,15 @@
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 			} else if (!vm.requestSent) {
 				vm.requestSent = true;
+				console.log(vm.editPlanningGroup.TeamSettings);
 				return planningGroupService.savePlanningGroup({
 					Id: vm.isEditGroup ? vm.editPlanningGroup.Id : null,
 					Name: vm.name,
 					Filters: vm.selectedResults,
 					Settings: vm.editPlanningGroup.Settings,
-					PreferencePercent: vm.editPlanningGroup.PreferencePercent
+					PreferencePercent: vm.editPlanningGroup.PreferencePercent,
+					TeamSettings: vm.editPlanningGroup.TeamSettings
+					
 				}).$promise.then(function () {
 					returnToPreviousView();
 				});

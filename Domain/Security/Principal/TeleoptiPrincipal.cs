@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private readonly IList<ClaimSet> _claimSets = new List<ClaimSet>();
 		private readonly Func<Guid> _personId = () => Guid.Empty;
 
-		public TeleoptiPrincipal(IIdentity identity, IPrincipalSource person)
+		public TeleoptiPrincipal(IIdentity identity, IPrincipalSource source)
 			: base(identity, new string[] { })
 		{
-			if (person != null)
-				_personId = person.PrincipalPersonId;
+			if (source != null)
+				_personId = source.PrincipalPersonId;
 			Regional = new Regional(
-				person?.PrincipalTimeZone(),
-				person?.PrincipalCultureLCID() ?? 0,
-				person?.PrincipalUICultureLCID() ?? 0);
+				source?.PrincipalTimeZone(),
+				source?.PrincipalCultureLCID() ?? 0,
+				source?.PrincipalUICultureLCID() ?? 0);
 		}
 		
 		public Guid PersonId => _personId.Invoke();

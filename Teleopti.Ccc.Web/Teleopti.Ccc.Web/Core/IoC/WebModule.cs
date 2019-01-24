@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<NotificationServiceClient>().As<INotificationServiceClient>().SingleInstance();
 			builder.RegisterType<WebTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
-			builder.RegisterType<TenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
+			builder.RegisterType<TenantLogonDataManagerClient>().As<ITenantLogonDataManagerClient>().SingleInstance();
 		}
 	}
 }

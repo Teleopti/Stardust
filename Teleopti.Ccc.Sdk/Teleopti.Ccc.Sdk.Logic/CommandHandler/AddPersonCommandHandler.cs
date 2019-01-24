@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly ITenantDataManager _tenantDataManager;
+		private readonly ITenantDataManagerClient _tenantDataManager;
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 
-		public AddPersonCommandHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantDataManager tenantDataManager, IWorkflowControlSetRepository workflowControlSetRepository)
+		public AddPersonCommandHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantDataManagerClient tenantDataManager, IWorkflowControlSetRepository workflowControlSetRepository)
 		{
 			_personRepository = personRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;

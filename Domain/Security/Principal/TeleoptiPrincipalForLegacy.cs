@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Security.Principal;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
@@ -20,10 +21,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		private IPerson _person;
 		private IIdentity _identity;
 
-		public TeleoptiPrincipalForLegacy(IIdentity identity, IPerson person) : base(identity, new string[] { })
+		public TeleoptiPrincipalForLegacy(IIdentity identity, IPerson person) : this(identity, new PersonAndBusinessUnit(person, null))
 		{
-			_person = person;
-			_claimsOwner = new ClaimsOwner(person);
+		}
+		
+		public TeleoptiPrincipalForLegacy(IIdentity identity, IPrincipalSource source) : base(identity, new string[] { })
+		{
+			_person = source.UnsafePerson() as IPerson;
+			_claimsOwner = new ClaimsOwner(source);
 			initializeFromPerson();
 		}
 

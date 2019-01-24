@@ -11,6 +11,9 @@
 		return service;
 
 		function setLocales(data) {
+			if (!data.Language)
+				return;
+			
 			$translate.use(data.Language);
 			angularMoment.changeLocale(data.DateFormatLocale);
 			dynamicLocaleService.set(data.DateFormatLocale);

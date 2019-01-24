@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			{
 				var webSettings = new WebSettings
 				{
-					Settings = c.Resolve<ISharedSettingsQuerier>()
+					Settings = c.Resolve<ISharedSettingsTenantClient>()
 						.GetSharedSettings()
 						.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary())
 				};
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			//remove this crap when we get rid of local systemuser in appdb
 			builder.Register(c => 
-				new tenantPeopleLoaderButSkipIfSystemUser_Hackish(new TenantPeopleLoader(c.Resolve<ITenantLogonDataManager>()), c.Resolve<ICurrentPersonContainer>()))
+				new tenantPeopleLoaderButSkipIfSystemUser_Hackish(new TenantPeopleLoader(c.Resolve<ITenantLogonDataManagerClient>()), c.Resolve<ICurrentPersonContainer>()))
 				.As<ITenantPeopleLoader>().InstancePerLifetimeScope();
 		}
 

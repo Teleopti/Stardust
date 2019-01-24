@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var result = new AuthenticationQuerierResult();
 			converter.Expect(x => x.Convert(authQueryResult)).Return(result);
 
-			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, converter);
+			var target = new AuthenticationTenantClient(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, converter);
 			target.TryLogon(applicationLogonClientModel, userAgent)
 				.Should().Be.SameInstanceAs(result);
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var result = new AuthenticationQuerierResult();
 			converter.Expect(x => x.Convert(authQueryResult)).Return(result);
 
-			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, converter);
+			var target = new AuthenticationTenantClient(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, converter);
 			target.TryLogon(identityLogonClientModel, userAgent)
 				.Should().Be.SameInstanceAs(result);
 		}

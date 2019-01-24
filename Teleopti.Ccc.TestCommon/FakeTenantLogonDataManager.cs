@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeTenantLogonDataManager : ITenantLogonDataManager
+	public class FakeTenantLogonDataManager : ITenantLogonDataManagerClient
 	{
 		private readonly IList<LogonInfoModel> storage = new List<LogonInfoModel>();
 

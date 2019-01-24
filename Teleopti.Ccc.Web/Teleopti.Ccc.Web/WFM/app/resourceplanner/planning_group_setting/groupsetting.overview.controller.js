@@ -103,7 +103,8 @@
 			restrict: 'EA',
 			scope: {
 				settings: '=',
-				preferencePercent: '='
+				preferencePercent: '=',
+				teamSettings: '='
 			},
 			templateUrl: 'app/resourceplanner/planning_group_setting/groupsetting.overview.html',
 			controller: 'planningGroupSettingOverviewController as vm',

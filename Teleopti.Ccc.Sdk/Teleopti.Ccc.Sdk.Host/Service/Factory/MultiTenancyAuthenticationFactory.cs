@@ -19,13 +19,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 	public class MultiTenancyAuthenticationFactory : IAuthenticationFactory
 	{
 		private readonly IAssembler<AuthenticationQuerierResult, AuthenticationResultDto> _authenticationResultAssembler;
-		private readonly IAuthenticationQuerier _authenticationQuerier;
+		private readonly IAuthenticationTenantClient _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
 		private readonly PersonCache _personCache = new PersonCache();
 		public const string UserAgent = "SDK";
 
 		public MultiTenancyAuthenticationFactory(IAssembler<AuthenticationQuerierResult, AuthenticationResultDto> authenticationResultAssembler,
-			IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider)
+			IAuthenticationTenantClient authenticationQuerier, IWindowsUserProvider windowsUserProvider)
 		{
 			_authenticationResultAssembler = authenticationResultAssembler;
 			_authenticationQuerier = authenticationQuerier;

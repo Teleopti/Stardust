@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		{
 			protected override IEnumerable<Toggles> ToggleFlags { get; } = new []
 			{
-				Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118
+				Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
+				Toggles.ResourcePlanner_TeamSchedulingInPlans_79283
 			};
 			protected override bool AlsoSimulateSecondRequest { get; } = true;
 		}

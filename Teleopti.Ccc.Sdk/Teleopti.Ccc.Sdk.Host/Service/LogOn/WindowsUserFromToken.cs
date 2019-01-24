@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
         private bool TryGetPersonFromStore()
         {
             //Genomför inloggning. Kasta exception vid fel.
-	        var authQuerier = new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
+	        var authQuerier = new AuthenticationTenantClient(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
 			        new PostHttpRequest(), new NewtonsoftJsonSerializer(),
 			        new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(),
 				        () => DataSourceForTenantServiceLocator.DataSourceForTenant, new LoadUserUnauthorized()));

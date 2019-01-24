@@ -15,7 +15,7 @@ import { IPowerBiElement } from 'service';
 })
 export class ReportComponent implements OnInit {
 	private pbiCoreService: any;
-	private action = 'view';
+	private action = this.nav.viewAction;
 
 	private errorNotificationOption = { nzDuration: 0 };
 
@@ -41,7 +41,7 @@ export class ReportComponent implements OnInit {
 		this.reportId = params.reportId.trim();
 		this.action = params.action.trim().toLowerCase();
 
-		this.inEditing = this.action === 'edit';
+		this.inEditing = this.action === this.nav.editAction;
 		this.permission = new Permission();
 		this.permission.CanViewReport = true;
 		this.permission.CanEditReport = false;
@@ -62,6 +62,11 @@ export class ReportComponent implements OnInit {
 		this.isLoading = true;
 		this.reportSvc.getPermission().then(permission => {
 			this.permission = permission;
+
+			if (this.action === this.nav.editAction && !this.permission.CanEditReport) {
+				this.nav.viewReport(this.reportId);
+				return;
+			}
 
 			if (this.permission.CanViewReport) {
 				this.reportSvc.getReportConfig(this.reportId).then(config => {
@@ -128,7 +133,7 @@ export class ReportComponent implements OnInit {
 			embedUrl: config.ReportUrl,
 			id: config.ReportId,
 			permissions: pbi.models.Permissions.All,
-			viewMode: this.action === 'edit'
+			viewMode: this.action === this.nav.editAction
 				? pbi.models.ViewMode.Edit
 				: pbi.models.ViewMode.View,
 			settings: {

@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
-			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
+			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManagerClient>();
 		}
 	}
 }

@@ -13,9 +13,9 @@ namespace Teleopti.Wfm.Api
 		private readonly ITokenVerifier _tokenVerifier;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ILogOnOff _logOnOff;
-		private readonly IAuthenticationQuerier _authenticationQuerier;
+		private readonly IAuthenticationTenantClient _authenticationQuerier;
 
-		public TokenHandler(OwinMiddleware next, ITokenVerifier tokenVerifier, IRepositoryFactory repositoryFactory, ILogOnOff logOnOff, IAuthenticationQuerier authenticationQuerier) : base(next)
+		public TokenHandler(OwinMiddleware next, ITokenVerifier tokenVerifier, IRepositoryFactory repositoryFactory, ILogOnOff logOnOff, IAuthenticationTenantClient authenticationQuerier) : base(next)
 		{
 			_tokenVerifier = tokenVerifier;
 			_repositoryFactory = repositoryFactory;

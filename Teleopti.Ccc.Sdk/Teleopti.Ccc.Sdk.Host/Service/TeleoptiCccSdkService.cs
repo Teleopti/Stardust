@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		private readonly IFactoryProvider _factoryProvider;
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly ITenantPeopleSaver _tenantPeopleSaver;
-		private readonly IChangePassword _changePassword;
+		private readonly IChangePasswordTenantClient _changePassword;
 		private readonly IUserTimeZone _userTimeZone;
 		private static readonly object PayrollExportLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(TeleoptiCccSdkService));
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			 IFactoryProvider factoryProvider,
 			 ILifetimeScope lifetimeScope,
 			ITenantPeopleSaver tenantPeopleSaver,
-			IChangePassword changePassword, 
+			IChangePasswordTenantClient changePassword, 
 			ICurrentBusinessUnit currentBusinessUnit,
 			IUserTimeZone userTimeZone)
 		{

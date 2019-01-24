@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_getTheGuidsFromAdvanceFilter = false;
 			using (_filterMultiplePersons = new FilterMultiplePersons())
 			{
-				_filterMultiplePersons.SetSearchablePersons(_selectedPersons, _componentContext.Resolve<ITenantLogonDataManager>(), _componentContext.Resolve<AdvancedAgentsFilter>());
+				_filterMultiplePersons.SetSearchablePersons(_selectedPersons, _componentContext.Resolve<ITenantLogonDataManagerClient>(), _componentContext.Resolve<AdvancedAgentsFilter>());
 				_filterMultiplePersons.ShowDialog(this);
 
 				if (_filterMultiplePersons.DialogResult == DialogResult.OK)

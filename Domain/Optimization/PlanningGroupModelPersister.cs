@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			planningGroup.Name = planningGroupModel.Name;
 			planningGroup.SetGlobalValues(new Percent(planningGroupModel.PreferencePercent / 100d));
+			planningGroup.SetTeamSettings(planningGroupModel.TeamSettings);
 
 			planningGroup.ClearFilters();
 			foreach (var filter in planningGroupModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))

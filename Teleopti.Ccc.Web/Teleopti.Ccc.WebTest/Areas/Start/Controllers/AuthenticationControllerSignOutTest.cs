@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var person = new Person();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			var personPersister = MockRepository.GenerateMock<IPersonPersister>();
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, null, null), new PersonAndBusinessUnit(person, null));
 			var currentTeleoptiPrincipal = new FakeCurrentTeleoptiPrincipal(principal);
 			
 			var target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificWfmCookieProvider, _authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null, loggedOnUser, personPersister, currentTeleoptiPrincipal);

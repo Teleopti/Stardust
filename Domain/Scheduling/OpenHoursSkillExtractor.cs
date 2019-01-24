@@ -17,12 +17,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class OpenHoursSkillExtractor : IOpenHoursSkillExtractor
 	{
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public OpenHoursSkillExtractor(IGroupPersonSkillAggregator groupPersonSkillAggregator, ITimeZoneGuard timeZoneGuard)
+		public OpenHoursSkillExtractor(IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
-			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
@@ -33,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var minOpen = TimeSpan.MaxValue;
 				var maxOpen = TimeSpan.MinValue;
 				var skills = _groupPersonSkillAggregator.AggregatedSkills(agentsInTeam, day.ToDateOnlyPeriod()).ToList();
-				var offsetUser = _timeZoneGuard.CurrentTimeZone().GetUtcOffset(day.Date);
+				var offsetAgent = agentsInTeam.First().PermissionInformation.DefaultTimeZone().GetUtcOffset(day.Date); //will probably be wrong if teamScheduling agents in different timeZones
 
 				foreach (var skill in skills)
 				{
@@ -42,11 +40,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 					foreach (var timePeriod in skillDay.OpenHours())
 					{
-						var start = timePeriod.StartTime.Add(-offsetSkill + offsetUser);
+						var start = timePeriod.StartTime.Add(-offsetSkill + offsetAgent);
 						if (start < minOpen)
 							minOpen = start;
 
-						var end = timePeriod.EndTime.Add(-offsetSkill + offsetUser);
+						var end = timePeriod.EndTime.Add(-offsetSkill + offsetAgent);
 						if (end > maxOpen)
 							maxOpen = end;
 					}
@@ -55,9 +53,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 					foreach (var timePeriod in skillDayNextDay.OpenHours())
 					{
-						var start = timePeriod.StartTime.Add(-offsetSkill + offsetUser).Add(TimeSpan.FromDays(1));
+						var start = timePeriod.StartTime.Add(-offsetSkill + offsetAgent).Add(TimeSpan.FromDays(1));
 						if(start > maxOpen) continue;
-						var end = timePeriod.EndTime.Add(-offsetSkill + offsetUser).Add(TimeSpan.FromDays(1));
+						var end = timePeriod.EndTime.Add(-offsetSkill + offsetAgent).Add(TimeSpan.FromDays(1));
 						if (end <= maxOpen) continue;
 						var maxEnd = TimeSpan.FromDays(2).Subtract(TimeSpan.FromMinutes(1));
 						if (end > maxEnd)
@@ -102,9 +100,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public Dictionary<DateOnly, IEffectiveRestriction> OpenHoursDictionary { get; }
 
-		public TimeSpan ForCurrentDate(DateOnly date)
+		public TimeSpan ForDate(DateOnly date)
 		{
-			if (OpenHoursDictionary == null) return TimeSpan.MaxValue;
 			if (!OpenHoursDictionary.TryGetValue(date, out var startEndRestriction)) return TimeSpan.MaxValue;
 			if (startEndRestriction?.EndTimeLimitation.EndTime == null) return TimeSpan.MaxValue;
 			return startEndRestriction.StartTimeLimitation.StartTime == null

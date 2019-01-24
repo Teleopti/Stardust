@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// Represent any person in the system
 	/// </summary>
 	public interface IPerson : IAggregateRoot,
-								IChangeInfo,
-								IPrincipalSource
+								IChangeInfo
 	{
 		/// <summary>
 		/// Gets the person's team at the given time.

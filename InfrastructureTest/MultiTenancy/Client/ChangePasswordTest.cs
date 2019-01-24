@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 				x => x.Send<object>(pathToTenantServer + "ChangePassword/Modify", logonClientModelSerialized))
 					.Return(result);
 			
-			var target = new ChangePassword(new TenantServerConfiguration(pathToTenantServer),  postHttpRequest, jsonSerializer, new ResponseException());
+			var target = new ChangePasswordTenantClient(new TenantServerConfiguration(pathToTenantServer),  postHttpRequest, jsonSerializer, new ResponseException());
 			target.SetNewPassword(changePasswordInput).Success.Should().Be.True();
 		}
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			jsonSerializer.Stub(x => x.SerializeObject(changePasswordInput)).Return(logonClientModelSerialized);
 			postHttpRequest.Stub(x => x.Send<object>(pathToTenantServer + "ChangePassword/Modify", logonClientModelSerialized)).Throw(ex);
 
-			var target = new ChangePassword(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, responseException);
+			var target = new ChangePasswordTenantClient(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, responseException);
 			target.SetNewPassword(changePasswordInput).Success.Should().Be.False();
 		}
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			jsonSerializer.Stub(x => x.SerializeObject(changePasswordInput)).Return(logonClientModelSerialized);
 			postHttpRequest.Stub(x => x.Send<object>(pathToTenantServer + "ChangePassword/Modify", logonClientModelSerialized)).Throw(ex);
 
-			var target = new ChangePassword(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, responseException);
+			var target = new ChangePasswordTenantClient(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, responseException);
 			target.SetNewPassword(changePasswordInput).Success.Should().Be.False();
 		}
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			jsonSerializer.Stub(x => x.SerializeObject(changePasswordInput)).Return(logonClientModelSerialized);
 			postHttpRequest.Stub(x => x.Send<object>(pathToTenantServer + "ChangePassword/Modify", logonClientModelSerialized)).Throw(ex);
 
-			var target = new ChangePassword(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, responseException);
+			var target = new ChangePasswordTenantClient(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, responseException);
 			Assert.Throws<WebException>(() => target.SetNewPassword(changePasswordInput));
 		}
 
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			jsonSerializer.Stub(x => x.SerializeObject(changePasswordInput)).Return(logonClientModelSerialized);
 			postHttpRequest.Stub(x => x.Send<object>(pathToTenantServer + "ChangePassword/Modify", logonClientModelSerialized)).Throw(new NotImplementedException());
 
-			var target = new ChangePassword(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, new ResponseException());
+			var target = new ChangePasswordTenantClient(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer, new ResponseException());
 			Assert.Throws<NotImplementedException>(() => target.SetNewPassword(changePasswordInput));
 		}
 	}

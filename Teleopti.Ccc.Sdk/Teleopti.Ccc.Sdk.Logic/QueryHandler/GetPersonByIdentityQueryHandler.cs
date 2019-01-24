@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly PersonCredentialsAppender _assembler;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly ITenantLogonDataManager _tenantLogonDataManager;
+		private readonly ITenantLogonDataManagerClient _tenantLogonDataManager;
 
-		public GetPersonByIdentityQueryHandler(PersonCredentialsAppender assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantLogonDataManager tenantLogonDataManager)
+		public GetPersonByIdentityQueryHandler(PersonCredentialsAppender assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantLogonDataManagerClient tenantLogonDataManager)
 		{
 			_assembler = assembler;
 			_personRepository = personRepository;

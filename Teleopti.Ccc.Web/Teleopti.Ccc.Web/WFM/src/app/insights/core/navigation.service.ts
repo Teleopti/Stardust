@@ -5,14 +5,17 @@ import { NavigationService as NavigationServiceCore } from './../../core/service
 	providedIn: 'root'
 })
 export class NavigationService {
+	public readonly viewAction = 'view';
+	public readonly editAction = 'edit';
+
 	constructor(private navService: NavigationServiceCore) {}
 
 	public viewReport(reportId) {
-		this.openReport(reportId, 'view');
+		this.openReport(reportId, this.viewAction);
 	}
 
 	public editReport(reportId) {
-		this.openReport(reportId, 'edit');
+		this.openReport(reportId, this.editAction);
 	}
 
 	public gotoInsights() {

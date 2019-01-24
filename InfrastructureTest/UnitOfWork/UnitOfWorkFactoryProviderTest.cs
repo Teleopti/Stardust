@@ -3,6 +3,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var expectedUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var dataSource = new FakeDataSource {Application = expectedUnitOfWorkFactory};
 			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, new Person());
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, new PersonAndBusinessUnit(new Person(), null));
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
 			identity.Expect(x => x.IsAuthenticated).Return(true);
 			identity.Expect(x => x.DataSource).Return(dataSource);

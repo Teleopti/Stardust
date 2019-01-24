@@ -2,7 +2,7 @@
 {
 	public interface IApplicationConfigurationDbProvider
 	{
-		ApplicationConfigurationDb GetConfiguration();
+		ApplicationConfigurationDb GetAll();
 		string GetServerValue(ServerConfigurationKey key);
 		string GetTenantValue(TenantApplicationConfigKey key);
 	}

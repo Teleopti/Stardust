@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Administration.Core
 		public void Init()
 		{
 			var serverUrl = _configReader.AppConfig("Settings");
-			var sharedSettingsQuerier = new SharedSettingsQuerier(serverUrl);
+			var sharedSettingsQuerier = new SharedSettingsTenantClient(serverUrl);
 			var sharedSetting = sharedSettingsQuerier.GetSharedSettings();
 			if (Guid.TryParse(sharedSetting.InstrumentationKey, out var iKeyGuid) && iKeyGuid != Guid.Empty)
 						TelemetryConfiguration.Active.InstrumentationKey = sharedSetting.InstrumentationKey;

@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 					var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
 					Thread.CurrentPrincipal =
 						new TeleoptiPrincipalForLegacy(
-							new TeleoptiIdentity(person.Name.FirstName, _dataSourceState.Get(), () => bu?.Id, bu?.Name, null, @event.LogOnDatasource), person);
+							new TeleoptiIdentity(person.Name.FirstName, _dataSourceState.Get(), () => bu?.Id, bu?.Name, null, @event.LogOnDatasource), new PersonAndBusinessUnit(person, null));
 
 					var jobResult = _jobResultRepository.Get(@event.JobId);
 					var skill = _skillRepository.Get(@event.TargetSkillId);

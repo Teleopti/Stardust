@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
+			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManagerClient>();
 		}
 
 		[Test]
