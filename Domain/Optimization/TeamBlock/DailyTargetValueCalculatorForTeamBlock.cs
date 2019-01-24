@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
 		private readonly IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
 		private readonly PullTargetValueFromSkillIntervalData _pullTargetValueFromSkillIntervalData;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public DailyTargetValueCalculatorForTeamBlock(ISkillIntervalDataDivider intervalDataDivider,
 			ISkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator,
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			ILocateMissingIntervalsIfMidNightBreak locateMissingIntervalsIfMidNightBreak,
 			IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight,
-			PullTargetValueFromSkillIntervalData pullTargetValueFromSkillIntervalData)
+			PullTargetValueFromSkillIntervalData pullTargetValueFromSkillIntervalData,
+			ITimeZoneGuard timeZoneGuard)
 		{
 			_intervalDataDivider = intervalDataDivider;
 			_intervalDataAggregator = intervalDataAggregator;
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_locateMissingIntervalsIfMidNightBreak = locateMissingIntervalsIfMidNightBreak;
 			_filterOutIntervalsAfterMidNight = filterOutIntervalsAfterMidNight;
 			_pullTargetValueFromSkillIntervalData = pullTargetValueFromSkillIntervalData;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences)
@@ -68,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IList<ISkill> skills, int minimumResolution)
 		{
 			var result = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-
+			var timezone = _timeZoneGuard.CurrentTimeZone();
 
 			var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(dateOnlyList);
 
@@ -82,15 +85,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				if (skill.MidnightBreakOffset != TimeSpan.Zero)
 				{
-					var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill,
-						TimeZoneGuard.Instance.CurrentTimeZone());
+					var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill, timezone);
 					skillStaffPeriodCollection = skillStaffPeriodCollection.Concat(missingIntervals).ToList();
-					skillStaffPeriodCollection = _filterOutIntervalsAfterMidNight.Filter(skillStaffPeriodCollection, currentDate,
-						TimeZoneGuard.Instance.CurrentTimeZone());
+					skillStaffPeriodCollection = _filterOutIntervalsAfterMidNight.Filter(skillStaffPeriodCollection, currentDate, timezone);
 				}
 
 				var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection,
-					currentDate, TimeZoneGuard.Instance.CurrentTimeZone());
+					currentDate, timezone);
 				mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
 
 				if (!result.ContainsKey(currentDate))
