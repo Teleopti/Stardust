@@ -310,6 +310,7 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationRotationTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationShiftCategoryLimitationTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockTest_Legacy.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\SchedulingAndDayOffOptimizationStardustResultTest.cs" />
     <Compile Include="SchedulingScenarios\ExtraPreferencesFactory.cs" />
     <Compile Include="SchedulingScenarios\FairnessOptimization\FairnessOptimizationDesktopTest.cs" />
