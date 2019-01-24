@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Filters = filterModels,
 				AgentCount = agentCount,
 				PreferencePercent = (int) (planningGroup.Settings.PreferenceValue.Value * 100),
+				TeamSettings = planningGroup.Settings.TeamSettings,
 				Settings = planningGroup.Settings.Select(planningGroupSettings => _planningGroupSettingsMapper.ToModel(planningGroupSettings)).ToList()
 			};
 		}
