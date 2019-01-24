@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    
 	public enum TeamSameType
 	{
-		ShiftCategory
+		ShiftCategory,
+		StartTime
 	}
 }

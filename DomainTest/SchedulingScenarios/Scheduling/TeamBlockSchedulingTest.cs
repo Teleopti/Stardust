@@ -81,6 +81,47 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		[Test]
+        public void ShouldTeamSchedulingUseSameStartTimeForHierarchy()
+        {
+        	if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_TeamSchedulingInPlans_79283))
+        		Assert.Ignore("only works with toggle on");
+        	DayOffTemplateRepository.Add(new DayOffTemplate());
+        	var date = new DateOnly(2015, 10, 12);
+        	var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+        	var activity = ActivityRepository.Has();
+        	var skill = SkillRepository.Has(activity);
+        	var scenario = ScenarioRepository.Has();
+        	var team = new Team().WithDescription(new Description("team1")).WithId();
+        	
+        	BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
+        	var shiftCategory = new ShiftCategory().WithId();
+        	var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+        	var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
+        	var bag = new RuleSetBag(ruleSet1, ruleSet2);
+        	PersonRepository.Has(team, new SchedulePeriod(date, SchedulePeriodType.Week, 1), bag, skill);
+        	PersonRepository.Has(team, new SchedulePeriod(date, SchedulePeriodType.Week, 1), bag, skill);
+        	SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 2));
+        	var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, SchedulePeriodType.Week, 1);
+        	planningPeriod.PlanningGroup.SetTeamSettings(new TeamSettings
+        	{
+        		GroupPageType = GroupPageType.Hierarchy,
+        		TeamSameType = TeamSameType.StartTime
+        	});
+
+        	Target.DoSchedulingAndDO(planningPeriod.Id.Value, false);
+
+        	Assert.Multiple(() =>
+        	{
+        		foreach (var day in DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1).DayCollection())
+        		{
+        			var assesOnDay = AssignmentRepository.LoadAll().Where(x => x.Date == day);
+        			assesOnDay.First().ShiftLayers.First().Period.StartDateTime
+        				.Should().Be.EqualTo(assesOnDay.Last().ShiftLayers.First().Period.StartDateTime);
+        		}
+        	});
+        }
+		
+		[Test]
 		public void ShouldHandleTeamUsingShiftOverMidnight()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);

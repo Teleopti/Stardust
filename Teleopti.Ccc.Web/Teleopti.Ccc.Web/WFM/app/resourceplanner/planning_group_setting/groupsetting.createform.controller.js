@@ -37,6 +37,7 @@
 
         vm.teamComparisonTypeOptions = [
             "SameShiftCategory",
+            "SameStartTime"
         ];
 		vm.teamComparisonType = vm.teamComparisonTypeOptions[0];
 
