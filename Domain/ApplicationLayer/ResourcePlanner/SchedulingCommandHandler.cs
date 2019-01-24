@@ -34,17 +34,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		[TestLog]
 		public virtual void Execute(SchedulingCommand command)
 		{
+			var events = CreateEvents(command);
+			_eventPublisher.Publish(events.ToArray());
+		}
+
+		[ReadonlyUnitOfWork]
+		protected virtual IEnumerable<SchedulingWasOrdered> CreateEvents(SchedulingCommand command)
+		{
 			var events = new List<SchedulingWasOrdered>();
 			using (CommandScope.Create(command))
 			{
 				var userLocks = _gridLockManager.LockInfos();
-				var islands = CreateIslands(command.Period, command);
-
+				var islands = _createIslands.Create(command.Period);
 				var useTeam = _schedulingUseTeamProvider.Fetch(command.PlanningPeriodId);
 				if (useTeam)
 				{
 					var agentsAndSkills = _crossAgentsAndSkills.Execute(islands, command.AgentsToSchedule);
-					addEvent(events, command, command.AgentsToSchedule, agentsAndSkills.Agents.ToHashSet(), agentsAndSkills.Skills, userLocks);
+					addEvent(events, command, command.AgentsToSchedule, agentsAndSkills.Agents.ToHashSet(),
+						agentsAndSkills.Skills, userLocks);
 				}
 				else
 				{
@@ -53,9 +60,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 						var agentsInIslandIds = island.AgentsInIsland().Select(x => x.Id.Value).ToHashSet();
 						addEvent(events, command, command.AgentsToSchedule, agentsInIslandIds, island.SkillIds(), userLocks);
 					}
-				}	
+				}
 			}
-			_eventPublisher.Publish(events.ToArray());
+
+			return events;
 		}
 
 		private static void addEvent(ICollection<SchedulingWasOrdered> events, SchedulingCommand command, IEnumerable<IPerson> allAgentsToSchedule, 
@@ -79,13 +87,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					RunDayOffOptimization = command.RunDayOffOptimization
 				});				
 			}
-		}
-
-		
-		[ReadonlyUnitOfWork]
-		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, SchedulingCommand command)
-		{
-			return _createIslands.Create(period);
 		}
 	}
 }
