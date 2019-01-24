@@ -19,39 +19,38 @@
 //Styleguide 1.32
 //
 
+.wfm-chip {
+	@extend .pointer;
 
-.wfm-chip{
-  @extend .pointer;
-
-  .chip-text{
-    padding:$full-padding;
-    background:$gray-300;
-    margin-right: 5px;
-	margin-left: -4px;
-  }
-  .chip-handle{
-    padding:$full-padding;
-    background:$secondary;
-  }
-  .chip-success{
-    background: $green-100!important;
-  }
-  .chip-warning{
-    background: $orange-400!important;
-  }
-  .chip-error{
-    background: $red-600!important;
-  }
+	.chip-text {
+		padding: $full-padding $full-padding * 2;
+		background: $gray-300;
+		margin-right: 5px;
+		margin-left: -4px;
+	}
+	.chip-handle {
+		padding: $full-padding $full-padding * 2;
+		background: $secondary;
+	}
+	.chip-success {
+		background: $green-100 !important;
+	}
+	.chip-warning {
+		background: $orange-400 !important;
+	}
+	.chip-error {
+		background: $red-600 !important;
+	}
 }
 
-.chip-disabled{
-  .wfm-chip{
-    cursor: not-allowed!important;
-  }
-  color:$text-color-muted;
+.chip-disabled {
+	.wfm-chip {
+		cursor: not-allowed !important;
+	}
+	color: $text-color-muted;
 }
 
-.wfm-chip-wrap{
-  display:inline-block;
-  margin:10px 0;
+.wfm-chip-wrap {
+	display: inline-block;
+	margin: 10px 0;
 }
