@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			action(currDefault);
 		}
 
-		public void SetTeamSettings(TeamSettings teamSettings)
+		public virtual void SetTeamSettings(TeamSettings teamSettings)
 		{
 			switch (teamSettings.GroupPageType)
 			{
