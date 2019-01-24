@@ -1736,7 +1736,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adjust To Neutral.
+        ///   Looks up a localized string similar to Adjust to Neutral.
         /// </summary>
         public static string AdjustToNeutral {
             get {
@@ -36340,6 +36340,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TeamScheduling {
             get {
                 return ResourceManager.GetString("TeamScheduling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Scheduling:.
+        /// </summary>
+        public static string TeamSchedulingColon {
+            get {
+                return ResourceManager.GetString("TeamSchedulingColon", resourceCulture);
             }
         }
         
