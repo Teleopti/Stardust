@@ -780,6 +780,8 @@ md-checkbox {
 
 	&.md-checked .md-icon {
 		background-color: $primary;
+		border-color: $primary;
+
 		&:after {
 			border-color: $white;
 			left: 6px;
