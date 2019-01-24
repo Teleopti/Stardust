@@ -175,6 +175,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerWithBetterShiftCategorySelectionTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\SkillDayChangedEventBuilderTest.cs" />
     <Compile Include="ApplicationLayer\MultipleChangeScheduleCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorAtLeastOneCriticalUnderStaffedSkillTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStaffingCheckMethodTest.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerIoCTest.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\TerminatePersonHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeEventHandlerTest.cs" />

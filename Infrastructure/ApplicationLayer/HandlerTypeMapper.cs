@@ -223,6 +223,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			};
 			yield return new MappingSpec
 			{
+				CurrentPersistedName = "AnalyticsForecastUpdater",
+				LegacyPersistedNames = new[] { "Teleopti.Ccc.Domain.ApplicationLayer.SkillDay.AnalyticsForecastUpdater, Teleopti.Ccc.Domain" },
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.SkillDay.AnalyticsForecastUpdater, Teleopti.Ccc.Domain"
+			};
+			yield return new MappingSpec
+			{
 				CurrentPersistedName = "AnalyticsPersonNameUpdater",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.GlobalSettingData.AnalyticsPersonNameUpdater, Teleopti.Ccc.Domain"},
 				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.GlobalSettingData.AnalyticsPersonNameUpdater, Teleopti.Ccc.Domain"
