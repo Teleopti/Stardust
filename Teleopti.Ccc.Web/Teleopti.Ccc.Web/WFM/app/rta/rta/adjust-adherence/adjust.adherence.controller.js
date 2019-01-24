@@ -1,64 +1,78 @@
 (function () {
-    'use strict';
+        'use strict';
 
-    angular
-        .module('wfm.rta')
-        .controller('AdjustAdherenceController', AdjustAdherenceController);
+        angular
+            .module('wfm.rta')
+            .controller('AdjustAdherenceController', AdjustAdherenceController);
 
-    AdjustAdherenceController.$inject = ['CurrentUserInfo', '$scope'];
+        AdjustAdherenceController.$inject = ['CurrentUserInfo', 'rtaStateService', '$http', '$scope', '$state'];
 
-    function AdjustAdherenceController(currentUserInfo, $scope) {
-        var vm = this;
-        var startDate, startTime, endDate, endTime;
-        vm.showAdjustToNeutralForm = false;
+        function AdjustAdherenceController(currentUserInfo, rtaStateService, $http, $scope, $state) {
+            var vm = this;
+            vm.showAdjustToNeutralForm = false;
+            vm.adjustedPeriods = [];
 
-        currentUserInfo.Load().then(function (data) {
-            vm.startDate = moment(new Date()).add(-1, 'days');
-            vm.endDate = moment(new Date()).add(-1, 'days');
+            currentUserInfo.Load().then(function (data) {
+                preselectDateAndTime(data);
+                buildSelectedPeriod();
 
-            vm.startTime = moment(new Date()).set({h: 8, m: 0});
-            vm.endTime = moment(new Date()).set({h: 18, m: 0});
+                $http.get('../api/Adherence/AdjustedPeriods')
+                    .then(function (response) {
+                        var data = response.data;
+                        vm.adjustedPeriods = buildAdjustedPeriods(data);
+                    });
+            });
 
-            vm.showMeridian = data.DateTimeFormat.ShowMeridian;
+            function preselectDateAndTime(data) {
+                vm.startDate = moment(new Date()).add(-1, 'days');
+                vm.endDate = moment(new Date()).add(-1, 'days');
 
-            buildSelectedPeriod();
-        });
+                vm.startTime = moment(new Date()).set({h: 8, m: 0});
+                vm.endTime = moment(new Date()).set({h: 18, m: 0});
 
-        $scope.$watch(function () {
-            return vm.startDate;
-        }, function (newValue, oldValue) {
-            startDate = moment(newValue);
-            buildSelectedPeriod();
-        });
+                vm.showMeridian = data.DateTimeFormat.ShowMeridian;
+            }
 
-        $scope.$watch(function () {
-            return vm.startTime;
-        }, function (newValue, oldValue) {
-            startTime = moment(newValue);
-            buildSelectedPeriod();
-        });
+            function buildSelectedPeriod() {
+                var startTime = moment(vm.startDate).format('L') + ' ' + moment(vm.startTime).format('LT');
+                var endTime = moment(vm.endDate).format('L') + ' ' + moment(vm.endTime).format('LT');
+                vm.selectedPeriod = startTime + ' - ' + endTime;
+            }
 
-        $scope.$watch(function () {
-            return vm.endDate;
-        }, function (newValue, oldValue) {
-            endDate = moment(newValue);
-            buildSelectedPeriod();
-        });
+            function buildAdjustedPeriods(data) {
+                return data.map(function (period) {
+                    return {
+                        StartTime: moment(period.StartTime).format('L LT'),
+                        EndTime: moment(period.EndTime).format('L LT')
+                    }
+                })
+            }
 
-        $scope.$watch(function () {
-            return vm.endTime;
-        }, function (newValue, oldValue) {
-            endTime = moment(newValue);
-            buildSelectedPeriod();
-        });
+            $scope.$watch(function () { return vm.startDate; }, buildSelectedPeriod);
+            $scope.$watch(function () { return vm.startTime; }, buildSelectedPeriod);
+            $scope.$watch(function () { return vm.endDate; }, buildSelectedPeriod);
+            $scope.$watch(function () { return vm.endTime; }, buildSelectedPeriod);
 
-        function buildSelectedPeriod() {
-            if (startDate && startTime && endDate && endTime)
-                vm.selectedPeriod = startDate.format('L') + ' ' + startTime.format('LT') + ' - ' + endDate.format('L') + ' ' + endTime.format('LT');
-        }
+            vm.adjustToNeutral = function () {
+                $http.post('../api/Adherence/AdjustPeriod', {
+                    StartDateTime: formatDateTime(vm.startDate, vm.startTime),
+                    EndDateTime: formatDateTime(vm.endDate, vm.endTime)
+                })
+            };
 
-        vm.toggleAdjustToNeutralForm = function () {
-            vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;
+            function formatDateTime(date, time) {
+                return moment(date).format('YYYY-MM-DD') + ' ' + moment(time).format('HH:mm');
+            }
+
+            vm.toggleAdjustToNeutralForm = function () {
+                vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;
+            };
+
+            vm.goToAgents = rtaStateService.goToAgents;
+            vm.goToOverview = rtaStateService.goToOverview;
+            vm.goToHistoricalOverview = function () {
+                $state.go('rta-historical-overview', {});
+            };
         }
     }
-})();
+)();
