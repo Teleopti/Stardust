@@ -833,16 +833,5 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			AddEvent(() => @event);
 		}
-
-
-
-
-
-		public virtual Guid PrincipalPersonId() => Id.GetValueOrDefault();
-		public virtual string PrincipalName() => Name.ToString();
-		public virtual TimeZoneInfo PrincipalTimeZone() => PermissionInformation?.DefaultTimeZone();
-		public virtual int? PrincipalCultureLCID() => PermissionInformation.CultureLCID();
-		public virtual int? PrincipalUICultureLCID() => PermissionInformation.UICultureLCID();
-		public virtual IEnumerable<IPrincipalSourcePeriod> PrincipalPeriods() => PersonPeriodCollection;
 	}
 }

@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private static void setDummyPrincipalBeforeContainerRegistrations()
 		{
-			var teleoptiPrincipal = new TeleoptiPrincipalForLegacy(new GenericIdentity(""), null);
+			var teleoptiPrincipal = new TeleoptiPrincipalForLegacy(new GenericIdentity(""), null as IPerson);
 			AppDomain.CurrentDomain.SetThreadPrincipal(teleoptiPrincipal);
 			Thread.CurrentPrincipal = teleoptiPrincipal;
 		}
