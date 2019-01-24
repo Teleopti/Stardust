@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			switch (teamSettings.GroupPageType)
 			{
+				case GroupPageType.SingleAgent:
 				case GroupPageType.Hierarchy:
 					_teamSettings = teamSettings;
 					break;

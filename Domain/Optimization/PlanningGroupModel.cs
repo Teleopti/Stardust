@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public PlanningGroupModel()
 		{
 			Filters = new List<FilterModel>();
+			TeamSettings = new TeamSettings();
 		}
 
 		public Guid Id { get; set; }

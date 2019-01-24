@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -67,6 +68,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			});
 			
 			PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.PreferenceValue.Should().Be.EqualTo(new Percent(0.24));
+		}
+		
+		[Test]
+		public void ShouldUpdateTeamSettings()
+		{
+			var planningGroup = new PlanningGroup();
+			PlanningGroupRepository.Has(planningGroup);
+			var defaultSetting = planningGroup.Settings.Single(x=>x.Default);
+			
+			var model = new PlanningGroupSettingsModel
+			{
+				Id = defaultSetting.Id.Value,
+				PlanningGroupId = planningGroup.Id.Value,
+			};
+
+			var teamSettings = new TeamSettings
+			{
+				GroupPageType = GroupPageType.Hierarchy,
+				TeamSameType = TeamSameType.ShiftCategory
+			};
+			Target.Persist(new PlanningGroupModel
+			{
+				Id = planningGroup.Id.Value,
+				Settings = new []{model},
+				TeamSettings = teamSettings
+			});
+
+			var teamSettingsPersisted = PlanningGroupRepository.Get(planningGroup.Id.Value).Settings.TeamSettings;
+			teamSettingsPersisted.GroupPageType.Should().Be.EqualTo(teamSettings.GroupPageType);
+			teamSettingsPersisted.TeamSameType.Should().Be.EqualTo(teamSettings.TeamSameType);
 		}
 
 		[Test]
