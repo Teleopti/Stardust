@@ -102,6 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public TimeSpan ForDate(DateOnly date)
 		{
+			if (OpenHoursDictionary == null) return TimeSpan.MaxValue;
 			if (!OpenHoursDictionary.TryGetValue(date, out var startEndRestriction)) return TimeSpan.MaxValue;
 			if (startEndRestriction?.EndTimeLimitation.EndTime == null) return TimeSpan.MaxValue;
 			return startEndRestriction.StartTimeLimitation.StartTime == null
