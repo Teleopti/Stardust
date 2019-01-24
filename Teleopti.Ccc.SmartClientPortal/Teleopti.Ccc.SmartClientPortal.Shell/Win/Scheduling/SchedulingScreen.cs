@@ -3317,12 +3317,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			try
 			{
 				var persister = _container.Resolve<ISchedulingScreenPersister>();
-				IEnumerable<PersistConflict> foundConflicts;
 				bool success = persister.TryPersist(SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.PersonRequests,
 					_modifiedWriteProtections,
 					SchedulerState.ModifiedWorkflowControlSets,
-					out foundConflicts);
+					out var foundConflicts);
 
 				if (!success && foundConflicts != null)
 				{
@@ -3366,7 +3365,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			finally
 			{
-				if (_undoRedo != null) _undoRedo.Clear();
+				_undoRedo?.Clear();
 				Cursor = Cursors.Default;
 				updateRequestCommandsAvailability();
 				updateShiftEditor();
