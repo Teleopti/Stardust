@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return scenario;
 		}
 
-		public static ISkill CreateSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, IActivity activity = null)
+		public static ISkill CreateSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, IActivity activity = null, TimeSpan? midnightBreakOffset = null)
 		{
 			if(activity == null)
 				activity = new Activity("activity_" + skillName).WithId();
@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				{
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
+			if (midnightBreakOffset != null)
+				skill.MidnightBreakOffset = midnightBreakOffset.Value;
 			if (isClosedOnWeekends)
 				WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, openHours).WithId(Guid.NewGuid());
 			else
@@ -186,7 +188,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			DateTime scheduledEndTime, double forecastedAgents,
 			FakeSkillForecastReadModelRepository skillForecastReadModelRepository)
 		{
-			skillForecastReadModelRepository.SkillForecasts = new List<SkillForecast>();
+			if (skillForecastReadModelRepository.SkillForecasts == null)
+				skillForecastReadModelRepository.SkillForecasts = new List<SkillForecast>();
 
 			for (var intervalTime = scheduledStartTime;
 				intervalTime < scheduledEndTime;

@@ -58,6 +58,44 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			vm.DataSeries.ScheduledStaffing[24].Should().Be.EqualTo(10);
 			vm.DataSeries.ScheduledStaffing[25].Should().Be.EqualTo(2);
 		}
+
+		[Test]
+		public void ShouldReturnOnCorrectDay()
+		{
+			TimeZone.IsSweden();
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0);
+			var userNowUtc = TimeZoneInfo.ConvertTimeToUtc(userNow, TimeZone.TimeZone());
+			Now.Is(userNowUtc);
+
+			var opensAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 26, 0, 0, 0), TimeZone.TimeZone());
+			var closesAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 27, 0, 0, 0), TimeZone.TimeZone());
+			var openHours = new DateTimePeriod(opensAtUtc, closesAtUtc).TimePeriod(TimeZoneInfo.Utc);
+
+			var act = ActivityFactory.CreateActivity("act");
+			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill1", openHours, false, act, TimeSpan.FromHours(opensAtUtc.Hour));
+			SkillRepository.Has(skill);
+
+			var val = 1;
+			for (var startTime = opensAtUtc.AddHours(-1) ; startTime < closesAtUtc.AddHours(1); startTime = startTime.AddMinutes(15) )
+			{
+				SkillSetupHelper.PopulateForecastReadModels(skill, startTime, startTime.AddMinutes(15), val+5, SkillForecastReadModelRepository);
+				SkillSetupHelper.PopulateStaffingReadModels(skill, startTime, startTime.AddMinutes(15), val++, SkillCombinationResourceRepository);
+			}
+
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, new DateOnly(2016, 8, 26), false);
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(96);
+			vm.DataSeries.ScheduledStaffing.Length.Should().Be(96);
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be(96);
+			vm.DataSeries.ScheduledStaffing[0].Should().Be.EqualTo(5);
+			vm.DataSeries.ScheduledStaffing[1].Should().Be.EqualTo(6);
+			vm.DataSeries.ScheduledStaffing[95].Should().Be.EqualTo(100);
+
+			vm.DataSeries.ForecastedStaffing[0].Should().Be.EqualTo(10);
+			vm.DataSeries.ForecastedStaffing[1].Should().Be.EqualTo(11);
+			vm.DataSeries.ForecastedStaffing[95].Should().Be.EqualTo(105);
+		}
 	}
 
 	
