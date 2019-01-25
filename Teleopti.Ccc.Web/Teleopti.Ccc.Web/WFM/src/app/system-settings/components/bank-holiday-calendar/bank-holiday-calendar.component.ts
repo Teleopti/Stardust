@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { NzNotificationService } from 'ng-zorro-antd';
+import { NzNotificationService, NzModalService } from 'ng-zorro-antd';
 import { TogglesService } from 'src/app/core/services';
 import { BankHolidayCalendarItem } from '../../interface';
 import { BankCalendarDataService } from '../../shared/bank-calendar-data.service';
@@ -17,14 +17,13 @@ export class BankHolidayCalendarComponent implements OnInit {
 	isEdittingCalendar = false;
 	edittingCalendar: BankHolidayCalendarItem;
 	selectedCalendar: BankHolidayCalendarItem;
-	isDeleteCalendarModalVisible = false;
-	confirmDeleteCalendarContent: string;
 
 	constructor(
 		private bankCalendarDataService: BankCalendarDataService,
 		private translate: TranslateService,
 		private noticeService: NzNotificationService,
-		private toggleService: TogglesService
+		private toggleService: TogglesService,
+		private modalService: NzModalService
 	) {}
 
 	ngOnInit(): void {
@@ -53,23 +52,47 @@ export class BankHolidayCalendarComponent implements OnInit {
 			if (this.isAssignBankHolidayCalendarsToSitesEnabled) {
 				this.bankCalendarDataService.getSitesByCalendar(calendar.Id).subscribe(result => {
 					if (Array.isArray(result)) {
-						this.confirmDeleteCalendarContent = this.translate
-							.instant('XSitesUseThisCalendar')
-							.replace('{0}', result.length);
-						this.isDeleteCalendarModalVisible = true;
+						this.modalService.confirm({
+							nzTitle: this.translate.instant('AreYouSureYouWantToDeleteThisBankHolidayCalendar'),
+							nzClassName: 'bank-holiday-calendar-modal',
+							nzContent:
+								'<p><span>' +
+								this.translate.instant('XSitesUseThisCalendar').replace('{0}', result.length) +
+								'</span><span> </span><span class="calendar-name">' +
+								this.selectedCalendar.Name +
+								'</span></p>',
+							nzOkType: 'danger',
+							nzOkText: this.translate.instant('Delete'),
+							nzCancelText: this.translate.instant('Cancel'),
+							nzOnOk: () => {
+								this.deleteHolidayCalendar();
+								return true;
+							},
+							nzOnCancel: () => {}
+						});
 					} else {
 						this.networkError();
 					}
 				}, this.networkError);
 			} else {
-				this.confirmDeleteCalendarContent = '';
-				this.isDeleteCalendarModalVisible = true;
+				this.modalService.confirm({
+					nzTitle: this.translate.instant('AreYouSureYouWantToDeleteThisBankHolidayCalendar'),
+					nzClassName: 'bank-holiday-calendar-modal',
+					nzContent: '<p><span class="calendar-name">' + this.selectedCalendar.Name + '</span></p>',
+					nzOkType: 'danger',
+					nzOkText: this.translate.instant('Delete'),
+					nzCancelText: this.translate.instant('Cancel'),
+					nzOnOk: () => {
+						this.deleteHolidayCalendar();
+						return true;
+					},
+					nzOnCancel: () => {}
+				});
 			}
 		});
 	}
 
 	deleteHolidayCalendar() {
-		this.isDeleteCalendarModalVisible = false;
 		this.bankCalendarDataService.deleteBankHolidayCalendar(this.selectedCalendar.Id).subscribe(result => {
 			if (result === true) {
 				this.bankHolidayCalendarsList.splice(this.bankHolidayCalendarsList.indexOf(this.selectedCalendar), 1);
@@ -83,10 +106,6 @@ export class BankHolidayCalendarComponent implements OnInit {
 				);
 			}
 		}, this.networkError);
-	}
-
-	closeDeleteHolidayCalendarModal() {
-		this.isDeleteCalendarModalVisible = false;
 	}
 
 	startAddNewBankCalender() {
