@@ -16,8 +16,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization;
 
-
-namespace Teleopti.Ccc.DomainTest.Optimization
+namespace Teleopti.Wfm.SchedulingTest.UnitTests
 {
 	[DomainTest]
 	public class WebIntradayOptimizationStardustHandlerTest: IntradayOptimizationScenarioTest

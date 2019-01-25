@@ -21,8 +21,7 @@ using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
+namespace Teleopti.Wfm.SchedulingTest.UnitTests
 {
 	[DomainTest]
 	[UseIocForFatClient]

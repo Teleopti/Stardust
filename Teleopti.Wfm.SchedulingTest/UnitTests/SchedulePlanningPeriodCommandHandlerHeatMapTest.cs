@@ -21,8 +21,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization;
 
-
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
+namespace Teleopti.Wfm.SchedulingTest.UnitTests
 {
 	[DomainTest]
 	[ExtendScope(typeof(DayOffOptimizationEventHandler))]
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		private void setup()
 		{
 			var teleoptiIdentity = AppDomainPrincipalContext.Current().Identity as TeleoptiIdentity;
-			var businessUnit = new Domain.Common.BusinessUnit(teleoptiIdentity.BusinessUnitName);
+			var businessUnit = new Ccc.Domain.Common.BusinessUnit(teleoptiIdentity.BusinessUnitName);
 			businessUnit.SetId(teleoptiIdentity.BusinessUnitId);
 			BusinessUnitRepository.Has(businessUnit);
 			Tenants.Has(teleoptiIdentity.DataSource.DataSourceName);

@@ -256,7 +256,6 @@
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveShiftCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodScheduleTest.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandlerHeatMapTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdaterTest.cs" />
@@ -300,8 +299,6 @@
     <Compile Include="ResourcePlanner\Hints\PreferenceHintDesktopTest.cs" />
     <Compile Include="ResourcePlanner\Hints\PreferenceHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
-    <Compile Include="SchedulingQuality\DayOffOptimizationDesktopQualityTest.cs" />
-    <Compile Include="SchedulingQuality\IntradayDesktopQualityTest.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilterTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceActivityServiceTest.cs" />
     <Compile Include="Scheduling\MasterActivityThreadingTest.cs" />
@@ -309,13 +306,9 @@
     <Compile Include="Scheduling\WebClearScheduleStardustHandlerTest.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidationTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCheckerTest.cs" />
-    <Compile Include="Scheduling\Restrictions\RestrictionNotAbleToBeScheduledReportTest.cs" />
-    <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduledOutsideSchedulingPeriodTest.cs" />
-    <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduledTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\Rules\MaximumWorkdayRuleTest.cs" />
     <Compile Include="Scheduling\Tracking\PersonAccountProjectionServicePermissionTest.cs" />
-    <Compile Include="Scheduling\WorkShiftFinderServiceTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\AvailableBusinessUnitsProviderTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\DummyPasswordPolicyTest.cs" />
     <Compile Include="Security\ImplementationDetails\Authentication\EnvironmentWindowsUserProviderTest.cs" />
@@ -484,7 +477,6 @@
     <Compile Include="Notification\UserDeviceServiceTest.cs" />
     <Compile Include="Optimization\BlockPreferenceProviderUsingFiltersTest.cs" />
     <Compile Include="Optimization\FetchPlanningGroupModelTest.cs" />
-    <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="Reports\ReportNavigationModelTest.cs" />
     <Compile Include="Reports\ScheduleAuditTrailReportViewModelProviderTest.cs" />
     <Compile Include="Reports\ScheduleChangedByUserViewModelProviderTest.cs" />
@@ -522,7 +514,6 @@
     <Compile Include="SkillGroups\SkillGroupViewModelBuilderTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
-    <Compile Include="Scheduling\BackToLegalShiftCommandTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizerTest.cs" />
     <Compile Include="ResourceCalculation\DoubleMatrixExtensions.cs" />
     <Compile Include="Scheduling\AbsenceRequestValidatorProviderTest.cs" />
@@ -537,7 +528,6 @@
     <Compile Include="Scheduling\FindSchedulesForPersonsTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
-    <Compile Include="Scheduling\WebScheduleStardustHandlerTest.cs" />
     <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />
     <Compile Include="SeatPlanning\SeatPlannerTests.cs" />

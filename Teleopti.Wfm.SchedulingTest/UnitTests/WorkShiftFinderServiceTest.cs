@@ -1,7 +1,7 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -20,7 +20,7 @@ using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling;
 
-namespace Teleopti.Ccc.DomainTest.Scheduling
+namespace Teleopti.Wfm.SchedulingTest.UnitTests
 {
 	[DomainTest]
 	public class WorkShiftFinderServiceTest : SchedulingScenario

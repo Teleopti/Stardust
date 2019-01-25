@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -21,8 +20,7 @@ using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
+namespace Teleopti.Wfm.SchedulingTest.UnitTests
 {
 	[DomainTest]
 	[UseIocForFatClient]

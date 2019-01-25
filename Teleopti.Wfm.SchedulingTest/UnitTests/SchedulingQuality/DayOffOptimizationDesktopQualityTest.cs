@@ -6,9 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -22,8 +20,7 @@ using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingQuality
+namespace Teleopti.Wfm.SchedulingTest.UnitTests.SchedulingQuality
 {
 	[DomainTest]
 	[UseIocForFatClient]

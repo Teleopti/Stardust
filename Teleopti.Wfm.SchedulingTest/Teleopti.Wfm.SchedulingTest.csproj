@@ -318,6 +318,16 @@
         <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationTeamBlockDesktopTest.cs" />
         <Compile Include="SchedulingScenarios\TrackOptimizationCallback.cs" />
         <Compile Include="SchedulingScenarios\TrackSchedulingCallback.cs" />
+        <Compile Include="UnitTests\BackToLegalShiftCommandTest.cs" />
+        <Compile Include="UnitTests\RestrictionNotAbleToBeScheduledReportTest.cs" />
+        <Compile Include="UnitTests\RestrictionsAbleToBeScheduledOutsideSchedulingPeriodTest.cs" />
+        <Compile Include="UnitTests\RestrictionsAbleToBeScheduledTest.cs" />
+        <Compile Include="UnitTests\SchedulePlanningPeriodCommandHandlerHeatMapTest.cs" />
+        <Compile Include="UnitTests\SchedulingQuality\DayOffOptimizationDesktopQualityTest.cs" />
+        <Compile Include="UnitTests\SchedulingQuality\IntradayDesktopQualityTest.cs" />
+        <Compile Include="UnitTests\WebIntradayOptimizationStardustHandlerTest.cs" />
+        <Compile Include="UnitTests\WebScheduleStardustHandlerTest.cs" />
+        <Compile Include="UnitTests\WorkShiftFinderServiceTest.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />
