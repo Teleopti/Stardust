@@ -37,11 +37,9 @@
 			  length="1000000"/>
 	
 	<property name="Status"
-          type="int"
           not-null="true"/>
 
 	<property name="WfmArea"
-          type="int"
           not-null="true"/>		
 
 	<many-to-one name="Creator"

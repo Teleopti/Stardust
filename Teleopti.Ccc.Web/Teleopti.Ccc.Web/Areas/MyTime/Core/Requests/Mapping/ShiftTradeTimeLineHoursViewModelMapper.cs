@@ -6,17 +6,16 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class ShiftTradeTimeLineHoursViewModelMapper : IShiftTradeTimeLineHoursViewModelMapper
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IUserTimeZone _userTimeZone;
 		private readonly IShiftTradeTimeLineHoursViewModelFactory _shiftTradeTimelineHoursViewModelFactory;
 
-		public ShiftTradeTimeLineHoursViewModelMapper(ILoggedOnUser loggedOnUser, IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory)
+		public ShiftTradeTimeLineHoursViewModelMapper(IUserTimeZone userTimeZone, IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory)
 		{
-			_loggedOnUser = loggedOnUser;
+			_userTimeZone = userTimeZone;
 			_shiftTradeTimelineHoursViewModelFactory = shiftTradeTimelineHoursViewModelFactory;
 		}
 
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			DateTimePeriod? myScheduleMinMax = getMyScheduleMinMax(mySchedule);
 			DateTimePeriod? possibleTradeScheduleMinMax = getpossibleTradeScheduleMinMax(possibleTradeSchedules);
 
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var timeZone = _userTimeZone.TimeZone();
 
 			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 				shiftTradeDate.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour),
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var start = mySchedule.ScheduleLayers.First().Start;
 			var end = mySchedule.ScheduleLayers.Last().End;
 
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var timeZone = _userTimeZone.TimeZone();
 
 			var result = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, timeZone);
 			return result;
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return null;
 
 
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var timeZone = _userTimeZone.TimeZone();
 
 			var startTime = schedulesWithoutDOAndEmpty.Min(s => s.ScheduleLayers.First().Start);
 			var endTime = schedulesWithoutDOAndEmpty.Max(l => l.ScheduleLayers.Last().End);

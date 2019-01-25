@@ -4,13 +4,11 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
-
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
@@ -21,11 +19,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapTimeLine8To17WhenNoExistingSchedule()
 		{
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var loggedOnUser = new SpecificTimeZone(timeZone);
 			var timeLineHoursViewModelFactory = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelFactory>();
-			var person = new Person().WithName(new Name("John", "Doe"));
-			person.PermissionInformation.SetDefaultTimeZone(timeZone);
-			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
 			var date = DateOnly.Today;
 			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(7).AddMinutes(45),
 																			  date.Date.AddHours(17).AddMinutes(15), timeZone);
@@ -85,11 +80,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			};
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var loggedOnUser = new SpecificTimeZone(timeZone);
 			var timeLineHoursViewModelFactory = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelFactory>();
-			var person = new Person().WithName(new Name("John", "Doe"));
-			person.PermissionInformation.SetDefaultTimeZone(timeZone);
-			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
 			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(5).AddMinutes(45),
 																			  date.Date.AddHours(16).AddMinutes(15), timeZone);
 
@@ -142,11 +134,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			};
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var loggedOnUser = new SpecificTimeZone(timeZone);
 			var timeLineHoursViewModelFactory = MockRepository.GenerateMock<IShiftTradeTimeLineHoursViewModelFactory>();
-			var person = new Person().WithName(new Name("John", "Doe"));
-			person.PermissionInformation.SetDefaultTimeZone(timeZone);
-			loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
 			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(4).AddMinutes(45),
 																			  date.Date.AddHours(13).AddMinutes(15), timeZone);
 
