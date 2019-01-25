@@ -173,6 +173,17 @@ ALTER TABLE [stage].[stg_acd_login_person]
 ALTER COLUMN [acd_login_code] nvarchar(100)
 GO
 
+TRUNCATE TABLE [stage].[stg_queue_workload]
+ALTER TABLE [stage].[stg_queue_workload] DROP CONSTRAINT [PK_stg_queue_workload]
+GO
 ALTER TABLE [stage].[stg_queue_workload]
-ALTER COLUMN [queue_code] nvarchar(100)
+ALTER COLUMN [queue_code] nvarchar(100) NOT NULL
+GO
+ALTER TABLE [stage].[stg_queue_workload] ADD  CONSTRAINT [PK_stg_queue_workload] PRIMARY KEY CLUSTERED 
+(
+	[queue_code] ASC,
+	[workload_code] ASC,
+	[log_object_data_source_id] ASC,
+	[log_object_name] ASC
+)
 GO
