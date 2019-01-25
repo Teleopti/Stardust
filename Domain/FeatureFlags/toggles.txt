@@ -80,14 +80,13 @@ Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not 
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
 SchedulePeriod_HideChineseMonth_78424 = true
 ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading, is not ready for release yet
-ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production. Don't modify this line!
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true #AF: OK for me to remove
 ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941 = true #AF: OK for me to remove
 ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717 = true
 ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
 ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = DEV
 ResourcePlanner_QueryHintOnLayers_79780 = RC
-ResourcePlanner_TeamSchedulingInPlans_79283 = RC
+ResourcePlanner_TeamSchedulingInPlans_79283 = RC #Note to ourselves: remember to remove a build step in ethiopian team after remove this toggle
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = RC
