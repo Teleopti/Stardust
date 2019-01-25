@@ -31,7 +31,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeMultisiteDayRepository MultisiteDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
 		public FakeSkillCombinationResourceReader SkillCombinationResourceReader;
 		
 		[Test]

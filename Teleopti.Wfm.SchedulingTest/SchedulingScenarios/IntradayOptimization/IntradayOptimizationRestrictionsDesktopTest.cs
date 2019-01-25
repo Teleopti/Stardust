@@ -120,7 +120,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass }, skillDay);
 			var optimizationPreferences = new OptimizationPreferences
 			{
-				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1.0d },
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1.0d }
 			};
 
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, dateOnly.ToDateOnlyPeriod(), optimizationPreferences, null);
@@ -179,7 +179,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, scheduleData, skillDays);
 			var optimizationPreferences = new OptimizationPreferences
 			{
-				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = preferenceValue },
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = preferenceValue }
 			};
 
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, period, optimizationPreferences, null);
@@ -204,7 +204,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, new IScheduleData[] { ass, preferenceDay }, skillDay);
 			var optimizationPreferences = new OptimizationPreferences
 			{
-				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1d },
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true, UsePreferences = true, PreferencesValue = 1d }
 			};
 
 			Assert.DoesNotThrow(() =>

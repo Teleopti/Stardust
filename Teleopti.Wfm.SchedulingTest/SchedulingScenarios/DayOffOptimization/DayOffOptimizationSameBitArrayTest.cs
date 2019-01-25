@@ -26,7 +26,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 
 		[Test]
 		[Timeout(10000)]

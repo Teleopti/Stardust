@@ -47,7 +47,7 @@ namespace Teleopti.Wfm.SchedulingTest.UnitTests.SchedulingQuality
 						UseConsecutiveDaysOff = false,
 						UseDaysOffPerWeek = false,
 						UseConsecutiveWorkdays = false,
-						UseFullWeekendsOff = false,
+						UseFullWeekendsOff = false
 					}), new NoOptimizationCallback());
 
 				standardDeviation = getResultingStandardDeviation(period, stateHolder);

@@ -80,7 +80,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 					{
 						new PersonAssignment(agent, scenario, date).WithDayOff(),
 						new PersonAssignment(agent, scenario, date.AddDays(1)).WithLayer(activity, new TimePeriod(8, 17)).ShiftCategory(shiftCatExpected),
-						new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff(),
+						new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff()
 					},
 					skillDays
 			);

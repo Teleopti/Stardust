@@ -36,7 +36,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
-		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		
 		[Test]
 		public void ShouldNotMoveDayOffWhenUsingSameDayOffAndNotInPlanningGroup()

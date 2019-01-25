@@ -46,7 +46,7 @@ namespace Teleopti.Wfm.SchedulingTest.UnitTests
 		private void setup()
 		{
 			var teleoptiIdentity = AppDomainPrincipalContext.Current().Identity as TeleoptiIdentity;
-			var businessUnit = new Ccc.Domain.Common.BusinessUnit(teleoptiIdentity.BusinessUnitName);
+			var businessUnit = new BusinessUnit(teleoptiIdentity.BusinessUnitName);
 			businessUnit.SetId(teleoptiIdentity.BusinessUnitId);
 			BusinessUnitRepository.Has(businessUnit);
 			Tenants.Has(teleoptiIdentity.DataSource.DataSourceName);

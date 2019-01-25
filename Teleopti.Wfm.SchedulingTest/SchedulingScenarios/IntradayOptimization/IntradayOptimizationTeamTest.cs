@@ -32,9 +32,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public IntradayOptimizationFromWeb Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-
 		
 		[Test]
 		public void ShouldMoveBothAgentsToHigherDemandIfTeamSameStartTimeIsUsed()

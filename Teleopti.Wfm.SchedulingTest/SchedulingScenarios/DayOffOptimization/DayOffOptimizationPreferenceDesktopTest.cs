@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			asses[6].SetDayOff(new DayOffTemplate()); //sunday
 			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = presentShiftCategory};
 			IEnumerable<IScheduleData> preferenceDays = Enumerable.Range(0, 5).Select(x => new PreferenceDay(agent, date.AddDays(x), preferenceRestriction));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] {agent}, asses.Union(preferenceDays), skillDays);;
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] {agent}, asses.Union(preferenceDays), skillDays);
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), UsePreferences = usePreferences, PreferencesValue = preferencePercentage} };
 			
 			Target.Execute(DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
