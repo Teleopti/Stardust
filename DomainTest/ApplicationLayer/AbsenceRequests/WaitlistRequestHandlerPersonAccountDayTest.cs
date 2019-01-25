@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -17,15 +16,12 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
-
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
-using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {

@@ -21,7 +21,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
-using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
