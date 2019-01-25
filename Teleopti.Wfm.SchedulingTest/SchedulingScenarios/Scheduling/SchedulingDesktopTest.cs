@@ -19,8 +19,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]

@@ -9,12 +9,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization;
 
 
 namespace Teleopti.Ccc.DomainTest.Optimization

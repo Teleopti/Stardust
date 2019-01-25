@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntraIntervalOptimization
 {
 	[DomainTest]
 	[DontSendEventsAtPersist]

@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
 {
 	public class CancelSchedulingCallback : ISchedulingCallback, IConvertSchedulingCallbackToSchedulingProgress
 	{

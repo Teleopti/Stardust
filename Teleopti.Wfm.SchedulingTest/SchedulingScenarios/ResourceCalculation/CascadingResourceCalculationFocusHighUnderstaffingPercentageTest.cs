@@ -11,8 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 {
 	//specific tests to ensure skills with high understaffing percentage are reduced quickly
 	[DomainTest]

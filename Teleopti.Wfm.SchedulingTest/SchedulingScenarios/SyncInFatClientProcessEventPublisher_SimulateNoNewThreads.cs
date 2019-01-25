@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
 {
 	public class SyncInFatClientProcessEventPublisher_SimulateNoNewThreads : IEventPublisher
 	{

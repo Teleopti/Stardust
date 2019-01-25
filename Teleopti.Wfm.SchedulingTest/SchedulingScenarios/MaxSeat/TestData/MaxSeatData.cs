@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat.TestData
 {
 	public class MaxSeatData
 	{

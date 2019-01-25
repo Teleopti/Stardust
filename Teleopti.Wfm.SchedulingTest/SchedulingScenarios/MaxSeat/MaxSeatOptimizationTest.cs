@@ -12,15 +12,14 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat.TestData;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
 	[TestFixture(TeamBlockType.Team)]

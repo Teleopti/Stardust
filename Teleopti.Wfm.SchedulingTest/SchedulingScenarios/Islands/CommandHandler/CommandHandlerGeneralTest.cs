@@ -11,8 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.TestCommon;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Islands.CommandHandler
 {
 	public class CommandHandlerGeneralTest : ResourcePlannerCommandHandlerTest
 	{

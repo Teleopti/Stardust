@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Optimization;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
 {
 	public static class ExtraPreferencesFactory
 	{

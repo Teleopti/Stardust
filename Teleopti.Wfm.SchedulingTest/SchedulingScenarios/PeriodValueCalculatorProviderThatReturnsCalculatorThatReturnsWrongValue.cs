@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
 {
 	public class PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue : IPeriodValueCalculatorProvider
 	{

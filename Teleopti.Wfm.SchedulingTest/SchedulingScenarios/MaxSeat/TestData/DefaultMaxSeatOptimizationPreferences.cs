@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat.TestData
 {
 	public static class DefaultMaxSeatOptimizationPreferences
 	{

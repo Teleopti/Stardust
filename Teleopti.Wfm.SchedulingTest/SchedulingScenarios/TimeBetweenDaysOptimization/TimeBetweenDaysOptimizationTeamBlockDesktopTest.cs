@@ -19,9 +19,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
-
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimization
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.TimeBetweenDaysOptimization
 {
 	[DomainTest]
 	[UseIocForFatClient]

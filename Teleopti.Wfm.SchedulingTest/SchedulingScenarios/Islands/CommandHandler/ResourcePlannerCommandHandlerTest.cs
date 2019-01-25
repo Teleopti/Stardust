@@ -12,8 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Islands.CommandHandler
 {
 	[TestFixture(SUT.IntradayOptimization)]
 	[TestFixture(SUT.Scheduling)]

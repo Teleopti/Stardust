@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -11,8 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	public class SchedulingPersistTest : SchedulingScenario

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 {
 	public abstract class MaxSeatScenario
 	{

@@ -2,7 +2,7 @@
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 {
 	public abstract class ResourceCalculationScenario : IConfigureToggleManager, IExtendSystem
 	{

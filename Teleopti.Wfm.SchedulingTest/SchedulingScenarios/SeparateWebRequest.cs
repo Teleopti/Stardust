@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+﻿namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
 {
 	public enum SeparateWebRequest
 	{

@@ -2,7 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
 {
 	public class TrackOptimizationCallback : IOptimizationCallback
 	{

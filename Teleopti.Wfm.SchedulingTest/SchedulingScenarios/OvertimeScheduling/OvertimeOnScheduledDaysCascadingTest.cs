@@ -15,8 +15,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
 	public class OvertimeOnScheduledDaysCascadingTest : OvertimeSchedulingScenario

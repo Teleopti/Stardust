@@ -12,12 +12,12 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.DomainTest.SchedulingScenarios;
-using Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
+using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
+using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling;
 
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions

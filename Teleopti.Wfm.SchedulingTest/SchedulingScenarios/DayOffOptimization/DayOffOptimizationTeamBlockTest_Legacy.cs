@@ -1,4 +1,3 @@
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -15,7 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 {
 	/*  DONT ADD MORE TESTS HERE! - LEGACY TESTS HERE!
 	 *  Web supports (limited) block (not team) DOopt only.

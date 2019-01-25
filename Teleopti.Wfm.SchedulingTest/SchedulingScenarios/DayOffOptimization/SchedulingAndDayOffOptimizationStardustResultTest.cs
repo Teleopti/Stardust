@@ -17,8 +17,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
 	[ExtendScope(typeof(WebScheduleStardustHandler))]

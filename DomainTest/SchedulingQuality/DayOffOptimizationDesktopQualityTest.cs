@@ -15,12 +15,12 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.DomainTest.SchedulingScenarios;
-using Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
+using Teleopti.Wfm.SchedulingTest.SchedulingScenarios;
+using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization;
 
 
 namespace Teleopti.Ccc.DomainTest.SchedulingQuality

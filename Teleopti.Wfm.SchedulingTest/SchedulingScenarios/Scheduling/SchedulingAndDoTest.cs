@@ -15,8 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	public class SchedulingAndDayOffTest : SchedulingScenario

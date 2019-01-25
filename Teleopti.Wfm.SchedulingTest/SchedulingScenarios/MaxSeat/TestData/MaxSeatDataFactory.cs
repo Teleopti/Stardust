@@ -8,8 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat.TestData
 {
 	public static class MaxSeatDataFactory
 	{

@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DontSendEventsAtPersist]
 	public abstract class OvertimeSchedulingScenario 

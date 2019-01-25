@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Islands
 {
 	[TestFixture]
 	public class IslandExtendedModelTest

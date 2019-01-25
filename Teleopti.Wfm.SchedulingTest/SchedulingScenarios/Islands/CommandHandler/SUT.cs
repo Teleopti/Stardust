@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
+﻿namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Islands.CommandHandler
 {
 	public enum SUT
 	{

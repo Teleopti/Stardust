@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Islands
 {
 	[DomainTest]
 	public class IslandModelTest : ITestInterceptor

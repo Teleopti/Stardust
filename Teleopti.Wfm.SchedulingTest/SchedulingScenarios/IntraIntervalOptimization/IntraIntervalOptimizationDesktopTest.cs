@@ -15,8 +15,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntraIntervalOptimization
 {
 	[UseIocForFatClient]
 	public class IntraIntervalOptimizationDesktopTest : IntraIntervalOptimizationScenarioTest

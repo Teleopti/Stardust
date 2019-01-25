@@ -16,8 +16,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
 	public class ResourceCalculationResultTest : ResourceCalculationScenario

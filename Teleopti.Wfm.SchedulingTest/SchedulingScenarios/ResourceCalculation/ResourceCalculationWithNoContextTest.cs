@@ -8,8 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
 	public class ResourceCalculationWithNoContextTest

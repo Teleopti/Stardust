@@ -5,9 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -22,8 +20,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 {
 	/* TODO: some if(individual) asserts here. 
 	 * Just here until we make teamblock work the same as for individual

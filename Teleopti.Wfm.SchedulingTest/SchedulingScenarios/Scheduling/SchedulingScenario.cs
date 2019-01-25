@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -7,7 +6,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 {
 	[TestFixtureSource(typeof(schedulingFixtureSource))]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]

@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[DontSendEventsAtPersist]

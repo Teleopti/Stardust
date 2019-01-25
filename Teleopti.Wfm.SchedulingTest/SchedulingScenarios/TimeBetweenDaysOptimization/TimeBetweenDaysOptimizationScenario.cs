@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimization
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.TimeBetweenDaysOptimization
 {
 	[DontSendEventsAtPersist]
 	public abstract class TimeBetweenDaysOptimizationScenario

@@ -10,8 +10,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Islands.CommandHandler
 {
 	public class CommandHandlerExternalStaffTest : ResourcePlannerCommandHandlerTest
 	{

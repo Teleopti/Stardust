@@ -20,8 +20,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
 	public class OvertimeOnNonScheduledDaysTest : OvertimeSchedulingScenario

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
 {
 	public static class DoubleExtensionsInCascadingTestScenarios
 	{

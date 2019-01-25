@@ -3,21 +3,20 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.TestCommon.FakeData;
-
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
+using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat.TestData;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
 	public class MaxSeatOptimizationTeamTest : MaxSeatScenario

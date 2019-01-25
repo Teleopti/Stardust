@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 {
 	/*  DONT ADD MORE TESTS HERE! - LEGACY TESTS HERE!
 	 *  Web supports (limited) block and team scheduling only.

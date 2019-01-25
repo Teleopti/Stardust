@@ -13,8 +13,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
-
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
+namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.BusinessRules
 {
 	[DomainTest]
 	public class MinWeeklyRestRuleTest
