@@ -101,6 +101,14 @@
 		}
 	}
 
+	.schedule-column {
+		padding: 0px;
+	}
+
+	.hasSelected .layer:not(.selected) {
+		opacity: 0.4;
+	}
+
 	.shift {
 		position: relative;
 		top: 4px;
@@ -113,14 +121,6 @@
 		.layer.sameTypeAsLast {
 			border-left-style: solid;
 			border-left-width: 1px;
-		}
-
-		.layer.hasSelected {
-			opacity: 0.4;
-		}
-
-		.layer.noneSelected {
-			opacity: 1;
 		}
 
 		.layer.selected {
@@ -715,10 +715,6 @@ team-schedule-datepicker {
 				width: 20px;
 				display: inline-block;
 			}
-		}
-
-		td.schedule-column {
-			padding: 0px;
 		}
 		//Week view table
 		thead tr.weekview-thead {

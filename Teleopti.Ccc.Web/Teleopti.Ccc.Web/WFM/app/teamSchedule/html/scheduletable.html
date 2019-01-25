@@ -22,10 +22,12 @@
 			<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
 		</tr>
 	</thead>
-	<tbody ng-style="::vm.tableStyle">
-		<tr ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}" ng-repeat-start="personSchedule in vm.scheduleVm.Schedules" ng-click="vm.togglePerson(personSchedule, $event)">
+	<tbody ng-style="::vm.tableStyle" ng-class="{'hasSelected':vm.totalSelectedProjections() != 0 }">
+		<tr ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
+			ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
+			ng-click="vm.togglePerson(personSchedule, $event)">
 			<td class="person-name-column">
-				<div ng-show="::vm.selectMode" class="inline-block">
+				<div ng-if="::vm.selectMode" class="inline-block">
 					<label>
 						<md-checkbox ng-model="personSchedule.IsSelected"
 									 ng-change="vm.updatePersonSelection(personSchedule)"
@@ -43,7 +45,7 @@
 					</md-tooltip>
 				</div>
 
-				<div class="person-name-text inline-block" ng-hide="::vm.selectMode">{{::personSchedule.Name}}</div>
+				<div class="person-name-text inline-block" ng-if="::!vm.selectMode">{{::personSchedule.Name}}</div>
 
 				<span class="validate-warning" ng-if="vm.showWarnings">
 					<span ng-if="vm.checkIsLoadedValidationForPerson(personSchedule.PersonId) && vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length > 0">
@@ -80,20 +82,25 @@
 				</md-tooltip>
 			</td>
 			<td class="schedule schedule-column">
-				<div class="relative time-line-for">
+				<div class="relative time-line-for" >
 					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs"
-						  ng-if="personSchedule.DayOffs.length > 0 && dayOff.Length > 0"
+						  ng-if="dayOff.Length > 0"
 						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
-						<md-tooltip ng-if="dayOff.DayOffName !=''">{{::dayOff.DayOffName}}</md-tooltip>
+						<md-tooltip ng-if="!!dayOff.DayOffName">{{::dayOff.DayOffName}}</md-tooltip>
 					</span>
-					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
+					<div class="shift" ng-if="personSchedule.Shifts.length" ng-repeat="shift in personSchedule.Shifts">
 						<div class="layer absolute floatleft selectable projection-layer"
-							 projection-name="{{::projection.Description}}"
+							 ng-if="shift.Projections.length"
 							 ng-repeat="projection in shift.Projections"
+							 projection-name="{{::projection.Description}}"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
-							 ng-class="{'overtime-light': projection.IsOvertime && projection.UseLighterBorder, 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder,
-							 personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,
-							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder, unselectable: !vm.canToggleSelection(projection, vm.selectedDate),
+							 ng-class="{
+							 'overtime-light': projection.IsOvertime && projection.UseLighterBorder, 
+							 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder,
+							 personAbsence: projection.ParentPersonAbsences !== null, 
+							 selected: projection.Selected,
+							 lighterBorder: projection.UseLighterBorder, 
+							 unselectable: !vm.canToggleSelection(projection, vm.selectedDate),
 							 sameTypeAsLast: projection.ShowDividedLine}"
 							 ng-click="vm.ToggleProjectionSelection(projection, vm.selectedDate)">
 							<md-tooltip class="multiline-tooltip layer-summary">
