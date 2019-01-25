@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -35,12 +36,13 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		private IEnumerable<Guid> getRequestsInWaitlist(IAbsenceRequest absenceRequest)
 		{
 			var period = absenceRequest.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
+
 			var budgetGroupId = getAbsenceRequestPersonFirstBudgetGroup(absenceRequest);
 			var processOrder = absenceRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistProcessOrder;
 			var requests = _personRequestRepository.GetPendingAndWaitlistedAbsenceRequests(period, budgetGroupId, processOrder);
-			var list = _personRequestRepository.Find(requests.Select(x => x.PersonRequestId));
+			var list = _personRequestRepository.FindPersonReuqestsWithAbsenceAndPersonPeriods(requests.Select(x => x.PersonRequestId));
 			var personRequestDic = list.ToDictionary(personRequest => personRequest.Id.Value);
-			var waitlistedRequests = requests.Where(x=>requestIsAutoGrant(x,personRequestDic)).Select(x => x.PersonRequestId);
+			var waitlistedRequests = requests.Where(x => requestIsAutoGrant(x, personRequestDic)).Select(x => x.PersonRequestId);
 			return waitlistedRequests;
 		}
 
@@ -51,6 +53,8 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 
 			var request = personRequestDic[personWaitlistedAbsenceRequest.PersonRequestId];
 			var wcs = request.Person.WorkflowControlSet;
+			if (wcs == null)
+				return false;
 
 			var isAutoGrant = wcs.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)request.Request)
 								  .AbsenceRequestProcess.GetType() == typeof(GrantAbsenceRequest);

@@ -116,5 +116,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		bool HasWaitlistedRequestsOnSkill(IEnumerable<Guid> skills, DateTime startDateTime, DateTime endDateTime, DateTime expiredDateTime);
 
 		IList<PersonWaitlistedAbsenceRequest> GetPendingAndWaitlistedAbsenceRequests(DateTimePeriod period, Guid? budgetGroupId, WaitlistProcessOrder waitlistProcessOrder = WaitlistProcessOrder.FirstComeFirstServed);
+
+		IList<IPersonRequest> FindPersonReuqestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids);
 	}
 }
