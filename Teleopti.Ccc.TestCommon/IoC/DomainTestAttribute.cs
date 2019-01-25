@@ -39,6 +39,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -295,6 +296,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 				isolate.UseTestDouble<FakePayrollExportRepository>().For<IPayrollExportRepository>();
 				isolate.UseTestDouble<FakePayrollResultRepository>().For<IPayrollResultRepository>();
+				isolate.UseTestDouble<FakeSkillForecastReadModelRepository>().For<ISkillForecastReadModelRepository, FakeSkillForecastReadModelRepository>();
 			}
 
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();

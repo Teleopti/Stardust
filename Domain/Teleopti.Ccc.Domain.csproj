@@ -236,6 +236,8 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
+    <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
+    <Compile Include="Intraday\To Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
@@ -245,6 +247,7 @@
     <Compile Include="Notification\ScheduleChangeForWeekViewEvent.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
+    <Compile Include="Repositories\ISkillForecastReadModelRepository.cs" />
     <Compile Include="Scheduling\TeamSettings.cs" />
     <Compile Include="Scheduling\UpdateSchedulingOptionsWithTeamSettings.cs" />
     <Compile Include="Security\Principal\ITeleoptiIdentityForLegacy.cs" />

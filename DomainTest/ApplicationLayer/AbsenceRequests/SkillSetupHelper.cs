@@ -7,8 +7,10 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.Domain;
+using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -178,6 +180,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				});
 			}
 			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
+		}
+
+		public static void PopulateForecastReadModels(ISkill skill, DateTime scheduledStartTime,
+			DateTime scheduledEndTime, double forecastedAgents,
+			FakeSkillForecastReadModelRepository skillForecastReadModelRepository)
+		{
+			skillForecastReadModelRepository.SkillForecasts = new List<SkillForecast>();
+
+			for (var intervalTime = scheduledStartTime;
+				intervalTime < scheduledEndTime;
+				intervalTime = intervalTime.AddMinutes(minutesPerInterval))
+			{
+				skillForecastReadModelRepository.SkillForecasts.Add(new SkillForecast
+				{
+					StartDateTime = intervalTime,
+					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
+					 Agents = forecastedAgents,
+					SkillId = skill.Id.GetValueOrDefault() 
+				});
+			}
+			
 		}
 	}
 }

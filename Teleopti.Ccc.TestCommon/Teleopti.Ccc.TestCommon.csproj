@@ -204,6 +204,7 @@
     <Compile Include="FakeData\FakePermissions.cs" />
     <Compile Include="FakeData\FakeIntradayQueueStatisticsLoader.cs" />
     <Compile Include="FakeData\FakeSkillCombinationResourceRepository.cs" />
+    <Compile Include="FakeData\FakeSkillForecastReadModelRepository.cs" />
     <Compile Include="FakeData\FakeTeamGamificationSettingRepository.cs" />
     <Compile Include="FakeData\JobResultExtensions.cs" />
     <Compile Include="FakeData\OrganizationFactory.cs" />

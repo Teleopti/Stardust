@@ -4,19 +4,13 @@ using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday.To_Staffing;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-
-	public interface ISkillForecastReadModelRepository
-
-	{
-		void PersistSkillForecast(List<SkillForecast> listOfIntervals);
-		IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTime startDateTime, DateTime endDateTime);
-	}
-
 	public class SkillForecastReadModelRepository : ISkillForecastReadModelRepository
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
@@ -127,13 +121,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 	}
 
-	public class SkillForecast
-	{
-		public DateTime StartDateTime { get; set; }
-		public Guid SkillId { get; set; }
-		public double Agents { get; set; }
-		public double Calls { get; set; }
-		public double AverageHandleTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-	}
+	
 }
