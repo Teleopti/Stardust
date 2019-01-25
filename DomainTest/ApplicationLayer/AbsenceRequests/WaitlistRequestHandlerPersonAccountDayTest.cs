@@ -40,14 +40,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeSkillDayRepository SkillDayRepository;
-		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public IScheduleStorage ScheduleStorage;
 		public MutableNow Now;
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakeTenants Tenants;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
-		public ResourceCalculationWithCount ResourceCalculation;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		private IBusinessUnit businessUnit;
 
@@ -62,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<SchedulerStateScheduleDayChangedCallback>().For<IScheduleDayChangeCallback>();
-			isolate.UseTestDouble<ResourceCalculationWithCount>().For<IResourceCalculation>();
 			isolate.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 		}
@@ -229,6 +225,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 		}
 	}
-
-
 }
