@@ -94,8 +94,6 @@
 			ctrl.sites = sites;
 		});
 
-		fetchSettingList();
-
 		$scope.$on('gamification.selectTargetsTab', function (event, args) {
 			fetchSettingList();
 		});
