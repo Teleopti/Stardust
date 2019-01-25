@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				var reqIds =
 					PersonRequestRepository.GetWaitlistRequests(new DateTimePeriod(new DateTime(2016, 04, 06, 8, 0, 0).Utc(),
 						new DateTime(2016, 04, 06, 17, 0, 0).Utc()));
-				_requests = PersonRequestRepository.FindPersonReuqestsWithAbsenceAndPersonPeriods(reqIds).Where(p => p.Person.WorkflowControlSet != null).ToList();
+				_requests = PersonRequestRepository.FindPersonRequestsWithAbsenceAndPersonPeriods(reqIds).Where(p => p.Person.WorkflowControlSet != null).ToList();
 			});
 		}
 

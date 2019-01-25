@@ -990,7 +990,7 @@ AND ps.Skill in(:list)")
 				.List<PersonWaitlistedAbsenceRequest>();
 		}
 
-		public IList<IPersonRequest> FindPersonReuqestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids)
+		public IList<IPersonRequest> FindPersonRequestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids)
 		{
 			var returnPersonRequests = new List<IPersonRequest>();
 			foreach (var idBatch in ids.Batch(1000))

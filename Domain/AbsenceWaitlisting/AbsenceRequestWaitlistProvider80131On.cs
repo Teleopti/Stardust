@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			var budgetGroupId = getAbsenceRequestPersonFirstBudgetGroup(absenceRequest);
 			var processOrder = absenceRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistProcessOrder;
 			var requests = _personRequestRepository.GetPendingAndWaitlistedAbsenceRequests(period, budgetGroupId, processOrder);
-			var list = _personRequestRepository.FindPersonReuqestsWithAbsenceAndPersonPeriods(requests.Select(x => x.PersonRequestId));
+			var list = _personRequestRepository.FindPersonRequestsWithAbsenceAndPersonPeriods(requests.Select(x => x.PersonRequestId));
 			var personRequestDic = list.ToDictionary(personRequest => personRequest.Id.Value);
 			var waitlistedRequests = requests.Where(x => requestIsAutoGrant(x, personRequestDic)).Select(x => x.PersonRequestId);
 			return waitlistedRequests;
