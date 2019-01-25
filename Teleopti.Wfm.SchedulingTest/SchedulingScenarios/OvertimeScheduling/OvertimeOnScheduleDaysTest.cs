@@ -519,6 +519,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				.Should().Be.EqualTo(date.Date.AddDays(1));
 		}
 		
+		[Test]
 		public void ShouldSchedulePersonOnDay()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
