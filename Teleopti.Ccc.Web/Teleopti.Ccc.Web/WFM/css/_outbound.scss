@@ -64,7 +64,7 @@
 			position: absolute;
 			top: 2rem;
 			border-radius: 5px;
-			box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);
+			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 			background: $white;
 		}
 
@@ -88,9 +88,10 @@
 			line-height: 25px;
 			padding: 0;
 			text-align: center;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26);
+			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 		}
-		.gantt-task-truncated-left, .gantt-task-truncated-right {
+		.gantt-task-truncated-left,
+		.gantt-task-truncated-right {
 			top: -2px;
 		}
 		.gantt-task-info {
@@ -151,7 +152,9 @@
 		.gantt-resizer {
 			opacity: 0;
 		}
-		.gantt-side-background, .gantt-body-background, .gantt-row {
+		.gantt-side-background,
+		.gantt-body-background,
+		.gantt-row {
 			pointer-events: none;
 
 			.gantt-task-content {
@@ -267,13 +270,13 @@
 		font-size: 15px;
 		text-align: center;
 		font-weight: bold;
-		box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, .26);
+		box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 		color: $white;
 		display: inline-block;
 		padding-right: 3px;
 		padding-left: 3px;
 		position: relative;
-		transition: box-shadow .4s;
+		transition: box-shadow 0.4s;
 	}
 	.overstaffed-color {
 		background-color: $blue-300;
@@ -286,7 +289,7 @@
 		padding: 5px 10px;
 		display: inline-block;
 		color: $white;
-		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26);
+		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 		float: left;
 		margin: 5px;
 	}
@@ -314,9 +317,10 @@
 		.polymorphic-input-body {
 			width: 100%;
 
-			md-select-value span{
+			md-select-value span .md-text {
 				max-width: 200px;
-				white-space: nowrap;
+				overflow-wrap: break-word;
+				display: block;
 			}
 		}
 	}
@@ -340,7 +344,7 @@
 		left: 0;
 		width: 100%;
 	}
-	campaign-chart > .clear-button{
+	campaign-chart > .clear-button {
 		bottom: 15px;
 		position: absolute;
 		left: 1rem;
