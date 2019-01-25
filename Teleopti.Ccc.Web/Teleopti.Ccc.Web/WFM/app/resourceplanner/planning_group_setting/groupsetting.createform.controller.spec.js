@@ -57,6 +57,10 @@ describe('planningGroupSettingEditController', function() {
 			];
 		});
 
+		$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function() {
+			return [200];
+		});
+
 		defaultSettingInfo = {
 			BlockFinderType: 0,
 			BlockSameShift: false,
@@ -144,7 +148,8 @@ describe('planningGroupSettingEditController', function() {
 
 	it('should display preference value', function() {
 		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo}, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
-
+		$httpBackend.flush();
+		
 		expect(vm.settingInfo.PreferencePercent).toEqual(23);
 	});
 
@@ -174,7 +179,8 @@ describe('planningGroupSettingEditController', function() {
 
 	it('should load selected undefault scheduling setting', function() {
 		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo }, {settingInfo: nonDefaultSettingInfo, teamSettings: teamSettings});
-
+		$httpBackend.flush();
+		
 		expect(vm.settingInfo.Id).toEqual('8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb');
 		expect(vm.settingInfo.Name).toEqual('Scheduling setting 101');
 		expect(vm.settingInfo.Default).toEqual(false);
@@ -182,7 +188,8 @@ describe('planningGroupSettingEditController', function() {
 
 	it('should load default scheduling setting', function() {
 		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo }, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
-
+		$httpBackend.flush();
+		
 		expect(vm.settingInfo.Id).toEqual('33f52ff4-0314-4a9e-80fa-5c958c57c92f');
 		expect(vm.settingInfo.Name).toEqual('Default');
 		expect(vm.settingInfo.Default).toEqual(true);
