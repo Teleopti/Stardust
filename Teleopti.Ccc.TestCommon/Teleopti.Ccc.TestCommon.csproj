@@ -212,6 +212,7 @@
     <Compile Include="FakeData\PersonAssignmentListContainer.cs" />
     <Compile Include="FakeData\PersonRequestAuthorizationCheckerConfigurable.cs" />
     <Compile Include="FakeData\PreferenceDayFactory.cs" />
+    <Compile Include="FakeData\ResourceCalculationWithCount.cs" />
     <Compile Include="FakeData\SkillIntradayStaffingFactory.cs" />
     <Compile Include="FakeData\WorkflowControlSetFactory.cs" />
     <Compile Include="FakeHistoricalOverviewReadModelPersister.cs" />

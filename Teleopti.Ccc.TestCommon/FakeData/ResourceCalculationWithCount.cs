@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
-namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
+namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class ResourceCalculationWithCount : CascadingResourceCalculation
 	{

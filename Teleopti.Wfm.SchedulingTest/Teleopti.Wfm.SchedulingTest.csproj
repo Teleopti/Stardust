@@ -257,7 +257,6 @@
         <Compile Include="SchedulingScenarios\PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue.cs" />
         <Compile Include="SchedulingScenarios\ResourceCalculateWithNewContext.cs" />
         <Compile Include="SchedulingScenarios\ResourceCalculationDataCreator.cs" />
-        <Compile Include="SchedulingScenarios\ResourceCalculationWithCount.cs" />
         <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationClosedSkillsTest.cs" />
         <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationContextTest.cs" />
         <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationEvenRelativeDifferenceTest.cs" />
