@@ -2,7 +2,7 @@
 	<div class="con-flex">
 		<form name="form" class="wfm-form scheduling-setting">
 			<div class="con-row">
-				<div class="con-flex setting-group material-depth-1">
+				<div class="con-flex setting-group">
 					<div class="con-row">
 						<div class="con-flex">
 							<div class="form-input-wrap">
@@ -65,8 +65,9 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="con-row">
-				<div class="con-flex setting-group material-depth-1">
+				<div class="con-flex setting-group">
 					<div class="con-flex">
 						<b>{{'DayOffRulesColon' | translate}}</b>
 					</div>
@@ -131,26 +132,51 @@
 						</div>
 					</div>
 				</div>
-				<div class="con-flex setting-group material-depth-1">
-					<div class="con-flex">
-						<b>{{'BlockSchedulingColon' | translate}}:</b>
-					</div>
+				<div class="con-flex setting-group">
 					<div class="con-row" style="padding-left: 5px">
 						<div class="con-flex">
-							<md-radio-group ng-model="vm.blockFinderType" ng-change="vm.blockFinderTypeOptionChanged()">
-								<md-radio-button ng-repeat="option in vm.blockFinderTypeOptions" ng-value="option">
-									<span>{{ option | translate}}</span>
-								</md-radio-button>
-							</md-radio-group>
+							<b>{{'BlockSchedulingColon' | translate}}</b>
+							<div class="con-row" >
+								<div class="con-flex">
+									<md-radio-group ng-model="vm.blockFinderType" ng-change="vm.blockFinderTypeOptionChanged()">
+										<md-radio-button ng-repeat="option in vm.blockFinderTypeOptions" ng-value="option">
+											<span>{{ option | translate}}</span>
+										</md-radio-button>
+									</md-radio-group>
+								</div>
+								<div class="con-flex" ng-if="vm.blockFinderType !== 'Off'">
+									<md-radio-group ng-model="vm.blockComparisonType" ng-change="vm.blockComparisonTypeOptionChanged()">
+										<md-radio-button ng-repeat="option in vm.blockComparisonTypeOptions" ng-value="option">
+											<span>{{ option | translate}}</span>
+										</md-radio-button>
+									</md-radio-group>
+								</div>
+							</div>
 						</div>
-						<div class="con-flex split-3-1" ng-if="vm.blockFinderType !== 'Off'">
-							<md-radio-group ng-model="vm.blockComparisonType" ng-change="vm.blockComparisonTypeOptionChanged()">
-								<md-radio-button ng-repeat="option in vm.blockComparisonTypeOptions" ng-value="option">
-									<span>{{ option | translate}}</span>
-								</md-radio-button>
-							</md-radio-group>
+						
+						<div class="con-flex" ng-if="vm.teamToggleEnabled && vm.settingInfo.Default">
+							<b>{{'TeamSchedulingColon' | translate}}</b>
+							<div class="con-row">
+								<div class="con-flex">
+									<md-radio-group ng-model="vm.teamGroupPageType" ng-change="vm.teamFinderTypeOptionChanged()">
+										<md-radio-button ng-repeat="option in vm.teamGroupPageTypeOptions" ng-value="option">
+											<span>{{ option | translate}}</span>
+										</md-radio-button>
+									</md-radio-group>
+								</div>
+								<div class="con-flex" ng-if="vm.teamGroupPageType !== 'Off'">
+									<md-radio-group ng-model="vm.teamComparisonType" ng-change="vm.teamComparisonTypeOptionChanged()">
+										<md-radio-button ng-repeat="option in vm.teamComparisonTypeOptions" ng-value="option">
+											<span>{{ option | translate}}</span>
+										</md-radio-button>
+									</md-radio-group>
+								</div>
+							</div>
+						</div>
+                        <div class="con-flex" ng-if="!(vm.teamToggleEnabled && vm.settingInfo.Default)">
 						</div>
 					</div>
+
 					<div class="con-row" style="padding-left: 5px" ng-if="vm.settingInfo.Default">
 						<div>
 							<label for="preferencePercent"><b>{{'PreferenceFulfillmentPercentColon'|translate}}</b></label>
@@ -159,6 +185,7 @@
 						</div>
 					</div>
 				</div>
+
 			</div>
 		</form>
 	</div>

@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	public class SchedulerMessageBrokerHandler : IInitiatorIdentifier, IDisposable, IReassociateDataForSchedules, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages, IMessageQueueRemoval
 	{
 		private SchedulingScreen _owner;
+		private readonly ILifetimeScope _container;
 		private readonly IScheduleScreenRefresher _scheduleScreenRefresher;
 		private readonly Guid _instanceId = Guid.NewGuid();
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulerMessageBrokerHandler));
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (owner == null) throw new ArgumentNullException(nameof(owner));
 			_owner = owner;
+			_container = container;
 			_scheduleScreenRefresher = container.Resolve<IScheduleScreenRefresher>(
 				TypedParameter.From<IReassociateDataForSchedules>(this),
 				TypedParameter.From(container.Resolve<IScheduleRefresher>(
@@ -266,7 +268,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAssignment)))
 				{
-				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(new PersonAssignmentRepository(currentUnitOfWork), eventMessage.DomainObjectId);
+				return _owner.SchedulerState.SchedulerStateHolder.Schedules.UpdateFromBroker(_container.Resolve<IPersonAssignmentRepository>(), eventMessage.DomainObjectId);
 				}
 			if (eventMessage.InterfaceType.IsAssignableFrom(typeof(IPersonAbsence)))
 				{

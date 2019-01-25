@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ServiceLevelSeconds = 20,
 				Shrinkage = 5
 			};
-			var queueSource = new QueueSource("testQ","",1);
+			var queueSource = new QueueSource("testQ","", 1);
 			queueSource.SetId(input.Queues[0]);
 			queueSourceRepository.Stub(x => x.LoadAll()).Return(new IQueueSource[] {queueSource});
 			var activity = ActivityFactory.CreateActivity("test1");

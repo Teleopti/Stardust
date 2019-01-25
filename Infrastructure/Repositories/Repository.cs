@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </summary>
         public virtual void Add(T root)
         {
-			if (root is IBelongsToBusinessUnit && ServiceLocatorForEntity.CurrentBusinessUnit.Current() == null)
+			if (root is IBelongsToBusinessUnit && ServiceLocator_DONTUSE.CurrentBusinessUnit.Current() == null)
 				throw new PermissionException("Business unit is required");
-			if (root is IChangeInfo && ServiceLocatorForEntity.UpdatedBy.Person() == null)
+			if (root is IChangeInfo && ServiceLocator_DONTUSE.UpdatedBy.Person() == null)
 				throw new PermissionException("Identity is required");
 			Session.SaveOrUpdate(root);
 		}

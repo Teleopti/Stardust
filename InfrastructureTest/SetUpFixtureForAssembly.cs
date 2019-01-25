@@ -5,14 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Autofac;
+using log4net.Config;
 using Teleopti.Ccc.Domain;
 using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -42,6 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		[OneTimeSetUp]
 		public void BeforeTestSuite()
 		{
+			XmlConfigurator.Configure();
 			var builder = new ContainerBuilder();
 			var toggles = new FakeToggleManager();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, toggles)));

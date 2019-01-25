@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 			UnitOfWork.Do(() =>
 			{
-				var personAssignment = PersonAssignmentRepository.Find(new DateOnlyPeriod("2015-12-07".Date(), "2015-12-08".Date()), scenario).Single();
+				var personAssignment = PersonAssignmentRepository.Find(new[]{person}, new DateOnlyPeriod("2015-12-07".Date(), "2015-12-08".Date()), scenario).Single();
 				personAssignment.MoveActivityAndSetHighestPriority(activity, "2015-12-07 8:00".Utc(), "2015-12-07 9:00".Utc(), "2".Hours(), null);
 				PersonAssignmentRepository.Add(personAssignment);
 			});
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 
 			UnitOfWork.Do(() =>
 			{
-				var personAssignment = PersonAssignmentRepository.Find(new DateOnlyPeriod("2015-12-07".Date(), "2015-12-08".Date()), scenario).Single();
+				var personAssignment = PersonAssignmentRepository.Find(new[]{person}, new DateOnlyPeriod("2015-12-07".Date(), "2015-12-08".Date()), scenario).Single();
 				personAssignment.MoveActivityAndSetHighestPriority(activity, "2015-12-07 8:00".Utc(), "2015-12-07 9:00".Utc(), "2".Hours(), null);
 				PersonAssignmentRepository.Add(personAssignment);
 			});

@@ -27,8 +27,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			// we are signed in with a transient BU and cant publish events
-			var bu = _businessUnit.Current();
-			if (bu?.Id == null) return;
+			var businessUnitId = _businessUnit.CurrentId();
+			if (!businessUnitId.HasValue) 
+				return;
 
 			var affectedInterfaces = from r in modifiedRoots
 									 let t = r.Root.GetType()

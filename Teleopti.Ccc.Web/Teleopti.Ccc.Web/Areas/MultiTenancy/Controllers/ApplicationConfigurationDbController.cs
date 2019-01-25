@@ -17,21 +17,29 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[HttpGet,Route("Configuration/GetAll")]
 		public virtual IHttpActionResult GetAll()
 		{
-			return Ok(_appConfig.GetConfiguration());
+			return Ok(_appConfig.GetAll());
 		}
 
 		[TenantUnitOfWork]
-		[HttpGet, Route("Configuration/TryGetServerValue")]
-		public virtual IHttpActionResult TryGetServerValue(string key, string defaultValue)
+		[HttpGet, Route("Configuration/GetServerValue")]
+		public virtual IHttpActionResult GetServerValue(string key)
 		{
-			return Ok(_appConfig.TryGetServerValue(key, defaultValue));
+			if (Enum.TryParse<ServerConfigurationKey>(key, out var enumKey))
+			{
+				return Ok(_appConfig.GetServerValue(enumKey));
+			}
+			return Ok<string>(null);
 		}
 
 		[TenantUnitOfWork]
-		[HttpGet, Route("Configuration/TryGetTenantValue")]
-		public virtual IHttpActionResult TryGetTenantValue(string key, string defaultValue)
+		[HttpGet, Route("Configuration/GetTenantValue")]
+		public virtual IHttpActionResult GetTenantValue(string key)
 		{
-			return Ok(_appConfig.TryGetTenantValue(key, defaultValue));
+			if (Enum.TryParse<TenantApplicationConfigKey>(key, out var enumKey))
+			{
+				return Ok(_appConfig.GetTenantValue(enumKey));
+			}
+			return Ok<string>(null);
 		}
 	}
 }

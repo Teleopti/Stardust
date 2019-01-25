@@ -290,6 +290,8 @@ var rtaTester = (function () {
 				state.$sessionStorage.$reset();
 			state.lastGoParams = undefined;
 			state.lastNotice = undefined;
+            jasmine.clock().uninstall();
+            moment.locale('en');
 		});
 
 		var bagOfCandy = controllerName == 'RtaAgentsController78568';
@@ -306,7 +308,9 @@ var rtaTester = (function () {
 		if (description === 'RtaTracerController')
 			setup(tests, '', 'RtaTracerController');
 		if (description === 'RtaHistoricalOverviewController')
-			setup(tests, '', 'RtaHistoricalOverviewController80594');
+			setup(tests, '', 'RtaHistoricalOverviewController80594');		
+		if (description === 'AdjustAdherenceController')
+			setup(tests, '', 'AdjustAdherenceController');
 		
 	}
 
@@ -319,8 +323,9 @@ var rtaTester = (function () {
 		fdescribe: function (description, tests) {
 			return fdescribe(description, function () {
 				setupByDescription(description, tests);
-			});
-		}
+			})
+		},
+		xdescribe: xdescribe
 	}
 
 })();

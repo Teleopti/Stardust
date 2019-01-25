@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
@@ -11,7 +10,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class ServiceLocatorModule : Module
 	{
+		private readonly IocConfiguration _config;
 		private bool _injecting = false;
+
+		public ServiceLocatorModule(IocConfiguration config)
+		{
+			_config = config;
+		}
 
 		protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, IComponentRegistration registration)
 		{
@@ -24,27 +29,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				return;
 			_injecting = true;
 
-			// set service locators
-			inject(container, typeof (ServiceLocatorForEntity));
-			inject(container, typeof (ServiceLocatorForLegacy));
-			inject(container, typeof (Infrastructure.ServiceLocatorForLegacy));
+			if (_config.Args().EnableLegacyServiceLocators)
+			{
+				var state = new ServiceLocatorState();
+				var fields = state.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+				fields.ForEach(x => x.SetValue(state, container.Resolve(x.FieldType)));
+				ServiceLocator_DONTUSE.Instance.Push(state);
+			}
+			else
+			{
+				ServiceLocator_DONTUSE.Instance.Push(null);
+			}
 
 			// resolve the disposer so that we are sure its dispose method will be called
 			container.Resolve<serviceLocatorDisposer>();
-		}
-
-		private static void inject(IComponentContext container, IReflect type)
-		{
-			// set roperty values
-			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Static).Where(x => x.CanWrite);
-			properties.ForEach(x => x.SetValue(null, container.Resolve(x.PropertyType), null));
-		}
-
-		private static void clear(Type type)
-		{
-			// clear property values
-			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Static).Where(x => x.CanWrite);
-			properties.ForEach(x => x.SetValue(null, null, null));
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -56,11 +54,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			public void Dispose()
 			{
-				clear(typeof(ServiceLocatorForEntity));
-				clear(typeof(ServiceLocatorForLegacy));
-				clear(typeof(Infrastructure.ServiceLocatorForLegacy));
+				ServiceLocator_DONTUSE.Instance.Pop();
 			}
-
 		}
 	}
 }

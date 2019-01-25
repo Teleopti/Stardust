@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
             _nodeCollection = new List<TreeNodeAdv>();
 
             //Create busienssunit node & add into the nodes.
-            var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
+            var bu = ((ITeleoptiIdentityForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnit();
             
             var rootNode = new TreeNodeAdv(bu.Description.ToString())
                                {
@@ -473,16 +473,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
         public void SaveChanges()
         {
 
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+            var identity = ((ITeleoptiIdentityForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity);
             foreach (IAggregateRoot aggregateRoot in _newNodesCollection)
             {
                 var theSite = aggregateRoot as ISite;
                 if (theSite != null)
-                    identity.BusinessUnit.AddSite(theSite);
+                    identity.BusinessUnit().AddSite(theSite);
 
                 var theTeam = aggregateRoot as ITeam;
                 if (theTeam == null) continue;
-                var teamSite = identity.BusinessUnit.SiteCollection.
+                var teamSite = identity.BusinessUnit().SiteCollection.
                     FirstOrDefault(s => s.Equals(theTeam.Site));
                 if (teamSite != null) teamSite.AddTeam(theTeam);
             }
@@ -491,11 +491,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
             {
                 var theSite = aggregateRoot as ISite;
                 if (theSite != null)
-                    identity.BusinessUnit.RemoveSite(theSite);
+                    identity.BusinessUnit().RemoveSite(theSite);
 
                 var theTeam = aggregateRoot as ITeam;
                 if (theTeam == null) continue;
-                var teamSite = identity.BusinessUnit.SiteCollection.
+                var teamSite = identity.BusinessUnit().SiteCollection.
                     FirstOrDefault(s => s.Equals(theTeam.Site));
                 teamSite.RemoveTeam(theTeam);
             }

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			try
 			{
-				var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+				var businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 				var personSubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					.CreateAlias("Team", "team", JoinType.InnerJoin)
 					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					.CreateAlias("Team", "team", JoinType.InnerJoin)
 					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
-					.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current()))
+					.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current()))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
 				var criterias = Session.CreateQueryBatch()
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					.CreateAlias("Team", "team", JoinType.InnerJoin)
 					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
-					.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current()))
+					.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current()))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
 				var criterias = Session.CreateQueryBatch()
@@ -557,7 +557,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Le("StartDate", period.EndDate))
 				.Add(Restrictions.Ge("internalEndDate", period.StartDate))
 				.Add(Restrictions.EqProperty("Parent", "per.Id"))
-				.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current()));
+				.Add(Restrictions.Eq("site.BusinessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current()));
 
 			return detachedCriteria;
 		}
@@ -567,7 +567,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (Session.BeginTransaction(IsolationLevel.ReadUncommitted))
 			{
 				return Session.GetNamedQuery("AgentSkillMatrix")
-					.SetEntity("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current())
+					.SetEntity("bu", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current())
 					.SetEntity("scenario", scenario)
 					.SetProperties(period)
 					.List<Tuple<Guid, Guid>>();
@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (Session.BeginTransaction(IsolationLevel.ReadUncommitted))
 			{
 				return Session.GetNamedQuery("AgentSiteMatrix")
-					.SetEntity("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current())
+					.SetEntity("bu", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current())
 					.SetProperties(period)
 					.List<Guid>();
 			}

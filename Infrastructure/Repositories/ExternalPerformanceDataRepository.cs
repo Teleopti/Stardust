@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ICollection<IExternalPerformanceData> FindByPeriod(DateOnlyPeriod period)
 		{
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			var businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 			return Session.CreateCriteria<ExternalPerformanceData>()
 				.Add(Restrictions.Conjunction()
 					.Add(Restrictions.Eq("BusinessUnit", businessUnit))

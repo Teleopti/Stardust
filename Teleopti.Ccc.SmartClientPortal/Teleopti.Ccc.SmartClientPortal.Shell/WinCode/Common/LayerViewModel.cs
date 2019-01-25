@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			get
 			{
 				var vs = Layer as IVisualLayer;
-				return vs?.Payload.ConfidentialDisplayColor(_person) ?? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person);
+				return vs?.Payload.ConfidentialDisplayColor_DONTUSE(_person) ?? Layer.Payload.ConfidentialDisplayColor_DONTUSE(SchedulePart.Person);
 			}
 		}
 
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			get
 			{
 				var vs = Layer as IVisualLayer;
-				return vs == null ? Layer.Payload.ConfidentialDescription(SchedulePart.Person).Name : vs.Payload.ConfidentialDescription(SchedulePart?.Person ?? _person).Name;
+				return vs == null ? Layer.Payload.ConfidentialDescription_DONTUSE(SchedulePart.Person).Name : vs.Payload.ConfidentialDescription_DONTUSE(SchedulePart?.Person ?? _person).Name;
 			}
 		}
 

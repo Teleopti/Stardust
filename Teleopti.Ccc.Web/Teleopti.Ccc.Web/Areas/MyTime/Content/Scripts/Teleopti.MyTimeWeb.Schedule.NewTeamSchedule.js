@@ -127,14 +127,6 @@
 				vm.isPanelVisible(false);
 			}
 		});
-
-		document.addEventListener(
-			'touchstart',
-			function() {
-				$('.tooltip').hide();
-			},
-			true
-		);
 	}
 
 	function rebuildTooltipForTimeFilterIcon() {

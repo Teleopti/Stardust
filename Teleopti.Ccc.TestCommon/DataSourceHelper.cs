@@ -17,7 +17,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Support.Library;
 using Teleopti.Wfm.Adherence.States;
 using Environment = NHibernate.Cfg.Environment;
-using ServiceLocatorForLegacy = Teleopti.Ccc.Infrastructure.ServiceLocatorForLegacy;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -48,8 +47,8 @@ namespace Teleopti.Ccc.TestCommon
 						enversConfiguration,
 						null,
 						new CurrentHttpContext(),
-						ServiceLocatorForLegacy.UpdatedBy,
-						ServiceLocatorForEntity.CurrentBusinessUnit,
+						ServiceLocator_DONTUSE.UpdatedBy,
+						ServiceLocator_DONTUSE.CurrentBusinessUnit,
 						new SirLeakAlot()));
 			});
 		}

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             _target = new ExtendReduceTimeDecisionMaker(_bitArrayConverter);
             _scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _lockableBitArray = new LockableBitArray(5, false, false, null);
+            _lockableBitArray = new LockableBitArray(5, false, false);
             _data = new List<double?>{-1, 8, 1, -8, 5};
             _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();

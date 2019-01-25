@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyDefaultPropertiesAreSet()
         {
             Assert.AreEqual("test", testPartTimePercentage.Description.Name);
-            Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, testPartTimePercentage.BusinessUnit);
+            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, testPartTimePercentage.BusinessUnit);
             Assert.AreEqual(1d, testPartTimePercentage.Percentage.Value);
             Assert.IsTrue(testPartTimePercentage.IsChoosable);
         }

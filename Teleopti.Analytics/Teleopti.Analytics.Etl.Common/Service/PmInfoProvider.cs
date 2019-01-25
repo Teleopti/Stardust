@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		{
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				return _serverConfigurationRepository.Get("PM_INSTALL");
+				return _serverConfigurationRepository.Get(ServerConfigurationKey.PM_INSTALL);
 			}
 		}
 
@@ -32,8 +33,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		{
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				var asServerName = _serverConfigurationRepository.Get("AS_SERVER_NAME");
-				var asDatabase = _serverConfigurationRepository.Get("AS_DATABASE");
+				var asServerName = _serverConfigurationRepository.Get(ServerConfigurationKey.AS_SERVER_NAME);
+				var asDatabase = _serverConfigurationRepository.Get(ServerConfigurationKey.AS_DATABASE);
 				return 
 					$"Provider=MSOLAP.3;Integrated Security=SSPI;Persist Security Info=True;Data Source={asServerName};Initial Catalog={asDatabase};Client Cache Size=25;Auto Synch Period=10000";
 			}

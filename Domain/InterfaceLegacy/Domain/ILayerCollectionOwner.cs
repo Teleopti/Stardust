@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created date: 2008-01-25
         /// </remarks>
         void OnAdd(ILayer<T> layer);
-    }
+	}
 
 	/// <summary>
 	/// 

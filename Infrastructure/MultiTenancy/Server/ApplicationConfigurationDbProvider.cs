@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 	public class ApplicationConfigurationDbProvider : IApplicationConfigurationDbProvider
 	{
 		private readonly IServerConfigurationRepository _serverRepo;
-		private readonly ICurrentTenant _currentTenant;
+		private readonly ICurrentTenant  _currentTenant;
 
 		public ApplicationConfigurationDbProvider(IServerConfigurationRepository serverRepo, ICurrentTenant currentTenant)
 		{
@@ -15,28 +16,46 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_currentTenant = currentTenant;
 		}
 
-		public ApplicationConfigurationDb GetConfiguration()
+		public ApplicationConfigurationDb GetAll()
 		{
+			var serverDbConfig = _serverRepo?.AllConfigurations();
+			var serverConfig = new Dictionary<ServerConfigurationKey, string>();
+			foreach (var sc in serverDbConfig)
+			{
+				if (Enum.TryParse<ServerConfigurationKey>(sc.Key, out var enumKey))
+				{
+					serverConfig.Add(enumKey, sc.Value);
+				}
+			}
+
+			var tenantDbConfig = _currentTenant?.Current()?.ApplicationConfig;
+			var tenantConfig = new Dictionary<TenantApplicationConfigKey, string>();
+			if (tenantDbConfig != null)
+			{
+				foreach (var sc in tenantDbConfig)
+				{
+					if (Enum.TryParse<TenantApplicationConfigKey>(sc.Key, out var enumKey))
+					{
+						tenantConfig.Add(enumKey, sc.Value);
+					}
+				}
+			}
+
 			return new ApplicationConfigurationDb
 			{
-				Server = _serverRepo?.AllConfigurations()?.ToDictionary(k => k.Key, v => v.Value),
-				Tenant = _currentTenant?.Current()?.ApplicationConfig?.ToDictionary(k => k.Key, v => v.Value)
+				Server = serverConfig,
+				Tenant = tenantConfig
 			};
 		}
 
-		public string TryGetServerValue(string key, string defaultValue = "")
+		public string GetServerValue(ServerConfigurationKey key)
 		{
-			return _serverRepo?.Get(key) ?? defaultValue;
+			return _serverRepo?.Get(key);
 		}
 
-		public string TryGetTenantValue(string key, string defaultValue = "")
+		public string GetTenantValue(TenantApplicationConfigKey key)
 		{
-			string value = string.Empty;
-			if (_currentTenant?.Current()?.ApplicationConfig?.TryGetValue(key, out value) ?? false)
-			{
-				return value;
-			}
-			return defaultValue;
+			return _currentTenant?.Current()?.GetApplicationConfig(key);
 		}
 	}
 }

@@ -32,12 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                     schedulerSplitters1.Dispose();
                     schedulerSplitters1 = null;
                 }
-                if (_gridChartManager != null)
-                    _gridChartManager.Dispose();
-                if (_skillDayGridControl!=null)
-                    _skillDayGridControl.Dispose();
-                if (_skillIntradayGridControl!=null)
-                    _skillIntradayGridControl.Dispose();
+                
                 if (_schedulerMessageBrokerHandler!=null)
                     _schedulerMessageBrokerHandler.Dispose();
                 if (_clipboardControl != null)

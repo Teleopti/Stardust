@@ -10896,7 +10896,7 @@ Teleopti R&amp;D</value>
     <value>开始时间应早于结束时间</value>
   </data>
   <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Teleopti产品激活密钥无效</value>
+    <value>Teleopti产品激活密钥免责条款</value>
   </data>
   <data name="TestSendingToColon" xml:space="preserve">
     <value>测试发送到：</value>
@@ -14859,10 +14859,10 @@ Teleopti R&amp;D</value>
     <value>请输入有效的邮件地址</value>
   </data>
   <data name="ResetPasswordSuccess" xml:space="preserve">
-    <value>重置密码说明邮件已发送给您</value>
+    <value>一个说明邮件已发送给您</value>
   </data>
   <data name="ForgotYourPasswordInstruction" xml:space="preserve">
-    <value>请输入用户名以获取重置密码说明</value>
+    <value>请数据人用户名以获得充值密码说明</value>
   </data>
   <data name="SomethingWentWrong" xml:space="preserve">
     <value>出现了一些问题。请稍后重试。</value>
@@ -14874,7 +14874,7 @@ Teleopti R&amp;D</value>
     <value>复制班表</value>
   </data>
   <data name="CopyScheduleDescription" xml:space="preserve">
-    <value>从任意一个“非默认”的情景复制班表，选定周期内目标情景的班表将被覆盖</value>
+    <value>从任意一个”非默认“的情景复制班表，选定周期内目标情景的班表将被覆盖</value>
   </data>
   <data name="SelectSkillOrGroup" xml:space="preserve">
     <value>选择一个技能或技能组</value>
@@ -15169,5 +15169,137 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ContractTimeViolation" xml:space="preserve">
     <value>当前调换班会导致过多的工时变更。</value>
+  </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>系统设置</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>常规设置</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
+    <value>您已修改了班次．您想要关闭并不保存吗？</value>
+  </data>
+  <data name="MonthOrMonths" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="WeekLowerCase" xml:space="preserve">
+    <value>周</value>
+  </data>
+  <data name="WeeksLowerCase" xml:space="preserve">
+    <value>周</value>
+  </data>
+  <data name="MonthLowerCase" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="MonthsLowerCase" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="DayLowerCase" xml:space="preserve">
+    <value>天</value>
+  </data>
+  <data name="DaysLowerCase" xml:space="preserve">
+    <value>天</value>
+  </data>
+  <data name="YearLowerCase" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="YearsLowerCase" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="WeekOrWeeks" xml:space="preserve">
+    <value>周</value>
+  </data>
+  <data name="BlockSchedulingColon" xml:space="preserve">
+    <value>批次排班：</value>
+  </data>
+  <data name="PublishSchedulePlans" xml:space="preserve">
+    <value>发布班表</value>
+  </data>
+  <data name="DeleteInsightsReport" xml:space="preserve">
+    <value>删除报表</value>
+  </data>
+  <data name="AuditTrailGeneralAuditTrailReport" xml:space="preserve">
+    <value>常规审核跟踪</value>
+  </data>
+  <data name="AuditTrailReportGroup" xml:space="preserve">
+    <value>审核跟踪</value>
+  </data>
+  <data name="AuditTrailSearchFilter" xml:space="preserve">
+    <value>搜索筛选器</value>
+  </data>
+  <data name="PasswordPolicyError" xml:space="preserve">
+    <value>密码策略错误</value>
+  </data>
+  <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
+    <value>您确定要从日历 {1} 中删除 {0} 年度？</value>
+  </data>
+  <data name="BankHolidayCalendarHasBeenSuccessfullyDeleted" xml:space="preserve">
+    <value>公共假日日历 {0} 已成功删除。</value>
+  </data>
+  <data name="BankHolidayCalendars" xml:space="preserve">
+    <value>公共假日日历</value>
+  </data>
+  <data name="DeleteThisYear" xml:space="preserve">
+    <value>删除该年度</value>
+  </data>
+  <data name="NameAlreadyExisting" xml:space="preserve">
+    <value>名称已存在</value>
+  </data>
+  <data name="NewCalendarName" xml:space="preserve">
+    <value>新的日历名称</value>
+  </data>
+  <data name="AddANewYear" xml:space="preserve">
+    <value>添加一个新的年度</value>
+  </data>
+  <data name="ThisCalendarHasNoDatesAdded" xml:space="preserve">
+    <value>该日历中没有添加日期。</value>
+  </data>
+  <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">
+    <value>这个年度没有定义公共假日。从日历选择一个日期以添加公共假日。</value>
+  </data>
+  <data name="BankHoliday" xml:space="preserve">
+    <value>公共假日</value>
+  </data>
+  <data name="NoBankHolidays" xml:space="preserve">
+    <value>没有公共假日</value>
+  </data>
+  <data name="AddNewBankHolidayCalendar" xml:space="preserve">
+    <value>添加新的公共假日日历</value>
+  </data>
+  <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
+    <value>发生一个错误。请检查网络连接并重试。如果持续出现错误，请联系您的管理员。</value>
+  </data>
+  <data name="NumberOfAgents" xml:space="preserve">
+    <value>{0} 个座席代表</value>
+  </data>
+  <data name="OneAgent" xml:space="preserve">
+    <value>1个座席代表</value>
+  </data>
+  <data name="DayOffRulesColon" xml:space="preserve">
+    <value>休息日规则：</value>
+  </data>
+  <data name="ScheduledAgents" xml:space="preserve">
+    <value>已排定的座席代表</value>
+  </data>
+  <data name="ValidationIssues" xml:space="preserve">
+    <value>验证问题</value>
+  </data>
+  <data name="ValidationsAreLoading" xml:space="preserve">
+    <value>正在进行验证</value>
+  </data>
+  <data name="ValidationsAreLoadingTooltip" xml:space="preserve">
+    <value>正在进行验证，请稍等一会</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
+    <value>此规划组中没有座席代表。请检查筛选器。</value>
+  </data>
+  <data name="ManageCalendars" xml:space="preserve">
+    <value>管理日历</value>
+  </data>
+  <data name="AssignCalendarsToSites" xml:space="preserve">
+    <value>分配日历到站点</value>
   </data>
 </root>

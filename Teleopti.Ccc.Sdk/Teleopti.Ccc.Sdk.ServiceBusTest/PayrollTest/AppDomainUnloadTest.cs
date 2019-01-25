@@ -98,6 +98,36 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		}
 
 		[Test]
+		public void ShouldFindDefaultPayrollFilesOnPayrollRootDirWhenUsingTenantSpecificDir()
+		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
+			runWithExceptionHandling(() =>
+			{
+				var payrollExportDto = new PayrollExportDto
+				{
+					TimeZoneId = "Utc",
+					DatePeriod = new DateOnlyPeriodDto
+					{
+						StartDate = new DateOnlyDto(2009, 2, 1),
+						EndDate = new DateOnlyDto(2009, 2, 1)
+
+					},
+					Name = "NewTenantFolderCreated",
+					PayrollFormat = new PayrollFormatDto(new Guid("{0e531434-a463-4ab6-8bf1-4696ddc9b296}"), "Name", "NewTenantFolderCreated")
+				};
+				for (var i = 0; i < 51; i++)
+					payrollExportDto.PersonCollection.Add(new PersonDto());
+
+				var target = new AppdomainCreatorWrapper();
+				var document = target.RunPayroll(new SdkFakeServiceFactory(), payrollExportDto,
+					new RunPayrollExportEvent(), Guid.NewGuid(), new FakeServiceBusPayrollExportFeedback(new InterAppDomainArguments()), _searchPath.Path);
+				document.DocumentElement.ChildNodes.Count.Should().Be(5);
+			});
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
+		}
+
+		[Test]
 		public void ShouldNotCrashIfTenantNotFound()
 		{
 			var existingPath = AppDomain.CurrentDomain.BaseDirectory;

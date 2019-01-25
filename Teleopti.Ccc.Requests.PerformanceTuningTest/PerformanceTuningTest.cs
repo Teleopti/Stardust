@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public AsSystem AsSystem;
 		public IDataSourceScope DataSource;
 		public IPersonRequestRepository PersonRequestRepository;
-		public MultiAbsenceRequestsHandler Target;
+		public MultiAbsenceRequestsHandlerRobustToggleOff Target;
 		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]

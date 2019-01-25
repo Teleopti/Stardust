@@ -823,9 +823,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		public static bool IsWorkday(this IScheduleDay scheduleDay)
 		{
-			if (scheduleDay.SignificantPart() == SchedulePartView.Overtime)
+			var schedulePartView = scheduleDay.SignificantPart();
+			if (schedulePartView == SchedulePartView.Overtime)
 				return true;
-			if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
+			if (schedulePartView == SchedulePartView.MainShift)
 				return true;
 			return false;
 		}

@@ -82,13 +82,13 @@ Layout = null;
 				</div>
 
 				<!-- ko if: showOldTrafficLightIconOnMobile -->
-				<div class="holiday-agents cursorpointer inline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom', trigger: 'click'}, hideTooltipAfterMouseLeave: true, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
+				<div class="holiday-agents cursorpointer inline-block" data-bind="visible: absenceRequestPermission, tooltip: { title: trafficLightTooltip(), placement: 'bottom', trigger: 'click'}, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
 					<div class="small-circle" data-bind="style: {background: trafficLightColor()}"></div>
 				</div>
 				<!-- /ko -->
 
 				<!--ko if: showNewTrafficLightIconOnMobile -->
-				<div class="holiday-agents progress traffic-light-progress" data-bind="tooltip: { title: trafficLightTooltip(), html: true, placement: 'bottom', trigger: 'click'}, hideTooltipAfterMouseLeave: true, css: trafficLightIconClass, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
+				<div class="holiday-agents progress traffic-light-progress" data-bind="tooltip: { title: trafficLightTooltip(), html: true, placement: 'bottom', trigger: 'click'}, css: trafficLightIconClass, style: {'right': showProbabilityOptionsToggleIcon() ? '38px': '0'}">
 					<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
 						<span class="sr-only">60% Complete</span>
 					</div>
@@ -135,7 +135,7 @@ Layout = null;
 			<!-- ko if: !isLoading() -->
 			<div class="mobile-schedule-layer-container" data-bind="style: {'width': probabilities().length > 0 ? 'calc(100% - 28px)' : '100%' }">
 				<!-- ko foreach: layers-->
-				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-availability-bar': isOvertimeAvailability, 'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-availability-bar': isOvertimeAvailability, 'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}">
 					<div data-bind="visible: showTitle && !isOvertimeAvailability">
 						<!-- ko if: hasMeeting -->
 						<div class="meeting">
@@ -160,7 +160,7 @@ Layout = null;
 			<!-- ko if: showProbabilityOptionsToggleIcon && probabilities().length > 0 -->
 			<div class="probability-vertical-bar">
 				<!--ko foreach: probabilities()-->
-				<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson, hideTooltipAfterMouseLeave: true"></div>
+				<div class="probability-cell" data-bind="css:cssClass(), tooltip: {title: tooltips, html:true, placement: 'left', trigger: 'click'}, style: styleJson"></div>
 				<!-- /ko -->
 			</div>
 			<!-- /ko -->

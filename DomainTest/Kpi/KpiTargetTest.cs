@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Kpi
             Assert.AreEqual(500, target.MaxValue);
             Assert.AreEqual(250, target.TargetValue);
 
-            Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
+            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
             
         }
         [Test]

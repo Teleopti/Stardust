@@ -11,9 +11,12 @@
 		return service;
 
 		function setLocales(data) {
+            angularMoment.changeLocale(data.DateFormatLocale);
+			if (!data.Language)
+				return;
+            
 			$translate.use(data.Language);
-			angularMoment.changeLocale(data.DateFormatLocale);
-			dynamicLocaleService.set(data.DateFormatLocale);
+            dynamicLocaleService.set(data.DateFormatLocale);
 			
 			// i18nService is for UI Grid localization.
 			// Languages supported by it is less than languages in server side (Refer to http://ui-grid.info/docs/#/tutorial/104_i18n).

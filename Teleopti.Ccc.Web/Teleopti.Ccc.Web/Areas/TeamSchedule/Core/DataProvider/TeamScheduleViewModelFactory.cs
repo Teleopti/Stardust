@@ -172,6 +172,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 					batchPermittedPersons = absenceScheduleDaysForPerson
 						.Select(sd => sd.Person)
+						.Distinct()
 						.ToList();
 				}
 				permittedPersons.AddRange(batchPermittedPersons);

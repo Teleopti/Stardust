@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly TeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly TeamBlockClearer _teamBlockClearer;
-		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
+		private readonly DailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly IWorkShiftSelector _workShiftSelector;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			TeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 			TeamBlockClearer teamBlockClearer,
-			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
+			DailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			IWorkShiftSelector workShiftSelector,
@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
+			var skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDays);
 			var callback = _currentOptimizationCallback.Current();
 			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, schedulingOptions);
 			var totalTeamBlockInfos = sortedTeamBlockInfos.Count;
@@ -149,7 +150,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var orgAssignmentsForTeamBlock = scheduleDictionary.SchedulesForPeriod(teamBlockInfo.BlockInfo.BlockPeriod, teamBlockInfo.TeamInfo.GroupMembers.ToArray())
 					.Select(x => x.PersonAssignment()).Where(x => x != null).ToArray();
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
-				var resCalcData = new ResourceCalculationData(scheduleDictionary, skillDays, schedulingOptions.ConsiderShortBreaks, false);
+				
+				var resCalcData = new ResourceCalculationData(scheduleDictionary, skillDays, skillStaffPeriodHolder, schedulingOptions.ConsiderShortBreaks, false);
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(orgAssignmentsForTeamBlock, new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays, scheduleDictionary, resCalcData, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);

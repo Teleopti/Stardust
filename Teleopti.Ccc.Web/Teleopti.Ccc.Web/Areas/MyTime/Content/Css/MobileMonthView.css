@@ -160,17 +160,12 @@
 	overflow-y: auto;
 }
 
-.mobile-month-day-outmonth {
+.mobile-month-day-outmonth .day-header-day,
+.mobile-month-day-outmonth .shift {
 	opacity: 0.4;
 }
 .mobile-month-current-day {
-	border: 1px solid #aaa;
-}
-.mobile-month-day .day-header-day.mobile-month-bank-holiday-day {
-	background: red;
-	border-radius: 50%;
-	color: white;
-	border-color: red;
+	border: 1px solid green;
 }
 .mobile-month-view .shift.is-day-off {
 	background-color: beige;

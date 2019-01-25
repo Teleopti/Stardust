@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public FakePersonRepository PersonRepository;
 		public IUserTimeZone UserTimeZone;
 		public FakeToggleManager ToggleManager;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		private ITeam team;
 		private IPersonPeriod personPeriod;
@@ -310,6 +311,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
 			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+			LoggedOnUser.SetFakeLoggedOnUser(personFrom);
 
 			var personRequest = createShiftTradeRequest(theDate, theDate, personFrom, personTo);
 			var shiftTradeRequest = (ShiftTradeRequest)personRequest.Request;
@@ -325,7 +327,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var status = shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing());
 			status.Should().Be(ShiftTradeStatus.Referred);
+		}
 
+		[Test]
+		public void ShouldNotUpdateShiftTradeStatusIfLoggedOnUserIsNotOneOfTrader()
+		{
+			var theDate = new DateOnly(2019, 1, 24);
+
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+
+			var personRequest = createShiftTradeRequest(theDate, theDate, personFrom, personTo);
+			var shiftTradeRequest = (ShiftTradeRequest)personRequest.Request;
+			personRequest.Pending();
+
+			createRequestListViewModel(theDate, theDate);
+
+			var status = shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing());
+			status.Should().Be(ShiftTradeStatus.OkByBothParts);
 		}
 
 		[Test]
@@ -338,6 +357,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
 			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
 			setUpPeople(personTo, personFrom);
+			LoggedOnUser.SetFakeLoggedOnUser(personFrom);
 
 			var personRequest = createShiftTradeRequest(theDate, theDate, personFrom, personTo);
 			var shiftTradeRequest = (ShiftTradeRequest)personRequest.Request;
@@ -358,7 +378,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			Assert.AreEqual(1, requestListViewModel.Requests.Count());
 			Assert.AreEqual(personRequest2.Id, requestListViewModel.Requests.First().Id);
-
 		}
 
 
@@ -696,7 +715,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				{personTo, personToAssignment},
 				{personFrom, personFromAssignment},
 			};
-
 		}
 
 		private ShiftTradeRequestListViewModel createRequestListViewModel(DateOnly startDate, DateOnly endDate)

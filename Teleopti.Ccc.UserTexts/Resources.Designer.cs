@@ -1393,6 +1393,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Period.
+        /// </summary>
+        public static string AddPeriod {
+            get {
+                return ResourceManager.GetString("AddPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add person.
         /// </summary>
         public static string AddPerson {
@@ -1673,11 +1682,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adjust Adherence.
+        /// </summary>
+        public static string AdjustAdherenceLink {
+            get {
+                return ResourceManager.GetString("AdjustAdherenceLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adjusted difference.
         /// </summary>
         public static string AdjustedDifference {
             get {
                 return ResourceManager.GetString("AdjustedDifference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjusted Periods.
+        /// </summary>
+        public static string AdjustedPeriods {
+            get {
+                return ResourceManager.GetString("AdjustedPeriods", resourceCulture);
             }
         }
         
@@ -1705,6 +1732,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AdjustTimeBankWithSeasonality {
             get {
                 return ResourceManager.GetString("AdjustTimeBankWithSeasonality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjust to Neutral.
+        /// </summary>
+        public static string AdjustToNeutral {
+            get {
+                return ResourceManager.GetString("AdjustToNeutral", resourceCulture);
             }
         }
         
@@ -22706,6 +22742,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No skill group created.
+        /// </summary>
+        public static string NoSkillGroupCreated {
+            get {
+                return ResourceManager.GetString("NoSkillGroupCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No skill groups found.
         /// </summary>
         public static string NoSkillGroupsFound {
@@ -36295,6 +36340,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TeamScheduling {
             get {
                 return ResourceManager.GetString("TeamScheduling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Scheduling:.
+        /// </summary>
+        public static string TeamSchedulingColon {
+            get {
+                return ResourceManager.GetString("TeamSchedulingColon", resourceCulture);
             }
         }
         

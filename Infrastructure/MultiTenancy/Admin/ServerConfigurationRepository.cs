@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
@@ -28,11 +29,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 					.ExecuteUpdate();
 		}
 
-		public string Get(string key)
+		public string Get(ServerConfigurationKey key)
 		{
 			return _currentTenantSession.CurrentSession()
 				.CreateSQLQuery("SELECT [Value] FROM [Tenant].[ServerConfiguration] WHERE [Key] = :key")
-				.SetParameter("key", key)
+				.SetParameter("key", key.ToString())
 				.UniqueResult<string>();
 		}
 

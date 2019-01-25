@@ -389,13 +389,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     }
                     if (period==null) continue;
 
-                    Percent factor;
-                    if (!content.MultisitePeriod.Distribution.TryGetValue((IChildSkill) skillDay.Skill, out factor)) continue;
+					if (!content.MultisitePeriod.Distribution.TryGetValue((IChildSkill) skillDay.Skill, out var factor)) continue;
                     
                     double tasks = content.SkillStaffPeriod.Payload.TaskData.Tasks*factor.Value;
-                    
-                    IList<ISkillStaffPeriod> skillDayStaffPeriods;
-                    if (!skillDayContent.TryGetValue(skillDay, out skillDayStaffPeriods))
+
+					if (!skillDayContent.TryGetValue(skillDay, out var skillDayStaffPeriods))
                     {
                         skillDayStaffPeriods = new List<ISkillStaffPeriod>();
                         skillDayContent.Add(skillDay, skillDayStaffPeriods);
@@ -425,7 +423,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                                                                           Payload.
                                                                                           CalculatedOccupancy)));
 
-                    skillStaffPeriod.Payload.Shrinkage = content.SkillStaffPeriod.Payload.Shrinkage;
+					var multiSiteStaffPeriod =
+						_multisiteSkillDay.SkillStaffPeriodCollection.FirstOrDefault(x =>
+							x.Period == content.SkillStaffPeriod.Period);
+					var manualAgents = multiSiteStaffPeriod?.Payload.ManualAgents;
+					if (manualAgents.HasValue)
+					{
+						skillStaffPeriod.Payload.ManualAgents = manualAgents * factor.Value;
+					}
+
+					skillStaffPeriod.Payload.Shrinkage = content.SkillStaffPeriod.Payload.Shrinkage;
                     skillStaffPeriod.Payload.Efficiency = content.SkillStaffPeriod.Payload.Efficiency;
                     skillStaffPeriod.Payload.SkillPersonData = period.SkillPersonData;
                     skillStaffPeriod.IsAvailable = true;

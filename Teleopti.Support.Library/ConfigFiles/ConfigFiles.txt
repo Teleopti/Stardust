@@ -21,3 +21,4 @@ $(Repository)Teleopti.Ccc.Requests.PerformanceTuningTest\app.config,$(BuildArtif
 $(Repository)Teleopti.Ccc.Staffing.PerformanceTest\app.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
 $(Repository)Teleopti.Ccc.StartPage\Web.config,$(BuildArtifacts)Web.StartPage.Web.config
 $(Repository)Teleopti.Ccc.ViewSchedule.PerformanceTest\app.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config
+$(Repository)Teleopti.Ccc.AbsenceRequest.PerformanceTest\app.config,$(BuildArtifacts)Teleopti.Ccc.TestCommon.App.config

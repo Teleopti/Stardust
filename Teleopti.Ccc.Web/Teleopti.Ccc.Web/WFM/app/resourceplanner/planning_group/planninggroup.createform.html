@@ -1,10 +1,10 @@
 <div class="view-header">
 	<div class="view-title" ng-if="!vm.isEditGroup">
-		<h1><i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / {{'CreatePlanningGroup' | translate}}
+		<h1><i class="mdi mdi-calendar"></i><a href="#/resourceplanner">{{'Plans' | translate}}</a> / {{'CreatePlanningGroup' | translate}}
 		</h1>
 	</div>
 	<div class="view-title" ng-if="vm.isEditGroup">
-		<h1><i class="mdi mdi-calendar"></i> <a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.planningGroupId}}/selectplanningperiod">{{vm.name}}</a> / {{'Edit' | translate}}</h1>
+		<h1><i class="mdi mdi-calendar"></i><a href="#/resourceplanner">{{'Plans' | translate}}</a> / <a href="#/resourceplanner/planninggroup/{{vm.planningGroupId}}/selectplanningperiod">{{vm.name}}</a> / {{'Edit' | translate}}</h1>
 	</div>
 </div>
 <div class="con-row">
@@ -63,25 +63,21 @@
 			</div>
 			<div class="con-flex panel">
 				<label style="margin: 5px"><b>{{'PlanGroupScheduling' | translate}}:</b></label>
-                <div class="con-row">
-                    <div class="con-flex ">
-                        <div class="con-row align-row-center">
-                            <div class="con-flex x3 align-row-center">
-                                <button class="wfm-btn wfm-btn-invis-default" id="createSchedulingSetting" ng-click="vm.goCreateSchedulingSetting()">
-                                    <i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-				<planning-group-settings-overview settings="vm.editPlanningGroup.Settings" preference-percent="vm.editPlanningGroup.PreferencePercent"></planning-group-settings-overview>
+				<div class="con-row align-row-center">
+					<div class="con-flex x3 align-row-center">
+						<button class="wfm-btn wfm-btn-invis-default" id="createSchedulingSetting" ng-click="vm.goCreateSchedulingSetting()">
+							<i class="mdi mdi-plus"></i> {{'NewPlanGroupSchedulingSetting' | translate}}</button>
+					</div>
+				</div>
+				<planning-group-settings-overview settings="vm.editPlanningGroup.Settings" preference-percent="vm.editPlanningGroup.PreferencePercent" team-settings="vm.editPlanningGroup.TeamSettings"></planning-group-settings-overview>
 			</div>
-			<div class="wfm-card-content" style="height: 62px;border-top: 1px solid rgba(0, 0, 0, 0.16);">
-				<div style="float: left;">
-					<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-default delete-plan-group"
+			<div>
+				<div class="pull-left">
+					<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-danger delete-plan-group"
 							ng-click='vm.confirmDeleteModal=true;'>{{'Delete'|translate}}
 					</button>
 				</div>
-				<div style="float: right;">
+				<div class="pull-right">
 					<button class="wfm-btn wfm-btn-invis-default"
 							ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
 					<button type="submit" class="wfm-btn save-plan-group wfm-btn-invis-primary" ng-disabled="vm.requestSent" ng-click="vm.persist()">
@@ -102,7 +98,7 @@
 												class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}
 										</button>
 										<button ng-click="vm.removePlanningGroup()" ng-disabled="vm.requestSent"
-												class="wfm-btn wfm-btn-invis-primary confirm-delete-plan-group">
+												class="wfm-btn wfm-btn-invis-danger confirm-delete-plan-group">
 											{{'Delete'|translate}}
 										</button>
 									</aside>

@@ -66,7 +66,7 @@ namespace Teleopti.Wfm.Api.Test
 		{
 			base.Isolate(isolate);
 
-			isolate.UseTestDouble(new sharedSettingsQuerierFake()).For<ISharedSettingsQuerier>();
+			isolate.UseTestDouble(new sharedSettingsQuerierFake()).For<ISharedSettingsTenantClient>();
 			var requestFake = new PostHttpRequestFake();
 			var nhibDecryption = new DataSourceConfigDecryption();
 			requestFake.SetReturnValue(new AuthenticationInternalQuerierResult
@@ -126,7 +126,7 @@ namespace Teleopti.Wfm.Api.Test
 			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 		}
 		
-		private class sharedSettingsQuerierFake : ISharedSettingsQuerier
+		private class sharedSettingsQuerierFake : ISharedSettingsTenantClient
 		{
 			public SharedSettings GetSharedSettings()
 			{

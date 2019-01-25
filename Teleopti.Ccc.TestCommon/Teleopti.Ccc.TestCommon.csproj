@@ -204,6 +204,7 @@
     <Compile Include="FakeData\FakePermissions.cs" />
     <Compile Include="FakeData\FakeIntradayQueueStatisticsLoader.cs" />
     <Compile Include="FakeData\FakeSkillCombinationResourceRepository.cs" />
+    <Compile Include="FakeData\FakeSkillForecastReadModelRepository.cs" />
     <Compile Include="FakeData\FakeTeamGamificationSettingRepository.cs" />
     <Compile Include="FakeData\JobResultExtensions.cs" />
     <Compile Include="FakeData\OrganizationFactory.cs" />
@@ -425,7 +426,6 @@
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
     <Compile Include="IoC\MustNotBeUsedException.cs" />
     <Compile Include="IoC\ServiceBusTestAttribute.cs" />
-    <Compile Include="IoC\ServiceLocatorForFakesModule.cs" />
     <Compile Include="IoC\SetupThrowingTestDoubles.cs" />
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />
@@ -439,6 +439,7 @@
     <Compile Include="IoC\UseRealPersonRequestPermissionCheckAttribute.cs" />
     <Compile Include="LegacyFakeEventPublisher.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
+    <Compile Include="Messaging\FakeMessageBrokerComposite.cs" />
     <Compile Include="Messaging\FakeUrl.cs" />
     <Compile Include="Messaging\MessageBrokerServerBridge.cs" />
     <Compile Include="Messaging\MessagingTestAttribute.cs" />
@@ -514,7 +515,6 @@
     <Compile Include="TestData\Analytics\Tables\dim_team.cs" />
     <Compile Include="TestData\Analytics\Tables\fact_forecast_workload.cs" />
     <Compile Include="TestData\Analytics\Tables\log_object_detail.cs" />
-    <Compile Include="TestData\Analytics\Tables\queues.cs" />
     <Compile Include="TestData\Analytics\Tables\sys_configuration.cs" />
     <Compile Include="TestData\Analytics\Team.cs" />
     <Compile Include="TestData\CommonNameDescriptionSettingsTestData.cs" />

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 	{
 		public PostHttpRequestFake HttpRequestFake;
 		public GetHttpRequestFake GetRequestFake;
-		public ITenantLogonDataManager Target;
+		public ITenantLogonDataManagerClient Target;
 		public FakeCurrentTenantCredentials CurrentTenantCredentials;
 
 		[Test]

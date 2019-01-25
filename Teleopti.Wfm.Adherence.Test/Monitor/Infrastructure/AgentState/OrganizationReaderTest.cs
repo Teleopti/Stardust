@@ -81,7 +81,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = person,
-				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
 				SiteId = site,
 				TeamId = team,
 			});

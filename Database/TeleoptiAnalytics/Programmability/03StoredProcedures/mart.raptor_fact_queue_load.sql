@@ -18,6 +18,9 @@ GO
 -- when			who		what
 -- 2011-10-26	DavidJ	#16688
 -- =============================================
+
+--exec [mart].[raptor_fact_queue_load] 
+
 CREATE PROCEDURE [mart].[raptor_fact_queue_load] 
 AS
 BEGIN
@@ -42,7 +45,7 @@ CREATE TABLE #stg_queue(
 	[date] [datetime] NOT NULL,
 	[interval] [nvarchar](50) NOT NULL,
 	[queue_code] [int] NULL,
-	[queue_name] [nvarchar](50) NOT NULL,
+	[queue_name] [nvarchar](100) NOT NULL,
 	[offd_direct_call_cnt] [int] NULL,
 	[overflow_in_call_cnt] [int] NULL,
 	[aband_call_cnt] [int] NULL,
@@ -159,7 +162,7 @@ ON
 JOIN
 	mart.dim_queue		q
 ON
-	q.queue_original_id= stg.queue_code 
+	q.queue_original_id= stg.queue_code
 	AND q.datasource_id = @datasource_id
 
 END

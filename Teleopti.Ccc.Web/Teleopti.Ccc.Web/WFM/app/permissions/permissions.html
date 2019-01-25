@@ -1,6 +1,6 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-account-key"></i> {{'ManagePermissions'|translate}}</h1>
+		<h1><i class="mdi mdi-account-key"></i>{{'ManagePermissions'|translate}}</h1>
 		<p translate>ManagePermissionsIntro</p>
 	</div>
 	<div class="fab-wrapper">
@@ -129,96 +129,94 @@
 		</div>
 	</div>
 	<div class="con-flex split-3-1 permissions-tabs">
-		<div class="panel">
-			<div class="wfm-slide-tabs tabbed-panel">
-				<md-content class="md-padding" ng-cloak>
-					<md-tabs md-dynamic-height md-border-bottom md-no-pagination="true" md-swipe-content="true" md-stretch-tabs="never">
-						<md-tab label="{{'Functions' | translate}}">
-							<md-content class="md-padding perm-functions ng-cloak">
-								<div class="con-row">
-									<div class="con-flex">
-										<label class="input-icon">
-											<i class="mdi mdi-filter-outline">
-												<input type="text" ng-model="vm.searchString" placeholder="{{'Filter' | translate}}" ng-change="vm.functionsDescriptionFilter(vm.searchString)">
-												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
-											</i>
-										</label>
-									</div>
-									<div class="con-flex split-1-2"></div>
-									<div class="con-flex line-right">
-
-										<div ng-click="toggleDangerModal = true" class="inline-flex" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
-											<md-checkbox ng-model="vm.isAllFunctionSelected" aria-label="Checkbox" class="non-pointer" >
-												{{'ToggleAll'|translate}}
-											</md-checkbox>
-										</div>
-
-									</div>
+		<div class="wfm-slide-tabs tabbed-panel">
+			<md-content class="md-padding" ng-cloak>
+				<md-tabs md-dynamic-height md-border-bottom md-no-pagination="true" md-swipe-content="true" md-stretch-tabs="never">
+					<md-tab label="{{'FunctionsCap' | translate}}">
+						<md-content class="md-padding perm-functions ng-cloak">
+							<div class="con-row">
+								<div class="con-flex">
+									<label class="input-icon">
+										<i class="mdi mdi-filter-outline">
+											<input type="text" ng-model="vm.searchString" placeholder="{{'Filter' | translate}}" ng-change="vm.functionsDescriptionFilter(vm.searchString)">
+											<md-tooltip>{{'Filter'|translate}}</md-tooltip>
+										</i>
+									</label>
 								</div>
-								<div class="con-row">
-									<div class="con-flex">
-										<form class="permission-radio-buttons inline-flex" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
+								<div class="con-flex split-1-2"></div>
+								<div class="con-flex line-right">
 
-											<md-radio-group class="inline-flex" ng-model="vm.functionGroup" tabindex="-1">
-												<label>{{'Show'|translate}}:</label>
-												<md-radio-button value="All" aria-label="radio" ng-click="vm.allFunctionsFilter()">{{'All' | translate}}</md-radio-button>
-												<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedFunctionsFilter()">{{'SelectedItems' | translate}}</md-radio-button>
-												<md-radio-button value="Unselected" aria-label="radio" ng-click="vm.unSelectedFunctionsFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
-											</md-radio-group>
+									<div ng-click="toggleDangerModal = true" class="inline-flex" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
+										<md-checkbox ng-model="vm.isAllFunctionSelected" aria-label="Checkbox" class="non-pointer" >
+											{{'ToggleAll'|translate}}
+										</md-checkbox>
+									</div>
 
-										</form>
-									</div>
 								</div>
-								<div class="con-row">
-									<div class="con-flex">
-										<permissions-tree filter-func="vm.functionsFilterObj" selected-role="vm.selectedRole" functions="vm.componentFunctions" is-selected="vm.isFunctionSelected" select="vm.selectFunction" on-click="vm.onFunctionClick"></permissions-tree>
-									</div>
-								</div>
-							</md-content>
-						</md-tab>
-						<md-tab id="data-tab" label="{{'Data' | translate}}">
-							<md-content class="md-padding">
-								<div class="con-row">
-									<div class="con-flex">
-										<label class="input-icon">
-											<i class="mdi mdi-filter-outline">
-												<input type="text" ng-model="searchString1" placeholder="{{'Filter' | translate}}" ng-change="vm.orgDataDescriptionFilter(searchString1)">
-												<md-tooltip>{{'Filter'|translate}}</md-tooltip>
-											</i>
-										</label>
-									</div>
-									<div class="con-flex split-1-2"></div>
-									<div class="con-flex">
-										<md-select ng-model="model" placeholder="{{'AddGlobalAuthorizationLabel'| translate}}" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
-											<h2>{{'AddGlobalAuthorizationLabel'| translate}}</h2>
-											<md-option ng-selected="option.RangeOption == vm.selectedRole.AvailableDataRange" ng-value="option.RangeOption"  ng-repeat="option in vm.organizationSelection.DynamicOptions" ng-click="vm.selectDynamicOption(option)">{{option.Name | translate}}</md-option>
-										</md-select>
-									</div>
-								</div>
-								<div class="con-row">
-									<div class="con-flex">
-										<form class="permission-radio-buttons inline-flex" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
+							</div>
+							<div class="con-row">
+								<div class="con-flex">
+									<form class="permission-radio-buttons inline-flex" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
 
-											<md-radio-group class="inline-flex" ng-model="vm.orgGroup" tabindex="-1">
-												<label>{{'Show'|translate}}:</label>
-												<md-radio-button value="All" aria-label="radio" ng-click="vm.allDataFilter()">{{'All' | translate}}</md-radio-button>
-												<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedDataFilter()">{{'SelectedItems' | translate}}</md-radio-button>
-												<md-radio-button value="Unselected" aria-label="radio" ng-click="vm.unselectedDataFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
-											</md-radio-group>
+										<md-radio-group class="inline-flex" ng-model="vm.functionGroup" tabindex="-1">
+											<label>{{'Show'|translate}}:</label>
+											<md-radio-button value="All" aria-label="radio" ng-click="vm.allFunctionsFilter()">{{'All' | translate}}</md-radio-button>
+											<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedFunctionsFilter()">{{'SelectedItems' | translate}}</md-radio-button>
+											<md-radio-button value="Unselected" aria-label="radio" ng-click="vm.unSelectedFunctionsFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
+										</md-radio-group>
 
-										</form>
-									</div>
+									</form>
 								</div>
-								<div class="con-row">
-									<div class="con-flex">
-										<permissions-list is-selected="vm.isOrgDataSelected" select="vm.selectOrgData" datafilter="vm.dataFilterObj" selected-role="vm.selectedRole" on-click="vm.nodeClick" original-org="vm.organizationSelection" org="vm.filteredOrganizationSelection"></permissions-list>
-									</div>
+							</div>
+							<div class="con-row">
+								<div class="con-flex">
+									<permissions-tree filter-func="vm.functionsFilterObj" selected-role="vm.selectedRole" functions="vm.componentFunctions" is-selected="vm.isFunctionSelected" select="vm.selectFunction" on-click="vm.onFunctionClick"></permissions-tree>
 								</div>
-							</md-content>
-						</md-tab>
-					</md-tabs>
-				</md-content>
-			</div>
+							</div>
+						</md-content>
+					</md-tab>
+					<md-tab id="data-tab" label="{{'Data' | translate}}">
+						<md-content class="md-padding">
+							<div class="con-row">
+								<div class="con-flex">
+									<label class="input-icon">
+										<i class="mdi mdi-filter-outline">
+											<input type="text" ng-model="searchString1" placeholder="{{'Filter' | translate}}" ng-change="vm.orgDataDescriptionFilter(searchString1)">
+											<md-tooltip>{{'Filter'|translate}}</md-tooltip>
+										</i>
+									</label>
+								</div>
+								<div class="con-flex split-1-2"></div>
+								<div class="con-flex">
+									<md-select ng-model="model" placeholder="{{'AddGlobalAuthorizationLabel'| translate}}" ng-class="{'non-pointer text-muted': !vm.selectedRole.Id || vm.selectedRole.BuiltIn || vm.selectedRole.IsMyRole}">
+										<h2>{{'AddGlobalAuthorizationLabel'| translate}}</h2>
+										<md-option ng-selected="option.RangeOption == vm.selectedRole.AvailableDataRange" ng-value="option.RangeOption"  ng-repeat="option in vm.organizationSelection.DynamicOptions" ng-click="vm.selectDynamicOption(option)">{{option.Name | translate}}</md-option>
+									</md-select>
+								</div>
+							</div>
+							<div class="con-row">
+								<div class="con-flex">
+									<form class="permission-radio-buttons inline-flex" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
+
+										<md-radio-group class="inline-flex" ng-model="vm.orgGroup" tabindex="-1">
+											<label>{{'Show'|translate}}:</label>
+											<md-radio-button value="All" aria-label="radio" ng-click="vm.allDataFilter()">{{'All' | translate}}</md-radio-button>
+											<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedDataFilter()">{{'SelectedItems' | translate}}</md-radio-button>
+											<md-radio-button value="Unselected" aria-label="radio" ng-click="vm.unselectedDataFilter()">{{'UnselectedItems' | translate}}</md-radio-button>
+										</md-radio-group>
+
+									</form>
+								</div>
+							</div>
+							<div class="con-row">
+								<div class="con-flex">
+									<permissions-list is-selected="vm.isOrgDataSelected" select="vm.selectOrgData" datafilter="vm.dataFilterObj" selected-role="vm.selectedRole" on-click="vm.nodeClick" original-org="vm.organizationSelection" org="vm.filteredOrganizationSelection"></permissions-list>
+								</div>
+							</div>
+						</md-content>
+					</md-tab>
+				</md-tabs>
+			</md-content>
 		</div>
 	</div>
 </div>

@@ -396,12 +396,6 @@
 				}
 				vm.HasPermissionToModifySkillGroup = result.data.HasPermissionToModifySkillArea;
 				if (angular.isUndefined(vm.skillGroups)) vm.skillGroups = [];
-				if (vm.skillGroups.length === 0) {
-					vm.skillGroups.push({
-						Name: $translate.instant('NoSkillGroupsFound'),
-						Id: -1
-					});
-				}
 				SkillGroupSvc.getSkills().then(function(result) {
 					vm.skills = result.data;
 					vm.loadState();

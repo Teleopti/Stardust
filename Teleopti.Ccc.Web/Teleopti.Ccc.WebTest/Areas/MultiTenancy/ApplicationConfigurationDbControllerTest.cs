@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			_fakeConfig = new ApplicationConfigurationDb
 			{
-				Server = new Dictionary<string, string>
+				Server = new Dictionary<ServerConfigurationKey, string>
 				{
-					{ ServerConfigurationKey.NotificationApiEndpoint.ToString(), "http://api.teleopti.com" },
-					{ ServerConfigurationKey.NotificationSmtpPort.ToString(), "25" }
+					{ ServerConfigurationKey.NotificationApiEndpoint, "http://api.teleopti.com" },
+					{ ServerConfigurationKey.NotificationSmtpPort, "25" }
 				},
-				Tenant = new Dictionary<string, string>
+				Tenant = new Dictionary<TenantApplicationConfigKey, string>
 				{
 					{ TenantApplicationConfigKey.NotificationApiKey, "<key>"},
 					{ TenantApplicationConfigKey.MobileQRCodeUrl, "http://www.teleopti.com"}
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var configData = Target.GetAll().Result<ApplicationConfigurationDb>();
 			Assert.IsTrue(configData.Tenant.ContainsKey(TenantApplicationConfigKey.NotificationApiKey));
 			Assert.IsTrue(configData.Tenant.ContainsKey(TenantApplicationConfigKey.MobileQRCodeUrl));
-			Assert.IsTrue(configData.Server.ContainsKey(ServerConfigurationKey.NotificationApiEndpoint.ToString()));
-			Assert.IsTrue(configData.Server.ContainsKey(ServerConfigurationKey.NotificationSmtpPort.ToString()));
+			Assert.IsTrue(configData.Server.ContainsKey(ServerConfigurationKey.NotificationApiEndpoint));
+			Assert.IsTrue(configData.Server.ContainsKey(ServerConfigurationKey.NotificationSmtpPort));
 			Assert.AreEqual(configData.Server.Count, 2);
 			Assert.AreEqual(configData.Tenant.Count, 2);
 		}
@@ -50,29 +50,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void ShouldGetConfigurationDataByKey()
 		{
 			ConfigDbProvider.LoadFakeData(_fakeConfig);
-			var serverData = Target.TryGetServerValue(ServerConfigurationKey.NotificationSmtpPort.ToString(), null).Result<string>();
-			Assert.AreEqual(serverData, _fakeConfig.Server[ServerConfigurationKey.NotificationSmtpPort.ToString()]);
+			var serverData = Target.GetServerValue(ServerConfigurationKey.NotificationSmtpPort.ToString()).Result<string>();
+			Assert.AreEqual(serverData, _fakeConfig.Server[ServerConfigurationKey.NotificationSmtpPort]);
 		
-			var tenantData = Target.TryGetTenantValue(TenantApplicationConfigKey.NotificationApiKey, null).Result<string>();
+			var tenantData = Target.GetTenantValue(TenantApplicationConfigKey.NotificationApiKey.ToString()).Result<string>();
 			Assert.AreEqual(tenantData, _fakeConfig.Tenant[TenantApplicationConfigKey.NotificationApiKey]);
 		}
 
 		[Test]
-		public void ShouldReturDefaultValueIfKeyIsMissing()
+		public void ShouldReturNullIfKeyIsMissing()
 		{
 			ConfigDbProvider.LoadFakeData(_fakeConfig);
-			var defVal = "DEFAULT";
-			var tenantData = Target.TryGetTenantValue(TenantApplicationConfigKey.MaximumSessionTimeInMinutes, defVal).Result<string>();
-			Assert.AreEqual(tenantData, defVal);
+			var tenantData = Target.GetTenantValue(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString()).Result<string>();
+			Assert.AreEqual(tenantData, null);
 
-			tenantData = Target.TryGetTenantValue("RandomKey", defVal).Result<string>();
-			Assert.AreEqual(tenantData, defVal);
+			tenantData = Target.GetTenantValue("RandomKey").Result<string>();
+			Assert.AreEqual(tenantData, null);
 
-			var serverData = Target.TryGetServerValue(ServerConfigurationKey.AS_DATABASE.ToString(), defVal).Result<string>();
-			Assert.AreEqual(serverData, defVal);
+			var serverData = Target.GetServerValue(ServerConfigurationKey.AS_DATABASE.ToString()).Result<string>();
+			Assert.AreEqual(serverData, null);
 
-			serverData = Target.TryGetServerValue("RandomKey", defVal).Result<string>();
-			Assert.AreEqual(serverData, defVal);
+			serverData = Target.GetServerValue("RandomKey").Result<string>();
+			Assert.AreEqual(serverData, null);
 		}
 	}
 }

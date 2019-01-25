@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			});
 
 			PersonAssignmentRepository.Find(Enumerable.Repeat(person, 1), new DateOnlyPeriod(2018, 1, 1, 2018, 1, 2), scenario)
-				.Count
+				.Count()
 				.Should().Be.EqualTo(1);
 		}
 

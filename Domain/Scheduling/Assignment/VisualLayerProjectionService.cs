@@ -22,19 +22,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_layerCollectionOriginal = new LayerCollection<IPayload>();
 		}
 
-		public void Add(IEnumerable<ILayer<IActivity>> layers, IVisualLayerFactory visualLayerFactory)
-		{
-			foreach (var layer in layers)
-			{
-				Add(layer, visualLayerFactory);
-			}
-		}
-
 		public void Add(ILayer<IActivity> layer, IVisualLayerFactory visualLayerFactory)
 		{
 			_layerCollectionOriginal.Add(visualLayerFactory.CreateShiftSetupLayer(layer));
 		}
-
+		
 		public void Add(IVisualLayer layer)
 		{
 			_layerCollectionOriginal.Add(layer);

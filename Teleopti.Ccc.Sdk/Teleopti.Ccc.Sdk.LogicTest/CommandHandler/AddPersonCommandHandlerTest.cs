@@ -137,9 +137,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void Isolate(IIsolate isolate)
 		{
 
-			isolate.UseTestDouble<ChangePassword>().For<IChangePassword>();
+			isolate.UseTestDouble<ChangePasswordTenantClient>().For<IChangePasswordTenantClient>();
 			isolate.UseTestDouble<TenantPeopleSaver>().For<ITenantPeopleSaver>();
-			isolate.UseTestDouble<TenantDataManager>().For<ITenantDataManager>();
+			isolate.UseTestDouble<TenantDataManagerClient>().For<ITenantDataManagerClient>();
 			isolate.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
 
 			isolate.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();

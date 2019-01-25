@@ -21,16 +21,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 		private readonly ILoginInitializer _initializer;
 		private readonly ILogOnOff _logOnOff;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly ISharedSettingsQuerier _sharedSettingsQuerier;
-		private readonly IAuthenticationQuerier _authenticationQuerier;
+		private readonly ISharedSettingsTenantClient _sharedSettingsQuerier;
+		private readonly IAuthenticationTenantClient _authenticationQuerier;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(LogonPresenter));
 		private readonly ILog _customLogger = LogManager.GetLogger("CustomEOLogger");
 		private readonly IApplicationInsights _applicationInsights;
 
 		public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
-			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
-			IAuthenticationQuerier authenticationQuerier, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, 
+			IMessageBrokerComposite messageBroker, ISharedSettingsTenantClient sharedSettingsQuerier,
+			IAuthenticationTenantClient authenticationQuerier, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, 
 			IApplicationInsights applicationInsights)
 		{
 			_view = view;

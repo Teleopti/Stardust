@@ -7,15 +7,15 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class TeleoptiPrincipalForLegacyFactory : IPrincipalFactory
 	{
-		public ITeleoptiPrincipal MakePrincipal(IPrincipalSource person, IDataSource dataSource, IBusinessUnit businessUnit, string tokenIdentity)
+		public ITeleoptiPrincipal MakePrincipal(IPrincipalSource source, IDataSource dataSource, string tokenIdentity)
 		{
-			var identity = new TeleoptiIdentity(
-				person?.PrincipalName() ?? string.Empty,
+			var identity = new TeleoptiIdentityForLegacy(
+				source?.PrincipalName() ?? string.Empty,
 				dataSource,
-				businessUnit,
+				source?.UnsafeBusinessUnit() as IBusinessUnit, 
 				WindowsIdentity.GetCurrent(),
 				tokenIdentity);
-			return new TeleoptiPrincipalForLegacy(identity, person as IPerson);
+			return new TeleoptiPrincipalForLegacy(identity, source);
 		}
 	}
 }

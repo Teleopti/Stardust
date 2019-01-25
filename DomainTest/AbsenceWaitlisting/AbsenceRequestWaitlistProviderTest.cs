@@ -14,12 +14,14 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 {
 	[DomainTest]
 	[TestFixture]
+	[ToggleOff(Toggles.MyTimeWeb_NewAbsenceRequestWaitlistPosition_80131)]
 	public class AbsenceRequestWaitlistProviderTest : IIsolateSystem
 	{
 		public IPersonRepository PersonRepository;

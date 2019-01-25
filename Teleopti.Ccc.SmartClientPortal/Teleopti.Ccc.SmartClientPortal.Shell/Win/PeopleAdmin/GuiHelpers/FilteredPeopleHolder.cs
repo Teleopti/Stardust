@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 	{
 		private readonly ITraceableRefreshService _refreshService;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
-		private readonly ITenantDataManager _tenantDataManager;
+		private readonly ITenantDataManagerClient _tenantDataManager;
 		private readonly IPersonRepository _personRepository;
 		private readonly List<IPerson> _personCollection = new List<IPerson>();
 		public List<Guid> PersonIdCollection { get; }
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public FilteredPeopleHolder(ITraceableRefreshService refreshService,
 				IDictionary<IPerson, IPersonAccountCollection> allAccounts,
-				ITenantDataManager tenantDataManager,
+				ITenantDataManagerClient tenantDataManager,
 				IPersonRepository personRepository)
 		{
 			_refreshService = refreshService;

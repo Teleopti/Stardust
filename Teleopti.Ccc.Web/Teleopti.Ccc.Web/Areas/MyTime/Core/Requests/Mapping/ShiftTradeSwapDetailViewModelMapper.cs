@@ -80,13 +80,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			DateTimePeriod totalPeriod;
 			var fromTotalPeriod = _projectionProvider.Projection(schedpartFrom).Period();
 			var toTotalPeriod = _projectionProvider.Projection(schedpartTo).Period();
+			var schedulePartViewFrom = schedpartFrom.SignificantPart();
+			var schedulePartViewTo = schedpartTo.SignificantPart();
 			if (fromTotalPeriod.HasValue && toTotalPeriod.HasValue)
 			{
 				totalPeriod = fromTotalPeriod.Value.MaximumPeriod(toTotalPeriod.Value);
 			}
 			else if (fromTotalPeriod.HasValue)
 			{
-				if (schedpartTo.SignificantPart() == SchedulePartView.DayOff)
+				if (schedulePartViewTo == SchedulePartView.DayOff)
 				{
 					totalPeriod = (DateTimePeriod)fromTotalPeriod;
 				}
@@ -98,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			else if (toTotalPeriod.HasValue)
 			{
-				if (schedpartFrom.SignificantPart() == SchedulePartView.DayOff)
+				if (schedulePartViewFrom == SchedulePartView.DayOff)
 				{
 					totalPeriod = (DateTimePeriod)toTotalPeriod;
 				}
@@ -113,8 +115,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				totalPeriod = ((IShiftTradeRequest)shiftTradeSwapDetail.Parent).Period;
 			}
 
-			if (schedpartFrom.SignificantPart() == SchedulePartView.DayOff &&
-				schedpartTo.SignificantPart() == SchedulePartView.DayOff)
+			if (schedulePartViewFrom == SchedulePartView.DayOff &&
+				schedulePartViewTo == SchedulePartView.DayOff)
 			{
 				totalPeriod = schedpartFrom.Period;
 				totalPeriod = new DateTimePeriod(totalPeriod.StartDateTime.AddHours(9), totalPeriod.EndDateTime.AddHours(-7));
@@ -212,9 +214,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				let length = visualLayer.Period.ElapsedTime().TotalMinutes
 				select new ShiftTradeEditScheduleLayerViewModel
 				{
-					Payload = visualLayer.Payload.ConfidentialDescription(person).Name,
+					Payload = visualLayer.Payload.ConfidentialDescription_DONTUSE(person).Name,
 					LengthInMinutes = (int)length,
-					Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(person)),
+					Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person)),
 					TitleTime = createTitle(startDate, endDate),
 					ElapsedMinutesSinceShiftStart = (int)startDate.Subtract(TimeZoneHelper.ConvertFromUtc(shiftStartTime, timeZone)).TotalMinutes
 				}).ToList();

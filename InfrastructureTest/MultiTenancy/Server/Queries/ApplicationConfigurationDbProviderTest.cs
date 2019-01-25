@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -49,17 +50,17 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			using (HttpContext.OnThisThreadUse(fakeContext))
 			{
-				var appConfig = Target.GetConfiguration();
+				var appConfig = Target.GetAll();
 
-				var serverKey = "ServerKey";
-				var tenantKey = "TenantKey";
+				var serverKey = ServerConfigurationKey.NotificationContentType;
+				var tenantKey = TenantApplicationConfigKey.NotificationApiKey;
 				var serverRepo = new ServerConfigurationRepository(tenantUnitOfWorkManager);
-				serverRepo.Update(serverKey, "ServerValue");
+				serverRepo.Update(serverKey.ToString(), "ServerValue");
 				personInfo.Tenant.SetApplicationConfig(tenantKey, "TenantValue");
 				Persist.Persist(personInfo.Tenant);
 				tenantUnitOfWorkManager.CurrentSession().Flush();
 
-				var acAfterUpdate = Target.GetConfiguration();
+				var acAfterUpdate = Target.GetAll();
 
 				Assert.AreEqual(acAfterUpdate.Server.Count, appConfig.Server.Count + 1);
 				Assert.AreEqual(acAfterUpdate.Tenant.Count, appConfig.Tenant.Count + 1);
@@ -73,33 +74,19 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			using (HttpContext.OnThisThreadUse(fakeContext))
 			{
-				var server = new {Key = "ServerKey", Value = "ServerValue"};
-				var tenant = new {Key = "TenantKey", Value = "TenantValue"};
+				var server = new {Key = ServerConfigurationKey.NotificationApiEndpoint, Value = "ServerValue"};
+				var tenant = new {Key = TenantApplicationConfigKey.NotificationApiKey, Value = "TenantValue"};
 				var serverRepo = new ServerConfigurationRepository(tenantUnitOfWorkManager);
-				serverRepo.Update(server.Key, server.Value);
+				serverRepo.Update(server.Key.ToString(), server.Value);
 				personInfo.Tenant.SetApplicationConfig(tenant.Key, tenant.Value);
 				Persist.Persist(personInfo.Tenant);
 				tenantUnitOfWorkManager.CurrentSession().Flush();
 
-				var serverRead = Target.TryGetServerValue(server.Key);
-				var tenantRead = Target.TryGetTenantValue(tenant.Key);
+				var serverRead = Target.GetServerValue(server.Key);
+				var tenantRead = Target.GetTenantValue(tenant.Key);
 
 				Assert.AreEqual(serverRead, server.Value);
 				Assert.AreEqual(tenantRead, tenant.Value);
-			}
-		}
-
-		[Test]
-		public void ShouldGetDefaultValuesOnMissingConfigurationKey()
-		{
-			using (HttpContext.OnThisThreadUse(fakeContext))
-			{
-				var defaultValue = "DEFAULT";
-				var serverRead = Target.TryGetServerValue("InvalidKey", defaultValue);
-				var tenantRead = Target.TryGetTenantValue("InvalidKey", defaultValue);
-
-				Assert.AreEqual(serverRead, defaultValue);
-				Assert.AreEqual(tenantRead, defaultValue);
 			}
 		}
 	}

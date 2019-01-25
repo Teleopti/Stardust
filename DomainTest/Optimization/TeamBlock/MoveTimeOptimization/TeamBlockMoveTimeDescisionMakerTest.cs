@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 
 		private static ILockableBitArray createBitArray()
 		{
-			ILockableBitArray bitArray = new LockableBitArray(7, false, false, null);
+			ILockableBitArray bitArray = new LockableBitArray(7, false, false);
 			bitArray.PeriodArea = new MinMax<int>(1, 4);
 			bitArray.Lock(0, true);
 			bitArray.Lock(5, true);

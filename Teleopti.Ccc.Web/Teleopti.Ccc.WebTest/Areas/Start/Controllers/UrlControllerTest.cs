@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			 const string url = "http://my.url.com/start/Url/RedirectToWebLogin";
 			 const string applicationPath = "/TeleoptiCCC/Web/";
 			 System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
-					 new TeleoptiIdentity("test", null, null, null, null), person);
+					 new TeleoptiIdentity("test", null, null, null, null, null), new PersonAndBusinessUnit(person, null));
 			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
 			 var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, signatureCreator, new Now());
 			 var result = ((RedirectResult) target.RedirectToWebLogin(""));

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var ass2 = new PersonAssignment(per1, scenario, new DateOnly(2000,1,1));
 			try
 			{
-				var rep = new PersonAssignmentRepository(UnitOfWork);
+				var rep = new PersonAssignmentRepository(CurrUnitOfWork);
 				rep.Add(ass1);
 				rep.Add(ass2);
 				UnitOfWork.PersistAll();

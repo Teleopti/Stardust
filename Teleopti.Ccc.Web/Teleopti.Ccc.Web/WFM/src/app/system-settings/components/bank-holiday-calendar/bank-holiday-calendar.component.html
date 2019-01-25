@@ -28,7 +28,7 @@
 	</bank-holiday-calendar-edit>
 
 	<div [hidden]="isAddingNewCalendar || isEdittingCalendar">
-		<nz-tabset>
+		<nz-tabset nzType="card">
 			<nz-tab [nzTitle]="bankHolidayTabTitleTemplate">
 				<ng-template #bankHolidayTabTitleTemplate>
 					<div class="manage-bank-holiday-calendar-tab">
@@ -129,22 +129,4 @@
 			</nz-tab>
 		</nz-tabset>
 	</div>
-
-	<nz-modal
-		*ngIf="isDeleteCalendarModalVisible && selectedCalendar"
-		[(nzVisible)]="isDeleteCalendarModalVisible"
-		[nzTitle]="'AreYouSureYouWantToDeleteThisBankHolidayCalendar' | translate"
-		[nzContent]="confirmDeleteCalendarContentTemplate"
-		[nzOkText]="'Delete' | translate"
-		nzOkType="danger"
-		[nzCancelText]="'Cancel' | translate"
-		(nzOnOk)="deleteHolidayCalendar()"
-		(nzOnCancel)="closeDeleteHolidayCalendarModal()"
-		class="bank-holiday-calendar-modal"
-	></nz-modal>
-
-	<ng-template #confirmDeleteCalendarContentTemplate>
-		<span>{{ confirmDeleteCalendarContent }}</span
-		>&nbsp;<span class="calendar-name">{{ selectedCalendar.Name }}</span>
-	</ng-template>
 </div>

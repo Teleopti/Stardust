@@ -52,8 +52,9 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 				if (newWeek) self.weekViewModels.push(newWeek);
 				newWeek = new Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel();
 			}
-			var newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate());
-			newWeek.dayViewModels.push(newDay);
+			newWeek.dayViewModels.push(
+				new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate())
+			);
 		}
 		self.weekViewModels.push(newWeek);
 		setUseFullHeightForDateCells();

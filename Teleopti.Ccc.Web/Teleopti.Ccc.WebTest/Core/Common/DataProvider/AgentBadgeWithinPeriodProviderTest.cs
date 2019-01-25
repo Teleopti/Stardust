@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var culture = CultureInfoFactory.CreateChineseCulture();
 			person.PermissionInformation.SetCulture(culture);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null, null), new PersonAndBusinessUnit(person, null));
 			CurrentTeleoptiPrincipal.Fake(principal);
 		}
 

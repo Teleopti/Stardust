@@ -122,9 +122,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 
 			JobClient.HandlerTypeNames.Should().Have.Count.EqualTo(2);
 			var expected1 = TypeMapper.NameForPersistence(typeof(TestMultiHandler2));
-			JobClient.HandlerTypeNames.ElementAt(0).Should().Contain(expected1);
+			JobClient.HandlerTypeNames.Should().Contain(expected1);
 			var expected2 = TypeMapper.NameForPersistence(typeof(TestMultiHandler1));
-			JobClient.HandlerTypeNames.ElementAt(1).Should().Contain(expected2);
+			JobClient.HandlerTypeNames.Should().Contain(expected2);
 		}
 
 		[Test]

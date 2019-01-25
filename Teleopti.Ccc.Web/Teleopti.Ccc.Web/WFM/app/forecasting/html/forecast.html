@@ -1,16 +1,11 @@
 <section>
-	<div class="con-row">
-		<div class="con-flex">
-			<div class="pull-left">
-				<h1><i class="mdi mdi-chart-line"></i> {{ 'Forecasts' | translate }}</h1>
-			</div>
-			<div class="con-flex">
-				<div class="pull-right">
-					<ng2-feedback-message
-						[feedback-type]="'newRelease'"
-						[component-name]="'Forecasts' | translate"
-					></ng2-feedback-message>
-				</div>
+	<div class="view-header with-fab">
+		<div class="view-title">
+				<h1><i class="mdi mdi-chart-line"></i>{{ 'Forecasts' | translate }}</h1>
+				<ng2-feedback-message class="pull-right"
+					[feedback-type]="'newRelease'"
+					[component-name]="'Forecasts' | translate"
+				></ng2-feedback-message>
 			</div>
 		</div>
 	</div>
@@ -50,41 +45,37 @@
 </section>
 
 <section>
-	<div class="con-row">
-		<div class="con-flex">
-			<div class="con-fluid-row">
-				<div class="con-fluid-flex" ng-repeat="skill in vm.skills | filter:filter | orderBy : Workload.Name">
-					<div class="card panel">
-						<div class="sub-header">
-							<h2 class="">
-								<i ng-class="vm.getSkillIcon(skill.SkillType)">
-									<md-tooltip>
-										<span ng-if="skill.SkillType.DoDisplayData">{{
-											skill.SkillType.SkillType | translate
-										}}</span>
-										<span ng-if="!skill.SkillType.DoDisplayData">{{
-											'UnsupportedSkill' | translate
-										}}</span>
-									</md-tooltip>
-								</i>
-								<span class="overflow-wrap-forecast">{{ skill.Workload.Name }}</span>
-							</h2>
-						</div>
-						<div class="card-footer con-row">
-							<span class="con-flex line-right card-footer-section">
-								<button
-									ng-if="vm.showHistory"
-									class="wfm-btn wfm-btn-invis-primary"
-									ng-click="vm.goToHistory(skill)"
-								>
-									{{ 'OpenHistoricalData' | translate }}
-								</button>
-								<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToModify(skill)">
-									{{ 'Open' | translate }}
-								</button>
-							</span>
-						</div>
-					</div>
+	<div class="con-fluid-row">
+		<div class="con-fluid-flex" ng-repeat="skill in vm.skills | filter:filter | orderBy : Workload.Name">
+			<div class="card panel">
+				<div class="sub-header">
+					<h2 class="">
+						<i ng-class="vm.getSkillIcon(skill.SkillType)">
+							<md-tooltip>
+								<span ng-if="skill.SkillType.DoDisplayData">{{
+									skill.SkillType.SkillType | translate
+								}}</span>
+								<span ng-if="!skill.SkillType.DoDisplayData">{{
+									'UnsupportedSkill' | translate
+								}}</span>
+							</md-tooltip>
+						</i>
+						{{ skill.Workload.Name }}
+					</h2>
+				</div>
+				<div class="card-footer con-row">
+					<span class="con-flex line-right card-footer-section">
+						<button
+							ng-if="vm.showHistory"
+							class="wfm-btn wfm-btn-invis-default"
+							ng-click="vm.goToHistory(skill)"
+						>
+							{{ 'OpenHistoricalData' | translate }}
+						</button>
+						<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goToModify(skill)">
+							{{ 'Open' | translate }}
+						</button>
+					</span>
 				</div>
 			</div>
 		</div>

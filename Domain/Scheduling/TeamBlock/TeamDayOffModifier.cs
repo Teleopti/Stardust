@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                               bool resourceCalculate)
 		{
 			IScheduleDay scheduleDay = _scheduleDayForPerson().ForPerson(person, dateOnly);
-			if (scheduleDay.SignificantPart() == SchedulePartView.FullDayAbsence || scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff)
+			var schedulePartView = scheduleDay.SignificantPart();
+			if (schedulePartView == SchedulePartView.FullDayAbsence || schedulePartView == SchedulePartView.ContractDayOff)
 				return;
 
 			scheduleDay.DeleteMainShift();

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current()); }
+			get { return _businessUnit ?? (_businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current()); }
 			protected set { _businessUnit = value; }
 		}
 

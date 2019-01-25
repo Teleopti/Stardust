@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Logon
 {
 	public interface IPrincipalFactory
 	{
-		ITeleoptiPrincipal MakePrincipal(IPrincipalSource person, IDataSource dataSource, IBusinessUnit businessUnit, string tokenIdentity);
+		ITeleoptiPrincipal MakePrincipal(IPrincipalSource source, IDataSource dataSource, string tokenIdentity);
 	}
 
 	public interface IPrincipalSource
@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.Domain.Logon
 		int? PrincipalCultureLCID();
 		int? PrincipalUICultureLCID();
 		IEnumerable<IPrincipalSourcePeriod> PrincipalPeriods();
+		Guid? PrincipalBusinessUnitId();
+		string PrincipalBusinessUnitIdName();
+		
+		object UnsafePerson();
+		object UnsafeBusinessUnit();
 	}
 
 	public interface IPrincipalSourcePeriod

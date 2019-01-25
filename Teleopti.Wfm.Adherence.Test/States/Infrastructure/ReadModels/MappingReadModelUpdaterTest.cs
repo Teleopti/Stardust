@@ -71,7 +71,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 
 			Target.Handle(new UnknownStateCodeReceviedEvent
 			{
-				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId().Value,
+				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.CurrentId().Value,
 				StateCode = "Телефон",
 				StateDescription = "Телефон"
 			});

@@ -9,8 +9,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class WorkShift : IWorkShift
 	{
+		private static readonly IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 		private IVisualLayerCollection _visualLayerCollection;
-		private IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
+		private List<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
         public WorkShift(IShiftCategory category)
 		{
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService();
-			proj.Add(LayerCollection, new VisualLayerFactory());
+			LayerCollection.ForEach(l => proj.Add(l, visualLayerFactory));
 			return proj;
 		}
 
@@ -36,10 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var retObj = (WorkShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
-			foreach (var newLayer in _layerCollection.Select(layer => ((WorkShiftActivityLayer)layer).NoneEntityClone()))
-			{
-				retObj._layerCollection.Add(newLayer);
-			}
+			retObj._layerCollection.AddRange(_layerCollection.Select(layer => ((WorkShiftActivityLayer)layer).NoneEntityClone()));
 			return retObj;
 		}
 
@@ -47,10 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var retObj = (WorkShift)MemberwiseClone();
 			retObj._layerCollection = new List<ILayer<IActivity>>();
-			foreach (var newLayer in _layerCollection.Select(layer => ((WorkShiftActivityLayer)layer).EntityClone()))
-			{
-				retObj._layerCollection.Add(newLayer);
-			}
+			retObj._layerCollection.AddRange(_layerCollection.Select(layer => ((WorkShiftActivityLayer)layer).EntityClone()));
 			return retObj;
 		}
 
@@ -77,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 throw new ArgumentException("Only WorkShiftActivityLayers can be added to a WorkShift");
 	        _visualLayerCollection = null;
         }
-
+		
 		public IVisualLayerCollection Projection => _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection());
 
 	    public IEditableShift ToEditorShift(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, TimeZoneInfo localTimeZone)

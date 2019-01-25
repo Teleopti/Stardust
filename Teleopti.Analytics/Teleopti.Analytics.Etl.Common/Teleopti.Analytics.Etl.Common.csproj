@@ -428,6 +428,7 @@
     <Compile Include="Transformer\Job\Steps\FactRequestedDaysJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactRequestJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactScheduleDayCountJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactScheduleDeviationJobStepStory79646.cs" />
     <Compile Include="Transformer\Job\Steps\FactScheduleDeviationJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactScheduleForecastSkillJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\FactScheduleJobStep.cs" />

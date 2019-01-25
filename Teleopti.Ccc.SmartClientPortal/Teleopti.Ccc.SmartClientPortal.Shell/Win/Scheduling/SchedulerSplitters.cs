@@ -10,13 +10,13 @@ using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Chart;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction;
@@ -26,31 +26,42 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Vie
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryDistribution;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
-    public partial class SchedulerSplitters : BaseUserControl
-    {
-        private readonly PinnedSkillHelper _pinnedSkillHelper;
+	public partial class SchedulerSplitters : BaseUserControl
+	{
+		private readonly PinnedSkillHelper _pinnedSkillHelper;
 		private IList<IPerson> _filteredPersons = new List<IPerson>();
-		private IVirtualSkillHelper _virtualSkillHelper;
 		private readonly ContextMenuStrip _contextMenuSkillGrid;
-		private SplitterManagerRestrictionView _splitterManager;
+		private readonly SplitterManagerRestrictionView _splitterManager;
 		private ISchedulerStateHolder _schedulerStateHolder;
-		private TeleoptiGridControl _skillGridControl;
-		private DateOnly _currentIntradayDate;
+		private SkillDayGridControl _skillDayGridControl;
+		private SkillIntraDayGridControl _skillIntraDayGridControl;
+		private SkillWeekGridControl _skillWeekGridControl;
+		private SkillMonthGridControl _skillMonthGridControl;
+		private SkillFullPeriodGridControl _skillFullPeriodGridControl;
+		private SkillResultViewSetting _skillResultViewSetting;
+		private DateOnly _currentIntraDayDate;
+		private string _chartDescription;
+
+		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs>
+			RestrictionsNotAbleToBeScheduledProgress;
+
+		public event EventHandler<ValidationViewAgentDoubleClickEvenArgs> ValidationAlertsAgentDoubleClick;
 
 		public SchedulerSplitters()
-        {
-            InitializeComponent();
-            if (!DesignMode)
-                SetTexts();
-            _pinnedSkillHelper = new PinnedSkillHelper();
-				tabSkillData.TabStyle = typeof(SkillTabRenderer);
-				tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
+		{
+			InitializeComponent();
+			if (!DesignMode)
+				SetTexts();
+			_pinnedSkillHelper = new PinnedSkillHelper();
+			tabSkillData.TabStyle = typeof(SkillTabRenderer);
+			tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
 			validationAlertsView1.AgentDoubleClick += validationAlertsView1AgentDoubleClick;
 			_contextMenuSkillGrid = new ContextMenuStrip();
 			_splitterManager = new SplitterManagerRestrictionView
@@ -61,71 +72,173 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				GridEditorSplitter = teleoptiLessIntelligentSplitContainerLessIntelligent1,
 				RestrictionViewSplitter = SplitContainerView
 			};
+
+			GridChartManager = new GridChartManager(ChartControlSkillData, true, true, true);
+			GridChartManager.Create();
+			ChartControlSkillData.ChartRegionClick += chartControlSkillDataChartRegionClick;
+			ChartControlSkillData.ChartRegionMouseHover += chartControlSkillDataChartRegionMouseHover;
 		}
 
-		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs> RestrictionsNotAbleToBeScheduledProgress;
-		public event EventHandler<ValidationViewAgentDoubleClickEvenArgs> ValidationAlertsAgentDoubleClick;
-
-		private void validationAlertsView1AgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
+		public void InitializeSkillResultGrids(ILifetimeScope container)
 		{
-			OnValidationAlertsAgentDoubleClick(e);
+			_skillDayGridControl = new SkillDayGridControl(container.Resolve<ISkillPriorityProvider>());
+			_skillWeekGridControl = new SkillWeekGridControl();
+			_skillMonthGridControl = new SkillMonthGridControl();
+			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
+			_skillIntraDayGridControl = new SkillIntraDayGridControl("SchedulerSkillIntradayGridAndChart",
+				container.Resolve<ISkillPriorityProvider>());
+
+			DayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			IntraDayGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			WeekGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			MonthGridControl.ContextMenuStrip = ContextMenuSkillGrid;
+			FullPeriodGridControl.ContextMenuStrip = ContextMenuSkillGrid;
 		}
 
-		public MultipleHostControl MultipleHostControl3
-        {
-            get { return multipleHostControl1; }
-        }
-
-		public AgentInfoControl AgentInfoControl
+		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder,
+			SchedulerGroupPagesProvider schedulerGroupPagesProvider, IEnumerable<IOptionalColumn> optionalColumns, SchedulingScreenSettings currentSchedulingScreenSettings)
 		{
-			get { return tabInfoPanels.TabPages[0].Controls[0] as AgentInfoControl;}
+			Grid.VScrollPixel = false;
+			Grid.HScrollPixel = false;
+			VirtualSkillHelper = container.Resolve<IVirtualSkillHelper>();
+			_schedulerStateHolder = schedulerStateHolder;
+
+			var requestedPeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
+			CurrentIntraDayDate = requestedPeriod.StartDate;
+			var outerPeriod =
+				new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
+			var agentInfoControl = new AgentInfoControl(schedulerGroupPagesProvider, container, outerPeriod,
+				requestedPeriod, schedulerStateHolder, optionalColumns);
+
+			tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
+			agentInfoControl.Dock = DockStyle.Fill;
+			tabInfoPanels.Refresh();
+
+			//container can fix this to one row
+			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =
+				new CachedNumberOfEachCategoryPerPerson(schedulerStateHolder.Schedules,
+					schedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate =
+				new CachedNumberOfEachCategoryPerDate(schedulerStateHolder.Schedules,
+					schedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+			var allowedSc = new List<IShiftCategory>();
+			foreach (var shiftCategory in schedulerStateHolder.CommonStateHolder.ShiftCategories)
+			{
+				if (shiftCategory is IDeleteTag sc && !sc.IsDeleted)
+					allowedSc.Add(shiftCategory);
+			}
+
+			ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
+				new CachedShiftCategoryDistribution(schedulerStateHolder.Schedules,
+					schedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
+					cachedNumberOfEachCategoryPerPerson,
+					allowedSc);
+			var shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedShiftCategoryDistribution,
+				cachedNumberOfEachCategoryPerDate,
+				cachedNumberOfEachCategoryPerPerson,
+				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
+				schedulerStateHolder.CommonNameDescription);
+			shiftCategoryDistributionModel.SetFilteredPersons(schedulerStateHolder.FilteredCombinedAgentsDictionary
+				.Values);
+			shiftCategoryDistributionControl1.SetModel(shiftCategoryDistributionModel);
+			agentsNotPossibleToSchedule1.InitAgentsNotPossibleToSchedule(
+				container.Resolve<RestrictionNotAbleToBeScheduledReport>(), this);
+			validationAlertsView1.SetModel(new ValidationAlertsModel(
+				schedulerStateHolder.Schedules, NameOrderOption.LastNameFirstName,
+				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod));
+
+			_contextMenuSkillGrid.Items["CreateSkillSummery"].Click += skillGridMenuItemClick;
+			setupSkillTabs(currentSchedulingScreenSettings);
 		}
 
-		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer
-        {
-            get { return lessIntellegentSplitContainerAdvMainContainer; }
-        }
-
-        public TeleoptiLessIntelligentSplitContainer SplitContainerView
-        {
-            get { return teleoptiLessIntellegentSplitContainerView; }
-        }
-        public ChartControl ChartControlSkillData
-        {
-            get { return chartControlSkillData; }
-        }
-
-		public ContextMenuStrip ContextMenuSkillGrid
+		public void RefreshSummarySkillIfActive()
 		{
-			get { return _contextMenuSkillGrid; }
+			if (TabSkillData.SelectedIndex < 0) return;
+			var tab = TabSkillData.TabPages[TabSkillData.SelectedIndex];
+			var skill = (ISkill)tab.Tag;
+			IAggregateSkill aggregateSkillSkill = skill;
+			if (!aggregateSkillSkill.IsVirtual)
+				return;
+
+			var skillGridControl = resolveControlFromSkillResultViewSetting();
+			if (skillGridControl is SkillIntraDayGridControl control)
+			{
+				var skillStaffPeriods =
+					_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
+						aggregateSkillSkill,
+						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
+							_currentIntraDayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo));
+				control.Presenter.RowManager?.SetDataSource(skillStaffPeriods);
+			}
+			else
+			{
+				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
+				if (selectedSkillGridControl == null)
+					return;
+
+				selectedSkillGridControl.SetDataSource(_schedulerStateHolder, skill);
+			}
+
+			InvalidateSkillResultGrids();
+			skillGridControl.Refresh();
 		}
 
-		public TabControlAdv TabSkillData
+		public MultipleHostControl MultipleHostControl3 { get; private set; }
+
+		public AgentInfoControl AgentInfoControl => tabInfoPanels.TabPages[0].Controls[0] as AgentInfoControl;
+
+		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer => lessIntellegentSplitContainerAdvMainContainer;
+
+		public TeleoptiLessIntelligentSplitContainer SplitContainerView { get; private set; }
+
+		public ChartControl ChartControlSkillData { get; private set; }
+
+		public ContextMenuStrip ContextMenuSkillGrid => _contextMenuSkillGrid;
+
+		public TabControlAdv TabSkillData => tabSkillData;
+
+		public IVirtualSkillHelper VirtualSkillHelper { get; private set; }
+
+		public ElementHost ElementHostRequests { get; private set; }
+
+		public HandlePersonRequestView HandlePersonRequestView1 { get; private set; }
+
+		public ElementHost ElementHost1 { get; private set; }
+
+		public GridControl Grid { get; private set; }
+
+		public SkillDayGridControl DayGridControl => _skillDayGridControl;
+
+		public SkillIntraDayGridControl IntraDayGridControl => _skillIntraDayGridControl;
+
+		public SkillWeekGridControl WeekGridControl => _skillWeekGridControl;
+
+		public SkillMonthGridControl MonthGridControl => _skillMonthGridControl;
+
+		public SkillFullPeriodGridControl FullPeriodGridControl => _skillFullPeriodGridControl;
+
+		public SkillResultViewSetting SkillResultViewSetting
 		{
-			get { return tabSkillData; }
+			get => _skillResultViewSetting;
+			set
+			{
+				_skillResultViewSetting = value;
+				foreach (var item in ContextMenuSkillGrid.Items)
+				{
+					if (!((item as ToolStripMenuItem)?.Tag is SkillResultViewSetting)) continue;
+					var itemTag = ((ToolStripMenuItem) item).Tag;
+					(item as ToolStripMenuItem).Checked = ((SkillResultViewSetting)itemTag).Equals(_skillResultViewSetting);
+				}
+			}
 		}
 
-		public IVirtualSkillHelper VirtualSkillHelper
+		public GridChartManager GridChartManager { get; }
+
+		public DateOnly CurrentIntraDayDate
 		{
-			get { return _virtualSkillHelper; }
+			get => _currentIntraDayDate;
+			set => _currentIntraDayDate = value;
 		}
-
-        public ElementHost ElementHostRequests
-        {
-            get { return elementHostRequests; }
-        }
-        public HandlePersonRequestView HandlePersonRequestView1
-        {
-            get { return handlePersonRequestView1; }
-        }
-        public ElementHost ElementHost1
-        {
-            get { return elementHost1; }
-        }
-        public GridControl Grid
-        {
-            get { return grid; }
-        }
 
 		public void ShowGraph(bool show)
 		{
@@ -159,23 +272,170 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void pinnedToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            var tab = tabSkillData.SelectedTab;
-            
-            if (tab!=null)
-                _pinnedSkillHelper.PinSlashUnpinTab(tab);
-        }
+		public void ReselectSelectedAgentNotPossibleToSchedule()
+		{
+			agentsNotPossibleToSchedule1.ReselectSelected();
+		}
 
-        public void PinSavedSkills(ISchedulingScreenSettings currentSchedulingScreenSettings)
-        {
-            _pinnedSkillHelper.InitialSetup(tabSkillData, currentSchedulingScreenSettings);
+		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons,
+			DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
+		{
+			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
+		}
+
+		public void EnableOrDisableViewShiftCategoryDistribution(bool enable)
+		{
+			shiftCategoryDistributionControl1.EnableOrDisableViewShiftCategoryDistribution(enable);
+		}
+
+		public void RefreshFilteredPersons(IEnumerable<IPerson> filteredPersons)
+		{
+			_filteredPersons = filteredPersons.ToList();
+			if (tabInfoPanels.SelectedIndex == 2)
+			{
+				validationAlertsView1.ReDraw(_filteredPersons);
+			}
+
+			tabInfoPanels.Refresh();
+
+			shiftCategoryDistributionControl1.Model.SetFilteredPersons(_filteredPersons);
+		}
+
+		public void TogglePropertyPanel(bool value)
+		{
+			//fix to solve right to left cultures not showing panel on start
+			lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = !value;
+			lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
+			var defaultDistance = lessIntellegentSplitContainerAdvMainContainer.Width - 350;
+
+			if (!value)
+			{
+				if (lessIntellegentSplitContainerAdvMainContainer.SplitterDistance >
+					defaultDistance)
+					lessIntellegentSplitContainerAdvMainContainer.SplitterDistance =
+						defaultDistance;
+
+				if (lessIntellegentSplitContainerAdvMainContainer.SplitterDistance <
+					lessIntellegentSplitContainerAdvMainContainer.Width - 700)
+					lessIntellegentSplitContainerAdvMainContainer.SplitterDistance =
+						defaultDistance;
+			}
+		}
+
+		public void SaveAllChartSetting()
+		{
+			IntraDayGridControl.SaveSetting();
+			DayGridControl.SaveSetting();
+			WeekGridControl.SaveSetting();
+			MonthGridControl.SaveSetting();
+			FullPeriodGridControl.SaveSetting();
+		}
+
+		public void InvalidateSkillResultGrids()
+		{
+			IntraDayGridControl.Invalidate(true);
+			DayGridControl.Invalidate(true);
+			WeekGridControl.Invalidate(true);
+			MonthGridControl.Invalidate(true);
+			FullPeriodGridControl.Invalidate(true);
+		}
+
+		public void ReloadChart()
+		{
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Week))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Week, _chartDescription);
+				GridChartManager.ReloadChart(WeekGridControl, description);
+			}
+
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Month))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Month, _chartDescription);
+				GridChartManager.ReloadChart(MonthGridControl, description);
+			}
+
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Period))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Period, _chartDescription);
+				GridChartManager.ReloadChart(FullPeriodGridControl, description);
+			}
+
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Intraday, _chartDescription);
+				GridChartManager.ReloadChart(IntraDayGridControl, description);
+			}
+			if (SkillResultViewSetting.Equals(SkillResultViewSetting.Day))
+			{
+				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Day, _chartDescription);
+				GridChartManager.ReloadChart(DayGridControl, description);
+			}
+			ChartControlSkillData.Visible = true;
+		}
+
+		public void DrawSkillGrid()
+		{
+			var skillGridControl = resolveControlFromSkillResultViewSetting();
+			_chartDescription = string.Empty;
+			if (TabSkillData.SelectedIndex >= 0)
+			{
+				TabPageAdv tab = TabSkillData.TabPages[TabSkillData.SelectedIndex];
+				var skill = (ISkill)tab.Tag;
+				IAggregateSkill aggregateSkillSkill = skill;
+				_chartDescription = skill.Name;
+
+				if (skillGridControl is SkillIntraDayGridControl control)
+				{
+					_chartDescription = drawIntraDay(control, skill, aggregateSkillSkill);
+				}
+
+				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
+
+				positionControl(skillGridControl);
+				selectedSkillGridControl?.DrawDayGrid(_schedulerStateHolder, skill);
+				selectedSkillGridControl?.DrawDayGrid(_schedulerStateHolder, skill);
+			}
+		}
+
+		#region Private
+
+		private TeleoptiGridControl resolveControlFromSkillResultViewSetting()
+		{
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+				return IntraDayGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
+				return DayGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
+				return WeekGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
+				return MonthGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
+				return FullPeriodGridControl;
+
+			return null;
+		}
+
+		private void pinnedToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var tab = tabSkillData.SelectedTab;
+
+			if (tab != null)
+				_pinnedSkillHelper.PinSlashUnpinTab(tab);
+		}
+
+		private void pinSavedSkills(ISchedulingScreenSettings currentSchedulingScreenSettings)
+		{
+			_pinnedSkillHelper.InitialSetup(tabSkillData, currentSchedulingScreenSettings);
 
 			if (_pinnedSkillHelper.PinnedPage() != null)
 				tabSkillData.SelectedTab = _pinnedSkillHelper.PinnedPage();
 		}
 
-		public ISkill CreateSkillSummery(IEnumerable<ISkill> allSkills)
+		private ISkill createSkillSummery(IEnumerable<ISkill> allSkills)
 		{
 			using (var skillSummery = new SkillSummary(allSkills))
 			{
@@ -183,15 +443,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if (skillSummery.DialogResult == DialogResult.OK)
 				{
-					var virtualSkill = (ISkill)skillSummery.AggregateSkillSkill;
+					var virtualSkill = (ISkill) skillSummery.AggregateSkillSkill;
 					virtualSkill.SetId(Guid.NewGuid());
 					TabPageAdv tab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
 					tab.ImageIndex = 4;
 					tab.Tag = skillSummery.AggregateSkillSkill;
 					tabSkillData.TabPages.Add(tab);
-					_virtualSkillHelper.SaveVirtualSkill(virtualSkill);
-					AddVirtualSkill(virtualSkill);
-					SortSkills();
+					VirtualSkillHelper.SaveVirtualSkill(virtualSkill);
+					_pinnedSkillHelper.AddVirtualSkill(virtualSkill);
+					_pinnedSkillHelper.SortSkills();
 
 					return virtualSkill;
 				}
@@ -209,18 +469,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if (skillSummery.DialogResult == DialogResult.OK)
 				{
-					IAggregateSkill newSkill = handleSummeryEditMenuItems(_contextMenuSkillGrid, menuItem, skillSummery);
+					IAggregateSkill newSkill =
+						handleSummeryEditMenuItems(_contextMenuSkillGrid, menuItem, skillSummery);
 
 					if (newSkill.AggregateSkills.Count != 0)
 					{
 						VirtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
-						ReplaceOldWithNew((ISkill)newSkill, skill);
-						SortSkills();
+						_pinnedSkillHelper.ReplaceOldWithNew((ISkill)newSkill, skill);
+						_pinnedSkillHelper.SortSkills();
 						ret = true;
 					}
 					else
 					{
-						RemoveVirtualSkill(newSkill);
+						removeVirtualSkill(newSkill);
 					}
 				}
 			}
@@ -228,10 +489,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return ret;
 		}
 
-		public void RemoveVirtualSkill(IAggregateSkill virtualSkill)
+		private void removeVirtualSkill(IAggregateSkill virtualSkill)
 		{
 			virtualSkill.ClearAggregateSkill();
-			removeVirtualSkill((Skill)virtualSkill);
+			_pinnedSkillHelper.RemoveVirtualSkill((ISkill)virtualSkill);
 			foreach (TabPageAdv tabPage in tabSkillData.TabPages)
 			{
 				if (tabPage.Tag == virtualSkill)
@@ -241,21 +502,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					break;
 				}
 			}
+
 			VirtualSkillHelper.SaveVirtualSkill(virtualSkill);
 		}
 
-		private IAggregateSkill handleSummeryEditMenuItems(ContextMenuStrip contextMenuSkillGrid, ToolStripMenuItem menuItem, SkillSummary skillSummary)
+		private IAggregateSkill handleSummeryEditMenuItems(ContextMenuStrip contextMenuSkillGrid,
+			ToolStripMenuItem menuItem, SkillSummary skillSummary)
 		{
-			var virtualSkill = (ISkill)skillSummary.AggregateSkillSkill;
+			var virtualSkill = (ISkill) skillSummary.AggregateSkillSkill;
 			tabSkillData.SelectedTab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
 			foreach (TabPageAdv tabPage in tabSkillData.TabPages)
 			{
 				handleTabsAndMenuItemsVirtualSkill(contextMenuSkillGrid, skillSummary, virtualSkill, tabPage, menuItem);
 			}
+
 			return virtualSkill;
 		}
 
-		private void handleTabsAndMenuItemsVirtualSkill(ContextMenuStrip contextMenuSkillGrid, SkillSummary skillSummary, ISkill virtualSkill, TabPageAdv tabPage,
+		private void handleTabsAndMenuItemsVirtualSkill(ContextMenuStrip contextMenuSkillGrid,
+			SkillSummary skillSummary, ISkill virtualSkill, TabPageAdv tabPage,
 			ToolStripMenuItem menuItem)
 		{
 			if (tabPage.Tag == virtualSkill)
@@ -266,10 +531,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					removeVirtualSkillToolStripMenuItem(contextMenuSkillGrid, tabPage, virtualSkill, "Delete");
 					return;
 				}
+
 				tabPage.Text = virtualSkill.Name;
 				menuItem.Name = virtualSkill.Name;
 				menuItem.Text = virtualSkill.Name;
-				var skillGridMenuItem = (ToolStripMenuItem)contextMenuSkillGrid.Items["Delete"];
+				var skillGridMenuItem = (ToolStripMenuItem) contextMenuSkillGrid.Items["Delete"];
 				foreach (ToolStripMenuItem subItem in skillGridMenuItem.DropDownItems)
 				{
 					if (subItem.Tag == virtualSkill)
@@ -282,9 +548,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void removeVirtualSkillToolStripMenuItem(ContextMenuStrip contextMenuSkillGrid, TabPageAdv tabPage, IAggregateSkill virtualSkill, string action)
+		private void removeVirtualSkillToolStripMenuItem(ContextMenuStrip contextMenuSkillGrid, TabPageAdv tabPage,
+			IAggregateSkill virtualSkill, string action)
 		{
-			var skillGridMenuItem = (ToolStripMenuItem)contextMenuSkillGrid.Items[action];
+			var skillGridMenuItem = (ToolStripMenuItem) contextMenuSkillGrid.Items[action];
 			tabSkillData.TabPages.Remove(tabPage);
 			foreach (ToolStripMenuItem subItem in skillGridMenuItem.DropDownItems)
 			{
@@ -298,130 +565,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		public void SortSkills()
-        {
-            _pinnedSkillHelper.SortSkills();
-        }
-
-        public void AddVirtualSkill(ISkill virtualSkill)
-        {
-            _pinnedSkillHelper.AddVirtualSkill(virtualSkill);
-        }
-
-        private void removeVirtualSkill(ISkill virtualSkill)
-        {
-            _pinnedSkillHelper.RemoveVirtualSkill(virtualSkill);
-        }
-
-        public void ReplaceOldWithNew(ISkill newSkill, ISkill oldSkill)
-        {
-            _pinnedSkillHelper.ReplaceOldWithNew(newSkill, oldSkill);
-        }
-
-        public void ToggelPropertyPanel(bool value)
-        {
-            //fix to solve right to left cultures not showing panel on start
-            lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = !value;
-            lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
-			var defaultDistance = lessIntellegentSplitContainerAdvMainContainer.Width - 350;
-
-			if (!value)
-	        {
-		        if (lessIntellegentSplitContainerAdvMainContainer.SplitterDistance >
-					defaultDistance)
-			        lessIntellegentSplitContainerAdvMainContainer.SplitterDistance =
-						defaultDistance;
-
-				if (lessIntellegentSplitContainerAdvMainContainer.SplitterDistance <
-					lessIntellegentSplitContainerAdvMainContainer.Width - 700)
-					lessIntellegentSplitContainerAdvMainContainer.SplitterDistance =
-						defaultDistance;
-			}
-        }
-
-		public void Initialize(ILifetimeScope container, ISchedulerStateHolder schedulerStateHolder, SchedulerGroupPagesProvider schedulerGroupPagesProvider, IEnumerable<IOptionalColumn> optionalColumns)
+		private void setupSkillTabs(SchedulingScreenSettings currentSchedulingScreenSettings)
 		{
-			Grid.VScrollPixel = false;
-			Grid.HScrollPixel = false;
-			_virtualSkillHelper = container.Resolve<IVirtualSkillHelper>();
-			_schedulerStateHolder = schedulerStateHolder;
-
-			var requestedPeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
-			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
-			var agentInfoControl = new AgentInfoControl(schedulerGroupPagesProvider, container, outerPeriod,
-				requestedPeriod, schedulerStateHolder, optionalColumns);
-
-			tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
-			agentInfoControl.Dock = DockStyle.Fill;
-			tabInfoPanels.Refresh();
-
-			//container can fix this to one row
-			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =
-				new CachedNumberOfEachCategoryPerPerson(schedulerStateHolder.Schedules, schedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
-			ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate =
-				new CachedNumberOfEachCategoryPerDate(schedulerStateHolder.Schedules, schedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
-			var allowedSc = new List<IShiftCategory>();
-			foreach (var shiftCategory in schedulerStateHolder.CommonStateHolder.ShiftCategories)
-			{
-				var sc = shiftCategory as IDeleteTag;
-				if (sc != null && !sc.IsDeleted)
-					allowedSc.Add(shiftCategory);
-			}
-			ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
-				new CachedShiftCategoryDistribution(schedulerStateHolder.Schedules, schedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
-					cachedNumberOfEachCategoryPerPerson,
-					allowedSc);
-			var shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedShiftCategoryDistribution,
-				cachedNumberOfEachCategoryPerDate,
-				cachedNumberOfEachCategoryPerPerson,
-				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod,
-				schedulerStateHolder.CommonNameDescription);
-			shiftCategoryDistributionModel.SetFilteredPersons(schedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
-			shiftCategoryDistributionControl1.SetModel(shiftCategoryDistributionModel);
-			agentsNotPossibleToSchedule1.InitAgentsNotPossibleToSchedule(container.Resolve<RestrictionNotAbleToBeScheduledReport>(), this);
-			validationAlertsView1.SetModel(new ValidationAlertsModel(
-				schedulerStateHolder.Schedules, NameOrderOption.LastNameFirstName,
-				schedulerStateHolder.RequestedPeriod.DateOnlyPeriod));
-
-			_contextMenuSkillGrid.Items["CreateSkillSummery"].Click += skillGridMenuItemClick;
-		}
-
-		public void RefreshSummarySkillIfActive(TeleoptiGridControl skillGridControl, DateOnly currentIntraDayDate)
-		{
-			if (TabSkillData.SelectedIndex < 0) return;
-			var tab = TabSkillData.TabPages[TabSkillData.SelectedIndex];
-			var skill = (ISkill)tab.Tag;
-			IAggregateSkill aggregateSkillSkill = skill;
-			if (!aggregateSkillSkill.IsVirtual)
-				return;
-
-			if (skillGridControl is SkillIntradayGridControl)
-			{
-				var skillStaffPeriods = _schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-					aggregateSkillSkill,
-					TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntraDayDate.Date,
-						currentIntraDayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo));
-				((SkillIntradayGridControl) skillGridControl).Presenter.RowManager?.SetDataSource(skillStaffPeriods);
-			}
-			else
-			{
-				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
-				if (selectedSkillGridControl == null)
-					return;
-
-				selectedSkillGridControl.SetDataSource(_schedulerStateHolder, skill);
-			}
-
-			skillGridControl.Refresh();
-		}
-
-		public void SetupSkillTabs(SchedulingScreenSettings currentSchedulingScreenSettings)
-		{
+			_currentIntraDayDate = _schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate;
 			TabSkillData.TabPages.Clear();
 			TabSkillData.ImageList = imageListSkillTypeIcons;
 			foreach (
 				ISkill virtualSkill in
-				VirtualSkillHelper.LoadVirtualSkills(_schedulerStateHolder.SchedulingResultState.VisibleSkills).OrderBy(s => s.Name))
+				VirtualSkillHelper.LoadVirtualSkills(_schedulerStateHolder.SchedulingResultState.VisibleSkills)
+					.OrderBy(s => s.Name))
 			{
 				TabPageAdv tab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);
 				tab.Tag = virtualSkill;
@@ -439,12 +591,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				TabSkillData.TabPages.Add(tab);
 			}
-			PinSavedSkills(currentSchedulingScreenSettings);
+
+			pinSavedSkills(currentSchedulingScreenSettings);
 		}
 
 		private void skillGridMenuItemClick(object sender, EventArgs e)
 		{
-			var virtualSkill = CreateSkillSummery(_schedulerStateHolder.SchedulingResultState.Skills);
+			var virtualSkill = createSkillSummery(_schedulerStateHolder.SchedulingResultState.Skills);
 			if (virtualSkill != null)
 			{
 				enableEditVirtualSkill(virtualSkill);
@@ -454,79 +607,48 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void enableDeleteVirtualSkill(ISkill virtualSkill)
 		{
-			var skillGridMenuItem = (ToolStripMenuItem)ContextMenuSkillGrid.Items["Delete"];
+			var skillGridMenuItem = (ToolStripMenuItem) ContextMenuSkillGrid.Items["Delete"];
 			skillGridMenuItem.Enabled = true;
-			var subItem = new ToolStripMenuItem(virtualSkill.Name);
-			subItem.Tag = virtualSkill;
+			var subItem = new ToolStripMenuItem(virtualSkill.Name) {Tag = virtualSkill};
 			subItem.Click += skillGridMenuItemDeleteClick;
 			skillGridMenuItem.DropDownItems.Add(subItem);
 		}
 
 		private void enableEditVirtualSkill(ISkill virtualSkill)
 		{
-			var skillGridMenuItem = (ToolStripMenuItem)_contextMenuSkillGrid.Items["Edit"];
+			var skillGridMenuItem = (ToolStripMenuItem) _contextMenuSkillGrid.Items["Edit"];
 			skillGridMenuItem.Enabled = true;
-			var subItem = new ToolStripMenuItem(virtualSkill.Name);
-			subItem.Tag = virtualSkill;
+			var subItem = new ToolStripMenuItem(virtualSkill.Name) {Tag = virtualSkill};
 			subItem.Click += skillGridMenuItemEditClick;
 			skillGridMenuItem.DropDownItems.Add(subItem);
 		}
 
 		private void skillGridMenuItemDeleteClick(object sender, EventArgs e)
 		{
-			var menuItem = (ToolStripMenuItem)sender;
-			var virtualSkill = (IAggregateSkill)menuItem.Tag;
-			RemoveVirtualSkill(virtualSkill);
+			var menuItem = (ToolStripMenuItem) sender;
+			var virtualSkill = (IAggregateSkill) menuItem.Tag;
+			removeVirtualSkill(virtualSkill);
 		}
 
 		private void skillGridMenuItemEditClick(object sender, EventArgs e)
 		{
-			var menuItem = (ToolStripMenuItem)sender;
-			var skill = (ISkill)menuItem.Tag;
+			var menuItem = (ToolStripMenuItem) sender;
+			var skill = (ISkill) menuItem.Tag;
 
 			var validData = editSkillSummary(_schedulerStateHolder.SchedulingResultState.Skills, skill, menuItem);
 			if (validData)
 			{
-				DrawSkillGrid(_skillGridControl, _currentIntradayDate);
+				DrawSkillGrid();
 			}
 		}
 
-		public string DrawSkillGrid(TeleoptiGridControl skillGridControl, DateOnly currentIntradayDate)
+		private string drawIntraDay(SkillIntraDayGridControl skillIntraDayGridControl, ISkill skill,
+			IAggregateSkill aggregateSkillSkill)
 		{
-			_skillGridControl = skillGridControl;
-			_currentIntradayDate = currentIntradayDate;
-			var chartDescription = string.Empty;
-			if (TabSkillData.SelectedIndex >= 0)
-			{
-				TabPageAdv tab = TabSkillData.TabPages[TabSkillData.SelectedIndex];
-				var skill = (ISkill)tab.Tag;
-				IAggregateSkill aggregateSkillSkill = skill;
-				chartDescription = skill.Name;
-
-				if (skillGridControl is SkillIntradayGridControl control)
-				{
-					chartDescription = drawIntraday(control, skill, aggregateSkillSkill, currentIntradayDate, chartDescription);
-					return chartDescription;
-				}
-
-				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
-				if (selectedSkillGridControl == null)
-					return chartDescription;
-
-				positionControl(skillGridControl);
-				selectedSkillGridControl.DrawDayGrid(_schedulerStateHolder, skill);
-				selectedSkillGridControl.DrawDayGrid(_schedulerStateHolder, skill);
-			}
-
-			return chartDescription;
-		}
-
-		private string drawIntraday(SkillIntradayGridControl skillIntradayGridControl, ISkill skill,
-			IAggregateSkill aggregateSkillSkill, DateOnly currentIntradayDate, string chartDescription)
-		{
+			_chartDescription = string.Empty;
 			IList<ISkillStaffPeriod> skillStaffPeriods;
-			var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date,
-				currentIntradayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo);
+			var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
+				_currentIntraDayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo);
 			if (aggregateSkillSkill.IsVirtual)
 			{
 				_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
@@ -542,17 +664,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						new List<ISkill> {skill},
 						periodToFind);
 			}
-
+			
 			if (skillStaffPeriods.Count >= 0)
 			{
-				chartDescription = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", skill.Name,
-					currentIntradayDate.ToShortDateString());
-				skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, _schedulerStateHolder);
-				skillIntradayGridControl.SetRowsAndCols();
-				positionControl(skillIntradayGridControl);
+				_chartDescription = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", skill.Name,
+					_currentIntraDayDate.ToShortDateString());
+				skillIntraDayGridControl.SetupDataSource(skillStaffPeriods, skill, _schedulerStateHolder);
+				skillIntraDayGridControl.SetRowsAndCols();
+				positionControl(skillIntraDayGridControl);
 			}
 
-			return chartDescription;
+			return _chartDescription;
 		}
 
 		private void positionControl(Control control)
@@ -569,42 +691,42 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			//position _grid
 			control.Dock = DockStyle.Fill;
 		}
+		#endregion
 
-		public void ReselectSelectedAgentNotPossibleToSchedule()
+		#region Virtual
+
+		protected virtual void OnValidationAlertsAgentDoubleClick(ValidationViewAgentDoubleClickEvenArgs e)
 		{
-			agentsNotPossibleToSchedule1.ReselectSelected();
+			ValidationAlertsAgentDoubleClick?.Invoke(this, e);
 		}
-
-		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
-		{
-			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
-		}
-
-		public void EnableOrDisableViewShiftCategoryDistribution(bool enable)
-		{
-			shiftCategoryDistributionControl1.EnableOrDisableViewShiftCategoryDistribution(enable);
-		}
-
-		public void RefreshFilteredPersons(IEnumerable<IPerson> filteredPersons)
-		{
-			_filteredPersons = filteredPersons.ToList();
-			if(tabInfoPanels.SelectedIndex == 2)
-			{
-				validationAlertsView1.ReDraw(_filteredPersons);
-			}
-			tabInfoPanels.Refresh();
-
-			shiftCategoryDistributionControl1.Model.SetFilteredPersons(_filteredPersons);
-		}
-
-	    protected virtual void OnValidationAlertsAgentDoubleClick(ValidationViewAgentDoubleClickEvenArgs e)
-	    {
-		    ValidationAlertsAgentDoubleClick?.Invoke(this, e);
-	    }
 
 		public virtual void OnRestrictionsNotAbleToBeScheduledProgress(System.ComponentModel.ProgressChangedEventArgs e)
 		{
 			RestrictionsNotAbleToBeScheduledProgress?.Invoke(this, e);
+		}
+
+		#endregion
+
+		#region Events
+
+		private void chartControlSkillDataChartRegionMouseHover(object sender, ChartRegionMouseEventArgs e)
+		{
+			GridChartManager.SetChartToolTip(e.Region, ChartControlSkillData);
+		}
+
+		private void chartControlSkillDataChartRegionClick(object sender, ChartRegionMouseEventArgs e)
+		{
+			int column = Math.Max(1, (int)GridChartManager.GetIntervalValueForChartPoint(ChartControlSkillData, e.Point));
+			var skillGridControl = resolveControlFromSkillResultViewSetting();
+			skillGridControl.ScrollCellInView(0, column);
+
+			if (skillGridControl is SkillDayGridControl)
+				Grid.ScrollCellInView(0, column + 1);
+		}
+
+		private void validationAlertsView1AgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
+		{
+			OnValidationAlertsAgentDoubleClick(e);
 		}
 
 		private void tabInfoPanelsSelectedIndexChanged(object sender, EventArgs e)
@@ -616,6 +738,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			Grid.Invalidate();
 		}
-
+		#endregion
 	}
 }

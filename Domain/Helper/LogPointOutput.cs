@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Domain.Helper
 
 	    private static ILog getLog()
 	    {
-		    var identity = TeleoptiPrincipal.CurrentPrincipal.Identity as ITeleoptiIdentity;
+		    var identity = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity as ITeleoptiIdentity;
 		    var appConnString = new SqlConnectionStringBuilder(identity.DataSource.Application.ConnectionString);
 		    if (identity != null)
 		    {
-			    GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
+			    GlobalContext.Properties["BU"] = identity.BusinessUnitName;
 			    GlobalContext.Properties["DataSource"] = appConnString.DataSource;
 			    GlobalContext.Properties["InitialCatalog"] = appConnString.InitialCatalog;
 		    }

@@ -2,7 +2,7 @@
 	'use strict';
 	angular
 		.module('adminAppHttp', [])
-		.factory('httpInterceptor', function ($q) {
+		.factory('httpInterceptor', function ($q, $rootScope) {
 
 			return {
 				// optional method
@@ -27,7 +27,9 @@
 				'responseError': function (rejection) {
 					// do something on error
 					if (rejection.status === 401) {
+						$rootScope.user = "";
 						window.location = "#/login";
+						location.reload();
 					}
 					return $q.reject(rejection);
 				}

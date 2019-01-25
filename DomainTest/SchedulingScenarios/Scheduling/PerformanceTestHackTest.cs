@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 { 
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537)]
+	[Toggle(Toggles.ResourcePlanner_TeamSchedulingInPlans_79283)]
 	public class PerformanceTestHackTest : SchedulingScenario
 	{
 		public FullScheduling Target;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldUseTeamAndSameShiftCategory()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));
@@ -53,6 +53,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agent2 = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), bag, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Day, 8);
+			planningPeriod.PlanningGroup.SetTeamSettings(new TeamSettings()
+			{
+				GroupPageType = GroupPageType.Hierarchy,
+				TeamSameType = TeamSameType.ShiftCategory
+			});
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 

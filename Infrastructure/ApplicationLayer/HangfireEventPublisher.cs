@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Hangfire;
+using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -28,8 +31,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_handlerTypeMapper = handlerTypeMapper;
 		}
 
-		public void Publish(params IEvent[] events) =>
-			jobsFor(events).ForEach(j => _client.Enqueue(j));
+		public void Publish(params IEvent[] events)
+		{
+			try
+			{
+				var hangfireEventJobs = jobsFor(events).ToArray();
+				Parallel.ForEach(hangfireEventJobs, j => _client.Enqueue(j));
+			}
+			catch (AggregateException e)
+			{
+				throw e.Flatten().InnerExceptions.FirstOrDefault();
+			}
+		}
 
 		public void PublishDaily(IEvent @event) =>
 			jobsFor(new[] {@event}).ForEach(x => _client.AddOrUpdateDaily(x));

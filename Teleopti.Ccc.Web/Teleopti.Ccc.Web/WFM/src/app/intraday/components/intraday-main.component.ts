@@ -18,9 +18,9 @@ import {
 	IntradayTrafficDataSeries,
 	IntradayTrafficSummaryData,
 	IntradayTrafficSummaryItem,
-	Skill,
 	SkillPickerItem,
-	SkillPickerItemType
+	SkillPickerItemType,
+	IIntradayAxisLabels
 } from '../types';
 
 @Component({
@@ -39,7 +39,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	) {}
 
 	selectedSkillOrGroup: SkillPickerItem;
-	selectedSubSkill: Skill;
+	// selectedSubSkill: Skill;
 	selectedSubSkillId: string;
 	selectedOffset = 0;
 	selectedChartType: IntradayChartType = 'traffic';
@@ -58,6 +58,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	timer: any;
 	showSkills = true;
 	showReforecastedWarning = false;
+	axisLabels: IIntradayAxisLabels = { yLabel: '-', y2Label: '-' };
 
 	ngOnInit() {
 		this.startTimer();
@@ -72,7 +73,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		this.selectedOffset = 0;
 		if (persisted) {
 			this.selectedSkillOrGroup = persisted.selectedSkillOrGroup;
-			this.selectedSubSkill = persisted.selectedSubSkill;
 			this.selectedSubSkillId = persisted.selectedSubSkillId;
 			this.selectedOffset = persisted.selectedOffset;
 			this.selectedChartType = persisted.selectedChartType;
@@ -95,7 +95,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	private setPersistedData() {
 		this.persistData.setPersisted({
 			selectedSkillOrGroup: this.selectedSkillOrGroup,
-			selectedSubSkill: this.selectedSubSkill,
 			selectedSubSkillId: this.selectedSubSkillId,
 			selectedOffset: this.selectedOffset,
 			selectedChartType: this.selectedChartType,
@@ -106,7 +105,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	onSelectSkill(e: SkillPickerItem) {
 		this.selectedSkillOrGroup = e;
-		this.selectedSubSkill = undefined;
 		this.selectedSubSkillId = undefined;
 		this.updateData();
 		this.setPersistedData();
@@ -188,6 +186,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	}
 
 	updateData = () => {
+		// tslint:disable-next-line:no-debugger
 		this.setPersistedData();
 		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
@@ -196,6 +195,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		this.showReforecastedWarning = this.isWarningableTab() && this.isSkillEmailOrBackoffice();
 
 		let selectedSkill = this.selectedSkillOrGroup;
+
 		if (this.selectedSubSkillId && this.selectedSubSkillId !== 'all') {
 			selectedSkill = {
 				Id: this.selectedSubSkillId,
@@ -360,14 +360,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		}
 	};
 
-	private handleError(err: any) {
-		console.warn('Http error', err);
-		this.error = true;
-		this.chartData = undefined;
-		this.errorMessage = this.translate.instant('NoDataAvailable');
-		this.loading = false;
-	}
-
 	goToGroupManager() {
 		location.hash = '#/intraday/skill-group-manager';
 	}
@@ -378,7 +370,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 				return moment(item).format('YYYY-MM-DD HH:mm');
 			});
 			if (!timeStamps || timeStamps.length === 0) return {};
-
+			this.axisLabels.yLabel = this.translate.instant('Volume');
+			this.axisLabels.y2Label = this.translate.instant('AverageHandlingTime');
 			return {
 				x: 'x',
 				xFormat: '%Y-%m-%d %H:%M',
@@ -440,7 +433,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		if (input && input.Time !== null) {
 			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
 			if (!timeStamps || timeStamps.length === 0) return {};
-
+			this.axisLabels.yLabel = this.translate.instant('SecondShort');
+			this.axisLabels.y2Label = this.translate.instant('%');
 			return {
 				x: 'x',
 				xFormat: '%Y-%m-%d %H:%M',
@@ -512,7 +506,8 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		if (input && input.Time !== null) {
 			const timeStamps = input.Time.map(item => moment(item).format('YYYY-MM-DD HH:mm'));
 			if (!timeStamps || timeStamps.length === 0) return {};
-
+			this.axisLabels.yLabel = this.translate.instant('Agents');
+			this.axisLabels.y2Label = this.translate.instant('%');
 			return {
 				x: 'x',
 				xFormat: '%Y-%m-%d %H:%M',
@@ -555,39 +550,45 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		}
 	}
 
-	public getEmailOrBackofficeWarning = function() {
+	public getEmailOrBackofficeWarning() {
 		if (this.selectedTabIndex === 1) {
 			return this.translate.instant('NotShowingAbandonRate');
 		} else if (this.selectedTabIndex === 2) {
 			return this.translate.instant('NotShowingReforcastedAgents');
 		}
-	};
+	}
 
-	public isSkillEmailOrBackoffice = function() {
+	public isSkillEmailOrBackoffice(): boolean {
 		if (this.selectedSkillOrGroup.Skills && this.selectedSkillOrGroup.Skills.length > 0) {
-			return this.selectedSkillOrGroup.Skills.find(function(skill) {
-				return skill.SkillType === 'SkillTypeEmail' || skill.SkillType === 'SkillTypeBackoffice';
-			});
+			const found = this.selectedSkillOrGroup.Skills.find(
+				skill => skill.SkillType === 'SkillTypeEmail' || skill.SkillType === 'SkillTypeBackoffice'
+			);
+			if (found || this.selectedSubSkillId === 'all') return true;
+			else {
+				const s = this.selectedSkillOrGroup.Skills.find(x => x.Id === this.selectedSubSkillId);
+				return s.SkillType === 'SkillTypeEmail' || s.SkillType === 'SkillTypeBackoffice';
+			}
 		} else {
 			return (
 				this.selectedSkillOrGroup.Skill.SkillType === 'SkillTypeEmail' ||
 				this.selectedSkillOrGroup.Skill.SkillType === 'SkillTypeBackoffice'
 			);
 		}
-		return false;
-	};
+	}
 
-	public isWarningableTab = function() {
+	public isWarningableTab() {
 		if (this.selectedTabIndex === 0) {
 			return false;
 		}
 		return true;
-	};
+	}
 
 	getEmptyTrafficData(): IntradayTrafficData {
 		return {
-			FirstIntervalStart: '2018-08-17T08:00:00',
-			FirstIntervalEnd: '2018-08-17T08:15:00',
+			FirstIntervalStart: moment().format(),
+			FirstIntervalEnd: moment()
+				.add(15, 'minutes')
+				.format(),
 			LatestActualIntervalStart: null,
 			LatestActualIntervalEnd: null,
 			Summary: {

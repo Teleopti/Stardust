@@ -13,19 +13,19 @@ namespace Teleopti.Wfm.Adherence.Historical
 	public class HistoricalAdherenceViewModelBuilder
 	{
 		private readonly IPersonRepository _persons;
-		private readonly IScheduleLoader _schedule;
+		private readonly ScheduleLoader _schedule;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
+		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly int _displayPastDays;
 
 		public HistoricalAdherenceViewModelBuilder(
 			IPersonRepository persons,
-			IScheduleLoader schedule,
+			ScheduleLoader schedule,
 			INow now,
 			IUserTimeZone timeZone,
 			IConfigReader config,
-			IAgentAdherenceDayLoader agentAdherenceDayLoader
+			AgentAdherenceDayLoader agentAdherenceDayLoader
 		)
 		{
 			_persons = persons;
@@ -83,8 +83,8 @@ namespace Teleopti.Wfm.Adherence.Historical
 					from layer in layers
 					select new HistoricalAdherenceActivityViewModel
 					{
-						Name = layer.Payload.ConfidentialDescription(person).Name,
-						Color = ColorTranslator.ToHtml(layer.Payload.ConfidentialDisplayColor(person)),
+						Name = layer.Payload.ConfidentialDescription_DONTUSE(person).Name,
+						Color = ColorTranslator.ToHtml(layer.Payload.ConfidentialDisplayColor_DONTUSE(person)),
 						StartTime = formatForUser(layer.Period.StartDateTime),
 						EndTime = formatForUser(layer.Period.EndDateTime),
 					})
@@ -104,7 +104,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 				.ToArray();
 		}
 
-		private IEnumerable<ApprovedPeriodViewModel> buildApprovedPeriods(IEnumerable<ApprovedPeriod> periods)
+		private IEnumerable<ApprovedPeriodViewModel> buildApprovedPeriods(IEnumerable<AdherencePeriod> periods)
 		{
 			return periods
 				.Select(a => new ApprovedPeriodViewModel

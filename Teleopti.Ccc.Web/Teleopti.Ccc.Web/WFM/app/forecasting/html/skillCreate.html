@@ -4,119 +4,111 @@
 	</header>
 </section>
 <section>
-	<div class="con-row">
-		<div class="con-flex">
-			<div class="panel form-panel">
-				<form name="form" class="wfm-form" novalidate ng-submit="vm.createSkill(form.$valid)">
-					<div class="con-row">
-						<div class="con-flex">
-							<div class="con-row">
-								<div class="con-flex">
-									<section>
-										<div class="form-input-wrap">
-											<label>{{ 'Name' | translate}}:</label>
-											<input type="text" maxlength="50" minlength="1" autofocus autocomplete="off" ng-model="vm.model.name" name="Name" id="nameId" required=""/>
-											<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Name.$touched">
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.Name.$error.required }">{{ 'YouCannotHaveABlankName' | translate }}</div>
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.Name.$error.maxlength }">{{'NameCantBeMoreThan' | translate}}</div>
-											</div>
-										</div>
-									</section>
-									<section>
-										<div class="form-input-wrap select-skilltype">
-											<lable class="lable-skilltype">{{ 'SkillType' | translate}}:</lable>
-											<select class="select-text">
-												<option class="option-text">{{ 'SkillTypeInboundTelephony' | translate}}</option>
-											</select>
-										</div>
-									</section>
-									<section>
-										<div class="form-input-wrap">
-											<label>{{ 'SkillActivity' | translate}}:</label>
-											<md-select id="activityId" aria-label="Activity" ng-model="vm.model.selectedActivity" required="">
-												<md-option ng-repeat="activity in vm.activities" ng-value="activity">{{ activity.Name }}</md-option>
-											</md-select>
-											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.Activity.$error.required }">{{ 'Required' | translate }}</div>
-											</div>
-										</div>
-									</section>
-									<section>
-										<div class="form-input-wrap">
-											<label>{{ 'TimeZone'|translate }}:</label>
-											<md-select id="timezoneId" aria-label="Timezone" ng-model="vm.model.selectedTimezone" required="">
-												<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone">{{ timezone.Name }}</md-option>
-											</md-select>
-											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Timezone.$touched">
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.Timezone.$error.required }">{{ 'Required' | translate }}</div>
-											</div>
-										</div>
-									</section>
-									<section>
-										<div class="form-input-wrap">
-											<label>{{'ServiceLevelParenthesisPercentSign'|translate}}:</label>
-											<input type="number" ng-model="vm.model.serviceLevelPercent" name="skillServiceLevelPercent" id="serviceLevelPercentId" max="100" min="1" required="" />
-											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelPercent.$error.required }">{{ 'Required' | translate }}</div>
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">{{ 'PercentageError'|translate }}</div>
-											</div>
-										</div>
-									</section>
-									<section>
-										<div class="form-input-wrap">
-											<label>{{ 'ServiceLevelSeconds'|translate }}:</label>
-											<input type="number" ng-model="vm.model.serviceLevelSeconds" name="skillServiceLevelSeconds" id="skillServiceLevelSecondsId" max="5000" min="1" required="" />
-											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelSeconds.$error.required }">{{ 'Required' | translate }}</div>
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max }">{{ 'SecondsSpan' | translate }}</div>
-											</div>
-										</div>
-									</section>
-									<section>
-										<div class="form-input-wrap">
-											<label>{{'ShrinkageParenthesisPercentSign'|translate}}:</label>
-											<input type="number" ng-model="vm.model.shrinkage" name="shrinkage" id="vm.shrinkageId" max="99" min="0" required="">
-											<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.shrinkage.$error.required }">{{ 'Required' | translate }}</div>
-												<div class="form-input-message" ng-class="{ formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max }">{{ 'ShrinkageSpan' | translate }}</div>
-											</div>
-										</div>
-									</section>
-								</div>
+	<div class="panel form-panel create-skill">
+		<form name="form" class="wfm-form" novalidate ng-submit="vm.createSkill(form.$valid)">
+			<div class="con-row">
+				<div class="con-flex">
+					<section>
+						<div class="form-input-wrap">
+							<label>{{ 'Name' | translate}}:</label>
+							<input type="text" maxlength="50" minlength="1" autofocus autocomplete="off" ng-model="vm.model.name" name="Name" id="nameId" required=""/>
+							<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Name.$touched">
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.Name.$error.required }">{{ 'YouCannotHaveABlankName' | translate }}</div>
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.Name.$error.maxlength }">{{'NameCantBeMoreThan' | translate}}</div>
 							</div>
 						</div>
-						
-						<div class="con-flex split-3-1">
-							<div class="form-input-wrap">
-								<label>{{ 'OpenHours' | translate }}:</label>
-								<working-hours-picker disable-next-day="true" working-hours="vm.model.workingHours"></working-hours-picker>
-								<div ng-cloak class="animate-input-message" ng-show="vm.noOpenHoursWarning()">
-									<div class="form-input-message">{{ 'AllDaysAreClosed' | translate }}</div>
-								</div>
+					</section>
+					<section>
+						<div class="form-input-wrap select-skilltype">
+							<lable class="lable-skilltype">{{ 'SkillType' | translate}}:</lable>
+							<select class="select-text">
+								<option class="option-text">{{ 'SkillTypeInboundTelephony' | translate}}</option>
+							</select>
+						</div>
+					</section>
+					<section>
+						<div class="form-input-wrap">
+							<label>{{ 'SkillActivity' | translate}}:</label>
+							<md-select id="activityId" aria-label="Activity" ng-model="vm.model.selectedActivity" required="">
+								<md-option ng-repeat="activity in vm.activities" ng-value="activity">{{ activity.Name }}</md-option>
+							</md-select>
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.Activity.$error.required }">{{ 'Required' | translate }}</div>
 							</div>
-							<div class="form-input-wrap">
-								<label>{{'Queues'|translate}}:</label>
-								<div ng-cloak class="animate-input-message" ng-show="!vm.queueSelected">
-									<div class="form-input-message formInvalidInput">{{ 'Required' | translate }}</div>
-								</div>
+						</div>
+					</section>
+					<section>
+						<div class="form-input-wrap">
+							<label>{{ 'TimeZone'|translate }}:</label>
+							<md-select id="timezoneId" aria-label="Timezone" ng-model="vm.model.selectedTimezone" required="">
+								<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone">{{ timezone.Name }}</md-option>
+							</md-select>
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Timezone.$touched">
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.Timezone.$error.required }">{{ 'Required' | translate }}</div>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="form-input-wrap">
+							<label>{{'ServiceLevelParenthesisPercentSign'|translate}}:</label>
+							<input type="number" ng-model="vm.model.serviceLevelPercent" name="skillServiceLevelPercent" id="serviceLevelPercentId" max="100" min="1" required="" />
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelPercent.$error.required }">{{ 'Required' | translate }}</div>
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">{{ 'PercentageError'|translate }}</div>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="form-input-wrap">
+							<label>{{ 'ServiceLevelSeconds'|translate }}:</label>
+							<input type="number" ng-model="vm.model.serviceLevelSeconds" name="skillServiceLevelSeconds" id="skillServiceLevelSecondsId" max="5000" min="1" required="" />
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelSeconds.$error.required }">{{ 'Required' | translate }}</div>
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max }">{{ 'SecondsSpan' | translate }}</div>
+							</div>
+						</div>
+					</section>
+					<section>
+						<div class="form-input-wrap">
+							<label>{{'ShrinkageParenthesisPercentSign'|translate}}:</label>
+							<input type="number" ng-model="vm.model.shrinkage" name="shrinkage" id="vm.shrinkageId" max="99" min="0" required="">
+							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.shrinkage.$error.required }">{{ 'Required' | translate }}</div>
+								<div class="form-input-message" ng-class="{ formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max }">{{ 'ShrinkageSpan' | translate }}</div>
+							</div>
+						</div>
+					</section>
+				</div>
+				
+				<div class="con-flex split-3-1">
+					<div class="form-input-wrap">
+						<label>{{ 'OpenHours' | translate }}:</label>
+						<working-hours-picker disable-next-day="true" working-hours="vm.model.workingHours"></working-hours-picker>
+						<div ng-cloak class="animate-input-message" ng-show="vm.noOpenHoursWarning()">
+							<div class="form-input-message">{{ 'AllDaysAreClosed' | translate }}</div>
+						</div>
+					</div>
+					<div class="form-input-wrap">
+						<label>{{'Queues'|translate}}:</label>
+						<div ng-cloak class="animate-input-message" ng-show="!vm.queueSelected">
+							<div class="form-input-message formInvalidInput">{{ 'Required' | translate }}</div>
+						</div>
 
-								<div class="material-depth-1">
-									<div class="big-table-wrapper" ui-i18n="en">
-										<div ui-grid="vm.gridOptions" ui-grid-resize-colums ui-grid-selection ui-grid-emptyBaseLayer></div>
-									</div>
-								</div>
+						<div class="panel">
+							<div class="big-table-wrapper" ui-i18n="en">
+								<div ui-grid="vm.gridOptions" ui-grid-resize-colums ui-grid-selection ui-grid-emptyBaseLayer></div>
 							</div>
 						</div>
 					</div>
-					<section>
-						<aside class="con-footer">
-							<button class="wfm-btn wfm-btn-invis-default" ui-sref="forecast">{{ 'Cancel'| translate }}</button>
-							<button type="submit" class="wfm-btn wfm-btn-invis-primary">{{ 'Save' | translate }}</button>
-						</aside>
-					</section>
-				</form>
+				</div>
 			</div>
-		</div>
+			<section>
+				<aside class="con-footer">
+					<button class="wfm-btn wfm-btn-invis-default" ui-sref="forecast">{{ 'Cancel'| translate }}</button>
+					<button type="submit" class="wfm-btn wfm-btn-invis-primary">{{ 'Save' | translate }}</button>
+				</aside>
+			</section>
+		</form>
 	</div>
 </section>
  

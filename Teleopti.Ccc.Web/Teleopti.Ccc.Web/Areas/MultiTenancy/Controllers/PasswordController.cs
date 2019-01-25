@@ -4,10 +4,7 @@ using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
-using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
@@ -17,8 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		private const string Error_TokenInvalid = "Error_TokenInvalid";
 		private const string Error_RequestFailed = "Error_RequestFailed";
 		private const string Error_Policy = "Error_Policy";
-
-
 
 		public PasswordController(IPasswordManager passwordManager)
 		{

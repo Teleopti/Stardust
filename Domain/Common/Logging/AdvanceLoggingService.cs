@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.Domain.Common.Logging
 
         private static void populateSystemProperties()
         {
-			if (TeleoptiPrincipal.CurrentPrincipal.Identity is ITeleoptiIdentity identity)
+			if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity is ITeleoptiIdentity identity)
             {
-                GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
-                GlobalContext.Properties["BUId"] = identity.BusinessUnit.Id;
+                GlobalContext.Properties["BU"] = identity.BusinessUnitName;
+                GlobalContext.Properties["BUId"] = identity.BusinessUnitId;
                 GlobalContext.Properties["DataSource"] = identity.DataSource.DataSourceName;
                 GlobalContext.Properties["WindowsIdentity"] = identity.WindowsIdentity.Name;
                 GlobalContext.Properties["HostIP"] = SystemInformationHelper.GetSystemIPAddress();

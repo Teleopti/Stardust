@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 		{
 			_oldPrincipal = (ITeleoptiPrincipal)Thread.CurrentPrincipal;
 			var person = persons.Get(_oldPrincipal.PersonId);
-			var newPrincipal = factory.MakePrincipal(person, ((TeleoptiIdentity)_oldPrincipal.Identity).DataSource, businessUnit, null);
+			var newPrincipal = factory.MakePrincipal(person, ((ITeleoptiIdentity)_oldPrincipal.Identity).DataSource, businessUnit, null);
 			Thread.CurrentPrincipal = newPrincipal;
 		}
 

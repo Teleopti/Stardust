@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			_mock = new MockRepository();
 			_validator = _mock.StrictMock<IDayOffLegalStateValidator>();
 			_validators = new List<IDayOffLegalStateValidator> { _validator };
-			_bitArray = new LockableBitArray(7, false, false, null);
+			_bitArray = new LockableBitArray(7, false, false);
 			_target = new FlexibelDayOffDecisionMaker(_validators);
 		}
 

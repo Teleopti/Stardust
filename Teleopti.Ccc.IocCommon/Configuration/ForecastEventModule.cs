@@ -1,6 +1,8 @@
 ﻿using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
+using Teleopti.Ccc.Domain.ApplicationLayer.SkillDay;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.Import;
@@ -37,6 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OpenAndSplitTargetSkill>().As<IOpenAndSplitTargetSkill>();
 			builder.RegisterType<ExportMultisiteSkillProcessor>().As<IExportMultisiteSkillProcessor>();
 			builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+			builder.RegisterType<SkillDayChangedEventHandler>().As<ISkillDayChangedEventHandler>().SingleInstance();
 		}
 
 		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

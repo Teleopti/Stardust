@@ -14,7 +14,6 @@ using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms;
-using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain;
@@ -109,19 +108,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
 		private readonly ILifetimeScope _container;
 		private static readonly ILog log = LogManager.GetLogger(typeof(SchedulingScreen));
-		private readonly SkillDayGridControl _skillDayGridControl;
-		private readonly SkillIntradayGridControl _skillIntradayGridControl;
-		private readonly SkillWeekGridControl _skillWeekGridControl;
-		private readonly SkillMonthGridControl _skillMonthGridControl;
-		private readonly SkillFullPeriodGridControl _skillFullPeriodGridControl;
-		private DateOnly _currentIntraDayDate;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
 		private readonly IList<IEntity> _temporarySelectedEntitiesFromTreeView;
-		private GridChartManager _gridChartManager;
-		private string _chartDescription;
-		private GridRowInChartSettingButtons _gridrowInChartSettingButtons;
+		private GridRowInChartSettingButtons _gridRowInChartSettingButtons;
 		private GridRow _currentSelectedGridRow;
 		private readonly IEventAggregator _eventAggregator = new EventAggregator();
 		private ClipboardControl _clipboardControl;
@@ -176,18 +167,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly System.Windows.Forms.Timer _tmpTimer = new System.Windows.Forms.Timer();
 		private readonly SchedulerGroupPagesProvider _groupPagesProvider;
 		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
-		private SkillResultViewSetting _skillResultViewSetting;
 		private DateTimePeriod _selectedPeriod;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
 		private SchedulingScreenPermissionHelper _permissionHelper;
 		private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
-		private Form _mainWindow;
+		private readonly Form _mainWindow;
 		private bool _cancelButtonPressed;
-		private IDaysOffPreferences _daysOffPreferences;
+		private readonly IDaysOffPreferences _daysOffPreferences;
 		private IEnumerable<IOptionalColumn> _optionalColumns;
 		private ReplaceActivityParameters _replaceActivityParameters;
-		private UserLockHelper _userLockHelper;
+		private readonly UserLockHelper _userLockHelper;
 
 		#region Constructors
 
@@ -245,10 +235,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 						foreach (var item in toolStripPanelItem.Items)
 						{
-							var toolstripButton = item as ToolStripItem;
-							if (toolstripButton != null)
+							if (item is ToolStripItem toolStripButton)
 							{
-								toolstripButton.RightToLeft = RightToLeft.No;
+								toolStripButton.RightToLeft = RightToLeft.No;
 							}
 						}
 					}
@@ -260,7 +249,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			_tmpTimer.Enabled = false;
 			updateShiftEditor();
-			if (_showInfoPanel) schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+			if (_showInfoPanel) schedulerSplitters1.TogglePropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
 		private void dateNavigateControlClosedPopup(object sender, EventArgs e)
@@ -273,10 +262,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_scheduleView.SetSelectedDateLocal(e.Value);
 			schedulerSplitters1.Grid.Invalidate();
 
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday) && _scheduleView is DayViewNew)
+			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday) && _scheduleView is DayViewNew)
 			{
 				drawSkillGrid();
-				reloadChart();
+				schedulerSplitters1.ReloadChart();
 			}
 
 			_tmpTimer.Enabled = true;
@@ -335,11 +324,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 
 			_userLockHelper = new UserLockHelper(this, schedulerSplitters1.Grid, _container.Resolve<IRestrictionExtractor>());
-			_skillDayGridControl = new SkillDayGridControl(_container.Resolve<ISkillPriorityProvider>());
-			_skillWeekGridControl = new SkillWeekGridControl();
-			_skillMonthGridControl = new SkillMonthGridControl();
-			_skillFullPeriodGridControl = new SkillFullPeriodGridControl();
-			_skillIntradayGridControl = new SkillIntradayGridControl("SchedulerSkillIntradayGridAndChart", _container.Resolve<ISkillPriorityProvider>());
 			toolStripButtonChartPeriodView.Tag = SkillResultViewSetting.Period;
 			toolStripButtonChartMonthView.Tag = SkillResultViewSetting.Month;
 			toolStripButtonChartWeekView.Tag = SkillResultViewSetting.Week;
@@ -358,7 +342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			SchedulerState.SchedulerStateHolder.SetRequestedScenario(loadScenario);
 			SchedulerState.SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod,
-				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler,
 																SchedulerState,
@@ -393,6 +377,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			LockManager = _container.Resolve<IGridlockManager>();
 
+			schedulerSplitters1.InitializeSkillResultGrids(_container);
 			setEventHandlers();
 			instantiateClipboardControl();
 			instantiateEditControl();
@@ -401,11 +386,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			AddControlHelpContext(schedulerSplitters1.Grid);
 			AddControlHelpContext(schedulerSplitters1.ChartControlSkillData);
-			AddControlHelpContext(_skillDayGridControl);
-			AddControlHelpContext(_skillIntradayGridControl);
-			AddControlHelpContext(_skillWeekGridControl);
-			AddControlHelpContext(_skillMonthGridControl);
-			AddControlHelpContext(_skillFullPeriodGridControl);
+			AddControlHelpContext(schedulerSplitters1.DayGridControl);
+			AddControlHelpContext(schedulerSplitters1.IntraDayGridControl);
+			AddControlHelpContext(schedulerSplitters1.WeekGridControl);
+			AddControlHelpContext(schedulerSplitters1.MonthGridControl);
+			AddControlHelpContext(schedulerSplitters1.FullPeriodGridControl);
 
 			_dateNavigateControl.SetAvailableTimeSpan(loadingPeriod);
 			_dateNavigateControl.SetSelectedDateNoInvoke(loadingPeriod.StartDate);
@@ -445,7 +430,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_clipboardControl?.SetButtonState(ClipboardAction.Paste, false);
 			_clipboardControlRestrictions?.SetButtonState(ClipboardAction.Paste, false);
-			setupContextMenuSkillGrid();
+			new SkillGridContextMenuBuilder().Build(schedulerSplitters1.SkillResultViewSetting, schedulerSplitters1.ContextMenuSkillGrid, _shrinkage,
+				skillGridMenuItemPeriodClick, toolStripMenuItemUseShrinkageClick);
 			setupToolbarButtonsChartViews();
 			contextMenuViews.Opened += contextMenuViewsOpened;
 			setHeaderText(loadingPeriod.StartDate, loadingPeriod.EndDate, null, null);
@@ -491,7 +477,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void setHeaderText(DateOnly start, DateOnly end, DateOnly? outerStart, DateOnly? outerEnd)
 		{
-			var currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var currentCultureInfo = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 			var startDate = start.Date.ToString("d", currentCultureInfo);
 			var endDate = end.Date.ToString("d", currentCultureInfo);
 
@@ -517,8 +503,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_schedulerMessageBrokerHandler.HandleMeetingChange(e.ModifiedMeeting, e.Delete);
 				invalidateAfterMeetingChange(e);
 			}
-			if (_scheduleView != null &&
-				_scheduleView.ViewGrid != null)
+			if (_scheduleView?.ViewGrid != null)
 			{
 				_scheduleView.ViewGrid.InvalidateRange(_scheduleView.ViewGrid.ViewLayout.VisibleCellsRange);
 				RecalculateResources();
@@ -662,7 +647,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						schedulerSplitters1.ContextMenuSkillGrid.Items.Add(skillGridMenuItem2);
 						var skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
 						skillGridMenuItem.Name = "agentSkillAnalyzer";
-						skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyserClick;
+						skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyzerClick;
 						schedulerSplitters1.ContextMenuSkillGrid.Items.Add(skillGridMenuItem);
 						var skillGridMenuItem3 = new ToolStripMenuItem("Find skill changes in period...");
 						skillGridMenuItem3.Click += skillGridMenuItemSkillChangeFinderClick;
@@ -887,7 +872,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Application.DoEvents();
 
 			_currentSchedulingScreenSettings = loadSchedulingScreenSettings();
-			_skillResultViewSetting = _currentSchedulingScreenSettings.SkillResultViewSetting;
+			schedulerSplitters1.SkillResultViewSetting = _currentSchedulingScreenSettings.SkillResultViewSetting;
 			displayOptionsFromSetting(_currentSchedulingScreenSettings);
 
 			//leave this at the top of this method
@@ -987,7 +972,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				Cursor.Current = Cursors.WaitCursor;
 				try
 				{
-					saveAllChartSetting();
+					schedulerSplitters1.SaveAllChartSetting();
 					saveQuickAccessState();
 					_currentSchedulingScreenSettings.EditorSnapToResolution = wpfShiftEditor1.Interval;
 					_currentSchedulingScreenSettings.HideEditor = !_showEditor;
@@ -996,7 +981,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_currentSchedulingScreenSettings.HideInfoPanel = !_showInfoPanel;
 					_currentSchedulingScreenSettings.HideRibbonTexts = !_showRibbonTexts;
 					_currentSchedulingScreenSettings.DefaultScheduleTag = _defaultScheduleTag.Id;
-					_currentSchedulingScreenSettings.SkillResultViewSetting = _skillResultViewSetting;
+					_currentSchedulingScreenSettings.SkillResultViewSetting = schedulerSplitters1.SkillResultViewSetting;
 
 					if (_scheduleView != null)
 					{
@@ -1076,7 +1061,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (button == null)
 				return;
 
-			_skillResultViewSetting = (SkillResultViewSetting) button.Tag;
+			schedulerSplitters1.SkillResultViewSetting = (SkillResultViewSetting) button.Tag;
 			updateSkillGridMenuItem();
 		}
 
@@ -1451,19 +1436,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void updateSkillGridMenuItem()
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(schedulerSplitters1.ContextMenuSkillGrid, _skillResultViewSetting,
+			var menuUpdater = new SkillGridMenuItemUpdate(schedulerSplitters1.ContextMenuSkillGrid, schedulerSplitters1.SkillResultViewSetting,
 				toolStripButtonChartPeriodView, toolStripButtonChartMonthView,
 				toolStripButtonChartWeekView, toolStripButtonChartDayView,
 				toolStripButtonChartIntradayView);
 			menuUpdater.Update();
 			_currentSelectedGridRow = null;
 			drawSkillGrid();
-			reloadChart();
+			schedulerSplitters1.ReloadChart();
 		}
 
 		private void skillGridMenuItemPeriodClick(object sender, EventArgs e)
 		{
-			_skillResultViewSetting = (SkillResultViewSetting)((ToolStripMenuItem)sender).Tag;
+			schedulerSplitters1.SkillResultViewSetting = (SkillResultViewSetting)((ToolStripMenuItem)sender).Tag;
 			updateSkillGridMenuItem();
 		}
 
@@ -1620,8 +1605,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private static void setThreadCulture()
 		{
-			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
 		}
 
 		private void backgroundWorkerValidatePersonsRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1735,15 +1720,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 
 					var selectedDate = _scheduleView.SelectedDateLocal();
-					if (_currentIntraDayDate != selectedDate)
+					if (schedulerSplitters1.CurrentIntraDayDate != selectedDate)
 					{
-						if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+						if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 						{
 							drawSkillGrid();
-							reloadChart();
+							schedulerSplitters1.ReloadChart();
 						}
 
-						_currentIntraDayDate = selectedDate;
+						schedulerSplitters1.CurrentIntraDayDate = selectedDate;
 					}
 
 					var selectedSchedules = _scheduleView.SelectedSchedules();
@@ -1756,15 +1741,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			}
 			gridSelectionChangedRunning = false;
-		}
-
-		private void saveAllChartSetting()
-		{
-			_skillIntradayGridControl.SaveSetting();
-			_skillDayGridControl.SaveSetting();
-			_skillWeekGridControl.SaveSetting();
-			_skillMonthGridControl.SaveSetting();
-			_skillFullPeriodGridControl.SaveSetting();
 		}
 
 		public async void RunActionWithDelay(System.Action action, int milliseconds)
@@ -1941,11 +1917,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				SchedulerState.SchedulerStateHolder.ResetFilteredPersons();
 				agentsDictionary = SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary;
 			}
-			schedulerSplitters1.Initialize(_container, SchedulerState.SchedulerStateHolder, _groupPagesProvider, _optionalColumns);
-			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+			schedulerSplitters1.Initialize(_container, SchedulerState.SchedulerStateHolder, _groupPagesProvider, _optionalColumns, _currentSchedulingScreenSettings);
+			schedulerSplitters1.TogglePropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 			schedulerSplitters1.RefreshFilteredPersons(agentsDictionary.Values);
 			schedulerSplitters1.SplitContainerAdvMainContainer.Visible = true;
-			setupSkillTabs();
 			toolStripStatusLabelScheduleTag.Visible = true;
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + @" " +
 													  SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary.Count + @" " +
@@ -1953,7 +1928,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 													  @" " + SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
 
-			var loadedPeriod = SchedulerState.SchedulerStateHolder.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var loadedPeriod = SchedulerState.SchedulerStateHolder.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 			setHeaderText(SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate, SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.EndDate, loadedPeriod.StartDate, loadedPeriod.EndDate);
 
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
@@ -1985,7 +1960,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_scheduleView.Sort(sortCommand);
 
 			drawSkillGrid();
-			reloadChart();
+			schedulerSplitters1.ReloadChart();
 			setupRequestPresenter();
 			setupRequestViewButtonStates();
 			releaseUserInterface(e.Cancelled);
@@ -2001,7 +1976,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var request = _requestView.SelectedAdapters().FirstOrDefault();
 			if (request == null) return;
 
-			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 			_scheduleView?.SelectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(localDate));
 		}
 
@@ -2330,7 +2305,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void tabSkillDataSelectedIndexChanged(object sender, EventArgs e)
 		{
 			drawSkillGrid();
-			reloadChart();
+			schedulerSplitters1.ReloadChart();
 		}
 
 		#endregion
@@ -2339,12 +2314,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void gridrowInChartSettingLineInChartEnabledChanged(object sender, GridlineInChartButtonEventArgs e)
 		{
-			_gridChartManager.UpdateChartSettings(_currentSelectedGridRow, _gridrowInChartSettingButtons, e.Enabled);
+			schedulerSplitters1.GridChartManager.UpdateChartSettings(_currentSelectedGridRow, _gridRowInChartSettingButtons, e.Enabled);
 		}
 
 		private void gridlinesInChartSettingsLineInChartSettingsChanged(object sender, GridlineInChartButtonEventArgs e)
 		{
-			_gridChartManager.UpdateChartSettings(_currentSelectedGridRow, e.Enabled, e.ChartSeriesStyle, e.GridToChartAxis,
+			schedulerSplitters1.GridChartManager.UpdateChartSettings(_currentSelectedGridRow, e.Enabled, e.ChartSeriesStyle, e.GridToChartAxis,
 				e.LineColor);
 		}
 
@@ -2355,41 +2330,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				_currentSelectedGridRow = skillResultGridControlBase.CurrentSelectedGridRow;
 				IChartSeriesSetting chartSeriesSettings = skillResultGridControlBase.CurrentSelectedGridRow.ChartSeriesSettings;
-				_gridrowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation,
+				_gridRowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation,
 					chartSeriesSettings.SeriesType, chartSeriesSettings.Color);
 			}
 		}
 
 		private void skillIntradayGridControlSelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
-			if (_skillIntradayGridControl.CurrentSelectedGridRow != null)
+			if (schedulerSplitters1.IntraDayGridControl.CurrentSelectedGridRow != null)
 			{
-				_currentSelectedGridRow = _skillIntradayGridControl.CurrentSelectedGridRow;
-				IChartSeriesSetting chartSeriesSettings = _skillIntradayGridControl.CurrentSelectedGridRow.ChartSeriesSettings;
-				_gridrowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation,
+				_currentSelectedGridRow = schedulerSplitters1.IntraDayGridControl.CurrentSelectedGridRow;
+				IChartSeriesSetting chartSeriesSettings = schedulerSplitters1.IntraDayGridControl.CurrentSelectedGridRow.ChartSeriesSettings;
+				_gridRowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation,
 					chartSeriesSettings.SeriesType, chartSeriesSettings.Color);
 			}
 		}
 
-
 		private void toolStripButtonGridInChartClick(object sender, EventArgs e)
 		{
-			reloadChart();
-		}
-
-		private void chartControlSkillDataChartRegionMouseHover(object sender, ChartRegionMouseEventArgs e)
-		{
-			GridChartManager.SetChartToolTip(e.Region, schedulerSplitters1.ChartControlSkillData);
-		}
-
-		private void chartControlSkillDataChartRegionClick(object sender, ChartRegionMouseEventArgs e)
-		{
-			int column = Math.Max(1, (int)GridChartManager.GetIntervalValueForChartPoint(schedulerSplitters1.ChartControlSkillData, e.Point));
-			var skillGridControl = resolveControlFromSkillResultViewSetting();
-			skillGridControl.ScrollCellInView(0, column);
-
-			if(skillGridControl is SkillDayGridControl)
-				schedulerSplitters1.Grid.ScrollCellInView(0, column + 1);
+			schedulerSplitters1.ReloadChart();
 		}
 
 		#endregion
@@ -2551,9 +2510,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(backgroundWorkerSchedulingProgressChanged), sender, e);
 			else
 			{
-				if (e.UserState is BackToLegalShiftArgs)
+				if (e.UserState is BackToLegalShiftArgs args)
 				{
-					var args = (BackToLegalShiftArgs)e.UserState;
 					if (_cancelButtonPressed)
 					{
 						args.Cancel = true;
@@ -2562,9 +2520,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					toolStripProgressBar1.Maximum = args.TotalBlocks;
 					schedulingProgress(null);
 				}
-				else if (e.UserState is TeleoptiProgressChangeMessage)
+				else if (e.UserState is TeleoptiProgressChangeMessage arg)
 				{
-					var arg = (TeleoptiProgressChangeMessage)e.UserState;
 					scheduleStatusBarUpdate(arg.Message);
 				}
 				else
@@ -2707,12 +2664,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				LanguageResourceHelper.Translate("XXSchedulingProgress"), _totalScheduled, toolStripProgressBar1.Maximum);
 			toolStripStatusLabelStatus.Text = statusText;
 			schedulerSplitters1.Grid.Invalidate();
-			refreshSummarySkillIfActive();
-			_skillIntradayGridControl.Invalidate(true);
-			_skillDayGridControl.Invalidate(true);
-			_skillWeekGridControl.Invalidate(true);
-			_skillMonthGridControl.Invalidate(true);
-			_skillFullPeriodGridControl.Invalidate(true);
+			schedulerSplitters1.RefreshSummarySkillIfActive();
 			refreshChart();
 			statusStrip1.Refresh();
 			Application.DoEvents();
@@ -2735,12 +2687,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (_scheduleCounter >= progress.ScreenRefreshRate)
 				{
 					schedulerSplitters1.Grid.Invalidate();
-					refreshSummarySkillIfActive();
-					_skillIntradayGridControl.Invalidate(true);
-					_skillDayGridControl.Invalidate(true);
-					_skillWeekGridControl.Invalidate(true);
-					_skillMonthGridControl.Invalidate(true);
-					_skillFullPeriodGridControl.Invalidate(true);
+					schedulerSplitters1.RefreshSummarySkillIfActive();
 					refreshChart();
 					_scheduleCounter = 0;
 				}
@@ -2773,11 +2720,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				schedulerSplitters1.Grid.Cursor = Cursors.Default;
 				schedulerSplitters1.Grid.Enabled = true;
 				schedulerSplitters1.Grid.Cursor = Cursors.Default;
-				_skillIntradayGridControl.Invalidate(true);
-				_skillDayGridControl.Invalidate(true);
-				_skillWeekGridControl.Invalidate(true);
-				_skillMonthGridControl.Invalidate(true);
-				_skillFullPeriodGridControl.Invalidate(true);
+				schedulerSplitters1.InvalidateSkillResultGrids();
 				refreshChart();
 
 				if (_scheduleView != null)
@@ -2815,7 +2758,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			try
 			{
-				_gridChartManager.ReloadChart();
+				schedulerSplitters1.GridChartManager.ReloadChart();
 			}
 			catch (NullReferenceException ex)
 			{
@@ -3002,10 +2945,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents);
 				if (!_teamLeaderMode)
 				{
-					var options = new SchedulingOptions();
-					options.ConsiderShortBreaks = _container.Resolve<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>()
-						.CanHaveShortBreak(SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents,
-							SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod);
+					var options = new SchedulingOptions
+					{
+						ConsiderShortBreaks = _container.Resolve<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>()
+							.CanHaveShortBreak(SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents,
+								SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod)
+					};
 					SchedulerState.SchedulerStateHolder.ConsiderShortBreaks = options.ConsiderShortBreaks;
 				}
 				else
@@ -3056,7 +3001,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXValidations"));
 			////TODO move into the else clause above
-			_detectedTimeZoneInfos.Add(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			_detectedTimeZoneInfos.Add(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
 			foreach (IPerson permittedPerson in SchedulerState.SchedulerStateHolder.ChoosenAgents)
 			{
@@ -3090,14 +3035,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadAccounts(IUnitOfWork uow, SchedulingScreenState stateHolder)
 		{
 			var rep = new PersonAbsenceAccountRepository(uow);
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487))
-			{
-				SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts = rep.LoadByUsers(SchedulerState.SchedulerStateHolder.ChoosenAgents);
-			}
-			else
-			{
-				SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts = rep.LoadAllAccounts();
-			}
+			SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts =
+				_container.Resolve<IToggleManager>()
+					.IsEnabled(Toggles.ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487)
+					? rep.LoadByUsers(SchedulerState.SchedulerStateHolder.ChoosenAgents)
+					: rep.LoadAllAccounts();
 		}
 
 		private void loadDefinitionSets(IUnitOfWork uow, SchedulingScreenState stateHolder)
@@ -3222,8 +3164,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if (!_backgroundWorkerRunning)
 				{
-					if (_scheduleView != null)
-						_scheduleView.RefreshRangeForAgentPeriod(e.ModifiedPerson, e.ModifiedPeriod);
+					_scheduleView?.RefreshRangeForAgentPeriod(e.ModifiedPerson, e.ModifiedPeriod);
 					if (e.Modifier == ScheduleModifier.UndoRedo)
 					{
 						_scheduleView?.SelectCellFromPersonDate(e.ModifiedPerson, e.ModifiedPart.DateOnlyAsPeriod.DateOnly);
@@ -3260,9 +3201,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				if(_container.Resolve<IToggleManager>().IsEnabled(Toggles.SchedulePeriod_HideChineseMonth_78424))
 				{
-					foreach (var schedulerStateChoosenAgent in SchedulerState.SchedulerStateHolder.ChoosenAgents)
+					foreach (var schedulerStateChosenAgent in SchedulerState.SchedulerStateHolder.ChoosenAgents)
 					{
-						foreach (var schedulePeriod in schedulerStateChoosenAgent.PersonSchedulePeriodCollection)
+						foreach (var schedulePeriod in schedulerStateChosenAgent.PersonSchedulePeriodCollection)
 						{
 							((SchedulePeriod) schedulePeriod).Toggle78424 = true;
 						}
@@ -3304,11 +3245,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadSchedulingScreenState(IUnitOfWork uow, SchedulingScreenState state)
 		{
 			state.Fill(uow);
-		}
-
-		private void disableSave()
-		{
-			toolStripButtonSaveLarge.Enabled = false;
 		}
 
 		private void enableSave()
@@ -3369,18 +3305,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			Cursor = Cursors.WaitCursor;
 
-			if (_personAbsenceAccountPersistValidationBusinessRuleResponses != null)
-				_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
+			_personAbsenceAccountPersistValidationBusinessRuleResponses?.Clear();
 
 			try
 			{
 				var persister = _container.Resolve<ISchedulingScreenPersister>();
-				IEnumerable<PersistConflict> foundConflicts;
 				bool success = persister.TryPersist(SchedulerState.SchedulerStateHolder.Schedules,
 					SchedulerState.PersonRequests,
 					_modifiedWriteProtections,
 					SchedulerState.ModifiedWorkflowControlSets,
-					out foundConflicts);
+					out var foundConflicts);
 
 				if (!success && foundConflicts != null)
 				{
@@ -3424,7 +3358,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			finally
 			{
-				if (_undoRedo != null) _undoRedo.Clear();
+				_undoRedo?.Clear();
 				Cursor = Cursors.Default;
 				updateRequestCommandsAvailability();
 				updateShiftEditor();
@@ -3459,7 +3393,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulerSplitters1.Grid.Cursor = Cursors.WaitCursor;
 			schedulerSplitters1.ElementHost1.Enabled = false; //shifteditor
 			ribbonControlAdv1.Cursor = Cursors.AppStarting;
-			disableSave();
+			toolStripButtonSaveLarge.Enabled = false;
 		}
 
 		private void enableOrDisableAllExceptCancelInRibbon(bool enable)
@@ -3476,7 +3410,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripStatusLabelContractTime.Enabled = enable;
 			if (toolStripSpinningProgressControl1.SpinningProgressControl == null)
 				toolStripSpinningProgressControl1 = new ToolStripSpinningProgressControl();
-			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = enable;
+			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = !enable;
 			schedulerSplitters1.EnableOrDisableViewShiftCategoryDistribution(enable);
 
 			toggleQuickButtonEnabledState(enable);
@@ -3530,7 +3464,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripTabItem1.Enabled = value;
 			toolStripTabItemHome.Enabled = !value;
 
-			var textInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.TextInfo;
+			var textInfo = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture.TextInfo;
 			var home = textInfo.ToUpper(Resources.Home);
 			var requests = textInfo.ToUpper(Resources.RequestsMenu);
 
@@ -3569,36 +3503,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void setupToolbarButtonsChartViews()
 		{
 			if (toolStripButtonChartIntradayView != null)
-				toolStripButtonChartIntradayView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday);
+				toolStripButtonChartIntradayView.Checked = schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday);
 			if (toolStripButtonChartDayView != null)
-				toolStripButtonChartDayView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day);
+				toolStripButtonChartDayView.Checked = schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Day);
 			if (toolStripButtonChartPeriodView != null)
-				toolStripButtonChartPeriodView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period);
+				toolStripButtonChartPeriodView.Checked = schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Period);
 			if (toolStripButtonChartMonthView != null)
-				toolStripButtonChartMonthView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month);
+				toolStripButtonChartMonthView.Checked = schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Month);
 			if (toolStripButtonChartWeekView != null)
-				toolStripButtonChartWeekView.Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week);
-		}
-
-		private void setupContextMenuSkillGrid()
-		{
-			new SkillGridContextMenuBuilder().Build(_skillResultViewSetting, schedulerSplitters1.ContextMenuSkillGrid, _shrinkage,
-				skillGridMenuItemPeriodClick, toolStripMenuItemUseShrinkageClick);
-
-			_skillDayGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
-			_skillIntradayGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
-			_skillWeekGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
-			_skillMonthGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
-			_skillFullPeriodGridControl.ContextMenuStrip = schedulerSplitters1.ContextMenuSkillGrid;
+				toolStripButtonChartWeekView.Checked = schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Week);
 		}
 
 		private void skillGridMenuItemAnalyzeResorceChangesClick(object sender, EventArgs e)
 		{
 			var selectedDate = _scheduleView.SelectedDateLocal();
 			TimeSpan? selectedTime = null;
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 			{
-				selectedTime = _skillIntradayGridControl.Presenter.SelectedIntervalTime();
+				selectedTime = schedulerSplitters1.IntraDayGridControl.Presenter.SelectedIntervalTime();
 			}
 			var model = new ResourceCalculationAnalyzerModel(SchedulerState.SchedulerStateHolder, _container, _optimizationHelperExtended, selectedDate, selectedTime, _shrinkage);
 			using (var resourceChanges = new ResourceCalculationAnalyzerView(model))
@@ -3609,23 +3531,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void skillGridMenuItemShovelAnalyzerClick(object sender, EventArgs e)
 		{
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			if (schedulerSplitters1.SkillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
 			{
 				using (_container.Resolve<CascadingResourceCalculationContextFactory>().Create(SchedulerState.SchedulerStateHolder.SchedulingResultState, false, _scheduleView.SelectedDateLocal().ToDateOnlyPeriod()))
 				{
 					using (var resourceChanges = new ShovelingAnalyzerView(_container.Resolve<IResourceCalculation>(), _container.Resolve<ITimeZoneGuard>()))
 					{
 						resourceChanges.FillForm(SchedulerState.SchedulerStateHolder.SchedulingResultState,
-							_skillIntradayGridControl.Presenter.Skill,
+							schedulerSplitters1.IntraDayGridControl.Presenter.Skill,
 							_scheduleView.SelectedDateLocal(),
-							_skillIntradayGridControl.Presenter.SelectedIntervalTime().GetValueOrDefault());
+							schedulerSplitters1.IntraDayGridControl.Presenter.SelectedIntervalTime().GetValueOrDefault());
 						resourceChanges.ShowDialog(this);
 					}
 				}
 			}
 		}
 
-		private void skillGridMenuItemAgentSkillAnalyserClick(object sender, EventArgs e)
+		private void skillGridMenuItemAgentSkillAnalyzerClick(object sender, EventArgs e)
 		{
 			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents,
 				SchedulerState.SchedulerStateHolder.SchedulingResultState.Skills, SchedulerState.SchedulerStateHolder.SchedulingResultState.SkillDays,
@@ -3665,12 +3587,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			ribbonControlAdv1.TabGroups[0].Name = Resources.ShiftEditor;
 			ribbonControlAdv1.TabGroups[1].Name = Resources.MainGrid;
-			_gridrowInChartSettingButtons = new GridRowInChartSettingButtons();
-			var chartsetteinghost = new ToolStripControlHost(_gridrowInChartSettingButtons);
-			toolStripExGridRowInChartButtons.Items.Add(chartsetteinghost);
-			_gridrowInChartSettingButtons.SetButtons();
-			_gridChartManager = new GridChartManager(schedulerSplitters1.ChartControlSkillData, true, true, true);
-			_gridChartManager.Create();
+			_gridRowInChartSettingButtons = new GridRowInChartSettingButtons();
+			toolStripExGridRowInChartButtons.Items.Add(new ToolStripControlHost(_gridRowInChartSettingButtons));
+			_gridRowInChartSettingButtons.SetButtons();
 			ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdv1);
 			ribbonControlAdv1.MenuButtonText = Resources.File;
 		}
@@ -3685,23 +3604,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#endregion
 
-		private void setupSkillTabs()
-		{
-			_currentIntraDayDate = SchedulerState.SchedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate;
-			schedulerSplitters1.SetupSkillTabs(_currentSchedulingScreenSettings);
-		}
-
 		private PersonsFilterView _cachedPersonsFilterView;
-
 		private PersonsFilterView getCachedPersonsFilterView()
 		{
 			if (_cachedPersonsFilterView == null || _cachedPersonsFilterView.IsDisposed)
 			{
 				IList<Guid> permittedPersonGuids = new List<Guid>();
-				foreach (var choosenAgent in SchedulerState.SchedulerStateHolder.ChoosenAgents)
+				foreach (var chosenAgent in SchedulerState.SchedulerStateHolder.ChoosenAgents)
 				{
-					if(choosenAgent.Id.HasValue)
-						permittedPersonGuids.Add(choosenAgent.Id.Value);
+					if(chosenAgent.Id.HasValue)
+						permittedPersonGuids.Add(chosenAgent.Id.Value);
 				}
 
 				_cachedPersonsFilterView =
@@ -4064,35 +3976,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_teamLeaderMode || _scheduleView == null)
 				return;
 
-			_currentIntraDayDate = _scheduleView.SelectedDateLocal();
-			var skillGridControl = resolveControlFromSkillResultViewSetting();
-			_chartDescription = schedulerSplitters1.DrawSkillGrid(skillGridControl, _currentIntraDayDate);
-		}
-
-		private TeleoptiGridControl resolveControlFromSkillResultViewSetting()
-		{
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
-				return _skillIntradayGridControl;
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
-				return _skillDayGridControl;
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
-				return _skillWeekGridControl;
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
-				return _skillMonthGridControl;
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
-				return _skillFullPeriodGridControl;
-
-			return null;
-		}
-
-		private void refreshSummarySkillIfActive()
-		{
-			var skillGridControl = resolveControlFromSkillResultViewSetting();
-			schedulerSplitters1.RefreshSummarySkillIfActive(skillGridControl, _currentIntraDayDate);
+			schedulerSplitters1.CurrentIntraDayDate = _scheduleView.SelectedDateLocal();
+			schedulerSplitters1.DrawSkillGrid();
 		}
 
 		private void loadBpos(IUnitOfWork uow, SchedulingScreenState stateHolder)
@@ -4162,39 +4047,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return 1;
 		}
 
-		private void reloadChart()
-		{
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Week, _chartDescription);
-				_gridChartManager.ReloadChart(_skillWeekGridControl, description);
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Month, _chartDescription);
-				_gridChartManager.ReloadChart(_skillMonthGridControl, description);
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Period, _chartDescription);
-				_gridChartManager.ReloadChart(_skillFullPeriodGridControl, description);
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Intraday, _chartDescription);
-				_gridChartManager.ReloadChart(_skillIntradayGridControl, description);
-			}
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
-			{
-				string description = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", Resources.Day, _chartDescription);
-				_gridChartManager.ReloadChart(_skillDayGridControl, description);
-			}
-			schedulerSplitters1.ChartControlSkillData.Visible = true;
-		}
-
 		private void schedulerSplitters1RestrictionsNotAbleToBeScheduledProgress(object sender,
 			ProgressChangedEventArgs e)
 		{
@@ -4247,22 +4099,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			notesEditor.NotesChanged += notesEditorNotesChanged;
 			notesEditor.PublicNotesChanged += notesEditorPublicNotesChanged;
 
-			_skillDayGridControl.GotFocus += skillGridControlGotFucus;
-			_skillIntradayGridControl.GotFocus += skillGridControlGotFucus;
-			_skillWeekGridControl.GotFocus += skillGridControlGotFucus;
-			_skillMonthGridControl.GotFocus += skillGridControlGotFucus;
-			_skillFullPeriodGridControl.GotFocus += skillGridControlGotFucus;
+			schedulerSplitters1.DayGridControl.GotFocus += skillGridControlGotFucus;
+			schedulerSplitters1.IntraDayGridControl.GotFocus += skillGridControlGotFucus;
+			schedulerSplitters1.WeekGridControl.GotFocus += skillGridControlGotFucus;
+			schedulerSplitters1.MonthGridControl.GotFocus += skillGridControlGotFucus;
+			schedulerSplitters1.FullPeriodGridControl.GotFocus += skillGridControlGotFucus;
 
-			_skillDayGridControl.SelectionChanged += skillGridControlSelectionChanged;
-			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControlSelectionChanged;
-			_skillWeekGridControl.SelectionChanged += skillGridControlSelectionChanged;
-			_skillMonthGridControl.SelectionChanged += skillGridControlSelectionChanged;
-			_skillFullPeriodGridControl.SelectionChanged += skillGridControlSelectionChanged;
+			schedulerSplitters1.DayGridControl.SelectionChanged += skillGridControlSelectionChanged;
+			schedulerSplitters1.IntraDayGridControl.SelectionChanged += skillIntradayGridControlSelectionChanged;
+			schedulerSplitters1.WeekGridControl.SelectionChanged += skillGridControlSelectionChanged;
+			schedulerSplitters1.MonthGridControl.SelectionChanged += skillGridControlSelectionChanged;
+			schedulerSplitters1.FullPeriodGridControl.SelectionChanged += skillGridControlSelectionChanged;
 
-			_gridrowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettingsLineInChartSettingsChanged;
-			_gridrowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
-			schedulerSplitters1.ChartControlSkillData.ChartRegionMouseHover += chartControlSkillDataChartRegionMouseHover;
-			schedulerSplitters1.ChartControlSkillData.ChartRegionClick += chartControlSkillDataChartRegionClick;
+			_gridRowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettingsLineInChartSettingsChanged;
+			_gridRowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
+			
 			_undoRedo.ChangedHandler += undoRedoChanged;
 
 			#region eventaggregator
@@ -4441,6 +4292,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			backStageButtonSystemExit.Click -= toolStripButtonSystemExitClick;
 			backStageButtonManiMenuImport.Click -= backStageButtonManiMenuImportClick;
 			backStageButtonMainMenuCopy.Click -= backStageButtonMainMenuCopyClick;
+			backStageButtonMainMenuSave.Click -= toolStripButtonSaveLargeClick;
 			backStage1.VisibleChanged -= backStage1VisibleChanged;
 
 			if (flowLayoutExportToScenario != null && flowLayoutExportToScenario.ContainerControl != null)
@@ -4617,45 +4469,39 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_requestView.SelectionChanged -= requestViewSelectionChanged;
 			}
 
-			if (_skillDayGridControl != null)
-				_skillDayGridControl.GotFocus -= skillGridControlGotFucus;
-			if (_skillIntradayGridControl != null)
-				_skillIntradayGridControl.GotFocus -= skillGridControlGotFucus;
+			if (schedulerSplitters1.DayGridControl != null)
+				schedulerSplitters1.DayGridControl.GotFocus -= skillGridControlGotFucus;
+			if (schedulerSplitters1.IntraDayGridControl != null)
+				schedulerSplitters1.IntraDayGridControl.GotFocus -= skillGridControlGotFucus;
 
-			if (_skillWeekGridControl != null)
-				_skillWeekGridControl.GotFocus -= skillGridControlGotFucus;
+			if (schedulerSplitters1.WeekGridControl != null)
+				schedulerSplitters1.WeekGridControl.GotFocus -= skillGridControlGotFucus;
 
-			if (_skillMonthGridControl != null)
-				_skillMonthGridControl.GotFocus -= skillGridControlGotFucus;
+			if (schedulerSplitters1.MonthGridControl != null)
+				schedulerSplitters1.MonthGridControl.GotFocus -= skillGridControlGotFucus;
 
-			if (_skillFullPeriodGridControl != null)
-				_skillFullPeriodGridControl.GotFocus -= skillGridControlGotFucus;
+			if (schedulerSplitters1.FullPeriodGridControl != null)
+				schedulerSplitters1.FullPeriodGridControl.GotFocus -= skillGridControlGotFucus;
 
-			if (_skillDayGridControl != null)
-				_skillDayGridControl.SelectionChanged -= skillGridControlSelectionChanged;
+			if (schedulerSplitters1.DayGridControl != null)
+				schedulerSplitters1.DayGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
-			if (_skillIntradayGridControl != null)
-				_skillIntradayGridControl.SelectionChanged -= skillIntradayGridControlSelectionChanged;
+			if (schedulerSplitters1.IntraDayGridControl != null)
+				schedulerSplitters1.IntraDayGridControl.SelectionChanged -= skillIntradayGridControlSelectionChanged;
 
-			if (_skillWeekGridControl != null)
-				_skillWeekGridControl.SelectionChanged -= skillGridControlSelectionChanged;
+			if (schedulerSplitters1.WeekGridControl != null)
+				schedulerSplitters1.WeekGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
-			if (_skillMonthGridControl != null)
-				_skillMonthGridControl.SelectionChanged -= skillGridControlSelectionChanged;
+			if (schedulerSplitters1.MonthGridControl != null)
+				schedulerSplitters1.MonthGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
-			if (_skillFullPeriodGridControl != null)
-				_skillFullPeriodGridControl.SelectionChanged -= skillGridControlSelectionChanged;
+			if (schedulerSplitters1.FullPeriodGridControl != null)
+				schedulerSplitters1.FullPeriodGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
-			if (_gridrowInChartSettingButtons != null)
+			if (_gridRowInChartSettingButtons != null)
 			{
-				_gridrowInChartSettingButtons.LineInChartSettingsChanged -= gridlinesInChartSettingsLineInChartSettingsChanged;
-				_gridrowInChartSettingButtons.LineInChartEnabledChanged -= gridrowInChartSettingLineInChartEnabledChanged;
-			}
-
-			if (schedulerSplitters1 != null && schedulerSplitters1.ChartControlSkillData != null)
-			{
-				schedulerSplitters1.ChartControlSkillData.ChartRegionMouseHover -= chartControlSkillDataChartRegionMouseHover;
-				schedulerSplitters1.ChartControlSkillData.ChartRegionClick -= chartControlSkillDataChartRegionClick;
+				_gridRowInChartSettingButtons.LineInChartSettingsChanged -= gridlinesInChartSettingsLineInChartSettingsChanged;
+				_gridRowInChartSettingButtons.LineInChartEnabledChanged -= gridrowInChartSettingLineInChartEnabledChanged;
 			}
 
 			if (_clipboardControl != null)
@@ -4964,7 +4810,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				var days =
 					personRequestViewModel.PersonRequest.Request.Period.ToDateOnlyPeriod(
-						TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).DayCollection();
+						TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).DayCollection();
 				days.ForEach(SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated);
 			}
 			RecalculateResources();
@@ -5133,7 +4979,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void setupAvailTimeZones()
 		{
-			TimeZoneGuard.Instance.Set(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			TimeZoneGuard.Instance.Set(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			wpfShiftEditor1.SetTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
 
@@ -5158,16 +5004,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			var exporter = new ExportToPdfGraphical(_scheduleView, this, SchedulerState,
-				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-				TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
+				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture,
+				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			exporter.Export();
 		}
 
 		private void exportToPdf(bool shiftsPerDay)
 		{
 			var exporter = new ExportToPdf(_scheduleView, this, SchedulerState,
-				TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-				TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
+				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture,
+				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			exporter.Export(shiftsPerDay);
 		}
 
@@ -5290,13 +5136,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			updateShiftEditor();
 		}
 
-		private DateTime _lastclickLabels;
+		private DateTime _lastClickLabels;
 
 		private void toolStripButtonShowTextsClick(object sender, EventArgs e)
 		{
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
-			if (_lastclickLabels.AddSeconds(1) > DateTime.Now) return;
-			_lastclickLabels = DateTime.Now;
+			if (_lastClickLabels.AddSeconds(1) > DateTime.Now) return;
+			_lastClickLabels = DateTime.Now;
 
 			toolStripButtonShowTexts.Checked = !toolStripButtonShowTexts.Checked;
 			_showRibbonTexts = toolStripButtonShowTexts.Checked;
@@ -5400,7 +5246,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonShrinkage.Checked = useShrinkage;
 			Cursor = Cursors.Default;
 
-			refreshSummarySkillIfActive();
+			schedulerSplitters1.RefreshSummarySkillIfActive();
 		}
 
 		private void toolStripMenuItemSearchClick(object sender, EventArgs e)
@@ -5526,8 +5372,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripMenuItemFindMatchingClick(object sender, EventArgs e)
 		{
-			IScheduleDay selected;
-			if (tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out selected))
+			if (tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out var selected))
 			{
 				findMatching(selected);
 			}
@@ -5607,7 +5452,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 				var scheduleRange = SchedulerState.SchedulerStateHolder.Schedules[historyDay.Person];
 				var currentDay = scheduleRange.ScheduledDay(historyDay.DateOnlyAsPeriod.DateOnly);
-				//schedule day can apperently have person absences from "other" day due to nightshifts and consecutive absence so we neet to add those to history day
 				foreach (
 					var data in
 						currentDay.PersistableScheduleDataCollection()
@@ -5722,9 +5566,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			IScheduleDay selectedDay;
 			var selectedSchedules = _scheduleView.SelectedSchedules();
-			if (!tryGetFirstSelectedSchedule(selectedSchedules, out selectedDay)) return;
+			if (!tryGetFirstSelectedSchedule(selectedSchedules, out var selectedDay)) return;
 
 			using (var view = new AgentStudentAvailabilityView(selectedDay, SchedulerState.SchedulerStateHolder.SchedulingResultState, _container.Resolve<IScheduleDayChangeCallback>()))
 			{
@@ -5831,8 +5674,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgentClick(object sender, EventArgs e)
 		{
-			IScheduleDay scheduleDay;
-			if (tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out scheduleDay))
+			if (tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out var scheduleDay))
 			{
 				var timeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 
@@ -5858,7 +5700,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			updateSelectionInfo(selectedSchedules);
 			updateShiftEditor();
 			drawSkillGrid();
-			reloadChart();
+			schedulerSplitters1.ReloadChart();
 		}
 
 		private void displayTimeZoneInfo()
@@ -5950,7 +5792,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripButtonShowPropertyPanelClick(object sender, EventArgs e)
 		{
 			toolStripButtonShowPropertyPanel.Checked = !toolStripButtonShowPropertyPanel.Checked;
-			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+			schedulerSplitters1.TogglePropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 			_showInfoPanel = toolStripButtonShowPropertyPanel.Checked;
 			updateSelectionInfo(_scheduleView.SelectedSchedules());
 		}

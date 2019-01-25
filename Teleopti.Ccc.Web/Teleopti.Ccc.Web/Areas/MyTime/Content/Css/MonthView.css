@@ -102,17 +102,17 @@
 
 .cal-month-day .absence {
 	background-image: url(../Images/stripe.png);
-	height: 120px;
-	padding-top: 30px;
+	height: 100%;
+	padding-top: 24px;
 }
 
 .cal-month-day .dayoff {
-	height: 120px;
-	padding-top: 40px;
+	height: 100%;
+	padding-top: 24px;
 }
 
 .cal-month-day .overtime {
-	padding-top: 40px;
+	padding-top: 24px;
 }
 .cal-month-day .absence .overtime {
 	padding: 0;
@@ -169,13 +169,13 @@
 }
 
 .shift {
-	height: 120px;
-	padding-top: 20px;
+	height: 100%;
+	padding-top: 24px;
 	font-size: 14px;
 }
 
 .shift.part-time {
-	height: 90px;
+	height: calc(100% - 30px);
 	padding-top: 0;
 	padding-bottom: 5px;
 	font-size: 13px;

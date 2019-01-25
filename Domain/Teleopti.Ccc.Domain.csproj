@@ -127,6 +127,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
+    <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider80131On.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
     <Compile Include="AgentInfo\AbsenceStaffingPossibilityCalculator.cs" />
@@ -208,11 +209,15 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\SkillDayChangedEventBuilder.cs" />
     <Compile Include="ApplicationLayer\Intraday\ISkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsDateMapper.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateAnalyticsScheduleLogger.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestAvailability.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastUpdater.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\ISkillDayChangedEventHandler.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\SkillDayChangedEventHandler.cs" />
     <Compile Include="Auditing\ITenantAudit.cs" />
     <Compile Include="Auditing\PurgeAuditRunner.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
@@ -231,11 +236,26 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
+    <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
+    <Compile Include="Intraday\To Staffing\StaffingViewModelCreator.cs" />
+    <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
+    <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
+    <Compile Include="MultiTenancy\IApplicationConfigurationDbTenantClient.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
+    <Compile Include="Notification\ScheduleChangeForWeekViewEvent.cs" />
+    <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
+    <Compile Include="Repositories\ISkillForecastReadModelRepository.cs" />
+    <Compile Include="Scheduling\TeamSettings.cs" />
+    <Compile Include="Scheduling\UpdateSchedulingOptionsWithTeamSettings.cs" />
+    <Compile Include="Security\Principal\ITeleoptiIdentityForLegacy.cs" />
+    <Compile Include="Security\Principal\ITeleoptiPrincipalForLegacy.cs" />
+    <Compile Include="Repositories\PersonWaitlistedAbsenceRequest.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
+    <Compile Include="Security\Principal\TeleoptiIdentityForLegacy.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
@@ -754,7 +774,6 @@
     <Compile Include="MultiTenancy\TenantApplicationConfigKey.cs" />
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Notification\FCMSendMessageResponse.cs" />
-    <Compile Include="Optimization\OptimizationPreferencesPerfTestProvider.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerStandard.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
@@ -783,7 +802,6 @@
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceScheduling.cs" />
     <Compile Include="Scheduling\SchedulingCallbackInfo.cs" />
-    <Compile Include="Scheduling\SchedulingOptionsProviderForTeamPerfTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityService.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandling.cs" />
@@ -918,7 +936,6 @@
     <Compile Include="InterfaceLegacy\Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IActivityRestriction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IActivityRestrictionTemplate.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAffectedPersonSkillService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeTransaction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeTransactionRepository.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAgentBadgeWithRank.cs" />
@@ -1254,7 +1271,6 @@
     <Compile Include="InterfaceLegacy\Domain\IShiftExchangeCriteria.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftExchangeOffer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftFromMasterActivityService.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IShiftLengthDecider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeApproveService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeBusinessRuleConfig.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeMaxSeatValidator.cs" />
@@ -1341,7 +1357,6 @@
     <Compile Include="InterfaceLegacy\Domain\IWorkloadDayTemplate.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShift.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftAddCallback.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftExtender.cs" />
     <Compile Include="InterfaceLegacy\Domain\IWorkShiftLimiter.cs" />
@@ -1982,7 +1997,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeListener.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeSubscriptions.cs" />
     <Compile Include="Security\SignatureCreator.cs" />
-    <Compile Include="Common\ServiceLocatorForEntity.cs" />
+    <Compile Include="Common\ServiceLocator_DONTUSE.cs" />
     <Compile Include="Islands\CreateIslands.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayIncomingViewModel.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />
@@ -2364,7 +2379,7 @@
     <Compile Include="Security\LicenseOptions\TeleoptiWfmVNextPilotLicenseOption.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdLogonClientModel.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQuerierResult.cs" />
-    <Compile Include="Security\MultiTenancyAuthentication\ITenantDataManager.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ITenantDataManagerClient.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\TenantAuthenticationData.cs" />
     <Compile Include="MessageBroker\Server\IBeforeSubscribe.cs" />
     <Compile Include="MessageBroker\Server\IMessageBrokerServer.cs" />
@@ -3246,10 +3261,10 @@
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationInternalQuerierResult.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\ChangePasswordInput.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\ChangePasswordResult.cs" />
-    <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
-    <Compile Include="Security\MultiTenancyAuthentication\IChangePassword.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationTenantClient.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\IChangePasswordTenantClient.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdentityLogonClientModel.cs" />
-    <Compile Include="Security\MultiTenancyAuthentication\ITenantLogonDataManager.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ITenantLogonDataManagerClient.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\LogonInfoModel.cs" />
     <Compile Include="Security\DataSourceConfigDecryption.cs" />
     <Compile Include="Security\PasswordPolicy.cs" />

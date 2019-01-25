@@ -119,7 +119,7 @@
 					var dl = window.WebChat.createDirectLine({ secret: token });
 					var botContainer = document.getElementById('grantBot');
 
-					const styleOptions = {
+					var styleOptions = {
 						backgroundColor: 'rgba(224, 224, 224, .4)',
 						bubbleBackground: 'rgba(153, 214, 255, .4)',
 						bubbleFromUserBackground: 'rgba(194, 224, 133, .6)',
@@ -141,7 +141,7 @@
 								return dl.postActivity(newActivity);
 							}
 						});
-					window.WebChat.renderWebChat({ directLine: dlWithChannelData, styleOptions: styleOptions },
+					window.WebChat.renderWebChat({ directLine: dlWithChannelData, styleOptions: styleOptions, userID: "@Model.CurrentLogonAgentId" },
 						botContainer);
 
 					$.when(deferred).done(function () {

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 
         public DateTimePeriod PeriodAsDateTimePeriod()
         {
-            return Period.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+            return Period.ToDateTimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 		private readonly IPersonRepository _personRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
-		private readonly ITenantLogonDataManager _tenantDataManager;
+		private readonly ITenantLogonDataManagerClient _tenantDataManager;
 		private readonly IComponentContext _container;
 		private IPersonSelectorPresenter _selectorPresenter;
 		private IPeopleNavigatorPresenter _myPresenter;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 		public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext,
 			IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory,
 			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler,
-			ITenantLogonDataManager tenantDataManager, IApplicationInsights applicationInsights)
+			ITenantLogonDataManagerClient tenantDataManager, IApplicationInsights applicationInsights)
 			: this()
 		{
 			_portalSettings = portalSettings;
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 		private void openPeople(IEnumerable<Guid> selectedGuids)
 		{
 			if (selectedGuids == null || selectedGuids.IsEmpty()) return;
-			var saviour = _container.Resolve<ITenantDataManager>();
+			var saviour = _container.Resolve<ITenantDataManagerClient>();
 			var toggle78424 = _container.Resolve<IToggleManager>()
 				.IsEnabled(Toggles.SchedulePeriod_HideChineseMonth_78424);
 			_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() =>
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 				var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
 				var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = _container.Resolve<IPersonAssignmentRepository>();
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 					accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
 				}
 				var currentUnitOfWork = new ThisUnitOfWork(uow);
-				var personAssignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+				var personAssignmentRepository = _container.Resolve<IPersonAssignmentRepository>();
 				var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
 				var agentDayScheduleTagRepository = new AgentDayScheduleTagRepository(currentUnitOfWork);
 				var noteRepository = new NoteRepository(currentUnitOfWork);
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 							() => overtimeAvailabilityRepository),
 						CurrentAuthorization.Make()));
 				var state = new WorksheetStateHolder();
-				var saviour = _container.Resolve<ITenantDataManager>();
+				var saviour = _container.Resolve<ITenantDataManagerClient>();
 				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour, _personRepository)
 				{
 					SelectedDate = DateOnly.Today,

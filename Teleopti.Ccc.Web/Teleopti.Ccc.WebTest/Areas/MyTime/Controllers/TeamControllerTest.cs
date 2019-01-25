@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			teamRepository.Add(team);
 
 			var person = PersonFactory.CreatePerson().WithId();
-			var identity = new TeleoptiIdentity("test", null, null, null, null);
+			var identity = new TeleoptiIdentity("test", null, null, null, null, null);
 
 			var mockAuthorize = MockRepository.GenerateMock<IAuthorizeAvailableData>();
 			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, team)).IgnoreArguments().Return(true);
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
 
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, new PersonAndBusinessUnit(person, null));
 			teleoptiPrincipal.AddClaimSet(claimSet);
 
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var site = new Site(siteName);
 			site.SetId(Guid.NewGuid());
 			site.SetBusinessUnit(businessUnit);
-			var identity = new TeleoptiIdentity("test", null, null, null, null);
+			var identity = new TeleoptiIdentity("test", null, null, null, null, null);
 			var person = PersonFactory.CreatePerson();
 			var team1 = new Team();
 			team1.Site = site;
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
 
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, new PersonAndBusinessUnit(person, null));
 			teleoptiPrincipal.AddClaimSet(claimSet);
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);

@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Infrastructure.Util
 {
 	public class ApplicationInsigths : IApplicationInsights 
 	{
-		private readonly ISharedSettingsQuerier _sharedSettingsQuerier;
+		private readonly ISharedSettingsTenantClient _sharedSettingsQuerier;
 		private readonly TelemetryClient _telemetryClient;
 
-		public ApplicationInsigths(ISharedSettingsQuerier sharedSettingsQuerier, TelemetryClient telemetryClient)
+		public ApplicationInsigths(ISharedSettingsTenantClient sharedSettingsQuerier, TelemetryClient telemetryClient)
 		{
 			_sharedSettingsQuerier = sharedSettingsQuerier;
 			_telemetryClient = telemetryClient;

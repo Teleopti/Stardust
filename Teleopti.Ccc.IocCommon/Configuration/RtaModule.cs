@@ -45,21 +45,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateQueueWorker>().AsSelf().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateQueueTenants>().SingleInstance();
 
-			if (_config.IsToggleEnabled(Toggles.RTA_StateQueueFloodPrevention_77710))
+			if (_config.Args().BehaviorTestServer)
 			{
-				if (_config.Args().BehaviorTestServer)
-				{
-					builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
-				}
-				else
-				{
-					builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
-					builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
-				}
+				builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<AlwaysHealthyChecker>().As<IStateQueueHealthChecker>().SingleInstance();
+				builder.RegisterType<StateQueueHealthChecker>().As<IStateQueueHealthChecker>().SingleInstance().ApplyAspects();
+				builder.RegisterType<StateQueueHealthCheckerProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 			}
 
 			builder.RegisterType<StateQueueUtilities>().SingleInstance().ApplyAspects();
@@ -149,12 +142,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
-			if (_config.IsToggleEnabled(Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485))
-				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveScheduleDependency>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else
-				builder.RegisterType<AgentAdherenceDayLoaderSpeedUpRemoveLastBefore>().As<IAgentAdherenceDayLoader>().SingleInstance();
-
-			builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
+			builder.RegisterType<AgentAdherenceDayLoader>().SingleInstance();
+			builder.RegisterType<ScheduleLoader>().SingleInstance();
 
 			builder.RegisterType<AdherenceDayStartEventPublisher>().SingleInstance();
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();

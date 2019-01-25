@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly IResourceCalculationDataContainer _relevantProjections;
 		private readonly ISkillResourceCalculationPeriodDictionary _skillStaffPeriods;
-		private readonly IAffectedPersonSkillService _personSkillService;
-		private readonly IActivityDivider _activityDivider;
-		private readonly IList<IActivity> _distinctActivities;
+		private readonly AffectedPersonSkillService _personSkillService;
+		private readonly ActivityDivider _activityDivider;
+		private readonly HashSet<IActivity> _distinctActivities;
 
 		private const double _quotient = 1d; // the outer quotient: default = 1
 		private const int _maximumIteration = 100; // the maximum number of iterations
 
 		public ScheduleResourceOptimizer(IResourceCalculationDataContainer relevantProjections,
 										 ISkillResourceCalculationPeriodDictionary relevantSkillStaffPeriods,
-										 IAffectedPersonSkillService personSkillService,
-										 bool clearSkillStaffPeriods, IActivityDivider activityDivider)
+										 AffectedPersonSkillService personSkillService,
+										 bool clearSkillStaffPeriods, ActivityDivider activityDivider)
 		{
 			_relevantProjections = relevantProjections;
 			_skillStaffPeriods = relevantSkillStaffPeriods;
@@ -38,23 +38,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void Optimize(DateTimePeriod datePeriodToRecalculate, ResourceCalculationData resourceCalculationData = null)
 		{
-			var affectedSkills = _personSkillService.AffectedSkills;
 			_distinctActivities.ForEach(
 				currentActivity =>
-						optimizeActivity(affectedSkills, currentActivity, datePeriodToRecalculate, resourceCalculationData));
+						optimizeActivity(_personSkillService.ActivityLookup[currentActivity], currentActivity, datePeriodToRecalculate, resourceCalculationData));
 		}
 
-		private void optimizeActivity(IEnumerable<ISkill> affectedSkills, IActivity currentActivity, DateTimePeriod datePeriodToRecalculate, ResourceCalculationData resourceCalculationData)
+		private void optimizeActivity(IEnumerable<ISkill> skills, IActivity currentActivity, DateTimePeriod datePeriodToRecalculate, ResourceCalculationData resourceCalculationData)
 		{
-			IList<ISkill> skills = new List<ISkill>();
-			foreach (var affectedSkill in affectedSkills)
-			{
-				if (affectedSkill != null && affectedSkill.Activity.Equals(currentActivity))
-					skills.Add(affectedSkill);
-			}
-
 			//All skills with same activity must have the same resolution
-			var defaultResolution = TimeSpan.FromMinutes(skills[0].DefaultResolution);
+			var defaultResolution = TimeSpan.FromMinutes(skills.First().DefaultResolution);
 			var currentStart =
 				datePeriodToRecalculate.StartDateTime.Date.Add(
 					TimeHelper.FitToDefaultResolution(datePeriodToRecalculate.StartDateTime.TimeOfDay,
@@ -69,16 +61,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private void resetSkillStaffPeriodsBeforeCalculation(IList<ISkill> skills, DateTimePeriod completeIntervalPeriod)
+		private void resetSkillStaffPeriodsBeforeCalculation(IEnumerable<ISkill> skills, DateTimePeriod completeIntervalPeriod)
 		{
 			foreach (ISkill skill in skills)
 			{
-				IResourceCalculationPeriodDictionary skillStaffPeriodDic;
-				if (_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDic))
+				if (_skillStaffPeriods.TryGetValue(skill, out var skillStaffPeriodDic))
 				{
-					IResourceCalculationPeriod skillStaffPeriod;
 					var completeIntervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(completeIntervalPeriod, skill.TimeZone);
-					if (skillStaffPeriodDic.TryGetValue(completeIntervalPeriodAdjusted, out skillStaffPeriod))
+					if (skillStaffPeriodDic.TryGetValue(completeIntervalPeriodAdjusted, out var skillStaffPeriod))
 					{
 						skillStaffPeriod.SetCalculatedResource65(0);
 						skillStaffPeriod.SetCalculatedLoggedOn(0);
@@ -89,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod, ResourceCalculationData resourceCalculationData)
 		{
-			IDividedActivityData dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
+			var dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
 																					   currentActivity, _relevantProjections,
 																					   completeIntervalPeriod);
 
@@ -104,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				IFurnessEvaluator furnessEvaluator = new FurnessEvaluator(furnessData);
 				furnessEvaluator.Evaluate(_quotient, _maximumIteration, Calculation.Variances.StandardDeviation);
-				IDividedActivityData optimizedActivityData = furnessDataConverter.ConvertFurnessDataBackToActivity();
+				var optimizedActivityData = furnessDataConverter.ConvertFurnessDataBackToActivity();
 
 				if (resourceCalculationData?.SkillCombinationHolder != null)
 				{
@@ -126,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private static void setFurnessResultsToSkillStaffPeriods(DateTimePeriod completeIntervalPeriod, IDictionary<ISkill, IResourceCalculationPeriod> relevantSkillStaffPeriods, IDividedActivityData optimizedActivityData)
+		private static void setFurnessResultsToSkillStaffPeriods(DateTimePeriod completeIntervalPeriod, IDictionary<ISkill, IResourceCalculationPeriod> relevantSkillStaffPeriods, DividedActivityData optimizedActivityData)
 		{
 			foreach (var skillPair in relevantSkillStaffPeriods)
 			{
@@ -163,11 +153,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			foreach (ISkill skill in relevantSkills)
 			{
-				IResourceCalculationPeriodDictionary skillStaffPeriodDictionary;
-				if (!_skillStaffPeriods.TryGetValue(skill, out skillStaffPeriodDictionary)) continue;
-				IResourceCalculationPeriod staffPeriod;
+				if (!_skillStaffPeriods.TryGetValue(skill, out var skillStaffPeriodDictionary)) continue;
 				var intervalPeriodAdjusted = _activityDivider.FetchPeriodForSkill(intervalPeriod, skill.TimeZone);
-				if (skillStaffPeriodDictionary.TryGetResolutionAdjustedValue(skill, intervalPeriodAdjusted, out staffPeriod))
+				if (skillStaffPeriodDictionary.TryGetResolutionAdjustedValue(skill, intervalPeriodAdjusted, out var staffPeriod))
 				{
 					staffPeriod.ResetMultiskillMinOccupancy();
 					relevantSkillStaffPeriods.Add(skill, staffPeriod);
@@ -176,9 +164,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return relevantSkillStaffPeriods;
 		}
 
-		private IActivity[] getDistinctActivities()
+		private HashSet<IActivity> getDistinctActivities()
 		{
-			return _personSkillService.AffectedSkills.Select(s => s.Activity).Distinct().ToArray();
+			return _personSkillService.ActivityLookup.Select(k => k.Key).ToHashSet();
 		}
 	}
 }

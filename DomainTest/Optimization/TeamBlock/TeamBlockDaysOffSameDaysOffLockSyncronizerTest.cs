@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var scenario = new Scenario("scenario");
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			var businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 			BusinessUnitRepository.Add(businessUnit);
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var scenario = new Scenario("scenario1");
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			var businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current();
 			BusinessUnitRepository.Add(businessUnit);
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);

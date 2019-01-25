@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_userZone = userZone;
 		}
 
-		protected override IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection)
+		protected override IEnumerable<IVisualLayer> ModifyCollection(IEnumerable<IVisualLayer> clonedUnmergedCollection)
 		{
 			var result = clonedUnmergedCollection.ToList();
 			for (var i = 0; i < result.Count; i++)

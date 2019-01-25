@@ -1,5 +1,7 @@
-<div class="con-row">
-	<h1 class="con-flex"><ng-content></ng-content></h1>
+<div class="view-header">
+	<div class="view-title">
+		<h1><ng-content></ng-content></h1>
 
-	<feedback-message feedbackType="newRelease" [componentName]="'People' | translate"></feedback-message>
+		<feedback-message class="pull-right" feedbackType="newRelease" [componentName]="'People' | translate"></feedback-message>
+	</div>
 </div>

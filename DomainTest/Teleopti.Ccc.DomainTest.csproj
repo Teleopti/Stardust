@@ -21,7 +21,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-	  <NoWarn>1591</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -151,6 +151,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider80131OnTest.cs" />
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderTest.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoaderTest.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="AgentInfo\SkillStaffingDataLoaderTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestFixtureTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestMethodTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestRobustBulkProcessorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessorComplexFlowTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestFilterWithNoValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerWithBetterShiftCategorySelectionTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\SkillDayChangedEventBuilderTest.cs" />
     <Compile Include="ApplicationLayer\MultipleChangeScheduleCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorAtLeastOneCriticalUnderStaffedSkillTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStaffingCheckMethodTest.cs" />
@@ -184,11 +187,13 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterUnnecessaryLoadTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\FetchAnalyticsScenariosCacheTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModelUpdaterPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventForShiftExchangeOfferTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationNewTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerIoCTest.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\TerminatePersonHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeEventHandlerTest.cs" />
@@ -279,6 +284,7 @@
     <Compile Include="Notification\NotificationServiceClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
     <Compile Include="Notification\ScheduleChangeMessagePollerTest.cs" />
+    <Compile Include="Notification\TeamScheduleWeekViewChangeCheckTest.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardustTest.cs" />
     <Compile Include="Optimization\PlanningGroupTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
@@ -304,6 +310,7 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPreferencesTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationRotationTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationShiftCategoryLimitationTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockTest_Legacy.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\SchedulingAndDayOffOptimizationStardustResultTest.cs" />
     <Compile Include="SchedulingScenarios\ExtraPreferencesFactory.cs" />
     <Compile Include="SchedulingScenarios\FairnessOptimization\FairnessOptimizationDesktopTest.cs" />
@@ -312,6 +319,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingSameThreadDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPreferenceTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerDecreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerExternalStaffTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerGeneralTest.cs" />
@@ -335,6 +343,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingHourlyDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest_Legacy.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationScenarioTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />
@@ -348,6 +357,7 @@
     <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationScenario.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilterTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceActivityServiceTest.cs" />
+    <Compile Include="Scheduling\MasterActivityThreadingTest.cs" />
     <Compile Include="Scheduling\OpenHoursSkillExtractorTest.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandlerTest.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidationTest.cs" />
@@ -517,7 +527,6 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeMaxSeatValidationTests.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerNoMockTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTestHelper.cs" />
-    <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\TickEvent\TenantDayTickEventTest.cs" />
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdaterTest.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModelTest.cs" />
@@ -1525,6 +1534,7 @@
     <Compile Include="Staffing\ExportForecastAndStaffingFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
+    <Compile Include="Staffing\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Staffing\TenantContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesDONOTUSEAttribute.cs" />

@@ -6,6 +6,7 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), person);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null, null), new PersonAndBusinessUnit(person, null));
 			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)Target.GetResult("Next");
 			result.Content.Count().Should().Be.EqualTo(1);
 		}

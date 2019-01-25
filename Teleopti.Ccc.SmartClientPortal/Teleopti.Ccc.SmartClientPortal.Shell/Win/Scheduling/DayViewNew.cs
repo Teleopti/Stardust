@@ -194,9 +194,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                 int endPixel = (int)Math.Round(pixelConverter.PositionFromDateTime(local.EndDateTime, IsRightToLeft)) + e.Bounds.X;
 
 				if(visualLayer.DefinitionSet != null && visualLayer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
-					drawOvertimeRect(e, visualLayer.Payload.ConfidentialDisplayColor(person), startPixel, endPixel);
+					drawOvertimeRect(e, visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person), startPixel, endPixel);
 				else
-					drawRect(e, visualLayer.Payload.ConfidentialDisplayColor(person), startPixel, endPixel);
+					drawRect(e, visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person), startPixel, endPixel);
             }
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 			var point = new Point(startPixel1 + ((endPixel1 - startPixel1) / 2), e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
-            drawContractDayOffRect(e, absence.ConfidentialDisplayColor(scheduleDay.Person), startPixel1, endPixel1, shortName, point);
+            drawContractDayOffRect(e, absence.ConfidentialDisplayColor_DONTUSE(scheduleDay.Person), startPixel1, endPixel1, shortName, point);
 
             drawTomorrow(e, person, pixelConverter, tomorrow);
         }
@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                 if (startPixel > e.Bounds.X + e.Bounds.Width)
                     continue;
 
-                Color color = Color.FromArgb(alphaFactor, visualLayer.Payload.ConfidentialDisplayColor(person));
+                Color color = Color.FromArgb(alphaFactor, visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person));
                 drawRect(e, color, startPixel, endPixel);
             }
         }
@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                 if (endPixel <= e.Bounds.X)
                     continue;
 
-                Color color = Color.FromArgb(alphaFactor, visualLayer.Payload.ConfidentialDisplayColor(person));
+                Color color = Color.FromArgb(alphaFactor, visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person));
                 drawRect(e, color, startPixel, endPixel);
             }
         }

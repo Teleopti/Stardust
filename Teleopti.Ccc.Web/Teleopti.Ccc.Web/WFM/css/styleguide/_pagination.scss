@@ -34,32 +34,28 @@
 //
 
 .pull-pagination {
-  text-align: right;
+	text-align: right;
 }
 
 .pagination,
 .pagination ul {
-  margin: 0;
+	margin: 0;
 }
 
 .pagination li {
-  display: inline-block;
-  padding: 10px;
-  cursor: pointer;
-  vertical-align: middle;
-  background-color: $white;
-  &.disabled {
-    cursor: not-allowed;
-    a {
-      pointer-events: none;
-      color: $gray026;
-    }
-  }
-  &.active {
-    background-color: $gray012;
-  }
-  & a{
-      color: $secondary;
-      text-decoration: none;
-    }
+	display: inline-block;
+	padding: 10px;
+	cursor: pointer;
+	vertical-align: middle;
+	background-color: $white;
+	&.disabled {
+		cursor: not-allowed;
+		a {
+			pointer-events: none;
+			color: $gray026;
+		}
+	}
+	&.active {
+		background-color: $gray012;
+	}
 }

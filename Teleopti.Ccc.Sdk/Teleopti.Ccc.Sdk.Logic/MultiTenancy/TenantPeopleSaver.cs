@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Sdk.Logic.MultiTenancy
 	}
 	public class TenantPeopleSaver : ITenantPeopleSaver
 	{
-		private readonly ITenantDataManager _tenantDataManager;
+		private readonly ITenantDataManagerClient _tenantDataManager;
 
-		public TenantPeopleSaver(ITenantDataManager tenantDataManager)
+		public TenantPeopleSaver(ITenantDataManagerClient tenantDataManager)
 		{
 			_tenantDataManager = tenantDataManager;
 		}

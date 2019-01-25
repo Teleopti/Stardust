@@ -91,6 +91,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<SkillCombinationResourcesWithoutBpoToggleOff>().As<ISkillCombinationResourcesWithoutBpo>()
 					.SingleInstance();
 			}
+
+			if (_configuration.IsToggleEnabled(Toggles.WFM_Forecast_Readmodel_80790))
+			{
+				builder.RegisterType<SkillForecastReadModelRepository>().As<ISkillForecastReadModelRepository>()
+					.SingleInstance();
+			}
 		}
 	}
 }

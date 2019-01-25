@@ -1,15 +1,14 @@
 using System.Collections.Generic;
-using log4net;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public abstract class ProjectionMerger : IProjectionMerger
 	{
-		private IVisualLayer[] _mergedCollection;
-		private static readonly ILog log = LogManager.GetLogger(typeof(ProjectionMerger));
+		private IEnumerable<IVisualLayer>  _mergedCollection;
 
-		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection)
+		public IEnumerable<IVisualLayer>  MergedCollection(IEnumerable<IVisualLayer>  unmergedCollection)
 		{
 			if (_mergedCollection == null)
 			{
@@ -19,21 +18,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return _mergedCollection;
 		}
 
-		protected abstract IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection);
+		protected abstract IEnumerable<IVisualLayer> ModifyCollection(IEnumerable<IVisualLayer> clonedUnmergedCollection);
 		public abstract object Clone();
 
-		private static IVisualLayer[] cloneUnMergedCollection(IVisualLayer[] unmergedCollection)
+		private static IEnumerable<IVisualLayer> cloneUnMergedCollection(IEnumerable<IVisualLayer>  unmergedCollection)
 		{
-			var layers = new List<IVisualLayer>(unmergedCollection.Length);
-			foreach (var layer in unmergedCollection)
-			{
-				var layerClone = (IVisualLayer)layer.EntityClone();
-				var casted = layerClone as VisualLayer;
-				if (casted == null)
-					log.Warn("Cannot cast " + layerClone + " to VisualLayer.");
-				layers.Add(layerClone);
-			}
-			return layers.ToArray();
+			return unmergedCollection.Select(layer => (IVisualLayer) layer.EntityClone()).ToArray();
 		}
 	}
 }

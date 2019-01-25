@@ -14952,7 +14952,7 @@ Vill du registrera dig?</value>
     <value>Din övertidsförfrågan kan inte godkännas. Vissa datum är för närvarande inte öppna för förfrågningar. </value>
   </data>
   <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Godkännande av övertidsförfrågningar är inte aktiverat av administratören för hela eller delar av den period förfrågan gäller.</value>
+    <value>Hela eller delar av den period din förfrågan gäller är inte öppen för övertidsförfrågningar. </value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
     <value>Starttiden {0:HH:mm} den {1:d} finns inte i skiftpåsen {2}.</value>
@@ -15440,7 +15440,7 @@ Applikationen kommer nu att stängas. </value>
     <value>Lägg till kompetensgrupp</value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Godkännande av frånvaroförfrågningar är inte aktiverat av administratören för hela eller delar av den period förfrågan gäller.</value>
+    <value>Hela eller delar av den period din förfrågan gäller är inte öppen för frånvaroförfrågningar. </value>
   </data>
   <data name="NoNonOverwritableActivities" xml:space="preserve">
     <value>Inga icke överskrivningsbara aktiviteter</value>
@@ -16031,9 +16031,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="PasswordPolicyError" xml:space="preserve">
     <value>Lösenordspolicyfel</value>
   </data>
-  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort denna helgdagskalender?</value>
-  </data>
   <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
     <value>Är du säker på att du vill ta bort år {0} från kalender {1}?</value>
   </data>
@@ -16135,5 +16132,35 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="PublishSchedulePlans" xml:space="preserve">
     <value>Publicera schema</value>
+  </data>
+  <data name="SelectACalendarForSite" xml:space="preserve">
+    <value>Välj en kalender för enheten</value>
+  </data>
+  <data name="NoCalendarsAvailable" xml:space="preserve">
+    <value>Inga tillgängliga kalendrar. </value>
+  </data>
+  <data name="XSitesUseThisCalendar" xml:space="preserve">
+    <value>{0} enheter använder denna kalender:</value>
+  </data>
+  <data name="AdjustAdherence" xml:space="preserve">
+    <value>Justera adherence (till neutral pga. tekniska problem)</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort den här helgdagskalendern?</value>
+  </data>
+  <data name="NoSkillGroupCreated" xml:space="preserve">
+    <value>Ingen kompetensgrupp har skapats</value>
+  </data>
+  <data name="AdjustedPeriods" xml:space="preserve">
+    <value>Justerade perioder</value>
+  </data>
+  <data name="AdjustAdherenceLink" xml:space="preserve">
+    <value>Justera adherence</value>
+  </data>
+  <data name="AdjustToNeutral" xml:space="preserve">
+    <value>Justera till neutral</value>
+  </data>
+  <data name="AddPeriod" xml:space="preserve">
+    <value>Lägg till period</value>
   </data>
 </root>

@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyDivideActivity()
         {
-            IDividedActivityData dividedActivity = 
-                _target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+            var dividedActivity = 
+                _target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods),new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
             VerifyPersonSkillResourcesData(dividedActivity);
 
@@ -67,8 +67,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             VerifyPersonResourcesData(dividedActivity);
 
             VerifyTargetDemandsData(dividedActivity);
-
-            VerifyRelativePersonSkillResourcesData(dividedActivity);
 
             VerifyRelativePersonSkillResourcesSumData(dividedActivity);
       
@@ -93,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					{skill, SkillDayFactory.PrepareSkillDay(skill, periodToCalculate.StartDateTime, 0)}
 				};
 			var dividedActivity = _target.DivideActivity(new SkillResourceCalculationPeriodWrapper(skillStaffPeriods),
-			                       new AffectedPersonSkillService(new[] {skill}), skill.Activity, _resources,
+				new AffectedPersonSkillService(new[] {skill}), skill.Activity, _resources,
 								   periodToCalculate);
 
 			var resourceMatrix = dividedActivity.KeyedSkillResourceEfficiencies;
@@ -125,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _target = new ActivityDivider();
 
-            IDividedActivityData result =
+            var result =
 				_target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             Assert.AreEqual(3, result.TargetDemands.Count);
         }
@@ -136,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISkillStaffPeriodDictionary dictionary = _skillStaffPeriods[_testContainer.AllSkills[0]];
             dictionary.Clear();
             _target = new ActivityDivider();
-            IDividedActivityData result =
+            var result =
 				_target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             Assert.AreEqual(2, result.TargetDemands.Count);
         }
@@ -165,12 +163,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 
 
-			IDividedActivityData result =
+			var result =
 				_target.DivideActivity(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriods), new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 			Assert.AreEqual(2, result.TargetDemands.Count);
 		}
 
-    	private void VerifyTargetDemandsData(IDividedActivityData dividedActivity)
+    	private void VerifyTargetDemandsData(DividedActivityData dividedActivity)
         {
             IDictionary<ISkill, double> targetDemands = dividedActivity.TargetDemands;
             Assert.IsNotNull(targetDemands);
@@ -179,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(10, targetDemands[_testContainer.ContainedSkills["PhoneB"]]);
         }
 
-	    private void VerifyPersonResourcesData(IDividedActivityData dividedActivity)
+	    private void VerifyPersonResourcesData(DividedActivityData dividedActivity)
 		{
 			var person1 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
@@ -199,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(10d, personResources[person4], 0.0001);
         }
 
-        private void VerifyRelativePersonResourcesData(IDividedActivityData dividedActivity)
+        private void VerifyRelativePersonResourcesData(DividedActivityData dividedActivity)
 		{
 			var person1 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
@@ -220,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(0.6666, personResources[person4], 0.0001);
         }
 
-        private void VerifyRelativePersonSkillResourcesSumData(IDividedActivityData dividedActivity)
+        private void VerifyRelativePersonSkillResourcesSumData(DividedActivityData dividedActivity)
         {
             IDictionary<ISkill, double> personLoggedOnSumma = dividedActivity.RelativePersonSkillResourcesSum;
             Assert.IsNotNull(personLoggedOnSumma);
@@ -229,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(1.9999, personLoggedOnSumma[_testContainer.ContainedSkills["PhoneB"]], 0.0001);
         }
 
-        private void VerifyPersonSkillEfficienciesData(IDividedActivityData dividedActivity)
+        private void VerifyPersonSkillEfficienciesData(DividedActivityData dividedActivity)
 		{
 			var person1 =
 				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
@@ -254,32 +252,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(1, skillResourceEfficiencyMatrix[person4][_testContainer.ContainedSkills["PhoneB"]]);
         }
 
-        private void VerifyRelativePersonSkillResourcesData(IDividedActivityData dividedActivity)
-		{
-			var person1 =
-				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
-			var person2 =
-				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
-			var person4 =
-				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
-									.ForActivity(_testContainer.ContainedActivities["Phone"].Id.GetValueOrDefault()).MergedKey();
-
-            KeyedSkillResourceDictionary resourceMatrix = dividedActivity.RelativeKeyedSkillResourceResources;
-            Assert.IsNotNull(resourceMatrix);
-            Assert.AreEqual(2, resourceMatrix.Count);
-            Assert.AreEqual(2, resourceMatrix[person1].Count);
-            Assert.AreEqual(1.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
-            Assert.AreEqual(1.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-            Assert.AreEqual(2, resourceMatrix[person2].Count);
-            Assert.AreEqual(1.3333, resourceMatrix[person2][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
-            Assert.AreEqual(1.3333, resourceMatrix[person2][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-            Assert.AreEqual(1, resourceMatrix[person4].Count);
-            Assert.AreEqual(0.6666, resourceMatrix[person4][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-        }
-
-        private void VerifyPersonSkillResourcesData(IDividedActivityData dividedActivity)
+        private void VerifyPersonSkillResourcesData(DividedActivityData dividedActivity)
         {
 	        var person1 =
 		        _personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))

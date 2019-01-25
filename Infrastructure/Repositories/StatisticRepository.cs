@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return session(uow).CreateSQLQuery("exec mart.raptor_load_queues")
 				 .AddScalar("Name", NHibernateUtil.String)
 				 .AddScalar("Description", NHibernateUtil.String)
-				 .AddScalar("QueueOriginalId", NHibernateUtil.Int32)
+				 .AddScalar("QueueOriginalId", NHibernateUtil.String)
 				 .AddScalar("DataSourceId", NHibernateUtil.Int32)
 				 .AddScalar("QueueAggId", NHibernateUtil.Int32)
 				 .AddScalar("LogObjectName", NHibernateUtil.String)
@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private IAnalyticsUnitOfWorkFactory StatisticUnitOfWorkFactory()
 		{
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity;
 			return identity.DataSource.Analytics;
 		}
 	}

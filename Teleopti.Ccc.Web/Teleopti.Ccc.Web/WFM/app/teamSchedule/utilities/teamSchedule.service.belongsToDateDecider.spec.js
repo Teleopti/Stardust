@@ -396,7 +396,7 @@
 				}
 			}
 		];
-		var timeRange = { startTime: moment('2016-07-02 4:00'), endTime: moment('2016-07-02 8:00') };
+		var timeRange = { startTime: moment('2016-07-02T04:00'), endTime: moment('2016-07-02T08:00') };
 		var belongsToDate = target.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleDataArray);
 		expect(belongsToDate).toEqual('2016-07-01');
 
@@ -814,7 +814,7 @@ describe('#belongs to date decider service with special locale #', function () {
 				}
 			}
 		];
-		var timeRange = { startTime: moment('2016-07-02 4:00'), endTime: moment('2016-07-02 8:00') };
+		var timeRange = { startTime: moment('2016-07-02T04:00'), endTime: moment('2016-07-02T08:00') };
 		var belongsToDate = target.decideBelongsToDateForOvertimeActivity(timeRange, normalizedScheduleDataArray);
 		expect(belongsToDate).toEqual('2016-07-01');
 

@@ -25,10 +25,6 @@ wfm-multiple-search-input {
 		margin-right: 20px;
 	}
 
-	.request-body {
-		border-bottom: 1px solid rgba(0, 0, 0, 0.26);
-	}
-
 	.requests-uigrid-table-container,
 	.requests-uigrid-table {
 		height: 60vh;
@@ -108,10 +104,6 @@ wfm-multiple-search-input {
 		}
 	}
 
-	.requests-table-header {
-		margin-bottom: 10px;
-	}
-
 	.ui-grid {
 		.ui-grid-row {
 			height: 30px;
@@ -169,15 +161,6 @@ wfm-multiple-search-input {
 		text-overflow: ellipsis;
 	}
 
-	/* Fix angular material issue where tabs are not displayed correctly on occasion
-        https://github.com/angular/material/issues/9660
-        https://github.com/angular/material/issues/9644 seem to be related.
-    */
-	md-tab-item {
-		float: none !important;
-		top: 6px !important;
-	}
-
 	.ui-grid-canvas .ui-grid-cell {
 		display: flex;
 		flex-flow: column nowrap;
@@ -190,6 +173,12 @@ wfm-multiple-search-input {
 			white-space: nowrap;
 			text-overflow: ellipsis;
 		}
+	}
+
+	.text-absence-view,
+	.shift-trade-view {
+		border: 1px solid $gray-300;
+		border-top: none;
 	}
 
 	.text-absence-view {

@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
+		private static readonly VisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 		private IList<ShiftLayer> _shiftLayers;
 		private IPerson _person;
 		private IScenario _scenario;
@@ -208,7 +209,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var proj = new VisualLayerProjectionService();
 			if (hasProjection())
 			{
-				proj.Add(MainActivities(), new VisualLayerFactory());
+				MainActivities().ForEach(l => proj.Add(l, visualLayerFactory));
 				var validPeriods = new HashSet<DateTimePeriod>(MainActivities().PeriodBlocks());
 				foreach (var overtimeLayer in OvertimeActivities())
 				{

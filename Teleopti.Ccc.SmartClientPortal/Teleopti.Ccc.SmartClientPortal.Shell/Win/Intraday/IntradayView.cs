@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 				{
 					toolStripStatusLabelLastUpdate.Text = string.Format(CultureInfo.CurrentCulture,
 						Resources.LastUpdateColonParameter0,
-						TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
+						TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).
 							ToLongTimeString());
 				}
 			}
@@ -533,7 +533,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
 		private void backgroundWorkerLoadControlsDoWork(object sender, DoWorkEventArgs e)
 		{
-			System.Threading.Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+			System.Threading.Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
 			Presenter.Initialize();
 		}
 
@@ -674,8 +674,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 				{
 					if (wizard.ShowDialog(this) != DialogResult.OK) return;
 
-					var principal = TeleoptiPrincipal.CurrentPrincipal;
-					var person = ((ITeleoptiPrincipalForLegacy)principal).UnsafePerson;
+					var principal = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
+					var person = ((ITeleoptiPrincipalForLegacy)principal).UnsafePerson();
 					var @event = new RecalculateForecastOnSkillCollectionEvent
 					{
 						SkillCollection = new Collection<RecalculateForecastOnSkill>(),

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			var period = new DateOnlyPeriod(dateOnlies.Min(), dateOnlies.Max());
 			
 			var reportableScenarios = _scenarioRepository.FindEnabledForReportingSorted();
-			var schedules = reportableScenarios.ToDictionary(k => k,
+			Func<Dictionary<IScenario, IScheduleDictionary>> schedules = () => reportableScenarios.ToDictionary(k => k,
 				v => _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, scheduleDictionaryLoadOptions,
 					period, v));
 
@@ -60,6 +60,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 				_handleOneAnalyticsAvailabilityDay.Execute(person, date, schedules, availabilityDays[date]);
 			}
 		}
-
 	}
 }

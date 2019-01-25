@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			_mocks = new MockRepository();
 			_cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
 			_daysOffPreferences = new DaysOffPreferences();
-			_bitArray = new LockableBitArray(7, false, false, null);
+			_bitArray = new LockableBitArray(7, false, false);
 			_functions = new DayOffBackToLegalStateFunctions(_bitArray);
 			_daysOffPreferences.UseConsecutiveDaysOff = true;
 			_target = new CMSBCaseSolver(_bitArray, _functions, _daysOffPreferences, _cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public MultiAbsenceRequestsHandler Target;
+		public MultiAbsenceRequestsHandlerRobustToggleOff Target;
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
+			isolate.UseTestDouble<MultiAbsenceRequestsHandlerRobustToggleOff>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 		}
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 			
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest2.Pending();
 			PersonRequestRepository.Add(personRequest2);
 
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator);

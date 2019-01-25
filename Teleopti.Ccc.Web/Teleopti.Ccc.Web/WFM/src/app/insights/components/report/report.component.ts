@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Inject, Injectable } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Inject } from '@angular/core';
 import { IStateService } from 'angular-ui-router';
 import { NzNotificationService } from 'ng-zorro-antd';
 
-import { Report } from '../../models/Report.model';
 import { Permission } from '../../models/Permission.model';
 import { ReportService } from '../../core/report.service';
 import { NavigationService } from '../../core/navigation.service';
+import { IPowerBiElement } from 'service';
 
 @Component({
 	selector: 'app-report',
@@ -15,7 +15,9 @@ import { NavigationService } from '../../core/navigation.service';
 })
 export class ReportComponent implements OnInit {
 	private pbiCoreService: any;
-	private action = 'view';
+	private action = this.nav.viewAction;
+
+	private errorNotificationOption = { nzDuration: 0 };
 
 	public initialized = false;
 	public isLoading = false;
@@ -36,10 +38,10 @@ export class ReportComponent implements OnInit {
 		private notification: NzNotificationService) {
 
 		const params = $state.params;
-		this.reportId = params.reportId;
-		this.action = params.action;
+		this.reportId = params.reportId.trim();
+		this.action = params.action.trim().toLowerCase();
 
-		this.inEditing = this.action === 'edit';
+		this.inEditing = this.action === this.nav.editAction;
 		this.permission = new Permission();
 		this.permission.CanViewReport = true;
 		this.permission.CanEditReport = false;
@@ -61,6 +63,11 @@ export class ReportComponent implements OnInit {
 		this.reportSvc.getPermission().then(permission => {
 			this.permission = permission;
 
+			if (this.action === this.nav.editAction && !this.permission.CanEditReport) {
+				this.nav.viewReport(this.reportId);
+				return;
+			}
+
 			if (this.permission.CanViewReport) {
 				this.reportSvc.getReportConfig(this.reportId).then(config => {
 					this.loadReport(config);
@@ -70,6 +77,8 @@ export class ReportComponent implements OnInit {
 			}
 
 			this.initialized = true;
+		}).catch(error => {
+			this.notification.create('error', 'Failed to open report', 'Error message: ' + error, this.errorNotificationOption);
 		});
 	}
 
@@ -80,12 +89,20 @@ export class ReportComponent implements OnInit {
 	updateToken(reportId) {
 		this.reportSvc.getReportConfig(reportId).then(config => {
 			const embedContainer = this.getReportContainer();
-			const report = this.pbiCoreService.get(embedContainer);
+
+			// If redirect to other page on update token, since the report container will be destroyed,
+			// the container will not be a embed report, it will failed to get the embed container and cause problem.
+			// Refer to test issue #80713: Error when edit a report
+			const powerBiElement = <IPowerBiElement>embedContainer;
+			if (!powerBiElement.powerBiEmbed) return;
 
 			const self = this;
+			const report = this.pbiCoreService.get(embedContainer);
 			report.setAccessToken(config.AccessToken).then(function () {
 				self.setTokenExpirationListener(config.Expiration, 2, reportId);
 			});
+		}).catch(error => {
+			console.error('Failed to update token for report, Error message: ' + error);
 		});
 	}
 
@@ -116,7 +133,7 @@ export class ReportComponent implements OnInit {
 			embedUrl: config.ReportUrl,
 			id: config.ReportId,
 			permissions: pbi.models.Permissions.All,
-			viewMode: this.action === 'edit'
+			viewMode: this.action === this.nav.editAction
 				? pbi.models.ViewMode.Edit
 				: pbi.models.ViewMode.View,
 			settings: {
@@ -156,18 +173,28 @@ export class ReportComponent implements OnInit {
 		this.reportSvc.cloneReport(reportId, this.newReportName).then(newReport => {
 			this.isProcessing = false;
 			this.nav.editReport(newReport.ReportId);
+		}).catch(error => {
+			this.notification.create('error', 'Failed to save as new report', 'Error message: ' + error, this.errorNotificationOption);
 		});
+
 	}
 
 	public deleteReport(reportId) {
+		let errorMessage;
 		this.isProcessing = true;
 		this.reportSvc.deleteReport(reportId).then(deleted => {
 			this.isProcessing = false;
 			if (deleted) {
 				this.nav.gotoInsights();
 			} else {
-				this.notification.create('error', 'Failed to delete report', 'Failed to delete report "' + this.reportName + '"');
+				errorMessage = 'Failed to delete report "' + this.reportName + '"';
 			}
+		}).catch(error => {
+			errorMessage = 'Error message: ' + error;
 		});
+
+		if (errorMessage && errorMessage.length > 0) {
+			this.notification.create('error', 'Failed to delete report', errorMessage, this.errorNotificationOption);
+		}
 	}
 }

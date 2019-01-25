@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		[TestLog]
 		[UnitOfWork]
-		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> selectedAgents, Guid planningPeriodId)
+		public virtual FullSchedulingResultModel Create(DateOnlyPeriod period, HashSet<IPerson> selectedAgents, Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period, null);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var nonScheduledAgents = _agentsWithWhiteSpots.Execute(scheduleOfSelectedPeople, loadedSelectedAgents, period);
 			var result = new FullSchedulingResultModel
 			{
-				ScheduledAgentsCount = loadedSelectedAgents.Count() - nonScheduledAgents.Count(),
+				ScheduledAgentsCount = loadedSelectedAgents.Length - nonScheduledAgents.Count(),
 				BusinessRulesValidationResults = validationResults
 			};
 			if (resultStateHolder.SkillDays != null)

@@ -11,7 +11,7 @@
 
 		public Tenant Current()
 		{
-			return _currentTenantUser.CurrentUser().Tenant;
+			return _currentTenantUser?.CurrentUser()?.Tenant;
 		}
 	}
 }

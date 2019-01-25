@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         public void AddWholeWeekAsSelected(int rowIndex, int colIndex)
         {
             if (_grid.Model.ColCount < colIndex) return;
-            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+            var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
             int weekNumWeekHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex, colIndex].Tag).Date, culture);
 			var weekColumns = new List<int>();
             for (int i = (int)ColumnType.StartScheduleColumns; i <= _grid.ColCount; i++)
@@ -859,14 +859,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             {
 				if (significantPart == SchedulePartView.ContractDayOff)
 				{
-					using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, layer.Payload.ConfidentialDisplayColor(person)))
+					using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, layer.Payload.ConfidentialDisplayColor_DONTUSE(person)))
 					{
 						e.Graphics.FillRectangle(brush, rect);
 					}
 				}
 				else
 				{
-					using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(rect,layer.Payload.ConfidentialDisplayColor(person)))
+					using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(rect,layer.Payload.ConfidentialDisplayColor_DONTUSE(person)))
 					{
 						e.Graphics.FillRectangle(lBrush, rect);
 					}

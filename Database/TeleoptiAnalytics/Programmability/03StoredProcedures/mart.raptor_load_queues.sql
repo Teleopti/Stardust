@@ -18,7 +18,7 @@ BEGIN
 	FROM mart.dim_queue dq
 	WHERE queue_id > -1
 	AND queue_original_id NOT IN (SELECT queue_original_id FROM mart.dim_queue_excluded excl 
-						WHERE	excl.queue_original_id	= dq.queue_original_id
+						WHERE	excl.queue_original_id	= dq.queue_original_id COLLATE DATABASE_DEFAULT
 						AND		excl.datasource_id		= dq.datasource_id)
 END
 GO

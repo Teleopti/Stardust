@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public PlanningGroupModel()
 		{
 			Filters = new List<FilterModel>();
+			TeamSettings = new TeamSettings();
 		}
 
 		public Guid Id { get; set; }
@@ -16,5 +18,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public int AgentCount { get; set; }
 		public int PreferencePercent { get; set; }
 		public IEnumerable<PlanningGroupSettingsModel> Settings { get; set; }
+		public TeamSettings TeamSettings { get; set; }
 	}
 }

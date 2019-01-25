@@ -1,8 +1,8 @@
 <div>
 	<section ui-view></section>
-	<div class="view-header with-fab with-desc">
+	<div class="view-header">
 		<div class="view-title">
-			<h1><i class="mdi mdi-compass-outline"></i> {{ 'Intraday' | translate }}</h1>
+			<h1><i class="mdi mdi-compass-outline"></i>{{ 'Intraday' | translate }}</h1>
 		</div>
 	</div>
 	<div class="con-row">
@@ -131,7 +131,7 @@
 				<div class="wfm-slide-tabs tabbed-panel">
 					<div class="con-row">
 						<div class="con-flex">
-							<md-tabs ng-click="vm.saveState()" md-dynamic-height md-selected="vm.moduleState.activeTab">
+							<md-tabs ng-click="vm.saveState()" md-dynamic-height md-border-bottom md-selected="vm.moduleState.activeTab">
 								<md-tab
 									ng-click="vm.pollActiveTabDataHelper(vm.moduleState.activeTab)"
 									label="{{'IncomingTraffic'|translate}}"

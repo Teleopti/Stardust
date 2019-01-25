@@ -111,6 +111,17 @@
 			}
 		});
 
+        service.fake({
+            name: 'currentUserInfo',
+			url: /Global\/User\/CurrentUser/,
+            clear: function () {
+                return {}
+            },
+            add: function (data, item) {
+                return item;
+            }
+        });
+
 		return service;
 
 	}

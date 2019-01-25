@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public static IAuthorization Current()
 		{
-			return ServiceLocatorForLegacy.CurrentAuthorization.Current();
+			return ServiceLocator_DONTUSE.CurrentAuthorization.Current();
 		}
 
 		private ClaimsAuthorization claimsAuthorization => new ClaimsAuthorization(_teleoptiPrincipal.Current());
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public override bool IsSatisfiedBy(IEnumerable<ClaimSet> obj)
 		{
-			var principal = TeleoptiPrincipal.CurrentPrincipal;
+			var principal = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
 			var identity = (ITeleoptiIdentity) principal.Identity;
 
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/",
@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 						if (authorizeExternalAvailableData != null)
 						{
-							if (authorizeExternalAvailableData.Check(principal.Organisation, DateOnly.Today, identity.BusinessUnit))
+							if (authorizeExternalAvailableData.Check(principal.Organisation, DateOnly.Today, identity.BusinessUnitId.GetValueOrDefault()))
 								return true;
 						}
 					}

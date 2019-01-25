@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			var dateTime1 = new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var dateTime3 = new DateTime(2011, 1, 1, 18, 0, 0, DateTimeKind.Utc);
 			var dateOnly = new DateOnly(2011, 1, 1);
-			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
 			using(_mockRepository.Record())
 			{
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				Expect.Call(_layer.Period).Return(new DateTimePeriod(dateTime1, dateTime3)).Repeat.AtLeastOnce();
 				Expect.Call(_layer.Payload).Return(_payload);
 				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_payload.ConfidentialDisplayColor(_person)).Return(Color.Blue);
+				Expect.Call(_payload.ConfidentialDisplayColor_DONTUSE(_person)).Return(Color.Blue);
 			    Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(_personPeriod);
 			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
 			    Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.ContractDayOff).Repeat.AtLeastOnce();
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             var dateTime1 = new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc);
             var dateTime3 = new DateTime(2011, 1, 1, 18, 0, 0, DateTimeKind.Utc);
 			var dateOnly = new DateOnly(2011, 1, 1);
-			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(dateOnly, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
             const float fontSize = 9f;
             var font = PdfFontManager.GetFont(fontSize, PdfFontStyle.Regular, new CultureInfo("sv-SE"));
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_layer.Period).Return(new DateTimePeriod(dateTime1, dateTime3)).Repeat.AtLeastOnce();
                 Expect.Call(_layer.Payload).Return(_payload);
                 Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_payload.ConfidentialDisplayColor(_person)).Return(Color.Blue);
+                Expect.Call(_payload.ConfidentialDisplayColor_DONTUSE(_person)).Return(Color.Blue);
                 Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(_personPeriod);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_projectionService.CreateProjection()).Return(_layerCollection);
                 Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(null);
-                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone));
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
             }
 

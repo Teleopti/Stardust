@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -9,12 +8,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public void Execute(IScheduleDictionary schedules, 
 			IEnumerable<IPerson> allAgents, 
 			DateOnlyPeriod fullPeriod,
-			IDictionary<IPerson, IEnumerable<DateOnly>> agentsWithExistingShiftsBeforeSchedule)
+			IDictionary<IPerson, HashSet<DateOnly>> agentsWithExistingShiftsBeforeSchedule)
 		{
+			var dayCollection = fullPeriod.DayCollection();
 			foreach (var agent in allAgents)
 			{
 				var range = schedules[agent];
-				foreach (var date in fullPeriod.DayCollection())
+				foreach (var date in dayCollection)
 				{
 					if(agentsWithExistingShiftsBeforeSchedule.TryGetValue(agent, out var alreadyScheduledDates) && alreadyScheduledDates.Contains(date))
 						continue;

@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory(), _toggleManager);
 			GridStyleInfoStore.CellValueProperty.IsCloneable = false;
 			dateTimePickerAdvPublishedTo.NullString = Resources.NotPublished;
-			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
-			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
 			SetMaxConsecutiveWorkingDaysVisibility(_toggleManager);
 			checkOvertimeProbabilityLicense();
 			checkOvertimeRequestsLicense();
@@ -859,7 +859,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			if (_presenter.SelectedModel == null) return;
 
-			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 			string text = string.Format(
 				culture,
 				Resources.AreYouSureYouWantToDeleteItem,

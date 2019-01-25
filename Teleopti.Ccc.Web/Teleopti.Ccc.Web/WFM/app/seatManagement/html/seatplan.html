@@ -1,17 +1,8 @@
 <div class="view-header seatplan-header" ng-class="!seatplan.isSeatMapBookingViewOpened ? 'with-fab' : ''">
 	<div class="view-title">
-		<h1 ng-if="seatplan.isReportOpened">
-			<i class="mdi mdi-tab-unselected"></i>
-			{{'SeatPlanReport' | translate}}
-		</h1>
-		<h1 ng-if="seatplan.isSeatMapBookingViewOpened">
-			<i class="mdi mdi-tab-unselected"></i>
-			{{'SeatBookings' | translate}}
-		</h1>
-		<h1 ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
-			<i class="mdi mdi-tab-unselected"></i>
-			{{'SeatPlan' | translate}}
-		</h1>
+		<h1 ng-if="seatplan.isReportOpened"><i class="mdi mdi-tab-unselected"></i>{{'SeatPlanReport' | translate}}</h1>
+		<h1 ng-if="seatplan.isSeatMapBookingViewOpened"><i class="mdi mdi-tab-unselected"></i>{{'SeatBookings' | translate}}</h1>
+		<h1 ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened"><i class="mdi mdi-tab-unselected"></i>{{'SeatPlan' | translate}}</h1>
 	</div>
 
 	<div class="fab-wrapper" ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
@@ -32,7 +23,7 @@
 
 </div>
 
-<div class="seatplan material-depth-1" ng-class="seatplan.isSeatMapBookingViewOpened ? 'seatmap-container' : ''" ui-view>
+<div class="seatplan panel" ng-class="seatplan.isSeatMapBookingViewOpened ? 'seatmap-container' : ''" ui-view>
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
 					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams"
 					  selected-locations="seatplan.reportSelectedLocations" seat-bookings-all="seatplan.seatBookingsAll"></seat-plan-report>
@@ -99,7 +90,7 @@
 	</div>
 </div>
 
-<div class="seatplan material-depth-1" ui-view ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened && !seatplan.usePlanningPeriods">
+<div class="seatplan panel" ui-view ng-if="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened && !seatplan.usePlanningPeriods">
 
 	<div class="con-row">
 		<div class="con-flex seatplan-planning-periods">

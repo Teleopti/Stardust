@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             if (mouseCellPosition < 0) mouseCellPosition = 0;
             if (mouseCellPosition > cellRect.Width) mouseCellPosition = cellRect.Width;
 
-            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
             if (dateTime.Date > _meetingViewModel.StartDate.Date)
             {
                 dateTime = _meetingViewModel.StartDate.Date.AddDays(1);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             if (mouseCellPosition > cellRect.Width) mouseCellPosition = cellRect.Width;
             if (mouseCellPosition < 0) mouseCellPosition = 0;
 
-            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
             var snappedTime = GetSnappedTime(dateTime.AddTicks(-(dateTime.Ticks % TimeSpan.TicksPerSecond)).TimeOfDay);
 
             if (snappedTime.Subtract(TimeSpan.FromMinutes(_snapToMinutes)) <= _meetingViewModel.StartTime && !(dateTime.Date > _meetingViewModel.StartDate.Date))
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             if (mouseCellPosition > cellRect.Width) mouseCellPosition = cellRect.Width;
             if (mouseCellPosition < 0) mouseCellPosition = 0;
 
-            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+            var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
             var time = dateTime.AddTicks(-(dateTime.Ticks % TimeSpan.TicksPerSecond));
 
             if (diffStart < TimeSpan.Zero) diffStart = TimeSpan.FromDays(1).Add(diffStart);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             var maxPos = cellRect.Width;
             if(_rightToLeft) maxPos = 0;
 
-	        var fromUtc = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(maxPos, _rightToLeft), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+	        var fromUtc = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(maxPos, _rightToLeft), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 	        if (_meetingViewModel.StartDate.Date.Add(snappedStart.Add(duration)) > fromUtc)
             {
                 var maxStart = fromUtc.Subtract(duration);

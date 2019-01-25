@@ -1,11 +1,11 @@
-<div class="view-header with-fab with-desc">
+<div class="view-header">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{ 'Plans' | translate }}</h1>
+		<h1><i class="mdi mdi-calendar"></i>{{ 'Plans' | translate }}</h1>
 	</div>
 </div>
 <div class="con-row" ng-if="vm.hasPg()">
 	<div class="con-flex ">
-		<div class="wfm-toolbar material-depth-1">
+		<div class="wfm-toolbar">
 			<div class="con-row">
 				<div class="con-flex">
 					<div class="plan-filter-container">
@@ -47,7 +47,7 @@
 		class="con-fluid-flex planingperiod-container"
 		ng-repeat="planningGroup in vm.planningGroups | filter:vm.filterName"
 	>
-		<div class="list-content material-depth-1 plan-group" ng-click="vm.goPlanningGroup(planningGroup.Id)">
+		<div class="list-content plan-group" ng-click="vm.goPlanningGroup(planningGroup.Id)">
 			<div class="list-header">
 				<h2>{{ planningGroup.Name }}</h2>
 				<div ng-show="planningGroup.AgentCount > 1" class="subtext">

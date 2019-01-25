@@ -4,12 +4,7 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public interface IRuleSetDeletedActivityChecker
-    {
-        bool ContainsDeletedActivity(IWorkShiftRuleSet ruleSet);
-    }
-
-    public class RuleSetDeletedActivityChecker : IRuleSetDeletedActivityChecker
+    public class RuleSetDeletedActivityChecker
     {
         public bool ContainsDeletedActivity(IWorkShiftRuleSet ruleSet)
         {

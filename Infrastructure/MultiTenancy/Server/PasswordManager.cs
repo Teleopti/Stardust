@@ -99,9 +99,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 					ContentValue = mailTemplate
 				};
 
-				var apiUrl = _serverConfiguration.Get(ServerConfigurationKey.NotificationApiEndpoint.ToString());
-				pi.Tenant.ApplicationConfig.TryGetValue(TenantApplicationConfigKey.NotificationApiKey, out var apiKey);
-				//var apiKey = "notification.apiKey";
+				var apiUrl = _serverConfiguration.Get(ServerConfigurationKey.NotificationApiEndpoint);
+				var apiKey =  pi.Tenant.GetApplicationConfig(TenantApplicationConfigKey.NotificationApiKey);
 				return _notification.SendEmail(mailMessage, apiUrl, apiKey);
 			}
 			catch (Exception)

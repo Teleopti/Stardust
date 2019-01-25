@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 	{
 		private ChangePasswordPresenter target;
 		private IChangePasswordView view;
-		private IChangePassword changePw;
+		private IChangePasswordTenantClient changePw;
 		private IPerson loggedOnPerson;
 
 		[SetUp]
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			loggedOnPerson.SetId(Guid.NewGuid());
 			
 			view = MockRepository.GenerateMock<IChangePasswordView>();
-			changePw = MockRepository.GenerateMock<IChangePassword>();
+			changePw = MockRepository.GenerateMock<IChangePasswordTenantClient>();
 			target = new ChangePasswordPresenter(view, changePw, loggedOnPerson);
 		}
 

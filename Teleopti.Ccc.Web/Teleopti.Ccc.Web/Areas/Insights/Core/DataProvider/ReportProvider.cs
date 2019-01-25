@@ -5,32 +5,31 @@ using System.Threading.Tasks;
 using Common.Logging;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
-using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.Insights.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 {
 	public class ReportProvider : IReportProvider
 	{
-		private const string templateReportName = "__WFM_Insights_Report_Template__";
-		private const string usageReportName = "Report Usage Metrics Report";
-		private readonly IConfigReader _configReader;
+		public const string TemplateReportName = "__WFM_Insights_Report_Template__";
+		public const string UsageReportName = "Report Usage Metrics Report";
+		private readonly IApplicationConfigurationDbProvider _appConfig;
 		private readonly IPowerBiClientFactory _powerBiClientFactory;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ReportProvider));
 
-		public ReportProvider(IConfigReader configReader,
-			IPowerBiClientFactory powerBiClientFactory)
+		public ReportProvider(IApplicationConfigurationDbProvider appConfig, IPowerBiClientFactory powerBiClientFactory)
 		{
-			_configReader = configReader;
+			_appConfig = appConfig;
 			_powerBiClientFactory = powerBiClientFactory;
 		}
 
 		public async Task<ReportModel[]> GetReports()
 		{
-			var excludedReports = new[] {usageReportName, templateReportName};
+			var excludedReports = new[] {UsageReportName, TemplateReportName};
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
-				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
 				return reports.Value.Where(r => !excludedReports.Contains(r.Name))
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				// Get a list of reports.
-				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
 				var report = string.IsNullOrEmpty(reportId)
@@ -80,16 +79,21 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		{
 			var result = new EmbedReportConfig();
 
+			if (!isValidReportName(newReportName))
+			{
+				return result;
+			}
+
 			// Create a Power BI Client object. It will be used to call Power BI APIs.
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				// Get a list of reports.
-				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
-				var templateReport = reports.Value.SingleOrDefault(r => r.Name == templateReportName);
+				var templateReport = reports.Value.SingleOrDefault(r => r.Name == TemplateReportName);
 				if (templateReport == null) {
-					logger.Error($"Template report \"{templateReportName}\" not found.");
+					logger.Error($"Template report \"{TemplateReportName}\" not found.");
 					return result;
 				}
 				
@@ -104,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		{
 			var result = new EmbedReportConfig();
 
-			if (string.IsNullOrEmpty(reportId))
+			if (string.IsNullOrEmpty(reportId) || !isValidReportName(newReportName))
 			{
 				return result;
 			}
@@ -113,7 +117,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				// Get a list of reports.
-				var groupId = _configReader.AppConfig("PowerBIGroupId");
+				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
 				var report = reports.Value.FirstOrDefault(r => r.Id == reportId);
@@ -124,11 +128,8 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 					return result;
 				}
 
-				var targetReportName = string.IsNullOrEmpty(newReportName)
-					? report.Name + " - Copy"
-					: newReportName;
 				var newReport = client.Reports.CloneReportInGroup(groupId, reportId,
-					new CloneReportRequest(targetReportName));
+					new CloneReportRequest(newReportName));
 
 				return await generateEmbedReportConfig(client, newReport);
 			}
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				try
 				{
 					// Get a list of reports.
-					var groupId = _configReader.AppConfig("PowerBIGroupId");
+					var groupId = getPowerBiGroupId();
 					client.Reports.DeleteReport(groupId, reportId);
 				}
 				catch (Exception ex)
@@ -158,6 +159,11 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 
 				return true;
 			}
+		}
+
+		private bool isValidReportName(string newReportName)
+		{
+			return !string.IsNullOrEmpty(newReportName);
 		}
 
 		private async Task<EmbedReportConfig> generateEmbedReportConfig(IPowerBIClient client, Report report, string userName = null,
@@ -185,7 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "Edit");
 			}
 
-			var groupId = _configReader.AppConfig("PowerBIGroupId");
+			var groupId = getPowerBiGroupId();
 			var token = await client.Reports.GenerateTokenInGroupAsync(groupId, report.Id,
 				generateTokenRequestParameters);
 
@@ -195,21 +201,27 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				return new EmbedReportConfig();
 			}
 
-			var result = new EmbedReportConfig
+			// The expiration got from PowerBI is earlier than now, set to Minimum Access Token Lifetime(10 minutes)
+			// Refer to https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-configurable-token-lifetimes#configurable-token-lifetime-properties
+			var tenMinutesLater = DateTime.Now.AddMinutes(10);
+			var expiration = token.Expiration < tenMinutesLater
+				? tenMinutesLater
+				: token.Expiration;
+
+			return new EmbedReportConfig
 			{
 				TokenType = "Embed",
 				AccessToken = token.Token,
-				// The expiration got from PowerBI is earlier than now, set to Minimum Access Token Lifetime(10 minutes)
-				// Refer to https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-configurable-token-lifetimes#configurable-token-lifetime-properties
-				Expiration = token.Expiration < DateTime.Now
-					? DateTime.Now.AddMinutes(10)
-					: token.Expiration,
+				Expiration = expiration,
 				ReportId = report.Id,
 				ReportName = report.Name,
 				ReportUrl = report.EmbedUrl
 			};
+		}
 
-			return result;
+		private string getPowerBiGroupId()
+		{
+			return _appConfig.GetTenantValue(TenantApplicationConfigKey.InsightsPowerBIGroupId);
 		}
 	}
 }

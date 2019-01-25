@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -145,6 +146,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
 			planningGroupModel.PreferencePercent.Should().Be
 				.EqualTo(planningGroup.Settings.PreferenceValue.Value * 100);
+		}
+		
+		[Test]
+		public void ShouldFetchTeamSettings()
+		{
+			var planningGroup = new PlanningGroup().WithId();
+			planningGroup.SetTeamSettings(new TeamSettings
+			{
+				GroupPageType = GroupPageType.Hierarchy,
+				TeamSameType = TeamSameType.ShiftCategory
+			});
+			PlanningGroupRepository.Add(planningGroup);
+
+			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
+			planningGroupModel.TeamSettings.GroupPageType.Should().Be.EqualTo(GroupPageType.Hierarchy);
+			planningGroupModel.TeamSettings.TeamSameType.Should().Be.EqualTo(TeamSameType.ShiftCategory);
 		}
 
 		[Test]

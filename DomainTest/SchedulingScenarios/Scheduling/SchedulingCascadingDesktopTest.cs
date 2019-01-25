@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
 		{
 			const int numberOfAgents = 50;
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = new DateOnly(2017, 1, 10);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation_TeamBlock(bool resourceCalculationHasBeenMade)
 		{
 			const int numberOfAgents = 50;
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = new DateOnly(2017, 1, 10);
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldShovelWhenSchedulingHasBeenDone()
 		{
 			var date = new DateOnly(2017, 1, 10);
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 16);
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		{
 			var date = new DateOnly(2016, 9, 19); //mån
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(0, 8);

@@ -21,25 +21,25 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	public class TeamScheduleShiftViewModelProvider
 	{
 		private readonly IProjectionProvider _projectionProvider;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleProjectionHelper _projectionHelper;
 		private readonly IProjectionSplitter _projectionSplitter;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
-		private ICommonAgentNameProvider _commonAgentNameProvider;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public TeamScheduleShiftViewModelProvider(IProjectionProvider projectionProvider,
-			ILoggedOnUser loggedOnUser,
 			IScheduleProjectionHelper projectionHelper,
 			IProjectionSplitter projectionSplitter,
 			IIanaTimeZoneProvider ianaTimeZoneProvider,
-			ICommonAgentNameProvider commonAgentNameProvider)
+			ICommonAgentNameProvider commonAgentNameProvider,
+			IUserTimeZone userTimeZone)
 		{
 			_projectionProvider = projectionProvider;
-			_loggedOnUser = loggedOnUser;
 			_projectionHelper = projectionHelper;
 			_projectionSplitter = projectionSplitter;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_commonAgentNameProvider = commonAgentNameProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		public GroupScheduleShiftViewModel MakeViewModel(
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential)
 		{
 			var projections = new List<GroupScheduleProjectionViewModel>();
-			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var userTimeZone = _userTimeZone.TimeZone();
 			var person = scheduleDay.Person;
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var personPeriod = person.Period(date);
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						? (isAbsenceConfidential && !canViewConfidential
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
-						: layer.Payload.ConfidentialDescription(person);
+						: layer.Payload.ConfidentialDescription_DONTUSE(person);
 
 					var matchedPersonalLayers = _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer);
 					var needSplitPersonalLayers = _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 													? (isAbsenceConfidential && !canViewConfidential
 														? ConfidentialPayloadValues.DisplayColorHex
 														: ((IAbsence)layer.Payload).DisplayColor.ToHtml())
-													: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToHtml(),
+													: layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDay.Person).ToHtml(),
 							Start = startDateTimeInUserTimeZone.ToServiceDateTimeFormat(),
 							StartInUtc = layer.Period.StartDateTime.ToServiceDateTimeFormat(),
 							End = endDateTimeInUserTimeZone.ToServiceDateTimeFormat(),
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				return ret;
 			}
 
-			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var userTimeZone = _userTimeZone.TimeZone();
 			var projection = _projectionProvider.Projection(scheduleDay);
 			var significantPart = scheduleDay.SignificantPart();
 
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						? (isAbsenceConfidential && !isPermittedToViewConfidential
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
-						: layer.Payload.ConfidentialDescription(person);
+						: layer.Payload.ConfidentialDescription_DONTUSE(person);
 					var expectedTime = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
 						startDateTimeInUserTimeZone.ToShortTimeString(), endDateTimeInUserTimeZone.ToShortTimeString());
 
@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? (isAbsenceConfidential && !isPermittedToViewConfidential
 								? ConfidentialPayloadValues.DisplayColorHex
 								: (layer.Payload as IAbsence).DisplayColor.ToCSV())
-							: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToCSV(),
+							: layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDay.Person).ToCSV(),
 						Start = startDateTimeInUserTimeZone,
 						End = endDateTimeInUserTimeZone,
 						LengthInMinutes = (int)endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,

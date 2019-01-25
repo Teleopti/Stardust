@@ -1,87 +1,85 @@
-﻿(function() {
-	'use strict';
+﻿(function () {
+    'use strict';
 
-	angular.module('currentUserInfoService').service('CurrentUserInfo', CurrentUserInfo);
+    angular.module('currentUserInfoService').service('CurrentUserInfo', CurrentUserInfo);
 
-	CurrentUserInfo.$inject = ['$http', '$q', 'wfmI18nService'];
+    CurrentUserInfo.$inject = ['$http', '$q', 'wfmI18nService'];
 
-	function CurrentUserInfo($http, $q, wfmI18nService) {
-		var userName;
-		var defaultTimeZone;
-		var defaultTimeZoneName;
-		var language;
-		var dateFormatLocale;
-		var timeout;
-		var firstDayOfWeek, dayNames, dateTimeFormat;
+    function CurrentUserInfo($http, $q, wfmI18nService) {
+        var timeout;
+        this.SetCurrentUserInfo = SetCurrentUserInfo;
+        this.CurrentUserInfo = CurrentUserInfo;
+        this.Load = Load;
+        this.getCurrentUserFromServer = getCurrentUserFromServer;
+        this.initContext = initContext;
+        this.isConnected = isConnected;
 
-		var isTeleoptiApplicationLogon;
-		this.SetCurrentUserInfo = SetCurrentUserInfo;
-		this.CurrentUserInfo = CurrentUserInfo;
-		this.getCurrentUserFromServer = getCurrentUserFromServer;
-		this.initContext = initContext;
-		this.isConnected = isConnected;
-		this.isTeleoptiApplicationLogon = isTeleoptiApplicationLogon;
+        var loaded;
+        var loadedData;
 
-		function SetCurrentUserInfo(data) {
-			userName = data.UserName;
-			defaultTimeZone = data.DefaultTimeZone;
-			defaultTimeZoneName = data.DefaultTimeZoneName;
-			language = data.Language;
-			dateFormatLocale = data.DateFormatLocale;
-			firstDayOfWeek = data.FirstDayOfWeek;
-			dayNames = data.DayNames;
-			dateTimeFormat = data.DateTimeFormat;
-			isTeleoptiApplicationLogon = data.IsTeleoptiApplicationLogon;
-		}
+        function Load() {
+            if (!loaded)
+                return initContext();
+            return loaded;
+        }
 
-		function CurrentUserInfo() {
-			return {
-				UserName: userName,
-				DefaultTimeZone: defaultTimeZone,
-				DefaultTimeZoneName: defaultTimeZoneName,
-				Language: language,
-				DateFormatLocale: dateFormatLocale,
-				FirstDayOfWeek: firstDayOfWeek,
-				IsTeleoptiApplicationLogon: isTeleoptiApplicationLogon,
-				DayNames: dayNames || [],
-				DateTimeFormat: getDateTimeFormat()
-			};
-		}
+        function initContext() {
+            loaded = getCurrentUserFromServer()
+                .then(function (response) {
+                    var data = response.data;
+                    timeout = Date.now() + 90000;
+                    wfmI18nService.setLocales(data);
+                    return data;
+                }).then(function (data) {
+                    loadedData = build(data);
+                    return loadedData;
+                });
+            return loaded;
+        }
 
-		function getDateTimeFormat() {
-			if (!dateTimeFormat) {
-				return {};
-			}
-			var patternArrays = dateTimeFormat.ShortTimePattern.split(' ');
-			var showMeridian = patternArrays.length > 1;
-			var shortTimePattern = showMeridian ? patternArrays[0] + ' A' : dateTimeFormat.ShortTimePattern;
-			return {
-				ShortTimePattern: shortTimePattern,
-				AMDesignator: dateTimeFormat.AMDesignator,
-				PMDesignator: dateTimeFormat.PMDesignator,
-				ShowMeridian: showMeridian
-			};
-		}
+        function getCurrentUserFromServer() {
+            return $http.get('../api/Global/User/CurrentUser');
+        }
 
-		function getCurrentUserFromServer() {
-			return $http.get('../api/Global/User/CurrentUser');
-		}
+        function build(data) {
+            return {
+                UserName: data.UserName,
+                DefaultTimeZone: data.DefaultTimeZone,
+                DefaultTimeZoneName: data.DefaultTimeZoneName,
+                Language: data.Language,
+                DateFormatLocale: data.DateFormatLocale,
+                FirstDayOfWeek: data.FirstDayOfWeek,
+                IsTeleoptiApplicationLogon: data.IsTeleoptiApplicationLogon,
+                DayNames: data.DayNames || [],
+                DateTimeFormat: getDateTimeFormat(data)
+            };
 
-		function initContext() {
-			var deferred = $q.defer();
-			var context = getCurrentUserFromServer();
+            function getDateTimeFormat(data) {
+                if (!data.DateTimeFormat) {
+                    return {};
+                }
+                var patternArrays = data.DateTimeFormat.ShortTimePattern.split(' ');
+                var showMeridian = patternArrays.length > 1;
+                var shortTimePattern = showMeridian ? patternArrays[0] + ' A' : data.DateTimeFormat.ShortTimePattern;
+                return {
+                    ShortTimePattern: shortTimePattern,
+                    AMDesignator: data.DateTimeFormat.AMDesignator,
+                    PMDesignator: data.DateTimeFormat.PMDesignator,
+                    ShowMeridian: showMeridian
+                };
+            }
+        }
 
-			context.success(function(data) {
-				timeout = Date.now() + 90000;
-				wfmI18nService.setLocales(data);
-				SetCurrentUserInfo(data);
-				deferred.resolve(data);
-			});
-			return deferred.promise;
-		}
+        function CurrentUserInfo() {
+            return loadedData || {};
+        }
 
-		function isConnected() {
-			return timeout > Date.now();
-		}
-	}
+        function SetCurrentUserInfo(data) {
+            loadedData = build(data);
+        }
+
+        function isConnected() {
+            return timeout > Date.now();
+        }
+    }
 })();

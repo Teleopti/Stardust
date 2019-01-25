@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			_preferenceDayModelMapper = preferenceDayModelMapper;
 		}
 
-		public PreferenceAndScheduleDayViewModel Map(IScheduleDay s)
+		public PreferenceAndScheduleDayViewModel Map(IScheduleDay s, IBankHolidayDate bankHolidayDate)
 		{
 			var personRestrictionCollection = s.PersonRestrictionCollection()?.OfType<IPreferenceDay>().SingleOrDefault();
 			var significantPartForDisplay = s.SignificantPartForDisplay();
@@ -43,7 +44,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				StyleClassName = styleClassName(s),
 				BorderColor = borderColor(s),
 				Meetings = meetings(s),
-				PersonalShifts = personalShifts(s)
+				PersonalShifts = personalShifts(s),
+				BankHolidayCalendar = mapCalendar(bankHolidayDate)
+			};
+		}
+
+		private BankHolidayCalendarViewModel mapCalendar(IBankHolidayDate bankHolidayDate)
+		{
+			if (bankHolidayDate == null) return null;
+
+			return new BankHolidayCalendarViewModel
+			{
+				CalendarId = bankHolidayDate.Calendar.Id.GetValueOrDefault(),
+				CalendarName = bankHolidayDate.Calendar.Name,
+				DateDescription = bankHolidayDate.Description
 			};
 		}
 
@@ -100,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					select new PersonalShiftViewModel
 					{
 						Subject =
-							layer.Payload.ConfidentialDescription(assignment.Person).Name,
+							layer.Payload.ConfidentialDescription_DONTUSE(assignment.Person).Name,
 						TimeSpan =
 							ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.TimeZone(),
 								CultureInfo.CurrentCulture)

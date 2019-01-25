@@ -1,7 +1,7 @@
 <div class="view-header with-fab">
 	<div class="view-title">
 		<h1>
-			<i class="mdi mdi-phone-forward"></i> {{'OutboundCampaigns' | translate}}
+			<i class="mdi mdi-phone-forward"></i>{{'OutboundCampaigns' | translate}}
 		</h1>
 	</div>
 	<div class="fab-wrapper">
@@ -20,7 +20,7 @@
 			<div class="con-row" style="align-items: center;">
 				<div class="con-flex">
 					<div class="gantt-datepicker inline-flex" style="align-items:center" ng-init="showDatePicker=false">
-						<button class="wfm-btn wfm-btn-sm wfm-btn-invis-primary" ng-click="viewOneMonthBefore()">
+						<button class="wfm-btn wfm-btn-sm wfm-btn-invis-default" ng-click="viewOneMonthBefore()">
 							<i class="mdi mdi-chevron-double-left"></i>
 						</button>
 						<div tabindex=0 class="context-menu card-context" ng-click="showDatePicker=!showDatePicker">
@@ -31,7 +31,7 @@
 							<div uib-datepicker ng-model="settings.periodStart" class="wfm-datepicker" datepicker-options="monthpickerOptions" ng-change="showDatePicker=false"></div>
 						</div>
 						<input class="pointer text-center" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />
-						<button class="wfm-btn wfm-btn-sm wfm-btn-invis-primary" ng-click="viewOneMonthAfter()">
+						<button class="wfm-btn wfm-btn-sm wfm-btn-invis-default" ng-click="viewOneMonthAfter()">
 							<i class="mdi mdi-chevron-double-right"></i>
 						</button>
 					</div>

@@ -1,21 +1,14 @@
 <div class="view-header">
 	<div class="view-title">
-		<div class="con-flex">
-			<div class="pull-left">
-				<i class="mdi mdi mdi-numeric-9-plus-box-multiple-outline"></i>
-				<h1 class="inline-block">{{'Requests' | translate }}</h1>
-			</div>
-			<div ng-if="vm.showFeedbackLink" class="pull-right">
-				<ng2-feedback-message [feedback-type]="'newRelease'" [component-name]="'Requests' | translate"></ng2-feedback-message>
-			</div>
-		</div>
+		<h1 class="inline-block"><i class="mdi mdi mdi-numeric-9-plus-box-multiple-outline"></i>{{'Requests' | translate }}</h1>
+		<ng2-feedback-message ng-if="vm.showFeedbackLink" class="pull-right" [feedback-type]="'newRelease'" [component-name]="'Requests' | translate"></ng2-feedback-message>
 	</div>
 </div>
 
 <div class="con-row wfm-requests">
 	<div class="con-flex">
-		<div class="panel wfm-block material-depth-1">
-			<div class="operation-container">
+
+			<div class="panel operation-container">
 				<div class="left-part">
 					<favorite-search apply-favorite="vm.applyFavorite(currentFavorite)" get-search="vm.getSearch()" current-favorite="vm.selectedFavorite"
 					 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
@@ -52,7 +45,7 @@
 			<div class="request-body">
 				<div class="wfm-slide-tabs tabbed-panel">
 					<md-content class="md-padding requests-table-header unselectable">
-						<md-tabs md-dynamic-height md-border-botto md-no-pagination md-selected="vm.selectedTabIndex">
+						<md-tabs md-dynamic-height md-border-bottom md-no-pagination md-selected="vm.selectedTabIndex">
 							<md-tab label="{{'Absence' | translate}} {{'And' | translate}} {{'Text' | translate}}" ng-click="vm.activeAbsenceAndTextTab()">
 							</md-tab>
 							<md-tab ng-if="vm.shiftTradeRequestsLicenseAvailable" label="{{'ShiftTrade' | translate}}" ng-click="vm.activeShiftTradeTab()">
@@ -69,6 +62,5 @@
 
 			<requests-footer ng-if="vm.isFooterInited" paging="vm.paging" page-size-options="vm.pageSizeOptions"
 			 is-shift-trade-view-active="vm.isShiftTradeViewActive()" is-using-request-submitter-time-zone="vm.isUsingRequestSubmitterTimeZone"></requests-footer>
-		</div>
 	</div>
 </div>

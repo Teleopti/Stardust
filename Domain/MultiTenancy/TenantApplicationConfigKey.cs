@@ -1,9 +1,14 @@
 ﻿namespace Teleopti.Ccc.Domain.MultiTenancy
 {
-	public static class TenantApplicationConfigKey
+	public enum TenantApplicationConfigKey
 	{
-		public static string MobileQRCodeUrl => nameof(MobileQRCodeUrl);
-		public static string MaximumSessionTimeInMinutes => nameof(MaximumSessionTimeInMinutes);
-		public static string NotificationApiKey => nameof(NotificationApiKey);
+		MobileQRCodeUrl,
+		MaximumSessionTimeInMinutes,
+		NotificationApiKey,
+		InsightsAzureTenantId,
+		InsightsPowerBIClientId,
+		InsightsPowerBIGroupId,
+		InsightsPowerBIUsername,
+		InsightsPowerBIPassword
 	}
 }

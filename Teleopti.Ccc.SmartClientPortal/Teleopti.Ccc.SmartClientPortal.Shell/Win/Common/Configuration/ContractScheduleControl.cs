@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
             get
             {
                 return
-                    TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+                    TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
             }
         }
 
@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
             IList<DayOfWeek> days =
                 DateHelper.GetDaysOfWeek(
-                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+                    TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
 
             foreach (var dayOfWeek in days)
             {

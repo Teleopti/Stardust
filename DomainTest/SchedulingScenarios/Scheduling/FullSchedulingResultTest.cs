@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var shiftBagActivity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", skillActivity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(shiftBagActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(12, 0, 12, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(1);
+			assignments.Count().Should().Be.EqualTo(1);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.Should().Be.Empty();
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(1);
+			assignments.Count().Should().Be.EqualTo(1);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.Should().Be.Empty();
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
-			assignments.Count.Should().Be.EqualTo(1);
+			assignments.Count().Should().Be.EqualTo(1);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.Should().Be.Empty();
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var contract = new Contract("_")

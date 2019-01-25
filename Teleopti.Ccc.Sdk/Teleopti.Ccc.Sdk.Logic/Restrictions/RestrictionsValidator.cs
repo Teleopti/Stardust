@@ -259,9 +259,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
             var layer = visualLayerCollection.First();
             resultSoFar.HasAbsence = true;
-            resultSoFar.ScheduledItemName = layer.Payload.ConfidentialDescription(person).Name;
-            resultSoFar.ScheduledItemShortName = layer.Payload.ConfidentialDescription(person).ShortName;
-            resultSoFar.DisplayColor = new ColorDto(layer.Payload.ConfidentialDisplayColor(person));
+            resultSoFar.ScheduledItemName = layer.Payload.ConfidentialDescription_DONTUSE(person).Name;
+            resultSoFar.ScheduledItemShortName = layer.Payload.ConfidentialDescription_DONTUSE(person).ShortName;
+            resultSoFar.DisplayColor = new ColorDto(layer.Payload.ConfidentialDisplayColor_DONTUSE(person));
             
             return resultSoFar;
         }

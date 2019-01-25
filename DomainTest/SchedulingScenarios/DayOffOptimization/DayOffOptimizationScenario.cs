@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 			protected override IEnumerable<Toggles> ToggleFlags { get; } = new[]
 			{
-				Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941
+				Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
+				Toggles.ResourcePlanner_TeamSchedulingInPlans_79283
 			};
 			protected override bool AlsoSimulateSecondRequest { get; } = true;
 		}

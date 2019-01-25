@@ -18,9 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			return registration
 				.OnActivating(e => validateAspectedType(ProxyUtil.GetUnproxiedType(e.Instance)))
 				.EnableClassInterceptors()
-				.ApplyFix()
-				.InterceptedBy(typeof (AspectInterceptor))
-				;
+				.InterceptedBy(typeof (AspectInterceptor));
 		}
 
 		public static IRegistrationBuilder<TLimit, TConcreteReflectionActivatorData, TRegistrationStyle>
@@ -31,9 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			validateAspectedType(registration.ActivatorData.ImplementationType);
 			return registration
 				.EnableClassInterceptors()
-				.ApplyFix()
-				.InterceptedBy(typeof(AspectInterceptor))
-				;
+				.InterceptedBy(typeof(AspectInterceptor));
 		}
 
 		private static void validateAspectedType(Type type)

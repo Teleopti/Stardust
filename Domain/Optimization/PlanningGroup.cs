@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IList<PlanningGroupSettings> _settings = new List<PlanningGroupSettings>();
 		private bool _isDeleted;
 		private Percent _preferenceValue;
+		private TeamSettings _teamSettings;
 
 		public PlanningGroup()
 		{
@@ -22,11 +24,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			planningGroupSettings.SetAsDefault();
 			addPlanningGroupSetting(planningGroupSettings);
 			_preferenceValue = new Percent(0.8);
+			_teamSettings = new TeamSettings
+			{
+				GroupPageType = GroupPageType.SingleAgent
+			};
 		}
 
 		public virtual IEnumerable<IFilter> Filters => _filters;
 		public virtual string Name { get; set; }
-		public virtual AllSettingsForPlanningGroup Settings => new AllSettingsForPlanningGroup(_settings, _preferenceValue);
+		public virtual AllSettingsForPlanningGroup Settings => new AllSettingsForPlanningGroup(_settings, _preferenceValue, _teamSettings);
 
 		public virtual void SetGlobalValues(Percent preferenceValue)
 		{
@@ -75,6 +81,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var currDefault = Settings.Single(x => x.Default);
 			action(currDefault);
+		}
+
+		public virtual void SetTeamSettings(TeamSettings teamSettings)
+		{
+			switch (teamSettings.GroupPageType)
+			{
+				case GroupPageType.SingleAgent:
+				case GroupPageType.Hierarchy:
+					_teamSettings = teamSettings;
+					break;
+				default:
+					throw new NotSupportedException();
+			}
 		}
 	}
 }

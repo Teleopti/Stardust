@@ -6,6 +6,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class EditableShift : IEditableShift
 	{
+		private static readonly IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
+
 		public EditableShift(IShiftCategory shiftCategory)
 		{
 			ShiftCategory = shiftCategory;
@@ -15,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService();
-			proj.Add(LayerCollection, new VisualLayerFactory());
+			LayerCollection.ForEach(l => proj.Add(l, visualLayerFactory));
 			return proj;
 		}
 

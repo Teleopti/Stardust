@@ -19,7 +19,7 @@
         /// Gets or sets the original CTI queue id.
         /// </summary>
         /// <value>The original cti queue id.</value>
-        int QueueOriginalId { get; set; }
+        string QueueOriginalId { get; set; }
 
         /// <summary>
         /// Gets the log object name.

@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.DisplayColor = Color.Red;
             target.Confidential = true;
             var loggedOn = TestWithStaticDependenciesDONOTUSEAttribute.loggedOnPerson;
-            Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(loggedOn));
-            Assert.AreEqual(target.Description, target.ConfidentialDescription(loggedOn));
+            Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor_DONTUSE(loggedOn));
+            Assert.AreEqual(target.Description, target.ConfidentialDescription_DONTUSE(loggedOn));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(Color.DarkSalmon.ToArgb(), target.DisplayColor.ToArgb());
             Assert.AreEqual("Sjuk", target.Description.Name);
             Assert.AreEqual("SJ", target.Description.ShortName);
-            Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
+            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
             Assert.AreEqual(37, target.Priority);
             Assert.IsFalse(target.Requestable);
             target.Requestable = true;
@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.Confidential = true;
             using(CurrentAuthorization.ThreadlyUse(new NoPermission()))
             {
-                Assert.AreEqual(ConfidentialPayloadValues.Description, target.ConfidentialDescription(null));
-                Assert.AreEqual(ConfidentialPayloadValues.DisplayColor, target.ConfidentialDisplayColor(null));
+                Assert.AreEqual(ConfidentialPayloadValues.Description, target.ConfidentialDescription_DONTUSE(null));
+                Assert.AreEqual(ConfidentialPayloadValues.DisplayColor, target.ConfidentialDisplayColor_DONTUSE(null));
             }
         }
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			targetPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-10), team));
 			targetPerson.TerminatePerson(DateOnly.Today.AddDays(-5), personAccountUpdater);
 
-			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", null, null, null, null), queryingPerson);
+			var principal = new TeleoptiPrincipalForLegacy(new TeleoptiIdentity("test", null, null, null, null, null), queryingPerson);
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData");
 			var claimSet = new DefaultClaimSet(new[]
@@ -197,8 +197,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			target.Confidential = true;
 			using (CurrentAuthorization.ThreadlyUse(new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal))))
 			{
-				Assert.AreEqual(target.Description, target.ConfidentialDescription(targetPerson));
-				Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(targetPerson));
+				Assert.AreEqual(target.Description, target.ConfidentialDescription_DONTUSE(targetPerson));
+				Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor_DONTUSE(targetPerson));
 			}		
 		}
 

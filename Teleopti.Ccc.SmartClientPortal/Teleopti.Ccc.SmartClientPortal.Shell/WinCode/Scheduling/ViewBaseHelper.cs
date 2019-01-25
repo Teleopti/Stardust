@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public static string ToLocalStartEndTimeString(DateTimePeriod period, TimeZoneInfo timeZoneInfo)
 		{
-			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 			const string separator = " - ";
 
 			return string.Concat(TimeHelper.TimeOfDayFromTimeSpan(period.StartDateTimeLocal(timeZoneInfo).TimeOfDay, culture),
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public static string ToLocalStartEndTimeStringAbsences(DateTimePeriod partPeriod, DateTimePeriod absencePeriod,
 			TimeZoneInfo timeZoneInfo)
 		{
-			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 			const string separator = " - ";
 			DateTimePeriod startTimePeriod = absencePeriod;
 			DateTimePeriod endTimePeriod = absencePeriod;
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 					sb.AppendLine();
 					sb.Append("    ");
-					sb.Append(layer.Payload.ConfidentialDescription(pa.Person).Name);
+					sb.Append(layer.Payload.ConfidentialDescription_DONTUSE(pa.Person).Name);
 					//name
 					sb.Append(": ");
 					sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone)); //time
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				{
 					if (sb.Length > 0) sb.AppendLine();
 
-					sb.Append(pa.Layer.Payload.ConfidentialDescription(pa.Person).Name); //name
+					sb.Append(pa.Layer.Payload.ConfidentialDescription_DONTUSE(pa.Person).Name); //name
 					sb.Append(": ");
 					sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, TimeZoneGuard.Instance.TimeZone));
 				}
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				if (sb.Length > 0) sb.AppendLine();
 				sb.Append(layer.DefinitionSet.Name);
 				sb.Append(": ");
-				sb.Append(layer.Payload.ConfidentialDescription(cell.Person).Name);
+				sb.Append(layer.Payload.ConfidentialDescription_DONTUSE(cell.Person).Name);
 				sb.Append(": ");
 				sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone));
 			}
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public static string GetToolTipDayOff(IScheduleDay cell)
 		{
 			var sb = new StringBuilder();
-			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 			var ass = cell.PersonAssignment();
 			if (ass != null)
 			{
@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				IVisualLayerCollection layerCollection = schedulePart.ProjectionService().CreateProjection();
 				foreach (IVisualLayer layer in layerCollection)
 				{
-					infoText = layer.Payload.ConfidentialDescription(schedulePart.Person).Name;
+					infoText = layer.Payload.ConfidentialDescription_DONTUSE(schedulePart.Person).Name;
 					break;
 				}
 				if (layerCollection.Count() == 0)

@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 	public class ChangePasswordPresenter
 	{
 		private readonly IChangePasswordView _view;
-		private readonly IChangePassword _changePassword;
+		private readonly IChangePasswordTenantClient _changePassword;
 		private readonly IPerson _loggedOnPerson;
 
-		public ChangePasswordPresenter(IChangePasswordView view, IChangePassword changePassword, IPerson loggedOnPerson)
+		public ChangePasswordPresenter(IChangePasswordView view, IChangePasswordTenantClient changePassword, IPerson loggedOnPerson)
 		{
 			_view = view;
 			_changePassword = changePassword;

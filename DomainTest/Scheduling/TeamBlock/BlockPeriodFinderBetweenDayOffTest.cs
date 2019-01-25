@@ -31,19 +31,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _target = new BlockPeriodFinderBetweenDayOff();
 	        _range = _mocks.StrictMock<IScheduleRange>();
 	        _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+	        _person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 	        _scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			_scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
 	        _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-
-			TimeZoneGuard.Instance.Set(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			TimeZoneGuard.Instance.Set(null);
 		}
 
 		[Test]

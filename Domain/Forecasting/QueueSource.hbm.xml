@@ -25,7 +25,8 @@
 		<!--IEntity-->
 
 		<property name="QueueOriginalId"
-				  type="int"
+				  type="string"
+				  length="100"
 				  not-null="true"/>
     
     <property name="DataSourceId"

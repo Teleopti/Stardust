@@ -8,7 +8,7 @@ namespace Teleopti.Wfm.Api
 	public static class CustomTokenMiddlewareExtensions
 	{
 		public static IAppBuilder UseCustomToken(
-			this IAppBuilder builder, ITokenVerifier tokenVerifier, IRepositoryFactory repositoryFactory, ILogOnOff logOnOff, IAuthenticationQuerier authenticationQuerier)
+			this IAppBuilder builder, ITokenVerifier tokenVerifier, IRepositoryFactory repositoryFactory, ILogOnOff logOnOff, IAuthenticationTenantClient authenticationQuerier)
 		{
 			return builder.Use(typeof(TokenHandler), tokenVerifier, repositoryFactory, logOnOff, authenticationQuerier);
 		}

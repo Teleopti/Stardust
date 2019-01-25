@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class FilterMultiplePersons : BaseDialogForm
 	{
-		private ITenantLogonDataManager _tenantLogonDataManager;
+		private ITenantLogonDataManagerClient _tenantLogonDataManager;
 		private readonly ArrayList _persons = new ArrayList();
 		private List<IPerson> _searchablePersons;
 		private ArrayList _userSelectedPersonList;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void fillGridListControlDefaultSearch()
 		{
-			IEnumerable<IPerson> found = _advancedAgentsFilter.Filter(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, textBox1.Text, _searchablePersons, _logonInfos, false);
+			IEnumerable<IPerson> found = _advancedAgentsFilter.Filter(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture, textBox1.Text, _searchablePersons, _logonInfos, false);
 
 			gridListControlDefaultSearch.BeginUpdate();
 			_persons.Clear();
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return null;
 		}
 
-		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons, ITenantLogonDataManager tenantLogonDataManager, AdvancedAgentsFilter advancedAgentsFilter)
+		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons, ITenantLogonDataManagerClient tenantLogonDataManager, AdvancedAgentsFilter advancedAgentsFilter)
 		{
 			_tenantLogonDataManager = tenantLogonDataManager;
 			_searchablePersons = searchablePersons.ToList();
@@ -278,14 +278,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var inputText = textBoxCustomSearch.Text;
 			var currentDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 			var inputTextArray = inputText.Split(new[] { currentDelimiter.First() }, StringSplitOptions.RemoveEmptyEntries);
-			CultureInfo cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			CultureInfo cultureInfo = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 			_duplicateInputText.Clear();
 			var actualInput = new List<String>();
 			actualInput.AddRange(inputTextArray);
 			foreach (var expected in inputTextArray)
 			{
 				string lowerSearchText = expected.ToLower(cultureInfo);
-				var personQuery = _advancedAgentsFilter.Filter(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, lowerSearchText, _searchablePersons, _logonInfos, true);
+				var personQuery = _advancedAgentsFilter.Filter(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture, lowerSearchText, _searchablePersons, _logonInfos, true);
 				if (personQuery.Count == 1)
 				{
 					var gridColumnPerson = new FilterMultiplePersonGridControlItem(personQuery.First(), getLogonInfoModelForPerson(personQuery.First().Id.GetValueOrDefault()));

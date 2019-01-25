@@ -46,13 +46,15 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (originalHasDayOff && currentHasDayOff)
                 return true;
 
-            if (original.SignificantPart() == SchedulePartView.MainShift && current.SignificantPart() == SchedulePartView.DayOff)
+			var originalSignificantPart = original.SignificantPart();
+			var currentSignificantPart = current.SignificantPart();
+			if (originalSignificantPart == SchedulePartView.MainShift && currentSignificantPart == SchedulePartView.DayOff)
                 return true;
 
-			if (original.SignificantPart() == SchedulePartView.None && current.SignificantPart() == SchedulePartView.MainShift)
+			if (originalSignificantPart == SchedulePartView.None && currentSignificantPart == SchedulePartView.MainShift)
 				return false;
 
-			if (current.SignificantPart() == SchedulePartView.None && original.SignificantPart() == SchedulePartView.MainShift)
+			if (currentSignificantPart == SchedulePartView.None && originalSignificantPart == SchedulePartView.MainShift)
 				return false;
 
 	        var originalAss = original.PersonAssignment();
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool MainShiftBasicEquals(IEditableShift original, IEditableShift current)
 		{
-			return MainShiftBasicEquals(original, current, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			return MainShiftBasicEquals(original, current, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 		}
 
 		public bool MainShiftBasicEquals(IEditableShift original, IEditableShift current, TimeZoneInfo timeZone)

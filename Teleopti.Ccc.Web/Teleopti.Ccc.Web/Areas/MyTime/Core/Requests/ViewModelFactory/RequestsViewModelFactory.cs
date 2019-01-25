@@ -14,7 +14,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common;
 using Teleopti.Ccc.Web.Core.Data;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 {
 	public class RequestsViewModelFactory : IRequestsViewModelFactory

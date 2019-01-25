@@ -1,8 +1,12 @@
+/**
+	This file is only for configuring ant dark theme. Only global styles.
+**/
 @import '../../node_modules/ng-zorro-antd/src/ng-zorro-antd.less';
 @import './ant_common';
 @import './colors';
 
 // Colors & base
+@telop-white: #ccc;
 @telop-text-secondary: #c4c4c4;
 
 @primary-color: @telop-dimmed-blue;
@@ -14,7 +18,7 @@
 @warning-color: @telop-dimmed-yellow;
 @normal-color: #d9d9d9;
 
-@body-background: @telop-black;
+@body-background: #222;
 @component-background: #2c2c2c; // Base background color for most components
 
 @heading-color: @telop-dimmed-light-blue;
@@ -37,12 +41,19 @@
 @border-color-base : #666; // base border outline a component
 @border-color-split : #666; // split border inside a component
 
+// Backgrounds
+@background-color-base : @telop-black;
+
 // Buttons
 @btn-primary-color : @telop-white;
 @btn-primary-bg : @primary-color;
 @btn-default-bg : @telop-black;
 @btn-disable-bg : @disabled-bg;
 @btn-default-border : #999;
+
+@btn-danger-color : @error-color;
+@btn-danger-bg : @background-color-base;
+@btn-danger-border : @error-color;
 
 // Table
 @table-row-hover-bg: #555;
@@ -60,6 +71,10 @@
 // Popover & popconfirm
 @popover-bg: @component-background;
 
+// Alert
+@alert-info-bg-color: @telop-dark-blue;
+@alert-warning-bg-color: @telop-dimmed-yellow;
+
 // HACKS FOR NON-THEMABLE PARTS :(
 .ant-checkbox {
 	.ant-checkbox-inner {
@@ -73,20 +88,10 @@
 	}
 }
 
-.ant-alert {
-	&-info {
-		background-color: @telop-dark-blue;
-	}
-	&-warning {
-		background-color: @telop-dimmed-yellow;
-	}
-}
-
-.ant-btn-danger {
-	color: @normal-color;
-	background: @btn-default-bg;
-}
-
 .ant-calendar-selected-day .ant-calendar-date {
 	background: @background-color-light;
+}
+
+.bank-holiday-calendar-sites-list nz-list-item:hover {
+	background: @table-row-hover-bg;
 }

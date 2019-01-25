@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		public void Bug27312FlatDemands()
 		{
 			IList<double?> values = new List<double?> { -50, -50, -50, -50, -50, -50, -50 };
-			ILockableBitArray bitArray = new LockableBitArray(7, false, false, null);
+			ILockableBitArray bitArray = new LockableBitArray(7, false, false);
 			bitArray.PeriodArea = new MinMax<int>(0, 5);
 			bitArray.Set(5, true);
 
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
         private static ILockableBitArray createArray1()
         {
-            ILockableBitArray ret = new LockableBitArray(7, false, false, null);
+            ILockableBitArray ret = new LockableBitArray(7, false, false);
             ret.PeriodArea = new MinMax<int>(0, 5);
             ret.Set(5, true);
             ret.Set(6, true);

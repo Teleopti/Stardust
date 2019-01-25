@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	[TestFixture]
 	public class PercentageTest
 	{
-		public IAgentAdherenceDayLoader Target;
+		public AgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 
@@ -339,9 +339,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 
 	public static class AgentAdherenceDayLoaderEx
 	{
-		public static IAgentAdherenceDay Load(this IAgentAdherenceDayLoader loader, Guid personId)
+		public static Adherence.Historical.AgentAdherenceDay.AgentAdherenceDay Load(this AgentAdherenceDayLoader loader, Guid personId)
 		{
-			return loader.LoadUntilNow(personId, new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime().Date));
+			return loader.LoadUntilNow(personId, new DateOnly(ServiceLocator_DONTUSE.Now.UtcDateTime().Date));
 		}
 	}
 }

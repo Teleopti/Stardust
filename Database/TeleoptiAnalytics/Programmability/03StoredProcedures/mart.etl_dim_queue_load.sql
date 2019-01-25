@@ -149,7 +149,7 @@ BEGIN
 					)
 	AND  --filter out Exluded queues
 		NOT EXISTS (SELECT queue_original_id FROM mart.dim_queue_excluded exl
-						WHERE	exl.queue_original_id	= agg.orig_queue_id
+						WHERE	exl.queue_original_id	= agg.orig_queue_id COLLATE DATABASE_DEFAULT
 						AND		exl.datasource_id		= sys.datasource_id
 					)'
 

@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
             labelProductName.Text = product.Product;
 
             var version = (AssemblyFileVersionAttribute)assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute), true)[0];
-            labelProductVersion.Text = version.Version;
+            textBoxVersion.Text = version.Version;
 
             var copyright = (AssemblyCopyrightAttribute) assembly.GetCustomAttributes(typeof (AssemblyCopyrightAttribute), true)[0];
             labelCopyright.Text = copyright.Copyright;

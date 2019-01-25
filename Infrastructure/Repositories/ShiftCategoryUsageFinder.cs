@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			AND scenario.DefaultScenario = 1
 			AND scenario.BusinessUnit = :businessUnit
 			AND s.BelongsToDate > DATEADD(d, -30, GETDATE())")
-				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId().GetValueOrDefault())
+				.SetGuid("businessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.CurrentId().GetValueOrDefault())
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(shiftCategoryPredictIntermediateResult)))
 				.List<shiftCategoryPredictIntermediateResult>();
 

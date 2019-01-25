@@ -35,11 +35,13 @@ FROM   person p
 				ON t.id = pp.team 
 		INNER JOIN [site] s 
 				ON t.site = s.id 
+		INNER JOIN WorkflowControlSet wcs 
+				ON wcs.Id = p.WorkflowControlSet
 WHERE  pp.startdate < @end 
 		AND pp.enddate > @start 
 		AND s.businessunit = @businessUnitId 
-		AND p.WorkflowControlSet IS NOT NULL
-
+		AND wcs.IsDeleted = 0
+		
 DECLARE @PersonRequestId UNIQUEIDENTIFIER 
 DECLARE @RequestId UNIQUEIDENTIFIER 
 DECLARE @person_id UNIQUEIDENTIFIER 
@@ -51,17 +53,20 @@ OPEN request_cursor
 
 FETCH next FROM request_cursor INTO @person_id 
 
+DECLARE @Count INT = 0;
 WHILE @@FETCH_STATUS = 0 
 	BEGIN 
 		-- waitlisted request begin
 		SELECT @PersonRequestId = Newid() 
+
+		SET @Count = @Count +15;
 
 		INSERT INTO personrequest 
 		SELECT @PersonRequestId, 
 				1, 
 				@systemUserId, 
 				@systemUserId, 
-				'2017-10-24', 
+				DATEADD(second, @COUNT,GETUTCDATE()), 
 				'2017-10-24', 
 				@person_id, 
 				@waitlistedStatus, 
@@ -89,12 +94,14 @@ WHILE @@FETCH_STATUS = 0
 		-- pending request begin
 		SELECT @PersonRequestId = Newid()
 
+		SET @Count = @Count +15;
+
 		INSERT INTO personrequest 
 		SELECT @PersonRequestId, 
 				1, 
 				@systemUserId, 
 				@systemUserId, 
-				'2017-10-24', 
+				DATEADD(second, @COUNT,GETUTCDATE()), 
 				'2017-10-24', 
 				@person_id, 
 				@pendingStatus, 

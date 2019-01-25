@@ -216,5 +216,66 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return HasWaitlisted;
 		}
+
+		public IList<PersonWaitlistedAbsenceRequest> GetPendingAndWaitlistedAbsenceRequests(DateTimePeriod period, Guid? budgetGroupId,
+			WaitlistProcessOrder waitlistProcessOrder = WaitlistProcessOrder.FirstComeFirstServed)
+		{
+			var requests = RequestRepository
+				.Where(x => x.Request.Period.EndDateTime > period.StartDateTime &&
+							x.Request.Period.StartDateTime < period.EndDateTime)
+				.Where(x => x.Person.WorkflowControlSet != null)
+				.Where(x => ((Person) x.Person).IsDeleted == false)
+				.Where(x=>x.IsPending || x.IsWaitlisted)
+				.Where(x =>
+			{
+				var first = x.Person.PersonPeriods(period.ToDateOnlyPeriod(x.Person.PermissionInformation.DefaultTimeZone())).FirstOrDefault();
+				if (!budgetGroupId.HasValue)
+				{
+					return first?.BudgetGroup == null;
+				}
+
+				if (first?.BudgetGroup == null)
+				{
+					return false;
+				}
+
+				var groupId = first.BudgetGroup.Id;
+				return groupId == budgetGroupId.Value;
+			});
+
+			if (waitlistProcessOrder == WaitlistProcessOrder.BySeniority)
+			{
+				return requests.OrderByDescending(x=>x.Person.Seniority)
+					.ThenBy(x => x.CreatedOn)
+					.Select(x => new PersonWaitlistedAbsenceRequest
+				{
+					PersonRequestId = x.Id.Value,
+					RequestStatus = GetRequestStatus(x)
+				}).ToList();
+			}
+
+			return requests.OrderBy(x => x.CreatedOn).Select(x => new PersonWaitlistedAbsenceRequest
+			{
+				PersonRequestId = x.Id.Value,
+				RequestStatus = GetRequestStatus(x)
+			}).ToList();
+
+		}
+
+		public IList<IPersonRequest> FindPersonRequestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids)
+		{
+			return Find(ids);
+		}
+
+		private PersonRequestStatus GetRequestStatus(IPersonRequest request)
+		{
+			if (request.IsWaitlisted)
+				return PersonRequestStatus.Waitlisted;
+
+			if (request.IsPending)
+				return PersonRequestStatus.Pending;
+
+			return PersonRequestStatus.New;
+		}
 	}
 }

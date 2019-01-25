@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		{
 			searchCritera.SearchDate = DateTime.Now;
 			var canSeeUsers = _auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, DateOnly.Today, _loggonUser.CurrentUser());
-			var currentBusinessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
+			var currentBusinessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 
 			var personFinderSearchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(
 				PersonFinderField.All, 

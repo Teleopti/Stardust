@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -11,14 +12,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[Category("BucketB")]
 	public class FavoriteSearchRepositoryTest : RepositoryTest<IFavoriteSearch>
 	{
+		private IPerson person;
+
+		protected override void ConcreteSetup()
+		{
+			person = PersonFactory.CreatePerson("test");
+			PersistAndRemoveFromUnitOfWork(person);
+		}
+
 		protected override IFavoriteSearch CreateAggregateWithCorrectBusinessUnit()
 		{
-			var person = PersonFactory.CreatePerson("test");
-			PersistAndRemoveFromUnitOfWork(person);
-			var fav = new FavoriteSearch("testFav");
-			fav.Creator = person;
-			fav.WfmArea = WfmArea.Teams;
-
+			var fav = new FavoriteSearch("testFav")
+			{
+				Creator = person,
+				WfmArea = WfmArea.Teams,
+				SearchTerm = "agent",
+				TeamIds = "team1,team2",
+				Status = FavoriteSearchStatus.Default
+			};
 			return fav;
 		}
 
@@ -26,49 +37,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var origin = CreateAggregateWithCorrectBusinessUnit();
 			Assert.AreEqual(origin.Name, loadedAggregateFromDatabase.Name);
+			Assert.AreEqual(origin.Creator, loadedAggregateFromDatabase.Creator);
+			Assert.AreEqual(origin.WfmArea, loadedAggregateFromDatabase.WfmArea);
+			Assert.AreEqual(origin.TeamIds, loadedAggregateFromDatabase.TeamIds);
+			Assert.AreEqual(origin.SearchTerm, loadedAggregateFromDatabase.SearchTerm);
+			Assert.AreEqual(origin.Status, loadedAggregateFromDatabase.Status);
 		}
 
 		protected override Repository<IFavoriteSearch> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new FavoriteSearchRepository(currentUnitOfWork);
 		}
-
-		[Test]
-		public void VerifyCanPersistProperties()
-		{
-			var person = PersonFactory.CreatePerson("test");
-			var fav = new FavoriteSearch("myFav")
-			{
-				SearchTerm = "agent",
-				TeamIds = "team1,team2",
-				Status = FavoriteSearchStatus.Default,
-				Creator = person,
-				WfmArea = WfmArea.Teams
-			};
-			PersistAndRemoveFromUnitOfWork(person);
-			PersistAndRemoveFromUnitOfWork(fav);
-
-			var loadedAll = new FavoriteSearchRepository(CurrUnitOfWork).LoadAll();
-
-			Assert.AreEqual(1, loadedAll.Count());
-			Assert.AreEqual("myFav", loadedAll.First().Name);
-			Assert.AreEqual("agent", loadedAll.First().SearchTerm);
-			Assert.AreEqual(FavoriteSearchStatus.Default, loadedAll.First().Status);
-			Assert.AreEqual("team1,team2", loadedAll.First().TeamIds);
-		}
-
+		
 		[Test]
 		public void CanFindFavoritesByPersonInArea()
 		{
 			var person = PersonFactory.CreatePerson("test");
 			PersistAndRemoveFromUnitOfWork(person);
-			var fav = new FavoriteSearch("myFav");
-			fav.Creator = person;
-			fav.WfmArea = WfmArea.Teams;
+			var fav = new FavoriteSearch("myFav") {Creator = person, WfmArea = WfmArea.Teams};
 
 			PersistAndRemoveFromUnitOfWork(fav);
 
-			var allByPerson = new FavoriteSearchRepository(CurrUnitOfWork).FindAllForPerson(person.Id.Value, WfmArea.Teams);
+			var allByPerson = new FavoriteSearchRepository(CurrUnitOfWork).FindAllForPerson(person, WfmArea.Teams);
 
 			Assert.AreEqual(1, allByPerson.Count());
 		}
@@ -77,7 +67,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldThrowExceptionWhenAddingFavoriteSearchWithSameNameForSamePersonInSameArea()
 		{
 			var name = "myfav";
-			var person = PersonFactory.CreatePerson("test");
 			PersistAndRemoveFromUnitOfWork(person);
 			var fav1 = new FavoriteSearch(name);
 			var duplicate = new FavoriteSearch(name);

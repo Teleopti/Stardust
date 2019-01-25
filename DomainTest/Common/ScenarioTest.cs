@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual("Zefault", _scenario.Description.Name);
             Assert.AreEqual(_scenario.DefaultScenario,true);
             Assert.AreEqual(_scenario.EnableReporting, false);
-            Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, _scenario.BusinessUnit);
+            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, _scenario.BusinessUnit);
             Assert.IsNull(_scenario.UpdatedBy);
             Assert.IsNull(_scenario.UpdatedOn);
             Assert.IsNull(_scenario.Version);

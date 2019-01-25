@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             var layer = new ProjectedLayerDto
                             {
                                 Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period),
-                                DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor(_assignedAgent)),
-                                Description = entity.Payload.ConfidentialDescription(_assignedAgent).Name,
+                                DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor_DONTUSE(_assignedAgent)),
+                                Description = entity.Payload.ConfidentialDescription_DONTUSE(_assignedAgent).Name,
                                 ContractTime = layerForPeriod.ContractTime(),
 								WorkTime = layerForPeriod.WorkTime(),
 								PaidTime = layerForPeriod.PaidTime(),

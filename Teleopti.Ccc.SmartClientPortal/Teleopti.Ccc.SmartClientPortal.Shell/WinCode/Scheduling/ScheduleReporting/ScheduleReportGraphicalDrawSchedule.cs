@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
                     rect = AdjustRectangleToHour(rect, layer, timelinePeriod, projectionRectangle);
                     if (rect.IsEmpty) continue;
                     rectangles.Add(rect);
-                    var lBrush = GradientBrush(rect, layer.Payload.ConfidentialDisplayColor(_part.Person));
+                    var lBrush = GradientBrush(rect, layer.Payload.ConfidentialDisplayColor_DONTUSE(_part.Person));
                     _page.Graphics.DrawRectangle(lBrush, rect);
 
 					if(_part.SignificantPartForDisplay() == SchedulePartView.ContractDayOff)

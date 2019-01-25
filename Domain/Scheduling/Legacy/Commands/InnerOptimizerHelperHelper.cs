@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, MatrixRestrictionLocker locker, SchedulingOptions schedulingOptions)
 		{
-			IList<DateOnly> daysToLock = locker.Execute(matrix, schedulingOptions);
+			var daysToLock = locker.Execute(matrix, schedulingOptions);
 			foreach (var dateOnly in daysToLock)
 			{
 				matrix.LockDay(dateOnly);

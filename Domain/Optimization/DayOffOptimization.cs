@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IScheduleAllRemovedDaysOrRollback
 	{
-		void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IList<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService);
+		void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IEnumerable<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class ScheduleAllRemovedDaysOrRollback : IScheduleAllRemovedDaysOrRollback
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_scheduleBlankSpots = scheduleBlankSpots;
 		}
-		public void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IList<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService)
+		public void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IEnumerable<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService)
 		{
 			if (removedDays.IsEmpty()) return;
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941)]
 	public class ScheduleAllRemovedDaysOrRollbackDoNothing : IScheduleAllRemovedDaysOrRollback
 	{
-		public void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IList<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService)
+		public void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IEnumerable<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService)
 		{
 		}
 	}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
-		private readonly PlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
+		private readonly IPlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
 		
 
 		public DayOffOptimization(TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod,
 			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback,
-			PlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
+			IPlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
@@ -145,8 +145,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 					foreach (var matrixOriginalStateContainer in matrixListOriginalStateContainer)
 					{
 						var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-						workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService );
-						_scheduleAllRemovedDaysOrRollback.Execute(matrixOriginalStateContainer, optimizationPreferences, workShiftBackToLegalStateService.RemovedDays, rollbackService);
+						var removedDays = workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService );
+						_scheduleAllRemovedDaysOrRollback.Execute(matrixOriginalStateContainer, optimizationPreferences, removedDays, rollbackService);
 					}
 					_scheduleBlankSpots.Execute(matrixListOriginalStateContainer, optimizationPreferences);
 					//////////////////

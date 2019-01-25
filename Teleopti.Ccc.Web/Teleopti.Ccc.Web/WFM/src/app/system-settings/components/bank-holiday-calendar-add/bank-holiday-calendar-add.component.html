@@ -145,19 +145,4 @@
 			{{ 'Save' | translate }}
 		</button>
 	</div>
-
-	<nz-modal
-		*ngIf="isDeleteYearModalVisible && activedYearTab"
-		[(nzVisible)]="isDeleteYearModalVisible"
-		[nzTitle]="
-			('AreYouSureToDeleteYearFromCalendar' | translate)
-				.replace('{0}', activedYearTab.Year.toString())
-				.replace('{1}', this.newCalendarName)
-		"
-		[nzOkText]="'Delete' | translate"
-		nzOkType="danger"
-		[nzCancelText]="'Cancel' | translate"
-		(nzOnOk)="deleteYearTab(activedYearTab)"
-		(nzOnCancel)="closeDeleteYearTabModal()"
-	></nz-modal>
 </div>

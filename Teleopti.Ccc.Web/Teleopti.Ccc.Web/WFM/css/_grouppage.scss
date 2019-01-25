@@ -2,13 +2,22 @@
 group-page-picker {
 	md-select-value {
 		color: $text-color-standard;
+
+		&.md-select-placeholder {
+			color: $text-color-muted;
+		}
 	}
-	md-select-value.md-select-placeholder {
-		color: $text-color-muted;
+
+	&:focus {
+		outline: none;
+
+		md-select-value {
+			border-color: $primary;
+		}
 	}
 
 	.group-picker-wrapper {
-		$NG-MATERIAL-DEFAULT: rgba(0,0,0,0.12);
+		$NG-MATERIAL-DEFAULT: rgba(0, 0, 0, 0.12);
 		$DEFAULT-WIDTH: 14em;
 		cursor: pointer;
 
@@ -19,12 +28,12 @@ group-page-picker {
 			color: $text-color-standard;
 			-webkit-appearance: none;
 			-moz-appearance: none;
-			background: $white;
+			background: $input-white;
 			min-height: 32px;
 			padding: 4px 11px;
 			border-radius: 4px;
 
-			&:not([disabled]):focus .md-select-value {
+			&:not([disabled]):focus {
 				outline: none;
 				border: 1px solid $primary;
 				box-shadow: 0 0 0 2px rgba($primary, 0.2);
@@ -42,7 +51,7 @@ group-page-picker {
 
 		.invalid {
 			color: $text-color-muted;
-			border-color: rgb(255,109,0) !important;
+			border-color: rgb(255, 109, 0) !important;
 		}
 	}
 }
@@ -52,11 +61,11 @@ group-page-picker {
 	$REPEATED-ITEM-HEIGHT: 40px;
 	$NUM-OF-VISIBLE-ITEMS: 7;
 	$VIRTUAL-REPEAT-HEIGHT: $NUM-OF-VISIBLE-ITEMS * $REPEATED-ITEM-HEIGHT + 0.6 * $REPEATED-ITEM-HEIGHT;
-	$PD: .2em;
+	$PD: 5px;
 	$CHECKBOX-WIDTH: 30px;
 	$EXPAND-ICON-WIDTH: 30px;
 
-	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 	background-color: $white;
 
 	._zero-height {
@@ -99,18 +108,28 @@ group-page-picker {
 					@extend .vertically-centered;
 				}
 
-				&:focus .md-icon {
-					outline: 1px solid $primary;
-				}
-
 				&.md-checked .md-icon {
-					background-color: $blue-300;
-					border-color: $blue-300;
+					background-color: $primary;
+					border-color: $primary;
 				}
 
 				&.indeterminate {
 					.md-container .md-icon {
-						background-color: $blue-300;
+						background-color: $white;
+
+						&:after {
+							display: table;
+							position: absolute;
+							content: ' ';
+							transform: translate(-50%, -50%) scale(1);
+							border: 0;
+							left: 50%;
+							top: 50%;
+							width: 8px;
+							height: 8px;
+							background-color: $primary;
+							opacity: 1;
+						}
 					}
 				}
 			}
@@ -119,7 +138,7 @@ group-page-picker {
 				flex-grow: 1;
 				line-height: $REPEATED-ITEM-HEIGHT;
 				margin: 0;
-				max-width: calc(100% - $CHECKBOX-WIDTH - $EXPAND-ICON-WIDTH);
+				max-width: calc(100% - #{$CHECKBOX-WIDTH} - #{$EXPAND-ICON-WIDTH});
 				overflow: hidden;
 				text-overflow: ellipsis;
 				white-space: nowrap;
@@ -139,9 +158,10 @@ group-page-picker {
 				-webkit-transition: none;
 				transition: none;
 				color: $text-color-standard;
+				font-size: inherit;
 
 				&:focus {
-					background-color: rgba(158,158,158,0.2);
+					background-color: rgba(158, 158, 158, 0.2);
 				}
 			}
 
@@ -151,8 +171,10 @@ group-page-picker {
 				width: $EXPAND-ICON-WIDTH;
 				margin: 0;
 
-				&:active, &:hover, &:focus {
-					background-color: rgba(158,158,158,0.26);
+				&:active,
+				&:hover,
+				&:focus {
+					background-color: rgba(158, 158, 158, 0.26);
 				}
 
 				label {
@@ -174,6 +196,7 @@ group-page-picker {
 
 			.child {
 				padding: 0;
+				font-weight: 400;
 
 				label.clickable-area {
 					padding: 0 10px 0 20px;
@@ -182,7 +205,7 @@ group-page-picker {
 		}
 
 		.focused {
-			background-color: rgba(158,158,158,0.2);
+			background-color: rgba(158, 158, 158, 0.2);
 		}
 
 		.md-button-toggle {
@@ -209,11 +232,11 @@ group-page-picker {
 	.footer {
 		display: flex;
 		justify-content: space-around;
-		padding: $PD;
+		padding: 0;
 
 		button.wfm-btn {
 			flex: 1 1 100%;
-			margin: 0;
+			margin: $PD;
 			transition: none;
 		}
 	}
@@ -238,4 +261,4 @@ group-page-picker {
 		background-color: $green-300;
 	}
 }
-	/* End of Group Page Picker*/
+/* End of Group Page Picker*/

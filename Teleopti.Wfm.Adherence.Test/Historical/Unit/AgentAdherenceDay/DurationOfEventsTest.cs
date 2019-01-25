@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	[TestFixture]
 	public class DurationOfEventsTest
 	{
-		public IAgentAdherenceDayLoader Target;
+		public AgentAdherenceDayLoader Target;
 		public FakeRtaHistory History;
 		public MutableNow Now;
 		public FakeDatabase Database;

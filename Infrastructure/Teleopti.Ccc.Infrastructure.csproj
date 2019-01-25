@@ -193,7 +193,6 @@
     <Compile Include="Analytics\Tables\fact_schedule.cs" />
     <Compile Include="Aop\AspectApplicationException.cs" />
     <Compile Include="Aop\AspectInterceptor.cs" />
-    <Compile Include="Aop\FixForEnableClassInterceptorsDoesNotThrowOnMissingDepedencies.cs" />
     <Compile Include="Aop\InvocationInfo.cs" />
     <Compile Include="Aop\RegistrationExtensions.cs" />
     <Compile Include="ApplicationLayer\ActiveTenantsUpdater.cs" />
@@ -278,6 +277,7 @@
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="MultiTenancy\AllTenantNames.cs" />
     <Compile Include="MultiTenancy\BehaviorTestTenants.cs" />
+    <Compile Include="MultiTenancy\Client\ApplicationConfigurationDbTenantClient.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationConfigurationDbProviderFake.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
@@ -301,6 +301,9 @@
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersisterFake.cs" />
+    <Compile Include="NHibernateConfiguration\AddForceSeekOnAssignmentLayers.cs" />
+    <Compile Include="NHibernateConfiguration\IModifySql.cs" />
+    <Compile Include="NHibernateConfiguration\SqlModificationScope.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\RetryingEventArgs.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlCommandFactory.cs" />
     <Compile Include="NHibernateConfiguration\TransientErrorHandling\SqlXmlReader.cs" />
@@ -333,6 +336,7 @@
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepository.cs" />
+    <Compile Include="Repositories\SkillForecastReadmodelRepository.cs" />
     <Compile Include="Repositories\SkillCombinationResourcesWithoutBpo.cs" />
     <Compile Include="Repositories\PersonAccessAuditRepository.cs" />
     <Compile Include="Repositories\PersonLoadAllWithAssociation.cs" />
@@ -388,21 +392,21 @@
     <Compile Include="MultiTenancy\Admin\LoadAllTenants.cs" />
     <Compile Include="MultiTenancy\Admin\TenantAdminUser.cs" />
     <Compile Include="MultiTenancy\Admin\TenantExists.cs" />
-    <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
+    <Compile Include="MultiTenancy\Client\AuthenticationFromFileTenantClient.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverter.cs" />
-    <Compile Include="MultiTenancy\Client\ChangePassword.cs" />
+    <Compile Include="MultiTenancy\Client\ChangePasswordTenantClient.cs" />
     <Compile Include="MultiTenancy\Client\GetHttpRequest.cs" />
     <Compile Include="MultiTenancy\Client\GetHttpRequestFake.cs" />
     <Compile Include="MultiTenancy\Client\IAuthenticationQuerierResultConverter.cs" />
     <Compile Include="MultiTenancy\Client\ICurrentTenantCredentials.cs" />
     <Compile Include="MultiTenancy\Client\IResponseException.cs" />
-    <Compile Include="MultiTenancy\Client\ISharedSettingsQuerier.cs" />
+    <Compile Include="MultiTenancy\Client\ISharedSettingsTenantClient.cs" />
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Client\PostHttpRequestFake.cs" />
     <Compile Include="MultiTenancy\Client\ResponseException.cs" />
     <Compile Include="MultiTenancy\Client\SharedSettings.cs" />
     <Compile Include="MultiTenancy\Client\TenantCredentials.cs" />
-    <Compile Include="MultiTenancy\Client\TenantLogonDataManager.cs" />
+    <Compile Include="MultiTenancy\Client\TenantLogonDataManagerClient.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\DataSourceForTenant.cs" />
     <Compile Include="MultiTenancy\Server\DataSourceConfiguration.cs" />
@@ -450,7 +454,7 @@
     <Compile Include="MultiTenancy\Server\Queries\IFindPersonInfoByIdentity.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IIdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IdentityUserQuery.cs" />
-    <Compile Include="MultiTenancy\Client\AuthenticationQuerier.cs" />
+    <Compile Include="MultiTenancy\Client\AuthenticationTenantClient.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistLogonAttempt.cs" />
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\Client\IPostHttpRequest.cs" />
@@ -464,7 +468,7 @@
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\Client\PostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Server\Tenant.cs" />
-    <Compile Include="MultiTenancy\Client\TenantDataManager.cs" />
+    <Compile Include="MultiTenancy\Client\TenantDataManagerClient.cs" />
     <Compile Include="MultiTenancy\Server\TenantAuthenticationFake.cs" />
     <Compile Include="NHibernateConfiguration\AnalyticsUnitOfWorkContext.cs" />
     <Compile Include="NHibernateConfiguration\MoreParameterInCriterion.cs" />
@@ -550,7 +554,6 @@
     <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />
     <Compile Include="Foundation\ConnectionStrings.cs" />
     <Compile Include="Foundation\IConnectionStrings.cs" />
-    <Compile Include="ServiceLocatorForEntity.cs" />
     <Compile Include="Staffing\IStaffingDataAvailablePeriodProvider.cs" />
     <Compile Include="Audit\StaffingContextReaderService.cs" />
     <Compile Include="Staffing\StaffingDataAvailablePeriodProvider.cs" />
@@ -573,7 +576,6 @@
     <Compile Include="Licensing\XmlLicenseServiceFactory.cs" />
     <Compile Include="NHibernateConfiguration\CompressedString.cs" />
     <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
-    <Compile Include="Foundation\IRetrievePersonNameForPerson.cs" />
     <Compile Include="Foundation\PurgeApplicationData.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalInternalsFactory.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalForLegacyFactory.cs" />
@@ -836,8 +838,8 @@
     <Compile Include="WebReports\IDetailedAdherenceForDayQuery.cs" />
     <Compile Include="Web\CurrentHttpContext.cs" />
     <Compile Include="Web\ICurrentHttpContext.cs" />
-    <Compile Include="MultiTenancy\Client\SharedSettingsQuerier.cs" />
-    <Compile Include="MultiTenancy\Client\SharedSettingsQuerierForNoWeb.cs" />
+    <Compile Include="MultiTenancy\Client\SharedSettingsTenantClient.cs" />
+    <Compile Include="MultiTenancy\Client\SharedSettingsTenantClientForNoWeb.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

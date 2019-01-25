@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return query.SetDateTime("StartDateTime", period.StartDateTime)
 				.SetDateTime("EndDateTime", period.EndDateTime)
 				.SetBoolean("IsDeleted", false)
-				.SetGuid("BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("BusinessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 				.SetGuid("Person", person.Id.GetValueOrDefault())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(RequestPeriod)))
 				.SetReadOnly(true)
@@ -927,6 +927,91 @@ AND ps.Skill in(:list)")
 
 			return cnt> 0;
 		}
+
+		public IList<PersonWaitlistedAbsenceRequest> GetPendingAndWaitlistedAbsenceRequests(DateTimePeriod period,
+			Guid? budgetGroupId,
+			WaitlistProcessOrder waitlistProcessOrder = WaitlistProcessOrder.FirstComeFirstServed)
+		{
+			var sqlTemplate = @"SELECT pr.Id as PersonRequestId, pr.RequestStatus
+						FROM dbo.PersonRequest pr 
+						INNER JOIN dbo.Request r ON r.Parent = pr.Id 
+						INNER JOIN dbo.AbsenceRequest ar ON r.Id=ar.Request 
+						INNER JOIN dbo.Person p ON p.id=pr.Person
+						INNER JOIN dbo.PersonPeriod pp ON pp.Parent = pr.Person 
+						INNER JOIN dbo.WorkflowControlSet wcs ON wcs.Id = p.WorkflowControlSet
+						{0}
+						WHERE pr.BusinessUnit = :businessUnit
+						AND p.IsDeleted = 0
+						AND wcs.IsDeleted = 0
+						AND  r.EndDateTime > :startDate and r.StartDateTime < :endDate
+						AND :withInPersonPeriod BETWEEN pp.StartDate AND pp.EndDate
+						AND pr.RequestStatus in (0,5)
+						{1}
+						{2}";
+
+			string joinSql, budgetGroupSql, orderSql;
+			if (waitlistProcessOrder == WaitlistProcessOrder.BySeniority)
+			{
+				joinSql = @"INNER JOIN (SELECT Parent, FirstStart = min(pp_inner.StartDate) 
+						          FROM dbo.PersonPeriod pp_inner
+						          GROUP BY Parent) as pps
+						     ON (pr.Person = pps.Parent)";
+				orderSql = "ORDER BY pps.FirstStart, pr.CreatedOn";
+			}
+			else
+			{
+				joinSql = "";
+				orderSql = "ORDER BY pr.CreatedOn";
+			}
+
+			if (budgetGroupId.HasValue)
+			{
+				budgetGroupSql = "AND pp.BudgetGroup= :budgetGroupId";
+			}
+			else
+			{
+				budgetGroupSql = "AND pp.BudgetGroup is null";
+			}
+
+			var fullSql = string.Format(sqlTemplate, joinSql, budgetGroupSql, orderSql);
+
+			var iSqlQuery = Session.CreateSQLQuery(fullSql)
+				.SetDateTime("startDate", period.StartDateTime)
+				.SetDateTime("endDate", period.EndDateTime)
+				.SetDateTime("withInPersonPeriod", period.StartDateTime.Date)
+				.SetGuid("businessUnit", ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+
+			if (budgetGroupId.HasValue)
+			{
+				iSqlQuery.SetGuid(nameof(budgetGroupId), budgetGroupId.Value);
+			}
+
+			return iSqlQuery.SetResultTransformer(Transformers.AliasToBean<PersonWaitlistedAbsenceRequest>())
+				.List<PersonWaitlistedAbsenceRequest>();
+		}
+
+		public IList<IPersonRequest> FindPersonRequestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids)
+		{
+			var returnPersonRequests = new List<IPersonRequest>();
+			foreach (var idBatch in ids.Batch(1000))
+			{
+				returnPersonRequests.AddRange(Session.CreateCriteria(typeof(PersonRequest), "req")
+					.Add(Restrictions.In("Id", idBatch.ToArray()))
+					.Fetch("requests")
+					.List<IPersonRequest>());
+			}
+
+			foreach (var returnPersonRequest in returnPersonRequests)
+			{
+				if (returnPersonRequest.Request is IAbsenceRequest absenceRequest)
+				{
+					LazyLoadingManager.Initialize(absenceRequest.Absence);
+					LazyLoadingManager.Initialize(absenceRequest.Person.PersonPeriodCollection);
+				}
+			}
+			return returnPersonRequests;
+		}
+
 		private static AbstractCriterion createPersonInCriterion(string propertyName, IReadOnlyCollection<IPerson> people)
 		{
 			if (people.Count <= 1000)

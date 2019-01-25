@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		{
 			_target = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new falseRandomizerForTest());
 			_values = new List<double?> { 0, 1, 3, 40, 25, 3, 2, 0, 1, 3, 30, 30, 3, 2 };
-			_workingArray = new LockableBitArray(21, false, false, null);
+			_workingArray = new LockableBitArray(21, false, false);
 			_workingArray.PeriodArea = new MinMax<int>(2, 15);
 			_workingArray.Lock(0, true);
 			_workingArray.Lock(1, true);
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		public void ShouldDetectFullWeekendsOnly()
 		{
 			_values = new List<double?> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
-			_workingArray = new LockableBitArray(42, false, false, null);
+			_workingArray = new LockableBitArray(42, false, false);
 			_workingArray.PeriodArea = new MinMax<int>(6, 36);
 			_workingArray.Set(6, true);
 			_workingArray.Set(7, true);

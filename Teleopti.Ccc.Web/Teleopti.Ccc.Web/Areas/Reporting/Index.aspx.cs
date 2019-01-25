@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			var timeZone = princip.Regional.TimeZone;
 			Guid? id = princip.PersonId;
 			var dataSource = teleoptiIdentity.DataSource;
-			var bu = teleoptiIdentity.BusinessUnit.Id;
+			var bu = teleoptiIdentity.BusinessUnitId;
 
 			Thread.CurrentThread.CurrentUICulture = uiCulture.FixPersianCulture();
 			Thread.CurrentThread.CurrentCulture = culture.FixPersianCulture();

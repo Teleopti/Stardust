@@ -15,6 +15,8 @@
 	<script type="text/javascript" src="../../../../Content/jquery/jquery-1.12.4.js"></script>
 	<script type="text/javascript" src="../../../../Content/jqueryui/jquery-ui-1.10.2.custom.js"></script>
 	<script type="text/javascript" src="../../../../Content/jqueryui/jquery-ui-1.10.2.slider.js"></script>
+	<script type="text/javascript" src="../../../../Content/jquery-plugin/jquery.touchSwipe.min.js"></script>
+	<script type="text/javascript" src="../../../../Content/jqueryui.touch-punch/jquery.ui.touch-punch.js"></script>
 	<script type="text/javascript" src="../../../../Content/Scripts/qunit.js"></script>
 	<script type="text/javascript" src="../../../../Content/Scripts/knockout-2.2.1.js"></script>
 	<script type="text/javascript" src="../../../../Content/bootstrap/Scripts/bootstrap.js"></script>
@@ -64,6 +66,8 @@
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.LayerViewModel.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MonthViewModel.js?bust=<%=version%>"></script>
+	<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MonthDayViewModel.js?bust=<%=version%>"></script>
+	<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js?bust=<%=version%>"></script>
 	<script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.WeekViewModel.js?bust=<%=version%>"></script>

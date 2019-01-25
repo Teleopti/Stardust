@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -38,6 +39,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -56,9 +58,6 @@ using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpeedUpHistoricalAdherence_RemoveScheduleDependency_78485)]
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_TooManyPersonAssociationChangedEvents_Packages_78669)]
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_StateQueueFloodPrevention_77710)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
@@ -159,6 +158,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Forecast
 			isolate.UseTestDouble<ForecastProvider>().For<ForecastProvider>();
+			isolate.UseTestDouble<SkillDayChangedEventBuilder>().For<SkillDayChangedEventBuilder>();
 			isolate.UseTestDouble<ForecastDayModelMapper>().For<ForecastDayModelMapper>();
 			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
 
@@ -294,6 +294,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
 				isolate.UseTestDouble<FakeStaffingAuditRepository>().For<IStaffingAuditRepository>();
 				isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
+				isolate.UseTestDouble<FakePayrollExportRepository>().For<IPayrollExportRepository>();
+				isolate.UseTestDouble<FakePayrollResultRepository>().For<IPayrollResultRepository>();
+				isolate.UseTestDouble<FakeSkillForecastReadModelRepository>().For<ISkillForecastReadModelRepository, FakeSkillForecastReadModelRepository>();
 			}
 
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
@@ -332,9 +335,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			extendScope();
 
-			fakeSignin();
+			var bu = new BusinessUnit("testbu").WithId(DefaultBusinessUnitId);
+			fakeSignin(bu);
 
-			createDefaultData();
+			createDefaultData(bu);
 		}
 
 		private void extendScope()
@@ -344,7 +348,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.ForEach(x => FakeEventPublisher.AddHandler(x));
 		}
 
-		private void fakeSignin()
+		private void fakeSignin(IBusinessUnit businessUnit)
 		{
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
@@ -359,7 +363,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				var principal = PrincipalFactory.MakePrincipal(
 					_loggedOnPerson,
 					DataSourceForTenant.Tenant(DefaultTenantName),
-					new BusinessUnit("loggedOnBu").WithId(),
+					businessUnit,
 					null
 				);
 				PrincipalContext.SetCurrentPrincipal(principal);
@@ -373,13 +377,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 		}
 
-		private void createDefaultData()
+		private void createDefaultData(IBusinessUnit businessUnit)
 		{
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
 			if (QueryAllAttributes<DefaultDataAttribute>().Any())
-				Database.Value.CreateDefaultData();
+				Database.Value.CreateDefaultData(businessUnit);
 		}
 
 		private bool fullPermissions()

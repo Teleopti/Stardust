@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IQueuedAbsenceRequest entity)
 		{
+			entity.SetId(Guid.NewGuid());
 			_queuedRequests.Add(entity);
 		}
 

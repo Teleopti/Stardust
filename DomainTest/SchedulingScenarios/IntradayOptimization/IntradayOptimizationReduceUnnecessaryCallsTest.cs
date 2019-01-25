@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotUseMaxSeatSkillDaysFromOtherSite()
 		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var siteNotInUse = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotUseSameMaxSeatSkillDayEvenIfInitMaxSeatForStateHolderIsUsed()
 		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();

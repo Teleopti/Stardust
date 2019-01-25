@@ -1,8 +1,5 @@
 <div class="workspace">
-	<h1>
-		<i class="mdi mdi-elevation-rise"></i>
-		Insights
-	</h1>
+	<h1><i class="mdi mdi-elevation-rise"></i>Insights</h1>
 
 	<div nz-row [nzGutter]="{ xs: 8, sm: 8, md: 8, lg: 8, xl: 8, xxl: 8 }" class="container">
 		<div nz-col nzSpan="8">
@@ -33,7 +30,7 @@
 				<span class="disabledLink" *ngIf="!permission.CanEditReport"><i nz-icon type="copy" theme="outline"></i> Save as new...</span>
 			</ng-template>
 			<ng-template #deleteAction>
-				<a nz-popconfirm nzTitle="Are you sure you want to delete this report?" nzOkText="ok" nzCancelText="cancel" (nzOnConfirm)="deleteReport(item)" *ngIf="permission.CanDeleteReport">
+				<a nz-popconfirm nzTitle='Are you sure you want to delete report "{{item.Name}}"?' nzOkText="Ok" nzCancelText="Cancel" (nzOnConfirm)="deleteReport(item)" *ngIf="permission.CanDeleteReport">
 					<i nz-icon type="delete" theme="outline"></i> Delete
 				</a>
 				<span class="disabledLink" *ngIf="!permission.CanDeleteReport"><i nz-icon type="delete" theme="outline"></i> Delete</span>
@@ -44,8 +41,9 @@
 		[hidden]="!initialized || permission.CanViewReport" 
 		nzType="error"
 		nzMessage="Error"
-		nzDescription="You have no permission to view Insights report."
-		nzShowIcon>
+		nzDescription="You do not have permission to view Insights report."
+		nzShowIcon
+		nzBanner>
 	</nz-alert>
 
     <nz-modal [(nzVisible)]="modalIsVisible" [nzTitle]="modalTitle" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">

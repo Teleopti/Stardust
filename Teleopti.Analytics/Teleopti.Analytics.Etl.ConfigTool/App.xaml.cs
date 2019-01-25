@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -9,7 +10,9 @@ using log4net.Config;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.ConfigTool.Gui;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Application = System.Windows.Application;
 
@@ -25,6 +28,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new EtlAppModule());
 			Container = builder.Build();
+
+			var webEtlRedirectView = new WebEtlRedirectView();
+			if (webEtlRedirectView.ShowDialog() == DialogResult.Yes)
+			{
+				var wfmPath = Container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
+				var path = wfmPath.Replace("Web", "Administration");
+				System.Diagnostics.Process.Start(path);
+				return;
+			}
+			webEtlRedirectView.Close();
 
 			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(new BaseConfigurationRepository())), new BaseConfigurationValidator());
 			configurationHandler.SetConnectionString(ConfigurationManager.AppSettings["datamartConnectionString"]);

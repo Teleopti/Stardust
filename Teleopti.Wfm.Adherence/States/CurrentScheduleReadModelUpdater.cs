@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Wfm.Adherence.States
 {
@@ -21,6 +22,7 @@ namespace Teleopti.Wfm.Adherence.States
 		private readonly IBusinessUnitRepository _businessUnits;
 		private readonly IScheduleStorage _schedules;
 		private readonly IKeyValueStorePersister _keyValueStore;
+		private readonly ICurrentAuthorization _authorization;
 
 		public CurrentScheduleReadModelUpdater(
 			INow now,
@@ -29,7 +31,8 @@ namespace Teleopti.Wfm.Adherence.States
 			IScenarioRepository scenarios,
 			IBusinessUnitRepository businessUnits,
 			IScheduleStorage schedules,
-			IKeyValueStorePersister keyValueStore
+			IKeyValueStorePersister keyValueStore,
+			ICurrentAuthorization authorization
 		)
 		{
 			_now = now;
@@ -39,6 +42,7 @@ namespace Teleopti.Wfm.Adherence.States
 			_businessUnits = businessUnits;
 			_schedules = schedules;
 			_keyValueStore = keyValueStore;
+			_authorization = authorization;
 		}
 
 		[ReadModelUnitOfWork]
@@ -147,12 +151,12 @@ namespace Teleopti.Wfm.Adherence.States
 							select new ScheduledActivity
 							{
 								BelongsToDate = new DateOnly(belongsToDate.Date),
-								DisplayColor = layer.Payload.ConfidentialDisplayColor(x).ToArgb(),
+								DisplayColor = layer.Payload.ConfidentialDisplayColor(x, _authorization).ToArgb(),
 								EndDateTime = layer.Period.EndDateTime,
-								Name = layer.Payload.ConfidentialDescription(x).Name,
+								Name = layer.Payload.ConfidentialDescription(x, _authorization).Name,
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								PersonId = x.Id.GetValueOrDefault(),
-								ShortName = layer.Payload.ConfidentialDescription(x).ShortName,
+								ShortName = layer.Payload.ConfidentialDescription(x, _authorization).ShortName,
 								StartDateTime = layer.Period.StartDateTime
 							})
 							.ToArray();

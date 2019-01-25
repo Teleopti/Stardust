@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Domain.Collection
 	/// </remarks>
 	public class VisualLayerCollection : IVisualLayerCollection
 	{
+		private static readonly IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
+
 		private readonly IProjectionMerger _merger;
 		private readonly Lazy<IEnumerable<IVisualLayer>> _mergedCollection;
 		
@@ -50,11 +52,6 @@ namespace Teleopti.Ccc.Domain.Collection
 				return ret;
 			});
 			_mergedCollection = new Lazy<IEnumerable<IVisualLayer>>(() => merger.MergedCollection(UnMergedCollection).ToList());
-		}
-
-		public static IVisualLayerCollection CreateEmptyProjection(IPerson assignedPerson)
-		{
-			return new VisualLayerCollection(Enumerable.Empty<IVisualLayer>(), new NoProjectionMerger());
 		}
 
 		public bool HasLayers { get; }
@@ -191,19 +188,14 @@ namespace Teleopti.Ccc.Domain.Collection
 		//borde göras om till en IProjectionMerger
 		public IFilteredVisualLayerCollection FilterLayers(IPayload payloadToSearch)
 		{
-			IList<IVisualLayer> retColl = new List<IVisualLayer>();
-			foreach (IVisualLayer layer in UnMergedCollection)
-			{
-				if (layer.Payload.OptimizedEquals(payloadToSearch))
-					retColl.Add(layer);
-			}
+			IList<IVisualLayer> retColl =
+				UnMergedCollection.Where(layer => layer.Payload.OptimizedEquals(payloadToSearch)).ToArray();
 			return new FilteredVisualLayerCollection(retColl, (IProjectionMerger)_merger.Clone(),this);
 		}
 
 		//borde göras om till en IProjectionMerger
 		public IFilteredVisualLayerCollection FilterLayers(DateTimePeriod periodToSearch)
 		{
-			IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 			IList<IVisualLayer> retColl = new List<IVisualLayer>();
 			var collCount = UnMergedCollection.Length;
 			if (collCount > 0)

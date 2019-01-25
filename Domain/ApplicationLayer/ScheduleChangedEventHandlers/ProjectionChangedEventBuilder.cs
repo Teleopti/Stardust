@@ -92,7 +92,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					break;
 				case SchedulePartView.FullDayAbsence:
 					eventScheduleDay.IsFullDayAbsence = true;
-					eventScheduleDay.ShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
+					var absenceCollection = scheduleDay.PersonAbsenceCollection();
+					if (absenceCollection.Length > 1) {
+						absenceCollection = absenceCollection.OrderBy(a => a.Layer.Payload.Priority)
+						.ThenByDescending(a => absenceCollection.IndexOf(a)).ToArray();
+					}
+					eventScheduleDay.ShortName = absenceCollection.First().Layer.Payload.Description.ShortName;
 					break;
 				case SchedulePartView.DayOff:
 					var dayOff = scheduleDay.PersonAssignment().DayOff();
@@ -145,7 +150,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					absence = absencePayload;
 				}
 
-				var description = absence?.Description ?? layer.Payload.ConfidentialDescription(person);
+				var description = absence?.Description ?? layer.Payload.ConfidentialDescription_DONTUSE(person);
 				var contractTime = projection.ContractTime(layer.Period);
 				var overTime = projection.Overtime(layer.Period);
 				var paidTime = projection.PaidTime(layer.Period);
@@ -165,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					MultiplicatorDefinitionSetId = layer.DefinitionSet?.Id ?? Guid.Empty,
 					PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 					IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
-					DisplayColor = absence?.DisplayColor.ToArgb() ?? layer.Payload.ConfidentialDisplayColor(person).ToArgb(),
+					DisplayColor = absence?.DisplayColor.ToArgb() ?? layer.Payload.ConfidentialDisplayColor_DONTUSE(person).ToArgb(),
 					RequiresSeat = requiresSeat,
 					WorkTime = workTime,
 					PaidTime = paidTime,

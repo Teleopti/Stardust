@@ -94,8 +94,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		private static void setThreadCulture()
 		{
-			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
+			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
 		}
 
 		void backgroundWorkerLoadReportRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 					settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
 				ReportHandler.CreateScheduledTimeVersusTargetData(unitOfWork, model, data,
-					TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, commonNameDescriptionSetting);
+					TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone, commonNameDescriptionSetting);
 			}
 
 			return new ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>(data, parameters, false);

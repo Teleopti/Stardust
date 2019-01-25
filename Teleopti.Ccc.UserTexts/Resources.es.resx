@@ -1291,7 +1291,7 @@ Planificación</value>
     <value>Planificación Seleccionada</value>
   </data>
   <data name="ScheduleViews" xml:space="preserve">
-    <value>Vistas del Horario</value>
+    <value>Vistas de Planificación</value>
   </data>
   <data name="Scheduling" xml:space="preserve">
     <value>Planificaciones</value>
@@ -2613,7 +2613,7 @@ Opcionales</value>
     <value>Horas inc</value>
   </data>
   <data name="HoursIncShrinkage" xml:space="preserve">
-    <value>Horas inluyendo ausentismo</value>
+    <value>Horas incluyendo ausentismo</value>
   </data>
   <data name="TotalAEW" xml:space="preserve">
     <value>AEW Total</value>
@@ -5014,7 +5014,7 @@ Actualizado en: {1}</value>
     <value>Hora de inicio temprano</value>
   </data>
   <data name="LatestEndTime" xml:space="preserve">
-    <value>Hora de fin tarde</value>
+    <value>Hora de fin mas tarde</value>
   </data>
   <data name="LatestStartTime" xml:space="preserve">
     <value>Hora de inicio tarde</value>
@@ -5398,7 +5398,7 @@ Actualizado en: {1}</value>
     <value>Ver reporte de Performance Manager</value>
   </data>
   <data name="ViewSchedules" xml:space="preserve">
-    <value>Ver planificaciones</value>
+    <value>Ver Planificaciones</value>
   </data>
   <data name="ModifyPersonRestriction" xml:space="preserve">
     <value>Modificar restricción personal</value>
@@ -7745,7 +7745,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Ajustar flexibilidad de tiempo de trab.</value>
   </data>
   <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
-    <value>Su solicitud de ausencia ha sido denegada automáticamente. No hay suficiente tiempo autorizado en presupuestos para esta solicitud,</value>
+    <value>Su solicitud de ausencia ha sido denegada automáticamente. No hay suficiente tiempo autorizado en Presupuestos para esta solicitud,</value>
   </data>
   <data name="MeetingActivityRequired" xml:space="preserve">
     <value>Seleccione una actividad!</value>
@@ -8024,7 +8024,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Días libres duplicados en {0}</value>
   </data>
   <data name="NoAbsenceDefined" xml:space="preserve">
-    <value>Debe crear al menos una ausencia para realizar esta acción.</value>
+    <value>Debe crear al menos una ausencia para poder realizar esta acción.</value>
   </data>
   <data name="NoAbsenceDefinedCaption" xml:space="preserve">
     <value>No hay ausencia definida</value>
@@ -10602,7 +10602,7 @@ Detalles del error:
     <value>Tiempo de descanso nocturno</value>
   </data>
   <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
-    <value>Reglad de validación</value>
+    <value>Reglas de validación</value>
   </data>
   <data name="ResetRules" xml:space="preserve">
     <value>Resetar Reglas</value>
@@ -12400,7 +12400,7 @@ Verifique su conexión a internet o contacte a su administrador.</value>
     <value>Buscar sitio / equipo / contrato</value>
   </data>
   <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
-    <value>El resultado de búsqueda de la(s) palabra(s) clave excederá 500, refina tu búsqueda.</value>
+    <value>El resultado de búsqueda de la(s) palabra(s) clave excederá {0}, refina tu búsqueda.</value>
   </data>
   <data name="MaxResultsReached" xml:space="preserve">
     <value>El resultado de búsqueda de la(s) palabra(s) clave superará {0}, refina tu búsqueda.</value>
@@ -13072,7 +13072,7 @@ Verifique su conexión a internet o contacte a su administrador.</value>
     <value>No se puede guardar esta respuesta ya que el mensaje completo excede el límite de 2000 caracteres</value>
   </data>
   <data name="CanNotRemoveShiftForAgentWithFullDayAbsence" xml:space="preserve">
-    <value>No se puede eliminar turno para un agente con ausencia de día completo</value>
+    <value>No es posible eliminar turno para un agente con ausencia de día completo</value>
   </data>
   <data name="CanNotRemoveShiftForAgentWithEmptySchedule" xml:space="preserve">
     <value>No se puede eliminar el turno de un agente con planificación vacía</value>
@@ -13852,5 +13852,134 @@ La aplicación ahora se cerrará.</value>
   </data>
   <data name="ContractTimeViolationMessageInShiftTradeRequest" xml:space="preserve">
     <value>Los dias seleccionados para el intercambio de turno resultarían en mucho o muy poco tiempo de contrato. Agregue o remueva para balancear los dias de trabajo.</value>
+  </data>
+  <data name="AddANewYear" xml:space="preserve">
+    <value>Agregar un nuevo año</value>
+  </data>
+  <data name="AddNewBankHolidayCalendar" xml:space="preserve">
+    <value>Añadir nuevo calendario de festivos</value>
+  </data>
+  <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
+    <value>Ha ocurrido un error. Por favor verifique su conexión de red e intente de nuevo. Si el error persiste, contacte a su administrador.</value>
+  </data>
+  <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
+    <value>¿Está seguro que desea borrar el año {0} del calendario {1}?</value>
+  </data>
+  <data name="AssignCalendarsToSites" xml:space="preserve">
+    <value>Asignar calendarios a sitios</value>
+  </data>
+  <data name="AuditTrailReportGroup" xml:space="preserve">
+    <value>Pista de Auditoria</value>
+  </data>
+  <data name="BankHolidayCalendarHasBeenSuccessfullyDeleted" xml:space="preserve">
+    <value>Calendario de dias festivos {0} ha sido elimiando exitosamente</value>
+  </data>
+  <data name="BankHoliday" xml:space="preserve">
+    <value>Dia festivo</value>
+  </data>
+  <data name="BankHolidayCalendars" xml:space="preserve">
+    <value>Calendarios de dias festivos</value>
+  </data>
+  <data name="BlockSchedulingColon" xml:space="preserve">
+    <value>Planificación por bloques</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="DayLowerCase" xml:space="preserve">
+    <value>día</value>
+  </data>
+  <data name="DayOffRulesColon" xml:space="preserve">
+    <value>Reglas de dias libres:</value>
+  </data>
+  <data name="DaysLowerCase" xml:space="preserve">
+    <value>días</value>
+  </data>
+  <data name="DeleteInsightsReport" xml:space="preserve">
+    <value>Borrar reporte</value>
+  </data>
+  <data name="DeleteThisYear" xml:space="preserve">
+    <value>Borrado</value>
+  </data>
+  <data name="AuditTrailGeneralAuditTrailReport" xml:space="preserve">
+    <value>Pista de auditoria general</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>Ajustes Generales</value>
+  </data>
+  <data name="IdentityLogon" xml:space="preserve">
+    <value>Credenciales de identificación</value>
+  </data>
+  <data name="ManageCalendars" xml:space="preserve">
+    <value>Administrar calendarios</value>
+  </data>
+  <data name="MonthLowerCase" xml:space="preserve">
+    <value>mes</value>
+  </data>
+  <data name="MonthOrMonths" xml:space="preserve">
+    <value>Mensual</value>
+  </data>
+  <data name="MonthsLowerCase" xml:space="preserve">
+    <value>meses</value>
+  </data>
+  <data name="NameAlreadyExisting" xml:space="preserve">
+    <value>El nombre ya existe</value>
+  </data>
+  <data name="NewCalendarName" xml:space="preserve">
+    <value>Nombre de nuevo calendario</value>
+  </data>
+  <data name="NoBankHolidays" xml:space="preserve">
+    <value>No hay dias festivos</value>
+  </data>
+  <data name="PasswordPolicyError" xml:space="preserve">
+    <value>Error en requisitos de contraseña</value>
+  </data>
+  <data name="PublishSchedulePlans" xml:space="preserve">
+    <value>Publicar horario</value>
+  </data>
+  <data name="ScheduledAgents" xml:space="preserve">
+    <value>Agentes planificados</value>
+  </data>
+  <data name="AuditTrailSearchFilter" xml:space="preserve">
+    <value>Filtro de búsqueda </value>
+  </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>Configuración del Sistema</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
+    <value>No hay agente en este grupo de planificación. Por favor revise los filtros.</value>
+  </data>
+  <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">
+    <value>No hay dias festivos definidos para este año. Seleccione un día para agregar al calendario de festivos.</value>
+  </data>
+  <data name="ThisCalendarHasNoDatesAdded" xml:space="preserve">
+    <value>Este calendario no tiene fechas agregadas.</value>
+  </data>
+  <data name="ValidationsAreLoading" xml:space="preserve">
+    <value>Validación en progreso</value>
+  </data>
+  <data name="ValidationsAreLoadingTooltip" xml:space="preserve">
+    <value>Validación en progreso, esto puede tardar unos cuantos minutos.</value>
+  </data>
+  <data name="ValidationIssues" xml:space="preserve">
+    <value>Problemas de validación</value>
+  </data>
+  <data name="WeekOrWeeks" xml:space="preserve">
+    <value>Semana(s)</value>
+  </data>
+  <data name="WeekLowerCase" xml:space="preserve">
+    <value>semana</value>
+  </data>
+  <data name="WeeksLowerCase" xml:space="preserve">
+    <value>semanas</value>
+  </data>
+  <data name="YearLowerCase" xml:space="preserve">
+    <value>año</value>
+  </data>
+  <data name="YearsLowerCase" xml:space="preserve">
+    <value>años</value>
+  </data>
+  <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
+    <value>Ha modificado un turno. Desea cerrar y perder los cambios?</value>
   </data>
 </root>

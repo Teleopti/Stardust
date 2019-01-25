@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 
-
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 {
     [TestFixture]
@@ -56,13 +55,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(rotationRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Once();
             }
-            IList<DateOnly> result;
+            IEnumerable<DateOnly> result;
             using (_mocks.Playback())
 			{
 				_schedulingOptions.UseRotations = true;
                 result = _target.Execute(_matrix,_schedulingOptions);
             }
-            Assert.AreEqual(_dayToCheck, result[0]);
+            Assert.AreEqual(_dayToCheck, result.First());
         }
 
         [Test]
@@ -79,13 +78,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(rotationRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Once();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
             {
 				_schedulingOptions.UseRotations = true;
                 result = _target.Execute(_matrix,_schedulingOptions);
             }
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count());
         }
 
         [Test]
@@ -102,13 +101,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(rotationRestriction.DayOffTemplate).Return(null).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Once();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
 			{
 				_schedulingOptions.UseRotations = true;
                 result = _target.Execute(_matrix,_schedulingOptions);
             }
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count());
         }
 
         [Test]
@@ -125,13 +124,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(rotationRestriction.DayOffTemplate).Return(null).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Once();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
 			{
 				_schedulingOptions.UseRotations = true;
                 result = _target.Execute(_matrix, _schedulingOptions);
             }
-            Assert.AreEqual(_dayToCheck, result[0]);
+            Assert.AreEqual(_dayToCheck, result.First());
         }
 
         [Test]
@@ -148,13 +147,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 				Expect.Call(availabilityRestriction.NotAvailable).Return(true).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
             {
 				_schedulingOptions.UseAvailability = true;
 				result = _target.Execute(_matrix, _schedulingOptions);
             }
-            Assert.AreEqual(_dayToCheck, result[0]);
+            Assert.AreEqual(_dayToCheck, result.First());
         }
 
         [Test]
@@ -171,13 +170,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(availabilityRestriction.NotAvailable).Return(true).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
             {
 				_schedulingOptions.UseAvailability = true;
 				result = _target.Execute(_matrix, _schedulingOptions);
             }
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count());
         }
 
         [Test]
@@ -194,13 +193,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(availabilityRestriction.NotAvailable).Return(false).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
             {
 				_schedulingOptions.UseAvailability = true;
 				result = _target.Execute(_matrix, _schedulingOptions);
             }
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count());
         }
 
         [Test]
@@ -218,13 +217,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
 			{
 				_schedulingOptions.UsePreferences = true;
                 result = _target.Execute(_matrix, _schedulingOptions);
             }
-            Assert.AreEqual(_dayToCheck, result[0]);
+            Assert.AreEqual(_dayToCheck, result.First());
         }
 
 		[Test]
@@ -242,13 +241,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 				Expect.Call(preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
 				Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Any();
 			}
-			IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
 			using (_mocks.Playback())
 			{
 				_schedulingOptions.UsePreferences = true;
 				result = _target.Execute(_matrix, _schedulingOptions);
 			}
-			Assert.AreEqual(_dayToCheck, result[0]);
+			Assert.AreEqual(_dayToCheck, result.First());
 		}
 
         [Test]
@@ -266,13 +265,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
 			{
 				_schedulingOptions.UsePreferences = true;
                 result = _target.Execute(_matrix, _schedulingOptions);
             }
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count());
         }
 
         [Test]
@@ -290,13 +289,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(preferenceRestriction.DayOffTemplate).Return(null).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
 			{
 				_schedulingOptions.UsePreferences = true;
                 result = _target.Execute(_matrix, _schedulingOptions);
             }
-            Assert.AreEqual(_dayToCheck, result[0]);
+            Assert.AreEqual(_dayToCheck, result.First());
         }
 
         [Test]
@@ -314,13 +313,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(preferenceRestriction.DayOffTemplate).Return(null).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
 			{
 				_schedulingOptions.UsePreferences = true;
                 result = _target.Execute(_matrix,_schedulingOptions);
             }
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count());
         }
 
         [Test]
@@ -398,9 +397,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             }
             using (_mocks.Playback())
             {
-                IList<DateOnly> result = _target.Execute(_matrix,_schedulingOptions);
-                Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(expectedDateOnly, result[0]);
+                var result = _target.Execute(_matrix,_schedulingOptions);
+                Assert.AreEqual(1, result.Count());
+                Assert.AreEqual(expectedDateOnly, result.First());
             }
         }
 

@@ -14,7 +14,7 @@ set nocount on
 begin transaction
 
 
---l�gg till -1 k� ifall den inte finns
+--l�gg till '-1' k� ifall den inte finns
 insert into agent_logg(
 	queue,
 	date_from,
@@ -53,7 +53,7 @@ select	qs.queue,	-- queue
 	0, 		-- transfer_out_call_cnt,
 	0 		-- admin_dur)
 from agent_state_logg as ast
-inner join queues as qs on qs.orig_queue_id = -1
+inner join queues as qs on qs.orig_queue_id = '-1'
 inner join agent_info as af on af.agent_id = ast.agent_id
 where not exists(select agent_id from agent_logg where queue = qs.queue
 						and date_from = ast.date_from
@@ -70,14 +70,14 @@ begin
 end
 
 
---uppdatera poster p� k� -1 i agent_logg
+--uppdatera poster p� k� '-1' i agent_logg
 update agent_logg set admin_dur = (select isnull(sum(ast.state_dur),0) from agent_state_logg as ast
 					inner join agent_states as st on st.state_id = ast.state_id
 					inner join queues as qs on qs.queue = al.queue
 					where st.is_admin = 1 
 					and st.is_active = 1
 					and al.date_from = ast.date_from
-					and qs.orig_queue_id = -1
+					and qs.orig_queue_id = '-1'
 					and al.agent_id = ast.agent_id
 					and al.interval = ast.interval
 					and qs.log_object_id = @log_object_id),
@@ -86,7 +86,7 @@ update agent_logg set admin_dur = (select isnull(sum(ast.state_dur),0) from agen
 					inner join queues as qs on qs.queue = al.queue
 					where ast.state_id = (select state_id from agent_states where state_name = 'avail')
 					and al.date_from = ast.date_from
-					and qs.orig_queue_id = -1
+					and qs.orig_queue_id = '-1'
 					and al.agent_id = ast.agent_id
 					and al.interval = ast.interval
 					and qs.log_object_id = @log_object_id),
@@ -96,7 +96,7 @@ update agent_logg set admin_dur = (select isnull(sum(ast.state_dur),0) from agen
 					where st.is_paus = 1 
 					and st.is_active = 1
 					and al.date_from = ast.date_from
-					and qs.orig_queue_id = -1
+					and qs.orig_queue_id = '-1'
 					and al.agent_id = ast.agent_id
 					and al.interval = ast.interval
 					and qs.log_object_id = @log_object_id),
@@ -106,14 +106,14 @@ update agent_logg set admin_dur = (select isnull(sum(ast.state_dur),0) from agen
 					where st.is_wrap = 1 
 					and st.is_active = 1
 					and al.date_from = ast.date_from
-					and qs.orig_queue_id = -1
+					and qs.orig_queue_id = '-1'
 					and al.agent_id = ast.agent_id
 					and al.interval = ast.interval
 					and qs.log_object_id = @log_object_id)
 from agent_logg al
 where al.date_from >= @last_logg_date
 and al.interval >= (select case when al.date_from = @last_logg_date then @last_logg_interval else 0 end)
-and al.queue = (select queue from queues where orig_queue_id = -1)
+and al.queue = (select queue from queues where orig_queue_id = '-1')
 
 
 if @@error <> 0
