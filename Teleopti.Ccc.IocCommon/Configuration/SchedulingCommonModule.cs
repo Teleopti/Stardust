@@ -414,7 +414,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionNotAbleToBeScheduledReport>().InstancePerLifetimeScope();
 			builder.RegisterType<AdvancedAgentsFilter>().SingleInstance();
 			builder.RegisterType<StaffingDataAvailablePeriodProvider>().As<IStaffingDataAvailablePeriodProvider>().SingleInstance();
-			builder.RegisterType<PlanningGroupGlobalSettingSetter>().SingleInstance();
+			
+			if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_TeamSchedulingInPlans_79283))
+			{
+				builder.RegisterType<PlanningGroupGlobalSettingSetter>().As<IPlanningGroupGlobalSettingSetter>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<PlanningGroupGlobalSettingSetterOld>().As<IPlanningGroupGlobalSettingSetter>().SingleInstance();
+			}
 
 			if (_configuration.Args().IsFatClient)
 			{

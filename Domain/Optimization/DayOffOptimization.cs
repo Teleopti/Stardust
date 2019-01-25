@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
-		private readonly PlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
+		private readonly IPlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
 		
 
 		public DayOffOptimization(TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod,
 			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback,
-			PlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
+			IPlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
