@@ -6,11 +6,12 @@
         .controller('planningGroupSettingEditController', Controller)
 		.directive('planningGroupSetting', planningGroupSettingDirective);
 
-    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', '$filter', 'NoticeService', 'PlanGroupSettingService', 'debounceService', 'Toggle'];
 
-    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService) {
+    function Controller($state, $stateParams, $translate, $filter, NoticeService, PlanGroupSettingService, debounceService, toggleService) {
         var vm = this;
 
+        vm.teamToggleEnabled = toggleService.ResourcePlanner_TeamSchedulingInPlans_79283;
         vm.isEdit = !!vm.settingInfo;
 		vm.settingInfo.isValid = isValid;
 
