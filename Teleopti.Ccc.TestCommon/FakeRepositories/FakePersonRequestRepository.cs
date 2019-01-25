@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		}
 
-		public IList<IPersonRequest> FindPersonReuqestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids)
+		public IList<IPersonRequest> FindPersonRequestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids)
 		{
 			return Find(ids);
 		}

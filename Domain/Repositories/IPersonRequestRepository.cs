@@ -117,6 +117,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<PersonWaitlistedAbsenceRequest> GetPendingAndWaitlistedAbsenceRequests(DateTimePeriod period, Guid? budgetGroupId, WaitlistProcessOrder waitlistProcessOrder = WaitlistProcessOrder.FirstComeFirstServed);
 
-		IList<IPersonRequest> FindPersonReuqestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids);
+		IList<IPersonRequest> FindPersonRequestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids);
 	}
 }
