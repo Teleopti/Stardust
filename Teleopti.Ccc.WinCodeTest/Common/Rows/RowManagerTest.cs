@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
         [Test]
         public void VerifyTimeZoneInfo()
         {
-            TimeZoneInfo timeZoneInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+            TimeZoneInfo timeZoneInfo = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
             Assert.AreEqual(timeZoneInfo.DisplayName, _target.TimeZoneInfo.DisplayName);
         }
     }

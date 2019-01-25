@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public override ISettingData FindByKey(string key)
 		{
-			var person = new PersonRepository(CurrentUnitOfWork).Get(TeleoptiPrincipal.CurrentPrincipal.PersonId);
+			var person = new PersonRepository(CurrentUnitOfWork).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 			return CurrentUnitOfWork.Current().Session().CreateCriteria(typeof(PersonalSettingData))
 				.Add(Restrictions.Eq("Key", key))
 				.Add(Restrictions.Eq("OwnerPerson", person))
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public T FindValueByKey<T>(string key, T defaultValue) where T : class, ISettingValue
 		{
-			var person = new PersonRepository(CurrentUnitOfWork).Get(TeleoptiPrincipal.CurrentPrincipal.PersonId);
+			var person = new PersonRepository(CurrentUnitOfWork).Get(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId);
 			ISettingData data = FindByKey(key)
 								?? new GlobalSettingDataRepository(CurrentUnitOfWork).FindByKey(key)
 								??

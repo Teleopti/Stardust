@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Common;
@@ -12,6 +14,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
@@ -23,12 +26,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 		public IPayrollExportRepository PayrollExportRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ISearchPath SearchPath;
+		public FakeServiceBusPayrollExportFeedback  ServiceBusPayrollExportFeedback;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<PayrollExportHandlerNew>().For<IHandleEvent<RunPayrollExportEvent>>();
 			isolate.UseTestDouble<FakePersonBusAssembler>().For<IPersonBusAssembler>();
-			isolate.UseTestDouble<FakeServiceBusPayrollExportFeedback>().For<IServiceBusPayrollExportFeedback>();
+			isolate.UseTestDouble<FakeServiceBusPayrollExportFeedback>().For<IServiceBusPayrollExportFeedback, FakeServiceBusPayrollExportFeedback>();
 			isolate.UseTestDouble<FakePayrollPeopleLoader>().For<IPayrollPeopleLoader>();
 			isolate.UseTestDouble<DomainAssemblyResolverNew>().For<IDomainAssemblyResolver>();
 			isolate.UseTestDouble<FakeTenantPeopleLoader>().For<ITenantPeopleLoader>();
@@ -38,10 +42,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			isolate.UseTestDouble<SearchPath>().For<ISearchPath>();
 		}
 
-		[Test, Ignore("WIP, works locally but not on Builder sever..")]
+		[Test, Ignore("trying to fix test on builder server")]
 		public void CopyPayrollFilesFromSourceToDestinationBeforeExecute()
 		{
-			var tenantName = "DirectoryEmptyTenant";
+			const string tenantName = "DirectoryEmptyTenant";
 			var tenantSpecificPayrollDir = Path.Combine(SearchPath.Path, tenantName);
 			if (Directory.Exists(tenantSpecificPayrollDir))
 				Directory.Delete(tenantSpecificPayrollDir, true);
@@ -60,6 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			var @event = new RunPayrollExportEvent
 			{
 				LogOnDatasource = tenantName, 
+				PayrollExportFormatId = payrollExport.PayrollFormatId,
 				PayrollExportId = payrollExport.Id.GetValueOrDefault(), 
 				PayrollResultId = payrollResult.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault()
@@ -67,6 +72,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			
 			Target.Handle(@event);
 
+			//ServiceBusPayrollExportFeedback.PayrollResultDetails.Where(f => f.DetailLevel == DetailLevel.Error).Should().Be.Empty();
+			ServiceBusPayrollExportFeedback.PayrollResultDetails.ForEach(d => Console.WriteLine($"{d.Message} Exception message:{d.Exception?.Message}"));
 			Assert.IsTrue(File.Exists(Path.Combine(tenantSpecificPayrollDir, "Teleopti.Ccc.Payroll.dll")));
 		}
 	}

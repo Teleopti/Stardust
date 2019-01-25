@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly TeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly TeamBlockClearer _teamBlockClearer;
-		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
+		private readonly DailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly IWorkShiftSelector _workShiftSelector;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			TeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 			TeamBlockClearer teamBlockClearer,
-			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
+			DailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			IWorkShiftSelector workShiftSelector,

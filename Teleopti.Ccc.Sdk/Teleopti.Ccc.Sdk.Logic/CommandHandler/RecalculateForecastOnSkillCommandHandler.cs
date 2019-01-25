@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 	    public void Handle(RecalculateForecastOnSkillCollectionCommandDto command)
 		{
-			var principal = TeleoptiPrincipal.CurrentPrincipal;
+			var principal = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
 			var person = _loggedOnUser.CurrentUser();
 			var @event = new RecalculateForecastOnSkillCollectionEvent
 				{

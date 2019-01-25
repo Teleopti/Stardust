@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			var shiftTimePeriod = _scheduleDay.ProjectionService().CreateProjection().Period();
 			if (shiftTimePeriod != null)
-				_existingShiftTimePeriod = shiftTimePeriod.Value.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+				_existingShiftTimePeriod = shiftTimePeriod.Value.TimePeriod(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
 			var scheduleDate = _scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var person = _scheduleDay.Person;

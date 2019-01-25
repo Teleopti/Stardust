@@ -39,6 +39,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -295,6 +296,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 				isolate.UseTestDouble<FakePayrollExportRepository>().For<IPayrollExportRepository>();
 				isolate.UseTestDouble<FakePayrollResultRepository>().For<IPayrollResultRepository>();
+				isolate.UseTestDouble<FakeSkillForecastReadModelRepository>().For<ISkillForecastReadModelRepository, FakeSkillForecastReadModelRepository>();
 			}
 
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
@@ -333,9 +335,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			extendScope();
 
-			fakeSignin();
+			var bu = new BusinessUnit("testbu").WithId(DefaultBusinessUnitId);
+			fakeSignin(bu);
 
-			createDefaultData();
+			createDefaultData(bu);
 		}
 
 		private void extendScope()
@@ -345,7 +348,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.ForEach(x => FakeEventPublisher.AddHandler(x));
 		}
 
-		private void fakeSignin()
+		private void fakeSignin(IBusinessUnit businessUnit)
 		{
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
@@ -360,7 +363,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				var principal = PrincipalFactory.MakePrincipal(
 					_loggedOnPerson,
 					DataSourceForTenant.Tenant(DefaultTenantName),
-					new BusinessUnit("loggedOnBu").WithId(),
+					businessUnit,
 					null
 				);
 				PrincipalContext.SetCurrentPrincipal(principal);
@@ -374,13 +377,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 		}
 
-		private void createDefaultData()
+		private void createDefaultData(IBusinessUnit businessUnit)
 		{
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
 			if (QueryAllAttributes<DefaultDataAttribute>().Any())
-				Database.Value.CreateDefaultData();
+				Database.Value.CreateDefaultData(businessUnit);
 		}
 
 		private bool fullPermissions()

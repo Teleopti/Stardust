@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				IPerson loaded = Session.Get<Person>(person.Id);
 				Assert.AreEqual(person, loaded);
 				Assert.AreEqual(new DateOnly(2000, 1, 1), loaded.PersonWriteProtection.PersonWriteProtectedDate);
-				Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.PersonId, loaded.PersonWriteProtection.UpdatedBy.Id);
+				Assert.AreEqual(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId, loaded.PersonWriteProtection.UpdatedBy.Id);
 				Assert.IsNotNull(loaded.PersonWriteProtection.UpdatedOn);
 				Assert.AreSame(loaded, loaded.PersonWriteProtection.BelongsTo);
 				var version = ((IVersioned) loaded).Version;

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings
         /// </summary>
         protected static CultureInfo UICulture
         {
-            get { return TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture; }
+            get { return TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture; }
         }
 
 		/// <summary>

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
 	public class ShiftTradeSiteOpenHourFilter : IShiftTradeSiteOpenHourFilter

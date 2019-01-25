@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public virtual void VerifyIncorrectBusinessUnitIsNotReadable()
         {
             T correct = CreateAggregateWithCorrectBusinessUnit();
-            IBelongsToBusinessUnit buRef = correct as IBelongsToBusinessUnit;
-            if (buRef!=null)
+			if (correct is IBelongsToBusinessUnit buRef)
             {
                 PersistAndRemoveFromUnitOfWork(correct);
 				

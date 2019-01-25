@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -11,9 +12,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private IList<IFavoriteSearch> storage = new List<IFavoriteSearch>();
 
-		public IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId, WfmArea area)
+		public IEnumerable<IFavoriteSearch> FindAllForPerson(IPerson person, WfmArea area)
 		{
-			return storage.Where(f => f.Creator.Id == personId && f.WfmArea == area);
+			return storage.Where(f => f.Creator.Equals(person) && f.WfmArea == area);
 		}
 
 		public IEnumerator<IFavoriteSearch> GetEnumerator()

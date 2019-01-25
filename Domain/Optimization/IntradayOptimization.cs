@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContext;
 		private readonly TeamBlockIntradayOptimizationService _teamBlockIntradayOptimizationService;
 		private readonly BlockPreferencesMapper _blockPreferencesMapper;
-		private readonly PlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
+		private readonly IPlanningGroupGlobalSettingSetter _planningGroupGlobalSettingSetter;
 
 		public IntradayOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
 			CascadingResourceCalculationContextFactory resourceCalculationContext, 
-			BlockPreferencesMapper blockPreferencesMapper, PlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
+			BlockPreferencesMapper blockPreferencesMapper, IPlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
 		{
 			_teamBlockIntradayOptimizationService = teamBlockIntradayOptimizationService;
 			_schedulerStateHolder = schedulerStateHolder;

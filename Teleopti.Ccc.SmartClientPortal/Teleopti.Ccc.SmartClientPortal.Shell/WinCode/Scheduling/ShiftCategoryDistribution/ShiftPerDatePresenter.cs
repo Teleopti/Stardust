@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 			{
 				var dateOnly = _sortedDates[rowIndex - 1];
 				style.CellValue = dateOnly.ToShortDateString();
-				if (DateHelper.IsWeekend(dateOnly, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture))
+				if (DateHelper.IsWeekend(dateOnly, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture))
 				{
 					style.TextColor = ColorHelper.ScheduleViewBaseHolidayHeader;
 				}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ShiftCategoryD
 				style.CellType = "IntegerReadOnlyCell";
 				var shiftCategory = columnTag as IShiftCategory;
 				style.CellValue = shiftCategory == null ? 0 : _model.ShiftCategoryCount(dateOnly, shiftCategory);
-				if (DateHelper.IsWeekend(dateOnly, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture))
+				if (DateHelper.IsWeekend(dateOnly, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture))
 					style.BackColor = ColorHelper.ScheduleViewBaseHolidayCell;
 			}
 		}

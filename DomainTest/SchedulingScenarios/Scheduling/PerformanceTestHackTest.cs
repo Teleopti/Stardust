@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 { 
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537)]
+	[Toggle(Toggles.ResourcePlanner_TeamSchedulingInPlans_79283)]
 	public class PerformanceTestHackTest : SchedulingScenario
 	{
 		public FullScheduling Target;
@@ -53,6 +53,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agent2 = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), bag, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,SchedulePeriodType.Day, 8);
+			planningPeriod.PlanningGroup.SetTeamSettings(new TeamSettings()
+			{
+				GroupPageType = GroupPageType.Hierarchy,
+				TeamSameType = TeamSameType.ShiftCategory
+			});
 			
 			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 

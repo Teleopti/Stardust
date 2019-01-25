@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestric
         private static string WorkTimeLimitationToString(ILimitation limitation)
         {
             CultureInfo culture =
-                TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+                TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
             if (!limitation.StartTime.HasValue && !limitation.EndTime.HasValue)
                 return string.Empty;
             if (!limitation.StartTime.HasValue && !limitation.EndTime.HasValue)

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public IList<FavoriteSearchViewModel> GetAllForCurrentUser(WfmArea area)
 		{
 			var currentUser = _loggonUser.CurrentUser();
-			return _favoriteSearchRepo.FindAllForPerson(currentUser.Id.GetValueOrDefault(), area).Select(f => new FavoriteSearchViewModel
+			return _favoriteSearchRepo.FindAllForPerson(currentUser, area).Select(f => new FavoriteSearchViewModel
 			{
 				Id =f.Id.GetValueOrDefault(),
 				Name = f.Name,

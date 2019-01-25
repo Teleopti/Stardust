@@ -16,7 +16,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class ShiftTradeScheduleViewModelMapper : IShiftTradeScheduleViewModelMapper
@@ -268,15 +267,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (fixedPeriod == null) return viewModel;
 
 			var personTo = _personRepository.Get(personToId);
-			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period, new List<IPerson> {_loggedOnUser.CurrentUser(), personTo });
+			var currentUser = _loggedOnUser.CurrentUser();
+			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period, new List<IPerson> {currentUser, personTo });
 			if (allSchedules == null) return viewModel;
 
-			allSchedules.TryGetValue(_loggedOnUser.CurrentUser(), out var myScheduleRange);
+			allSchedules.TryGetValue(currentUser, out var myScheduleRange);
 			allSchedules.TryGetValue(personTo, out var personToScheduleRange);
 			var multiSchedules = new List<ShiftTradeMultiScheduleViewModel>();
 			foreach (var dateOnly in fixedPeriod.Value.DayCollection())
 			{
-				var mySchedule = mapToShiftTradeAddPersonScheduleViewModel(myScheduleRange, dateOnly, _loggedOnUser.CurrentUser());
+				var mySchedule = mapToShiftTradeAddPersonScheduleViewModel(myScheduleRange, dateOnly, currentUser);
 				var personToSchedule = mapToShiftTradeAddPersonScheduleViewModel(personToScheduleRange, dateOnly, personTo);
 				var isSelectable = _selectableChecker.CheckSelectable(hasAbsence(mySchedule, personToSchedule), 
 					myScheduleRange?.ScheduledDay(dateOnly), personToScheduleRange?.ScheduledDay(dateOnly), dateOnly, personTo, out var reason);
@@ -308,10 +308,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private DateOnlyPeriod? fixPeriodForUnpublishedSchedule(DateOnlyPeriod periodInput)
 		{
-			var dateTimePeriod = periodInput.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			var currentUser = _loggedOnUser.CurrentUser();
+			var dateTimePeriod = periodInput.ToDateTimePeriod(currentUser.PermissionInformation.DefaultTimeZone());
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)) return periodInput;
 
-			var publishedToDate = _loggedOnUser.CurrentUser().WorkflowControlSet.SchedulePublishedToDate;
+			var publishedToDate = currentUser.WorkflowControlSet.SchedulePublishedToDate;
 			if (!publishedToDate.HasValue) return null;
 
 			var startTime = periodInput.StartDate;

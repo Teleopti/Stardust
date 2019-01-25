@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId, WfmArea area)
+		public IEnumerable<IFavoriteSearch> FindAllForPerson(IPerson person, WfmArea area)
 		{
 			ICollection<IFavoriteSearch> retList = Session.CreateCriteria<FavoriteSearch>()
-				.Add(Restrictions.Eq("Creator.Id", personId))
-				.Add(Restrictions.Eq("WfmArea", (int)area))
+				.Add(Restrictions.Eq("Creator", person))
+				.Add(Restrictions.Eq("WfmArea", area))
 				.List<IFavoriteSearch>();
 
 			return retList;
@@ -27,6 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public interface IFavoriteSearchRepository:IRepository<IFavoriteSearch>
 	{
-		IEnumerable<IFavoriteSearch> FindAllForPerson(Guid personId, WfmArea area);
+		IEnumerable<IFavoriteSearch> FindAllForPerson(IPerson person, WfmArea area);
 	}
 }
