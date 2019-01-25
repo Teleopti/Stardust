@@ -18,8 +18,10 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public StaffingViewModelCreator Target;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeSkillForecastReadModelRepository SkillForecastReadModelRepository;
+		public FakeSkillRepository SkillRepository;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
+		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		private const int minutesPerInterval = 15;
 
 		public void Isolate(IIsolate isolate)
@@ -27,12 +29,12 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldCalculateCorrectForecastingWithoutShrinkage()
 		{
 			TimeZone.IsSweden();
-
-			var userNow = new DateTime(2016, 8, 26, 8, 15, 0);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			  var userNow = new DateTime(2016, 8, 26, 8, 15, 0);
 			var userNowUtc = TimeZoneInfo.ConvertTimeToUtc(userNow, TimeZone.TimeZone());
 			Now.Is(userNowUtc);
 
@@ -40,23 +42,21 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var closesAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 26, 8, 30, 0), TimeZone.TimeZone());
 			var openHours = new DateTimePeriod(opensAtUtc, closesAtUtc).TimePeriod(TimeZoneInfo.Utc);
 
-			//var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
 			var act = ActivityFactory.CreateActivity("act");
 			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill1", openHours, false, act);
-			//SkillRepository.Has(skill);
+			SkillRepository.Has(skill);
 
-			//SkillDayRepository.Has(SkillSetupHelper.CreateSkillDay(skill, scenario, userNowUtc, openHours, false));
 			SkillSetupHelper.PopulateStaffingReadModels(skill, userNowUtc, userNowUtc.AddMinutes(minutesPerInterval), 2, SkillCombinationResourceRepository);
 			SkillSetupHelper.PopulateStaffingReadModels(skill, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc, 10, SkillCombinationResourceRepository);
 
 			SkillSetupHelper.PopulateForecastReadModels(skill, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc.AddMinutes(minutesPerInterval), 3, SkillForecastReadModelRepository);
-			  var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() });
+			  var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, new DateOnly(2016, 8, 26), false);
 
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
-			vm.DataSeries.ForecastedStaffing[0].Should().Be.EqualTo(3);
-			vm.DataSeries.ForecastedStaffing[1].Should().Be.EqualTo(3);
-			vm.DataSeries.ScheduledStaffing[0].Should().Be.EqualTo(10);
-			vm.DataSeries.ScheduledStaffing[1].Should().Be.EqualTo(2);
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(96);
+			vm.DataSeries.ForecastedStaffing[24].Should().Be.EqualTo(3);
+			vm.DataSeries.ForecastedStaffing[25].Should().Be.EqualTo(3);
+			vm.DataSeries.ScheduledStaffing[24].Should().Be.EqualTo(10);
+			vm.DataSeries.ScheduledStaffing[25].Should().Be.EqualTo(2);
 		}
 	}
 
