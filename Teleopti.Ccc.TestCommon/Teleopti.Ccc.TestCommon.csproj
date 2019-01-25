@@ -471,6 +471,7 @@
     <Compile Include="PersonAssignmentExtensions.cs" />
     <Compile Include="PersonExtensions.cs" />
     <Compile Include="RequestInfo.cs" />
+    <Compile Include="ResourceCalculateWithNewContext.cs" />
     <Compile Include="ScheduleDayExtensions.cs" />
     <Compile Include="SchedulePeriodExtensions.cs" />
     <Compile Include="Scheduling\FillSchedulerStateHolderWithTestData.cs" />

@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
-namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios
+namespace Teleopti.Ccc.TestCommon
 {
 	//just a wrapper class for simpler testing. Not to be moved to domain!
 	public class ResourceCalculateWithNewContext

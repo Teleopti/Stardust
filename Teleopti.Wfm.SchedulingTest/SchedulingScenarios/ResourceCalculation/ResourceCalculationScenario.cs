@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
