@@ -22,7 +22,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			//Send to MessageBroker that new queue stats is loaded
 			var messageSender = _jobParameters.Helper.MessageSender;
 
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity;
 
 			var notification = NotificationFactory.CreateNotification(
 				DateTime.Now.Date,

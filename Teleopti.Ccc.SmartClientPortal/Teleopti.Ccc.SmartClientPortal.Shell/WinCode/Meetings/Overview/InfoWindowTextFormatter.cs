@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
                 _commonNameDescription = _settingDataRepository.FindValueByKey("CommonNameDescription",
                                                                                new CommonNameDescriptionSetting());
             }
-            _userTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+            _userTimeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
         }
 
         public string GetInfoText(IMeeting meeting)

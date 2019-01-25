@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             }
             using (mocks.Playback())
             {
-                target.CreateModels(new[] { person }, new DateOnlyPeriodAsDateTimePeriod(dateOnlyPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
+                target.CreateModels(new[] { person }, new DateOnlyPeriodAsDateTimePeriod(dateOnlyPeriod, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone));
                 target.Models.Count.Should().Be.EqualTo(1);
             }
         }

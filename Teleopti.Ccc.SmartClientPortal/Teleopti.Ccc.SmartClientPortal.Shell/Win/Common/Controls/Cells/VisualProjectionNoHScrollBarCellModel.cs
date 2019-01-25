@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 			var cellModel = style.CellModel as VisualProjectionNoHScrollBarCellModel;
 			TimeZoneInfo timeZoneInfo = (cellModel != null && cellModel.TimeZoneInfo != null)
 				? cellModel.TimeZoneInfo
-				: TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+				: TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
 
 			foreach (var interval in timePeriod.AffectedHourCollection())
 			{

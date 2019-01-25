@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
         public void LoadTimeZones()
         {
-            TimeZoneInfo defaultTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+            TimeZoneInfo defaultTimeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
             IList<TimeZoneInfo> timeZoneList = TimeZoneInfo.GetSystemTimeZones().Select(t => t).ToList();
 
             comboBoxAdvTimeZone.DisplayMember = "DisplayName";

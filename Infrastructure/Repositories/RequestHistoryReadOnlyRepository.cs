@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+                var timeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
                 return TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone) + Delimiter +
                        TimeZoneHelper.ConvertFromUtc(EndDateTime, timeZone);
             }
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+                var timeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
                 return TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone).ToShortDateString() + Delimiter +
                        TimeZoneHelper.ConvertFromUtc(EndDateTime, timeZone).ToShortDateString();
             }
@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
-                var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+                var timeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
+                var culture = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
                 return TimeZoneHelper.ConvertFromUtc(LastUpdatedDateTime, timeZone).ToString(culture);
             }
         }

@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
                 string lastUpdated = string.Empty;
                 if (_lastUpdatedByText.LastUpdate.HasValue)
                     lastUpdated = _lastUpdatedByText.LastUpdate.Value.ToString(DateFormat,
-                                                                              TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+                                                                              TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
 
                 labelLastUpdated.Text = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", Resources.LastUpdated, lastUpdated);
                 labelChangedBy.Text = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", Resources.ChangedBy,

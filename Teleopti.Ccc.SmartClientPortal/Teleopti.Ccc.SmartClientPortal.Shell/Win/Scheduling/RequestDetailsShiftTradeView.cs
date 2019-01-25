@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 				if (e.ColIndex == 0 && e.RowIndex > 0)
 				{
-					e.Style.CellValue = _presenter.CurrentPeriods[e.RowIndex - 1].StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToShortDateString();
+					e.Style.CellValue = _presenter.CurrentPeriods[e.RowIndex - 1].StartDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToShortDateString();
 				}
                 if (e.ColIndex == 1 && e.RowIndex > 0)
                 {

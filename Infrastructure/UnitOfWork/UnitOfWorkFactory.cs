@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			get
 			{
-				if (TeleoptiPrincipal.CurrentPrincipal == null)
+				if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal == null)
 				{
 					return null;
 				}
-				var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
+				var identity = (ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity;
 				return identity.DataSource.Application;
 			}
 		}

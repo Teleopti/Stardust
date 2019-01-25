@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
         {
             get
             {
-                return TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+                return TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
             }
         }
 

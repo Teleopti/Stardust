@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll.DefinitionSets
             {
                 ExplorerView.ExplorerPresenter.VisualizePresenter.LoadModel(
                     ExplorerView.ExplorerPresenter.Model.SelectedDate.Value,
-										TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+										TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
                 gcProjection.RowCount = 1;// ExplorerView.ExplorerPresenter.VisualizePresenter.ModelCollection.Count;
                 gcProjection.ColCount = 1;
             }

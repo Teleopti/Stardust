@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(absenceDescription.ShortName, _preferenceCellData.DisplayShortName);
 			Assert.AreEqual(absencePayload.ConfidentialDisplayColor(_person), _preferenceCellData.DisplayColor);
 			Assert.IsTrue(_preferenceCellData.HasFullDayAbsence);
-			Assert.AreEqual(TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipal.CurrentPrincipal.Regional.Culture), _preferenceCellData.ShiftLengthScheduledShift);
+			Assert.AreEqual(TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture), _preferenceCellData.ShiftLengthScheduledShift);
 			
 		}
 
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(part.PersonAssignment().DayOff().Description.Name, _preferenceCellData.DisplayName);
 			Assert.AreEqual(part.PersonAssignment().DayOff().Description.ShortName, _preferenceCellData.DisplayShortName);
 			Assert.IsTrue(_preferenceCellData.HasDayOff);
-			Assert.AreEqual(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture), _preferenceCellData.ShiftLengthScheduledShift);
+			Assert.AreEqual(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture), _preferenceCellData.ShiftLengthScheduledShift);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

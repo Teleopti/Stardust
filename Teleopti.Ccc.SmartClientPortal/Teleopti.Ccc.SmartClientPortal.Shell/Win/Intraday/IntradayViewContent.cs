@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			wpfShiftEditor1.AddActivity += wpfShiftEditorAddActivity;
 			wpfShiftEditor1.AddOvertime += wpfShiftEditorAddOvertime;
 			wpfShiftEditor1.AddPersonalShift += wpfShiftEditorAddPersonalShift;
-			wpfShiftEditor1.SetTimeZone(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			wpfShiftEditor1.SetTimeZone(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 			dayLayerView1.UpdateShiftEditor += dayLayerView1UpdateShiftEditor;
 			notesEditor1.NotesChanged += notesEditor1NotesChanged;
 			notesEditor1.PublicNotesChanged += notesEditor1NotesChanged;
@@ -287,8 +287,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
 		private void skillGridBackgroundLoaderDoWork(object sender, DoWorkEventArgs e)
 		{
-			System.Threading.Thread.CurrentThread.CurrentUICulture = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
-			System.Threading.Thread.CurrentThread.CurrentCulture = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			System.Threading.Thread.CurrentThread.CurrentUICulture = Domain.Security.Principal.TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.UICulture;
+			System.Threading.Thread.CurrentThread.CurrentCulture = Domain.Security.Principal.TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 
 			IList<ISkillStaffPeriod> periods = _presenter.PrepareSkillIntradayCollection();
 			_skillIntradayGridControl.SetupDataSource(periods, SelectedSkill, true, _presenter.SchedulerStateHolder);
@@ -571,7 +571,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 
 		private void schedulesPartModified(object sender, ModifyEventArgs e)
 		{
-			_presenter.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)));
+			_presenter.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone)));
 			if (e.Modifier != ScheduleModifier.MessageBroker)
 				_owner.EnableSave();
 
