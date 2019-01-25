@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().SingleInstance();
 			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().As<ISkillStaffPeriodToSkillIntervalDataMapper>().SingleInstance();
 			builder.RegisterType<SkillIntervalDataSkillFactorApplier>().As<ISkillIntervalDataSkillFactorApplier>().SingleInstance();
-			builder.RegisterType<SkillIntervalDataAggregator>().As<ISkillIntervalDataAggregator>().SingleInstance();
+			builder.RegisterType<SkillIntervalDataAggregator>().AsSelf().SingleInstance();
 			builder.RegisterType<DayIntervalDataCalculator>().As<IDayIntervalDataCalculator>().SingleInstance();
 			builder.RegisterType<DeleteSchedulePartService>().As<IDeleteSchedulePartService>().SingleInstance();
 			builder.RegisterType<DeleteAndResourceCalculateService>().InstancePerLifetimeScope();
@@ -617,7 +617,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ValidatedTeamBlockInfoExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>().SingleInstance();
-			builder.RegisterType<DailyTargetValueCalculatorForTeamBlock>().As<IDailyTargetValueCalculatorForTeamBlock>();
+			builder.RegisterType<DailyTargetValueCalculatorForTeamBlock>().AsSelf();
 			builder.RegisterType<MedianCalculatorForDays>().SingleInstance();
 			builder.RegisterType<CreateSkillIntervalDataPerDateAndActivity>().SingleInstance();
 			builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>().SingleInstance();
