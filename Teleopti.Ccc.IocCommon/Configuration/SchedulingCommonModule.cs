@@ -456,16 +456,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<BlockPreferenceProviderForPlanningPeriod>().As<IBlockPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<DayOffOptimizationPreferenceProviderForPlanningPeriod>().As<IDayOffOptimizationPreferenceProviderForPlanningPeriod>().SingleInstance();
 				builder.RegisterType<PersistSchedulesAfterIsland>().As<ISynchronizeSchedulesAfterIsland>().SingleInstance();
-				if (_configuration.IsToggleEnabled(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
-				{
-					builder.RegisterType<OptimizationPreferencesPerfTestProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
-					builder.RegisterType<SchedulingOptionsProviderForTeamPerfTest>().As<ISchedulingOptionsProvider>().SingleInstance();
-				}
-				else
-				{
-					builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
-					builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().SingleInstance();
-				}
+				
+				builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
+				builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().SingleInstance();
 				builder.RegisterType<PeopleInOrganization>().As<IAllStaff>().SingleInstance();
 				builder.RegisterType<CurrentOptimizationCallback>().As<ICurrentOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();

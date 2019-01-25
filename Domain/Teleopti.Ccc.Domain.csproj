@@ -774,7 +774,6 @@
     <Compile Include="MultiTenancy\TenantApplicationConfigKey.cs" />
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Notification\FCMSendMessageResponse.cs" />
-    <Compile Include="Optimization\OptimizationPreferencesPerfTestProvider.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerStandard.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
@@ -803,7 +802,6 @@
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceScheduling.cs" />
     <Compile Include="Scheduling\SchedulingCallbackInfo.cs" />
-    <Compile Include="Scheduling\SchedulingOptionsProviderForTeamPerfTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityService.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandling.cs" />

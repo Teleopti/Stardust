@@ -61,9 +61,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			{
 				x.ConsecutiveWorkdays = new MinMax<int>(1, 20); //just to make sure anything goes
 			}); 
-			var optPrefs = OptimizationPreferencesProvider.Fetch();
-			optPrefs.Extra.UseTeams= true;
-			OptimizationPreferencesProvider.SetFromTestsOnly_LegacyDONOTUSE(optPrefs);
+			planningPeriod.PlanningGroup.SetTeamSettings(new TeamSettings()
+			{
+				GroupPageType = GroupPageType.Hierarchy,
+				TeamSameType = TeamSameType.ShiftCategory
+			});
 
 			for (var i = 0; i < numberOfAttempts; i++)
 			{
