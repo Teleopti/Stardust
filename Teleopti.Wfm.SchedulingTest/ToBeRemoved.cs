@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 
-namespace Teleopti.Wfm.SchdulingTest
+namespace Teleopti.Wfm.SchedulingTest
 {
 	public class ToBeRemoved
 	{

@@ -257,7 +257,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Azure.Common",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Shared", "Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj", "{94841D3A-191A-4AFB-8E4E-78AF8138BFE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.SchdulingTest", "Teleopti.Wfm.SchdulingTest\Teleopti.Wfm.SchdulingTest.csproj", "{976853A3-D450-4424-A472-79AD858B806D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.SchedulingTest", "Teleopti.Wfm.SchedulingTest\Teleopti.Wfm.SchedulingTest.csproj", "{976853A3-D450-4424-A472-79AD858B806D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,8 +7,8 @@
         <ProjectGuid>{976853A3-D450-4424-A472-79AD858B806D}</ProjectGuid>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>Teleopti.Wfm.SchdulingTest</RootNamespace>
-        <AssemblyName>Teleopti.Wfm.SchdulingTest</AssemblyName>
+        <RootNamespace>Teleopti.Wfm.SchedulingTest</RootNamespace>
+        <AssemblyName>Teleopti.Wfm.SchedulingTest</AssemblyName>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
@@ -149,6 +149,12 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
+        <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
+        <Name>Teleopti.Ccc.Domain</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
