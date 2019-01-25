@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public FakePlanningGroupRepository PlanningGroupRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		
 		public DayOffOptimizationTeamBlockTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
