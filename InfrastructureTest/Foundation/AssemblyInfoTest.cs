@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				"Teleopti.Ccc.Sdk.LoadTestClient", "Teleopti.Ccc.Sdk.Samples", "TeleoptiControls",
 				"Teleopti.Common.UI.OutlookControls", "Teleopti.Runtime.Environment", "Teleopti.Runtime.TestServer",
 				"Teleopti.Support.PreReqsCheck", "Teleopti.Ccc.Web", "ReplaceString", "Teleopti.Ccc.WebBehaviorTest",
-				"Teleopti.Ccc.Intraday.TestCommon"
+				"Teleopti.Ccc.Intraday.TestCommon", "Teleopti.Wfm.SchedulingTest"
 			};
 
 			var folders = solutionDirectory().EnumerateFiles("AssemblyInfo.cs", SearchOption.AllDirectories)
