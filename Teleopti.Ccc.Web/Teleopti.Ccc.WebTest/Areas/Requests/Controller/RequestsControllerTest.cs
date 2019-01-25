@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakeUserTimeZone UserTimeZone;
 		public FakeLicenseAvailability LicenseAvailability;
 
 		public void Isolate(IIsolate isolate)
@@ -138,7 +139,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var date = new DateTime(2018, 11, 21);
 			var input = setupData(date);
 
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
+			var denverTimeZoneInfo = TimeZoneInfoFactory.DenverTimeZoneInfo();
+			LoggedOnUser.SetDefaultTimeZone(denverTimeZoneInfo);
+			UserTimeZone.Is(denverTimeZoneInfo);
 
 			var result = Target.GetRequests(input);
 
@@ -168,7 +171,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var expactedDate = new DateTime(2018, 11, 26, 8, 0, 0, DateTimeKind.Utc);
 			var input = setupData(expactedDate, new List<DateTimePeriod>{new DateTimePeriod(expactedDate, expactedDate.AddHours(9))});
 
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
+			var denverTimeZoneInfo = TimeZoneInfoFactory.DenverTimeZoneInfo();
+			LoggedOnUser.SetDefaultTimeZone(denverTimeZoneInfo);
+			UserTimeZone.Is(denverTimeZoneInfo);
 
 			var result = Target.GetRequests(input);
 			result.Requests.First().Shifts.First().BelongsToDate.Should().Be.EqualTo(expactedDate.Date.AddHours(1));
@@ -424,6 +429,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			var logonUser = PersonFactory.CreatePersonWithGuid("logon", "user");
 			LoggedOnUser.SetFakeLoggedOnUser(logonUser);
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			UserTimeZone.Is(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			setLogonUserPermissions();
 			PersonFinderReadOnlyRepository.Has(logonUser);
 		}
