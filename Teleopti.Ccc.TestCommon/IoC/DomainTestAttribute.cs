@@ -335,9 +335,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			extendScope();
 
-			fakeSignin();
+			var bu = new BusinessUnit("testbu").WithId(DefaultBusinessUnitId);
+			fakeSignin(bu);
 
-			createDefaultData();
+			createDefaultData(bu);
 		}
 
 		private void extendScope()
@@ -347,7 +348,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.ForEach(x => FakeEventPublisher.AddHandler(x));
 		}
 
-		private void fakeSignin()
+		private void fakeSignin(IBusinessUnit businessUnit)
 		{
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
@@ -362,7 +363,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				var principal = PrincipalFactory.MakePrincipal(
 					_loggedOnPerson,
 					DataSourceForTenant.Tenant(DefaultTenantName),
-					new BusinessUnit("loggedOnBu").WithId(),
+					businessUnit,
 					null
 				);
 				PrincipalContext.SetCurrentPrincipal(principal);
@@ -376,13 +377,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 		}
 
-		private void createDefaultData()
+		private void createDefaultData(IBusinessUnit businessUnit)
 		{
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
 			if (QueryAllAttributes<DefaultDataAttribute>().Any())
-				Database.Value.CreateDefaultData();
+				Database.Value.CreateDefaultData(businessUnit);
 		}
 
 		private bool fullPermissions()
