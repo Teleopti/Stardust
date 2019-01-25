@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="AddOverTimePerformanceTest.cs" />
     <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
+    <Compile Include="LoadStaffingViewTest.cs" />
     <Compile Include="ResourceCalculateWhen49DaysInReadmodel.cs" />
     <Compile Include="ResourceCalculate3DaysTest.cs" />
     <Compile Include="StaffingPerformanceTestAttribute.cs" />
