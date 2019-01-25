@@ -6,6 +6,7 @@ using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly UnitOfWorkFactoryFactory _unitOfWorkFactoryFactory;
+		private readonly IUpdatedBy _updatedBy;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly MemoryNHibernateConfigurationCache _nhibernateConfigurationCache;
 
@@ -26,12 +28,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IEnversConfiguration enversConfiguration,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter,
 			MemoryNHibernateConfigurationCache nhibernateConfigurationCache,
-			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory)
+			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory,
+			IUpdatedBy updatedBy)
 		{
 			_enversConfiguration = enversConfiguration;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_nhibernateConfigurationCache = nhibernateConfigurationCache;
 			_unitOfWorkFactoryFactory = unitOfWorkFactoryFactory;
+			_updatedBy = updatedBy;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -127,7 +131,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			
 			_dataSourceConfigurationSetter.AddDefaultSettingsTo(configuration);
 
-			_enversConfiguration.Configure(configuration);
+			_enversConfiguration.Configure(configuration, _updatedBy);
 			_nhibernateConfigurationCache.StoreConfiguration(settings, configuration);
 			return configuration;
 		}

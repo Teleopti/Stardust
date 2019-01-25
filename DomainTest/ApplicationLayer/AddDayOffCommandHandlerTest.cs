@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment.Date.Should().Be.EqualTo(date);
 			personAssignment.DayOff().DayOffTemplateId.Should().Be.EqualTo(dayOffTemplate.Id.Value);
 
-			var theEvent = personAssignment.PopAllEvents().OfType<DayOffAddedEvent>().Single();
+			var theEvent = personAssignment.PopAllEvents(null).OfType<DayOffAddedEvent>().Single();
 			theEvent.Date.Should().Be.EqualTo(date.Date);
 			theEvent.PersonId.Should().Be.EqualTo(person.Id.Value);
 			theEvent.CommandId.Should().Be.EqualTo(trackId);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				personAssignment.Date.Date.Should().Be.EqualTo(date);
 				personAssignment.DayOff().DayOffTemplateId.Should().Be.EqualTo(dayOffTemplate.Id.Value);
 
-				var theEvent = personAssignment.PopAllEvents().OfType<DayOffAddedEvent>().Single();
+				var theEvent = personAssignment.PopAllEvents(null).OfType<DayOffAddedEvent>().Single();
 				theEvent.Date.Should().Be.EqualTo(date);
 				theEvent.PersonId.Should().Be.EqualTo(person.Id.Value);
 				theEvent.CommandId.Should().Be.EqualTo(trackId);

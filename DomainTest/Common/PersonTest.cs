@@ -824,11 +824,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 					new ContractSchedule("_")), 
 				new Team());
 			person.AddPersonPeriod(period);
-			person.PopAllEvents();
+			person.PopAllEvents(null);
 
 			person.AddExternalLogOn(new ExternalLogOn(), period);
 
-			person.PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -844,11 +844,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 					new ContractSchedule("_")),
 				team1);
 			person.AddPersonPeriod(period);
-			person.PopAllEvents();
+			person.PopAllEvents(null);
 
 			person.ChangeTeam(team2, period);
 
-			person.PopAllEvents().OfType<PersonTeamChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents(null).OfType<PersonTeamChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -868,7 +868,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.ChangeTeam(team2, period);
 			person.AddExternalLogOn(new ExternalLogOn(), period);
 
-			var events = person.PopAllEvents();
+			var events = person.PopAllEvents(null);
 
 			var serialized = events.Select(x =>
 				new

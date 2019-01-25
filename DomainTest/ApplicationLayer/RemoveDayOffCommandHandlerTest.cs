@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var theEvent = PersonAssignmentRepository.LoadAll().Single(p => p.Person.Id == person.Id.Value).PopAllEvents().Single(e => e is DayOffDeletedEvent) as DayOffDeletedEvent;
+			var theEvent = PersonAssignmentRepository.LoadAll().Single(p => p.Person.Id == person.Id.Value).PopAllEvents(null).Single(e => e is DayOffDeletedEvent) as DayOffDeletedEvent;
 			theEvent.Date.Should().Be.EqualTo(date.Date);
 			theEvent.PersonId.Should().Be.EqualTo(person.Id.Value);
 			theEvent.CommandId.Should().Be.EqualTo(trackId);

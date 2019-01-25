@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
 
@@ -17,6 +18,8 @@ namespace Teleopti.Wfm.Adherence.Historical
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
+		private readonly ICurrentAuthorization _authorization;
+		private readonly ILoggedOnUserIsPerson _loggedOnUserIsPerson;
 		private readonly int _displayPastDays;
 
 		public HistoricalAdherenceViewModelBuilder(
@@ -25,7 +28,9 @@ namespace Teleopti.Wfm.Adherence.Historical
 			INow now,
 			IUserTimeZone timeZone,
 			IConfigReader config,
-			AgentAdherenceDayLoader agentAdherenceDayLoader
+			AgentAdherenceDayLoader agentAdherenceDayLoader,
+			ICurrentAuthorization authorization,
+			ILoggedOnUserIsPerson loggedOnUserIsPerson
 		)
 		{
 			_persons = persons;
@@ -33,9 +38,14 @@ namespace Teleopti.Wfm.Adherence.Historical
 			_now = now;
 			_timeZone = timeZone;
 			_agentAdherenceDayLoader = agentAdherenceDayLoader;
+			_authorization = authorization;
+			_loggedOnUserIsPerson = loggedOnUserIsPerson;
 			_displayPastDays = RtaEventStoreMaintainer.DisplayPastDays(config);
 		}
 
+		public HistoricalAdherenceViewModel Build(Guid personId) =>
+			Build(personId, new DateOnly(_now.UtcDateTime().Date));
+		
 		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly date)
 		{
 			var person = _persons.Load(personId);
@@ -83,8 +93,8 @@ namespace Teleopti.Wfm.Adherence.Historical
 					from layer in layers
 					select new HistoricalAdherenceActivityViewModel
 					{
-						Name = layer.Payload.ConfidentialDescription_DONTUSE(person).Name,
-						Color = ColorTranslator.ToHtml(layer.Payload.ConfidentialDisplayColor_DONTUSE(person)),
+						Name = layer.Payload.ConfidentialDescription(person, _authorization, _loggedOnUserIsPerson).Name,
+						Color = ColorTranslator.ToHtml(layer.Payload.ConfidentialDisplayColor(person, _authorization, _loggedOnUserIsPerson)),
 						StartTime = formatForUser(layer.Period.StartDateTime),
 						EndTime = formatForUser(layer.Period.EndDateTime),
 					})

@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 			var ass = PersonAssignmentRepository.LoadAll().Single();
-			var theEvent = ass.PopAllEvents().OfType<PersonalActivityAddedEvent>()
+			var theEvent = ass.PopAllEvents(null).OfType<PersonalActivityAddedEvent>()
 				.Single(e => e.ActivityId == command.PersonalActivityId);
 
 			theEvent.Date.Should().Be.EqualTo(new DateTime(2016, 05, 17));

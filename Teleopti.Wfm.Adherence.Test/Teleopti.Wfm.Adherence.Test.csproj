@@ -221,7 +221,6 @@
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\DateFormatTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\DateTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\DurationOfEventsTest.cs" />
-    <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\HistoricalAdherenceViewModelBuilderEx.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\LateForWorkTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\NavigationTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\PercentageTest.cs" />

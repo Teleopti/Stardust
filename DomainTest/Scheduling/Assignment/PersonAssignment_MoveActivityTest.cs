@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}); 
 
 			var affectedPeriod = layerPeriod.MaximumPeriod(assignment.Period);
-			var theEvent = assignment.PopAllEvents().OfType<ActivityMovedEvent>().Single();
+			var theEvent = assignment.PopAllEvents(null).OfType<ActivityMovedEvent>().Single();
 			theEvent.PersonId.Should().Be(agent.Id.Value);
 			theEvent.StartDateTime.Should().Be(affectedPeriod.StartDateTime);
 			theEvent.EndDateTime.Should().Be(affectedPeriod.EndDateTime);
@@ -210,11 +210,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layerPeriod = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, activity, layerPeriod);
 
-			assignment.PopAllEvents();
+			assignment.PopAllEvents(null);
 
 			assignment.MoveActivityAndSetHighestPriority(activity, layerPeriod.StartDateTime, createDateTime(1), layerPeriod.ElapsedTime(), null);
 
-			assignment.PopAllEvents().Count()
+			assignment.PopAllEvents(null).Count()
 				.Should().Be.EqualTo(1);
 		}
 

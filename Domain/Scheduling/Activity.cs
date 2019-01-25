@@ -107,12 +107,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return String.Concat(Description.Name, ", ", base.ToString());
 		}
 
-		public virtual Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization)
+		public virtual Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization, ILoggedOnUserIsPerson loggedOnUserIsPerson)
 		{
 			return Description;
 		}
 
-		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization)
+		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization, ILoggedOnUserIsPerson loggedOnUserIsPerson)
 		{
 			return DisplayColor;
 		}

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected override void Then(IScheduleRange myScheduleRange)
 		{
 			myScheduleRange.TakeSnapshot();
-			myScheduleRange.ScheduledDay(date).PersonAssignment().PopAllEvents().Should().Be.Empty();
+			myScheduleRange.ScheduledDay(date).PersonAssignment().PopAllEvents(null).Should().Be.Empty();
 		}
 
 		protected override IScheduleRangeConflictCollector ConflictCollector()

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
 	public class Events
 	{
-		private IList<Func<IEvent>> _events = new List<Func<IEvent>>();
+		private IList<Func<IPopEventsContext, IEvent>> _events = new List<Func<IPopEventsContext, IEvent>>();
 		private Guid? _commandId;
 
 		public void NotifyCommandId(Guid commandId)
@@ -19,17 +19,23 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public void AddEvent(Func<IEvent> @event)
 		{
+			_events.Add(x => @event.Invoke());
+		}
+
+		public void AddEvent(Func<IPopEventsContext, IEvent> @event)
+		{
 			_events.Add(@event);
 		}
 
 		public void AddEvent(IEvent @event)
 		{
-			_events.Add(() => @event);
+			_events.Add(x => @event);
 		}
 
-		public IEnumerable<IEvent> PopAllEvents()
+		public IEnumerable<IEvent> PopAllEvents(IPopEventsContext context)
 		{
-			var allEvents = _events.Select(e => e()).ToArray();
+			context = context ?? new FromServiceLocators();
+			var allEvents = _events.Select(e => e(context)).ToArray();
 			_events.Clear();
 			if (_commandId.HasValue)
 				allEvents.ForEach(e =>
@@ -53,6 +59,26 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		public bool HasEvents()
 		{
 			return _events.Any();
+		}
+	}
+
+	public interface IPopEventsContext
+	{
+		INow Now { get; }
+	}
+
+	public class FromServiceLocators : IPopEventsContext
+	{
+		public INow Now => ServiceLocator_DONTUSE.Now;
+	}
+
+	public class Injected : IPopEventsContext
+	{
+		public INow Now { get; }
+
+		public Injected(INow now)
+		{
+			Now = now;
 		}
 	}
 }

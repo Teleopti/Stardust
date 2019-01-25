@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			ScenarioRepository.Has(personAssignment.Scenario);
 			ScheduleStorage.Add(personAssignment);
-			personAssignment.PopAllEvents();
+			personAssignment.PopAllEvents(null);
 			Target.Handle(command);
 
 			var scheduleDic = ScheduleDayProvider.GetScheduleDictionary(date, person);
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();
 
-			var @event = personAssignment.PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>().Single();
+			var @event = personAssignment.PopAllEvents(null).OfType<PersonAssignmentLayerRemovedEvent>().Single();
 			@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
 			@event.Date.Should().Be(new DateTime(2013, 11, 14));
 			@event.StartDateTime.Should().Be(shiftLayer.Period.StartDateTime);

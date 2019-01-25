@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	{
 		public static Description ConfidentialDescription_DONTUSE(this IPayload payload, IPerson assignedPerson)
 		{
-			return payload.ConfidentialDescription(assignedPerson, ServiceLocator_DONTUSE.CurrentAuthorization);
+			return payload.ConfidentialDescription(assignedPerson, ServiceLocator_DONTUSE.CurrentAuthorization, ServiceLocator_DONTUSE.LoggedOnUserIsPerson);
 		}
 		
 		public static Color ConfidentialDisplayColor_DONTUSE(this IPayload payload, IPerson assignedPerson)
 		{
-			return payload.ConfidentialDisplayColor(assignedPerson, ServiceLocator_DONTUSE.CurrentAuthorization);
+			return payload.ConfidentialDisplayColor(assignedPerson, ServiceLocator_DONTUSE.CurrentAuthorization, ServiceLocator_DONTUSE.LoggedOnUserIsPerson);
 		}
 	}
 	
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: rogerkr
         /// Created date: 2010-02-09
         /// </remarks>
-		Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization);
+		Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization, ILoggedOnUserIsPerson loggedOnUserIsPerson);
 
         /// <summary>
         /// Returns the color of the payload or,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: rogerkr
         /// Created date: 2010-02-09
         /// </remarks>
-		Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization);
+		Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization, ILoggedOnUserIsPerson loggedOnUserIsPerson);
 
         /// <summary>
         /// Gets or sets a value indicating whether this payload is [in contract time].

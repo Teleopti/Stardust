@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var optionalColumn = new OptionalColumn("Car");
 			person.SetOptionalColumnValue(new OptionalColumnValue("Saab"), optionalColumn);
 
-			((Person)person).PopAllEvents().OfType<OptionalColumnValueChangedEvent>().Should().Not.Be.Empty();
+			((Person)person).PopAllEvents(null).OfType<OptionalColumnValueChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.SetOptionalColumnValue(new OptionalColumnValue("Saab"), optionalColumn);
 			person.RemoveOptionalColumnValue(person.GetColumnValue(optionalColumn));
 
-			((Person)person).PopAllEvents().OfType<OptionalColumnValueChangedEvent>().Count().Should().Be(1);
+			((Person)person).PopAllEvents(null).OfType<OptionalColumnValueChangedEvent>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.SetOptionalColumnValue(new OptionalColumnValue("Volvo"), optionalColumn);
 			person.SetOptionalColumnValue(new OptionalColumnValue("Saab"), optionalColumn);
 
-			((Person)person).PopAllEvents().OfType<OptionalColumnValueChangedEvent>().Count()
+			((Person)person).PopAllEvents(null).OfType<OptionalColumnValueChangedEvent>().Count()
 				.Should().Be(1);
 		}
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.SetOptionalColumnValue(new OptionalColumnValue("Volvo"), optionalColumn1);
 			person.SetOptionalColumnValue(new OptionalColumnValue("Bungalow"), optionalColumn2);
 
-			((Person)person).PopAllEvents().OfType<OptionalColumnValueChangedEvent>().Count()
+			((Person)person).PopAllEvents(null).OfType<OptionalColumnValueChangedEvent>().Count()
 				.Should().Be(1);
 		}
 	}

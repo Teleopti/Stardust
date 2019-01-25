@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 10:00", Adherence.Configuration.Adherence.In);
 			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.Neutral);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.RecordedOutOfAdherences().First().StartTime.Should().Be("2017-12-08 08:00".Utc());
 			result.RecordedOutOfAdherences().First().EndTime.Should().Be("2017-12-08 10:00".Utc());
@@ -61,7 +61,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithHistoricalStateChange("2017-12-08 13:00", Adherence.Configuration.Adherence.In)
 				;
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.RecordedOutOfAdherences().First().StartTime.Should().Be("2017-12-08 08:00".Utc());
 			result.RecordedOutOfAdherences().First().EndTime.Should().Be("2017-12-08 09:00".Utc());

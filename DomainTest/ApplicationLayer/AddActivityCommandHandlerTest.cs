@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 			//to make the event list empty
-			personAssignment.PopAllEvents();
+			personAssignment.PopAllEvents(null);
 			ScenarioRepository.Has(personAssignment.Scenario);
 			PersonAssignmentRepository.Add(personAssignment);
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			personAssignment = PersonAssignmentRepository.LoadAll().Single();
 
-			var @event = personAssignment.PopAllEvents().OfType<ActivityAddedEvent>().Single();
+			var @event = personAssignment.PopAllEvents(null).OfType<ActivityAddedEvent>().Single();
 			@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
 			@event.Date.Should().Be(new DateTime(2013, 11, 14));
 			@event.StartDateTime.Should().Be(command.StartTime);
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 13));
 			pa.ShiftLayers.ForEach(l => l.WithId());
-			pa.PopAllEvents();
+			pa.PopAllEvents(null);
 			PersonAssignmentRepository.Add(pa);
 			var command = new AddActivityCommand
 			{
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var personAssignment = PersonAssignmentRepository.LoadAll().Single();
 
-			var allEves = personAssignment.PopAllEvents();
+			var allEves = personAssignment.PopAllEvents(null);
 			allEves.Count().Should().Be(1);
 			var @events = allEves.OfType<ActivityAddedEvent>().Where(e => e.ActivityId == addedActivity.Id.Value);
 			@events.Count().Should().Be(1);

@@ -41,14 +41,19 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			_events.AddEvent(@event);
 		}
 
+		protected void AddEvent(Func<IPopEventsContext, IEvent> @event)
+		{
+			_events.AddEvent(@event);
+		}
+		
 		protected void AddEvent(IEvent @event)
 		{
 			_events.AddEvent(@event);
 		}
 
-		public virtual IEnumerable<IEvent> PopAllEvents()
+		public virtual IEnumerable<IEvent> PopAllEvents(IPopEventsContext context)
 		{
-			return _events.PopAllEvents();
+			return _events.PopAllEvents(context);
 		}
 
 		public virtual bool HasEvents()

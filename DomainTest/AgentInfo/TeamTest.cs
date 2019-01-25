@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			target.SetDescription(new Description("Set Name"));
 
-			var @event = target.PopAllEvents().OfType<TeamNameChangedEvent>().Single();
+			var @event = target.PopAllEvents(null).OfType<TeamNameChangedEvent>().Single();
 			@event.TeamId.Should().Be(target.Id);
 			@event.Name.Should().Be("Set Name");
 		}

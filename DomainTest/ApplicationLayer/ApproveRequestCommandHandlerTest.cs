@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAbsence = ((IAbsenceApprovalService) Target.GetRequestApprovalService())
 				.GetApprovedPersonAbsence();
 
-			var @events = personAbsence.PopAllEvents();
+			var @events = personAbsence.PopAllEvents(null);
 			@events.Single().Should().Be.OfType<PersonAbsenceAddedEvent>();
 		}
 

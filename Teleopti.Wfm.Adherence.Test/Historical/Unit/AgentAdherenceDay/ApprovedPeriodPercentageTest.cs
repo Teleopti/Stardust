@@ -53,7 +53,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithApprovedPeriod("2017-12-08 11:00", "2017-12-08 20:00")
 				;
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(90);
 		}
@@ -74,7 +74,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithApprovedPeriod("2017-12-08 10:00", "2017-12-08 12:00")
 				;
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(50);
 		}

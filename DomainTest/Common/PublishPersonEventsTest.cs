@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.SetEmploymentNumber("123");
 			person.AddPersonPeriod(personPeriod);
 
-			var result = person.PopAllEvents();
+			var result = person.PopAllEvents(null);
 			result.OfType<PersonNameChangedEvent>().Should().Not.Be.Empty();
 			result.OfType<PersonEmploymentNumberChangedEvent>().Should().Not.Be.Empty();
 			result.OfType<PersonPeriodChangedEvent>().Should().Not.Be.Empty();

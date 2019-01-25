@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var personAbsence = new PersonAbsence(person,nonDefaultScenario,new AbsenceLayer(absence,new DateTimePeriod(2001,1,1,2002,1,1)));
 			personAbsence.NotifyDelete();
 
-		    var events = personAbsence.PopAllEvents();
+		    var events = personAbsence.PopAllEvents(null);
 		    events.Count().Should().Be.EqualTo(0);
 
 	    }

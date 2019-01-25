@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				if (skillDay is IAggregateRootWithEvents events)
 				{
-					events.PopAllEvents();
+					events.PopAllEvents(null);
 				}
 				skillDayIds.Add(skillDay.Id.Value);
 			}

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Select(x =>
 				{
 					if (x is IAggregateRootWithEvents events)
-						events.PopAllEvents();
+						events.PopAllEvents(null);
 					return x;
 				})
 				.ToArray();

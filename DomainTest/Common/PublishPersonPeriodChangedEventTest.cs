@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			person.AddPersonPeriod(personPeriod);
 
-			((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Not.Be.Empty();
+			((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -36,11 +36,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var person = PersonFactory.CreatePersonWithId();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-01".Date());
 			person.AddPersonPeriod(personPeriod);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 
 			person.DeletePersonPeriod(personPeriod);
 
-			((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+			((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -49,11 +49,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var person = PersonFactory.CreatePersonWithId();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-01".Date());
 			person.AddPersonPeriod(personPeriod);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 
 			person.ChangePersonPeriodStartDate("2017-01-25".Date(), personPeriod);
 
-			((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+			((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var person = PersonFactory.CreatePersonWithId();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-25".Date());
 			person.AddPersonPeriod(personPeriod);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 
 			person.RemoveAllPeriodsAfter("2017-01-01".Date());
 
-			((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+			((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -75,11 +75,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var person = PersonFactory.CreatePersonWithId();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-01".Date());
 			person.AddPersonPeriod(personPeriod);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 
 			person.RemoveAllPersonPeriods();
 
-			((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+			((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -88,11 +88,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var person = PersonFactory.CreatePersonWithId();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-01".Date());
 			person.AddPersonPeriod(personPeriod);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 
 			person.AddExternalLogOn(new ExternalLogOn(), personPeriod);
 
-			((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+			((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -102,11 +102,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-01".Date());
 			person.AddPersonPeriod(personPeriod);
 			person.AddExternalLogOn(new ExternalLogOn(), personPeriod);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 
 			person.ResetExternalLogOn(personPeriod);
 
-			((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+			((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -116,12 +116,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod("2017-01-01".Date());
 			person.AddPersonPeriod(personPeriod);
 			person.AddExternalLogOn(new ExternalLogOn(), personPeriod);
-			((Person)person).PopAllEvents();
+			((Person)person).PopAllEvents(null);
 
 			person.ResetExternalLogOn(personPeriod);
 			person.AddExternalLogOn(new ExternalLogOn(), personPeriod);
 
-			((Person)person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+			((Person)person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -132,11 +132,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			person.AddPersonPeriod(personPeriod);
 			var existingExternalLogon = new ExternalLogOn();
 			person.AddExternalLogOn(existingExternalLogon, personPeriod);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 
 			person.RemoveExternalLogOn(existingExternalLogon, personPeriod);
 
-			((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
+			((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			person.AddPersonPeriod(personPeriod);
 
-			var @event = ((Person) person).PopAllEvents().OfType<PersonPeriodChangedEvent>().Single();
+			var @event = ((Person) person).PopAllEvents(null).OfType<PersonPeriodChangedEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 			@event.CurrentBusinessUnitId.Should().Be(businessUnitId);
 			@event.CurrentSiteId.Should().Be(siteId);
@@ -172,11 +172,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var currentPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017,01,01), TeamFactory.CreateTeamWithId(currentTeamId));
 			var futurePeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017,02,08), TeamFactory.CreateTeamWithId(futureTeamId));
 			person.AddPersonPeriod(currentPeriod);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 
 			person.AddPersonPeriod(futurePeriod);
 
-			((Person)person).PopAllEvents()
+			((Person)person).PopAllEvents(null)
 				.OfType<PersonPeriodChangedEvent>()
 				.Single()
 				.CurrentTeamId.Should().Be(currentTeamId);

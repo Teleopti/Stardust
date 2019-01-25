@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Target.Handle(command);
 			var expectedStartInUtc = command.NewStartTimeInUtc;
 			var loadedPersonAss = PersonAssignmentRepository.LoadAll().Single();
-			var @event = loadedPersonAss.PopAllEvents().OfType<ActivityMovedEvent>().Single();
+			var @event = loadedPersonAss.PopAllEvents(null).OfType<ActivityMovedEvent>().Single();
 			@event.PersonId.Should().Be(agent.Id.Value);
 			@event.StartDateTime.Should().Be(expectedStartInUtc);
 			@event.ScenarioId.Should().Be(loadedPersonAss.Scenario.Id.Value);

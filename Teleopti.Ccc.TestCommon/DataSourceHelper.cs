@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.TestCommon
 						new CurrentHttpContext(),
 						ServiceLocator_DONTUSE.UpdatedBy,
 						ServiceLocator_DONTUSE.CurrentBusinessUnit,
-						new SirLeakAlot()));
+						new SirLeakAlot()),
+					ServiceLocator_DONTUSE.UpdatedBy);
 			});
 		}
 

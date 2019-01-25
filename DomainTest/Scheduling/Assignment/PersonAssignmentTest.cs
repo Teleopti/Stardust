@@ -783,7 +783,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var clone = target.NoneEntityClone();
 			clone.SetActivitiesAndShiftCategoryFromWithOffset(source, TimeSpan.Zero);
 
-			var allEvents = target.PopAllEvents();
+			var allEvents = target.PopAllEvents(null);
 			allEvents.OfType<DayUnscheduledEvent>().Count().Should().Be(0);
 		}
 
@@ -804,7 +804,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				TrackId = trackId
 			});
 
-			var theEvent = assignment.PopAllEvents().OfType<MainShiftCategoryReplaceEvent>().Single();
+			var theEvent = assignment.PopAllEvents(null).OfType<MainShiftCategoryReplaceEvent>().Single();
 			theEvent.PersonId.Should().Be(agent.Id.Value);
 			theEvent.Date.Should().Be(new DateTime(2016, 8, 9));
 			theEvent.ScenarioId.Should().Be(assignment.Scenario.Id.Value);
@@ -821,7 +821,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(agent,
 					ScenarioFactory.CreateScenarioWithId("_", true), layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
 
-			assignment.PopAllEvents();
+			assignment.PopAllEvents(null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -831,7 +831,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				TrackId = trackId
 			});
 
-			assignment.PopAllEvents().Count()
+			assignment.PopAllEvents(null).Count()
 				.Should().Be.EqualTo(1);
 		}
 

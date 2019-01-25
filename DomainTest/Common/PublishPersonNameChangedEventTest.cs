@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var person = PersonFactory.CreatePerson();
 
-			((Person)person).PopAllEvents().OfType<PersonNameChangedEvent>().Should().Not.Be.Empty();
+			((Person)person).PopAllEvents(null).OfType<PersonNameChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var personId = Guid.NewGuid();
 			var person = PersonFactory.CreatePersonWithId(personId);
-			((Person)person).PopAllEvents();
+			((Person)person).PopAllEvents(null);
 
 			person.SetName(new Name("bill","gates"));
 		
 	
-			var @event = ((Person)person).PopAllEvents().OfType<PersonNameChangedEvent>().Single();
+			var @event = ((Person)person).PopAllEvents(null).OfType<PersonNameChangedEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 			@event.FirstName.Should().Be("bill");
 			@event.LastName.Should().Be("gates");
@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var personId = Guid.NewGuid();
 			var person = PersonFactory.CreatePersonWithId(personId);
-			((Person) person).PopAllEvents();
+			((Person) person).PopAllEvents(null);
 			
 			person.SetName(new Name("bill", "rates"));
 			person.SetName(new Name("bill", "gates"));
 			
 
-			var @event = ((Person) person).PopAllEvents().OfType<PersonNameChangedEvent>().Single();
+			var @event = ((Person) person).PopAllEvents(null).OfType<PersonNameChangedEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 			@event.FirstName.Should().Be("bill");
 			@event.LastName.Should().Be("gates");

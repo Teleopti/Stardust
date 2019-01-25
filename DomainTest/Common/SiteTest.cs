@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			target.SetDescription(new Description("london"));
 			
-			var result = target.PopAllEvents().OfType<SiteNameChangedEvent>().Single();
+			var result = target.PopAllEvents(null).OfType<SiteNameChangedEvent>().Single();
 			result.SiteId.Should().Be(siteId);
 			result.Name.Should().Be("london");
 		}

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void Execute(IDifferenceCollection<IPersistableScheduleData> scheduleDifference)
 		{
 			var aggregateRoots = scheduleDifference.Select(d => d.CurrentItem);
-			aggregateRoots.OfType<IAggregateRootWithEvents>().ForEach(a => a.PopAllEvents());
+			aggregateRoots.OfType<IAggregateRootWithEvents>().ForEach(a => a.PopAllEvents(null));
 		}
 	}
 }

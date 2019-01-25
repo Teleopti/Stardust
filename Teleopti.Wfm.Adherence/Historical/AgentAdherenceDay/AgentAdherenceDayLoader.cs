@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		}
 
 		public AgentAdherenceDay Load(Guid personId, DateOnly date) => load(personId, date, DateTime.MaxValue.Utc());
-
+		public AgentAdherenceDay LoadUntilNow(Guid personId) => LoadUntilNow(personId, new DateOnly(_now.UtcDateTime().Date));
 		public AgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date) => load(personId, date, _now.UtcDateTime());
 
 		private AgentAdherenceDay load(Guid personId, DateOnly date, DateTime until)

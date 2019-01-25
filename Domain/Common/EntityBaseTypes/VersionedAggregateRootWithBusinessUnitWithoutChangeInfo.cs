@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IEnumerable<IEvent> PopAllEvents()
 		{
-			return _events.PopAllEvents();
+			return _events.PopAllEvents(null);
 		}
 
 		public virtual bool HasEvents()

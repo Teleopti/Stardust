@@ -86,7 +86,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithHistoricalStateChange("2017-12-08 08:30", Adherence.Configuration.Adherence.Out)
 				.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.In);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(50);
 		}
@@ -105,7 +105,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.In);
 			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.Out);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(50);
 		}
@@ -124,7 +124,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.Out);
 			Database.WithHistoricalStateChange("2017-12-08 14:00", Adherence.Configuration.Adherence.In);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(25);
 		}
@@ -146,7 +146,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 14:00", Adherence.Configuration.Adherence.In);
 			Database.WithHistoricalStateChange("2017-12-08 16:00", Adherence.Configuration.Adherence.Out);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(50);
 		}
@@ -165,7 +165,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-01 00:00", Adherence.Configuration.Adherence.Out);
 			Database.WithHistoricalAdherenceDayStart("2017-12-08 07:00", Adherence.Configuration.Adherence.Out);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(0);
 		}
@@ -183,7 +183,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				;
 			Database.WithHistoricalStateChange("2017-12-01 00:00", Adherence.Configuration.Adherence.In);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(100);
 		}
@@ -202,7 +202,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 07:30", Adherence.Configuration.Adherence.In);
 			Database.WithHistoricalStateChange("2017-12-08 07:31", Adherence.Configuration.Adherence.Out);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(0);
 		}
@@ -221,7 +221,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.Out);
 			Database.WithHistoricalStateChange("2017-12-08 16:30", Adherence.Configuration.Adherence.In);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(0);
 		}
@@ -235,7 +235,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAgent(person)
 				;
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 			result.Percentage().Should().Be(null);
 		}
 
@@ -251,7 +251,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.In);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(100);
 		}
@@ -270,7 +270,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Configuration.Adherence.Neutral);
 			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.In);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(100);
 		}
@@ -291,7 +291,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 				.WithHistoricalStateChange("2017-12-08 11:00", Adherence.Configuration.Adherence.In)
 				;
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(90);
 		}
@@ -311,7 +311,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 10:00", Adherence.Configuration.Adherence.In);
 			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Configuration.Adherence.Neutral);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(50);
 		}
@@ -331,7 +331,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 			Database.WithHistoricalStateChange("2017-12-08 08:30", Adherence.Configuration.Adherence.Neutral);
 			Database.WithHistoricalStateChange("2017-12-08 14:00", Adherence.Configuration.Adherence.In);
 
-			var result = Target.Load(person);
+			var result = Target.LoadUntilNow(person);
 
 			result.Percentage().Should().Be(100);
 		}

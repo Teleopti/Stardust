@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			person.SetEmploymentNumber("123");
 
-			((Person)person).PopAllEvents().OfType<PersonEmploymentNumberChangedEvent>().Should().Not.Be.Empty();
+			((Person)person).PopAllEvents(null).OfType<PersonEmploymentNumberChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			person.SetEmploymentNumber("123");
 
-			var @event = ((Person)person).PopAllEvents().OfType<PersonEmploymentNumberChangedEvent>().Single();
+			var @event = ((Person)person).PopAllEvents(null).OfType<PersonEmploymentNumberChangedEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 			@event.EmploymentNumber.Should().Be("123");
 		}

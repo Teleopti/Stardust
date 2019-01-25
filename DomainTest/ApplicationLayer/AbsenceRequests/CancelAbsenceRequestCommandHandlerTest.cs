@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			personAbsence.NotifyTransactionComplete(DomainUpdateType.Delete);
 			personAbsence.NotifyDelete();
-			var events = personAbsence.PopAllEvents().ToArray();
+			var events = personAbsence.PopAllEvents(null).ToArray();
 
 			events.Length.Should().Be.EqualTo(2);
 			events[0].Should().Be.OfType<PersonAbsenceRemovedEvent>();

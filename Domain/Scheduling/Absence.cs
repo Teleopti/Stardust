@@ -115,23 +115,23 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-        public virtual Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization)
+        public virtual Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization, ILoggedOnUserIsPerson loggedOnUserIsPerson)
         {
-            return isPermittedToSeePayloadInfo(assignedPerson, authorization) 
+            return isPermittedToSeePayloadInfo(assignedPerson, authorization, loggedOnUserIsPerson) 
                     ? Description : ConfidentialPayloadValues.Description;
         }
 
-		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization)
+		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization, ILoggedOnUserIsPerson loggedOnUserIsPerson)
         {
-            return isPermittedToSeePayloadInfo(assignedPerson, authorization)
+            return isPermittedToSeePayloadInfo(assignedPerson, authorization, loggedOnUserIsPerson)
                        ? DisplayColor : ConfidentialPayloadValues.DisplayColor;
         }
 
-		private bool isPermittedToSeePayloadInfo(IPerson assignedPerson, ICurrentAuthorization authorization)
+		private bool isPermittedToSeePayloadInfo(IPerson assignedPerson, ICurrentAuthorization authorization, ILoggedOnUserIsPerson loggedOnUserIsPerson)
 		{
 			if (!Confidential)
 				return true;
-			if (ServiceLocator_DONTUSE.LoggedOnUserIsPerson.IsPerson(assignedPerson))
+			if (loggedOnUserIsPerson.IsPerson(assignedPerson))
 				return true;
 
 			var dateOnly = DateOnly.Today;

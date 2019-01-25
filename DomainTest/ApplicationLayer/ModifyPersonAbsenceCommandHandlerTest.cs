@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			var @event = personAbsence.PopAllEvents().Single() as PersonAbsenceModifiedEvent;
+			var @event = personAbsence.PopAllEvents(null).Single() as PersonAbsenceModifiedEvent;
 			@event.AbsenceId.Should().Be(personAbsence.Id.Value);
 			@event.PersonId.Should().Be(personAbsence.Person.Id.Value);
 			@event.ScenarioId.Should().Be(currentScenario.Id.Value);

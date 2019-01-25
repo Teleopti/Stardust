@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var movedLunchLayer = loadedPersonAss.ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 15));
-			var @event = loadedPersonAss.PopAllEvents().OfType<ActivityMovedEvent>().Single();
+			var @event = loadedPersonAss.PopAllEvents(null).OfType<ActivityMovedEvent>().Single();
 			@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
 			@event.ScenarioId.Should().Be(loadedPersonAss.Scenario.Id.GetValueOrDefault());
 			@event.InitiatorId.Should().Be(operatePersonId);

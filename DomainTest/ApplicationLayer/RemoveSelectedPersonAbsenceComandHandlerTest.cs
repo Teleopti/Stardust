@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				ScheduleRange = scheduleDictionary[person]
 			});
 
-			personAbsence.PopAllEvents().Cast<PersonAbsenceRemovedEvent>().Single().StartDateTime.Should().Be.EqualTo(new DateTime(2019, 1, 15, 20, 0, 0));
+			personAbsence.PopAllEvents(null).Cast<PersonAbsenceRemovedEvent>().Single().StartDateTime.Should().Be.EqualTo(new DateTime(2019, 1, 15, 20, 0, 0));
 		}
 
 

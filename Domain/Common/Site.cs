@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.Domain.Common
 			_description = new Description(name);
 		}
 
-		public override IEnumerable<IEvent> PopAllEvents() =>
-			base.PopAllEvents()
+		public override IEnumerable<IEvent> PopAllEvents(IPopEventsContext context) =>
+			base.PopAllEvents(context)
 				.KeepLastOfType<SiteNameChangedEvent>();
 
 		public virtual Description Description => _description;

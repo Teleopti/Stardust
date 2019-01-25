@@ -23,6 +23,7 @@ namespace Teleopti.Wfm.Adherence.States
 		private readonly IScheduleStorage _schedules;
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly ICurrentAuthorization _authorization;
+		private readonly ILoggedOnUserIsPerson _loggedOnUserIsPerson;
 
 		public CurrentScheduleReadModelUpdater(
 			INow now,
@@ -32,7 +33,8 @@ namespace Teleopti.Wfm.Adherence.States
 			IBusinessUnitRepository businessUnits,
 			IScheduleStorage schedules,
 			IKeyValueStorePersister keyValueStore,
-			ICurrentAuthorization authorization
+			ICurrentAuthorization authorization,
+			ILoggedOnUserIsPerson loggedOnUserIsPerson
 		)
 		{
 			_now = now;
@@ -43,6 +45,7 @@ namespace Teleopti.Wfm.Adherence.States
 			_schedules = schedules;
 			_keyValueStore = keyValueStore;
 			_authorization = authorization;
+			_loggedOnUserIsPerson = loggedOnUserIsPerson;
 		}
 
 		[ReadModelUnitOfWork]
@@ -151,12 +154,12 @@ namespace Teleopti.Wfm.Adherence.States
 							select new ScheduledActivity
 							{
 								BelongsToDate = new DateOnly(belongsToDate.Date),
-								DisplayColor = layer.Payload.ConfidentialDisplayColor(x, _authorization).ToArgb(),
+								DisplayColor = layer.Payload.ConfidentialDisplayColor(x, _authorization, _loggedOnUserIsPerson).ToArgb(),
 								EndDateTime = layer.Period.EndDateTime,
-								Name = layer.Payload.ConfidentialDescription(x, _authorization).Name,
+								Name = layer.Payload.ConfidentialDescription(x, _authorization, _loggedOnUserIsPerson).Name,
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								PersonId = x.Id.GetValueOrDefault(),
-								ShortName = layer.Payload.ConfidentialDescription(x, _authorization).ShortName,
+								ShortName = layer.Payload.ConfidentialDescription(x, _authorization, _loggedOnUserIsPerson).ShortName,
 								StartDateTime = layer.Period.StartDateTime
 							})
 							.ToArray();

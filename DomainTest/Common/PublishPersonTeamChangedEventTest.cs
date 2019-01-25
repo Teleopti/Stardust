@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			person.ChangeTeam(team, person.Period("2017-01-25".Date()));
 
-			((Person) person).PopAllEvents().OfType<PersonTeamChangedEvent>().Should().Not.Be.Empty();
+			((Person) person).PopAllEvents(null).OfType<PersonTeamChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			person.ChangeTeam(organization.Team, person.Period("2017-01-25".Date()));
 
-			var @event = ((Person) person).PopAllEvents().OfType<PersonTeamChangedEvent>().Single();
+			var @event = ((Person) person).PopAllEvents(null).OfType<PersonTeamChangedEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 			@event.CurrentBusinessUnitId.Should().Be(businessUnitId);
 			@event.CurrentSiteId.Should().Be(siteId);

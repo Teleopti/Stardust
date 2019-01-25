@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Domain.Common
 			_firstDayOfWeek = DayOfWeek.Monday; //1
 		}
 
-		public override IEnumerable<IEvent> PopAllEvents() =>
-			base.PopAllEvents()
+		public override IEnumerable<IEvent> PopAllEvents(IPopEventsContext context) =>
+			base.PopAllEvents(context)
 				.KeepLastOfType<PersonNameChangedEvent>()
 				.KeepLastOfType<PersonPeriodChangedEvent>()
 				.KeepLastOfType<OptionalColumnValueChangedEvent>()
@@ -369,9 +369,9 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private void addPersonPeriodChangedEvent()
 		{
-			AddEvent(() =>
+			AddEvent(c =>
 			{
-				var info = currentAssociationInfo(ServiceLocator_DONTUSE.Now);
+				var info = currentAssociationInfo(c.Now);
 				return new PersonPeriodChangedEvent
 				{
 					PersonId = Id.GetValueOrDefault(),

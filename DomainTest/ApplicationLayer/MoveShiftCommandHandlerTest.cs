@@ -213,11 +213,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
 			};
 
-			personAss.PopAllEvents();
+			personAss.PopAllEvents(null);
 			Target.Handle(cmd);
 
 			var personAssignment = PersonAssignmentRepository.LoadAll().Single();
-			var events = personAssignment.PopAllEvents();
+			var events = personAssignment.PopAllEvents(null);
 			events.Single().Should().Be.OfType<ActivityMovedEvent>();
 		}
 

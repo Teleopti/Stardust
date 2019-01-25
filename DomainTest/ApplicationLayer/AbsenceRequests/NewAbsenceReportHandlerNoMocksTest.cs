@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personAbsence = scheduleDay.PersonAbsenceCollection().SingleOrDefault(abs => abs.Layer.Payload == absence && abs.Person == person);
 
 
-			var @event = personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			var @event = personAbsence.PopAllEvents(null).Single() as FullDayAbsenceAddedEvent;
 
 			@event.Should().Not.Be.Null();
 			@event.StartDateTime.Should().Be.EqualTo(personAbsence.Layer.Period.StartDateTime);

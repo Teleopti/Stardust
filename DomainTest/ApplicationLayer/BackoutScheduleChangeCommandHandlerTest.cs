@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ScheduleHistoryRepository.SetRevision(rev, date, pa.CreateTransient());
 			pa.SetDayOff(DayOffFactory.CreateDayOff());
 			ScheduleHistoryRepository.SetRevision(lstRev, date, pa.CreateTransient());
-			pa.PopAllEvents();
+			pa.PopAllEvents(null);
 
 			var command = new BackoutScheduleChangeCommand
 			{

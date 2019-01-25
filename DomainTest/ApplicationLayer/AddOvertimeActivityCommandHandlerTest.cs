@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var ass = PersonAssignmentRepository.LoadAll().Single();
 
-			var addOvertimeEvent = ass.PopAllEvents().OfType<ActivityAddedEvent>()
+			var addOvertimeEvent = ass.PopAllEvents(null).OfType<ActivityAddedEvent>()
 				.Single(e => e.ActivityId == command.ActivityId);
 
 			addOvertimeEvent.Date.Should().Be.EqualTo(new DateTime(2013, 11, 14));

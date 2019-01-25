@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			var events = PersonAssignmentRepository.Get(personAssigment.Id.GetValueOrDefault()).PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>();
+			var events = PersonAssignmentRepository.Get(personAssigment.Id.GetValueOrDefault()).PopAllEvents(null).OfType<PersonAssignmentLayerRemovedEvent>();
 			events.Single().CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
 		}
 	}

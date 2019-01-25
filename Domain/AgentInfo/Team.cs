@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private bool _isDeleted;
 		private IScorecard _scorecard;
 
-		public override IEnumerable<IEvent> PopAllEvents() =>
-			base.PopAllEvents()
+		public override IEnumerable<IEvent> PopAllEvents(IPopEventsContext context) =>
+			base.PopAllEvents(context)
 				.KeepLastOfType<TeamNameChangedEvent>();
 
 		public virtual bool IsChoosable => !IsDeleted;

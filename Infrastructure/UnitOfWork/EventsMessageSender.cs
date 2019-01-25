@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -8,10 +9,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class EventsMessageSender : ITransactionHook
 	{
 		private readonly IEventPopulatingPublisher _publisher;
+		private readonly INow _now;
 
-		public EventsMessageSender(IEventPopulatingPublisher publisher)
+		public EventsMessageSender(
+			IEventPopulatingPublisher publisher,
+			INow now
+			)
 		{
 			_publisher = publisher;
+			_now = now;
 		}
 
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
@@ -32,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					if (e.Status == DomainUpdateType.Delete)
 						e.Root.NotifyDelete();
 					e.Root.NotifyTransactionComplete(e.Status);
-					return e.Root.PopAllEvents();
+					return e.Root.PopAllEvents(new Injected(_now));
 				})
 				.ToArray();
 

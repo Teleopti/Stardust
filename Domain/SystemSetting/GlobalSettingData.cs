@@ -66,9 +66,9 @@ namespace Teleopti.Ccc.Domain.SystemSetting
 		{
 		}
 
-		public virtual IEnumerable<IEvent> PopAllEvents()
+		public virtual IEnumerable<IEvent> PopAllEvents(IPopEventsContext context)
 		{
-			return _events.PopAllEvents();
+			return _events.PopAllEvents(context);
 		}
 
 		public virtual bool HasEvents()

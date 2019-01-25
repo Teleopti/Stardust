@@ -25,19 +25,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_layer = layer;
 		}
 
-		/// <summary>
-		/// Constructor for CommandHandlers
-		/// </summary>
-		public PersonAbsence(IScenario scenario) : this()
+		public PersonAbsence(IScenario scenario)
 		{
 			_scenario = scenario;
 		}
 
 		protected PersonAbsence()
 		{
-			_lastChange = ServiceLocator_DONTUSE.Now.UtcDateTime();
 		}
-
+		
 		/// <summary>
 		/// Make this person absence a full day absence
 		/// </summary>
@@ -60,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				fullDayAbsenceAddedEvent.CommandId = trackedCommandInfo.TrackId;
 			}
 
-			var @events = PopAllEvents().ToList();
+			var @events = PopAllEvents(null).ToList();
 
 			if (!@events.Any(e =>
 			 {
@@ -100,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				personAbsenceAddedEvent.CommandId = trackedCommandInfo.TrackId;
 			}
 
-			var @events = PopAllEvents().ToList();
+			var @events = PopAllEvents(null).ToList();
 
 			if (!@events.Any(e => e is PersonAbsenceAddedEvent addedEvent && (addedEvent.AbsenceId == personAbsenceAddedEvent.AbsenceId
 																			  && addedEvent.PersonId == personAbsenceAddedEvent.PersonId
@@ -304,7 +300,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual DateTime? LastChange
 		{
-			get => _lastChange;
+			get => _lastChange ?? (_lastChange = ServiceLocator_DONTUSE.Now.UtcDateTime());
 			set => _lastChange = value;
 		}
 
