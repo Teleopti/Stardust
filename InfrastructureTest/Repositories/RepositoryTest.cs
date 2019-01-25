@@ -20,7 +20,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     /// <summary>
-	/// Base class for repository testsPersistAndRemoveFromUnitOfWork
+	/// Base class for repository tests
     /// </summary>
     public abstract class RepositoryTest<T> : DatabaseTest where T : IAggregateRoot
     {
@@ -56,11 +56,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 PersistAndRemoveFromUnitOfWork(inCorrect);
 
                 var retList = rep.LoadAll();
-                Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnit)r).BusinessUnit.Equals(buRef.BusinessUnit)));
+                Assert.IsTrue(retList.OfType<IBelongsToBusinessUnit>().All(r => r.BusinessUnit.Equals(buRef.BusinessUnit)));
             }
             else
             {
-
                 Assert.IsNull(
                     correct.GetType().GetProperty("BusinessUnit", BindingFlags.Public | BindingFlags.Instance),
                     "Property BusinessUnit exists on " + correct.GetType().Name +
@@ -72,8 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyMappedBusinessUnitExists()
         {
             T correct = CreateAggregateWithCorrectBusinessUnit();
-            IBelongsToBusinessUnit buRef = correct as IBelongsToBusinessUnit;
-            if (buRef!=null)
+			if (correct is IBelongsToBusinessUnit)
             {
                 try
                 {
@@ -97,8 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Evict(simpleEntity); //ändrat!
             T loadedAggregate = rep.Load(id);
             Assert.AreEqual(id, loadedAggregate.Id);
-            IBelongsToBusinessUnit buRef = loadedAggregate as IBelongsToBusinessUnit;
-            if (buRef!=null)
+			if (loadedAggregate is IBelongsToBusinessUnit buRef)
                 Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
             VerifyAggregateGraphProperties(loadedAggregate);
         }
@@ -112,15 +109,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Evict(simpleEntity); //ändrat!
             T loadedAggregate = rep.Get(id);
             Assert.AreEqual(id, loadedAggregate.Id);
-            IBelongsToBusinessUnit buRef = loadedAggregate as IBelongsToBusinessUnit;
-            if (buRef != null)
+			if (loadedAggregate is IBelongsToBusinessUnit buRef)
                 Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
             VerifyAggregateGraphProperties(loadedAggregate);
         }
 
-        /// <summary>
-        /// Verifies that Add & remove works.
-        /// </summary>
         [Test]
         public virtual void VerifyAddAndRemoveWorks()
         {
@@ -132,22 +125,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsFalse(UnitOfWork.Contains(entity));
         }
 
-        /// <summary>
-        /// Verifies that addrange() works.
-        /// </summary>
         [Test]
         public virtual void VerifyAddRangeWorks()
         {
             T entity1 = CreateAggregateWithCorrectBusinessUnit();
             T entity2 = CreateAggregateWithCorrectBusinessUnit();
-            IList<T> entList = new List<T>();
-            entList.Add(entity1);
-            entList.Add(entity2);
-            rep.AddRange(entList);
+			IList<T> entList = new List<T>
+			{
+				entity1,
+				entity2
+			};
+			rep.AddRange(entList);
             Assert.IsTrue(UnitOfWork.Contains(entity1));
             Assert.IsTrue(UnitOfWork.Contains(entity2));
         }
-
 
         [Test]
         public void VerifyRemovedItemsCannotBeRead()
@@ -207,8 +198,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		/// </summary>
 		protected virtual void ConcreteSetup() { }
 
-    
-
         /// <summary>
         /// Creates an aggregate using the Bu of logged in user.
         /// Should be a "full detailed" aggregate
@@ -216,14 +205,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected abstract T CreateAggregateWithCorrectBusinessUnit();
 
-
         /// <summary>
         /// Verifies the aggregate graph properties.
         /// </summary>
         /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
         protected abstract void VerifyAggregateGraphProperties(T loadedAggregateFromDatabase);
-
-
 
         protected abstract Repository<T> TestRepository(ICurrentUnitOfWork currentUnitOfWork);
 
@@ -232,5 +218,4 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             return Session.SessionFactory.GetAllClassMetadata()[root.GetType().ToString()].IsMutable;
         }
     }
-
 }
