@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -42,9 +43,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			isolate.UseTestDouble<SearchPath>().For<ISearchPath>();
 		}
 
-		[Test, Ignore("trying to fix test on builder server")]
+		[Test]
 		public void CopyPayrollFilesFromSourceToDestinationBeforeExecute()
 		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
 			const string tenantName = "DirectoryEmptyTenant";
 			var tenantSpecificPayrollDir = Path.Combine(SearchPath.Path, tenantName);
 			if (Directory.Exists(tenantSpecificPayrollDir))
@@ -75,6 +78,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			//ServiceBusPayrollExportFeedback.PayrollResultDetails.Where(f => f.DetailLevel == DetailLevel.Error).Should().Be.Empty();
 			ServiceBusPayrollExportFeedback.PayrollResultDetails.ForEach(d => Console.WriteLine($"{d.Message} Exception message:{d.Exception?.Message}"));
 			Assert.IsTrue(File.Exists(Path.Combine(tenantSpecificPayrollDir, "Teleopti.Ccc.Payroll.dll")));
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
 	}
 }
