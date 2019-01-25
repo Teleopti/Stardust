@@ -168,3 +168,11 @@ GO
 ALTER TABLE [stage].[stg_queue]
 ALTER COLUMN [queue_name] nvarchar(100)
 GO
+
+ALTER TABLE [stage].[stg_acd_login_person]
+ALTER COLUMN [acd_login_code] nvarchar(100)
+GO
+
+ALTER TABLE [stage].[stg_queue_workload]
+ALTER COLUMN [queue_code] nvarchar(100)
+GO
