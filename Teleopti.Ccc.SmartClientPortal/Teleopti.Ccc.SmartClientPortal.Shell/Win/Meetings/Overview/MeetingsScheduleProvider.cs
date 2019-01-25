@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
             _meetingChangerAndPersister = meetingChangerAndPersister;
             _model = model;
         	_overlappingAppointmentsHelper = overlappingAppointmentsHelper;
-        	_userTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+        	_userTimeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
             _appointmentFromMeetingCreator = new AppointmentFromMeetingCreator(new MeetingTimeZoneHelper(_userTimeZone));
             
             SaveOnCloseBehaviorAction = SaveOnCloseBehavior.DoNotSave;
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
                         var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
 
                     	var persons = new List<Guid>(_model.FilteredPersonsId);
-						var person = TeleoptiPrincipal.CurrentPrincipal.PersonId;
+						var person = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId;
 						if (!persons.Contains(person) && _model.IncludeForOrganizer)
 						{
 							persons.Add(person);

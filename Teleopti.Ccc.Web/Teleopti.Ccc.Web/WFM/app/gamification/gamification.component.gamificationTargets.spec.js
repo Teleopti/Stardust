@@ -7,6 +7,8 @@ describe('gamification, ', function () {
 	    $material,
 	    $document;
 
+	var times4FetchSettingList = 0;
+
 	var mySites = [
 		{ position: 0, id: '1', name: 'Washington DC' },
 		{ position: 1, id: '2', name: 'Toronto' },
@@ -35,6 +37,8 @@ describe('gamification, ', function () {
 			$document = $injector.get('$document');
 			$timeout = $injector.get('$timeout');
 		});
+
+		times4FetchSettingList = 0;
 	});
 
 	afterEach(function () {
@@ -66,13 +70,16 @@ describe('gamification, ', function () {
 			expect(target.find('gamification-targets-table').length).toBe(1);
 		});
 
+		it('should load settings only for one time when render', function () {
+			setupComponent();
+			expect(times4FetchSettingList).toBe(1);
+		});
+
 		it('should fetch sites', function () {
 			var cmp = setupComponent();
 			var numSites = cmp.find('md-option').length;
 			expect(numSites).toBe(10);
 		});
-
-		// it('should fetch settings', function () { });
 
 		it('should fetch teams on the selected sites', function () {
 			var cmp = setupComponent();
@@ -333,6 +340,7 @@ describe('gamification, ', function () {
 		};
 
 		this.fetchSettingList = function () {
+			times4FetchSettingList++;
 			return $q(function (resolve, reject) {
 				var list = [
 					{ id: 'default', name: 'Default' },

@@ -291,6 +291,7 @@ var rtaTester = (function () {
 			state.lastGoParams = undefined;
 			state.lastNotice = undefined;
             jasmine.clock().uninstall();
+            moment.locale('en');
 		});
 
 		var bagOfCandy = controllerName == 'RtaAgentsController78568';

@@ -554,7 +554,6 @@
     <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />
     <Compile Include="Foundation\ConnectionStrings.cs" />
     <Compile Include="Foundation\IConnectionStrings.cs" />
-    <Compile Include="ServiceLocatorForEntity.cs" />
     <Compile Include="Staffing\IStaffingDataAvailablePeriodProvider.cs" />
     <Compile Include="Audit\StaffingContextReaderService.cs" />
     <Compile Include="Staffing\StaffingDataAvailablePeriodProvider.cs" />

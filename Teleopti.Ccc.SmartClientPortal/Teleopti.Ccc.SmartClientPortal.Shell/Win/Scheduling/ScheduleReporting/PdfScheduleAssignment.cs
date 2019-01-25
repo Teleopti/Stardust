@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
             Graphics.DrawString(visualLayer.Period.TimePeriod(timeZoneInfo).ToShortTimeString(), font, Brush, timeRect, Format);
             top = top + fontSize + 2;
             var nameRect = new RectangleF(0, top, ColumnWidth, fontSize + 2);
-			Graphics.DrawString(visualLayer.Payload.ConfidentialDescription(person).Name, font, Brush, nameRect, Format);
+			Graphics.DrawString(visualLayer.Payload.ConfidentialDescription_DONTUSE(person).Name, font, Brush, nameRect, Format);
 			top = top + fontSize + 2;
 			nameRect = new RectangleF(0, top, ColumnWidth, fontSize + 2);
 
@@ -152,11 +152,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
             {
                 if (visualLayer.DefinitionSet != null)
                 {
-                    string overtimeText = string.Concat(visualLayer.Payload.ConfidentialDescription(person).Name, ", ",
+                    string overtimeText = string.Concat(visualLayer.Payload.ConfidentialDescription_DONTUSE(person).Name, ", ",
                                                         visualLayer.DefinitionSet.Name);
                     if (overtimeText.Length > MAX_NUMBER_OF_CHARACTERS)
                     {
-                        Graphics.DrawString(string.Concat(visualLayer.Payload.ConfidentialDescription(person).Name, ", "), font, Brush, nameRect, Format);
+                        Graphics.DrawString(string.Concat(visualLayer.Payload.ConfidentialDescription_DONTUSE(person).Name, ", "), font, Brush, nameRect, Format);
                         nameRect = new RectangleF(0, top + fontSize + 2, ColumnWidth, fontSize + 2);
                         Graphics.DrawString(visualLayer.DefinitionSet.Name, font, Brush, nameRect, Format);
                     }
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
             float lineStart = timeRect.Top;
             float lineEnd = nameRect.Bottom;
 
-            Graphics.DrawLine(new PdfPen(visualLayer.Payload.ConfidentialDisplayColor(person), 5), 7, lineStart, 7, lineEnd);
+            Graphics.DrawLine(new PdfPen(visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(person), 5), 7, lineStart, 7, lineEnd);
 
             return nameRect.Bottom + 2;
             //return top + fontSize + 2 + RowSpace;

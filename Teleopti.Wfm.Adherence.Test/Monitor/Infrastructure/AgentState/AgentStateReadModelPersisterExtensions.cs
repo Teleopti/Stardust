@@ -10,7 +10,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			instance.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = model.PersonId,
-				BusinessUnitId = model.BusinessUnitId ?? ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = model.BusinessUnitId ?? ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
 				SiteId = model.SiteId,
 				SiteName = model.SiteName,
 				TeamId = model.TeamId.GetValueOrDefault(),
@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState
 			instance.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = model.PersonId,
-				BusinessUnitId = model.BusinessUnitId ?? ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = model.BusinessUnitId ?? ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
 				SiteId = model.SiteId,
 				SiteName = model.SiteName,
 				TeamId = model.TeamId.GetValueOrDefault(),

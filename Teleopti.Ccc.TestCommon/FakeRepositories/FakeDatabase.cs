@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 		}
 
-		public void CreateDefaultData()
+		public void CreateDefaultData(IBusinessUnit businessUnit)
 		{
 			// default data already created. ugly for now...
 			if (_applicationFunctions.LoadAll().Any())
@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				CultureInfoFactory.CreateEnglishCulture(), null);
 			_person.PermissionInformation.AddApplicationRole(role);
 
-			WithBusinessUnit(DomainTestAttribute.DefaultBusinessUnitId);
+			WithBusinessUnit(businessUnit.Id.Value);
 
 			WithScenario(null, true);
 

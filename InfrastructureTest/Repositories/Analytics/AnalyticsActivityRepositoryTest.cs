@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldFindActivities()
 		{
-			var businessUnit = new BusinessUnit(ServiceLocatorForEntity.CurrentBusinessUnit.Current(), 1,4);
+			var businessUnit = new BusinessUnit(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current(), 1,4);
 			var code = Guid.NewGuid();
 			var activity = new Activity(10, code, "Activity name", Color.AliceBlue, new ExistingDatasources(new UtcAndCetTimeZones()), 4);
 			analyticsDataFactory.Setup(activity);

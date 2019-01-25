@@ -103,13 +103,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 							var isAbsenceConfidential = isPayloadAbsence && ((IAbsence) layer.Payload).Confidential;
 							var description = isPayloadAbsence
 								? ((IAbsence) layer.Payload).Description
-								: layer.Payload.ConfidentialDescription(personSchedule.Person);
+								: layer.Payload.ConfidentialDescription_DONTUSE(personSchedule.Person);
 							var sl = new SimpleLayer
 							{
 								Description = description.Name,
 								Color = isPayloadAbsence
 									? ((IAbsence) layer.Payload).DisplayColor.ToCSV()
-									: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToCSV(),
+									: layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDay.Person).ToCSV(),
 								Start = layer.Period.StartDateTime,
 								End = layer.Period.EndDateTime,
 								IsAbsenceConfidential = isAbsenceConfidential

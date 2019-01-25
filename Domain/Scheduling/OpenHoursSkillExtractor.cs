@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)]
 	public interface IOpenHoursSkillExtractor
 	{
-		OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period);
+		OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, IScheduleMatrixPro matrix, DateOnly currentDate);
 	}
 
 	public class OpenHoursSkillExtractor : IOpenHoursSkillExtractor
@@ -23,8 +23,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
+		public OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, IScheduleMatrixPro matrix, DateOnly currentDate)
 		{
+			var period = new DateOnlyPeriod(matrix.FullWeeksPeriodDays.Min(x => x.Day), matrix.FullWeeksPeriodDays.Max(x => x.Day));
+
+			var allExceptCurrentDayIsScheduled = true;
+			foreach (var scheduleDayPro in matrix.FullWeeksPeriodDays.Reverse())
+			{
+				if (scheduleDayPro.Day == currentDate || scheduleDayPro.DaySchedulePart().IsScheduled()) continue;
+				allExceptCurrentDayIsScheduled = false;
+				break;
+			}
+
+			if (allExceptCurrentDayIsScheduled) return null;
+
 			var skillDaysBySkillAndDay = skillDays.ToDictionary(s => (s.Skill, s.CurrentDate));
 			var openHoursDictionary = period.DayCollection().ToDictionary(d => d, day =>
 			{
@@ -85,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)]
 	public class OpenHoursSkillExtractorDoNothing : IOpenHoursSkillExtractor
 	{
-		public OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod period)
+		public OpenHoursSkillResult Extract(IEnumerable<IPerson> agentsInTeam, IEnumerable<ISkillDay> skillDays, IScheduleMatrixPro matrix, DateOnly currentDate)
 		{
 			return null;
 		}

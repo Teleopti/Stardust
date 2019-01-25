@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual Guid? BusinessUnit
 		{
-			get => _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId());
+			get => _businessUnit ?? (_businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.CurrentId());
 			protected set => _businessUnit = value;
 		}
 

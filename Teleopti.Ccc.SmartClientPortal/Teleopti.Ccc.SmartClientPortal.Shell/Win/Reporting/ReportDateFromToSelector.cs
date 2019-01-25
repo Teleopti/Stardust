@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
                 dateTimePickerAdvWorkAStartDate.UseCurrentCulture =
                     dateTimePickerAdvWorkEndPeriod.UseCurrentCulture = false;
-                dateTimePickerAdvWorkEndPeriod.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
-                dateTimePickerAdvWorkAStartDate.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+                dateTimePickerAdvWorkEndPeriod.SetCultureInfoSafe(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
+                dateTimePickerAdvWorkAStartDate.SetCultureInfoSafe(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture);
             }
         }
 

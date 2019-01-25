@@ -83,8 +83,8 @@ namespace Teleopti.Wfm.Adherence.Historical
 					from layer in layers
 					select new HistoricalAdherenceActivityViewModel
 					{
-						Name = layer.Payload.ConfidentialDescription(person).Name,
-						Color = ColorTranslator.ToHtml(layer.Payload.ConfidentialDisplayColor(person)),
+						Name = layer.Payload.ConfidentialDescription_DONTUSE(person).Name,
+						Color = ColorTranslator.ToHtml(layer.Payload.ConfidentialDisplayColor_DONTUSE(person)),
 						StartTime = formatForUser(layer.Period.StartDateTime),
 						EndTime = formatForUser(layer.Period.EndDateTime),
 					})

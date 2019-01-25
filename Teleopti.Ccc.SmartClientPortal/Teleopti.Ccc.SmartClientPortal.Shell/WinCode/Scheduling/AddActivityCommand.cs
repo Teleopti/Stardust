@@ -27,11 +27,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public static DateTimePeriod GetDefaultPeriodFromPart(IScheduleDay part)
 		{
-			var startDateTimeLocal = part.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			var startDateTimeLocal = part.Period.StartDateTimeLocal(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 			DateTimePeriod defaultPeriod =
 				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 					startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour)),
-					startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour)), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+					startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour)), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
 			if (part.SignificantPart() == SchedulePartView.MainShift)
 			{

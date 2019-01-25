@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		{
 			var skillDayId1 = Guid.NewGuid();
 			var skillDayId2 = Guid.NewGuid();
-			var events = new List<IEvent>(){ new SkillDayChangedEvent() { SkillDayId = skillDayId1 } , new SkillDayChangedEvent() { SkillDayId = skillDayId2 } };
+			var events = new List<IEvent>{ new SkillDayChangedEvent() { SkillDayId = skillDayId1 } , new SkillDayChangedEvent() { SkillDayId = skillDayId2 } };
 			Target.Handle(events);
-			var eventPublished = EventPublisher.PublishedEvents.Single(x => x.GetType() == typeof(ForecastChangedEvent)) as ForecastChangedEvent;
+			var eventPublished = EventPublisher.PublishedEvents.OfType<ForecastChangedEvent>().Single();
 			eventPublished.SkillDayIds.First().Should().Be.EqualTo(skillDayId1);
 			eventPublished.SkillDayIds.Last().Should().Be.EqualTo(skillDayId2);
 		}

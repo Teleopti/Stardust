@@ -60,7 +60,7 @@
 								<div
 									class="ant-calendar-date"
 									[class.border]="year.SelectedDates.indexOf(currentDate.getTime()) > -1"
-									(click)="dateClick(year)"
+									(click)="dateClick(currentDate, year)"
 								>
 									{{ currentDate.getDate() }}
 								</div>
@@ -146,20 +146,4 @@
 			{{ 'Save' | translate }}
 		</button>
 	</div>
-
-	<nz-modal
-		*ngIf="isDeleteYearModalVisible && activedYearTab"
-		[(nzVisible)]="isDeleteYearModalVisible"
-		[nzTitle]="
-			('AreYouSureToDeleteYearFromCalendar' | translate)
-				.replace('{0}', activedYearTab.Year.toString())
-				.replace('{1}', this.edittingCalendarName)
-		"
-		[nzOkText]="'Delete' | translate"
-		nzOkType="danger"
-		[nzCancelText]="'Cancel' | translate"
-		(nzOnOk)="deleteYearTab(activedYearTab)"
-		(nzOnCancel)="closeDeleteYearTabModal()"
-		class="bank-holiday-delete-year-tab-modal"
-	></nz-modal>
 </div>

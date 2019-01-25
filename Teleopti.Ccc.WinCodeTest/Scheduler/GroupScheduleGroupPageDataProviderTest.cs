@@ -51,14 +51,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 
             _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(),
-				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, _disableDeletedFilter, _resultHolder, new TimeZoneGuard());
+				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, _disableDeletedFilter, _resultHolder, new TimeZoneGuard());
 			_target = new GroupScheduleGroupPageDataProvider(()=>_stateHolder, _repositoryFactory, _currentUnitOfWorkFactory, _disableDeletedFilter);
 		}
 
 		[Test]
 		public void VerifyBusinessUnitCollection()
 		{
-            var expected = ((ITeleoptiIdentityForLegacy)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit();
+            var expected = ((ITeleoptiIdentityForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnit();
 			var repository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 
 			commonMocks();

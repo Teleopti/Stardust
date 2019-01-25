@@ -153,7 +153,7 @@ describe('BankHolidayCalendarAddComponent', () => {
 
 		expect(component.newCalendarYears[0].Dates.length).toBe(0);
 
-		component.dateClick(component.newCalendarYears[0]);
+		component.dateClick({ nativeDate: new Date('2015-01-10') }, component.newCalendarYears[0]);
 		fixture.detectChanges();
 		flush();
 

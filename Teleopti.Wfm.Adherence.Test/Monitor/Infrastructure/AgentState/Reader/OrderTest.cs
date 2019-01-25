@@ -117,7 +117,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = pierre,
-				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
 				FirstName = "Pierre",
 				LastName = "Baldi"
 			});
@@ -125,7 +125,7 @@ namespace Teleopti.Wfm.Adherence.Test.Monitor.Infrastructure.AgentState.Reader
 			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = ashley,
-				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
+				BusinessUnitId = ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value,
 				FirstName = "Ashley",
 				LastName = "Andeen"
 			});

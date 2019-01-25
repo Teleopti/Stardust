@@ -18,7 +18,6 @@ import {
 	IntradayTrafficDataSeries,
 	IntradayTrafficSummaryData,
 	IntradayTrafficSummaryItem,
-	Skill,
 	SkillPickerItem,
 	SkillPickerItemType,
 	IIntradayAxisLabels
@@ -187,6 +186,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 	}
 
 	updateData = () => {
+		// tslint:disable-next-line:no-debugger
 		this.setPersistedData();
 		if (!this.selectedSkillOrGroup || !this.selectedSkillOrGroup.Skills) {
 			return;
@@ -195,6 +195,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 		this.showReforecastedWarning = this.isWarningableTab() && this.isSkillEmailOrBackoffice();
 
 		let selectedSkill = this.selectedSkillOrGroup;
+
 		if (this.selectedSubSkillId && this.selectedSubSkillId !== 'all') {
 			selectedSkill = {
 				Id: this.selectedSubSkillId,
@@ -358,14 +359,6 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			}
 		}
 	};
-
-	private handleError(err: any) {
-		console.warn('Http error', err);
-		this.error = true;
-		this.chartData = undefined;
-		this.errorMessage = this.translate.instant('NoDataAvailable');
-		this.loading = false;
-	}
 
 	goToGroupManager() {
 		location.hash = '#/intraday/skill-group-manager';
@@ -570,12 +563,9 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			const found = this.selectedSkillOrGroup.Skills.find(
 				skill => skill.SkillType === 'SkillTypeEmail' || skill.SkillType === 'SkillTypeBackoffice'
 			);
-			console.log('found', found);
-
-			if (found && this.selectedSubSkillId === 'all') return true;
+			if (found || this.selectedSubSkillId === 'all') return true;
 			else {
 				const s = this.selectedSkillOrGroup.Skills.find(x => x.Id === this.selectedSubSkillId);
-				console.log('found.SkillType', s.SkillType);
 				return s.SkillType === 'SkillTypeEmail' || s.SkillType === 'SkillTypeBackoffice';
 			}
 		} else {

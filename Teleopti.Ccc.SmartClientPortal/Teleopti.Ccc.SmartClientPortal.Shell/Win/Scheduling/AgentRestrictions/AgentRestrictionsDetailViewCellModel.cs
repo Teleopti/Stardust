@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 				format.Alignment = StringAlignment.Center;
 
 				CultureInfo culture =
-					TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+					TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.Culture;
 
 				g.DrawString(cellData.TheDate.ToShortDateString(culture), Grid.Font, Brushes.Black, clientRectangle);
 

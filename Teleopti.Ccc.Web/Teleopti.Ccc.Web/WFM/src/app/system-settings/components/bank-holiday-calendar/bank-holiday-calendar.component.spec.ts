@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import en from '@angular/common/locales/en';
 import zh from '@angular/common/locales/zh';
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite } from '@wfm/test';
@@ -401,7 +401,7 @@ describe('BankHolidayCalendarComponent', () => {
 		expect(component.bankHolidayCalendarsList[0].CurrentYearIndex).toBe(0);
 	});
 
-	it('should popup a modal and let user confirm when deleting a caldendar', () => {
+	it('should popup a modal and let user confirm when deleting a caldendar', fakeAsync(() => {
 		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
 			{
 				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
@@ -436,54 +436,64 @@ describe('BankHolidayCalendarComponent', () => {
 			.match('../api/SitesByCalendar/' + 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df')[0]
 			.flush(['4aae67fd-af87-4377-b9d3-3c82c9f68f2f']);
 		fixture.detectChanges();
-
-		expect(document.getElementsByClassName('ant-modal')[0].innerHTML.indexOf('2013') > -1).toBeTruthy();
-	});
-
-	it('should notice user of how many sites are using the calendar when deleting it', () => {
-		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
-			{
-				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
-				Name: 'Bank holiday calendar 2013',
-				Years: [
-					{
-						Year: '2013',
-						Dates: [
-							{
-								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
-								Date: '2013-01-09',
-								Description: 'BankHoliday',
-								IsDeleted: false
-							}
-						]
-					}
-				]
-			}
-		]);
-
+		tick(500);
 		fixture.detectChanges();
 
-		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
-		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
-
-		list[0].getElementsByClassName('anticon-delete')[0].parentElement.dispatchEvent(new Event('click'));
-
-		httpTestingController.match('../ToggleHandler/AllToggles')[0].flush({
-			WFM_Setting_BankHolidayCalendar_Create_79297: true,
-			WFM_Setting_AssignBankHolidayCalendarsToSites_79899: true
-		});
-
-		httpTestingController
-			.match('../api/SitesByCalendar/' + 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df')[0]
-			.flush(['4aae67fd-af87-4377-b9d3-3c82c9f68f2f']);
-
-		fixture.detectChanges();
-
-		expect(document.getElementsByClassName('ant-modal')[0].innerHTML.indexOf('2013') > -1).toBeTruthy();
 		expect(
-			document.getElementsByClassName('ant-modal')[0].innerHTML.indexOf('XSitesUseThisCalendar') > -1
+			document.getElementsByClassName('ant-modal-confirm-body-wrapper')[0].innerHTML.indexOf('2013') > -1
 		).toBeTruthy();
-	});
+	}));
+
+	it('should notice user of how many sites are using the calendar when deleting it', fakeAsync(() => {
+		httpTestingController.match('../api/BankHolidayCalendars')[0].flush([
+			{
+				Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+				Name: 'Bank holiday calendar 2013',
+				Years: [
+					{
+						Year: '2013',
+						Dates: [
+							{
+								Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+								Date: '2013-01-09',
+								Description: 'BankHoliday',
+								IsDeleted: false
+							}
+						]
+					}
+				]
+			}
+		]);
+
+		fixture.detectChanges();
+
+		const bankHolidayCalendarSettings = document.getElementsByClassName('bank-holiday-settings')[0];
+		const list = bankHolidayCalendarSettings.getElementsByTagName('nz-collapse-panel');
+
+		list[0].getElementsByClassName('anticon-delete')[0].parentElement.dispatchEvent(new Event('click'));
+
+		httpTestingController.match('../ToggleHandler/AllToggles')[0].flush({
+			WFM_Setting_BankHolidayCalendar_Create_79297: true,
+			WFM_Setting_AssignBankHolidayCalendarsToSites_79899: true
+		});
+
+		httpTestingController
+			.match('../api/SitesByCalendar/' + 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df')[0]
+			.flush(['4aae67fd-af87-4377-b9d3-3c82c9f68f2f']);
+
+		fixture.detectChanges();
+		tick(500);
+		fixture.detectChanges();
+
+		expect(
+			document.getElementsByClassName('ant-modal-confirm-body-wrapper')[0].innerHTML.indexOf('2013') > -1
+		).toBeTruthy();
+		expect(
+			document
+				.getElementsByClassName('ant-modal-confirm-body-wrapper')[0]
+				.innerHTML.indexOf('XSitesUseThisCalendar') > -1
+		).toBeTruthy();
+	}));
 
 	it('should show site tab when WFM_Setting_AssignBankHolidayCalendarsToSites_79899 is turn on', () => {
 		const toggleReq = httpTestingController.match('../ToggleHandler/AllToggles');

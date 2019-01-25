@@ -90,10 +90,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			                 let length = visualLayer.Period.ElapsedTime().TotalMinutes
 			                 select new AsmLayer
 			                        	{														    
-			                        		Payload = visualLayer.Payload.ConfidentialDescription(currentUser).Name,
+			                        		Payload = visualLayer.Payload.ConfidentialDescription_DONTUSE(currentUser).Name,
 											StartMinutesSinceAsmZero = getStartMinutesSinceAsmZero(dstJudgement, startDate,asmZero),
 			                        		LengthInMinutes = length,
-			                        		Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(currentUser)),
+			                        		Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor_DONTUSE(currentUser)),
 											StartTimeText = startDate.ToString(culture.DateTimeFormat.ShortTimePattern, culture),
 											EndTimeText = endDate.ToString(culture.DateTimeFormat.ShortTimePattern, culture)
 							 }).ToList();

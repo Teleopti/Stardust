@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		protected PersonAbsence()
 		{
-			_lastChange = ServiceLocatorForEntity.Now.UtcDateTime();
+			_lastChange = ServiceLocator_DONTUSE.Now.UtcDateTime();
 		}
 
 		/// <summary>

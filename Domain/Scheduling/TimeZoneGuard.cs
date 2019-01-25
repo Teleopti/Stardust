@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private TimeZoneInfo _timeZone;
 
-		public TimeZoneInfo TimeZone => _timeZone ?? (_timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+		public TimeZoneInfo TimeZone => _timeZone ?? (_timeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 
 		public void Set(TimeZoneInfo timeZone)
 		{
 			_timeZone = timeZone;
 		}
 
-		public static ITimeZoneGuard Instance => ServiceLocatorForLegacy.TimeZoneGuard;
+		public static ITimeZoneGuard Instance => ServiceLocator_DONTUSE.TimeZoneGuard;
 
 		public TimeZoneInfo CurrentTimeZone()
 		{

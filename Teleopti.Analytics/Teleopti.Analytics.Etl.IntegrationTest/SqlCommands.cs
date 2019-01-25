@@ -200,11 +200,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
 			{
-				string sql = string.Format("select sum(f.{0}) from mart.fact_schedule_deviation f " +
+				string sql = $"select sum(f.{@columnName}) from mart.fact_schedule_deviation f " +
 										   "inner join mart.dim_date d " +
 										   "on f.shift_startdate_id = d.date_id " +
-										   "where d.date_date = @date and is_logged_in = 1",
-					columnName);
+										   "where d.date_date = @date and is_logged_in = 1";
 				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
 				{
 					sqlCommand.Parameters.AddWithValue("@date", utcDate.Date);

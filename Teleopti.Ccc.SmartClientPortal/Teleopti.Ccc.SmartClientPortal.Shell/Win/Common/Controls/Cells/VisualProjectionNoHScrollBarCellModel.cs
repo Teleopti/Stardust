@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 			var cellModel = style.CellModel as VisualProjectionNoHScrollBarCellModel;
 			TimeZoneInfo timeZoneInfo = (cellModel != null && cellModel.TimeZoneInfo != null)
 				? cellModel.TimeZoneInfo
-				: TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+				: TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
 
 			foreach (var interval in timePeriod.AffectedHourCollection())
 			{
@@ -142,10 +142,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 				{
 					var rect2 = rect;
 					rect2.Inflate(1, 1);
-					using (Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.Payload.ConfidentialDisplayColor(projectionCellValue.AssignedPerson), 90, false))
+					using (Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.Payload.ConfidentialDisplayColor_DONTUSE(projectionCellValue.AssignedPerson), 90, false))
 					{
 						g.FillRectangle(brush, rect);
-						var tipData = new ToolTipData(rect.X, rect.X + rect.Width, layer.Payload.ConfidentialDescription(projectionCellValue.AssignedPerson) + "  " + layer.Period.TimePeriod(timeZoneInfo).ToShortTimeString());
+						var tipData = new ToolTipData(rect.X, rect.X + rect.Width, layer.Payload.ConfidentialDescription_DONTUSE(projectionCellValue.AssignedPerson) + "  " + layer.Period.TimePeriod(timeZoneInfo).ToShortTimeString());
 						tipDatas.Add(tipData);
 					}
 				}

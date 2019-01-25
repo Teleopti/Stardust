@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Common
 			personPeriod.Team = team;
 			AddEvent(() =>
 			{
-				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
+				var info = currentAssociationInfo(ServiceLocator_DONTUSE.Now);
 				return new PersonTeamChangedEvent
 				{
 					PersonId = Id.GetValueOrDefault(),
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			AddEvent(() =>
 			{
-				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
+				var info = currentAssociationInfo(ServiceLocator_DONTUSE.Now);
 				return new PersonPeriodChangedEvent
 				{
 					PersonId = Id.GetValueOrDefault(),

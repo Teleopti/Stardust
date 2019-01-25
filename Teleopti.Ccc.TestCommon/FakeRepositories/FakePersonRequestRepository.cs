@@ -262,6 +262,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		}
 
+		public IList<IPersonRequest> FindPersonRequestsWithAbsenceAndPersonPeriods(IEnumerable<Guid> ids)
+		{
+			return Find(ids);
+		}
+
 		private PersonRequestStatus GetRequestStatus(IPersonRequest request)
 		{
 			if (request.IsWaitlisted)

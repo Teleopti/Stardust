@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			            if (significantPart == SchedulePartView.FullDayAbsence ||
 			                significantPart == SchedulePartView.ContractDayOff)
 			            {
-				            color2 = absenceCollection[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person);
+				            color2 = absenceCollection[0].Layer.Payload.ConfidentialDisplayColor_DONTUSE(scheduleDay.Person);
 				            symbol = "X";
 			            }
 		            }

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         public void ShouldAllowClaimWithCurrentBusinessUnitToSeePeople()
         {
             var availableData = new AvailableData();
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+			var identity = ((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity);
 			var businessUnit = new BusinessUnit(identity.BusinessUnitName);
 			businessUnit.SetId(identity.BusinessUnitId);
 			availableData.AddAvailableBusinessUnit(businessUnit);

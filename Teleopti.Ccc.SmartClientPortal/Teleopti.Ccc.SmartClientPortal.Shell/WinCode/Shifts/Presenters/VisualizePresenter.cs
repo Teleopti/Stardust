@@ -118,8 +118,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters
                     {
                         var payload = new VisualPayloadInfo(layer.Period.StartDateTime,
                                                                           layer.Period.EndDateTime,
-                                                                          layer.Payload.ConfidentialDisplayColor(null),
-                                                                          layer.Payload.ConfidentialDescription(null).Name);
+                                                                          layer.Payload.ConfidentialDisplayColor_DONTUSE(null),
+                                                                          layer.Payload.ConfidentialDescription_DONTUSE(null).Name);
                         var master = layer.Payload as IMasterActivity;
                         if(master != null)
                             payload.SetUnderlyingActivities(master.ActivityCollection);

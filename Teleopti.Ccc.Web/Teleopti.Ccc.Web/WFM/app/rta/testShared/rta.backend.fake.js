@@ -81,6 +81,16 @@
 			url: /\.\.\/api\/HistoricalAdherence\/RemoveApprovedPeriod/
 		});
 
+        service.fake({
+            name: 'adjustPeriod',
+            url: /\.\.\/api\/Adherence\/AdjustPeriod/
+        });        
+        
+        service.fake({
+            name: 'adjustedPeriods',
+            url: /\.\.\/api\/Adherence\/AdjustedPeriods/
+        });
+
 		service.fake({
 			name: 'historicalAdherence',
 			url: /\.\.\/api\/HistoricalAdherence\/ForPerson(.*)/,

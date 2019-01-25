@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 	{
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataSkillFactorApplier _skillIntervalDataSkillFactorApplier;
-		private readonly ISkillIntervalDataAggregator _intervalDataAggregator;
+		private readonly SkillIntervalDataAggregator _intervalDataAggregator;
 		private readonly ISkillIntervalDataDivider _intervalDataDivider;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public CalculateAggregatedDataForActivtyAndDate(
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier,
-			ISkillIntervalDataAggregator intervalDataAggregator,
+			SkillIntervalDataAggregator intervalDataAggregator,
 			ISkillIntervalDataDivider intervalDataDivider,
 			ITimeZoneGuard timeZoneGuard)
 		{

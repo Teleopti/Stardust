@@ -10,8 +10,10 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
@@ -34,13 +36,19 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		private IList<IPersonRequest> _requests;
 		private DateTime _nowDateTime;
 
+		private const string tenantName = "Teleopti WFM";
+		private readonly Guid businessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b");
 
 		public override void OneTimeSetUp()
 		{
+			var schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
+			LicenseSchema.SetActiveLicenseSchema(tenantName, schema);
+
 			_nowDateTime = new DateTime(2016, 04, 06, 6, 58, 0).Utc();
 			Now.Is(_nowDateTime);
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+
+			using (DataSource.OnThisThreadUse(tenantName))
+				AsSystem.Logon(tenantName, businessUnitId);
 
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
@@ -64,7 +72,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				var reqIds =
 					PersonRequestRepository.GetWaitlistRequests(new DateTimePeriod(new DateTime(2016, 04, 06, 8, 0, 0).Utc(),
 						new DateTime(2016, 04, 06, 17, 0, 0).Utc()));
-				_requests = PersonRequestRepository.Find(reqIds).Where(p => p.Person.WorkflowControlSet != null).ToList();
+				_requests = PersonRequestRepository.FindPersonRequestsWithAbsenceAndPersonPeriods(reqIds).Where(p => p.Person.WorkflowControlSet != null).ToList();
 			});
 		}
 
@@ -73,8 +81,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		{
 			Now.Is("2016-04-06 06:59");
 
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			using (DataSource.OnThisThreadUse(tenantName))
+				AsSystem.Logon(tenantName, businessUnitId);
 
 			WithUnitOfWork.Do(() =>
 			{

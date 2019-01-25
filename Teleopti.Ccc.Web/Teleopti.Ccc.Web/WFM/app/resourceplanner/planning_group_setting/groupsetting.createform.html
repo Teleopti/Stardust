@@ -154,7 +154,7 @@
 							</div>
 						</div>
 						
-						<div class="con-flex">
+						<div class="con-flex" ng-if="vm.teamToggleEnabled && vm.settingInfo.Default">
 							<b>{{'TeamSchedulingColon' | translate}}</b>
 							<div class="con-row">
 								<div class="con-flex">
@@ -172,6 +172,8 @@
 									</md-radio-group>
 								</div>
 							</div>
+						</div>
+                        <div class="con-flex" ng-if="!(vm.teamToggleEnabled && vm.settingInfo.Default)">
 						</div>
 					</div>
 

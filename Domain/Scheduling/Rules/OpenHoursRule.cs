@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				if (openHours.Any(dateTimePeriod => dateTimePeriod.Contains(layer.Period))) continue;
 
 				var errorMessage = string.Format(errorMessageTemplate,
-					layer.Payload.ConfidentialDescription(person),
+					layer.Payload.ConfidentialDescription_DONTUSE(person),
 					layer.Period.StartDateTimeLocal(timeZone),
 					layer.Period.EndDateTimeLocal(timeZone));
 				return createResponse(person, dateOnly, errorMessage);

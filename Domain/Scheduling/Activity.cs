@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -106,12 +107,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return String.Concat(Description.Name, ", ", base.ToString());
 		}
 
-		public virtual Description ConfidentialDescription(IPerson assignedPerson)
+		public virtual Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization)
 		{
 			return Description;
 		}
 
-		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
+		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization)
 		{
 			return DisplayColor;
 		}

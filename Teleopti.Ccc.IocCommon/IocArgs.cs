@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.IocCommon
 		public bool IsFatClient { get; set; }
 		public IocCache Cache { get; } = new IocCache();
 		public bool TeleoptiPrincipalForLegacy { get; set; }
+		public bool EnableLegacyServiceLocators { get; set; }
 
 		public IocArgs(IConfigReader configReader)
 		{
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.IocCommon
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 			MessageBrokerUrl = configReader.AppConfig("MessageBroker");
 			TeleoptiPrincipalForLegacy = false;
+			EnableLegacyServiceLocators = true;
 		}
 	}
 }

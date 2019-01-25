@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private Guid getBusinessUnitId()
 		{
-			return ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
+			return ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage, DateOnly queryDate)

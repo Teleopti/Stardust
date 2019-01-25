@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.DisplayColor = Color.Red;
             target.Confidential = true;
             var loggedOn = TestWithStaticDependenciesDONOTUSEAttribute.loggedOnPerson;
-            Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(loggedOn));
-            Assert.AreEqual(target.Description, target.ConfidentialDescription(loggedOn));
+            Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor_DONTUSE(loggedOn));
+            Assert.AreEqual(target.Description, target.ConfidentialDescription_DONTUSE(loggedOn));
         }
 
         /// <summary>
@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.Confidential = true;
             using(CurrentAuthorization.ThreadlyUse(new NoPermission()))
             {
-                Assert.AreEqual(ConfidentialPayloadValues.Description, target.ConfidentialDescription(null));
-                Assert.AreEqual(ConfidentialPayloadValues.DisplayColor, target.ConfidentialDisplayColor(null));
+                Assert.AreEqual(ConfidentialPayloadValues.Description, target.ConfidentialDescription_DONTUSE(null));
+                Assert.AreEqual(ConfidentialPayloadValues.DisplayColor, target.ConfidentialDisplayColor_DONTUSE(null));
             }
         }
 
@@ -197,8 +197,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			target.Confidential = true;
 			using (CurrentAuthorization.ThreadlyUse(new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal))))
 			{
-				Assert.AreEqual(target.Description, target.ConfidentialDescription(targetPerson));
-				Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(targetPerson));
+				Assert.AreEqual(target.Description, target.ConfidentialDescription_DONTUSE(targetPerson));
+				Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor_DONTUSE(targetPerson));
 			}		
 		}
 

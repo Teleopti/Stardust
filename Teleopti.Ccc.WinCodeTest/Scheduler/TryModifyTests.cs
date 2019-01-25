@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldReturnTrueForModificationWithAlreadyOverridenRuleBroken()
 		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var scenario = new Scenario("Default").WithId();
 			var shiftCategory = new ShiftCategory("DY").WithId();
 			var activity = new Activity("Phone")
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldReturnTrueForModificationWithRuleBroken()
 		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
 			var scenario = new Scenario("Default").WithId();
 			var shiftCategory = new ShiftCategory("DY").WithId();
 			var activity = new Activity("Phone")

@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{976853A3-D450-4424-A472-79AD858B806D}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Teleopti.Wfm.SchedulingTest</RootNamespace>
+        <AssemblyName>Teleopti.Wfm.SchedulingTest</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="Microsoft.Win32.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\Microsoft.Win32.Primitives.4.0.1\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="mscorlib" />
+        <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+          <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+          <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="policy.2.3.FSharp.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpTestsEx, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1">
+          <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="SharpTestsEx.Mvc, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1">
+          <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.Mvc.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.AppContext, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.AppContext.4.1.0\lib\net463\System.AppContext.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Diagnostics.Tracing, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Diagnostics.Tracing.4.1.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Drawing\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Drawing.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Globalization.Calendars, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Globalization.Calendars.4.0.1\lib\net46\System.Globalization.Calendars.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.IO, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.IO.4.1.0\lib\net462\System.IO.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.IO.Compression, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <HintPath>..\packages\System.IO.Compression.4.1.0\lib\net46\System.IO.Compression.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.IO.Compression.ZipFile, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <HintPath>..\packages\System.IO.Compression.ZipFile.4.0.1\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Linq, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Linq.4.1.0\lib\net463\System.Linq.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Linq.Expressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Linq.Expressions.4.1.0\lib\net463\System.Linq.Expressions.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Net.Http, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Net.Http.4.1.0\lib\net46\System.Net.Http.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Net.Sockets, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Net.Sockets.4.1.0\lib\net46\System.Net.Sockets.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Reflection, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Reflection.4.1.0\lib\net462\System.Reflection.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Runtime, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Runtime.4.1.0\lib\net462\System.Runtime.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Runtime.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Runtime.Extensions.4.1.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Runtime.InteropServices.4.1.0\lib\net462\System.Runtime.InteropServices.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.2.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Security.Cryptography.Encoding.4.0.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Security.Cryptography.Primitives.4.0.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Text.RegularExpressions.4.1.0\lib\net463\System.Text.RegularExpressions.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+          <HintPath>..\packages\Teleopti.Secrets.8.0.0.278\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f">
+          <HintPath>..\packages\Teleopti.Secrets.8.0.0.278\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="SchedulingScenarios\BusinessRules\MinWeeklyRestRuleTest.cs" />
+        <Compile Include="SchedulingScenarios\CancelSchedulingCallback.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationAvailabilityTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCallbackDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDayOffRulesTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationFakeDecisionMakerDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationLockDaysTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationNoPeriodValueCalculatorTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPlanningGroupTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPreferenceDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPreferencesTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationRestrictionDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationResultTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationRotationTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationSameBitArrayTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationScenario.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationShiftCategoryLimitationTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockTest_Legacy.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTest.cs" />
+        <Compile Include="SchedulingScenarios\DayOffOptimization\SchedulingAndDayOffOptimizationStardustResultTest.cs" />
+        <Compile Include="SchedulingScenarios\DoubleExtensionsInCascadingTestScenarios.cs" />
+        <Compile Include="SchedulingScenarios\ExtraPreferencesFactory.cs" />
+        <Compile Include="SchedulingScenarios\FairnessOptimization\FairnessOptimizationDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayCombinationDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingSameThreadDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandSpecificTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationDesktopMaxSeatTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIncreaseIslandsTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandTests.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPlanningGroupTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPreferenceTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationRestrictionsDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationScenarioTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStandardDeviationTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamTest.cs" />
+        <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTest.cs" />
+        <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationScenarioTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerDecreaseIslandsTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerExternalStaffTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerGeneralTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerIncreaseIslandsTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\CommandHandler\ResourcePlannerCommandHandlerTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\CommandHandler\SUT.cs" />
+        <Compile Include="SchedulingScenarios\Islands\IslandExtendedModelTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\IslandModelAfterReducingTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\IslandModelBeforeReducingTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\IslandModelCompleteTest.cs" />
+        <Compile Include="SchedulingScenarios\Islands\IslandModelTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatMustNotDependOnStateHolderTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatMustNotResourceCalculateTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatNoRandomnessTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOpenHoursTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationBlockTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationPreferencesTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTeamTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatRestrictionsTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatScenario.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatSurroundingDaysTest.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\TestData\DefaultMaxSeatOptimizationPreferences.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\TestData\MaxSeatData.cs" />
+        <Compile Include="SchedulingScenarios\MaxSeat\TestData\MaxSeatDataFactory.cs" />
+        <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
+        <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduledDaysTest.cs" />
+        <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduleDaysTest.cs" />
+        <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduledDaysCascadingTest.cs" />
+        <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />
+        <Compile Include="SchedulingScenarios\PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculateWithNewContext.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculationDataCreator.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculationWithCount.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationClosedSkillsTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationContextTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationEvenRelativeDifferenceTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationFocusHighUnderstaffingPercentageTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedParallellSkillsTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedSkillSetsTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationSmallOverstaffingTests.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationTrackShovelingTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\GuessResourceCalculationHasBeenMadeTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\IllegalResourceCalculationTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculateCorrectDaysTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationContextPeriodTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationResultTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationScenario.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationTimeZoneTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithExternalStaffTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationWithNoContextTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourcePlannerFixtureSource.cs" />
+        <Compile Include="SchedulingScenarios\ResourcePlannerFixtureSourceTest.cs" />
+        <Compile Include="SchedulingScenarios\ResourcePlannerTestParameters.cs" />
+        <Compile Include="SchedulingScenarios\ResourcePlannerTestParameterTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\ConcurrencyDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\DaysOffSchedulingDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\DoNotRunNightRestWhiteSpotDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingResultTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\MinMaxStaffingDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingBlockTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingCallbackDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopPermissionTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferenceDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingFulfillPreferencesTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingHourlyDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingIslandTests.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingPersistTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingPlanningPeriodTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingReduceSkillsTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingShiftCategoryLimitationDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\SchedulingTimeZoneDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\TeamBlockPeriodSchedulingTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest.cs" />
+        <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest_Legacy.cs" />
+        <Compile Include="SchedulingScenarios\SeparateWebRequest.cs" />
+        <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
+        <Compile Include="SchedulingScenarios\TakeShiftWithLatestShiftStartIfSameShiftValue.cs" />
+        <Compile Include="SchedulingScenarios\TeamBlockType.cs" />
+        <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationScenario.cs" />
+        <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationTeamBlockDesktopTest.cs" />
+        <Compile Include="SchedulingScenarios\TrackOptimizationCallback.cs" />
+        <Compile Include="SchedulingScenarios\TrackSchedulingCallback.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="App.config" />
+      <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
+        <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
+        <Name>Teleopti.Ccc.Domain</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+        <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
+        <Name>Teleopti.Ccc.Infrastructure</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+        <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+        <Name>Teleopti.Ccc.IocCommon</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+        <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
+        <Name>Teleopti.Ccc.TestCommon</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+        <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
+        <Name>Teleopti.Ccc.UserTexts</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
+        <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
+        <Name>Teleopti.Wfm.Shared</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

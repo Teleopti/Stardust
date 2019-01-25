@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
-using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
-	public class DatesFromPeriod : IAnalyticsDataSetup, IDateData
+	public class DatesFromPeriod : IDateData
 	{
 		public Dictionary<DateTime, DataRow> DateMap { get; set; }
 		public IEnumerable<DataRow> Rows { get; set; }
@@ -22,6 +22,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			this.startDate = startDate;
 			this.endDate = endDate;
 			DateMap = new Dictionary<DateTime, DataRow>();
+		}
+
+		public int? DateId(DateTime date)
+		{
+			if (!DateMap.Any() || !DateMap.ContainsKey(date))
+			{
+				return null;
+			}
+
+			return (int?) DateMap[date]["date_id"];
 		}
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)

@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		private readonly Scenario scenario = new Scenario("d");
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakeUserTimeZone UserTimeZone;
 		public IScheduleStorage ScheduleStorage;
 		public FakeMeetingRepository MeetingRepository;
 
@@ -743,7 +744,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		[Test]
 		public void ShouldSplitMergedPersonalActivityInProjectionWithSinglePersonalLayer()
 		{
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			var chinaTimeZoneInfo = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+			LoggedOnUser.SetDefaultTimeZone(chinaTimeZoneInfo);
+			UserTimeZone.Is(chinaTimeZoneInfo);
 
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");

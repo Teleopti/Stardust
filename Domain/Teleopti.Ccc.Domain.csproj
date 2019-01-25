@@ -236,6 +236,8 @@
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
+    <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
+    <Compile Include="Intraday\To Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
@@ -245,6 +247,7 @@
     <Compile Include="Notification\ScheduleChangeForWeekViewEvent.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
+    <Compile Include="Repositories\ISkillForecastReadModelRepository.cs" />
     <Compile Include="Scheduling\TeamSettings.cs" />
     <Compile Include="Scheduling\UpdateSchedulingOptionsWithTeamSettings.cs" />
     <Compile Include="Security\Principal\ITeleoptiIdentityForLegacy.cs" />
@@ -252,6 +255,7 @@
     <Compile Include="Repositories\PersonWaitlistedAbsenceRequest.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentityForLegacy.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
@@ -770,7 +774,6 @@
     <Compile Include="MultiTenancy\TenantApplicationConfigKey.cs" />
     <Compile Include="MultiTenancy\TenantUserPersister.cs" />
     <Compile Include="Notification\FCMSendMessageResponse.cs" />
-    <Compile Include="Optimization\OptimizationPreferencesPerfTestProvider.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerStandard.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
@@ -799,7 +802,6 @@
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceScheduling.cs" />
     <Compile Include="Scheduling\SchedulingCallbackInfo.cs" />
-    <Compile Include="Scheduling\SchedulingOptionsProviderForTeamPerfTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityService.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandling.cs" />
@@ -1995,7 +1997,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeListener.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeSubscriptions.cs" />
     <Compile Include="Security\SignatureCreator.cs" />
-    <Compile Include="Common\ServiceLocatorForEntity.cs" />
+    <Compile Include="Common\ServiceLocator_DONTUSE.cs" />
     <Compile Include="Islands\CreateIslands.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayIncomingViewModel.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />

@@ -84,6 +84,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Bug25126.cs" />
+    <Compile Include="Bug79808.cs" />
     <Compile Include="Bug76017.cs" />
     <Compile Include="DimDayOffTests.cs" />
     <Compile Include="Bug25131.cs" />

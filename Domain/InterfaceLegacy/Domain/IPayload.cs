@@ -1,7 +1,22 @@
 ﻿using System.Drawing;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
+	public static class IPayloadExtensions
+	{
+		public static Description ConfidentialDescription_DONTUSE(this IPayload payload, IPerson assignedPerson)
+		{
+			return payload.ConfidentialDescription(assignedPerson, ServiceLocator_DONTUSE.CurrentAuthorization);
+		}
+		
+		public static Color ConfidentialDisplayColor_DONTUSE(this IPayload payload, IPerson assignedPerson)
+		{
+			return payload.ConfidentialDisplayColor(assignedPerson, ServiceLocator_DONTUSE.CurrentAuthorization);
+		}
+	}
+	
     /// <summary>
     /// Interface for payload to be shown
     /// </summary>
@@ -22,7 +37,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: rogerkr
         /// Created date: 2010-02-09
         /// </remarks>
-		Description ConfidentialDescription(IPerson assignedPerson);
+		Description ConfidentialDescription(IPerson assignedPerson, ICurrentAuthorization authorization);
 
         /// <summary>
         /// Returns the color of the payload or,
@@ -33,7 +48,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: rogerkr
         /// Created date: 2010-02-09
         /// </remarks>
-		Color ConfidentialDisplayColor(IPerson assignedPerson);
+		Color ConfidentialDisplayColor(IPerson assignedPerson, ICurrentAuthorization authorization);
 
         /// <summary>
         /// Gets or sets a value indicating whether this payload is [in contract time].

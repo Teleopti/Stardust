@@ -143,25 +143,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			payrollFormats.Count().Should().Be(3);
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
-
-
-		//private static void copyFiles(string sourcePath, string destinationPath,
-		//	string subdirectoryPath)
-		//{
-		//	var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
-		//	var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
-
-		//	if (Path.GetFullPath(fullSourcePath) == Path.GetFullPath(fullDestinationPath))
-		//		return;
-
-		//	if (!Directory.Exists(fullDestinationPath))
-		//		Directory.CreateDirectory(fullDestinationPath);
-
-		//	foreach (var sourceFile in Directory.GetFiles(fullSourcePath))
-		//	{
-		//		var fullDestinationFilename = Path.Combine(fullDestinationPath, Path.GetFileName(sourceFile));
-		//		File.Copy(sourceFile, fullDestinationFilename, true);
-		//	}
-		//}
 	}
 }

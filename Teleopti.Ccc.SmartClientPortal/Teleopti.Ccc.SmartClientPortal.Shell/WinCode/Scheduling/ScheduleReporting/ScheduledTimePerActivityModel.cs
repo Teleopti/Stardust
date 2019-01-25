@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 				if (activity != null || meetingActivity != null)
                 {
                     DateOnly dateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
-                    list.Add(new ScheduledTimePerActivityModel { ActivityName = layer.Payload.ConfidentialDescription(schedulePart.Person).Name, ScheduledTime = layer.Period.ElapsedTime().TotalMinutes, ScheduledDate = dateOnly.Date }); 
+                    list.Add(new ScheduledTimePerActivityModel { ActivityName = layer.Payload.ConfidentialDescription_DONTUSE(schedulePart.Person).Name, ScheduledTime = layer.Period.ElapsedTime().TotalMinutes, ScheduledDate = dateOnly.Date }); 
                 }
             }
             return list;

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Helper
 	{
 		private static subscriptionContext getContext()
 		{
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity;
 			var businessUnitId = identity.BusinessUnitId.GetValueOrDefault();
 			var datasource = identity.DataSource.DataSourceName;
 

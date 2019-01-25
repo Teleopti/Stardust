@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
                             JobCategory = j.JobCategory,
 							Owner = j.Owner.Name.ToString(),
 							Status = determineStatus(j),
-							Timestamp = TimeZoneHelper.ConvertFromUtc(j.Timestamp, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).ToString()
+							Timestamp = TimeZoneHelper.ConvertFromUtc(j.Timestamp, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).ToString()
 						}).ToList();
 			}
 		}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting
             {
                 var jobResult = _jobResultRepository.Get(jobResultModel.JobId.GetValueOrDefault());
 
-				var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+				var timeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone;
 				return jobResult.Details.Where(d => (int)d.DetailLevel > detailLevel).OrderByDescending(d => d.Timestamp).Select(m => new JobResultDetailModel
 				{
 					Message = m.Message,

@@ -9,6 +9,6 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdher
 		public static HistoricalAdherenceViewModel Build(
 			this Adherence.Historical.HistoricalAdherenceViewModelBuilder target,
 			Guid personId) =>
-			target.Build(personId, new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime().Date));
+			target.Build(personId, new DateOnly(ServiceLocator_DONTUSE.Now.UtcDateTime().Date));
 	}
 }

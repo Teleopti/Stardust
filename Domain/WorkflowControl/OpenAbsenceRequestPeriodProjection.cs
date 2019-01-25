@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					currentTime = findNextTimeSlot(currentTime);
 			}
 
-			return workingColl.Where(w => w.GetPeriod(ServiceLocatorForEntity.Now.ServerDate_DontUse()).Intersection(limitToPeriod).HasValue).ToList();
+			return workingColl.Where(w => w.GetPeriod(ServiceLocator_DONTUSE.Now.ServerDate_DontUse()).Intersection(limitToPeriod).HasValue).ToList();
 		}
 
 		private void AddBottomLayer(DateOnlyPeriod limitToPeriod)
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private bool isNextPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			var dateToCheck = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate).EndDate;
-			return dateToCheck > ServiceLocatorForEntity.Now.ServerDate_DontUse();
+			return dateToCheck > ServiceLocator_DONTUSE.Now.ServerDate_DontUse();
 		}
 
 		private bool isPeriodOutside(DateOnlyPeriod requestPeriod, IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)

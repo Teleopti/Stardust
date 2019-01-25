@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
         	var period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period);
             var activity = _activityAssembler.DomainEntityToDto(entity.Payload);
-            activity.Description = entity.Payload.ConfidentialDescription(_person).Name;
-            activity.DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor(_person));
+            activity.Description = entity.Payload.ConfidentialDescription_DONTUSE(_person).Name;
+            activity.DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor_DONTUSE(_person));
 
             return new ActivityLayerDto
                        {

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 
 		private void add(MatrixPermissionHolder holder)
 		{
-			if (holder.Team.BusinessUnitExplicit.Id.Value == ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+			if (holder.Team.BusinessUnitExplicit.Id.Value == ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 				_result.Add(holder);
 		}
 

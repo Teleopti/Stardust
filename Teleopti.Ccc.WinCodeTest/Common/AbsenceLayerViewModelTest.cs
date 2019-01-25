@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		    var layerWithPayload = new AbsenceLayer(new Absence(), _period);
 			_personAbsence = new PersonAbsence(person, new Scenario(), layerWithPayload);
 		    scheduleDay.Stub(x => x.Person).Return(person);
-		    var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+		    var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 		    scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
 
 		    _target = new AbsenceLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _personAbsence, null, new FullPermission());
@@ -92,8 +92,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			var payloadFromLayer = _personAbsence.Layer.Payload;
 
-			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor(person), _target.DisplayColor);
-			Assert.AreEqual(payloadFromLayer.ConfidentialDescription(person).Name, _target.Description);
+			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor_DONTUSE(person), _target.DisplayColor);
+			Assert.AreEqual(payloadFromLayer.ConfidentialDescription_DONTUSE(person).Name, _target.Description);
 			Assert.AreEqual(_personAbsence.Layer.Period, _target.Period);
 			Assert.AreEqual(TimeSpan.FromMinutes(15), _target.Interval);
 			Assert.IsFalse(_target.IsChanged);

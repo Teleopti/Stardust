@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class ShiftExchangeOfferMapper : IShiftExchangeOfferMapper
@@ -24,8 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		public IPersonRequest Map(ShiftExchangeOfferForm form, IPersonRequest personRequest)
 		{
 			_currentPerson = _loggedOnUser.CurrentUser();
-			var offer = personRequest.Request as ShiftExchangeOffer;
-			if (offer != null)
+			if (personRequest.Request is ShiftExchangeOffer offer)
 			{
 				mapOffer(form, personRequest, offer.Status);
 			}
