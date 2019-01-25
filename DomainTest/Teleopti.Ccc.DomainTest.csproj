@@ -319,6 +319,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingSameThreadDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPreferenceTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerDecreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerExternalStaffTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\CommandHandlerGeneralTest.cs" />
