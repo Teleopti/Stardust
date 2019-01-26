@@ -5262,7 +5262,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (searchForm.ShowDialog(this) != DialogResult.OK) return;
 				if (searchForm.SelectedPerson == null) return;
 
-				_scheduleView.SelectCellFromPersonDate(searchForm.SelectedPerson, _dateNavigateControl.SelectedDate);
+				_scheduleView.SelectRowForPerson(searchForm.SelectedPerson);
 			}
 		}
 

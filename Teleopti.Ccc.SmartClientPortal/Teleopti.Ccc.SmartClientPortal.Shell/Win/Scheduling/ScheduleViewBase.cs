@@ -84,6 +84,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Presenter.ClipHandlerSchedule.Clear();
 		}
 
+		public void SelectRowForPerson(IPerson person)
+		{
+			int row = GetRowForAgent(person);
+			GridRangeInfo info = GridRangeInfo.Cells(row, 0, row, 0);
+			ViewGrid.Selections.Clear(true);
+			ViewGrid.CurrentCell.Activate(row, 0, GridSetCurrentCellOptions.SetFocus);
+			ViewGrid.Selections.ChangeSelection(info, info, true);
+			ViewGrid.CurrentCell.MoveTo(row, 0, GridSetCurrentCellOptions.ScrollInView);
+		}
+
 		public void SelectCellFromPersonDate(IPerson person, DateOnly localDate)
 		{
 			Point point = GetCellPositionForAgentDay(person, localDate);
