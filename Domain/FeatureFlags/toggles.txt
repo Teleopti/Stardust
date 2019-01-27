@@ -36,7 +36,7 @@ WfmGlobalLayout_personalOptions_37114 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_ReviewHistoricalAdherence_74770 = true
 RTA_RestrictModifySkillGroups_78568 = true
-RTA_InputValidationForApprovingAdherencePeriods_77045 = RC
+RTA_InputValidationForApprovingAdherencePeriods_77045 = true
 RTA_ImproveUsabilityExpandableCards_79025 = true
 RTA_AdjustAdherenceToNeutral_80594 = false
 
@@ -99,9 +99,9 @@ Wfm_AuditTrail_StaffingAuditTrail_78125 = true
 Wfm_AuditTrail_GenericAuditTrail_74938 = true
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
 WFM_ProbabilityView_ImproveResponseTime_80040 = true
-WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = RC 
-WFM_Intraday_OptimizeSkillDayLoad_80153 = RC
-WFM_AbsenceRequest_Robust_Processing_79988= RC
+WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = true
+WFM_Intraday_OptimizeSkillDayLoad_80153 = true
+WFM_AbsenceRequest_Robust_Processing_79988= true
 WFM_Forecast_Readmodel_80790 = RC
 
 # Squids #
@@ -113,7 +113,7 @@ WFM_Forecast_Show_History_Data_76432 = DEV
 WFM_Connect_NewLandingPage_Remove_GDPR_78132 = true
 WFM_Connect_NewLandingPage_WEB_78578 = true
 WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425 = RC
-ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646 = RC
+ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646 = true
 WFM_AnalyticsForecastUpdater_80798 = RC
 
 
