@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
+using Teleopti.Ccc.UserTexts;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -33,20 +35,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             _scaleCalculator = scaleCalculator;
         }
 
-        public override int ColCount
-        {
-            get
-            {
-                return (int)ColumnType.StartScheduleColumns;
-            }
-        }
+        public override int ColCount => (int)ColumnType.StartScheduleColumns;
 
-        public DateTimePeriod ScalePeriod
-        {
-            get { return _scalePeriod; }
-        }
+		public DateTimePeriod ScalePeriod => _scalePeriod;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public override void QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
             if (e.RowIndex - View.RowHeaders > SchedulerState.FilteredCombinedAgentsDictionary.Count)
@@ -96,7 +89,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             if (e.RowIndex == 0)
             {
                 // Text date header;
-                e.Style.Text = _selectedDate.ToShortDateString();
+				var dayOfWeek = _selectedDate.DayOfWeek;
+				string dayOfWeekName;
+				switch (dayOfWeek)
+				{
+					case DayOfWeek.Monday: dayOfWeekName = Resources.Monday; break;
+					case DayOfWeek.Tuesday: dayOfWeekName = Resources.Tuesday; break;
+					case DayOfWeek.Wednesday: dayOfWeekName = Resources.Wednesday; break;
+					case DayOfWeek.Thursday: dayOfWeekName = Resources.Thursday; break;
+					case DayOfWeek.Friday: dayOfWeekName = Resources.Friday; break;
+					case DayOfWeek.Saturday: dayOfWeekName = Resources.Saturday; break;
+					case DayOfWeek.Sunday: dayOfWeekName = Resources.Sunday; break;
+					default: dayOfWeekName = Resources.NA; break;
+				}
+				e.Style.Text = dayOfWeekName + " " + _selectedDate.ToShortDateString();
                 e.Style.Tag = _selectedDate;
                 e.Style.CellTipText =
                     DateHelper.WeekNumber(_selectedDate.Date, CultureInfo.CurrentCulture)
