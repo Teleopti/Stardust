@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -51,8 +52,9 @@ namespace Teleopti.Ccc.Domain.Common
 		private ServiceLocatorState current()
 		{
 			Instances.TryPeek(out var current);
+//			if (current == null)
+//				throw new Exception("Service locator is disabled when running tests in parallel!");
 			return current;
-			//throw new Exception("BOOOM!");
 		}
 
 		public static readonly ServiceLocator_DONTUSE Instance = new ServiceLocator_DONTUSE();
