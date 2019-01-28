@@ -18,6 +18,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Islands.CommandHandler
 	[TestFixture(SUT.Scheduling)]
 	[TestFixture(SUT.DayOffOptimization)]
 	[DomainTest]
+	[DontSendEventsAtPersist]
 	public abstract class ResourcePlannerCommandHandlerTest : ITestInterceptor, IIsolateSystem
 	{
 		private readonly SUT _sut;
