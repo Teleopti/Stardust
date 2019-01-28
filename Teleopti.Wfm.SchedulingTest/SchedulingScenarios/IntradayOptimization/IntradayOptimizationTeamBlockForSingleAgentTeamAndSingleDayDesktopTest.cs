@@ -26,12 +26,15 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 	{
 		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderOrg;
+		//TODO: remove me and use [DefaultDAta] instead
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-
+		public ICurrentBusinessUnit CurrentBusinessUnit;
+		//
+		
 		[Test]
 		public void ShouldNotRollBackIfSingleAgentSingleDayAndPeriodValueIsNotBetter()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var date = new DateOnly(2014, 4, 1);
 			var scenario = new Scenario("Default").WithId();
 			var shiftCategory = new ShiftCategory("DY").WithId();
