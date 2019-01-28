@@ -1620,7 +1620,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (rethrowBackgroundException(e))
 				return;
 
-			scheduleStatusBarUpdate(LanguageResourceHelper.Translate("XXLoadingFormThreeDots"));
 			afterBackgroundWorkersCompleted(e.Cancelled);
 		}
 
