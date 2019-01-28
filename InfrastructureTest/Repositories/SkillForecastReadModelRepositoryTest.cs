@@ -5,11 +5,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.PersistSkillForecast(listOfIntervals);
 
 			var skills = new[] { skill.Id.GetValueOrDefault() };
-			var result = Target.LoadSkillForecast(skills, new DateTime(2019, 1, 23, 10, 0, 0), new DateTime(2019, 1, 23, 11, 0, 0));
+			var result = Target.LoadSkillForecast(skills, new DateTimePeriod(new DateTime(2019, 1, 23, 10, 0, 0, DateTimeKind.Utc), new DateTime(2019, 1, 23, 11, 0, 0, DateTimeKind.Utc)));
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Agents.Should().Be(10);
 			result.First().Calls.Should().Be(400);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var skills = new[] {skill1.Id.GetValueOrDefault()};
 			var result =
-				Target.LoadSkillForecast(skills, new DateTime(2019, 1, 23, 10, 0, 0), new DateTime(2019, 1, 23, 11, 0, 0));
+				Target.LoadSkillForecast(skills, new DateTimePeriod(new DateTime(2019, 1, 23, 10, 0, 0,DateTimeKind.Utc), new DateTime(2019, 1, 23, 11, 0, 0,DateTimeKind.Utc)));
 			result.Count.Should().Be.EqualTo(1);
 			result.First().SkillId.Should().Be.EqualTo(skill1.Id.GetValueOrDefault());
 		}
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var skills = new[] {skill1.Id.GetValueOrDefault()};
 			var result =
-				Target.LoadSkillForecast(skills, new DateTime(2019, 1, 23, 10, 0, 0), new DateTime(2019, 1, 23, 10, 30, 0));
+				Target.LoadSkillForecast(skills, new DateTimePeriod(new DateTime(2019, 1, 23, 10, 0, 0,DateTimeKind.Utc), new DateTime(2019, 1, 23, 10, 30, 0,DateTimeKind.Utc)));
 			result.Count.Should().Be.EqualTo(1);
 			result.First().SkillId.Should().Be.EqualTo(skill1.Id.GetValueOrDefault());
 		}

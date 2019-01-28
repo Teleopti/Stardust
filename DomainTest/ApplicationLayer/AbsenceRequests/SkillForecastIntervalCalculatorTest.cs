@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -55,8 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Calculate(skillList, dtp);
 
-			var skillStaffIntervals= SkillForecastReadModelRepository.LoadSkillForecast(new[] {skill.Id.GetValueOrDefault()}, dtp.StartDate.Date,
-				dtp.EndDate.Date);
+			var skillStaffIntervals= SkillForecastReadModelRepository.LoadSkillForecast(new[] {skill.Id.GetValueOrDefault()}, new DateTimePeriod(dtp.StartDate.Utc(),dtp.EndDate.Date.Utc()));
 			skillStaffIntervals.Count.Should().Be.EqualTo(12);
 			skillStaffIntervals.Count(x => x.Agents == 15.7).Should().Be.EqualTo(4);
 			skillStaffIntervals.Count(x => x.AverageHandleTime == 210).Should().Be.EqualTo(4);
@@ -86,8 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Calculate(skillList, dtp);
 
 			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(
-				new[] {phoneSkill.Id.GetValueOrDefault(), emailSkill.Id.GetValueOrDefault()}, dtp.StartDate.Date,
-				dtp.EndDate.Date);
+				new[] {phoneSkill.Id.GetValueOrDefault(), emailSkill.Id.GetValueOrDefault()}, new DateTimePeriod(dtp.StartDate.Date.Utc(),dtp.EndDate.Date.Utc()));
 			skillStaffIntervals.Count.Should().Be.EqualTo(16);
 		}
 
@@ -111,8 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Calculate(skillList, dtp);
 
-			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(new[] { skill.Id.GetValueOrDefault() }, dtp.StartDate.Date,
-				dtp.EndDate.Date);
+			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(new[] { skill.Id.GetValueOrDefault() },new DateTimePeriod(dtp.StartDate.Date.Utc(),dtp.EndDate.Date.Utc()));
 			skillStaffIntervals.Count.Should().Be.EqualTo(4);
 			//skillStaffIntervals.Count(x => x.Agents == 15.7).Should().Be.EqualTo(4);
 			//skillStaffIntervals.Count(x => x.AverageHandleTime == 210).Should().Be.EqualTo(4);
