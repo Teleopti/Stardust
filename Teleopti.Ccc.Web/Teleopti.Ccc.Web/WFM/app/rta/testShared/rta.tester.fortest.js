@@ -221,6 +221,7 @@ var rtaTester = (function () {
 			});
 		});
 
+		var locale;
 		beforeEach(inject(
 			['$httpBackend', '$interval', '$state', '$sessionStorage', 'FakeRtaBackend', 'NoticeService', '$translate', '$controller', '$timeout', '$rootScope',
 				function ($httpBackend, $interval, $state, $sessionStorage, $fakeBackend, NoticeService, $translate, $controller, $timeout, $rootScope) {
@@ -279,7 +280,8 @@ var rtaTester = (function () {
 					spyOn($translate, 'instant').and.callFake(function (key) {
 						return state.$fakeBackend.data.translation()[key] || key;
 					});
-
+					
+					locale = moment.locale();
 				}]
 		));
 
@@ -291,7 +293,7 @@ var rtaTester = (function () {
 			state.lastGoParams = undefined;
 			state.lastNotice = undefined;
             jasmine.clock().uninstall();
-            moment.locale('en');
+            moment.locale(locale);
 		});
 
 		var bagOfCandy = controllerName == 'RtaAgentsController78568';
