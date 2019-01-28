@@ -1978,6 +1978,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			var localDate = TimeZoneHelper.ConvertFromUtc(request.FirstDateInRequest, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 			_scheduleView?.SelectCellFromPersonDate(request.PersonRequest.Person, new DateOnly(localDate));
+			schedulerSplitters1.CurrentIntraDayDate = new DateOnly(localDate);
+			drawSkillGrid();
+			schedulerSplitters1.ReloadChart();
 		}
 
 		private void setupRequestViewButtonStates()
