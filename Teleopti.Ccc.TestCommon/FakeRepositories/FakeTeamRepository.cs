@@ -2,15 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeTeamRepository : ITeamRepository, IEnumerable<ITeam>
 	{
+		private readonly FakeBusinessUnitRepository _businessUnitRepository;
 		private readonly IList<ITeam> _teams = new List<ITeam>();
+
+		public FakeTeamRepository(FakeBusinessUnitRepository businessUnitRepository)
+		{
+			_businessUnitRepository = businessUnitRepository;
+		}
 		
 		public void Add (ITeam entity)
 		{
@@ -21,6 +28,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	    {
 	        _teams.Add(team);
 	    }
+
+		public void HasConnectedToCurrentBusinessUnit(ITeam team)
+		{
+			team.Site = new Site("_");
+			
+			//TODO: should not be here - to be fixed soon. Read from burepo instead
+			var bu = new BusinessUnit("test BU").WithId(DomainTestAttribute.DefaultBusinessUnitId);
+			//
+			bu.AddSite(team.Site);
+			_businessUnitRepository.Has(bu);
+		}
 
 		public void Remove (ITeam entity)
 		{
