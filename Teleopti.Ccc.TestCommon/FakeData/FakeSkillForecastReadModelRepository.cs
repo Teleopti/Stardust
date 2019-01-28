@@ -9,11 +9,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeSkillForecastReadModelRepository : ISkillForecastReadModelRepository
 	{
-		public IList<SkillForecast> SkillForecasts;
+		public List<SkillForecast> SkillForecasts= new List<SkillForecast>();
 
 		public void PersistSkillForecast(List<SkillForecast> listOfIntervals)
 		{
-			throw new NotImplementedException();
+			
+			SkillForecasts.AddRange(listOfIntervals);
 		}
 
 		public IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTimePeriod period)
