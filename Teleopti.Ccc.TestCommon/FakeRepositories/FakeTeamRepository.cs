@@ -11,11 +11,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeTeamRepository : ITeamRepository, IEnumerable<ITeam>
 	{
 		private readonly IList<ITeam> _teams = new List<ITeam>();
-
-		public FakeTeamRepository(params  ITeam[] teams)
-		{
-			teams.ForEach (Add);
-		}
 		
 		public void Add (ITeam entity)
 		{

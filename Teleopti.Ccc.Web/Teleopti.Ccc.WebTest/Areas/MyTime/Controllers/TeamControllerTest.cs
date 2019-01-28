@@ -123,7 +123,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = PersonFactory.CreatePerson();
 			var team1 = new Team();
 			team1.Site = site;
-			var teamRepository = new FakeTeamRepository(team1);
+			var teamRepository = new FakeTeamRepository();
+			teamRepository.Has(team1);
 			var mockAuthorize = MockRepository.GenerateMock<IAuthorizeAvailableData>();
 			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, team1)).IgnoreArguments().Return(true);
 			var claimSet =
