@@ -21,7 +21,6 @@
 	zoom: 1;
 	display: inline;
 } /* IE7 inline-block fix */
-
 .calendarview-week {
 	background: transparent;
 	padding-left: 0;
