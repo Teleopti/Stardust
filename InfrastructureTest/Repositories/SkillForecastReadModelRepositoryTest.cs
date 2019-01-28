@@ -79,7 +79,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				EndDateTime = new DateTime(2019, 1, 23, 10, 15, 0),
 				Agents = 10,
 				Calls = 400,
-				AverageHandleTime = 15
+				AverageHandleTime = 15,
+				AgentsWithShrinkage = 20,
+				IsBackOffice = false
 			});
 			Target.PersistSkillForecast(listOfIntervals);
 
@@ -87,9 +89,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = Target.LoadSkillForecast(skills, new DateTimePeriod(new DateTime(2019, 1, 23, 10, 0, 0, DateTimeKind.Utc), new DateTime(2019, 1, 23, 11, 0, 0, DateTimeKind.Utc)));
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Agents.Should().Be(10);
+			result.First().AgentsWithShrinkage.Should().Be(20);
 			result.First().Calls.Should().Be(400);
 			result.First().SkillId.Should().Be(skill.Id.GetValueOrDefault());
 			result.First().AverageHandleTime.Should().Be(15);
+			result.First().IsBackOffice.Should().Be(false);
 			result.First().StartDateTime.Should().Be(new DateTime(2019, 1, 23, 10, 0, 0));
 			result.First().EndDateTime.Should().Be(new DateTime(2019, 1, 23, 10, 15, 0));
 		}
@@ -183,6 +187,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().SkillId.Should().Be.EqualTo(skill1.Id.GetValueOrDefault());
 		}
 
+		
 		private List<SkillForecast> readIntervals()
 		{
 			var connection = new SqlConnection(InfraTestConfigReader.ConnectionString);

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
@@ -20,6 +21,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[TestFixture]
 	[DomainTest]
+	[AllTogglesOn]
+	[Ignore("WIP")]
 	public class SkillForecastIntervalCalculatorTest : IIsolateSystem
 	{
 		public SkillForecastIntervalCalculator Target;
@@ -89,6 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new[] {phoneSkill.Id.GetValueOrDefault(), emailSkill.Id.GetValueOrDefault()}, new DateTimePeriod(dtp.StartDate.Date.Utc(),dtp.EndDate.Date.Utc()));
 			skillStaffIntervals.Count.Should().Be.EqualTo(16);
 		}
+		
 
 		[Test]
 		public void ShouldSaveTheIntervaWitinProvidedPeriod()
@@ -117,6 +121,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			//skillStaffIntervals.Count(x => x.Calls == 200).Should().Be.EqualTo(4);
 		}
 
+
+		[Test]
+		public void ShouldCalculateDemandWithShrinkage()
+		{
+			var dtp = new DateOnlyPeriod(new DateOnly(2019, 2, 16), new DateOnly(2019, 2, 19));
+			var now = new DateTime(2019, 2, 17, 16, 0, 0);
+			IntervalLengthFetcher.Has(15);
+			Now.Is(now);
+			var skillOpenHours = new TimePeriod(8, 9);
+			var skill = createSkill(15, "phone", skillOpenHours);
+			var scenario = ScenarioFactory.CreateScenarioWithId("x", true);
+			var skillDay15 = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2019, 2, 15), skillOpenHours, 10, 5, 100);
+			skillDay15.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
+			SkillRepository.Add(skill);
+			SkillDayRepository.AddRange(new[] { skillDay15 });
+			ScenarioRepository.Add(scenario);
+
+			var skillList = new List<ISkill>() { skill };
+
+			Target.Calculate(skillList, dtp);
+
+			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(new[] { skill.Id.GetValueOrDefault() }, new DateTimePeriod(dtp.StartDate.Date.Utc(), dtp.EndDate.Date.Utc()));
+			skillStaffIntervals.Count.Should().Be.EqualTo(4);
+			skillStaffIntervals.Count(x => x.AgentsWithShrinkage == 12.5).Should().Be.EqualTo(4);
+			skillStaffIntervals.Count(x => x.Agents == 10).Should().Be.EqualTo(4);
+		}
 		protected ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
 			var skill =

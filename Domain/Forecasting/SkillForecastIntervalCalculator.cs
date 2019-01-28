@@ -12,15 +12,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public class SkillForecastIntervalCalculator
 	{
-		private ISkillDayRepository _skillDayRepository;
 		private readonly ILoadSkillDaysWithPeriodFlexibility _loadSkillDaysWithPeriodFlexibility;
 		private readonly IScenarioRepository _scenarioRepository;
-		private ISkillForecastReadModelRepository _skillForecastReadModelRepository;
+		private readonly ISkillForecastReadModelRepository _skillForecastReadModelRepository;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 
-		public SkillForecastIntervalCalculator(ISkillDayRepository skillDayRepository, ILoadSkillDaysWithPeriodFlexibility loadSkillDaysWithPeriodFlexibility, IScenarioRepository scenarioRepository, ISkillForecastReadModelRepository skillForecastReadModelRepository, IIntervalLengthFetcher intervalLengthFetcher)
+		public SkillForecastIntervalCalculator(ILoadSkillDaysWithPeriodFlexibility loadSkillDaysWithPeriodFlexibility, IScenarioRepository scenarioRepository, ISkillForecastReadModelRepository skillForecastReadModelRepository, IIntervalLengthFetcher intervalLengthFetcher)
 		{
-			_skillDayRepository = skillDayRepository;
 			_loadSkillDaysWithPeriodFlexibility = loadSkillDaysWithPeriodFlexibility;
 			_scenarioRepository = scenarioRepository;
 			_skillForecastReadModelRepository = skillForecastReadModelRepository;
@@ -37,8 +35,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var skillDays = skillDaysBySkills.SelectMany(x => x.Value);
 			var periods = skillDays
 				.SelectMany(x =>
-					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), false)
+					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), true)
 						.Select(i => new {SkillDay = x, StaffPeriod = i}));
+			var periodsWithShrinkage = skillDays
+				.SelectMany(x =>
+					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), true)
+						.Select(i => new { SkillDay = x, StaffPeriod = i }));
+			//var agentsWithShrinkage = 
 			var intervals = periods
 				.Where(x => x.StaffPeriod.Period.StartDateTime >= dtp.StartDate.Date && x.StaffPeriod.Period.EndDateTime <= dtp.EndDate.Date)
 				.Select(x => new SkillForecast
@@ -48,9 +51,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					EndDateTime = x.StaffPeriod.Period.EndDateTime,
 					Agents = x.StaffPeriod.FStaff,
 					Calls = x.StaffPeriod.ForecastedTasks,
-					AverageHandleTime = x.StaffPeriod.AverageHandlingTaskTime.TotalSeconds
+					AverageHandleTime = x.StaffPeriod.AverageHandlingTaskTime.TotalSeconds,
+					//AgentsWithShrinkage = x.StaffPeriod.ForecastedDistributedDemandWithShrinkage
+					
 				}).ToList();
 			_skillForecastReadModelRepository.PersistSkillForecast(intervals);
 		}
+
+		
 	}
 }

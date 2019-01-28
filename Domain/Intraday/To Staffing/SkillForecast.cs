@@ -11,6 +11,6 @@ namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
 		public double AgentsWithShrinkage { get; set; }
 		public double Calls { get; set; }
 		public double AverageHandleTime { get; set; }
-		
+		public bool IsBackOffice { get; set; }
 	}
 }
