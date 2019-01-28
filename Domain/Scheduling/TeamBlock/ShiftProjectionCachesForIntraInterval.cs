@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly ProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private readonly WorkShiftFilterService _workShiftFilterService;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public ShiftProjectionCachesForIntraInterval(TeamBlockRoleModelSelector roleModelSelector,
 			ActivityIntervalDataCreator activityIntervalDataCreator,
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			ProposedRestrictionAggregator proposedRestrictionAggregator,
-			WorkShiftFilterService workShiftFilterService)
+			WorkShiftFilterService workShiftFilterService,
+			ITimeZoneGuard timeZoneGuard)
 		{
 			_roleModelSelector = roleModelSelector;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public IEnumerable<IWorkShiftCalculationResultHolder> Execute(
@@ -98,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumStaffing, schedulingOptions.UseMaximumStaffing);
 
-			return _workSelectorForIntraInterval.SelectAllShiftProjectionCaches(shifts, activityInternalData,parameters, TimeZoneGuard.Instance.CurrentTimeZone());
+			return _workSelectorForIntraInterval.SelectAllShiftProjectionCaches(shifts, activityInternalData,parameters, _timeZoneGuard.CurrentTimeZone());
 		}
 	}
 }
