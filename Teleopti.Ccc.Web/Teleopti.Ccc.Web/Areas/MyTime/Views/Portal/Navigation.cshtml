@@ -155,11 +155,7 @@
 							value: ''
 						};
 
-						dlWithChannelData.postActivity(activity).subscribe(function(id) {
-							if (console) {
-								console.debug('WebChat conversation started');
-							}
-						});
+						dlWithChannelData.postActivity(activity);
 					});
 				},
 				error: function(e) {
