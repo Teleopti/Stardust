@@ -20,6 +20,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
+	[DontSendEventsAtPersist]
 	public class IntradayOptimizationCommandSpecificTest
 	{
 		public FakeSkillRepository SkillRepository;
