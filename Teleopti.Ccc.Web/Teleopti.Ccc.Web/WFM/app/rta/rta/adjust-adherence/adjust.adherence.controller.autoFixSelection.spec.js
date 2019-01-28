@@ -1,7 +1,7 @@
 'use strict';
 
 rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
-    it('should adjust start date', function (t) {
+    it('should auto fix start date', function (t) {
         var now = new Date('2019-01-25T12:00:00');
         jasmine.clock().mockDate(now);
         t.backend.with.currentUserInfo({
@@ -16,7 +16,7 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
         expect(moment(vm.startDate).format('YYYY-MM-DD')).toEqual('2019-01-20');
     });    
     
-    it('should adjust end date', function (t) {
+    it('should auto fix end date', function (t) {
         var now = new Date('2019-01-25T12:00:00');
         jasmine.clock().mockDate(now);
         t.backend.with.currentUserInfo({
@@ -31,7 +31,7 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
         expect(moment(vm.endDate).format('YYYY-MM-DD')).toEqual('2019-01-25');
     });
 
-    it('should adjust start time', function (t) {
+    it('should auto fix start time', function (t) {
         var now = new Date('2019-01-25T12:00:00');
         jasmine.clock().mockDate(now);
         t.backend.with.currentUserInfo({
@@ -46,7 +46,7 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
         expect(moment(vm.startTime).format('HH:mm')).toEqual('07:00');
     });
 
-    it('should adjust end time', function (t) {
+    it('should auto fix end time', function (t) {
         var now = new Date('2019-01-25T12:00:00');
         jasmine.clock().mockDate(now);
         t.backend.with.currentUserInfo({
