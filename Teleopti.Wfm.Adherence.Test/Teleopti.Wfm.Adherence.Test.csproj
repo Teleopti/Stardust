@@ -179,6 +179,8 @@
     <Compile Include="Configuration\Unit\DefaultStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Configuration\Unit\LoggedOutStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="Configuration\Unit\LoggedOutStateGroupMissingInRtaServiceTest.cs" />
+    <Compile Include="Configuration\Unit\Parallelize.cs" />
+    <Compile Include="Configuration\Unit\PermissionViewModelBuilderTest.cs" />
     <Compile Include="Configuration\Unit\RtaMapTest.cs" />
     <Compile Include="Configuration\Unit\RtaRuleTest.cs" />
     <Compile Include="Configuration\Unit\RtaStateGroupTest.cs" />
@@ -212,6 +214,7 @@
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\RemoveApprovedPeriodTest.cs" />
     <Compile Include="Historical\Unit\ApprovePeriodAsInAdherence\RemovePeriodAsInAdherenceCommandHandlerTest.cs" />
+    <Compile Include="Historical\Unit\Parallelize.cs" />
     <Compile Include="Historical\Unit\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceDate\DateTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\AdherencesTest.cs" />
@@ -270,6 +273,7 @@
     <Compile Include="Monitor\Infrastructure\AgentState\TeamCardReaderSitesTest.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\TeamCardReaderSiteTest.cs" />
     <Compile Include="Monitor\Infrastructure\AgentState\UnorderedEventsTest.cs" />
+    <Compile Include="Monitor\Unit\Parallelize.cs" />
     <Compile Include="Monitor\Unit\ReadModels\AgentState\DeleteTest.cs" />
     <Compile Include="Monitor\Unit\ReadModels\AgentState\PersonAssociationChangedTest.cs" />
     <Compile Include="Monitor\Unit\ReadModels\AgentState\PersonEmploymentNumberChangedTest.cs" />
@@ -291,7 +295,6 @@
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="Monitor\Unit\ViewModels\SiteCardViewModelBuilderTest.cs" />
-    <Compile Include="PermissionViewModelBuilderTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="States\Infrastructure\ReadModels\ExternalLogonReadModelPersisterTest.cs" />
@@ -325,6 +328,7 @@
     <Compile Include="States\Measurement\MeasureHangfireEventPackageTest.cs" />
     <Compile Include="States\Measurement\MeasureScheduleLoadingTest.cs" />
     <Compile Include="States\Measurement\PerformanceMeasurementTestAttribute.cs" />
+    <Compile Include="States\Unit\Parallelize.cs" />
     <Compile Include="States\Unit\ReadModels\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="States\Unit\ReadModels\ExternalLogonReadModelUpdaterTest.cs" />
     <Compile Include="States\Unit\ReadModels\MappingsTest.cs" />
@@ -383,6 +387,7 @@
     <Compile Include="Tracer\Infrastructure\RtaTracerTest.cs" />
     <Compile Include="Tracer\Infrastructure\RtaTracerWriterTenantTest.cs" />
     <Compile Include="Tracer\Infrastructure\RtaTracerWriterTest.cs" />
+    <Compile Include="Tracer\Unit\Parallelize.cs" />
     <Compile Include="Tracer\Unit\RtaTracerActivityCheckTraceTest.cs" />
     <Compile Include="Tracer\Unit\RtaTracerCloseSnapshotTraceTest.cs" />
     <Compile Include="Tracer\Unit\RtaTracerNoUserCodeTest.cs" />
