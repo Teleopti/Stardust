@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -8,6 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 	{
 		void PersistSkillForecast(List<SkillForecast> listOfIntervals);
-		IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTime startDateTime, DateTime endDateTime);
+		IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTimePeriod period);
 	}
 }

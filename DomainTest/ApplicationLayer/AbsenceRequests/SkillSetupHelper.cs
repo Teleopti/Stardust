@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		public static void PopulateForecastReadModels(ISkill skill, DateTime scheduledStartTime,
 			DateTime scheduledEndTime, double forecastedAgents,
-			FakeSkillForecastReadModelRepository skillForecastReadModelRepository)
+			FakeSkillForecastReadModelRepository skillForecastReadModelRepository, double? forecastedAgentsWithShrinkage = null)
 		{
 			if (skillForecastReadModelRepository.SkillForecasts == null)
 				skillForecastReadModelRepository.SkillForecasts = new List<SkillForecast>();
@@ -199,7 +199,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				{
 					StartDateTime = intervalTime,
 					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
-					 Agents = forecastedAgents,
+					Agents = forecastedAgents,
+					AgentsWithShrinkage = forecastedAgentsWithShrinkage ?? forecastedAgents,
 					SkillId = skill.Id.GetValueOrDefault() 
 				});
 			}

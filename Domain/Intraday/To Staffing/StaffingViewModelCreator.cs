@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly INow _now;
 
-		public StaffingViewModelCreator(IResourceCalculation resourceCalculation, ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository,
+		public StaffingViewModelCreator(IResourceCalculation resourceCalculation, ISkillRepository skillRepository,
+			ISkillCombinationResourceRepository skillCombinationResourceRepository,
 			ISkillForecastReadModelRepository skillForecastReadModelRepository, IUserTimeZone timeZone,
 			IIntervalLengthFetcher intervalLengthFetcher, INow now)
 		{
@@ -42,11 +43,11 @@ namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
 			var startOfDayLocal = dateInLocalTime?.Date ?? TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), timeZone).Date;
 
 			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, timeZone);
-
+		 	var endOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.AddDays(1).Date, timeZone);
 			var minutesPerInterval = _intervalLengthFetcher.GetIntervalLength();
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
-			var skillStaffingIntervals = loadAndResorceCalculate(startOfDayUtc);
+			var skillStaffingIntervals = loadAndResorceCalculate(startOfDayUtc, endOfDayUtc, useShrinkage);
 			var timeSeries = DataSeries(startOfDayLocal, minutesPerInterval, _timeZone.TimeZone()).Where(x => x.Date == startOfDayLocal.Date).ToArray();
 
 
@@ -65,24 +66,24 @@ namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
 			};
 		}
 
-		private IList<SkillStaffingInterval> loadAndResorceCalculate(DateTime startOfDayUtc)
+		private IList<SkillStaffingInterval> loadAndResorceCalculate(DateTime startOfDayUtc, DateTime endOfDayUtc, bool useShrinkage)
 		{
 			var skills = _skillRepository.LoadAll().ToList();
 			var firstPeriodDateInSkillTimeZone = new DateOnly(skills.Select(x => TimeZoneInfo.ConvertTimeFromUtc(startOfDayUtc, x.TimeZone)).Min());
 			var lastPeriodDateInSkillTimeZone = new DateOnly(skills.Select(x => TimeZoneInfo.ConvertTimeFromUtc(startOfDayUtc.AddDays(1), x.TimeZone)).Max());
 			var dateOnlyPeriod = new DateOnlyPeriod(firstPeriodDateInSkillTimeZone, lastPeriodDateInSkillTimeZone);
 
-			var period = new DateTimePeriod(startOfDayUtc, startOfDayUtc.AddDays(1));
+			var period = new DateTimePeriod(startOfDayUtc, endOfDayUtc);
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
 			var skillForecastList =
-				_skillForecastReadModelRepository.LoadSkillForecast(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), startOfDayUtc, startOfDayUtc.AddDays(1));
+				_skillForecastReadModelRepository.LoadSkillForecast(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), period);
 
 			var intervals = skillForecastList.Select(skillForecast => new SkillStaffingInterval
 			{
 				SkillId = skillForecast.SkillId,
 				StartDateTime = skillForecast.StartDateTime,
 				EndDateTime = skillForecast.EndDateTime,
-				Forecast = skillForecast.Agents,
+				Forecast = useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,
 				StaffingLevel = 0,
 			});
 			var returnList = new HashSet<SkillStaffingInterval>();

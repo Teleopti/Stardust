@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -14,9 +16,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTime startDateTime, DateTime endDateTime)
+		public IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTimePeriod period)
 		{
-			return SkillForecasts;
+			return SkillForecasts.Where(x =>x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime).ToList();
 		}
 	}
 }

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTime startDateTime, DateTime endDateTime)
+		public IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTimePeriod period)
 		{
 			var result = new List<SkillForecast>();
 			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					using (var command =
 						new SqlCommand(
 							$"select SkillId, StartDateTime,EndDateTime, Agents, Calls, AverageHandleTime from [ReadModel].[SkillForecast] " +
-							$"Where SkillId In ({getInValues(skills)}) AND StartDateTime >= '{startDateTime}' AND StartDateTime <= '{endDateTime}'",
+							$"Where SkillId In ({getInValues(skills)}) AND StartDateTime >= '{period.StartDateTime}' AND StartDateTime <= '{period.EndDateTime}'",
 							connection, transaction))
 					{
 
