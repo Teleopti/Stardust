@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 			var availableDetails = details.Where(
 				p =>
-				PrincipalAuthorization.Current().IsPermitted(
+				PrincipalAuthorization.Current_DONTUSE().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.ViewSchedules, queryDate, p));
 			var peopleForShiftTrade = new List<IPerson>();
 			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

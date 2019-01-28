@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
         {
             _view.SetTexts();
             _view.SetColor();
-            _view.SetPermissionOnAbsences(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
-			_view.SetPermissionOnDayOffs(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-            _view.SetPermissionOnPersonalAssignments(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-            _view.SetPermissionOnAssignments(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-            _view.SetPermissionOnOvertime(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-            _view.SetPermissionsOnRestrictions(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
-			_view.SetPermissionsOnShiftAsOvertime(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionOnAbsences(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
+			_view.SetPermissionOnDayOffs(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionOnPersonalAssignments(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionOnAssignments(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionOnOvertime(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
+            _view.SetPermissionsOnRestrictions(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
+			_view.SetPermissionsOnShiftAsOvertime(PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
             _view.ShowRestrictions(_showRestrictions);
         }
 

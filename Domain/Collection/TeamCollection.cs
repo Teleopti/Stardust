@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             get
 			{
-				var authorization = PrincipalAuthorization.Current();
+				var authorization = PrincipalAuthorization.Current_DONTUSE();
 				return _allTeams.Distinct().Where(t => authorization.IsPermitted(_functionPath, _queryDate, t)).ToArray();
 			}
         }
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             get
             {
-				var authorization = PrincipalAuthorization.Current();
+				var authorization = PrincipalAuthorization.Current_DONTUSE();
 				return _allTeams.Select(t => t.Site).Distinct().Where(s => authorization.IsPermitted(_functionPath, _queryDate, s))
 					.ToArray();
             }

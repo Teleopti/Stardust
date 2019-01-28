@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
 
 		public void Execute()
         {
-            var loadUser = Domain.Security.Principal.PrincipalAuthorization.Current().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
+            var loadUser = Domain.Security.Principal.PrincipalAuthorization.Current_DONTUSE().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
             if (!_loadUsers)
                 loadUser = false;
             var dateOnlyPeriod = _view.SelectedPeriod;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
             
             toNodes = removeDuplicates(toNodes);
 			// Permissions
-			var auth = Domain.Security.Principal.PrincipalAuthorization.Current();
+			var auth = Domain.Security.Principal.PrincipalAuthorization.Current_DONTUSE();
 
             var toRemove = new List<IPersonSelectorOrganization>();
 			if(_view.VisiblePersonIds != null)

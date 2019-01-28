@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public bool HasFunctionPermissionForTeams(IEnumerable<ITeam> teams, string functionPath)
 		{
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 			foreach (ITeam team in teams)
 			{
 				if (!authorization.IsPermitted(functionPath, DateOnly.Today, team))
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		public bool IsPermittedToEditMeeting(ScheduleViewBase scheduleView, IEnumerable selectedEntitiesFromTreeView, IScenario scenario)
 		{
 			if (!IsPermittedToViewMeeting(scheduleView, selectedEntitiesFromTreeView)) return false;
-			return !scenario.Restricted || PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
+			return !scenario.Restricted || PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
 		}
 
 		public bool IsPermittedToWriteProtect(ScheduleViewBase scheduleView, IEnumerable selectedEntitiesFromTreeView)
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public bool IsThisPermittedApproveRequest(PersonRequestViewModel model)
 		{
-			return new PersonRequestAuthorization(PrincipalAuthorization.Current()).IsPermittedRequestApprove(model.RequestType);
+			return new PersonRequestAuthorization(PrincipalAuthorization.Current_DONTUSE()).IsPermittedRequestApprove(model.RequestType);
 		}
 
 		public bool IsPermittedApproveRequest(IEnumerable<PersonRequestViewModel> models)
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public bool IsPermittedViewRequest()
 		{
-			return new PersonRequestAuthorization(PrincipalAuthorization.Current()).IsPermittedRequestView();
+			return new PersonRequestAuthorization(PrincipalAuthorization.Current_DONTUSE()).IsPermittedRequestView();
 		}
 
 		public bool IsViewRequestDetailsAvailable(RequestView requestView)
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			ToolStripMenuItem writeProtectSchedule, ToolStripMenuItem writeProtectSchedule2, ToolStripMenuItem addStudentAvailabilityRestriction, ToolStripMenuItem addStudentAvailability,
 			ToolStripMenuItem addPreferenceRestriction, ToolStripMenuItem addPreference)
 		{
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 			insertAbsence.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
 			insertDayOff.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 			delete.Enabled = deleteSpecial.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public void SetPermissionOnMenuButtons(ToolStripButton requestView, BackStageButton options, ToolStripButton filterOvertimeAvailability, ToolStripMenuItem scheduleOvertime, ToolStripButton filterStudentAvailability)
 		{
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 			requestView.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
 			options.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 			filterOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
@@ -147,19 +147,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		{
 			actions.Enabled = true;
 			schedule.Enabled = 
-				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling);
+				PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling);
 		}
 
 		public void CheckPastePermissions(ToolStripMenuItem paste, ToolStripMenuItem pasteSpecial)
 		{
-			bool permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			bool permitted = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 			paste.Enabled = permitted;
 			pasteSpecial.Enabled = permitted;
 		}
 
 		public void CheckModifyPermissions(ToolStripMenuItem addActivity, ToolStripMenuItem addOverTime, ToolStripMenuItem insertAbsence, ToolStripMenuItem insertDayOff )
 		{
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 			addActivity.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 			addOverTime.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 			insertAbsence.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);

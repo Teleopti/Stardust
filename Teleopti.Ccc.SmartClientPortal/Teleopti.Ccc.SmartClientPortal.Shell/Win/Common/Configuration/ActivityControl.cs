@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("AllowOverwrite",Resources.Overwritable));
 
 			gridColumns.Add(new SFGridDropDownEnumColumn<IActivity, ReportLevelDetailAdapter, ReportLevelDetail>("ReportLevelDetail", Resources.ReportLevel, reportLevelDetails(), "DisplayName", "ReportLevelDetail"));
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+			if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 			{
 				var payrollColumn = new SFGridEditableTextColumn<IActivity>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
 				gridColumns.Add(payrollColumn);

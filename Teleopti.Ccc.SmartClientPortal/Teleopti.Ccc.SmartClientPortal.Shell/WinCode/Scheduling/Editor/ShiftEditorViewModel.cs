@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor
 		}
 
 		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
-			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
+			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current_DONTUSE()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
         {
 
         }

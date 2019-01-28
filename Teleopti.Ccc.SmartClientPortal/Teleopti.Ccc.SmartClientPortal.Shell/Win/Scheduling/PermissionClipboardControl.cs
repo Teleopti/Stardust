@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (_clipboardControl != null)
 			{
-				var authorization = PrincipalAuthorization.Current();
+				var authorization = PrincipalAuthorization.Current_DONTUSE();
 				_clipboardControl.SetButtonDropDownItemState(ClipboardAction.Cut, ClipboardItems.Shift.ToString(),
 				                                             authorization.IsPermitted(
 				                                             	DefinedRaptorApplicationFunctionPaths.

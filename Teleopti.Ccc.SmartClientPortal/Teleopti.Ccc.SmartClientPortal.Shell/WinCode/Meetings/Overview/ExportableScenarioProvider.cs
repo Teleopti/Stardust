@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
                 unitOfWork.Reassociate(tempScenarios);
                 
                 var canModifyRestricted =
-                    PrincipalAuthorization.Current().IsPermitted(
+                    PrincipalAuthorization.Current_DONTUSE().IsPermitted(
                         DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
                 if (!canModifyRestricted)
                 {

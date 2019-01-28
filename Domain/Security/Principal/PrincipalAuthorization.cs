@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			_teleoptiPrincipal = teleoptiPrincipal;
 		}
 
-		public static IAuthorization Current()
+		public static IAuthorization Current_DONTUSE()
 		{
 			return ServiceLocator_DONTUSE.CurrentAuthorization.Current();
 		}

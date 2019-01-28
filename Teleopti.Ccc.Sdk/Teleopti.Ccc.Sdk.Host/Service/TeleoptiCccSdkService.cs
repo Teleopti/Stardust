@@ -1906,7 +1906,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 
 			if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.PersonId == person.Id.GetValueOrDefault(Guid.Empty))
 			{
-				afUnionCollection.AddRange(PrincipalAuthorization.Current().GrantedFunctions());
+				afUnionCollection.AddRange(PrincipalAuthorization.Current_DONTUSE().GrantedFunctions());
 			}
 			else
 			{

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Filters
 
 		protected override bool IsAuthorized(HttpActionContext actionContext)
 		{
-			return base.IsAuthorized(actionContext) && PrincipalAuthorization.Current().IsPermitted(_functionPath);
+			return base.IsAuthorized(actionContext) && PrincipalAuthorization.Current_DONTUSE().IsPermitted(_functionPath);
 		}
 
 		protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)

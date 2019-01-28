@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			_personFinderReadOnlyRepository.FindPeople(SearchCriteria);
 			var today = DateOnly.Today;
 			var bu = ((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnitId;
-			var auth = Domain.Security.Principal.PrincipalAuthorization.Current();
+			var auth = Domain.Security.Principal.PrincipalAuthorization.Current_DONTUSE();
 			foreach (var personFinderDisplayRow in SearchCriteria.DisplayRows)
 			{
 				if (personFinderDisplayRow.PersonId != Guid.Empty)

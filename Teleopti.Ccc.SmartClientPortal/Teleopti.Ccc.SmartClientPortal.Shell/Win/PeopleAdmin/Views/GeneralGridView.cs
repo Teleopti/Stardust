@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		
 		internal override void CreateHeaders()
 		{
-			_hasRights = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword);
+			_hasRights = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword);
 			_gridColumns.Add(new RowHeaderColumn<PersonGeneralModel>());
 
 			createUserInfoHeaders();
@@ -426,9 +426,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			Grid.ContextMenuStrip = new ContextMenuStrip();
 
 			var addPersonPermission =
-				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson);
+				PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson);
 			var deletePersonPermission =
-				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson);
+				PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson);
 			_addNewPersonMenuItem = new ToolStripMenuItem(Resources.New);
 			if(addPersonPermission)
 				_addNewPersonMenuItem.Click += AddNewGridRow;
@@ -605,7 +605,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		private void deletePersons()
 		{
-		    if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson))
+		    if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson))
 		        return;
 
 			if (Grid.Model.SelectedRanges.Count <= 0) return;
@@ -652,7 +652,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		internal override void AddNewGridRow<T>(object sender, T eventArgs)
 		{
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
+			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
 				return;
 			addPerson();
 		}

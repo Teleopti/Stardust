@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
                     // Don't remove it the user can change it
                     var gridlock = new Gridlock(scheduleDay, LockType.WriteProtected);
                     if (lockDictionary.Count == 1 && lockDictionary.ContainsKey(gridlock.Key) &&
-                        PrincipalAuthorization.Current().IsPermitted(
+                        PrincipalAuthorization.Current_DONTUSE().IsPermitted(
                             DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
                     {
 

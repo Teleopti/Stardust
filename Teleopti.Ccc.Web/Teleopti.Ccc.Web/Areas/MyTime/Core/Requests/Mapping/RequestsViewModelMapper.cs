@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				new DateOnly(personRequest.Request.Period.StartDateTimeLocal(timeZone));
 			if (dateforDayCancellationCheck >= _now.CurrentLocalDate(timeZone))
 			{
-				if (PrincipalAuthorization.Current().IsPermitted(
+				if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, new DateOnly(personRequest.RequestedDate),
 					personRequest.Person))
 				{

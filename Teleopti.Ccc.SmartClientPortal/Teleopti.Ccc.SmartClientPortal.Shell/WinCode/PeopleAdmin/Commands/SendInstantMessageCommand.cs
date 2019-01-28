@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands
     {
         public bool CanExecute()
         {
-            return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.SendAsm);
+            return PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.SendAsm);
         }
     }
 }

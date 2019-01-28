@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			commonSetup();
 
-			var permissions = PrincipalAuthorization.Current() as FullPermission;
+			var permissions = PrincipalAuthorization.Current_DONTUSE() as FullPermission;
 			permissions.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
 			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc),

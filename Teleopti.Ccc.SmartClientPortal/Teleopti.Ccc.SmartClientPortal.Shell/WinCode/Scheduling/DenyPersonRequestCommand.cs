@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public void Execute()
 		{
-			if (_scenario.Restricted && !PrincipalAuthorization.Current()
+			if (_scenario.Restricted && !PrincipalAuthorization.Current_DONTUSE()
 					.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario))
 			{
 				_viewBase?.ShowErrorMessage(Resources.CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios, Resources.ViolationOfABusinessRule);

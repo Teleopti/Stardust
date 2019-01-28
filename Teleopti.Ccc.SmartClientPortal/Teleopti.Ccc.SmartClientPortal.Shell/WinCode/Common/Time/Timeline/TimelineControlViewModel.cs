@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Time.Timeline
     {
         public TimelineControlViewModel(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService)
         {
-            _layers = new LayerViewModelCollection(eventAggregator, createLayerViewModelService,new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current());
+            _layers = new LayerViewModelCollection(eventAggregator, createLayerViewModelService,new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current_DONTUSE());
             CurrentDispatcher = Dispatcher.CurrentDispatcher;
             TimeZoom = new TimeZoomViewModel(Period);
             TickMarks = new ObservableCollection<TickMarkViewModel>();

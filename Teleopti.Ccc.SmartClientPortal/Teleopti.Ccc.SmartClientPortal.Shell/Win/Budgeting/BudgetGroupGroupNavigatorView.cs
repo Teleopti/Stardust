@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 
 		private void checkPermissons()
 		{
-			splitContainer1.Visible = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenBudgets);
+			splitContainer1.Visible = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenBudgets);
 		}
 
 		public BudgetGroupNavigatorPresenter Presenter { get; set; }

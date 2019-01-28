@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
         public bool CanExecute()
         {
             return
-                PrincipalAuthorization.Current().IsPermitted(
+                PrincipalAuthorization.Current_DONTUSE().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.ModifyGroupPage);
         }
     }

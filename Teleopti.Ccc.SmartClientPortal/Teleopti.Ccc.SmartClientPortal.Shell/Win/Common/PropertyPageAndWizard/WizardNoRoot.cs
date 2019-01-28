@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard
 			if (!_propertyPages.IsOnFirst() ||
 				_propertyPages.Name != Resources.QuickForecast ||
 				!_toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801) || 
-				!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
+				!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
 				previewPanel.Hide();
 			treeViewPages.SelectedNodes.Clear();
 			foreach (TreeNodeAdv treeNode in _rootNode.Nodes)

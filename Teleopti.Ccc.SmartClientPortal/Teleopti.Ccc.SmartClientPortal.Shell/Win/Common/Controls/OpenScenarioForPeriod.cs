@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 			:this(openMode)
 		{
 			_selectedEntityList = new List<IEntity>(selectedEntityList);
-			checkBoxRequests.Visible = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
+			checkBoxRequests.Visible = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
 		}
 
 		private bool validateSelectedDatesControl(ICollection<DateOnlyPeriod> periods)
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 		{
 			if (_selectedEntityList == null) return true;
 
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 
 			if (_selectedEntityList.OfType<ITeam>().Any()) 
 				return _selectedEntityList.OfType<ITeam>().All(team => authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario, dateOnly, team));
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
 
 		private static bool hasFunctionPermissionForRestrictedScenarios()
 		{
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 			return authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario);
 		}
 

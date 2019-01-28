@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Api.Query
 		[UnitOfWork]
 		public virtual QueryResultDto<ScheduleChangesListenerSubscriptionDto> Handle(AllScheduleChangesListenerSubscriptionDto query)
 		{
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
+			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
 				return new QueryResultDto<ScheduleChangesListenerSubscriptionDto>
 				{
 					Successful = false,

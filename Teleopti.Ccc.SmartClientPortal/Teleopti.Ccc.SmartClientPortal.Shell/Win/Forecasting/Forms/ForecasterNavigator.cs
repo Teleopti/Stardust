@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private void setVisibility()
 		{
 			toolStripMenuItemCopyTo.Visible = _toggleManager.IsEnabled(Toggles.Forecast_CopySettingsToWorkflow_11112);
-			var instance = PrincipalAuthorization.Current();
+			var instance = PrincipalAuthorization.Current_DONTUSE();
 			toolStripMenuItemActionSkillImportForecast.Visible =
 				instance.IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
@@ -742,7 +742,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 		private void toggleExportMenu()
 		{
-			var instance = PrincipalAuthorization.Current();
+			var instance = PrincipalAuthorization.Current_DONTUSE();
 			var directExportEnabled =
 				instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit);
 			var fileExportEnabled = instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastFile);
@@ -1370,7 +1370,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			)]
 		private void toolStripMenuItemExportClick(object sender, EventArgs e)
 		{
-			var instance = PrincipalAuthorization.Current();
+			var instance = PrincipalAuthorization.Current_DONTUSE();
 			using (
 				var model =
 					new ExportSkillModel(

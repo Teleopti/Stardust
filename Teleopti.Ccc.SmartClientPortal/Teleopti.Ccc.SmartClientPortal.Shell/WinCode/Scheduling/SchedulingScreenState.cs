@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleStorage scheduleStorage)
 		{
 			IPersonRequest updatedRequest = null;
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
+			if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 				updatedRequest = personRequestRepository.Find(personRequestId);
 			
 			if (updatedRequest != null)
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 			IList<IPersonRequest> personRequests = new List<IPersonRequest>();
 
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && SchedulerStateHolder.RequestedScenario.DefaultScenario)
+			if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && SchedulerStateHolder.RequestedScenario.DefaultScenario)
 				if (personRequestRepository != null)
 					personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(SchedulerStateHolder.ChoosenAgents, period);
 			

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 
 		public static void VerifyCanModifyPeople()
 		{
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage))
+			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage))
 			{
 				throw new FaultException("You're not allowed to modify person details.");
 			}
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 
 		public static void VerifyCanBeModifiedByCurrentUser(this IPerson person, DateOnly dateOnly)
 		{
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
+			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
 			{
 				throw new FaultException("You're not allowed to modify person details.");
 			}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 
 		public static void VerifyCanBeModifiedByCurrentUser(this IEnumerable<IPerson> people, DateOnly dateOnly)
 		{
-			var authorizationInstance = PrincipalAuthorization.Current();
+			var authorizationInstance = PrincipalAuthorization.Current_DONTUSE();
 			foreach (var person in people)
 			{
 				if (!authorizationInstance.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))

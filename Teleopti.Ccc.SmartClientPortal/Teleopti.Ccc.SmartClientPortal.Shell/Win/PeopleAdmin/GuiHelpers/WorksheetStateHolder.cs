@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		internal void AddAndSavePerson(int rowIndex, FilteredPeopleHolder filteredPeopleHolder)
 		{
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
+			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
 				return;
 
 			IPerson newPerson = new Person();
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		internal void InsertFromClipHandler(int rowIndex, ClipHandler<string> clipHandler, FilteredPeopleHolder filteredPeopleHolder)
 		{
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
+			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
 				return;
 
 			var persons = new List<IPerson>();

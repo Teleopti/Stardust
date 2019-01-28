@@ -1483,7 +1483,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldValidatePermissionForCancelAbsenceRequest()
 		{
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
-			((FakePermissions)PrincipalAuthorization.Current()).HasPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
+			((FakePermissions)PrincipalAuthorization.Current_DONTUSE()).HasPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
 			
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03),
 				false);

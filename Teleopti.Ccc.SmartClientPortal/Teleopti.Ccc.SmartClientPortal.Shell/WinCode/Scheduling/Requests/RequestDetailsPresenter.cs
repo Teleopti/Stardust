@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 			_view.Message = _model.GetMessage(new NoFormatting());
 			_view.LabelName = _model.Name;
 			_view.Status = _model.StatusText;
-            _personRequestAuthorization = new PersonRequestAuthorization(PrincipalAuthorization.Current());
+            _personRequestAuthorization = new PersonRequestAuthorization(PrincipalAuthorization.Current_DONTUSE());
 		}
 
 		public bool IsShiftTradeRequest()

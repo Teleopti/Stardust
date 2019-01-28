@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				unitOfWork.Reassociate(_schedulingScreenState.SchedulerStateHolder.SchedulingResultState.LoadedAgents);
 				var persons = reloadedMeeting.MeetingPersons.Select(m => m.Person).ToArray();
 
-				if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, reloadedMeeting.StartDate, scheduleViewBase, PrincipalAuthorization.Current())) return;
+				if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, reloadedMeeting.StartDate, scheduleViewBase, PrincipalAuthorization.Current_DONTUSE())) return;
 				reloadedMeeting.Snapshot();
 
 				meetingRepository.Remove(reloadedMeeting);

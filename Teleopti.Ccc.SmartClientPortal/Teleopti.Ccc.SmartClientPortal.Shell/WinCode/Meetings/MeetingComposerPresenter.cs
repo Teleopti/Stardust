@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                         currentMeeting = meetingRepository.Load(_model.Meeting.Id.GetValueOrDefault());
                         var persons = currentMeeting.MeetingPersons.Select(m => m.Person);
                         unitOfWork.Reassociate(persons);
-                        if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, currentMeeting.StartDate, _view, PrincipalAuthorization.Current()))
+                        if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, currentMeeting.StartDate, _view, PrincipalAuthorization.Current_DONTUSE()))
                             return;
                         currentMeeting.Snapshot();
                     }
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                 //Reload So all data is there
                 persons = RepositoryFactory.CreatePersonRepository(unitOfWork).FindPeople(persons);
                 var checker = new MeetingParticipantPermittedChecker();
-                if (!checker.ValidatePermittedPersons(persons, Model.StartDate, _view, PrincipalAuthorization.Current()))
+                if (!checker.ValidatePermittedPersons(persons, Model.StartDate, _view, PrincipalAuthorization.Current_DONTUSE()))
                     return;
             }
             if (!IsMeetingValid()) return;

@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager
             toolStripDropDownNewReport.Visible = false;
             toolStripDropDownViewReports.Visible = false;
 
-            if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.CreatePerformanceManagerReport))
+            if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.CreatePerformanceManagerReport))
             {
                 // If you have right to create report then you also are authorized to view reports.
                 toolStripDropDownNewReport.Visible = true;
                 toolStripDropDownViewReports.Visible = true;
             }
-            if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport))
+            if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewPerformanceManagerReport))
             {
                 toolStripDropDownViewReports.Visible = true;
             }

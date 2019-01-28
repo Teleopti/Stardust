@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Filters
 
 			if (isAuthorized && !_applicationFunctionPaths.IsNullOrEmpty())
 			{
-				var authorization = PrincipalAuthorization.Current();
+				var authorization = PrincipalAuthorization.Current_DONTUSE();
 				isAuthorized =
 					_applicationFunctionPaths.Any(
 						applicationFunctionPath => authorization.IsPermitted(applicationFunctionPath));

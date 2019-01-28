@@ -624,7 +624,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             Color backGroundColor = _grid.BackColor;
             Color backGroundHolidayColor = _colorHolidayCell;
 
-            var authorization = PrincipalAuthorization.Current();
+            var authorization = PrincipalAuthorization.Current_DONTUSE();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
             {
                 if (schedulePart != null)
@@ -990,7 +990,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         private void splitAbsences(IList<IScheduleDay> selectedParts)
         {
-			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+			var permitted = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
 			foreach (var part in selectedParts)
             {
                 var day = Presenter.SchedulerState.Schedules[part.Person].ScheduledDay(part.Period.ToDateOnlyPeriod(part.TimeZone).StartDate);
@@ -1212,7 +1212,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if(gridlockManager == null)
 				throw new ArgumentNullException("gridlockManager");
 
-			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+			var permitted = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
 			IDictionary<IPerson, IList<DateOnly>> locks = new Dictionary<IPerson, IList<DateOnly>>();
 
 			foreach (var scheduleDay in SelectedSchedules())

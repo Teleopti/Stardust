@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_skillPriorityProvider = skillPriorityProvider;
 			_container = container;
 
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 
 			InitializeComponent();
 			if (DesignMode) return;
