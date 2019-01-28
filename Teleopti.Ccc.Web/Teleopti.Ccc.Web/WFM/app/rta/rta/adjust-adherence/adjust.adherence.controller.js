@@ -15,12 +15,7 @@
             currentUserInfo.Load().then(function (data) {
                 preselectDateAndTime(data);
                 buildSelectedPeriod();
-
-                $http.get('../api/Adherence/AdjustedPeriods')
-                    .then(function (response) {
-                        var data = response.data;
-                        vm.adjustedPeriods = buildAdjustedPeriods(data);
-                    });
+                loadData();
             });
 
             function preselectDateAndTime(data) {
@@ -39,6 +34,14 @@
                 vm.selectedPeriod = startTime + ' - ' + endTime;
             }
 
+            function loadData() {
+                $http.get('../api/Adherence/AdjustedPeriods')
+                    .then(function (response) {
+                        var data = response.data;
+                        vm.adjustedPeriods = buildAdjustedPeriods(data);
+                    });
+            }
+
             function buildAdjustedPeriods(data) {
                 return data.map(function (period) {
                     return {
@@ -47,27 +50,46 @@
                     }
                 })
             }
-            
-            $scope.$watch(function () { return vm.startDate; }, function (){
+
+            vm.adjustToNeutral = function () {
+                $http.post('../api/Adherence/AdjustPeriod', {
+                    StartDateTime: formatDateTime(vm.startDate, vm.startTime),
+                    EndDateTime: formatDateTime(vm.endDate, vm.endTime)
+                }).then(loadData);
+            };
+
+            function formatDateTime(date, time) {
+                return moment(date).format('YYYY-MM-DD') + ' ' + moment(time).format('HH:mm');
+            }
+
+            $scope.$watch(function () {
+                return vm.startDate;
+            }, function () {
                 if (shouldAutoFixDate())
                     vm.endDate = vm.startDate;
                 buildSelectedPeriod();
             });
-            
-            $scope.$watch(function () { return vm.startTime; }, function() {
-                if(shouldAutoFixTime())
+
+            $scope.$watch(function () {
+                return vm.startTime;
+            }, function () {
+                if (shouldAutoFixTime())
                     vm.endTime = vm.startTime;
                 buildSelectedPeriod();
             });
-            
-            $scope.$watch(function () { return vm.endDate; }, function() {
+
+            $scope.$watch(function () {
+                return vm.endDate;
+            }, function () {
                 if (shouldAutoFixDate())
                     vm.startDate = vm.endDate;
                 buildSelectedPeriod();
             });
-            
-            $scope.$watch(function () { return vm.endTime; }, function() {
-                if(shouldAutoFixTime())
+
+            $scope.$watch(function () {
+                return vm.endTime;
+            }, function () {
+                if (shouldAutoFixTime())
                     vm.startTime = vm.endTime;
                 buildSelectedPeriod();
             });
@@ -79,22 +101,11 @@
                 return (isSameDay && isStartTimeAfterEndTime);
             }
 
-            function shouldAutoFixDate() {return moment(vm.startDate).isAfter(moment(vm.endDate), 'day');}
-            
-            vm.adjustToNeutral = function () {
-                $http.post('../api/Adherence/AdjustPeriod', {
-                    StartDateTime: formatDateTime(vm.startDate, vm.startTime),
-                    EndDateTime: formatDateTime(vm.endDate, vm.endTime)
-                })
-            };
-
-            function formatDateTime(date, time) {
-                return moment(date).format('YYYY-MM-DD') + ' ' + moment(time).format('HH:mm');
+            function shouldAutoFixDate() {
+                return moment(vm.startDate).isAfter(moment(vm.endDate), 'day');
             }
-
-            vm.toggleAdjustToNeutralForm = function () {
-                vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;
-            };
+            
+            vm.toggleAdjustToNeutralForm = function () {vm.showAdjustToNeutralForm = !vm.showAdjustToNeutralForm;};
 
             vm.goToAgents = rtaStateService.goToAgents;
             vm.goToOverview = rtaStateService.goToOverview;
