@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private void setUserLockedDaysInMatrix(IScheduleMatrixPro matrix, DateOnlyPeriod selectedPeriod, IGridlockManager gridlockManager)
 		{
 			var currentPerson = matrix.Person;
-
+			var authorization = _currentAuthorization.Current();
 			foreach (var dayPro in matrix.EffectivePeriodDays)
 			{
 				var day = dayPro.Day;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					if (userLock.Value.LockType.Equals(LockType.WriteProtected))
 					{
-						if (!_currentAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+						if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
 						{
 							matrix.LockDay(day);
 						}
