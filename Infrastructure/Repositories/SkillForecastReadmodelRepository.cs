@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			dt.Columns.Add("AgentsWithShrinkage", typeof(double));
 			dt.Columns.Add("Calls", typeof(double));
 			dt.Columns.Add("AverageHandleTime", typeof(double));
-			dt.Columns.Add("InsertedOn", typeof(DateTime));
 			dt.Columns.Add("IsBackOffice", typeof(bool));
+			dt.Columns.Add("InsertedOn", typeof(DateTime));
 
 			var insertedOn = _now.UtcDateTime();
 
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				row["AgentsWithShrinkage"] = intervals.AgentsWithShrinkage;
 				row["Calls"] = intervals.Calls;
 				row["AverageHandleTime"] = intervals.AverageHandleTime;
-				row["InsertedOn"] = insertedOn;
 				row["IsBackOffice"] = intervals.IsBackOffice;
+				row["InsertedOn"] = insertedOn;
 
 				dt.Rows.Add(row);
 			}
