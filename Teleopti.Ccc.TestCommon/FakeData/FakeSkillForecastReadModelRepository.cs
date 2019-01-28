@@ -9,17 +9,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeSkillForecastReadModelRepository : ISkillForecastReadModelRepository
 	{
-		public List<SkillForecast> SkillForecasts= new List<SkillForecast>();
+		public List<SkillForecast> SkillForecasts = new List<SkillForecast>();
 
 		public void PersistSkillForecast(List<SkillForecast> listOfIntervals)
 		{
-			
 			SkillForecasts.AddRange(listOfIntervals);
 		}
 
 		public IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTimePeriod period)
 		{
-			return SkillForecasts.Where(x =>x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime).ToList();
+			var skillForecastList = SkillForecasts.Where(x =>x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && x.IsBackOffice == false).ToList();
+			skillForecastList.AddRange(SkillForecasts.Where(x =>
+				x.StartDateTime >= period.StartDateTime.AddDays(-8) && x.EndDateTime <= period.EndDateTime &&
+				x.IsBackOffice == true).ToList());
+
+			return skillForecastList;
 		}
 	}
 }

@@ -1373,7 +1373,7 @@
     <Compile Include="Staffing\ExportBpoFileTest.cs" />
     <Compile Include="Staffing\ExportForecastAndStaffingFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
-    <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
+    <Compile Include="Staffing\ScheduledStaffingViewModelCreatorTest.cs" />
     <Compile Include="Staffing\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Staffing\TenantContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />

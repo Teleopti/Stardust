@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -55,6 +57,43 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(96);
 			vm.DataSeries.ForecastedStaffing[24].Should().Be.EqualTo(3);
 			vm.DataSeries.ForecastedStaffing[25].Should().Be.EqualTo(3);
+			vm.DataSeries.ScheduledStaffing[24].Should().Be.EqualTo(10);
+			vm.DataSeries.ScheduledStaffing[25].Should().Be.EqualTo(2);
+		}
+		
+		[Test]
+		public void ShouldCalculateCorrectForecastingForMultipleSkills()
+		{
+			TimeZone.IsSweden();
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0);
+			var userNowUtc = TimeZoneInfo.ConvertTimeToUtc(userNow, TimeZone.TimeZone());
+			Now.Is(userNowUtc);
+
+			var opensAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 26, 8, 0, 0), TimeZone.TimeZone());
+			var closesAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 26, 8, 30, 0), TimeZone.TimeZone());
+			var openHours = new DateTimePeriod(opensAtUtc, closesAtUtc).TimePeriod(TimeZoneInfo.Utc);
+
+			var act = ActivityFactory.CreateActivity("act");
+			var act2 = ActivityFactory.CreateActivity("act");
+			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill1", openHours, false, act);
+			var skill2 = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill1", openHours, false, act2);
+			SkillRepository.Has(skill);
+			SkillRepository.Has(skill2);
+
+			var skillList = new HashSet<Guid> {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()};
+			SkillSetupHelper.PopulateStaffingReadModels(skillList, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc, 10, SkillCombinationResourceRepository);
+			SkillSetupHelper.PopulateStaffingReadModels(skillList, userNowUtc, userNowUtc.AddMinutes(minutesPerInterval), 2, SkillCombinationResourceRepository);
+			
+			SkillSetupHelper.PopulateForecastReadModels(skill, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc.AddMinutes(minutesPerInterval), 3, SkillForecastReadModelRepository);
+			SkillSetupHelper.PopulateForecastReadModels(skill2, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc.AddMinutes(minutesPerInterval), 3, SkillForecastReadModelRepository);
+
+			var skillIdArray = new List<ISkill> {skill, skill2}.Select(s => s.Id.GetValueOrDefault()).ToArray();
+			var vm = Target.Load(skillIdArray, new DateOnly(2016, 8, 26), false);
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(96);
+			vm.DataSeries.ForecastedStaffing[24].Should().Be.EqualTo(6);
+			vm.DataSeries.ForecastedStaffing[25].Should().Be.EqualTo(6);
 			vm.DataSeries.ScheduledStaffing[24].Should().Be.EqualTo(10);
 			vm.DataSeries.ScheduledStaffing[25].Should().Be.EqualTo(2);
 		}

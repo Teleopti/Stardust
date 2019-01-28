@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AuditableBpoOperationsToggleOff>().As<IAuditableBpoOperations>().SingleInstance();
 
 			builder.RegisterType<StaffingViewModelCreator>().SingleInstance();
+			builder.RegisterType<ResourceCalculationUsingReadModels>().SingleInstance();
 		}
 	}
 }

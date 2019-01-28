@@ -237,6 +237,7 @@
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
+    <Compile Include="Intraday\To Staffing\ResourceCalculationUsingReadModels.cs" />
     <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
     <Compile Include="Intraday\To Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
