@@ -144,8 +144,8 @@ export class BankHolidayCalendarEditComponent implements OnInit {
 	}
 
 	deleteYearTab(year: BankHolidayCalendarYearItem): boolean {
-		year.Dates.forEach(d => (d.IsDeleted = true));
-		year.ModifiedDates = year.Dates;
+		year.ModifiedDates = year.ModifiedDates.concat(year.Dates);
+		year.ModifiedDates.forEach(d => (d.IsDeleted = true));
 		this.deletedYears.push(year);
 
 		this.edittingCalendarYears.splice(this.edittingCalendarYears.indexOf(year), 1);

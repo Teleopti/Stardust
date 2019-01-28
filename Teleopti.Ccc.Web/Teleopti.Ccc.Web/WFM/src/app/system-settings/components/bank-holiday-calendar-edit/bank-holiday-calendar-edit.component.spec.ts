@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed, async, fakeAsync, flush } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, flush, tick } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -345,6 +345,52 @@ describe('BankHolidayCalendarEditComponent', () => {
 		expect(component.edittingCalendarYears[0].Dates.length).toBe(2);
 		expect(component.edittingCalendarYears[0].ModifiedDates[0].IsDeleted).toBe(false);
 		expect(component.edittingCalendarYears[0].ModifiedDates[0].Description).toBe('new description');
+	});
+
+	it('should remove all dates of a year when the year is deleted', () => {
+		component.edittingCalendar = {
+			Id: 'e0e97b97-1f4c-4834-9cc1-a9c3003b10df',
+			Name: 'Bank holiday calendar',
+			CurrentYearIndex: 0,
+			Years: [
+				{
+					Year: '2013',
+					Dates: [
+						{
+							Id: '1a9e52aa-ca90-42a0-aa6d-a9c3003b10df',
+							Date: '2013-01-09',
+							Description: 'BankHoliday 1',
+							IsDeleted: false
+						},
+						{
+							Id: '876b72ef-4238-423a-a05b-a9c3003b10df',
+							Date: '2013-01-10',
+							Description: 'BankHoliday 2',
+							IsDeleted: false
+						}
+					]
+				}
+			]
+		};
+		fixture.detectChanges();
+
+		const editBankHolidayCalendarPanel = document.getElementsByClassName('edit-bank-holiday-calendar')[0];
+		const dateRows = editBankHolidayCalendarPanel
+			.getElementsByClassName('bank-holiday-calendar-date-list')[0]
+			.getElementsByTagName('nz-list-item');
+
+		expect(dateRows.length).toBe(2);
+		expect(component.edittingCalendarYears[0].Dates.length).toBe(2);
+
+		dateRows[1].getElementsByClassName('remove-date-icon')[0].dispatchEvent(new Event('click'));
+		fixture.detectChanges();
+
+		component.deleteYearTab(component.edittingCalendarYears[0]);
+		fixture.detectChanges();
+
+		expect(component.deletedYears[0].ModifiedDates.length).toBe(2);
+		expect(component.deletedYears[0].ModifiedDates[0].IsDeleted).toBe(true);
+		expect(component.deletedYears[0].ModifiedDates.length).toBe(2);
 	});
 
 	// it('should keep the remaining dates in selected dates array after removing a date', () => {
