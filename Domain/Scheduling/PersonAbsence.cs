@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		protected PersonAbsence()
 		{
-			_lastChange = DateTime.MinValue;
+			_lastChange = DateTime.UtcNow;
 		}
 
 		/// <summary>
@@ -304,12 +304,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual DateTime? LastChange
 		{
-			get
-			{
-				if (_lastChange == DateTime.MinValue)
-					_lastChange = ServiceLocator_DONTUSE.Now.UtcDateTime();
-				return _lastChange;
-			}
+			get => _lastChange;
 			set => _lastChange = value;
 		}
 
