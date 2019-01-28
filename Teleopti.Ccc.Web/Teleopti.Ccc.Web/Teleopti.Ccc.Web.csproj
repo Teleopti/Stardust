@@ -1710,6 +1710,7 @@
     <Content Include="Areas\MyTime\Views\Schedule\MobileMonthPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.assistPeriodSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.html" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.js" />
     <Content Include="WFM\app\rta\rta\adjust-adherence\adjust.adherence.controller.spec.js" />

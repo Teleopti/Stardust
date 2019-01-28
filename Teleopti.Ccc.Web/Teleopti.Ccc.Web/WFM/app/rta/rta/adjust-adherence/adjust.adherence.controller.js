@@ -47,12 +47,40 @@
                     }
                 })
             }
+            
+            $scope.$watch(function () { return vm.startDate; }, function (){
+                if (shouldAutoFixDate())
+                    vm.endDate = vm.startDate;
+                buildSelectedPeriod();
+            });
+            
+            $scope.$watch(function () { return vm.startTime; }, function() {
+                if(shouldAutoFixTime())
+                    vm.endTime = vm.startTime;
+                buildSelectedPeriod();
+            });
+            
+            $scope.$watch(function () { return vm.endDate; }, function() {
+                if (shouldAutoFixDate())
+                    vm.startDate = vm.endDate;
+                buildSelectedPeriod();
+            });
+            
+            $scope.$watch(function () { return vm.endTime; }, function() {
+                if(shouldAutoFixTime())
+                    vm.startTime = vm.endTime;
+                buildSelectedPeriod();
+            });
 
-            $scope.$watch(function () { return vm.startDate; }, buildSelectedPeriod);
-            $scope.$watch(function () { return vm.startTime; }, buildSelectedPeriod);
-            $scope.$watch(function () { return vm.endDate; }, buildSelectedPeriod);
-            $scope.$watch(function () { return vm.endTime; }, buildSelectedPeriod);
+            function shouldAutoFixTime() {
+                var isSameDay = moment(vm.startDate).isSame(moment(vm.endDate), 'day');
+                var isStartTimeAfterEndTime = moment(vm.startTime).isAfter(moment(vm.endTime));
 
+                return (isSameDay && isStartTimeAfterEndTime);
+            }
+
+            function shouldAutoFixDate() {return moment(vm.startDate).isAfter(moment(vm.endDate), 'day');}
+            
             vm.adjustToNeutral = function () {
                 $http.post('../api/Adherence/AdjustPeriod', {
                     StartDateTime: formatDateTime(vm.startDate, vm.startTime),
