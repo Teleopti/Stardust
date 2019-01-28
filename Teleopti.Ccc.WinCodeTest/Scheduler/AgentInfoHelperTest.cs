@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(7)), TimeZoneInfo.Utc);
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
 			var gridLockManager = new GridlockManager();
-			var matrixUserLocker = new MatrixUserLockLocker(() => gridLockManager);
+			var matrixUserLocker = new MatrixUserLockLocker(() => gridLockManager, CurrentAuthorization.Make());
 			var notPermittedLocker = new MatrixNotPermittedLocker(new ThisAuthorization(new FullPermission()));
 			var personListExtraxtor = new PersonListExtractorFromScheduleParts();
 			var periodExtractor = new PeriodExtractorFromScheduleParts();
