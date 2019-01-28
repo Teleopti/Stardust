@@ -476,9 +476,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 		[Test]
 		public void ShouldNotRemoveAllShiftsWhenTryingToGetBackToLegalState([Values(2, 3, 4)] int targetDayOffs)
 		{
-			if (!ResourcePlannerTestParameters.IsEnabled(Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941))
-				Assert.Ignore("only works with toggle on");
-
 			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has(activity);

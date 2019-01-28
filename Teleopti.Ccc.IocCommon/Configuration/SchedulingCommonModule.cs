@@ -274,12 +274,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixClosedDayLocker>().SingleInstance();
-
-			builder
-				.RegisterToggledComponent<ScheduleAllRemovedDaysOrRollback, ScheduleAllRemovedDaysOrRollbackDoNothing,IScheduleAllRemovedDaysOrRollback>(
-					Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941)
-				.InstancePerLifetimeScope();
-
+			builder.RegisterType<ScheduleAllRemovedDaysOrRollback>().InstancePerLifetimeScope();
 			builder.RegisterToggledComponent<OpenHoursSkillExtractor, OpenHoursSkillExtractorDoNothing, IOpenHoursSkillExtractor>(
 				Toggles.ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118)
 				.SingleInstance();

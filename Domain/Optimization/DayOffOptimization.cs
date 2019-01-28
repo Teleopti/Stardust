@@ -17,12 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IScheduleAllRemovedDaysOrRollback
-	{
-		void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IEnumerable<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService);
-	}
-
-	public class ScheduleAllRemovedDaysOrRollback : IScheduleAllRemovedDaysOrRollback
+	public class ScheduleAllRemovedDaysOrRollback
 	{
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
 
@@ -43,14 +38,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941)]
-	public class ScheduleAllRemovedDaysOrRollbackDoNothing : IScheduleAllRemovedDaysOrRollback
-	{
-		public void Execute(ScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, IOptimizationPreferences optimizationPreferences, IEnumerable<DateOnly> removedDays, SchedulePartModifyAndRollbackService rollbackService)
-		{
-		}
-	}
-
 	public class DayOffOptimization
 	{
 		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
@@ -66,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 		private readonly IDayOffOptimizationPreferenceProviderForPlanningPeriod _dayOffOptimizationPreferenceProviderForPlanningPeriod;
-		private readonly IScheduleAllRemovedDaysOrRollback _scheduleAllRemovedDaysOrRollback;
+		private readonly ScheduleAllRemovedDaysOrRollback _scheduleAllRemovedDaysOrRollback;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly MatrixListFactory _matrixListFactory;
@@ -89,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
 			IDayOffOptimizationPreferenceProviderForPlanningPeriod dayOffOptimizationPreferenceProviderForPlanningPeriod,
-			IScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback,
+			ScheduleAllRemovedDaysOrRollback scheduleAllRemovedDaysOrRollback,
 			IPlanningGroupGlobalSettingSetter planningGroupGlobalSettingSetter)
 		{
 			_teamBlockDayOffOptimizer = teamBlockDayOffOptimizer;
