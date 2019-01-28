@@ -6,11 +6,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Staffing;
 
-namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
+namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class StaffingViewModelCreator
+	public class StaffingViewModelCreator : IStaffingViewModelCreator
 	{
 		private readonly ResourceCalculationUsingReadModels _resourceCalculationUsingReadModels;
 		private readonly IUserTimeZone _timeZone;

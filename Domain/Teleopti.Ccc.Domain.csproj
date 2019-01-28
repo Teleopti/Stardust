@@ -237,9 +237,7 @@
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
-    <Compile Include="Intraday\To Staffing\ResourceCalculationUsingReadModels.cs" />
     <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
-    <Compile Include="Intraday\To Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
@@ -258,6 +256,9 @@
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentityForLegacy.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.cs" />
+    <Compile Include="Staffing\IStaffingViewModelCreator.cs" />
+    <Compile Include="Staffing\ResourceCalculationUsingReadModels.cs" />
+    <Compile Include="Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />

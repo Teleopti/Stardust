@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
-namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
+namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class ResourceCalculationUsingReadModels
 	{

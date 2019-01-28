@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.Staffing;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
+	[AllTogglesOn]
 	public class StaffingViewModelCreatorTest
 	{
 		public StaffingViewModelCreator Target;

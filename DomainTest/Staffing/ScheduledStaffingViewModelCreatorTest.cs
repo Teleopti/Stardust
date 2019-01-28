@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
@@ -17,6 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
+	[ToggleOff(Toggles.WFM_Forecast_Readmodel_80790)]
 	public class ScheduledStaffingViewModelCreatorTest : IIsolateSystem
 	{
 		public ScheduledStaffingViewModelCreator Target;
