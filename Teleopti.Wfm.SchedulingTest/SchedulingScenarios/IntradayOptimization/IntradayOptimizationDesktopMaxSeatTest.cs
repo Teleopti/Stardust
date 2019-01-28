@@ -26,7 +26,10 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 	{
 		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		//TODO: remove when [DefaultData] is used
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
+		//
 
 		[TestCase(MaxSeatsFeatureOptions.DoNotConsiderMaxSeats, teamBlockStyle.TeamHierarchy, ExpectedResult = true)]
 		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, teamBlockStyle.TeamHierarchy, ExpectedResult = false)]
@@ -38,7 +41,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[TestCase(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak, teamBlockStyle.Classic, ExpectedResult = false)]
 		public bool ShouldRespectMaxSeatWhenIntradayOptimizationIsMade(MaxSeatsFeatureOptions maxSeatsFeatureOptions, teamBlockStyle teamBlockStyle)
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
