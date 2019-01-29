@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		protected readonly ConcurrentStack<ServiceLocatorState> Instances = new ConcurrentStack<ServiceLocatorState>();
 
-		public ServiceLocator_DONTUSE()
+		private ServiceLocator_DONTUSE()
 		{
 			Push(new ServiceLocatorState
 			{
