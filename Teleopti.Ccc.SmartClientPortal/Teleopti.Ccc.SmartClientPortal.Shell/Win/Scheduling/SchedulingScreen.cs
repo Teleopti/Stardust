@@ -3909,23 +3909,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				new OvertimeAvailabilityRepository(currentUnitOfWork),
 				new PersistableScheduleDataPermissionChecker(currentAuthorization),
 				_container.Resolve<IScheduleStorageRepositoryWrapper>(), currentAuthorization);
-			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
-			var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
-			using (
-				var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
-					new MoveDataBetweenSchedules(allNewRules, _container.Resolve<IScheduleDayChangeCallback>()),
-					_schedulerMessageBrokerHandler,
-					_scheduleView.AllSelectedPersons(selectedSchedules),
-					selectedSchedules,
-					scenario,
-					_container.Resolve<IScheduleDictionaryPersister>(),
-					exportToScenarioAccountPersister,
-					exportToScenarioAbsenceFinder,
-					SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts,
-					_scheduleView.AllSelectedDates(selectedSchedules)))
-			{
-				exportForm.ShowDialog(this);
-			}
+			//var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
+			//var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
+			//using (
+			//	var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
+			//		new MoveDataBetweenSchedules(allNewRules, _container.Resolve<IScheduleDayChangeCallback>()),
+			//		_schedulerMessageBrokerHandler,
+			//		_scheduleView.AllSelectedPersons(selectedSchedules),
+			//		selectedSchedules,
+			//		scenario,
+			//		_container.Resolve<IScheduleDictionaryPersister>(),
+			//		exportToScenarioAccountPersister,
+			//		exportToScenarioAbsenceFinder,
+			//		SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts,
+			//		_scheduleView.AllSelectedDates(selectedSchedules)))
+			//{
+			//	exportForm.ShowDialog(this);
+			//}
 		}
 
 		private void loadLockMenues()
