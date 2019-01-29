@@ -6,12 +6,14 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
+	[EnabledBy(Toggles.WFM_Forecast_Readmodel_80790)]
 	[InstancePerLifetimeScope]
 	public class UpdateSkillForecastReadModelHandler : IHandleEvent<ForecastChangedEvent>, IRunOnStardust
 	{
