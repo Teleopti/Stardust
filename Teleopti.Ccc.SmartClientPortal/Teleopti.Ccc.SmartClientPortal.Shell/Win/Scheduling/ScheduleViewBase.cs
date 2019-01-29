@@ -1550,7 +1550,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                 int row = GetRowForAgent(person);
                 _grid.RefreshRange(GridRangeInfo.Cell(row, (int)ColumnType.RowHeaderColumn + 1), true);
                 //loop for all days in period
-	            var datePeriod = period.ToDateOnlyPeriod(TimeZoneGuard.Instance.TimeZone);
+	            var datePeriod = period.ToDateOnlyPeriod(TimeZoneGuard.Instance.CurrentTimeZone());
 	            foreach (var date in datePeriod.DayCollection())
 	            {
                     int column = GetColumnForDate(date);

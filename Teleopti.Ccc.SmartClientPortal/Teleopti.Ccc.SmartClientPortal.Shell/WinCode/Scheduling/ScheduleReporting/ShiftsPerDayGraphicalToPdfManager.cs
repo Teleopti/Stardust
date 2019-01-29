@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 				{
 					if (top > page.GetClientSize().Height - 30)
 						top = NewPageAgentView(doc, _rightToLeft, _culture, out page, person, dateOnly);
-					else if(AddPageForDaylightSavingTime(previousDateOnly, dateOnly, TimeZoneGuard.Instance.TimeZone))
+					else if(AddPageForDaylightSavingTime(previousDateOnly, dateOnly, TimeZoneGuard.Instance.CurrentTimeZone()))
 						top = NewPageAgentView(doc, _rightToLeft, _culture, out page, person, dateOnly);
 
 					var dic = _stateHolder.Schedules;

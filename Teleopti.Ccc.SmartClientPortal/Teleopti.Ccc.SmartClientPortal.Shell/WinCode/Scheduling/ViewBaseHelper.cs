@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 				if (projectionPeriod.HasValue)
 				{
-					sb.Append(ToLocalStartEndTimeString(projectionPeriod.Value, TimeZoneGuard.Instance.TimeZone)); //time
+					sb.Append(ToLocalStartEndTimeString(projectionPeriod.Value, TimeZoneGuard.Instance.CurrentTimeZone())); //time
 				}
 
 				foreach (var layer in pa.PersonalActivities())
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					sb.Append(layer.Payload.ConfidentialDescription_DONTUSE(pa.Person).Name);
 					//name
 					sb.Append(": ");
-					sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone)); //time
+					sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.CurrentTimeZone())); //time
 				}
 			}
 			return sb.ToString();
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 					sb.Append(pa.Layer.Payload.ConfidentialDescription_DONTUSE(pa.Person).Name); //name
 					sb.Append(": ");
-					sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, TimeZoneGuard.Instance.TimeZone));
+					sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, TimeZoneGuard.Instance.CurrentTimeZone()));
 				}
 			}
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 				sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
 				sb.Append(": ");
-				sb.Append(ToLocalStartEndTimeString(personMeeting.Period, TimeZoneGuard.Instance.TimeZone));
+				sb.Append(ToLocalStartEndTimeString(personMeeting.Period, TimeZoneGuard.Instance.CurrentTimeZone()));
 
 				if (personMeeting.Optional)
 					sb.AppendFormat(" ({0})", Resources.Optional);
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				sb.Append(": ");
 				sb.Append(layer.Payload.ConfidentialDescription_DONTUSE(cell.Person).Name);
 				sb.Append(": ");
-				sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone));
+				sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.CurrentTimeZone()));
 			}
 			return sb.ToString();
 		}
@@ -601,7 +601,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				infoText = pa.ShiftCategory.Description.Name;
 				if (period.HasValue)
 				{
-					periodText = ToLocalStartEndTimeString(period.Value, TimeZoneGuard.Instance.TimeZone);
+					periodText = ToLocalStartEndTimeString(period.Value, TimeZoneGuard.Instance.CurrentTimeZone());
 				}
 			}
 

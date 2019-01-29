@@ -264,14 +264,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAbsence personAbsence = new PersonAbsence(_agent, _scenario, layer);
             var absCollection = new [] { personAbsence };
             var part = _mockRep.StrictMock<IScheduleDay>();
-			string expectedStart = "Tjänsteresa: " + TimeZoneHelper.ConvertFromUtc(startTime, TimeZoneGuard.Instance.TimeZone).ToShortTimeString() + 
-                                            " - " + partStartperiod.EndDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString();
+			string expectedStart = "Tjänsteresa: " + TimeZoneHelper.ConvertFromUtc(startTime, TimeZoneGuard.Instance.CurrentTimeZone()).ToShortTimeString() + 
+                                            " - " + partStartperiod.EndDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()).ToShortTimeString();
 
-			string expectedMiddle = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString() +
-											" - " + partStartperiod.EndDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString();
+			string expectedMiddle = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()).ToShortTimeString() +
+											" - " + partStartperiod.EndDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()).ToShortTimeString();
 
-			string expectedEnd = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString() +
-											" - " + TimeZoneHelper.ConvertFromUtc(endTime, TimeZoneGuard.Instance.TimeZone).ToShortTimeString();
+			string expectedEnd = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()).ToShortTimeString() +
+											" - " + TimeZoneHelper.ConvertFromUtc(endTime, TimeZoneGuard.Instance.CurrentTimeZone()).ToShortTimeString();
 
             using (_mockRep.Record())
             {
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyToolTipOvertime()
         {
             var period = new DateTimePeriod(new DateTime(2008, 1, 1, 17, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 18, 0, 0, DateTimeKind.Utc));
-			IList<IPersonPeriod> personPeriods = _agent.PersonPeriods(period.ToDateOnlyPeriod(TimeZoneGuard.Instance.TimeZone));
+			IList<IPersonPeriod> personPeriods = _agent.PersonPeriods(period.ToDateOnlyPeriod(TimeZoneGuard.Instance.CurrentTimeZone()));
             IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
                 MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("Paid Overtime",
                                                                                    MultiplicatorType.Overtime);

@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         {
             _selectedDate = dateOnly;
             _scalePeriod = _scaleCalculator.CalculateScalePeriod(_schedulerState, _selectedDate);
-            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1)), TimeZoneGuard.Instance.TimeZone);
+            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1)), TimeZoneGuard.Instance.CurrentTimeZone());
         }
 
 

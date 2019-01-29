@@ -1253,10 +1253,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					var last = sortedList.LastOrDefault();
 					var period =
 						new DateTimePeriod(
-							DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(first, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc),
-							DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last.AddDays(1), TimeZoneGuard.Instance.TimeZone),
+							DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(first, TimeZoneGuard.Instance.CurrentTimeZone()), DateTimeKind.Utc),
+							DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last.AddDays(1), TimeZoneGuard.Instance.CurrentTimeZone()),
 								DateTimeKind.Utc));
-					var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, TimeZoneGuard.Instance.TimeZone, period);
+					var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, TimeZoneGuard.Instance.CurrentTimeZone(), period);
 
 					if (!addDayOffDialog.Result)
 						return;
@@ -4865,7 +4865,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void setupAvailTimeZones()
 		{
 			TimeZoneGuard.Instance.Set(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
-			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
+			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.CurrentTimeZone();
 			wpfShiftEditor1.SetTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
 
 			foreach (TimeZoneInfo info in _detectedTimeZoneInfos)
@@ -5567,8 +5567,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void changeTimeZone(TimeZoneInfo timeZone)
 		{
 			TimeZoneGuard.Instance.Set(timeZone);
-			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
-			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
+			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.CurrentTimeZone();
+			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
@@ -5594,7 +5594,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripSplitButtonTimeZone.Visible = show;
 			toolStripSplitButtonTimeZone.Text = string.Concat(LanguageResourceHelper.Translate("XXViewPointTimeZone"),
 				Resources.Colon,
-				TimeZoneGuard.Instance.TimeZone.DisplayName);
+				TimeZoneGuard.Instance.CurrentTimeZone().DisplayName);
 		}
 
 		private void toolStripMenuItemScheduleOvertimeClick(object sender, EventArgs e)

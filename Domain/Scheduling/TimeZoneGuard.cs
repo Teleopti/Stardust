@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public interface ITimeZoneGuard
 	{
 		TimeZoneInfo CurrentTimeZone();
-		TimeZoneInfo TimeZone { get; }
 		void Set(TimeZoneInfo timeZone);
 	}
 	
