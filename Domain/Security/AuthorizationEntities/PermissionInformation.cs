@@ -135,16 +135,32 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 		public CultureInfo UICulture()
 		{
-			if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
+
+			if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal == null || !TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
+			{
+				if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
+
+				try
+				{
+					return CultureInfo.GetCultureInfo(uiCulture.Value).FixPersianCulture();
+				}
+				catch (ArgumentException)
+				{
+					return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
+				}				
+			}
+
+			if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture;
 
 			try
 			{
-				return CultureInfo.GetCultureInfo(uiCulture.Value).FixPersianCulture();
+				return CultureInfo.GetCultureInfo(uiCulture.Value);
 			}
 			catch (ArgumentException)
 			{
-				return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
-			}				
+				return Thread.CurrentThread.CurrentUICulture;
+			}
+
 		}
 
 		public int? UICultureLCID()
