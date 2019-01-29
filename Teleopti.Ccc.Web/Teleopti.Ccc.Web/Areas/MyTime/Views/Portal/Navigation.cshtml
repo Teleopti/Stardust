@@ -113,10 +113,6 @@
 										dispatch({
 											type: 'WEB_CHAT/SEND_EVENT',
 											payload: {
-												from: {
-													id: "@Model.CurrentLogonAgentId",
-													name: "@Model.CurrentLogonAgentName"
-												},
 												name: 'startConversation',
 												value: '',
 												type: 'event'
@@ -127,7 +123,8 @@
 									if (action.type === 'DIRECT_LINE/POST_ACTIVITY') {
 										action.payload.activity.channelData = {
 											"personId": "@Model.CurrentLogonAgentId",
-											"environment": window.location.host
+											"environment": window.location.host,
+											"personName": "@Model.CurrentLogonAgentName"
 										};
 									}
 
