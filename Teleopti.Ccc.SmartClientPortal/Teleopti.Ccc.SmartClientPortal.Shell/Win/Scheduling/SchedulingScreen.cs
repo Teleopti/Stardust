@@ -13,7 +13,6 @@ using Autofac;
 using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain;
@@ -32,7 +31,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -1896,7 +1894,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
 			loadLockMenues();
-			loadScenarioMenuItems();
 
 			toolStripStatusLabelStatus.Text = @"SETTING UP SKILL TABS...";
 			ResumeLayout(true);
@@ -3826,108 +3823,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			enableSave();
 		}
 
-		[RemoveMeWithToggle("function + flowLayoutExportToScenario from designer", Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
-		private void loadScenarioMenuItems()
-		{
-			IList<IScenario> scenarios;
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				IScenarioRepository scenarioRepository = new ScenarioRepository(uow);
-				scenarios = scenarioRepository.FindAllSorted(); // Ascending or Descending ?
-			}
-			var authorization = PrincipalAuthorization.Current_DONTUSE();
-
-			for (var i = scenarios.Count - 1; i > -1; i--)
-			{
-				if (scenarios[i].Restricted &&
-					!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario))
-					scenarios.RemoveAt(i);
-			}
-
-			if (RightToLeftLayout) flowLayoutExportToScenario.ReverseRows = true;
-
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576))
-			{
-				var exportLimitedTime = new Label
-				{
-					Text = Resources.ExportAvailableLimitedTime,
-					Width = 300,
-					Height = 80,
-					BackColor = Color.Green,
-					ForeColor = Color.White,
-					TextAlign = ContentAlignment.MiddleCenter
-				};
-				exportLimitedTime.Font.ChangeToBold();
-				flowLayoutExportToScenario.ContainerControl.Controls.Add(exportLimitedTime);
-			}
-
-			backStageButtonManiMenuImport.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
-			backStageButtonMainMenuCopy.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
-
-			foreach (var scenario in scenarios)
-			{
-				if (_scenario.Description.Name == scenario.Description.Name) continue;
-				var button = new ButtonAdv
-				{
-					Text = scenario.Description.Name,
-					Width = 300,
-					Height = 80,
-					Appearance = ButtonAppearance.Metro,
-					UseVisualStyle = true,
-					Tag = scenario
-				};
-
-				button.Font.ChangeToBold();
-				button.Click += menuItemClick;
-				flowLayoutExportToScenario.ContainerControl.Controls.Add(button);
-			}
-		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
-		private void menuItemClick(object sender, EventArgs e)
-		{
-			var buttonAdv = sender as ButtonAdv;
-			var toolStripMenuItem = sender as ToolStripMenuItem;
-			IScenario scenario = null;
-
-			if (buttonAdv != null) scenario = (IScenario)(buttonAdv).Tag;
-			if (toolStripMenuItem != null) scenario = (IScenario)(toolStripMenuItem).Tag;
-
-			if (scenario == null) return;
-
-			var allNewRules = SchedulerState.SchedulerStateHolder.SchedulingResultState.GetRulesToRun();
-			var selectedSchedules = _scheduleView.SelectedSchedules();
-			var uowFactory = UnitOfWorkFactory.Current;
-			var currentAuthorization = CurrentAuthorization.Make();
-			var currentUnitOfWork = new FromFactory(() => uowFactory);
-			var scheduleRepository = new ScheduleStorage(currentUnitOfWork,
-				new PersonAssignmentRepository(currentUnitOfWork), new PersonAbsenceRepository(currentUnitOfWork),
-				new MeetingRepository(currentUnitOfWork), new AgentDayScheduleTagRepository(currentUnitOfWork),
-				new NoteRepository(currentUnitOfWork), new PublicNoteRepository(currentUnitOfWork),
-				new PreferenceDayRepository(currentUnitOfWork), new StudentAvailabilityDayRepository(currentUnitOfWork),
-				new PersonAvailabilityRepository(currentUnitOfWork), new PersonRotationRepository(currentUnitOfWork),
-				new OvertimeAvailabilityRepository(currentUnitOfWork),
-				new PersistableScheduleDataPermissionChecker(currentAuthorization),
-				_container.Resolve<IScheduleStorageRepositoryWrapper>(), currentAuthorization);
-			//var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
-			//var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
-			//using (
-			//	var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
-			//		new MoveDataBetweenSchedules(allNewRules, _container.Resolve<IScheduleDayChangeCallback>()),
-			//		_schedulerMessageBrokerHandler,
-			//		_scheduleView.AllSelectedPersons(selectedSchedules),
-			//		selectedSchedules,
-			//		scenario,
-			//		_container.Resolve<IScheduleDictionaryPersister>(),
-			//		exportToScenarioAccountPersister,
-			//		exportToScenarioAbsenceFinder,
-			//		SchedulerState.SchedulerStateHolder.SchedulingResultState.AllPersonAccounts,
-			//		_scheduleView.AllSelectedDates(selectedSchedules)))
-			//{
-			//	exportForm.ShowDialog(this);
-			//}
-		}
-
+		//[RemoveMeWithToggle("function + flowLayoutExportToScenario from designer", Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+		
 		private void loadLockMenues()
 		{
 			if (_scheduleView == null) return;
@@ -4297,15 +4194,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			backStageButtonMainMenuSave.Click -= toolStripButtonSaveLargeClick;
 			backStage1.VisibleChanged -= backStage1VisibleChanged;
 
-			if (flowLayoutExportToScenario != null && flowLayoutExportToScenario.ContainerControl != null)
-			{
-				foreach (var control in flowLayoutExportToScenario.ContainerControl.Controls)
-				{
-					ButtonAdv button = control as ButtonAdv;
-					if (button != null)
-						button.Click -= menuItemClick;
-				}
-			}
 			toolStripButtonSaveLarge.Click -= toolStripButtonSaveLargeClick;
 			toolStripButtonRefreshLarge.Click -= toolStripButtonRefreshLargeClick;
 			toolStripButtonQuickAccessCancel.Click -= toolStripButtonQuickAccessCancelClick;
