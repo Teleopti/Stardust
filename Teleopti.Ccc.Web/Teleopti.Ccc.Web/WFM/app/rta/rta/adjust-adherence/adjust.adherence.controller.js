@@ -67,6 +67,8 @@
             }, function () {
                 if (shouldAutoFixDate())
                     vm.endDate = vm.startDate;
+                if (shouldAutoFixTime())
+                    vm.endTime = vm.startTime;
                 buildSelectedPeriod();
             });
 
@@ -83,6 +85,8 @@
             }, function () {
                 if (shouldAutoFixDate())
                     vm.startDate = vm.endDate;
+                if (shouldAutoFixTime())
+                    vm.startTime = vm.endTime;
                 buildSelectedPeriod();
             });
 

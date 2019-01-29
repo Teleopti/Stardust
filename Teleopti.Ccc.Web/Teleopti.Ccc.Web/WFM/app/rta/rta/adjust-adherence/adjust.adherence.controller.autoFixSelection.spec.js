@@ -60,4 +60,48 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
 
         expect(moment(vm.endTime).format('HH:mm')).toEqual('19:00');
     });
+
+    it('should auto fix end time on change of start date', function (t) {
+        var now = new Date('2019-01-29T20:00:00');
+        jasmine.clock().mockDate(now);
+        t.backend.with.currentUserInfo({
+            DateFormatLocale: "sv-SE"
+        });
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.endDate = new Date(2019, 0, 29);
+        });
+        t.apply(function () {
+            vm.startTime = new Date('2019-01-29T19:00:00');
+        });
+        t.apply(function () {
+            vm.startDate = new Date(2019, 0, 29);
+        });
+        
+        expect(moment(vm.endTime).format('HH:mm')).toEqual('19:00');
+    });
+    
+    it('should auto fix start time on change of end date', function (t) {
+        var now = new Date('2019-01-29T20:00:00');
+        jasmine.clock().mockDate(now);
+        t.backend.with.currentUserInfo({
+            DateFormatLocale: "sv-SE"
+        });
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.startDate = new Date(2019, 0, 27);
+        });
+        t.apply(function () {
+            vm.startTime = new Date('2019-01-29T19:00:00');
+        });
+        t.apply(function () {
+            vm.endDate = new Date(2019, 0, 27);
+        });
+        
+        expect(moment(vm.startTime).format('HH:mm')).toEqual('18:00');
+    });
+    
+    
 });
