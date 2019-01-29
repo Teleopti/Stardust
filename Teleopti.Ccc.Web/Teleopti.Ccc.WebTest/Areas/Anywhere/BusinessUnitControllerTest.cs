@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldGetAllBusinessUnitsIfPermitted()
 		{
-			var buRepository = new FakeBusinessUnitRepository();
+			var buRepository = new FakeBusinessUnitRepository(null);
 			var bu1 = new BusinessUnit("bu1").WithId();
 			var bu2 = new BusinessUnit("bu2").WithId();
 			buRepository.Add(bu1);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldGetAllBusinessUnitsIfPermittedWithCurrentBusinessUnitAtFirstPosition()
 		{
-			var buRepository = new FakeBusinessUnitRepository();
+			var buRepository = new FakeBusinessUnitRepository(null);
 			var bu1 = new BusinessUnit("bu1").WithId();
 			var bu2 = new BusinessUnit("bu2").WithId();
 			buRepository.Add(bu1);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		public void ShouldGetCurrentLoggedOnBusinessUnit()
 		{
 			var bu1 = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var buRepository = new FakeBusinessUnitRepository();
+			var buRepository = new FakeBusinessUnitRepository(null);
 			buRepository.Add(bu1);
 			var currentBusinessUnit = new SpecificBusinessUnit(bu1);
 

@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeTeamRepository : ITeamRepository, IEnumerable<ITeam>
 	{
 		private readonly FakeBusinessUnitRepository _businessUnitRepository;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IList<ITeam> _teams = new List<ITeam>();
 
-		public FakeTeamRepository(FakeBusinessUnitRepository businessUnitRepository)
+		public FakeTeamRepository(FakeBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_businessUnitRepository = businessUnitRepository;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 		
 		public void Add (ITeam entity)
@@ -32,10 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void HasConnectedToCurrentBusinessUnit(ITeam team)
 		{
 			team.Site = new Site("_");
-			
-			//TODO: should not be here - to be fixed soon. Read from burepo instead
-			var bu = new BusinessUnit("test BU").WithId(DomainTestAttribute.DefaultBusinessUnitId);
-			//
+			var bu = _currentBusinessUnit.Current();
 			bu.AddSite(team.Site);
 			_businessUnitRepository.Has(bu);
 		}

@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		{
 			_dataSourcesFactory = new FakeDataSourcesFactory(new FakeStorage(), null, null);
 			_runWithUnitOfWork = new FakeRunWithUnitOfWork();
-			_businessUnitRepository = new FakeBusinessUnitRepository();
+			_businessUnitRepository = new FakeBusinessUnitRepository(null);
 			_personRepository = new FakePersonRepositoryLegacy();
 			_scenarioRepository = new FakeScenarioRepository();
 			_applicationRoleRepository =  new FakeApplicationRoleRepository();

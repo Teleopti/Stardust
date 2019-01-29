@@ -25,16 +25,11 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public ResourceCalculateWithNewContext ResourceCalculation;
-		//TODO: use [DefaultData] instead
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public ICurrentBusinessUnit CurrentBusinessUnit;
-		//
 
 		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
 		{
 			const int numberOfAgents = 50;
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = new DateOnly(2017, 1, 10);
@@ -78,7 +73,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation_TeamBlock(bool resourceCalculationHasBeenMade)
 		{
 			const int numberOfAgents = 50;
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = new DateOnly(2017, 1, 10);
@@ -116,7 +110,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public void ShouldShovelWhenSchedulingHasBeenDone()
 		{
 			var date = new DateOnly(2017, 1, 10);
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 16);
@@ -145,7 +138,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		{
 			var date = new DateOnly(2016, 9, 19); //mån
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(0, 8);

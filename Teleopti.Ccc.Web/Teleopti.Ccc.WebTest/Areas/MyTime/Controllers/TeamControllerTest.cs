@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTeamOptionsAsJsonForShiftTradeBoard()
 		{
-			var teamRepository = new FakeTeamRepository(null);
+			var teamRepository = new FakeTeamRepository(null, null);
 			var site = new Site("mysite");
 			var team = new Team {Site = site }.WithDescription(new Description("myteam")).WithId();
 			teamRepository.Add(team);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var person = PersonFactory.CreatePerson();
 			var team1 = new Team();
 			team1.Site = site;
-			var teamRepository = new FakeTeamRepository(null);
+			var teamRepository = new FakeTeamRepository(null, null);
 			teamRepository.Has(team1);
 			var mockAuthorize = MockRepository.GenerateMock<IAuthorizeAvailableData>();
 			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, team1)).IgnoreArguments().Return(true);

@@ -34,10 +34,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 		public FakeTeamRepository TeamRepository;
-		//TODO: use [DefaultData] instead
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public ICurrentBusinessUnit CurrentBusinessUnit;
-		//
 
 		[Test]
 		public void ShouldTeamSchedulingUseSameShiftCategoryForHierarchy()
@@ -236,7 +233,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
 			var team = new Team().WithDescription(new Description("team1"));
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
@@ -287,7 +284,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var team = new Team().WithDescription(new Description("team1"));
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
@@ -339,7 +336,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var team = new Team().WithDescription(new Description("team"));
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
@@ -400,7 +397,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var skill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");
 			var team = new Team().WithDescription(new Description("team"));
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void VerifyDomainEntityToDto()
         {
-			var teamRep = new FakeTeamRepository(null);
+			var teamRep = new FakeTeamRepository(null, null);
 			var target = new TeamAssembler(teamRep);
 
 	        var teamDomain = new Team {Site = new Site("Europe")}
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test]
 	    public void VerifyDtoToDomainEntity()
 	    {
-		    var teamRep = new FakeTeamRepository(null);
+		    var teamRep = new FakeTeamRepository(null, null);
 		    var target = new TeamAssembler(teamRep);
 
 		    var teamDomain = new Team {Site = new Site("Europe")}

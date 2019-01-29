@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			unitOfWorkFactory = mock.DynamicMock<IUnitOfWorkFactory>();
 			exportingPerson = new Person().WithName(new Name("Ex", "Porter"));
 			_currentBusinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
-			var fakeBuRepo = new FakeBusinessUnitRepository();
+			var fakeBuRepo = new FakeBusinessUnitRepository(null);
 
 			fakeBuRepo.Has(_currentBusinessUnit);
 			target = new PayrollExportHandler(currentUnitOfWork, payrollExportRepository, payrollResultRepository,

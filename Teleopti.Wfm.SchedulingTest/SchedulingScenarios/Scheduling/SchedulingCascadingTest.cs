@@ -29,10 +29,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public IResourceOptimizationHelperExtended ResourceCalculation;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		//TODO: use [DefaultData] instead
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public ICurrentBusinessUnit CurrentBusinessUnit;
-		//
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -40,7 +36,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		{
 			const int numberOfAgents = 50;
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = DateOnly.Today;

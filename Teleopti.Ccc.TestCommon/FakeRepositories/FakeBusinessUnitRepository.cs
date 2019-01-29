@@ -8,10 +8,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeBusinessUnitRepository : IBusinessUnitRepository
 	{
-		private readonly IList<IBusinessUnit> _businessUnits = new List<IBusinessUnit>();
+		private readonly Lazy<ICurrentBusinessUnit> _currentBusinessUnit;
+		private readonly HashSet<IBusinessUnit> _businessUnits = new HashSet<IBusinessUnit>();
 
 		private readonly IList<TimeZoneInfo> _timeZones = new List<TimeZoneInfo>();
 
+		public FakeBusinessUnitRepository(Lazy<ICurrentBusinessUnit> currentBusinessUnit)
+		{
+			_currentBusinessUnit = currentBusinessUnit;
+		}
+
+		public void HasCurrentBusinessUnit()
+		{
+			Add(_currentBusinessUnit.Value.Current());
+		}
+		
 		public void Has(IBusinessUnit businessUnit)
 		{
 			Add(businessUnit);

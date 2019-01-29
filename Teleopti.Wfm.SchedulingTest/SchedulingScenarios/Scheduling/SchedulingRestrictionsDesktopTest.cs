@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
@@ -28,15 +27,10 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		//TODO: use [DefaultData] instead
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public ICurrentBusinessUnit CurrentBusinessUnit;
-		//
 
 		[Test]
 		public void ShouldNotScheduleShiftsForRestrictionsOnlyWhenNoRestrictionExists()
 		{
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var date = new DateOnly(2017, 1, 10);
 			var activity = new Activity("_").WithId();
 			var otherActivity = new Activity("_").WithId();

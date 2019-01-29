@@ -33,14 +33,11 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		public InitMaxSeatForStateHolder InitMaxSeatForStateHolder;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public WorkShiftSelectorTrackWhatSkillDays WorkShiftSelector;
-		//TODO: remove when [DefaultData]is used
-		public ICurrentBusinessUnit CurrentBusinessUnit;
-		//
 
 		[Test]
 		public void ShouldNotUseMaxSeatSkillDaysFromOtherSite()
 		{
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var siteNotInUse = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
@@ -79,7 +76,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotUseSameMaxSeatSkillDayEvenIfInitMaxSeatForStateHolderIsUsed()
 		{
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();

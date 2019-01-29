@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			_seatMapLocationRepository = MockRepository.GenerateMock<ISeatMapLocationRepository>();
 			_seatBookingRepository = MockRepository.GenerateMock<ISeatBookingRepository>();
 
-			_seatMapPersister = new SeatMapPersister(_seatMapLocationRepository, new FakeBusinessUnitRepository(),
+			_seatMapPersister = new SeatMapPersister(_seatMapLocationRepository, new FakeBusinessUnitRepository(null),
 				new FakeCurrentBusinessUnit(), _seatBookingRepository, new FakeSeatPlanRepository(), new FakeApplicationRoleRepository());
 			_seatMapProvider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository, _userTimeZone);
 
