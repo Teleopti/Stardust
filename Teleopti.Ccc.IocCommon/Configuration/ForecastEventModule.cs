@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.ApplicationLayer.SkillDay;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -16,6 +17,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		[ThreadStatic]
 		private static IJobResultFeedback jobResultFeedback;
+		private readonly IocConfiguration _config;
+
+		public ForecastEventModule(IocConfiguration config)
+		{
+			_config = config;
+		}
+
 
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -39,6 +47,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OpenAndSplitTargetSkill>().As<IOpenAndSplitTargetSkill>();
 			builder.RegisterType<ExportMultisiteSkillProcessor>().As<IExportMultisiteSkillProcessor>();
 			builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+			if (_config.IsToggleEnabled(Toggles.WFM_Forecast_Readmodel_80790))
+			{
+				builder.RegisterType<SkillForecastIntervalCalculator>().SingleInstance();
+			}
+			
+
 		}
 
 		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

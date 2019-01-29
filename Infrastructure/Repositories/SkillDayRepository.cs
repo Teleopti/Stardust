@@ -111,9 +111,24 @@ SELECT 0
 
 		public ICollection<ISkillDay> LoadSkillDays(IEnumerable<Guid> skillDaysIdList)
 		{
-			return Session.CreateCriteria<SkillDay>("sd")
+			var days = Session.CreateCriteria<SkillDay>("sd")
 				.Add(Restrictions.InG("Id", skillDaysIdList))
 				.List<ISkillDay>();
+			var skillDays = days.OfType<ISkillDay>().ToList();
+
+			var grouped = days.GroupBy(d => d.Skill);
+			foreach (var group in grouped)
+			{
+				var period = new DateOnlyPeriod(group.Min(x => x.CurrentDate), group.Max(x => x.CurrentDate));
+				var calculator = new SkillDayCalculator(group.Key, group, period);
+				foreach (var skillDay in group)
+				{
+					skillDay.SetupSkillDay();
+					skillDay.SkillDayCalculator = calculator;
+				}
+			}
+
+			return skillDays;
 		}
 
 		public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)

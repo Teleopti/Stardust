@@ -257,6 +257,7 @@
     <Compile Include="Staffing\IStaffingViewModelCreator.cs" />
     <Compile Include="Staffing\ResourceCalculationUsingReadModels.cs" />
     <Compile Include="Staffing\StaffingViewModelCreator.cs" />
+    <Compile Include="Forecasting\UpdateSkillForecastReadModelHandler.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />

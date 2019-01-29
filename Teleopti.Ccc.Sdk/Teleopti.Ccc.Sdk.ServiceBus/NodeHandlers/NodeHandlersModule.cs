@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<IntradayToolHandler>().Named<IHandle<IntradayToolEvent>>(NodeComponentName).SingleInstance();
 			builder.RegisterType<ImportScheduleNodeHandler>().Named<IHandle<ImportScheduleEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
 			builder.RegisterType<CopyScheduleNodeHandler>().Named<IHandle<CopyScheduleEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
+			builder.RegisterType<SkillForecastReadModelHandler>().Named<IHandle<ForecastChangedEvent>>(NodeComponentName).SingleInstance().ApplyAspects();
 			
 			builder.RegisterGenericDecorator(typeof(refreshTogglesDecorator<>), typeof(IHandle<>), NodeComponentName);
 		}
