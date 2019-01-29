@@ -95,6 +95,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			string subdirectoryPath)
 		{
 			var fullSourcePath = Path.Combine(sourcePath, subdirectoryPath);
+			if(Directory.Exists(fullSourcePath) == false)
+				return;
 			var fullDestinationPath = Path.Combine(destinationPath, subdirectoryPath);
 
 			copyFiles(fullSourcePath, fullDestinationPath);

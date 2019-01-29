@@ -80,5 +80,43 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			Assert.IsTrue(File.Exists(Path.Combine(tenantSpecificPayrollDir, "Teleopti.Ccc.Payroll.dll")));
 			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
 		}
+
+		[Test]
+		public void ShouldNotCreateTenantDirectoryThatIsNotInDeployNew()
+		{
+			var existingPath = AppDomain.CurrentDomain.BaseDirectory;
+			AppDomain.CurrentDomain.SetData("APPBASE", Assembly.GetAssembly(GetType()).Location.Replace("\\Teleopti.Ccc.Sdk.ServiceBusTest.dll", ""));
+			const string tenantName = "TenantWithoutPayrollDirectory";
+			var tenantSpecificPayrollDir = Path.Combine(SearchPath.Path, tenantName);
+			if (Directory.Exists(tenantSpecificPayrollDir))
+				Directory.Delete(tenantSpecificPayrollDir, true);
+
+			var businessUnit = new BusinessUnit("businessUnitName").WithId();
+			BusinessUnitRepository.Add(businessUnit);
+
+			var payrollExport = new FakePayrollExport().WithId();
+			payrollExport.PayrollFormatId = new Guid("{0e531434-a463-4ab6-8bf1-4696ddc9b296}");
+			payrollExport.SetCreatedBy(PersonFactory.CreatePerson());
+			PayrollExportRepository.Add(payrollExport);
+
+			var payrollResult = new PayrollResult(payrollExport, new Person(), DateTime.Now).WithId();
+			PayrollResultRepository.Add(payrollResult);
+
+			var @event = new RunPayrollExportEvent
+			{
+				LogOnDatasource = tenantName,
+				PayrollExportFormatId = payrollExport.PayrollFormatId,
+				PayrollExportId = payrollExport.Id.GetValueOrDefault(),
+				PayrollResultId = payrollResult.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault()
+			};
+
+			Target.Handle(@event);
+
+			ServiceBusPayrollExportFeedback.PayrollResultDetails.ForEach(d => Console.WriteLine($"{d.Message} Exception message:{d.Exception?.Message}"));
+			Assert.IsFalse(Directory.Exists(tenantSpecificPayrollDir));
+			Assert.False(File.Exists(Path.Combine(tenantSpecificPayrollDir, "Teleopti.Ccc.Payroll.dll")));
+			AppDomain.CurrentDomain.SetData("APPBASE", existingPath);
+		}
 	}
 }
