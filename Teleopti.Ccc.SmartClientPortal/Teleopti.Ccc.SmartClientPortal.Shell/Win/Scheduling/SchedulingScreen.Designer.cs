@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Notes;
@@ -7,7 +6,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Editor;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
-    partial class SchedulingScreen
+	partial class SchedulingScreen
     {
         /// <summary>
         /// Required designer variable.
@@ -928,7 +927,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolstripMenuRemoveWriteProtection, System.Windows.Forms.Keys.None);
 			this.toolstripMenuRemoveWriteProtection.Size = new System.Drawing.Size(210, 22);
 			this.toolstripMenuRemoveWriteProtection.Text = "xxRemoveWriteProtection";
-			this.toolstripMenuRemoveWriteProtection.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolstripMenuRemoveWriteProtectionMouseUp);
+			this.toolstripMenuRemoveWriteProtection.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuRemoveWriteProtectionMouseUp);
 			// 
 			// toolStripMenuItemMeetingOrganizer
 			// 
@@ -1832,7 +1831,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.ToolStripMenuItemRemoveWriteProtectionToolBar, System.Windows.Forms.Keys.None);
 			this.ToolStripMenuItemRemoveWriteProtectionToolBar.Size = new System.Drawing.Size(197, 22);
 			this.ToolStripMenuItemRemoveWriteProtectionToolBar.Text = "xxRemoveWriteProtection";
-			this.ToolStripMenuItemRemoveWriteProtectionToolBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolstripMenuRemoveWriteProtectionMouseUp);
+			this.ToolStripMenuItemRemoveWriteProtectionToolBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuRemoveWriteProtectionMouseUp);
 			// 
 			// toolStripExTags
 			// 

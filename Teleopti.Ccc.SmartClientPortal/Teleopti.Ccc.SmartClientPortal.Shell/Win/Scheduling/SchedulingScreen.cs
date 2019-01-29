@@ -2800,9 +2800,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					e);
 			else
 			{
-				var progress = e.UserState as SchedulingServiceBaseEventArgs;
-
-				if (progress != null && _cancelButtonPressed)
+				if (e.UserState is SchedulingServiceBaseEventArgs progress && _cancelButtonPressed)
 				{
 					progress.Cancel = true;
 					progress.CancelCallback();
@@ -3217,10 +3215,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Loading requests"))
 			{
-				string numberOfDaysToShowNonPendingRequests;
 				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
 					StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue(
-						"NumberOfDaysToShowNonPendingRequests", out numberOfDaysToShowNonPendingRequests)
+						"NumberOfDaysToShowNonPendingRequests", out var numberOfDaysToShowNonPendingRequests)
 						? Convert.ToInt32(numberOfDaysToShowNonPendingRequests)
 						: 14);
 			}
@@ -3823,8 +3820,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			enableSave();
 		}
 
-		//[RemoveMeWithToggle("function + flowLayoutExportToScenario from designer", Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
-		
 		private void loadLockMenues()
 		{
 			if (_scheduleView == null) return;
@@ -4331,7 +4326,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ToolStripMenuItemAllRM.MouseUp -= toolStripMenuItemLockAllRestrictionsMouseUp;
 			toolStripMenuItemLockAllTagsRM.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
 			toolStripMenuItemWriteProtectSchedule.MouseUp -= toolStripMenuItemWriteProtectScheduleMouseUp;
-			toolstripMenuRemoveWriteProtection.MouseUp -= toolstripMenuRemoveWriteProtectionMouseUp;
+			toolstripMenuRemoveWriteProtection.MouseUp -= toolStripMenuRemoveWriteProtectionMouseUp;
 			ToolStripMenuItemCreateMeeting.MouseUp -= toolStripMenuItemCreateMeetingMouseUp;
 			toolStripMenuItemEditMeeting.MouseUp -= toolStripMenuItemEditMeetingMouseUp;
 			toolStripMenuItemRemoveParticipant.MouseUp -= toolStripMenuItemRemoveParticipantMouseUp;
@@ -4341,7 +4336,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			ToolStripMenuItemExportToPDFShiftsPerDay.MouseUp -= toolStripMenuItemExportToPdfShiftsPerDayMouseUp;
 			ToolStripMenuItemLockAllRestrictions.MouseUp -= toolStripMenuItemLockAllRestrictionsMouseUp;
 			toolStripMenuItemLockAllTags.MouseUp -= toolStripMenuItemLockAllTagsMouseUp;
-			ToolStripMenuItemRemoveWriteProtectionToolBar.MouseUp -= toolstripMenuRemoveWriteProtectionMouseUp;
+			ToolStripMenuItemRemoveWriteProtectionToolBar.MouseUp -= toolStripMenuRemoveWriteProtectionMouseUp;
 			toolStripButtonQuickAccessRedo.MouseUp -= toolStripButtonQuickAccessRedoClick1;
 
 			toolStripButtonShrinkage.Click -= toolStripButtonShrinkageClick;
@@ -4759,10 +4754,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			notesEditor = null;
 
-			if (schedulerSplitters1 != null && schedulerSplitters1.ElementHostRequests != null && schedulerSplitters1.ElementHostRequests.Child != null) schedulerSplitters1.ElementHostRequests.Child = null;
-			if (schedulerSplitters1 != null && schedulerSplitters1.Grid != null) schedulerSplitters1.Grid.ContextMenu = null;
-			if (contextMenuViews != null) contextMenuViews.Dispose();
-			if (schedulerSplitters1 != null) schedulerSplitters1.Dispose();
+			if (schedulerSplitters1?.ElementHostRequests != null && schedulerSplitters1.ElementHostRequests.Child != null) schedulerSplitters1.ElementHostRequests.Child = null;
+			if (schedulerSplitters1?.Grid != null) schedulerSplitters1.Grid.ContextMenu = null;
+			contextMenuViews?.Dispose();
+			schedulerSplitters1?.Dispose();
 
 			if (backStageView != null)
 			{
@@ -4808,7 +4803,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void undoRedoSelectAndRefresh()
 		{
-			if (_lastModifiedPart != null && _lastModifiedPart.ModifiedPart != null)
+			if (_lastModifiedPart?.ModifiedPart != null)
 			{
 				_scheduleView?.SelectCellFromPersonDate(_lastModifiedPart.ModifiedPerson, _lastModifiedPart.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 			}
@@ -4844,7 +4839,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			writeProtectSchedule();
 		}
 
-		private void toolstripMenuRemoveWriteProtectionMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuRemoveWriteProtectionMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
 			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection)) return;
@@ -4982,7 +4977,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			catch (CouldNotCreateTransactionException dataSourceException)
 			{
-				//rk - dont like this but cannot easily find "the spot" to catch these exception in current design
+				//rk - don't like this but cannot easily find "the spot" to catch these exception in current design
 				using (
 					var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
 						Resources.ServerUnavailable))
@@ -5327,8 +5322,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripMenuItemViewHistoryClick(object sender, EventArgs e)
 		{
 			if (!_scenario.DefaultScenario || !_isAuditingSchedules) return;
-			IScheduleDay selected;
-			if (!tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out selected)) return;
+			if (!tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out var selected)) return;
 
 			bool isLocked = LockManager.HasLocks && LockManager.Gridlocks(selected) != null;
 
@@ -5443,9 +5437,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void addPreferenceToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			IScheduleDay selectedDay;
 			var selectedSchedules = _scheduleView.SelectedSchedules();
-			if (!tryGetFirstSelectedSchedule(selectedSchedules, out selectedDay)) return;
+			if (!tryGetFirstSelectedSchedule(selectedSchedules, out var selectedDay)) return;
 
 			using (var view = new AgentPreferenceView(selectedDay, SchedulerState.SchedulerStateHolder, _container.Resolve<IScheduleDayChangeCallback>()))
 			{
@@ -5478,8 +5471,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void addOvertimeAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			IScheduleDay selectedDay;
-			if (!tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out selectedDay)) return;
+			if (!tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out var selectedDay)) return;
 
 			using (var view = new AgentOvertimeAvailabilityView(selectedDay, SchedulerState.SchedulerStateHolder.SchedulingResultState, _container.Resolve<IScheduleDayChangeCallback>()))
 			{
