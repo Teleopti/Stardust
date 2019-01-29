@@ -31,7 +31,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
@@ -40,6 +39,10 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePersonRotationRepository PersonRotationRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		//TODO: use [DefaultData] instead
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
+		//
 		
 		[TestCase(true)]
 		[TestCase(false)]
@@ -144,7 +147,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var agent = PersonRepository.Has(new Contract("_"), ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
 				new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
 			agent.Period(firstDay).RuleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
@@ -187,7 +190,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var agent = PersonRepository.Has(new Contract("_"), ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
 				new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
 			agent.Period(firstDay).RuleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
