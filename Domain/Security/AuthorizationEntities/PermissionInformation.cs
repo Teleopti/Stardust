@@ -110,30 +110,15 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		
 		public CultureInfo Culture()
 		{
-			var currPrinciple = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
-			if (currPrinciple == null || !currPrinciple.Regional.ForceUseGregorianCalendar)
-			{
-				if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
-
-				try
-				{
-					return CultureInfo.GetCultureInfo(culture.Value).FixPersianCulture();
-				}
-				catch (ArgumentException)
-				{
-					return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
-				}
-			}
-
-			if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture;
+			if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
 
 			try
 			{
-				return CultureInfo.GetCultureInfo(culture.Value);
+				return CultureInfo.GetCultureInfo(culture.Value).FixPersianCulture();
 			}
 			catch (ArgumentException)
 			{
-				return Thread.CurrentThread.CurrentCulture;
+				return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
 			}
 		}
 
@@ -148,7 +133,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			else uiCulture = null;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
 		public CultureInfo UICulture()
 		{
 
