@@ -289,7 +289,6 @@
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheckTest.cs" />
     <Compile Include="Optimization\IntradayOptimizationOnStardustTest.cs" />
     <Compile Include="Optimization\PlanningGroupTest.cs" />
-    <Compile Include="ParallelizedTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProviderTest.cs" />
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForBetweenDayoffsTest.cs" />
