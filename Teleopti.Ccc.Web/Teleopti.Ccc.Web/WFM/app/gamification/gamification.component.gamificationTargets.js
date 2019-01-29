@@ -67,11 +67,11 @@
 				.then(onSuccess, onError);
 
 			function onSuccess(saved) {
-				$log.debug(saved)
+				$log.debug(saved);
 			}
 
 			function onError(response) {
-				$log.error(response)
+				$log.error(response);
 			}
 		};
 
@@ -87,7 +87,6 @@
 		}
 
 		function startSpinner() { ctrl.isBusy = true; }
-
 		function stopSpinner() { ctrl.isBusy = false; }
 
 		dataService.fetchSites().then(function (sites) {
@@ -102,7 +101,20 @@
 			return dataService.fetchSettingList().then(function (list) {
 				if (!angular.isArray(list)) return;
 				ctrl.settings = list;
+				updateAppliedSetting();
 			});
+		}
+
+		function updateAppliedSetting() {
+			if (ctrl.teamsResult !== undefined) {
+				ctrl.teamsResult.current.forEach(function (obj) {
+					var isContain = false;
+					ctrl.settings.forEach(function (setting) {
+						if (setting.id === obj.appliedSettingId) isContain = true; 
+					});
+					if (!isContain) obj.appliedSettingId = '00000000-0000-0000-0000-000000000000';
+				});
+			}
 		}
 	}
 

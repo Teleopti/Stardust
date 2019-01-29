@@ -49,5 +49,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return _teamGamificationSettings.FirstOrDefault(x => x.Team.Id == team.Id);
 		}
+
+		public IEnumerable<ITeamGamificationSetting> FetchTeamGamificationSettings(Guid gamificationId)
+		{
+			return _teamGamificationSettings.Where(ts => gamificationId == ts.GamificationSetting.Id.GetValueOrDefault()).ToList();
+		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -32,6 +33,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return ret;
 		}
-	}
 
+		public IEnumerable<ITeamGamificationSetting> FetchTeamGamificationSettings(Guid gamificationId)
+		{
+			return Session.QueryOver<ITeamGamificationSetting>()
+				.Where(s => s.GamificationSetting.Id.Value == gamificationId)
+				.List<ITeamGamificationSetting>();
+		}
+	}
 }

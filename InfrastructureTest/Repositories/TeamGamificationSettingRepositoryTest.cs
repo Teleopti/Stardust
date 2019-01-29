@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -81,6 +82,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual("team" , loadedMyGamificationSetting.Team.Description.Name);
 		}
 
+		[Test]
+		public void ShouldFetchTeamGamificationSettings()
+		{
+			_teamGamificationSetting = new TeamGamificationSetting { Team = _team, GamificationSetting = _gamificationSetting };
+			PersistAndRemoveFromUnitOfWork(_teamGamificationSetting);
+
+			var loadedMyGamificationSettings =
+				new TeamGamificationSettingRepository(CurrUnitOfWork).FetchTeamGamificationSettings(_gamificationSetting.Id.GetValueOrDefault());
+			loadedMyGamificationSettings.First().Id.Should().Be.EqualTo(_teamGamificationSetting.Id);
+		}
 		protected override void VerifyAggregateGraphProperties(ITeamGamificationSetting loadedAggregateFromDatabase)
 		{
 			ITeamGamificationSetting org = CreateAggregateWithCorrectBusinessUnit();
