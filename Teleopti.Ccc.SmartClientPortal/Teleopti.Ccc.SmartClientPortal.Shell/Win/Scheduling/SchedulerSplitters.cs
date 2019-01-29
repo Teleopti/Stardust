@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private SkillResultViewSetting _skillResultViewSetting;
 		private DateOnly _currentIntraDayDate;
 		private string _chartDescription;
+		private IVirtualSkillHelper _virtualSkillHelper;
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs>
 			RestrictionsNotAbleToBeScheduledProgress;
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			Grid.VScrollPixel = false;
 			Grid.HScrollPixel = false;
-			VirtualSkillHelper = container.Resolve<IVirtualSkillHelper>();
+			_virtualSkillHelper = container.Resolve<IVirtualSkillHelper>();
 			_schedulerStateHolder = schedulerStateHolder;
 
 			var requestedPeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
@@ -196,8 +197,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		public ContextMenuStrip ContextMenuSkillGrid => _contextMenuSkillGrid;
 
 		public TabControlAdv TabSkillData => tabSkillData;
-
-		public IVirtualSkillHelper VirtualSkillHelper { get; private set; }
 
 		public ElementHost ElementHostRequests { get; private set; }
 
@@ -449,7 +448,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					tab.ImageIndex = 4;
 					tab.Tag = skillSummery.AggregateSkillSkill;
 					tabSkillData.TabPages.Add(tab);
-					VirtualSkillHelper.SaveVirtualSkill(virtualSkill);
+					_virtualSkillHelper.SaveVirtualSkill(virtualSkill);
 					_pinnedSkillHelper.AddVirtualSkill(virtualSkill);
 					_pinnedSkillHelper.SortSkills();
 
@@ -474,7 +473,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					if (newSkill.AggregateSkills.Count != 0)
 					{
-						VirtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
+						_virtualSkillHelper.EditAndRenameVirtualSkill(newSkill, skill.Name);
 						_pinnedSkillHelper.ReplaceOldWithNew((ISkill)newSkill, skill);
 						_pinnedSkillHelper.SortSkills();
 						ret = true;
@@ -503,7 +502,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 			}
 
-			VirtualSkillHelper.SaveVirtualSkill(virtualSkill);
+			_virtualSkillHelper.SaveVirtualSkill(virtualSkill);
 		}
 
 		private IAggregateSkill handleSummeryEditMenuItems(ContextMenuStrip contextMenuSkillGrid,
@@ -572,7 +571,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			TabSkillData.ImageList = imageListSkillTypeIcons;
 			foreach (
 				ISkill virtualSkill in
-				VirtualSkillHelper.LoadVirtualSkills(_schedulerStateHolder.SchedulingResultState.VisibleSkills)
+				_virtualSkillHelper.LoadVirtualSkills(_schedulerStateHolder.SchedulingResultState.VisibleSkills)
 					.OrderBy(s => s.Name))
 			{
 				TabPageAdv tab = ColorHelper.CreateTabPage(virtualSkill.Name, virtualSkill.Description);

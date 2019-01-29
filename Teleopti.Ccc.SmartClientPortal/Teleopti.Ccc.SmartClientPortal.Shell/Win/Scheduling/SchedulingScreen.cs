@@ -682,18 +682,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				save();
 			}
 
-			if (e.KeyCode == Keys.Q && e.Control && e.Shift)
-			{
-				if (TestMode.Micke)
-				{
-					using (var agentSkillExplorer = new AgentSkillExplorer())
-					{
-						agentSkillExplorer.Setup(SchedulerState.SchedulerStateHolder, _container);
-						agentSkillExplorer.ShowDialog(this);
-					}
-				}
-			}
-
 			if (e.KeyCode == Keys.Enter && toolStripTextBoxFilter.Focused)
 			{
 				_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '), SchedulerState.SchedulerStateHolder.FilteredCombinedAgentsDictionary);
