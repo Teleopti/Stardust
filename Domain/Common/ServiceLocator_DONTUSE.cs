@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.Domain.Common
 		private ServiceLocatorState current()
 		{
 			Instances.TryPeek(out var current);
-//			if (current == null)
-//				throw new Exception("Service locator is disabled when running tests in parallel!");
+			if (current == null)
+				throw new Exception("DONT USE SERVICE LOCATOR!");
 			return current;
 		}
 
