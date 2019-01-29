@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				allSupportedPages.Add(new SetGamificationSettingTargetsControl());
 			}
 
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+			if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());
 
 			allSupportedPages.Add(new NotificationSettingsControl());

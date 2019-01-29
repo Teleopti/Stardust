@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			_configReader = configReader;
 
 			_readOnly =
-				 !PrincipalAuthorization.Current().IsPermitted(
+				 !PrincipalAuthorization.Current_DONTUSE().IsPermitted(
 					  DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
 		}
 

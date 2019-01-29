@@ -109,5 +109,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		public double ForecastWithoutShrinkage { get; set; }
+		
+		public bool IsBacklogType { get; set; }
 	}
 }

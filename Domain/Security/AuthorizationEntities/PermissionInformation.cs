@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		
 		public CultureInfo Culture()
 		{
-
-			if (TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal == null || !TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
+			var currPrinciple = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
+			if (currPrinciple == null || !currPrinciple.Regional.ForceUseGregorianCalendar)
 			{
 				if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
 

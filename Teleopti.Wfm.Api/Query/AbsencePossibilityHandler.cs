@@ -72,13 +72,13 @@ namespace Teleopti.Wfm.Api.Query
 				};
 			}
 
-			var loadOption = new ScheduleDictionaryLoadOptions(false, false);
+			var loadOption = new ScheduleDictionaryLoadOptions(false, false) {LoadDaysAfterLeft = false};
 			var period = new DateOnlyPeriod(query.StartDate.ToDateOnly(), query.EndDate.ToDateOnly());
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var schedule =
 				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, loadOption, period, scenario);
 			var scheduledTimePeriods = schedule[person].ScheduledDayCollection(period)
-				.Select(x => x.PersonAssignment().Period).ToList();
+				.SelectMany(x => x.ProjectionService().CreateProjection().FilterLayers<IActivity>()).ToArray();
 
 			var possibilityModels = _absenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(person,
 				periodForAbsence.Value);
@@ -94,7 +94,7 @@ namespace Teleopti.Wfm.Api.Query
 
 		private IEnumerable<AbsencePossibilityDto> createPeriodStaffingPossibilityViewModels(
 			IEnumerable<CalculatedPossibilityModel> calculatedPossibilityModels,
-			IList<DateTimePeriod> scheduledTimePeriods, TimeZoneInfo timezone)
+			IVisualLayer[] scheduledTimePeriods, TimeZoneInfo timezone)
 		{
 			var periodStaffingPossibilityViewModels = new List<AbsencePossibilityDto>();
 			foreach (var calculatedPossibilityModel in calculatedPossibilityModels)
@@ -110,7 +110,7 @@ namespace Teleopti.Wfm.Api.Query
 					var period = new DateTimePeriod(
 						TimeZoneHelper.ConvertToUtc(startTime, timezone),
 						TimeZoneHelper.ConvertToUtc(endTime, timezone));
-					if (!scheduledTimePeriods.Any(p => p.Contains(period)))
+					if (!scheduledTimePeriods.Any(p => p.WorkTime() > TimeSpan.Zero && p.Period.Contains(period)))
 					{
 						continue;
 					}
@@ -119,7 +119,7 @@ namespace Teleopti.Wfm.Api.Query
 					{
 						StartTime = startTime,
 						EndTime = endTime,
-						Possibility = calculatedPossibilityModel.IntervalPossibilies[keys[i]]
+						Possibility = calculatedPossibilityModel.IntervalPossibilies[startTime]
 					});
 				}
 			}

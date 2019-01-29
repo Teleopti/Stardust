@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanDurationCellModel(Grid.Model) { AllowEmptyCell = true });
 			if (!Grid.CellModels.ContainsKey("NumericCell"))
 				Grid.CellModels.Add("NumericCell", new NumericCellModel(Grid.Model));
-			Grid.ReadOnly = !PrincipalAuthorization.Current().IsPermitted(
+			Grid.ReadOnly = !PrincipalAuthorization.Current_DONTUSE().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
 			Grid.KeyDown += (sender, args) =>
 			{

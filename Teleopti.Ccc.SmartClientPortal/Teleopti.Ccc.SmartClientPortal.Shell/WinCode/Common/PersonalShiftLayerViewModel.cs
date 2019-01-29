@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		{
 			_layer = layer;
 			_parent = parent;
-			_authorization = authorization ?? PrincipalAuthorization.Current();
+			_authorization = authorization ?? PrincipalAuthorization.Current_DONTUSE();
 		}
 
 		public override string LayerDescription => UserTexts.Resources.PersonalShifts;

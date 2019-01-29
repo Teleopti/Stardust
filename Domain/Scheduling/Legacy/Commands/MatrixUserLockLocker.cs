@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
     public class MatrixUserLockLocker
     {
         private readonly Func<IGridlockManager> _gridlockManager;
+		private readonly ICurrentAuthorization _currentAuthorization;
 
-        public MatrixUserLockLocker(Func<IGridlockManager> gridlockManager)
-        {
-            _gridlockManager = gridlockManager;
-        }
+		public MatrixUserLockLocker(Func<IGridlockManager> gridlockManager, ICurrentAuthorization currentAuthorization)
+		{
+			_gridlockManager = gridlockManager;
+			_currentAuthorization = currentAuthorization;
+		}
 
         public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod)
         {
@@ -23,10 +25,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             }
         }
 
-		private static void setUserLockedDaysInMatrix(IScheduleMatrixPro matrix, DateOnlyPeriod selectedPeriod, IGridlockManager gridlockManager)
+		private void setUserLockedDaysInMatrix(IScheduleMatrixPro matrix, DateOnlyPeriod selectedPeriod, IGridlockManager gridlockManager)
 		{
 			var currentPerson = matrix.Person;
-
+			var authorization = _currentAuthorization.Current();
 			foreach (var dayPro in matrix.EffectivePeriodDays)
 			{
 				var day = dayPro.Day;
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					if (userLock.Value.LockType.Equals(LockType.WriteProtected))
 					{
-						if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+						if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
 						{
 							matrix.LockDay(day);
 						}

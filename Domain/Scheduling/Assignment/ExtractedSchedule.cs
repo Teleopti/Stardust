@@ -601,7 +601,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				}
 			}
 
-			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) && deleteList.Count > 0)
+			if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) && deleteList.Count > 0)
 				return;
 
 			//remove absences up for split

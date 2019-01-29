@@ -8,8 +8,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
@@ -29,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly IUserTimeZone _timeZone;
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly ISkillGroupRepository _skillGroupRepository;
-		private readonly ScheduledStaffingViewModelCreator _staffingViewModelCreator;
+		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly IAuthorization _authorization;
 		private readonly ExportForecastAndStaffingFile _exportForecastAndStaffingFile;
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		public StaffingController(AddOverTime addOverTime, IScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  IForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
-								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ICurrentDataSource currentDataSource, 
+								  IStaffingViewModelCreator staffingViewModelCreator, ICurrentDataSource currentDataSource, 
 			IAuthorization authorization,
 			ExportForecastAndStaffingFile exportForecastAndStaffingFile, ExportStaffingPeriodValidationProvider periodValidationProvider,
 			BpoProvider bpoProvider, IAllSkillForSkillGroupProvider allSkillForSkillGroupProvider)

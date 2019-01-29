@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					p =>
 						p.Any(
 							d =>
-								PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+								PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 									queryDate, d))).Select(
 										p =>
 											new GroupPageGroupDto

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
@@ -16,7 +18,8 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
-	public class ScheduledSTaffingVIewModelCreatorTest : IIsolateSystem
+	[ToggleOff(Toggles.WFM_Forecast_Readmodel_80790)]
+	public class ScheduledStaffingViewModelCreatorTest : IIsolateSystem
 	{
 		public ScheduledStaffingViewModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -69,6 +72,50 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			forecastedSeries.Second().Should().Be.EqualTo(3);
 			relativeDiffSeries.First().Should().Be.EqualTo(7);
 			relativeDiffSeries.Second().Should().Be.EqualTo(-1);
+			vm.DataSeries.AbsoluteDifference.Length.Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Length);
+		}
+		
+		[Test]
+		public void ShouldHandleMultipleSkills()
+		{
+			TimeZone.IsSweden();
+
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0);
+			var userNowUtc = TimeZoneInfo.ConvertTimeToUtc(userNow, TimeZone.TimeZone());
+			Now.Is(userNowUtc);
+
+			var opensAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 26, 8, 0, 0), TimeZone.TimeZone());
+			var closesAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 26, 8, 30, 0), TimeZone.TimeZone());
+			var openHours = new DateTimePeriod(opensAtUtc, closesAtUtc).TimePeriod(TimeZoneInfo.Utc);
+
+			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			var act = ActivityRepository.Has("act");
+			var act2 = ActivityRepository.Has("act2");
+			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill1", openHours, false, act);
+			var skill2 = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill2", openHours, false, act2);
+			SkillRepository.Has(skill);
+			SkillRepository.Has(skill2);
+			
+			SkillDayRepository.Has(SkillSetupHelper.CreateSkillDay(skill, scenario, userNowUtc, openHours, false));	
+			SkillDayRepository.Has(SkillSetupHelper.CreateSkillDay(skill2, scenario, userNowUtc, openHours, false));
+
+			var skillList = new HashSet<Guid> {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()};
+			SkillSetupHelper.PopulateStaffingReadModels(skillList, userNowUtc, userNowUtc.AddMinutes(minutesPerInterval), 2, SkillCombinationResourceRepository);
+			SkillSetupHelper.PopulateStaffingReadModels(skillList, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc, 10, SkillCombinationResourceRepository);
+			
+			var vm = Target.Load(skillList.ToArray());
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(userNow.AddMinutes(-minutesPerInterval));
+			var scheduledSeries = vm.DataSeries.ScheduledStaffing;
+			var forecastSeries = vm.DataSeries.ForecastedStaffing;
+			var relativeDiffSeries = vm.DataSeries.AbsoluteDifference;
+			scheduledSeries.First().Should().Be.EqualTo(10);
+			scheduledSeries.Second().Should().Be.EqualTo(2);
+			forecastSeries.First().Should().Be.EqualTo(6);
+			forecastSeries.Second().Should().Be.EqualTo(6);
+			relativeDiffSeries.First().Should().Be.EqualTo(4);
+			relativeDiffSeries.Second().Should().Be.EqualTo(-4);
 			vm.DataSeries.AbsoluteDifference.Length.Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Length);
 		}
 

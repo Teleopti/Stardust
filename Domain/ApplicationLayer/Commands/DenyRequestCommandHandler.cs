@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			try
 			{
-				if (_currentScenario.Current() != null && _currentScenario.Current().Restricted && !PrincipalAuthorization.Current()
+				if (_currentScenario.Current() != null && _currentScenario.Current().Restricted && !PrincipalAuthorization.Current_DONTUSE()
 						.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario))
 				{
 					command.ErrorMessages.Add(Resources.CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios);

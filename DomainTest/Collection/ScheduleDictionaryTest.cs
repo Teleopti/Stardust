@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				
 				var target = new ScheduleDictionary(scenario, _period,
 					new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-					new ByPassPersistableScheduleDataPermissionChecker(), authorizer);
+					new ByPassPersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), authorizer);
 				var part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
 				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
 				var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				
 				var target = new ScheduleDictionary(scenario, _period,
 					new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-					new ByPassPersistableScheduleDataPermissionChecker(), authorizer);
+					new ByPassPersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), authorizer);
 				var part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
 				var schedule = (Schedule)part;
 				schedule.Add(ass);
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				
 				var target = new ScheduleDictionary(scenario, _period,
 					new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-					new ByPassPersistableScheduleDataPermissionChecker(), authorizer);
+					new ByPassPersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), authorizer);
 				var part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
 				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();
 				var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2000, 6, 1, 2000, 6, 2)).WithId();

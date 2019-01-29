@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scenario = new Scenario();
 			var parameters = new ScheduleParameters(scenario, _person, new DateTimePeriod(2017, 10, 19, 0, 2017, 10, 24, 23));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, DateTime.Now);
-			_scheduleRange = new ScheduleRange(scheduleDictionary, parameters, new ByPassPersistableScheduleDataPermissionChecker(), CurrentAuthorization.Make());
+			_scheduleRange = new ScheduleRange(scheduleDictionary, parameters, new ByPassPersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 		}
 
 		[Test]
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var scenario = new Scenario();
 			var parameters = new ScheduleParameters(scenario, _person, new DateTimePeriod(2017, 10, 19, 0, 2017, 10, 24, 23));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, DateTime.Now);
-			_scheduleRange = new ScheduleRange(scheduleDictionary, parameters, new ByPassPersistableScheduleDataPermissionChecker(), CurrentAuthorization.Make());
+			_scheduleRange = new ScheduleRange(scheduleDictionary, parameters, new ByPassPersistableScheduleDataPermissionChecker(CurrentAuthorization.Make()), CurrentAuthorization.Make());
 		}
 
 		[Test]

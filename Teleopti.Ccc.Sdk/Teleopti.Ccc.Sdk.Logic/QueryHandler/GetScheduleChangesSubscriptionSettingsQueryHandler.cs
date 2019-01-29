@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		private static void validatePermissions()
 		{
-			var principalAuthorization = PrincipalAuthorization.Current();
+			var principalAuthorization = PrincipalAuthorization.Current_DONTUSE();
 			if (!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
 			{
 				throw new FaultException("This function requires higher permissions.");

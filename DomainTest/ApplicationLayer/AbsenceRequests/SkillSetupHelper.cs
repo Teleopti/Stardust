@@ -61,6 +61,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return skill;
 		}
 
+		public static ISkillDay CreateSkillDayWithDemand(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, double demand, double averageHandleTime,double calls)
+		{
+
+			var random = new Random();
+			ISkillDay skillDay;
+			skillDay =
+				skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, demand)).WithId();
+
+			var index = 0;
+
+			var workloadDay = skillDay.WorkloadDayCollection.First();
+			workloadDay.Lock();
+			for (TimeSpan intervalStart = openHours.StartTime; intervalStart < openHours.EndTime; intervalStart = intervalStart.Add(TimeSpan.FromMinutes(skill.DefaultResolution)))
+			{
+				workloadDay.TaskPeriodList[index].Tasks = calls;
+				workloadDay.TaskPeriodList[index].AverageTaskTime = TimeSpan.FromSeconds(averageHandleTime);
+				workloadDay.TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(200);
+				index++;
+			}
+			workloadDay.Release();
+
+			return skillDay;
+		}
+
 		public static ISkillDay CreateSkillDayWithDemand(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, double demand )
 		{
 			
@@ -183,10 +207,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			}
 			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 		}
+		
+		public static void PopulateStaffingReadModels(HashSet<Guid> skillIds, DateTime scheduledStartTime,
+			DateTime scheduledEndTime, double staffing,
+			FakeSkillCombinationResourceRepository skillCombinationResourceRepository)
+		{
+			var skillCombinationResources = new List<SkillCombinationResource>();
+
+			for (var intervalTime = scheduledStartTime;
+				intervalTime < scheduledEndTime;
+				intervalTime = intervalTime.AddMinutes(minutesPerInterval))
+			{
+				skillCombinationResources.Add(new SkillCombinationResource
+				{
+					StartDateTime = intervalTime,
+					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
+					Resource = staffing,
+					SkillCombination = skillIds
+				});
+			}
+			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
+		}
 
 		public static void PopulateForecastReadModels(ISkill skill, DateTime scheduledStartTime,
 			DateTime scheduledEndTime, double forecastedAgents,
-			FakeSkillForecastReadModelRepository skillForecastReadModelRepository)
+			FakeSkillForecastReadModelRepository skillForecastReadModelRepository, double? forecastedAgentsWithShrinkage = null,
+			bool isBackOffice = false)
 		{
 			if (skillForecastReadModelRepository.SkillForecasts == null)
 				skillForecastReadModelRepository.SkillForecasts = new List<SkillForecast>();
@@ -199,8 +245,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				{
 					StartDateTime = intervalTime,
 					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
-					 Agents = forecastedAgents,
-					SkillId = skill.Id.GetValueOrDefault() 
+					Agents = forecastedAgents,
+					AgentsWithShrinkage = forecastedAgentsWithShrinkage ?? forecastedAgents,
+					SkillId = skill.Id.GetValueOrDefault(),
+					IsBackOffice = isBackOffice
 				});
 			}
 			

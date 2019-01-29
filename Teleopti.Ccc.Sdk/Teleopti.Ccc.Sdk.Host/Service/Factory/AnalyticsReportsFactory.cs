@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
         internal static ICollection<MatrixReportInfoDto> Create()
         {
             var dtoList = new List<MatrixReportInfoDto>();
-            var appFuncList = PrincipalAuthorization.Current().GrantedFunctions().FilterBySpecification(new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix));
+            var appFuncList = PrincipalAuthorization.Current_DONTUSE().GrantedFunctions().FilterBySpecification(new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix));
 
             IStatisticRepository staticRepository = StatisticRepositoryFactory.Create();
             ICollection<MatrixReportInfo> matrixReportCollection = staticRepository.LoadReports();

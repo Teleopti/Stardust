@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			});
 		}
 
-		private static int customPortLastUsed = 57000;
+		private static int customPortLastUsed = 49000;
 
 		private static IDisposable RandomPortsAndUrls(TestLog testlog = null)
 		{

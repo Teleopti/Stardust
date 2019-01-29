@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void SetRestoreButtonStatus()
 		{
-			if (_model.PageRows.Count <= 0 ||!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)) buttonRestore.Enabled = false;
+			if (_model.PageRows.Count <= 0 ||!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)) buttonRestore.Enabled = false;
 			else buttonRestore.Enabled = true;
 		}
 

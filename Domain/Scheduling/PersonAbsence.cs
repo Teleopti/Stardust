@@ -25,15 +25,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_layer = layer;
 		}
 
-		public PersonAbsence(IScenario scenario)
+		/// <summary>
+		/// Constructor for CommandHandlers
+		/// </summary>
+		public PersonAbsence(IScenario scenario) : this()
 		{
 			_scenario = scenario;
 		}
 
 		protected PersonAbsence()
 		{
+			_lastChange = DateTime.UtcNow;
 		}
-		
+
 		/// <summary>
 		/// Make this person absence a full day absence
 		/// </summary>
@@ -300,7 +304,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual DateTime? LastChange
 		{
-			get => _lastChange ?? (_lastChange = ServiceLocator_DONTUSE.Now.UtcDateTime());
+			get => _lastChange;
 			set => _lastChange = value;
 		}
 

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Reports
 				where analysisReports().Contains(a.ForeignId.ToUpper())
 				select a).ToList();
 
-			var auditApplicationFunction = PrincipalAuthorization.Current().GrantedFunctions()
+			var auditApplicationFunction = PrincipalAuthorization.Current_DONTUSE().GrantedFunctions()
 				.FirstOrDefault(a => a.ForeignId == DefinedRaptorApplicationFunctionForeignIds.ScheduleAuditTrailWebReport);
 			if (auditApplicationFunction != null)
 			{

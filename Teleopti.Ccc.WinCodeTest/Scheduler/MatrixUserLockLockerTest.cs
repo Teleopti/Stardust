@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _gridlockDictionary = new GridlockDictionary();
             _gridlockDictionary.Add("key", _gridLock);
             _gridlockManager = _mockRepository.StrictMock<IGridlockManager>();
-            _target = new MatrixUserLockLocker(()=>_gridlockManager);
+            _target = new MatrixUserLockLocker(()=>_gridlockManager, CurrentAuthorization.Make());
         }
 
         [Test]

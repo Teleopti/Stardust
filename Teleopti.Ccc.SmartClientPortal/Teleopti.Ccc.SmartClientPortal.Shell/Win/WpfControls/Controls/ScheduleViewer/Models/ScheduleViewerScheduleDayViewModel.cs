@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Schedule
 
         public ScheduleViewerScheduleDayViewModel(IScheduleDay part,IEventAggregator eventAggregator)
         {
-			Layers = new LayerViewModelCollection(eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current());
+			Layers = new LayerViewModelCollection(eventAggregator, new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule(), PrincipalAuthorization.Current_DONTUSE());
             Layers.AddFromSchedulePart(part);
             _part = part;
             DisplayColor = Color.LightBlue;

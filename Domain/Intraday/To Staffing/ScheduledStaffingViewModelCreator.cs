@@ -3,11 +3,12 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
+using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class ScheduledStaffingViewModelCreator
+	public class ScheduledStaffingViewModelCreator : IStaffingViewModelCreator
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;

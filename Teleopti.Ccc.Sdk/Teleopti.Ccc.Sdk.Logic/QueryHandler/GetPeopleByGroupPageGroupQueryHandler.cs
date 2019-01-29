@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
 
 				var availableDetails = details.Where(
-					p => PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+					p => PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 				                                                                  queryDate, p));
 
 				var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));

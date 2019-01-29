@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 	    public MainShiftLayerViewModel(IVisualLayer layer, IPerson person, IAuthorization authorization = null)
             : base(layer, person)
 		{
-			_authorization = authorization ?? PrincipalAuthorization.Current();
+			_authorization = authorization ?? PrincipalAuthorization.Current_DONTUSE();
 		}
 
         public MainShiftLayerViewModel(ILayerViewModelObserver observer, MainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IAuthorization authorization = null)
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
         {
 	        _layer = layer;
 	        _assignment = assignment;
-			_authorization = authorization ?? PrincipalAuthorization.Current();
+			_authorization = authorization ?? PrincipalAuthorization.Current_DONTUSE();
 		}
 		
 	    public override string LayerDescription => UserTexts.Resources.Activity;

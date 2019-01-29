@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (_editControl != null)
 			{
-				var authorization = PrincipalAuthorization.Current();
+				var authorization = PrincipalAuthorization.Current_DONTUSE();
 
 				_editControl.SetButtonState(EditAction.New, authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
 				_editControl.SetSpecialItemState(EditAction.New, ClipboardItems.Preference.ToString(), authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));								

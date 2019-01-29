@@ -91,9 +91,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_view = view;
 			_earlyWarningEnabled =
-				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning);
+				PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning);
 			_realTimeAdherenceEnabled =
-				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence);
+				PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence);
 
 			_schedulingResultLoader = schedulingResultLoader;
 

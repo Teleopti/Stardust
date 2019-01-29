@@ -32,12 +32,11 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public IntradayOptimizationFromWeb Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakeTeamRepository TeamRepository;
 		
 		[Test]
 		public void ShouldMoveBothAgentsToHigherDemandIfTeamSameStartTimeIsUsed()
-		{
-			
+		{	
 			var activity = ActivityFactory.CreateActivity("_");
 			var skill = SkillRepository.Has("_", activity);
 			var date = new DateOnly(2015, 10, 12);
@@ -47,7 +46,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 9, 0, 60), new TimePeriodWithSegment(16, 0, 17, 0, 60), shiftCategory));
 			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(8, 8), TimeSpan.Zero));
 			var team = new Team().WithDescription(new Description("team1")).WithId();
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var agent1 = PersonRepository.Has(team,schedulePeriod, ruleSet, skill);
 			var agent2 = PersonRepository.Has(team,schedulePeriod, ruleSet, skill);
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Reports
 		{
 			get
 			{
-				return PrincipalAuthorization.Current()
+				return PrincipalAuthorization.Current_DONTUSE()
 					.GrantedFunctions().FilterBySpecification(
 						new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)
 					);
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Reports
 			get
 			{
 				IEnumerable<IApplicationFunction> onlineReportFunctions =
-					PrincipalAuthorization.Current()
+					PrincipalAuthorization.Current_DONTUSE()
 						.GrantedFunctions()
 						.Where(af => _reportVisibleList.Any(v => v.ForeignId() == af.ForeignId))
 						.ToArray();
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Reports
 		private IEnumerable<IApplicationFunction> getAuditReports()
 		{
 			var auditReports = new List<IApplicationFunction>();
-			var auditApplicationFunction = PrincipalAuthorization.Current().GrantedFunctions()
+			var auditApplicationFunction = PrincipalAuthorization.Current_DONTUSE().GrantedFunctions()
 				.FirstOrDefault(a => a.ForeignId == DefinedRaptorApplicationFunctionForeignIds.GeneralAuditTrailWebReport);
 			
 			if (auditApplicationFunction != null)

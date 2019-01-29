@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		SchedulePeriod_HideChineseMonth_78424,
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
-		ResourcePlanner_DoNotRemoveShiftsDayOffOptimization_77941,
 		ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717,
 		ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487,
 		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,

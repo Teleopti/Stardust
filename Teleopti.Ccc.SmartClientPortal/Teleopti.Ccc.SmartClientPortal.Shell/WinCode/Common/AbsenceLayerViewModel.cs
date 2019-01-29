@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		public AbsenceLayerViewModel(ILayerViewModelObserver observer, IPersonAbsence personAbsence, IEventAggregator eventAggregator, IAuthorization authorization = null)
 				: base(observer, personAbsence.Layer, eventAggregator, false, personAbsence.Person)
 		{
-			_authorization = authorization ?? PrincipalAuthorization.Current();
+			_authorization = authorization ?? PrincipalAuthorization.Current_DONTUSE();
 		}
 
 			public AbsenceLayerViewModel(IVisualLayer layer, IPerson person, IAuthorization authorization = null)
 				: base(null, layer, null, true, person)
 			{
-				_authorization = authorization ?? PrincipalAuthorization.Current();
+				_authorization = authorization ?? PrincipalAuthorization.Current_DONTUSE();
 			}
 
         public override string LayerDescription => UserTexts.Resources.Absence;

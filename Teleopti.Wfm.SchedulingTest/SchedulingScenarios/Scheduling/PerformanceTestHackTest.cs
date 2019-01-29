@@ -25,17 +25,17 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+		public FakeTeamRepository TeamRepository;
 
 		[Test]
 		public void ShouldUseTeamAndSameShiftCategory()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));

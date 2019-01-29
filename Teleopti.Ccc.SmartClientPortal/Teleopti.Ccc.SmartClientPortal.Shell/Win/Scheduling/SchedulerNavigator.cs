@@ -370,7 +370,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var toggleManager = _container.Resolve<IToggleManager>();
 			var toggled = toggleManager.IsEnabled(Toggles.Wfm_SkillPriorityRoutingGUI_39885);
-			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills);
+			var permitted = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills);
 
 			toolStripButtonOrganizeCascadingSkills.Visible = toggled && permitted;
 		}
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void enableCopySchedule()
 		{
-			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.CopySchedule);
+			var permitted = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.CopySchedule);
 			toolStripButtonCopySchedule.Visible = permitted;
 			if (toolStripButtonCopySchedule.Visible)
 				toolStripSeparator1.Visible = true;
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void enableImportSchedule()
 		{
-			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportSchedule);
+			var permitted = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportSchedule);
 			toolStripButtonImportSchedule.Visible = permitted;
 			if (toolStripButtonImportSchedule.Visible)
 				toolStripSeparator1.Visible = true;

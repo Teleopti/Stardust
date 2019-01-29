@@ -32,11 +32,13 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
+		//TODO: remove me later when [DefaultData] is used
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldNotCrashWhenUsingKeepExistingDaysOff()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2010, 1, 1);
@@ -76,7 +78,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldMarkDayToBeRecalculated()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -108,7 +110,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotMarkDayThatIsNotChangedToBeRecalculated()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -140,7 +142,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldMarkDayToBeRecalculatedWhenDoNotBreak()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -172,7 +174,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotMarkDayToBeRecalculatedWhenDoNotBreak()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -202,7 +204,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldConsiderKeepStartTime()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2010, 1, 1);
@@ -266,7 +268,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotCrashOnSchedulePeriodSameShiftCategoryAndKeepActivityLength()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var date = new DateOnly(2014, 4, 1);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var scenario = new Scenario("Default").WithId();
@@ -306,7 +308,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotCrashWhenAgentHaveNoSkill()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var date = new DateOnly(2014, 4, 1);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var scenario = new Scenario("Default").WithId();
@@ -345,7 +347,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldConsiderCrossSkillAgents()
 		{
-			BusinessUnitRepository.Has(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			var scenario = new Scenario();
 			var activity = new Activity();
 			var dateOnly = new DateOnly(2010, 1, 1);

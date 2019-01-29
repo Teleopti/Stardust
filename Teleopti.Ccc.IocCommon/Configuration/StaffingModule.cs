@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StaffingSettingsReader49Days>().As<IStaffingSettingsReader>().SingleInstance();
 			
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
-			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();
 			builder.RegisterType<BacklogSkillTypesForecastCalculator>().SingleInstance();
 			builder.RegisterType<ImportBpoFile>().SingleInstance();
 			builder.RegisterType<SkillCombinationBpoTimeLineReader>().As<ISkillCombinationBpoTimeLineReader>().SingleInstance();
@@ -44,11 +43,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AuditableBpoOperationsToggleOn>().As<IAuditableBpoOperations>().SingleInstance()
 					.ApplyAspects();
 			}
-
 			else
 				builder.RegisterType<AuditableBpoOperationsToggleOff>().As<IAuditableBpoOperations>().SingleInstance();
 
-			builder.RegisterType<StaffingViewModelCreator>().SingleInstance();
+			if (_configuration.IsToggleEnabled(Toggles.WFM_Forecast_Readmodel_80790))
+				builder.RegisterType<StaffingViewModelCreator>().As<IStaffingViewModelCreator, StaffingViewModelCreator>().SingleInstance();
+			else
+				builder.RegisterType<ScheduledStaffingViewModelCreator>().As<IStaffingViewModelCreator, ScheduledStaffingViewModelCreator>().SingleInstance();
+			
+			builder.RegisterType<ResourceCalculationUsingReadModels>().SingleInstance();
 		}
 	}
 }

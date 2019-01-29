@@ -169,6 +169,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerBug45331Test.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\SkillForecastIntervalCalculatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\UpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerPersonAccountDayTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerPersonAccountTimeTest.cs" />
@@ -1372,7 +1373,7 @@
     <Compile Include="Staffing\ExportBpoFileTest.cs" />
     <Compile Include="Staffing\ExportForecastAndStaffingFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
-    <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
+    <Compile Include="Staffing\ScheduledStaffingViewModelCreatorTest.cs" />
     <Compile Include="Staffing\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Staffing\TenantContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />

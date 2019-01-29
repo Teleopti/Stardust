@@ -8,9 +8,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ByPassPersistableScheduleDataPermissionChecker : IPersistableScheduleDataPermissionChecker
 	{
+		private readonly ICurrentAuthorization _currentAuthorization;
+
+		public ByPassPersistableScheduleDataPermissionChecker(ICurrentAuthorization currentAuthorization)
+		{
+			_currentAuthorization = currentAuthorization;
+		}
+		
 		public IList<IPersistableScheduleData> GetPermittedData(IEnumerable<IPersistableScheduleData> persistableScheduleData)
 		{
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = _currentAuthorization.Current();
 			var permittedData = persistableScheduleData.Where(d =>
 			{
 				var forAuthorization =

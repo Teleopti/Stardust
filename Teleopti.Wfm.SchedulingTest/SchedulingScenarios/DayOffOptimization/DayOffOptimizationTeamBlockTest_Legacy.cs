@@ -34,7 +34,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakeTeamRepository FakeTeamRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 		
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var team = new Team { Site = new Site("site") }.WithDescription("_").WithId();
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
+			FakeTeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var contractToSchedule = new Contract("_").WithId();
 			var contractNotToSchedule = new Contract("_").WithId();
 			var planningGroup = new PlanningGroup().AddFilter(new ContractFilter(contractToSchedule));

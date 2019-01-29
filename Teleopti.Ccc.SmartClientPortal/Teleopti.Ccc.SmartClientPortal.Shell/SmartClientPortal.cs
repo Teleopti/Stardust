@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void toolStripButtonPermissonsClick(object sender, EventArgs e)
 		{
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
+			if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
 			{
 				Process.Start(buildWfmUri("WFM/#/permissions").ToString());
 			}
@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void setPermissionOnToolStripButtonControls()
 		{
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 			backStageButtonPermissions.Enabled =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions);
 			backStageButtonOptions.Enabled =
@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void loadOutLookBar()
 		{
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 			IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctions().FilterBySpecification(new ModuleSpecification());
 
 			IList<ModulePanelItem> modulePanelItems = new List<ModulePanelItem>();
@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
 						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
-						if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_74903) && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
+						if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_74903) && PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");
@@ -370,7 +370,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
 						outlookBarSmartPartInfo.Icon = Resources.Forecasts2_filled_32x32;
 						if (_toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801) &&
-							PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
+							PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewForecasts;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/forecast");
@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
 						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;
-						if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebRequests))
+						if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebRequests))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewRequestsModule;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/requests");

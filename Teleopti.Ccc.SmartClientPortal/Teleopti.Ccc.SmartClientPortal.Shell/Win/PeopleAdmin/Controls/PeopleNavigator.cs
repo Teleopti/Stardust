@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 			if (DesignMode) return;
 
 			toolStripButtonOpen.Click += onOpenPeople;
-			var addPersonPermission = PrincipalAuthorization.Current().IsPermitted(
+			var addPersonPermission = PrincipalAuthorization.Current_DONTUSE().IsPermitted(
 				DefinedRaptorApplicationFunctionPaths.AddPerson);
 			toolStripButtonAddPerson.Enabled = addPersonPermission;
 			if(addPersonPermission)

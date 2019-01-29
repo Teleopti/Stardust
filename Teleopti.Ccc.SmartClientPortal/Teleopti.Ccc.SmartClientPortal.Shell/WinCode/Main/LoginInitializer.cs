@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 
         private bool authorize()
         {
-            if (!PrincipalAuthorization.Current().IsPermitted(
+            if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(
                 DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication))
             {
                 _logonView.ShowErrorMessage(string.Concat(Resources.YouAreNotAuthorizedToRunTheApplication, "  "), Resources.AuthenticationFailed);

@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		public GamificationController Target;
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public FakeExternalPerformanceRepository ExternalPerformanceRepository;
+		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
 		
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -69,6 +70,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		{
 			var result = Target.RemoveGamification(Guid.NewGuid());
 			result.Should().Be.InstanceOf<NotFoundResult>();
+		}
+
+		[Test]
+		public void ShuldRemoveTeamGamificationSettingWhenRemove()
+		{
+			var gamificationId = Guid.NewGuid();
+			var gamificationSetting = new GamificationSetting("newGamification").WithId(gamificationId);
+			GamificationSettingRepository.Add(gamificationSetting);
+			var team = TeamFactory.CreateTeam("teamBla", "siteBla");
+			var teamGamificationSetting = new TeamGamificationSetting{Team = team, GamificationSetting = gamificationSetting};
+			TeamGamificationSettingRepository.Add(teamGamificationSetting);
+
+			Target.RemoveGamification(gamificationId);
+
+			TeamGamificationSettingRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]

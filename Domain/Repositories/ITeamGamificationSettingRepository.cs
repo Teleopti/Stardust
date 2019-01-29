@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -7,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IEnumerable<ITeamGamificationSetting> FindAllTeamGamificationSettingsSortedByTeam();
 		ITeamGamificationSetting FindTeamGamificationSettingsByTeam(ITeam myTeam);
+		IEnumerable<ITeamGamificationSetting> FetchTeamGamificationSettings(Guid gamificationId);
 	}
 }

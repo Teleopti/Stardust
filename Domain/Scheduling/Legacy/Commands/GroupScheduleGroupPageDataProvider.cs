@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		private IEnumerable<IContract> _contractCollection;
         private IEnumerable<IContractSchedule> _contractScheduleCollection;
@@ -25,13 +26,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private IEnumerable<IPerson> _allPersons;
 		private readonly object _lockObject = new Object();
 
-		public GroupScheduleGroupPageDataProvider(Func<ISchedulerStateHolder> stateHolder, IRepositoryFactory repositoryFactory, ICurrentUnitOfWorkFactory unitOfWorkFactory, IDisableDeletedFilter disableDeletedFilter)
+		public GroupScheduleGroupPageDataProvider(Func<ISchedulerStateHolder> stateHolder, IRepositoryFactory repositoryFactory, ICurrentUnitOfWorkFactory unitOfWorkFactory, IDisableDeletedFilter disableDeletedFilter, ICurrentBusinessUnit currentBusinessUnit)
         {
             _stateHolder = stateHolder;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
 			_disableDeletedFilter = disableDeletedFilter;
-        }
+			_currentBusinessUnit = currentBusinessUnit;
+		}
 
         public IEnumerable<IContract> ContractCollection
         {
@@ -203,7 +205,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
 							var repository = _repositoryFactory.CreateBusinessUnitRepository(uow.Uow);
-							var businessUnit = repository.Get(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.GetValueOrDefault());
+							var businessUnit = repository.Get(_currentBusinessUnit.CurrentId().Value);
 							businessUnit = repository.LoadHierarchyInformation(businessUnit);
 							_businessUnit = businessUnit;
 						}

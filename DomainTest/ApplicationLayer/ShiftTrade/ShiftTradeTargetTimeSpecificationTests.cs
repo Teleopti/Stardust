@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private ShiftTradeTargetTimeSpecification createShiftTradeTargetTimeSpecification()
 		{
 			var gridLockManager = new GridlockManager();
-			var matrixUserLocker = new MatrixUserLockLocker(() => gridLockManager);
+			var matrixUserLocker = new MatrixUserLockLocker(() => gridLockManager, CurrentAuthorization.Make());
 			var notPermittedLocker = new MatrixNotPermittedLocker(new ThisAuthorization(new FullPermission()));
 			var personListExtraxtor = new PersonListExtractorFromScheduleParts();
 			var periodExtractor = new PeriodExtractorFromScheduleParts();

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryRange);
 
-				var principalAuthorization = PrincipalAuthorization.Current();
+				var principalAuthorization = PrincipalAuthorization.Current_DONTUSE();
 				var availableDetails = details.Where(
 					p => days.Any(date => principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 						date, p)));

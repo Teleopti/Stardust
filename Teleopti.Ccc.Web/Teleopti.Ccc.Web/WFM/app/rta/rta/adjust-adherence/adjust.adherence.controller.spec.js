@@ -147,5 +147,30 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
         expect(vm.adjustedPeriods[1].EndTime).toEqual('2019-01-25 11:00');
     });
 
+    it('should refresh view after adjust to neutral', function (t) {
+        t.backend.with.currentUserInfo({
+                DateFormatLocale: "sv-SE"
+            });
+        var vm = t.createController();
+
+        t.backend.with
+            .adjustedPeriods({
+                StartTime: '2019-01-28T09:00:00',
+                EndTime: '2019-01-28T10:00:00'
+            });
+        t.apply(function () {
+            vm.startDate = new Date(2019, 0, 28);
+            vm.startTime = new Date('2019-01-28T09:00:00');
+            vm.endDate = new Date(2019, 0, 28);
+            vm.endTime = new Date('2019-01-28T10:00:00');
+        });
+        t.apply(function () {
+            vm.adjustToNeutral();
+        });
+
+        expect(vm.adjustedPeriods[0].StartTime).toEqual('2019-01-28 09:00');
+        expect(vm.adjustedPeriods[0].EndTime).toEqual('2019-01-28 10:00');
+    });        
+    
 
 });

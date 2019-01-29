@@ -1,55 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Staffing;
 
-namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
+namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class StaffingViewModelCreator
+	public class StaffingViewModelCreator : IStaffingViewModelCreator
 	{
-		private readonly IResourceCalculation _resourceCalculation;
-		private readonly ISkillRepository _skillRepository;
-		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
-		private readonly ISkillForecastReadModelRepository _skillForecastReadModelRepository;
+		private readonly ResourceCalculationUsingReadModels _resourceCalculationUsingReadModels;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly INow _now;
 
-		public StaffingViewModelCreator(IResourceCalculation resourceCalculation, ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository,
-			ISkillForecastReadModelRepository skillForecastReadModelRepository, IUserTimeZone timeZone,
-			IIntervalLengthFetcher intervalLengthFetcher, INow now)
+		public StaffingViewModelCreator(IUserTimeZone timeZone,IIntervalLengthFetcher intervalLengthFetcher, 
+			ResourceCalculationUsingReadModels resourceCalculationUsingReadModels, INow now)
 		{
-			_resourceCalculation = resourceCalculation;
-			_skillRepository = skillRepository;
-			_skillCombinationResourceRepository = skillCombinationResourceRepository;
-			_skillForecastReadModelRepository = skillForecastReadModelRepository;
+			_resourceCalculationUsingReadModels = resourceCalculationUsingReadModels;
 			_timeZone = timeZone;
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_now = now;
 		}
 
-		public ScheduledStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateInLocalTime = null,
+		public ScheduledStaffingViewModel Load(Guid[] skillIds, DateOnly? dateInLocalTime = null,
 			bool useShrinkage = false)
 		{
 			var timeZone = _timeZone.TimeZone();
 			var startOfDayLocal = dateInLocalTime?.Date ?? TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), timeZone).Date;
 
 			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, timeZone);
-
+		 	var endOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.AddDays(1).Date, timeZone);
 			var minutesPerInterval = _intervalLengthFetcher.GetIntervalLength();
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
-			var skillStaffingIntervals = loadAndResorceCalculate(startOfDayUtc);
+			var skillStaffingIntervals = _resourceCalculationUsingReadModels.LoadAndResourceCalculate(skillIds, startOfDayUtc, endOfDayUtc, useShrinkage);
 			var timeSeries = DataSeries(startOfDayLocal, minutesPerInterval, _timeZone.TimeZone()).Where(x => x.Date == startOfDayLocal.Date).ToArray();
-
-
+			
 			var dataSeries = new StaffingDataSeries
 			{
 				Date = new DateOnly(startOfDayLocal),
@@ -65,51 +54,6 @@ namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
 			};
 		}
 
-		private IList<SkillStaffingInterval> loadAndResorceCalculate(DateTime startOfDayUtc)
-		{
-			var skills = _skillRepository.LoadAll().ToList();
-			var firstPeriodDateInSkillTimeZone = new DateOnly(skills.Select(x => TimeZoneInfo.ConvertTimeFromUtc(startOfDayUtc, x.TimeZone)).Min());
-			var lastPeriodDateInSkillTimeZone = new DateOnly(skills.Select(x => TimeZoneInfo.ConvertTimeFromUtc(startOfDayUtc.AddDays(1), x.TimeZone)).Max());
-			var dateOnlyPeriod = new DateOnlyPeriod(firstPeriodDateInSkillTimeZone, lastPeriodDateInSkillTimeZone);
-
-			var period = new DateTimePeriod(startOfDayUtc, startOfDayUtc.AddDays(1));
-			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
-			var skillForecastList =
-				_skillForecastReadModelRepository.LoadSkillForecast(skills.Select(x => x.Id.GetValueOrDefault()).ToArray(), startOfDayUtc, startOfDayUtc.AddDays(1));
-
-			var intervals = skillForecastList.Select(skillForecast => new SkillStaffingInterval
-			{
-				SkillId = skillForecast.SkillId,
-				StartDateTime = skillForecast.StartDateTime,
-				EndDateTime = skillForecast.EndDateTime,
-				Forecast = skillForecast.Agents,
-				StaffingLevel = 0,
-			});
-			var returnList = new HashSet<SkillStaffingInterval>();
-			intervals.ForEach(i => returnList.Add(i));
-
-			var skillStaffingIntervals = returnList
-				.Where(x => period.Contains(x.StartDateTime) || x.DateTimePeriod.Contains(period.StartDateTime)).ToList();
-			skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
-
-			var relevantSkillStaffPeriods = skillStaffingIntervals
-				.GroupBy(s => skills.First(a => a.Id.GetValueOrDefault() == s.SkillId))
-				.ToDictionary(k => k.Key,
-					v =>
-						(IResourceCalculationPeriodDictionary)
-						new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
-							s => (IResourceCalculationPeriod)s)));
-
-			var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
-
-			using (new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataContainerFromSkillCombinations(combinationResources, skills, false))))
-			{
-				_resourceCalculation
-					.ResourceCalculate(dateOnlyPeriod, resCalcData, () => new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataContainerFromSkillCombinations(combinationResources, skills, true))));
-			}
-
-			return skillStaffingIntervals;
-		}
 		private double?[] ForecastDataSeries(IList<SkillStaffingInterval> forecastedStaffingPerSkill, DateTime[] timeSeries)
 		{
 			var forecastedStaffing = forecastedStaffingPerSkill

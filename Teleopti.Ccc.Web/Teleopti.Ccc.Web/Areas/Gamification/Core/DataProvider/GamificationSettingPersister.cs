@@ -16,12 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		private readonly IGamificationSettingMapper _mapper;
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;		
 		private readonly BadgeSettingDataConverter _converter = new BadgeSettingDataConverter();
+		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepository;
 
-		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository)
+		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, 
+			IExternalPerformanceRepository externalPerformanceRepository, ITeamGamificationSettingRepository teamGamificationSettingRepository)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
 			_mapper = mapper;
 			_externalPerformanceRepository = externalPerformanceRepository;
+			_teamGamificationSettingRepository = teamGamificationSettingRepository;
 		}
 
 		public GamificationSettingViewModel Persist()
@@ -43,6 +46,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (gamificationSetting == null) return false;
 
 			_gamificationSettingRepository.Remove(gamificationSetting);
+
+			var teamGamificationSettings = _teamGamificationSettingRepository.FetchTeamGamificationSettings(id);
+			foreach (var setting in teamGamificationSettings)
+			{
+				_teamGamificationSettingRepository.Remove(setting);
+			}
 			return true;
 		}
 

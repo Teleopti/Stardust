@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                     if (!IsInsidePersonPeriod(daySchedule))
                         _lockManager.AddLock(daySchedule, LockType.OutsidePersonPeriod);
 
-                    if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+                    if (!PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
                         if (!daySchedule.IsFullyPublished)
                             _lockManager.AddLock(daySchedule, LockType.UnpublishedSchedule);
 
@@ -581,7 +581,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
                     // if it only is one lock and that is WriteProtected AND the user is allowed to change those
                     // Don't remove it the user can change it
                     var gridlock = new Gridlock(theParts[i], LockType.WriteProtected);
-                    if (lockDictionary.Count == 1 && lockDictionary.ContainsKey(gridlock.Key) && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+                    if (lockDictionary.Count == 1 && lockDictionary.ContainsKey(gridlock.Key) && PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
                     {
 
                     }
@@ -778,7 +778,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
         public void AddAbsence(IList<IScheduleDay> schedules, DateTimePeriod? defaultPeriod)
         {
-			var command = new AddAbsenceCommand(_schedulerState, _view, this, schedules, new ThisAuthorization(PrincipalAuthorization.Current()))
+			var command = new AddAbsenceCommand(_schedulerState, _view, this, schedules, new ThisAuthorization(PrincipalAuthorization.Current_DONTUSE()))
                               {DefaultPeriod = defaultPeriod};
             command.Execute();
         }

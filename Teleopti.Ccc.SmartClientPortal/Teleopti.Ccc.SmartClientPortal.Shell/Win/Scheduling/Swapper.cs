@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (selectedSchedules.IsEmpty())
 				return;
 
-			ISwapRawService swapRawService = new SwapRawService(new ThisAuthorization(PrincipalAuthorization.Current()));
+			ISwapRawService swapRawService = new SwapRawService(new ThisAuthorization(PrincipalAuthorization.Current_DONTUSE()));
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
 														 _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
 

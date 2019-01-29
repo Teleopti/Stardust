@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			var ret = new ConcurrentDictionary<string, IList<IPerson>>();
 
 			//Sorry don't know how to test this static shit
-			var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current_DONTUSE();
 			var functionPath = _applicationFunction.FunctionPath;
 			var personToIndex = _personToIndex.Where(p => authorization.IsPermitted(functionPath, datePeriod.StartDate, p) || authorization.IsPermitted(functionPath, datePeriod.EndDate, p)).ToArray();
 

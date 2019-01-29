@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             SetColors();
             setPermissionOnControls();
 
-            _readOnly = !PrincipalAuthorization.Current().IsPermitted(
+            _readOnly = !PrincipalAuthorization.Current_DONTUSE().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 
         private void setPermissionOnControls()
         {
-            var optionPagePermission = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+            var optionPagePermission = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
             backStageButton3.Enabled = optionPagePermission;
 
             toolStripButtonContract.Enabled = optionPagePermission;
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
                     case ViewType.GeneralView:
                         theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPerson);
 						if(theButton != null)
-							theButton.Enabled = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson);
+							theButton.Enabled = PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson);
 						break;
                     case ViewType.PeoplePeriodView:
                         theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonPeriod);
@@ -971,7 +971,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 
             //Set generalToolStripButton to add new person when press CTRL + N.
             //SetShortcut(generalToolStripButton, ((Keys.Control | Keys.N)));
-            toolStripExEdit.Enabled = PrincipalAuthorization.Current().IsPermitted(
+            toolStripExEdit.Enabled = PrincipalAuthorization.Current_DONTUSE().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 
@@ -1003,7 +1003,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 
             _clipboardControl.PasteSpecialClicked += clipboardControlPasteSpecialClicked;
             _clipboardControl.PasteClicked += clipboardControlPasteClicked;
-            toolStripExClipboard.Enabled = PrincipalAuthorization.Current().IsPermitted(
+            toolStripExClipboard.Enabled = PrincipalAuthorization.Current_DONTUSE().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 
@@ -1128,7 +1128,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
         {
             Cursor.Current = Cursors.WaitCursor;
             _editControl.SetButtonState(EditAction.Delete,
-                PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson));
+                PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson));
             IList<IPerson> selectedPersons = _gridConstructor.View.GetSelectedPersons();
 
             // Construct general information grid.
@@ -1151,7 +1151,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
                 // Configures the find and replace form
                 _findAndReplaceForm.ConfigureSearchFunctionality(_gridConstructor.View.Grid, _domainFinder);
 
-                if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword))
+                if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword))
                 {
                     togglePanelContent(false);
                     splitContainerWorksheet.Panel2Collapsed = false;
@@ -1573,7 +1573,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             _filteredPeopleHolder.LoadBudgetGroup();
             peopleRibbon.MenuButtonText = UserTexts.Resources.FileProperCase.ToUpper();
             _editControl.ToolStripButtonDelete.Enabled =
-               PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson);
+               PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson);
         }
 
         private void loadPeopleAdminReferences()

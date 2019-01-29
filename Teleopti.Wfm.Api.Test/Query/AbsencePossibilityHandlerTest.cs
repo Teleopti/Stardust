@@ -10,9 +10,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -21,7 +20,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-
 
 namespace Teleopti.Wfm.Api.Test.Query
 {
@@ -32,7 +30,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		private const int intervalLengthInMinute = 15;
 
 		public IApiHttpClient Client;
-		public IAbsenceRepository AbsenceRepository;
+		public FakeAbsenceRepository AbsenceRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
@@ -40,6 +38,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public FakeWorkloadRepository WorkloadRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 		public MutableNow Now;
@@ -99,9 +98,61 @@ namespace Teleopti.Wfm.Api.Test.Query
 
 			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
 			resultDto["Result"].Count().Should().Be.EqualTo((17 - 8) * 4 * 2);
-			Console.WriteLine(resultDto["Result"].Count(x => x["Possibility"].Value<int>() == 1));
 			resultDto["Result"].All(x => x["Possibility"].Value<int>() == 1).Should().Be
 				.EqualTo(forecastStaffPerInterval < scheduledStaffPerInterval);
+		}
+
+		[Test]
+		public async System.Threading.Tasks.Task ShouldNotReturnCurrentAbsenceAsPossibility()
+		{
+			var today = new DateTime(2018, 8, 2, 0, 0, 0, DateTimeKind.Utc);
+			var dateOnlyToday = new DateOnly(today);
+
+			Now.Is(today.AddHours(13));
+
+			Client.Authorize();
+
+			var absence = AbsenceFactory.CreateAbsence("Absence").WithId();
+			absence.Requestable = true;
+			AbsenceRepository.Add(absence);
+
+			var scenario = ScenarioRepository.Has("Default").WithId();
+			var activity = ActivityRepository.Has("Test Activity").WithId();
+
+			var openHours = new TimePeriod(0, 24);
+			var skill = createSkill(intervalLengthInMinute, "Phone", openHours, activity);
+			SkillRepository.Has(skill);
+
+			setupScheduleData(skill, today, 10, 20);
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(today.Year, 1, 1), new[] { skill }).WithId();
+			var workflowControlSet = createWorkflowControlSet(today, absence);
+			person.WorkflowControlSet = workflowControlSet;
+
+			PersonRepository.Has(person);
+
+			var personAssignment = new PersonAssignment(person, scenario, dateOnlyToday);
+			personAssignment.AddActivity(activity, new TimePeriod(8, 17));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var personAbsence = new PersonAbsence(person, scenario,
+				new AbsenceLayer(absence,
+					dateOnlyToday.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone())));
+			PersonAbsenceRepository.Add(personAbsence);
+
+			var queryDto = new
+			{
+				PersonId = person.Id,
+				StartDate = today,
+				EndDate = today
+			};
+
+			var result = await Client.PostAsync("/query/AbsencePossibility/AbsencePossibilityByPersonId",
+				new StringContent(JsonConvert.SerializeObject(queryDto), Encoding.UTF8, "application/json"));
+			var resultDto = JObject.Parse(await result.EnsureSuccessStatusCode().Content.ReadAsStringAsync());
+
+			resultDto["Successful"].Value<bool>().Should().Be.EqualTo(true);
+			resultDto["Result"].Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]

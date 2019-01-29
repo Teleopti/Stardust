@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.IoC
 			isolate.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
 			isolate.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
 			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			isolate.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();

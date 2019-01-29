@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         {
             if ((functionPath != null) && (dateOnly.HasValue) && (ContainedEntity != null))
             {
-                return PrincipalAuthorization.Current().IsPermitted(functionPath,
+                return PrincipalAuthorization.Current_DONTUSE().IsPermitted(functionPath,
                                                                        dateOnly.Value,ContainedEntity);
             }
             return false;

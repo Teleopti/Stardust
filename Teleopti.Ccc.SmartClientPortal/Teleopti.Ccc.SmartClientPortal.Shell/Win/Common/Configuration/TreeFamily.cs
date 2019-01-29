@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
         public bool CheckPermission()
         {
-            return PrincipalAuthorization.Current().IsPermitted(_applicationFunctionPath);
+            return PrincipalAuthorization.Current_DONTUSE().IsPermitted(_applicationFunctionPath);
         }
     }
 }

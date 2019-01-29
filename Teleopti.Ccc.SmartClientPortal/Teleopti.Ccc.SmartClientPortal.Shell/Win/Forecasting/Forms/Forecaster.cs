@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private void setPermissionOnControls()
 		{
 			backStageButtonOptions.Enabled =
-				 PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+				 PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 
 		private void addChart()

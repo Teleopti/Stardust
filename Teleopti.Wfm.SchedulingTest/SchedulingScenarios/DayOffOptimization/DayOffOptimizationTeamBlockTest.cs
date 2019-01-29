@@ -28,8 +28,8 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		public FakeTeamRepository FakeTeamRepository;
 		
 		public DayOffOptimizationTeamBlockTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
 		{
@@ -47,8 +47,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
         	var skill = SkillRepository.Has(activity);
         	var scenario = ScenarioRepository.Has();
         	var team = new Team().WithDescription(new Description("team1")).WithId();
-        	
-        	BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
+			FakeTeamRepository.HasConnectedToCurrentBusinessUnit(team);
         	var shiftCategory = new ShiftCategory().WithId();
         	var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
         	var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
@@ -84,8 +83,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
         	var skill = SkillRepository.Has(activity);
         	var scenario = ScenarioRepository.Has();
         	var team = new Team().WithDescription(new Description("team1")).WithId();
-        	
-        	BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
+			FakeTeamRepository.HasConnectedToCurrentBusinessUnit(team);
         	var shiftCategory = new ShiftCategory().WithId();
         	var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
         	var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
@@ -121,8 +119,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
         	var skill = SkillRepository.Has(activity);
         	var scenario = ScenarioRepository.Has();
         	var team = new Team().WithDescription(new Description("team1")).WithId();
-        	
-        	BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
+			FakeTeamRepository.HasConnectedToCurrentBusinessUnit(team);
         	var shiftCategory1 = new ShiftCategory().WithId();
         	var shiftCategory2 = new ShiftCategory().WithId();
         	var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory1));
@@ -160,7 +157,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var agent1 = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOff(1), ruleSet, skill);
 			var agent2 = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOff(1), ruleSet, skill);
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocator_DONTUSE.CurrentBusinessUnit.Current().Id.Value));
+			FakeTeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				1, 2, 2, 2, 2, 2, 2,
 				1, 2, 2, 2, 2, 2, 2));
