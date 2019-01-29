@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OpenAndSplitTargetSkill>().As<IOpenAndSplitTargetSkill>();
 			builder.RegisterType<ExportMultisiteSkillProcessor>().As<IExportMultisiteSkillProcessor>();
 			builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-			builder.RegisterType<SkillDayChangedEventHandler>().As<ISkillDayChangedEventHandler>().SingleInstance();
 		}
 
 		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

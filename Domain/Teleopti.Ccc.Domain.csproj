@@ -216,8 +216,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateAnalyticsScheduleLogger.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestAvailability.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastUpdater.cs" />
-    <Compile Include="ApplicationLayer\SkillDay\ISkillDayChangedEventHandler.cs" />
-    <Compile Include="ApplicationLayer\SkillDay\SkillDayChangedEventHandler.cs" />
     <Compile Include="Auditing\ITenantAudit.cs" />
     <Compile Include="Auditing\PurgeAuditRunner.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
