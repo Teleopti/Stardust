@@ -26,6 +26,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 	[LoggedOff]
 	[DefaultData]
 	[RealPermissions]
+	[NonParallelizable] //would be good to get rid of but currently reading service locator on Ientity.businessunit
 	public class SchedulingDesktopPermissionTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
