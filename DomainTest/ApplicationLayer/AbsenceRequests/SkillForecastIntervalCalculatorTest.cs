@@ -86,29 +86,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new[] {phoneSkill.Id.GetValueOrDefault(), emailSkill.Id.GetValueOrDefault()}, new DateTimePeriod(dtp.StartDate.Date.Utc(),dtp.EndDate.Date.Utc()));
 			skillStaffIntervals.Count.Should().Be.EqualTo(16);
 		}
-		
-
-		[Test, Ignore("Tested in another way. tested in filter tests that are below")]
-		public void ShouldSaveTheIntervaWitinProvidedPeriod()
-		{
-			var dtp = new DateOnlyPeriod(new DateOnly(2019, 2, 16), new DateOnly(2019, 2, 19));
-			var now = new DateTime(2019, 2, 17, 16, 0, 0);
-			IntervalLengthFetcher.Has(15);
-			Now.Is(now);
-			var skillOpenHours = new TimePeriod(8, 9);
-			var skill = createSkill(15, "phone", skillOpenHours);
-			var scenario = ScenarioFactory.CreateScenarioWithId("x", true);
-			var skillDay15 = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2019, 2, 15), skillOpenHours, 11, 5, 100);
-			var skillDay17 = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2019, 2, 17), skillOpenHours, 5.7, 8, 200);
-			SkillRepository.Add(skill);
-			SkillDayRepository.AddRange( new[]{ skillDay15,skillDay17});
-			ScenarioRepository.Add(scenario);
-
-			//Target.Calculate(new List<ISkillDay> { skillDay15});
-
-			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(new[] { skill.Id.GetValueOrDefault() },new DateTimePeriod(dtp.StartDate.Date.Utc(),dtp.EndDate.Date.Utc()));
-			skillStaffIntervals.Count.Should().Be.EqualTo(4);
-		}
 
 
 		[Test]
@@ -223,10 +200,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldFilterSkillDaysThatAreFarInFuture()
 		{
-			var dtp = new DateOnlyPeriod(new DateOnly(2019, 1, 16), new DateOnly(2019, 3, 19));
+			var dtp = new DateOnlyPeriod(new DateOnly(2019, 1, 16), new DateOnly(2019, 4, 19));
 			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
 			IntervalLengthFetcher.Has(15);
 			Now.Is(now);

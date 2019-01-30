@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			BusinessUnitRepository.Add(bu);
 			
 			var dtp = new DateOnlyPeriod(new DateOnly(2019, 2, 16), new DateOnly(2019, 2, 19));
-			var now = new DateTime(2019, 2, 17, 16, 0, 0);
+			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
 			IntervalLengthFetcher.Has(15);
 			Now.Is(now);
 			var skillOpenHours = new TimePeriod(8, 9);

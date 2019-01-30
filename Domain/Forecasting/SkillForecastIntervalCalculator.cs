@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			var skillDays = _skillDayRepository.LoadSkillDays(skillDayIds);
 			var validPeriod = _skillForecastReadModelPeriodBuilder.Build();
-			return skillDays.Where(x => validPeriod.Intersect(x.CurrentDate.ToDateTimePeriod(TimeZoneInfo.Utc)));
+			return skillDays.Where(x => x.CurrentDate.Date >= validPeriod.StartDateTime && x.CurrentDate.Date <= validPeriod.EndDateTime);
 		}
 		
 	}
@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public DateTimePeriod Build()
 		{
-			var startDate = _now.UtcDateTime().AddDays(-_skillForecastSettingsReader.NumberOfDaysInPast);
-			var endDate = _now.UtcDateTime().AddDays(_staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 49));
+			var startDate = _now.UtcDateTime().Date.AddDays(-_skillForecastSettingsReader.NumberOfDaysInPast);
+			var endDate = _now.UtcDateTime().Date.AddDays(_staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 49));
 			endDate = endDate.AddDays(_skillForecastSettingsReader.NumberOfExtraDaysInFuture);
 			return new DateTimePeriod(startDate.Date,endDate.Date);
 		}
