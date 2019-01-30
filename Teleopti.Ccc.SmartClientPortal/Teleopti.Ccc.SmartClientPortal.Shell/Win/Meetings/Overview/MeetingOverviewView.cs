@@ -515,7 +515,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview
 
 		private static bool isPermittedToViewSchedules()
 		{
-			IPerson person = ((ITeleoptiPrincipalForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson();
+			IPerson person = ((ITeleoptiPrincipalWithUnsafePerson)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson();
 			ITeam rightClickedPersonsTeam = person.MyTeam(DateOnly.Today);
 			if (PrincipalAuthorization.Current_DONTUSE().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
 			{

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void VerifyBusinessUnitCollection()
 		{
-            var expected = ((ITeleoptiIdentityForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnit();
+            var expected = ((ITeleoptiIdentityWithUnsafeBusinessUnit)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnit();
 			var repository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 
 			commonMocks();

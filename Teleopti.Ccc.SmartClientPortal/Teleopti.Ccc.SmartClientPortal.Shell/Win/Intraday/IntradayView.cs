@@ -675,7 +675,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 					if (wizard.ShowDialog(this) != DialogResult.OK) return;
 
 					var principal = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal;
-					var person = ((ITeleoptiPrincipalForLegacy)principal).UnsafePerson();
+					var person = ((ITeleoptiPrincipalWithUnsafePerson)principal).UnsafePerson();
 					var @event = new RecalculateForecastOnSkillCollectionEvent
 					{
 						SkillCollection = new Collection<RecalculateForecastOnSkill>(),

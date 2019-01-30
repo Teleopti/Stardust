@@ -154,7 +154,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 						 (_userDefinedGroupings = _jobParameters.Helper.Repository.LoadUserDefinedGroupings());
 		}
 
-		public IBusinessUnit BusinessUnit => ((ITeleoptiIdentityForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnit();
+		public IBusinessUnit BusinessUnit => ((ITeleoptiIdentityWithUnsafeBusinessUnit)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnit();
 
 		public DateOnlyPeriod SelectedPeriod => DateOnly.Today.ToDateOnlyPeriod();
 

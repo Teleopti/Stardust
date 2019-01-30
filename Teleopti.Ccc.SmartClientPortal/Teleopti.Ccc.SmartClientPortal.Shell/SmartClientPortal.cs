@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			Cursor = Cursors.WaitCursor;
 			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
 			_mainStatusStrip.Refresh();
-			var identity = (ITeleoptiIdentityForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity;
+			var identity = (ITeleoptiIdentityWithUnsafeBusinessUnit)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity;
 			var loggedOnBu = identity.BusinessUnit();
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 

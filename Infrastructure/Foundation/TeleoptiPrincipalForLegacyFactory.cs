@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		public ITeleoptiPrincipal MakePrincipal(IPrincipalSource source, IDataSource dataSource, string tokenIdentity)
 		{
-			var identity = new TeleoptiIdentityForLegacy(
+			var identity = new TeleoptiIdentityWithUnsafeBusinessUnit(
 				source?.PrincipalName() ?? string.Empty,
 				dataSource,
 				source?.UnsafeBusinessUnit() as IBusinessUnit, 
 				WindowsIdentity.GetCurrent(),
 				tokenIdentity);
-			return new TeleoptiPrincipalForLegacy(identity, source);
+			return new TeleoptiPrincipalWithUnsafePerson(identity, source);
 		}
 	}
 }

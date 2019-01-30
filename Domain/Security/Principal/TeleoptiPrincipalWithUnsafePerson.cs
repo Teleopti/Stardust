@@ -7,32 +7,32 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public static class TeleoptiPrincipalForLegacyExtensions
+	public static class TeleoptiPrincipalWithUnsafePersonExtensions
 	{
-		public static IPerson UnsafePerson(this ITeleoptiPrincipalForLegacy instance)
+		public static IPerson UnsafePerson(this ITeleoptiPrincipalWithUnsafePerson instance)
 		{
 			return instance.UnsafePersonObject() as IPerson;
 		}
 	}
 
-	public class TeleoptiPrincipalForLegacy : GenericPrincipal, ITeleoptiPrincipal, ITeleoptiPrincipalForLegacy
+	public class TeleoptiPrincipalWithUnsafePerson : GenericPrincipal, ITeleoptiPrincipal, ITeleoptiPrincipalWithUnsafePerson
 	{
 		private IClaimsOwner _claimsOwner;
 		private IPerson _person;
 		private IIdentity _identity;
 
-		public TeleoptiPrincipalForLegacy(IIdentity identity, IPerson person) : this(identity, new PersonAndBusinessUnit(person, null))
+		public TeleoptiPrincipalWithUnsafePerson(IIdentity identity, IPerson person) : this(identity, new PersonAndBusinessUnit(person, null))
 		{
 		}
 		
-		public TeleoptiPrincipalForLegacy(IIdentity identity, IPrincipalSource source) : base(identity, new string[] { })
+		public TeleoptiPrincipalWithUnsafePerson(IIdentity identity, IPrincipalSource source) : base(identity, new string[] { })
 		{
 			_person = source.UnsafePerson() as IPerson;
 			_claimsOwner = new ClaimsOwner(source);
 			initializeFromPerson();
 		}
 
-		public void ChangePrincipal(TeleoptiPrincipalForLegacy principal)
+		public void ChangePrincipal(TeleoptiPrincipalWithUnsafePerson principal)
 		{
 			_person = principal._person;
 			_claimsOwner = principal._claimsOwner;
@@ -59,6 +59,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public IEnumerable<ClaimSet> ClaimSets => _claimsOwner.ClaimSets;
 		public void AddClaimSet(ClaimSet claimSet) => _claimsOwner.AddClaimSet(claimSet);
 
-		object ITeleoptiPrincipalForLegacy.UnsafePersonObject() => _person;
+		object ITeleoptiPrincipalWithUnsafePerson.UnsafePersonObject() => _person;
 	}
 }

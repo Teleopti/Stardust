@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             _targetControl = targetControl;
             if (StateHolderReader.IsInitialized)
             {
-                if (Thread.CurrentPrincipal is TeleoptiPrincipalForLegacy)
+                if (Thread.CurrentPrincipal is TeleoptiPrincipalWithUnsafePerson)
                 {
                     _targetControl.RightToLeft =
-                        (((ITeleoptiPrincipalForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson().PermissionInformation.RightToLeftDisplay)
+                        (((ITeleoptiPrincipalWithUnsafePerson)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson().PermissionInformation.RightToLeftDisplay)
                             ? RightToLeft.Yes
                             : RightToLeft.No;
 
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			string resourceText = UserTexts.Resources.ResourceManager.GetString(translatedString);
 	        if (toUpper && !resourceText.IsNullOrEmpty() && StateHolderReader.IsInitialized)
 	        {
-		        if (Thread.CurrentPrincipal is TeleoptiPrincipalForLegacy)
+		        if (Thread.CurrentPrincipal is TeleoptiPrincipalWithUnsafePerson)
 		        {
-			        var cultureInfo = ((ITeleoptiPrincipalForLegacy) TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson().PermissionInformation.UICulture();
+			        var cultureInfo = ((ITeleoptiPrincipalWithUnsafePerson) TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).UnsafePerson().PermissionInformation.UICulture();
 			        resourceText = resourceText.ToUpper(cultureInfo);
 		        }
 	        }

@@ -155,9 +155,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    private void changeBusinessUnit(IBusinessUnit businessUnit,IPerson person)
 	    {
 			 var identity = new TeleoptiIdentity("test user", new FakeDataSource(), () => businessUnit?.Id, businessUnit?.Name, WindowsIdentity.GetCurrent(), null);
-			 var principalForTest = new TeleoptiPrincipalForLegacy(identity, person);
-			 Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(identity, person);
-			 ((TeleoptiPrincipalForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).ChangePrincipal(principalForTest);
+			 var principalForTest = new TeleoptiPrincipalWithUnsafePerson(identity, person);
+			 Thread.CurrentPrincipal = new TeleoptiPrincipalWithUnsafePerson(identity, person);
+			 ((TeleoptiPrincipalWithUnsafePerson)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal).ChangePrincipal(principalForTest);
 	    }
 
         private static testData dummyValue()

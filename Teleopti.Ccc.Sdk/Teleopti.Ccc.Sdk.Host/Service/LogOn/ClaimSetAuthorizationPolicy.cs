@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
                 return true;
             }
 
-            var teleoptiPrincipal = obj as TeleoptiPrincipalForLegacy;
+            var teleoptiPrincipal = obj as TeleoptiPrincipalWithUnsafePerson;
             if (string.IsNullOrEmpty(teleoptiPrincipal?.Identity.Name))
             {
                 return true;

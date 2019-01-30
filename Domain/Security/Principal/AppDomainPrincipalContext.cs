@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
 		{
-			if (_currentTeleoptiPrincipal.Current() is TeleoptiPrincipalForLegacy currentPrincipal)
+			if (_currentTeleoptiPrincipal.Current() is TeleoptiPrincipalWithUnsafePerson currentPrincipal)
 			{
-				currentPrincipal.ChangePrincipal((TeleoptiPrincipalForLegacy) principal);
+				currentPrincipal.ChangePrincipal((TeleoptiPrincipalWithUnsafePerson) principal);
 			}
 			else
 			{

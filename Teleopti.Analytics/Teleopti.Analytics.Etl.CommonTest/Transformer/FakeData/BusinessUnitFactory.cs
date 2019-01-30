@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
     {
         public static IBusinessUnit CreateBusinessUnitWithSitesAndTeams()
         {
-            IBusinessUnit swedenBusinessUnit = ((ITeleoptiIdentityForLegacy)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnit();
+            IBusinessUnit swedenBusinessUnit = ((ITeleoptiIdentityWithUnsafeBusinessUnit)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnit();
             Site danderydUnit = SiteFactory.CreateSimpleSite("Danderyd");
             Site strangnasUnit = SiteFactory.CreateSimpleSite("Strangnas");
             danderydUnit.AddTeam(TeamFactory.CreateSimpleTeam("Team Raptor"));

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			if (principal == null)
 				return null;
 
-			if (principal is ITeleoptiPrincipalForLegacy principalWithPerson)
+			if (principal is ITeleoptiPrincipalWithUnsafePerson principalWithPerson)
 				return principalWithPerson.UnsafePersonObject();
 			
 			var hasUnitOfWork = _unitOfWork?.Current()?.HasCurrentUnitOfWork() ?? false;

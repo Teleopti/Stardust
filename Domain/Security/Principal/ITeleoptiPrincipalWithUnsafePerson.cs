@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public interface ITeleoptiPrincipalForLegacy
+	public interface ITeleoptiPrincipalWithUnsafePerson
 	{
 		object UnsafePersonObject();
 	}

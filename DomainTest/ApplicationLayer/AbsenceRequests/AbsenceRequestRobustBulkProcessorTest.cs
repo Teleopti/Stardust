@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
-			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+			Thread.CurrentPrincipal = new TeleoptiPrincipalWithUnsafePerson(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			var queueId = addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator, sent);
 
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
-			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+			Thread.CurrentPrincipal = new TeleoptiPrincipalWithUnsafePerson(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			var queueId = addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator, sent);
 
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
-			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+			Thread.CurrentPrincipal = new TeleoptiPrincipalWithUnsafePerson(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator, sent);
 
@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
-			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+			Thread.CurrentPrincipal = new TeleoptiPrincipalWithUnsafePerson(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			var queuedId = addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator, new DateTime());
 
@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest2);
 
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
-			Thread.CurrentPrincipal = new TeleoptiPrincipalForLegacy(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
+			Thread.CurrentPrincipal = new TeleoptiPrincipalWithUnsafePerson(newIdentity, PersonRepository.FindAllSortByName().FirstOrDefault());
 
 			var queuedId1 = addToQueue(personRequest, RequestValidatorsFlag.IntradayValidator, new DateTime());
 			var queuedId2 = addToQueue(personRequest2, RequestValidatorsFlag.BudgetAllotmentValidator, new DateTime());

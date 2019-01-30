@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
     {
         private IPerson person;
         private ITeleoptiIdentity identity;
-        private TeleoptiPrincipalForLegacy target;
+        private TeleoptiPrincipalWithUnsafePerson target;
 
         [SetUp]
         public void Setup()
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             person = PersonFactory.CreatePerson();
 			identity = new TeleoptiIdentity("test", null, null, null, null, null);
 
-            target = new TeleoptiPrincipalForLegacy(identity, person);
+            target = new TeleoptiPrincipalWithUnsafePerson(identity, person);
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             using (mocks.Playback())
             {
 				var newIdentity = new TeleoptiIdentity("test2", null, null, null, null, null);
-                var newTarget = new TeleoptiPrincipalForLegacy(newIdentity, newPerson);
+                var newTarget = new TeleoptiPrincipalWithUnsafePerson(newIdentity, newPerson);
 
                 target.ChangePrincipal(newTarget);
 				
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2011, 5, 1), site.TeamCollection[0]);
             person.AddPersonPeriod(personPeriod);
             
-            target = new TeleoptiPrincipalForLegacy(identity,person);
+            target = new TeleoptiPrincipalWithUnsafePerson(identity,person);
 
             target.Organisation.BelongsToBusinessUnit(personPeriod.Team.BusinessUnitExplicit,new DateOnly(2011,5,1)).Should().Be.True();
             target.Organisation.BelongsToSite(personPeriod.Team.Site,new DateOnly(2011,5,1)).Should().Be.True();

@@ -248,11 +248,11 @@
     <Compile Include="Repositories\ISkillForecastReadModelRepository.cs" />
     <Compile Include="Scheduling\TeamSettings.cs" />
     <Compile Include="Scheduling\UpdateSchedulingOptionsWithTeamSettings.cs" />
-    <Compile Include="Security\Principal\ITeleoptiIdentityForLegacy.cs" />
-    <Compile Include="Security\Principal\ITeleoptiPrincipalForLegacy.cs" />
+    <Compile Include="Security\Principal\ITeleoptiIdentityWithUnsafeBusinessUnit.cs" />
+    <Compile Include="Security\Principal\ITeleoptiPrincipalWithUnsafePerson.cs" />
     <Compile Include="Repositories\PersonWaitlistedAbsenceRequest.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
-    <Compile Include="Security\Principal\TeleoptiIdentityForLegacy.cs" />
+    <Compile Include="Security\Principal\TeleoptiIdentityWithUnsafeBusinessUnit.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.cs" />
     <Compile Include="Staffing\IStaffingViewModelCreator.cs" />
     <Compile Include="Staffing\ResourceCalculationUsingReadModels.cs" />
@@ -3291,7 +3291,7 @@
     <Compile Include="Logon\ClaimSetForApplicationRole.cs" />
     <Compile Include="Security\Principal\ITeleoptiIdentity.cs" />
     <Compile Include="Security\Principal\TeleoptiIdentity.cs" />
-    <Compile Include="Security\Principal\TeleoptiPrincipalForLegacy.cs" />
+    <Compile Include="Security\Principal\TeleoptiPrincipalWithUnsafePerson.cs" />
     <Compile Include="Security\Principal\TeleoptiPrincipal.cs" />
     <Compile Include="Security\Principal\UserCulture.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
