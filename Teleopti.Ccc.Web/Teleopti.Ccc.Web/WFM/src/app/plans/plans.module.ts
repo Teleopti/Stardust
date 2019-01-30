@@ -2,12 +2,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { DowngradeableComponent } from '@wfm/types';
-import { LandingPageComponent } from './components';
 import { PlanningGroupService } from './shared';
 import { IStateService } from 'angular-ui-router';
+import { TitleBarComponent } from './components/title-bar';
+import {LandingPageComponent} from "./pages/planning-groups/overview/landing.component";
 
 @NgModule({
-	declarations: [LandingPageComponent],
+	declarations: [LandingPageComponent, TitleBarComponent],
 	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [
 		PlanningGroupService,
