@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public void Calculate(IEnumerable<Guid> skillDayIds)
 		{
 			var justSkillDays = filterSkillDays(skillDayIds);
+			if (!justSkillDays.Any()) return;
 			var skills = justSkillDays.Select(x => x.Skill);
 			var period = new DateOnlyPeriod(justSkillDays.Min(x => x.CurrentDate),justSkillDays.Max(x => x.CurrentDate));
 			var skillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
