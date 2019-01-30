@@ -280,8 +280,12 @@ var rtaTester = (function () {
 					spyOn($translate, 'instant').and.callFake(function (key) {
 						return state.$fakeBackend.data.translation()[key] || key;
 					});
-					
+
 					locale = moment.locale();
+					
+                    $fakeBackend.with.currentUserInfo({
+                        DateFormatLocale: "sv-SE"
+                    });
 				}]
 		));
 

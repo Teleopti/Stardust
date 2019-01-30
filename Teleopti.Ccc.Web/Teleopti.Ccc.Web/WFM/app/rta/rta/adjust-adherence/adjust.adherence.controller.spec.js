@@ -60,9 +60,6 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     it('should have preselected period', function (t) {
         var now = new Date('2019-01-22T08:00:00');
         jasmine.clock().mockDate(now);
-        t.backend.with.currentUserInfo({
-            DateFormatLocale: "sv-SE"
-        });
 
         var vm = t.createController();
 
@@ -70,9 +67,6 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     });
 
     it('should update preselected period', function (t) {
-        t.backend.with.currentUserInfo({
-            DateFormatLocale: "sv-SE"
-        });
         var vm = t.createController();
 
         t.apply(function () {
@@ -127,9 +121,6 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
 
     it('should display multiple adjusted periods', function (t) {
         t.backend.with
-            .currentUserInfo({
-                DateFormatLocale: "sv-SE"
-            })
             .adjustedPeriods({
                 StartTime: '2019-01-25T07:00:00',
                 EndTime: '2019-01-25T09:00:00'
@@ -148,11 +139,7 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     });
 
     it('should refresh view after adjust to neutral', function (t) {
-        t.backend.with.currentUserInfo({
-                DateFormatLocale: "sv-SE"
-            });
         var vm = t.createController();
-
         t.backend.with
             .adjustedPeriods({
                 StartTime: '2019-01-28T09:00:00',
@@ -164,13 +151,12 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
             vm.endDate = new Date(2019, 0, 28);
             vm.endTime = new Date('2019-01-28T10:00:00');
         });
+        
         t.apply(function () {
             vm.adjustToNeutral();
         });
 
         expect(vm.adjustedPeriods[0].StartTime).toEqual('2019-01-28 09:00');
         expect(vm.adjustedPeriods[0].EndTime).toEqual('2019-01-28 10:00');
-    });        
-    
-
+    });
 });

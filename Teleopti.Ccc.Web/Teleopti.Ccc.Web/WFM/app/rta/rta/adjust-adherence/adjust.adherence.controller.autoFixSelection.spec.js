@@ -2,13 +2,11 @@
 
 rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     it('should auto fix start date', function (t) {
-        var now = new Date('2019-01-25T12:00:00');
-        jasmine.clock().mockDate(now);
-        t.backend.with.currentUserInfo({
-            DateFormatLocale: "sv-SE"
-        });
         var vm = t.createController();
-
+        
+        t.apply(function () {
+            vm.startDate = new Date(2019, 0, 21);
+        });
         t.apply(function () {
             vm.endDate = new Date(2019, 0, 20);
         });
@@ -17,12 +15,10 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     });    
     
     it('should auto fix end date', function (t) {
-        var now = new Date('2019-01-25T12:00:00');
-        jasmine.clock().mockDate(now);
-        t.backend.with.currentUserInfo({
-            DateFormatLocale: "sv-SE"
-        });
         var vm = t.createController();
+        t.apply(function () {
+            vm.endDate = new Date(2019, 0, 24);
+        });
 
         t.apply(function () {
             vm.startDate = new Date(2019, 0, 25);
@@ -32,13 +28,14 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     });
 
     it('should auto fix start time', function (t) {
-        var now = new Date('2019-01-25T12:00:00');
-        jasmine.clock().mockDate(now);
-        t.backend.with.currentUserInfo({
-            DateFormatLocale: "sv-SE"
-        });
         var vm = t.createController();
-
+        
+        t.apply(function () {
+            vm.startDate = new Date(2019, 0, 24);
+            vm.endDate = new Date(2019, 0, 24);
+            vm.startTime = new Date('2019-01-25T08:00:00'); 
+            vm.endTime = new Date('2019-01-25T18:00:00'); 
+        });
         t.apply(function () {
             vm.endTime = new Date('2019-01-25T07:00:00');
         });
@@ -47,13 +44,14 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     });
 
     it('should auto fix end time', function (t) {
-        var now = new Date('2019-01-25T12:00:00');
-        jasmine.clock().mockDate(now);
-        t.backend.with.currentUserInfo({
-            DateFormatLocale: "sv-SE"
-        });
         var vm = t.createController();
-
+        
+        t.apply(function () {
+            vm.startDate = new Date(2019, 0, 24);
+            vm.endDate = new Date(2019, 0, 24);
+            vm.startTime = new Date('2019-01-25T08:00:00');
+            vm.endTime = new Date('2019-01-25T18:00:00');
+        });
         t.apply(function () {
             vm.startTime = new Date('2019-01-25T19:00:00');
         });
@@ -62,18 +60,13 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     });
 
     it('should auto fix end time on change of start date', function (t) {
-        var now = new Date('2019-01-29T20:00:00');
-        jasmine.clock().mockDate(now);
-        t.backend.with.currentUserInfo({
-            DateFormatLocale: "sv-SE"
-        });
         var vm = t.createController();
 
         t.apply(function () {
+            vm.startDate = new Date(2019, 0, 28);
             vm.endDate = new Date(2019, 0, 29);
-        });
-        t.apply(function () {
             vm.startTime = new Date('2019-01-29T19:00:00');
+            vm.endTime = new Date('2019-01-29T08:00:00');
         });
         t.apply(function () {
             vm.startDate = new Date(2019, 0, 29);
@@ -83,18 +76,13 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
     });
     
     it('should auto fix start time on change of end date', function (t) {
-        var now = new Date('2019-01-29T20:00:00');
-        jasmine.clock().mockDate(now);
-        t.backend.with.currentUserInfo({
-            DateFormatLocale: "sv-SE"
-        });
         var vm = t.createController();
 
         t.apply(function () {
             vm.startDate = new Date(2019, 0, 27);
-        });
-        t.apply(function () {
+            vm.endDate = new Date(2019, 0, 28);
             vm.startTime = new Date('2019-01-29T19:00:00');
+            vm.endTime = new Date('2019-01-29T18:00:00');
         });
         t.apply(function () {
             vm.endDate = new Date(2019, 0, 27);
