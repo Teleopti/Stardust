@@ -18,6 +18,7 @@ import { PeopleModule } from './people/people.module';
 import { SystemSettingsModule } from './system-settings/system-settings.module';
 import { ReportModule } from './reports/reports.module';
 import { ResetPasswordModule } from './reset-password/reset-password.module';
+import { PlansModule } from './plans/plans.module';
 
 @NgModule({
 	declarations: [BootstrapComponent],
@@ -26,6 +27,7 @@ import { ResetPasswordModule } from './reset-password/reset-password.module';
 		BrowserModule,
 		UpgradeModule,
 		PeopleModule,
+		PlansModule,
 		SystemSettingsModule,
 		AuthenticationModule,
 		ApiAccessModule,
