@@ -115,7 +115,7 @@
             name: 'currentUserInfo',
 			url: /Global\/User\/CurrentUser/,
             clear: function () {
-                return {}
+                return { DateFormatLocale: "sv-SE" }
             },
             add: function (data, item) {
                 return item;
