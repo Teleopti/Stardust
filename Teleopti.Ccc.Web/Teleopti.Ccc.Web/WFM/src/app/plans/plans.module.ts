@@ -24,5 +24,5 @@ import { LandingPageComponent } from './pages/planning-groups/overview/landing.c
 export class PlansModule {}
 
 export const plansComponents: DowngradeableComponent[] = [
-	{ ng1Name: 'ng2PlansLandingPage', ng2Component: LandingPageComponent }
+	{ ng1Name: 'ng2Plans', ng2Component: LandingPageComponent }
 ];

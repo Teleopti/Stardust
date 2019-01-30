@@ -3,7 +3,7 @@
 
 	angular.module('wfm.resourceplanner').config(stateConfig);
 
-	function stateConfig($stateProvider) {
+	function stateConfig($stateProvider, ToggleProvider) {
 		$stateProvider
 			.state('resourceplanner', {
 				url: '/resourceplanner',
@@ -11,7 +11,11 @@
 			})
 			.state('resourceplanner.overview', {
 				url: '',
-				templateUrl: 'app/resourceplanner/planning_group/planninggroups.html',
+				templateUrl: function() {
+					return ToggleProvider.WFM_Plans_Redesign_81198
+						? 'app/resourceplanner/plans-modern.html'
+						: 'app/resourceplanner/planning_group/planninggroups.html';
+				}, 
 				controller: 'planningGroupsController as vm',
 				resolve: {
 					planningGroups: [
@@ -23,10 +27,6 @@
 						}
 					]
 				}
-			})
-			.state('resourceplanner.angular', {
-				url: '/angular',
-				template: '<ng2-plans-landing-page></ng2-plans-landing-page>'
 			})
 			.state('resourceplanner.createplanninggroup', {
 				url: '/createplanninggroup',

@@ -1692,6 +1692,7 @@
     <Content Include="WFM\app\requests\_modules.js" />
     <Content Include="WFM\app\resourceplanner\components\week-month-group.component.js" />
     <Content Include="WFM\app\resourceplanner\components\week-month-group.tpl.html" />
+    <Content Include="WFM\app\resourceplanner\plans-modern.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.controller.spec.js" />
