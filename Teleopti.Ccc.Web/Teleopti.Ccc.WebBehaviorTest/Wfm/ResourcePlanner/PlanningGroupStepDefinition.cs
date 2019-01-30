@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[Then(@"I should see '(.*)' in the planning group list")]
 		public void ThenIShouldSeeInThePlanningGroupList(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h2", planningGroupName);
+			Browser.Interactions.AssertAnyContains("tr [data-test-group-name]", planningGroupName);
 		}
 
 		[Then(@"I should see '(.*)' in the scheduling setting list")]
@@ -128,8 +128,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I click edit planning group '(.*)'")]
 		public void WhenIClickEditPlanningGroup(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".plan-group > div.list-header h2", planningGroupName);
-			Browser.Interactions.Click(".edit-plan-group");
+			Browser.Interactions.AssertAnyContains("tr [data-test-group-name]", planningGroupName);
+			Browser.Interactions.Click("tr a[data-test-edit-group]");
 		}
 		
 		[When(@"I click planning group setting '(.*)'")]
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[Then(@"I should not see '(.*)' in the planning group list")]
 		public void ThenIShouldNotSeeInThePlanningGroupList(string planningGroupName)
 		{
-			Browser.Interactions.AssertNoContains(".con-fluid-row", ".plan-group > div.list-header h1", planningGroupName);
+			Browser.Interactions.AssertNoContains("tbody", "tr [data-test-group-name]", planningGroupName);
 		}
 
 		[Then(@"I should not see '(.*)' in the scheduling setting list")]

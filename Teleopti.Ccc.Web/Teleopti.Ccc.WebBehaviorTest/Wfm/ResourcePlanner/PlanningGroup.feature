@@ -1,5 +1,6 @@
 ﻿@WFM
 @OnlyRunIfEnabled('Wfm_WebPlan_Pilot_46815')
+@OnlyRunIfEnabled('WFM_Plans_Redesign_81198')
 Feature: PlanningGroup
 	As a resource planner 
 	I need to generate a plan (schedule&opt) for my part of the organization,
