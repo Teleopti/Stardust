@@ -105,7 +105,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 
 	onSelectSkill(e: SkillPickerItem) {
 		this.selectedSkillOrGroup = e;
-		this.selectedSubSkillId = undefined;
+		this.selectedSubSkillId = 'all';
 		this.updateData();
 		this.setPersistedData();
 	}
