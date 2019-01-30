@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -439,6 +440,35 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 			skillCDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
+		}
+		
+		
+		[Test]
+		[Ignore("75837")]
+		public void ShouldShovelMultipleStepsIfPrimaryAndMiddleSkillAreClosed()
+		{
+			const int numberOfAgents = 4;
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("A").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsClosed();
+			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillB = new Skill("B").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsClosed();
+			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillC = new Skill("C").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(3).IsOpen();
+			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var assignments = new List<IPersonAssignment>();
+			for (var i = 0; i < numberOfAgents; i++)
+			{
+				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB, skillC);
+				var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(16, 24));
+				assignments.Add(ass);
+			}
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, assignments, new[] { skillADay, skillBDay, skillCDay }, false, false));
+
+			skillCDay.SkillStaffPeriodCollection.Last().CalculatedResource
+				.Should().Be.EqualTo(numberOfAgents); //or maybe it should be 1? At least not 0 as it is now...
 		}
 	}
 }
