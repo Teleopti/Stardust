@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			Instances.TryPeek(out var current);
 			if (current == null)
-				throw new Exception("DONT USE SERVICE LOCATOR!");
+				throw new ServiceLocatorNotAllowedException("DONT USE SERVICE LOCATOR!");
 			return current;
 		}
 
@@ -66,5 +66,12 @@ namespace Teleopti.Ccc.Domain.Common
 		public static ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal => Instance.current()?.CurrentTeleoptiPrincipal;
 		public static ICurrentAuthorization CurrentAuthorization => Instance.current().CurrentAuthorization;
 		public static ITimeZoneGuard TimeZoneGuard => Instance.current().TimeZoneGuard;
+	}
+
+	public class ServiceLocatorNotAllowedException : Exception
+	{
+		public ServiceLocatorNotAllowedException(string message) : base(message)
+		{
+		}
 	}
 }
