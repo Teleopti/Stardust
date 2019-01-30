@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		public IEnumerable<PreferenceDayDomainData> Days { get; set; }
 		public int MaxMustHave { get; set; }
 		public int CurrentMustHave { get; set; }
+		public IEnumerable<DateOnly> ScheduledDays { get; set; }
 	}
 
 	public class PreferenceDayDomainData

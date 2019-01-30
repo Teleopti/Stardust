@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			public DateOnly FirstDayOfWeek { get; set; }
 			public DateOnlyPeriod Period { get; set; }
 			public IWorkflowControlSet WorkflowControlSet { get; set; }
+			public IEnumerable<DateOnly> ScheduledDays { get; set; }
 		}
 
 		private class DayMappingData
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			public DateOnly Date { get; set; }
 			public DateOnlyPeriod Period { get; set; }
 			public IWorkflowControlSet WorkflowControlSet { get; set; }
+			public bool IsScheduled { get; set; }
 		}
 
 		public PreferenceViewModel Map(PreferenceDomainData s)
@@ -139,7 +141,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			var isInsidePreferencePeriod = s.WorkflowControlSet.PreferencePeriod.Contains(s.Date);
 			var isInsidePreferenceInputPeriod = s.WorkflowControlSet.PreferenceInputPeriod.Contains(_now.ServerDate_DontUse());
 
-			return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod;
+			return isInsideSchedulePeriod && isInsidePreferencePeriod && isInsidePreferenceInputPeriod && !s.IsScheduled;
 		}
 
 		private WeekViewModel map(PreferenceWeekMappingData s)
@@ -149,9 +151,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			{
 				Days =
 					datesThisWeek.Select(
-							d => new DayMappingData {Date = d, Period = s.Period, WorkflowControlSet = s.WorkflowControlSet,})
-						.Select(map)
-						.ToArray()
+							d => new DayMappingData {
+								Date = d,
+								Period = s.Period,
+								WorkflowControlSet = s.WorkflowControlSet,
+								IsScheduled =s.ScheduledDays.Contains(d)})
+								.Select(map)
+								.ToArray()
 			};
 		}
 		
@@ -254,6 +260,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				FirstDayOfWeek = d,
 				Period = s.Period,
 				WorkflowControlSet = s.WorkflowControlSet,
+				ScheduledDays = s.ScheduledDays
 			}).Select(map).ToArray();
 		}
 	}
