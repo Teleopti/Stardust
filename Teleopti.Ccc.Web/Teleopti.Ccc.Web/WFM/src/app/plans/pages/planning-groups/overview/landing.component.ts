@@ -1,9 +1,9 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { NavigationService } from 'src/app/core/services';
-import { map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { FormBuilder, FormControl } from '@angular/forms';
-import {PlanningGroup} from "../../../models";
-import {PlanningGroupService} from "../../../shared";
+import { PlanningGroup } from '../../../models';
+import { PlanningGroupService } from '../../../shared';
 @Component({
 	selector: 'plans-landing-page',
 	templateUrl: './landing.component.html',

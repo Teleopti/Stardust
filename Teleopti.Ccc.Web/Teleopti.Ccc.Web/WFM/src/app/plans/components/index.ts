@@ -1,1 +1,1 @@
-export * from './landing-page/landing.component';
+export * from './title-bar';

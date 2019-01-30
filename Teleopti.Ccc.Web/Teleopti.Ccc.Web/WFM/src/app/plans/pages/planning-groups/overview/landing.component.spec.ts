@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite, PageObject } from '@wfm/test';
 import { MockTranslationModule } from '@wfm/mocks/translation';
 import { NzInputModule, NzTableModule, NzDividerModule } from 'ng-zorro-antd';
@@ -6,8 +6,8 @@ import { of } from 'rxjs';
 import { LandingPageComponent } from './landing.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NavigationService } from 'src/app/core/services';
-import {PlanningGroupService} from "../../../shared";
-import {TitleBarComponent} from "../../../components/title-bar";
+import { PlanningGroupService } from '../../../shared';
+import { TitleBarComponent } from '../../../components/title-bar';
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroups() {

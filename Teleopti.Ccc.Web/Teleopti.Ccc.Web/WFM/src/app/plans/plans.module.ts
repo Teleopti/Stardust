@@ -5,7 +5,7 @@ import { DowngradeableComponent } from '@wfm/types';
 import { PlanningGroupService } from './shared';
 import { IStateService } from 'angular-ui-router';
 import { TitleBarComponent } from './components/title-bar';
-import {LandingPageComponent} from "./pages/planning-groups/overview/landing.component";
+import { LandingPageComponent } from './pages/planning-groups/overview/landing.component';
 
 @NgModule({
 	declarations: [LandingPageComponent, TitleBarComponent],
