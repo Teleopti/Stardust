@@ -2425,6 +2425,7 @@
     <Content Include="WFM\src\app\plans\plans.module.ts" />
     <Content Include="WFM\src\app\plans\shared\index.ts" />
     <Content Include="WFM\src\app\plans\shared\planninggroup.service.ts" />
+    <Content Include="WFM\src\app\plans\shared\planningperiod.service.ts" />
     <Content Include="WFM\src\app\reports\mocks\audit-trail.ts" />
     <Content Include="WFM\src\app\reports\mocks\index.ts" />
     <Content Include="WFM\src\app\reports\pages\general-audit-trail\general-audit-trail.component.html" />

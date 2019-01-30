@@ -1,1 +1,68 @@
 <plans-title-bar><i class="mdi mdi-calendar"></i>{{ 'Plans' | translate }}</plans-title-bar>
+<div nz-row>
+    <button nz-button nzType="default">{{'ScheduleVerb' | translate}}</button>
+    <button nz-button nzType="default">{{'IntraOptimize' | translate}}</button>
+    <button nz-button nzType="default">{{'ClearScheduleResultAndHistoryData' | translate}}</button>
+    <button nz-button nzType="default">{{'PublishSchedulePlans' | translate}}</button>
+    <button nz-button nzType="default">{{'PlanGroupScheduling' | translate}}</button>
+
+    <nz-tabset>
+        <nz-tab nzTitle="{{'Overview'|translate}}">
+            <div nz-row>
+                <div class="wfm-chip-wrap" *ngIf="valLoading">
+                                        <span class="wfm-chip">
+                                            <span class="chip-handle chip-error">
+                                                ...
+                                            </span>
+                                            <span class="chip-text">{{'ValidationsAreLoading'|translate}}</span>
+                                        </span>
+                </div>
+                <div class="wfm-chip-wrap" ng-if="!valLoading">
+                                            <span class="wfm-chip">
+                                                <span class="chip-handle chip-error">
+                                                    <!--{{vm.valData.totalValNum}}-->
+                                                </span>
+                                                <span class="chip-text">{{'ValidationIssues'|translate}}</span>
+                                            </span>
+                </div>
+                <div class="wfm-chip-wrap">
+                                            <span class="wfm-chip">
+                                                <span class="chip-handle scheduled-agents">
+                                                    <!--{{vm.scheduledAgents}}/{{vm.totalAgents}}-->
+                                                </span>
+                                                <span class="chip-text">{{'ScheduledAgents'|translate}}</span>
+                                            </span>
+                </div>
+            </div>
+
+            <div class="grid-scroll-wrap">
+                <table class="overview">
+                    <!--<col width="20px"/>-->
+                    <!--<tr ng-repeat="(index, subnode) in dayNodes | limitTo:1 ">-->
+                        <!--<th class="datehead"-->
+                            <!--ng-repeat="datenode in subnode.SkillDetails">-->
+                            <!--<p class="tabledate">{{datenode.Date }}</p>-->
+                        <!--</th>-->
+                    <!--</tr>-->
+                    <tr *ngFor="let subnode of dayNodes">
+                        <td class="skillname">{{ subnode.SkillName }}</td>
+                        <td class="long" *ngFor="let node of subnode.SkillDetails"
+                            [ngClass]="{weekend: node.weekend}">
+                            <div class="resourceplanner-box"
+                                 [ngClass]="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
+                                <!--<md-tooltip>-->
+                                <!--{{'RelativeDifference' | translate}}:-->
+                                <!--{{node.parseDif}}% | {{subnode.SkillName}} |-->
+                                <!--{{node.Date }}-->
+                                <!--</md-tooltip>-->
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </nz-tab>
+        <nz-tab nzTitle="{{'Validations'|translate}}">
+            Content of Tab Pane 2
+        </nz-tab>
+    </nz-tabset>
+</div>
