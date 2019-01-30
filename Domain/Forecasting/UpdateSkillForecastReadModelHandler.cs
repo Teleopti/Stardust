@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			//may be this could be improved may be just call the new Skill SkillDayCalculator inthe loadSkillDays directly
 			//could be optimized
-			var justSkillDays = _skillDayRepository.LoadSkillDays(@event.SkillDayIds);
-			var skills = justSkillDays.Select(x => x.Skill);
-			var period = new DateOnlyPeriod(justSkillDays.Min(x => x.CurrentDate),justSkillDays.Max(x => x.CurrentDate));
-			var allSkillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
-			_skillForecastIntervalCalculator.Calculate(allSkillDays);
+			//var justSkillDays = _skillDayRepository.LoadSkillDays(@event.SkillDayIds);
+			//var skills = justSkillDays.Select(x => x.Skill);
+			//var period = new DateOnlyPeriod(justSkillDays.Min(x => x.CurrentDate),justSkillDays.Max(x => x.CurrentDate));
+			//var allSkillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
+			_skillForecastIntervalCalculator.Calculate(@event.SkillDayIds);
 		}
 	}
 }

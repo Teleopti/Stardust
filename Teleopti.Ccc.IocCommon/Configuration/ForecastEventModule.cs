@@ -50,6 +50,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_config.IsToggleEnabled(Toggles.WFM_Forecast_Readmodel_80790))
 			{
 				builder.RegisterType<SkillForecastIntervalCalculator>().SingleInstance();
+				builder.RegisterType<SkillForecastReadModelPeriodBuilder>().SingleInstance();
+				builder.RegisterType<SkillForecastSettingsReader>().SingleInstance();
+
 			}
 			
 
