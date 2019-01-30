@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Wfm.Adherence.Historical.AdjustAdherence;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
@@ -20,12 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			return Ok(new[] {new AdjustedPeriod() {StartTime = "2019-01-28 12:00", EndTime = "2019-01-28 14:00"}});
 		}					
-	}
-
-	public class AdjustAdherenceToNeutralCommand
-	{
-		public string StartTime;
-		public string EndTime;		
 	}
 
 	public class AdjustedPeriod
