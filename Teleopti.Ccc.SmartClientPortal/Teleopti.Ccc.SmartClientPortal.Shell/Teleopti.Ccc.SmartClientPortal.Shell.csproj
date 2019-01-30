@@ -1005,6 +1005,9 @@
     <Compile Include="WinCode\Scheduling\Editor\ShiftEditorSettings.cs" />
     <Compile Include="WinCode\Scheduling\Editor\ShiftEditorViewModel.cs" />
     <Compile Include="WinCode\Scheduling\Editor\TriggerShiftEditorUpdate.cs" />
+    <Compile Include="WinCode\Scheduling\ExportToScenarioAbsenceFinder.cs" />
+    <Compile Include="WinCode\Scheduling\ExportToScenarioAccountPersister.cs" />
+    <Compile Include="WinCode\Scheduling\ExportToScenarioResultPresenter.cs" />
     <Compile Include="WinCode\Scheduling\ExportToScenarioWarningData.cs" />
     <Compile Include="WinCode\Scheduling\FilterHourlyAvailabilityPresenter.cs" />
     <Compile Include="WinCode\Scheduling\FilterOvertimeAvailabilityPresenter.cs" />
@@ -1045,6 +1048,7 @@
     <Compile Include="WinCode\Scheduling\IAgentStudentAvailabilityCommand.cs" />
     <Compile Include="WinCode\Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="WinCode\Scheduling\IApprovePersonRequestCommand.cs" />
+    <Compile Include="WinCode\Scheduling\IExportToScenarioResultView.cs" />
     <Compile Include="WinCode\Scheduling\IGridSchedulesExtractor.cs" />
     <Compile Include="WinCode\Scheduling\IHandlePersonRequestCommand.cs" />
     <Compile Include="WinCode\Scheduling\INotesAltered.cs" />
@@ -3059,6 +3063,12 @@
     <Compile Include="Win\Scheduling\DrawRestrictionIcon.cs" />
     <Compile Include="Win\Scheduling\ExportToPdf.cs" />
     <Compile Include="Win\Scheduling\ExportToPdfGraphical.cs" />
+    <Compile Include="Win\Scheduling\ExportToScenarioResultView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Win\Scheduling\ExportToScenarioResultView.Designer.cs">
+      <DependentUpon>ExportToScenarioResultView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Win\Scheduling\FilterHourlyAvailabilityView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4778,6 +4788,9 @@
     <EmbeddedResource Include="Win\Scheduling\DaysOffControl.resx">
       <DependentUpon>DaysOffControl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Win\Scheduling\ExportToScenarioResultView.resx">
+      <DependentUpon>ExportToScenarioResultView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Scheduling\FilterHourlyAvailabilityView.resx">
       <DependentUpon>FilterHourlyAvailabilityView.cs</DependentUpon>

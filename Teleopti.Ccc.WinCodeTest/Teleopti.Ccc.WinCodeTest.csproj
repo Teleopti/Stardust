@@ -525,6 +525,8 @@
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
     <Compile Include="Scheduler\Editor\Bug26842.cs" />
+    <Compile Include="Scheduler\ExportToScenarioAbsenceFinderTest.cs" />
+    <Compile Include="Scheduler\ExportToScenarioAccountPersisterTest.cs" />
     <Compile Include="Scheduler\FakeBusinessRulesResponseHandler.cs" />
     <Compile Include="Scheduler\FakeScheduleView.cs" />
     <Compile Include="Scheduler\FilterHourlyAvailabilityPresenterTest.cs" />
@@ -561,6 +563,7 @@
     <Compile Include="Scheduler\DayPresenterNewTest.cs" />
     <Compile Include="Scheduler\DayPresenterScaleCalculatorTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorRoutedCommandsTest.cs" />
+    <Compile Include="Scheduler\ExportToScenarioResultTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllAvailabilityAvailableCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllAvailabilityFulfilledCommandTest.cs" />
     <Compile Include="Scheduler\GridlockCommands\GridlockAllAvailabilityUnavailableCommandTest.cs" />
