@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public class SkillForecastIntervalCalculator
 	{
-		//private readonly ILoadSkillDaysWithPeriodFlexibility _loadSkillDaysWithPeriodFlexibility;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly ISkillForecastReadModelRepository _skillForecastReadModelRepository;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public SkillForecastIntervalCalculator(ISkillForecastReadModelRepository skillForecastReadModelRepository,
 			IIntervalLengthFetcher intervalLengthFetcher, ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder)
 		{
-			//_loadSkillDaysWithPeriodFlexibility = loadSkillDaysWithPeriodFlexibility;
 			_skillForecastReadModelRepository = skillForecastReadModelRepository;
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_skillDayRepository = skillDayRepository;
@@ -33,27 +31,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;
 		}
 
-		////remove this method later on
-		//public void Calculate(List<ISkill> skills, DateOnlyPeriod dtp)
-		//{
-		//	//no child skill should be filterd out
-		//	//call this CalculateForecastedAgentsForEmailSkills
-
-		//	var skillDaysBySkills =
-		//		_loadSkillDaysWithPeriodFlexibility.Load(dtp, skills, _scenarioRepository.LoadDefaultScenario());
-		//	var skillDays = skillDaysBySkills.SelectMany(x => x.Value);
-		//	Calculate(skillDays);
-		//}
-
-		//this method will be the one later on we will remove the other method TDD
-
-		public void Calculate(IEnumerable<Guid> skillDayIds)
+		public void Calculate(IEnumerable<ISkillDay> skillDays)
 		{
-			var justSkillDays = filterSkillDays(skillDayIds);
-			if (!justSkillDays.Any()) return;
-			var skills = justSkillDays.Select(x => x.Skill);
-			var period = new DateOnlyPeriod(justSkillDays.Min(x => x.CurrentDate),justSkillDays.Max(x => x.CurrentDate));
-			var skillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
 
 			var periods = skillDays
 				.SelectMany(x =>
@@ -91,14 +70,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			_skillForecastReadModelRepository.PersistSkillForecast(result);
 		}
-
-		private IEnumerable<ISkillDay> filterSkillDays(IEnumerable<Guid> skillDayIds)
-		{
-			var skillDays = _skillDayRepository.LoadSkillDays(skillDayIds);
-			var validPeriod = _skillForecastReadModelPeriodBuilder.Build();
-			return skillDays.Where(x => x.CurrentDate.Date >= validPeriod.StartDateTime && x.CurrentDate.Date <= validPeriod.EndDateTime);
-		}
-		
 	}
 
 	public class SkillForecastReadModelPeriodBuilder
