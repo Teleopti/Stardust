@@ -587,7 +587,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private class disabledFakeState : IState
 		{
-			public IApplicationData ApplicationScopeData { get { throw new NotSupportedException(); } }
+			public IApplicationData ApplicationScopeData_DONTUSE { get { throw new NotSupportedException(); } }
 			public void SetApplicationData(IApplicationData applicationData)
 			{
 			}

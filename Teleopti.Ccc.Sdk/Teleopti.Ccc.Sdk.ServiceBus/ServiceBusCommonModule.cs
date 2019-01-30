@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData).As<IApplicationData>().ExternallyOwned();
+			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData_DONTUSE).As<IApplicationData>().ExternallyOwned();
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();

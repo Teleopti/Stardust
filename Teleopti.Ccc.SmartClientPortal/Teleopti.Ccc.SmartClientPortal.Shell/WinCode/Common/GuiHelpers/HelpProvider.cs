@@ -76,18 +76,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers
         {
             var topic = tryGetHelpString(sender as UIElement);
 
-			var helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrlOnline"];
-			var helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefixOnline"];
-			var helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffixOnline"];
-			var helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDividerOnline"];
+			var helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpUrlOnline"];
+			var helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpPrefixOnline"];
+			var helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpSuffixOnline"];
+			var helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpDividerOnline"];
 			var helpLang = string.Empty; //empty for now
 
             if (Keyboard.Modifiers == ModifierKeys.Shift)
             {
-				helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
-				helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];
-				helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffix"];
-				helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDivider"];
+				helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpUrl"];
+				helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpPrefix"];
+				helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpSuffix"];
+				helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpDivider"];
             }
             Help.ShowHelp(null, string.Concat(helpUrl, helpLang, helpPrefix, topic.Replace("+",helpDivider), helpSuffix));
         }

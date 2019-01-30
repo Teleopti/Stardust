@@ -26,22 +26,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 		private HelpHelper()
 		{
 			//Read help settings from config file
-            string helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
+            string helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpUrl"];
 			if (!string.IsNullOrEmpty(helpUrl)) _http = helpUrl;
-			string helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];
+			string helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpPrefix"];
 			if (!string.IsNullOrEmpty(helpPrefix)) _prefix = helpPrefix;
-			string helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffix"];
+			string helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpSuffix"];
 			if (!string.IsNullOrEmpty(helpSuffix)) _suffix = helpSuffix;
-			string helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDivider"];
+			string helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpDivider"];
 			if (!string.IsNullOrEmpty(helpDivider)) _divider = helpDivider;
 
-			string helpUrlOnline = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrlOnline"];
+			string helpUrlOnline = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpUrlOnline"];
 			if (!string.IsNullOrEmpty(helpUrlOnline)) _httpOnline = helpUrlOnline;
-			string helpPrefixOnline = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefixOnline"];
+			string helpPrefixOnline = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpPrefixOnline"];
 			if (!string.IsNullOrEmpty(helpPrefixOnline)) _prefixOnline = helpPrefixOnline;
-			string helpSuffixOnline = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffixOnline"];
+			string helpSuffixOnline = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpSuffixOnline"];
 			if (!string.IsNullOrEmpty(helpSuffixOnline)) _suffixOnline = helpSuffixOnline;
-			string helpDividerOnline = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDividerOnline"];
+			string helpDividerOnline = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["HelpDividerOnline"];
 			if (!string.IsNullOrEmpty(helpDividerOnline)) _dividerOnline = helpDividerOnline;
 
 			//Select language is handled in Wiki site

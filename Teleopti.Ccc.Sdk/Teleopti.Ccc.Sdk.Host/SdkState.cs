@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             HttpRuntime.Cache.Add(ApplicationDataKey,applicationData,null,Cache.NoAbsoluteExpiration,TimeSpan.FromMinutes(30),CacheItemPriority.Normal,null);
         }
 
-        public override IApplicationData ApplicationScopeData
+        public override IApplicationData ApplicationScopeData_DONTUSE
         {
             get
             {
                 var result = HttpRuntime.Cache.Get(ApplicationDataKey) as IApplicationData;
-                return result ?? base.ApplicationScopeData;
+                return result ?? base.ApplicationScopeData_DONTUSE;
             }
         }
     }

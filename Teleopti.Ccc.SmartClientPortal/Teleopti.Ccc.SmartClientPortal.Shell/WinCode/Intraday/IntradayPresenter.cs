@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 			_eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.LoadingInitialStatesThreeDots);
 			if (!_realTimeAdherenceEnabled || HistoryOnly) return;
 			string pollingInterval;
-			if (!StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue("RtaPollingInterval", out pollingInterval))
+			if (!StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings.TryGetValue("RtaPollingInterval", out pollingInterval))
 				pollingInterval = "5000";
 			_poller.Poll(Convert.ToInt32(pollingInterval), loadExternalAgentStates);
 		}

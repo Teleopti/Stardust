@@ -14,6 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_applicationScopeData = applicationData;
 		}
 
-		public virtual IApplicationData ApplicationScopeData => _applicationScopeData;
+		public virtual IApplicationData ApplicationScopeData_DONTUSE => _applicationScopeData;
 	}
 }

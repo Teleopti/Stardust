@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             mocks.ReplayAll();
             Assert.IsNotNull(target);
-            Assert.IsNull(target.ApplicationScopeData);
+            Assert.IsNull(target.ApplicationScopeData_DONTUSE);
             mocks.VerifyAll();
         }
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IApplicationData appData = mocks.StrictMock<IApplicationData>();
             mocks.ReplayAll();
             target.SetApplicationData(appData);
-            Assert.AreSame(appData, target.ApplicationScopeData);
+            Assert.AreSame(appData, target.ApplicationScopeData_DONTUSE);
             mocks.VerifyAll();
         }
     }

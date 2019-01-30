@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
     {
         internal static MessageBrokerDto RetrieveMessageBrokerConfigurations()
         {
-					string connectionString = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["MessageBroker"];
+					string connectionString = StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["MessageBroker"];
         	
 			Uri serverUrl;
         	if (Uri.TryCreate(connectionString,UriKind.Absolute,out serverUrl))

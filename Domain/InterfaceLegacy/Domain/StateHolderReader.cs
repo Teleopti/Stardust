@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		{
 			get
 			{
-				return InstanceInternal != null && InstanceInternal.StateReader.ApplicationScopeData != null;
+				return InstanceInternal != null && InstanceInternal.StateReader.ApplicationScopeData_DONTUSE != null;
 			}
 		}
 

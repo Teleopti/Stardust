@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
-			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState {ApplicationScopeData = ApplicationData});
+			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState {ApplicationScopeData_DONTUSE = ApplicationData});
 
 			persistLoggedOnPerson();
 			persistBusinessUnit();

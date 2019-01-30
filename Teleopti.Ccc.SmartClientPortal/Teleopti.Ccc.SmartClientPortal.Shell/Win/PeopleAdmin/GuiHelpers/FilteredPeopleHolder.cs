@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			//create new person grid data.
 			var personGridData = new PersonGeneralModel(person, new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())),
 				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), logonInfoModel,
-				new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService));
+				new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData_DONTUSE.LoadPasswordPolicyService));
 
 			//set optional columns if any.
 			if (_optionalColumnCollection.Count > 0)

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 
 		private static string getHost()
 		{
-			return ConfigurationManager.AppSettings["MessageBroker"] ?? (StateHolderReader.IsInitialized ? StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings["MessageBroker"] : "");
+			return ConfigurationManager.AppSettings["MessageBroker"] ?? (StateHolderReader.IsInitialized ? StateHolderReader.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings["MessageBroker"] : "");
 		}
 
 		public void Initialize(ITelemetry telemetry)

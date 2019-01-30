@@ -2,6 +2,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IStateReader
 	{
-		IApplicationData ApplicationScopeData { get; }
+		IApplicationData ApplicationScopeData_DONTUSE { get; }
 	}
 }

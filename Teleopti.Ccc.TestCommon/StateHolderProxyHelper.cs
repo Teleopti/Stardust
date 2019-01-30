@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon
 
 			var applicationData = new ApplicationData(appSettings, null);
 			createAndSetPrincipal(person, dataSource, businessUnit);
-			var state = new FakeState {ApplicationScopeData = applicationData};
+			var state = new FakeState {ApplicationScopeData_DONTUSE = applicationData};
 			ClearAndSetStateHolder(state);
 		}
 

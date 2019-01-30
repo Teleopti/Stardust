@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public void Terminate()
 		{
-			_state.ApplicationScopeData.Dispose();
+			_state.ApplicationScopeData_DONTUSE.Dispose();
 		}
 	}
 }

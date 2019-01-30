@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
 			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>().SingleInstance();
 
-			builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)
+			builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData_DONTUSE)
 				.As<IApplicationData>().SingleInstance()
 				.ExternallyOwned();
 

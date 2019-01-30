@@ -3204,7 +3204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Loading requests"))
 			{
 				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
-					StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue(
+					StateHolderReader.Instance.StateReader.ApplicationScopeData_DONTUSE.AppSettings.TryGetValue(
 						"NumberOfDaysToShowNonPendingRequests", out var numberOfDaysToShowNonPendingRequests)
 						? Convert.ToInt32(numberOfDaysToShowNonPendingRequests)
 						: 14);

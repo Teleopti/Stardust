@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			var gridData = new PersonGeneralModel(newPerson, new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())),
 				new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), new LogonInfoModel(),
-				new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService))
+				new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData_DONTUSE.LoadPasswordPolicyService))
 			{
 				CanBold = true
 			};
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 				var personGridData = new PersonGeneralModel(person,
 					new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())),
 					new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), new LogonInfoModel(),
-					new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService))
+					new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData_DONTUSE.LoadPasswordPolicyService))
 				{
 					CanBold = true
 				};

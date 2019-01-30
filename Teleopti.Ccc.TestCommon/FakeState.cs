@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeState : IState
 	{
-		public IApplicationData ApplicationScopeData { get; set; }
+		public IApplicationData ApplicationScopeData_DONTUSE { get; set; }
 
 		public void SetApplicationData(IApplicationData applicationData)
 		{
-			ApplicationScopeData = applicationData;
+			ApplicationScopeData_DONTUSE = applicationData;
 		}
 	}
 }
