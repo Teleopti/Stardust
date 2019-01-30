@@ -461,7 +461,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skillA, skillB, skillC);
-				var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(16, 24));
+				var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(0, 2));
 				assignments.Add(ass);
 			}
 
