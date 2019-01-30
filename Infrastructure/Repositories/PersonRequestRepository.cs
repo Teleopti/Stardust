@@ -943,6 +943,7 @@ AND ps.Skill in(:list)")
 						WHERE pr.BusinessUnit = :businessUnit
 						AND p.IsDeleted = 0
 						AND wcs.IsDeleted = 0
+						AND pr.IsDeleted = 0
 						AND  r.EndDateTime > :startDate and r.StartDateTime < :endDate
 						AND :withInPersonPeriod BETWEEN pp.StartDate AND pp.EndDate
 						AND pr.RequestStatus in (0,5)

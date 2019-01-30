@@ -555,6 +555,61 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
+
+		[Test]
+		public void ShouldNotReturnDeletedWaitlistedRequests()
+		{
+			using (CurrentAuthorization.ThreadlyUse(new FullPermission()))
+			{
+				var team1 = TeamFactory.CreateSimpleTeam("team1");
+				team1.Site = _site;
+				PersistAndRemoveFromUnitOfWork(team1);
+
+				var absence = AbsenceFactory.CreateAbsence("Football");
+				PersistAndRemoveFromUnitOfWork(absence);
+
+				var waitlistedWcs =
+					WorkflowControlSetFactory.CreateWorkFlowControlSetWithWaitlist(absence,
+						WaitlistProcessOrder.FirstComeFirstServed);
+
+				PersistAndRemoveFromUnitOfWork(new[] { waitlistedWcs });
+
+				var budgetGroup1 = new BudgetGroup { Name = "group1", TimeZone = TimeZoneInfo.Utc };
+				PersistAndRemoveFromUnitOfWork(budgetGroup1);
+
+				var person1 = createPerson("person1", team1, budgetGroup1, waitlistedWcs,
+					new List<DateOnly> { new DateOnly(2016, 03, 01) });
+				PersistAndRemoveFromUnitOfWork( person1);
+
+				var period1 = new DateTimePeriod(_baseTime.AddHours(15), _baseTime.AddHours(19));
+				var request1 =
+					PersonRequestFactory.CreateWaitlistedPersonRequest(person1, absence, period1, "Waitlisted");
+
+				var period2 = new DateTimePeriod(_baseTime.AddHours(10), _baseTime.AddHours(18));
+				var request2 = PersonRequestFactory.CreateWaitlistedPersonRequest(person1, absence, period2, "Waitlisted");
+
+				PersistPersonRequestListInOrder(new List<IPersonRequest>
+				{
+					request1,
+					request2
+				});
+
+				((PersonRequest)request1).SetDeleted();
+				PersistAndRemoveFromUnitOfWork(request1);
+
+				var pendingAndWaitlistedRequests = new PersonRequestRepository(UnitOfWork)
+					.GetPendingAndWaitlistedAbsenceRequests(period2, budgetGroup1.Id.Value).ToArray();
+
+				pendingAndWaitlistedRequests.Length.Should().Be.EqualTo(1);
+
+				Assert.True(SequenceEquals(pendingAndWaitlistedRequests, new List<PersonWaitlistedAbsenceRequest>
+				{
+					new PersonWaitlistedAbsenceRequest
+						{PersonRequestId = request2.Id.Value, RequestStatus = PersonRequestStatus.Waitlisted},
+				}));
+			}
+		}
+
 		[Test]
 		public void ShouldReturnWaitlistedRequestsRegardlessWorkflowControlSet()
 		{
