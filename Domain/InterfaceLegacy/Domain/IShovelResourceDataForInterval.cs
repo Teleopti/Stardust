@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void AddResources(double resourcesToAdd);
 		double AbsoluteDifference { get; }
 		double CalculatedResource { get; }
-		double RelativeDifference { get; }
 		double FStaff { get; }
 	}
 }

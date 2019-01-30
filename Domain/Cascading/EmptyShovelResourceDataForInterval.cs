@@ -12,8 +12,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public double CalculatedResource { get; }
 
-		public double RelativeDifference { get; }
-
 		public double FStaff { get; }
 	}
 }
