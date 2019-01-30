@@ -159,4 +159,23 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
         expect(vm.adjustedPeriods[0].StartTime).toEqual('2019-01-28 09:00');
         expect(vm.adjustedPeriods[0].EndTime).toEqual('2019-01-28 10:00');
     });
+
+    it('should submit invalid date if no time specified', function (t) {
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.startDate = new Date(2019, 0, 30);
+            vm.startTime = null;
+            vm.endDate = new Date(2019, 0, 30);
+            vm.endTime = null;
+        });
+        t.apply(function () {
+            vm.adjustToNeutral();
+        });
+
+        expect(t.backend.lastParams.adjustPeriod()).toEqual({
+            StartDateTime: '2019-01-30 Invalid date',
+            EndDateTime: '2019-01-30 Invalid date'
+        });
+    });
 });

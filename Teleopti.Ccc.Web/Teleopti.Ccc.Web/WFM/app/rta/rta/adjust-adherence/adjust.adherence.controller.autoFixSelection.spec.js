@@ -90,6 +90,4 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
         
         expect(moment(vm.startTime).format('HH:mm')).toEqual('18:00');
     });
-    
-    
 });
