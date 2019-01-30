@@ -5,10 +5,10 @@ import { DowngradeableComponent } from '@wfm/types';
 import { PlanningGroupService } from './shared';
 import { IStateService } from 'angular-ui-router';
 import { TitleBarComponent } from './components/title-bar';
-import { LandingPageComponent } from './pages/planning-groups/overview/landing.component';
+import {PlanningGroupsOverviewComponent} from "./pages/planning-groups/planning-groups-overview.component";
 
 @NgModule({
-	declarations: [LandingPageComponent, TitleBarComponent],
+	declarations: [PlanningGroupsOverviewComponent, TitleBarComponent],
 	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [
 		PlanningGroupService,
@@ -19,10 +19,10 @@ import { LandingPageComponent } from './pages/planning-groups/overview/landing.c
 		}
 	],
 	exports: [],
-	entryComponents: [LandingPageComponent]
+	entryComponents: [PlanningGroupsOverviewComponent]
 })
 export class PlansModule {}
 
 export const plansComponents: DowngradeableComponent[] = [
-	{ ng1Name: 'ng2Plans', ng2Component: LandingPageComponent }
+	{ ng1Name: 'ng2Plans', ng2Component: PlanningGroupsOverviewComponent }
 ];

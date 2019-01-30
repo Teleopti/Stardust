@@ -2,15 +2,15 @@ import { Component } from '@angular/core';
 import { NavigationService } from 'src/app/core/services';
 import { map } from 'rxjs/operators';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { PlanningGroup } from '../../../models';
-import { PlanningGroupService } from '../../../shared';
+import {PlanningGroup} from "../../models";
+import {PlanningGroupService} from "../../shared";
 @Component({
-	selector: 'plans-landing-page',
-	templateUrl: './landing.component.html',
-	styleUrls: ['./landing.component.scss'],
+	selector: 'plans-groups-overview',
+	templateUrl: './planning-groups-overview.component.html',
+	styleUrls: ['./planning-groups-overview.component.scss'],
 	providers: []
 })
-export class LandingPageComponent {
+export class PlanningGroupsOverviewComponent {
 	filterControl: FormControl = this.fb.control('');
 	planningGroups: PlanningGroup[] = [];
 	filteredPlanningGroups: PlanningGroup[] = [];

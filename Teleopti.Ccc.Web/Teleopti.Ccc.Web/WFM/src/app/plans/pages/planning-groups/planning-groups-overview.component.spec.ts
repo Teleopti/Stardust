@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite, PageObject } from '@wfm/test';
 import { MockTranslationModule } from '@wfm/mocks/translation';
-import { NzInputModule, NzTableModule, NzDividerModule } from 'ng-zorro-antd';
+import {NzInputModule, NzTableModule, NzDividerModule, NzGridModule} from 'ng-zorro-antd';
 import { of } from 'rxjs';
-import { LandingPageComponent } from './landing.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NavigationService } from 'src/app/core/services';
-import { PlanningGroupService } from '../../../shared';
-import { TitleBarComponent } from '../../../components/title-bar';
+import {PlanningGroupsOverviewComponent} from "./planning-groups-overview.component";
+import {PlanningGroupService} from "../../shared";
+import {TitleBarComponent} from "../../components/title-bar";
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroups() {
@@ -26,17 +26,17 @@ class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	}
 }
 
-describe('Plans LandingPage', () => {
-	let component: LandingPageComponent;
-	let fixture: ComponentFixture<LandingPageComponent>;
+describe('Planning Group Overview', () => {
+	let component: PlanningGroupsOverviewComponent;
+	let fixture: ComponentFixture<PlanningGroupsOverviewComponent>;
 	let page: Page;
 
 	configureTestSuite();
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [LandingPageComponent, TitleBarComponent],
-			imports: [NzInputModule, NzTableModule, ReactiveFormsModule, MockTranslationModule, NzDividerModule],
+			declarations: [PlanningGroupsOverviewComponent, TitleBarComponent],
+			imports: [NzInputModule, NzTableModule, ReactiveFormsModule, MockTranslationModule, NzDividerModule, NzGridModule],
 			providers: [
 				{ provide: PlanningGroupService, useClass: MockPlanningGroupService },
 				{ provide: NavigationService, useValue: {} }
@@ -45,7 +45,7 @@ describe('Plans LandingPage', () => {
 	}));
 
 	beforeEach(() => {
-		fixture = TestBed.createComponent(LandingPageComponent);
+		fixture = TestBed.createComponent(PlanningGroupsOverviewComponent);
 		component = fixture.componentInstance;
 		page = new Page(fixture);
 	});
