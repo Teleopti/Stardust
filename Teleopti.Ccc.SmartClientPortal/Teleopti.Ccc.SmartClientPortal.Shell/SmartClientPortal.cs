@@ -295,8 +295,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				_logger.Error("An error occurred when trying to save settings on exit.", dataSourceException);
 			}
-
-			StateHolder.Instance.Terminate();
 		}
 
 		private void toolStripButtonPermissonsClick(object sender, EventArgs e)

@@ -17,9 +17,5 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; }
 
 		public IDictionary<string, string> AppSettings { get; }
-
-		public void Dispose()
-		{
-		}
 	}
 }

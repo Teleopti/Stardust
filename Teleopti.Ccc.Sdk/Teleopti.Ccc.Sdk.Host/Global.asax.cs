@@ -56,10 +56,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			if (AutofacHostFactory.Container != null)
 				AutofacHostFactory.Container.Dispose();
-
-			if (StateHolderReader.IsInitialized)
-				StateHolder.Instance.Terminate();
-
 		}
 
 		protected void Application_Start(object sender, EventArgs e)

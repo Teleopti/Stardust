@@ -41,10 +41,5 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		internal IState State => _state;
 
 		public override IStateReader StateReader => _state;
-
-		public void Terminate()
-		{
-			_state.ApplicationScopeData_DONTUSE.Dispose();
-		}
 	}
 }
