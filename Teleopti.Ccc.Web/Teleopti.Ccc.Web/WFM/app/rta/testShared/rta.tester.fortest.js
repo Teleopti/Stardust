@@ -282,6 +282,7 @@ var rtaTester = (function () {
 					});
 
 					locale = moment.locale();
+                    moment.locale('en');
 					
                     $fakeBackend.with.currentUserInfo({
                         DateFormatLocale: "sv-SE"
