@@ -1113,6 +1113,7 @@
     <Compile Include="Scheduling\Meetings\RecurrentMonthlyByDayMeetingTest.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentWeeklyMeetingTest.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentDailyMeetingTest.cs" />
+    <Compile Include="Scheduling\MoveDataBetweenSchedulesTest.cs" />
     <Compile Include="Scheduling\NoteByDateSorterTest.cs" />
     <Compile Include="Scheduling\NoteTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCloserTest.cs" />

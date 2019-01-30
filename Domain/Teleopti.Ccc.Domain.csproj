@@ -1072,6 +1072,7 @@
     <Compile Include="InterfaceLegacy\Domain\IMeetingPerson.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMeetingRestrictionCombiner.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMemento.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IMoveDataBetweenSchedules.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMoveTimeOptimizer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMultiplicator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMultiplicatorDefinition.cs" />
@@ -3061,6 +3062,7 @@
     <Compile Include="Scheduling\Meetings\RecurrentMonthlyByDayMeeting.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentMonthlyByWeekMeeting.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentWeeklyMeeting.cs" />
+    <Compile Include="Scheduling\MoveDataBetweenSchedules.cs" />
     <Compile Include="Scheduling\Note.cs" />
     <Compile Include="Scheduling\NoteByDateSorter.cs" />
     <Compile Include="Scheduling\PersonAbsence.cs" />
