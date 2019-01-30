@@ -90,7 +90,11 @@
 			})
 			.state('resourceplanner.planningperiodoverview', {
 				url: '/planninggroup/:groupId/detail/:ppId',
-				templateUrl: 'app/resourceplanner/planning_period/planningperiod.overview.html',
+				templateUrl: function() {
+					return ToggleProvider.WFM_Plans_Redesign_81198
+						? 'app/resourceplanner/plans-planningperiodoverview-modern.html'
+						: 'app/resourceplanner/planning_period/planningperiod.overview.html';
+				},
 				controller: 'planningPeriodOverviewController as vm',
 				params: {
 					groupId: '',

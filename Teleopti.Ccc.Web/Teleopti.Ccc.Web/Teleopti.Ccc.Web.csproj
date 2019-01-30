@@ -1697,6 +1697,7 @@
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.service.js" />
+    <Content Include="WFM\app\resourceplanner\plans-planningperiodoverview-modern.html" />
     <Content Include="WFM\app\resourceplanner\tree_data\cardPanel.demo.controller.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\demo.html" />
     <Content Include="WFM\app\resourceplanner\tree_data\main.controller.js" />
@@ -2417,6 +2418,10 @@
     <Content Include="WFM\src\app\plans\pages\planning-groups\planning-groups-overview.component.scss" />
     <Content Include="WFM\src\app\plans\pages\planning-groups\planning-groups-overview.component.spec.ts" />
     <Content Include="WFM\src\app\plans\pages\planning-groups\planning-groups-overview.component.ts" />
+    <Content Include="WFM\src\app\plans\pages\planning-period\planning-period-overview.component.html" />
+    <Content Include="WFM\src\app\plans\pages\planning-period\planning-period-overview.component.scss" />
+    <Content Include="WFM\src\app\plans\pages\planning-period\planning-period-overview.component.spec.ts" />
+    <Content Include="WFM\src\app\plans\pages\planning-period\planning-period-overview.component.ts" />
     <Content Include="WFM\src\app\plans\plans.module.ts" />
     <Content Include="WFM\src\app\plans\shared\index.ts" />
     <Content Include="WFM\src\app\plans\shared\planninggroup.service.ts" />

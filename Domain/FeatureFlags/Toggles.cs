@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		ResourcePlanner_QueryHintOnLayers_79780,
 		ResourcePlanner_TeamSchedulingInPlans_79283,
 		WFM_Plans_Redesign_81198,
+		WFM_Plans_HeatMap_79112,
 
 		Wfm_DisplayOnlineHelp_39402,
 
