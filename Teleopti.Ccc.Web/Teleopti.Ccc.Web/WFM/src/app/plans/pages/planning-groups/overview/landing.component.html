@@ -1,16 +1,23 @@
 <plans-title-bar><i class="mdi mdi-calendar"></i>{{ 'Plans' | translate }}</plans-title-bar>
-<button nz-button nzType="primary" (click)="createPlanningGroup()">
-	<i nz-icon type="plus"></i> {{ 'NewPlanningGroup' | translate }}
-</button>
 
-<nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixTemplate">
-	<input type="text" nz-input placeholder="Filter" [formControl]="filterControl" />
-</nz-input-group>
+<div nz-row>
+	<div nz-col [nzSpan]="8">
+		<nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixTemplate">
+			<input type="text" nz-input placeholder="Filter" [formControl]="filterControl" />
+		</nz-input-group>
 
-<ng-template #prefixTemplate><i nz-icon type="filter"></i></ng-template>
-<ng-template #suffixTemplate
-	><i nz-icon type="close-circle" (click)="clearFilter()" *ngIf="filterControl.value"></i
-></ng-template>
+		<ng-template #prefixTemplate><i nz-icon type="filter"></i></ng-template>
+		<ng-template #suffixTemplate
+		><i nz-icon type="close-circle" (click)="clearFilter()" *ngIf="filterControl.value"></i
+		></ng-template>
+	</div>
+
+	<div nz-col [nzSpan]="16">
+		<button nz-button nzType="primary" (click)="createPlanningGroup()" class="pull-right">
+			<i nz-icon type="plus"></i> {{ 'NewPlanningGroup' | translate }}
+		</button>
+	</div>
+</div>
 
 <nz-table
 	#basicTable
@@ -22,7 +29,7 @@
 		<tr>
 			<th>Name</th>
 			<th>Agents</th>
-			<th>Action</th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -30,7 +37,7 @@
 			<td data-test-group-name>{{ group.Name }}</td>
 			<td>{{ group.AgentCount }}</td>
 			<td>
-				<a (click)="viewPlanningPeriods(group)">{{ 'View' | translate }}</a>
+				<a (click)="viewPlanningPeriods(group)">{{ 'ViewPlanningPeriods' | translate }}</a>
 				<nz-divider nzType="vertical"></nz-divider>
 				<a (click)="editPlanningGroup(group)">{{ 'EditPlanningGroup' | translate }}</a>
 			</td>
