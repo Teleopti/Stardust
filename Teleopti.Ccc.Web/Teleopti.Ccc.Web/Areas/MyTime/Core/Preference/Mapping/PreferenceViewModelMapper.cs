@@ -155,7 +155,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 								Date = d,
 								Period = s.Period,
 								WorkflowControlSet = s.WorkflowControlSet,
-								IsScheduled =s.ScheduledDays.Contains(d)})
+								IsScheduled = s.ScheduledDays?.Contains(d)??false
+							})
 								.Select(map)
 								.ToArray()
 			};
