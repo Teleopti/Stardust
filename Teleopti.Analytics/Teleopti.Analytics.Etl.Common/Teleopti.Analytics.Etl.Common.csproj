@@ -125,8 +125,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.4.5.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -354,7 +354,7 @@
     <Compile Include="Transformer\IocContainerHolder.cs" />
     <Compile Include="Transformer\Job\JobHelper.cs" />
     <Compile Include="Transformer\Job\JobResult.cs" />
-    <Compile Include="Transformer\Job\JobsParameters.cs" />
+    <Compile Include="Transformer\Job\JobParameters.cs" />
     <Compile Include="Transformer\Job\JobStepBase.cs" />
     <Compile Include="Transformer\Job\JobStepResult.cs" />
     <Compile Include="Transformer\Job\Jobs\InsightsDataRefreshJobCollection.cs" />
@@ -554,6 +554,7 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

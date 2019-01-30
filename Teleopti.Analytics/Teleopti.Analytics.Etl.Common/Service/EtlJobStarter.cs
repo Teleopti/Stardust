@@ -114,6 +114,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				cube,
 				pmInstallation,
 				configHandler.BaseConfiguration.RunIndexMaintenance,
+				true, // When run scheduled job from ETL service, always assume Insights enabled.
 				culture
 			);
 

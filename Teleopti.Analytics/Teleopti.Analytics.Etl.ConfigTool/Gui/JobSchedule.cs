@@ -18,7 +18,6 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 {
 	public partial class JobSchedule : Form
@@ -67,7 +66,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			var pmInfoProvider = App.Container.Resolve<PmInfoProvider>();
 			var container = new IocContainerHolder(App.Container);
 			var jobCollection =
-				 new JobCollection(
+				new JobCollection(
 					new JobParameters(
 						null, 1,
 						_baseConfiguration.TimeZoneCode,
@@ -75,10 +74,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						pmInfoProvider.Cube(),
 						pmInfoProvider.PmInstallation(),
 						CultureInfo.CurrentCulture,
-						container, 
-						_baseConfiguration.RunIndexMaintenance
-						)
-					);
+						container,
+						_baseConfiguration.RunIndexMaintenance,
+						_baseConfiguration.InsightsConfig?.IsValid() ?? false
+					)
+				);
 			comboBoxJob.DataSource = jobCollection;
 			comboBoxJob.DisplayMember = "Name";
 			comboBoxJob.ValueMember = "Name";

@@ -8,8 +8,6 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -31,6 +29,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			string cube,
 			string pmInstallation, 
 			bool runIndexMaintenance, 
+			bool insightsEnabled,
 			CultureInfo culture)
 		{
 			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);
@@ -44,7 +43,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					pmInstallation,
 					culture,
 					new IocContainerHolder(_componentContext), 
-					runIndexMaintenance)
+					runIndexMaintenance,
+					insightsEnabled)
 					{
 						Helper = jobHelper
 					};
