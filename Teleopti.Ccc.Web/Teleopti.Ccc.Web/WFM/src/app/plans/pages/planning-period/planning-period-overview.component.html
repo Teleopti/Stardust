@@ -1,11 +1,17 @@
 <plans-title-bar><i class="mdi mdi-calendar"></i>{{ 'Plans' | translate }}</plans-title-bar>
-<div nz-row>
-    <button nz-button nzType="default" (click)="launchSchedule()">{{'ScheduleVerb' | translate}}</button>
-    <button nz-button nzType="default">{{'IntraOptimize' | translate}}</button>
-    <button nz-button nzType="default">{{'ClearScheduleResultAndHistoryData' | translate}}</button>
-    <button nz-button nzType="default">{{'PublishSchedulePlans' | translate}}</button>
-    <button nz-button nzType="default">{{'PlanGroupScheduling' | translate}}</button>
 
+
+
+<div nz-row>
+    <nz-spin nzTip='Schceduling...' [nzSpinning]="schedulingPerformed">
+        <button nz-button nzType="default" (click)="launchSchedule()">{{'ScheduleVerb' | translate}}</button>
+        <button nz-button nzType="default">{{'IntraOptimize' | translate}}</button>
+        <button nz-button nzType="default">{{'ClearScheduleResultAndHistoryData' | translate}}</button>
+        <button nz-button nzType="default">{{'PublishSchedulePlans' | translate}}</button>
+    </nz-spin>
+    
+    <button nz-button nzType="default">{{'PlanGroupScheduling' | translate}}</button>
+    
     <nz-tabset>
         <nz-tab nzTitle="{{'Overview'|translate}}">
             <div nz-row>
