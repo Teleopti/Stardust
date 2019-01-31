@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Web.Mvc;
 using AuthBridge.Configuration;
-using AuthBridge.Model;
 using AuthBridge.Utilities;
 using Microsoft.Practices.Unity;
 
@@ -13,7 +12,9 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 {
 	public class SystemStatus : ViewPage
 	{
+		private static readonly HttpClient client = new HttpClient();
 		private readonly StringBuilder sbTriedVisitByIdentityUrls = new StringBuilder();
+		
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			var urls = providerUrls();
@@ -63,9 +64,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 		{
 			try
 			{
-				var httpWebRequest = WebRequest.CreateHttp(url);
-				var httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-				return httpWebResponse.StatusCode == HttpStatusCode.OK;
+				return client.GetAsync(url).Result.IsSuccessStatusCode;
 			}
 			catch (Exception)
 			{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
-using System.Net;
+using System.Net.Http;
 using System.ServiceProcess;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -21,10 +20,8 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
-
 
 namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 {
@@ -38,6 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IReadModelValidator _readModelValidator;
 		private readonly IStardustRepository _stardustRepository;
 		private readonly IntradayIncomingTrafficApplicationService _intradayIncomingTrafficApplicationService;
+
+		private static readonly HttpClient client = new HttpClient();
 
 		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
 												  IStardustSender stardustSender, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator,
@@ -85,46 +84,42 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		[HttpGet, Route("api/HealthCheck/ServerDetails")]
 		public virtual IHttpActionResult ServerDetails()
 		{
-			Func<Uri, Tuple<bool, string>> pingAddress = s =>
+			Tuple<bool, string> PingAddress(Uri s)
 			{
-				using (var client = new WebClient())
+				try
 				{
-					try
-					{
-						client.DownloadString(s);
-						return new Tuple<bool, string>(true, string.Empty);
-					}
-					catch (Exception x)
-					{
-						return new Tuple<bool, string>(false, x.Message);
-					}
+					client.GetAsync(s).Result.EnsureSuccessStatusCode();
+					return new Tuple<bool, string>(true, string.Empty);
 				}
-			};
-
-			Func<IEnumerable<Tuple<string, bool, string>>> pingAllUrlsFromSettings =
-				() =>
+				catch (Exception x)
 				{
-					var result = new List<Tuple<string, bool, string>>();
-					foreach (string key in ConfigurationManager.AppSettings.AllKeys)
-					{
-						string value = ConfigurationManager.AppSettings[key];
+					return new Tuple<bool, string>(false, x.Message);
+				}
+			}
 
-						Uri uri;
-						if (Uri.TryCreate(value, UriKind.Absolute, out uri) && !uri.IsFile && !uri.IsUnc)
+			IEnumerable<Tuple<string, bool, string>> PingAllUrlsFromSettings()
+			{
+				var result = new List<Tuple<string, bool, string>>();
+				foreach (string key in ConfigurationManager.AppSettings.AllKeys)
+				{
+					string value = ConfigurationManager.AppSettings[key];
+
+					if (Uri.TryCreate(value, UriKind.Absolute, out var uri) && !uri.IsFile && !uri.IsUnc)
+					{
+						if (key == "ManagerLocation")
 						{
-							if (key == "ManagerLocation")
-							{
-								result.Add(new Tuple<string, bool, string>(value, false, "Skip"));
-							}
-							else
-							{
-								var pingResult = pingAddress(uri);
-								result.Add(new Tuple<string, bool, string>(value, pingResult.Item1, pingResult.Item2));
-							}
+							result.Add(new Tuple<string, bool, string>(value, false, "Skip"));
+						}
+						else
+						{
+							var pingResult = PingAddress(uri);
+							result.Add(new Tuple<string, bool, string>(value, pingResult.Item1, pingResult.Item2));
 						}
 					}
-					return result;
-				};
+				}
+
+				return result;
+			}
 
 			var computerInfo = new ServerComputer();
 			var nodes = _stardustRepository.GetAllWorkerNodes();
@@ -169,7 +164,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 						TimeZoneInfo.Local.Id,
 						UrlsReachable = new
 						{
-							UrlResults = pingAllUrlsFromSettings().Select(s => new { Url = s.Item1, Reachable = s.Item2, Message = s.Item3 })
+							UrlResults = PingAllUrlsFromSettings().Select(s => new { Url = s.Item1, Reachable = s.Item2, Message = s.Item3 })
 						},
 						RunningServices = new
 						{
