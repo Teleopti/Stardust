@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	{
 		private readonly IEventPublisher _eventPublisher;
 		private readonly SkillForecastReadModelPeriodBuilder _skillForecastReadModelPeriodBuilder;
-		private readonly IReadModelStartTimeRepository _readModelStartTimeRepository;
+		private readonly ISystemJobStartTimeRepository _systemJobStartTimeRepository;
 		private readonly INow _now;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 
-		public TriggerSkillForecastReadModel(IEventPublisher eventPublisher, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, IReadModelStartTimeRepository readModelStartTimeRepository, INow now, IBusinessUnitRepository businessUnitRepository)
+		public TriggerSkillForecastReadModel(IEventPublisher eventPublisher, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, ISystemJobStartTimeRepository systemJobStartTimeRepository, INow now, IBusinessUnitRepository businessUnitRepository)
 		{
 			_eventPublisher = eventPublisher;
 			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;
-			_readModelStartTimeRepository = readModelStartTimeRepository;
+			_systemJobStartTimeRepository = systemJobStartTimeRepository;
 			_now = now;
 			_businessUnitRepository = businessUnitRepository;
 		}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			businessUnits.ForEach(businessUnit =>
 			{
 				var businessUnitId = businessUnit.Id.GetValueOrDefault();
-				var lastRun = _readModelStartTimeRepository.GetLastCalculatedTime(businessUnitId,"TriggerSkillForecastReadModel");
+				var lastRun = _systemJobStartTimeRepository.GetLastCalculatedTime(businessUnitId, JobNamesForJoStartTime.TriggerSkillForecastReadModel);
 				var period = _skillForecastReadModelPeriodBuilder.BuildFullPeriod();
 				if (lastRun.HasValue)
 				{
@@ -46,15 +46,21 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				_eventPublisher.Publish(new UpdateSkillForecastReadModelEvent()
 				{
 					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime
+					EndDateTime = period.EndDateTime,
+					LogOnBusinessUnitId = businessUnitId
 				});
 			});
 
 		}
 	}
 
-	public interface IReadModelStartTimeRepository
+	public interface ISystemJobStartTimeRepository
 	{
 		DateTime? GetLastCalculatedTime(Guid bu, string jobName);
+	}
+
+	public static class JobNamesForJoStartTime
+	{
+		public static string TriggerSkillForecastReadModel => "TriggerSkillForecastReadModel";
 	}
 }

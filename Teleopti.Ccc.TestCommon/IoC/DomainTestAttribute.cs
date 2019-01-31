@@ -296,6 +296,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 				isolate.UseTestDouble<FakePayrollExportRepository>().For<IPayrollExportRepository>();
 				isolate.UseTestDouble<FakePayrollResultRepository>().For<IPayrollResultRepository>();
+				isolate.UseTestDouble<FakeSystemJobStartTimeRepository>().For<ISystemJobStartTimeRepository>();
 				isolate.UseTestDouble<FakeSkillForecastReadModelRepository>().For<ISkillForecastReadModelRepository, FakeSkillForecastReadModelRepository>();
 			}
 
