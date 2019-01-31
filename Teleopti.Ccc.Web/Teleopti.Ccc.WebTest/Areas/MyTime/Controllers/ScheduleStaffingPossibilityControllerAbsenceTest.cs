@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -23,7 +22,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Ccc.WebTest.Core.IoC;
-
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -162,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetProperPossibilitiesWhenUsingBothIntradayAndIntradayWithShrinkageValidators()
 		{
 			setupSiteOpenHour();
-			setupTestData(new double?[] {10d, 9.5d}, new double?[] {10d, 9.5d});
+			setupTestData(new double?[] { 10d, 9.5d }, new double?[] { 10d, 9.5d });
 
 			var rollingPeriod = new AbsenceRequestOpenRollingPeriod
 			{
@@ -187,11 +185,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var dayInRollingPeriod = Now.ServerDate_DontUse().AddDays(19);
 			var possibilitiesIntraday = getPossibilityViewModels(dayInRollingPeriod, StaffingPossiblityType.Absence)
-				.Where(x=>x.Date == dayInRollingPeriod.ToFixedClientDateOnlyFormat()).ToList();
+				.Where(x => x.Date == dayInRollingPeriod.ToFixedClientDateOnlyFormat()).ToList();
 
 			var dayInShrinkagePeriod = Now.ServerDate_DontUse().AddDays(22);
 			var possibilitiesIntradayWithShrinkage = getPossibilityViewModels(dayInShrinkagePeriod, StaffingPossiblityType.Absence)
-				.Where(x=>x.Date == dayInShrinkagePeriod.ToFixedClientDateOnlyFormat()).ToList();
+				.Where(x => x.Date == dayInShrinkagePeriod.ToFixedClientDateOnlyFormat()).ToList();
 
 			Assert.AreEqual(2, possibilitiesIntraday.Count);
 			possibilitiesIntraday.ForEach(x => Assert.AreEqual(1, x.Possibility));
@@ -226,7 +224,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					Period = new DateTimePeriod(utcDate.Date.Add(intervals[1]), utcDate.Date.Add(intervals[1]).AddMinutes(15))
 				};
 				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
-					new[] {staffingPeriodData1, staffingPeriodData2}, User.CurrentUser().PermissionInformation.DefaultTimeZone());
+					new[] { staffingPeriodData1, staffingPeriodData2 }, User.CurrentUser().PermissionInformation.DefaultTimeZone());
 			});
 
 			setupWorkFlowControlSet();
@@ -427,11 +425,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetAllGoodPossibilitiesWhenUnderStaffingThresholdsIsMinusOne()
+		public void ShouldGetAllFairPossibilitiesWhenStaffingLevelIsLowerThanUnderStaffingThresholds()
 		{
 			var skill = createSkill("test1");
-			skill.StaffingThresholds = new StaffingThresholds(new Percent(-1), new Percent(-1), new Percent(0.1));
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.95), new Percent(-0.95), new Percent(0.1));
 			setupTestData(skill, new double?[] { 1, 1 }, new double?[] { 0.1, 0.2 });
+			setupWorkFlowControlSet();
+
+			var possibilities =
+				getPossibilityViewModels(null, StaffingPossiblityType.Absence)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldGetAllGoodPossibilitiesWhenStaffingLevelIsHigherThanUnderStaffingThresholds()
+		{
+			var skill = createSkill("test1");
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.95), new Percent(-0.95), new Percent(0.1));
+			setupTestData(skill, new double?[] { 100, 100 }, new double?[] { 20, 20 });
 			setupWorkFlowControlSet();
 
 			var possibilities =
@@ -444,27 +459,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetFairPossibilitiesForAbsenceWhenUnderstaffingIsZeroAndForcastedAndScheduledAreEqual()
+		public void ShouldGetAllGoodPossibilitiesWhenStaffingLevelIsEqualToUnderStaffingThresholds()
 		{
-			var person = User.CurrentUser();
-			var activity1 = createActivity();
-			var skill1 = createSkill("skill1");
-			skill1.StaffingThresholds = createStaffingThresholds(0, 0, 0.1);
-
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 10d, 10d });
-
-			addPersonSkillsToPersonPeriod(personSkill1);
-
-			createAssignment(person, activity1);
+			var skill = createSkill("test1");
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.95), new Percent(-0.95), new Percent(0.1));
+			setupTestData(skill, new double?[] { 100, 100 }, new double?[] { 5, 5 });
 			setupWorkFlowControlSet();
 
-			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Absence)
-				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
-
+			var possibilities =
+				getPossibilityViewModels(null, StaffingPossiblityType.Absence)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
 			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
 		}
 
 		private void setupWorkFlowControlSet()
@@ -616,7 +624,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					Period = new DateTimePeriod(utcDate.Date.Add(intervals[1]), utcDate.Date.Add(intervals[1]).AddMinutes(15))
 				};
 				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
-					new[] {staffingPeriodData1, staffingPeriodData2}, User.CurrentUser().PermissionInformation.DefaultTimeZone());
+					new[] { staffingPeriodData1, staffingPeriodData2 }, User.CurrentUser().PermissionInformation.DefaultTimeZone());
 			});
 		}
 	}

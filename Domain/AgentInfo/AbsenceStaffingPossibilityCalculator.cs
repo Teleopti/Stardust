@@ -63,11 +63,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private IScheduleDictionary loadScheduleDictionary(IPerson person, DateOnlyPeriod period)
 		{
-			var loadOption = new ScheduleDictionaryLoadOptions(false, false) {LoadAgentDayScheduleTags = false};
+			var loadOption = new ScheduleDictionaryLoadOptions(false, false) { LoadAgentDayScheduleTags = false };
 			var scenario = _scenarioRepository.Current();
 
 			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {person}, loadOption, period, scenario);
+				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person }, loadOption, period, scenario);
 			return scheduleDictionary;
 		}
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffing.Time))
 					continue;
-				
+
 				substractUsersSchedule(person, skillStaffing, personAssignmentDictionary[skillStaffing.Date]);
 
 				var possibility = calculatePossibility(skillStaffing);
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (!skillScheduled) return;
 			// we can't calculate current user's schedule for a skill in a specific period
 			// so we just substract 1 which means user's schedule is removed(#44607)
-			if (skillStaffingData.ScheduledStaffing <= 1 && !skill.StaffingThresholds.Understaffing.Value.Equals(-1))
+			if (skillStaffingData.ScheduledStaffing <= 1)
 			{
 				skillStaffingData.ScheduledStaffing = 0;
 			}
