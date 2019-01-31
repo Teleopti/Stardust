@@ -535,6 +535,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.SameHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"},
 				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.SameHandlerEnabledByTestToggle, Teleopti.Ccc.Domain"
 			};
+			yield return new MappingSpec
+			{
+				CurrentPersistedName = "TriggerSkillForecastReadModel",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.Forecasting.TriggerSkillForecastReadModel, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.Forecasting.TriggerSkillForecastReadModel, Teleopti.Ccc.Domain"
+			};
 		}
 
 		protected class MappingSpec
