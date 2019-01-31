@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.TestCommon
 						onAnotherThread(() =>
 						{
 							//
-							Console.WriteLine(job);
 							EventProcessor.Process(tenant, job.Event, job.Package, job.HandlerType);
 						});
 					});
