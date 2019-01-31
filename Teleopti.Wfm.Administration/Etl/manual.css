@@ -12,13 +12,13 @@
 		left: 0;
 		-ms-overflow-style: none;
 		overflow: auto;
-		top: 5em;
+		top: 7em;
 		margin-left: 1em;
 	}
 
-		.manualJobOuterDateContainer::-webkit-scrollbar {
-			display: none;
-		}
+	.manualJobOuterDateContainer::-webkit-scrollbar {
+		display: none;
+	}
 
 	.manualJobDateContainer {
 		position: fixed;
@@ -40,7 +40,6 @@
 
 	.manualJobInnerDateContainer {
 		float: none;
-		margin-top: 25px;
 		font-size: 21px;
 		text-align: center;
 		animation: fadein 2s;
