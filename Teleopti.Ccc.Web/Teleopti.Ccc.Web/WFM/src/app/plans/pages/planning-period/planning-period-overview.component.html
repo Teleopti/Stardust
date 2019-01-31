@@ -67,8 +67,135 @@
                 </table>
             </div>
         </nz-tab>
-        <nz-tab nzTitle="{{'Validations'|translate}}">
-            Content of Tab Pane 2
+        <nz-tab [nzTitle]="titleTemplate">
+            <ng-template #titleTemplate>
+                {{'Validations'|translate}}<nz-badge [nzCount]="valData.totalValNum"></nz-badge>
+            </ng-template>
+            <div nz-row *ngIf="valData.totalValNum !== 0">
+                <nz-collapse>
+                    <nz-collapse-panel [nzHeader]="preValidationsTitle">
+                        <ng-template #preValidationsTitle>
+                            {{'PreSchedulingValidationIssues' | translate}}
+                            <span>
+                                {{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
+								<span
+                                        tabindex="0"
+                                        class="context-menu card-context"
+                                        ng-disabled="vm.valLoading"
+                                        ng-click="vm.getValidationByPpId();$event.stopPropagation();"
+                                >
+									<i class="mdi mdi-refresh"></i>
+								</span>
+                            </span>
+                        </ng-template>
+                        <div nz-row>
+                            <div class="con-flex ">
+                                <label for="validationFilter" class="input-icon">
+                                    <i class="mdi mdi-filter-outline">
+                                        <input
+                                                type="text"
+                                                id="validationFilter"
+                                                ng-model="validationFilter"
+                                                placeholder="{{'FilterValidationIssues' | translate}}"
+                                        />
+                                    </i>
+                                </label>
+                            </div>
+                            <table class="wfm-table">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'Resource' | translate }}</th>
+                                    <th>{{ 'Area' | translate }}</th>
+                                    <th>{{ 'Description' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let msg of valData.preValidation">
+                                    <td>{{ msg.ResourceName }}</td>
+                                    <td>
+                                        <div *ngFor="let item of msg.ValidationErrors">
+                                            {{ item.ResourceType | translate }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div *ngFor="let item of msg.ValidationErrors">
+                                            {{ item.ErrorMessageLocalized }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </nz-collapse-panel>
+                    <nz-collapse-panel [nzHeader]="scheduleIssuesTitle">
+                        <ng-template #scheduleIssuesTitle>
+                            {{'ScheduledIssues' | translate}}
+                            <span>
+                                {{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}
+								<span
+                                        tabindex="0"
+                                        class="context-menu card-context"
+                                        ng-disabled="vm.valLoading"
+                                        ng-click="vm.getValidationByPpId();$event.stopPropagation();"
+                                >
+									<i class="mdi mdi-refresh"></i>
+								</span>
+							</span>
+                        </ng-template>
+                        <div nz-row>
+                            <div class="con-flex ">
+                                <label for="scheduleIssuesFilter" class="input-icon">
+                                    <i class="mdi mdi-filter-outline">
+                                        <input
+                                                type="text"
+                                                id="scheduleIssuesFilter"
+                                                ng-model="scheduleIssuesFilter"
+                                                placeholder="{{'FilterValidationIssues' | translate}}"
+                                        />
+                                    </i>
+                                </label>
+                            </div>
+                            <table class="wfm-table">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'Resource' | translate }}</th>
+                                    <th>{{ 'Area' | translate }}</th>
+                                    <th>{{ 'Description' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let msg of valData.scheduleIssues">
+                                    <td>{{ msg.ResourceName }}</td>
+                                    <td>
+                                        <div *ngFor="let item of msg.ValidationErrors">
+                                            {{ item.ResourceType | translate }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div *ngFor="let item of msg.ValidationErrors">
+                                            {{ item.ErrorMessageLocalized }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </nz-collapse-panel>
+                </nz-collapse>
+            </div>
+            <div nz-row *ngIf="valData.totalValNum === 0">
+                <div>
+                    <div nz-row class="panel">
+                        <div class="con-flex">
+				            <span ng-if="!valLoading">
+					            <i class="mdi mdi-information-outline"></i> {{ 'NoValidIssuesForPp' | translate }}</span>
+                            <span ng-if="valLoading" class="text-warning">
+					            <i class="mdi mdi-alert"></i> Loading validation issues...
+				            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </nz-tab>
     </nz-tabset>
 </div>

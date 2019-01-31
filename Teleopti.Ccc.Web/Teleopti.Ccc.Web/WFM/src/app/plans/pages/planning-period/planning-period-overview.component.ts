@@ -25,6 +25,8 @@ export class PlanningPeriodOverviewComponent {
 	planningPeriodInfo: any;
 	totalAgents: number = 0;
 	valLoading: boolean = true;
+
+	validationFilter;
 	
 
 	dayNodes;
