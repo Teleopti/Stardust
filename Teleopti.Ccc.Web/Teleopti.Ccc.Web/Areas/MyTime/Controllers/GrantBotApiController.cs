@@ -1,11 +1,11 @@
-﻿using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Auth;
@@ -15,35 +15,40 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class GrantBotApiController : ApiController
 	{
 		private readonly IConfigReader _configReader;
-		private readonly IHttpRequestHandler _httpRequestHandler;
+		private readonly IHttpServer _httpRequestHandler;
 		private readonly ICurrentHttpContext _currentHttpContext;
+		private readonly IServerConfigurationRepository _serverConfigurationRepository;
 
 		public GrantBotApiController(IConfigReader configReader,
-			IHttpRequestHandler httpRequestHandler, ICurrentHttpContext currentHttpContext)
+			IHttpServer httpRequestHandler, ICurrentHttpContext currentHttpContext, IServerConfigurationRepository serverConfigurationRepository)
 		{
 			_configReader = configReader;
 			_httpRequestHandler = httpRequestHandler;
 			_currentHttpContext = currentHttpContext;
+			_serverConfigurationRepository = serverConfigurationRepository;
 		}
 
-		[HttpGet, Route("api/GrantBot/Config")]
-		public async Task<GrantBotConfig> GetGrantBotConfig()
+		[HttpGet, Route("api/GrantBot/Config"), TenantUnitOfWork]
+		public virtual async Task<GrantBotConfig> GetGrantBotConfig()
 		{
-			var secret = _configReader.AppConfig("GrantBotDirectLineSecret");
-			var url = _configReader.AppConfig("GrantBotTokenGenerateUrl");
+			var secret = _serverConfigurationRepository.Get(ServerConfigurationKey.GrantBotDirectLineSecret);
+			if (string.IsNullOrEmpty(secret))
+			{
+				secret = _configReader.AppConfig(ServerConfigurationKey.GrantBotDirectLineSecret.ToString());
+			}
+			var url =  _configReader.AppConfig("GrantBotTokenGenerateUrl");
 			if (string.IsNullOrEmpty(secret) || string.IsNullOrEmpty(url))
 			{
 				return null;
 			}
-
-			var request = new HttpRequestMessage(HttpMethod.Post, url);
-			request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", secret);
-			request.Content = new StringContent(JsonConvert.SerializeObject(new { TrustedOrigins = new []
+			
+			var response = await _httpRequestHandler.Post(url, new
 			{
-				_currentHttpContext.Current().Request.UrlConsideringLoadBalancerHeaders()
-			}}), Encoding.UTF8, "application/json");
-
-			var response = await _httpRequestHandler.SendAsync(request);
+				TrustedOrigins = new[]
+				{
+					_currentHttpContext.Current().Request.UrlConsideringLoadBalancerHeaders()
+				}
+			}, _ => new NameValueCollection{{"Authorization", $"Bearer {secret}"}});
 
 			var token = string.Empty;
 			if (response.IsSuccessStatusCode)

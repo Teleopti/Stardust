@@ -30,6 +30,8 @@
 		NotificationSmtpUseRelay,
 		NotificationSmtpUseSsl,
 		NotificationContentType,
-		NotificationEncodingName
+		NotificationEncodingName,
+		GrantBotApiUrl,
+		GrantBotDirectLineSecret
 	}
 }

@@ -171,7 +171,6 @@
     <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
     <Compile Include="Container\ContainerConfigurationTest.cs" />
     <Compile Include="Container\RefreshTogglesOnEventHandlersTest.cs" />
-    <Compile Include="FakeServerConfigurationRepository.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="PayrollTest\FakePayrollExport.cs" />
     <Compile Include="PayrollTest\FakePayrollPeopleLoader.cs" />

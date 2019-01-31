@@ -4,11 +4,11 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeServerConfigurationRepository : IServerConfigurationRepository
 	{
-		public Dictionary<string,string> Configuration = new Dictionary<string, string>();
+		private readonly Dictionary<ServerConfigurationKey, string> _configuration = new Dictionary<ServerConfigurationKey, string>();
 
 		public IEnumerable<ServerConfiguration> AllConfigurations()
 		{
@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 		public void Update(string key, string value)
 		{
-			throw new NotImplementedException();
+			_configuration[(ServerConfigurationKey) Enum.Parse(typeof(ServerConfigurationKey), key)] = value;
 		}
 
 		public string Get(ServerConfigurationKey key)
 		{
-			if (!Configuration.ContainsKey(key.ToString()))
-				return "";
-			return Configuration[key.ToString()];
+			return !_configuration.TryGetValue(key, out var val) ? "" : val;
 		}
 	}
 }

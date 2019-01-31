@@ -16,6 +16,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			}
 
 			var serverConfigurationRepository = new FakeServerConfigurationRepository();
-			serverConfigurationRepository.Configuration.Add("PayrollSourcePath",
+			serverConfigurationRepository.Update("PayrollSourcePath",
 				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"));
 			var initializePayrollFormatsUsingAppDomain =
 				new InitializePayrollFormatsUsingAppDomain(dataSourceForTenant, payrollFormatRepositoryFactory);
