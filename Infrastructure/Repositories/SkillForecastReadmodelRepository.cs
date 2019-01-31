@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -81,47 +84,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTimePeriod period)
 		{
+			const string sql =
+				"select SkillId, StartDateTime,EndDateTime, Agents,AgentsWithShrinkage, Calls, AverageHandleTime,IsBackOffice from [ReadModel].[SkillForecast] " +
+				"Where SkillId In (:skillIds) AND StartDateTime >= :startDate AND StartDateTime <= :endDate";
 			var result = new List<SkillForecast>();
-			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
-			using (var connection = new SqlConnection(connectionString))
-			{
-				connection.Open();
-				using (var transaction = connection.BeginTransaction())
-				{
-					using (var command =
-						new SqlCommand(
-							$"select SkillId, StartDateTime,EndDateTime, Agents,AgentsWithShrinkage, Calls, AverageHandleTime,IsBackOffice from [ReadModel].[SkillForecast] " +
-							$"Where SkillId In ({getInValues(skills)}) AND StartDateTime >= '{period.StartDateTime}' AND StartDateTime <= '{period.EndDateTime}'",
-							connection, transaction))
-					{
-
-						using (var reader = command.ExecuteReader())
-						{
-							if (!reader.HasRows) return new List<SkillForecast>();
-							while (reader.Read())
-							{
-								var skillForecastInterval = new SkillForecast
-								{
-									SkillId = reader.GetGuid(0),
-									StartDateTime = reader.GetDateTime(1),
-									EndDateTime = reader.GetDateTime(2),
-									Agents = reader.GetDouble(3),
-									AgentsWithShrinkage =   reader.GetDouble(4),
-									Calls = reader.GetDouble(5),
-									AverageHandleTime = reader.GetDouble(6),
-									IsBackOffice = reader.GetBoolean(7),
-									
-								};
-								result.Add(skillForecastInterval);
-							}
-						}
-					}
-
-					transaction.Commit();
-					return result;
-				}
-			}
+			result.AddRange(_currentUnitOfWork.Session().CreateSQLQuery(sql)
+					.SetDateTime("startDate", period.StartDateTime )
+					.SetDateTime("endDate", period.EndDateTime)
+					.SetParameterList("skillIds", skills.ToArray())
+					.SetResultTransformer(Transformers.AliasToBean(typeof(SkillForecast)))
+					.SetReadOnly(true)
+					.List<SkillForecast>());
+			
+			return result;
 		}
+		
 
 		private string getInValues(Guid[] values)
 		{
