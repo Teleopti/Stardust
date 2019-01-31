@@ -13,8 +13,9 @@ export class PlanningPeriodOverviewComponent {
 
 	ppId: string;
 	runScheduling: boolean = false;
-	runClear: boolean = false;
 	runIntraday: boolean = false;
+	runClear: boolean = false;
+	runPublish: boolean = false;
 	status: string='';
 	isScheduled: boolean = false;
 	scheduledAgents: number = 0;
@@ -56,6 +57,7 @@ export class PlanningPeriodOverviewComponent {
 	
 	public launchSchedule(){
 		this.runScheduling = true;
+		this.status = this.translate.instant('PresentTenseSchedule');
 		this.planningPeriodService.launchScheduling(this.ppId).subscribe(()=>{
 			this.checkProgress();
 		});
@@ -63,6 +65,7 @@ export class PlanningPeriodOverviewComponent {
 	
 	public optimizeIntraday(){
 		this.runIntraday = true;
+		this.status = this.translate.instant('IntraOptimize');
 		this.planningPeriodService.optimizeIntraday(this.ppId).subscribe(()=>{
 			this.checkProgress();
 		});
@@ -70,13 +73,21 @@ export class PlanningPeriodOverviewComponent {
 	
 	public clearSchedule(){
 		this.runClear = true;
+		this.status = this.translate.instant('ClearScheduleResultAndHistoryData');
 		this.planningPeriodService.clearSchedule(this.ppId).subscribe(()=>{
 			this.checkProgress();
 		});
 	}
+
+	public publishSchedule(){
+		this.runPublish = true;
+		this.planningPeriodService.publishSchedule(this.ppId).subscribe(()=>{
+			this.runPublish = false;
+		});
+	}
 	
 	public isDisabled(){
-		if (this.runScheduling || this.runClear || this.runIntraday)
+		if (this.runScheduling || this.runClear || this.runIntraday || this.runPublish)
 		{
 			return true;
 		}
