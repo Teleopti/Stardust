@@ -1,21 +1,31 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Net;
+using System.Net.Http;
 using System.Text;
-using Teleopti.Ccc.Infrastructure.Foundation;
+using Newtonsoft.Json;
+using Polly;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class GetHttpRequest : IGetHttpRequest
 	{
-		public T Get<T>(string url, NameValueCollection arguments, string userAgent = null)
+		private readonly HttpClient client = new HttpClient();
+
+		public T Get<T>(string url, NameValueCollection arguments)
 		{
 			url = appendQueryStringArguments(url, arguments);
+			
+			var request = new HttpRequestMessage(HttpMethod.Get, url);
+			
+			var returnValue = Policy.Handle<HttpRequestException>()
+				.WaitAndRetry(new[] { TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10) })
+				.Execute(() =>
+				{
+					var result = client.SendAsync(request);
+					return JsonConvert.DeserializeObject<T>(result.Result.Content.ReadAsStringAsync().Result);
+				});
 
-			var request = (HttpWebRequest)WebRequest.Create(url);
-			request.UserAgent = userAgent;
-
-			return request.GetRequest<T>();
+			return returnValue;
 		}
 
 		private static string appendQueryStringArguments(string url, NameValueCollection arguments)
@@ -37,10 +47,23 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		{
 			url = appendQueryStringArguments(url, arguments);
 
-			var request = (HttpWebRequest)WebRequest.Create(url);
-			request.Headers.Add("personid", tenantCredentials.PersonId.ToString());
-			request.Headers.Add("tenantpassword", tenantCredentials.TenantPassword);
-			return request.GetRequest<T>();
+			const string PersonIdHeader = "personid";
+			const string TenantPasswordHeader = "tenantpassword";
+
+			var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+			request.Headers.Add(PersonIdHeader, tenantCredentials.PersonId.ToString());
+			request.Headers.Add(TenantPasswordHeader, tenantCredentials.TenantPassword);
+
+			var returnValue = Policy.Handle<HttpRequestException>()
+				.WaitAndRetry(new[] { TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10) })
+				.Execute(() =>
+				{
+					var result = client.SendAsync(request);
+					return JsonConvert.DeserializeObject<T>(result.Result.Content.ReadAsStringAsync().Result);
+				});
+
+			return returnValue;
 		}
 	}
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 
 namespace Teleopti.Ccc.Infrastructure.Toggle
 {
@@ -10,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 	public class ToggleQuerier : IToggleManager, IToggleFiller
 	{
 		private readonly string _pathToWebAppOrFile;
+		private IGetHttpRequest _getHttpRequest = new GetHttpRequest();
 		private IDictionary<Toggles, bool> _loadedToggles;
 		private readonly object locker = new object();
 
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			lock (locker)
 			{
 				var uriBuilder = new UriBuilder(_pathToWebAppOrFile + "ToggleHandler/AllToggles");
-				_loadedToggles = uriBuilder.ExecuteJsonRequest<IDictionary<Toggles, bool>>();				
+				_loadedToggles = _getHttpRequest.Get<IDictionary<Toggles, bool>>(uriBuilder.ToString(), new NameValueCollection());
 			}
 		}
 	}

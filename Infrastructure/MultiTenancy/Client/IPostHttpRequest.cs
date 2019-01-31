@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 	public interface IGetHttpRequest
 	{
-		T Get<T>(string url, NameValueCollection arguments, string userAgent = null);
+		T Get<T>(string url, NameValueCollection arguments);
 		T GetSecured<T>(string url, NameValueCollection arguments, TenantCredentials tenantCredentials);
 	}
 }

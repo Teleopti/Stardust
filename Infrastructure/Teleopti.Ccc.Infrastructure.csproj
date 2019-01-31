@@ -240,7 +240,6 @@
     <Compile Include="Foundation\HelperFunctions.cs" />
     <Compile Include="Foundation\InitializeMessageBroker.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
-    <Compile Include="Foundation\JsonExtensions.cs" />
     <Compile Include="Foundation\LazyLoadingManager.cs" />
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\ReportUrlConstructor.cs" />

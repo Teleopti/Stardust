@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public NameValueCollection Sent { get; private set; }
 		public TenantCredentials SendTenantCredentials { get; private set; }
 
-		public T Get<T>(string url, NameValueCollection arguments, string userAgent = null)
+		public T Get<T>(string url, NameValueCollection arguments)
 		{
 			Sent = arguments;
 			CalledUrl = url;
