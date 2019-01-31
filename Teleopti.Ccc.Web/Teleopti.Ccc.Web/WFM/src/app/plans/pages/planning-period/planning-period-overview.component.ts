@@ -2,6 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {PlanningPeriodService} from "../../shared";
 import {IStateService} from "angular-ui-router";
 import {TranslateService} from "@ngx-translate/core";
+import {NavigationService} from "../../../core/services";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -12,6 +13,7 @@ import {TranslateService} from "@ngx-translate/core";
 export class PlanningPeriodOverviewComponent {
 
 	ppId: string;
+	groupId: string;
 	runScheduling: boolean = false;
 	runIntraday: boolean = false;
 	runClear: boolean = false;
@@ -35,8 +37,9 @@ export class PlanningPeriodOverviewComponent {
 		preValidation: []
 	};
 
-	constructor(private planningPeriodService: PlanningPeriodService, @Inject('$state') private $state: IStateService, private translate: TranslateService) {
+	constructor(private planningPeriodService: PlanningPeriodService, @Inject('$state') private $state: IStateService, private translate: TranslateService, private navService: NavigationService) {
 		this.ppId = $state.params.ppId.trim();
+		this.groupId = $state.params.groupId.trim();
 	}
 
 	ngOnInit(){
@@ -84,6 +87,10 @@ export class PlanningPeriodOverviewComponent {
 		this.planningPeriodService.publishSchedule(this.ppId).subscribe(()=>{
 			this.runPublish = false;
 		});
+	}
+
+	public editPlanningGroup() {
+		this.navService.go('resourceplanner.editplanninggroup', { groupId: this.groupId });
 	}
 	
 	public isDisabled(){
