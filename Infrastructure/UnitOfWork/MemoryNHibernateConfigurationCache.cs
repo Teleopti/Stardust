@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using NHibernate;
 using NHibernate.Cfg;
 
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			var key = getConfigKey(settings);
 			if (key == null) return defaultValue;
-			return configurationCache.ContainsKey(key) ? configurationCache[key] : defaultValue;
+			return configurationCache.TryGetValue(key, out var config) ? config : defaultValue;
 		}
 
 		public void StoreConfiguration(IDictionary<string, string> settings, Configuration configuration)
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			var key = getSessionFactoryKey(configuration);
 			if (key == null) return defaultValue;
-			return sessionFactoryCache.ContainsKey(key) ? sessionFactoryCache[key] : defaultValue;
+			return sessionFactoryCache.TryGetValue(key, out var factory) ? factory : defaultValue;
 		}
 
 		public void StoreSessionFactory(Configuration configuration, ISessionFactory sessionFactory)
@@ -52,12 +53,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private static string getConfigKey(IDictionary<string, string> settings)
 		{
-			return settings.ContainsKey(Environment.SessionFactoryName) ? settings[Environment.SessionFactoryName] : null;
+			return settings.TryGetValue(Environment.SessionFactoryName, out var val) ? val : null;
 		}
 
 		private static string getSessionFactoryKey(Configuration configuration)
 		{
-			return configuration.Properties.ContainsKey(Environment.SessionFactoryName) ? configuration.Properties[Environment.SessionFactoryName] : null;
+			return configuration.Properties.TryGetValue(Environment.SessionFactoryName, out var val) ? val : null;
 		}
 	}
 }
