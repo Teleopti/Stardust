@@ -296,7 +296,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				EstimatedServiceLevel = EstimatedServiceLevel,
 				EstimatedServiceLevelShrinkage = EstimatedServiceLevelShrinkage,
 				FStaff = FStaff,
-				AverageHandlingTaskTime = Payload.TaskData.AverageHandlingTaskTime
+				AverageHandlingTaskTime = Payload.TaskData.AverageHandlingTaskTime,
+				PercentAnswered = Payload.ServiceAgreementData.ServiceLevel.Percent,
+				AnsweredWithinSeconds = Payload.ServiceAgreementData.ServiceLevel.Seconds
 			}).ToArray();
 		}
 

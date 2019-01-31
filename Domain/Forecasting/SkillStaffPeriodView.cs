@@ -13,5 +13,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    public Percent EstimatedServiceLevel { get; set; }
 	    public Percent EstimatedServiceLevelShrinkage { get; set; }
 		public TimeSpan AverageHandlingTaskTime { get; set; }
+		public Percent PercentAnswered { get; set; }
+		public double AnsweredWithinSeconds { get; set; }
 	}
 }
