@@ -78,14 +78,11 @@
                             {{'PreSchedulingValidationIssues' | translate}}
                             <span>
                                 {{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
-								<span
-                                        tabindex="0"
-                                        class="context-menu card-context"
-                                        ng-disabled="vm.valLoading"
-                                        ng-click="vm.getValidationByPpId();$event.stopPropagation();"
+								<button nz-button nzType="default" nzShape="circle"
+                                        (click)="loadValidations();$event.stopPropagation();"
                                 >
-									<i class="mdi mdi-refresh"></i>
-								</span>
+									<i nz-icon type="reload"></i>
+								</button>
                             </span>
                         </ng-template>
                         <div nz-row>
@@ -132,14 +129,6 @@
                             {{'ScheduledIssues' | translate}}
                             <span>
                                 {{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}
-								<span
-                                        tabindex="0"
-                                        class="context-menu card-context"
-                                        ng-disabled="vm.valLoading"
-                                        ng-click="vm.getValidationByPpId();$event.stopPropagation();"
-                                >
-									<i class="mdi mdi-refresh"></i>
-								</span>
 							</span>
                         </ng-template>
                         <div nz-row>
