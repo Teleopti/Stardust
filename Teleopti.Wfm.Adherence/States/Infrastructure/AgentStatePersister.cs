@@ -5,7 +5,6 @@ using NHibernate;
 using NHibernate.Multi;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Wfm.Adherence.States.Events;
 

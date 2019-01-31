@@ -122,8 +122,10 @@
     <Compile Include="Configuration\RtaState.cs" />
     <Compile Include="Configuration\RtaStateGroup.cs" />
     <Compile Include="Configuration\RtaStateHolder.cs" />
+    <Compile Include="DateExtensions.cs" />
     <Compile Include="DateOnly.cs" />
     <Compile Include="DateTimePeriod.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Historical\AdjustAdherence\AdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\AdjustAdherence\AdjustAdherenceToNeutralCommand.cs" />
     <Compile Include="Historical\AdjustAdherence\AdjustAdherenceToNeutralCommandHandler.cs" />

@@ -49,22 +49,5 @@ namespace Teleopti.Wfm.Adherence.Configuration
 		{
 			get { return Parent as IRtaStateGroup; }
 		}
-
-		public virtual object Clone()
-		{
-			return MemberwiseClone();
-		}
-
-		public virtual IRtaState NoneEntityClone()
-		{
-			var clone = (IRtaState) MemberwiseClone();
-			clone.SetId(null);
-			return clone;
-		}
-
-		public virtual IRtaState EntityClone()
-		{
-			return (IRtaState) MemberwiseClone();
-		}
 	}
 }

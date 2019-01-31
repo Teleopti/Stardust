@@ -4,11 +4,6 @@ using System.Threading;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public interface ICurrentAuthorization
-	{
-		IAuthorization Current();
-	}
-
 	public interface IAuthorizationScope
 	{
 		IDisposable OnThisThreadUse(IAuthorization authorization);

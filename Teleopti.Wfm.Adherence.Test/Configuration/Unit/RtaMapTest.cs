@@ -55,14 +55,6 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 			var clone = target.EntityClone();
 			clone.Activity.Should().Be(activity.Id.Value);
 			clone.Id.Should().Be(target.Id);
-
-			clone = target.NoneEntityClone();
-			clone.Id.HasValue.Should().Be(false);
-			clone.StateGroup.Should().Be(target.StateGroup);
-
-			clone = (IRtaMap) target.Clone();
-			clone.Id.Should().Be(target.Id);
-			clone.RtaRule.Should().Be(target.RtaRule);
 		}
 	}
 }

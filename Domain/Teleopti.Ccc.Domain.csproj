@@ -250,6 +250,7 @@
     <Compile Include="Repositories\ISkillForecastReadModelRepository.cs" />
     <Compile Include="Scheduling\TeamSettings.cs" />
     <Compile Include="Scheduling\UpdateSchedulingOptionsWithTeamSettings.cs" />
+    <Compile Include="Security\Principal\ICurrentAuthorization.cs" />
     <Compile Include="Security\Principal\ITeleoptiIdentityWithUnsafeBusinessUnit.cs" />
     <Compile Include="Repositories\PersonWaitlistedAbsenceRequest.cs" />
     <Compile Include="Security\Principal\OrganisationMembershipExtensions.cs" />
@@ -295,7 +296,6 @@
     <Compile Include="InterfaceLegacy\Domain\IntervalDefinition.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonInfoModel.cs" />
     <Compile Include="InterfaceLegacy\Domain\IStateReader.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IUserCulture.cs" />
     <Compile Include="InterfaceLegacy\Domain\MinMax.cs" />
     <Compile Include="InterfaceLegacy\Domain\ParsedTimeOfDay.cs" />
     <Compile Include="InterfaceLegacy\Domain\Percent.cs" />
@@ -1328,7 +1328,6 @@
     <Compile Include="InterfaceLegacy\Domain\IUndoRedoContainer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnsavedDaysInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnvalidatedScheduleRangeUpdate.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IUserTimeZone.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserUICulture.cs" />
     <Compile Include="InterfaceLegacy\Domain\IValidatedRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IValidatedVolumeDay.cs" />
@@ -1443,7 +1442,6 @@
     <Compile Include="InterfaceLegacy\Infrastructure\IAggregateRootInitializer.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ICurrentAnalyticsUnitOfWork.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ICurrentAnalyticsUnitOfWorkFactory.cs" />
-    <Compile Include="InterfaceLegacy\Infrastructure\ICurrentUnitOfWork.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ICurrentUnitOfWorkFactory.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IDeleteTag.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IHttpServer.cs" />
@@ -1914,7 +1912,6 @@
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\SeatBookingReportCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\SwapMainShiftForTwoPersonsCommand.cs" />
-    <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffAddedEvent.cs" />
@@ -1935,9 +1932,6 @@
     <Compile Include="ApplicationLayer\Forecast\ImportForecastProcessor.cs" />
     <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkill.cs" />
     <Compile Include="ApplicationLayer\Forecast\SplitImportForecastMessage.cs" />
-    <Compile Include="ApplicationLayer\ICurrentEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\IEventPopulatingPublisher.cs" />
-    <Compile Include="ApplicationLayer\IEventPublisherScope.cs" />
     <Compile Include="ApplicationLayer\IgnoreDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommandHandler.cs" />
@@ -2139,7 +2133,6 @@
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
-    <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
     <Compile Include="DummyDataSource.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\WorkloadAccuracy.cs" />

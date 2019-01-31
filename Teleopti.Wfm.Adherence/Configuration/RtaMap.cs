@@ -39,18 +39,6 @@ namespace Teleopti.Wfm.Adherence.Configuration
 			set { _rtaRule = value; }
 		}
 
-		public virtual object Clone()
-		{
-			return EntityClone();
-		}
-
-		public virtual IRtaMap NoneEntityClone()
-		{
-			var clone = (IRtaMap) MemberwiseClone();
-			clone.SetId(null);
-			return clone;
-		}
-
 		public virtual IRtaMap EntityClone()
 		{
 			return (IRtaMap) MemberwiseClone();
