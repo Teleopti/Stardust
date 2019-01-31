@@ -17,8 +17,9 @@ export class PlanningPeriodOverviewComponent {
 	isScheduled: boolean = false;
 	scheduledAgents: number = 0;
 	timer: any;
-	
+	planningPeriodInfo: any;
 	valLoading: boolean = true;
+	
 
 	dayNodes;
 
@@ -35,6 +36,7 @@ export class PlanningPeriodOverviewComponent {
 	}
 
 	ngOnInit(){
+		this.loadPlanningPeriodInfo();
 		this.loadValidations();
 		this.loadLastResult();
 		this.checkState();
@@ -76,6 +78,12 @@ export class PlanningPeriodOverviewComponent {
 			}
 		});
 	};
+	
+	private loadPlanningPeriodInfo(){
+		this.planningPeriodService.getPlanningPeriodInfo(this.ppId).subscribe(data=>{
+			this.planningPeriodInfo = data?data:{};
+		});
+	}
 	
 	private updateValidationErrorsNumber(){
 		this.valData.totalValNum = 0;

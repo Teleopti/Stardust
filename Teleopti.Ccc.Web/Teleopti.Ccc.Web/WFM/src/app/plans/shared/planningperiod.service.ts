@@ -21,4 +21,8 @@ export class PlanningPeriodService {
 	public getValidation(planningPeriodId: string){
 		return this.httpClient.get('../api/resourceplanner/planningperiod/'+planningPeriodId+'/validation') as Observable<any>;
 	}
+
+	public getPlanningPeriodInfo(planningPeriodId: string){
+		return this.httpClient.get('../api/resourceplanner/planningperiod/'+planningPeriodId) as Observable<any>;
+	}
 }
