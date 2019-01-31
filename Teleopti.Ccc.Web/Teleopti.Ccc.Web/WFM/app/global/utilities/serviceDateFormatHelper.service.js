@@ -14,12 +14,14 @@
 		var self = this;
 
 		this.getDateByFormat = function (date, format) {
-			var dateMoment = date;
+			var dateMoment = null;
 			if (!(date instanceof moment)) {
 				dateMoment = moment(date);
+			} else {
+				dateMoment = date.clone();
 			}
 
-			if (moment.locale() != 'en') {
+			if (dateMoment.locale() != 'en') {
 				dateMoment.locale('en');
 			}
 
