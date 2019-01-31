@@ -33,7 +33,15 @@ export class PlanningPeriodOverviewComponent {
 			if (!fullSchedulingResult) return;
 			this.dayNodes = fullSchedulingResult.SkillResultList ? fullSchedulingResult.SkillResultList : undefined;
 		});
-		
+	}
+	
+	public launchSchedule(){
+		this.planningPeriodService.launchScheduling(this.ppId).subscribe(()=>{
+			this.checkProgress();
+		});
+	}
+	
+	private checkProgress(){
 		
 	}
 }

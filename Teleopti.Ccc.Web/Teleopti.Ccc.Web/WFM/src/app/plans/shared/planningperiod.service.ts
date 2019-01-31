@@ -9,4 +9,8 @@ export class PlanningPeriodService {
 	public lastJobResult(planningPeriodId: string): Observable<any> {
 		return this.httpClient.get('../api/resourceplanner/planningperiod/'+planningPeriodId+'/result') as Observable<any>; 
 	}
+	
+	public launchScheduling(planningPeriodId: string) {
+		return this.httpClient.post('../api/resourceplanner/planningperiod/'+planningPeriodId+'/schedule', {}) as Observable<string>;
+	}
 }
