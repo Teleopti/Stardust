@@ -377,6 +377,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var personToDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_toPerson, new Scenario("scenario"), DateOnly.Today, theDayOff);
 			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub(expactedTime, _fromPerson, SchedulePartView.DayOff, personFromDayOff);
 			var scheduleDayTo = _scheduleFactory.ScheduleDayStub(expactedTime, _toPerson, SchedulePartView.DayOff, personToDayOff);
+			scheduleDayTo.Stub(x => x.Period).Return(new DateTimePeriod(expactedTime, expactedTime.AddDays(1)));
 			_projectionProvider.Expect(x => x.Projection(scheduleDayFrom)).Return(_scheduleFactory.ProjectionStub());
 			_projectionProvider.Expect(x => x.Projection(scheduleDayTo)).Return(_scheduleFactory.ProjectionStub());
 
