@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Polly;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
 			var returnValue = Policy.Handle<HttpRequestException>()
-				.Or<AggregateException>(ex => ex.InnerExceptions.Any(e => e is HttpRequestException))
+				.Or<AggregateException>(ex => ex.InnerExceptions.Any(e => e is HttpRequestException || e is TaskCanceledException))
 				.WaitAndRetry(new[] { TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10) })
 				.Execute(() =>
 				{
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			request.Headers.Add(TenantPasswordHeader, tenantCredentials.TenantPassword);
 
 			var returnValue = Policy.Handle<HttpRequestException>()
-				.Or<AggregateException>(ex => ex.InnerExceptions.Any(e => e is HttpRequestException))
+				.Or<AggregateException>(ex => ex.InnerExceptions.Any(e => e is HttpRequestException || e is TaskCanceledException))
 				.WaitAndRetry(new[] { TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10) })
 				.Execute(() =>
 				{
