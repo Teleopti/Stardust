@@ -8,9 +8,8 @@
         <button nz-button nzType="default" (click)="optimizeIntraday()">{{'IntraOptimize' | translate}}</button>
         <button nz-button nzType="default" (click)="clearSchedule()">{{'ClearScheduleResultAndHistoryData' | translate}}</button>
         <button nz-button nzType="default" (click)="publishSchedule()">{{'PublishSchedulePlans' | translate}}</button>
+        <button class="pull-right" nz-button nzType="default" (click)="editPlanningGroup()">{{'PlanGroupScheduling' | translate}}</button>
     </nz-spin>
-    
-    <button nz-button nzType="default" (click)="editPlanningGroup()">{{'PlanGroupScheduling' | translate}}</button>
     
     <nz-tabset>
         <nz-tab nzTitle="{{'Overview'|translate}}">
@@ -71,19 +70,21 @@
             <ng-template #titleTemplate>
                 {{'Validations'|translate}}<nz-badge [nzCount]="valData.totalValNum"></nz-badge>
             </ng-template>
-            <div nz-row *ngIf="valData.totalValNum !== 0">
+            <div *ngIf="valData.totalValNum !== 0">
                 <nz-collapse>
                     <nz-collapse-panel [nzHeader]="preValidationsTitle">
                         <ng-template #preValidationsTitle>
-                            {{'PreSchedulingValidationIssues' | translate}}
-                            <span>
+                            <div nz-row>
+                                <span nz-col [nzSpan]="12">{{'PreSchedulingValidationIssues' | translate}}</span>
+                                <span nz-col [nzSpan]="12">
                                 {{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
-								<button nz-button nzType="default" nzShape="circle"
-                                        (click)="loadValidations();$event.stopPropagation();"
-                                >
+                                    <button nz-button nzType="default" nzShape="circle"
+                                            (click)="loadValidations();$event.stopPropagation();"
+                                    >
 									<i nz-icon type="reload"></i>
 								</button>
                             </span>
+                            </div>
                         </ng-template>
                         <div nz-row>
                             <div class="con-flex ">
@@ -126,10 +127,10 @@
                     </nz-collapse-panel>
                     <nz-collapse-panel [nzHeader]="scheduleIssuesTitle">
                         <ng-template #scheduleIssuesTitle>
-                            {{'ScheduledIssues' | translate}}
-                            <span>
-                                {{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}
-							</span>
+                            <div nz-row>
+                                <span nz-col [nzSpan]="12">{{'ScheduledIssues' | translate}}</span>
+                                <span nz-col [nzSpan]="12">{{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}</span>
+                            </div>
                         </ng-template>
                         <div nz-row>
                             <div class="con-flex ">
