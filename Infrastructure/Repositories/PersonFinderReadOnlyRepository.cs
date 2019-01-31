@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				var sql = $@"Select EmploymentNumber as [Identity], PersonId as PersonId, {(int)IdentityMatchField.EmploymentNumber} as MatchField
 							     From ReadModel.FindPerson
-							    Where BusinessUnitId = '{businessUnit.Id}'
+							    Where BusinessUnitId = :businessUnit
 							      And EmploymentNumber in (:identities)
 							   Union
 							   Select Distinct UserCode, PersonId, {(int)IdentityMatchField.ExternalLogon}
@@ -92,6 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.AddScalar("PersonId", NHibernateUtil.Guid)
 					.AddScalar("MatchField", NHibernateUtil.Int32)
 					.SetParameterList("identities", identitiesInBatch.ToArray())
+					.SetGuid("businessUnit", businessUnit.Id.GetValueOrDefault())
 					.SetReadOnly(true)
 					.List<object[]>()
 					.Select(x => new PersonIdentityMatchResult
