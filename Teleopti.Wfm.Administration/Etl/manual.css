@@ -1,7 +1,7 @@
-﻿@media only screen and (min-width: 1452px) {
+﻿@media only screen and (min-width: 1741px) {
 
 	.manualJobOuterDateContainer {
-		position: fixed;
+		position: fixed !important;
 		position: -webkit-sticky; /* Safari */
 		position: sticky;
 		height: 80%;
@@ -12,6 +12,8 @@
 		left: 0;
 		-ms-overflow-style: none;
 		overflow: auto;
+		top: 5em;
+		margin-left: 1em;
 	}
 
 		.manualJobOuterDateContainer::-webkit-scrollbar {
@@ -27,11 +29,7 @@
 		margin: 0;
 		left: 0;
 	}
-
-	.ETLManualTopContainer {
-		margin-left: 16.66666667%;
-	}
-
+	
 	.manualJobDateFrom h5 {
 		margin: 0
 	}
@@ -92,20 +90,17 @@
 	}
 }
 
-@media only screen and (max-width: 1452px) {
+@media only screen and (max-width: 1740px) {
 
 	.manualJobDateContainer {
 		width: 100%;
 	}
 
-	.ETLManualTopContainer {
-		margin-left: 8.33333333%;
-	}
-
-
 	.manualJobInnerDateContainer {
 		float: left;
-		margin-right: 5px;
+		margin-right: 2em;
+		margin-left: -1em;
+		min-width: 18em;
 	}
 }
 
