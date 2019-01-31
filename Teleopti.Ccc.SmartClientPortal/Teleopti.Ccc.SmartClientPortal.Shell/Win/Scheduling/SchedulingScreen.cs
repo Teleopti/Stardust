@@ -1884,7 +1884,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
 			loadLockMenues();
-			loadScenarioMenuItems();
+			if(!_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_HideExportSchedule_81161))
+			{
+				loadScenarioMenuItems();
+			}
+			else
+			{
+				backStageTabExportTo.Visible = false;
+				backStageTabExportTo.TabVisible = false;
+			}
 
 			toolStripStatusLabelStatus.Text = @"SETTING UP SKILL TABS...";
 			ResumeLayout(true);
@@ -3811,7 +3819,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			enableSave();
 		}
 
-		[RemoveMeWithToggle("function + flowLayoutExportToScenario from designer", Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+		[RemoveMeWithToggle("function + flowLayoutExportToScenario from designer", Toggles.ResourcePlanner_HideExportSchedule_81161)]
 		private void loadScenarioMenuItems()
 		{
 			IList<IScenario> scenarios;
@@ -3831,7 +3839,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if (RightToLeftLayout) flowLayoutExportToScenario.ReverseRows = true;
 
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576))
+			if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_HideExportSchedule_81161))
 			{
 				var exportLimitedTime = new Label
 				{
@@ -3845,9 +3853,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				exportLimitedTime.Font.ChangeToBold();
 				flowLayoutExportToScenario.ContainerControl.Controls.Add(exportLimitedTime);
 			}
-
-			backStageButtonManiMenuImport.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
-			backStageButtonMainMenuCopy.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
 
 			foreach (var scenario in scenarios)
 			{
@@ -3868,7 +3873,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_HideExportSchedule_81161)]
 		private void menuItemClick(object sender, EventArgs e)
 		{
 			var buttonAdv = sender as ButtonAdv;

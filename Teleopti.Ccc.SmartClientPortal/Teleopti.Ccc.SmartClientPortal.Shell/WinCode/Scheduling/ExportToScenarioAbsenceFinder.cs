@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideExportSchedule_81161)]
 	public interface IExportToScenarioAbsenceFinder
 	{
 		Dictionary<IPerson, HashSet<IAbsence>> Find(IScenario exportScenario,
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			ICollection<DateOnly> datesToExport);
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideExportSchedule_81161)]
 	public class ExportToScenarioAbsenceFinder : IExportToScenarioAbsenceFinder
 	{
 		public Dictionary<IPerson, HashSet<IAbsence>> Find(IScenario exportScenario, 

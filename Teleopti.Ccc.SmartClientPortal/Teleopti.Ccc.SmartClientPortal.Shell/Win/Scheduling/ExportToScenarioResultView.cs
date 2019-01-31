@@ -16,7 +16,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideExportSchedule_81161)]
 	public partial class ExportToScenarioResultView : BaseDialogForm, IExportToScenarioResultView
 	{
 		private ExportToScenarioResultPresenter _presenter;

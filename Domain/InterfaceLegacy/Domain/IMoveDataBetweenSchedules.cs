@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideExportSchedule_81161)]
 	public interface IMoveDataBetweenSchedules
     {
         /// <summary>

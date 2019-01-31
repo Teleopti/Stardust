@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			ICollection<DateOnly> datesToExport);
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideExportSchedule_81161)]
 	public class ExportToScenarioAccountPersister : IExportToScenarioAccountPersister
 	{
 		private readonly IPersonAccountPersister _personAccountPersister;

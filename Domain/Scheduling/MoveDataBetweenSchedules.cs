@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_HideExportSchedule_81161)]
 	public class MoveDataBetweenSchedules : IMoveDataBetweenSchedules
 	{
 		private readonly INewBusinessRuleCollection _newBusinessRules;
