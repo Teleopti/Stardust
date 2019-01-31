@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<SkillForecastIntervalCalculator>().SingleInstance();
 				builder.RegisterType<SkillForecastReadModelPeriodBuilder>().SingleInstance();
+				builder.RegisterType<SystemJobStartTimeRepository>().As<ISystemJobStartTimeRepository>().SingleInstance();
 				builder.RegisterType<SkillForecastSettingsReader>().SingleInstance();
 
 			}

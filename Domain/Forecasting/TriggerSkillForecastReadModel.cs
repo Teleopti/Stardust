@@ -59,6 +59,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		DateTime? GetLastCalculatedTime(Guid bu, string jobName);
 	}
 
+	public class SystemJobStartTimeRepository : ISystemJobStartTimeRepository
+	{
+		public DateTime? GetLastCalculatedTime(Guid bu, string jobName)
+		{
+			return null;
+		}
+	}
+
 	public static class JobNamesForJoStartTime
 	{
 		public static string TriggerSkillForecastReadModel => "TriggerSkillForecastReadModel";
