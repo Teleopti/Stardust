@@ -1,31 +1,39 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class SkillStaffPeriodEx : SkillStaffPeriod
 	{
 		public double AnsweredWithinSeconds { get; set; }
-		public double Forecast { get; set; }
-		private double BookedAgainstIncomingDemand65 { get; set; }
-		private double _calculatedResource;
 		public Guid SkillId { get; set; }
-		
-		public SkillStaffPeriodEx(){}
-		
-		private SkillStaffPeriodEx(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData) : base(period, taskData, serviceAgreementData)
+
+		public double Forecast
+		{
+			get
+			{
+				SkillStaff skillStaff = (SkillStaff)Payload;
+				return skillStaff.ForecastedIncomingDemand;
+			}
+			set
+			{
+				SkillStaff skillStaff = (SkillStaff)Payload;
+				skillStaff.ForecastedIncomingDemand = value;
+			}
+		}
+
+		public SkillStaffPeriodEx(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData) : base(period, taskData, serviceAgreementData)
 		{
 		}
 
 		public new void SetCalculatedResource65(double resources)
 		{
-			_calculatedResource = resources;
-			
+			SkillStaff skillStaff = (SkillStaff)Payload;
+			skillStaff.CalculatedResource = resources;
+
 			if (SegmentInThisCollection.Count == 1)
 			{
 				PickResources65();
@@ -56,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private void createSkillStaffSegments65(IList<SkillStaffPeriodEx> sortedPeriods, int currentIndex)
 		{
 			var ourPeriod = sortedPeriods[currentIndex];
-			var sa = TimeSpan.FromSeconds(AnsweredWithinSeconds);//Payload.ServiceAgreementData.ServiceLevel.Seconds);
+			var sa = TimeSpan.FromSeconds(AnsweredWithinSeconds);
 
 			for (; currentIndex < sortedPeriods.Count; currentIndex++)
 			{
@@ -84,31 +92,31 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 		}
 		
-		public new void PickResources65()
+		public override void PickResources65()
 		{
 			//_estimatedServiceLevel = null;
 			//_estimatedServiceLevelShrinkage = null;
 
-			//SkillStaff thisSkillStaff = (SkillStaff) Payload;
+			SkillStaff thisSkillStaff = (SkillStaff) Payload;
 
 			if (SortedSegmentCollection.Count == 1)
 			{
-				BookedAgainstIncomingDemand65 = _calculatedResource;
-				SortedSegmentCollection[0].BookedResource65 = _calculatedResource;
+				thisSkillStaff.BookedAgainstIncomingDemand65 = thisSkillStaff.CalculatedResource;
+				SortedSegmentCollection[0].BookedResource65 = thisSkillStaff.CalculatedResource;
 				_bookedResource65 = _segmentInThisCollection.Sum(x => x.BookedResource65);
 			}
 			else
 			{
-				var forecastIncomingDemand = Forecast;
+				var forecastIncomingDemand = thisSkillStaff.ForecastedIncomingDemand;
 
-				BookedAgainstIncomingDemand65 = 0;
+				thisSkillStaff.BookedAgainstIncomingDemand65 = 0;
 
 				foreach (var xSegment in SortedSegmentCollection)
 				{
 					((SkillStaffPeriod) xSegment.BelongsToY)._bookedResource65 -= xSegment.BookedResource65;
 					xSegment.BookedResource65 = 0;
 
-					var diff = forecastIncomingDemand - BookedAgainstIncomingDemand65;
+					var diff = forecastIncomingDemand - thisSkillStaff.BookedAgainstIncomingDemand65;
 					if (diff > 0)
 					{
 						ISkillStaffPeriod ownerSkillStaffPeriod = xSegment.BelongsToY;
@@ -123,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 						if (diff >= ownerNotBookedResource)
 							diff = ownerNotBookedResource;
 
-						BookedAgainstIncomingDemand65 += diff;
+						thisSkillStaff.BookedAgainstIncomingDemand65 += diff;
 						xSegment.BookedResource65 = diff;
 						((SkillStaffPeriod) xSegment.BelongsToY)._bookedResource65 += xSegment.BookedResource65;
 					}

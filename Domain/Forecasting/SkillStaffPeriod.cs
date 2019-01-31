@@ -24,7 +24,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		private readonly object Locker = new object();
 
-		protected internal SkillStaffPeriod(){}
+		//protected internal SkillStaffPeriod()
+		//{
+		//	_sortedSegmentCollection = new SortedList<DateTime, ISkillStaffSegmentPeriod>();
+		//	_segmentInThisCollection = new List<ISkillStaffSegmentPeriod>();
+		//}
 		
 		public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData) : base(
 			new SkillStaff(taskData, serviceAgreementData), period)
@@ -647,7 +651,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public IStaffingCalculatorServiceFacade StaffingCalculatorService =>
 			SkillDay.Skill.SkillType.StaffingCalculatorService;
 
-		public void PickResources65()
+		public virtual void PickResources65()
 		{
 			_estimatedServiceLevel = null;
 			_estimatedServiceLevelShrinkage = null;

@@ -53,11 +53,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 					skillForecast.AnsweredWithinSeconds);
 				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.3), new Percent(0.8));
 
-				var skillStaffPeriod = new SkillStaffPeriodEx
+				var skillStaffPeriod = new SkillStaffPeriodEx(new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime), new Task(), serviceAgreement)
 				{
 					AnsweredWithinSeconds = skillForecast.AnsweredWithinSeconds,
 					Forecast = useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,
-					SkillId = skillForecast.SkillId
+					SkillId = skillForecast.SkillId,
+					Period = new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime)
 				};
 				
 				//new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime), 
@@ -145,15 +146,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 			foreach (var skillStaffPeriodsForSkill in skillStaffPeriodsBySkill)
 			{
 				var skillId = skillStaffPeriodsForSkill.Key;
-				//var skillStaffPeriod = skillStaffPeriodsForSkill;
-				var skillCombinationsForSkill = skillCombinationResources.Where(s => s.SkillCombination.Contains(skillId));
+				var skillCombinationsForSkill = skillCombinationResources.Where(s => s.SkillCombination.Contains(skillId)).ToList();
+
 				skillStaffPeriodsForSkill.ForEach(ssp => ssp.SetCalculatedResource65(0));
-				
-				var totalResources = skillCombinationsForSkill.Where(s => s.StartDateTime == s.StartDateTime)
-					.Sum(s => s.Resource);
-				
-				//if(totalResources > 0)
-				//	skillStaffPeriod.SetCalculatedResource65(totalResources);
+				foreach (var skillStaffPeriodForSkill in skillStaffPeriodsForSkill)
+				{
+					var totalResources = skillCombinationsForSkill.Where(s => s.StartDateTime == skillStaffPeriodForSkill.Period.StartDateTime)
+						.Sum(s => s.Resource);
+
+					if(totalResources > 0)
+						skillStaffPeriodForSkill.SetCalculatedResource65(totalResources);
+				}
 			}
 		}
 	}
