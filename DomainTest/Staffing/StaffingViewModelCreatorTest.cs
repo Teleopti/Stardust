@@ -245,6 +245,46 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			vm.DataSeries.ForecastedStaffing[1].Should().Be.EqualTo(11);
 			vm.DataSeries.ForecastedStaffing[91].Should().Be.EqualTo(101);
 		}
+		
+		[Test, Ignore("WIP")]
+		public void ShouldHandleBacklogSkill()
+		{
+			TimeZone.IsSweden();
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var userNow = new DateTime(2019, 03, 31, 8, 15, 0);
+			var userNowUtc = TimeZoneInfo.ConvertTimeToUtc(userNow, TimeZone.TimeZone());
+			Now.Is(userNowUtc);
+
+			var opensAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2019, 03, 31, 0, 0, 0), TimeZone.TimeZone());
+			var closesAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2019, 04, 1, 0, 0, 0), TimeZone.TimeZone());
+			// to avoid daylighttimesavingchangedate
+			var openHours = new DateTimePeriod(opensAtUtc.AddMonths(-1), opensAtUtc.AddMonths(-1).AddDays(1)).TimePeriod(TimeZoneInfo.Utc);
+
+			var act = ActivityFactory.CreateActivity("act");
+			var emailSkill = SkillSetupHelper.CreateSkill(minutesPerInterval, "email", openHours, false, act, TimeSpan.FromHours(opensAtUtc.Hour));
+			SkillRepository.Has(emailSkill);
+
+			var val = 1;
+			for (var startTime = opensAtUtc.AddDays(-8); startTime < closesAtUtc.AddHours(2); startTime = startTime.AddMinutes(15))
+			{
+				SkillSetupHelper.PopulateForecastReadModels(emailSkill, startTime, startTime.AddMinutes(15), val + 5, 
+					SkillForecastReadModelRepository, isBackOffice: true, percentAnswered: .8, answeredWithinSeconds: TimeSpan.FromDays(3).TotalSeconds);
+				SkillSetupHelper.PopulateStaffingReadModels(emailSkill, startTime, startTime.AddMinutes(15), val++, SkillCombinationResourceRepository);
+			}
+
+			var vm = Target.Load(new[] { emailSkill.Id.GetValueOrDefault() }, new DateOnly(2019, 03, 31), useShrinkage: false);
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(92);
+			vm.DataSeries.ScheduledStaffing.Length.Should().Be(92);
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be(92);
+			vm.DataSeries.ScheduledStaffing[0].Should().Be.EqualTo(769);
+			vm.DataSeries.ScheduledStaffing[1].Should().Be.EqualTo(770);
+			vm.DataSeries.ScheduledStaffing[91].Should().Be.EqualTo(860);
+
+			vm.DataSeries.ForecastedStaffing[0].Should().Be.EqualTo(774);
+			vm.DataSeries.ForecastedStaffing[1].Should().Be.EqualTo(775);
+			vm.DataSeries.ForecastedStaffing[91].Should().Be.EqualTo(865);
+		}
 	}
 
 	

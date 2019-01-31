@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	public class SkillStaffPeriod : Layer<ISkillStaff>, ISkillStaffPeriod, IAggregateSkillStaffPeriod,
 		IShovelResourceDataForInterval
 	{
-		private readonly SortedList<DateTime, ISkillStaffSegmentPeriod> _sortedSegmentCollection;
-		private IList<ISkillStaffSegmentPeriod> _segmentInThisCollection;
+		protected internal readonly SortedList<DateTime, ISkillStaffSegmentPeriod> _sortedSegmentCollection;
+		protected internal IList<ISkillStaffSegmentPeriod> _segmentInThisCollection;
 		private bool _isAggregate;
 		private double _aggregatedFStaff;
 		private double _aggregatedCalculatedResources;
@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		private readonly object Locker = new object();
 
+		protected internal SkillStaffPeriod(){}
+		
 		public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData) : base(
 			new SkillStaff(taskData, serviceAgreementData), period)
 		{
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public double IncomingDifference => ScheduledAgentsIncoming - Payload.ForecastedIncomingDemand;
 
-		private double _bookedResource65;
+		protected internal double _bookedResource65;
 
 		public double BookedResource65
 		{

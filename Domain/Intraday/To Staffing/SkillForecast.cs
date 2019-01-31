@@ -12,5 +12,7 @@ namespace Teleopti.Ccc.Domain.Intraday.To_Staffing
 		public double Calls { get; set; }
 		public double AverageHandleTime { get; set; }
 		public bool IsBackOffice { get; set; }
+		public double PercentAnswered { get; set; }
+		public double AnsweredWithinSeconds { get; set; }
 	}
 }

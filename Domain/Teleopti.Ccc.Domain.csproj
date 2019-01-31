@@ -256,6 +256,7 @@
     <Compile Include="Security\Principal\TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.cs" />
     <Compile Include="Staffing\IStaffingViewModelCreator.cs" />
     <Compile Include="Staffing\ResourceCalculationUsingReadModels.cs" />
+    <Compile Include="Staffing\SkillStaffPeriodEx.cs" />
     <Compile Include="Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Forecasting\UpdateSkillForecastReadModelHandler.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />

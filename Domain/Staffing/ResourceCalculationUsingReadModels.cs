@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
@@ -32,24 +36,81 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var dateOnlyPeriod = new DateOnlyPeriod(firstPeriodDateInSkillTimeZone, lastPeriodDateInSkillTimeZone);
 
 			var period = new DateTimePeriod(startOfDayUtc, endOfDayUtc);
-			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
+			var skillCombinationFetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-8), endOfDayUtc);
+			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(skillCombinationFetchPeriod).ToList();
 			
 			var skillForecastList =
 				_skillForecastReadModelRepository.LoadSkillForecast(skillIds.ToArray(), period);
 
-			var intervals = skillForecastList.Select(skillForecast => new SkillStaffingInterval
+			var skillStaffPeriods = new List<SkillStaffPeriodEx>();
+
+			var backlogSkillForecastList = skillForecastList.Where(sf => sf.IsBackOffice).ToList();
+			var nonBacklogSkillForecastList = skillForecastList.Where(sf => !sf.IsBackOffice).ToList();
+			
+			foreach (var skillForecast in backlogSkillForecastList)
+			{
+				var serviceLevel = new ServiceLevel(new Percent(skillForecast.PercentAnswered),
+					skillForecast.AnsweredWithinSeconds);
+				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.3), new Percent(0.8));
+
+				var skillStaffPeriod = new SkillStaffPeriodEx
+				{
+					AnsweredWithinSeconds = skillForecast.AnsweredWithinSeconds,
+					Forecast = useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,
+					SkillId = skillForecast.SkillId
+				};
+				
+				//new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime), 
+					//new Task(useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,TimeSpan.FromSeconds(skillForecast.AverageHandleTime),TimeSpan.Zero), 
+					//serviceAgreement);
+
+				//var skillDayLight = new SkillDayLight(skills.SingleOrDefault(s => s.Id == skillForecast.SkillId));
+				//skillStaffPeriod.SetSkillDay(skillDayLight);
+
+				//skillStaffPeriod.ForecastedDistributedDemand
+				
+				
+				//skillStaffPeriod.CalculateStaff();
+				skillStaffPeriods.Add(skillStaffPeriod);
+			}
+
+			var groupedSkillStaffPeriods = skillStaffPeriods.ToLookup(p => p.SkillId);
+			
+			foreach (var staffPeriodsForSkillId in groupedSkillStaffPeriods)
+			{
+				foreach (var intervalForSkillId in staffPeriodsForSkillId)
+				{
+					intervalForSkillId.CreateSegmentCollection(staffPeriodsForSkillId.ToList());
+				}
+			}
+			
+			calculateForecastAgentsForEmailSkills(groupedSkillStaffPeriods,combinationResources);
+			var returnList = new HashSet<SkillStaffingInterval>();
+			var intervals = skillStaffPeriods.Select(sspBySkill =>
+			{
+				var skillStaffPeriod = sspBySkill;
+				return new SkillStaffingInterval
+				{
+					SkillId = skillStaffPeriod.SkillId,
+					StartDateTime = skillStaffPeriod.Period.StartDateTime,
+					EndDateTime = skillStaffPeriod.Period.EndDateTime,
+					Forecast = skillStaffPeriod.FStaff,
+					StaffingLevel = skillStaffPeriod.BookedResource65
+					//IsBacklogType = true
+				};
+			}).ToList();
+			intervals.ForEach(i => returnList.Add(i));
+			
+			var nonBacklogSkillStaffingIntervals = nonBacklogSkillForecastList.Select(skillForecast => new SkillStaffingInterval
 			{
 				SkillId = skillForecast.SkillId,
 				StartDateTime = skillForecast.StartDateTime,
 				EndDateTime = skillForecast.EndDateTime,
 				Forecast = useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,
-				StaffingLevel = 0,
-				IsBacklogType = skillForecast.IsBackOffice
+				//StaffingLevel = 0,
+				//IsBacklogType = false
 			}).ToList();
-			
-			calculateForecastAgentsForEmailSkills(intervals,combinationResources);
-			var returnList = new HashSet<SkillStaffingInterval>();
-			intervals.ForEach(i => returnList.Add(i));
+			nonBacklogSkillStaffingIntervals.ForEach(i => returnList.Add(i));
 
 			var skillStaffingIntervals = returnList
 				.Where(x => period.Contains(x.StartDateTime) || x.DateTimePeriod.Contains(period.StartDateTime)).ToList();
@@ -78,20 +139,21 @@ namespace Teleopti.Ccc.Domain.Staffing
 			return skillStaffingIntervals;
 		}
 		
-		private static void calculateForecastAgentsForEmailSkills(IList<SkillStaffingInterval> skillStaffingIntervals, IList<SkillCombinationResource> skillCombinationResources)
+		private static void calculateForecastAgentsForEmailSkills(ILookup<Guid, SkillStaffPeriodEx> skillStaffPeriodsBySkill, IList<SkillCombinationResource> skillCombinationResources)
 		{
-			var backlogSkillStaffingIntervals = skillStaffingIntervals.Where(s => s.IsBacklogType);
-
-			foreach (var interval in backlogSkillStaffingIntervals)
+			//TODO: move from old structure to new Skill Grouped SkillStaffPeriodEx  
+			foreach (var skillStaffPeriodsForSkill in skillStaffPeriodsBySkill)
 			{
-				var skillId = interval.SkillId;
+				var skillId = skillStaffPeriodsForSkill.Key;
+				//var skillStaffPeriod = skillStaffPeriodsForSkill;
 				var skillCombinationsForSkill = skillCombinationResources.Where(s => s.SkillCombination.Contains(skillId));
-				interval.SetCalculatedResource65(0);
-				var totalResources = skillCombinationsForSkill.Where(s => s.StartDateTime == interval.StartDateTime)
+				skillStaffPeriodsForSkill.ForEach(ssp => ssp.SetCalculatedResource65(0));
+				
+				var totalResources = skillCombinationsForSkill.Where(s => s.StartDateTime == s.StartDateTime)
 					.Sum(s => s.Resource);
 				
-				if(totalResources > 0)
-					interval.SetCalculatedResource65(totalResources);
+				//if(totalResources > 0)
+				//	skillStaffPeriod.SetCalculatedResource65(totalResources);
 			}
 		}
 	}
