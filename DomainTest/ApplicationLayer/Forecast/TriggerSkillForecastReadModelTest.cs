@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	[Ignore("WIP")]
 	public class TriggerSkillForecastReadModelTest : IIsolateSystem
 	{
-		public FakeReadModelStartTimeRepository ReadModelStartTimeRepository;
+		public FakeSystemJobStartTimeRepository SystemJobStartTimeRepository;
 		public MutableNow Now;
 		public FakeEventPublisher Publisher;
 		public TriggerSkillForecastReadModel Target;
@@ -31,8 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<SkillForecastIntervalCalculator>().For<SkillForecastIntervalCalculator>();
-			isolate.UseTestDouble<FakeReadModelStartTimeRepository>().For<IReadModelStartTimeRepository>();
 			isolate.UseTestDouble<StaffingSettingsReader49Days>().For<IStaffingSettingsReader>();
 		}
 
@@ -56,23 +54,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		[Test]
 		public void ShouldPublishEventForNext8Days()
 		{
+			var bu = BusinessUnitFactory.CreateWithId("bu");
+			BusinessUnitRepository.Add(bu);
 			Now.Is(new DateTime(2019, 1, 30, 10, 0, 0, DateTimeKind.Utc));
-			//ReadModelStartTimeRepository.FakeTime = new DateTime(2019, 1, 23, 10, 0, 0, DateTimeKind.Utc);
+			var lastExecuted = new DateTime(2019, 1, 23, 10, 0, 0, DateTimeKind.Utc);
+			createFakeRecord(bu.Id.GetValueOrDefault(),lastExecuted );
+
 			Target.Handle(new TenantDayTickEvent());
 
 			Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Count().Should().Be.EqualTo(1);
 			var @event = Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().FirstOrDefault();
 			var staffingDaysNum = StaffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 49);
 			var extraDaysForForecast = SkillForecastSettingsReader.NumberOfExtraDaysInFuture;
-			//@event.StartDateTime.Should().Be.EqualTo(ReadModelStartTimeRepository.FakeTime.Value.AddDays(staffingDaysNum+extraDaysForForecast).Date);
+			@event.StartDateTime.Should().Be.EqualTo(lastExecuted.AddDays(staffingDaysNum+extraDaysForForecast).Date);
 			@event.EndDateTime.Should().Be.EqualTo(@event.StartDateTime.AddDays(extraDaysForForecast).Date);
 		}
 
 		[Test]
 		public void ShouldNotPublishEventForNext8DaysIfRecentlyUpdated()
 		{
+			var bu = BusinessUnitFactory.CreateWithId("bu");
+			BusinessUnitRepository.Add(bu);
 			Now.Is(new DateTime(2019, 1, 30, 10, 0, 0, DateTimeKind.Utc));
-			//ReadModelStartTimeRepository.FakeTime = new DateTime(2019, 1, 24, 10, 0, 0, DateTimeKind.Utc);
+			createFakeRecord(bu.Id.GetValueOrDefault(), new DateTime(2019, 1, 24, 10, 0, 0, DateTimeKind.Utc));
 			Target.Handle(new TenantDayTickEvent());
 
 			Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Count().Should().Be.EqualTo(0);
@@ -80,41 +84,86 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 
 
 		[Test]
-		public void ShouldNotPublishEventForNext8DaysIfRecentlyUpdated2()
+		public void ShouldPublishEventForAllBus()
 		{
+			var bu1 = BusinessUnitFactory.CreateWithId("bu");
+			BusinessUnitRepository.Add(bu1);
+			var bu2 = BusinessUnitFactory.CreateWithId("bu");
+			BusinessUnitRepository.Add(bu2);
+			Now.Is(new DateTime(2019, 1, 30, 10, 0, 0, DateTimeKind.Utc));
+
+			Target.Handle(new TenantDayTickEvent());
+
+			Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Count().Should().Be.EqualTo(2);
+			var allEvents = Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Select(x=>x);
+			allEvents.Any(x=>x.LogOnBusinessUnitId==bu1.Id.GetValueOrDefault()).Should().Be.True();
+			allEvents.Any(x=>x.LogOnBusinessUnitId==bu2.Id.GetValueOrDefault()).Should().Be.True();
 		}
 
-		private void createFakeStartTimeModel(DateTime lastScheduledTime)
+		[Test]
+		public void ShouldPublishJobForTheBuThatHasOldReadModel()
+		{
+			var bu1 = BusinessUnitFactory.CreateWithId("bu");
+			var bu2 = BusinessUnitFactory.CreateWithId("bu");
+			BusinessUnitRepository.AddRange(new []{bu1,bu2});
+			Now.Is(new DateTime(2019, 1, 30, 10, 0, 0, DateTimeKind.Utc));
+			var lastExecuted = new DateTime(2019, 1, 23, 10, 0, 0, DateTimeKind.Utc);
+			createFakeRecord(bu1.Id.GetValueOrDefault(), lastExecuted);
+			createFakeRecord(bu2.Id.GetValueOrDefault(), lastExecuted.AddDays(3));
+
+			Target.Handle(new TenantDayTickEvent());
+
+			Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Count().Should().Be.EqualTo(1);
+			var @event = Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().FirstOrDefault();
+			@event.LogOnBusinessUnitId.Should().Be.EqualTo(bu1.Id.GetValueOrDefault());
+		}
+
+		[Test]
+		public void ShouldPublishJobForAllOldBUs()
+		{
+			var bu1 = BusinessUnitFactory.CreateWithId("bu");
+			var bu2 = BusinessUnitFactory.CreateWithId("bu");
+			BusinessUnitRepository.AddRange(new[] { bu1, bu2 });
+			Now.Is(new DateTime(2019, 1, 30, 10, 0, 0, DateTimeKind.Utc));
+			var lastExecuted = new DateTime(2019, 1, 23, 10, 0, 0, DateTimeKind.Utc);
+			createFakeRecord(bu1.Id.GetValueOrDefault(), lastExecuted);
+			createFakeRecord(bu2.Id.GetValueOrDefault(), lastExecuted);
+
+			Target.Handle(new TenantDayTickEvent());
+
+			Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Count().Should().Be.EqualTo(2);
+			var allEvents = Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Select(x=>x);
+			allEvents.Any(x=>x.LogOnBusinessUnitId==bu1.Id.GetValueOrDefault()).Should().Be.True();
+			allEvents.Any(x=>x.LogOnBusinessUnitId==bu2.Id.GetValueOrDefault()).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotPublishEventIfAlreadyPublished()
 		{
 			var bu = BusinessUnitFactory.CreateWithId("bu");
 			BusinessUnitRepository.Add(bu);
+
+			Now.Is(new DateTime(2019, 1, 30, 10, 0, 0, DateTimeKind.Utc));
+			Target.Handle(new TenantDayTickEvent());
+			Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Count().Should().Be.EqualTo(1);
+
+			Now.Is(new DateTime(2019, 1, 31, 10, 0, 0, DateTimeKind.Utc));
+			Target.Handle(new TenantDayTickEvent());
+			Publisher.PublishedEvents.OfType<UpdateSkillForecastReadModelEvent>().Count().Should().Be.EqualTo(0);
+		}
+
+		private void createFakeRecord(Guid bu,DateTime lastScheduledTime)
+		{
+			
 			var fakeStartTimeModel = new FakeStartTimeModel()
 			{
-				LastScheduledTime = lastScheduledTime,
-				BusinessUnit = bu.Id.GetValueOrDefault(),
-				JobName = "TriggerSkillForecastReadModel"
+				StartedAt = lastScheduledTime,
+				BusinessUnit = bu,
+				JobName = JobNamesForJoStartTime.TriggerSkillForecastReadModel
 			};
-			ReadModelStartTimeRepository.List.Add(fakeStartTimeModel);
+			SystemJobStartTimeRepository.List.Add(fakeStartTimeModel);
 			
 			
 		}
-	}
-
-	
-	public class FakeReadModelStartTimeRepository : IReadModelStartTimeRepository
-	{
-		public List<FakeStartTimeModel> List = new List<FakeStartTimeModel>();
-
-		public DateTime? GetLastCalculatedTime(Guid bu, string jobName)
-		{
-			return List.FirstOrDefault(x => x.BusinessUnit == bu && x.JobName.Equals(jobName)).LastScheduledTime;
-		}
-	}
-
-	public class FakeStartTimeModel
-	{
-		public DateTime LastScheduledTime { get; set; }
-		public Guid BusinessUnit { get; set; }
-		public string JobName { get; set; }
 	}
 }

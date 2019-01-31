@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		public NestedService2 NestedService2;
 		public CurrentHttpContext HttpContext;
 		public ICurrentMessageBrokerUnitOfWork UnitOfWork;
-		
+		public ConcurrencyRunner Run;
+
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
 			extend.AddService<TheService>();
@@ -115,11 +116,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		[TestTable("TestTable2")]
 		public void ShouldProduceUnitOfWorkForEachThread()
 		{
-			var thread1 = onAnotherThread(() =>
+			Run.InParallel(() =>
 			{
 				TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 			});
-			var thread2 = onAnotherThread(() =>
+			Run.InParallel(() =>
 			{
 				TheService.Does(uow =>
 				{
@@ -127,8 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 					throw new TestException();
 				});
 			});
-			thread1.Join();
-			thread2.Join();
+			Assert.Throws<AggregateException>(() => Run.Wait());
 
 			Enumerable.Count(TestTable.Values("TestTable1")).Should().Be(1000);
 			Enumerable.Count(TestTable.Values("TestTable2")).Should().Be(0);
@@ -155,12 +155,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		[TestTable("TestTable2")]
 		public void ShouldProduceUnitOfWorkForEachWebRequest()
 		{
-			var thread1 = onAnotherThread(() =>
+			Run.InParallel(() =>
 			{
 				using (HttpContext.OnThisThreadUse(new FakeHttpContext()))
 					TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 			});
-			var thread2 = onAnotherThread(() =>
+			Run.InParallel(() =>
 			{
 				using (HttpContext.OnThisThreadUse(new FakeHttpContext()))
 				{
@@ -171,8 +171,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 					});
 				}
 			});
-			thread1.Join();
-			thread2.Join();
+			Assert.Throws<AggregateException>(() => Run.Wait());
 
 			Enumerable.Count(TestTable.Values("TestTable1")).Should().Be(1000);
 			Enumerable.Count(TestTable.Values("TestTable2")).Should().Be(0);
