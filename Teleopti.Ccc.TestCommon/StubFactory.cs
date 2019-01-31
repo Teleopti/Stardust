@@ -74,10 +74,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings)
 		{
+			date = date.ToUniversalTime();
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			                       
 			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(date), timeZone);
 			var scheduleDay = MockRepository.GenerateStub<IScheduleDay>();
+			scheduleDay.Stub(x => x.Period).Return(new DateTimePeriod(date, date.AddDays(1)));
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
 			scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.SignificantPart()).Return(significantPartToDisplay);

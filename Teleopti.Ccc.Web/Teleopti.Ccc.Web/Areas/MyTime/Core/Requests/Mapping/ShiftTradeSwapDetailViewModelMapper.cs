@@ -17,15 +17,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IUserCulture _userCulture;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPersonNameProvider _personNameProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 		private const int timeLineOffset = 15;
 
-		public ShiftTradeSwapDetailViewModelMapper(IShiftTradeTimeLineHoursViewModelFactory timelineViewModelFactory, IProjectionProvider projectionProvider, IUserCulture userCulture, IUserTimeZone userTimeZone, IPersonNameProvider personNameProvider)
+		public ShiftTradeSwapDetailViewModelMapper(IShiftTradeTimeLineHoursViewModelFactory timelineViewModelFactory, 
+			IProjectionProvider projectionProvider, IUserCulture userCulture, IUserTimeZone userTimeZone, IPersonNameProvider personNameProvider, 
+			ILoggedOnUser loggedOnUser)
 		{
 			_timelineViewModelFactory = timelineViewModelFactory;
 			_projectionProvider = projectionProvider;
 			_userCulture = userCulture;
 			_userTimeZone = userTimeZone;
 			_personNameProvider = personNameProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public ShiftTradeSwapDetailsViewModel Map(IShiftTradeSwapDetail s, NameFormatSettings nameFormatSettings)
@@ -118,7 +122,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (schedulePartViewFrom == SchedulePartView.DayOff &&
 				schedulePartViewTo == SchedulePartView.DayOff)
 			{
-				totalPeriod = schedpartFrom.Period;
+				totalPeriod = _loggedOnUser.CurrentUser().Equals(schedpartFrom.Person) ? schedpartFrom.Period : schedpartTo.Period;
 				totalPeriod = new DateTimePeriod(totalPeriod.StartDateTime.AddHours(9), totalPeriod.EndDateTime.AddHours(-7));
 			}
 			return new DateTimePeriod(totalPeriod.StartDateTime.AddHours(-extraHourBeforeAndAfter), 

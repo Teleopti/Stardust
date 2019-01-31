@@ -64,7 +64,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			nameFormatSettingsPersisterAndProvider.Stub(x => x.Get()).Return(_nameFormatSettings);
 			_personNameProvider = new PersonNameProvider(nameFormatSettingsPersisterAndProvider);
 
-			target = new ShiftTradeSwapDetailViewModelMapper(_timeLineFactory,_projectionProvider,_userCulture,_userTimeZone,_personNameProvider);
+			var loggedOnUser = MockRepository.GenerateStub<ILoggedOnUser>();
+			_toPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(_toPerson);
+
+			target = new ShiftTradeSwapDetailViewModelMapper(_timeLineFactory,_projectionProvider,_userCulture,_userTimeZone,_personNameProvider, loggedOnUser);
 		}
 
 		[Test]
@@ -152,7 +156,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var timeLineHoursViewModelFactory = MockRepository.GenerateStrictMock<IShiftTradeTimeLineHoursViewModelFactory>();
 
-			target = new ShiftTradeSwapDetailViewModelMapper(timeLineHoursViewModelFactory, _projectionProvider, _userCulture, _userTimeZone, _personNameProvider);
+			target = new ShiftTradeSwapDetailViewModelMapper(timeLineHoursViewModelFactory, _projectionProvider, _userCulture, _userTimeZone, _personNameProvider, null);
 			
 			var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			var to = new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc);
@@ -362,6 +366,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			dayOffLayer.Color.Should().Be.Empty();
 			dayOffLayer.ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(0);
 			dayOffLayer.LengthInMinutes.Should().Be.EqualTo(TimeSpan.FromHours(9).TotalMinutes);
+		}
+
+		[Test]
+		public void ShouldUseLoggedOnPersonSchedulePeriodWhenBothDayoff()
+		{
+			var expactedTime = new DateTime(2019, 1, 31, 0, 0, 0, DateTimeKind.Utc);
+			var theDayOff = new DayOffTemplate(new Description("my day off"));
+			var personFromDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_fromPerson, new Scenario("scenario"), DateOnly.Today, theDayOff);
+			var personToDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_toPerson, new Scenario("scenario"), DateOnly.Today, theDayOff);
+			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub(expactedTime, _fromPerson, SchedulePartView.DayOff, personFromDayOff);
+			var scheduleDayTo = _scheduleFactory.ScheduleDayStub(expactedTime, _toPerson, SchedulePartView.DayOff, personToDayOff);
+			_projectionProvider.Expect(x => x.Projection(scheduleDayFrom)).Return(_scheduleFactory.ProjectionStub());
+			_projectionProvider.Expect(x => x.Projection(scheduleDayTo)).Return(_scheduleFactory.ProjectionStub());
+
+			var shiftTradeRequest = CreateShiftTrade(_dateFrom, _dateTo, scheduleDayFrom, scheduleDayTo);
+			var result = target.Map(shiftTradeRequest.ShiftTradeSwapDetails.First(), _nameFormatSettings);
+
+			result.TimeLineStartDateTime.Should().Be.EqualTo(expactedTime.AddHours(8));
 		}
 
 		[Test]
