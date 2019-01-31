@@ -12,12 +12,14 @@ import {TranslateService} from "@ngx-translate/core";
 export class PlanningPeriodOverviewComponent {
 
 	ppId: string;
-	schedulingPerformed: boolean = false;
+	runScheduling: boolean = false;
+	runClear: boolean = false;
 	status: string='';
 	isScheduled: boolean = false;
 	scheduledAgents: number = 0;
 	timer: any;
 	planningPeriodInfo: any;
+	totalAgents: number = 0;
 	valLoading: boolean = true;
 	
 
@@ -52,28 +54,64 @@ export class PlanningPeriodOverviewComponent {
 	}
 	
 	public launchSchedule(){
+		this.runScheduling = true;
 		this.planningPeriodService.launchScheduling(this.ppId).subscribe(()=>{
 			this.checkProgress();
 		});
+	}
+	
+	public clearSchedule(){
+		this.runClear = true;
+		this.planningPeriodService.clearSchedule(this.ppId).subscribe(()=>{
+			this.checkProgress();
+		});
+	}
+	
+	public isDisabled(){
+		if (this.runScheduling || this.runClear)
+		{
+			return true;
+		}
 	}
 	
 	private checkProgress = ()=>{
 		this.planningPeriodService.lastJobStatus(this.ppId).subscribe((data)=>{
 			let schedulingStatus = data.SchedulingStatus;
 			if (!schedulingStatus || !schedulingStatus.HasJob) {
-				this.schedulingPerformed = false;
+				this.runScheduling = false;
 			} else {
 				if (!schedulingStatus.Successful && !schedulingStatus.Failed) {
-					this.schedulingPerformed = true;
+					this.runScheduling = true;
 					this.status = this.translate.instant('PresentTenseSchedule');
 					return;
 				}
 				if (schedulingStatus.Failed) {
-					this.schedulingPerformed = false;
+					this.runScheduling = false;
 				}
-				if (schedulingStatus.Successful && this.schedulingPerformed) {
-					this.schedulingPerformed = false;
+				if (schedulingStatus.Successful && this.runScheduling) {
+					this.runScheduling = false;
 					this.loadLastResult();
+				}
+			}
+
+			let clearScheduleStatus = data.ClearScheduleStatus;
+			if (!clearScheduleStatus || !clearScheduleStatus.HasJob) {
+				this.runClear = false;
+			} else {
+				if (!clearScheduleStatus.Successful && !clearScheduleStatus.Failed) {
+					this.runClear = true;
+					this.status = this.translate.instant('ClearScheduleResultAndHistoryData');
+				}
+				if (clearScheduleStatus.Successful && this.runClear) {
+					this.runClear = false;
+					this.isScheduled = false;
+					this.scheduledAgents = 0;
+					this.dayNodes = undefined;
+					this.status = '';
+				}
+				if (clearScheduleStatus.Failed) {
+					this.runClear = false;
+					this.status = '';
 				}
 			}
 		});
@@ -82,6 +120,7 @@ export class PlanningPeriodOverviewComponent {
 	private loadPlanningPeriodInfo(){
 		this.planningPeriodService.getPlanningPeriodInfo(this.ppId).subscribe(data=>{
 			this.planningPeriodInfo = data?data:{};
+			this.totalAgents = data? data.TotalAgents: 0;
 		});
 	}
 	
