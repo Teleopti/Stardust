@@ -17,4 +17,8 @@ export class PlanningPeriodService {
 	public lastJobStatus(planningPeriodId: string){
 		return this.httpClient.get('../api/resourceplanner/planningperiod/'+planningPeriodId+'/status') as Observable<any>;
 	}
+
+	public getValidation(planningPeriodId: string){
+		return this.httpClient.get('../api/resourceplanner/planningperiod/'+planningPeriodId+'/validation') as Observable<any>;
+	}
 }

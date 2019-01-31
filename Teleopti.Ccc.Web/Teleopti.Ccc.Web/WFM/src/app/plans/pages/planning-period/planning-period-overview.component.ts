@@ -35,6 +35,7 @@ export class PlanningPeriodOverviewComponent {
 	}
 
 	ngOnInit(){
+		this.loadValidations();
 		this.loadLastResult();
 		this.checkState();
 	}
@@ -108,6 +109,15 @@ export class PlanningPeriodOverviewComponent {
 			} else {
 				this.isScheduled = false;
 			}
+		});
+	}
+	
+	private loadValidations(){
+		this.valLoading = true;
+		this.planningPeriodService.getValidation(this.ppId).subscribe(data => {
+			this.valData.preValidation = data.InvalidResources;
+			this.valLoading = false;
+			this.updateValidationErrorsNumber();
 		});
 	}
 }
