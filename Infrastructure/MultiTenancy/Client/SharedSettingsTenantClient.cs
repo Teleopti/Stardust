@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public SharedSettings GetSharedSettings()
 		{
-			var response = _httpClient.GetAsync(_urlToServer + "Start/Config/SharedSettings").GetAwaiter().GetResult();
+			var response = _httpClient.GetAsync("Start/Config/SharedSettings").GetAwaiter().GetResult();
 			if (!response.IsSuccessStatusCode)
 				return new SharedSettings();
 
