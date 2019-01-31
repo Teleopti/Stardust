@@ -14,6 +14,10 @@ export class PlanningPeriodService {
 		return this.httpClient.post('../api/resourceplanner/planningperiod/'+planningPeriodId+'/schedule', {}) as Observable<string>;
 	}
 
+	public optimizeIntraday(planningPeriodId: string) {
+		return this.httpClient.post('../api/resourceplanner/planningperiod/'+planningPeriodId+'/optimizeintraday', {});
+	}
+
 	public clearSchedule(planningPeriodId: string) {
 		return this.httpClient.delete('../api/resourceplanner/planningperiod/'+planningPeriodId+'/schedule', {}) as Observable<string>;
 	}

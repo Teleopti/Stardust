@@ -14,6 +14,7 @@ export class PlanningPeriodOverviewComponent {
 	ppId: string;
 	runScheduling: boolean = false;
 	runClear: boolean = false;
+	runIntraday: boolean = false;
 	status: string='';
 	isScheduled: boolean = false;
 	scheduledAgents: number = 0;
@@ -60,6 +61,13 @@ export class PlanningPeriodOverviewComponent {
 		});
 	}
 	
+	public optimizeIntraday(){
+		this.runIntraday = true;
+		this.planningPeriodService.optimizeIntraday(this.ppId).subscribe(()=>{
+			this.checkProgress();
+		});
+	}
+	
 	public clearSchedule(){
 		this.runClear = true;
 		this.planningPeriodService.clearSchedule(this.ppId).subscribe(()=>{
@@ -68,7 +76,7 @@ export class PlanningPeriodOverviewComponent {
 	}
 	
 	public isDisabled(){
-		if (this.runScheduling || this.runClear)
+		if (this.runScheduling || this.runClear || this.runIntraday)
 		{
 			return true;
 		}
@@ -87,10 +95,12 @@ export class PlanningPeriodOverviewComponent {
 				}
 				if (schedulingStatus.Failed) {
 					this.runScheduling = false;
+					return;
 				}
 				if (schedulingStatus.Successful && this.runScheduling) {
 					this.runScheduling = false;
 					this.loadLastResult();
+					return;
 				}
 			}
 
@@ -101,6 +111,7 @@ export class PlanningPeriodOverviewComponent {
 				if (!clearScheduleStatus.Successful && !clearScheduleStatus.Failed) {
 					this.runClear = true;
 					this.status = this.translate.instant('ClearScheduleResultAndHistoryData');
+					return;
 				}
 				if (clearScheduleStatus.Successful && this.runClear) {
 					this.runClear = false;
@@ -108,10 +119,34 @@ export class PlanningPeriodOverviewComponent {
 					this.scheduledAgents = 0;
 					this.dayNodes = undefined;
 					this.status = '';
+					return;
 				}
 				if (clearScheduleStatus.Failed) {
 					this.runClear = false;
 					this.status = '';
+					return;
+				}
+			}
+
+			let intradayOptimizationStatus = data.IntradayOptimizationStatus;
+			if (!intradayOptimizationStatus || !intradayOptimizationStatus.HasJob) {
+				this.runIntraday = false;
+			} else {
+				if (!intradayOptimizationStatus.Successful && !intradayOptimizationStatus.Failed) {
+					this.runIntraday = true;
+					this.status = this.translate.instant('IntraOptimize');
+					return;
+				}
+				if (intradayOptimizationStatus.Successful && this.runIntraday) {
+					this.runIntraday = false;
+					this.status = '';
+					this.loadLastResult();
+					return;
+				}
+				if (intradayOptimizationStatus.Failed) {
+					this.runIntraday = false;
+					this.status = '';
+					return;
 				}
 			}
 		});

@@ -3,9 +3,9 @@
 
 
 <div nz-row>
-    <nz-spin nzTip='Schceduling...' [nzSpinning]="isDisabled()">
+    <nz-spin [nzTip]="status" [nzSpinning]="isDisabled()">
         <button nz-button nzType="default" (click)="launchSchedule()">{{'ScheduleVerb' | translate}}</button>
-        <button nz-button nzType="default">{{'IntraOptimize' | translate}}</button>
+        <button nz-button nzType="default" (click)="optimizeIntraday()">{{'IntraOptimize' | translate}}</button>
         <button nz-button nzType="default" (click)="clearSchedule()">{{'ClearScheduleResultAndHistoryData' | translate}}</button>
         <button nz-button nzType="default">{{'PublishSchedulePlans' | translate}}</button>
     </nz-spin>
