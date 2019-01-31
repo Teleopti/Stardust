@@ -86,6 +86,7 @@ ResourcePlanner_LoadLessPersonAccountsWhenOpeningScheduler_78487 = true
 ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118 = RC
 ResourcePlanner_QueryHintOnLayers_79780 = RC
 ResourcePlanner_TeamSchedulingInPlans_79283 = RC #Note to ourselves: remember to remove a build step in ethiopian team after remove this toggle
+WFM_Plans_Redesign_81198 = RC
 
 # DeBockers #
 WFM_Intraday_Redesign_77214 = RC
