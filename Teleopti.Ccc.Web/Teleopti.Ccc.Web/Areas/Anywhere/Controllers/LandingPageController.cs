@@ -21,14 +21,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly IToggleManager _toggleManager;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly HttpClient client = new HttpClient();
 
 		public LandingPageController(IToggleManager toggleManager, IPermissionProvider permissionProvider)
 		{
 			_toggleManager = toggleManager;
 			_permissionProvider = permissionProvider;
+
+			client.DefaultRequestHeaders.Accept.Clear();
+			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
-
-
+		
 		[HttpGet, Route("api/Anywhere/GetLandingPage"), UnitOfWork]
 		public virtual string GetLandingPage()
 		{
@@ -51,15 +54,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			StringContent stringContent = new StringContent(JsonConvert.SerializeObject(encrypt(loginData)),
 				Encoding.UTF8, "application/json");
-			using (var client = new HttpClient())
-			{
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-				var response = client
-					.PostAsync("https://www.teleopti.com/api/v1/autologin/init", stringContent)
-					.GetAwaiter().GetResult();
-				return response;
-			}
+
+			var response = client
+				.PostAsync("https://www.teleopti.com/api/v1/autologin/init", stringContent)
+				.GetAwaiter().GetResult();
+			return response;
 		}
 
 		private string encrypt(Hashtable DataToEncrypt)
