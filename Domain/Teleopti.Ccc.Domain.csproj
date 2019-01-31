@@ -257,7 +257,7 @@
     <Compile Include="Security\Principal\TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.cs" />
     <Compile Include="Staffing\IStaffingViewModelCreator.cs" />
     <Compile Include="Staffing\ResourceCalculationUsingReadModels.cs" />
-    <Compile Include="Staffing\SkillStaffPeriodEx.cs" />
+    <Compile Include="Staffing\SkillStaffPeriodForReadmodel.cs" />
     <Compile Include="Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Forecasting\UpdateSkillForecastReadModelHandler.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
@@ -4026,8 +4026,8 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Aop\Core" />
-    <Folder Include="Logon\Aspects" />
+    <Folder Include="Aop\Core\" />
+    <Folder Include="Logon\Aspects\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

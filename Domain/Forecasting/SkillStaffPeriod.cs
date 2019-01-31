@@ -651,7 +651,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public IStaffingCalculatorServiceFacade StaffingCalculatorService =>
 			SkillDay.Skill.SkillType.StaffingCalculatorService;
 
-		public virtual void PickResources65()
+		public void PickResources65()
 		{
 			_estimatedServiceLevel = null;
 			_estimatedServiceLevelShrinkage = null;
@@ -746,7 +746,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			skillStaffPeriod._bookedResource65 += newSegmentPeriod.BookedResource65;
 		}
 
-		private void CreateSkillStaffSegments65(IList<ISkillStaffPeriod> sortedPeriods, int currentIndex)
+		protected internal void CreateSkillStaffSegments65(IList<ISkillStaffPeriod> sortedPeriods, int currentIndex)
 		{
 			ISkillStaffPeriod ourPeriod = sortedPeriods[currentIndex];
 			TimeSpan sa = TimeSpan.FromSeconds(Payload.ServiceAgreementData.ServiceLevel.Seconds);

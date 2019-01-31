@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var skillForecastList =
 				_skillForecastReadModelRepository.LoadSkillForecast(skillIds.ToArray(), period);
 
-			var skillStaffPeriods = new List<SkillStaffPeriodEx>();
+			var skillStaffPeriods = new List<SkillStaffPeriodForReadmodel>();
 
 			var backlogSkillForecastList = skillForecastList.Where(sf => sf.IsBackOffice).ToList();
 			var nonBacklogSkillForecastList = skillForecastList.Where(sf => !sf.IsBackOffice).ToList();
@@ -53,35 +51,24 @@ namespace Teleopti.Ccc.Domain.Staffing
 					skillForecast.AnsweredWithinSeconds);
 				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.3), new Percent(0.8));
 
-				var skillStaffPeriod = new SkillStaffPeriodEx(new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime), new Task(), serviceAgreement)
+				var skillStaffPeriod = new SkillStaffPeriodForReadmodel(new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime), new Task(), serviceAgreement)
 				{
-					AnsweredWithinSeconds = skillForecast.AnsweredWithinSeconds,
 					Forecast = useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,
 					SkillId = skillForecast.SkillId,
 					Period = new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime)
 				};
 				
-				//new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime), 
-					//new Task(useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,TimeSpan.FromSeconds(skillForecast.AverageHandleTime),TimeSpan.Zero), 
-					//serviceAgreement);
-
-				//var skillDayLight = new SkillDayLight(skills.SingleOrDefault(s => s.Id == skillForecast.SkillId));
-				//skillStaffPeriod.SetSkillDay(skillDayLight);
-
-				//skillStaffPeriod.ForecastedDistributedDemand
-				
-				
-				//skillStaffPeriod.CalculateStaff();
 				skillStaffPeriods.Add(skillStaffPeriod);
 			}
-
-			var groupedSkillStaffPeriods = skillStaffPeriods.ToLookup(p => p.SkillId);
 			
-			foreach (var staffPeriodsForSkillId in groupedSkillStaffPeriods)
+			var groupedSkillStaffPeriods = skillStaffPeriods.GroupBy(p => p.SkillId).ToList();
+			
+			foreach (var groupedSkillStaffPeriod in groupedSkillStaffPeriods)
 			{
-				foreach (var intervalForSkillId in staffPeriodsForSkillId)
+				var staffPeriodsForSkillId = groupedSkillStaffPeriod.Cast<ISkillStaffPeriod>().ToList();
+				foreach (SkillStaffPeriod intervalForSkillId in staffPeriodsForSkillId)
 				{
-					intervalForSkillId.CreateSegmentCollection(staffPeriodsForSkillId.ToList());
+					intervalForSkillId.CreateSkillStaffSegments65(staffPeriodsForSkillId, staffPeriodsForSkillId.IndexOf(intervalForSkillId));
 				}
 			}
 			
@@ -140,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			return skillStaffingIntervals;
 		}
 		
-		private static void calculateForecastAgentsForEmailSkills(ILookup<Guid, SkillStaffPeriodEx> skillStaffPeriodsBySkill, IList<SkillCombinationResource> skillCombinationResources)
+		private static void calculateForecastAgentsForEmailSkills(IEnumerable<IGrouping<Guid, SkillStaffPeriodForReadmodel>> skillStaffPeriodsBySkill, IList<SkillCombinationResource> skillCombinationResources)
 		{
 			//TODO: move from old structure to new Skill Grouped SkillStaffPeriodEx  
 			foreach (var skillStaffPeriodsForSkill in skillStaffPeriodsBySkill)
