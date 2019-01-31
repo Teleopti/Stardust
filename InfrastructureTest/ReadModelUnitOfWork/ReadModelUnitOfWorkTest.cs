@@ -18,6 +18,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
+using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 {
@@ -51,8 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public ICurrentReadModelUnitOfWork UnitOfWork;
 		public FakeCurrentTeleoptiPrincipal Principal;
 		public IDataSourcesFactory DataSourcesFactory;
-		public FakeConfigReader ConfigReader;
 		public IDataSourceScope DataSource;
+		public ConcurrencyRunner Run;
 
 		[Test]
 		[TestTable("TestTable")]
@@ -127,11 +128,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[TestTable("TestTable2")]
 		public void ShouldProduceUnitOfWorkForEachThread()
 		{
-			var thread1 = onAnotherThread(() =>
+			Run.InParallel(() =>
 			{
 				TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 			});
-			var thread2 = onAnotherThread(() =>
+			Run.InParallel(() =>
 			{
 				TheService.Does(uow =>
 				{
@@ -139,8 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 					throw new TestException();
 				});
 			});
-			thread1.Join();
-			thread2.Join();
+			Assert.Throws<AggregateException>(() => Run.Wait());
 
 			TestTable.Values("TestTable1").Count().Should().Be(1000);
 			TestTable.Values("TestTable2").Count().Should().Be(0);
@@ -167,12 +167,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[TestTable("TestTable2")]
 		public void ShouldProduceUnitOfWorkForEachWebRequest()
 		{
-			var thread1 = onAnotherThread(() =>
+			Run.InParallel(() =>
 			{
 				using (HttpContext.OnThisThreadUse(new FakeHttpContext()))
 					TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 			});
-			var thread2 = onAnotherThread(() =>
+			Run.InParallel(() =>
 			{
 				using (HttpContext.OnThisThreadUse(new FakeHttpContext()))
 				{
@@ -183,8 +183,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 					});
 				}
 			});
-			thread1.Join();
-			thread2.Join();
+			Assert.Throws<AggregateException>(() => Run.Wait());
 
 			TestTable.Values("TestTable1").Count().Should().Be(1000);
 			TestTable.Values("TestTable2").Count().Should().Be(0);
