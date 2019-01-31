@@ -22,7 +22,7 @@
 	function addActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
 		var vm = this;
 
-		vm.label = 'AddActivity';
+		vm.label = vm.command.key;
 
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
@@ -151,7 +151,11 @@
 		vm.addActivity = function () {
 			var requestData = getRequestData();
 			vm.checkingCommand = true;
-			CommandCheckService.checkAddActivityOverlapping(requestData)
+			var checkMethod = 'checkAddActivityOverlapping';
+			if (vm.command.key === "AddPersonalActivity") {
+				checkMethod = 'checkAddPersonalActivityOverlapping';
+			}
+			CommandCheckService[checkMethod](requestData)
 				.then(function (data) {
 					addActivity(data);
 				});

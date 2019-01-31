@@ -407,6 +407,32 @@
 		expect(result.commandControl.timeRange.endTime).toBe("2018-03-01 09:00");
 	});
 
+	it('should call correct checking overlap method when applying adding personal activity', function () {
+		scheduleManagement.resetSchedules(
+			[{
+				Date: '2019-01-30',
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Projection: []
+			}]
+			, '2019-01-30', 'Europe/Stockholm');
+
+		var personSchedule = scheduleManagement.groupScheduleVm.Schedules[0];
+		personSchedule.IsSelected = true;
+		personSelection.updatePersonSelection(personSchedule);
+		personSelection.toggleAllPersonProjections(personSchedule, '2019-01-30');
+
+		var result = setUp('2019-01-30', 'Europe/Stockholm', 'AddPersonalActivity');
+		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+		applyButton.triggerHandler('click');
+
+		result.scope.$apply();
+		expect(fakeCommandCheckService.checkedOverlapForPersonalActivity).toBeTruthy();
+	})
+
 	it('should invoke action callback after calling add activity', function () {
 		scheduleManagement.resetSchedules(
 			[{
@@ -710,6 +736,9 @@
 		var checkStatus = false,
 			fakeOverlappingList = [];
 
+		var self = this;
+		this.checkedOverlapForPersonalActivity = false;
+
 		this.checkOverlappingCertainActivities = function () {
 			return {
 				then: function (cb) {
@@ -733,6 +762,14 @@
 		this.checkAddActivityOverlapping = function (requestedData) {
 			return {
 				then: function (cb) {
+					cb(requestedData);
+				}
+			}
+		};
+		this.checkAddPersonalActivityOverlapping = function (requestedData) {
+			return {
+				then: function (cb) {
+					self.checkedOverlapForPersonalActivity = true;
 					cb(requestedData);
 				}
 			}
