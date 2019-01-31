@@ -18193,4 +18193,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Add Period</value>
     <comment>Button text for displaying adjust adherence form</comment>
   </data>
+  <data name="ViewPlanningPeriods" xml:space="preserve">
+    <value>View planning periods</value>
+    <comment>Action button on each planning group in planning group overview in Plans</comment>
+  </data>
 </root>

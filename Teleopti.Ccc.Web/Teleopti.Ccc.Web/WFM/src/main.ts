@@ -18,6 +18,7 @@ import { environment } from './environments/environment';
 import { MainController } from './main.controller';
 import { mainInitializer } from './main.initializer';
 import { DowngradeableComponent, RouterConfigFunction } from './types';
+import { plansComponents } from './app/plans/plans.module';
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
@@ -112,6 +113,7 @@ downgradeHelper(menuComponents);
 downgradeHelper(insightsComponents);
 downgradeHelper(intradayComponents);
 downgradeHelper(resetPasswordComponents);
+downgradeHelper(plansComponents);
 
 /**
  * Use this if your module is purely Angular and you want mount some routes

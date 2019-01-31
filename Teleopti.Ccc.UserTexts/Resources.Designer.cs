@@ -39650,6 +39650,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View planning periods.
+        /// </summary>
+        public static string ViewPlanningPeriods {
+            get {
+                return ResourceManager.GetString("ViewPlanningPeriods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Viewpoint.
         /// </summary>
         public static string Viewpoint {
