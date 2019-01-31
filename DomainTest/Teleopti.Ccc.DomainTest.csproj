@@ -171,6 +171,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerBug45331Test.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestProcessorTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\SkillForecastIntervalCalculatorTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\TriggerSkillForecastReadModelTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\UpdateSkillForecastReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\UpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerPersonAccountDayTest.cs" />

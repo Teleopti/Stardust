@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private IEnumerable<ISkillDay> filterSkillDays(IEnumerable<Guid> skillDayIds)
 		{
 			var skillDays = _skillDayRepository.LoadSkillDays(skillDayIds);
-			var validPeriod = _skillForecastReadModelPeriodBuilder.Build();
+			var validPeriod = _skillForecastReadModelPeriodBuilder.BuildFullPeriod();
 			return skillDays.Where(x => x.CurrentDate.Date >= validPeriod.StartDateTime && x.CurrentDate.Date <= validPeriod.EndDateTime);
 		}
 

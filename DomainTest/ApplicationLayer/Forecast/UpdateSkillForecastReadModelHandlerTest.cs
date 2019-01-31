@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	[TestFixture]
 	[DomainTest]
 	[AllTogglesOn]
-	public class UpdateSkillForecastReadModelHandlerTest : IIsolateSystem
+	public class UpdateSkillForecastReadModelHandlerTest
 	{
 		public UpdateSkillForecastReadModelHandler Target;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
@@ -37,11 +37,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeTenants Tenants;
-
-		public void Isolate(IIsolate isolate)
-		{
-
-		}
 
 		[Test]
 		public void VerifyIfTheForecastChangedEventIsHandled()

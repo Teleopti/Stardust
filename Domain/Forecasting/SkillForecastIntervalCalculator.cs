@@ -85,11 +85,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_staffingSettingsReader = staffingSettingsReader;
 		}
 
-		public DateTimePeriod Build()
+		public DateTimePeriod BuildFullPeriod()
 		{
 			var startDate = _now.UtcDateTime().Date.AddDays(-_skillForecastSettingsReader.NumberOfDaysInPast);
 			var endDate = _now.UtcDateTime().Date.AddDays(_staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 49));
 			endDate = endDate.AddDays(_skillForecastSettingsReader.NumberOfExtraDaysInFuture);
+			return new DateTimePeriod(startDate.Date,endDate.Date);
+		}
+
+		public DateTimePeriod BuildNextPeriod(DateTime lastRun)
+		{
+			var staffingDaysNum = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 49);
+			var extraDaysForForecast = _skillForecastSettingsReader.NumberOfExtraDaysInFuture;
+			var startDate = lastRun.AddDays(staffingDaysNum + extraDaysForForecast);
+			var endDate = startDate.AddDays(extraDaysForForecast);
 			return new DateTimePeriod(startDate.Date,endDate.Date);
 		}
 	}
