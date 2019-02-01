@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				{
 					StartDateTime = period.StartDateTime,
 					EndDateTime = period.EndDateTime,
-					LogOnBusinessUnitId = businessUnitId
+					LogOnBusinessUnitId = businessUnitId,
 				});
 			});
 
@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	public interface ISystemJobStartTimeRepository
 	{
 		DateTime? GetLastCalculatedTime(Guid bu, string jobName);
+		void UpdateLastCalculatedTime(Guid bu, string jobName);
 	}
 
 	public class SystemJobStartTimeRepository : ISystemJobStartTimeRepository

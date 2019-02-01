@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeTenants Tenants;
+		public FakeSystemJobStartTimeRepository SystemJobStartTimeRepository;
 
 		[Test]
 		public void VerifyIfTheForecastChangedEventIsHandled()
@@ -216,7 +217,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			skillStaffIntervals.Count(x => x.Agents == 10).Should().Be.EqualTo(4);
 		}
 
-		
+		[Test]
+		public void ShouldUpdateLastCalculatedTimeOnCalculation()
+		{
+			Tenants.Has("Teleopti WFM");
+			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
+			PersonRepository.Add(person);
+			var bu = BusinessUnitFactory.CreateWithId("something");
+			BusinessUnitRepository.Add(bu);
+
+			var dtp = new DateOnlyPeriod(new DateOnly(2019, 2, 16), new DateOnly(2019, 2, 19));
+			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
+			IntervalLengthFetcher.Has(15);
+			Now.Is(now);
+			var skillOpenHours = new TimePeriod(8, 9);
+			var skill = createPhoneSkill(15, "phone", skillOpenHours);
+			var scenario = ScenarioFactory.CreateScenarioWithId("x", true);
+			scenario.SetBusinessUnit(bu);
+			scenario.DefaultScenario = true;
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2019, 2, 17), new TimePeriod(9, 10), 15.7, 10, 200);
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skillDay);
+			ScenarioRepository.Add(scenario);
+
+			var oldUpdatedTime = Now.UtcDateTime().AddDays(-9);
+			SystemJobStartTimeRepository.EntryList.Add(new FakeStartTimeModel()
+			{
+				StartedAt = oldUpdatedTime,
+				BusinessUnit = bu.Id.GetValueOrDefault(),
+				JobName = JobNamesForJoStartTime.TriggerSkillForecastReadModel
+			});
+
+			Target.Handle(new UpdateSkillForecastReadModelEvent()
+			{
+				LogOnBusinessUnitId = bu.Id.GetValueOrDefault(),
+				LogOnDatasource = "Teleopti WFM",
+				StartDateTime = new DateTime(2019, 02, 17),
+				EndDateTime = new DateTime(2019, 02, 17)
+			});
+
+			SystemJobStartTimeRepository.GetLastCalculatedTime(bu.Id.GetValueOrDefault(), JobNamesForJoStartTime.TriggerSkillForecastReadModel)
+				.Should().Be.GreaterThan(oldUpdatedTime);
+		}
+
+
 
 		protected ISkill createPhoneSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
