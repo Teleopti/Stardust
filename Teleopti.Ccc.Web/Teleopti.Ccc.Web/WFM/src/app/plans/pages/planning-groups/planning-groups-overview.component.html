@@ -3,7 +3,7 @@
 <div nz-row>
 	<div nz-col [nzSpan]="8">
 		<nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixTemplate">
-			<input type="text" nz-input placeholder="Filter" [formControl]="filterControl" />
+			<input type="text" nz-input placeholder="{{'FilterPlanningGroups' | translate}}" [formControl]="filterControl" />
 		</nz-input-group>
 
 		<ng-template #prefixTemplate><i nz-icon type="filter"></i></ng-template>
