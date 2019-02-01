@@ -1,6 +1,6 @@
 <table class="table" ng-if="vm.scheduleVm.Schedules.length > 0">
 	<thead>
-		<tr class="person">
+		<tr>
 			<th class="person-name-column">
 				<md-checkbox ng-model="vm.toggleAllInCurrentPage"
 							 ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
@@ -8,7 +8,7 @@
 				</md-checkbox>
 				<sort-agent ng-model="vm.selectedSortOption" class="pull-right sort-agent"></sort-agent>
 			</th>
-			<th class="shift-category-cell-header"></th>
+			<th class="shift-category-cell"></th>
 			<th id="time-line-container" class="schedule schedule-column">
 				<time-line times="vm.scheduleVm.TimeLine.HourPoints"
 						   schedule-count="vm.scheduleVm.Schedules.length"
@@ -17,7 +17,7 @@
 			</th>
 			<th class="schedule-tool-column"></th>
 			<th class="schedule-tool-column"></th>
-			<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
+			<th class="contract-time-column">{{'ContractTime' | translate}}</th>
 		</tr>
 	</thead>
 	<tbody ng-style="::vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
@@ -101,11 +101,11 @@
 				</div>
 			</td>
 			<td class="schedule-tool-column">
-				<span class="editor" ng-if="::vm.showEditButton(personSchedule)" ng-click="vm.clickEditButton(personSchedule)"><i class="mdi mdi-pencil"></i></span>
+				<span class="editor cursorpointer" ng-if="::vm.showEditButton(personSchedule)" ng-click="vm.clickEditButton(personSchedule)"><i class="mdi mdi-pencil"></i></span>
 			</td>
 			<td class="schedule-tool-column schedule-note-column"
 				ng-click="vm.editScheduleNote(personSchedule.PersonId)">
-				<span ng-class="{'has-note': vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote}">
+				<span class="cursorpointer" ng-class="{'has-note': vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote}">
 					<i class="mdi mdi-comment"></i>
 				</span>
 				<md-tooltip class="multiline-tooltip max-width-600 truncated" md-direction="left"
@@ -115,7 +115,7 @@
 					{{vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes}}
 				</md-tooltip>
 			</td>
-			<td class="contract-time contract-time-column">{{::personSchedule.ContractTime}}</td>
+			<td class="contract-time-column">{{::personSchedule.ContractTime}}</td>
 		</tr>
 		<tr class="shift-editor-row" ng-repeat-end ng-if="vm.isScheduleInEditing(personSchedule)">
 			<td colspan="6">

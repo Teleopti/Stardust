@@ -578,188 +578,182 @@ team-schedule-datepicker {
 
 	table {
 		margin-bottom: 0;
+	}
 
-		tbody {
-			height: 100%;
-			display: block;
-			overflow-y: scroll;
-			max-height: 62vh;
-			min-height: 500px;
-			min-width: 680px;
-			border-top: 1px solid $gray012;
+	tbody {
+		height: 100%;
+		display: block;
+		overflow-y: scroll;
+		max-height: 62vh;
+		min-height: 500px;
+		min-width: 680px;
+		border-top: 1px solid $gray012;
+	}
+
+	thead,
+	tbody tr {
+		display: table;
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	thead {
+		width: calc(100% - 17px);
+		height: 40px;
+	}
+
+	tbody tr:last-child {
+		border-bottom: 1px solid #dddddd;
+	}
+
+	tbody tr:not(.shift-editor-row):hover,
+	tbody tr.in-editing {
+		background: $gray012;
+	}
+
+	tbody .shift-editor-row td {
+		padding: 0;
+	}
+
+	th,
+	td {
+		padding: 5px 0 5px 0;
+		border-bottom: none;
+		line-height: 1.5;
+		vertical-align: top;
+	}
+
+	.person-name-column {
+		width: 25%;
+		white-space: nowrap;
+		padding-right: 5px;
+		padding-left: 5px;
+		min-width: 150px;
+		font-weight: normal;
+
+		span.person-name-text {
+			word-break: break-word;
+			white-space: normal;
 		}
 
-		thead,
-		tbody tr {
-			display: table;
-			width: 100%;
-			table-layout: fixed;
+		.sort-agent {
+			margin: 5px 0;
 		}
 
-		thead {
-			width: calc(100% - 17px);
-			height: 40px;
+		md-checkbox {
+			margin-top: 0px;
+			margin-bottom: 0px;
+		}
+	}
+
+	.schedule-tool-column {
+		width: 2%;
+		text-align: center;
+
+		i.mdi:before {
+			font-size: 14px !important;
+		}
+	}
+
+	.contract-time-column {
+		width: 10%;
+		padding: 5px;
+		min-width: 150px;
+		font-weight: 400;
+		text-align: center;
+		white-space: nowrap;
+	}
+
+	td.contract-time-column {
+		border-left: 1px solid $gray012;
+	}
+
+	td.schedule-tool-column.schedule-note-column > span:not(.has-note) {
+		color: $gray-500;
+	}
+
+	.shift-category-cell {
+		width: 30px;
+	}
+
+	td.shift-category-cell {
+		text-align: center;
+		font-size: 12px;
+		border-left: 1px solid $gray012;
+		position: relative;
+		padding: 10px 0 0 0;
+
+		& > .info {
+			position: absolute;
+			top: -7px;
+			right: -2px;
+			transform: scale(0.6);
 		}
 
-		tbody tr:last-child {
-			border-bottom: 1px solid #dddddd;
+		& > span {
+			width: 20px;
+			display: inline-block;
+			cursor: pointer;
 		}
+	}
 
-		tbody tr:not(.shift-editor-row):hover,
-		tbody tr.in-editing {
-			background: $gray012;
-		}
-
-		tbody .shift-editor-row td {
-			padding: 0;
-		}
-
-		th,
-		td {
-			padding: 5px 0 5px 0;
-			border-bottom: none;
-			line-height: 1.5;
-			vertical-align: top;
-		}
-
-		.person-name-column {
-			width: 25%;
-			white-space: nowrap;
-			padding-right: 5px;
-			padding-left: 5px;
-			min-width: 150px;
-			font-weight: normal;
-
-			span.person-name-text {
-				word-break: break-word;
-				white-space: normal;
-			}
-
-			.sort-agent {
-				margin: 5px 0;
-			}
-
-			md-checkbox {
-				margin-top: 0px;
-				margin-bottom: 0px;
-			}
-		}
-
-		th.schedule-tool-column,
-		td.schedule-tool-column {
-			width: 2%;
-			text-align: center;
-
-			i.mdi:before {
-				font-size: 14px !important;
-			}
-
-			span {
-				cursor: pointer;
-			}
-		}
-
-		th.contract-time-header,
-		td.contract-time-column {
-			width: 10%;
-			padding: 5px;
-			min-width: 150px;
-			font-weight: 400;
-			text-align: center;
-			white-space: nowrap;
-		}
-
-		td.contract-time-column {
-			border-left: 1px solid $gray012;
-		}
-
-		td.schedule-tool-column.schedule-note-column > span:not(.has-note) {
-			color: $gray-500;
-		}
-
-		th.shift-category-cell-header,
-		td.shift-category-cell {
-			width: 30px;
-		}
-
-		td.shift-category-cell {
-			text-align: center;
-			font-size: 12px;
-			border-left: 1px solid $gray012;
-			position: relative;
-			padding: 10px 0 0 0;
-
-			& > .info {
-				position: absolute;
-				top: -7px;
-				right: -2px;
-				transform: scale(0.6);
-			}
-
-			& > span {
-				width: 20px;
-				display: inline-block;
-				cursor: pointer;
-			}
-		}
-		//Week view table
-		thead tr.weekview-thead {
-			th {
-				font-weight: bold;
-				padding: 0 10px;
-				word-break: normal;
-				white-space: normal;
-				border-left: 1px solid $gray012;
-				border-right: 1px solid $gray012;
-			}
-
-			th .date {
-				float: right;
-			}
-		}
-
-		@media (max-width: 768px) {
-			thead tr.weekview-thead th {
-				padding: 0;
-				text-align: center;
-			}
-
-			thead tr.weekview-thead th .date {
-				float: none;
-			}
-		}
-
-		tr.weekview-tr {
-			height: 60px;
-			border-bottom: 1px solid #dddddd;
-		}
-
-		td.weekview-td {
-			padding: 0;
+	//Week view table
+	thead tr.weekview-thead {
+		th {
+			font-weight: bold;
+			padding: 0 10px;
+			word-break: normal;
+			white-space: normal;
 			border-left: 1px solid $gray012;
 			border-right: 1px solid $gray012;
+		}
+
+		th .date {
+			float: right;
+		}
+	}
+
+	@media (max-width: 768px) {
+		thead tr.weekview-thead th {
+			padding: 0;
 			text-align: center;
-			cursor: default;
-
-			.summary {
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
 		}
 
-		td.weekview-td.terminated {
-			opacity: 0.3;
-			text-decoration: line-through;
+		thead tr.weekview-thead th .date {
+			float: none;
 		}
+	}
 
-		td.weekview-td:hover {
-			border-bottom: 1px solid $blue-500;
-		}
+	tr.weekview-tr {
+		height: 60px;
+		border-bottom: 1px solid #dddddd;
+	}
 
-		td.weekview-person-name {
-			word-break: break-word;
-			padding: 0 5px;
+	td.weekview-td {
+		padding: 0;
+		border-left: 1px solid $gray012;
+		border-right: 1px solid $gray012;
+		text-align: center;
+		cursor: default;
+
+		.summary {
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
+	}
+
+	td.weekview-td.terminated {
+		opacity: 0.3;
+		text-decoration: line-through;
+	}
+
+	td.weekview-td:hover {
+		border-bottom: 1px solid $blue-500;
+	}
+
+	td.weekview-person-name {
+		word-break: break-word;
+		padding: 0 5px;
 	}
 }
 //TeamSchedule Command Panels
