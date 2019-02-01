@@ -88,16 +88,16 @@
 					]
 				}
 			})
-			.state('resourceplanner.planningperiodoverview', {
-				url: '/planninggroup/:groupId/detail/:ppId',
+			.state('resourceplanner.angular', {
+				url: '/planninggroup1/:groupId/detail/:ppId',
 				templateUrl: 'app/resourceplanner/plans-planningperiodoverview-modern.html',
 				params: {
 					groupId: '',
 					ppId: ''
 				}
 			})
-			.state('resourceplanner.planningperiodoverviewOLD', {
-				url: '/planninggroup1/:groupId/detail/:ppId',
+			.state('resourceplanner.planningperiodoverview', {
+				url: '/planninggroup/:groupId/detail/:ppId',
 				templateUrl: function() {
 					return 'app/resourceplanner/planning_period/planningperiod.overview.html';
 				},
