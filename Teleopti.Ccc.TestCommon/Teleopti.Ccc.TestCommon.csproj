@@ -236,6 +236,7 @@
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
     <Compile Include="FakeRepositories\FakeFetchAllToggleOverrides.cs" />
     <Compile Include="FakeRepositories\FakeForecastDayOverrideRepository.cs" />
+    <Compile Include="FakeRepositories\FakeInsightsReportRepository.cs" />
     <Compile Include="FakeRepositories\FakePersistToggleOverride.cs" />
     <Compile Include="FakeRepositories\FakePersonAccessAuditRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAccessRepository.cs" />

@@ -236,6 +236,9 @@
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
     <Compile Include="Forecasting\TriggerSkillForecastReadModel.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
+    <Compile Include="Insights\InsightsReport.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IInsightsReportRepository.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
     <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
@@ -4065,6 +4068,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\ForecastDayOverride.hbm.xml" />
+    <EmbeddedResource Include="Insights\InsightsReport.hbm.xml" />
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

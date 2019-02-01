@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+				   assembly="Teleopti.Ccc.Domain"
+				   namespace="Teleopti.Ccc.Domain.Insights"
+				   default-access="field.camelcase-underscore">
+
+	<class name="InsightsReport" table="InsightsReport">
+		<!--Insights Report is created by PowerBI, its id should get from PowerBI too-->
+		<id name="Id"
+			type="guid"
+			access="nosetter.camelcase-underscore"
+			unsaved-value="null">
+			<generator class="assigned" />
+		</id>
+
+		<version name="Version"
+				 unsaved-value ="null"/>
+
+		<property name="Name"
+				  not-null="true"
+				  type="string"
+				  length="200"/>
+
+		<property name="IsBuildIn"
+				  not-null="true"
+				  type="Boolean"/>
+
+		<property name="IsDeleted"
+				  type="boolean"
+				  not-null="true"/>
+
+		<many-to-one name="CreatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_InsightsReport_Person_CreatedBy"/>
+
+		<property name="CreatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+
+		<many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+					 not-null="true"
+					 foreign-key="FK_InsightsReport_Person_UpdatedBy"/>
+
+		<property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+
+		<filter name="deletedFlagFilter"
+				condition="IsDeleted = 0" />
+	</class>
+</hibernate-mapping>
