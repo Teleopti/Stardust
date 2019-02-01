@@ -37,12 +37,12 @@
 						<span class="timezone-tip"
 							  ng-if="vm.isNotSameTimezone(personSchedule.Timezone)">
 							<i class="mdi mdi-earth"></i>
+							<md-tooltip md-direction="right">
+								{{::personSchedule.Timezone.DisplayName}}
+							</md-tooltip>
 						</span>
 					</label>
-					<md-tooltip md-direction="right"
-								ng-if="vm.isNotSameTimezone(personSchedule.Timezone)">
-						{{::personSchedule.Timezone.DisplayName}}
-					</md-tooltip>
+					
 				</div>
 
 				<div class="person-name-text inline-block" ng-if="::!vm.selectMode">{{::personSchedule.Name}}</div>
