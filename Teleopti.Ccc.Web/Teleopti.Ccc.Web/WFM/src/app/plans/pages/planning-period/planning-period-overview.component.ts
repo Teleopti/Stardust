@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 	selector: 'plans-period-overview',
 	templateUrl: './planning-period-overview.component.html',
 	styleUrls: ['./planning-period-overview.component.scss'],
-	providers: [],
+	providers: []
 })
 export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	preValidationFilterControl: FormControl = this.fb.control('');
