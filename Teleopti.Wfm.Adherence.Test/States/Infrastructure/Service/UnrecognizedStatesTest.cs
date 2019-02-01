@@ -19,6 +19,7 @@ using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
 using Teleopti.Wfm.Adherence.Test.States.Unit.Service;
+using Description = Teleopti.Wfm.Adherence.Configuration.Description;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 {
@@ -185,7 +186,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 			{
 				var site = new Site("site");
 				_siteRepository.Add(site);
-				var team = new Team { Site = site }.WithDescription(new Description("team"));
+				var team = new Team { Site = site }.WithDescription(new Ccc.Domain.InterfaceLegacy.Domain.Description("team"));
 				_teamRepository.Add(team);
 				var contract = new Contract("c");
 				_contractRepository.Add(contract);

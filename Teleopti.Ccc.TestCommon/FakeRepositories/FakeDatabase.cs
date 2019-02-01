@@ -30,6 +30,7 @@ using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
 using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
+using Description = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -1265,7 +1266,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			_rule = new RtaRule();
 			if (name != null)
-				_rule.Description = new Description(name);
+				_rule.Description = new Wfm.Adherence.Configuration.Description(name);
 			_rule.SetId(id ?? Guid.NewGuid());
 			_rule.SetBusinessUnit(_businessUnit);
 			_rule.StaffingEffect = staffingEffect;

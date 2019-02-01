@@ -15,6 +15,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
+using Description = Teleopti.Wfm.Adherence.Configuration.Description;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.ReadModels
 {

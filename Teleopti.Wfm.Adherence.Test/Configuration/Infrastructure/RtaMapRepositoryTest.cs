@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
+using Description = Teleopti.Wfm.Adherence.Configuration.Description;
 
 namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 {

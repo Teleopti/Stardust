@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (rule == null)
 			{
-				rule = new RtaRule(new Description(Name ?? RandomName.Make()), displayColor, 0, StaffingEffect)
+				rule = new RtaRule(new Teleopti.Wfm.Adherence.Configuration.Description(Name ?? RandomName.Make()), displayColor, 0, StaffingEffect)
 				{
 					AlarmColor = alarmColor
 				};

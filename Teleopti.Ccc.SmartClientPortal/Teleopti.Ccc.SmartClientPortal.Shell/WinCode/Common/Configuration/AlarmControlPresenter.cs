@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				return;
 			}
 
-			alarm.Description = new Description(name);
+			alarm.Description = new Teleopti.Wfm.Adherence.Configuration.Description(name);
 		}
 	}
 }

@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
+using Description = Teleopti.Wfm.Adherence.Configuration.Description;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 {
@@ -97,7 +98,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 				Sites.Add(site);
 
 				team = new Team {Site = site}
-					.WithDescription(new Description(RandomName.Make()));
+					.WithDescription(new Ccc.Domain.InterfaceLegacy.Domain.Description(RandomName.Make()));
 				Teams.Add(team);
 				site.AddTeam(team);
 			});

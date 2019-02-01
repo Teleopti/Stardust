@@ -102,6 +102,7 @@
     <Compile Include="Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="Configuration\ConfigurationValidator.cs" />
     <Compile Include="Configuration\DefaultStateGroupException.cs" />
+    <Compile Include="Configuration\Description.cs" />
     <Compile Include="Configuration\Events\RtaMapChangedEvent.cs" />
     <Compile Include="Configuration\Events\RtaRuleChangedEvent.cs" />
     <Compile Include="Configuration\Events\RtaStateGroupChangedEvent.cs" />

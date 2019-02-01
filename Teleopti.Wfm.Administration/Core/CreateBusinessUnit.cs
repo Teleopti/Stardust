@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Wfm.Adherence.Configuration;
+using Description = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description;
 
 namespace Teleopti.Wfm.Administration.Core
 {

@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.Configuration;
+using Description = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -522,7 +523,7 @@ namespace Teleopti.Ccc.TestCommon
 		private Database addRule(string name, int? staffingEffect, Adherence? adherence, Color? color)
 		{
 			_rule = name;
-			var rule = new RtaRule {Description = new Description(name)};
+			var rule = new RtaRule {Description = new Wfm.Adherence.Configuration.Description(name)};
 			if (staffingEffect.HasValue)
 				rule.StaffingEffect = staffingEffect.Value;
 			if (adherence.HasValue)
