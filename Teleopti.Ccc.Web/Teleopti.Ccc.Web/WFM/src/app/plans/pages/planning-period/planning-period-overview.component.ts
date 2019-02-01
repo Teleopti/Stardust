@@ -15,6 +15,7 @@ import {map} from "rxjs/operators";
 export class PlanningPeriodOverviewComponent {
 
 	preValidationFilterControl: FormControl = this.fb.control('');
+	scheduleIssuesFilterControl: FormControl = this.fb.control('');
 	ppId: string;
 	groupId: string;
 	runScheduling: boolean = false;
@@ -29,6 +30,7 @@ export class PlanningPeriodOverviewComponent {
 	totalAgents: number = 0;
 	valLoading: boolean = true;
 	filteredPreValidations: any[];
+	filteredScheduleIssues: any[];
 
 	validationFilter;
 
@@ -67,6 +69,19 @@ export class PlanningPeriodOverviewComponent {
 			.subscribe(filteredPreValidations => {
 				this.filteredPreValidations = filteredPreValidations;
 			});
+
+		this.scheduleIssuesFilterControl.valueChanges
+			.pipe(
+				map(filterString => {
+					return this.valData.scheduleIssues.filter(g => g.ResourceName.toLowerCase().includes(filterString.toLowerCase())
+						|| g.ValidationErrors.some(item=> item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase())
+							|| this.translate.instant(item.ResourceType.toLowerCase()).includes(filterString.toLowerCase()))
+					);
+				})
+			)
+			.subscribe(filteredScheduleIssues => {
+				this.filteredScheduleIssues = filteredScheduleIssues;
+			});
 	}
 
 	ngOnDestroy(): void {
@@ -78,8 +93,12 @@ export class PlanningPeriodOverviewComponent {
 		this.timer = setInterval(this.checkProgress, 10000);
 	}
 
-	public clearPrevalidationFilter() {
+	public clearPreValidationFilter() {
 		this.preValidationFilterControl.setValue('');
+	}
+
+	public clearScheduleIssuesFilter() {
+		this.scheduleIssuesFilterControl.setValue('');
 	}
 
 	public launchSchedule(){
@@ -227,6 +246,7 @@ export class PlanningPeriodOverviewComponent {
 				this.isScheduled = true;
 				this.scheduledAgents = data.FullSchedulingResult.ScheduledAgentsCount;
 				this.valData.scheduleIssues = data.FullSchedulingResult.BusinessRulesValidationResults;
+				this.scheduleIssuesFilterControl.updateValueAndValidity();
 				this.updateValidationErrorsNumber();
 				if (!fullSchedulingResult) return;
 				this.dayNodes = fullSchedulingResult.SkillResultList ? fullSchedulingResult.SkillResultList : undefined;
@@ -240,9 +260,9 @@ export class PlanningPeriodOverviewComponent {
 		this.valLoading = true;
 		this.planningPeriodService.getValidation(this.ppId).subscribe(data => {
 			this.valData.preValidation = data.InvalidResources;
+			this.preValidationFilterControl.updateValueAndValidity();
 			this.valLoading = false;
 			this.updateValidationErrorsNumber();
-			this.preValidationFilterControl.updateValueAndValidity();
 		});
 	}
 }

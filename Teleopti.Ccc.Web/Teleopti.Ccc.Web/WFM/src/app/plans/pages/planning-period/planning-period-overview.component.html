@@ -94,13 +94,13 @@
                         </ng-template>
                         <div nz-row style="padding-bottom: 5px">
                             <div nz-col [nzSpan]="8">
-                                <nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixTemplate">
+                                <nz-input-group [nzSuffix]="suffixPreValidationTemplate" [nzPrefix]="prefixPreValidationTemplate">
                                     <input type="text" nz-input placeholder="Filter" [formControl]="preValidationFilterControl" />
                                 </nz-input-group>
 
-                                <ng-template #prefixTemplate><i nz-icon type="filter"></i></ng-template>
-                                <ng-template #suffixTemplate
-                                ><i nz-icon type="close-circle" (click)="clearPrevalidationFilter()" *ngIf="preValidationFilterControl.value"></i
+                                <ng-template #prefixPreValidationTemplate><i nz-icon type="filter"></i></ng-template>
+                                <ng-template #suffixPreValidationTemplate
+                                ><i nz-icon type="close-circle" (click)="clearPreValidationFilter()" *ngIf="preValidationFilterControl.value"></i
                                 ></ng-template>
                             </div>
                         </div>
@@ -138,19 +138,19 @@
                                 <span nz-col [nzSpan]="12">{{ valData.totalLastValNum }} {{ 'IssuesText' | translate }}</span>
                             </div>
                         </ng-template>
-                        <div nz-row>
-                            <div class="con-flex ">
-                                <label for="scheduleIssuesFilter" class="input-icon">
-                                    <i class="mdi mdi-filter-outline">
-                                        <input
-                                                type="text"
-                                                id="scheduleIssuesFilter"
-                                                ng-model="scheduleIssuesFilter"
-                                                placeholder="{{'FilterValidationIssues' | translate}}"
-                                        />
-                                    </i>
-                                </label>
+                        <div nz-row style="padding-bottom: 5px">
+                            <div nz-col [nzSpan]="8">
+                                <nz-input-group [nzSuffix]="suffixScheduleIssuesTemplate" [nzPrefix]="prefixScheduleIssuesTemplate">
+                                    <input type="text" nz-input placeholder="Filter" [formControl]="scheduleIssuesFilterControl" />
+                                </nz-input-group>
+
+                                <ng-template #prefixScheduleIssuesTemplate><i nz-icon type="filter"></i></ng-template>
+                                <ng-template #suffixScheduleIssuesTemplate
+                                ><i nz-icon type="close-circle" (click)="clearScheduleIssuesFilter()" *ngIf="scheduleIssuesFilterControl.value"></i
+                                ></ng-template>
                             </div>
+                        </div>
+                        <div nz-row>
                             <table class="wfm-table">
                                 <thead>
                                 <tr>
@@ -160,7 +160,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let msg of valData.scheduleIssues">
+                                <tr *ngFor="let msg of filteredScheduleIssues">
                                     <td>{{ msg.ResourceName }}</td>
                                     <td>
                                         <div *ngFor="let item of msg.ValidationErrors">
