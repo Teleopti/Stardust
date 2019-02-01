@@ -76,14 +76,20 @@
                         <ng-template #preValidationsTitle>
                             <div nz-row>
                                 <span nz-col [nzSpan]="12">{{'PreSchedulingValidationIssues' | translate}}</span>
-                                <span nz-col [nzSpan]="12">
-                                {{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
-                                    <button nz-button nzType="default" nzShape="circle"
-                                            (click)="loadValidations();$event.stopPropagation();"
-                                    >
-									<i nz-icon type="reload"></i>
-								</button>
-                            </span>
+                                    <span nz-col [nzSpan]="4">
+                                             <ng-template #indicatorTemplate><i nz-icon type="loading" style="font-size: 24px;"></i></ng-template>
+                                            <nz-spin [nzIndicator]="indicatorTemplate" [nzSpinning]="valLoading">
+                                            {{ valData.totalPreValNum }} {{ 'IssuesText' | translate }}
+                                            <button nz-button nzType="default" nzShape="circle"
+                                                    (click)="loadValidations();$event.stopPropagation();"
+                                            >
+                                            <i nz-icon type="reload"></i>
+                                        </button>
+                                       </nz-spin>
+                                    </span>
+                                <span nz-col [nzSpan]="8">
+                                    
+                                </span>
                             </div>
                         </ng-template>
                         <div nz-row>
