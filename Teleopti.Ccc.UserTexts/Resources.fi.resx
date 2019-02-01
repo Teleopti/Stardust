@@ -3197,7 +3197,7 @@ Korvaa</value>
     <comment>Enter name on the new grouping</comment>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
-    <value>Henkilön tehtävä ei kelpaa. {0}</value>
+    <value>Henkilön tehtävä ei kelpaa.</value>
     <comment>Person assignment is not valid.</comment>
   </data>
   <data name="Hide" xml:space="preserve">
@@ -15653,5 +15653,140 @@ Applikaatio sulkeutuu. </value>
   </data>
   <data name="PeopleManageUsers" xml:space="preserve">
     <value>Tarkastele käyttäjiä</value>
+  </data>
+  <data name="BlockSchedulingColon" xml:space="preserve">
+    <value>Blokki -työvuorott:</value>
+  </data>
+  <data name="PublishSchedulePlans" xml:space="preserve">
+    <value>Julkaise työvuorot</value>
+  </data>
+  <data name="DeleteInsightsReport" xml:space="preserve">
+    <value>Poista raportti</value>
+  </data>
+  <data name="AuditTrailGeneralAuditTrailReport" xml:space="preserve">
+    <value>Yleinen Audit Trail</value>
+  </data>
+  <data name="ScheduledAgents" xml:space="preserve">
+    <value>Työvuorotetut agentit</value>
+  </data>
+  <data name="AuditTrailSearchFilter" xml:space="preserve">
+    <value>Filtteri</value>
+  </data>
+  <data name="SystemSetting" xml:space="preserve">
+    <value>Järjestelmäasetukset</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroupReviewFilters" xml:space="preserve">
+    <value>Tässä suunnitteluryhmässä ei ole agentteja. Tarkista filtteröinti.</value>
+  </data>
+  <data name="ThereAreNoBankHolidaysDefinedForThisYearSelectADayInTheCalendarToCreateANewHoliday" xml:space="preserve">
+    <value>Arkipyhiä ei ole määritelty tälle vuodelle. Valitse päivä kalenterista lisätäksesi arkipyhän. </value>
+  </data>
+  <data name="ThisCalendarHasNoDatesAdded" xml:space="preserve">
+    <value>Tässä kalenterissa ei ole lisättyjä päivämääriä.</value>
+  </data>
+  <data name="ValidationsAreLoading" xml:space="preserve">
+    <value>Validointi käynnissä</value>
+  </data>
+  <data name="ValidationsAreLoadingTooltip" xml:space="preserve">
+    <value>Validointi käynnissä, saattaa kestää muutaman minuutin</value>
+  </data>
+  <data name="ValidationIssues" xml:space="preserve">
+    <value>Validointivirhe</value>
+  </data>
+  <data name="WeekLowerCase" xml:space="preserve">
+    <value>viikko</value>
+  </data>
+  <data name="WeekOrWeeks" xml:space="preserve">
+    <value>Viikko/Viikot</value>
+  </data>
+  <data name="WeeksLowerCase" xml:space="preserve">
+    <value>viikkoa</value>
+  </data>
+  <data name="YearLowerCase" xml:space="preserve">
+    <value>vuosi</value>
+  </data>
+  <data name="YearsLowerCase" xml:space="preserve">
+    <value>vuodet</value>
+  </data>
+  <data name="ConfirmMessageWhenCancelShiftEditing" xml:space="preserve">
+    <value>Olet muokannut vuoroa. Haluatko sulkea ja menettää muutokset?</value>
+  </data>
+  <data name="MonthOrMonths" xml:space="preserve">
+    <value>kuukausi/kuukausia</value>
+  </data>
+  <data name="BankHoliday" xml:space="preserve">
+    <value>Arkipyhä</value>
+  </data>
+  <data name="NoBankHolidays" xml:space="preserve">
+    <value>Ei arkipyhiä</value>
+  </data>
+  <data name="AddNewBankHolidayCalendar" xml:space="preserve">
+    <value>Lisää uudet arkipyhät kalenteriin</value>
+  </data>
+  <data name="DayOffRulesColon" xml:space="preserve">
+    <value>Vapaapäivien säännöt:</value>
+  </data>
+  <data name="NumberOfAgents" xml:space="preserve">
+    <value>{0} agenttia</value>
+  </data>
+  <data name="OneAgent" xml:space="preserve">
+    <value>1 agentti</value>
+  </data>
+  <data name="ManageCalendars" xml:space="preserve">
+    <value>Hallinnoi kalentereja</value>
+  </data>
+  <data name="AnErrorOccurredPleaseCheckTheNetworkConnectionAndTryAgain" xml:space="preserve">
+    <value>Tapahtui virhe. Tarkista verkkoyhteys ja yritä uudestaan. Jos tämä jatkuu, ota yhteys pääkäyttäjään.</value>
+  </data>
+  <data name="AddANewYear" xml:space="preserve">
+    <value>Lisää muille vuosille</value>
+  </data>
+  <data name="NameAlreadyExisting" xml:space="preserve">
+    <value>Nimi on jo käytössä</value>
+  </data>
+  <data name="MonthLowerCase" xml:space="preserve">
+    <value>kuukausi</value>
+  </data>
+  <data name="MonthsLowerCase" xml:space="preserve">
+    <value>kuukausia</value>
+  </data>
+  <data name="AuditTrailReportGroup" xml:space="preserve">
+    <value>Työvuorohistoria</value>
+  </data>
+  <data name="DayLowerCase" xml:space="preserve">
+    <value>päivä</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>Yleiset asetukset</value>
+  </data>
+  <data name="NewCalendarName" xml:space="preserve">
+    <value>Uusi kalenterinimi</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Vahvista</value>
+  </data>
+  <data name="PasswordPolicyError" xml:space="preserve">
+    <value>Salasanakäytäntövirhe</value>
+  </data>
+  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
+    <value>Oletko varma, että haluat poistaa arkipyhän kalenterista?</value>
+  </data>
+  <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
+    <value>Haluatko varmasti poistaa vuoden {0} kalenterista {1}?</value>
+  </data>
+  <data name="BankHolidayCalendarHasBeenSuccessfullyDeleted" xml:space="preserve">
+    <value>Arkipyhäkalenteri {0} on poistettu.</value>
+  </data>
+  <data name="BankHolidayCalendars" xml:space="preserve">
+    <value>Arkipyhäkalenterit</value>
+  </data>
+  <data name="DeleteThisYear" xml:space="preserve">
+    <value>Poista tämä vuosi</value>
+  </data>
+  <data name="DaysLowerCase" xml:space="preserve">
+    <value>päivät</value>
+  </data>
+  <data name="AssignCalendarsToSites" xml:space="preserve">
+    <value>Aseta kalenterit näille toimipisteille</value>
   </data>
 </root>
