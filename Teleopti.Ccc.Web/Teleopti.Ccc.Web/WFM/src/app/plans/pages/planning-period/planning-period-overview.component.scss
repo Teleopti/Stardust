@@ -29,10 +29,14 @@ table.overview {
   }
 }
 
-.skillname {
+.skill-name {
   max-width: 20em !important;
   text-overflow: ellipsis;
   white-space: nowrap;
+  position: absolute;
+  left: 0;
+  overflow: visible;
+  padding-left: 20px;
 }
 
 .long {

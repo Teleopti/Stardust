@@ -1,7 +1,5 @@
 <plans-title-bar><i class="mdi mdi-calendar"></i>{{ 'Plans' | translate }}</plans-title-bar>
 
-
-
 <div nz-row>
     <nz-spin [nzTip]="status" [nzSpinning]="isDisabled()">
         <button nz-button nzType="default" (click)="launchSchedule()">{{'ScheduleVerb' | translate}}</button>
@@ -32,7 +30,7 @@
                 </div>
                 <div class="wfm-chip-wrap">
                                             <span class="wfm-chip">
-                                                <span class="chip-handle scheduled-agents">
+                                                <span class="chip-handle">
                                                     {{scheduledAgents}}/{{totalAgents}}
                                                 </span>
                                                 <span class="chip-text">{{'ScheduledAgents'|translate}}</span>
@@ -42,27 +40,17 @@
 
             <div class="grid-scroll-wrap">
                 <table class="overview">
-                    <!--<col width="20px"/>-->
-                    <!--<tr ng-repeat="(index, subnode) in dayNodes | limitTo:1 ">-->
-                    <!--<th class="datehead"-->
-                    <!--ng-repeat="datenode in subnode.SkillDetails">-->
-                    <!--<p class="tabledate">{{datenode.Date }}</p>-->
-                    <!--</th>-->
-                    <!--</tr>-->
+                    <tbody>
                     <tr *ngFor="let subnode of dayNodes">
-                        <td class="skillname">{{ subnode.SkillName }}</td>
+                        <td class="skill-name">{{ subnode.SkillName }}</td>
                         <td class="long" *ngFor="let node of subnode.SkillDetails"
                             [ngClass]="{weekend: node.weekend}">
                             <div class="resourceplanner-box"
                                  [ngClass]="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
-                                <!--<md-tooltip>-->
-                                <!--{{'RelativeDifference' | translate}}:-->
-                                <!--{{node.parseDif}}% | {{subnode.SkillName}} |-->
-                                <!--{{node.Date }}-->
-                                <!--</md-tooltip>-->
                             </div>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </nz-tab>
