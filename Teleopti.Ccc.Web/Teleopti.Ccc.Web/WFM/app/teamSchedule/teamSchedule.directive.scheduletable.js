@@ -129,10 +129,6 @@
 			return vm.scheduleInEditing && vm.scheduleInEditing.PersonId === personSchedule.PersonId;
 		}
 
-		vm.isNotSameTimezone = function (personTimezone) {
-			return vm.selectedTimezone && personTimezone.IanaId !== vm.selectedTimezone;
-		}
-
 		vm.getHourPointsForHourLine = function () {
 			var pointsCount = vm.scheduleVm.TimeLine.HourPoints.length;
 			return angular.copy(vm.scheduleVm.TimeLine.HourPoints).splice(0, pointsCount - 2);

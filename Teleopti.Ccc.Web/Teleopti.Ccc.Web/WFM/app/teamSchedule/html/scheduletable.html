@@ -40,7 +40,7 @@
 						>
 							{{::personSchedule.Name}}
 						</md-checkbox>
-						<span class="timezone-tip" ng-if="vm.isNotSameTimezone(personSchedule.Timezone)">
+						<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
 							<i class="mdi mdi-earth"></i>
 							<md-tooltip md-direction="right">
 								{{::personSchedule.Timezone.DisplayName}}
