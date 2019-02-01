@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -59,7 +60,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         public void FalseIfSameEndTime()
         {
             using (_mock.Record())
-            {
+			{
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] {new Person(), new Person()});
                 Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -85,6 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
             {
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -110,6 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
             {
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -135,6 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
 			{
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -161,6 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
             {
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -186,6 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
             {
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -211,6 +218,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
 			{
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -236,6 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
             {
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -261,6 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
 			{
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -286,6 +296,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
             {
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -312,6 +323,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
 			using (_mock.Record())
 			{
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -337,6 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             using (_mock.Record())
 			{
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
@@ -362,6 +375,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_teamInfo.GroupMembers).Return(new[] { new Person(), new Person() });
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
