@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 
@@ -18,8 +19,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 
 		public bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo teamBlockInfo, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
-			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays, groupPersonSkillAggregator);
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
+			if (blockPeriod.DayCount() < 2 && teamBlockInfo.TeamInfo.GroupMembers.Count() < 2)
+				return true;
+
+			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays, groupPersonSkillAggregator);		
 			var dates = skillIntervalDataPerDateAndActivity.Keys;
 			TimePeriod? sampleOpenHour = null;
 			foreach (var date in dates)

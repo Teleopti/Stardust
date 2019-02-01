@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -47,6 +48,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool IsTeamBlockInSteadyState(ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions)
 		{
 			bool isSteadyState = true;
+			if (teamBlockInfo.TeamInfo.GroupMembers.Count() < 2 && teamBlockInfo.BlockInfo.BlockPeriod.DayCount() < 2)
+				return isSteadyState;
+
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(schedulingOptions) ||
 			    _teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(schedulingOptions))
 				isSteadyState &= _sameStartTimeBlockSpecification.IsSatisfiedBy(teamBlockInfo);
