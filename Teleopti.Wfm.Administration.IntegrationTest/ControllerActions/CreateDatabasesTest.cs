@@ -92,9 +92,9 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "Password");
+            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "passwordPassword7");
 
-			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", AppUser = "user", AppPassword = "Passw0rd", FirstUser = "user", FirstUserPassword = "password", BusinessUnit = "BU"};
+			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "passwordPassword7", AppUser = "user", AppPassword = "Passw0rd", FirstUser = "user", FirstUserPassword = "password", BusinessUnit = "BU"};
 
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();

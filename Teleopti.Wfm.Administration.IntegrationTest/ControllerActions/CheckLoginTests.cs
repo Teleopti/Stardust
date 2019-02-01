@@ -29,14 +29,14 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "alogin", "password");
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "alogin", "passwordPassword7");
 			
 			var model = new CreateTenantModel
 			{
 				AppUser = "alogin",
 				AppPassword = "Passw0rd",
 				CreateDbUser = "dbcreatorperson",
-				CreateDbPassword = "password"
+				CreateDbPassword = "passwordPassword7"
 			};
 
 			var result = Target.CheckLogin(model).Content;
@@ -71,7 +71,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 				AppUser = RandomName.Make(),
 				AppPassword = "S0meG0odpassword",
 				CreateDbUser = "dbcreatorperson",
-				CreateDbPassword = "password"
+				CreateDbPassword = "passwordPassword7"
 			};
 
 			var result = Target.CheckLogin(model).Content;

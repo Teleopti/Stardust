@@ -27,23 +27,23 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;
 			builder.UserID = "dbcreatorperson";
-			builder.Password = "password";
+			builder.Password = "passwordPassword7";
 			
 			var helper = new DatabaseHelper(builder.ConnectionString, DatabaseType.TeleoptiCCC7);
 			helper.CreateByDbManager();
 			
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString,"appuser", "password");
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString,"appuser", "passwordPassword7");
 
 			var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
 			builderAnal.IntegratedSecurity = false;
 			builderAnal.UserID = "dbcreatorperson";
-			builderAnal.Password = "password";
+			builderAnal.Password = "passwordPassword7";
 
 			helper = new DatabaseHelper(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics);
 			helper.CreateByDbManager();
 
 			builder.UserID = "appuser";
-			builder.Password = "password";
+			builder.Password = "passwordPassword7";
 			var appConn = builder.ConnectionString;
 
 			builder.InitialCatalog = TestPollutionCleaner.TestTenantAnalyticsConnection().InitialCatalog;
@@ -60,7 +60,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			{
 				Tenant = "NewOne",
 				AdminUserName = "dbcreatorperson",
-				AdminPassword = "password"
+				AdminPassword = "passwordPassword7"
 			});
 
 		}

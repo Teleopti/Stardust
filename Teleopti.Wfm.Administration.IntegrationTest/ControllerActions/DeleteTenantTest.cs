@@ -56,11 +56,11 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;
 			builder.UserID = "dbcreatorperson";
-			builder.Password = "password";
+			builder.Password = "passwordPassword7";
 			
 			var sqlVersion = new SqlVersion(12);
-			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password");
-			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", "password", sqlVersion,
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "passwordPassword7");
+			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", "passwordPassword7", sqlVersion,
 				"NewFineTenant", 1);
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())

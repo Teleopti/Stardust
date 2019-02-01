@@ -8,7 +8,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		{
 			Tenant = "New Tenant";
 			CreateDbUser = "dbcreatorperson";
-			CreateDbPassword = "password";
+			CreateDbPassword = "passwordPassword7";
 			AppUser = "new TenantAppUser";
 			AppPassword = "NewTenantAppPassword";
 			FirstUser = "Thefirstone";
