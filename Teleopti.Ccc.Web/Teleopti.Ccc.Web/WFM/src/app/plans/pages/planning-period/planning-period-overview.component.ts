@@ -14,7 +14,7 @@ import {map} from "rxjs/operators";
 })
 export class PlanningPeriodOverviewComponent {
 
-	filterControl: FormControl = this.fb.control('');
+	preValidationFilterControl: FormControl = this.fb.control('');
 	ppId: string;
 	groupId: string;
 	runScheduling: boolean = false;
@@ -55,7 +55,7 @@ export class PlanningPeriodOverviewComponent {
 		this.loadLastResult();
 		this.checkState();
 
-		this.filterControl.valueChanges
+		this.preValidationFilterControl.valueChanges
 			.pipe(
 				map(filterString => {
 					return this.valData.preValidation.filter(g => g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) 
@@ -78,8 +78,8 @@ export class PlanningPeriodOverviewComponent {
 		this.timer = setInterval(this.checkProgress, 10000);
 	}
 
-	public clearFilter() {
-		this.filterControl.setValue('');
+	public clearPrevalidationFilter() {
+		this.preValidationFilterControl.setValue('');
 	}
 
 	public launchSchedule(){
@@ -242,7 +242,7 @@ export class PlanningPeriodOverviewComponent {
 			this.valData.preValidation = data.InvalidResources;
 			this.valLoading = false;
 			this.updateValidationErrorsNumber();
-			this.filterControl.updateValueAndValidity();
+			this.preValidationFilterControl.updateValueAndValidity();
 		});
 	}
 }
