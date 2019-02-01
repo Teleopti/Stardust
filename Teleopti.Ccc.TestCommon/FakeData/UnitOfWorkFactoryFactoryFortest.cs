@@ -48,11 +48,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				return new FakeUnitOfWork(new FakeStorage());
 			}
 
-	        public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
-	        {
-				throw new NotImplementedException();
-			}
-
 	        public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
             {
                 throw new NotImplementedException();

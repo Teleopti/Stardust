@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			resolver)
 		{
 			_eventPublisher = eventPublisher;
-			unitOfWorks.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
+			var uow = unitOfWorks.Current().CreateAndOpenUnitOfWork();
+			uow.DisableFilter(QueryFilter.BusinessUnit);
 
 			Person("I").Apply(new PersonUserConfigurable
 			{

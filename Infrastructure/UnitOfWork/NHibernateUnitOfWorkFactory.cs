@@ -68,11 +68,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
-			return CreateAndOpenUnitOfWork(QueryFilter.BusinessUnit);
-		}
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
-		{
 			_nestedUnitOfWorkStrategy.Strategize(_context);
 
 			var interceptor = _unitOfWorkFactoryFactory.MakeInterceptor();
@@ -81,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Interceptor(interceptor)
 				.OpenSession();
 
-			businessUnitFilter.Enable(session, _businessUnit.CurrentId().GetValueOrDefault());
+			QueryFilter.BusinessUnit.Enable(session, _businessUnit.CurrentId().GetValueOrDefault());
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 

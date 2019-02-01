@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
+			var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+			uow.DisableFilter(QueryFilter.BusinessUnit);
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)

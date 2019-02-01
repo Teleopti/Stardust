@@ -3,14 +3,11 @@ using NHibernate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
-
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class QueryFilter : IQueryFilter
 	{
 		private readonly Action<ISession, object> _enable;
-
-		public static readonly IQueryFilter NoFilter = new QueryFilter("noFilter", (session, p) => { });
 
 		public static readonly IQueryFilter BusinessUnit = new QueryFilter("businessUnitFilter", (session, p) =>
 		{
@@ -34,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			Name = name;
 		}
 
-		public string Name { get; private set; }
+		public string Name { get;  }
 
 		public void Enable(object session, object payload)
 		{

@@ -36,11 +36,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new FakeUnitOfWork(_storage, _publisher, _hooks);
 		}
 
-		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
-		{
-			return new FakeUnitOfWork(_storage, _publisher, _hooks);
-		}
-
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
 		{
 			throw new NotImplementedException();
@@ -59,6 +54,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public void Dispose()
 		{
 		}
-
 	}
 }
