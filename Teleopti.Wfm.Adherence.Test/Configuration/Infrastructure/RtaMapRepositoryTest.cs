@@ -69,9 +69,10 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
             var result = new RtaMapRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
             Assert.AreEqual(1, result.Count);
-            Assert.IsTrue(LazyLoadingManager2.IsInitialized(result[0].Activity));
-            Assert.IsTrue(LazyLoadingManager2.IsInitialized(result[0].StateGroup));
-            Assert.IsTrue(LazyLoadingManager2.IsInitialized(result[0].RtaRule));
+			Session.Close();
+			result[0].Activity.ToString();
+			result[0].StateGroup.ToString();
+			result[0].RtaRule.ToString();
         }
     }
 }
