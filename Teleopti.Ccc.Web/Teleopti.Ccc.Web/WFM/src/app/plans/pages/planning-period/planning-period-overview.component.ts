@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { PlanningPeriodService } from '../../shared';
+import {PlanningGroupService, PlanningPeriodService} from '../../shared';
 import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 	selector: 'plans-period-overview',
 	templateUrl: './planning-period-overview.component.html',
 	styleUrls: ['./planning-period-overview.component.scss'],
-	providers: []
+	providers: [],
 })
 export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	preValidationFilterControl: FormControl = this.fb.control('');
@@ -25,7 +25,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	isScheduled = false;
 	scheduledAgents = 0;
 	timer: any;
-	planningPeriodInfo: any;
+	planningPeriodInfo: any = {};
+	planningGroupInfo: any = {};
 	totalAgents = 0;
 	valLoading = true;
 	filteredPreValidations: any[];
@@ -45,6 +46,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private planningPeriodService: PlanningPeriodService,
+		private planningGroupService: PlanningGroupService,
 		@Inject('$state') private $state: IStateService,
 		private translate: TranslateService,
 		private navService: NavigationService,
@@ -55,6 +57,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
+		this.loadPlanningGroupInfo();
 		this.loadPlanningPeriodInfo();
 		this.loadValidations();
 		this.loadLastResult();
@@ -99,6 +102,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			.subscribe(filteredScheduleIssues => {
 				this.filteredScheduleIssues = filteredScheduleIssues;
 			});
+		
 	}
 
 	ngOnDestroy(): void {
@@ -233,6 +237,12 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.planningPeriodService.getPlanningPeriodInfo(this.ppId).subscribe(data => {
 			this.planningPeriodInfo = data ? data : {};
 			this.totalAgents = data ? data.TotalAgents : 0;
+		});
+	}
+
+	private loadPlanningGroupInfo() {
+		this.planningGroupService.getPlanningGroup(this.groupId).subscribe(data => {
+			this.planningGroupInfo = data ? data : {};
 		});
 	}
 

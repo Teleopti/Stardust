@@ -5,12 +5,17 @@ import { DowngradeableComponent } from '@wfm/types';
 import { PlanningGroupService, PlanningPeriodService } from './shared';
 import { IStateService } from 'angular-ui-router';
 import { TitleBarComponent } from './components/title-bar';
-import {PlanningGroupsOverviewComponent} from "./pages/planning-groups/planning-groups-overview.component";
-import {PlanningPeriodOverviewComponent} from "./pages/planning-period/planning-period-overview.component";
+import { PlanningGroupsOverviewComponent } from './pages/planning-groups/planning-groups-overview.component';
+import { PlanningPeriodOverviewComponent } from './pages/planning-period/planning-period-overview.component';
+import {MomentModule} from "ngx-moment";
 
 @NgModule({
 	declarations: [TitleBarComponent, PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent],
-	imports: [SharedModule, TranslateModule.forChild()],
+	imports: [
+		SharedModule, 
+		TranslateModule.forChild(),
+		MomentModule
+	],
 	providers: [
 		PlanningGroupService,
 		PlanningPeriodService,

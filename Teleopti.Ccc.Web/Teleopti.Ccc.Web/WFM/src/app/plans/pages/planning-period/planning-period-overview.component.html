@@ -1,4 +1,8 @@
-<plans-title-bar><i class="mdi mdi-calendar"></i>{{ 'Plans' | translate }}</plans-title-bar>
+<plans-title-bar>
+	<i class="mdi mdi-calendar"></i><a href="#/resourceplanner">{{ 'Plans' | translate }}</a> /
+	<a href="#/resourceplanner/planninggroup/{{ groupId }}/selectplanningperiod">{{ planningGroupInfo.Name }}</a>
+	/ {{ planningPeriodInfo.StartDate | amDateFormat:"LL"}} - {{ planningPeriodInfo.EndDate | amDateFormat:"LL"}}
+</plans-title-bar>
 
 <div nz-row>
 	<nz-spin [nzTip]="status" [nzSpinning]="isDisabled()">
