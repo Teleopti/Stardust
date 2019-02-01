@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.States;
 
-namespace Teleopti.Wfm.Adherence.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
     public interface IRtaStateHolder
     {

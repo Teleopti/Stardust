@@ -112,7 +112,6 @@
     <Compile Include="Configuration\IRtaState.cs" />
     <Compile Include="Configuration\IRtaStateGroup.cs" />
     <Compile Include="Configuration\IRtaStateGroupRepository.cs" />
-    <Compile Include="Configuration\IRtaStateHolder.cs" />
     <Compile Include="Configuration\Repositories\Repository.cs" />
     <Compile Include="Configuration\Repositories\RtaMapRepository.cs" />
     <Compile Include="Configuration\Repositories\RtaRuleRepository.cs" />
@@ -121,7 +120,6 @@
     <Compile Include="Configuration\RtaRule.cs" />
     <Compile Include="Configuration\RtaState.cs" />
     <Compile Include="Configuration\RtaStateGroup.cs" />
-    <Compile Include="Configuration\RtaStateHolder.cs" />
     <Compile Include="DateExtensions.cs" />
     <Compile Include="DateOnly.cs" />
     <Compile Include="DateTimePeriod.cs" />

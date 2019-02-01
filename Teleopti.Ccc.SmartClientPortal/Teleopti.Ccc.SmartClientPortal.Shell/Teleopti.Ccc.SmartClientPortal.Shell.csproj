@@ -710,6 +710,7 @@
     <Compile Include="WinCode\Intraday\IntradayLoadProgress.cs" />
     <Compile Include="WinCode\Intraday\IntradayMainModel.cs" />
     <Compile Include="WinCode\Intraday\IntradayPresenter.cs" />
+    <Compile Include="WinCode\Intraday\IRtaStateHolder.cs" />
     <Compile Include="WinCode\Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
     <Compile Include="WinCode\Intraday\OnEventForecastDataMessageCommand.cs" />
     <Compile Include="WinCode\Intraday\OnEventMeetingMessageCommand.cs" />
@@ -719,6 +720,7 @@
     <Compile Include="WinCode\Intraday\Poller.cs" />
     <Compile Include="WinCode\Intraday\ReforecastModel.cs" />
     <Compile Include="WinCode\Intraday\ReforecastWizardPages.cs" />
+    <Compile Include="WinCode\Intraday\RtaStateHolder.cs" />
     <Compile Include="WinCode\Intraday\StaffingEffectViewAdapter.cs" />
     <Compile Include="WinCode\Main\ILogonView.cs" />
     <Compile Include="WinCode\Main\LicenseStatusLoader.cs" />

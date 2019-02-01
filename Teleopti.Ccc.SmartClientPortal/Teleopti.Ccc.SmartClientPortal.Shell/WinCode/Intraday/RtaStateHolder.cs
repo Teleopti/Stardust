@@ -5,9 +5,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.States;
 
-namespace Teleopti.Wfm.Adherence.Configuration
+namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 {
     public class RtaStateHolder : IRtaStateHolder
     {

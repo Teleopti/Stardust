@@ -185,7 +185,6 @@
     <Compile Include="Configuration\Unit\RtaMapTest.cs" />
     <Compile Include="Configuration\Unit\RtaRuleTest.cs" />
     <Compile Include="Configuration\Unit\RtaStateGroupTest.cs" />
-    <Compile Include="Configuration\Unit\RtaStateHolderTest.cs" />
     <Compile Include="Configuration\Unit\RtaStateTest.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Historical\Infrastructure\HistoricalOverviewViewModel\AdherenceTest.cs" />
