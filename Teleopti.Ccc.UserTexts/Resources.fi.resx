@@ -15768,9 +15768,6 @@ Applikaatio sulkeutuu. </value>
   <data name="PasswordPolicyError" xml:space="preserve">
     <value>Salasanakäytäntövirhe</value>
   </data>
-  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
-    <value>Oletko varma, että haluat poistaa arkipyhän kalenterista?</value>
-  </data>
   <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
     <value>Haluatko varmasti poistaa vuoden {0} kalenterista {1}?</value>
   </data>

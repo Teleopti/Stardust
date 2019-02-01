@@ -15526,9 +15526,6 @@ Möchten Sie teilnehmen?</value>
   <data name="PasswordPolicyError" xml:space="preserve">
 		<value>Fehler bei der Passwortrichtlinie</value>
 	</data>
-  <data name="AreYouSureToDeleteThisBankHolidayCalendar" xml:space="preserve">
-		<value>Sind Sie sicher, dass Sie diesen Feiertagskalender löschen möchten?</value>
-	</data>
   <data name="AreYouSureToDeleteYearFromCalendar" xml:space="preserve">
 		<value>Sind Sie sicher, dass Sie das Jahr {0} aus dem Kalender {1} löschen möchten?</value>
 	</data>
