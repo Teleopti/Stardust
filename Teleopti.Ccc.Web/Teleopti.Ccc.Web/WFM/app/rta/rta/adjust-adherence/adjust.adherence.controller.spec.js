@@ -160,22 +160,57 @@ rtaTester.describe('AdjustAdherenceController', function (it, fit, xit) {
         expect(vm.adjustedPeriods[0].EndTime).toEqual('2019-01-28 10:00');
     });
 
-    it('should submit invalid date if no time specified', function (t) {
+    it('should display ? if invalid start time', function (t) {
+        var now = new Date('2019-02-01T08:00:00');
+        jasmine.clock().mockDate(now);
         var vm = t.createController();
 
         t.apply(function () {
-            vm.startDate = new Date(2019, 0, 30);
             vm.startTime = null;
-            vm.endDate = new Date(2019, 0, 30);
+        });
+
+        expect(vm.selectedPeriod).toEqual("2019-01-31 ? - 2019-01-31 18:00");
+    });
+
+    it('should display ? if invalid end time', function (t) {
+        var now = new Date('2019-02-01T08:00:00');
+        jasmine.clock().mockDate(now);
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.endTime = null;
+        });
+
+        expect(vm.selectedPeriod).toEqual("2019-01-31 08:00 - 2019-01-31 ?");
+    });
+
+    it('should not submit if invalid start time', function (t) {
+        var now = new Date('2019-02-01T08:00:00');
+        jasmine.clock().mockDate(now);
+        var vm = t.createController();
+
+        t.apply(function () {
+            vm.startTime = null;
+        });
+        t.apply(function () {
+            vm.adjustToNeutral();
+        });
+
+        expect(t.backend.lastParams.adjustPeriod()).toBeUndefined();
+    });
+
+    it('should not submit if invalid end time', function (t) {
+        var now = new Date('2019-02-01T08:00:00');
+        jasmine.clock().mockDate(now);
+        var vm = t.createController();
+
+        t.apply(function () {
             vm.endTime = null;
         });
         t.apply(function () {
             vm.adjustToNeutral();
         });
 
-        expect(t.backend.lastParams.adjustPeriod()).toEqual({
-            StartDateTime: '2019-01-30 Invalid date',
-            EndDateTime: '2019-01-30 Invalid date'
-        });
+        expect(t.backend.lastParams.adjustPeriod()).toBeUndefined();
     });
 });

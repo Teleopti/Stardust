@@ -5,9 +5,9 @@
             .module('wfm.rta')
             .controller('AdjustAdherenceController', AdjustAdherenceController);
 
-        AdjustAdherenceController.$inject = ['CurrentUserInfo', 'rtaStateService', '$http', '$scope', '$state'];
+        AdjustAdherenceController.$inject = ['CurrentUserInfo', 'rtaStateService', '$http', '$scope', '$state', '$timeout'];
 
-        function AdjustAdherenceController(currentUserInfo, rtaStateService, $http, $scope, $state) {
+        function AdjustAdherenceController(currentUserInfo, rtaStateService, $http, $scope, $state, $timeout) {
             var vm = this;
             vm.showAdjustToNeutralForm = false;
             vm.adjustedPeriods = [];
@@ -29,9 +29,11 @@
             }
 
             function buildSelectedPeriod() {
-                var startTime = moment(vm.startDate).format('L') + ' ' + moment(vm.startTime).format('LT');
-                var endTime = moment(vm.endDate).format('L') + ' ' + moment(vm.endTime).format('LT');
-                vm.selectedPeriod = startTime + ' - ' + endTime;
+                var startTime = moment(vm.startTime).isValid() ? moment(vm.startTime).format('LT') : '?';
+                var endTime = moment(vm.endTime).isValid() ? moment(vm.endTime).format('LT') : '?';
+                var start = moment(vm.startDate).format('L') + ' ' + startTime;
+                var endTime = moment(vm.endDate).format('L') + ' ' + endTime;
+                vm.selectedPeriod = start + ' - ' + endTime;
             }
 
             function loadData() {
@@ -52,6 +54,8 @@
             }
 
             vm.adjustToNeutral = function () {
+                if(!(moment(vm.startTime).isValid() && moment(vm.endTime).isValid()))
+                    return;
                 $http.post('../api/Adherence/AdjustPeriod', {
                     StartDateTime: formatDateTime(vm.startDate, vm.startTime),
                     EndDateTime: formatDateTime(vm.endDate, vm.endTime)
@@ -75,8 +79,13 @@
             $scope.$watch(function () {
                 return vm.startTime;
             }, function () {
-                if (shouldAutoFixTime())
-                    vm.endTime = vm.startTime;
+                if (shouldAutoFixTime()) {
+                    $timeout(function() {
+                        if(!moment(vm.startTime).isValid())
+                            return;
+                        vm.endTime = vm.startTime;
+                    }, 1000)
+                }
                 buildSelectedPeriod();
             });
 
@@ -93,8 +102,13 @@
             $scope.$watch(function () {
                 return vm.endTime;
             }, function () {
-                if (shouldAutoFixTime())
-                    vm.startTime = vm.endTime;
+                if (shouldAutoFixTime()) {
+                    $timeout(function(){
+                        if(!moment(vm.endTime).isValid())
+                            return;
+                        vm.startTime = vm.endTime;
+                    }, 1000);
+                }
                 buildSelectedPeriod();
             });
 
