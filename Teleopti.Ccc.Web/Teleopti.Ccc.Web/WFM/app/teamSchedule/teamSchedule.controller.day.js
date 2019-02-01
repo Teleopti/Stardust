@@ -602,7 +602,6 @@
 
 		vm.validateWarningEnabled = false;
 
-		vm.scheduleTableSelectMode = true;
 		vm.onUseShrinkageChanged = function (useShrinkage) {
 			StaffingConfigStorageService.setShrinkage(useShrinkage);
 		};

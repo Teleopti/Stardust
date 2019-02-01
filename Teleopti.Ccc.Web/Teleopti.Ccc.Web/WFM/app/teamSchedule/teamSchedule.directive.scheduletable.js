@@ -7,7 +7,6 @@
 	function scheduleTableDirective() {
 		return {
 			scope: {
-				selectMode: '=',
 				selectedDate: '=',
 				selectedTimezone: '<',
 				selectedSortOption: '<',

@@ -2,12 +2,10 @@
 	<thead>
 		<tr class="person">
 			<th class="person-name-column">
-				<md-checkbox ng-if="::vm.selectMode"
-							 ng-model="vm.toggleAllInCurrentPage"
+				<md-checkbox ng-model="vm.toggleAllInCurrentPage"
 							 ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
 					{{'AgentName' | translate}}
 				</md-checkbox>
-				<div ng-hide="::vm.selectMode" class="wfm-checkbox-label nowrap">{{'AgentName' | translate}}</div>
 				<sort-agent ng-model="vm.selectedSortOption" class="pull-right sort-agent"></sort-agent>
 			</th>
 			<th class="shift-category-cell-header"></th>
@@ -27,7 +25,7 @@
 			ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
 			ng-click="vm.togglePerson(personSchedule, $event)">
 			<td class="person-name-column">
-				<div ng-if="::vm.selectMode" class="inline-block">
+				<div class="inline-block">
 					<label>
 						<md-checkbox ng-model="personSchedule.IsSelected"
 									 ng-change="vm.updatePersonSelection(personSchedule)"
@@ -42,10 +40,7 @@
 							</md-tooltip>
 						</span>
 					</label>
-					
 				</div>
-
-				<div class="person-name-text inline-block" ng-if="::!vm.selectMode">{{::personSchedule.Name}}</div>
 
 				<span class="validate-warning" ng-if="vm.showWarnings">
 					<span ng-if="vm.checkIsLoadedValidationForPerson(personSchedule.PersonId) && vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length > 0">
@@ -82,7 +77,7 @@
 				</md-tooltip>
 			</td>
 			<td class="schedule schedule-column">
-				<div class="relative time-line-for" >
+				<div class="relative time-line-for">
 					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs"
 						  ng-if="dayOff.Length > 0"
 						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
@@ -95,11 +90,11 @@
 							 projection-name="{{::projection.Description}}"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
 							 ng-class="{
-							 'overtime-light': projection.IsOvertime && projection.UseLighterBorder, 
+							 'overtime-light': projection.IsOvertime && projection.UseLighterBorder,
 							 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder,
-							 personAbsence: projection.ParentPersonAbsences !== null, 
+							 personAbsence: projection.ParentPersonAbsences !== null,
 							 selected: projection.Selected,
-							 lighterBorder: projection.UseLighterBorder, 
+							 lighterBorder: projection.UseLighterBorder,
 							 unselectable: !vm.canToggleSelection(projection, vm.selectedDate),
 							 sameTypeAsLast: projection.ShowDividedLine}"
 							 ng-click="vm.ToggleProjectionSelection(projection, vm.selectedDate)">
