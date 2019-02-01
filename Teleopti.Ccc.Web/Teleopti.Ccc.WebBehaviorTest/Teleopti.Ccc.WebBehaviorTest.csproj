@@ -277,6 +277,12 @@
       <DependentUpon>MobileMonth.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\MobileMonthStepDefinitions.cs" />
+    <Compile Include="MyTime\PreferencesPeriodFeedbackMobile.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PreferencesPeriodFeedbackMobile.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\PreferencesPeriodFeedbackMobileStepDefinition.cs" />
     <Compile Include="MyTime\ShiftTradeRequestViewShowingMultipleShifts.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1168,6 +1174,10 @@
     <None Include="MyTime\JalaaliCalendar.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>JalaaliCalendar.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\PreferencesPeriodFeedbackMobile.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesPeriodFeedbackMobile.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

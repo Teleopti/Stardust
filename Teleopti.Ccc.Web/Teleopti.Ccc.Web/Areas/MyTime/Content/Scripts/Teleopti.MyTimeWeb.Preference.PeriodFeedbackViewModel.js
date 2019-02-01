@@ -47,9 +47,9 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function(ajax, dayViewMo
 	this.TargetDaysOffUpper = ko.observable();
 	this.PossibleResultDaysOff = ko.observable();
 	this.IsHostAMobile = ko.observable(Teleopti.MyTimeWeb.Common.IsHostAMobile());
-	this.shouldShowWarningDetail = ko.observable(true);
+	this.isShowingWarningDetail = ko.observable(false);
 	this.toggleWarningDetail = function() {
-		self.shouldShowWarningDetail(!self.shouldShowWarningDetail());
+		self.isShowingWarningDetail(!self.isShowingWarningDetail());
 	};
 
 	this.TargetContractTimeLowerMinutes = ko.observable();

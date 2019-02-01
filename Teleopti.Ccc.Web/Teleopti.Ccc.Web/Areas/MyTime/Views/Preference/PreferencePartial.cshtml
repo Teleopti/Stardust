@@ -10,7 +10,7 @@
 
 <div class="navbar teleopti-toolbar subnavbar">
 	<div class="container">
-		<ul class="nav navbar-nav teleopti-toolbar row submenu" data-bind="css:{'phone-navbar':IsHostAMobile}">
+		<ul class="nav navbar-nav teleopti-toolbar row submenu preference-toolbar" data-bind="css:{'phone-navbar':IsHostAMobile}">
 			<li class="col-xs-12 col-sm-4 phone-navbar-top">
 				<span class="input-group" style="max-width: 329px;">
 					<span class="input-group-btn">
@@ -110,6 +110,9 @@
 				</ul>
 			</li>
 		</ul>
+		<div class="warning-indicator" data-bind="click: toggleWarningDetail, style:{'display': IsHostAMobile ? 'flex' : 'none'}">
+			<span data-bind="css: PreferenceFeedbackClass, text:WarningCount" class="warning-count">!</span>
+		</div>
 	</div>
 </div>
 
@@ -121,8 +124,7 @@
 		<div class="phone-background" ></div>
 	</div>
 	<div id="Preference-period-feedback-view" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsHostAMobile}">
-		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: PreferenceFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
-		<div class="hide-at-start" data-bind="css:{warningDetail:shouldShowWarningDetail(), 'show-after-loaded': FeedbackLoaded()}">
+		<div class="hide-at-start warning-detail" data-bind="css:{'show-after-loaded': FeedbackLoaded()}, style: {'display': !IsHostAMobile() || isShowingWarningDetail() ? 'block' : 'none'}">
 			<div class="alert alert-preference" data-bind="css: PreferenceFeedbackClass">
 				<div>
 					<!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->

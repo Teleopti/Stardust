@@ -55,8 +55,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 					Teleopti.MyTimeWeb.Common.DateFormat +
 					'"}'
 			);
-			ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
-			//ko.applyBindings(selectionViewModel, $('div.navbar')[2]);
+			ko.applyBindings(selectionViewModel, $('.preference-toolbar')[0]);
 		});
 	}
 
@@ -489,6 +488,28 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 				date,
 				weekViewModels
 			);
+
+			if (isHostAMobile) {
+				function AlertViewModel(feedbackViewModel) {
+					var self = this;
+					self.PreferenceFeedbackClass = ko.computed(function () {
+						return feedbackViewModel.PreferenceFeedbackClass();
+					});
+
+					self.WarningCount = ko.computed(function () {
+						return feedbackViewModel.WarningCount();
+					});
+
+					self.toggleWarningDetail = function () {
+						feedbackViewModel.toggleWarningDetail();
+					};
+					self.IsHostAMobile = true;
+				}
+
+				var alertViewModelBinding = new AlertViewModel(periodFeedbackViewModel);
+				ko.applyBindings(alertViewModelBinding, $('.warning-indicator')[0]);
+			}
+			
 
 			var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 			if (periodFeedbackElement) {

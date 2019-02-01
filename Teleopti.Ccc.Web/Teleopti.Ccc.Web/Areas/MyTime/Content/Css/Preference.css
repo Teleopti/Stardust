@@ -136,30 +136,31 @@
 		top: 0;
 		left: 0;
 	}
+	.warning-indicator {
+		height: 100%;
+		width: 35px;
+		text-align: center;
+		position: absolute;
+		top: 0;
+		right: 0;
+		cursor: pointer;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.warning-count {
+		height: 20px;
+		width: 20px;
+		border-radius: 15px;
+		display: block;
+	}
 	.phone-warning-indicator {
 		position: relative;
 	}
 	.phone-warning-indicator .alert {
 		width: 100%;
 	}
-	.phone-warning-indicator .warning-indicator {
-		display: block !important;
-		height: 45px;
-		width: 35px;
-		text-align: center;
-		position: absolute;
-		top: -60px;
-		right: -15px;
-		cursor: pointer;
-	}
-	.phone-warning-indicator .warning-count {
-		height: 20px;
-		width: 20px;
-		border-radius: 15px;
-		display: block;
-		margin-top: 10px;
-	}
-	.phone-warning-indicator .warningDetail {
+	.phone-warning-indicator .warning-detail {
 		display: none;
 	}
 	.phone-warning-indicator + #Preference-body {
@@ -287,10 +288,6 @@
 		color: white;
 	}
 }
-.warning-indicator {
-	display: none;
-}
-
 .preference {
 	height: 20px;
 	text-align: center;
