@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			{
 				BusinessUnit = "BU",
 				AppUser = "somenewnotthere",
-				AppPassword = "Passw0rd",
+				AppPassword = "Passw0rdPassword",
 				FirstUser = ""
 			};
 			var result = Target.CreateDatabases(model).Content;
@@ -44,7 +44,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			{
 				BusinessUnit = "",
 				AppUser = "somenewnotthere",
-				AppPassword = "Passw0rd",
+				AppPassword = "Passw0rdPassword",
 				FirstUser = "somenewnotthere"
 			};
          
@@ -111,7 +111,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			{
 				Tenant = "New Tenant",
 				AppUser = "new TenantAppUser",
-				AppPassword = "Passw0rd"
+				AppPassword = "Passw0rdPassword"
 			});
 
 			result.Content.Success.Should().Be.True();

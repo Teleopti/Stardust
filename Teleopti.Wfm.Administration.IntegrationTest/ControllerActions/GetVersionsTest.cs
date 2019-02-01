@@ -27,15 +27,15 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			TestPollutionCleaner.Clean("tenant", "appuser");
 
 			var sqlVersion = new SqlVersion(12);
-			helper.LoginTasks().CreateLogin("appuser", "SomeG00dpw", false);
-			helper.AddPermissions("appuser", "SomeG00dpw", sqlVersion);
+			helper.LoginTasks().CreateLogin("appuser", "SomeG00dpwPassword", false);
+			helper.AddPermissions("appuser", "SomeG00dpwPassword", sqlVersion);
 			var result =
 				Target.GetVersions(new VersionCheckModel
 				{
 					AppDatabase = appBuilder.InitialCatalog,
 					Server = appBuilder.DataSource,
 					UserName = "appuser",
-					Password = "SomeG00dpw"
+					Password = "SomeG00dpwPassword"
 				});
 			result.Content.AppVersionOk.Should().Be.True();
 		}
