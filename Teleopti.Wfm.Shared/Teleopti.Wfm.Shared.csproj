@@ -183,7 +183,6 @@
     <Compile Include="UnitOfWork\IStatelessUnitOfWork.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\IUnitOfWorkFactory.cs" />
-    <Compile Include="UnitOfWork\LazyLoadingManager.cs" />
     <Compile Include="Web\CurrentHttpContext.cs" />
     <Compile Include="Web\ICurrentHttpContext.cs" />
   </ItemGroup>
