@@ -69,7 +69,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			return workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, _timeZoneGuard.CurrentTimeZone(), true, teamBlockInfo.TeamInfo.GroupMembers.First());
+			var person = teamBlockInfo.TeamInfo.GroupMembers.First();
+			return workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, _timeZoneGuard.CurrentTimeZone(), true, person);
 		}
 	}
 }

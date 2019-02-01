@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		public ShiftProjectionCache SelectShiftProjectionCache(IGroupPersonSkillAggregator groupPersonSkillAggregator, DateOnly datePointer, IList<ShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
 			 ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
 		{
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(groupPersonSkillAggregator, teamBlockInfo, datePointer, allSkillDays, forRoleModel);
+			var activityInternalData = _activityIntervalDataCreator.CreateForAgent(groupPersonSkillAggregator, teamBlockInfo, datePointer, allSkillDays, forRoleModel, person.PermissionInformation.DefaultTimeZone());
 			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumStaffing, schedulingOptions.UseMaximumStaffing);
 
 			double? bestShiftValue = null;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 			var shiftsWithValue =
 				shifts
-					.Select(s => new { s, value = valueForShift(activityInternalData, s, parameters, timeZoneInfo) })
+					.Select(s => new { s, value = valueForShift(activityInternalData, s, parameters, person.PermissionInformation.DefaultTimeZone()) })
 					.Where(s => s.value.HasValue);
 
 			if (schedulingOptions.SkipNegativeShiftValues)
