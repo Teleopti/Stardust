@@ -1,10 +1,10 @@
-import {Component, Inject} from '@angular/core';
-import {PlanningPeriodService} from "../../shared";
-import {IStateService} from "angular-ui-router";
-import {TranslateService} from "@ngx-translate/core";
-import {NavigationService} from "../../../core/services";
-import {FormBuilder, FormControl} from "@angular/forms";
-import {map} from "rxjs/operators";
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { PlanningPeriodService } from '../../shared';
+import { IStateService } from 'angular-ui-router';
+import { TranslateService } from '@ngx-translate/core';
+import { NavigationService } from '../../../core/services';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { map } from 'rxjs/operators';
 
 @Component({
 	selector: 'plans-period-overview',
@@ -12,28 +12,26 @@ import {map} from "rxjs/operators";
 	styleUrls: ['./planning-period-overview.component.scss'],
 	providers: []
 })
-export class PlanningPeriodOverviewComponent {
-
+export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	preValidationFilterControl: FormControl = this.fb.control('');
 	scheduleIssuesFilterControl: FormControl = this.fb.control('');
 	ppId: string;
 	groupId: string;
-	runScheduling: boolean = false;
-	runIntraday: boolean = false;
-	runClear: boolean = false;
-	runPublish: boolean = false;
-	status: string='';
-	isScheduled: boolean = false;
-	scheduledAgents: number = 0;
+	runScheduling = false;
+	runIntraday = false;
+	runClear = false;
+	runPublish = false;
+	status = '';
+	isScheduled = false;
+	scheduledAgents = 0;
 	timer: any;
 	planningPeriodInfo: any;
-	totalAgents: number = 0;
-	valLoading: boolean = true;
+	totalAgents = 0;
+	valLoading = true;
 	filteredPreValidations: any[];
 	filteredScheduleIssues: any[];
 
 	validationFilter;
-
 
 	dayNodes;
 
@@ -45,13 +43,18 @@ export class PlanningPeriodOverviewComponent {
 		preValidation: []
 	};
 
-	constructor(private planningPeriodService: PlanningPeriodService, @Inject('$state') private $state: IStateService, private translate: TranslateService,
-				private navService: NavigationService, private fb: FormBuilder) {
+	constructor(
+		private planningPeriodService: PlanningPeriodService,
+		@Inject('$state') private $state: IStateService,
+		private translate: TranslateService,
+		private navService: NavigationService,
+		private fb: FormBuilder
+	) {
 		this.ppId = $state.params.ppId.trim();
 		this.groupId = $state.params.groupId.trim();
 	}
 
-	ngOnInit(){
+	ngOnInit() {
 		this.loadPlanningPeriodInfo();
 		this.loadValidations();
 		this.loadLastResult();
@@ -60,9 +63,16 @@ export class PlanningPeriodOverviewComponent {
 		this.preValidationFilterControl.valueChanges
 			.pipe(
 				map(filterString => {
-					return this.valData.preValidation.filter(g => g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) 
-							|| g.ValidationErrors.some(item=> item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) 
-								|| this.translate.instant(item.ResourceType.toLowerCase()).includes(filterString.toLowerCase()))
+					return this.valData.preValidation.filter(
+						g =>
+							g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
+							g.ValidationErrors.some(
+								item =>
+									item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
+									this.translate
+										.instant(item.ResourceType.toLowerCase())
+										.includes(filterString.toLowerCase())
+							)
 					);
 				})
 			)
@@ -73,9 +83,16 @@ export class PlanningPeriodOverviewComponent {
 		this.scheduleIssuesFilterControl.valueChanges
 			.pipe(
 				map(filterString => {
-					return this.valData.scheduleIssues.filter(g => g.ResourceName.toLowerCase().includes(filterString.toLowerCase())
-						|| g.ValidationErrors.some(item=> item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase())
-							|| this.translate.instant(item.ResourceType.toLowerCase()).includes(filterString.toLowerCase()))
+					return this.valData.scheduleIssues.filter(
+						g =>
+							g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) ||
+							g.ValidationErrors.some(
+								item =>
+									item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) ||
+									this.translate
+										.instant(item.ResourceType.toLowerCase())
+										.includes(filterString.toLowerCase())
+							)
 					);
 				})
 			)
@@ -101,33 +118,33 @@ export class PlanningPeriodOverviewComponent {
 		this.scheduleIssuesFilterControl.setValue('');
 	}
 
-	public launchSchedule(){
+	public launchSchedule() {
 		this.runScheduling = true;
 		this.status = this.translate.instant('PresentTenseSchedule');
-		this.planningPeriodService.launchScheduling(this.ppId).subscribe(()=>{
+		this.planningPeriodService.launchScheduling(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
 
-	public optimizeIntraday(){
+	public optimizeIntraday() {
 		this.runIntraday = true;
 		this.status = this.translate.instant('IntraOptimize');
-		this.planningPeriodService.optimizeIntraday(this.ppId).subscribe(()=>{
+		this.planningPeriodService.optimizeIntraday(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
 
-	public clearSchedule(){
+	public clearSchedule() {
 		this.runClear = true;
 		this.status = this.translate.instant('ClearScheduleResultAndHistoryData');
-		this.planningPeriodService.clearSchedule(this.ppId).subscribe(()=>{
+		this.planningPeriodService.clearSchedule(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
 
-	public publishSchedule(){
+	public publishSchedule() {
 		this.runPublish = true;
-		this.planningPeriodService.publishSchedule(this.ppId).subscribe(()=>{
+		this.planningPeriodService.publishSchedule(this.ppId).subscribe(() => {
 			this.runPublish = false;
 		});
 	}
@@ -136,16 +153,15 @@ export class PlanningPeriodOverviewComponent {
 		this.navService.go('resourceplanner.editplanninggroup', { groupId: this.groupId });
 	}
 
-	public isDisabled(){
-		if (this.runScheduling || this.runClear || this.runIntraday || this.runPublish)
-		{
+	public isDisabled() {
+		if (this.runScheduling || this.runClear || this.runIntraday || this.runPublish) {
 			return true;
 		}
 	}
 
-	private checkProgress = ()=>{
-		this.planningPeriodService.lastJobStatus(this.ppId).subscribe((data)=>{
-			let schedulingStatus = data.SchedulingStatus;
+	private checkProgress = () => {
+		this.planningPeriodService.lastJobStatus(this.ppId).subscribe(data => {
+			const schedulingStatus = data.SchedulingStatus;
 			if (!schedulingStatus || !schedulingStatus.HasJob) {
 				this.runScheduling = false;
 			} else {
@@ -165,7 +181,7 @@ export class PlanningPeriodOverviewComponent {
 				}
 			}
 
-			let clearScheduleStatus = data.ClearScheduleStatus;
+			const clearScheduleStatus = data.ClearScheduleStatus;
 			if (!clearScheduleStatus || !clearScheduleStatus.HasJob) {
 				this.runClear = false;
 			} else {
@@ -189,7 +205,7 @@ export class PlanningPeriodOverviewComponent {
 				}
 			}
 
-			let intradayOptimizationStatus = data.IntradayOptimizationStatus;
+			const intradayOptimizationStatus = data.IntradayOptimizationStatus;
 			if (!intradayOptimizationStatus || !intradayOptimizationStatus.HasJob) {
 				this.runIntraday = false;
 			} else {
@@ -213,35 +229,35 @@ export class PlanningPeriodOverviewComponent {
 		});
 	};
 
-	private loadPlanningPeriodInfo(){
-		this.planningPeriodService.getPlanningPeriodInfo(this.ppId).subscribe(data=>{
-			this.planningPeriodInfo = data?data:{};
-			this.totalAgents = data? data.TotalAgents: 0;
+	private loadPlanningPeriodInfo() {
+		this.planningPeriodService.getPlanningPeriodInfo(this.ppId).subscribe(data => {
+			this.planningPeriodInfo = data ? data : {};
+			this.totalAgents = data ? data.TotalAgents : 0;
 		});
 	}
 
-	private updateValidationErrorsNumber(){
+	private updateValidationErrorsNumber() {
 		this.valData.totalValNum = 0;
 		this.valData.totalPreValNum = 0;
 		this.valData.totalLastValNum = 0;
-		let pre = this.valData.preValidation;
-		let after = this.valData.scheduleIssues;
+		const pre = this.valData.preValidation;
+		const after = this.valData.scheduleIssues;
 		if (pre.length > 0) {
-			pre.forEach(item =>{
+			pre.forEach(item => {
 				if (item.ValidationErrors !== null) this.valData.totalPreValNum += item.ValidationErrors.length;
 			});
 		}
 		if (after.length > 0) {
-			after.forEach(item=>{
+			after.forEach(item => {
 				if (item.ValidationErrors !== null) this.valData.totalLastValNum += item.ValidationErrors.length;
 			});
 		}
 		this.valData.totalValNum = this.valData.totalPreValNum + this.valData.totalLastValNum;
 	}
 
-	private loadLastResult(){
-		this.planningPeriodService.lastJobResult(this.ppId).subscribe(data=>{
-			let fullSchedulingResult = data.FullSchedulingResult;
+	private loadLastResult() {
+		this.planningPeriodService.lastJobResult(this.ppId).subscribe(data => {
+			const fullSchedulingResult = data.FullSchedulingResult;
 			if (fullSchedulingResult) {
 				this.isScheduled = true;
 				this.scheduledAgents = data.FullSchedulingResult.ScheduledAgentsCount;
@@ -256,7 +272,7 @@ export class PlanningPeriodOverviewComponent {
 		});
 	}
 
-	private loadValidations(){
+	private loadValidations() {
 		this.valLoading = true;
 		this.planningPeriodService.getValidation(this.ppId).subscribe(data => {
 			this.valData.preValidation = data.InvalidResources;

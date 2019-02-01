@@ -1,77 +1,77 @@
 .grid-scroll-wrap {
-  width: 100%;
-  overflow: auto;
-  min-height: 370px;
+	width: 100%;
+	overflow: auto;
+	min-height: 370px;
 }
 
 table.overview {
-  table-layout: fixed;
-  width: auto;
-  margin-top: 25px;
+	table-layout: fixed;
+	width: auto;
+	margin-top: 25px;
 }
 
 .overview {
-  border-collapse: separate;
-  padding: 5px;
-  margin-bottom: 35px;
-  width: 100%;
-  empty-cells: show;
+	border-collapse: separate;
+	padding: 5px;
+	margin-bottom: 35px;
+	width: 100%;
+	empty-cells: show;
 
-  td {
-    width: 10px;
-  }
-  th {
-    visibility: hidden;
-    width: 10px;
-  }
-  th:nth-child(2n) {
-    visibility: visible !important;
-  }
+	td {
+		width: 10px;
+	}
+	th {
+		visibility: hidden;
+		width: 10px;
+	}
+	th:nth-child(2n) {
+		visibility: visible !important;
+	}
 }
 
 .skill-name {
-  max-width: 20em !important;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  position: absolute;
-  left: 0;
-  overflow: visible;
-  padding-left: 20px;
+	max-width: 20em !important;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	position: absolute;
+	left: 0;
+	overflow: visible;
+	padding-left: 20px;
 }
 
 .long {
-  letter-spacing: 1em;
+	letter-spacing: 1em;
 }
 
 .weekend {
-  background-color: rgba(255, 165, 0, 0.37);
+	background-color: rgba(255, 165, 0, 0.37);
 }
 
 .resourceplanner-box {
-  width: 20px;
-  height: 20px;
+	width: 20px;
+	height: 20px;
 }
 
 .resourceplanner-box:hover {
-  outline: 3px rgba(0, 0, 0, 0.54) solid;
+	outline: 3px rgba(0, 0, 0, 0.54) solid;
 }
 
 .understaffed {
-  background: #fc0 !important;
+	background: #fc0 !important;
 }
 
 .critUnderstaffed {
-  background: red !important;
+	background: red !important;
 }
 
 .closed {
-  background-color: #cacaca;
+	background-color: #cacaca;
 }
 
 .overstaffed {
-  background: blue !important;
+	background: blue !important;
 }
 
 [nz-button] {
-  margin-right: 8px;
+	margin-right: 8px;
 }
