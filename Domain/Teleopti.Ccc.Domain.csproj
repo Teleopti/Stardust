@@ -224,8 +224,8 @@
     <Compile Include="Budgeting\BudgetGroupState.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
-    <Compile Include="Common\EntityBaseTypes\Events.cs" />
     <Compile Include="Common\EntityBaseTypes\EventsExtensions.cs" />
+    <Compile Include="Common\EntityBaseTypes\FromServiceLocators.cs" />
     <Compile Include="Common\EntityBaseTypes\IEventsRoot.cs" />
     <Compile Include="Common\EntityBaseTypes\NonversionedAggregateRootWithBusinessUnit.cs" />
     <Compile Include="Common\EntityBaseTypes\VersionedAggregateRoot.cs" />
@@ -944,7 +944,6 @@
     <Compile Include="InterfaceLegacy\Domain\IAgentDayScheduleTag.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAggregateEntity.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAggregateRootBrokerConditions.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAggregateRootWithEvents.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAggregateSkill.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAggregateSkillStaffPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAlreadyAbsentValidator.cs" />
@@ -1085,7 +1084,6 @@
     <Compile Include="InterfaceLegacy\Domain\INotificationConfigReader.cs" />
     <Compile Include="InterfaceLegacy\Domain\INotificationMessage.cs" />
     <Compile Include="InterfaceLegacy\Domain\INotificationSender.cs" />
-    <Compile Include="InterfaceLegacy\Domain\INow.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOccupiedSeatCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOfficialWeekendDays.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOpenAbsenceRequestPeriodExtractor.cs" />

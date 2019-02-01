@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Collection2;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public IEnumerable<IEvent> PopAllEvents(IPopEventsContext context)
 		{
-			context = context ?? new FromServiceLocators();
+			//context = context ?? new FromServiceLocators();
 			var allEvents = _events.Select(e => e(context)).ToArray();
 			_events.Clear();
 			if (_commandId.HasValue)
@@ -65,11 +65,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 	public interface IPopEventsContext
 	{
 		INow Now { get; }
-	}
-
-	public class FromServiceLocators : IPopEventsContext
-	{
-		public INow Now => ServiceLocator_DONTUSE.Now;
 	}
 
 	public class Injected : IPopEventsContext

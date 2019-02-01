@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IEnumerable<IEvent> PopAllEvents(IPopEventsContext context)
 		{
-			return _events.PopAllEvents(context);
+			return _events.PopAllEvents(context ?? new FromServiceLocators());
 		}
 
 		public virtual bool HasEvents()

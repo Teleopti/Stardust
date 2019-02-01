@@ -164,8 +164,11 @@
     <Compile Include="Tenant\TenantFromArguments.cs" />
     <Compile Include="Tenant\TenantScopeAspect.cs" />
     <Compile Include="Tenant\TenantScopeAttribute.cs" />
+    <Compile Include="Time\INow.cs" />
     <Compile Include="UnitOfWork\DomainUpdateType.cs" />
+    <Compile Include="UnitOfWork\Events.cs" />
     <Compile Include="UnitOfWork\IAggregateRoot.cs" />
+    <Compile Include="UnitOfWork\IAggregateRootWithEvents.cs" />
     <Compile Include="UnitOfWork\IAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\IAuditSetter.cs" />
     <Compile Include="UnitOfWork\IAuditSetting.cs" />
