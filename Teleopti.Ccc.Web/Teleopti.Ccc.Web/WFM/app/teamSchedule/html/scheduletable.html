@@ -103,11 +103,15 @@
 			<td class="schedule-tool-column">
 				<span class="editor" ng-if="::vm.showEditButton(personSchedule)" ng-click="vm.clickEditButton(personSchedule)"><i class="mdi mdi-pencil"></i></span>
 			</td>
-			<td class="schedule-tool-column schedule-note-column" ng-click="vm.editScheduleNote(personSchedule.PersonId)">
-				<span ng-class="{noComment:!vm.getScheduleNoteForPerson(personSchedule.PersonId).internalNotes && !vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes}"><i class="mdi mdi-comment"></i></span>
-				<md-tooltip class="multiline-tooltip max-width-600 truncated" md-direction="left" ng-if="vm.getScheduleNoteForPerson(personSchedule.PersonId).internalNotes ||vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes ">
+			<td class="schedule-tool-column schedule-note-column"
+				ng-click="vm.editScheduleNote(personSchedule.PersonId)">
+				<span ng-class="{'has-note': vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote}">
+					<i class="mdi mdi-comment"></i>
+				</span>
+				<md-tooltip class="multiline-tooltip max-width-600 truncated" md-direction="left"
+							ng-if="vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote">
 					{{vm.getScheduleNoteForPerson(personSchedule.PersonId).internalNotes}}
-					<md-divider style="background-color: white" ng-if="vm.hasPublicNote(personSchedule.PersonId)"></md-divider>
+					<md-divider style="background-color: white" ng-if="!!vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes.length"></md-divider>
 					{{vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes}}
 				</md-tooltip>
 			</td>
@@ -115,7 +119,10 @@
 		</tr>
 		<tr class="shift-editor-row" ng-repeat-end ng-if="vm.isScheduleInEditing(personSchedule)">
 			<td colspan="6">
-				<shift-editor date="vm.selectedDate" timezone="vm.selectedTimezone" person-id="personSchedule.PersonId" raw-schedule="vm.getRawSchedule(personSchedule.PersonId)"></shift-editor>
+				<shift-editor date="vm.selectedDate"
+							  timezone="vm.selectedTimezone"
+							  person-id="personSchedule.PersonId"
+							  raw-schedule="vm.getRawSchedule(personSchedule.PersonId)"></shift-editor>
 			</td>
 		</tr>
 

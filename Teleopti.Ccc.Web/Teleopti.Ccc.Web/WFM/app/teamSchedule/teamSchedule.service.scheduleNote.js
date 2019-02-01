@@ -19,6 +19,7 @@
 			scheduleData.forEach(function (schedule) {
 				if (date === schedule.Date) {
 					noteDict[schedule.PersonId] = {
+						hasNote: !!schedule.PublicNotes || !!schedule.InternalNotes,
 						internalNotes: schedule.InternalNotes,
 						publicNotes: schedule.PublicNotes
 					};

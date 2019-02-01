@@ -100,10 +100,6 @@
 			return ScheduleNoteMgmt.getNoteForPerson(personId);
 		};
 
-		vm.hasPublicNote = function (personId) {
-			return ScheduleNoteMgmt.getNoteForPerson(personId).publicNotes && ScheduleNoteMgmt.getNoteForPerson(personId).publicNotes.length > 0;
-		}
-
 		vm.editScheduleNote = function (personId) {
 			vm.noteEditorInputOption = {
 				selectedDate: vm.selectedDate,

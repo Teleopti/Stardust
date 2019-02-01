@@ -673,10 +673,8 @@ team-schedule-datepicker {
 			border-left: 1px solid $gray012;
 		}
 
-		td.schedule-tool-column.schedule-note-column {
-			.noComment {
-				color: $gray-500;
-			}
+		td.schedule-tool-column.schedule-note-column > span:not(.has-note) {
+			color: $gray-500;
 		}
 
 		th.shift-category-cell-header,
