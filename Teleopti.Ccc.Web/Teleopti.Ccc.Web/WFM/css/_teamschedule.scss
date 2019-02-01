@@ -105,7 +105,7 @@
 		padding: 0px;
 	}
 
-	.hasSelected .layer:not(.selected) {
+	.has-selected .schedule-column .shift .layer:not(.selected) {
 		opacity: 0.4;
 	}
 
@@ -116,9 +116,10 @@
 		.layer {
 			height: 22px;
 			text-align: center;
+			cursor: pointer;
 		}
 
-		.layer.sameTypeAsLast {
+		.layer.same-type-as-last {
 			border-left-style: solid;
 			border-left-width: 1px;
 		}
@@ -128,26 +129,16 @@
 			border: 1px dashed #795548;
 		}
 
-		.layer.lighterBorder {
+		.layer.lighter-border {
 			border-color: #00ffff;
 		}
 
 		.layer:first-of-type {
-			-webkit-border-radius: 4px 0px 0px 4px;
-			-moz-border-radius: 4px 0px 0px 4px;
 			border-radius: 4px 0px 0px 4px;
 		}
 
 		.layer:last-of-type {
-			-webkit-border-radius: 0px 4px 4px 0px;
-			-moz-border-radius: 0px 4px 4px 0px;
 			border-radius: 0px 4px 4px 0px;
-		}
-
-		.layer:only-child {
-			-webkit-border-radius: 4px 4px 4px 4px;
-			-moz-border-radius: 4px 4px 4px 4px;
-			border-radius: 4px 4px 4px 4px;
 		}
 
 		.layer.unselectable {
@@ -237,10 +228,6 @@
 
 	.hidden-for-test {
 		display: none;
-	}
-
-	.selectable {
-		cursor: pointer;
 	}
 
 	note-editor {

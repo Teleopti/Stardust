@@ -20,7 +20,7 @@
 			<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
 		</tr>
 	</thead>
-	<tbody ng-style="::vm.tableStyle" ng-class="{'hasSelected':vm.totalSelectedProjections() != 0 }">
+	<tbody ng-style="::vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
 		<tr ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
 			ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
 			ng-click="vm.togglePerson(personSchedule, $event)">
@@ -78,20 +78,19 @@
 						<md-tooltip ng-if="!!dayOff.DayOffName">{{::dayOff.DayOffName}}</md-tooltip>
 					</span>
 					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
-						<div class="layer absolute pull-left selectable projection-layer"
+						<div class="layer absolute pull-left"
 							 ng-repeat="projection in shift.Projections"
 							 projection-name="{{::projection.Description}}"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
 							 ng-class="{
 							 'overtime-light': projection.IsOvertime && projection.UseLighterBorder,
 							 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder,
-							 personAbsence: projection.ParentPersonAbsences !== null,
-							 selected: projection.Selected,
-							 lighterBorder: projection.UseLighterBorder,
-							 unselectable: !vm.canToggleSelection(projection, vm.selectedDate),
-							 sameTypeAsLast: projection.ShowDividedLine}"
+							 'selected': projection.Selected,
+							 'lighter-border': projection.UseLighterBorder,
+							 'unselectable': !projection.Selectable(),
+							 'same-type-as-last': projection.ShowDividedLine}"
 							 ng-click="vm.ToggleProjectionSelection(projection, vm.selectedDate)">
-							<md-tooltip class="multiline-tooltip layer-summary">
+							<md-tooltip class="multiline-tooltip">
 								<div>{{::projection.Description}}</div>
 								<div>{{::projection.TimeSpan}}</div>
 							</md-tooltip>
