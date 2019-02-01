@@ -54,34 +54,31 @@
 					</span>
 				</span>
 			</td>
-			<td class="shift-category-cell"
-				ng-click="personSchedule.ShiftCategory.Name && vm.modifyShiftCategoryForAgent($event, personSchedule)"
-				ng-style="{cursor: (personSchedule.ShiftCategory.Name ? 'pointer' : 'default')}">
 
+			<td class="shift-category-cell">
 				<i class="mdi mdi-information mdi-alert info" ng-if="personSchedule.HasUnderlyingSchedules()"></i>
-
 				<span id="name" ng-if="::personSchedule.ShiftCategory.Name"
+					  ng-click="vm.modifyShiftCategoryForAgent($event, personSchedule)"
 					  ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.TextColor}">
 					{{::personSchedule.ShiftCategory.ShortName}}
 				</span>
-				<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name ||  personSchedule.HasUnderlyingSchedules()"
+
+				<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name || personSchedule.HasUnderlyingSchedules()"
 							class="multiline-tooltip"
 							md-direction="right">
 					<div ng-if="::personSchedule.ShiftCategory.Name">{{::personSchedule.ShiftCategory.Name}}</div>
-
 					<underlying-schedule-info person-schedule="personSchedule" date="vm.selectedDate"></underlying-schedule-info>
 				</md-tooltip>
 			</td>
+
 			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
 					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs"
-						  ng-if="dayOff.Length > 0"
 						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
 						<md-tooltip ng-if="!!dayOff.DayOffName">{{::dayOff.DayOffName}}</md-tooltip>
 					</span>
-					<div class="shift" ng-if="personSchedule.Shifts.length" ng-repeat="shift in personSchedule.Shifts">
-						<div class="layer absolute floatleft selectable projection-layer"
-							 ng-if="shift.Projections.length"
+					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
+						<div class="layer absolute pull-left selectable projection-layer"
 							 ng-repeat="projection in shift.Projections"
 							 projection-name="{{::projection.Description}}"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"

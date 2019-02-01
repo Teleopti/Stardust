@@ -704,7 +704,7 @@ team-schedule-datepicker {
 			position: relative;
 			padding: 10px 0 0 0;
 
-			.info {
+			& > .info {
 				position: absolute;
 				top: -7px;
 				right: -2px;
@@ -714,6 +714,7 @@ team-schedule-datepicker {
 			& > span {
 				width: 20px;
 				display: inline-block;
+				cursor: pointer;
 			}
 		}
 		//Week view table
