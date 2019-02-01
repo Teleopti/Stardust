@@ -22,7 +22,7 @@
                                             <span class="chip-text">{{'ValidationsAreLoading'|translate}}</span>
                                         </span>
                 </div>
-                <div class="wfm-chip-wrap" ng-if="!valLoading">
+                <div class="wfm-chip-wrap" *ngIf="!valLoading && valData.totalValNum > 0">
                                             <span class="wfm-chip">
                                                 <span class="chip-handle chip-error">
                                                     {{valData.totalValNum}}
@@ -183,9 +183,9 @@
                 <div>
                     <div nz-row class="panel">
                         <div class="con-flex">
-				            <span ng-if="!valLoading">
+				            <span *ngIf="!valLoading">
 					            <i class="mdi mdi-information-outline"></i> {{ 'NoValidIssuesForPp' | translate }}</span>
-                            <span ng-if="valLoading" class="text-warning">
+                            <span *ngIf="valLoading" class="text-warning">
 					            <i class="mdi mdi-alert"></i> Loading validation issues...
 				            </span>
                         </div>
