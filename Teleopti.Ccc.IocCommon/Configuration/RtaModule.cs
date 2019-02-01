@@ -108,6 +108,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalOverviewViewModelBuilder>().SingleInstance();
+			builder.RegisterType<AdjustedPeriodsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();

@@ -125,6 +125,8 @@
     <Compile Include="DateOnly.cs" />
     <Compile Include="DateTimePeriod.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Historical\AdjustedPeriodViewModel.cs" />
+    <Compile Include="Historical\AdjustedPeriodsViewModelBuilder.cs" />
     <Compile Include="Historical\AdjustAdherence\AdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\AdjustAdherence\AdjustAdherenceToNeutralCommand.cs" />
     <Compile Include="Historical\AdjustAdherence\AdjustAdherenceToNeutralCommandHandler.cs" />
