@@ -501,13 +501,19 @@
 				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) {
 					return schedule.PersonId;
 				});
-				ValidateRulesService.getValidateRulesResultForCurrentPage(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), currentPagePersonIds);
+				vm.isLoading = true;
+				ValidateRulesService.getValidateRulesResultForCurrentPage(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), currentPagePersonIds).then(function () {
+					vm.isLoading = false;
+				});
 			}
 		};
 
 		vm.checkValidationWarningForCommandTargets = function (personIds) {
 			if (vm.currentSettings.validateWarningEnabled) {
-				ValidateRulesService.updateValidateRulesResultForPeople(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), personIds);
+				vm.isLoading = true;
+				ValidateRulesService.updateValidateRulesResultForPeople(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), personIds).then(function () {
+					vm.isLoading = false;
+				});
 			}
 		};
 

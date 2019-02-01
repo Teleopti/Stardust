@@ -43,7 +43,7 @@
 					warnings: []
 				}
 			});
-			getValidateRulesResult(date, personIds);
+			return getValidateRulesResult(date, personIds);
 		}
 
 		function updateValidateRulesResultForPeople(date, personIds) {
@@ -58,7 +58,7 @@
 				}
 			});
 
-			getValidateRulesResult(date, personIdOnCurrentPage);
+			return getValidateRulesResult(date, personIdOnCurrentPage);
 		}
 
 		function getValidateRulesResult(date, personIds) {
@@ -67,14 +67,16 @@
 				PersonIds: personIds
 			};
 
-			$http.post(getValidateRulesResultUrl, postData).then(function (response) {
-				for (var personId in warningDict) {
-					warningDict[personId] && (warningDict[personId].isLoaded = true);
-				}
-
-				response.data.forEach(function (warning) {
-					warningDict[warning.PersonId].warnings = warning.Warnings;
-				});
+			return $q(function (resolve) {
+				$http.post(getValidateRulesResultUrl, postData).then(function (response) {
+					for (var personId in warningDict) {
+						warningDict[personId] && (warningDict[personId].isLoaded = true);
+					}
+					response.data.forEach(function (warning) {
+						warningDict[warning.PersonId].warnings = warning.Warnings;
+					});
+					resolve();
+				})
 			});
 		}
 

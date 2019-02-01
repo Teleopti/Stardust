@@ -43,7 +43,7 @@
 				</div>
 
 				<span class="validate-warning" ng-if="vm.showWarnings">
-					<span ng-if="vm.checkIsLoadedValidationForPerson(personSchedule.PersonId) && vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length > 0">
+					<span ng-if="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
 						<span class="warning-icon">
 							<i class="mdi mdi-account-alert"></i>
 						</span>
@@ -52,10 +52,6 @@
 							<span ng-bind-html="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId) | br"></span>
 						</md-tooltip>
 					</span>
-					<md-progress-circular md-mode="indeterminate"
-										  md-diameter="15"
-										  ng-if="!vm.checkIsLoadedValidationForPerson(personSchedule.PersonId)">
-					</md-progress-circular>
 				</span>
 			</td>
 			<td class="shift-category-cell"

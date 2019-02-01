@@ -43,9 +43,10 @@
 		});
 
 		vm.totalSelectedProjections = function () {
-			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().CheckedPersonCount +
-				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount +
-				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount;
+			var totalSelection = personSelectionSvc.getTotalSelectedPersonAndProjectionCount();
+			return totalSelection.CheckedPersonCount +
+				totalSelection.SelectedActivityInfo.ActivityCount +
+				totalSelection.SelectedAbsenceInfo.AbsenceCount;
 		};
 
 		vm.updatePersonSelection = function (personSchedule) {
