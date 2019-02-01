@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public T Get<T>(string url, NameValueCollection arguments)
 		{
 			url = appendQueryStringArguments(url, arguments);
-			
-			var request = new HttpRequestMessage(HttpMethod.Get, url);
-			
-			var returnValue = callAndRetry<T>(request);
+
+			HttpRequestMessage Request() => new HttpRequestMessage(HttpMethod.Get, url);
+
+			var returnValue = callAndRetry<T>(Request);
 
 			return returnValue;
 		}
@@ -46,24 +46,28 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			const string PersonIdHeader = "personid";
 			const string TenantPasswordHeader = "tenantpassword";
 
-			var request = new HttpRequestMessage(HttpMethod.Get, url);
+			HttpRequestMessage requestFunc()
+			{
+				var request = new HttpRequestMessage(HttpMethod.Get, url);
 
-			request.Headers.Add(PersonIdHeader, tenantCredentials.PersonId.ToString());
-			request.Headers.Add(TenantPasswordHeader, tenantCredentials.TenantPassword);
+				request.Headers.Add(PersonIdHeader, tenantCredentials.PersonId.ToString());
+				request.Headers.Add(TenantPasswordHeader, tenantCredentials.TenantPassword);
+				return request;
+			}
 
-			var returnValue = callAndRetry<T>(request);
+			var returnValue = callAndRetry<T>(requestFunc);
 
 			return returnValue;
 		}
 
-		private T callAndRetry<T>(HttpRequestMessage request)
+		private T callAndRetry<T>(Func<HttpRequestMessage> request)
 		{
 			return Policy.Handle<HttpRequestException>()
 				.Or<AggregateException>(ex => ex.InnerExceptions.Any(e => e is HttpRequestException || e is TaskCanceledException))
 				.WaitAndRetry(new[] { TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10) })
 				.Execute(() =>
 				{
-					var result = client.SendAsync(request);
+					var result = client.SendAsync(request());
 					return JsonConvert.DeserializeObject<T>(result.Result.Content.ReadAsStringAsync().Result);
 				});
 		}

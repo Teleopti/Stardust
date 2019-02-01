@@ -14,30 +14,32 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public T Send<T>(string url, string json, string userAgent = null)
 		{
-			var request = new HttpRequestMessage(HttpMethod.Post, url)
+			HttpRequestMessage RequestFunc()
 			{
-				Content = new StringContent(json, Encoding.UTF8, "application/json")
-			};
+				var request = new HttpRequestMessage(HttpMethod.Post, url) {Content = new StringContent(json, Encoding.UTF8, "application/json")};
 
-			if (userAgent != null)
-			{
-				request.Headers.UserAgent.Clear();
-				request.Headers.Add("User-Agent", userAgent);
+				if (userAgent != null)
+				{
+					request.Headers.UserAgent.Clear();
+					request.Headers.Add("User-Agent", userAgent);
+				}
+
+				return request;
 			}
 
-			var returnValue = sendWithRetry<T>(request);
+			var returnValue = sendWithRetry<T>(RequestFunc);
 
 			return returnValue;
 		}
 
-		private T sendWithRetry<T>(HttpRequestMessage request)
+		private T sendWithRetry<T>(Func<HttpRequestMessage> request)
 		{
 			return Policy.Handle<HttpRequestException>()
 				.Or<AggregateException>(ex => ex.InnerExceptions.Any(e => e is HttpRequestException || e is TaskCanceledException))
 				.WaitAndRetry(new[] { TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10) })
 				.Execute(() =>
 				{
-					var result = client.SendAsync(request);
+					var result = client.SendAsync(request());
 					return JsonConvert.DeserializeObject<T>(result.Result.Content.ReadAsStringAsync().Result);
 				});
 		}
@@ -47,15 +49,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			const string PersonIdHeader = "personid";
 			const string TenantPasswordHeader = "tenantpassword";
 
-			var request = new HttpRequestMessage(HttpMethod.Post, url)
+			HttpRequestMessage RequestFunc()
 			{
-				Content = new StringContent(json, Encoding.UTF8, "application/json")
-			};
-			
-			request.Headers.Add(PersonIdHeader, tenantCredentials.PersonId.ToString());
-			request.Headers.Add(TenantPasswordHeader, tenantCredentials.TenantPassword);
+				var request = new HttpRequestMessage(HttpMethod.Post, url) {Content = new StringContent(json, Encoding.UTF8, "application/json")};
 
-			var returnValue = sendWithRetry<T>(request);
+				request.Headers.Add(PersonIdHeader, tenantCredentials.PersonId.ToString());
+				request.Headers.Add(TenantPasswordHeader, tenantCredentials.TenantPassword);
+				return request;
+			}
+
+			var returnValue = sendWithRetry<T>(RequestFunc);
 
 			return returnValue;
 		}
