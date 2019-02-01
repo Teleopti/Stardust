@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			DialogResult response = ViewBase.ShowConfirmationMessage(text, caption);
 			if (response != DialogResult.Yes) return;
 
-			((IRtaStateGroup) stateToDelete.Parent).DeleteState(stateToDelete);
+			stateToDelete.Parent.DeleteState(stateToDelete);
 			treeViewAdv1.SelectedNode.Remove();
 		}
 
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (node != null)
 			{
 				if (node.TagObject.Equals(state) &&
-					!((IRtaStateGroup) ((IRtaState) node.TagObject).Parent).DefaultStateGroup)
+					!((IRtaState) node.TagObject).Parent.DefaultStateGroup)
 				{
 					return node;
 				}
@@ -400,8 +400,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				var state = treeNodeAdv.TagObject as IRtaState;
 				if (stateGroup != null && state != null)
 				{
-					_groupsWithRemovedStates.Add(state.StateGroup);
-					treeNodeAdv.TagObject = state.StateGroup.MoveStateTo(stateGroup, state);
+					_groupsWithRemovedStates.Add(state.Parent);
+					treeNodeAdv.TagObject = state.Parent.MoveStateTo(stateGroup, state);
 				}
 			}
 		}
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (destinationNode == null) return false;
 			var sourceState = sourceNode.TagObject as IRtaState;
 			var destinationStateGroup = destinationNode.TagObject as IRtaStateGroup;
-			if (sourceState != null && destinationStateGroup != null && sourceState.StateGroup != destinationStateGroup)
+			if (sourceState != null && destinationStateGroup != null && sourceState.Parent != destinationStateGroup)
 				return true;
 
 			return false;

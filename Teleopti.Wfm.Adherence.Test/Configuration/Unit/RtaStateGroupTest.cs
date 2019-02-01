@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
             _target.AddState("100", "state 1");
             IRtaState state1 = _target.StateCollection[0];
 
-            Assert.AreEqual(state1.StateGroup.Name, _name);
+            Assert.AreEqual(state1.Parent.Name, _name);
             Assert.AreEqual(1, _target.StateCollection.Count);
         }
     }

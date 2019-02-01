@@ -86,7 +86,7 @@ namespace Teleopti.Wfm.Adherence.Configuration
         {
             _stateCollection.Add(state);
 			AddEvent(new RtaStateGroupChangedEvent());
-			state.SetParent(this);
+			state.Parent = this;
         }
 
         public virtual IRtaState MoveStateTo(IRtaStateGroup target, IRtaState state)

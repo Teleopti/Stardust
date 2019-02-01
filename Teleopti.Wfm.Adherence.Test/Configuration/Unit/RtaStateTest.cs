@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 
             Assert.AreEqual(_name, _target.Name);
             Assert.AreEqual(_stateCode, _target.StateCode);
-            Assert.AreEqual(stateGroup, _target.StateGroup);
+            Assert.AreEqual(stateGroup, _target.Parent);
 
             _target.Name = "Pause";
             _target.StateCode = "P001";
@@ -38,9 +38,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
             stateGroup1.AddState(_stateCode, _name);
 			_target = stateGroup1.MoveStateTo(stateGroup2, stateGroup1.StateCollection[0]);
 			
-            Assert.AreEqual(stateGroup2.Name, _target.StateGroup.Name);
-            Assert.AreEqual(stateGroup2.Available, _target.StateGroup.Available);
-            Assert.AreEqual(stateGroup2.DefaultStateGroup, _target.StateGroup.DefaultStateGroup);
+            Assert.AreEqual(stateGroup2.Name, _target.Parent.Name);
+            Assert.AreEqual(stateGroup2.Available, _target.Parent.Available);
+            Assert.AreEqual(stateGroup2.DefaultStateGroup, _target.Parent.DefaultStateGroup);
             Assert.IsFalse(stateGroup1.StateCollection.Contains(_target));
 
             Assert.IsNull(stateGroup2.MoveStateTo(null, _target));

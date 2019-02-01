@@ -1,13 +1,15 @@
 using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {
-	public class RtaState : AggregateEntity, IRtaState
+	public class RtaState : Entity, IRtaState
 	{
 		private string _stateCode;
 		private string _name;
 		private Guid? _businessUnit;
+		private IEntity _parent;
 
 		protected RtaState()
 		{
@@ -29,7 +31,7 @@ namespace Teleopti.Wfm.Adherence.Configuration
 
 		protected virtual Guid? BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = StateGroup.BusinessUnit); }
+			get { return _businessUnit ?? (_businessUnit = Parent.BusinessUnit); }
 			set => _businessUnit = value;
 		}
 
@@ -45,9 +47,10 @@ namespace Teleopti.Wfm.Adherence.Configuration
 			set { _stateCode = value; }
 		}
 
-		public virtual IRtaStateGroup StateGroup
+		public virtual IRtaStateGroup Parent
 		{
-			get { return Parent as IRtaStateGroup; }
+			get { return _parent as IRtaStateGroup; }
+			set { _parent = value; }
 		}
 	}
 }
