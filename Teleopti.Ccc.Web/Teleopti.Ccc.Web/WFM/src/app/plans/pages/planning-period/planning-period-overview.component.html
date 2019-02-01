@@ -12,22 +12,6 @@
     <nz-tabset>
         <nz-tab nzTitle="{{'Overview'|translate}}">
             <div nz-row>
-                <div class="wfm-chip-wrap" *ngIf="valLoading">
-                                        <span class="wfm-chip">
-                                            <span class="chip-handle chip-error">
-                                                ...
-                                            </span>
-                                            <span class="chip-text">{{'ValidationsAreLoading'|translate}}</span>
-                                        </span>
-                </div>
-                <div class="wfm-chip-wrap" *ngIf="!valLoading && valData.totalValNum > 0">
-                                            <span class="wfm-chip">
-                                                <span class="chip-handle chip-error">
-                                                    {{valData.totalValNum}}
-                                                </span>
-                                                <span class="chip-text">{{'ValidationIssues'|translate}}</span>
-                                            </span>
-                </div>
                 <div class="wfm-chip-wrap">
                                             <span class="wfm-chip">
                                                 <span class="chip-handle">
