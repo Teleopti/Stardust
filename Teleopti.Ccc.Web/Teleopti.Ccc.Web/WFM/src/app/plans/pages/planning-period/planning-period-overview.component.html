@@ -92,19 +92,19 @@
                                 </span>
                             </div>
                         </ng-template>
-                        <div nz-row>
-                            <div class="con-flex ">
-                                <label for="validationFilter" class="input-icon">
-                                    <i class="mdi mdi-filter-outline">
-                                        <input
-                                                type="text"
-                                                id="validationFilter"
-                                                ng-model="validationFilter"
-                                                placeholder="{{'FilterValidationIssues' | translate}}"
-                                        />
-                                    </i>
-                                </label>
+                        <div nz-row style="padding-bottom: 5px">
+                            <div nz-col [nzSpan]="8">
+                                <nz-input-group [nzSuffix]="suffixTemplate" [nzPrefix]="prefixTemplate">
+                                    <input type="text" nz-input placeholder="Filter" [formControl]="filterControl" />
+                                </nz-input-group>
+
+                                <ng-template #prefixTemplate><i nz-icon type="filter"></i></ng-template>
+                                <ng-template #suffixTemplate
+                                ><i nz-icon type="close-circle" (click)="clearFilter()" *ngIf="filterControl.value"></i
+                                ></ng-template>
                             </div>
+                        </div>
+                        <div nz-row>
                             <table class="wfm-table">
                                 <thead>
                                 <tr>
@@ -114,7 +114,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr *ngFor="let msg of valData.preValidation">
+                                <tr *ngFor="let msg of filteredPreValidations">
                                     <td>{{ msg.ResourceName }}</td>
                                     <td>
                                         <div *ngFor="let item of msg.ValidationErrors">

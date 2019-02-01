@@ -3,6 +3,8 @@ import {PlanningPeriodService} from "../../shared";
 import {IStateService} from "angular-ui-router";
 import {TranslateService} from "@ngx-translate/core";
 import {NavigationService} from "../../../core/services";
+import {FormBuilder, FormControl} from "@angular/forms";
+import {map} from "rxjs/operators";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -12,6 +14,7 @@ import {NavigationService} from "../../../core/services";
 })
 export class PlanningPeriodOverviewComponent {
 
+	filterControl: FormControl = this.fb.control('');
 	ppId: string;
 	groupId: string;
 	runScheduling: boolean = false;
@@ -25,9 +28,10 @@ export class PlanningPeriodOverviewComponent {
 	planningPeriodInfo: any;
 	totalAgents: number = 0;
 	valLoading: boolean = true;
+	filteredPreValidations: any[];
 
 	validationFilter;
-	
+
 
 	dayNodes;
 
@@ -39,7 +43,8 @@ export class PlanningPeriodOverviewComponent {
 		preValidation: []
 	};
 
-	constructor(private planningPeriodService: PlanningPeriodService, @Inject('$state') private $state: IStateService, private translate: TranslateService, private navService: NavigationService) {
+	constructor(private planningPeriodService: PlanningPeriodService, @Inject('$state') private $state: IStateService, private translate: TranslateService,
+				private navService: NavigationService, private fb: FormBuilder) {
 		this.ppId = $state.params.ppId.trim();
 		this.groupId = $state.params.groupId.trim();
 	}
@@ -49,6 +54,19 @@ export class PlanningPeriodOverviewComponent {
 		this.loadValidations();
 		this.loadLastResult();
 		this.checkState();
+
+		this.filterControl.valueChanges
+			.pipe(
+				map(filterString => {
+					return this.valData.preValidation.filter(g => g.ResourceName.toLowerCase().includes(filterString.toLowerCase()) 
+							|| g.ValidationErrors.some(item=> item.ErrorMessageLocalized.toLowerCase().includes(filterString.toLowerCase()) 
+								|| this.translate.instant(item.ResourceType.toLowerCase()).includes(filterString.toLowerCase()))
+					);
+				})
+			)
+			.subscribe(filteredPreValidations => {
+				this.filteredPreValidations = filteredPreValidations;
+			});
 	}
 
 	ngOnDestroy(): void {
@@ -59,7 +77,11 @@ export class PlanningPeriodOverviewComponent {
 		this.checkProgress();
 		this.timer = setInterval(this.checkProgress, 10000);
 	}
-	
+
+	public clearFilter() {
+		this.filterControl.setValue('');
+	}
+
 	public launchSchedule(){
 		this.runScheduling = true;
 		this.status = this.translate.instant('PresentTenseSchedule');
@@ -67,7 +89,7 @@ export class PlanningPeriodOverviewComponent {
 			this.checkProgress();
 		});
 	}
-	
+
 	public optimizeIntraday(){
 		this.runIntraday = true;
 		this.status = this.translate.instant('IntraOptimize');
@@ -75,7 +97,7 @@ export class PlanningPeriodOverviewComponent {
 			this.checkProgress();
 		});
 	}
-	
+
 	public clearSchedule(){
 		this.runClear = true;
 		this.status = this.translate.instant('ClearScheduleResultAndHistoryData');
@@ -94,14 +116,14 @@ export class PlanningPeriodOverviewComponent {
 	public editPlanningGroup() {
 		this.navService.go('resourceplanner.editplanninggroup', { groupId: this.groupId });
 	}
-	
+
 	public isDisabled(){
 		if (this.runScheduling || this.runClear || this.runIntraday || this.runPublish)
 		{
 			return true;
 		}
 	}
-	
+
 	private checkProgress = ()=>{
 		this.planningPeriodService.lastJobStatus(this.ppId).subscribe((data)=>{
 			let schedulingStatus = data.SchedulingStatus;
@@ -171,14 +193,14 @@ export class PlanningPeriodOverviewComponent {
 			}
 		});
 	};
-	
+
 	private loadPlanningPeriodInfo(){
 		this.planningPeriodService.getPlanningPeriodInfo(this.ppId).subscribe(data=>{
 			this.planningPeriodInfo = data?data:{};
 			this.totalAgents = data? data.TotalAgents: 0;
 		});
 	}
-	
+
 	private updateValidationErrorsNumber(){
 		this.valData.totalValNum = 0;
 		this.valData.totalPreValNum = 0;
@@ -197,7 +219,7 @@ export class PlanningPeriodOverviewComponent {
 		}
 		this.valData.totalValNum = this.valData.totalPreValNum + this.valData.totalLastValNum;
 	}
-	
+
 	private loadLastResult(){
 		this.planningPeriodService.lastJobResult(this.ppId).subscribe(data=>{
 			let fullSchedulingResult = data.FullSchedulingResult;
@@ -213,13 +235,14 @@ export class PlanningPeriodOverviewComponent {
 			}
 		});
 	}
-	
+
 	private loadValidations(){
 		this.valLoading = true;
 		this.planningPeriodService.getValidation(this.ppId).subscribe(data => {
 			this.valData.preValidation = data.InvalidResources;
 			this.valLoading = false;
 			this.updateValidationErrorsNumber();
+			this.filterControl.updateValueAndValidity();
 		});
 	}
 }
