@@ -66,6 +66,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			return null;
 		}
+
+		public void UpdateLastCalculatedTime(Guid bu, string jobName)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	public static class JobNamesForJoStartTime
