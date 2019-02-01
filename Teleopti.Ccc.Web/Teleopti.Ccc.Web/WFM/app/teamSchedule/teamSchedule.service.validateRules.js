@@ -13,89 +13,51 @@
 		var currentEnabledTypes = {};
 
 		self.getAvailableValidationRules = getAvailableValidationRules;
-		self.getValidateRulesResultForCurrentPage = getValidateRulesResultForCurrentPage;
 		self.updateCheckedValidationTypes = updateCheckedValidationTypes;
 		self.updateValidateRulesResultForPeople = updateValidateRulesResultForPeople;
 		self.checkValidationForPerson = checkValidationForPerson;
-		self.checkIsLoadedValidationForPerson = checkIsLoadedValidationForPerson;
 
 		function getAvailableValidationRules() {
-			var deferred = $q.defer();
-
-			$http.get(getValidationRulesUrl).then(function (data) {
-				deferred.resolve(data);
-			}, function (error) {
-				deferred.reject(error);
+			return $q(function (resolve, reject) {
+				$http.get(getValidationRulesUrl).then(function (data) {
+					resolve(data);
+				}, function (error) {
+					reject(error);
+				});
 			});
-
-			return deferred.promise;
 		}
 
 		function updateCheckedValidationTypes(type, checked) {
 			currentEnabledTypes[type] = checked;
 		}
 
-		function getValidateRulesResultForCurrentPage(date, personIds) {
-			warningDict = {};
-			personIds.forEach(function (id) {
-				warningDict[id] = {
-					isLoaded: false,
-					warnings: []
-				}
-			});
-			return getValidateRulesResult(date, personIds);
-		}
-
 		function updateValidateRulesResultForPeople(date, personIds) {
-			var personIdOnCurrentPage = [];
-			personIds.forEach(function (id) {
-				if (warningDict[id]) {
-					warningDict[id] = {
-						isLoaded: false,
-						warnings: []
-					}
-					personIdOnCurrentPage.push(id);
-				}
-			});
-
-			return getValidateRulesResult(date, personIdOnCurrentPage);
-		}
-
-		function getValidateRulesResult(date, personIds) {
 			var postData = {
 				Date: date,
 				PersonIds: personIds
 			};
-
+		
 			return $q(function (resolve) {
 				$http.post(getValidateRulesResultUrl, postData).then(function (response) {
-					for (var personId in warningDict) {
-						warningDict[personId] && (warningDict[personId].isLoaded = true);
-					}
+					personIds.forEach(function (personId) {
+						delete warningDict[personId];
+					});
 					response.data.forEach(function (warning) {
-						warningDict[warning.PersonId].warnings = warning.Warnings;
+						warningDict[warning.PersonId] = warning.Warnings;
 					});
 					resolve();
 				})
 			});
 		}
 
-		function checkValidationForPerson(personId, filteredRuleType) {
+		function checkValidationForPerson(personId) {
 			if (!warningDict[personId]) return [];
 
-			var result = warningDict[personId].warnings.filter(function (w) {
-				if (filteredRuleType)
-					return filteredRuleType == w.RuleType;
+			return warningDict[personId].filter(function (w) {
 				return currentEnabledTypes[w.RuleType];
 			}).map(function (w) {
 				return w.Content;
 			});
-
-			return result;
-		}
-
-		function checkIsLoadedValidationForPerson(personId) {
-			return warningDict[personId] && warningDict[personId].isLoaded;
 		}
 	}
 })();

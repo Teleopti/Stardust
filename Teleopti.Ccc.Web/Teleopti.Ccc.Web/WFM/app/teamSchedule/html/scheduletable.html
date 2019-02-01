@@ -43,7 +43,7 @@
 				</div>
 
 				<span class="validate-warning" ng-if="vm.showWarnings">
-					<span ng-if="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
+					<span ng-if="!!vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
 						<span class="warning-icon">
 							<i class="mdi mdi-account-alert"></i>
 						</span>

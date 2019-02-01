@@ -502,7 +502,7 @@
 					return schedule.PersonId;
 				});
 				vm.isLoading = true;
-				ValidateRulesService.getValidateRulesResultForCurrentPage(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), currentPagePersonIds).then(function () {
+				ValidateRulesService.updateValidateRulesResultForPeople(serviceDateFormatHelper.getDateOnly(vm.scheduleDate), currentPagePersonIds).then(function () {
 					vm.isLoading = false;
 				});
 			}

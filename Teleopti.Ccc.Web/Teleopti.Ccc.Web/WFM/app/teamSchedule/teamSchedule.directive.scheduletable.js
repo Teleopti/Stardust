@@ -100,10 +100,6 @@
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
 
-		vm.checkIsLoadedValidationForPerson = function (personId) {
-			return ValidateRulesService.checkIsLoadedValidationForPerson(personId);
-		};
-
 		vm.getScheduleNoteForPerson = function (personId) {
 			return ScheduleNoteMgmt.getNoteForPerson(personId);
 		};
