@@ -67,7 +67,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function($) {
 						Teleopti.MyTimeWeb.Common.DateFormat +
 						'" }'
 				);
-				ko.applyBindings(vm, $('div.subnavbar')[0]);
+				ko.applyBindings(vm, $('.availability-toolbar')[0]);
 			}
 		});
 	}
@@ -137,6 +137,28 @@ Teleopti.MyTimeWeb.StudentAvailability = (function($) {
 			dayViewModels,
 			periodData.Date
 		);
+
+		if (isHostAMobile) {
+			function AlertViewModel(feedbackViewModel) {
+				var self = this;
+				self.StudentAvailabilityFeedbackClass = ko.computed(function () {
+					return feedbackViewModel.StudentAvailabilityFeedbackClass();
+				});
+
+				self.WarningCount = ko.computed(function () {
+					return feedbackViewModel.WarningCount();
+				});
+
+				self.toggleWarningDetail = function () {
+					feedbackViewModel.toggleWarningDetail();
+				};
+				self.IsHostAMobile = true;
+			}
+
+			var alertViewModelBinding = new AlertViewModel(periodFeedbackVM);
+			ko.applyBindings(alertViewModelBinding, $('.warning-indicator')[0]);
+		}
+
 		periodFeedbackVM.LoadFeedback(completelyLoaded);
 
 		var template = $('#StudentAvailability-period');

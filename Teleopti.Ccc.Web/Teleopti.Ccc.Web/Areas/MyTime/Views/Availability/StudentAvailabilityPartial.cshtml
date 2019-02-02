@@ -8,7 +8,7 @@ Layout = null;
 
 <div class="navbar teleopti-toolbar subnavbar">
 	<div class="container">
-		<ul class="nav navbar-nav teleopti-toolbar row submenu" data-bind="css:{'phone-navbar': IsHostAMobile}">
+		<ul class="nav navbar-nav teleopti-toolbar row submenu availability-toolbar" data-bind="css:{'phone-navbar': IsHostAMobile}">
 			<li class="col-xs-12 col-sm-4 phone-navbar-top">
 				<span class="input-group" style="max-width: 329px;">
 					<span class="input-group-btn">
@@ -17,7 +17,7 @@ Layout = null;
 						</button>
 					</span>
 					<input class="form-control text-center date-input-style" style="font-size: 13px;" data-bind="value: displayDate"
-					 type="text" readonly="readonly" />
+						   type="text" readonly="readonly" />
 					<span class="input-group-btn">
 						<button class="btn btn-default moment-datepicker" type="button">
 							<i class="glyphicon glyphicon-calendar"></i>
@@ -35,6 +35,10 @@ Layout = null;
 				</ul>
 			</li>
 		</ul>
+		<div class="warning-indicator" data-bind="click: toggleWarningDetail, style:{'display': IsHostAMobile ? 'flex' : 'none'}">
+			<span data-bind="css: StudentAvailabilityFeedbackClass,text:WarningCount"
+				  class="warning-count"></span>
+		</div>
 		<!--ko if:isInitFinished-->
 		<div id="init-flag"></div>
 		<!--/ko-->
@@ -53,25 +57,23 @@ Layout = null;
 		<div class="phone-background"></div>
 	</div>
 	<div id="StudentAvailability-period" class="m-b-10" data-bind="css:{'phone-warning-indicator': IsHostAMobile}"
-	 data-mytime-studentavailabilityperiod="@Model.StudentAvailabilityPeriod">
-		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: StudentAvailabilityFeedbackClass,text:WarningCount"
-			 class="warning-count">!</span></div>
-		<div data-bind="css:{warningDetail:shouldShowWarningDetail()}">
+		 data-mytime-studentavailabilityperiod="@Model.StudentAvailabilityPeriod">
+		<div data-bind="style: {'display': !IsHostAMobile() || isShowingWarningDetail() ? 'block' : 'none'}">
 			<div class="alert alert-student-availability" data-bind="css : StudentAvailabilityFeedbackClass()">
 				@if (Model.StudentAvailabilityPeriod == null)
 				{
-				@String.Format("{0} : {1}", Resources.StudentAvailabilityPeriod, Resources.MissingWorkflowControlSet)
+					@String.Format("{0} : {1}", Resources.StudentAvailabilityPeriod, Resources.MissingWorkflowControlSet)
 				}
 				else
 				{
-				@Html.Raw(string.Format(Resources.YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot,
-				"<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>",
-				"<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>",
-				"<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
-				@Html.Raw("</br>")
+					@Html.Raw(string.Format(Resources.YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot,
+					"<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>",
+					"<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>",
+					"<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
+					@Html.Raw("</br>")
 
-				@String.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
-				@String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
+					@String.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
+					@String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
 				}
 			</div>
 		</div>

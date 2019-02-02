@@ -68,10 +68,9 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function(ajax, 
 		else return 2;
 	});
 
-	this.shouldShowWarningDetail = ko.observable(true);
-
-	this.toggleWarningDetail = function() {
-		self.shouldShowWarningDetail(!self.shouldShowWarningDetail());
+	this.isShowingWarningDetail = ko.observable(false);
+	this.toggleWarningDetail = function () {
+		self.isShowingWarningDetail(!self.isShowingWarningDetail());
 	};
 
 	this.StudentAvailabilityFeedbackClass = ko
