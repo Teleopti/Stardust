@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	{
 		ShiftProjectionCache SelectShiftProjectionCache(IGroupPersonSkillAggregator groupPersonSkillAggregator, DateOnly datePointer, IList<ShiftProjectionCache> shifts,
 			IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo teamBlockInfo,
-			SchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person);
+			SchedulingOptions schedulingOptions, bool forRoleModel, IPerson agent);
 	}
 
 	public class WorkShiftSelector : IWorkShiftSelector, IWorkShiftSelectorForIntraInterval
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 
 		public ShiftProjectionCache SelectShiftProjectionCache(IGroupPersonSkillAggregator groupPersonSkillAggregator, DateOnly datePointer, IList<ShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
-			 ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
+			 ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, bool forRoleModel, IPerson person)
 		{
 			var activityInternalData = _activityIntervalDataCreator.CreateForAgent(groupPersonSkillAggregator, teamBlockInfo, datePointer, allSkillDays, forRoleModel, person.PermissionInformation.DefaultTimeZone());
 			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumStaffing, schedulingOptions.UseMaximumStaffing);

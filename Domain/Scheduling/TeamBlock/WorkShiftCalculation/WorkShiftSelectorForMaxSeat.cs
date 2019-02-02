@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		}
 
 		public virtual ShiftProjectionCache SelectShiftProjectionCache(IGroupPersonSkillAggregator groupPersonSkillAggregator, DateOnly datePointer, IList<ShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
-			ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
+			ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, bool forRoleModel, IPerson agent)
 		{
 			var bestShiftValue = valueForShiftNotToUse;
 			ShiftProjectionCache ret = null;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 			foreach (var shift in shifts)
 			{
-				var thisShiftsPeak = thisShiftsValue(person, maxSeatSkillDays, shift, hasNonMaxSeatSkills, skillDays, bestShiftValue);
+				var thisShiftsPeak = thisShiftsValue(agent, maxSeatSkillDays, shift, hasNonMaxSeatSkills, skillDays, bestShiftValue);
 
 				if (thisShiftsPeak < bestShiftValue)
 				{

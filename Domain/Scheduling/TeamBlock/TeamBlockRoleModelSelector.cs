@@ -15,19 +15,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly WorkShiftFilterService _workShiftFilterService;
 		private readonly SameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
 		private readonly FirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 			WorkShiftFilterService workShiftFilterService,
 			SameOpenHoursInTeamBlock sameOpenHoursInTeamBlock,
-			FirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder,
-			ITimeZoneGuard timeZoneGuard)
+			FirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder)
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_sameOpenHoursInTeamBlock = sameOpenHoursInTeamBlock;
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
-			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public ShiftProjectionCache Select(IScheduleDictionary schedules,
@@ -70,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 
 			var person = teamBlockInfo.TeamInfo.GroupMembers.First();
-			return workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, _timeZoneGuard.CurrentTimeZone(), true, person);
+			return workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, true, person);
 		}
 	}
 }

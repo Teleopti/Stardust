@@ -17,21 +17,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly WorkShiftFilterService _workShiftFilterService;
 		private readonly TeamScheduling _teamScheduling;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			ProposedRestrictionAggregator proposedRestrictionAggregator,
 			WorkShiftFilterService workShiftFilterService,
 			TeamScheduling teamScheduling,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator,
-			ITimeZoneGuard timeZoneGuard)
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_teamScheduling = teamScheduling;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
-			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public bool ScheduleSingleDay(IEnumerable<IPersonAssignment> orginalPersonAssignments, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
@@ -103,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			return workShiftSelector.SelectShiftProjectionCache(_groupPersonSkillAggregator, day, shifts, allSkillDays, teamBlockSingleDayInfo, schedulingOptions, _timeZoneGuard.CurrentTimeZone(), false, person);
+			return workShiftSelector.SelectShiftProjectionCache(_groupPersonSkillAggregator, day, shifts, allSkillDays, teamBlockSingleDayInfo, schedulingOptions, false, person);
 		}
 	}
 }
