@@ -33,11 +33,9 @@
 			<td class="person-name-column">
 				<div class="inline-block">
 					<label>
-						<md-checkbox
-							ng-model="personSchedule.IsSelected"
-							ng-change="vm.updatePersonSelection(personSchedule)"
-							aria-label="Checkbox"
-						>
+						<md-checkbox ng-model="personSchedule.IsSelected"
+									 ng-change="vm.updatePersonSelection(personSchedule)"
+									 aria-label="Checkbox">
 							{{::personSchedule.Name}}
 						</md-checkbox>
 						<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
@@ -49,17 +47,13 @@
 					</label>
 				</div>
 
-				<span class="validate-warning" ng-if="vm.showWarnings">
-					<span ng-if="!!vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
-						<span class="warning-icon">
-							<i class="mdi mdi-account-alert"></i>
-						</span>
-						<md-tooltip class="multiline-tooltip max-width-600" md-direction="right">
-							<span
-								ng-bind-html="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId) | br"
-							></span>
-						</md-tooltip>
+				<span class="validate-warning" ng-if="vm.showWarnings && !!vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
+					<span class="warning-icon">
+						<i class="mdi mdi-account-alert"></i>
 					</span>
+					<md-tooltip class="multiline-tooltip max-width-600" md-direction="right">
+						<span ng-bind-html="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId) | br"></span>
+					</md-tooltip>
 				</span>
 			</td>
 
