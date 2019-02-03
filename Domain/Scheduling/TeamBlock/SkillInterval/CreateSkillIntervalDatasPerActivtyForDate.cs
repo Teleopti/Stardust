@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
 	public interface ICreateSkillIntervalDatasPerActivtyForDate
 	{
-		Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, HashSet<ISkill> skills, IEnumerable<ISkillDay> allSkillDays);
+		//Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, HashSet<ISkill> skills, IEnumerable<ISkillDay> allSkillDays);
 
 		Dictionary<IActivity, IList<ISkillIntervalData>> CreateForAgent(DateOnly dateOnly, HashSet<ISkill> skills,
 			IEnumerable<ISkillDay> allSkillDays, TimeZoneInfo agenTimeZoneInfo);
@@ -38,19 +38,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 				skillActivity => _calculateAggregatedDataForActivtyAndDate.CalculateForAgent(skillDaysForPersonalSkillByActivity[skillActivity], minimumResolution, agenTimeZoneInfo));
 		}
 
-		public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, HashSet<ISkill> skills, IEnumerable<ISkillDay> allSkillDays)
-		{
-			var minimumResolution = int.MaxValue;
-			if (skills.Any())
-				minimumResolution = skills.Min(x => x.DefaultResolution);
-			var skilldaysForDate = allSkillDays.FilterOnDate(dateOnly);
-			var skillDaysForPersonalSkill = skilldaysForDate.Where(s => skills.Contains(s.Skill));
+		//public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, HashSet<ISkill> skills, IEnumerable<ISkillDay> allSkillDays)
+		//{
+		//	var minimumResolution = int.MaxValue;
+		//	if (skills.Any())
+		//		minimumResolution = skills.Min(x => x.DefaultResolution);
+		//	var skilldaysForDate = allSkillDays.FilterOnDate(dateOnly);
+		//	var skillDaysForPersonalSkill = skilldaysForDate.Where(s => skills.Contains(s.Skill));
 
-			var skillActivities = skills.Select(s => s.Activity).ToHashSet();
+		//	var skillActivities = skills.Select(s => s.Activity).ToHashSet();
 
-			var skillDaysForPersonalSkillByActivity = skillDaysForPersonalSkill.ToLookup(s => s.Skill.Activity);
-			return skillActivities.ToDictionary(a => a,
-				skillActivity => _calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDaysForPersonalSkillByActivity[skillActivity], minimumResolution));
-		}
+		//	var skillDaysForPersonalSkillByActivity = skillDaysForPersonalSkill.ToLookup(s => s.Skill.Activity);
+		//	return skillActivities.ToDictionary(a => a,
+		//		skillActivity => _calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDaysForPersonalSkillByActivity[skillActivity], minimumResolution));
+		//}
 	}
 }

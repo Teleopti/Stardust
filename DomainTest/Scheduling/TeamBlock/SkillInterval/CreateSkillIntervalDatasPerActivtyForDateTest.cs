@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateFor(date, skillList, skillDayList);
+				var result = _target.CreateForAgent(date, skillList, skillDayList, TimeZoneInfo.Utc);
 				Assert.AreEqual(2, result.Count);
 			}
 		}
