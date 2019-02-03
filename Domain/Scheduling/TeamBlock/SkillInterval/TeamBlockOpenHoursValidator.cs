@@ -25,8 +25,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		}
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder)
-		{	
-			var dayIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, schedulingResultStateHolder.SkillDays.ToSkillDayEnumerable(), _groupPersonSkillAggregator);
+		{
+			var agentTimeZoneInfo = teamBlockInfo.TeamInfo.GroupMembers.First().PermissionInformation.DefaultTimeZone();
+			var dayIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateForAgent(
+				teamBlockInfo, schedulingResultStateHolder.SkillDays.ToSkillDayEnumerable(),
+				_groupPersonSkillAggregator, agentTimeZoneInfo);
 			var firstDate = findFirstNoneDayOffOrFullDayAbsenceDayForAnyTeamMember(teamBlockInfo.BlockInfo.BlockPeriod,
 				teamBlockInfo.TeamInfo.GroupMembers.ToList(), schedulingResultStateHolder);
 			var firstDateActivities = dayIntervalDataPerDateAndActivity[firstDate].Keys.ToList();

@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 			if (blockPeriod.DayCount() < 2 && teamBlockInfo.TeamInfo.GroupMembers.Count() < 2)
 				return true;
 
-			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays, groupPersonSkillAggregator);		
+			var agentTimeZoneInfo = teamBlockInfo.TeamInfo.GroupMembers.First().PermissionInformation.DefaultTimeZone();
+			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateForAgent(teamBlockInfo, allSkillDays, groupPersonSkillAggregator, agentTimeZoneInfo);		
 			var dates = skillIntervalDataPerDateAndActivity.Keys;
 			TimePeriod? sampleOpenHour = null;
 			foreach (var date in dates)
