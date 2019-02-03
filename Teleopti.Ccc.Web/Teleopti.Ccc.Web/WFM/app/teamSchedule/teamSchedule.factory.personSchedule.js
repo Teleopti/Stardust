@@ -227,10 +227,6 @@
 			}).length;
 		};
 
-		PersonSchedule.prototype.HasUnderlyingSchedules = function () {
-			return !!this.UnderlyingScheduleSummary;
-		}
-
 		PersonSchedule.prototype.AbsenceCount = function () {
 			if (this.Shifts[0] && this.Shifts[0].Date === this.Date) {
 				return this.Shifts[0].AbsenceCount();

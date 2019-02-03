@@ -58,7 +58,7 @@
 			</td>
 
 			<td class="shift-category-cell">
-				<i class="mdi mdi-information mdi-alert info" ng-if="personSchedule.HasUnderlyingSchedules()"></i>
+				<i class="mdi mdi-information mdi-alert info" ng-if="!!personSchedule.UnderlyingScheduleSummary"></i>
 				<span
 					id="name"
 					ng-if="::personSchedule.ShiftCategory.Name"
@@ -69,7 +69,7 @@
 				</span>
 
 				<md-tooltip
-					ng-if="!!personSchedule.ShiftCategory.Name || personSchedule.HasUnderlyingSchedules()"
+					ng-if="!!personSchedule.ShiftCategory.Name || !!personSchedule.UnderlyingScheduleSummary"
 					class="multiline-tooltip"
 					md-direction="right"
 				>
