@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 				Expect.Call(_skillDayForSkill1.CurrentDate).Return(date).Repeat.Any();
 				Expect.Call(_skillDayForSkill2.Skill).Return(_skill2).Repeat.Any();
 				Expect.Call(_skillDayForSkill2.CurrentDate).Return(date).Repeat.Any();
-				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(Arg<IEnumerable<ISkillDay>>.List.IsIn(_skillDayForSkill1),Arg<int>.Is.Equal(15)))
+				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateForAgent(Arg<IEnumerable<ISkillDay>>.List.IsIn(_skillDayForSkill1),Arg<int>.Is.Equal(15), Arg<TimeZoneInfo>.Is.Equal(TimeZoneInfo.Utc)))
 					  .Return(new List<ISkillIntervalData> { skillIntervalData1 });
-				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(Arg<IEnumerable<ISkillDay>>.List.IsIn(_skillDayForSkill2), Arg<int>.Is.Equal(15)))
+				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateForAgent(Arg<IEnumerable<ISkillDay>>.List.IsIn(_skillDayForSkill2), Arg<int>.Is.Equal(15), Arg<TimeZoneInfo>.Is.Equal(TimeZoneInfo.Utc)))
 					  .Return(new List<ISkillIntervalData> { skillIntervalData2});
 			}
 

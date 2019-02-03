@@ -37,20 +37,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			return skillActivities.ToDictionary(a => a,
 				skillActivity => _calculateAggregatedDataForActivtyAndDate.CalculateForAgent(skillDaysForPersonalSkillByActivity[skillActivity], minimumResolution, agenTimeZoneInfo));
 		}
-
-		//public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, HashSet<ISkill> skills, IEnumerable<ISkillDay> allSkillDays)
-		//{
-		//	var minimumResolution = int.MaxValue;
-		//	if (skills.Any())
-		//		minimumResolution = skills.Min(x => x.DefaultResolution);
-		//	var skilldaysForDate = allSkillDays.FilterOnDate(dateOnly);
-		//	var skillDaysForPersonalSkill = skilldaysForDate.Where(s => skills.Contains(s.Skill));
-
-		//	var skillActivities = skills.Select(s => s.Activity).ToHashSet();
-
-		//	var skillDaysForPersonalSkillByActivity = skillDaysForPersonalSkill.ToLookup(s => s.Skill.Activity);
-		//	return skillActivities.ToDictionary(a => a,
-		//		skillActivity => _calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDaysForPersonalSkillByActivity[skillActivity], minimumResolution));
-		//}
 	}
 }
