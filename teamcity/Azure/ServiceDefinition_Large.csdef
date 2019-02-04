@@ -47,7 +47,6 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		  </Environment>
 	  </Task>
 	  <Task commandLine="InitHost.cmd" executionContext="elevated" taskType="simple" />
-	  <Task commandLine="AddCname.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="PatchDatabases.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="PrepareConfigAndSignClickOnce.cmd" executionContext="elevated" taskType="simple" />
 	  <Task commandLine="InstallServiceV2.cmd" executionContext="elevated" taskType="simple" />

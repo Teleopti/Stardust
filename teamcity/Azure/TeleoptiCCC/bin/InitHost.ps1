@@ -18,6 +18,20 @@ function TeleoptiDriveMapProperty-get {
 	return $TeleoptiDriveMapProperty
 }
 
+function Hostsfile-Add-Cname {
+    param(
+    [string]$CName
+    )
+	
+	$ipV4 = Test-Connection -ComputerName (hostname) -Count 1  | Select IPV4Address
+	$hostentry = "$($ipV4.IPV4Address.IPAddressToString) $CName"
+    $hostsFile = "$($env:windir)\system32\Drivers\etc\hosts"
+    If ((Get-Content "$hostsFile" ) -notcontains "$hostentry") {
+        Add-Content -Encoding UTF8  "$hostsFile" "`r`n"
+        Add-Content -Encoding UTF8  "$hostsFile" "$hostentry"
+    }
+}
+
 function Get-ScriptDirectory
 {
     $Invocation = (Get-Variable MyInvocation -Scope 1).Value;
@@ -89,6 +103,12 @@ Try
 		log-error "User is not Admin!"
 		throw "User is not Admin!"
 	}
+	
+	#74478, #76734, #78787
+    $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
+    $Cname = "$DataSourceName.teleopticloud.com"
+	log-info "Adding Cname '$Cname' to local hosts file..."
+    Hostsfile-Add-Cname -Cname $Cname
 	
 	#Test - tabort 
 	[System.Environment]::SetEnvironmentVariable('DotJonsson', 'true', [System.EnvironmentVariableTarget]::Machine)
