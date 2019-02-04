@@ -90,6 +90,11 @@ Try
 		throw "User is not Admin!"
 	}
 	
+	#Test - tabort 
+	[System.Environment]::SetEnvironmentVariable('DotJonsson', 'true', [System.EnvironmentVariableTarget]::Machine)
+	$Env:DotJonsson = $true
+	log-info "Environment variable 'DotJonsson' is set to '$Env:DotJonsson'"
+	
 	#Stopping IIS to ensure no requests before system ready and environmental variable $Env:TeleoptiIsAzure needs to be set before IIS is started..
 	iisreset /stop /timeout:120
 	
