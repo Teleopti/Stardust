@@ -462,11 +462,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		private bool _setting = true;
 
-		public void TruncateAndMoveScheduleFromCurrentToAuditTables()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void SetSetting(bool setting)
 		{
 			_setting = setting;
