@@ -77,6 +77,7 @@
 					//vm.user = response.data.Name;
 					$rootScope.user = response.data.Name;
 					vm.id = response.data.Id;
+					window.location = "#";
 				} else {
 					vm.user = "";
 					$rootScope.user = "";
