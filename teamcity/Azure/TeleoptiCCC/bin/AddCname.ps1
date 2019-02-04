@@ -92,9 +92,6 @@ Try
 		throw "User is not Admin!"
 	}
 	
-	#Test - Tabort
-	log-info "Environment variable DotJonsson = '$Env:DotJonsson'"
-	
 	#74478, #76734, #78787
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     $Cname = "$DataSourceName.teleopticloud.com"

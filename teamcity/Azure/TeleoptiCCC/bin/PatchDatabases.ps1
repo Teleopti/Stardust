@@ -344,6 +344,9 @@ Try
     configure-logging -configFile "$configFile" -serviceName "$serviceName"
 	
 	log-info "running: $ScriptFileName"
+	
+	#Test - Tabort
+	log-info "Environment variable DotJonsson = '$Env:DotJonsson'"
 
 	##test if admin
 	If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
