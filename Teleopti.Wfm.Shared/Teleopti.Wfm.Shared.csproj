@@ -172,8 +172,6 @@
     <Compile Include="UnitOfWork\Events.cs" />
     <Compile Include="UnitOfWork\IAggregateRoot.cs" />
     <Compile Include="UnitOfWork\IAnalyticsUnitOfWorkFactory.cs" />
-    <Compile Include="UnitOfWork\IAuditSetter.cs" />
-    <Compile Include="UnitOfWork\IAuditSetting.cs" />
     <Compile Include="UnitOfWork\IBelongsToBusinessUnitId.cs" />
     <Compile Include="UnitOfWork\ICurrentReadModelUnitOfWork.cs" />
     <Compile Include="UnitOfWork\ICurrentUnitOfWork.cs" />
