@@ -15,9 +15,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		private readonly IEnumerable<ITransactionHook> _hooks;
 
 		public string Name { get; set; }
-		public IAuditSetter AuditSetting { get; set; }
 		public string ConnectionString { get; set; }
-
 
 		public FakeUnitOfWorkFactory(IFakeStorage storage)
 		{

@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.TestCommon
 					new MemoryNHibernateConfigurationCache(),
 					new UnitOfWorkFactoryFactory(
 						new NoPreCommitHooks(),
-						enversConfiguration,
 						null,
 						new CurrentHttpContext(),
 						ServiceLocator_DONTUSE.UpdatedBy,

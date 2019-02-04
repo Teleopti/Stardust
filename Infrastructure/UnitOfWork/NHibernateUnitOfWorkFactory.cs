@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly ISessionFactory _factory;
 		private readonly ApplicationUnitOfWorkContext _context;
-		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly ICurrentBusinessUnit _businessUnit;
 		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		// is longer than the container when running unit tests
 		protected internal NHibernateUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
-			IAuditSetter auditSettingProvider,
 			string connectionString,
 			ICurrentTransactionHooks transactionHooks,
 			string tenant,
@@ -31,7 +29,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
 			_context = new ApplicationUnitOfWorkContext(tenant);
-			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
 			_businessUnit = businessUnit;
 			_nestedUnitOfWorkStrategy = nestedUnitOfWorkStrategy;
@@ -61,8 +58,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			return _context.Get() != null;
 		}
-
-		public IAuditSetter AuditSetting => _auditSettingProvider;
 
 		public string ConnectionString { get; }
 

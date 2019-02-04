@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class UnitOfWorkFactoryFactory
 	{
 		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
-		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IUpdatedBy _updatedBy;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public UnitOfWorkFactoryFactory(
 			ICurrentPreCommitHooks currentPreCommitHooks,
-			IEnversConfiguration enversConfiguration,
 			ICurrentTransactionHooks transactionHooks,
 			ICurrentHttpContext httpContext,
 			IUpdatedBy updatedBy,
@@ -28,7 +26,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			INestedUnitOfWorkStrategy nestedUnitOfWorkStrategy)
 		{
 			_currentPreCommitHooks = currentPreCommitHooks;
-			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;
 			_httpContext = httpContext;
 			_updatedBy = updatedBy;
@@ -48,7 +45,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			return new NHibernateUnitOfWorkFactory(
 				sessionFactory,
-				_enversConfiguration.AuditSettingProvider,
 				connectionString,
 				_transactionHooks,
 				tenant,
