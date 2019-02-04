@@ -487,15 +487,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			}
 
 			public bool IsScheduleEnabled { get; protected set; }
-			public void TurnOffScheduleAuditing(IAuditSetter auditSettingSetter)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void TurnOnScheduleAuditing(IAuditSettingRepository auditSettingRepository, IAuditSetter auditSettingSetter)
-			{
-				throw new NotImplementedException();
-			}
 
 			public bool ShouldBeAudited(object entity)
 			{

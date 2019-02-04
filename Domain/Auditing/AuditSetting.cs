@@ -8,19 +8,6 @@ namespace Teleopti.Ccc.Domain.Auditing
 
 		public virtual bool IsScheduleEnabled { get; protected set; }
 
-		public virtual void TurnOffScheduleAuditing(IAuditSetter auditSettingSetter)
-		{
-			IsScheduleEnabled = false;
-			auditSettingSetter.SetEntity(this);
-		}
-
-		public virtual void TurnOnScheduleAuditing(IAuditSettingRepository auditSettingRepository, 
-															IAuditSetter auditSettingSetter)
-		{
-			auditSettingRepository.TruncateAndMoveScheduleFromCurrentToAuditTables();
-			IsScheduleEnabled = true;
-			auditSettingSetter.SetEntity(this);
-		}
 
 		public virtual bool ShouldBeAudited(object entity)
 		{

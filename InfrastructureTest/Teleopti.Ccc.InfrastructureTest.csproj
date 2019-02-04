@@ -211,7 +211,6 @@
     <Compile Include="ApplicationLayer\Staffing\SendUpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherContextBug48226Test.cs" />
     <Compile Include="Auditing\AuditAggregatorServiceTest.cs" />
-    <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\PersonAccessContextPurgeServiceTest.cs" />
     <Compile Include="Auditing\PersonAccessContextReaderServiceTest.cs" />
     <Compile Include="Auditing\PurgeAuditRunnerTest.cs" />
