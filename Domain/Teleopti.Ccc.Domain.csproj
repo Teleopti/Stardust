@@ -224,15 +224,12 @@
     <Compile Include="Budgeting\BudgetGroupState.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
-    <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events.cs" />
+    <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_Versioned_BusinessUnitId.cs" />
     <Compile Include="Common\EntityBaseTypes\EventsExtensions.cs" />
     <Compile Include="Common\EntityBaseTypes\FromServiceLocators.cs" />
-    <Compile Include="Common\EntityBaseTypes\IAggregateRoot_Events.cs" />
-    <Compile Include="Common\EntityBaseTypes\IEventsRoot.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_BusinessUnit.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit.cs" />
-    <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_Versioned_BusinessUnitId.cs" />
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
     <Compile Include="Forecasting\TriggerSkillForecastReadModel.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
@@ -293,7 +290,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InterfaceLegacy\Domain\IApplicationData.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IBelongsToBusinessUnitId.cs" />
     <Compile Include="InterfaceLegacy\Domain\ICurrentSchedulingSource.cs" />
     <Compile Include="InterfaceLegacy\Domain\InParameter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IntervalDefinition.cs" />
@@ -1332,7 +1328,6 @@
     <Compile Include="InterfaceLegacy\Domain\IUserUICulture.cs" />
     <Compile Include="InterfaceLegacy\Domain\IValidatedRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IValidatedVolumeDay.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IVersioned.cs" />
     <Compile Include="InterfaceLegacy\Domain\IVirtualSchedulePeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IVirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="InterfaceLegacy\Domain\IVirtualSkillHelper.cs" />
@@ -2088,7 +2083,6 @@
     <Compile Include="Common\Time\Time.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
-    <Compile Include="Common\EntityBaseTypes\AggregateRoot.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorization.cs" />
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
@@ -3335,7 +3329,6 @@
     <Compile Include="Forecasting\MonthOfYearItem.cs" />
     <Compile Include="Forecasting\SkillDayRestrictionSet.cs" />
     <Compile Include="Forecasting\SkillDayTemplate.cs" />
-    <Compile Include="Common\EntityBaseTypes\Entity.cs" />
     <Compile Include="Common\Layer.cs" />
     <Compile Include="AgentInfo\Team.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateEntity.cs" />

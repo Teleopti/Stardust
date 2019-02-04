@@ -27,9 +27,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 		public void VerifyProperties()
 		{
 			Assert.AreEqual(_description, _target.Description);
-			Assert.AreEqual(_description, _target.ConfidentialDescription(null));
 			Assert.AreEqual(_color, _target.DisplayColor);
-			Assert.AreEqual(_color, _target.ConfidentialDisplayColor(null));
 			Assert.AreEqual(_thresholdTime, _target.ThresholdTime);
 			Assert.AreEqual(_staffingEffect, _target.StaffingEffect);
 

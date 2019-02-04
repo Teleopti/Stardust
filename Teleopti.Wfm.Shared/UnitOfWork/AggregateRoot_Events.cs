@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 	public abstract class AggregateRoot_Events : 
 		AggregateRoot, 
 		IAggregateRoot_Events, 
-		IEventsRoot
+		ICloneEventsAfterMerge
 	{
 		private Events _events = new Events();
 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			clone._events = _events.Clone();
 		}
 
-		void IEventsRoot.CloneEventsAfterMerge(AggregateRoot_Events clone)
+		void ICloneEventsAfterMerge.CloneEventsAfterMerge(AggregateRoot_Events clone)
 		{
 			CloneEvents(clone);
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IEnumerable<IEvent> PopAllEvents(IPopEventsContext context)
 		{
-			return _events.PopAllEvents(context ?? new FromServiceLocators());
+			return _events.PopAllEvents(context);
 		}
 
 		public virtual bool HasEvents()

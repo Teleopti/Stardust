@@ -86,16 +86,6 @@ namespace Teleopti.Wfm.Adherence.Configuration
 			get { return _displayColor; }
 			set { _displayColor = value; }
 		}
-
-		public virtual Description ConfidentialDescription(IPerson assignedPerson)
-		{
-			return Description;
-		}
-
-		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
-		{
-			return DisplayColor;
-		}
 	}
 
 }

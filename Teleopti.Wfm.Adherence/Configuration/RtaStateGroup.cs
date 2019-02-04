@@ -36,11 +36,6 @@ namespace Teleopti.Wfm.Adherence.Configuration
 			AddEvent(new RtaStateGroupChangedEvent());
 		}
 
-		public virtual void SetBusinessUnit(IBusinessUnit businessUnit)
-	    {
-		    BusinessUnit = businessUnit.Id.Value;
-	    }
-
         public virtual string Name
         {
             get { return _name; }

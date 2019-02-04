@@ -165,15 +165,21 @@
     <Compile Include="Tenant\TenantScopeAspect.cs" />
     <Compile Include="Tenant\TenantScopeAttribute.cs" />
     <Compile Include="Time\INow.cs" />
+    <Compile Include="UnitOfWork\AggregateRoot.cs" />
+    <Compile Include="UnitOfWork\AggregateRoot_Events.cs" />
     <Compile Include="UnitOfWork\DomainUpdateType.cs" />
+    <Compile Include="UnitOfWork\Entity.cs" />
     <Compile Include="UnitOfWork\Events.cs" />
     <Compile Include="UnitOfWork\IAggregateRoot.cs" />
+    <Compile Include="UnitOfWork\IAggregateRoot_Events.cs" />
     <Compile Include="UnitOfWork\IAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\IAuditSetter.cs" />
     <Compile Include="UnitOfWork\IAuditSetting.cs" />
+    <Compile Include="UnitOfWork\IBelongsToBusinessUnitId.cs" />
     <Compile Include="UnitOfWork\ICurrentReadModelUnitOfWork.cs" />
     <Compile Include="UnitOfWork\ICurrentUnitOfWork.cs" />
     <Compile Include="UnitOfWork\IEntity.cs" />
+    <Compile Include="UnitOfWork\ICloneEventsAfterMerge.cs" />
     <Compile Include="UnitOfWork\IHaveSession.cs" />
     <Compile Include="UnitOfWork\ILiteUnitOfWork.cs" />
     <Compile Include="UnitOfWork\IQueryFilter.cs" />
@@ -182,6 +188,7 @@
     <Compile Include="UnitOfWork\IStatelessUnitOfWork.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\IUnitOfWorkFactory.cs" />
+    <Compile Include="UnitOfWork\IVersioned.cs" />
     <Compile Include="Web\CurrentHttpContext.cs" />
     <Compile Include="Web\ICurrentHttpContext.cs" />
   </ItemGroup>

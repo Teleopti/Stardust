@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
-	public interface IEventsRoot
+	public interface ICloneEventsAfterMerge
 	{
 		void CloneEventsAfterMerge(AggregateRoot_Events clone);
 	}

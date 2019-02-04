@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			try
 			{
 				var merge = Session.Merge(root);
-				(root as IEventsRoot)?.CloneEventsAfterMerge(merge as AggregateRoot_Events_ChangeInfo);
+				(root as ICloneEventsAfterMerge)?.CloneEventsAfterMerge(merge as AggregateRoot_Events_ChangeInfo);
 				return merge;
 			}
 			catch (StaleStateException staleStateEx)
