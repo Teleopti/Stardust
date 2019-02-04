@@ -5,6 +5,7 @@ ECHO. >> Install.log
 SET ETLService=TeleoptiEtlService
 SET ServiceBus=TeleoptiServiceBus
 
+SET DRIVELETTER=%CD:~0,3%
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 SET DRIVE=%ROOTDIR:~0,2%
@@ -27,7 +28,7 @@ IF NOT ERRORLEVEL 1060 (
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
 
 )
-sc create %ETLService% binPath= "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" DisplayName= "%ETLService%" >> Install.log
+sc create %ETLService% binPath= "%DRIVELETTER%approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" DisplayName= "%ETLService%" >> Install.log
 sc config %ETLService% start=Auto
 
 ECHO Service status after install [%ETLService%] >> Install.log
@@ -42,7 +43,7 @@ IF NOT ERRORLEVEL 1060 (
 	SC QUERY %ServiceBus%
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
 )
-sc create %ServiceBus% binPath= "E:\approot\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe" DisplayName= "%ServiceBus%" >> Install.log
+sc create %ServiceBus% binPath= "%DRIVELETTER%approot\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe" DisplayName= "%ServiceBus%" >> Install.log
 sc config %ServiceBus% start=Auto
 ECHO Service status after install [%ServiceBus%] >> Install.log
 SC QUERY %ServiceBus%  >> Install.log
