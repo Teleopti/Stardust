@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.Events;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.States.Events;
@@ -140,6 +141,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString())
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
+			return this;
+		}
+		
+		public FakeRtaHistory AdjustedAdherenceToNeutral(string start, string end)
+		{
+			_store.Add(new AdjustAdherenceToNeutralEvent
+			{
+				StartTime = start.Utc(),
+				EndTime = end.Utc()
 			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}

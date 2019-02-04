@@ -1369,6 +1369,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_rtaHistory.ArrivedLateForWork(_person.Id.Value, shiftStart, time);
 			return this;
 		}
+		
+		public FakeDatabase WithAdjustedAdherenceToNeutral(string start, string end)
+		{
+			_rtaHistory.AdjustedAdherenceToNeutral(start, end);
+			return this;
+		}
 
 		[UnitOfWork]
 		public virtual FakeDatabase ClearAssignments(Guid? personId)

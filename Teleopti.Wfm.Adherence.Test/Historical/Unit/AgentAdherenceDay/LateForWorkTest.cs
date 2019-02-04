@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	[TestFixture]
 	public class LateForWorkTest
 	{
-		public AgentAdherenceDayLoader Target;
+		public IAgentAdherenceDayLoader Target;
 		public FakeRtaHistory History;
 		public MutableNow Now;
 

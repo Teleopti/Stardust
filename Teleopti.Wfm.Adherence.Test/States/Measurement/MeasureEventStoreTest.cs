@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Measurement
 	public class MeasureEventStoreTest
 	{
 		public ConcurrencyRunner Run;
-		public AgentAdherenceDayLoader Loader;
+		public IAgentAdherenceDayLoader Loader;
 		public IEventPublisher Publisher;
 		public Database Database;
 		public WithUnitOfWork Uow;

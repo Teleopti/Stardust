@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	[TestFixture]
 	public class NotApplicableEventsTest
 	{
-		public AgentAdherenceDayLoader Target;
+		public IAgentAdherenceDayLoader Target;
 		public FakeRtaHistory History;
 		public MutableNow Now;
 		public FakeRtaEventStore Events;

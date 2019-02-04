@@ -10,14 +10,7 @@ using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	public interface IAgentAdherenceDayLoader
-	{
-		IAgentAdherenceDay Load(Guid personId, DateOnly date);
-		IAgentAdherenceDay LoadUntilNow(Guid personId);
-		IAgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date);
-	}
-
-	public class AgentAdherenceDayLoader : IAgentAdherenceDayLoader
+	public class AgentAdherenceDayLoaderAdjustAdherenceToNeutral : IAgentAdherenceDayLoader
 	{
 		private readonly INow _now;
 		private readonly IRtaEventStoreReader _eventStore;
@@ -26,7 +19,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private readonly ScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
 
-		public AgentAdherenceDayLoader(
+		public AgentAdherenceDayLoaderAdjustAdherenceToNeutral(
 			INow now,
 			ScheduleLoader scheduleLoader,
 			IPersonRepository persons,
@@ -46,21 +39,23 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		public IAgentAdherenceDay LoadUntilNow(Guid personId) => LoadUntilNow(personId, new DateOnly(_now.UtcDateTime().Date));
 		public IAgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date) => load(personId, date, _now.UtcDateTime());
 
-		private AgentAdherenceDay load(Guid personId, DateOnly date, DateTime until)
+		private IAgentAdherenceDay load(Guid personId, DateOnly date, DateTime until)
 		{
 			var person = _persons.Load(personId);
 
 			var time = TimeZoneInfo.ConvertTimeToUtc(date.Date, person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc);
 			var period = new DateTimePeriod(time, time.AddDays(1));
-			var events = _eventStore.Load(personId, date);
-			var saga = new AgentAdherenceDay(until, period, () => shiftFromSchedule(personId, date));
+			var adjustedPeriodEvents = _eventStore.LoadAdjustedPeriodEvents();
+			var eventsForPerson = _eventStore.Load(personId, date);
+			var events = eventsForPerson.Concat(adjustedPeriodEvents);
+			var saga = new AgentAdherenceDayAdjustAdherenceToNeutral(until, period, () => shiftFromSchedule(personId, date));
 
 			applyAndVerboseLogErrors(events, saga);
 
 			return saga;
 		}
 
-		private void applyAndVerboseLogErrors(IEnumerable<IEvent> events, AgentAdherenceDay saga)
+		private void applyAndVerboseLogErrors(IEnumerable<IEvent> events, AgentAdherenceDayAdjustAdherenceToNeutral saga)
 		{
 			try
 			{

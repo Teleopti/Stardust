@@ -11,23 +11,7 @@ using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical
 {
-	public interface IRtaEventStoreSynchronizer
-	{
-		void Synchronize();
-	}
-
-	public class DontSynchronize : IRtaEventStoreSynchronizer, IRtaEventStoreAsyncSynchronizer
-	{
-		public void Synchronize()
-		{
-		}
-
-		public void SynchronizeAsync()
-		{
-		}
-	}
-
-	public class RtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
+	public class RtaEventStoreSynchronizerAdjustAdherenceToNeutral : IRtaEventStoreSynchronizer
 	{
 		private readonly IRtaEventStoreReader _events;
 		private readonly IHistoricalOverviewReadModelPersister _readModels;
@@ -37,7 +21,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 
 		public const string SynchronizedEventKey = "HistoricalOverviewReadModelSynchronizedEvent";
 
-		public RtaEventStoreSynchronizer(
+		public RtaEventStoreSynchronizerAdjustAdherenceToNeutral(
 			IRtaEventStoreReader events,
 			IHistoricalOverviewReadModelPersister readModels,
 			IAgentAdherenceDayLoader adherenceDayLoader,
@@ -101,7 +85,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 					var data = e.QueryData();
 					return new
 					{
-						PersonId = data.PersonId.Value,
+						PersonId = data.PersonId.GetValueOrDefault(),
 						Day = data.BelongsToDate ?? new DateOnly(data.StartTime.Value)
 					};
 				})

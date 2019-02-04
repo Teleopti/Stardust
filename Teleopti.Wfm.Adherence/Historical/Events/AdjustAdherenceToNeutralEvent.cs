@@ -1,11 +1,18 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Historical.Events
 {
-	public class AdjustAdherenceToNeutralEvent : IEvent
+	public class AdjustAdherenceToNeutralEvent : IEvent, IRtaStoredEvent
 	{
 		public DateTime StartTime;
 		public DateTime EndTime;
+		public QueryData QueryData() =>
+			new QueryData
+			{
+				StartTime = StartTime,
+				EndTime = EndTime
+			};
 	}
 }

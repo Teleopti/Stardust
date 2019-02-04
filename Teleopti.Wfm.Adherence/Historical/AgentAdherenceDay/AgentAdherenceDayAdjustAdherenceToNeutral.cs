@@ -6,7 +6,7 @@ using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	public class AgentAdherenceDay : IAgentAdherenceDay
+	public class AgentAdherenceDayAdjustAdherenceToNeutral : IAgentAdherenceDay
 	{
 		private readonly DateTime _now;
 		private readonly DateTimePeriod _fullDay;
@@ -14,6 +14,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 
 		private DateTimePeriod? _collectedShift;
 		private readonly IList<openPeriod> _collectedApprovedPeriods = new List<openPeriod>();
+		private readonly IList<openPeriod> _collectedNeutralPeriods = new List<openPeriod>();
 		private readonly IList<HistoricalChangeModel> _collectedChanges = new List<HistoricalChangeModel>();
 
 		private DateTimePeriod? _calculatedDisplayPeriod;
@@ -26,7 +27,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private int? _secondsInAdherence;
 		private int? _secondsOutOfAdherence;
 
-		public AgentAdherenceDay(
+		public AgentAdherenceDayAdjustAdherenceToNeutral(
 			DateTime now,
 			DateTimePeriod fullDay,
 			Func<DateTimePeriod?> shiftFromSchedule
@@ -64,6 +65,9 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 
 		public void Apply(ApprovedPeriodRemovedEvent @event) =>
 			_collectedApprovedPeriods.Remove(new openPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
+		
+		public void Apply(AdjustAdherenceToNeutralEvent @event) =>
+			_collectedNeutralPeriods.Add(new openPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
 
 		public void ApplyDone() => calculate();
 
@@ -128,8 +132,9 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				return;
 
 			var recordedNeutralAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral);
+			var allNeutralAdherences = recordedNeutralAdherences.Concat(_collectedNeutralPeriods);
 
-			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, recordedOutOfAdherences, recordedNeutralAdherences, _collectedApprovedPeriods);
+			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, recordedOutOfAdherences, allNeutralAdherences, _collectedApprovedPeriods);
 			_secondsOutOfAdherence = calculateSecondsOutOfAdherence(shift.Value, recordedOutOfAdherences, _collectedApprovedPeriods);
 			_adherencePercentage = AdherencePercentageCalculation.Calculate(_secondsInAdherence, _secondsOutOfAdherence);
 		}

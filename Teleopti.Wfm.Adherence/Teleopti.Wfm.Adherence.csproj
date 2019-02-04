@@ -133,11 +133,14 @@
     <Compile Include="Historical\AdjustAdherence\AdjustedPeriod.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePercentageCalculation.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePeriod.cs" />
+    <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayAdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
+    <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoaderAdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoadException.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="Historical\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="Historical\AgentAdherenceDay\HistoricalChangeModel.cs" />
+    <Compile Include="Historical\AgentAdherenceDay\IAgentAdherenceDay.cs" />
     <Compile Include="Historical\AgentAdherenceDay\ScheduleLoader.cs" />
     <Compile Include="Historical\ApprovePeriodAsInAdherence\ApprovedPeriod.cs" />
     <Compile Include="Historical\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherence.cs" />
@@ -168,6 +171,7 @@
     <Compile Include="Historical\RtaEventStoreAsyncSynchronizer.cs" />
     <Compile Include="Historical\RtaEventStoreMaintainer.cs" />
     <Compile Include="Historical\RtaEventStoreSynchronizer.cs" />
+    <Compile Include="Historical\RtaEventStoreSynchronizerAdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\RtaEventStoreUpgrader.cs" />
     <Compile Include="Historical\RtaEventStoreVersion.cs" />
     <Compile Include="KeyValueStorePersisterExtensions.cs" />

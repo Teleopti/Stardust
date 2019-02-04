@@ -30,6 +30,7 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 		IEnumerable<IEvent> Load(Guid personId, DateOnly date);
 		LoadedEvents LoadForSynchronization(long fromEventId);
 		long ReadLastId();
+		IEnumerable<IEvent> LoadAdjustedPeriodEvents();
 	}
 
 	public class LoadedEvents
