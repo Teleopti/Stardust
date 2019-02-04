@@ -1,6 +1,8 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface ISeatPlan : IAggregateRootWithEvents
+	public interface ISeatPlan : IAggregateRoot_Events
 	{
 		DateOnly Date { get; set; }
 		SeatPlanStatus Status { get; set; }

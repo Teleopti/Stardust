@@ -4,6 +4,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Where(x => x.Scenario != null)
 				.Select(x =>
 				{
-					if (x is IAggregateRootWithEvents events)
+					if (x is IAggregateRoot_Events events)
 						events.PopAllEvents(null);
 					return x;
 				})

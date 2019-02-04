@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 {
-    public class Multiplicator : VersionedAggregateRootWithBusinessUnit, IMultiplicator, IDeleteTag
+    public class Multiplicator : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IMultiplicator, IDeleteTag
     {
         private Description _description;
         private Color _displayColor = Color.Cornsilk;

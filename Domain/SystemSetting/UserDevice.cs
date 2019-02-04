@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.SystemSetting
 {
-	public class UserDevice : SimpleAggregateRoot, IUserDevice
+	public class UserDevice : AggregateRoot, IUserDevice
 	{
 		private IPerson _owner;
 		private string _token;

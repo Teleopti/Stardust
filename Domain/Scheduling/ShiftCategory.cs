@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    public class ShiftCategory : VersionedAggregateRootWithBusinessUnit, IShiftCategory, IDeleteTag, ICloneableEntity<ShiftCategory>, IAggregateRootWithEvents
+    public class ShiftCategory : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IShiftCategory, IDeleteTag, ICloneableEntity<ShiftCategory>, IAggregateRoot_Events
 	{
 		private Description _description;
         private Color _displayColor;

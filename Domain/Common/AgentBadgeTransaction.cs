@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class AgentBadgeTransaction : SimpleAggregateRoot, IAgentBadgeTransaction
+	public class AgentBadgeTransaction : AggregateRoot, IAgentBadgeTransaction
 	{
 		private IPerson _person;
 		private int _badgeType;

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
-	public interface IAggregateRootWithEvents : IAggregateRoot
+	public interface IAggregateRoot_Events : IAggregateRoot
 	{
 		void NotifyCommandId(Guid commandId);
 		void NotifyTransactionComplete(DomainUpdateType operation);

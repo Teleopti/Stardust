@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class ExtendedPreferenceTemplate : AggregateRoot, IExtendedPreferenceTemplate
+    public class ExtendedPreferenceTemplate : AggregateRoot_Events_ChangeInfo, IExtendedPreferenceTemplate
     {
         private readonly Color _displayColor;
         private readonly IPerson _person;

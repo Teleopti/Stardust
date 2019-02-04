@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Configuration
@@ -6,7 +7,7 @@ namespace Teleopti.Wfm.Adherence.Configuration
 	public interface IRtaStateGroup :
 		IBelongsToBusinessUnitId,
 		IVersioned,
-		IAggregateRootWithEvents
+		IAggregateRoot_Events
 	{
 		string Name { get; set; }
 		bool DefaultStateGroup { get; set; }

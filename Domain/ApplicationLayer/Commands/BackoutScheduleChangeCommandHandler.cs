@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			diffsForTargetDate.ForEach(diff =>
 			{
-				var eventHolder = diff.CurrentItem as AggregateRoot;
+				var eventHolder = diff.CurrentItem as AggregateRoot_Events_ChangeInfo;
 				eventHolder?.NotifyCommandId(command.TrackedCommandInfo.TrackId);
 			});
 

@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class PlanningPeriod : NonversionedAggregateRootWithBusinessUnit
+	public class PlanningPeriod : AggregateRoot_Events_ChangeInfo_BusinessUnit
 	{
 		private DateOnlyPeriod _range;
 		private static readonly SchedulePeriodRangeCalculator calculator = new SchedulePeriodRangeCalculator();

@@ -86,7 +86,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			IScenario scenario = new Scenario(name);
 			scenario.SetId(Guid.NewGuid());
 			scenario.DefaultScenario = isDefaultScenario;
-			Type rootType = typeof(AggregateRoot);
+			Type rootType = typeof(AggregateRoot_Events_ChangeInfo);
 			rootType.GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(
 				 scenario, new DateTime(1900, 1, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 			return scenario;

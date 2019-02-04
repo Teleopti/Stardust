@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void Execute(IDifferenceCollection<IPersistableScheduleData> scheduleDifference)
 		{
 			var aggregateRoots = scheduleDifference.Select(d => d.CurrentItem);
-			aggregateRoots.OfType<IAggregateRootWithEvents>().ForEach(a => a.PopAllEvents(null));
+			aggregateRoots.OfType<IAggregateRoot_Events>().ForEach(a => a.PopAllEvents(null));
 		}
 	}
 }

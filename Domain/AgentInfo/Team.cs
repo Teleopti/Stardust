@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-	public class Team : VersionedAggregateRoot, ITeam, IAggregateRootWithEvents, IDeleteTag
+	public class Team : AggregateRoot_Events_ChangeInfo_Versioned, ITeam, IAggregateRoot_Events, IDeleteTag
 	{
 		private Description _description;
 		private ISite _site;

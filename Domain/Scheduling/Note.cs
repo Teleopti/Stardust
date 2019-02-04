@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    public class Note : VersionedAggregateRootWithBusinessUnit, INote
+    public class Note : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, INote
     {
         private readonly IPerson _person;
         private IScenario _scenario;

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
     /// Created by: rogerkr
     /// Created date: 2008-03-27
     /// </remarks>
-    public class RuleSetBag : VersionedAggregateRootWithBusinessUnit, IRuleSetBag, IDeleteTag
+    public class RuleSetBag : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IRuleSetBag, IDeleteTag
     {
 
 		#region Fields (2) 

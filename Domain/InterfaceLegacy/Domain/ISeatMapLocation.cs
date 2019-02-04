@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface ISeatMapLocation : IAggregateRootWithEvents
+	public interface ISeatMapLocation : IAggregateRoot_Events
 	{
 
 		int SeatCount { get; }

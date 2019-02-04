@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface IPersonAbsence : IPersistableScheduleData,
 										IExportToAnotherScenario,
-										IAggregateRootWithEvents,
+										IAggregateRoot_Events,
 										ICloneableEntity<IPersonAbsence>,
 										IVersioned
 	{

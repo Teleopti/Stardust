@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public abstract class Payload : VersionedAggregateRootWithBusinessUnit, IDeleteTag
+	public abstract class Payload : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IDeleteTag
 	{
 		private bool _inContractTime;
 		private ITracker _tracker;

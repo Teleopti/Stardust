@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class AgentBadgeWithRank : SimpleAggregateRoot, IAgentBadgeWithRank
+	public class AgentBadgeWithRank : AggregateRoot, IAgentBadgeWithRank
 	{
 		public static IList<IAgentBadgeWithRank> FromAgentBadgeWithRanksTransaction(
 			ICollection<IAgentBadgeWithRankTransaction> agentBadgeWithRankTransactions)

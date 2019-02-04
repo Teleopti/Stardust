@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Insights
 {
-	public class InsightsReport : VersionedAggregateRoot, IInsightsReport
+	public class InsightsReport : AggregateRoot_Events_ChangeInfo_Versioned, IInsightsReport
 	{
 		private string _name;
 		private bool _isDeleted;

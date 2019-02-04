@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting
 										IBelongsToBusinessUnit,
 										IChangeInfo,
 										IVersioned,
-										IAggregateRootWithEvents
+										IAggregateRoot_Events
 	{
 #pragma warning disable 0649
 		private IPerson _createdBy;

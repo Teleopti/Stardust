@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class PreferenceDay : VersionedAggregateRootWithBusinessUnit, IRestrictionOwner, IPreferenceDay, IAggregateRootWithEvents
+    public class PreferenceDay : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IRestrictionOwner, IPreferenceDay, IAggregateRoot_Events
     {
         private IPreferenceRestriction _restriction;
         private readonly IPerson _person;

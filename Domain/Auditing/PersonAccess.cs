@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Domain.Auditing
 {
-	public class PersonAccess : SimpleAggregateRoot, IPersonAccess
+	public class PersonAccess : AggregateRoot, IPersonAccess
 	{
 		protected PersonAccess()
 		{

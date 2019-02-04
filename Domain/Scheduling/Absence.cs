@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// <summary>
     /// Represents when an agent is not present due to illnes or vacation e.g
     /// </summary>
-    public class Absence : Payload, IAbsence, IAggregateRootWithEvents
+    public class Absence : Payload, IAbsence, IAggregateRoot_Events
 	{
         private byte _priority = 100;
         private bool _requestable;

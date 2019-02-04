@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class SiteOpenHour : VersionedAggregateRoot, ISiteOpenHour
+	public class SiteOpenHour : AggregateRoot_Events_ChangeInfo_Versioned, ISiteOpenHour
 	{
 		private ISite _parent;
 		private DayOfWeek _weekDay;

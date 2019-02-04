@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// Created date: 2008-02-25
 	/// </remarks>
 	public interface IPersonAssignment : IPersistableScheduleData,
-		IAggregateRootWithEvents,
+		IAggregateRoot_Events,
 		IChangeInfo,
 		IRestrictionChecker<IPersonAssignment>,
 		IProjectionSource,

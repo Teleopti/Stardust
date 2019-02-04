@@ -2,6 +2,6 @@
 {
 	public interface IEventsRoot
 	{
-		void CloneEventsAfterMerge(AggregateRoot clone);
+		void CloneEventsAfterMerge(AggregateRoot_Events clone);
 	}
 }

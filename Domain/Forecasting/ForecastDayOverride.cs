@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		TimeSpan? OverriddenAverageAfterTaskTime { get; set; }
 	}
 
-	public class ForecastDayOverride : VersionedAggregateRoot, IForecastDayOverride
+	public class ForecastDayOverride : AggregateRoot_Events_ChangeInfo_Versioned, IForecastDayOverride
 	{
 		private readonly DateOnly _date;
 		private readonly IWorkload _workload;

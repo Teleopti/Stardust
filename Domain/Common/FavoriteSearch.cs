@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class FavoriteSearch : NonversionedAggregateRootWithBusinessUnit, IFavoriteSearch
+	public class FavoriteSearch : AggregateRoot_Events_ChangeInfo_BusinessUnit, IFavoriteSearch
 	{
 		private string _name;
 		private string _teamIds;

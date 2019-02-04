@@ -2,7 +2,8 @@
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
-	public abstract class VersionedAggregateRoot : AggregateRoot,
+	public abstract class AggregateRoot_Events_ChangeInfo_Versioned : 
+		AggregateRoot_Events_ChangeInfo,
 		IVersioned
 	{
 		private int? _version;

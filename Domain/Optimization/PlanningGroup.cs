@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class PlanningGroup : NonversionedAggregateRootWithBusinessUnit, IDeleteTag
+	public class PlanningGroup : AggregateRoot_Events_ChangeInfo_BusinessUnit, IDeleteTag
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
 		private readonly IList<PlanningGroupSettings> _settings = new List<PlanningGroupSettings>();

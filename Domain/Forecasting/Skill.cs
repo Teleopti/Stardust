@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		Percent OverstaffingFactor { get; set; }
 	}
 
-	public class Skill : VersionedAggregateRootWithBusinessUnit, ISkill, ISkillPriority, IDeleteTag, IAggregateRootWithEvents
+	public class Skill : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, ISkill, ISkillPriority, IDeleteTag, IAggregateRoot_Events
 	{
         private string _name = string.Empty;
         private string _description = string.Empty;

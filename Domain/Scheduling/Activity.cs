@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using System.Drawing;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	[Serializable]
-	public class Activity : Payload, IActivity, IAggregateRootWithEvents
+	public class Activity : Payload, IActivity, IAggregateRoot_Events
 	{
 		private Description _description;
 		private Color _displayColor;

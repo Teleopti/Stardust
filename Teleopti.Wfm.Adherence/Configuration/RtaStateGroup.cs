@@ -6,7 +6,7 @@ using Teleopti.Wfm.Adherence.Configuration.Events;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {
-	public class RtaStateGroup : VersionedAggregateRootWithBusinessUnitIdWithoutChangeInfo, IRtaStateGroup
+	public class RtaStateGroup : AggregateRoot_Events_Versioned_BusinessUnitId, IRtaStateGroup
     {
         private readonly IList<IRtaState> _stateCollection = new List<IRtaState>();
         private bool _available;

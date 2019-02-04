@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 {
-	public class Meeting : VersionedAggregateRootWithBusinessUnit, IMeeting, IProvideCustomChangeInfo
+	public class Meeting : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IMeeting, IProvideCustomChangeInfo
 	{
 		private IPerson _organizer;
 		private ISet<IMeetingPerson> _meetingPersons;

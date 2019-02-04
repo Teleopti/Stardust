@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class JobResult : VersionedAggregateRootWithBusinessUnit, IJobResult
+    public class JobResult : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IJobResult
     {
         private readonly IPerson _owner;
         private readonly DateTime _timestamp;

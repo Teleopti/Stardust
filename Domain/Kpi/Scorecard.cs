@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Kpi
     ///  Created by: Ola
     ///  Created date: 2008-04-15    
     /// </remarks>
-    public class Scorecard : VersionedAggregateRootWithBusinessUnit, IScorecard
+    public class Scorecard : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IScorecard
     {
         private string _name;
         private readonly IList<IKeyPerformanceIndicator> _keyPerformanceIndicatorCollection = new List<IKeyPerformanceIndicator>();

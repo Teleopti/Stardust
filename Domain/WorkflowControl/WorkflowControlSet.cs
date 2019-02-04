@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	// ReSharper disable ArrangeAccessorOwnerBody
 	// ReSharper disable ConvertToAutoProperty
-	public class WorkflowControlSet : VersionedAggregateRootWithBusinessUnit, IWorkflowControlSet, IDeleteTag
+	public class WorkflowControlSet : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IWorkflowControlSet, IDeleteTag
 	{
 		private string _name = string.Empty;
 		private bool _isDeleted;

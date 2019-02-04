@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-	public class Campaign : NonversionedAggregateRootWithBusinessUnit, IOutboundCampaign
+	public class Campaign : AggregateRoot_Events_ChangeInfo_BusinessUnit, IOutboundCampaign
 	{
 		private string _name;
 		private ISkill _skill;
