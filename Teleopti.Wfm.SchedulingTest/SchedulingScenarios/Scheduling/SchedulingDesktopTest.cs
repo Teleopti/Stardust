@@ -503,7 +503,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var timeZoneSkill = TimeZoneInfo.FindSystemTimeZoneById(skillTimeZone);
 			var timeZoneUser = TimeZoneInfo.FindSystemTimeZoneById(userTimeZone);
 			var timeZoneAgent = TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone);
-			TimeZoneGuard.SetTimeZone(timeZoneUser);
+			TimeZoneGuard.Set(timeZoneUser);
 			var diffAgentSkillTimeZones = timeZoneAgent.GetUtcOffset(date.Date).Subtract(timeZoneSkill.GetUtcOffset(date.Date)).Hours;
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var activity = new Activity { RequiresSkill = true }.WithId();

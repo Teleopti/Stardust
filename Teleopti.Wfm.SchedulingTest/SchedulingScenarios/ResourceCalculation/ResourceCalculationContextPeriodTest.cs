@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 			) 
 		{
 			var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(myTimeZone);
-			TimeZoneGuard.SetTimeZone(userTimeZone);
+			TimeZoneGuard.Set(userTimeZone);
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone)).IsOpen();

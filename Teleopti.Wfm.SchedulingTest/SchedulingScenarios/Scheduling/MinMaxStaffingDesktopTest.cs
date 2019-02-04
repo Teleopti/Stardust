@@ -110,7 +110,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string agentTimeZone,
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string skillTimeZone)
 		{
-			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
+			TimeZoneGuard.Set(TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
 			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(userViewPointTimeZone));
 			var date = new DateOnly(2017, 1, 11);
 			var activity = new Activity().WithId();

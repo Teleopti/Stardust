@@ -63,7 +63,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 		[Test]
 		public void ShouldHandleCasesWhereSkillsTimeZoneIsFarAway()
 		{
-			TimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			TimeZoneGuard.Set(TimeZoneInfo.Utc);
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithId().IsOpen();
@@ -99,7 +99,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 		[Test]
 		public void ShouldPlaceOvertimeWhenViewerAndAgentTimeZonesAreFarAway([Values("W. Europe Standard Time", "Mountain Standard Time")] string viewersTimeZone)
 		{
-			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(viewersTimeZone));
+			TimeZoneGuard.Set(TimeZoneInfo.FindSystemTimeZoneById(viewersTimeZone));
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var activity = new Activity("_");
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).WithId().IsOpen().DefaultResolution(15);

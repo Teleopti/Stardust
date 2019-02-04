@@ -371,7 +371,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(0, 24));
 			var agent2 = new Person().InTimeZone(scheduledAndSkillTimeZone).WithPersonPeriod(prioritizedSkill, nonPrioritizedSkill);
 			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(0, 24));
-			TimeZoneGuard.SetTimeZone(endUserTimeZone);
+			TimeZoneGuard.Set(endUserTimeZone);
 
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass1, ass2 }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay }, false, false));
 

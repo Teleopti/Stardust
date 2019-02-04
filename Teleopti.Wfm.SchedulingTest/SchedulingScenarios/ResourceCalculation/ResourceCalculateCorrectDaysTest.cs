@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldMarkDayBeforeIfAffectedShiftStartedDayBeforeInUsersTimeZone()
 		{
-			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			FakeTimeZoneGuard.Set(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12); 
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
@@ -43,7 +43,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldMarkDayBeforeIfAffectingShiftStartsDayBeforeInUsersTimeZone()
 		{
-			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			FakeTimeZoneGuard.Set(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12);
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldMarkDayAndDayAfterWhenAffectingShiftStartsDayAfterInUsersTimeZone()
 		{
-			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			FakeTimeZoneGuard.Set(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12);
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
@@ -82,7 +82,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldMarkDayWhenUndo()
 		{
-			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			FakeTimeZoneGuard.Set(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12);
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
@@ -104,7 +104,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldMarkDayWhenRedo()
 		{
-			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			FakeTimeZoneGuard.Set(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12);
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");

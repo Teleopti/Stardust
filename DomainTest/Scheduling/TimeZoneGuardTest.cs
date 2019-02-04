@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var timeZone = TimeZoneInfo.Utc;
 			_target.Set(timeZone);
 
-			Assert.That(_target.TimeZone, Is.EqualTo(timeZone));
+			Assert.That(_target.CurrentTimeZone(), Is.EqualTo(timeZone));
 		}
 	}
 }
