@@ -9,10 +9,10 @@ IF EXIST "%DIRECTORY%\PendingReboot.txt" (
   GOTO Finish
 )
 
-IF EXIST "%DIRECTORY%\%PROCESSNAME%_Success.txt" (
-  ECHO %PROCESSNAME% has already run. >> "%DIRECTORY%\StartupLog.txt" 2>&1
-  GOTO Finish
-)
+REM IF EXIST "%DIRECTORY%\%PROCESSNAME%_Success.txt" (
+REM  ECHO %PROCESSNAME% has already run. >> "%DIRECTORY%\StartupLog.txt" 2>&1
+REM   GOTO Finish
+REM )
 
 REM   Run your real exe task
 ECHO Running %PROCESSNAME%.ps1 >> "%DIRECTORY%\StartupLog.txt" 2>&1
