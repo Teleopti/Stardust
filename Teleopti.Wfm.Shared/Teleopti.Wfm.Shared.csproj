@@ -171,7 +171,6 @@
     <Compile Include="UnitOfWork\Entity.cs" />
     <Compile Include="UnitOfWork\Events.cs" />
     <Compile Include="UnitOfWork\IAggregateRoot.cs" />
-    <Compile Include="UnitOfWork\IAggregateRoot_Events.cs" />
     <Compile Include="UnitOfWork\IAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\IAuditSetter.cs" />
     <Compile Include="UnitOfWork\IAuditSetting.cs" />
