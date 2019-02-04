@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon
 			return new DataSourceFactoryFactory(container.Resolve<IDataSourcesFactory>);
 		}
 
-		public static DataSourceFactoryFactory MakeLegacyWay(IEnversConfiguration enversConfiguration = null)
+		public static DataSourceFactoryFactory MakeLegacyWay(EnversConfiguration enversConfiguration = null)
 		{
 			return new DataSourceFactoryFactory(() =>
 			{

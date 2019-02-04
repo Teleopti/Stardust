@@ -13,7 +13,7 @@ using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	public class EnversConfiguration : IEnversConfiguration
+	public class EnversConfiguration
 	{
 		public const string AuditingSchema = "Auditing";
 		private readonly AuditSetter _auditSettingProvider;

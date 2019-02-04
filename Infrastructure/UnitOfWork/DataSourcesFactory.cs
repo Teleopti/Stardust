@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
-		private readonly IEnversConfiguration _enversConfiguration;
+		private readonly EnversConfiguration _enversConfiguration;
 		private readonly UnitOfWorkFactoryFactory _unitOfWorkFactoryFactory;
 		private readonly IUpdatedBy _updatedBy;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
 		public DataSourcesFactory(
-			IEnversConfiguration enversConfiguration,
+			EnversConfiguration enversConfiguration,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter,
 			MemoryNHibernateConfigurationCache nhibernateConfigurationCache,
 			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory,

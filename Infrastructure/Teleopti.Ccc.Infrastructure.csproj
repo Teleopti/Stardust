@@ -583,7 +583,6 @@
     <Compile Include="NHibernateConfiguration\EnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\TenantSessionContext.cs" />
     <Compile Include="NHibernateConfiguration\IDataSourceConfigurationSetter.cs" />
-    <Compile Include="NHibernateConfiguration\IEnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriver.cs" />
     <Compile Include="NHibernateConfiguration\NHibernateConfigurationExtensions.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />
