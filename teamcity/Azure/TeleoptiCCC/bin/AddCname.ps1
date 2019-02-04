@@ -18,6 +18,20 @@ function TeleoptiDriveMapProperty-get {
 	return $TeleoptiDriveMapProperty
 }
 
+function Hostsfile-Add-Cname {
+    param(
+    [string]$CName
+    )
+	
+	$ipV4 = Test-Connection -ComputerName (hostname) -Count 1  | Select IPV4Address
+	$hostentry = "$($ipV4.IPV4Address.IPAddressToString) $CName"
+    $hostsFile = "$($env:windir)\system32\Drivers\etc\hosts"
+    If ((Get-Content "$hostsFile" ) -notcontains "$hostentry") {
+        Add-Content -Encoding UTF8  "$hostsFile" "`r`n"
+        Add-Content -Encoding UTF8  "$hostsFile" "$hostentry"
+    }
+}
+
 function Get-ScriptDirectory
 {
     $Invocation = (Get-Variable MyInvocation -Scope 1).Value;
@@ -48,23 +62,11 @@ function Test-Administrator
 	return ($myWindowsPrincipal.IsInRole($adminRole))
 }
 
-function EventlogSource-Create {
-    Param([string]$EventSourceName)
-	log-info "Creating event log..."
-    $type = "Application"
-    #create event log source
-    if ([System.Diagnostics.EventLog]::SourceExists("$EventSourceName") -eq $false) {
-        [System.Diagnostics.EventLog]::CreateEventSource("$EventSourceName", $type)
-        }
-}
-
-
 ##===========
 ## Main
 ##===========
 $directory = Get-ScriptDirectory
 $computer = gc env:computername
-
 
 Try
 {
@@ -90,22 +92,13 @@ Try
 		throw "User is not Admin!"
 	}
 	
-	#Stopping IIS to ensure no requests before system ready and environmental variable $Env:TeleoptiIsAzure needs to be set before IIS is started..
-	iisreset /stop /timeout:120
-	
-	#Setting $Env:TeleoptiIsAzure = $true 
-	[System.Environment]::SetEnvironmentVariable('TeleoptiIsAzure', 'true', [System.EnvironmentVariableTarget]::Machine)
-	$Env:TeleoptiIsAzure = $true
-	log-info "Environment variable 'TeleoptiIsAzure' is set to '$Env:TeleoptiIsAzure'"
-	
-	#Set environment variables for RoleInstanceID & Rolename
-	[Environment]::SetEnvironmentVariable("RoleName", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Role.Name, "Machine") 
-	[Environment]::SetEnvironmentVariable("RoleInstanceID", [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::CurrentRoleInstance.Id, "Machine")
-	
-	#Set Datasource customer name as env variables
-	$Env:CustomerName = $DataSourceName
+	#74478, #76734, #78787
+    $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
+    $Cname = "$DataSourceName.teleopticloud.com"
+	log-info "Adding Cname '$Cname' to local hosts file..."
+    Hostsfile-Add-Cname -Cname $Cname
 
-    
+	    
 }
 Catch [Exception]
 {
