@@ -62,7 +62,7 @@ Try
 	if ($env:RoleInstanceID -eq "TeleoptiCCC_IN_0" -or $env:RoleInstanceID -eq "TeleoptiCCC_IN_1"){
 		
 		$ServiceEtlPath = $DriveLocation + "approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
-		ReinstallService "TeleoptiEtlService" "$ServicePath"
+		ReinstallService "TeleoptiEtlService" "$ServiceEtlPath"
 	}
 	else {
 		log-info "We are on instance '$env:RoleInstanceID', ETL will not be installed here..."
