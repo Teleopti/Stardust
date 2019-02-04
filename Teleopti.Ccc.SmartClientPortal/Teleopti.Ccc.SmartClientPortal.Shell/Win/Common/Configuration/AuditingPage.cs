@@ -1,14 +1,10 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Drawing;
 using Syncfusion.Drawing;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
 
@@ -18,29 +14,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 	// no mvc/p whatsoever here... 
 	public partial class AuditingPage : BaseUserControl, ISettingPage
 	{
-		private IAuditSetting _auditSetting;
-		private bool checkedWhenLoaded;
-
 		public AuditingPage()
 		{
 			InitializeComponent();
 		}
 
-		private AuditSettingRepository Repository { get; set; }
+		private AuditSettingRepository _repository;
 
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
-			Repository = new AuditSettingRepository(new ThisUnitOfWork(value));
+			_repository = new AuditSettingRepository(new ThisUnitOfWork(value));
 		}
 
 		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
 		{
 		}
 
-		public ViewType ViewType
-		{
-			get { return ViewType.AuditTrailSetting; }
-		}
+		public ViewType ViewType => ViewType.AuditTrailSetting;
 
 		public void InitializeDialogControl()
 		{
@@ -49,7 +39,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			loadAuditSetting();
+			setAuditTrailingStatus(_repository.Read().IsScheduleEnabled);
 			setColors();
 		}
 
@@ -64,35 +54,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 		   autoLabelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 		   autoLabelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-
-		}
-
-		private void loadAuditSetting()
-		{
-			checkBoxAdvIsRunning.CheckedChanged -= checkBoxAdvIsRunningCheckedChanged;
-			_auditSetting = Repository.Read();
-			checkedWhenLoaded = _auditSetting.IsScheduleEnabled;
-			checkBoxAdvIsRunning.Checked = checkedWhenLoaded;
-			setAuditTrailingStatus(checkBoxAdvIsRunning.Checked);
-
-			checkBoxAdvIsRunning.CheckedChanged += checkBoxAdvIsRunningCheckedChanged;
 		}
 
 		public void SaveChanges()
 		{
-			if (checkedWhenLoaded != checkBoxAdvIsRunning.Checked)
-			{
-				if (checkBoxAdvIsRunning.Checked)
-				{
-					(_auditSetting as AuditSetting).TurnOnScheduleAuditing(Repository, UnitOfWorkFactory.Current.AuditSetting);
-				}
-				else
-				{
-					_auditSetting.TurnOffScheduleAuditing(UnitOfWorkFactory.Current.AuditSetting);
-				}				
-			}
-
-			loadAuditSetting();
 		}
 
 		public void Persist()
@@ -127,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			else
 			{
 				backColor = Color.FromArgb(255, 224, 224);
-				autoLabelStatusText.Text = Resources.AuditingIsNotRunning;
+				autoLabelStatusText.Text = Resources.AuditingIsNotRunningPleaseContactTeleopti;
 			}
 			setStatusPanelBackColor(backColor);
 		}
@@ -136,39 +101,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			var brushInfo = new BrushInfo(gradientPanelExtStatusText.BackgroundColor.PatternStyle, gradientPanelExtStatusText.BackgroundColor.ForeColor, backColor);
 			gradientPanelExtStatusText.BackgroundColor = brushInfo;
-		}
-
-		private void checkBoxAdvIsRunningCheckedChanged(object sender, EventArgs e)
-		{
-			var areYouSureDialogResult = DialogResult.OK;
-			var oldState = !checkBoxAdvIsRunning.Checked;
-			if (checkBoxAdvIsRunning.Checked)
-			{
-				areYouSureDialogResult = MessageDialogs.ShowQuestion(this, Resources.AuditingTurnOnLong,
-					Resources.AuditingTurnOnShort);
-			}
-			else
-			{
-				if (_auditSetting.IsScheduleEnabled)
-				{
-					areYouSureDialogResult = MessageDialogs.ShowQuestion(this, Resources.AuditTrailSettingOffQuestion,
-						Resources.AuditTrailSetting);
-				}
-			}
-
-			if (areYouSureDialogResult == DialogResult.No)
-			{
-				checkBoxAdvIsRunning.Checked = oldState;
-			}
-			else
-			{
-				setStatusPanelBackColor(Color.FromArgb(255, 224, 128));
-			}
-		}
-
-		private void checkBoxAdvIsRunning_CheckStateChanged(object sender, EventArgs e)
-		{
-
 		}
 	}
 }

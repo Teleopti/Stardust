@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -3705,6 +3705,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AuditingIsNotRunning {
             get {
                 return ResourceManager.GetString("AuditingIsNotRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schedule audit trail is not running. We recommend turning it on, please contact Teleopti..
+        /// </summary>
+        public static string AuditingIsNotRunningPleaseContactTeleopti {
+            get {
+                return ResourceManager.GetString("AuditingIsNotRunningPleaseContactTeleopti", resourceCulture);
             }
         }
         

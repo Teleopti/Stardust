@@ -10190,6 +10190,10 @@ These options are activated:
     <value>Schedule audit trail is not running.</value>
     <comment>Schedule audit trail is not running.</comment>
   </data>
+	<data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
+    <value>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</value>
+    <comment>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</comment>
+  </data>
   <data name="AuditingIsRunning" xml:space="preserve">
     <value>Schedule audit trail is running.</value>
     <comment>Schedule audit trail is running.</comment>
