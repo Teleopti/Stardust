@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			foreach (var skillDay in skillDays)
 			{
-				if (skillDay is IAggregateRoot_Events events)
+				if (skillDay is IPublishEvents events)
 				{
 					events.PopAllEvents(null);
 				}

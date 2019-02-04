@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// <summary>
     /// A forecast
     /// </summary>
-    public class Workload : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IWorkload, IDeleteTag, IAggregateRoot_Events
+    public class Workload : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IWorkload, IDeleteTag
     {
         private string _name = string.Empty;
         private string _description = string.Empty;

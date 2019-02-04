@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.SystemSetting.BankHolidayCalendar
 {
-	public class BankHolidayCalendar : AggregateRoot_Events_ChangeInfo_BusinessUnit, IBankHolidayCalendar, IAggregateRoot_Events
+	public class BankHolidayCalendar : AggregateRoot_Events_ChangeInfo_BusinessUnit, IBankHolidayCalendar
 	{
 		private string _name;
 

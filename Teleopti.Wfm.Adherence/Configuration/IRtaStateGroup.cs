@@ -7,7 +7,8 @@ namespace Teleopti.Wfm.Adherence.Configuration
 	public interface IRtaStateGroup :
 		IBelongsToBusinessUnitId,
 		IVersioned,
-		IAggregateRoot_Events
+		IAggregateRoot, 
+		IPublishEvents
 	{
 		string Name { get; set; }
 		bool DefaultStateGroup { get; set; }

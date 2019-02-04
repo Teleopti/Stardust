@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// Created by: micke
     /// Created date: 18.12.2007
     /// </remarks>
-	public class SkillDay : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, ISkillDay, IPeriodized, IAggregateRoot_Events
+	public class SkillDay : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, ISkillDay, IPeriodized
     {
         private DateOnly _currentDate;
         private ISkill _skill;

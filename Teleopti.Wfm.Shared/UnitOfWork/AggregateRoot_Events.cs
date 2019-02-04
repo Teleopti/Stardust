@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
 	public abstract class AggregateRoot_Events : 
 		AggregateRoot, 
-		IAggregateRoot_Events, 
+		IAggregateRoot,
+		IPublishEvents,
 		ICloneEventsAfterMerge
 	{
 		private Events _events = new Events();

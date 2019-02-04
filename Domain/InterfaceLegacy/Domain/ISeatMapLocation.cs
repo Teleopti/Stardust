@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface ISeatMapLocation : IAggregateRoot_Events
+	public interface ISeatMapLocation : IAggregateRoot, IPublishEvents
 	{
 
 		int SeatCount { get; }

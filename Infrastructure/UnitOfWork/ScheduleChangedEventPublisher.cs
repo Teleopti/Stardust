@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Where(x => x.Scenario != null)
 				.Select(x =>
 				{
-					if (x is IAggregateRoot_Events events)
+					if (x is IPublishEvents events)
 						events.PopAllEvents(null);
 					return x;
 				})

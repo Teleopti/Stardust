@@ -17,7 +17,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class PersonRequest : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit,
-								 IPersonRequest, IDeleteTag, IPushMessageWhenRootAltered, IAggregateRoot_Events
+								 IPersonRequest, IDeleteTag, IPushMessageWhenRootAltered
 	{
 		private const int messageLength = 2000;
 		private const int messageTipLength = 255;

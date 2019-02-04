@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface ISeatBooking : IAggregateRoot_Events
+	public interface ISeatBooking : IAggregateRoot, IPublishEvents
 	{
 		IPerson Person { get; set; }
 		DateOnly BelongsToDate { get; set; }

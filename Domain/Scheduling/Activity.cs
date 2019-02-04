@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	[Serializable]
-	public class Activity : Payload, IActivity, IAggregateRoot_Events
+	public class Activity : Payload, IActivity
 	{
 		private Description _description;
 		private Color _displayColor;

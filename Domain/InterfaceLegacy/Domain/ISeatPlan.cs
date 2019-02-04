@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface ISeatPlan : IAggregateRoot_Events
+	public interface ISeatPlan : IAggregateRoot, IPublishEvents
 	{
 		DateOnly Date { get; set; }
 		SeatPlanStatus Status { get; set; }

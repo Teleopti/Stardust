@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class Site : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, ISite, IDeleteTag, IAggregateRoot_Events
+	public class Site : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, ISite, IDeleteTag
 	{
 		private readonly IList<ITeam> _teamCollection;
 		private Description _description;

@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface IPersonAbsence : IPersistableScheduleData,
 										IExportToAnotherScenario,
-										IAggregateRoot_Events,
+										IAggregateRoot,
+										IPublishEvents,
 										ICloneableEntity<IPersonAbsence>,
 										IVersioned
 	{

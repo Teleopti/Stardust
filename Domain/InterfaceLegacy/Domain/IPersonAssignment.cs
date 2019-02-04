@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// Created date: 2008-02-25
 	/// </remarks>
 	public interface IPersonAssignment : IPersistableScheduleData,
-		IAggregateRoot_Events,
+		IAggregateRoot, 
+		IPublishEvents,
 		IChangeInfo,
 		IRestrictionChecker<IPersonAssignment>,
 		IProjectionSource,
