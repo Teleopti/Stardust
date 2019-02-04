@@ -3,7 +3,6 @@ using NHibernate.Cfg;
 using NHibernate.Envers.Configuration;
 using NHibernate.Envers.Configuration.Fluent;
 using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			IAuditSetting AuditSettingDel(ISession s)
 			{
-			
 				var auditSetting = s.Get<AuditSetting>(AuditSettingDefault.TheId);
 				if (auditSetting == null)
 					throw new DataSourceException(AuditSettingRepository.MissingAuditSetting);
@@ -30,8 +28,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 			_auditSettingProvider = new AuditSetter(AuditSettingDel);
 		}
-
-		public IAuditSetter AuditSettingProvider => _auditSettingProvider;
 
 		public void Configure(Configuration nhibConfiguration, IUpdatedBy updatedBy)
 		{
