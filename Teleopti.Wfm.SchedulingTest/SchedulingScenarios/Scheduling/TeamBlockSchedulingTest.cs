@@ -68,9 +68,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 
 			Assert.Multiple(() =>
 			{
-				var allAssesWithLayers = AssignmentRepository.LoadAll().Where(x => x.ShiftLayers.Any());
-				allAssesWithLayers.Select(x => x.ShiftCategory).ToHashSet().Count
-					.Should().Be.EqualTo(2);
 				foreach (var day in DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1).DayCollection())
 				{
 					var assesOnDay = AssignmentRepository.LoadAll().Where(x => x.Date == day);
