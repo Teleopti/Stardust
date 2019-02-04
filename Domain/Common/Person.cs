@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Common
 		}
 
 		public override IEnumerable<IEvent> PopAllEvents(IPopEventsContext context) =>
-			base.PopAllEvents(context)
+			base.PopAllEvents(context ?? new FromServiceLocators())
 				.KeepLastOfType<PersonNameChangedEvent>()
 				.KeepLastOfType<PersonPeriodChangedEvent>()
 				.KeepLastOfType<OptionalColumnValueChangedEvent>()
