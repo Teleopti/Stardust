@@ -182,6 +182,7 @@
     <Compile Include="UnitOfWork\ICloneEventsAfterMerge.cs" />
     <Compile Include="UnitOfWork\IHaveSession.cs" />
     <Compile Include="UnitOfWork\ILiteUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\IPublishEvents.cs" />
     <Compile Include="UnitOfWork\IQueryFilter.cs" />
     <Compile Include="UnitOfWork\IReadModelUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\IRootChangeInfo.cs" />
