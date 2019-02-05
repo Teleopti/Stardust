@@ -234,19 +234,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public static void PopulateForecastReadModels(ISkill skill, DateTime scheduledStartTime,
 			DateTime scheduledEndTime, double forecastAgents,
 			FakeSkillForecastReadModelRepository skillForecastReadModelRepository, double? forecastAgentsWithShrinkage = null,
-			bool isBackOffice = false, double percentAnswered = 1, double answeredWithinSeconds = 0)
+			bool isBackOffice = false, double percentAnswered = 1, double answeredWithinSeconds = 0, int overrideMinutesPerInterval = 15)
 		{
 			if (skillForecastReadModelRepository.SkillForecasts == null)
 				skillForecastReadModelRepository.SkillForecasts = new List<SkillForecast>();
 
 			for (var intervalTime = scheduledStartTime;
 				intervalTime < scheduledEndTime;
-				intervalTime = intervalTime.AddMinutes(minutesPerInterval))
+				intervalTime = intervalTime.AddMinutes(overrideMinutesPerInterval))
 			{
 				skillForecastReadModelRepository.SkillForecasts.Add(new SkillForecast
 				{
 					StartDateTime = intervalTime,
-					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
+					EndDateTime = intervalTime.AddMinutes(overrideMinutesPerInterval),
 					Agents = forecastAgents,
 					AgentsWithShrinkage = forecastAgentsWithShrinkage ?? forecastAgents,
 					SkillId = skill.Id.GetValueOrDefault(),

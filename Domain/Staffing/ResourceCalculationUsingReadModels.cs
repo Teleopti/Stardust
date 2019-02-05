@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var period = new DateTimePeriod(startOfDayUtc, endOfDayUtc);
 			var skillCombinationFetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-8), endOfDayUtc);
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(skillCombinationFetchPeriod).ToList();
-			var combinationResourcesSystemResolution = split(combinationResources.ToList(), TimeSpan.FromMinutes(15));
-
+			
 			var skillForecastList =
 				_skillForecastReadModelRepository.LoadSkillForecast(skillIds.ToArray(), period);
 
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				}
 			}
 
-			calculateForecastAgentsForEmailSkills(groupedSkillStaffPeriods, combinationResourcesSystemResolution);
+			calculateForecastAgentsForEmailSkills(groupedSkillStaffPeriods, combinationResources);
 			var returnList = new HashSet<SkillStaffingInterval>();
 			var intervals = skillStaffPeriods.Select(sspBySkill =>
 			{
