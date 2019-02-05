@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -395,6 +396,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 				var cook = HttpContext.Current.Request.Cookies["WfmAdminAuth"];
 				var value = Uri.UnescapeDataString(cook.Value);
 				var obj = System.Web.Helpers.Json.Decode<cookieValues>(value);
+				var cookieAuth = obj.tokenKey;
+				var valid = AdminAccessTokenRepository.TokenIsValid(cookieAuth, new Now());
+				if(!valid) return Json(new UserModel());
 				return Json(new UserModel {Name = obj.user, Id = obj.id, Token = obj.tokenKey});
 			}
 
