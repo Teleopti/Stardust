@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftProjectionCacheFilter>().SingleInstance();
 
 			builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().SingleInstance();
-			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().As<ISkillStaffPeriodToSkillIntervalDataMapper>().SingleInstance();
+			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().SingleInstance();
 			builder.RegisterType<SkillIntervalDataSkillFactorApplier>().As<ISkillIntervalDataSkillFactorApplier>().SingleInstance();
 			builder.RegisterType<SkillIntervalDataAggregator>().AsSelf().SingleInstance();
 			builder.RegisterType<DayIntervalDataCalculator>().As<IDayIntervalDataCalculator>().SingleInstance();
