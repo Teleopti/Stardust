@@ -192,13 +192,14 @@
     <Compile Include="Historical\Infrastructure\RtaEventStoreBatchInsertTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreEventTypeIdTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreReadByDateTest.cs" />
+    <Compile Include="Historical\Infrastructure\RtaEventStoreReadForSynchronizationTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreReadTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreSynchronizerTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgradeWriterTest.cs" />
     <Compile Include="Historical\Unit\AdjustAdherence\AdjustAdherenceToNeutralCommandHandlerTest.cs" />
-    <Compile Include="Historical\Unit\AgentAdherenceDay\AdjustPeriodToNeutralPercentageTest.cs" />
+    <Compile Include="Historical\Unit\AgentAdherenceDay\PercentageAdjustToNeutralTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\_TestBench.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\AdherencesTest.cs" />
     <Compile Include="Historical\Unit\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />

@@ -4,7 +4,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Historical.Events
 {
-	public class AdjustAdherenceToNeutralEvent : IEvent, IRtaStoredEvent
+	[JsonObject(Id = "AdjustedToNeutralAdherence")]
+	public class PeriodAdjustedToNeutralEvent : IEvent, IRtaStoredEvent
 	{
 		public DateTime StartTime;
 		public DateTime EndTime;

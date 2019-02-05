@@ -11,7 +11,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
-	public class AdjustPeriodToNeutralPercentageTest
+	public class PercentageAdjustToNeutralTest
 	{
 		public IAgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 		public MutableNow Now;
 		
 		[Test]
-		public void ShouldNeutralize()
+		public void ShouldRecalculatePercentage()
 		{
 			Now.Is("2019-02-04 08:00");
 			var person = Guid.NewGuid();

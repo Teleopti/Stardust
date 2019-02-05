@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			public int Id;
 			public int? StoreVersion;
-			public Guid PersonId;
+			public Guid? PersonId;
 			public DateOnly? BelongsToDate;
 			public DateTime StartTime;
 			public DateTime EndTime;
@@ -87,16 +87,6 @@ namespace Teleopti.Ccc.TestCommon
 			toUpdate.StoreVersion = toStoreVersion;
 		}
 
-		public IEnumerable<IEvent> Load(Guid personId, DateTime @from, DateTime to)
-		{
-			return Data
-				.Where(x => x.PersonId == personId &&
-							x.StartTime <= @from &&
-							x.EndTime >= @to)
-				.Select(e => e.Event)
-				.ToArray();
-		}
-
 		public IEnumerable<IEvent> Load(Guid personId, Wfm.Adherence.DateOnly date)
 		{
 			return Data
@@ -106,10 +96,10 @@ namespace Teleopti.Ccc.TestCommon
 				.ToArray();
 		}
 
-		public IEnumerable<IEvent> LoadAdjustedPeriodEvents()
+		public IEnumerable<IEvent> LoadAllOfType<T>()
 		{
 			return Data
-				.Where(x => x.Event.GetType() == typeof(AdjustAdherenceToNeutralEvent))
+				.Where(x => x.Event.GetType() == typeof(T))
 				.Select(e => e.Event)
 				.ToArray();
 		}

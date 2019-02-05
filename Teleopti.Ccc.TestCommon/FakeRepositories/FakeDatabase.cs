@@ -1370,12 +1370,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 		
-		public FakeDatabase WithAdjustedAdherenceToNeutral(string start, string end)
-		{
-			_rtaHistory.AdjustedAdherenceToNeutral(start, end);
-			return this;
-		}
-
 		[UnitOfWork]
 		public virtual FakeDatabase ClearAssignments(Guid? personId)
 		{

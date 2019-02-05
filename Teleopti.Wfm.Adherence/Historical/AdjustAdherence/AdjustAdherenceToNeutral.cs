@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AdjustAdherence
 		{
 			var validPeriod = new DateTimePeriod(period.StartTime, period.EndTime);
 			
-			_publisher.Publish(new AdjustAdherenceToNeutralEvent
+			_publisher.Publish(new PeriodAdjustedToNeutralEvent
 			{
 				StartTime = validPeriod.StartDateTime,
 				EndTime = validPeriod.EndDateTime

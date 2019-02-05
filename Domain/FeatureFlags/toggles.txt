@@ -38,7 +38,7 @@ RTA_ReviewHistoricalAdherence_74770 = true
 RTA_RestrictModifySkillGroups_78568 = true
 RTA_InputValidationForApprovingAdherencePeriods_77045 = true
 RTA_ImproveUsabilityExpandableCards_79025 = true
-RTA_AdjustAdherenceToNeutral_80594 = false
+RTA_AdjustAdherenceToNeutral_80594 = true
 
 MessageBroker_HttpSenderThrottleRequests_79140 = true
 MessageBroker_VeganBurger_79140 = true

@@ -150,7 +150,7 @@
     <Compile Include="Historical\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommand.cs" />
     <Compile Include="Historical\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommandHandler.cs" />
     <Compile Include="Historical\ApprovePeriodAsInAdherence\RemovedPeriod.cs" />
-    <Compile Include="Historical\Events\AdjustAdherenceToNeutralEvent.cs" />
+    <Compile Include="Historical\Events\PeriodAdjustedToNeutralEvent.cs" />
     <Compile Include="Historical\Events\ApprovedPeriodRemovedEvent.cs" />
     <Compile Include="Historical\Events\PeriodApprovedAsInAdherenceEvent.cs" />
     <Compile Include="Historical\HistoricalAdherenceDate.cs" />

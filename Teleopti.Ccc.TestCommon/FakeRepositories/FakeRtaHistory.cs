@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		
 		public FakeRtaHistory AdjustedAdherenceToNeutral(string start, string end)
 		{
-			_store.Add(new AdjustAdherenceToNeutralEvent
+			_store.Add(new PeriodAdjustedToNeutralEvent
 			{
 				StartTime = start.Utc(),
 				EndTime = end.Utc()
