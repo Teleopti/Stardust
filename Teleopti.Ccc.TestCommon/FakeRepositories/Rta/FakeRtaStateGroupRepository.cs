@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			throw new NotImplementedException();
 		}
 
-		public IList<IRtaStateGroup> LoadAllCompleteGraph()
+		public IEnumerable<IRtaStateGroup> LoadAllCompleteGraph()
 		{
 			return _storage.LoadAll<IRtaStateGroup>().ToList();
 		}

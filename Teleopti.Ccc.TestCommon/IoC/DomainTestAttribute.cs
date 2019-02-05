@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<SeatBookingRequestAssembler>().For<ISeatBookingRequestAssembler>();
 				isolate.UseTestDouble<SeatFrequencyCalculator>().For<ISeatFrequencyCalculator>();
 				isolate.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
-				isolate.UseTestDouble<FakeShiftCategorySelectionRepository>().For<IRepository<IShiftCategorySelection>>();
+				isolate.UseTestDouble<FakeShiftCategorySelectionRepository>().For<Domain.InterfaceLegacy.Domain.IRepository<IShiftCategorySelection>>();
 				isolate.UseTestDouble<FakeShiftCategoryUsageFinder>().For<IShiftCategoryUsageFinder>();
 				isolate.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
 				isolate.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();

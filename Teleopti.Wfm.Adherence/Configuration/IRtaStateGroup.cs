@@ -18,8 +18,8 @@ namespace Teleopti.Wfm.Adherence.Configuration
 
 		bool IsLogOutState { get; set; }
 
-		IRtaStateGroup AddState(string stateCode, string stateName);
-		IRtaStateGroup AddState(string stateCode);
+		void AddState(string stateCode, string stateName);
+		void AddState(string stateCode);
 		IRtaState MoveStateTo(IRtaStateGroup target, IRtaState state);
 		void DeleteState(IRtaState state);
 		void ClearStates();

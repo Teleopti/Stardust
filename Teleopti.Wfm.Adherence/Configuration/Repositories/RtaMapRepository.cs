@@ -5,14 +5,15 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 {
-	public class RtaMapRepository : Repository<IRtaMap>,
+	public class RtaMapRepository : 
+		Repository<IRtaMap>,
 		IRtaMapRepository
 	{
 		public RtaMapRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
 		
-		public IList<IRtaMap> LoadAllCompleteGraph()
+		public IEnumerable<IRtaMap> LoadAllCompleteGraph()
 		{
 			return Session.CreateCriteria(typeof (RtaMap))
 				.Fetch("Activity")

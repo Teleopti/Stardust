@@ -1403,7 +1403,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 
-		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)
+		private static void ensureExists<T>(Domain.InterfaceLegacy.Domain.IRepository<T> loadAggregates, Guid? id, Action createAction)
 			where T : IAggregateRoot
 		{
 			var all = loadAggregates.LoadAll();
@@ -1419,6 +1419,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				createAction();
 		}
 
+		private static void ensureExists<T>(Teleopti.Wfm.Adherence.Configuration.IRepository<T> loadAggregates, Guid? id, Action createAction)
+			where T : IAggregateRoot
+		{
+			var all = loadAggregates.LoadAll();
+			if (id.HasValue)
+			{
+				var existing = all.SingleOrDefault(x => x.Id.Equals(id));
+				if (existing != null)
+					return;
+				createAction();
+			}
+
+			if (all.IsEmpty())
+				createAction();
+		}
+		
 		public FakeDatabase WithShiftTradeRequest(Guid personFromId, Guid personToId, string date)
 		{
 			_personRequest = new PersonRequestFactory()

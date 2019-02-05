@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Analytics.ReportTexts;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -111,7 +112,8 @@ namespace Teleopti.Wfm.Administration.Core
 				_personRepository(uow).Add(systemUser);
 
 				var rtaStateGroupCreator = new RtaStateGroupCreator(@"RtaStates.xml");
-				_rtaStateGroupRepository(uow).AddRange(rtaStateGroupCreator.RtaGroupCollection);
+				var repo = _rtaStateGroupRepository(uow);
+				rtaStateGroupCreator.RtaGroupCollection.ForEach(x => repo.Add(x));
 			});
 		}
 

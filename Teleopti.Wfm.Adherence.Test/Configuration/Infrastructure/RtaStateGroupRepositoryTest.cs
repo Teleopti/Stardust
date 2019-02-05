@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -62,11 +63,11 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             PersistAndRemoveFromUnitOfWork(stateGroup);
 
             var result = new RtaStateGroupRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
-            Assert.AreEqual(1,result.Count);
+            Assert.AreEqual(1,result.Count());
 			Session.Close();
 			Assert.DoesNotThrow(()=>
 			{
-				var shouldHaveBeenLoadedBeforeSessionWasClosed = result[0].StateCollection.Count;				
+				var shouldHaveBeenLoadedBeforeSessionWasClosed = result.Single().StateCollection.Count;				
 			});
         }
 
