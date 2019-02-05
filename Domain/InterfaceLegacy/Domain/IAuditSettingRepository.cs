@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.Auditing;
+
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
@@ -9,6 +11,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Gets the audit setting
 		/// </summary>
 		/// <returns></returns>
-		IAuditSetting Read();
+		AuditSetting Read();
 	}
 }

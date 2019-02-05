@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public IAuditSetting Read()
+		public AuditSetting Read()
 		{
 			var auditSetting = _currentUnitOfWork.Session().Get<AuditSetting>(AuditSettingDefault.TheId);
 			if(auditSetting==null)

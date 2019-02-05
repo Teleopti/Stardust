@@ -8,10 +8,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
 	public class AuditSettingProvider
 	{
-		private volatile IAuditSetting _entity;
+		private volatile AuditSetting _entity;
 		private readonly object locker = new object();
 
-		public IAuditSetting Entity(ISession session)
+		public AuditSetting Entity(ISession session)
 		{
 			if (_entity == null)
 			{

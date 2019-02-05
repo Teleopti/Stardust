@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Auditing
 {
-	public class AuditSetting : IAuditSetting
+	public class AuditSetting
 	{
 		protected virtual int Id { get; set; }
 

@@ -467,25 +467,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_setting = setting;
 		}
 
-		public IAuditSetting Read()
+		public AuditSetting Read()
 		{
 			var setting = new FakeAuditSetting();
 			setting.SetScheduleEnabled(_setting);
 			return setting;
 		}
 
-		internal class FakeAuditSetting : IAuditSetting
+		internal class FakeAuditSetting : AuditSetting
 		{
 			public void SetScheduleEnabled(bool v)
 			{
 				IsScheduleEnabled = v;
-			}
-
-			public bool IsScheduleEnabled { get; protected set; }
-
-			public bool ShouldBeAudited(object entity)
-			{
-				throw new NotImplementedException();
 			}
 		}
 	}
