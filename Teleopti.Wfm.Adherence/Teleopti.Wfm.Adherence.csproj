@@ -176,6 +176,7 @@
     <Compile Include="Historical\RtaEventStoreUpgrader.cs" />
     <Compile Include="Historical\RtaEventStoreVersion.cs" />
     <Compile Include="KeyValueStorePersisterExtensions.cs" />
+    <Compile Include="MinMax.cs" />
     <Compile Include="Monitor\AgentStateReadModelMaintainer.cs" />
     <Compile Include="Monitor\AgentStateReadModelUpdater.cs" />
     <Compile Include="Monitor\AgentStatesViewModelBuilder.cs" />

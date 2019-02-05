@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-
 
 namespace Teleopti.Wfm.Adherence
 {
@@ -26,8 +23,8 @@ namespace Teleopti.Wfm.Adherence
 
 		private static void validateDateTime(DateTime startDateTime, DateTime endDateTime)
 		{
-			InParameter.VerifyDateIsUtc(nameof(startDateTime), startDateTime);
-			InParameter.VerifyDateIsUtc(nameof(endDateTime), endDateTime);
+//			InParameter.VerifyDateIsUtc(nameof(startDateTime), startDateTime);
+//			InParameter.VerifyDateIsUtc(nameof(endDateTime), endDateTime);
 		}
 		
 		public DateTime StartDateTime => period.Minimum;
@@ -36,13 +33,6 @@ namespace Teleopti.Wfm.Adherence
 		public TimeSpan ElapsedTime()
 		{
 			return EndDateTime.Subtract(StartDateTime);
-		}
-
-		public bool ContainsPart(DateTime theDateTime)
-		{
-			InParameter.VerifyDateIsUtc(nameof(theDateTime), theDateTime);
-
-			return theDateTime <= EndDateTime && theDateTime >= StartDateTime;
 		}
 
 		public bool Intersect(DateTimePeriod intersectPeriod)
