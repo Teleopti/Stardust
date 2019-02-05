@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			dt.Columns.Add("Calls", typeof(double));
 			dt.Columns.Add("AverageHandleTime", typeof(double));
 			dt.Columns.Add("IsBackOffice", typeof(bool));
+			dt.Columns.Add("PercentAnswered", typeof(double));
+			dt.Columns.Add("AnsweredWithinSeconds", typeof(double));
 			dt.Columns.Add("InsertedOn", typeof(DateTime));
 
 			var insertedOn = _now.UtcDateTime();
@@ -53,6 +55,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				row["Calls"] = intervals.Calls;
 				row["AverageHandleTime"] = intervals.AverageHandleTime;
 				row["IsBackOffice"] = intervals.IsBackOffice;
+				row["PercentAnswered"] = intervals.PercentAnswered;
+				row["AnsweredWithinSeconds"] = intervals.AnsweredWithinSeconds;
 				row["InsertedOn"] = insertedOn;
 
 				dt.Rows.Add(row);
@@ -85,20 +89,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<SkillForecast> LoadSkillForecast(Guid[] skills, DateTimePeriod period)
 		{
 			const string sql =
-				"select SkillId, StartDateTime,EndDateTime, Agents,AgentsWithShrinkage, Calls, AverageHandleTime,IsBackOffice from [ReadModel].[SkillForecast] " +
+				"select SkillId, StartDateTime,EndDateTime, Agents,AgentsWithShrinkage, Calls, AverageHandleTime,IsBackOffice, PercentAnswered, AnsweredWithinSeconds from [ReadModel].[SkillForecast] " +
 				"Where SkillId In (:skillIds) AND StartDateTime >= :startDate AND StartDateTime <= :endDate";
 			var result = new List<SkillForecast>();
 			result.AddRange(_currentUnitOfWork.Session().CreateSQLQuery(sql)
-					.SetDateTime("startDate", period.StartDateTime )
+					.SetDateTime("startDate", period.StartDateTime)
 					.SetDateTime("endDate", period.EndDateTime)
 					.SetParameterList("skillIds", skills.ToArray())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(SkillForecast)))
 					.SetReadOnly(true)
 					.List<SkillForecast>());
-			
+
 			return result;
 		}
-		
+
 
 		private string getInValues(Guid[] values)
 		{

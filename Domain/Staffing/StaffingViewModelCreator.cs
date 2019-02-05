@@ -37,7 +37,16 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
 			var skillStaffingIntervals = _resourceCalculationUsingReadModels.LoadAndResourceCalculate(skillIds, startOfDayUtc, endOfDayUtc, useShrinkage);
-			var timeSeries = DataSeries(startOfDayLocal, minutesPerInterval, _timeZone.TimeZone()).Where(x => x.Date == startOfDayLocal.Date).ToArray();
+			//var relevantPeriod = FindStartAndEndDateFromIntervals(skillStaffingIntervals);
+			var relevantStartTime = skillStaffingIntervals.Any() ? skillStaffingIntervals.Min(s => s.StartDateTime) : startOfDayLocal;
+			var relevantEndTime = skillStaffingIntervals.Any()
+				? skillStaffingIntervals.Max(s => s.StartDateTime)
+				: endOfDayUtc;
+			var timeSeries = DataSeries(
+				relevantStartTime,
+				relevantEndTime,
+				minutesPerInterval, _timeZone.TimeZone()).Where(x => x.Date == startOfDayLocal.Date).ToArray();
+			//var timeSeries = DataSeries(startOfDayLocal,  minutesPerInterval, _timeZone.TimeZone()).Where(x => x.Date == startOfDayLocal.Date).ToArray();
 			
 			var dataSeries = new StaffingDataSeries
 			{
@@ -46,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				ForecastedStaffing = ForecastDataSeries(skillStaffingIntervals.ToList(), timeSeries),
 				ScheduledStaffing = ScheduledDataSeries(skillStaffingIntervals.ToList(), timeSeries)
 			};
+
 			calculateAbsoluteDifference(dataSeries);
 			return new ScheduledStaffingViewModel
 			{
@@ -53,6 +63,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 				StaffingHasData = skillStaffingIntervals.Any()
 			};
 		}
+
+		//private DateTimePeriod FindStartAndEndDateFromIntervals(IList<SkillStaffingInterval> skillStaffingIntervals)
+		//{
+		//	var period = new DateTimePeriod(skillStaffingIntervals.Min(s => s.StartDateTime), skillStaffingIntervals.Max(s => s.EndDateTime));
+		//	return period;
+		//}
 
 		private double?[] ForecastDataSeries(IList<SkillStaffingInterval> forecastedStaffingPerSkill, DateTime[] timeSeries)
 		{
@@ -64,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 					return new StaffingInterval
 					{
 						SkillId = staffingIntervalModel.SkillId,
-						StartTime = staffingIntervalModel.StartDateTime,
+						StartTime = TimeZoneHelper.ConvertFromUtc(staffingIntervalModel.StartDateTime, _timeZone.TimeZone()),
 						Agents = s.Sum(a => a.FStaff)
 					};
 				})
@@ -87,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				.GroupBy(x => x.StartDateTime)
 				.Select(s => new staffingStartInterval
 				{
-					StartTime = s.Key,
+					StartTime = TimeZoneHelper.ConvertFromUtc(s.Key, _timeZone.TimeZone()),
 					StaffingLevel = s.Sum(a => a.StaffingLevel)
 				})
 				.ToList();
@@ -134,10 +150,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 		}
 
-		private  DateTime[] DataSeries(DateTime startDateTime, int minutesPerInterval, TimeZoneInfo timeZoneInfo)
+		private  DateTime[] DataSeries(DateTime startDateTimeUtc, DateTime endDateTimeUtc, int minutesPerInterval, TimeZoneInfo timeZoneInfo)
 		{
-			var theMinTime = startDateTime;
-			var theMaxTime = startDateTime.AddDays(1);
+			var theMinTime = TimeZoneHelper.ConvertFromUtc(startDateTimeUtc, timeZoneInfo);
+			var theMaxTime = TimeZoneHelper.ConvertFromUtc(endDateTimeUtc, timeZoneInfo);
 
 			var timeSeries = new List<DateTime>();
 

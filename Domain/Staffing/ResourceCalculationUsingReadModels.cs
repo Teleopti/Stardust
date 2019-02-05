@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ISkillForecastReadModelRepository _skillForecastReadModelRepository;
 		private readonly IResourceCalculation _resourceCalculation;
 
-		public ResourceCalculationUsingReadModels(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, 
+		public ResourceCalculationUsingReadModels(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository,
 			ISkillForecastReadModelRepository skillForecastReadModelRepository, IResourceCalculation resourceCalculation)
 		{
 			_skillRepository = skillRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_skillForecastReadModelRepository = skillForecastReadModelRepository;
 			_resourceCalculation = resourceCalculation;
 		}
-		
+
 		public IList<SkillStaffingInterval> LoadAndResourceCalculate(IEnumerable<Guid> skillIds, DateTime startOfDayUtc, DateTime endOfDayUtc, bool useShrinkage)
 		{
 			var skills = _skillRepository.LoadAll().ToList();
@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var period = new DateTimePeriod(startOfDayUtc, endOfDayUtc);
 			var skillCombinationFetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-8), endOfDayUtc);
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(skillCombinationFetchPeriod).ToList();
-			
+			var combinationResourcesSystemResolution = split(combinationResources.ToList(), TimeSpan.FromMinutes(15));
+
 			var skillForecastList =
 				_skillForecastReadModelRepository.LoadSkillForecast(skillIds.ToArray(), period);
 
@@ -44,25 +45,25 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			var backlogSkillForecastList = skillForecastList.Where(sf => sf.IsBackOffice).ToList();
 			var nonBacklogSkillForecastList = skillForecastList.Where(sf => !sf.IsBackOffice).ToList();
-			
+
 			foreach (var skillForecast in backlogSkillForecastList)
 			{
 				var serviceLevel = new ServiceLevel(new Percent(skillForecast.PercentAnswered),
 					skillForecast.AnsweredWithinSeconds);
 				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.3), new Percent(0.8));
-
-				var skillStaffPeriod = new SkillStaffPeriodForReadmodel(new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime), new Task(), serviceAgreement)
+				var dateTimePeriod = new DateTimePeriod(new DateTime(skillForecast.StartDateTime.Ticks, DateTimeKind.Utc), new DateTime(skillForecast.EndDateTime.Ticks, DateTimeKind.Utc));
+				var skillStaffPeriod = new SkillStaffPeriodForReadmodel(dateTimePeriod, new Task(), serviceAgreement)
 				{
 					Forecast = useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,
 					SkillId = skillForecast.SkillId,
-					Period = new DateTimePeriod(skillForecast.StartDateTime, skillForecast.EndDateTime)
+					Period = dateTimePeriod
 				};
-				
+
 				skillStaffPeriods.Add(skillStaffPeriod);
 			}
-			
+
 			var groupedSkillStaffPeriods = skillStaffPeriods.GroupBy(p => p.SkillId).ToList();
-			
+
 			foreach (var groupedSkillStaffPeriod in groupedSkillStaffPeriods)
 			{
 				var staffPeriodsForSkillId = groupedSkillStaffPeriod.Cast<ISkillStaffPeriod>().ToList();
@@ -71,8 +72,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 					intervalForSkillId.CreateSkillStaffSegments65(staffPeriodsForSkillId, staffPeriodsForSkillId.IndexOf(intervalForSkillId));
 				}
 			}
-			
-			calculateForecastAgentsForEmailSkills(groupedSkillStaffPeriods,combinationResources);
+
+			calculateForecastAgentsForEmailSkills(groupedSkillStaffPeriods, combinationResourcesSystemResolution);
 			var returnList = new HashSet<SkillStaffingInterval>();
 			var intervals = skillStaffPeriods.Select(sspBySkill =>
 			{
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				};
 			}).ToList();
 			intervals.ForEach(i => returnList.Add(i));
-			
+
 			var nonBacklogSkillStaffingIntervals = nonBacklogSkillForecastList.Select(skillForecast => new SkillStaffingInterval
 			{
 				SkillId = skillForecast.SkillId,
@@ -118,15 +119,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 				() => new ResourceCalculationDataContainerFromSkillCombinations(combinationResources, skills, false))))
 			{
 				_resourceCalculation
-					.ResourceCalculate(dateOnlyPeriod, resCalcData, 
+					.ResourceCalculate(dateOnlyPeriod, resCalcData,
 						() => new ResourceCalculationContext(
 							new Lazy<IResourceCalculationDataContainerWithSingleOperation>(
 								() => new ResourceCalculationDataContainerFromSkillCombinations(combinationResources, skills, true))));
 			}
 
-			return skillStaffingIntervals;
+			var relevantSkillStaffingIntervals = skillStaffingIntervals.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIds.Contains(x.SkillId)).ToList();
+			var splitSkillStaffingIntervals = split(relevantSkillStaffingIntervals.ToList(), TimeSpan.FromMinutes(15));
+			return splitSkillStaffingIntervals;
 		}
-		
+
 		private static void calculateForecastAgentsForEmailSkills(IEnumerable<IGrouping<Guid, SkillStaffPeriodForReadmodel>> skillStaffPeriodsBySkill, IList<SkillCombinationResource> skillCombinationResources)
 		{
 			//TODO: move from old structure to new Skill Grouped SkillStaffPeriodEx  
@@ -141,10 +144,92 @@ namespace Teleopti.Ccc.Domain.Staffing
 					var totalResources = skillCombinationsForSkill.Where(s => s.StartDateTime == skillStaffPeriodForSkill.Period.StartDateTime)
 						.Sum(s => s.Resource);
 
-					if(totalResources > 0)
+					if (totalResources > 0)
 						skillStaffPeriodForSkill.SetCalculatedResource65(totalResources);
 				}
 			}
+		}
+
+		private static List<SkillCombinationResource> split(List<SkillCombinationResource> skillCombinationList, TimeSpan resolution)
+		{
+			var dividedIntervals = new List<SkillCombinationResource>();
+
+			foreach (var skillCombinationInterval in skillCombinationList)
+			{
+				if (!skillCombinationInterval.GetTimeSpan().Equals(resolution))
+				{
+					var startInterval = skillCombinationInterval.StartDateTime;
+					while (startInterval < skillCombinationInterval.EndDateTime)
+					{
+						dividedIntervals.Add(new SkillCombinationResource
+						{
+							SkillCombination = skillCombinationInterval.SkillCombination,
+							StartDateTime = startInterval,
+							EndDateTime = startInterval.Add(resolution),
+							Resource = skillCombinationInterval.Resource
+						});
+						startInterval = startInterval.Add(resolution);
+					}
+				}
+				else
+				{
+					dividedIntervals.Add(new SkillCombinationResource
+					{
+						SkillCombination = skillCombinationInterval.SkillCombination,
+						StartDateTime = skillCombinationInterval.StartDateTime,
+						EndDateTime = skillCombinationInterval.EndDateTime,
+						Resource = skillCombinationInterval.Resource
+					});
+				}
+			}
+			return dividedIntervals;
+		}
+
+		private static SkillStaffingInterval cloneSkillStaffingInterval(SkillStaffingInterval skillStaffingInterval)
+		{
+			return new SkillStaffingInterval()
+			{
+				SkillId = skillStaffingInterval.SkillId,
+				StartDateTime = skillStaffingInterval.StartDateTime,
+				EndDateTime = skillStaffingInterval.EndDateTime,
+				StaffingLevel = skillStaffingInterval.StaffingLevel,
+				CalculatedResource = skillStaffingInterval.CalculatedResource,
+				EstimatedServiceLevel = skillStaffingInterval.EstimatedServiceLevel,
+				FStaff = skillStaffingInterval.FStaff,
+				Forecast = skillStaffingInterval.Forecast,
+				ForecastWithoutShrinkage = skillStaffingInterval.ForecastWithoutShrinkage,
+				IsBacklogType = skillStaffingInterval.IsBacklogType,
+				Shrinkage = skillStaffingInterval.Shrinkage,
+				StaffingLevelWithShrinkage = skillStaffingInterval.StaffingLevelWithShrinkage
+			};
+		}
+
+		private static IList<SkillStaffingInterval> split(List<SkillStaffingInterval> staffingList, TimeSpan resolution)
+		{
+			var dividedIntervals = new List<SkillStaffingInterval>();
+
+			foreach (var skillStaffingInterval in staffingList)
+			{
+				if (!skillStaffingInterval.GetTimeSpan().Equals(resolution))
+				{
+					var startInterval = skillStaffingInterval.StartDateTime;
+					while (startInterval < skillStaffingInterval.EndDateTime)
+					{
+						var partSkillStaffingInterval = cloneSkillStaffingInterval(skillStaffingInterval);
+						partSkillStaffingInterval.StartDateTime = startInterval;
+						partSkillStaffingInterval.EndDateTime = startInterval.Add(resolution);
+						dividedIntervals.Add(partSkillStaffingInterval);
+
+						startInterval = startInterval.Add(resolution);
+					}
+				}
+				else
+				{
+					var partSkillStaffingInterval = cloneSkillStaffingInterval(skillStaffingInterval);
+					dividedIntervals.Add(partSkillStaffingInterval);
+				}
+			}
+			return dividedIntervals;
 		}
 	}
 }
