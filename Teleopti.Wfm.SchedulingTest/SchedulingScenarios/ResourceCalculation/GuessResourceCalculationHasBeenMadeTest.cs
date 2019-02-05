@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(9, 17));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agent }, new[] { ass }, skillDay);
 
-			stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade()
+			stateHolder.SchedulingResultState.SkillStaffPeriodHolder.GuessResourceCalculationHasBeenMade()
 				.Should().Be.False();
 		}
 
@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 
 			Target.ResourceCalculate(date, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
-			stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade()
+			stateHolder.SchedulingResultState.SkillStaffPeriodHolder.GuessResourceCalculationHasBeenMade()
 				.Should().Be.True();
 		}
 	}

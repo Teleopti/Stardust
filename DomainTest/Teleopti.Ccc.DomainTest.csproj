@@ -498,7 +498,7 @@
     <Compile Include="Optimization\PlanningGroupModelPersisterTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandlerTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
-    <Compile Include="ResourceCalculation\FakeSkillStaffPeriodHolder.cs" />
+    <Compile Include="ResourceCalculation\FakeSkillStaffPeriodHolder_DONOTUSE.cs" />
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerTest.cs" />

@@ -86,12 +86,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
 			}
 		}
-
-		public bool GuessResourceCalculationHasBeenMade()
-		{
-			return _skillStaffPeriodHolder.Value.GuessResourceCalculationHasBeenMade();
-		}
-
+		
 		public ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);

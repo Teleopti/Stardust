@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 
-			if (!schedulerStateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade())
+			if (!schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.GuessResourceCalculationHasBeenMade())
 			{
 				using (_cascadingResourceCalculationContextFactory.Create(schedulerStateHolder.SchedulingResultState, false, selectedPeriod))
 				{

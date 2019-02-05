@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		INewBusinessRuleCollection GetRulesToRun();
 		ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
 		IEnumerable<ExternalStaff> ExternalStaff { get; set; }
-	    bool GuessResourceCalculationHasBeenMade();
 	    ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
     }
 }
