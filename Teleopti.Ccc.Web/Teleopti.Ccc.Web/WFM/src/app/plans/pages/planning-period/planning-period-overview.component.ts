@@ -277,15 +277,28 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 				this.scheduleIssuesFilterControl.updateValueAndValidity();
 				this.updateValidationErrorsNumber();
 				if (!fullSchedulingResult) return;
-				const skillData = fullSchedulingResult.SkillResultList ? fullSchedulingResult.SkillResultList : undefined;
-				if(skillData){
-					skillData.forEach(subnode=>{
-						subnode.SkillDetails.forEach(node=>{
-							node.bgcolor = this.heatMapColorHelper.getColor(node.RelativeDifference*100);
+				const skillResultList = fullSchedulingResult.SkillResultList ? fullSchedulingResult.SkillResultList : undefined;
+				if(skillResultList){
+					const culturalDaysOff = {
+						a : 6, //saturday
+						b : 0, //sunday
+						start : 1
+					};
+					skillResultList.forEach(skill=>{
+						skill.SkillDetails.forEach(day=>{
+							day.bgcolor = this.heatMapColorHelper.getColor(day.RelativeDifference*100);
+							debugger;
+							const weekday = new Date(day.Date).getDay();
+							if (weekday === culturalDaysOff.a || weekday === culturalDaysOff.b) {
+								return (day.weekend = true);
+							}
+							if (weekday === culturalDaysOff.start) {
+								return (day.weekstart = true);
+							}
 						});
 					});
 				}
-				this.dayNodes = skillData;
+				this.dayNodes = skillResultList;
 			} else {
 				this.isScheduled = false;
 			}
