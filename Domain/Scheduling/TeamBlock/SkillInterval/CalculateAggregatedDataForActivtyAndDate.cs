@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 				var skillIntervalDatas =
 					_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriods,
-						skillDay.CurrentDate, agenTimeZoneInfo);
+						agenTimeZoneInfo);
 				var splittedDatas = _intervalDataDivider.SplitSkillIntervalData(skillIntervalDatas, resolution);
 				var adjustedIntervalDatas = splittedDatas.Select(skillIntervalData =>
 					_skillIntervalDataSkillFactorApplier.ApplyFactors(skillIntervalData, skillDay.Skill)).ToArray();
