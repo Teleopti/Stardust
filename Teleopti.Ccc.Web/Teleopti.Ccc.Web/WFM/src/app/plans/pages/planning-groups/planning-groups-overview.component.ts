@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavigationService } from 'src/app/core/services';
-import { map } from 'rxjs/operators';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { PlanningGroup } from '../../models';
 import { PlanningGroupService } from '../../shared';
@@ -15,6 +14,13 @@ export class PlanningGroupsOverviewComponent {
 	planningGroups: PlanningGroup[] = [];
 	filteredPlanningGroups: PlanningGroup[] = [];
 
+	sortName = 'Name';
+	sortValue = 'ascend';
+	sortMap = {
+		Name   : 'ascend',
+		AgentCount: null
+	};
+
 	constructor(
 		private planningGroupService: PlanningGroupService,
 		private navService: NavigationService,
@@ -24,15 +30,9 @@ export class PlanningGroupsOverviewComponent {
 			this.planningGroups = groups;
 			this.filterControl.updateValueAndValidity();
 		});
-		this.filterControl.valueChanges
-			.pipe(
-				map(filterString => {
-					return this.planningGroups.filter(g => g.Name.includes(filterString));
-				})
-			)
-			.subscribe(filteredGroups => {
-				this.filteredPlanningGroups = filteredGroups;
-			});
+		this.filterControl.valueChanges.subscribe(filterString => {
+			this.search(filterString);
+		});
 	}
 
 	public viewPlanningPeriods(group: PlanningGroup) {
@@ -49,5 +49,22 @@ export class PlanningGroupsOverviewComponent {
 
 	public clearFilter() {
 		this.filterControl.setValue('');
+	}
+	
+	public sort(key: string, value: string): void{
+		this.sortName = key;
+		this.sortValue = value;
+		this.search(this.filterControl.value);
+	}
+	
+	public search(filterString: string){
+		const data = this.planningGroups.filter(g => g.Name.includes(filterString));
+		if (this.sortName && this.sortValue) {
+			this.filteredPlanningGroups = data.sort((a, b) => (this.sortValue === 'ascend') ?
+				(a[ this.sortName ] > b[ this.sortName ] ? 1 : -1) :
+				(b[ this.sortName ] > a[ this.sortName ] ? 1 : -1));
+		}else{
+			this.filteredPlanningGroups = data;
+		}
 	}
 }
