@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Security;
 
 namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 {
-    public abstract class Repository<T> : IRepository<T> where T : IAggregateRoot
+    public abstract class Repository<T> where T : IAggregateRoot
     {
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
@@ -16,6 +16,9 @@ namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;
 	    }
+		
+		private IUnitOfWork unitOfWork => _currentUnitOfWork.Current();
+		protected ISession Session => unitOfWork.Session();
 
 	    public virtual IEnumerable<T> LoadAll()
         {
@@ -49,18 +52,15 @@ namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 			}
 			else
 			{
-				if (!UnitOfWork.Contains(root))
+				if (!unitOfWork.Contains(root))
 				{
 					//ouch! this creates a lot of problem
 					//don't dare to remove it though
-					UnitOfWork.Reassociate(root);
+					unitOfWork.Reassociate(root);
 				}
 				delRootInfo.SetDeleted();
 			}
 		}
 
-		public IUnitOfWork UnitOfWork => _currentUnitOfWork.Current();
-
-		protected ISession Session => UnitOfWork.Session();
 	}
 }

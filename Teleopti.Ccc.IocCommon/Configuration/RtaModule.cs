@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Hangfire.Server;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
@@ -13,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Configuration;
+using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.AdjustAdherence;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
@@ -39,6 +38,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<RtaMapRepository>().AsImplementedInterfaces().SingleInstance();
+			builder.RegisterType<RtaRuleRepository>().AsImplementedInterfaces().SingleInstance();
+			builder.RegisterType<RtaStateGroupRepository>().AsImplementedInterfaces().SingleInstance();
+			
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();

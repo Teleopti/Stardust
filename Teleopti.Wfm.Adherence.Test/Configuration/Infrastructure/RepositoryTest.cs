@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NHibernate;
@@ -8,7 +7,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -116,19 +114,6 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Assert.IsTrue(UnitOfWork.IsDirty());
 			UnitOfWork.Remove(entity);
 			Assert.IsFalse(UnitOfWork.Contains(entity));
-		}
-
-		[Test]
-		public void VerifyAddRangeWorks()
-		{
-			var entity1 = CreateAggregateWithCorrectBusinessUnit();
-			var entity2 = CreateAggregateWithCorrectBusinessUnit();
-			IList<T> entList = new List<T>();
-			entList.Add(entity1);
-			entList.Add(entity2);
-			rep.AddRange(entList);
-			Assert.IsTrue(UnitOfWork.Contains(entity1));
-			Assert.IsTrue(UnitOfWork.Contains(entity2));
 		}
 
 		[Test]
