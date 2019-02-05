@@ -56,6 +56,10 @@ table.overview {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
 }
 
+.closed {
+	background-color: #cacaca !important;
+}
+
 [nz-button] {
 	margin-right: 8px;
 }
