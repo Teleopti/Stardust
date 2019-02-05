@@ -1,10 +1,7 @@
-﻿using System;
-using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -12,14 +9,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     public class SchedulingOptionsTest
     {
         private SchedulingOptions _target;
-	    private ShiftProjectionCache _shiftProjectionCache;
 
         [SetUp]
         public void Setup()
         {
             _target = new SchedulingOptions();
-	        _shiftProjectionCache = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Test")), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
-        }
+		}
 
         [Test]
         public void VerifyProperties()
@@ -65,12 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsTrue(_target.UseTeam);
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
-            Assert.IsTrue(_target.UseSameDayOffs);
-            
-			_target.AddNotAllowedShiftProjectionCache(_shiftProjectionCache);
-			Assert.AreEqual(_shiftProjectionCache, _target.NotAllowedShiftProjectionCaches[0]);
-			_target.ClearNotAllowedShiftProjectionCaches();
-			Assert.IsEmpty(_target.NotAllowedShiftProjectionCaches);
+            Assert.IsTrue(_target.UseSameDayOffs);         
         }
 
         [Test]
@@ -84,7 +74,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target.RotationDaysOnly);
             _target.RotationDaysOnly = true;
             Assert.IsFalse(_target.RotationDaysOnly);
-
         }
 
         [Test]

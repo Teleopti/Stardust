@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if (!agentsHash.Contains(person)) continue;
 
 						var progressPerson = person.Name.ToString();
-						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
 
 						var affect = affectIssue(scheduleDay, intervalIssuesBefore.IssuesOnDay);
 						if(!affect) continue;
@@ -83,7 +82,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						if (!agentsHash.Contains(person)) continue;
 
 						var progressPerson = person.Name.ToString();
-						schedulingOptions.ClearNotAllowedShiftProjectionCaches();
 
 						var affect = affectIssue(scheduleDay, intervalIssuesBefore.IssuesOnDayAfter);
 						if (!affect) continue;

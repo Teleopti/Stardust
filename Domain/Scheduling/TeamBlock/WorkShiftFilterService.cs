@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly RuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessabilityFilter;
 		private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
-		private readonly DisallowedShiftProjectionCachesFilter _disallowedShiftProjectionCachesFilter;
 		private readonly ActivityRequiresSkillProjectionFilter _activityRequiresSkillProjectionFilter;
 		private readonly OpenHoursFilter _openHoursFilter;
 		private readonly IOpenHoursSkillExtractor _openHoursSkillExtractor;
@@ -51,7 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			RuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter,
 			ShiftProjectionCacheManager shiftProjectionCacheManager,
 			IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter,
-			DisallowedShiftProjectionCachesFilter disallowedShiftProjectionCachesFilter,
 			ActivityRequiresSkillProjectionFilter activityRequiresSkillProjectionFilter,
 			OpenHoursFilter openHoursFilter,
 			IOpenHoursSkillExtractor openHoursSkillExtractor)
@@ -74,7 +72,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        _ruleSetAccordingToAccessabilityFilter = ruleSetAccordingToAccessabilityFilter;
 		    _shiftProjectionCacheManager = shiftProjectionCacheManager;
 			_ruleSetPersonalSkillsActivityFilter = ruleSetPersonalSkillsActivityFilter;
-			_disallowedShiftProjectionCachesFilter = disallowedShiftProjectionCachesFilter;
 			_activityRequiresSkillProjectionFilter = activityRequiresSkillProjectionFilter;
 			_openHoursFilter = openHoursFilter;
 			_openHoursSkillExtractor = openHoursSkillExtractor;
@@ -151,8 +148,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnlyAsPeriod, filteredRuleSetList, false);
 
 			shiftList = runFilters(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList, true, teamBlockInfo, skillDays);
-
-			shiftList = _disallowedShiftProjectionCachesFilter.Filter(schedulingOptions.NotAllowedShiftProjectionCaches, shiftList);
 
 			if (schedulingOptions.UseTeam)
 			{

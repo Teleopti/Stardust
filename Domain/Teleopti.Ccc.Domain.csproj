@@ -807,7 +807,6 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduleSelected.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffScheduling.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoExtensions.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftProjectionCachesFilter.cs" />
     <Compile Include="Security\Principal\IUpdatedBySystemUser.cs" />
     <Compile Include="Security\Principal\UpdatedBySystemUser.cs" />
     <Compile Include="Staffing\CompareProjection.cs" />
