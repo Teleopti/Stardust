@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var isAnyAvailabilityLeftToUse = false;
 				if(permissionState == PermissionState.Satisfied)
 				{
-					if (restrictionChecker.IsAnyAvailabilityLeftToUse(schedulePart))
+					if (new HourlyAvailiabilityDisplayHelper().IsAnyAvailabilityLeftToUse(schedulePart))
 						isAnyAvailabilityLeftToUse = true;
 				}
 				drawRestrictionIcon.DrawStudentAvailability(permissionState, isAnyAvailabilityLeftToUse);

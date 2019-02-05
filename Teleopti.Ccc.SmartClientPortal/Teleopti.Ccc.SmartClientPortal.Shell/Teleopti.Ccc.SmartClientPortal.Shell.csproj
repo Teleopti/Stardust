@@ -3279,6 +3279,7 @@
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\CutPasteHandlerFactory.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\DummyCutPasteHandler.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\EditorCutPasteHandler.cs" />
+    <Compile Include="Win\Scheduling\SchedulingScreenInternals\HourlyAvailiabilityDisplayHelper.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ICutPasteHandler.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\LoaderMethod.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkills.cs">
