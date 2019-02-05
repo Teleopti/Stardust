@@ -46,7 +46,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IUnitOfWork CurrentUnitOfWork()
 		{
-			return _context.Get();
+			var unitOfWork = _context.Get();
+			// maybe better to return null..
+			// but mimic nhibernate session context for now
+			if (unitOfWork == null)
+				throw new HibernateException("No session bound to the current context");
+			return unitOfWork;
 		}
 
 		public bool HasCurrentUnitOfWork()
