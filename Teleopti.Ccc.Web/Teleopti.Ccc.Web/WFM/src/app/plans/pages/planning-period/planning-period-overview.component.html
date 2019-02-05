@@ -38,7 +38,7 @@
 								*ngFor="let node of subnode.SkillDetails"
 								[ngClass]="{ weekend: node.weekend }"
 							>
-								<div
+								<div nz-tooltip nzTitle="{{'RelativeDifference' | translate}}: {{node.RelativeDifferencePercent}}% | {{subnode.SkillName}} | {{node.Date | amDateFormat:'L'}}"
 									class="resourceplanner-box"
 									[ngClass]="{ closed: node.ColorId==4 }"
 									[style.background-color]="node.bgcolor"

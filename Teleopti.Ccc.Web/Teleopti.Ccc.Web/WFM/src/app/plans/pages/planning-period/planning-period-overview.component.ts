@@ -287,14 +287,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					skillResultList.forEach(skill=>{
 						skill.SkillDetails.forEach(day=>{
 							day.bgcolor = this.heatMapColorHelper.getColor(day.RelativeDifference*100);
-							debugger;
 							const weekday = new Date(day.Date).getDay();
 							if (weekday === culturalDaysOff.a || weekday === culturalDaysOff.b) {
-								return (day.weekend = true);
+								day.weekend = true;
 							}
 							if (weekday === culturalDaysOff.start) {
-								return (day.weekstart = true);
+								day.weekstart = true;
 							}
+							day.RelativeDifferencePercent = (day.RelativeDifference * 100).toFixed(1);
 						});
 					});
 				}
