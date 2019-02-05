@@ -16026,6 +16026,10 @@ Do you want to participate?</value>
     <value>Create planning group</value>
     <comment>text for helping information </comment>
   </data>
+  <data name="NoPlanningGroupFound" xml:space="preserve">
+    <value>No planning group found.</value>
+	<comment>used in web plans when no planning group exist or no planning group matches the filter</comment>
+  </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
     <value>Create first planning period</value>
     <comment>Create first planning period</comment>
