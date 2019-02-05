@@ -638,7 +638,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
 		{
-			builder.RegisterType<CreateSkillIntervalDatasPerActivtyForDate>().As<ICreateSkillIntervalDatasPerActivtyForDate>().SingleInstance();
+			builder.RegisterType<CreateSkillIntervalDatasPerActivtyForDate>().SingleInstance();
 			builder.RegisterType<CalculateAggregatedDataForActivtyAndDate>().As<ICalculateAggregatedDataForActivtyAndDate>().SingleInstance();
 			builder.RegisterType<OpenHourForDate>().As<IOpenHourForDate>().SingleInstance();
 			builder.RegisterType<ActivityIntervalDataCreator>().SingleInstance();

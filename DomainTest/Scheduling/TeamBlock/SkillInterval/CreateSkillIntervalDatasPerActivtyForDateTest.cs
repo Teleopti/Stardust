@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 	public class CreateSkillIntervalDatasPerActivtyForDateTest
 	{
 		private MockRepository _mocks;
-		private ICreateSkillIntervalDatasPerActivtyForDate _target;
+		private CreateSkillIntervalDatasPerActivtyForDate _target;
 		private ICalculateAggregatedDataForActivtyAndDate _calculateAggregatedDataForActivtyAndDate;
 		private ISkill _skill1;
 		private ISkill _skill2;
