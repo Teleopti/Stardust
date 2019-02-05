@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public interface IFavoriteSearch : IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit, ICloneableEntity<IFavoriteSearch>
+	public interface IFavoriteSearch : IAggregateRoot, IChangeInfo, IFilterOnBusinessUnit, ICloneableEntity<IFavoriteSearch>
 	{
 		string Name { get; set; }
 		string TeamIds { get; set; }

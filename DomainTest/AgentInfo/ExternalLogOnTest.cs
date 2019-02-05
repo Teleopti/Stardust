@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         [Test]
         public void VerifyProperties()
         {
-            Assert.IsFalse(target is IBelongsToBusinessUnit);
+            Assert.IsFalse(target is IFilterOnBusinessUnit);
             Assert.AreEqual(-1,target.AcdLogOnMartId);
             Assert.AreEqual(-2,target.AcdLogOnAggId);
             Assert.AreEqual("ABCD",target.AcdLogOnOriginalId);

@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public static class Extensions
 	{
-		public static void SetBusinessUnit(this IBelongsToBusinessUnit aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
+		public static void SetBusinessUnit(this IFilterOnBusinessUnit aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
 		{
 			setBusinessUnit(aggregateRootWithBusinessUnit, businessUnit);
 		}
 		
-		public static void SetBusinessUnit(this IBelongsToBusinessUnitId aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
+		public static void SetBusinessUnit(this IFilterOnBusinessUnitId aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
 		{
 			setBusinessUnit(aggregateRootWithBusinessUnit, businessUnit.Id.Value);
 		}

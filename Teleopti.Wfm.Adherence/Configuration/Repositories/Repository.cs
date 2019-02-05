@@ -34,8 +34,8 @@ namespace Teleopti.Wfm.Adherence.Configuration.Repositories
 
         public virtual void Add(T root)
         {
-			if (root is IBelongsToBusinessUnit && ServiceLocator_DONTUSE.CurrentBusinessUnit.Current() == null)
-				throw new PermissionException("Business unit is required");
+//			if (root is IFilterOnBusinessUnit && ServiceLocator_DONTUSE.CurrentBusinessUnit.Current() == null)
+//				throw new PermissionException("Business unit is required");
 			if (root is IChangeInfo && ServiceLocator_DONTUSE.UpdatedBy.Person() == null)
 				throw new PermissionException("Identity is required");
 			Session.SaveOrUpdate(root);

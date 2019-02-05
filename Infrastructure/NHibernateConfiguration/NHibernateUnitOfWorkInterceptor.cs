@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private bool setBusinessUnitId(object entity, IEnumerable<string> propertyNames, IList<object> state)
 		{
-			if (!(entity is IBelongsToBusinessUnitId belongsToBusinessUnitId))
+			if (!(entity is IFilterOnBusinessUnitId belongsToBusinessUnitId))
 				return false;
 
 			var props = propertyIndexesForInsert(propertyNames);

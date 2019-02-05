@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Created by: robink
     /// Created date: 2008-09-18
     /// </remarks>
-    public interface ISkillDay : ITaskOwner, IRestrictionChecker<ISkillDay>, ITemplateDay, ICloneableEntity<ISkillDay>, IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit
+    public interface ISkillDay : ITaskOwner, IRestrictionChecker<ISkillDay>, ITemplateDay, ICloneableEntity<ISkillDay>, IAggregateRoot, IChangeInfo, IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets the Scenario

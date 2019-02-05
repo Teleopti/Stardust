@@ -32,8 +32,8 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		public void VerifyIncorrectBusinessUnitIsNotReadable()
 		{
 			var correct = CreateAggregateWithCorrectBusinessUnit();
-			var buRef = correct as IBelongsToBusinessUnit;
-			var buRefId = correct as IBelongsToBusinessUnitId;
+			var buRef = correct as IFilterOnBusinessUnit;
+			var buRefId = correct as IFilterOnBusinessUnitId;
 			if (buRef != null || buRefId != null)
 			{
 				PersistAndRemoveFromUnitOfWork(correct);
@@ -45,9 +45,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
 				var retList = rep.LoadAll();
 				if (buRef != null)
-					Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
+					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
 				if (buRefId != null)
-					Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnitId) r).BusinessUnit.Equals(buRefId.BusinessUnit)));
+					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnitId) r).BusinessUnit.Equals(buRefId.BusinessUnit)));
 			}
 			else
 			{
@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		public void VerifyMappedBusinessUnitExists()
 		{
 			var aggregate = CreateAggregateWithCorrectBusinessUnit();
-			if (aggregate is IBelongsToBusinessUnit || aggregate is IBelongsToBusinessUnitId)
+			if (aggregate is IFilterOnBusinessUnit || aggregate is IFilterOnBusinessUnitId)
 				try
 				{
 					Session.CreateCriteria(aggregate.GetType())
@@ -84,9 +84,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Session.Evict(simpleEntity);
 			var loadedAggregate = rep.Load(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
-			if (loadedAggregate is IBelongsToBusinessUnit buRef)
+			if (loadedAggregate is IFilterOnBusinessUnit buRef)
 				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
-			if (loadedAggregate is IBelongsToBusinessUnitId buId)
+			if (loadedAggregate is IFilterOnBusinessUnitId buId)
 				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value, buId.BusinessUnit);
 			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
 		}
@@ -100,9 +100,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Session.Evict(simpleEntity);
 			var loadedAggregate = rep.Get(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
-			if (loadedAggregate is IBelongsToBusinessUnit buRef)
+			if (loadedAggregate is IFilterOnBusinessUnit buRef)
 				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
-			if (loadedAggregate is IBelongsToBusinessUnitId buId)
+			if (loadedAggregate is IFilterOnBusinessUnitId buId)
 				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value, buId.BusinessUnit);
 			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
 		}
@@ -178,7 +178,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			switch (entity)
 			{
 				case IChangeInfo _:
-				case IBelongsToBusinessUnit _:
+				case IFilterOnBusinessUnit _:
 					Assert.Throws<PermissionException>(() => rep.Add(entity));
 					break;
 				default:

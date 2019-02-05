@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void BelongsToBusinessUnitIsFalse()
         {
-            Assert.IsFalse(target is IBelongsToBusinessUnit);
+            Assert.IsFalse(target is IFilterOnBusinessUnit);
         }
     }
 }

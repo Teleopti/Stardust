@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Kpi
             Assert.AreEqual(Color.White.ToArgb(), target.DefaultLowerThanMinColor.ToArgb());
 
 
-            Assert.IsFalse(target is IBelongsToBusinessUnit);
+            Assert.IsFalse(target is IFilterOnBusinessUnit);
 
         }
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Kpi
             Assert.AreEqual(Color.DarkSlateGray.ToArgb(), newKpi.DefaultLowerThanMinColor.ToArgb());
 
 
-            Assert.IsFalse(target is IBelongsToBusinessUnit);
+            Assert.IsFalse(target is IFilterOnBusinessUnit);
 
         }
     }

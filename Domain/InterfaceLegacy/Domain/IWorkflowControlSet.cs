@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </remarks>
 	public interface IWorkflowControlSet : IAggregateRoot,
 		IChangeInfo,
-		IBelongsToBusinessUnit,
+		IFilterOnBusinessUnit,
 		ICloneableEntity<IWorkflowControlSet>
 	{
 		/// <summary>

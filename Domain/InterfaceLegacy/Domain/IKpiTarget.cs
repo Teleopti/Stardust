@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// Holds values for one Kpi and One Team
     /// </summary>
-    public interface IKpiTarget : IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit
+    public interface IKpiTarget : IAggregateRoot, IChangeInfo, IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets the team description.

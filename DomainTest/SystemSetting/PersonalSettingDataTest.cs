@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting
         [Test]
         public void VerifyBelongsToNoBusinessUnit()
         {
-            Assert.IsFalse(_target is IBelongsToBusinessUnit);
+            Assert.IsFalse(_target is IFilterOnBusinessUnit);
         }
     }
 }

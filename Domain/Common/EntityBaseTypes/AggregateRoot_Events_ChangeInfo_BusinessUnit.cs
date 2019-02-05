@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
 	public abstract class AggregateRoot_Events_ChangeInfo_BusinessUnit : 
 		AggregateRoot_Events_ChangeInfo,
-		IBelongsToBusinessUnit
+		IFilterOnBusinessUnit
 	{
 		private IBusinessUnit _businessUnit;
 

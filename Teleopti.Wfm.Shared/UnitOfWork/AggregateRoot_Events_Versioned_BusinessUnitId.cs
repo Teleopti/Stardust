@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
@@ -7,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 	public abstract class AggregateRoot_Events_Versioned_BusinessUnitId : 
 		AggregateRoot_Events,
 		IVersioned,
-		IBelongsToBusinessUnitId
+		IFilterOnBusinessUnitId
 	{
 		private Guid? _businessUnit;
 

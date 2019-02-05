@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 namespace Teleopti.Ccc.Domain.SystemSetting
 {
 	public class GlobalSettingData :	SettingData,
-										IBelongsToBusinessUnit,
+										IFilterOnBusinessUnit,
 										IChangeInfo,
 										IVersioned,
 										IPublishEvents

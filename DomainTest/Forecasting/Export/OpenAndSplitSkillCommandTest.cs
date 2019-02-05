@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 				skillDay.SkillDataPeriodCollection.Count.Should().Be.EqualTo(60);
 				skillDay.WorkloadDayCollection[0].OpenTaskPeriodList.Count.Should().Be.EqualTo(8);
 
-				((IBelongsToBusinessUnit)skillDay).BusinessUnit.Should().Be.EqualTo(secondBusinessUnit);
+				((IFilterOnBusinessUnit)skillDay).BusinessUnit.Should().Be.EqualTo(secondBusinessUnit);
 			}
 		}
 	}

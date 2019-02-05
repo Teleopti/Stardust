@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 			}
 		}
 
-		public static void ValidateBusinessUnitConsistency(this IBelongsToBusinessUnit belongsToBusinessUnit)
+		public static void ValidateBusinessUnitConsistency(this IFilterOnBusinessUnit belongsToBusinessUnit)
 		{
 			var currentBusinessUnit = ((ITeleoptiIdentity)TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Identity).BusinessUnitId.GetValueOrDefault();
 			if (belongsToBusinessUnit.BusinessUnit != null && currentBusinessUnit != belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault())

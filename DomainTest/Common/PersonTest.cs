@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.AreEqual(string.Empty, target.Note);
 			Assert.AreEqual(string.Empty, target.EmploymentNumber);
 			Assert.IsNotNull(target.PermissionInformation);
-			Assert.IsFalse(target is IBelongsToBusinessUnit);
+			Assert.IsFalse(target is IFilterOnBusinessUnit);
 			Assert.AreSame(target, target.PermissionInformation.BelongsTo);
 			Assert.AreEqual(0, target.PersonPeriodCollection.Count());
 			Assert.IsFalse(target.TerminalDate.HasValue);

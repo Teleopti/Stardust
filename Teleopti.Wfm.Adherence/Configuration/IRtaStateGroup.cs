@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 namespace Teleopti.Wfm.Adherence.Configuration
 {
 	public interface IRtaStateGroup :
-		IBelongsToBusinessUnitId,
+		IFilterOnBusinessUnitId,
 		IVersioned,
 		IAggregateRoot, 
 		IPublishEvents

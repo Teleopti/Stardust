@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     public interface IScenario : IAggregateRoot, 
                                     IComparable<IScenario>,
                                     IChangeInfo,
-                                    IBelongsToBusinessUnit
+                                    IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets or sets the description.

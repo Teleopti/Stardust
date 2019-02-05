@@ -4,7 +4,7 @@
     /// PartTimePercentage
     /// </summary>
     public interface IPartTimePercentage : IAggregateRoot,
-											IChangeInfo, IBelongsToBusinessUnit
+											IChangeInfo, IFilterOnBusinessUnit
     {
         /// <summary>
         /// Description of PartTimePercentage

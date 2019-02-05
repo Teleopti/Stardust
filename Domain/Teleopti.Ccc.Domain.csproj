@@ -223,7 +223,6 @@
     <Compile Include="Budgeting\BudgetGroupState.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
-    <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_Versioned_BusinessUnitId.cs" />
     <Compile Include="Common\EntityBaseTypes\EventsExtensions.cs" />
     <Compile Include="Common\EntityBaseTypes\FromServiceLocators.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_BusinessUnit.cs" />
@@ -957,7 +956,7 @@
     <Compile Include="InterfaceLegacy\Domain\IAvailabilityRotation.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAvailableData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBacklogTask.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IBelongsToBusinessUnit.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IFilterOnBusinessUnit.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBlockFinder.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBlockInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBudgetAbsenceAllowanceDetail.cs" />

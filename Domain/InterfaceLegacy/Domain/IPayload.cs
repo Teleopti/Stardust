@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Created date: 2008-02-22
     /// </remarks>
     public interface IPayload : IAggregateRoot,
-                                    IBelongsToBusinessUnit,
+                                    IFilterOnBusinessUnit,
                                     IChangeInfo
     {
         /// <summary>

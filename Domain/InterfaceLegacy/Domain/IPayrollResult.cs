@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Created by: robink
     /// Created date: 2009-03-17
     /// </remarks>
-    public interface IPayrollResult : IAggregateRoot
+    public interface IPayrollResult : IAggregateRoot, IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets the period.

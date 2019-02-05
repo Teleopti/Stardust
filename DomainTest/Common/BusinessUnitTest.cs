@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyDoesNotBelongToBusinessUnit()
         {
-            Assert.IsFalse(_target is IBelongsToBusinessUnit);
+            Assert.IsFalse(_target is IFilterOnBusinessUnit);
         }
 
         /// <summary>

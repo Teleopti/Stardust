@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     ///<summary>
     /// The job result information.
     ///</summary>
-    public interface IJobResult : IAggregateRoot, IVersioned
+    public interface IJobResult : IAggregateRoot, IVersioned, IFilterOnBusinessUnit
 	{
         ///<summary>
         /// The job category (defined in <see cref="JobCategory"/>).

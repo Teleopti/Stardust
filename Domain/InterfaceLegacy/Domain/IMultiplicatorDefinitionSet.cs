@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     ///<summary>
     /// Interface for MultiplicatorDefinitions
     ///</summary>
-    public interface IMultiplicatorDefinitionSet : IAggregateRoot, ICloneableEntity<IMultiplicatorDefinitionSet>,IChangeInfo, IBelongsToBusinessUnit
+    public interface IMultiplicatorDefinitionSet : IAggregateRoot, ICloneableEntity<IMultiplicatorDefinitionSet>,IChangeInfo, IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets or sets the name.
