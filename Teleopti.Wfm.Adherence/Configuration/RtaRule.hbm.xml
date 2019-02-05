@@ -19,7 +19,7 @@
 		<property name="Adherence"/>
 		<property name="IsAlarm"/>
 		<property name="AlarmColor" type="Teleopti.Wfm.Adherence.Configuration.ColorNumber, Teleopti.Wfm.Adherence"/>
-		<property name="BusinessUnit" access="property"/>
+		<property name="BusinessUnit"/>
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
 	</class>
 </hibernate-mapping>

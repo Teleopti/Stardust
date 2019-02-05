@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual Guid? BusinessUnit
 		{
-			get => _businessUnit ?? (_businessUnit = ServiceLocator_DONTUSE.CurrentBusinessUnit.CurrentId());
-			protected set => _businessUnit = value;
+			get => _businessUnit;
+			set => _businessUnit = value;
 		}
 
 		private int? _version;

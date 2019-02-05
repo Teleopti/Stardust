@@ -12,7 +12,7 @@
 		<property name="Activity" access="property"/>
 		<many-to-one name="StateGroup" class="Teleopti.Wfm.Adherence.Configuration.RtaStateGroup"/>
 		<many-to-one name="RtaRule" class="Teleopti.Wfm.Adherence.Configuration.RtaRule"/>
-		<property name="BusinessUnit" access="property"/>
+		<property name="BusinessUnit"/>
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
 	</class>
 </hibernate-mapping>

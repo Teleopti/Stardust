@@ -72,22 +72,22 @@ namespace Teleopti.Wfm.Adherence.Configuration
 
 		public virtual IRtaStateGroup AddState(string stateCode, string stateName)
         {
-            IRtaState state = new RtaState(stateName, stateCode);
-            AddStateInternal(state);
+            AddStateInternal(new RtaState(stateName, stateCode));
             return this;
         }
 
-        protected internal virtual void AddStateInternal(IRtaState state)
-        {
+        protected virtual void AddStateInternal(IRtaState state)
+		{
+			state.BusinessUnit = BusinessUnit;
+			state.Parent = this;
             _stateCollection.Add(state);
 			AddEvent(new RtaStateGroupChangedEvent());
-			state.Parent = this;
         }
 
         public virtual IRtaState MoveStateTo(IRtaStateGroup target, IRtaState state)
         {
             _stateCollection.Remove(state);
-            RtaStateGroup internalAdd = target as RtaStateGroup;
+            var internalAdd = target as RtaStateGroup;
             if (internalAdd==null) return null;
             if (state==null) return null;
 	        var rtaState = new RtaState(state.Name, state.StateCode);

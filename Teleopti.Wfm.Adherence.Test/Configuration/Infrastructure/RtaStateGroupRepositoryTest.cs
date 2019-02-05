@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -19,14 +20,15 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             return stateGroup;
         }
 
-        protected override void VerifyAggregateGraphProperties(IRtaStateGroup loadedAggregateFromDatabase)
+        protected override void VerifyAggregateGraphProperties(IRtaStateGroup saved, IRtaStateGroup loaded)
         {
-            var org = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(org.Name, loadedAggregateFromDatabase.Name);
-            Assert.AreEqual(org.BusinessUnit, loadedAggregateFromDatabase.BusinessUnit);
-            Assert.AreEqual(org.Available, loadedAggregateFromDatabase.Available);
-            Assert.AreEqual(org.DefaultStateGroup, loadedAggregateFromDatabase.DefaultStateGroup);
-            Assert.AreEqual(org.StateCollection.Count, loadedAggregateFromDatabase.StateCollection.Count);
+            var created = CreateAggregateWithCorrectBusinessUnit();
+            Assert.AreEqual(created.Name, loaded.Name);
+            Assert.AreEqual(saved.BusinessUnit, ServiceLocator_DONTUSE.CurrentBusinessUnit.CurrentId());
+            Assert.AreEqual(saved.BusinessUnit, loaded.BusinessUnit);
+            Assert.AreEqual(created.Available, loaded.Available);
+            Assert.AreEqual(created.DefaultStateGroup, loaded.DefaultStateGroup);
+            Assert.AreEqual(created.StateCollection.Count, loaded.StateCollection.Count);
 			//Assert.AreEqual(org.StateCollection[0].BusinessUnit, loadedAggregateFromDatabase.StateCollection[0].BusinessUnit);
         }
 

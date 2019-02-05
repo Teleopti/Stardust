@@ -61,19 +61,18 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		[Test]
 		public void VerifyMappedBusinessUnitExists()
 		{
-			var correct = CreateAggregateWithCorrectBusinessUnit();
-			if (!(correct is IBelongsToBusinessUnit)) return;
-
-			try
-			{
-				Session.CreateCriteria(correct.GetType())
-					.Add(Restrictions.Eq("BusinessUnit", null))
-					.List();
-			}
-			catch (QueryException)
-			{
-				Assert.Fail("Type " + correct.GetType().Name + " implements IBelongsToBusinessUnit. Remember to map BU and corresponding filter in mapping file !");
-			}
+			var aggregate = CreateAggregateWithCorrectBusinessUnit();
+			if (aggregate is IBelongsToBusinessUnit || aggregate is IBelongsToBusinessUnitId)
+				try
+				{
+					Session.CreateCriteria(aggregate.GetType())
+						.Add(Restrictions.Eq("BusinessUnit", null))
+						.List();
+				}
+				catch (QueryException)
+				{
+					Assert.Fail("Type " + aggregate.GetType().Name + " implements IBelongsToBusinessUnit. Remember to map BU and corresponding filter in mapping file !");
+				}
 		}
 
 		[Test]
@@ -87,7 +86,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IBelongsToBusinessUnit buRef)
 				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
-			VerifyAggregateGraphProperties(loadedAggregate);
+			if (loadedAggregate is IBelongsToBusinessUnitId buId)
+				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value, buId.BusinessUnit);
+			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
 		}
 
 		[Test]
@@ -101,7 +102,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IBelongsToBusinessUnit buRef)
 				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
-			VerifyAggregateGraphProperties(loadedAggregate);
+			if (loadedAggregate is IBelongsToBusinessUnitId buId)
+				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value, buId.BusinessUnit);
+			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
 		}
 
 		[Test]
@@ -190,7 +193,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
 		protected abstract T CreateAggregateWithCorrectBusinessUnit();
 
-		protected abstract void VerifyAggregateGraphProperties(T loadedAggregateFromDatabase);
+		protected abstract void VerifyAggregateGraphProperties(T saved, T loaded);
 
 		protected abstract Repository<T> TestRepository(ICurrentUnitOfWork currentUnitOfWork);
 

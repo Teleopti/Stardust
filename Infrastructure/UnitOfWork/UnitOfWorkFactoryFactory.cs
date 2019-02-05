@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public NHibernateUnitOfWorkInterceptor MakeInterceptor()
 		{
-			return new NHibernateUnitOfWorkInterceptor(_updatedBy, _currentPreCommitHooks);
+			return new NHibernateUnitOfWorkInterceptor(_updatedBy, _businessUnit, _currentPreCommitHooks);
 		}
 
 		public virtual NHibernateUnitOfWorkFactory MakeAppFactory(
