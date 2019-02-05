@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	[TestFixture]
 	[DomainTest]
 	[AllTogglesOn]
+	[Ignore("WIP")]
 	public class SkillForecastIntervalCalculatorTest : IIsolateSystem
 	{
 		public SkillForecastIntervalCalculator Target;
