@@ -1,21 +1,15 @@
-using System;
-using System.Runtime.CompilerServices;
 using NHibernate;
+using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
 	public class AuditSettingProvider
 	{
-		private readonly Func<ISession, IAuditSetting> _entityDel;
 		private volatile IAuditSetting _entity;
 		private readonly object locker = new object();
-
-		public AuditSettingProvider(Func<ISession, IAuditSetting> entityDel)
-		{
-			InParameter.NotNull(nameof(entityDel), entityDel);
-			_entityDel = entityDel;
-		}
 
 		public IAuditSetting Entity(ISession session)
 		{
@@ -25,7 +19,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				{
 					if (_entity == null)
 					{
-						_entity = _entityDel(session);
+						var auditSetting = session.Get<AuditSetting>(AuditSettingDefault.TheId);
+						if (auditSetting == null)
+							throw new DataSourceException(AuditSettingRepository.MissingAuditSetting);
+						_entity = auditSetting;
 					}
 				}
 			}
