@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { map } from 'rxjs/operators';
+import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -50,7 +51,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		@Inject('$state') private $state: IStateService,
 		private translate: TranslateService,
 		private navService: NavigationService,
-		private fb: FormBuilder
+		private fb: FormBuilder,
+		private heatMapColorHelper:HeatMapColorHelper
 	) {
 		this.ppId = $state.params.ppId.trim();
 		this.groupId = $state.params.groupId.trim();
@@ -275,7 +277,15 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 				this.scheduleIssuesFilterControl.updateValueAndValidity();
 				this.updateValidationErrorsNumber();
 				if (!fullSchedulingResult) return;
-				this.dayNodes = fullSchedulingResult.SkillResultList ? fullSchedulingResult.SkillResultList : undefined;
+				const skillData = fullSchedulingResult.SkillResultList ? fullSchedulingResult.SkillResultList : undefined;
+				if(skillData){
+					skillData.forEach(subnode=>{
+						subnode.SkillDetails.forEach(node=>{
+							node.bgcolor = this.heatMapColorHelper.getColor(node.RelativeDifference*100);
+						});
+					});
+				}
+				this.dayNodes = skillData;
 			} else {
 				this.isScheduled = false;
 			}

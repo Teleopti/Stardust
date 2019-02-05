@@ -8,6 +8,7 @@ import { TitleBarComponent } from './components/title-bar';
 import { PlanningGroupsOverviewComponent } from './pages/planning-groups/planning-groups-overview.component';
 import { PlanningPeriodOverviewComponent } from './pages/planning-period/planning-period-overview.component';
 import {MomentModule} from "ngx-moment";
+import {HeatMapColorHelper} from "./shared/heatmapcolor.service";
 
 @NgModule({
 	declarations: [TitleBarComponent, PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent],
@@ -19,6 +20,7 @@ import {MomentModule} from "ngx-moment";
 	providers: [
 		PlanningGroupService,
 		PlanningPeriodService,
+		HeatMapColorHelper,
 		{
 			provide: '$state',
 			useFactory: (i: any): IStateService => i.get('$state'),

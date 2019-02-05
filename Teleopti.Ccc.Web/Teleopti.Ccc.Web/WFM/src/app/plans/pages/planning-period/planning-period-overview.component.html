@@ -40,12 +40,8 @@
 							>
 								<div
 									class="resourceplanner-box"
-									[ngClass]="{
-										understaffed: node.ColorId == 1,
-										critUnderstaffed: node.ColorId == 2,
-										overstaffed: node.ColorId == 3,
-										closed: node.ColorId == 4
-									}"
+									[style.background-color]="node.bgcolor"
+								
 								></div>
 							</td>
 						</tr>
