@@ -498,7 +498,7 @@
     <Compile Include="Licensing\LicenseStatusRepositoriesTest.cs" />
     <Compile Include="Licensing\LicenseStatusUpdaterTest.cs" />
     <Compile Include="Licensing\LicenseStatusXmlTest.cs" />
-    <Compile Include="NHibernateConfiguration\AuditSetterTest.cs" />
+    <Compile Include="NHibernateConfiguration\AuditSettingProviderTest.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetterTest.cs" />
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />

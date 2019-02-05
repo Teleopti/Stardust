@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	public class EnversConfiguration
 	{
 		public const string AuditingSchema = "Auditing";
-		private readonly AuditSetter _auditSettingProvider;
+		private readonly AuditSettingProvider _auditSettingProvider;
 
 		public EnversConfiguration()
 		{
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 					throw new DataSourceException(AuditSettingRepository.MissingAuditSetting);
 				return auditSetting;
 			}
-			_auditSettingProvider = new AuditSetter(AuditSettingDel);
+			_auditSettingProvider = new AuditSettingProvider(AuditSettingDel);
 		}
 
 		public void Configure(Configuration nhibConfiguration, IUpdatedBy updatedBy)

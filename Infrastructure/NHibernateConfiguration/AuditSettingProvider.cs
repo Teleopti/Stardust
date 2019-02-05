@@ -5,13 +5,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	public class AuditSetter : IAuditSetter
+	public class AuditSettingProvider
 	{
 		private readonly Func<ISession, IAuditSetting> _entityDel;
 		private volatile IAuditSetting _entity;
 		private readonly object locker = new object();
 
-		public AuditSetter(Func<ISession, IAuditSetting> entityDel)
+		public AuditSettingProvider(Func<ISession, IAuditSetting> entityDel)
 		{
 			InParameter.NotNull(nameof(entityDel), entityDel);
 			_entityDel = entityDel;

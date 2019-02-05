@@ -233,7 +233,6 @@
     <Compile Include="Forecasting\TriggerSkillForecastReadModel.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Insights\InsightsReport.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAuditSetter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAuditSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReportRepository.cs" />

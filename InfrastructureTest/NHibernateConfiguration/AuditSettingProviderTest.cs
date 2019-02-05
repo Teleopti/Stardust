@@ -9,14 +9,14 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 {
 	[TestFixture]
-	public class AuditSetterTest
+	public class AuditSettingProviderTest
 	{
 		[Test]
 		public void ShouldReturnDelegateValue()
 		{
 			var aSetting = new AuditSetting();
 			Func<ISession, IAuditSetting> deleg = s => aSetting;
-			var provider = new AuditSetter(deleg);
+			var provider = new AuditSettingProvider(deleg);
 
 			provider.Entity(null).Should().Be.SameInstanceAs(aSetting);
 		}
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void ShouldThrowIfNullIsPassedToCtor()
 		{
-			Assert.Throws<ArgumentNullException>(() => new AuditSetter(null));
+			Assert.Throws<ArgumentNullException>(() => new AuditSettingProvider(null));
 		}
 
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		public void ShouldCallDelegateOnlyOnce()
 		{
 			var wasCalled = false;
-			var provider = new AuditSetter(s =>
+			var provider = new AuditSettingProvider(s =>
 			                                       {
 			                                          if (wasCalled)
 			                                             Assert.Fail("Should call delegate only once!");

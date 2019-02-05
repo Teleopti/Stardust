@@ -578,7 +578,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Foundation\ApplicationData.cs" />
-    <Compile Include="NHibernateConfiguration\AuditSetter.cs" />
+    <Compile Include="NHibernateConfiguration\AuditSettingProvider.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\TenantSessionContext.cs" />
     <Compile Include="NHibernateConfiguration\IDataSourceConfigurationSetter.cs" />

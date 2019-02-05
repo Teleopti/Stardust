@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
 	public class TeleoptiAuditEventListener : AuditEventListener
 	{
-		private readonly AuditSetter _auditSetting;
+		private readonly AuditSettingProvider _auditSetting;
 
-		public TeleoptiAuditEventListener(AuditSetter auditSetting)
+		public TeleoptiAuditEventListener(AuditSettingProvider auditSetting)
 		{
 			_auditSetting = auditSetting;
 		}
