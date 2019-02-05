@@ -54,7 +54,8 @@ export class HeatMapColorHelper {
 		const red = this.convertToHex(r);
 		const green = this.convertToHex(g);
 		const blue = this.convertToHex(b);
-		return red + green + blue;
+		const alpha = this.convertToHex(150);
+		return red + green + blue + alpha;
 	}
 }
 

@@ -44,7 +44,11 @@ table.overview {
 }
 
 .weekend {
-	background-color: rgba(255, 165, 0, 0.37);
+	background-color: lightgrey;
+}
+
+.closed {
+	background-color: darkgray !important;
 }
 
 .resourceplanner-box {
@@ -54,10 +58,6 @@ table.overview {
 
 .resourceplanner-box:hover {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
-}
-
-.closed {
-	background-color: #cacaca !important;
 }
 
 [nz-button] {
