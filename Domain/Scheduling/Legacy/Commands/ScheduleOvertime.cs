@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 		}
 
-		public void Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules)
+		public void Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, TimeZoneInfo userTimeZoneInfo)
 		{
 			var stateholder = _schedulerStateHolder();
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						var scheduleRange = _schedulerStateHolder().Schedules[person];
 						var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
 						var scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-						_scheduleOvertimeService.SchedulePersonOnDay(scheduleRange, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter);
+						_scheduleOvertimeService.SchedulePersonOnDay(scheduleRange, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, userTimeZoneInfo);
 						_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);
 						var progressResult = onDayScheduled(backgroundWorker, new SchedulingServiceSuccessfulEventArgs(scheduleDay, () => cancel = true));
 						if (progressResult.ShouldCancel) return;

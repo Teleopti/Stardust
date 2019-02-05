@@ -55,7 +55,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 			};
 			LockManager.AddLock(agent, dateOnly,LockType.Normal);
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 			
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();
 		}
@@ -91,7 +91,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -129,7 +129,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -160,7 +160,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly)
 				.PersonAssignment(true)
@@ -196,7 +196,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				AvailableAgentsOnly = true
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly)
 				.PersonAssignment(true)
@@ -233,7 +233,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				AvailableAgentsOnly = true
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly)
 				.PersonAssignment(true)
@@ -266,7 +266,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -296,7 +296,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -326,7 +326,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -356,7 +356,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -386,7 +386,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -417,7 +417,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			var openHours = skillDay1.OpenHours().First();
 			var overtimePeriod = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().First().Period.TimePeriod(TimeZoneInfo.Utc);
@@ -450,7 +450,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			var openHours = skillDay1.OpenHours().First();
 			var overtimePeriod = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().First().Period.TimePeriod(TimeZoneInfo.Utc);
@@ -481,7 +481,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				AvailableAgentsOnly = true
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(date) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().OvertimeActivities().Single().Period.StartDateTime.Date
 				.Should().Be.EqualTo(date.Date.AddDays(1));
@@ -513,7 +513,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				AvailableAgentsOnly = true
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(date) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(date) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().OvertimeActivities().Single().Period.StartDateTime.Date
 				.Should().Be.EqualTo(date.Date.AddDays(1));
@@ -544,7 +544,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 			
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -577,7 +577,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 				SkillActivity = activity
 			};
 
-			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			return stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().IsEmpty();
 		}

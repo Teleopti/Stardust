@@ -2783,7 +2783,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_container.Resolve<ScheduleOvertime>()
 				.Execute(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling),
-								LockManager.UnlockedDays(scheduleDays));
+								LockManager.UnlockedDays(scheduleDays), TimeZoneGuard.Instance.CurrentTimeZone());
 
 			SchedulerState.SchedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 			_undoRedo.CommitBatch();
