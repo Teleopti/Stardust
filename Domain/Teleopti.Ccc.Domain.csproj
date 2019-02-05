@@ -237,6 +237,7 @@
     <Compile Include="InterfaceLegacy\Domain\IAuditSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReportRepository.cs" />
+    <Compile Include="InterfaceLegacy\Infrastructure\UnitOfWorkFactoryExtensions.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
     <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />

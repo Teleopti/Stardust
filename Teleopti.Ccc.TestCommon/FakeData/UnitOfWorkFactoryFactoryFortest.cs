@@ -33,12 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             {
                return new FakeUnitOfWork(new FakeStorage());
             }
-
-	        public bool HasCurrentUnitOfWork()
-	        {
-		        return false;
-	        }
-	        
+            
 			public string ConnectionString { get; }
 			
 	        public IUnitOfWork CreateAndOpenUnitOfWork()

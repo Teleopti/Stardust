@@ -49,11 +49,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return _context.Get();
 		}
 
-		public bool HasCurrentUnitOfWork()
-		{
-			return _context.Get() != null;
-		}
-
 		public string ConnectionString { get; }
 
 		public IUnitOfWork CreateAndOpenUnitOfWork()

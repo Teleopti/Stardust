@@ -44,11 +44,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new FakeUnitOfWork(_storage, _publisher, _hooks);
 		}
 
-		public bool HasCurrentUnitOfWork()
-		{
-			return false;
-		}
-
 		public void Dispose()
 		{
 		}
