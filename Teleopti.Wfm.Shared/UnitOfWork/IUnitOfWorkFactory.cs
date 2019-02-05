@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
@@ -9,5 +10,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 		IUnitOfWork CreateAndOpenUnitOfWork();
 		IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork();
 		IUnitOfWork CurrentUnitOfWork();
+		bool HasCurrentUnitOfWork();
 	}
 }
