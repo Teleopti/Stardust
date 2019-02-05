@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				{
 					if (_entity == null)
 					{
-						var auditSetting = session.Get<AuditSetting>(AuditSettingDefault.TheId);
+						var auditSetting = session.Get<AuditSetting>(AuditSetting.TheId);
 						if (auditSetting == null)
 							throw new DataSourceException(AuditSettingRepository.MissingAuditSetting);
 						_entity = auditSetting;

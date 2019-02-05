@@ -4,10 +4,10 @@ namespace Teleopti.Ccc.Domain.Auditing
 {
 	public class AuditSetting
 	{
+		public const int TheId = 1;
+		
 		protected virtual int Id { get; set; }
-
 		public virtual bool IsScheduleEnabled { get; protected set; }
-
 
 		public virtual bool ShouldBeAudited(object entity)
 		{
