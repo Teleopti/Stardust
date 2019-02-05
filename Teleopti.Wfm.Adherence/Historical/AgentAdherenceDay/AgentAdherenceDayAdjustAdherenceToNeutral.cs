@@ -132,10 +132,9 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				return;
 
 			var recordedNeutralAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral);
-			var allNeutralAdherences = recordedNeutralAdherences.Concat(_collectedNeutralPeriods);
 
-			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, recordedOutOfAdherences, allNeutralAdherences, _collectedApprovedPeriods);
-			_secondsOutOfAdherence = calculateSecondsOutOfAdherence(shift.Value, recordedOutOfAdherences, _collectedApprovedPeriods);
+			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, recordedOutOfAdherences, recordedNeutralAdherences, _collectedNeutralPeriods, _collectedApprovedPeriods);
+			_secondsOutOfAdherence = calculateSecondsOutOfAdherence(shift.Value, recordedOutOfAdherences, _collectedNeutralPeriods, _collectedApprovedPeriods);
 			_adherencePercentage = AdherencePercentageCalculation.Calculate(_secondsInAdherence, _secondsOutOfAdherence);
 		}
 
@@ -236,12 +235,15 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			DateTime now,
 			IEnumerable<openPeriod> outOfAdherences,
 			IEnumerable<openPeriod> neutralAdherences,
+			IEnumerable<openPeriod> adjustedToNeutralPeriods,
 			IEnumerable<openPeriod> approvedPeriods)
 		{
 			outOfAdherences = intersectsWithPeriod(shift, outOfAdherences);
 			outOfAdherences = subtractPeriods(outOfAdherences, approvedPeriods);
+			outOfAdherences = subtractPeriods(outOfAdherences, adjustedToNeutralPeriods);
 			neutralAdherences = intersectsWithPeriod(shift, neutralAdherences);
 			neutralAdherences = subtractPeriods(neutralAdherences, approvedPeriods);
+			neutralAdherences = addPeriods(neutralAdherences, adjustedToNeutralPeriods);
 
 			var timeOut = timeInShift(shift, outOfAdherences);
 			var timeNeutral = timeInShift(shift, neutralAdherences);
@@ -253,11 +255,13 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			return Convert.ToInt32(timeIn.TotalSeconds);
 		}
 
-		private static int? calculateSecondsOutOfAdherence(DateTimePeriod shift, IEnumerable<openPeriod> outOfAdherences, IEnumerable<openPeriod> approvedPeriods)
+		private static int? calculateSecondsOutOfAdherence(DateTimePeriod shift, IEnumerable<openPeriod> outOfAdherences, IEnumerable<openPeriod> neutralAdherences, IEnumerable<openPeriod> approvedPeriods)
 		{
 			outOfAdherences = intersectsWithPeriod(shift, outOfAdherences);
 			outOfAdherences = subtractPeriods(outOfAdherences, approvedPeriods);
+			outOfAdherences = subtractPeriods(outOfAdherences, neutralAdherences);
 			var timeOut = timeInShift(shift, outOfAdherences);
+			
 			return Convert.ToInt32(timeOut.TotalSeconds);
 		}
 
@@ -310,6 +314,29 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 					)
 				)
 				.ToArray();
+
+		private static IEnumerable<openPeriod> addPeriods(IEnumerable<openPeriod> periods, IEnumerable<openPeriod> toAdd)
+		{
+			List<openPeriod> periodsList = periods.ToList();
+			return toAdd.Aggregate(periodsList, (acc, adjusted) =>
+			{				
+				var lastPeriod = acc.LastOrDefault();
+				var startsAfterLastPeriodEnds = lastPeriod != null && adjusted.StartTime > lastPeriod.EndTime;
+				var endsBeforeLastPeriodStarts = lastPeriod != null && adjusted.EndTime < lastPeriod.StartTime;
+				var notIntersecting = startsAfterLastPeriodEnds || endsBeforeLastPeriodStarts;
+
+				if (lastPeriod == null || notIntersecting)
+				{
+					acc.Add(adjusted);
+				}
+				else
+				{
+					lastPeriod.EndTime = lastPeriod.EndTime < adjusted.EndTime ? adjusted.EndTime : lastPeriod.EndTime;
+					lastPeriod.StartTime = lastPeriod.StartTime > adjusted.StartTime ? adjusted.StartTime : lastPeriod.StartTime;
+				}
+				return acc;
+			});
+		}
 
 		private class openPeriod
 		{
