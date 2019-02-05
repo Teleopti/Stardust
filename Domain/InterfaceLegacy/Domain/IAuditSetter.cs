@@ -6,10 +6,5 @@
 	/// </summary>
 	public interface IAuditSetter
 	{
-		/// <summary>
-		/// Sets the entity
-		/// </summary>
-		/// <param name="entity"></param>
-		void SetEntity(IAuditSetting entity);
 	}
 }

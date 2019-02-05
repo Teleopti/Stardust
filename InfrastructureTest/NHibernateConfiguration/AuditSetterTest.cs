@@ -22,16 +22,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		}
 
 		[Test]
-		public void ShouldBeAbleToSetEntity()
-		{
-			var aSetting = new AuditSetting();
-			var provider = new AuditSetter(s => new AuditSetting());
-			provider.SetEntity(aSetting);
-
-			provider.Entity(null).Should().Be.SameInstanceAs(aSetting);
-		}
-
-		[Test]
 		public void ShouldThrowIfNullIsPassedToCtor()
 		{
 			Assert.Throws<ArgumentNullException>(() => new AuditSetter(null));

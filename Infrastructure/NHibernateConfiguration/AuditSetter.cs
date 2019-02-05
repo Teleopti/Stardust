@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	public class AuditSetter : IAuditSetter
 	{
 		private readonly Func<ISession, IAuditSetting> _entityDel;
-		private IAuditSetting _entity;
+		private volatile IAuditSetting _entity;
+		private readonly object locker = new object();
 
 		public AuditSetter(Func<ISession, IAuditSetting> entityDel)
 		{
@@ -20,15 +21,15 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			if (_entity == null)
 			{
-				SetEntity(_entityDel(session));
+				lock (locker)
+				{
+					if (_entity == null)
+					{
+						_entity = _entityDel(session);
+					}
+				}
 			}
 			return _entity;
-		}
-
-		[MethodImplAttribute(MethodImplOptions.Synchronized)]
-		public void SetEntity(IAuditSetting entity)
-		{
-			_entity = entity;
 		}
 	}
 }
