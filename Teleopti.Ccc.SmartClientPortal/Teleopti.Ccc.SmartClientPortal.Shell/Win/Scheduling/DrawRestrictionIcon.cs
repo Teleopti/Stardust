@@ -60,16 +60,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             }
         }
 
-        public void DrawStudentAvailability(PermissionState permissionState)
+        public void DrawStudentAvailability(PermissionState permissionState, bool availabiltyLeft)
         {
             if (permissionState != PermissionState.None)
             {
                 Brush brush = getBrush(permissionState);
-                Point x = new Point(_gridDrawCellEventArgs.Bounds.Right - 60, _gridDrawCellEventArgs.Bounds.Top + 5);
-                Point y = new Point(_gridDrawCellEventArgs.Bounds.Right - 60 + 8, _gridDrawCellEventArgs.Bounds.Top + 5);
-                Point z = new Point(_gridDrawCellEventArgs.Bounds.Right - 60, _gridDrawCellEventArgs.Bounds.Top + 5 + 8);
+                Point x = new Point(_gridDrawCellEventArgs.Bounds.Right - 20, _gridDrawCellEventArgs.Bounds.Top + 5);
+                Point y = new Point(_gridDrawCellEventArgs.Bounds.Right - 20 + 8, _gridDrawCellEventArgs.Bounds.Top + 5);
+                Point z = new Point(_gridDrawCellEventArgs.Bounds.Right - 20, _gridDrawCellEventArgs.Bounds.Top + 5 + 8);
 
                 _gridDrawCellEventArgs.Graphics.FillPolygon(brush, new[] { x, z, y });
+
+				if (availabiltyLeft && permissionState == PermissionState.Satisfied)
+				{
+					x = new Point(_gridDrawCellEventArgs.Bounds.Right - 20 + 8, _gridDrawCellEventArgs.Bounds.Top + 5 + 8);
+					_gridDrawCellEventArgs.Graphics.FillPolygon(Brushes.LightGray, new[] { x, z, y });
+				}
             }
         }
         private static Brush getBrush(PermissionState permissionState)

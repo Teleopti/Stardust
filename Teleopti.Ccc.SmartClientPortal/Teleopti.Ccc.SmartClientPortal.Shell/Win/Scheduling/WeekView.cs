@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         protected override int CellWidth()
         {
-            return 189;
+            return 160;
         }
 
         //draw cell
@@ -102,7 +102,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (personPeriod?.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)
 			{
 				permissionState = restrictionChecker.CheckStudentAvailability(schedulePart);
-				drawRestrictionIcon.DrawStudentAvailability(permissionState);
+				var isAnyAvailabilityLeftToUse = false;
+				if(permissionState == PermissionState.Satisfied)
+				{
+					if (restrictionChecker.IsAnyAvailabilityLeftToUse(schedulePart))
+						isAnyAvailabilityLeftToUse = true;
+				}
+				drawRestrictionIcon.DrawStudentAvailability(permissionState, isAnyAvailabilityLeftToUse);
 			}
 		}
 		
