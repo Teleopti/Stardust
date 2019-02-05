@@ -266,7 +266,6 @@
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="MultiTenancy\AllTenantNames.cs" />
     <Compile Include="MultiTenancy\BehaviorTestTenants.cs" />
-    <Compile Include="MultiTenancy\Client\ApplicationConfigurationDbTenantClient.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationConfigurationDbProviderFake.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\Server\Aspects\TenantAuditAspect.cs" />
