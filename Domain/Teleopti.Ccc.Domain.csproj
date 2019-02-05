@@ -230,6 +230,7 @@
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit.cs" />
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
+    <Compile Include="Forecasting\SkillsExtensions.cs" />
     <Compile Include="Forecasting\TriggerSkillForecastReadModel.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Insights\InsightsReport.cs" />

@@ -53,10 +53,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
 		}
-
-		public int MinimumSkillIntervalLength()
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

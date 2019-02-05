@@ -113,6 +113,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IEnumerable<ExternalStaff> ExternalStaff { get; set; }
 	    bool GuessResourceCalculationHasBeenMade();
 	    ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
-	    int MinimumSkillIntervalLength();
     }
 }
