@@ -228,6 +228,7 @@
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_BusinessUnit.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit.cs" />
+    <Compile Include="Common\Time\IUserNowExtensions.cs" />
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
     <Compile Include="Forecasting\SkillsExtensions.cs" />
     <Compile Include="Forecasting\TriggerSkillForecastReadModel.cs" />
@@ -370,7 +371,6 @@
     <Compile Include="MessageBroker\Server\MessageBrokerServerNoMailboxPurge.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerServerThrottleMessages.cs" />
     <Compile Include="MessageBroker\Server\RouteToGroupName.cs" />
-    <Compile Include="MultiTenancy\ActiveTenants.cs" />
     <Compile Include="Notification\INotificationServiceClient.cs" />
     <Compile Include="Notification\NotificationServiceClient.cs" />
     <Compile Include="Optimization\AllSettingsForPlanningGroup.cs" />
@@ -587,9 +587,7 @@
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
     <Compile Include="Common\PurgeSetting.cs" />
-    <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
-    <Compile Include="Common\Time\UserNow.cs" />
     <Compile Include="Config\ApplicationInsightsConfigurationReader.cs" />
     <Compile Include="Exceptions\NoDefaultScenarioException.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportDailyModel.cs" />
@@ -1418,8 +1416,6 @@
     <Compile Include="InterfaceLegacy\Domain\WorkTimeSource.cs" />
     <Compile Include="InterfaceLegacy\IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="InterfaceLegacy\IFilter.cs" />
-    <Compile Include="InterfaceLegacy\IJsonDeserializer.cs" />
-    <Compile Include="InterfaceLegacy\IJsonSerializer.cs" />
     <Compile Include="InterfaceLegacy\IMapiMailMessage.cs" />
     <Compile Include="InterfaceLegacy\IMultiAbsenceRequestsUpdater.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsAbsence.cs" />
@@ -2224,7 +2220,6 @@
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerTracer.cs" />
     <Compile Include="MultiTenancy\CannotIterateAllTenants.cs" />
-    <Compile Include="MultiTenancy\IAllTenantNames.cs" />
     <Compile Include="MultiTenancy\ICountTenants.cs" />
     <Compile Include="MultiTenancy\IFindTenantNameByRtaKey.cs" />
     <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />

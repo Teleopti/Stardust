@@ -105,6 +105,8 @@
     <Compile Include="Events\IInitiatorContext.cs" />
     <Compile Include="Events\IInitiatorIdentifier.cs" />
     <Compile Include="Events\IInitiatorIdentifierScope.cs" />
+    <Compile Include="Events\IJsonEventDeserializer.cs" />
+    <Compile Include="Events\IJsonEventSerializer.cs" />
     <Compile Include="Events\ILogOnContext.cs" />
     <Compile Include="Events\InitiatorIdentifier.cs" />
     <Compile Include="Events\IResolve.cs" />
@@ -119,8 +121,8 @@
     <Compile Include="Events\TrackingMessage.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericDisposable.cs" />
-    <Compile Include="IJsonEventDeserializer.cs" />
-    <Compile Include="IJsonEventSerializer.cs" />
+    <Compile Include="IJsonDeserializer.cs" />
+    <Compile Include="IJsonSerializer.cs" />
     <Compile Include="IRetryHandle.cs" />
     <Compile Include="Principal\AppDomainPrincipalContext.cs" />
     <Compile Include="Principal\CurrentProcess.cs" />
@@ -149,8 +151,10 @@
     <Compile Include="Principal\ThreadPrincipalContext.cs" />
     <Compile Include="Principal\WebRequestPrincipalContext.cs" />
     <Compile Include="Retry.cs" />
+    <Compile Include="Tenant\ActiveTenants.cs" />
     <Compile Include="Tenant\DataSourceConfiguration.cs" />
     <Compile Include="Tenant\DataSourceForTenant.cs" />
+    <Compile Include="Tenant\IAllTenantNames.cs" />
     <Compile Include="Tenant\ICurrentDataSource.cs" />
     <Compile Include="Tenant\IDataSource.cs" />
     <Compile Include="Tenant\IDataSourceForTenant.cs" />
@@ -165,6 +169,8 @@
     <Compile Include="Tenant\TenantScopeAspect.cs" />
     <Compile Include="Tenant\TenantScopeAttribute.cs" />
     <Compile Include="Time\INow.cs" />
+    <Compile Include="Time\IUserNow.cs" />
+    <Compile Include="Time\UserNow.cs" />
     <Compile Include="UnitOfWork\AggregateRoot.cs" />
     <Compile Include="UnitOfWork\AggregateRoot_Events.cs" />
     <Compile Include="UnitOfWork\AggregateRoot_Events_Versioned_BusinessUnitId.cs" />
