@@ -4,7 +4,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntraIntervalOptimizat
 {
 	[DomainTest]
 	[DontSendEventsAtPersist]
-	[DefaultData]
 	public abstract class IntraIntervalOptimizationScenarioTest
 	{
 	}

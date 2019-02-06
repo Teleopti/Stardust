@@ -19,6 +19,7 @@ using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization;
 namespace Teleopti.Wfm.SchedulingTest.UnitTests
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class WebIntradayOptimizationStardustHandlerTest: IntradayOptimizationScenarioTest
 	{
 		public WebIntradayOptimizationStardustHandler Target;

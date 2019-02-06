@@ -65,8 +65,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var fromInjectTargets = _injectTo
 				.SelectMany(x => x.GetType().GetCustomAttributes(typeof(T), true).Cast<T>());
 			var fromTest = _method?.GetCustomAttributes(typeof(T), true).Cast<T>() ?? Enumerable.Empty<T>();
+			var fromAssembly = _method?.DeclaringType.Assembly.GetCustomAttributes(typeof(T)).Cast<T>() ?? Enumerable.Empty<T>();
 			return fromInjectTargets
 				.Union(fromTest)
+				.Union(fromAssembly)
 				.ToArray();
 		}
 
