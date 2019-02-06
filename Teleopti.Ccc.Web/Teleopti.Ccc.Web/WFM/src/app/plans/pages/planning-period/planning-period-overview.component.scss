@@ -1,8 +1,4 @@
-.grid-scroll-wrap {
-	width: 100%;
-	overflow: auto;
-	min-height: 370px;
-}
+
 
 table.overview {
 	table-layout: fixed;
@@ -49,6 +45,27 @@ table.overview {
 
 .closed {
 	background-color: darkgray !important;
+}
+
+.legend{
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.legend-box {
+	width: 10px;
+	height: 10px;
+	text-align: center;
+	position: relative;
+}
+
+.heatmap-div {
+	width: auto;
+	padding-bottom: 1px;
+	min-height: 100px;
+	margin-top: 20px;
+	margin-left: 175px;
+	overflow: auto;
 }
 
 .heatmap-date-header{

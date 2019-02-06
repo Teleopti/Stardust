@@ -28,9 +28,24 @@
 				</div>
 			</div>
 
-			<div class="grid-scroll-wrap">
+			<div class="legend" *ngIf="dayNodes">
+				<h2>Scheduled Skills Heatmap</h2>
 				<table>
-					<thead *ngIf="dayNodes&&dayNodes.length>0">
+					<tbody>
+					<tr >
+						<td class="">-100%</td>
+						<td *ngFor="let legend of legends">
+							<div class="legend-box" [style.background-color]="legend.bgcolor"></div>
+						</td>
+						<td class="">100%</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="heatmap-div" *ngIf="dayNodes&&dayNodes.length>0">
+				<table>
+					<thead>
 						<tr>
 							<th></th>
 							<th *ngFor ="let month of months" [attr.colspan]="month.Count">

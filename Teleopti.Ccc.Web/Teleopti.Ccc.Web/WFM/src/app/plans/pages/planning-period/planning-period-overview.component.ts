@@ -35,6 +35,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	filteredPreValidations: any[];
 	filteredScheduleIssues: any[];
 	months : any;
+	legends: any[] = [];
 
 	validationFilter;
 
@@ -68,7 +69,9 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.loadValidations();
 		this.loadLastResult();
 		this.checkState();
-
+		this.initLegends();
+		console.log(this.legends);
+		
 		this.preValidationFilterControl.valueChanges
 			.pipe(
 				map(filterString => {
@@ -113,6 +116,16 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		clearInterval(this.timer);
+	}
+	
+	private initLegends(){
+		for(let i = 0; i <41;i++){
+			const number = i*5-100;
+			this.legends.push({
+				number: number,
+				bgcolor: this.heatMapColorHelper.getColor(number)
+			});
+		}
 	}
 
 	private checkState() {
