@@ -189,11 +189,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}	
 		}
 
-	    public void SetBusinessUnit_UseFromTestOnly(IBusinessUnit businessUnit)
-	    {
-		    _businessUnit = businessUnit;
-	    }
-
 		public IBusinessUnit BusinessUnit
         {
 	        get

@@ -33,7 +33,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void HasConnectedToCurrentBusinessUnit(ITeam team)
 		{
-			team.Site = new Site("_");
+			if (team.Site == null)
+			{
+				team.Site = new Site("_");				
+			}
 			var bu = _currentBusinessUnit.Current();
 			bu.AddSite(team.Site);
 			_businessUnitRepository.Has(bu);
