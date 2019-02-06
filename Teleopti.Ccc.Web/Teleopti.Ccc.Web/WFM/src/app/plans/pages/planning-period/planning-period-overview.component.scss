@@ -39,12 +39,8 @@ table.overview {
 	letter-spacing: 1em;
 }
 
-.weekend {
-	background-color: lightgrey;
-}
-
-.closed {
-	background-color: darkgray !important;
+.heatmap-weekend {
+	color: rgba(255, 165, 0, 0.8);
 }
 
 .legend{
@@ -66,6 +62,14 @@ table.overview {
 	margin-top: 20px;
 	margin-left: 175px;
 	overflow: auto;
+
+	.worst{
+		background-color: rgba(255, 0, 0, 0.5);
+	}
+
+	.heatmap-closed {
+		background-color: rgba(0, 0, 0, 0.25) !important;
+	}
 }
 
 .heatmap-date-header{
@@ -84,6 +88,10 @@ table.overview {
 
 .heatmap-box:hover {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
+}
+
+.heatmap-day{
+	background-color: rgba(0, 0, 0, 0.1);
 }
 
 [nz-button] {

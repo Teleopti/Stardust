@@ -7,12 +7,24 @@ export class HeatMapColorHelper {
 	gradients: Array<HeatMapColorValue>;
 	constructor() {
 		this.gradients = [
-			new HeatMapColorValue(255, 0, 0, -100),  //red
-			new HeatMapColorValue(255, 255, 0, -10),    //yellow
-			new HeatMapColorValue(0, 255, 0, 0),        //green
-			new HeatMapColorValue(0, 255, 255, 10),    //cyan
-			new HeatMapColorValue(0, 0, 255, 100)    //blue
+			// new HeatMapColorValue(255, 0, 0, -100),  //red
+			// new HeatMapColorValue(170, 0, 0, -20),  //red
+			// new HeatMapColorValue(85, 0, 0, -10),  //red
+			// // new HeatMapColorValue(255, 255, 0, -10),    //yellow
+			// new HeatMapColorValue(255, 255, 255, 0),        //white
+			// // new HeatMapColorValue(0, 255, 255, 10),    //cyan
+			// new HeatMapColorValue(0, 0, 128, 10),    //blue
+			// new HeatMapColorValue(0, 0, 255, 100),    //blue
 
+			new HeatMapColorValue(255, 0, 0, -100),  //red
+			new HeatMapColorValue(255, 200, 200, -20.001),  //red
+			new HeatMapColorValue(255, 255, 100, -20),  //red
+			new HeatMapColorValue(255, 255, 200, -10),  //red
+			// new HeatMapColorValue(255, 255, 0, -10),    //yellow
+			new HeatMapColorValue(255, 255, 255, 0),        //white
+			// new HeatMapColorValue(0, 255, 255, 10),    //cyan
+			new HeatMapColorValue(200, 200, 255, 10),    //blue
+			new HeatMapColorValue(0, 0, 255, 100),    //blue
 		];
 
 		this.min = this.gradients[0].value;
@@ -54,8 +66,9 @@ export class HeatMapColorHelper {
 		const red = this.convertToHex(r);
 		const green = this.convertToHex(g);
 		const blue = this.convertToHex(b);
-		const alpha = this.convertToHex(150);
-		return red + green + blue + alpha;
+		// const alpha = this.convertToHex(150);
+		// return red + green + blue + alpha;
+		return red + green + blue;
 	}
 }
 

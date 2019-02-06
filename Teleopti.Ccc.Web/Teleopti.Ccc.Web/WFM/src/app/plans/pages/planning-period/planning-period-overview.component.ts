@@ -36,6 +36,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	filteredScheduleIssues: any[];
 	months : any;
 	legends: any[] = [];
+	worstDay: any;
 
 	validationFilter;
 
@@ -70,7 +71,6 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.loadLastResult();
 		this.checkState();
 		this.initLegends();
-		console.log(this.legends);
 		
 		this.preValidationFilterControl.valueChanges
 			.pipe(
@@ -329,6 +329,18 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						toArray());
 
 					monthCount.subscribe(result => this.months = result);
+					
+					const allDays = [];
+					skillResultList.forEach(skill=>{
+						skill.SkillDetails.forEach(day =>{
+							allDays.push(day);
+						});
+					});
+					allDays.sort((a, b)=>
+						a.RelativeDifference>b.RelativeDifference?1:-1
+					);
+					this.worstDay = allDays[0];
+					console.log(this.worstDay)
 				}
 			} else {
 				this.isScheduled = false;
