@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IBusinessUnit Get(Guid id)
 		{
-			return _businessUnits.Single(x => x.Id.Value == id);
+			return _businessUnits.SingleOrDefault(x => x.Id.Value == id);
 		}
 
 		public IEnumerable<IBusinessUnit> LoadAll()
