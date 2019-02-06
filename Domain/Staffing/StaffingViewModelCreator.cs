@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var minutesPerInterval = _intervalLengthFetcher.GetIntervalLength();
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
-			var skillStaffingIntervals = _resourceCalculationUsingReadModels.LoadAndResourceCalculate(skillIds, startOfDayUtc, endOfDayUtc, useShrinkage);
+			var skillStaffingIntervals = _resourceCalculationUsingReadModels.LoadAndResourceCalculate(skillIds, startOfDayUtc, endOfDayUtc, useShrinkage, _timeZone);
 			//var relevantPeriod = FindStartAndEndDateFromIntervals(skillStaffingIntervals);
 			var relevantStartTime = skillStaffingIntervals.Any() ? skillStaffingIntervals.Min(s => s.StartDateTime) : startOfDayLocal;
 			var relevantEndTime = skillStaffingIntervals.Any()

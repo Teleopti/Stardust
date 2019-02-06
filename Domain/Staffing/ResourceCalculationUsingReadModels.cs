@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_resourceCalculation = resourceCalculation;
 		}
 
-		public IList<SkillStaffingInterval> LoadAndResourceCalculate(IEnumerable<Guid> skillIds, DateTime startOfDayUtc, DateTime endOfDayUtc, bool useShrinkage)
+		public IList<SkillStaffingInterval> LoadAndResourceCalculate(IEnumerable<Guid> skillIds, DateTime startOfDayUtc, DateTime endOfDayUtc, 
+			bool useShrinkage, IUserTimeZone userTimeZone)
 		{
 			var skills = _skillRepository.LoadAll().ToList();
 			var firstPeriodDateInSkillTimeZone = new DateOnly(skills.Select(x => TimeZoneInfo.ConvertTimeFromUtc(startOfDayUtc, x.TimeZone)).Min());
@@ -34,11 +35,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var dateOnlyPeriod = new DateOnlyPeriod(firstPeriodDateInSkillTimeZone, lastPeriodDateInSkillTimeZone);
 
 			var period = new DateTimePeriod(startOfDayUtc, endOfDayUtc);
-			var skillCombinationFetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-8), endOfDayUtc);
-			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(skillCombinationFetchPeriod).ToList();
+			var fetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-8), endOfDayUtc.AddDays(2));
+			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(fetchPeriod).ToList();
 			
 			var skillForecastList =
-				_skillForecastReadModelRepository.LoadSkillForecast(skillIds.ToArray(), period);
+				_skillForecastReadModelRepository.LoadSkillForecast(skillIds.ToArray(), fetchPeriod);
 
 			var skillStaffPeriods = new List<SkillStaffPeriodForReadmodel>();
 
@@ -50,7 +51,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 				var serviceLevel = new ServiceLevel(new Percent(skillForecast.PercentAnswered),
 					skillForecast.AnsweredWithinSeconds);
 				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.3), new Percent(0.8));
-				var dateTimePeriod = new DateTimePeriod(new DateTime(skillForecast.StartDateTime.Ticks, DateTimeKind.Utc), new DateTime(skillForecast.EndDateTime.Ticks, DateTimeKind.Utc));
+				var dateTimePeriod = new DateTimePeriod(new DateTime(skillForecast.StartDateTime.Ticks, DateTimeKind.Utc),
+					new DateTime(skillForecast.EndDateTime.Ticks, DateTimeKind.Utc));
 				var skillStaffPeriod = new SkillStaffPeriodForReadmodel(dateTimePeriod, new Task(), serviceAgreement)
 				{
 					Forecast = useShrinkage ? skillForecast.AgentsWithShrinkage : skillForecast.Agents,
@@ -65,8 +67,34 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			foreach (var groupedSkillStaffPeriod in groupedSkillStaffPeriods)
 			{
+				//var groupedPerDay = groupedSkillStaffPeriod.GroupBy(p => TimeZoneHelper.ConvertFromUtc(p.Period.StartDateTime, userTimeZone.TimeZone()).Date).ToList();
+				//foreach (var skillStaffPeriodForReadmodels in groupedPerDay.OrderBy(x => x.Key))
+				//{
+				//	var staffPeriodsFoDay = skillStaffPeriodForReadmodels.OrderBy(x => x.Period.StartDateTime).Cast<ISkillStaffPeriod>().ToList();
+				//	foreach (SkillStaffPeriod intervalForSkillId in staffPeriodsFoDay)
+				//	{
+				//		intervalForSkillId.CreateSkillStaffSegments65(staffPeriodsFoDay, staffPeriodsFoDay.IndexOf(intervalForSkillId));
+				//	}
+				//}
+
+				//var groupedPerDay = groupedSkillStaffPeriod.GroupBy(p => new DateOnly(TimeZoneHelper.ConvertFromUtc(p.Period.StartDateTime, userTimeZone.TimeZone()).Date)).ToList();
+				//foreach (var skillStaffPeriodForReadmodels in groupedPerDay.OrderBy(x => x.Key))
+				//{
+				//	var ngt = GetSkillStaffPeriodsForDayCalculation(skillStaffPeriods, groupedSkillStaffPeriod.Key,
+				//		skillStaffPeriodForReadmodels.Key, skills);
+
+				//	var staffPeriodsFoDay = skillStaffPeriodForReadmodels.OrderBy(x => x.Period.StartDateTime).Cast<ISkillStaffPeriod>().ToList();
+				//	foreach (SkillStaffPeriod intervalForSkillId in staffPeriodsFoDay)
+				//	{
+				//		intervalForSkillId.CreateSkillStaffSegments65(staffPeriodsFoDay, staffPeriodsFoDay.IndexOf(intervalForSkillId));
+				//	}
+				//}
+
+				
+
+
 				var staffPeriodsForSkillId = groupedSkillStaffPeriod.Cast<ISkillStaffPeriod>().ToList();
-				foreach (SkillStaffPeriod intervalForSkillId in staffPeriodsForSkillId)
+				foreach (SkillStaffPeriod intervalForSkillId in staffPeriodsForSkillId.OrderBy(x => x.Period.StartDateTime))
 				{
 					intervalForSkillId.CreateSkillStaffSegments65(staffPeriodsForSkillId, staffPeriodsForSkillId.IndexOf(intervalForSkillId));
 				}
@@ -131,7 +159,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		private static void calculateForecastAgentsForEmailSkills(IEnumerable<IGrouping<Guid, SkillStaffPeriodForReadmodel>> skillStaffPeriodsBySkill, IList<SkillCombinationResource> skillCombinationResources)
 		{
-			//TODO: move from old structure to new Skill Grouped SkillStaffPeriodEx  
 			foreach (var skillStaffPeriodsForSkill in skillStaffPeriodsBySkill)
 			{
 				var skillId = skillStaffPeriodsForSkill.Key;
@@ -229,6 +256,32 @@ namespace Teleopti.Ccc.Domain.Staffing
 				}
 			}
 			return dividedIntervals;
+		}
+
+		public virtual IEnumerable<SkillStaffPeriodForReadmodel> GetSkillStaffPeriodsForDayCalculation(
+			IEnumerable<SkillStaffPeriodForReadmodel> allSkillStaffPeriods, Guid skillId, DateOnly currentDate,
+			IList<ISkill> allSkills)
+		{
+			var foundSkillStaffPeriods = new List<SkillStaffPeriodForReadmodel>();
+			var skill = allSkills.SingleOrDefault(x => x.Id.GetValueOrDefault().Equals(skillId));
+			//if (ShouldHandleAllTasksWithinSkillStaffPeriod(skillDay))
+			//	return skillDay.SkillStaffPeriodCollection;
+
+			var skillResolution = skill.DefaultResolution;
+			var endDateTime = currentDate.AddDays(3).Date;
+			for (var currentDateTime = TimeZoneHelper.ConvertToUtc(currentDate.Date, skill.TimeZone);
+				currentDateTime < endDateTime;
+				currentDateTime = currentDateTime.AddMinutes(skillResolution))
+			{
+				var periods = allSkillStaffPeriods.Where(x => x.Period.StartDateTime == currentDateTime && x.SkillId == skillId);
+				if (!periods.Any())
+					break;
+				//if (!periods.IsAvailable) continue;
+
+				foundSkillStaffPeriods.Add(periods.First());
+			}
+
+			return foundSkillStaffPeriods;
 		}
 	}
 }

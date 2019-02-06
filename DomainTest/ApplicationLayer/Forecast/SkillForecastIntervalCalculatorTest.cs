@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			SkillDayRepository.Add(skillDay);
 			ScenarioRepository.Add(scenario);
 
-			Target.Calculate(new List<ISkillDay> {skillDay});
+			Target.Calculate(new List<ISkillDay> {skillDay}, new[] { skill }, dtp);
 
 			var skillStaffIntervals= SkillForecastReadModelRepository.LoadSkillForecast(new[] {skill.Id.GetValueOrDefault()}, new DateTimePeriod(dtp.StartDate.Utc(),dtp.EndDate.Date.Utc()));
 			skillStaffIntervals.Count.Should().Be.EqualTo(12);
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			SkillDayRepository.AddRange(new [] {emailSkillDay,phoneSkillDay});
 			ScenarioRepository.Add(scenario);
 
-		Target.Calculate(new List<ISkillDay> { phoneSkillDay, emailSkillDay});
+		Target.Calculate(new List<ISkillDay> { phoneSkillDay, emailSkillDay}, new[] { phoneSkill, emailSkill }, dtp);
 
 			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(
 				new[] {phoneSkill.Id.GetValueOrDefault(), emailSkill.Id.GetValueOrDefault()}, new DateTimePeriod(dtp.StartDate.Date.Utc(),dtp.EndDate.Date.Utc()));
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			SkillDayRepository.Add(skillDay);
 			ScenarioRepository.Add(scenario);
 
-			Target.Calculate(new List<ISkillDay> { skillDay });
+			Target.Calculate(new List<ISkillDay> { skillDay }, new[] {skill }, dtp);
 
 			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(new[] { skill.Id.GetValueOrDefault() }, new DateTimePeriod(dtp.StartDate.Utc(), dtp.EndDate.Date.Utc()));
 			skillStaffIntervals.Count.Should().Be.EqualTo(12);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			SkillDayRepository.Add(skillDay);
 			ScenarioRepository.Add(scenario);
 
-			Target.Calculate(new List<ISkillDay> { skillDay });
+			Target.Calculate(new List<ISkillDay> { skillDay }, new[] { skill }, dtp);
 
 			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(new[] { skill.Id.GetValueOrDefault() }, new DateTimePeriod(dtp.StartDate.Utc(), dtp.EndDate.Date.Utc()));
 			skillStaffIntervals.Count.Should().Be.EqualTo(4);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			SkillDayRepository.AddRange(new[] { emailSkillDay, phoneSkillDay });
 			ScenarioRepository.Add(scenario);
 
-			Target.Calculate(new List<ISkillDay> { phoneSkillDay, emailSkillDay });
+			Target.Calculate(new List<ISkillDay> { phoneSkillDay, emailSkillDay }, new[] { phoneSkill, emailSkill }, dtp);
 
 			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(
 				new[] { phoneSkill.Id.GetValueOrDefault(), emailSkill.Id.GetValueOrDefault() }, new DateTimePeriod(dtp.StartDate.Date.Utc(), dtp.EndDate.Date.Utc()));

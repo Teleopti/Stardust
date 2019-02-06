@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;
 		}
 
-		public void Calculate(IEnumerable<ISkillDay> skillDays)
+		public void Calculate(IEnumerable<ISkillDay> skillDays, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 
 			//var periods = skillDays
@@ -42,6 +42,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			//	.SelectMany(x =>
 			//		x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), true)
 			//			.Select(i => new { SkillDay = x, StaffPeriod = i }));
+			IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
+			foreach (var skill in skills)
+			{
+				var skillSkilldays = skillDays.Where(x => x.Skill.Equals(skill));
+				calculators.Add(new SkillDayCalculator(skill, skillSkilldays, period));
+				
+				foreach (ISkillDay skillDay in skillSkilldays)
+				{
+					skillDay.RecalculateDailyTasks();
+				}
+			}
+			
+			
 
 			var periods = skillDays
 				.SelectMany(x =>

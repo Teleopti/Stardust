@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
@@ -260,6 +261,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			var act = ActivityFactory.CreateActivity("act");
 			var emailSkill = SkillSetupHelper.CreateSkill(minutesPerInterval, "email", openHours, false, act, TimeSpan.FromHours(opensAtUtc.Hour));
+			
 			SkillRepository.Has(emailSkill);
 
 			//var val = 1;
