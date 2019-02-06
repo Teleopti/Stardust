@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		protected void CloneEvents(AggregateRoot_Events clone)
 		{
+			if (clone == null)
+				return;
 			clone._events = _events.Clone();
 		}
 
