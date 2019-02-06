@@ -40,8 +40,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var irrelevantActivity = ActivityRepository.Has("irrelevant");
 			var skill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
 			var irrelevantSkill = SkillRepository.Has("irrelevant skill", irrelevantActivity); // To see we don't include this in the result
-			
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Day, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -73,8 +72,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var activityConectedToSkill = ActivityRepository.Has("_");
 			var activityConnectedToRuleSet = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activityConectedToSkill, new TimePeriod(8, 16));
-
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityConnectedToRuleSet,
@@ -106,8 +104,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var relevantSkill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
 			var irrellevantSkill = SkillRepository.Has("irrelevant skill", activity, new TimePeriod(8, 16));
-
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
@@ -137,8 +134,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var relevantSkill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
 			var irrelevantSkill = SkillRepository.Has("irrelevant skill", activity, new TimePeriod(8, 16));
-
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriodMonth = new SchedulePeriod(new DateOnly(2015, 1, 1), SchedulePeriodType.Month, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
@@ -169,8 +165,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var activeSkill = SkillRepository.Has("active skill", activity, new TimePeriod(8, 16));
 			var inactiveSkill = SkillRepository.Has("inactive skill", activity, new TimePeriod(8, 16));
-
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(new DateOnly(2015, 1, 1), SchedulePeriodType.Week, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
@@ -198,8 +193,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var date = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
-
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
 			var filterContract = new Contract("_");
 			var contractScheduleWorkingMondayToFriday = new ContractScheduleWorkingMondayToFriday();

@@ -27,6 +27,7 @@ namespace Teleopti.Wfm.SchedulingTest.UnitTests
 	[ExtendScope(typeof(DayOffOptimizationEventHandler))]
 	[ExtendScope(typeof(WebScheduleStardustHandler))]
 	[ExtendScope(typeof(SchedulingEventHandler))]
+	[NoDefaultData]
 	public class SchedulePlanningPeriodCommandHandlerHeatMapTest : DayOffOptimizationScenario
 	{
 		public SchedulePlanningPeriodCommandHandler Target;

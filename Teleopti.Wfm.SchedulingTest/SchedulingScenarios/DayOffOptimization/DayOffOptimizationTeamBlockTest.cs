@@ -45,7 +45,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
         	var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
         	var activity = ActivityRepository.Has();
         	var skill = SkillRepository.Has(activity);
-        	var scenario = ScenarioRepository.Has();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
         	var team = new Team().WithDescription(new Description("team1")).WithId();
 			FakeTeamRepository.HasConnectedToCurrentBusinessUnit(team);
         	var shiftCategory = new ShiftCategory().WithId();
@@ -81,7 +81,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
         	var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
         	var activity = ActivityRepository.Has();
         	var skill = SkillRepository.Has(activity);
-        	var scenario = ScenarioRepository.Has();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
         	var team = new Team().WithDescription(new Description("team1")).WithId();
 			FakeTeamRepository.HasConnectedToCurrentBusinessUnit(team);
         	var shiftCategory = new ShiftCategory().WithId();
@@ -117,7 +117,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
         	var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
         	var activity = ActivityRepository.Has();
         	var skill = SkillRepository.Has(activity);
-        	var scenario = ScenarioRepository.Has();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
         	var team = new Team().WithDescription(new Description("team1")).WithId();
 			FakeTeamRepository.HasConnectedToCurrentBusinessUnit(team);
         	var shiftCategory1 = new ShiftCategory().WithId();
@@ -152,7 +152,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var team = new Team {Site = new Site("site")};
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var agent1 = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOff(1), ruleSet, skill);

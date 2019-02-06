@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
 			var shiftCategory = new ShiftCategory("_").WithId();

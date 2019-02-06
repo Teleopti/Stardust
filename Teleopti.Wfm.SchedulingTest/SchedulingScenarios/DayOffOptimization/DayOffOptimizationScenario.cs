@@ -14,6 +14,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 	[LoggedOnAppDomain]
 	[DontSendEventsAtPersist]
 	[TestFixtureSource(typeof(dayOffFixtureSource))]
+	[DefaultData]
 	public abstract class DayOffOptimizationScenario : IIsolateSystem, IExtendSystem, ITestInterceptor, IConfigureToggleManager
 	{
 		protected readonly ResourcePlannerTestParameters ResourcePlannerTestParameters;

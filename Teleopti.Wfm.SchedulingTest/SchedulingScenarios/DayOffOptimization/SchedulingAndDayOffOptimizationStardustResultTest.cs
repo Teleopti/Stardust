@@ -52,7 +52,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var activity = ActivityRepository.Has("_");
 			var skillTimeZone = TimeZoneInfo.FindSystemTimeZoneById(skillTimeZoneStr);
 			var skill = SkillRepository.Has("relevant skill", activity).InTimeZone(skillTimeZone);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Day, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var filterContract = new ContractWithMaximumTolerance().WithId();
