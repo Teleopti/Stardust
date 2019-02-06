@@ -526,19 +526,11 @@
     <Compile Include="Analytics\Transformer\IPersonPeriodFilter.cs" />
     <Compile Include="Analytics\Transformer\IPersonPeriodTransformer.cs" />
     <Compile Include="Analytics\Transformer\PersonPeriodFilterForDateCreation.cs" />
-    <Compile Include="Aop\AnalyticsUnitOfWorkAttribute.cs" />
-    <Compile Include="Aop\IAnalyticsUnitOfWorkAspect.cs" />
-    <Compile Include="Aop\ILogManager.cs" />
     <Compile Include="Aop\IMessageBrokerUnitOfWorkAspect.cs" />
-    <Compile Include="Aop\InvocationInfoBuilder.cs" />
-    <Compile Include="Aop\LogInfoAspect.cs" />
-    <Compile Include="Aop\LogInfoAttribute.cs" />
-    <Compile Include="Aop\IUnitOfWorkAspect.cs" />
     <Compile Include="Aop\IAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Aop\LogManagerWrapper.cs" />
     <Compile Include="Aop\MessageBrokerUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\TestLog.cs" />
-    <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestQueueStrategyHandler.cs" />
@@ -2176,7 +2168,6 @@
     <Compile Include="Forecasting\ITaskOwnerPeriod.cs" />
     <Compile Include="Forecasting\OverrideTask.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
-    <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="Helper\DateExtensions.cs" />
     <Compile Include="Helper\ISchedulingProgress.cs" />
@@ -2220,11 +2211,6 @@
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerTracer.cs" />
     <Compile Include="MultiTenancy\CannotIterateAllTenants.cs" />
-    <Compile Include="MultiTenancy\ICountTenants.cs" />
-    <Compile Include="MultiTenancy\IFindTenantNameByRtaKey.cs" />
-    <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />
-    <Compile Include="MultiTenancy\NoTenantAuthenticationAttribute.cs" />
-    <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\FilterMapper.cs" />
     <Compile Include="Optimization\FilterModel.cs" />
     <Compile Include="Optimization\Filters\ContractFilter.cs" />
@@ -2557,7 +2543,6 @@
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayIsLockedSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\VerifyWeeklyRestAroundDayOffSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
-    <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="Outbound\Campaign.cs" />
     <Compile Include="Outbound\OutboundProductionPlanFactory.cs" />
     <Compile Include="Outbound\OutboundSkillCreator.cs" />
@@ -4006,7 +3991,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Aop\Core\" />
     <Folder Include="Logon\Aspects\" />
     <Folder Include="Properties\" />
   </ItemGroup>

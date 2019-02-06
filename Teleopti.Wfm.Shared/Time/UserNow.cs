@@ -18,5 +18,10 @@ namespace Teleopti.Ccc.Domain.Common.Time
 		{
 			return TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 		}
+		
+		public DateTime Date()
+		{
+			return DateTime().Date;
+		}
 	}
 }

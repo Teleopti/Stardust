@@ -77,6 +77,8 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Analytics\AnalyticsUnitOfWorkAttribute.cs" />
+    <Compile Include="Analytics\IAnalyticsUnitOfWorkAspect.cs" />
     <Compile Include="Aspects\AspectAttribute.cs" />
     <Compile Include="Aspects\IAspect.cs" />
     <Compile Include="Aspects\IInvocationInfo.cs" />
@@ -124,6 +126,10 @@
     <Compile Include="IJsonDeserializer.cs" />
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="IRetryHandle.cs" />
+    <Compile Include="Log\ILogManager.cs" />
+    <Compile Include="Log\InvocationInfoBuilder.cs" />
+    <Compile Include="Log\LogInfoAspect.cs" />
+    <Compile Include="Log\LogInfoAttribute.cs" />
     <Compile Include="Principal\AppDomainPrincipalContext.cs" />
     <Compile Include="Principal\CurrentProcess.cs" />
     <Compile Include="Principal\CurrentTeleoptiPrincipal.cs" />
@@ -150,24 +156,31 @@
     <Compile Include="Principal\TeleoptiPrincipalInternalsFactory.cs" />
     <Compile Include="Principal\ThreadPrincipalContext.cs" />
     <Compile Include="Principal\WebRequestPrincipalContext.cs" />
+    <Compile Include="ReadModel\IReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="ReadModel\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="Retry.cs" />
     <Compile Include="Tenant\ActiveTenants.cs" />
     <Compile Include="Tenant\DataSourceConfiguration.cs" />
     <Compile Include="Tenant\DataSourceForTenant.cs" />
     <Compile Include="Tenant\IAllTenantNames.cs" />
+    <Compile Include="Tenant\ICountTenants.cs" />
     <Compile Include="Tenant\ICurrentDataSource.cs" />
     <Compile Include="Tenant\IDataSource.cs" />
     <Compile Include="Tenant\IDataSourceForTenant.cs" />
     <Compile Include="Tenant\IDataSourceScope.cs" />
     <Compile Include="Tenant\IDataSourcesFactory.cs" />
     <Compile Include="Tenant\IFindTenantByNameWithEnsuredTransaction.cs" />
+    <Compile Include="Tenant\IFindTenantNameByRtaKey.cs" />
     <Compile Include="Tenant\IInitializeLicenseServiceForTenant.cs" />
     <Compile Include="Tenant\ILicenseFeedback.cs" />
+    <Compile Include="Tenant\ITenantUnitOfWorkAspect.cs" />
+    <Compile Include="Tenant\NoTenantAuthenticationAttribute.cs" />
     <Compile Include="Tenant\Tenant.cs" />
     <Compile Include="Tenant\TenantApplicationConfigKey.cs" />
     <Compile Include="Tenant\TenantFromArguments.cs" />
     <Compile Include="Tenant\TenantScopeAspect.cs" />
     <Compile Include="Tenant\TenantScopeAttribute.cs" />
+    <Compile Include="Tenant\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Time\INow.cs" />
     <Compile Include="Time\IUserNow.cs" />
     <Compile Include="Time\UserNow.cs" />
@@ -192,8 +205,10 @@
     <Compile Include="UnitOfWork\IRootChangeInfo.cs" />
     <Compile Include="UnitOfWork\IStatelessUnitOfWork.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\IUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\IVersioned.cs" />
+    <Compile Include="UnitOfWork\UnitOfWorkAttribute.cs" />
     <Compile Include="Web\CurrentHttpContext.cs" />
     <Compile Include="Web\ICurrentHttpContext.cs" />
   </ItemGroup>
