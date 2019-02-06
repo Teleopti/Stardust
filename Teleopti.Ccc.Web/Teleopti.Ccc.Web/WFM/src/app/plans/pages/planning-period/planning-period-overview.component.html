@@ -29,17 +29,30 @@
 			</div>
 
 			<div class="grid-scroll-wrap">
-				<table class="overview">
+				<table>
+					<thead *ngIf="dayNodes&&dayNodes.length>0">
+						<tr>
+							<th></th>
+							<th *ngFor ="let month of months" [attr.colspan]="month.Count">
+								<p class="heatmap-date-header">{{ month.Name }}</p>
+							</th>
+						</tr>
+						<tr>
+							<th></th>
+							<th *ngFor ="let datenode of dayNodes[0].SkillDetails">
+								<p class="heatmap-date-header">{{datenode.Date | amDateFormat:"D"}}</p>
+							</th>
+						</tr>
+					</thead>
 					<tbody>
 						<tr *ngFor="let subnode of dayNodes">
 							<td class="skill-name">{{ subnode.SkillName }}</td>
 							<td
-								class="long"
 								*ngFor="let node of subnode.SkillDetails"
 								[ngClass]="{ weekend: node.weekend }"
 							>
 								<div nz-tooltip nzTitle="{{'RelativeDifference' | translate}}: {{node.RelativeDifferencePercent}}% | {{subnode.SkillName}} | {{node.Date | amDateFormat:'L'}}"
-									class="resourceplanner-box"
+									class="heatmap-box"
 									[ngClass]="{ closed: node.ColorId==4 }"
 									[style.background-color]="node.bgcolor"
 								></div>

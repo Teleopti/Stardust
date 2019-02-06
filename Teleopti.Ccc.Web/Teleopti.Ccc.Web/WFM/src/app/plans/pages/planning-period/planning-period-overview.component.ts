@@ -4,8 +4,10 @@ import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { map } from 'rxjs/operators';
+import {groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators';
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
+import {DateFormatPipe} from "ngx-moment";
+import {from} from "rxjs";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -32,6 +34,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	valLoading = true;
 	filteredPreValidations: any[];
 	filteredScheduleIssues: any[];
+	months : any;
 
 	validationFilter;
 
@@ -52,7 +55,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		private translate: TranslateService,
 		private navService: NavigationService,
 		private fb: FormBuilder,
-		private heatMapColorHelper:HeatMapColorHelper
+		private heatMapColorHelper:HeatMapColorHelper, 
+		private amDateFormat: DateFormatPipe
 	) {
 		this.ppId = $state.params.ppId.trim();
 		this.groupId = $state.params.groupId.trim();
@@ -299,6 +303,20 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					});
 				}
 				this.dayNodes = skillResultList;
+				if(skillResultList && skillResultList.length>0) {
+					const months = skillResultList[0].SkillDetails.map((item: any) => this.amDateFormat.transform(item.Date, 'MMMM'));
+
+					const monthCount = from(months).pipe(
+						groupBy(item => item),
+						mergeMap(group => group.pipe(
+							reduce((total, item) => total + 1, 0),
+							map(total => ({Name: group.key, Count: total}))
+							)
+						),
+						toArray());
+
+					monthCount.subscribe(result => this.months = result);
+				}
 			} else {
 				this.isScheduled = false;
 			}

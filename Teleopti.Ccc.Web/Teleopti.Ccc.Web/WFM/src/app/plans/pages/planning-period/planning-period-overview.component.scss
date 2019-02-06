@@ -51,12 +51,21 @@ table.overview {
 	background-color: darkgray !important;
 }
 
-.resourceplanner-box {
-	width: 20px;
-	height: 20px;
+.heatmap-date-header{
+	text-align: center;
+	margin: 2px;
 }
 
-.resourceplanner-box:hover {
+.heatmap-box {
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	position: relative;
+	cursor: pointer;
+	margin: 2px;
+}
+
+.heatmap-box:hover {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
 }
 
