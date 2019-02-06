@@ -30,13 +30,11 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 	{
 		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		[Test]
 		public void ShouldNotCrashWhenUsingKeepExistingDaysOff()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2010, 1, 1);
@@ -76,7 +74,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldMarkDayToBeRecalculated()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -108,7 +105,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotMarkDayThatIsNotChangedToBeRecalculated()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -140,7 +136,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldMarkDayToBeRecalculatedWhenDoNotBreak()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -172,7 +167,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotMarkDayToBeRecalculatedWhenDoNotBreak()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var site = new Site("siten") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithId().WithDescription(new Description("_"));
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
@@ -202,7 +196,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldConsiderKeepStartTime()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2010, 1, 1);
@@ -266,7 +259,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotCrashOnSchedulePeriodSameShiftCategoryAndKeepActivityLength()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var date = new DateOnly(2014, 4, 1);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var scenario = new Scenario("Default").WithId();
@@ -306,7 +298,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotCrashWhenAgentHaveNoSkill()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var date = new DateOnly(2014, 4, 1);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var scenario = new Scenario("Default").WithId();
@@ -345,7 +336,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldConsiderCrossSkillAgents()
 		{
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var scenario = new Scenario();
 			var activity = new Activity();
 			var dateOnly = new DateOnly(2010, 1, 1);

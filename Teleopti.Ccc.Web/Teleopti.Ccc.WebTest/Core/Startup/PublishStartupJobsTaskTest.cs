@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			_eventPublisher = new LegacyFakeEventPublisher();
 			_loadAllTenants = new FakeTenants();
-			_businessUnitRepository = new FakeBusinessUnitRepository(null);
+			_businessUnitRepository = new FakeBusinessUnitRepository();
 			_tenantUnitOfWorkFake = new TenantUnitOfWorkFake();
 
 			_target = new PublishStartupJobsTask(_eventPublisher, _loadAllTenants, _tenantUnitOfWorkFake);
