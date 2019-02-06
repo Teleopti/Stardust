@@ -263,14 +263,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			public static IDisposableWithUow Create(ICurrentUnitOfWorkFactory unitOfWorkFactory)
 			{
-				try
-				{
-					return new emptyDisposable(unitOfWorkFactory.Current().CurrentUnitOfWork());
-				}
-				catch (Exception)
-				{
-					return new disposableUnitOfWork(unitOfWorkFactory.Current().CreateAndOpenUnitOfWork());
-				}
+				var currUowFactory = unitOfWorkFactory.Current();
+				return currUowFactory.HasCurrentUnitOfWork()
+					? (IDisposableWithUow) new emptyDisposable(currUowFactory.CurrentUnitOfWork())
+					: new disposableUnitOfWork(currUowFactory.CreateAndOpenUnitOfWork());
 			}
 
 			class disposableUnitOfWork : IDisposableWithUow
