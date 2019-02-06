@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -25,6 +28,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeDatabase Database;
+		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
+		public IBusinessRuleConfigProvider BusinessRuleConfigProvider;
 		public MutableNow Now;
 
 		public void Isolate(IIsolate isolate)
@@ -41,8 +46,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(2)
-				.WithBusinessRuleForShiftTrade()
+				.WithShiftTradeWorkflow(2);
+			WithBusinessRuleForShiftTrade();
+			Database
 				.WithAgent(personFromId)
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
 				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
@@ -66,8 +72,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(2)
-				.WithBusinessRuleForShiftTrade()
+				.WithShiftTradeWorkflow(2);
+			WithBusinessRuleForShiftTrade();
+			Database
 				.WithAgent(personFromId)
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
 				.WithPersonAbsence("2018-05-09 8:00", "2018-05-09 16:00")
@@ -92,8 +99,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(2)
-				.WithBusinessRuleForShiftTrade()
+				.WithShiftTradeWorkflow(2);
+			WithBusinessRuleForShiftTrade();
+			Database
 				.WithAgent(personFromId)
 				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
 				.WithScheduleDayOff("2018-05-11")
@@ -116,8 +124,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(3)
-				.WithBusinessRuleForShiftTrade()
+				.WithShiftTradeWorkflow(3);
+			WithBusinessRuleForShiftTrade();
+			Database
 				.WithAgent(personFromId)
 				.WithScheduleDayOff("2018-05-08")
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
@@ -142,8 +151,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(2)
-				.WithBusinessRuleForShiftTrade()
+				.WithShiftTradeWorkflow(2);
+			WithBusinessRuleForShiftTrade();
+			Database
 				.WithAgent(personFromId)
 				.WithScheduleDayOff("2018-05-09")
 				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
@@ -170,8 +180,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(2)
-				.WithBusinessRuleForShiftTrade()
+				.WithShiftTradeWorkflow(2);
+			WithBusinessRuleForShiftTrade();
+			Database
 				.WithAgent(personFromId)
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
 				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
@@ -194,8 +205,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(2)
-				.WithBusinessRuleForShiftTrade(false)
+				.WithShiftTradeWorkflow(2);
+			WithBusinessRuleForShiftTrade(false);
+			Database
 				.WithAgent(personFromId)
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
 				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
@@ -218,8 +230,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(2)
-				.WithBusinessRuleForShiftTrade(true, RequestHandleOption.Pending)
+				.WithShiftTradeWorkflow(2);
+			WithBusinessRuleForShiftTrade(true, RequestHandleOption.Pending);
+			Database
 				.WithAgent(personFromId)
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
 				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
@@ -242,8 +255,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(1)
-				.WithBusinessRuleForShiftTrade()
+				.WithShiftTradeWorkflow(1);
+			WithBusinessRuleForShiftTrade();
+			Database
 				.WithAgent(personToId)
 				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
 				.WithScheduleDayOff("2018-05-11")
@@ -267,9 +281,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 			Database
-				.WithShiftTradeWorkflow(2)
-				.WithBusinessRuleForShiftTrade()
-				.WithAgent(personFromId)
+				.WithShiftTradeWorkflow(2);
+			WithBusinessRuleForShiftTrade();
+			Database.WithAgent(personFromId)
 				.WithScheduleDayOff("2018-05-08")
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
 				.WithScheduleDayOff("2018-05-10")
@@ -285,6 +299,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var handledRequest = PersonRequestRepository.Get(Database.CurrentPersonRequestId());
 			handledRequest.IsApproved.Should().Be.True();
+		}
+		
+		public void WithBusinessRuleForShiftTrade(bool enable = true, RequestHandleOption handleOption = RequestHandleOption.AutoDeny)
+		{
+			GlobalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey,
+				new ShiftTradeSettings
+				{
+					BusinessRuleConfigs =
+						BusinessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest().Cast<ShiftTradeBusinessRuleConfig>()
+							.ForEach(x =>
+							{
+								if (enable) x.Enabled = true;
+								if (handleOption == RequestHandleOption.AutoDeny) x.HandleOptionOnFailed = handleOption;
+							}).ToArray()
+				});
 		}
 
 		private AcceptShiftTradeEvent createAcceptShiftTradeEvent(Guid personToId, bool useMaximumWorkday = true)

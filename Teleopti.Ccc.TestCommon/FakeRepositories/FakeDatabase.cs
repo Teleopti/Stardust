@@ -434,11 +434,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
 		private readonly FakeShiftCategoryRepository _shiftCategories;
-		private readonly FakeGlobalSettingDataRepository _globalSettings;
 		private readonly FakePersonRequestRepository _personRequests;
 		private readonly ApprovePeriodAsInAdherence _approvePeriod;
 		private readonly RemoveApprovedPeriod _removePeriod;
-		private readonly IBusinessRuleConfigProvider _businessRuleConfig;
 		private readonly FakeRtaHistory _rtaHistory;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 		
@@ -499,11 +497,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
 			FakeShiftCategoryRepository shiftCategories,
-			FakeGlobalSettingDataRepository globalSettings,
 			FakePersonRequestRepository personRequests,
 			ApprovePeriodAsInAdherence approvePeriod,
 			RemoveApprovedPeriod removePeriod,
-			IBusinessRuleConfigProvider businessRuleConfig,
 			FakeRtaHistory rtaHistory,
 			IShiftTradeRequestSetChecksum shiftTradeSetChecksum)
 		{
@@ -540,10 +536,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
 			_shiftCategories = shiftCategories;
-			_globalSettings = globalSettings;
 			_personRequests = personRequests;
 			_approvePeriod = approvePeriod;
-			_businessRuleConfig = businessRuleConfig;
 			_rtaHistory = rtaHistory;
 			_removePeriod = removePeriod;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
@@ -1130,22 +1124,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 100);
 			if (maximumConsecutiveWorkingDays != null)
 				_workflowControlSet.MaximumConsecutiveWorkingDays = maximumConsecutiveWorkingDays.Value;
-			return this;
-		}
-
-		public FakeDatabase WithBusinessRuleForShiftTrade(bool enable = true, RequestHandleOption handleOption = RequestHandleOption.AutoDeny)
-		{
-			_globalSettings.PersistSettingValue(ShiftTradeSettings.SettingsKey,
-				new ShiftTradeSettings
-				{
-					BusinessRuleConfigs =
-						_businessRuleConfig.GetDefaultConfigForShiftTradeRequest().Cast<ShiftTradeBusinessRuleConfig>()
-							.ForEach(x =>
-							{
-								if (enable) x.Enabled = true;
-								if (handleOption == RequestHandleOption.AutoDeny) x.HandleOptionOnFailed = handleOption;
-							}).ToArray()
-				});
 			return this;
 		}
 
