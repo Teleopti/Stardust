@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	[TestFixture]
 	[DomainTest]
 	[AllTogglesOn]
-	[Ignore("WIP")]
 	public class SkillForecastIntervalCalculatorTest : IIsolateSystem
 	{
 		public SkillForecastIntervalCalculator Target;
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 
 			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(
 				new[] {phoneSkill.Id.GetValueOrDefault(), emailSkill.Id.GetValueOrDefault()}, new DateTimePeriod(dtp.StartDate.Date.Utc(),dtp.EndDate.Date.Utc()));
-			skillStaffIntervals.Count.Should().Be.EqualTo(16);
+			skillStaffIntervals.Count.Should().Be.EqualTo(7);
 		}
 
 
@@ -174,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			skillStaffIntervals.Count(x => x.SkillId == phoneSkill.Id.GetValueOrDefault() && x.IsBackOffice == false)
 				.Should().Be.EqualTo(4);
 			skillStaffIntervals.Count(x => x.SkillId == emailSkill.Id.GetValueOrDefault() && x.IsBackOffice)
-				.Should().Be.EqualTo(4);
+				.Should().Be.EqualTo(1);
 
 		}
 
