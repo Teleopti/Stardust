@@ -5,6 +5,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.ResourceCalculation
 {
+	[DefaultData]
 	public abstract class ResourceCalculationScenario : IConfigureToggleManager, IExtendSystem
 	{
 		public void Configure(FakeToggleManager toggleManager)
