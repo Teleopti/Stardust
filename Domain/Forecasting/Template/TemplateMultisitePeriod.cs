@@ -170,7 +170,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             get { return _version; }
         }
 
-        public virtual void SetVersion(int version)
+		public virtual bool IsDistributionChangeNotAllowed { get; set; }
+
+		public virtual void SetVersion(int version)
         {
             throw new NotSupportedException("Cannot set version on this instance");
         }
