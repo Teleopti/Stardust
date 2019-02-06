@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
-			builder.RegisterType<NotificationCreator>().As<INotificationCreator>().SingleInstance();
 
 			builder.RegisterType<MessageBrokerCompositeClient>()
 				.As<IMessageBrokerComposite>()

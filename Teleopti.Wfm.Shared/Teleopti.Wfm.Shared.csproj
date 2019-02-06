@@ -79,6 +79,8 @@
     </Compile>
     <Compile Include="Analytics\AnalyticsUnitOfWorkAttribute.cs" />
     <Compile Include="Analytics\IAnalyticsUnitOfWorkAspect.cs" />
+    <Compile Include="Analytics\ICurrentAnalyticsUnitOfWork.cs" />
+    <Compile Include="Analytics\WithAnalyticsUnitOfWork.cs" />
     <Compile Include="Aspects\AspectAttribute.cs" />
     <Compile Include="Aspects\IAspect.cs" />
     <Compile Include="Aspects\IInvocationInfo.cs" />
@@ -86,6 +88,8 @@
     <Compile Include="Configuration\IConfigReader.cs" />
     <Compile Include="ConstraintViolationException.cs" />
     <Compile Include="DataSourceException.cs" />
+    <Compile Include="DeadLockRetrier.cs" />
+    <Compile Include="DeadLockVictimException.cs" />
     <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
     <Compile Include="Events\AllowFailuresAttribute.cs" />
     <Compile Include="Events\AttemptsAttribute.cs" />
@@ -130,6 +134,9 @@
     <Compile Include="Log\InvocationInfoBuilder.cs" />
     <Compile Include="Log\LogInfoAspect.cs" />
     <Compile Include="Log\LogInfoAttribute.cs" />
+    <Compile Include="Log\TestLog.cs" />
+    <Compile Include="Log\TestLogAspect.cs" />
+    <Compile Include="Log\TestLogAttribute.cs" />
     <Compile Include="Principal\AppDomainPrincipalContext.cs" />
     <Compile Include="Principal\CurrentProcess.cs" />
     <Compile Include="Principal\CurrentTeleoptiPrincipal.cs" />
@@ -187,10 +194,12 @@
     <Compile Include="UnitOfWork\AggregateRoot.cs" />
     <Compile Include="UnitOfWork\AggregateRoot_Events.cs" />
     <Compile Include="UnitOfWork\AggregateRoot_Events_Versioned_BusinessUnitId.cs" />
+    <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="UnitOfWork\DomainUpdateType.cs" />
     <Compile Include="UnitOfWork\Entity.cs" />
     <Compile Include="UnitOfWork\Events.cs" />
     <Compile Include="UnitOfWork\IAggregateRoot.cs" />
+    <Compile Include="UnitOfWork\IAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\IAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\IFilterOnBusinessUnitId.cs" />
     <Compile Include="UnitOfWork\ICurrentReadModelUnitOfWork.cs" />

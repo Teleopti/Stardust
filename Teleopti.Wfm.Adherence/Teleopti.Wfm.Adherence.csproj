@@ -249,7 +249,6 @@
     <Compile Include="States\Infrastructure\StateQueueHealthCheckerProcess.cs" />
     <Compile Include="States\Infrastructure\StateQueueUtilities.cs" />
     <Compile Include="States\Infrastructure\StateQueueWorker.cs" />
-    <Compile Include="States\INotificationCreator.cs" />
     <Compile Include="States\InputInfo.cs" />
     <Compile Include="States\InvalidAuthenticationKeyException.cs" />
     <Compile Include="States\InvalidSourceException.cs" />
@@ -265,7 +264,6 @@
     <Compile Include="States\Mapping.cs" />
     <Compile Include="States\MappingReadModelUpdater.cs" />
     <Compile Include="States\NoLoggedOutStateGroupsException.cs" />
-    <Compile Include="States\NotificationCreator.cs" />
     <Compile Include="States\PerTenant.cs" />
     <Compile Include="States\Rta.cs" />
     <Compile Include="States\RuleEventPublisher.cs" />
