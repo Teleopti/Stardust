@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var date = new DateOnly(2018, 8, 13);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has(activity);
-			var scenario = ScenarioRepository.Has();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 2, 2, 2, 2, 2, 2));
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));

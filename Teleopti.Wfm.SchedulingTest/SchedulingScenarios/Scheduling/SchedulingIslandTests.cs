@@ -34,7 +34,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 1);
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var activityAB = new Activity("AB").WithId();
 			var activityC = new Activity("C").WithId();
 			var skillA = SkillRepository.Has("skillA", activityAB);

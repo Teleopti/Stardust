@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
-			if (QueryAllAttributes<DefaultDataAttribute>().Any())
+			if (QueryAllAttributes<DefaultDataAttribute>().Any() && !QueryAllAttributes<NoDefaultDataAttribute>().Any())
 				Database.Value.CreateDefaultData(businessUnit);
 		}
 

@@ -6,4 +6,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	public class DefaultDataAttribute : Attribute
 	{
 	}
+	
+	[AttributeUsage(AttributeTargets.Class)]
+	public class NoDefaultDataAttribute : Attribute{}
 }

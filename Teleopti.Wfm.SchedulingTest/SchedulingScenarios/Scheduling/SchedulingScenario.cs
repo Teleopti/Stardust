@@ -13,6 +13,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[DontSendEventsAtPersist]
+	[DefaultData]
 	public abstract class SchedulingScenario : ITestInterceptor, IExtendSystem, IConfigureToggleManager
 	{
 		protected readonly ResourcePlannerTestParameters ResourcePlannerTestParameters;

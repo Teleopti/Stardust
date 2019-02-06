@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
@@ -59,7 +59,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory10H = new ShiftCategory().WithId();
 			var shiftCategory8H = new ShiftCategory().WithId();
 			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory8H));
@@ -84,7 +84,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategoryInRuleSet = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategoryInRuleSet));
 			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
@@ -107,7 +107,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var ruleSet10H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet8H, skill);
@@ -162,7 +162,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has();
 			activity.AllowOverwrite = true;
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var ruleSet10H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
@@ -193,7 +193,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet8H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var ruleSet10H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
@@ -225,7 +225,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var contract = new Contract("_")
@@ -256,7 +256,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
 			var activity = ActivityRepository.Has();
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);

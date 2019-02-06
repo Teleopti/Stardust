@@ -39,7 +39,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var skillActivity = ActivityRepository.Has("_");
 			var shiftBagActivity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", skillActivity);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(shiftBagActivity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -89,7 +89,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(12, 0, 12, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -118,7 +118,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -150,7 +150,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var contract = new Contract("_")
 			{
@@ -180,7 +180,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var firstDay = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var contract = new Contract("_")
@@ -216,7 +216,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 		{
 			var monday = new DateOnly(2018, 10, 8);
 			var planningPeriod = PlanningPeriodRepository.Has(monday, SchedulePeriodType.Day, 1);
-			var scenario = ScenarioRepository.Has();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var agent = PersonRepository.Has(new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(monday, SchedulePeriodType.Day, 1));
 			var personAbsence = new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence(), monday.AddDays(absencePosition).ToDateOnlyPeriod().ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone())));
 			PersonAbsenceRepository.Has(personAbsence);
@@ -233,7 +233,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = PersonRepository.Has(new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
@@ -258,7 +258,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
 			var agent = PersonRepository.Has(new ContractScheduleWorkingMondayToFriday(), new SchedulePeriod(date, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1),1));
@@ -282,7 +282,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategoryInSecondShiftBag = new ShiftCategory("_").WithId();
 			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), new ShiftCategory("_").WithId()));
 			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryInSecondShiftBag));

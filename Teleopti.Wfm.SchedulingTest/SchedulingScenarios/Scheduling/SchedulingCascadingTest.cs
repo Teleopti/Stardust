@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skillA = SkillRepository.Has("A", activity, 1).DefaultResolution(15);
 			var skillB = SkillRepository.Has("B", activity, 2).DefaultResolution(15);
-			var scenario = ScenarioRepository.Has("default");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet =
 				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
