@@ -24,7 +24,6 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		public void Create(Tenant tenant, string businessUnitName)
 		{
-			
 		}
 	}
 
@@ -45,7 +44,6 @@ namespace Teleopti.Wfm.Administration.Core
 		private readonly Func<ICurrentUnitOfWork, IKpiRepository> _kpiRepository;
 		private readonly Func<ICurrentUnitOfWork, ISkillTypeRepository> _skillTypeRepository;
 		private readonly Func<ICurrentUnitOfWork, IRtaStateGroupRepository> _rtaStateGroupRepository;
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
 		public CreateBusinessUnit(IDataSourcesFactory dataSourcesFactory,
 			IRunWithUnitOfWork runWithUnitOfWork,
@@ -56,8 +54,7 @@ namespace Teleopti.Wfm.Administration.Core
 			Func<ICurrentUnitOfWork, IAvailableDataRepository> availableDataRepository,
 			Func<ICurrentUnitOfWork, IKpiRepository> kpiRepository,
 			Func<ICurrentUnitOfWork, ISkillTypeRepository> skillTypeRepository,
-			Func<ICurrentUnitOfWork, IRtaStateGroupRepository> rtaStateGroupRepository,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+			Func<ICurrentUnitOfWork, IRtaStateGroupRepository> rtaStateGroupRepository)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 			_runWithUnitOfWork = runWithUnitOfWork;
@@ -69,7 +66,6 @@ namespace Teleopti.Wfm.Administration.Core
 			_kpiRepository = kpiRepository;
 			_skillTypeRepository = skillTypeRepository;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
-			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
 		public void Create(Tenant tenant, string businessUnitName)

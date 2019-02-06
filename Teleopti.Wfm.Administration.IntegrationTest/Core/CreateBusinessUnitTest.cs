@@ -52,8 +52,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				uow => _availableDataRepository,
 				uow => _kpiRepository,
 				uow => _skillTypeRepository,
-				uow => _rtaStateGroupRepository,
-				new StaffingCalculatorServiceFacade());
+				uow => _rtaStateGroupRepository);
 		}
 
 		[Test]
