@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Analytics.ReportTexts;
@@ -36,25 +35,27 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly IRunWithUnitOfWork _runWithUnitOfWork;
-		private readonly Func<ICurrentUnitOfWork, IBusinessUnitRepository> _businessUnitRepository;
-		private readonly Func<ICurrentUnitOfWork, IPersonRepository> _personRepository;
-		private readonly Func<ICurrentUnitOfWork, IScenarioRepository> _scenarioRepository;
-		private readonly Func<ICurrentUnitOfWork, IApplicationRoleRepository> _applicationRoleRepository;
-		private readonly Func<ICurrentUnitOfWork, IAvailableDataRepository> _availableDataRepository;
-		private readonly Func<ICurrentUnitOfWork, IKpiRepository> _kpiRepository;
-		private readonly Func<ICurrentUnitOfWork, ISkillTypeRepository> _skillTypeRepository;
-		private readonly Func<ICurrentUnitOfWork, IRtaStateGroupRepository> _rtaStateGroupRepository;
+		private readonly IBusinessUnitRepository _businessUnitRepository;
+		private readonly IPersonRepository _personRepository;
+		private readonly IScenarioRepository _scenarioRepository;
+		private readonly IApplicationRoleRepository _applicationRoleRepository;
+		private readonly IAvailableDataRepository _availableDataRepository;
+		private readonly IKpiRepository _kpiRepository;
+		private readonly ISkillTypeRepository _skillTypeRepository;
+		private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public CreateBusinessUnit(IDataSourcesFactory dataSourcesFactory,
 			IRunWithUnitOfWork runWithUnitOfWork,
-			Func<ICurrentUnitOfWork, IBusinessUnitRepository> businessUnitRepository,
-			Func<ICurrentUnitOfWork, IPersonRepository> personRepository,
-			Func<ICurrentUnitOfWork, IScenarioRepository> scenarioRepository,
-			Func<ICurrentUnitOfWork, IApplicationRoleRepository> applicationRoleRepository,
-			Func<ICurrentUnitOfWork, IAvailableDataRepository> availableDataRepository,
-			Func<ICurrentUnitOfWork, IKpiRepository> kpiRepository,
-			Func<ICurrentUnitOfWork, ISkillTypeRepository> skillTypeRepository,
-			Func<ICurrentUnitOfWork, IRtaStateGroupRepository> rtaStateGroupRepository)
+			IBusinessUnitRepository businessUnitRepository,
+			IPersonRepository personRepository,
+			IScenarioRepository scenarioRepository,
+			IApplicationRoleRepository applicationRoleRepository,
+			IAvailableDataRepository availableDataRepository,
+			IKpiRepository kpiRepository,
+			ISkillTypeRepository skillTypeRepository,
+			IRtaStateGroupRepository rtaStateGroupRepository,
+			ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 			_runWithUnitOfWork = runWithUnitOfWork;
@@ -66,6 +67,7 @@ namespace Teleopti.Wfm.Administration.Core
 			_kpiRepository = kpiRepository;
 			_skillTypeRepository = skillTypeRepository;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		public void Create(Tenant tenant, string businessUnitName)
@@ -74,15 +76,15 @@ namespace Teleopti.Wfm.Administration.Core
 			var newBusinessUnit = new BusinessUnit(businessUnitName);
 			IPerson systemUser = null;
 
-			_runWithUnitOfWork.WithGlobalScope(dataSource, uow =>
+			_runWithUnitOfWork.WithGlobalScope(dataSource, () =>
 			{
-				_businessUnitRepository(uow).Add(newBusinessUnit);
-				systemUser = _personRepository(uow).Get(SystemUser.Id); // This requires that the system user already exists!
+				_businessUnitRepository.Add(newBusinessUnit);
+				systemUser = _personRepository.Get(SystemUser.Id); // This requires that the system user already exists!
 			});
 
-			_runWithUnitOfWork.WithBusinessUnitScope(dataSource, newBusinessUnit, uow =>
+			_runWithUnitOfWork.WithBusinessUnitScope(dataSource, newBusinessUnit, () =>
 			{
-				createMissingKpis(_kpiRepository(uow));
+				createMissingKpis(_kpiRepository);
 
 				var administratorRole = buildRole(ShippedApplicationRoleNames.AdministratorRole, ShippedCustomRoles.xxBuiltInAdministratorRole.ToString(), false, newBusinessUnit);
 				var businessUnitAdministratorRole = buildRole(ShippedApplicationRoleNames.BusinessUnitAdministratorRole, ShippedCustomRoles.xxBuiltInBusinessUnitAdministratorRole.ToString(), false, newBusinessUnit);
@@ -94,22 +96,21 @@ namespace Teleopti.Wfm.Administration.Core
 				var siteManagerData = buildAvailableData(siteManagerRole, AvailableDataRangeOption.MySite);
 				var teamLeaderData = buildAvailableData(teamLeaderRole, AvailableDataRangeOption.MyOwn);
 				var agentData = buildAvailableData(agentRole, AvailableDataRangeOption.MyTeam);
-				_scenarioRepository(uow).Add(buildScenario());
-				_applicationRoleRepository(uow).AddRange(new[] { administratorRole, businessUnitAdministratorRole, siteManagerRole, teamLeaderRole, agentRole });
-				_availableDataRepository(uow).AddRange(new[] { administratorData, businessUnitAdministratorData, siteManagerData, teamLeaderData, agentData });
+				_scenarioRepository.Add(buildScenario());
+				_applicationRoleRepository.AddRange(new[] { administratorRole, businessUnitAdministratorRole, siteManagerRole, teamLeaderRole, agentRole });
+				_availableDataRepository.AddRange(new[] { administratorData, businessUnitAdministratorData, siteManagerData, teamLeaderData, agentData });
 
-				createMissingSkillTypes(_skillTypeRepository(uow));
+				createMissingSkillTypes(_skillTypeRepository);
 
 				if (systemUser != null)
 				{
-					uow.Current().Reassociate(systemUser);
+					_currentUnitOfWork.Current().Reassociate(systemUser);
 					systemUser.PermissionInformation.AddApplicationRole(administratorRole);
 				}
-				_personRepository(uow).Add(systemUser);
+				_personRepository.Add(systemUser);
 
 				var rtaStateGroupCreator = new RtaStateGroupCreator(@"RtaStates.xml");
-				var repo = _rtaStateGroupRepository(uow);
-				rtaStateGroupCreator.RtaGroupCollection.ForEach(x => repo.Add(x));
+				rtaStateGroupCreator.RtaGroupCollection.ForEach(x => _rtaStateGroupRepository.Add(x));
 			});
 		}
 
