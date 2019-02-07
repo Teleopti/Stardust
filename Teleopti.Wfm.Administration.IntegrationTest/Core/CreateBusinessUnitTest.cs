@@ -45,14 +45,15 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			_target = new CreateBusinessUnit(
 				_dataSourcesFactory,
 				_runWithUnitOfWork,
-				uow => _businessUnitRepository,
-				uow => _personRepository,
-				uow => _scenarioRepository,
-				uow => _applicationRoleRepository,
-				uow => _availableDataRepository,
-				uow => _kpiRepository,
-				uow => _skillTypeRepository,
-				uow => _rtaStateGroupRepository);
+				_businessUnitRepository,
+				_personRepository,
+				_scenarioRepository,
+				_applicationRoleRepository,
+				_availableDataRepository,
+				_kpiRepository,
+				_skillTypeRepository,
+				_rtaStateGroupRepository,
+				CurrentUnitOfWork.Make());
 		}
 
 		[Test]
