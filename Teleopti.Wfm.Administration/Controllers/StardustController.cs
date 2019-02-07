@@ -155,6 +155,30 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok();
 		}
 
+		[HttpPost, Route("Stardust/TriggerSkillForecastCalculation")]
+		[TenantUnitOfWork]
+		public virtual IHttpActionResult TriggerSkillForecastCalculation([FromBody] SkillForecastCalculationModel model)
+		{
+			if (model == null) return BadRequest("logOnModel is null!");
+			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(model.Tenant));
+			var appConnstring = tenant.DataSourceConfiguration.ApplicationConnectionString;
+			var bus = _stardustRepository.SelectAllBus(appConnstring);
+
+			foreach (var bu in bus)
+			{
+				_stardustSender.Send(
+					new UpdateSkillForecastReadModelEvent
+					{
+						StartDateTime = model.StartDate,
+						EndDateTime = model.EndDate,
+						LogOnDatasource = model.Tenant,
+						LogOnBusinessUnitId = bu
+					});
+			}
+
+			return Ok();
+		}
+
 		[HttpGet, Route("Stardust/HealthCheck")]
 		public IHttpActionResult HealthCheck()
 		{

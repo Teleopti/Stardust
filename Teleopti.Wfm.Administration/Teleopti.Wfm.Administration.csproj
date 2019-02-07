@@ -416,7 +416,7 @@
     <Compile Include="Core\EtlTool\TenantLogDataSourcesProvider.cs" />
     <Compile Include="Core\Modules\EtlToolModule.cs" />
     <Compile Include="Models\JobCollectionModel.cs" />
-    <Compile Include="Models\Stardust\LogOnModel.cs" />
+    <Compile Include="Models\Stardust\StardustModels.cs" />
     <Compile Include="Core\Stardust\IPingNode.cs" />
     <Compile Include="Core\Stardust\PingNode.cs" />
     <Compile Include="Core\Modules\StardustModule.cs" />
