@@ -356,7 +356,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						return suma>sumb?1:-1;
 					});
 				}
-				this.dayNodes = skillResultList;
+				this.dayNodes = skillResultList.filter(skill=>skill.SkillDetails.some(day=>day.ColorId!==4));
 				if(skillResultList && skillResultList.length>0) {
 					this.parseMonths();
 					this.parseWorstDays();
