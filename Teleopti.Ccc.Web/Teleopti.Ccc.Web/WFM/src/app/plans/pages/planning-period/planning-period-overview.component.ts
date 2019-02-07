@@ -340,7 +340,6 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						a.RelativeDifference>b.RelativeDifference?1:-1
 					);
 					this.worstDay = allDays[0];
-					console.log(this.worstDay)
 				}
 			} else {
 				this.isScheduled = false;
