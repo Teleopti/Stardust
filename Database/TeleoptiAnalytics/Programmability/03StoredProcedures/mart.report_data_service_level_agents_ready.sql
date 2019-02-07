@@ -105,7 +105,7 @@ CREATE TABLE #queue(
 	)
 
 --declare
-DECLARE @hide_time_zone bit, @default_scenario_id int, @business_unit_id int, @date_from_id int, @date_to_id int
+DECLARE @hide_time_zone bit, @default_scenario_id int, @business_unit_id int, @date_from_id int, @date_to_id int,@date_from_id_minus1 int, @date_to_id_plus1 int
 
 SET @hide_time_zone = 0
 
@@ -115,7 +115,9 @@ SELECT @default_scenario_id = scenario_id FROM mart.dim_scenario WHERE business_
 
 SELECT @date_from_id = date_id FROM mart.dim_date WHERE date_date = @date_from
 SELECT @date_to_id = date_id FROM mart.dim_date WHERE date_date = @date_to
-
+SELECT @date_from_id_minus1 = date_id from mart.dim_date where date_date = DATEADD(d,-1,@date_from)--make sure get correct date if gaps in dim_date
+SELECT @date_to_id_plus1 = date_id from mart.dim_date where date_date = DATEADD(d,1,@date_to) --make sure get correct date if gaps in dim_date
+--SELECT @date_from_id,@date_to_id,@date_from_id_minus1,@date_to_id_plus1
 
 /*Split string of skill id:s*/
 INSERT INTO #skills
@@ -297,11 +299,10 @@ SELECT
 	dp.skillset_id,
 	fs.scheduled_ready_time_m
 FROM mart.fact_schedule fs WITH (NOLOCK)
-INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
-	ON dpl.person_id = fs.person_id
 INNER JOIN mart.dim_person dp  WITH (NOLOCK)
-	ON dp.person_id = dpl.person_id
-WHERE shift_startdate_local_id between @date_from_id -1 and @date_to_id +1 
+	ON dp.person_id = fs.person_id
+	AND fs.shift_startdate_local_id between dp.valid_from_date_id_local and dp.valid_to_date_id_local
+WHERE shift_startdate_local_id between @date_from_id_minus1 and @date_to_id_plus1
 	AND fs.scenario_id = @default_scenario_id
 	AND fs.scheduled_ready_time_m > 0
 
@@ -324,7 +325,6 @@ INNER JOIN #skills s
 INNER JOIN #bridge_time_zone b
 	ON fs.interval_id = b.interval_id
 	AND fs.schedule_date_id = b.date_id
-	AND fs.shift_startdate_local_id BETWEEN b.date_id -1 AND b.date_id +1
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
 	AND d.date_date BETWEEN @date_from AND @date_to
@@ -358,10 +358,8 @@ SELECT	CASE @interval_type
 FROM mart.fact_agent fa
 INNER JOIN mart.bridge_acd_login_person bap 
 	ON fa.acd_login_id=bap.acd_login_id
-INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
-	ON dpl.person_id = bap.person_id
 INNER JOIN mart.dim_person dp  WITH (NOLOCK)
-	ON dp.person_id = dpl.person_id
+	ON dp.person_id = bap.person_id
 INNER JOIN mart.bridge_skillset_skill bs 
 	ON dp.skillset_id = bs.skillset_id
 INNER JOIN mart.dim_workload dw 
@@ -378,6 +376,7 @@ INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id
 	AND i.interval_id BETWEEN @interval_from AND @interval_to
 WHERE fa.ready_time_s>0
+AND d.date_id between dp.valid_from_date_id_local and valid_to_date_id_local
 GROUP BY
 	CASE @interval_type 
 	WHEN 1 THEN i.interval_name
