@@ -342,7 +342,9 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						});
 					});
 				}
-				
+				skillResultList.sort((a, b)=>
+					a.SkillName>b.SkillName?1:-1
+				);
 				this.dayNodes = skillResultList;
 				if(skillResultList && skillResultList.length>0) {
 					this.parseMonths();
