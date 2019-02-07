@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		{
 			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, TheDate.DateId, 0, scheduledReadyTimeOneMinutes, 1, ScenarioId));
 			analyticsDataFactory.Setup(new FactSchedule(PersonId, TheDate.DateId, TheDate.DateId, 0, scheduledReadyTimeTwoMinutes, 2, ScenarioId));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, 1, PersonId, 0, 0, deviationScheduleReadyOneSeconds, 0, true));
-			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, 2, PersonId, 0, 0, deviationScheduleReadyTwoSeconds, 0, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, TheDate.DateId, 1, PersonId, 0, 0, deviationScheduleReadyOneSeconds, 0, true));
+			analyticsDataFactory.Setup(new FactScheduleDeviation(TheDate.DateId, TheDate.DateId, TheDate.DateId, 2, PersonId, 0, 0, deviationScheduleReadyTwoSeconds, 0, true));
 		}
 
 		[Test]

@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 
 		public static void AddFactScheduleDeviation(this DataTable dataTable,
 			int shiftStartdateLocalId,
+			int shiftStartDateId,
 			int dateId,
 			int intervalId,
 			int personId,
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int deviationScheduleS,
 			int deviationScheduleReadyS,
 			int deviationContractS,
-			bool isLoggedIn, 
+			bool isLoggedIn,
 			int? businessunitId)
 		{
 			var row = dataTable.NewRow();
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["deviation_schedule_ready_s"] = deviationScheduleReadyS;
 			row["deviation_contract_s"] = deviationContractS;
 			row["is_logged_in"] = isLoggedIn;
-			row["shift_startdate_id"] = shiftStartdateLocalId;
+			row["shift_startdate_id"] = shiftStartDateId;
 			row["shift_startinterval_id"] = intervalId;
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;

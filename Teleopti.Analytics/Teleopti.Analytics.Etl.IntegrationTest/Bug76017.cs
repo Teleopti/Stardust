@@ -52,11 +52,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 			var personId = 1;
 			var acdLoginId = 1;
-			var existingScheduleDeviationToday = new FactScheduleDeviation(today.DateId, today.DateId, 31, personId, 400, 0, 0, 500, true, businessUnit.BusinessUnitId);
-			var existingScheduleDeviationTomorrow = new FactScheduleDeviation(tomorrow.DateId, tomorrow.DateId, 32, personId, 0, 0, 0, 0, false, businessUnit.BusinessUnitId);
-			var scheduledIntervalToday1 = new ScheduledShift(personId, today.DateId, 31, 31, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
-			var scheduledIntervalToday2 = new ScheduledShift(personId, today.DateId, 32, 32, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
-			var scheduledIntervalTomorrow = new ScheduledShift(personId, tomorrow.DateId, 32, 32, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
+			var existingScheduleDeviationToday = new FactScheduleDeviation(today.DateId, today.DateId, today.DateId, 31, personId, 400, 0, 0, 500, true, businessUnit.BusinessUnitId);
+			var existingScheduleDeviationTomorrow = new FactScheduleDeviation(tomorrow.DateId, tomorrow.DateId, tomorrow.DateId, 32, personId, 0, 0, 0, 0, false, businessUnit.BusinessUnitId);
+			var scheduledIntervalToday1 = new ScheduledShift(personId, today.DateId, today.DateId, 31, 31, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
+			var scheduledIntervalToday2 = new ScheduledShift(personId, today.DateId, today.DateId, 32, 32, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
+			var scheduledIntervalTomorrow = new ScheduledShift(personId, tomorrow.DateId, tomorrow.DateId, 32, 32, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
 			var agentStatsTodayInterval1 = new FactAgent(today.DateId, 31, acdLoginId, 400, 900, 500, 0, 0, 0, 0, 0, 0);
 			var agentStatsTodayInterval2 = new FactAgent(today.DateId, 32, acdLoginId, 850, 900, 50, 0, 0, 0, 0, 0, 0);
 			var statsUpUntilIntervalIdLocal = new IntervalBase(TimeZoneHelper.ConvertFromUtc(today.Date.Date.AddMinutes(32d * 15d), stockholmTimeZone), 96).Id;
@@ -138,8 +138,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 			const int personId = 1;
 			const int acdLoginId = 1;
-			var existingScheduleDeviationYesterday = new FactScheduleDeviation(yesterday.DateId, yesterday.DateId, 83, personId, 800, 0, 0, 100, true, businessUnit.BusinessUnitId);
-			var scheduledIntervalToday = new ScheduledShift(personId, today.DateId, 32, 32, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
+			var existingScheduleDeviationYesterday = new FactScheduleDeviation(yesterday.DateId, yesterday.DateId, yesterday.DateId, 83, personId, 800, 0, 0, 100, true, businessUnit.BusinessUnitId);
+			var scheduledIntervalToday = new ScheduledShift(personId, today.DateId, today.DateId, 32, 32, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
 			var agentStatsTodayInterval = new FactAgent(today.DateId, 32, acdLoginId, 400, 900, 500, 0, 0, 0, 0, 0, 0);
 			var statsUpUntilIntervalIdLocal = new IntervalBase(TimeZoneHelper.ConvertFromUtc(today.Date.Date.AddMinutes(32d * 15d), stockholmTimeZone), 96).Id;
 			var logObjectDetail = new LogObjectDetail(today.Date.Date, statsUpUntilIntervalIdLocal);
@@ -206,8 +206,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 			var personId = 1;
 			var acdLoginId = 1;
-			var scheduledIntervals = new ScheduledShift(personId, today.DateId, 32, 45, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
-			var existingScheduleDeviationToday = new FactScheduleDeviation(today.DateId, today.DateId, 32, personId, 400, 0, 0, 500, true, businessUnit.BusinessUnitId);
+			var scheduledIntervals = new ScheduledShift(personId, today.DateId, today.DateId, 32, 45, scenario.ScenarioId, dataSource, businessUnit.BusinessUnitId);
+			var existingScheduleDeviationToday = new FactScheduleDeviation(today.DateId, today.DateId, today.DateId, 32, personId, 400, 0, 0, 500, true, businessUnit.BusinessUnitId);
 			for (var intervalId = 32; intervalId <= 45; intervalId++)
 			{
 				var agentStatsInterval = new FactAgent(today.DateId, intervalId, acdLoginId, 800, 900, 100, 0, 0, 0, 0, 0, 0);

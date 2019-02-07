@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Analytics().Setup(new FactSchedule(personId, dateId, dateId, 0, 22, intervalId, scenarioId));
 			DataMaker.Data().Analytics().Setup(new FactAgent(dateId, intervalId, acdLoginId, 600, 900, 300, 55,0, 0, 7, 210, 60));
             DataMaker.Data().Analytics().Setup(new FactAgentQueue(dateId, intervalId, queues.QueueId, acdLoginId, 210, 60, 7, 0));
-			DataMaker.Data().Analytics().Setup(new FactScheduleDeviation(dateId, dateId, intervalId, personId, 900, 60, 60, 60, true));
+			DataMaker.Data().Analytics().Setup(new FactScheduleDeviation(dateId, dateId, dateId, intervalId, personId, 900, 60, 60, 60, true));
 		}
 
 		[Given(@"I have adherence report data for mobile view for '(.*)'")]
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Analytics().Setup(new FactAgentQueue(theDay.DateId, intervalId, 5, acdLoginId, 210, 60, 7, 0));
 			DataMaker.Data()
 				.Analytics()
-				.Setup(new FactScheduleDeviation(theDay.DateId, theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
+				.Setup(new FactScheduleDeviation(theDay.DateId, theDay.DateId, theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
 		}
 
 

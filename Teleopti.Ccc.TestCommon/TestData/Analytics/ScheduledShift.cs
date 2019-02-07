@@ -9,18 +9,20 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	public class ScheduledShift : IAnalyticsDataSetup
 	{
 		private readonly int _personId;
-		private readonly int _shiftStartDateId;
+		private readonly int _shiftStartLocalDateId;
+		private readonly int _scheduleDateId;
 		private readonly int _shiftStartIntervalId;
 		private readonly int _shiftEndIntervalId;
 		private readonly int _scenarioId;
 		private readonly IDatasourceData _dataSource;
 		private readonly int _businessUnitId;
 
-		public ScheduledShift(int personId, int shiftStartDateId, int shiftStartIntervalId, int shiftEndIntervalId,
+		public ScheduledShift(int personId, int shiftStartLocalDateId, int scheduleDateId, int shiftStartIntervalId, int shiftEndIntervalId,
 			int scenarioId, IDatasourceData dataSource, int businessUnitId)
 		{
 			_personId = personId;
-			_shiftStartDateId = shiftStartDateId;
+			_shiftStartLocalDateId = shiftStartLocalDateId;
+			_scheduleDateId = scheduleDateId;
 			_shiftStartIntervalId = shiftStartIntervalId;
 			_shiftEndIntervalId = shiftEndIntervalId;
 			_scenarioId = scenarioId;
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 			for (int interval = _shiftStartIntervalId; interval <= _shiftEndIntervalId; interval++)
 			{
-				var schedule = new FactSchedule(_personId, _shiftStartDateId, _shiftStartDateId, 15, 15, 15, interval, _scenarioId, _businessUnitId);
+				var schedule = new FactSchedule(_personId, _shiftStartLocalDateId, _scheduleDateId, 15, 15, 15, interval, _scenarioId, _businessUnitId);
 				schedule.Apply(connection, userCulture, analyticsDataCulture);
 			}
 			
