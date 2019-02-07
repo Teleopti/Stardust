@@ -10,6 +10,14 @@ Background:
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 2 |
+	And there is a scenario
+	| Field         | Value           |
+	| Name          | Scenario 1      |
+	| Business Unit | Business Unit 1 |
+	And there is a scenario
+	| Field         | Value           |
+	| Name          | Scenario 2      |
+	| Business Unit | Business Unit 2 |
 	And there is a role with
 	| Field                | Value                    |
 	| Name                 | Role for business unit 1 |
