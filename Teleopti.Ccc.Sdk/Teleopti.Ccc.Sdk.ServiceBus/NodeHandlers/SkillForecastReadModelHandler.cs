@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class SkillForecastReadModelHandler : IHandle<ForecastChangedEvent>
+	public class SkillForecastReadModelHandler : IHandle<ForecastChangedEvent>,IHandle<UpdateSkillForecastReadModelEvent>
 	{
 		private readonly IComponentContext _componentContext;
 
@@ -25,6 +25,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			ref IEnumerable<object> returnObjects)
 		{
 			var theRealOne = _componentContext.Resolve<IHandleEvent<ForecastChangedEvent>>();
+			theRealOne.Handle(parameters);
+		}
+
+		[AsSystem]
+		public virtual void Handle(UpdateSkillForecastReadModelEvent parameters, CancellationTokenSource cancellationTokenSource,
+			Action<string> sendProgress, ref IEnumerable<object> returnObjects)
+		{
+			var theRealOne = _componentContext.Resolve<IHandleEvent<UpdateSkillForecastReadModelEvent>>();
 			theRealOne.Handle(parameters);
 		}
 	}
