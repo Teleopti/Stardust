@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 	{
 		public void Dispose()
 		{
-			
 		}
 
 		public FakePowerBiClient(IReports reports)
@@ -26,6 +25,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 		public IReports Reports { get; }
 		public IDashboards Dashboards { get; }
 		public ITiles Tiles { get; }
+		public IApps Apps { get; }
+		public IDataflows Dataflows { get; }
 		public IGateways Gateways { get; }
 		public IGroups Groups { get; }
 		public ICapacities Capacities { get; }
