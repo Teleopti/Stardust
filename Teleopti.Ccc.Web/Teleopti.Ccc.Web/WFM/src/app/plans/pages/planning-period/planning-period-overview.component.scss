@@ -66,10 +66,10 @@ table.overview {
 	.worst{
 		background-color: rgba(255, 0, 0, 0.5);
 	}
+}
 
-	.heatmap-closed {
-		background-color: rgba(0, 0, 0, 0.25) !important;
-	}
+.heatmap-closed {
+	background-color: rgba(0, 0, 0, 0.25) !important;
 }
 
 .heatmap-date-header{

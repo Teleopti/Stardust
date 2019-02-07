@@ -33,11 +33,16 @@
 				<table>
 					<tbody>
 					<tr >
-						<td class="">-100%</td>
+						<td>-100%</td>
 						<td *ngFor="let legend of legends">
 							<div class="legend-box" [style.background-color]="legend.bgcolor"></div>
 						</td>
-						<td class="">100%</td>
+						<td>100%</td>
+						<td colspan="3"></td>
+						<td>{{'Closed' | translate}}</td>
+						<td>
+							<div class="legend-box heatmap-closed"></div>
+						</td>
 					</tr>
 					</tbody>
 				</table>
