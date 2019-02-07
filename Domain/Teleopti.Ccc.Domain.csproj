@@ -235,6 +235,7 @@
     <Compile Include="Forecasting\SkillsExtensions.cs" />
     <Compile Include="Forecasting\TriggerSkillForecastReadModelHandler.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
+    <Compile Include="Infrastructure\InitializeBusinessUnitDatabaseState.cs" />
     <Compile Include="Insights\InsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReportRepository.cs" />
