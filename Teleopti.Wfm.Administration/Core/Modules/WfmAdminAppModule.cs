@@ -87,15 +87,6 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<HangfireStatisticsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HangfireRepository>().SingleInstance();
 			builder.RegisterType<HangfireUtilities>().AsSelf().As<IManageFailedHangfireEvents>().SingleInstance();
-			builder.Register<Func<ICurrentUnitOfWork, IBusinessUnitRepository>>(context => uow => new BusinessUnitRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IPersonRepository>>(context => uow => new PersonRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IScenarioRepository>>(context => uow => new ScenarioRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IApplicationRoleRepository>>(context => uow => new ApplicationRoleRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IAvailableDataRepository>>(context => uow => new AvailableDataRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IKpiRepository>>(context => uow => new KpiRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, ISkillTypeRepository>>(context => uow => new SkillTypeRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IRtaStateGroupRepository>>(context => uow => new RtaStateGroupRepository(uow));
-
 			builder.RegisterType<AdminAccessTokenRepository>().AsSelf();
 			builder.RegisterType<RecurrentEventTimer>().SingleInstance();
 			builder.RegisterType<InitializeApplicationInsight>().SingleInstance();
