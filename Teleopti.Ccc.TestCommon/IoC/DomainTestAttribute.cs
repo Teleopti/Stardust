@@ -40,7 +40,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -300,6 +299,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakePayrollResultRepository>().For<IPayrollResultRepository>();
 				isolate.UseTestDouble<FakeSkillForecastJobStartTimeRepository>().For<ISkillForecastJobStartTimeRepository>();
 				isolate.UseTestDouble<FakeSkillForecastReadModelRepository>().For<ISkillForecastReadModelRepository, FakeSkillForecastReadModelRepository>();
+				isolate.UseTestDouble<FakeKpiRepository>().For<IKpiRepository>();
 			}
 
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
 			if (QueryAllAttributes<DefaultDataAttribute>().Any() && !QueryAllAttributes<NoDefaultDataAttribute>().Any())
-				Database.Value.CreateDefaultData(businessUnit);
+				Database.Value.CreateBusinessUnitDefaultData(businessUnit);
 		}
 
 		private bool fullPermissions()

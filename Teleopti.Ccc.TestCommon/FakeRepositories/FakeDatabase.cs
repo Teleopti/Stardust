@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -24,7 +24,6 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
@@ -415,7 +414,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakePersonAssignmentRepository _personAssignments;
 		private readonly FakeApplicationFunctionRepository _applicationFunctions;
 		private readonly FakeAvailableDataRepository _availableDatas;
-		private readonly IDefinedRaptorApplicationFunctionFactory _allApplicationFunctions;
 		private readonly FakeAbsenceRepository _absences;
 		private readonly FakePersonAbsenceRepository _personAbsences;
 		private readonly FakeActivityRepository _activities;
@@ -439,7 +437,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly RemoveApprovedPeriod _removePeriod;
 		private readonly FakeRtaHistory _rtaHistory;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
-		
+		private readonly InitializeBusinessUnitDatabaseState _initializeBusinessUnitDatabaseState;
+		private readonly IDefinedRaptorApplicationFunctionFactory _definedRaptorApplicationFunctionFactory;
+
 		private BusinessUnit _businessUnit;
 		private Site _site;
 		private Person _person;
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private Contract _contract;
 		private PartTimePercentage _partTimePercentage;
 		private ContractSchedule _contractSchedule;
-		private Scenario _scenario;
+		private IScenario _scenario;
 		private DayOffTemplate _dayOffTemplate;
 		private PersonAssignment _personAssignment;
 		private Absence _absence;
@@ -478,7 +478,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakePersonAssignmentRepository personAssignments,
 			FakeApplicationFunctionRepository applicationFunctions,
 			FakeAvailableDataRepository availableDatas,
-			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions,
 			FakeAbsenceRepository absences,
 			FakePersonAbsenceRepository personAbsences,
 			FakeActivityRepository activities,
@@ -501,7 +500,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ApprovePeriodAsInAdherence approvePeriod,
 			RemoveApprovedPeriod removePeriod,
 			FakeRtaHistory rtaHistory,
-			IShiftTradeRequestSetChecksum shiftTradeSetChecksum)
+			IShiftTradeRequestSetChecksum shiftTradeSetChecksum,
+			InitializeBusinessUnitDatabaseState initializeBusinessUnitDatabaseState,
+			IDefinedRaptorApplicationFunctionFactory definedRaptorApplicationFunctionFactory)
 		{
 			_tenants = tenants;
 			_persons = persons;
@@ -517,7 +518,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personAssignments = personAssignments;
 			_applicationFunctions = applicationFunctions;
 			_availableDatas = availableDatas;
-			_allApplicationFunctions = allApplicationFunctions;
 			_absences = absences;
 			_personAbsences = personAbsences;
 			_activities = activities;
@@ -541,20 +541,41 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_rtaHistory = rtaHistory;
 			_removePeriod = removePeriod;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
+			_initializeBusinessUnitDatabaseState = initializeBusinessUnitDatabaseState;
+			_definedRaptorApplicationFunctionFactory = definedRaptorApplicationFunctionFactory;
 		}
 
-		public void CreateDefaultData(IBusinessUnit businessUnit)
+		public void CreateBusinessUnitDefaultData(IBusinessUnit businessUnit)
 		{
 			// default data already created. ugly for now...
 			if (_applicationFunctions.LoadAll().Any())
 				return;
 
-			// all application functions
-			_allApplicationFunctions.ApplicationFunctions.ForEach(_applicationFunctions.Add);
+			dataFromDbReleaseScript();
+			
+			// seems to always exist
+			WithDataSource(-1, "-1");
+			WithDataSource(1, "-1");
+			
+			WithBusinessUnit(businessUnit.Id.Value);
+			
+			_initializeBusinessUnitDatabaseState.Execute(_businessUnit, _person);
+			//hack for now - we shouldn't care about bu prop in domain
+			_scenario = _scenarios.LoadDefaultScenario().WithBusinessUnit(_businessUnit);
+		}
 
+		private void dataFromDbReleaseScript()
+		{
+			// all application functions
+			_definedRaptorApplicationFunctionFactory.ApplicationFunctions.ForEach(_applicationFunctions.Add);
+			
+			var systemUser = new Person().WithName("System")
+				.InTimeZone(TimeZoneInfo.Utc)
+				.WithCulture(CultureInfoFactory.CreateEnglishCulture())
+				.WithId(SystemUser.Id);
+			
 			// super role
-			var role = new ApplicationRole {Name = SystemUser.SuperRoleName};
-			role.SetId(SystemUser.SuperRoleId);
+			var role = new ApplicationRole {Name = SystemUser.SuperRoleName}.WithId(SystemUser.SuperRoleId);
 			role.AddApplicationFunction(_applicationFunctions.LoadAll().Single(x => x.FunctionPath == DefinedRaptorApplicationFunctionPaths.All));
 			var availableData = new AvailableData
 			{
@@ -564,23 +585,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_availableDatas.Add(availableData);
 			role.AvailableData = availableData;
 			_applicationRoles.Add(role);
-
-			// created by app config app
-			// should should match the system user that is created
-			// not sure if it does...
-			WithPerson(SystemUser.Id, SystemUser.Name, null,
-				TimeZoneInfo.Utc,
-				CultureInfoFactory.CreateEnglishCulture(),
-				CultureInfoFactory.CreateEnglishCulture(), null);
-			_person.PermissionInformation.AddApplicationRole(role);
-
-			WithBusinessUnit(businessUnit.Id.Value);
-
-			WithScenario(null, true);
-
-			// seems to always exist
-			WithDataSource(-1, "-1");
-			WithDataSource(1, "-1");
+			
+			systemUser.PermissionInformation.AddApplicationRole(role);
+			_person = systemUser;
 		}
 
 		// rta stuff we want to remove

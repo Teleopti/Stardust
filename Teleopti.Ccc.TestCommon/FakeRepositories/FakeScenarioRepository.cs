@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IScenario entity)
 		{
-			_scenario.Add(entity);
+			_scenario.Add(entity.WithIdIfNotPresent());
 		}
 
 		public void Remove(IScenario entity)
