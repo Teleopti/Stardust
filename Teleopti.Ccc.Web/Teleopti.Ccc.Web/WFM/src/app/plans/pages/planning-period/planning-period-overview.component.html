@@ -28,8 +28,34 @@
 				</div>
 			</div>
 
-			<div class="legend" *ngIf="dayNodes">
-				<h2>Scheduled Skills Heatmap</h2>
+			<h2>Scheduled skills heatmap</h2>
+
+			<div nz-row>
+				<span nz-col [nzSpan]="8">
+					<nz-input-group
+							[nzSuffix]="suffixSkillMapTemplate"
+							[nzPrefix]="prefixSkillMapTemplate"
+					>
+						<input
+								type="text"
+								nz-input
+								placeholder="Filter skill"
+								[formControl]="skillFilterControl"
+						/>
+					</nz-input-group>
+	
+					<ng-template #prefixSkillMapTemplate><i nz-icon type="filter"></i></ng-template>
+					<ng-template #suffixSkillMapTemplate><i
+							nz-icon
+							type="close-circle"
+							(click)="clearSkillMapFilter()"
+							*ngIf="skillFilterControl.value"
+					></i
+					></ng-template>
+				</span>
+			</div>
+			
+			<div class="legend">
 				<table>
 					<tbody>
 					<tr >
@@ -38,8 +64,7 @@
 							<div class="legend-box" [style.background-color]="legend.bgcolor"></div>
 						</td>
 						<td>100%</td>
-						<td colspan="3"></td>
-						<td>{{'Closed' | translate}}</td>
+						<td style="padding-left:20px">{{'Closed' | translate}}:</td>
 						<td>
 							<div class="legend-box heatmap-closed"></div>
 						</td>
@@ -48,7 +73,7 @@
 				</table>
 			</div>
 			
-			<div class="heatmap-div" *ngIf="dayNodes&&dayNodes.length>0">
+			<div class="heatmap-div" *ngIf="filteredSkills&&filteredSkills.length>0">
 				<table>
 					<thead>
 						<tr>
@@ -59,13 +84,13 @@
 						</tr>
 						<tr>
 							<th></th>
-							<th *ngFor ="let datenode of dayNodes[0].SkillDetails">
+							<th *ngFor ="let datenode of filteredSkills[0].SkillDetails">
 								<p class="heatmap-date-header" [ngClass]="{'heatmap-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let subnode of dayNodes">
+						<tr *ngFor="let subnode of filteredSkills">
 							<td class="skill-name">{{ subnode.SkillName }}</td>
 							<td class="heatmap-day"
 								*ngFor="let node of subnode.SkillDetails"

@@ -18,6 +18,7 @@ import {from} from "rxjs";
 export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	preValidationFilterControl: FormControl = this.fb.control('');
 	scheduleIssuesFilterControl: FormControl = this.fb.control('');
+	skillFilterControl: FormControl = this.fb.control('');
 	ppId: string;
 	groupId: string;
 	runScheduling = false;
@@ -41,7 +42,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	validationFilter;
 
-	dayNodes;
+	skills;
+	filteredSkills;
 
 	valData = {
 		totalValNum: 0,
@@ -112,7 +114,20 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			.subscribe(filteredScheduleIssues => {
 				this.filteredScheduleIssues = filteredScheduleIssues;
 			});
-		
+
+		this.skillFilterControl.valueChanges
+			.pipe(
+				map(filterString => {
+					return this.skills
+						.filter(
+						g =>
+							g.SkillName.toLowerCase().includes(filterString.toLowerCase()) 
+					);
+				})
+			)
+			.subscribe(filteredSkills => {
+				this.filteredSkills = filteredSkills;
+			});
 	}
 
 	ngOnDestroy(): void {
@@ -140,6 +155,10 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	public clearScheduleIssuesFilter() {
 		this.scheduleIssuesFilterControl.setValue('');
+	}
+	
+	public clearSkillMapFilter() {
+		this.skillFilterControl.setValue('');
 	}
 
 	public launchSchedule() {
@@ -218,7 +237,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					this.runClear = false;
 					this.isScheduled = false;
 					this.scheduledAgents = 0;
-					this.dayNodes = undefined;
+					this.skills = undefined;
 					this.status = '';
 					return;
 				}
@@ -286,7 +305,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 	
 	private parseMonths(){
-		const months = this.dayNodes[0].SkillDetails.map((item: any) => this.amDateFormat.transform(item.Date, 'MMMM'));
+		const months = this.skills[0].SkillDetails.map((item: any) => this.amDateFormat.transform(item.Date, 'MMMM'));
 		const monthCount = from(months).pipe(
 			groupBy(item => item),
 			mergeMap(group => group.pipe(
@@ -301,7 +320,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	
 	private parseWorstDays(){
 		const allDays = [];
-		this.dayNodes.forEach(skill=>{
+		this.skills.forEach(skill=>{
 			skill.SkillDetails.forEach(day =>{
 				allDays.push(day);
 			});
@@ -358,7 +377,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						return suma>sumb?1:-1;
 					});
 				}
-				this.dayNodes = skillResultList.filter(skill=>skill.SkillDetails.some(day=>day.ColorId!==4));
+				this.skills = skillResultList.filter(skill=>skill.SkillDetails.some(day=>day.ColorId!==4));
+				this.skillFilterControl.updateValueAndValidity();
 				if(skillResultList && skillResultList.length>0) {
 					this.parseMonths();
 					this.parseWorstDays();
