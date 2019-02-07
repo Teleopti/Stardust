@@ -341,10 +341,21 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 							day.RelativeDifferencePercent = (day.RelativeDifference * 100).toFixed(1);
 						});
 					});
+
+					skillResultList.sort((a, b)=>
+					{
+						let suma = 0;
+						a.SkillDetails.forEach(item=>{
+							suma +=item.RelativeDifference;
+						});
+						let sumb = 0;
+						b.SkillDetails.forEach(item=>{
+							sumb +=item.RelativeDifference;
+						});
+
+						return suma>sumb?1:-1;
+					});
 				}
-				skillResultList.sort((a, b)=>
-					a.SkillName>b.SkillName?1:-1
-				);
 				this.dayNodes = skillResultList;
 				if(skillResultList && skillResultList.length>0) {
 					this.parseMonths();
