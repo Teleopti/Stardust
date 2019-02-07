@@ -537,9 +537,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			};
 			yield return new MappingSpec
 			{
-				CurrentPersistedName = "TriggerSkillForecastReadModel",
+				CurrentPersistedName = "TriggerSkillForecastReadModelHandler",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.Forecasting.TriggerSkillForecastReadModel, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.Forecasting.TriggerSkillForecastReadModel, Teleopti.Ccc.Domain"
+				CurrentTypeName = "Teleopti.Ccc.Domain.Forecasting.TriggerSkillForecastReadModelHandler, Teleopti.Ccc.Domain"
 			};
 		}
 
