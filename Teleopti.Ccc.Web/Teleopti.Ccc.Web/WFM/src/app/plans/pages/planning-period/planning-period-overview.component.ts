@@ -283,6 +283,33 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		}
 		this.valData.totalValNum = this.valData.totalPreValNum + this.valData.totalLastValNum;
 	}
+	
+	private parseMonths(){
+		const months = this.dayNodes[0].SkillDetails.map((item: any) => this.amDateFormat.transform(item.Date, 'MMMM'));
+		const monthCount = from(months).pipe(
+			groupBy(item => item),
+			mergeMap(group => group.pipe(
+				reduce((total, item) => total + 1, 0),
+				map(total => ({Name: group.key, Count: total}))
+				)
+			),
+			toArray());
+
+		monthCount.subscribe(result => this.months = result);
+	}
+	
+	private parseWorstDays(){
+		const allDays = [];
+		this.dayNodes.forEach(skill=>{
+			skill.SkillDetails.forEach(day =>{
+				allDays.push(day);
+			});
+		});
+		allDays.sort((a, b)=>
+			a.RelativeDifference>b.RelativeDifference?1:-1
+		);
+		this.worstDay = allDays[0];
+	}
 
 	private loadLastResult() {
 		this.planningPeriodService.lastJobResult(this.ppId).subscribe(data => {
@@ -315,31 +342,11 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						});
 					});
 				}
+				
 				this.dayNodes = skillResultList;
 				if(skillResultList && skillResultList.length>0) {
-					const months = skillResultList[0].SkillDetails.map((item: any) => this.amDateFormat.transform(item.Date, 'MMMM'));
-
-					const monthCount = from(months).pipe(
-						groupBy(item => item),
-						mergeMap(group => group.pipe(
-							reduce((total, item) => total + 1, 0),
-							map(total => ({Name: group.key, Count: total}))
-							)
-						),
-						toArray());
-
-					monthCount.subscribe(result => this.months = result);
-					
-					const allDays = [];
-					skillResultList.forEach(skill=>{
-						skill.SkillDetails.forEach(day =>{
-							allDays.push(day);
-						});
-					});
-					allDays.sort((a, b)=>
-						a.RelativeDifference>b.RelativeDifference?1:-1
-					);
-					this.worstDay = allDays[0];
+					this.parseMonths();
+					this.parseWorstDays();
 				}
 			} else {
 				this.isScheduled = false;
