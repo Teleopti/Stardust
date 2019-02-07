@@ -69,7 +69,7 @@
 							<td class="skill-name">{{ subnode.SkillName }}</td>
 							<td class="heatmap-day"
 								*ngFor="let node of subnode.SkillDetails"
-								[ngClass]="{ worst: worstDay.RelativeDifferencePercent == node.RelativeDifferencePercent }"
+								[ngClass]="{ 'worst-under-staff-day': worstUnderStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent, 'worst-over-staff-day': worstOverStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent }"
 							>
 								<div nz-tooltip nzTitle="{{'RelativeDifference' | translate}}: {{node.RelativeDifferencePercent}}% | {{subnode.SkillName}} | {{node.Date | amDateFormat:'L'}}"
 									class="heatmap-box"

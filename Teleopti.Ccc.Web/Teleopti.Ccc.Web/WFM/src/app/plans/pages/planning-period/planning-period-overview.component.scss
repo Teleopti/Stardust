@@ -63,8 +63,12 @@ table.overview {
 	margin-left: 175px;
 	overflow: auto;
 
-	.worst{
+	.worst-under-staff-day {
 		background-color: rgba(255, 0, 0, 0.5);
+	}
+	
+	.worst-over-staff-day {
+		background-color: rgba(0, 0, 255, 0.5);
 	}
 }
 

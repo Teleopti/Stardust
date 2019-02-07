@@ -36,7 +36,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	filteredScheduleIssues: any[];
 	months : any;
 	legends: any[] = [];
-	worstDay: any;
+	worstUnderStaffDay: any;
+	worstOverStaffDay: any;
 
 	validationFilter;
 
@@ -308,7 +309,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		allDays.sort((a, b)=>
 			a.RelativeDifference>b.RelativeDifference?1:-1
 		);
-		this.worstDay = allDays[0];
+		this.worstUnderStaffDay = allDays[0];
+		this.worstOverStaffDay = allDays[allDays.length-1];
 	}
 
 	private loadLastResult() {
