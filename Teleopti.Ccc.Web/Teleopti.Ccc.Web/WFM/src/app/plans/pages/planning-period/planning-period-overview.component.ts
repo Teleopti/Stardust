@@ -360,6 +360,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 								day.weekstart = true;
 							}
 							day.RelativeDifferencePercent = (day.RelativeDifference * 100).toFixed(1);
+							day.tooltip = (day.ColorId === 4? this.translate.instant('Closed') : this.translate.instant('RelativeDifference') + ' ' + day.RelativeDifferencePercent + '%') + ' | ' + skill.SkillName + ' | ' + this.amDateFormat.transform(day.Date, 'L');
 						});
 					});
 
