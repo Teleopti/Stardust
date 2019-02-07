@@ -353,8 +353,13 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						skill.SkillDetails.forEach(day=>{
 							day.bgcolor = this.heatMapColorHelper.getColor(day.RelativeDifference*100);
 							const weekday = new Date(day.Date).getDay();
-							if (weekday === culturalDaysOff.a || weekday === culturalDaysOff.b) {
+							if (weekday === culturalDaysOff.a) {
 								day.weekend = true;
+								day.saturday = true;
+							}
+							if(weekday === culturalDaysOff.b){
+								day.weekend = true;
+								day.sunday = true;
 							}
 							if (weekday === culturalDaysOff.start) {
 								day.weekstart = true;

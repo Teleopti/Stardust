@@ -85,7 +85,7 @@
 						<tr>
 							<th></th>
 							<th *ngFor ="let datenode of filteredSkills[0].SkillDetails">
-								<p class="heatmap-date-header" [ngClass]="{'heatmap-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
+								<p class="heatmap-date-header" [ngClass]="{'heatmap-head-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
 							</th>
 						</tr>
 					</thead>
@@ -94,11 +94,16 @@
 							<td class="skill-name">{{ subnode.SkillName }}</td>
 							<td class="heatmap-day"
 								*ngFor="let node of subnode.SkillDetails"
-								[ngClass]="{ 'worst-under-staff-day': worstUnderStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent, 'worst-over-staff-day': worstOverStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent }"
+								[ngClass]="{ 
+								'worst-under-staff-day': worstUnderStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent, 
+								'worst-over-staff-day': worstOverStaffDay.RelativeDifferencePercent == node.RelativeDifferencePercent,
+								'heatmap-saturday': node.saturday, 
+								'heatmap-sunday': node.sunday
+								 }"
 							>
 								<div nz-tooltip nzTitle="{{node.tooltip}}"
 									class="heatmap-box"
-									[ngClass]="{ 'heatmap-closed': node.ColorId==4}"
+									[ngClass]="{ 'heatmap-closed': node.ColorId===4}"
 									[style.background-color]="node.bgcolor"
 								></div>
 							</td>

@@ -39,8 +39,18 @@ table.overview {
 	letter-spacing: 1em;
 }
 
-.heatmap-weekend {
+.heatmap-head-weekend {
 	color: rgba(255, 165, 0, 0.8);
+}
+
+.heatmap-saturday {
+	border-left: solid rgba(255, 165, 0, 0.8);
+	border-width: thin;
+}
+
+.heatmap-sunday {
+	border-right: solid rgba(255, 165, 0, 0.8);
+	border-width: thin;
 }
 
 .legend{
