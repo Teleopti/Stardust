@@ -8,7 +8,7 @@ import {
 	NzGridModule,
 	NzTabsModule,
 	NzSpinModule,
-	NzCollapseModule, NzBadgeModule
+	NzCollapseModule, NzBadgeModule, NzToolTipModule
 } from 'ng-zorro-antd';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -16,8 +16,9 @@ import { NavigationService } from 'src/app/core/services';
 import {PlanningGroupService, PlanningPeriodService} from '../../shared';
 import { TitleBarComponent } from '../../components/title-bar';
 import { PlanningPeriodOverviewComponent } from './planning-period-overview.component';
-import { MomentModule } from "ngx-moment";
+import {DateFormatPipe, MomentModule} from "ngx-moment";
 import {IStateService} from "angular-ui-router";
+import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroups() {
@@ -59,11 +60,14 @@ describe('Planning Period Overview', () => {
 				MockTranslationModule,
 				NzDividerModule,
 				NzGridModule,
+				NzToolTipModule,
 				MomentModule
 			],
 			providers: [
 				{ provide: PlanningGroupService, useClass: MockPlanningGroupService },
 				{ provide: PlanningPeriodService, useClass: MockPlanningPeriodService },
+				{ provide: HeatMapColorHelper, useClass: HeatMapColorHelper },
+				{ provide: DateFormatPipe, useClass: DateFormatPipe },
 				{
 					provide: '$state',
 					useValue: mockStateService
