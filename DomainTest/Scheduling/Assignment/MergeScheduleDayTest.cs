@@ -570,8 +570,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IAbsenceLayer absenceLayer1 = new AbsenceLayer(new Absence(), absPeriod1);
 			IAbsenceLayer absenceLayer2 = new AbsenceLayer(new Absence(), absPeriod2);
 
-			IPersonAbsence personAbsence1 = new PersonAbsence(person1, scenario, absenceLayer1);
-			IPersonAbsence personAbsence2 = new PersonAbsence(person1, scenario, absenceLayer2);
+			IPersonAbsence personAbsence1 = new PersonAbsence(person1, scenario, absenceLayer1).WithId();
+			IPersonAbsence personAbsence2 = new PersonAbsence(person1, scenario, absenceLayer2).WithId();
 
 			source.Add(personAbsence1);
 			source.Add(personAbsence2);
