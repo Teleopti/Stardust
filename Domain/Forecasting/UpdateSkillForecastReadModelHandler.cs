@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -22,18 +23,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICurrentScenario _currentScenario;
 		private ISkillRepository _skillRepository;
-		private readonly ISystemJobStartTimeRepository _systemJobStartTimeRepository;
+		private readonly ISkillForecastJobStartTimeRepository _skillForecastJobStartTimeRepository;
 
 		private readonly SkillForecastReadModelPeriodBuilder _skillForecastReadModelPeriodBuilder;
 
-		public UpdateSkillForecastReadModelHandler(SkillForecastIntervalCalculator skillForecastIntervalCalculator, ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, ISkillRepository skillRepository, ISystemJobStartTimeRepository systemJobStartTimeRepository)
+		public UpdateSkillForecastReadModelHandler(SkillForecastIntervalCalculator skillForecastIntervalCalculator, ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, ISkillRepository skillRepository, ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository)
 		{
 			_skillForecastIntervalCalculator = skillForecastIntervalCalculator;
 			_skillDayRepository = skillDayRepository;
 			_currentScenario = currentScenario;
 			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;
 			_skillRepository = skillRepository;
-			_systemJobStartTimeRepository = systemJobStartTimeRepository;
+			_skillForecastJobStartTimeRepository = skillForecastJobStartTimeRepository;
 		}
 
 		[AsSystem]
@@ -60,11 +61,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		[UnitOfWork]
 		public virtual void Handle(UpdateSkillForecastReadModelEvent @event)
 		{
+			//if false dont proceed
+			_skillForecastJobStartTimeRepository.UpdateJobStartTime(@event.LogOnBusinessUnitId);
 			var skills = _skillRepository.LoadAllSkills();
 			var period = new DateOnlyPeriod(new DateOnly(@event.StartDateTime), new DateOnly(@event.EndDateTime));
 			var skillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
-			_skillForecastIntervalCalculator.Calculate(skillDays, skills, period);
-			_systemJobStartTimeRepository.UpdateLastCalculatedTime(@event.LogOnBusinessUnitId, JobNamesForJoStartTime.TriggerSkillForecastReadModel);
+			_skillForecastIntervalCalculator.Calculate(skillDays,skills, period);
+			_skillForecastJobStartTimeRepository.ResetLock(@event.LogOnBusinessUnitId);
 		}
 	}
 }

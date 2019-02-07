@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -297,7 +298,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 				isolate.UseTestDouble<FakePayrollExportRepository>().For<IPayrollExportRepository>();
 				isolate.UseTestDouble<FakePayrollResultRepository>().For<IPayrollResultRepository>();
-				isolate.UseTestDouble<FakeSystemJobStartTimeRepository>().For<ISystemJobStartTimeRepository>();
+				isolate.UseTestDouble<FakeSkillForecastJobStartTimeRepository>().For<ISkillForecastJobStartTimeRepository>();
 				isolate.UseTestDouble<FakeSkillForecastReadModelRepository>().For<ISkillForecastReadModelRepository, FakeSkillForecastReadModelRepository>();
 			}
 

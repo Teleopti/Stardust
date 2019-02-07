@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	[TestFixture]
 	[DomainTest]
 	[AllTogglesOn]
-	public class UpdateSkillForecastReadModelHandlerTest
+	public class UpdateSkillForecastReadModelHandlerTest : IIsolateSystem
 	{
 		public UpdateSkillForecastReadModelHandler Target;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
@@ -37,7 +38,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeTenants Tenants;
-		public FakeSystemJobStartTimeRepository SystemJobStartTimeRepository;
+		public FakeSkillForecastJobStartTimeRepository SkillForecastJobStartTimeRepository;
+		public SkillForecastSettingsReader SkillForecastSettingsReader;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<SkillForecastSettingsReader>().For<SkillForecastSettingsReader>();
+		}
 
 		[Test]
 		public void VerifyIfTheForecastChangedEventIsHandled()
@@ -218,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		}
 
 		[Test]
-		public void ShouldUpdateLastCalculatedTimeOnCalculation()
+		public void ShouldUpdateLastCalculatedTimeOnCalculationForBulkUpdate()
 		{
 			Tenants.Has("Teleopti WFM");
 			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
@@ -226,7 +233,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var bu = BusinessUnitFactory.CreateWithId("something");
 			BusinessUnitRepository.Add(bu);
 
-			var dtp = new DateOnlyPeriod(new DateOnly(2019, 2, 16), new DateOnly(2019, 2, 19));
 			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
 			IntervalLengthFetcher.Has(15);
 			Now.Is(now);
@@ -241,11 +247,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			ScenarioRepository.Add(scenario);
 
 			var oldUpdatedTime = Now.UtcDateTime().AddDays(-9);
-			SystemJobStartTimeRepository.EntryList.Add(new FakeStartTimeModel()
+			SkillForecastJobStartTimeRepository.EntryList.Add(new FakeStartTimeModel()
 			{
 				StartedAt = oldUpdatedTime,
 				BusinessUnit = bu.Id.GetValueOrDefault(),
-				JobName = JobNamesForJoStartTime.TriggerSkillForecastReadModel
 			});
 
 			Target.Handle(new UpdateSkillForecastReadModelEvent()
@@ -256,10 +261,80 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				EndDateTime = new DateTime(2019, 02, 17)
 			});
 
-			SystemJobStartTimeRepository.GetLastCalculatedTime(bu.Id.GetValueOrDefault(), JobNamesForJoStartTime.TriggerSkillForecastReadModel)
-				.Should().Be.GreaterThan(oldUpdatedTime);
+			SkillForecastJobStartTimeRepository.GetLastCalculatedTime(bu.Id.GetValueOrDefault()).Should().Be.GreaterThan(oldUpdatedTime);
 		}
 
+		[Test]
+		public void ShouldSetStartAndLockTimeForBulkUpdate()
+		{
+			Tenants.Has("Teleopti WFM");
+			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
+			PersonRepository.Add(person);
+			var bu = BusinessUnitFactory.CreateWithId("something");
+			BusinessUnitRepository.Add(bu);
+
+			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
+			IntervalLengthFetcher.Has(15);
+			Now.Is(now);
+			var skillOpenHours = new TimePeriod(8, 9);
+			var skill = createPhoneSkill(15, "phone", skillOpenHours);
+			var scenario = ScenarioFactory.CreateScenarioWithId("x", true);
+			scenario.SetBusinessUnit(bu);
+			scenario.DefaultScenario = true;
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2019, 2, 17), new TimePeriod(9, 10), 15.7, 10, 200);
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skillDay);
+			ScenarioRepository.Add(scenario);
+
+			Target.Handle(new UpdateSkillForecastReadModelEvent()
+			{
+				LogOnBusinessUnitId = bu.Id.GetValueOrDefault(),
+				LogOnDatasource = "Teleopti WFM",
+				StartDateTime = new DateTime(2019, 02, 17),
+				EndDateTime = new DateTime(2019, 02, 17)
+			});
+
+			var jobEntry = SkillForecastJobStartTimeRepository.EntryList.FirstOrDefault(x => x.BusinessUnit == bu.Id.GetValueOrDefault());
+			//jobEntry.Locked.Should().Be.EqualTo(now.Utc().AddMinutes(SkillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes));
+			jobEntry.StartedAt.Should().Be.EqualTo(now.Utc());
+
+		}
+
+		[Test]
+		public void ShouldResetLockWhenJobIsFinishedBulkUpdate()
+		{
+			Tenants.Has("Teleopti WFM");
+			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
+			PersonRepository.Add(person);
+			var bu = BusinessUnitFactory.CreateWithId("something");
+			BusinessUnitRepository.Add(bu);
+
+			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
+			IntervalLengthFetcher.Has(15);
+			Now.Is(now);
+			var skillOpenHours = new TimePeriod(8, 9);
+			var skill = createPhoneSkill(15, "phone", skillOpenHours);
+			var scenario = ScenarioFactory.CreateScenarioWithId("x", true);
+			scenario.SetBusinessUnit(bu);
+			scenario.DefaultScenario = true;
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2019, 2, 17), new TimePeriod(9, 10), 15.7, 10, 200);
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skillDay);
+			ScenarioRepository.Add(scenario);
+
+			Target.Handle(new UpdateSkillForecastReadModelEvent()
+			{
+				LogOnBusinessUnitId = bu.Id.GetValueOrDefault(),
+				LogOnDatasource = "Teleopti WFM",
+				StartDateTime = new DateTime(2019, 02, 17),
+				EndDateTime = new DateTime(2019, 02, 17)
+			});
+
+			var jobEntry = SkillForecastJobStartTimeRepository.EntryList.FirstOrDefault(x => x.BusinessUnit == bu.Id.GetValueOrDefault());
+			jobEntry.Locked.HasValue.Should().Be.False();
+			jobEntry.StartedAt.Should().Be.EqualTo(now.Utc());
+
+		}
 
 
 		protected ISkill createPhoneSkill(int intervalLength, string skillName, TimePeriod openHours)

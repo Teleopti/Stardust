@@ -177,7 +177,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 
 		}
 
-
 		protected ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
 			var skill =

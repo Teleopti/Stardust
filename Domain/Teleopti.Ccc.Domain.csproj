@@ -228,10 +228,12 @@
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_BusinessUnit.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ISkillForecastJobStartTimeRepository.cs" />
     <Compile Include="Common\Time\IUserNowExtensions.cs" />
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
+    <Compile Include="Forecasting\SkillForecastReadModelPeriodBuilder.cs" />
     <Compile Include="Forecasting\SkillsExtensions.cs" />
-    <Compile Include="Forecasting\TriggerSkillForecastReadModel.cs" />
+    <Compile Include="Forecasting\TriggerSkillForecastReadModelHandler.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Insights\InsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
