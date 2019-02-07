@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Wfm.Adherence.States
 {
@@ -87,7 +86,7 @@ namespace Teleopti.Wfm.Adherence.States
 
 		public static CurrentScheduleReadModelVersion Parse(string str)
 		{
-			var splat = str?.Split(":");
+			var splat = str?.Split(':');
 			if (splat == null || splat.Length != 2)
 				return null;
 

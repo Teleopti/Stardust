@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// Created by: robink
     /// Created date: 2008-03-27
     /// </remarks>
-    public class ValidatedVolumeDay : VersionedAggregateRootWithBusinessUnit, IValidatedVolumeDay
+    public class ValidatedVolumeDay : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IValidatedVolumeDay
     {
         private readonly IWorkload _workload;
         private readonly DateOnly _volumeDayDate;

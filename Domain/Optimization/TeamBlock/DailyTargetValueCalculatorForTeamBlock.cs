@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISkillIntervalDataDivider _intervalDataDivider;
 		private readonly SkillIntervalDataAggregator _intervalDataAggregator;
 		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
-		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
+		private readonly SkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public DailyTargetValueCalculatorForTeamBlock(ISkillIntervalDataDivider intervalDataDivider,
 			SkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator,
-			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
+			SkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			ILocateMissingIntervalsIfMidNightBreak locateMissingIntervalsIfMidNightBreak,
 			IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight,
@@ -85,8 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					skillStaffPeriodCollection = _filterOutIntervalsAfterMidNight.Filter(skillStaffPeriodCollection, currentDate, timezone);
 				}
 
-				var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection,
-					currentDate, timezone);
+				var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection, timezone);
 				mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
 
 				if (!result.TryGetValue(currentDate, out var intervals))

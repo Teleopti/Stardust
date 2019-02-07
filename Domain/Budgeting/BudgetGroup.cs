@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Budgeting
 {
-    public class BudgetGroup : VersionedAggregateRootWithBusinessUnit, IBudgetGroup, IDeleteTag
+    public class BudgetGroup : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IBudgetGroup, IDeleteTag
     {
 	    private readonly ISet<ISkill> _skillCollection;
         private string _timeZone;

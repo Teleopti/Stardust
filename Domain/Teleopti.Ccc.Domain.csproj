@@ -218,7 +218,6 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestAvailability.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastUpdater.cs" />
     <Compile Include="Auditing\ITenantAudit.cs" />
-    <Compile Include="Auditing\PurgeAuditRunner.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationExtended.cs" />
     <Compile Include="Budgeting\BudgetGroupState.cs" />
@@ -226,14 +225,12 @@
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Common\EntityBaseTypes\EventsExtensions.cs" />
     <Compile Include="Common\EntityBaseTypes\FromServiceLocators.cs" />
-    <Compile Include="Common\EntityBaseTypes\IEventsRoot.cs" />
-    <Compile Include="Common\EntityBaseTypes\NonversionedAggregateRootWithBusinessUnit.cs" />
-    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRoot.cs" />
-    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnit.cs" />
-    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitId.cs" />
-    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitIdWithoutChangeInfo.cs" />
-    <Compile Include="Common\EntityBaseTypes\VersionedAggregateRootWithBusinessUnitWithoutChangeInfo.cs" />
+    <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_BusinessUnit.cs" />
+    <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned.cs" />
+    <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit.cs" />
+    <Compile Include="Common\Time\IUserNowExtensions.cs" />
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
+    <Compile Include="Forecasting\SkillsExtensions.cs" />
     <Compile Include="Forecasting\TriggerSkillForecastReadModel.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
     <Compile Include="Insights\InsightsReport.cs" />
@@ -278,7 +275,6 @@
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
     <Compile Include="Forecasting\Models\WorkloadQueueStatisticsViewModel.cs" />
     <Compile Include="Forecasting\SkillStaffingIntervalUnderstaffing.cs" />
-    <Compile Include="Infrastructure\DeadLockRetrier.cs" />
     <Compile Include="Infrastructure\Events\SharedMinuteTickEvent.cs" />
     <Compile Include="Infrastructure\HttpRequestHandler.cs" />
     <Compile Include="Infrastructure\IHttpRequestHandler.cs" />
@@ -293,7 +289,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InterfaceLegacy\Domain\IApplicationData.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IBelongsToBusinessUnitId.cs" />
     <Compile Include="InterfaceLegacy\Domain\ICurrentSchedulingSource.cs" />
     <Compile Include="InterfaceLegacy\Domain\InParameter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IntervalDefinition.cs" />
@@ -375,7 +370,6 @@
     <Compile Include="MessageBroker\Server\MessageBrokerServerNoMailboxPurge.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerServerThrottleMessages.cs" />
     <Compile Include="MessageBroker\Server\RouteToGroupName.cs" />
-    <Compile Include="MultiTenancy\ActiveTenants.cs" />
     <Compile Include="Notification\INotificationServiceClient.cs" />
     <Compile Include="Notification\NotificationServiceClient.cs" />
     <Compile Include="Optimization\AllSettingsForPlanningGroup.cs" />
@@ -531,20 +525,9 @@
     <Compile Include="Analytics\Transformer\IPersonPeriodFilter.cs" />
     <Compile Include="Analytics\Transformer\IPersonPeriodTransformer.cs" />
     <Compile Include="Analytics\Transformer\PersonPeriodFilterForDateCreation.cs" />
-    <Compile Include="Aop\AnalyticsUnitOfWorkAttribute.cs" />
-    <Compile Include="Aop\IAnalyticsUnitOfWorkAspect.cs" />
-    <Compile Include="Aop\ILogManager.cs" />
     <Compile Include="Aop\IMessageBrokerUnitOfWorkAspect.cs" />
-    <Compile Include="Aop\InvocationInfoBuilder.cs" />
-    <Compile Include="Aop\LogInfoAspect.cs" />
-    <Compile Include="Aop\LogInfoAttribute.cs" />
-    <Compile Include="Aop\IUnitOfWorkAspect.cs" />
-    <Compile Include="Aop\IAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Aop\LogManagerWrapper.cs" />
     <Compile Include="Aop\MessageBrokerUnitOfWorkAttribute.cs" />
-    <Compile Include="Aop\TestLog.cs" />
-    <Compile Include="Aop\UnitOfWorkAttribute.cs" />
-    <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestQueueStrategyHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ApproveRequestsWithValidatorsEventHandler.cs" />
@@ -592,9 +575,7 @@
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
     <Compile Include="Common\PurgeSetting.cs" />
-    <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
-    <Compile Include="Common\Time\UserNow.cs" />
     <Compile Include="Config\ApplicationInsightsConfigurationReader.cs" />
     <Compile Include="Exceptions\NoDefaultScenarioException.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportDailyModel.cs" />
@@ -610,7 +591,6 @@
     <Compile Include="Forecasting\Import\ForecastsRowExtractor.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
-    <Compile Include="Infrastructure\DeadLockVictimException.cs" />
     <Compile Include="Infrastructure\Events\PublishInitializeReadModelEvent.cs" />
     <Compile Include="Infrastructure\Events\RequeueHangfireEvent.cs" />
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
@@ -810,7 +790,6 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduleSelected.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffScheduling.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoExtensions.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftProjectionCachesFilter.cs" />
     <Compile Include="Security\Principal\IUpdatedBySystemUser.cs" />
     <Compile Include="Security\Principal\UpdatedBySystemUser.cs" />
     <Compile Include="Staffing\CompareProjection.cs" />
@@ -959,7 +938,7 @@
     <Compile Include="InterfaceLegacy\Domain\IAvailabilityRotation.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAvailableData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBacklogTask.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IBelongsToBusinessUnit.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IFilterOnBusinessUnit.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBlockFinder.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBlockInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBudgetAbsenceAllowanceDetail.cs" />
@@ -1332,7 +1311,6 @@
     <Compile Include="InterfaceLegacy\Domain\IUserUICulture.cs" />
     <Compile Include="InterfaceLegacy\Domain\IValidatedRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IValidatedVolumeDay.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IVersioned.cs" />
     <Compile Include="InterfaceLegacy\Domain\IVirtualSchedulePeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IVirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="InterfaceLegacy\Domain\IVirtualSkillHelper.cs" />
@@ -1425,8 +1403,6 @@
     <Compile Include="InterfaceLegacy\Domain\WorkTimeSource.cs" />
     <Compile Include="InterfaceLegacy\IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="InterfaceLegacy\IFilter.cs" />
-    <Compile Include="InterfaceLegacy\IJsonDeserializer.cs" />
-    <Compile Include="InterfaceLegacy\IJsonSerializer.cs" />
     <Compile Include="InterfaceLegacy\IMapiMailMessage.cs" />
     <Compile Include="InterfaceLegacy\IMultiAbsenceRequestsUpdater.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsAbsence.cs" />
@@ -1441,7 +1417,6 @@
     <Compile Include="InterfaceLegacy\Infrastructure\DomainObjectNotInFilterException.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\EncryptionConstants.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IAggregateRootInitializer.cs" />
-    <Compile Include="InterfaceLegacy\Infrastructure\ICurrentAnalyticsUnitOfWork.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ICurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\ICurrentUnitOfWorkFactory.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IDeleteTag.cs" />
@@ -1884,7 +1859,6 @@
     <Compile Include="UndoRedo\UndoRedoWithScheduleCallbackContainer.cs" />
     <Compile Include="UnitOfWork\ThisAnalyticsUnitOfWork.cs" />
     <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\WithAnalyticsUnitOfWork.cs" />
     <Compile Include="ApplicationLayer\AllTenantRecurringEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverter.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCreatorInfo.cs" />
@@ -2061,8 +2035,6 @@
     <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\IBusinessUnitIdForRequest.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodChangedEvent.cs" />
-    <Compile Include="Aop\TestLogAspect.cs" />
-    <Compile Include="Aop\TestLogAttribute.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentDataSource.cs" />
@@ -2088,7 +2060,6 @@
     <Compile Include="Common\Time\Time.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
-    <Compile Include="Common\EntityBaseTypes\SimpleAggregateRoot.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorization.cs" />
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
@@ -2188,7 +2159,6 @@
     <Compile Include="Forecasting\ITaskOwnerPeriod.cs" />
     <Compile Include="Forecasting\OverrideTask.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
-    <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="Helper\DateExtensions.cs" />
     <Compile Include="Helper\ISchedulingProgress.cs" />
@@ -2232,12 +2202,6 @@
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="MessageBroker\Server\MessageBrokerTracer.cs" />
     <Compile Include="MultiTenancy\CannotIterateAllTenants.cs" />
-    <Compile Include="MultiTenancy\IAllTenantNames.cs" />
-    <Compile Include="MultiTenancy\ICountTenants.cs" />
-    <Compile Include="MultiTenancy\IFindTenantNameByRtaKey.cs" />
-    <Compile Include="MultiTenancy\ITenantUnitOfWorkAspect.cs" />
-    <Compile Include="MultiTenancy\NoTenantAuthenticationAttribute.cs" />
-    <Compile Include="MultiTenancy\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="Optimization\FilterMapper.cs" />
     <Compile Include="Optimization\FilterModel.cs" />
     <Compile Include="Optimization\Filters\ContractFilter.cs" />
@@ -2570,7 +2534,6 @@
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayIsLockedSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\VerifyWeeklyRestAroundDayOffSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
-    <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="Outbound\Campaign.cs" />
     <Compile Include="Outbound\OutboundProductionPlanFactory.cs" />
     <Compile Include="Outbound\OutboundSkillCreator.cs" />
@@ -2899,7 +2862,7 @@
     <Compile Include="Common\AggregateException.cs" />
     <Compile Include="Common\ChildPersonGroup.cs" />
     <Compile Include="Common\DisabledObjectSpecification.cs" />
-    <Compile Include="Common\EntityBaseTypes\AggregateRoot.cs" />
+    <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo.cs" />
     <Compile Include="Common\IOptionalColumnView.cs" />
     <Compile Include="Common\IUserTextTranslator.cs" />
     <Compile Include="Common\LocalizedUpdateInfo.cs" />
@@ -3335,7 +3298,6 @@
     <Compile Include="Forecasting\MonthOfYearItem.cs" />
     <Compile Include="Forecasting\SkillDayRestrictionSet.cs" />
     <Compile Include="Forecasting\SkillDayTemplate.cs" />
-    <Compile Include="Common\EntityBaseTypes\Entity.cs" />
     <Compile Include="Common\Layer.cs" />
     <Compile Include="AgentInfo\Team.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateEntity.cs" />
@@ -4020,7 +3982,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Aop\Core\" />
     <Folder Include="Logon\Aspects\" />
     <Folder Include="Properties\" />
   </ItemGroup>

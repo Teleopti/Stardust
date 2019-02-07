@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AdjustAdherence
 				EndDateTime = "2019-01-30 10:00"
 			});
 
-			var published = Publisher.PublishedEvents.OfType<AdjustAdherenceToNeutralEvent>().Single();
+			var published = Publisher.PublishedEvents.OfType<PeriodAdjustedToNeutralEvent>().Single();
 			published.StartTime.Should().Be("2019-01-30 08:00:00".Utc());
 			published.EndTime.Should().Be("2019-01-30 10:00".Utc());
 		}
@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AdjustAdherence
 				EndDateTime = "2019-01-30 18:00"
 			});
 	
-			var published = Publisher.PublishedEvents.OfType<AdjustAdherenceToNeutralEvent>().Single();
+			var published = Publisher.PublishedEvents.OfType<PeriodAdjustedToNeutralEvent>().Single();
 			published.StartTime.Should().Be("2019-01-30 15:00:00".Utc());
 			published.EndTime.Should().Be("2019-01-30 17:00:00".Utc());
 		}

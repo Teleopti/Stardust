@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.UndoRedo;
 
 namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 {
-	public class PersonAbsenceAccount : VersionedAggregateRoot, IPersonAbsenceAccount
+	public class PersonAbsenceAccount : AggregateRoot_Events_ChangeInfo_Versioned, IPersonAbsenceAccount
 	{
 		private readonly IPerson _person;
 		private readonly IAbsence _absence;

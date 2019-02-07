@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(DataSourceId, _target2.DataSourceId);
             Assert.AreEqual(QueueAggId, _target2.QueueAggId);
             Assert.AreEqual(string.Empty, _target2.LogObjectName);
-            Assert.AreEqual(false, _target2 is IBelongsToBusinessUnit);
+            Assert.AreEqual(false, _target2 is IFilterOnBusinessUnit);
         }
 
         /// <summary>

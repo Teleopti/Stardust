@@ -1,9 +1,10 @@
 using System.Drawing;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Configuration
 {
-	public interface IRtaRule : IAggregateRootWithEvents
+	public interface IRtaRule : IAggregateRoot, IPublishEvents
     {
 	    Description Description { get; set; }
 	    Color DisplayColor { get; set; }

@@ -31,16 +31,38 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;
 		}
 
-		public void Calculate(IEnumerable<ISkillDay> skillDays)
+		public void Calculate(IEnumerable<ISkillDay> skillDays, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
+
+			//var periods = skillDays
+			//	.SelectMany(x =>
+			//		x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), false)
+			//			.Select(i => new { SkillDay = x, StaffPeriod = i }));
+			//var periodsWithShrinkage = skillDays
+			//	.SelectMany(x =>
+			//		x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), true)
+			//			.Select(i => new { SkillDay = x, StaffPeriod = i }));
+			IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
+			foreach (var skill in skills)
+			{
+				var skillSkilldays = skillDays.Where(x => x.Skill.Equals(skill));
+				calculators.Add(new SkillDayCalculator(skill, skillSkilldays, period));
+				
+				foreach (ISkillDay skillDay in skillSkilldays)
+				{
+					skillDay.RecalculateDailyTasks();
+				}
+			}
+			
+			
 
 			var periods = skillDays
 				.SelectMany(x =>
-					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), false)
+					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(x.Skill.DefaultResolution), false)
 						.Select(i => new { SkillDay = x, StaffPeriod = i }));
 			var periodsWithShrinkage = skillDays
 				.SelectMany(x =>
-					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), true)
+					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(x.Skill.DefaultResolution), true)
 						.Select(i => new { SkillDay = x, StaffPeriod = i }));
 
 			var agentsWithShrinkage = periodsWithShrinkage.ToDictionary(
@@ -62,7 +84,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					Calls = x.StaffPeriod.ForecastedTasks,
 					AverageHandleTime = x.StaffPeriod.AverageHandlingTaskTime.TotalSeconds,
 					AgentsWithShrinkage = agentsWithShrinkage.ContainsKey(item) ? agentsWithShrinkage[item] : 0,
-					IsBackOffice = SkillTypesWithBacklog.IsBacklogSkillType(x.SkillDay.Skill)
+					IsBackOffice = SkillTypesWithBacklog.IsBacklogSkillType(x.SkillDay.Skill),
+					AnsweredWithinSeconds = x.StaffPeriod.AnsweredWithinSeconds,
+					PercentAnswered = x.StaffPeriod.PercentAnswered.Value
 
 				});
 

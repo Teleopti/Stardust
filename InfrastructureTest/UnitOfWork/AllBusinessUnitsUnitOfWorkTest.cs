@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Configuration;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public IPrincipalAndStateContext Context;
 		public IDataSourceScope DataSource;
 		public IDataSourceForTenant DataSourceForTenant;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
 
 		public class TheServiceImpl
 		{
@@ -117,11 +119,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				TheService.DoesOnAllBusinessUnitsWithoutDatasource(uow => { });
 
-				// existing beahvior is the HibernateException, although something else would be better
-				//UnitOfWork.Current().Should().Be.Null();
-				Assert.Throws<HibernateException>(() => RepositoryNotValidatingUserLogon.LoadAll());
+				CurrentUnitOfWork.Current().Should().Be.Null();
 			}
-
 		}
 		
 		[Test]

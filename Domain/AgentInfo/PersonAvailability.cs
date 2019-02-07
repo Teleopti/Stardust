@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-    public class PersonAvailability : VersionedAggregateRootWithBusinessUnit, IPersonAvailability, IDeleteTag 
+    public class PersonAvailability : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IPersonAvailability, IDeleteTag 
     {
         private readonly IPerson _person;
         private IAvailabilityRotation _availability;

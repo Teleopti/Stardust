@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 				skillStaffPeriod.SetCalculatedResource65(0.5);
 			}
 
-			var timeZoneInfo = TimeZoneGuard.Instance.CurrentTimeZone();
+			var timeZoneInfo = TimeZoneInfo.Utc;
 			var workShift1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(9), skill.Activity);
 			var workShift2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(9), TimeSpan.FromHours(10), skill.Activity); //should win
 			var workShift3 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(10), TimeSpan.FromHours(11), skill.Activity);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 				skillStaffPeriod.SetCalculatedResource65(0.5);
 			}
 
-			var timeZoneInfo = TimeZoneGuard.Instance.CurrentTimeZone();
+			var timeZoneInfo = TimeZoneInfo.Utc;
 			var workShift1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(9), skill.Activity);
 			var workShift2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(9), TimeSpan.FromHours(10), skill.Activity); //should win
 			var workShift3 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(10), TimeSpan.FromHours(11), skill.Activity);

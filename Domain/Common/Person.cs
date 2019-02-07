@@ -17,7 +17,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 namespace Teleopti.Ccc.Domain.Common
 {
 	[DebuggerDisplay("{Name}, {Id.ToString().ToUpper()}")]
-	public class Person : VersionedAggregateRoot, IPerson, IDeleteTag, IAggregateRootWithEvents
+	public class Person : AggregateRoot_Events_ChangeInfo_Versioned, IPerson, IDeleteTag
 	{
 		private Name _name;
 		private readonly IPermissionInformation _permissionInformation;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Common
 		}
 
 		public override IEnumerable<IEvent> PopAllEvents(IPopEventsContext context) =>
-			base.PopAllEvents(context)
+			base.PopAllEvents(context ?? new FromServiceLocators())
 				.KeepLastOfType<PersonNameChangedEvent>()
 				.KeepLastOfType<PersonPeriodChangedEvent>()
 				.KeepLastOfType<OptionalColumnValueChangedEvent>()

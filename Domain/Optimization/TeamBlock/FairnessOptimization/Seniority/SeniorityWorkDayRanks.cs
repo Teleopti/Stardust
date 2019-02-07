@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-	public class SeniorityWorkDayRanks : NonversionedAggregateRootWithBusinessUnit, ISeniorityWorkDayRanks
+	public class SeniorityWorkDayRanks : AggregateRoot_Events_ChangeInfo_BusinessUnit, ISeniorityWorkDayRanks
 	{
 		private int _monday;
 		private int _tuesday;

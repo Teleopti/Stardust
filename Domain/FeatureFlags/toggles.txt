@@ -102,7 +102,7 @@ WFM_ProbabilityView_ImproveResponseTime_80040 = true
 WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = true
 WFM_Intraday_OptimizeSkillDayLoad_80153 = true
 WFM_AbsenceRequest_Robust_Processing_79988= true
-WFM_Forecast_Readmodel_80790 = RC
+WFM_Forecast_Readmodel_80790 = false
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...

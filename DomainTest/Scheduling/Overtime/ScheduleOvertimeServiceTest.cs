@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
-			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
+
 			Target.SchedulePersonOnDay(stateHolder.Schedules[agent], overtimePreference,
-				resourceCalculateDelayer, dateOnly.AddDays(1), scheduleTagSetter);
+				resourceCalculateDelayer, dateOnly.AddDays(1), scheduleTagSetter, TimeZoneInfoFactory.DenverTimeZoneInfo());
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1)).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();
 		}

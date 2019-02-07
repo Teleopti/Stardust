@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	[Serializable]
-	public class SeatMapLocation : VersionedAggregateRootWithBusinessUnit, ISeatMapLocation
+	public class SeatMapLocation : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, ISeatMapLocation
 	{
 		private readonly IList<ISeat> _seats = new List<ISeat>();
 		private readonly IList<SeatMapLocation> _childLocations = new List<SeatMapLocation>();

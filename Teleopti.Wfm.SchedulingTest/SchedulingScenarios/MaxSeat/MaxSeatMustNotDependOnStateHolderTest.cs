@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 	public class MaxSeatMustNotDependOnStateHolderTest : MaxSeatScenario, IIsolateSystem
 	{
 		public MaxSeatOptimization Target;
-		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+		public FakeTeamRepository TeamRepository;
 		public FakeGroupPageRepository GroupPageRepository;
 
 		[Test]
@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");

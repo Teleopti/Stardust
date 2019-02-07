@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class StaffingAudit : SimpleAggregateRoot, IStaffingAudit
+	public class StaffingAudit : AggregateRoot, IStaffingAudit
 
 	{
 		protected StaffingAudit()

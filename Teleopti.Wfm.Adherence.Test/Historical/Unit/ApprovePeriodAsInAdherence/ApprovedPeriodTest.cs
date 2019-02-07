@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ApprovePeriodAsInAdherence
 	public class ApprovedPeriodTest
 	{
 		public FakeDatabase Database;
-		public AgentAdherenceDayLoader Target;
+		public IAgentAdherenceDayLoader Target;
 
 		[Test]
 		public void ShouldApprove()

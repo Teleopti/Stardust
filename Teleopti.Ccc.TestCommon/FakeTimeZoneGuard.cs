@@ -5,31 +5,26 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeTimeZoneGuard : ITimeZoneGuard
 	{
+		private TimeZoneInfo _timeZone;
+		
 		public FakeTimeZoneGuard(TimeZoneInfo timeZoneInfo)
 		{
-			TimeZone = timeZoneInfo;
+			_timeZone = timeZoneInfo;
 		}
 
 		public FakeTimeZoneGuard()
 		{
-			TimeZone = TimeZoneInfo.Utc;
+			_timeZone = TimeZoneInfo.Utc;
 		}
 
 		public TimeZoneInfo CurrentTimeZone()
 		{
-			return TimeZone;
+			return _timeZone;
 		}
-
-		public TimeZoneInfo TimeZone { get; private set; }
 
 		public void Set(TimeZoneInfo timeZone)
 		{
-			TimeZone = timeZone;
-		}
-
-		public void SetTimeZone(TimeZoneInfo timeZoneInfo)
-		{
-			TimeZone = timeZoneInfo;
+			_timeZone = timeZone;
 		}
 	}
 }

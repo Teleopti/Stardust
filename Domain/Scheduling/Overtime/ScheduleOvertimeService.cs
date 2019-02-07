@@ -19,28 +19,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IGridlockManager _gridlockManager;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 
 		public ScheduleOvertimeService(OvertimeLengthDecider overtimeLengthDecider, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IGridlockManager gridlockManager,
-			ITimeZoneGuard timeZoneGuard,
 			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider)
 		{
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_gridlockManager = gridlockManager;
-			_timeZoneGuard = timeZoneGuard;
 			_personSkillsForScheduleDaysOvertimeProvider = personSkillsForScheduleDaysOvertimeProvider;
 		}
 
-		public bool SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, IScheduleTagSetter scheduleTagSetter)
+		public bool SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, IScheduleTagSetter scheduleTagSetter, TimeZoneInfo userTimeZoneInfo)
 		{
 			var person = scheduleRange.Person;
-			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
 			if (_gridlockManager.Gridlocks(person, dateOnly) != null)
 				return false;
 			if (!hasMultiplierDefinitionSetOfOvertimeType(person, dateOnly, overtimePreferences))
@@ -50,13 +46,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
 			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(overtimePreferences, scheduleRange, dateOnly, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
 
-			var oldRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, timeZoneInfo);
+			var oldRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, userTimeZoneInfo);
 			var rules = setupRules(overtimePreferences);
 
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
 			{
-				var periodStartMyViewPoint = dateTimePeriod.StartDateTimeLocal(timeZoneInfo);
-				var periodEndMyViewPoint = dateTimePeriod.EndDateTimeLocal(timeZoneInfo);
+				var periodStartMyViewPoint = dateTimePeriod.StartDateTimeLocal(userTimeZoneInfo);
+				var periodEndMyViewPoint = dateTimePeriod.EndDateTimeLocal(userTimeZoneInfo);
 				var overtimeSpecifiedPeriodStartDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Minimum);
 				var overtimeSpecifiedPeriodEndDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Maximum);
 
@@ -75,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, false);
 
-				var newRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, timeZoneInfo);
+				var newRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, userTimeZoneInfo);
 				if (newRmsValue <= oldRmsValue)
 					return true;
 

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Class for UnitCollection
     /// </summary>
     public interface ISite : IAggregateRoot, 
-                                IBelongsToBusinessUnit
+                                IFilterOnBusinessUnit
     {
 		/// <summary>
         /// Gets or sets the descrition of the site.

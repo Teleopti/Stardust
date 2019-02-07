@@ -498,7 +498,7 @@
     <Compile Include="Optimization\PlanningGroupModelPersisterTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandlerTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
-    <Compile Include="ResourceCalculation\FakeSkillStaffPeriodHolder.cs" />
+    <Compile Include="ResourceCalculation\FakeSkillStaffPeriodHolder_DONOTUSE.cs" />
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerTest.cs" />
@@ -1206,7 +1206,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonMainShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ContractTimeShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftCategoriesShiftFilterTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftProjectionCashesFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\EarliestEndTimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\EffectiveRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\LatestStartTimeLimitationShiftFilterTest.cs" />

@@ -38,9 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	        {
 		        return false;
 	        }
-
-	        public IAuditSetter AuditSetting => null;
-
+	        
 			public string ConnectionString { get; }
 			
 	        public IUnitOfWork CreateAndOpenUnitOfWork()

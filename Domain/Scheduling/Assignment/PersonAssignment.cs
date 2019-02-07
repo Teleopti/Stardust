@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class PersonAssignment : VersionedAggregateRoot,
+	public class PersonAssignment : AggregateRoot_Events_ChangeInfo_Versioned,
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon
 
         public static void SetUpdatedOn(IChangeInfo aggregateRoot, DateTime date)
         {
-            typeof(AggregateRoot).GetField("_updatedOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
+            typeof(AggregateRoot_Events_ChangeInfo).GetField("_updatedOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
                 aggregateRoot, date);
         }
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.TestCommon
         }
         public static void SetUpdatedBy(IChangeInfo aggregateRoot, IPerson person)
         {
-            typeof(AggregateRoot).GetField("_updatedBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
+            typeof(AggregateRoot_Events_ChangeInfo).GetField("_updatedBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
                 aggregateRoot, person);
         }
 

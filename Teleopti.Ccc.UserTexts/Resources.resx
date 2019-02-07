@@ -10190,6 +10190,10 @@ These options are activated:
     <value>Schedule audit trail is not running.</value>
     <comment>Schedule audit trail is not running.</comment>
   </data>
+	<data name="AuditingIsNotRunningPleaseContactTeleopti" xml:space="preserve">
+    <value>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</value>
+    <comment>Schedule audit trail is not running. We recommend turning it on, please contact Teleopti.</comment>
+  </data>
   <data name="AuditingIsRunning" xml:space="preserve">
     <value>Schedule audit trail is running.</value>
     <comment>Schedule audit trail is running.</comment>
@@ -12296,7 +12300,7 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="TeamSchedulingColon" xml:space="preserve">
     <value>Team Scheduling:</value>
-	<comment>Used in Plans: Edit planning group</comment>
+    <comment>Used in Plans: Edit planning group</comment>
   </data>
   <data name="BlockFinderTypeSingleDay" xml:space="preserve">
     <value>&lt;No Block&gt;</value>
@@ -16022,6 +16026,10 @@ Do you want to participate?</value>
     <value>Create planning group</value>
     <comment>text for helping information </comment>
   </data>
+  <data name="NoPlanningGroupFound" xml:space="preserve">
+    <value>No planning group found.</value>
+	<comment>used in web plans when no planning group exist or no planning group matches the filter</comment>
+  </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
     <value>Create first planning period</value>
     <comment>Create first planning period</comment>
@@ -18196,5 +18204,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="ViewPlanningPeriods" xml:space="preserve">
     <value>View planning periods</value>
     <comment>Action button on each planning group in planning group overview in Plans</comment>
+  </data>
+  <data name="ReadOnlyDistribution" xml:space="preserve">
+    <value>Distribution change is not allowed</value>
+    <comment>Distribution change is not allowed when saving as template on multi site skill</comment>
   </data>
 </root>

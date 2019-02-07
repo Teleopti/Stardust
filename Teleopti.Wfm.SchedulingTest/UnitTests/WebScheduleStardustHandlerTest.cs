@@ -23,6 +23,7 @@ using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling;
 namespace Teleopti.Wfm.SchedulingTest.UnitTests
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class WebScheduleStardustHandlerTest : SchedulingScenario
 	{
 		public WebScheduleStardustHandler Target;

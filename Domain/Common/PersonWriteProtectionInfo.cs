@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class PersonWriteProtectionInfo : SimpleAggregateRoot, IPersonWriteProtectionInfo, IChangeInfo
+    public class PersonWriteProtectionInfo : AggregateRoot, IPersonWriteProtectionInfo, IChangeInfo
     {
 #pragma warning disable 0649
         private IPerson _updatedBy;

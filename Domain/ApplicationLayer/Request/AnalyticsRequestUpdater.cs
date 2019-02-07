@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				return;
 			}
 
-			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(((IBelongsToBusinessUnit)personRequest).BusinessUnit.Id.GetValueOrDefault());
+			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(personRequest.BusinessUnit.Id.GetValueOrDefault());
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 
 			var personPeriod = getPersonPeriod(personRequest);

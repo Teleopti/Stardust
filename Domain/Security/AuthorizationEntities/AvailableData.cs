@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
-    public class AvailableData : VersionedAggregateRoot, IAvailableData, IDeleteTag
+    public class AvailableData : AggregateRoot_Events_ChangeInfo_Versioned, IAvailableData, IDeleteTag
     {
 	    private IApplicationRole _applicationRole;
         private readonly ICollection<IBusinessUnit> _availableBusinessUnits;

@@ -111,7 +111,7 @@ namespace Teleopti.Wfm.Api.Test
 			isolate.UseTestDouble(userUnauthorized).For<ILoadUserUnauthorized>();
 			isolate.UseTestDouble<DummyHangfireClientStarter>().For<IHangfireClientStarter>();
 			
-			var businessUnitRepository = new FakeBusinessUnitRepository(null);
+			var businessUnitRepository = new FakeBusinessUnitRepository();
 			businessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			var fakeStorage = new FakeStorage();

@@ -81,7 +81,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Calls = 400,
 				AverageHandleTime = 15,
 				AgentsWithShrinkage = 20,
-				IsBackOffice = false
+				IsBackOffice = false,
+				PercentAnswered = 0.8,
+				AnsweredWithinSeconds = 10
+			
 			});
 			Target.PersistSkillForecast(listOfIntervals);
 
@@ -96,6 +99,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().IsBackOffice.Should().Be(false);
 			result.First().StartDateTime.Should().Be(new DateTime(2019, 1, 23, 10, 0, 0));
 			result.First().EndDateTime.Should().Be(new DateTime(2019, 1, 23, 10, 15, 0));
+			result.First().PercentAnswered.Should().Be(0.8);
+			result.First().AnsweredWithinSeconds.Should().Be(10);
 		}
 
 		[Test]

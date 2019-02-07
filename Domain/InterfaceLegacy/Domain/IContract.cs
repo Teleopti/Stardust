@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// conditions and directives of the work. 
     /// </summary>
     public interface IContract : IAggregateRoot,
-									IChangeInfo, IBelongsToBusinessUnit
+									IChangeInfo, IFilterOnBusinessUnit
     {
         /// <summary>
         /// Name of Contract

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var repository = new RtaStateGroupRepository(new ThisUnitOfWork(uow));
-				return repository.LoadAllCompleteGraph();
+				return repository.LoadAllCompleteGraph().ToList();
 			}
 		}
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
-		private static void removeGroupActivityAlarmMappingsWithGroup(IRtaStateGroup @group, IRepository<IRtaMap> alarmMappingRepository)
+		private static void removeGroupActivityAlarmMappingsWithGroup(IRtaStateGroup @group, Wfm.Adherence.Configuration.IRepository<IRtaMap> alarmMappingRepository)
 		{
 			var mappingsWithStateGroup = alarmMappingRepository.LoadAll()
 				.Where(x => @group.Equals(x.StateGroup));

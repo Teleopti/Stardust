@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface ISeniorityWorkDayRanks : IAggregateRoot, IBelongsToBusinessUnit, IChangeInfo
+	public interface ISeniorityWorkDayRanks : IAggregateRoot, IFilterOnBusinessUnit, IChangeInfo
 	{
 		int Monday { get; set; }
 		int Tuesday { get; set; }

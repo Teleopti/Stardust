@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// Created by: robink
     /// Created date: 2008-05-14
     /// </remarks>
-    public class Outlier : VersionedAggregateRootWithBusinessUnit, IOutlier
+    public class Outlier : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IOutlier
     {
         private Description _description;
         private IList<DateOnly> _dates;

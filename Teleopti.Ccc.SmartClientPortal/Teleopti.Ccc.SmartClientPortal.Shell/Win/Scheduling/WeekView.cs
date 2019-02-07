@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         protected override int CellWidth()
         {
-            return 189;
+            return 160;
         }
 
         //draw cell
@@ -102,7 +103,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (personPeriod?.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)
 			{
 				permissionState = restrictionChecker.CheckStudentAvailability(schedulePart);
-				drawRestrictionIcon.DrawStudentAvailability(permissionState);
+				var isAnyAvailabilityLeftToUse = false;
+				if(permissionState == PermissionState.Satisfied)
+				{
+					if (new HourlyAvailiabilityDisplayHelper().IsAnyAvailabilityLeftToUse(schedulePart))
+						isAnyAvailabilityLeftToUse = true;
+				}
+				drawRestrictionIcon.DrawStudentAvailability(permissionState, isAnyAvailabilityLeftToUse);
 			}
 		}
 		

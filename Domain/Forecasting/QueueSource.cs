@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// <summary>
     /// Source class
     /// </summary>
-    public class QueueSource : VersionedAggregateRoot, IQueueSource
+    public class QueueSource : AggregateRoot_Events_ChangeInfo_Versioned, IQueueSource
     {
         private string _name = string.Empty;
         private string _description = string.Empty;

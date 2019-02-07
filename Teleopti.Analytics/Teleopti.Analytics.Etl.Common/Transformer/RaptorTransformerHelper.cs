@@ -27,7 +27,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			var rootCheck = root as IChangeInfo;
 			if (rootCheck != null)
 			{
-				Type rootType = typeof(AggregateRoot);
+				Type rootType = typeof(AggregateRoot_Events_ChangeInfo);
 				if (updatedOn.HasValue)
 					rootType.GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(root, updatedOn);
 			}

@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <value>The version.</value>
         int? Version { get; }
-    }
+		bool IsDistributionChangeNotAllowed { get; set; }
+	}
 }

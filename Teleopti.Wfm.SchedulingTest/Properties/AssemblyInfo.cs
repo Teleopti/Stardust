@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using NUnit.Framework;
+using Teleopti.Ccc.TestCommon.IoC;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -36,3 +37,4 @@ using NUnit.Framework;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: Parallelizable(ParallelScope.Fixtures)]
+[assembly: DefaultData]

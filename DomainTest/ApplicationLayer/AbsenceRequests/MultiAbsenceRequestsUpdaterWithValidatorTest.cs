@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillStaffPeriod.Stub(x => x.Period).Return(skillDateTimePeriod);
 			skillStaffPeriod.Stub(x => x.DateTimePeriod).Return(skillDateTimePeriod);
 
-			var skillStaffPeriodHolder = new FakeSkillStaffPeriodHolder();
+			var skillStaffPeriodHolder = new FakeSkillStaffPeriodHolder_DONOTUSE();
 			skillStaffPeriodHolder.SetDictionary(new SkillSkillStaffPeriodExtendedDictionary { { skill, new SkillStaffPeriodDictionary(skill) { skillStaffPeriod } } });
 			SchedulingResultStateHolder.SetSkillStaffPeriodHolder(skillStaffPeriodHolder);
 		}

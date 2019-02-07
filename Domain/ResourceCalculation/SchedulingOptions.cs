@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class SchedulingOptions
 	{
 		private HashSet<IShiftCategory> _notAllowedShiftCategories = new HashSet<IShiftCategory>();
-		private IList<ShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<ShiftProjectionCache>(); 
 
 		private bool _usePreferencesMustHaveOnly;
 	    private bool _useRotations;
@@ -111,19 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     		set { _mainShiftOptimizeActivitySpecification = value; }
     	}
 
-	    public void AddNotAllowedShiftProjectionCache(ShiftProjectionCache shiftProjectionCache)
-	    {
-		    _notAllowedShiftProjectionCaches.Add(shiftProjectionCache);
-	    }
-
-	    public IList<ShiftProjectionCache> NotAllowedShiftProjectionCaches => _notAllowedShiftProjectionCaches;
-
 	    public IRuleSetBag FixedShiftBag { get; set; }
-
-	    public void ClearNotAllowedShiftProjectionCaches()
-	    {
-		    _notAllowedShiftProjectionCaches.Clear();
-	    }
 
 	    public IMultiplicatorDefinitionSet OvertimeType { get; set; }
 
@@ -258,7 +245,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var ret = (SchedulingOptions) MemberwiseClone();
 			ret._notAllowedShiftCategories = _notAllowedShiftCategories.ToHashSet();
-			ret._notAllowedShiftProjectionCaches = _notAllowedShiftProjectionCaches.ToList();
             return ret;
         }
     }

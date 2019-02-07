@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Hangfire.Server;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
@@ -13,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Wfm.Adherence;
 using Teleopti.Wfm.Adherence.Configuration;
+using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Adherence.Historical;
 using Teleopti.Wfm.Adherence.Historical.AdjustAdherence;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
@@ -39,6 +38,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<RtaMapRepository>().AsImplementedInterfaces().SingleInstance();
+			builder.RegisterType<RtaRuleRepository>().AsImplementedInterfaces().SingleInstance();
+			builder.RegisterType<RtaStateGroupRepository>().AsImplementedInterfaces().SingleInstance();
+			
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<StateQueue>().As<IStateQueueReader>().As<IStateQueueWriter>().SingleInstance().ApplyAspects();
@@ -130,7 +133,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaEventStoreUpgraderProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();
 
-			if (_config.IsToggleEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770))
+			if (_config.IsToggleEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
+			{
+				builder.RegisterType<RtaEventStoreSynchronizerAdjustAdherenceToNeutral>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RtaEventStoreAsyncSynchronizer>().As<IRtaEventStoreAsyncSynchronizer>().SingleInstance().ApplyAspects();
+				builder.RegisterType<RunAsynchronouslyAndLog>().As<IRtaEventStoreAsyncSynchronizerStrategy>().SingleInstance().ApplyAspects();
+			}		
+			else if (_config.IsToggleEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770))
 			{
 				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance().ApplyAspects();
 				builder.RegisterType<RtaEventStoreAsyncSynchronizer>().As<IRtaEventStoreAsyncSynchronizer>().SingleInstance().ApplyAspects();
@@ -144,7 +153,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
-			builder.RegisterType<AgentAdherenceDayLoader>().SingleInstance();
+			if (_config.IsToggleEnabled(Toggles.RTA_AdjustAdherenceToNeutral_80594))
+			{
+				builder.RegisterType<AgentAdherenceDayAdjustAdherenceToNeutral>().As<IAgentAdherenceDay>().SingleInstance();
+				builder.RegisterType<AgentAdherenceDayLoaderAdjustAdherenceToNeutral>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<AgentAdherenceDay>().As<IAgentAdherenceDay>().SingleInstance();
+				builder.RegisterType<AgentAdherenceDayLoader>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			}
+
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 
 			builder.RegisterType<AdherenceDayStartEventPublisher>().SingleInstance();

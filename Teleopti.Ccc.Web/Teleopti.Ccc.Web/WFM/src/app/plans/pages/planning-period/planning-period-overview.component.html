@@ -28,24 +28,48 @@
 				</div>
 			</div>
 
-			<div class="grid-scroll-wrap">
-				<table class="overview">
+			<div class="legend" *ngIf="dayNodes">
+				<h2>Scheduled Skills Heatmap</h2>
+				<table>
+					<tbody>
+					<tr >
+						<td class="">-100%</td>
+						<td *ngFor="let legend of legends">
+							<div class="legend-box" [style.background-color]="legend.bgcolor"></div>
+						</td>
+						<td class="">100%</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="heatmap-div" *ngIf="dayNodes&&dayNodes.length>0">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th *ngFor ="let month of months" [attr.colspan]="month.Count">
+								<p class="heatmap-date-header">{{ month.Name }}</p>
+							</th>
+						</tr>
+						<tr>
+							<th></th>
+							<th *ngFor ="let datenode of dayNodes[0].SkillDetails">
+								<p class="heatmap-date-header" [ngClass]="{'heatmap-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
+							</th>
+						</tr>
+					</thead>
 					<tbody>
 						<tr *ngFor="let subnode of dayNodes">
 							<td class="skill-name">{{ subnode.SkillName }}</td>
-							<td
-								class="long"
+							<td class="heatmap-day"
 								*ngFor="let node of subnode.SkillDetails"
-								[ngClass]="{ weekend: node.weekend }"
+								[ngClass]="{ worst: worstDay.RelativeDifferencePercent == node.RelativeDifferencePercent }"
 							>
-								<div
-									class="resourceplanner-box"
-									[ngClass]="{
-										understaffed: node.ColorId == 1,
-										critUnderstaffed: node.ColorId == 2,
-										overstaffed: node.ColorId == 3,
-										closed: node.ColorId == 4
-									}"
+								<div nz-tooltip nzTitle="{{'RelativeDifference' | translate}}: {{node.RelativeDifferencePercent}}% | {{subnode.SkillName}} | {{node.Date | amDateFormat:'L'}}"
+									class="heatmap-box"
+									[ngClass]="{ 'heatmap-closed': node.ColorId==4}"
+									[style.background-color]="node.bgcolor"
 								></div>
 							</td>
 						</tr>

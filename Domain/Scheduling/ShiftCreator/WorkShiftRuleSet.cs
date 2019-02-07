@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
     /// Created by: rogerkr
     /// Created date: 2008-03-20
     /// </remarks>
-    public class WorkShiftRuleSet : VersionedAggregateRootWithBusinessUnit, IWorkShiftRuleSet
+    public class WorkShiftRuleSet : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IWorkShiftRuleSet
     {
 		private IList<IWorkShiftExtender> _extenderCollection;
         private IList<IWorkShiftLimiter> _limiterCollection;

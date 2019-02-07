@@ -33,10 +33,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void HasConnectedToCurrentBusinessUnit(ITeam team)
 		{
-			team.Site = new Site("_");
-			var bu = _currentBusinessUnit.Current();
-			bu.AddSite(team.Site);
-			_businessUnitRepository.Has(bu);
+			if (team.Site == null)
+			{
+				team.Site = new Site("_");				
+			}
+
+			var currBuId = _currentBusinessUnit.CurrentId();
+			//TODO: fix when we use DefaultData in all places where this method is called
+			var currBuInDb = _businessUnitRepository.Get(currBuId.Value);
+			if (currBuInDb == null)
+			{
+				var bu = _currentBusinessUnit.Current();
+				bu.AddSite(team.Site);
+				_businessUnitRepository.Has(bu);
+			}
+			else
+			{
+				currBuInDb.AddSite(team.Site);
+			}
 		}
 
 		public void Remove (ITeam entity)

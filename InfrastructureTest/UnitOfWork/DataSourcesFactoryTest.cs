@@ -14,13 +14,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	public class DataSourcesFactoryTest
 	{
 		private IDataSourcesFactory target;
-		private IEnversConfiguration enversConfiguration;
 
 		[SetUp]
 		public void Setup()
 		{
-			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = DataSourceHelper.MakeLegacyWay(enversConfiguration).Make();
+			target = DataSourceHelper.MakeLegacyWay().Make();
 		}
 
 		[Test]

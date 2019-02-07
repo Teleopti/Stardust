@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
 	[DebuggerDisplay("{ForeignId}, {Id.ToString().ToUpper()}, {FunctionPath}")]
-	public class ApplicationFunction : VersionedAggregateRoot, IApplicationFunction, IDeleteTag
+	public class ApplicationFunction : AggregateRoot_Events_ChangeInfo_Versioned, IApplicationFunction, IDeleteTag
     {
         private string _functionDescription;
         private IParentChildEntity _parent;

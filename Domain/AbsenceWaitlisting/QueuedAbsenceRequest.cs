@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 {
-	public class QueuedAbsenceRequest : NonversionedAggregateRootWithBusinessUnit, IQueuedAbsenceRequest
+	public class QueuedAbsenceRequest : AggregateRoot_Events_ChangeInfo_BusinessUnit, IQueuedAbsenceRequest
 	{
 		public virtual Guid PersonRequest { get; set; }
 

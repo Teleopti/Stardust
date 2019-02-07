@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface IGamificationSetting : IAggregateRoot, IChangeInfo, IBelongsToBusinessUnit, ICloneableEntity<IGamificationSetting>
+	public interface IGamificationSetting : IAggregateRoot, IChangeInfo, IFilterOnBusinessUnit, ICloneableEntity<IGamificationSetting>
 	{
 		Description Description { get; set; }
 		GamificationSettingRuleSet GamificationSettingRuleSet { get; set; }

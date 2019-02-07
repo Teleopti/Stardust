@@ -44,19 +44,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			set {  }
 		}
 
-		public bool GuessResourceCalculationHasBeenMade()
-		{
-			return false;
-		}
-
 		public ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
-		}
-
-		public int MinimumSkillIntervalLength()
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

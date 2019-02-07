@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
-using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Wfm.Adherence.Historical
 {
@@ -17,7 +16,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 		private readonly ScheduleLoader _schedule;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
+		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly ICurrentAuthorization _authorization;
 		private readonly ILoggedOnUserIsPerson _loggedOnUserIsPerson;
 		private readonly int _displayPastDays;
@@ -28,7 +27,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 			INow now,
 			IUserTimeZone timeZone,
 			IConfigReader config,
-			AgentAdherenceDayLoader agentAdherenceDayLoader,
+			IAgentAdherenceDayLoader agentAdherenceDayLoader,
 			ICurrentAuthorization authorization,
 			ILoggedOnUserIsPerson loggedOnUserIsPerson
 		)

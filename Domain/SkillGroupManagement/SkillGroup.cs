@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Intraday.Domain;
 
 namespace Teleopti.Ccc.Domain.SkillGroupManagement
 {
-	public class SkillGroup : VersionedAggregateRootWithBusinessUnit, IDeleteTag
+	public class SkillGroup : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IDeleteTag
 	{
 		private ICollection<SkillInIntraday> _skills;
 		private string _name;

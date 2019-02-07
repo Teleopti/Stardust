@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class OvertimeAvailability : NonversionedAggregateRootWithBusinessUnit, IOvertimeAvailability, IDeleteTag
+    public class OvertimeAvailability : AggregateRoot_Events_ChangeInfo_BusinessUnit, IOvertimeAvailability, IDeleteTag
     {
         private readonly IPerson _person;
         private DateOnly _dateOfOvertime;

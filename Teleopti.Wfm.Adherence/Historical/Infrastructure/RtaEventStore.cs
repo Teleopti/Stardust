@@ -152,26 +152,6 @@ WHERE Id = :Id
 				.ExecuteUpdate();
 		}
 
-		public IEnumerable<IEvent> Load(Guid personId, DateTime @from, DateTime to) =>
-			loadEvents(
-				_unitOfWork.Current().Session()
-					.CreateSQLQuery(@"
-SELECT 
-	[Type],
-	[Event] 
-FROM 
-	[rta].[Events] WITH (NOLOCK) 
-WHERE 
-	PersonId = :PersonId AND 
-	StartTime <= :EndTime AND 
-	EndTime >= :StartTime
-ORDER BY [Id] ASC
-")
-					.SetParameter("PersonId", personId)
-					.SetParameter("StartTime", @from)
-					.SetParameter("EndTime", @to)
-			);
-
 		public IEnumerable<IEvent> Load(Guid personId, DateOnly date) =>
 			loadEvents(
 				_unitOfWork.Current().Session()
@@ -189,6 +169,11 @@ ORDER BY [Id] ASC
 					.SetParameter("personId", personId)
 					.SetParameter("date", date.Date)
 			);
+
+		public IEnumerable<IEvent> LoadAllOfType<T>()
+		{
+			throw new NotImplementedException();
+		}
 
 		public LoadedEvents LoadForSynchronization(long fromEventId)
 		{

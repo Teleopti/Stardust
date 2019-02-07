@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// Holds values for one Scorecard, the Name and the Key Performance Indicators that are used in the Scorecard
     ///</summary>
     public interface IScorecard : IAggregateRoot, IChangeInfo,
-                                    IBelongsToBusinessUnit
+                                    IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets or sets the name.

@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// An application role, eg Person or TeamLeader
     /// </summary>
-    public interface IApplicationRole : IAggregateRoot, IBelongsToBusinessUnit
+    public interface IApplicationRole : IAggregateRoot, IFilterOnBusinessUnit
     {
         /// <summary>
         /// Sets the business unit.

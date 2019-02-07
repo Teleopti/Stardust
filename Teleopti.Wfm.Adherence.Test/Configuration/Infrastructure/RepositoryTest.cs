@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NHibernate;
@@ -8,7 +7,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,8 +30,8 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		public void VerifyIncorrectBusinessUnitIsNotReadable()
 		{
 			var correct = CreateAggregateWithCorrectBusinessUnit();
-			var buRef = correct as IBelongsToBusinessUnit;
-			var buRefId = correct as IBelongsToBusinessUnitId;
+			var buRef = correct as IFilterOnBusinessUnit;
+			var buRefId = correct as IFilterOnBusinessUnitId;
 			if (buRef != null || buRefId != null)
 			{
 				PersistAndRemoveFromUnitOfWork(correct);
@@ -45,9 +43,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
 				var retList = rep.LoadAll();
 				if (buRef != null)
-					Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
+					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnit) r).BusinessUnit.Equals(buRef.BusinessUnit)));
 				if (buRefId != null)
-					Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnitId) r).BusinessUnit.Equals(buRefId.BusinessUnit)));
+					Assert.IsTrue(retList.All(r => ((IFilterOnBusinessUnitId) r).BusinessUnit.Equals(buRefId.BusinessUnit)));
 			}
 			else
 			{
@@ -61,19 +59,18 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		[Test]
 		public void VerifyMappedBusinessUnitExists()
 		{
-			var correct = CreateAggregateWithCorrectBusinessUnit();
-			if (!(correct is IBelongsToBusinessUnit)) return;
-
-			try
-			{
-				Session.CreateCriteria(correct.GetType())
-					.Add(Restrictions.Eq("BusinessUnit", null))
-					.List();
-			}
-			catch (QueryException)
-			{
-				Assert.Fail("Type " + correct.GetType().Name + " implements IBelongsToBusinessUnit. Remember to map BU and corresponding filter in mapping file !");
-			}
+			var aggregate = CreateAggregateWithCorrectBusinessUnit();
+			if (aggregate is IFilterOnBusinessUnit || aggregate is IFilterOnBusinessUnitId)
+				try
+				{
+					Session.CreateCriteria(aggregate.GetType())
+						.Add(Restrictions.Eq("BusinessUnit", null))
+						.List();
+				}
+				catch (QueryException)
+				{
+					Assert.Fail("Type " + aggregate.GetType().Name + " implements IBelongsToBusinessUnit. Remember to map BU and corresponding filter in mapping file !");
+				}
 		}
 
 		[Test]
@@ -85,9 +82,11 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Session.Evict(simpleEntity);
 			var loadedAggregate = rep.Load(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
-			if (loadedAggregate is IBelongsToBusinessUnit buRef)
+			if (loadedAggregate is IFilterOnBusinessUnit buRef)
 				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
-			VerifyAggregateGraphProperties(loadedAggregate);
+			if (loadedAggregate is IFilterOnBusinessUnitId buId)
+				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value, buId.BusinessUnit);
+			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
 		}
 
 		[Test]
@@ -99,9 +98,11 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Session.Evict(simpleEntity);
 			var loadedAggregate = rep.Get(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
-			if (loadedAggregate is IBelongsToBusinessUnit buRef)
+			if (loadedAggregate is IFilterOnBusinessUnit buRef)
 				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
-			VerifyAggregateGraphProperties(loadedAggregate);
+			if (loadedAggregate is IFilterOnBusinessUnitId buId)
+				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value, buId.BusinessUnit);
+			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
 		}
 
 		[Test]
@@ -113,19 +114,6 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			Assert.IsTrue(UnitOfWork.IsDirty());
 			UnitOfWork.Remove(entity);
 			Assert.IsFalse(UnitOfWork.Contains(entity));
-		}
-
-		[Test]
-		public void VerifyAddRangeWorks()
-		{
-			var entity1 = CreateAggregateWithCorrectBusinessUnit();
-			var entity2 = CreateAggregateWithCorrectBusinessUnit();
-			IList<T> entList = new List<T>();
-			entList.Add(entity1);
-			entList.Add(entity2);
-			rep.AddRange(entList);
-			Assert.IsTrue(UnitOfWork.Contains(entity1));
-			Assert.IsTrue(UnitOfWork.Contains(entity2));
 		}
 
 		[Test]
@@ -175,7 +163,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			switch (entity)
 			{
 				case IChangeInfo _:
-				case IBelongsToBusinessUnit _:
+				case IFilterOnBusinessUnit _:
 					Assert.Throws<PermissionException>(() => rep.Add(entity));
 					break;
 				default:
@@ -190,7 +178,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
 		protected abstract T CreateAggregateWithCorrectBusinessUnit();
 
-		protected abstract void VerifyAggregateGraphProperties(T loadedAggregateFromDatabase);
+		protected abstract void VerifyAggregateGraphProperties(T saved, T loaded);
 
 		protected abstract Repository<T> TestRepository(ICurrentUnitOfWork currentUnitOfWork);
 

@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.AuthorizationEn
         [Test]
         public void VerifyBelongsToBusinessUnit()
         {
-            Assert.IsFalse(_target is IBelongsToBusinessUnit);
+            Assert.IsFalse(_target is IFilterOnBusinessUnit);
         }
 
         [Test]

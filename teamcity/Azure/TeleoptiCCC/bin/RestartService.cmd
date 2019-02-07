@@ -13,7 +13,7 @@ IF EXIST "%DIRECTORY%\PendingReboot.txt" (
 ::allow un-signed
 powershell set-executionpolicy unrestricted
 ::execute
-powershell . %DIRECTORY%\%PROCESSNAME%.ps1 "True" >> "%DIRECTORY%\StartupLog.txt" 2>&1
+powershell . %DIRECTORY%\%PROCESSNAME%.ps1 >> "%DIRECTORY%\StartupLog.txt" 2>&1
 
 exit /b 0
 

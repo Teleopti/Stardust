@@ -276,6 +276,8 @@ Try
     [string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
     [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
     Set-Location $scriptPath
+	
+	$DriveLocation = $pwd.drive.name + ':\'
 
  	#start log4net
 	$log4netPath = $scriptPath + "\log4net"
@@ -293,8 +295,8 @@ Try
         $approot  = "C:\temp\eDrive\approot"
         $desktopPublic = "C:\Users\Public\Desktop"
     } else {
-        $sitesroot = "E:\sitesroot"
-        $approot  = "E:\approot"
+        $sitesroot = "$DriveLocation" + "sitesroot"
+        $approot  = "$DriveLocation" + "approot"
         $desktopPublic = "D:\Users\Public\Desktop"
         }
     $TeleoptiCCCPath = "C:\Program Files (x86)\Teleopti\TeleoptiCCC"

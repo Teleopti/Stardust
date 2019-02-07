@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public virtual void VerifyIncorrectBusinessUnitIsNotReadable()
         {
             T correct = CreateAggregateWithCorrectBusinessUnit();
-			if (correct is IBelongsToBusinessUnit buRef)
+			if (correct is IFilterOnBusinessUnit buRef)
             {
                 PersistAndRemoveFromUnitOfWork(correct);
 				
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 PersistAndRemoveFromUnitOfWork(inCorrect);
 
                 var retList = rep.LoadAll();
-                Assert.IsTrue(retList.OfType<IBelongsToBusinessUnit>().All(r => r.BusinessUnit.Equals(buRef.BusinessUnit)));
+                Assert.IsTrue(retList.OfType<IFilterOnBusinessUnit>().All(r => r.BusinessUnit.Equals(buRef.BusinessUnit)));
             }
             else
             {
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyMappedBusinessUnitExists()
         {
             T correct = CreateAggregateWithCorrectBusinessUnit();
-			if (correct is IBelongsToBusinessUnit)
+			if (correct is IFilterOnBusinessUnit)
             {
                 try
                 {
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Evict(simpleEntity); //ändrat!
             T loadedAggregate = rep.Load(id);
             Assert.AreEqual(id, loadedAggregate.Id);
-			if (loadedAggregate is IBelongsToBusinessUnit buRef)
+			if (loadedAggregate is IFilterOnBusinessUnit buRef)
                 Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
             VerifyAggregateGraphProperties(loadedAggregate);
         }
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Session.Evict(simpleEntity); //ändrat!
             T loadedAggregate = rep.Get(id);
             Assert.AreEqual(id, loadedAggregate.Id);
-			if (loadedAggregate is IBelongsToBusinessUnit buRef)
+			if (loadedAggregate is IFilterOnBusinessUnit buRef)
                 Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
             VerifyAggregateGraphProperties(loadedAggregate);
         }
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    Logout();
 			if (entity is IChangeInfo)
 				Assert.Throws<PermissionException>(() => rep.Add(entity));
-			else if (entity is IBelongsToBusinessUnit)
+			else if (entity is IFilterOnBusinessUnit)
 				Assert.Throws<PermissionException>(() => rep.Add(entity));
 		    else
 				rep.Add(entity);

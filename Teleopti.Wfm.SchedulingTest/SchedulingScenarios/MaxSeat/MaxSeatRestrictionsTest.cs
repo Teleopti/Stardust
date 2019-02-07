@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat.TestData;
@@ -28,7 +29,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 	{
 		private readonly TeamBlockType _teamBlockType;
 		public MaxSeatOptimization Target;
-		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+		public FakeTeamRepository TeamRepository;
 
 		public MaxSeatRestrictionsTest(TeamBlockType teamBlockType)
 		{
@@ -40,7 +41,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -67,7 +68,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -93,7 +94,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -119,7 +120,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -145,7 +146,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
@@ -171,7 +172,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.MaxSeat
 		{
 			var site = new Site("_") { MaxSeats = 1 }.WithId();
 			var team = new Team { Site = site }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			TeamRepository.HasConnectedToCurrentBusinessUnit(team);
 			var activity = new Activity("_") { RequiresSeat = true }.WithId();
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");

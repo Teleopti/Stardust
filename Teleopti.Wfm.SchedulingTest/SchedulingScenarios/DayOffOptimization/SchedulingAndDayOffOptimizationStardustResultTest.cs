@@ -32,8 +32,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public ICurrentBusinessUnit CurrentBusinessUnit;
 		public FakeJobResultRepository JobResultRepository;
 
 		public SchedulePlanningPeriodCommandHandler Target;
@@ -46,13 +44,12 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var systemUser = new Person().WithName(new Name("system","system")).WithId(SystemUser.Id)
 				.InTimeZone(TimeZoneInfo.Utc);
 			PersonRepository.Has(systemUser);
-			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			//
 			var date = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skillTimeZone = TimeZoneInfo.FindSystemTimeZoneById(skillTimeZoneStr);
 			var skill = SkillRepository.Has("relevant skill", activity).InTimeZone(skillTimeZone);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Day, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var filterContract = new ContractWithMaximumTolerance().WithId();

@@ -59,11 +59,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			specialPersonAssignmentRegistration(builder);
 
-			typeof(RtaStateGroupRepository).Assembly
-				.GetExportedTypes()
-				.Where(t => isRepository(t) && hasCorrectCtor(t))
-				.ForEach(t => { builder.RegisterType(t).AsImplementedInterfaces().SingleInstance(); });
-
 			builder.RegisterType<PersonLoadAllWithAssociation>().As<IPersonLoadAllWithAssociation>().SingleInstance();
 
 			builder.RegisterType<ScheduleStorageRepositoryWrapper>().As<IScheduleStorageRepositoryWrapper>();

@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var s = UnitOfWorkFactory.Current.CurrentUnitOfWork().FetchSession();
 				s.Auditer().GetRevisions(typeof(PersonAssignment), PersonAssignment.Id.Value).Should().Not.Be.Empty();
-				target.TruncateAndMoveScheduleFromCurrentToAuditTables();
+				const string sql = "exec Auditing.InitAuditTables";
+				uow.FetchSession().CreateSQLQuery(sql).ExecuteUpdate();
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

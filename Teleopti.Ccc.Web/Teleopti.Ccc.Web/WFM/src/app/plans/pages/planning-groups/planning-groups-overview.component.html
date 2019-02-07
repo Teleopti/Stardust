@@ -22,13 +22,12 @@
 <nz-table
 	#basicTable
 	[nzData]="filteredPlanningGroups"
-	[nzNoResult]="'You need to create a planning group :('"
-	[nzShowPagination]="false"
+	[nzNoResult]="'NoPlanningGroupFound' | translate "
 >
 	<thead>
 		<tr>
-			<th>Name</th>
-			<th>Agents</th>
+			<th nzShowSort [(nzSort)]="sortMap.Name" (nzSortChange)="sort('Name',$event)">{{ 'Name' | translate }}</th>
+			<th nzShowSort [(nzSort)]="sortMap.AgentCount" (nzSortChange)="sort('AgentCount',$event)">{{ 'Agents' | translate }}</th>
 			<th></th>
 		</tr>
 	</thead>

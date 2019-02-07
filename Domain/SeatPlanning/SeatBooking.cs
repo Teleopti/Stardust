@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	[Serializable]
-	public class SeatBooking : NonversionedAggregateRootWithBusinessUnit, ISeatBooking
+	public class SeatBooking : AggregateRoot_Events_ChangeInfo_BusinessUnit, ISeatBooking
 	{
 
 		private DateTime _startDateTime;

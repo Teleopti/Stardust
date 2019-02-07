@@ -29,9 +29,9 @@ namespace Teleopti.Wfm.Adherence.Configuration
 			_stateCode = stateCode;
 		}
 
-		protected virtual Guid? BusinessUnit
+		public virtual Guid? BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = Parent.BusinessUnit); }
+			get { return _businessUnit; }
 			set => _businessUnit = value;
 		}
 

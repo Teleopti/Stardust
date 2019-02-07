@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		[SetUp]
 		protected void Setup()
 		{
-			turnOnAudit();
+			clearAudit();
 			Agent = PersonFactory.CreatePerson();
 			Today = DateTime.UtcNow.Date;
 			PersonAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(Agent, new DateTimePeriod(Today, Today.AddDays(1)));
@@ -58,25 +58,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			AuditSetup();
 		}
 
-		private static void turnOnAudit()
+		private static void clearAudit()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.FetchSession().CreateQuery(@"delete from Revision").ExecuteUpdate();
 				uow.PersistAll();
 			}
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var auditSettingRep = new AuditSettingRepository(UnitOfWorkFactory.CurrentUnitOfWork());
-				var auditSetting = auditSettingRep.Read();
-				(auditSetting as AuditSetting).TurnOnScheduleAuditing(auditSettingRep, UnitOfWorkFactory.Current.AuditSetting);
-				//not persisting this one
-			}
 		}
 
 		protected virtual void AuditSetup()
 		{
 		}
-
 	}
 }

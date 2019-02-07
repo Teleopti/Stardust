@@ -45,6 +45,8 @@ Try
     [string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
     [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
     Set-Location $scriptPath
+	
+	$DriveLocation = $pwd.drive.name + ':\'
  
 	#start log4net
 	$log4netPath = $scriptPath + "\log4net"
@@ -59,13 +61,15 @@ Try
 	
 	if ($env:RoleInstanceID -eq "TeleoptiCCC_IN_0" -or $env:RoleInstanceID -eq "TeleoptiCCC_IN_1"){
 		
-		ReinstallService "TeleoptiEtlService" "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
+		$ServiceEtlPath = $DriveLocation + "approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe"
+		ReinstallService "TeleoptiEtlService" "$ServiceEtlPath"
 	}
 	else {
 		log-info "We are on instance '$env:RoleInstanceID', ETL will not be installed here..."
 	}
 	
-	ReinstallService "TeleoptiServiceBus" "E:\approot\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe"
+	$ServiceSbPath = $DriveLocation + "approot\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe"
+	ReinstallService "TeleoptiServiceBus" "$ServiceSbPath"
 	
     
 	$ServiceBus = "TeleoptiServiceBus"

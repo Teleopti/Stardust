@@ -38,11 +38,10 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.IntradayOptimization
 			mailActivity.RequiresSkill = true;
 			var phoneSkill = SkillRepository.Has("phone", phoneActivity, new TimePeriod(8, 16)).InTimeZone(TimeZoneInfo.Utc);
 			phoneSkill.DefaultResolution = 30;
-
 			var mailSkill = SkillRepository.Has("mail", mailActivity, new TimePeriod(0, 24)).InTimeZone(TimeZoneInfo.Utc);
 			mailSkill.DefaultResolution = 60;
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1);
 			var worktimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
 			var contract = new Contract("contract")

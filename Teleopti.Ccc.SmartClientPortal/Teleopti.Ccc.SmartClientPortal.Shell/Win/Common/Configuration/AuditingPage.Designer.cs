@@ -36,8 +36,6 @@
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.gradientPanelExtStatusText = new Syncfusion.Windows.Forms.Tools.GradientPanelExt();
             this.autoLabelStatusText = new Syncfusion.Windows.Forms.Tools.AutoLabel();
-            this.tableLayoutPanelEnable = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBoxAdvIsRunning = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
             this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
             this.labelHeader = new System.Windows.Forms.Label();
@@ -47,8 +45,6 @@
             this.tableLayoutPanelMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelExtStatusText)).BeginInit();
             this.gradientPanelExtStatusText.SuspendLayout();
-            this.tableLayoutPanelEnable.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvIsRunning)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
             this.gradientPanelHeader.SuspendLayout();
             this.tableLayoutPanelHeader.SuspendLayout();
@@ -117,7 +113,6 @@
             this.tableLayoutPanelMain.ColumnCount = 1;
             this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelMain.Controls.Add(this.gradientPanelExtStatusText, 0, 0);
-            this.tableLayoutPanelMain.Controls.Add(this.tableLayoutPanelEnable, 0, 1);
             this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelMain.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
@@ -156,33 +151,6 @@
             this.autoLabelStatusText.Size = new System.Drawing.Size(363, 30);
             this.autoLabelStatusText.TabIndex = 0;
             this.autoLabelStatusText.Text = "Schedule Audit Trail is not running!";
-            // 
-            // tableLayoutPanelEnable
-            // 
-            this.tableLayoutPanelEnable.ColumnCount = 1;
-            this.tableLayoutPanelEnable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelEnable.Controls.Add(this.checkBoxAdvIsRunning, 0, 0);
-            this.tableLayoutPanelEnable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelEnable.Location = new System.Drawing.Point(15, 84);
-            this.tableLayoutPanelEnable.Name = "tableLayoutPanelEnable";
-            this.tableLayoutPanelEnable.RowCount = 1;
-            this.tableLayoutPanelEnable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelEnable.Size = new System.Drawing.Size(664, 86);
-            this.tableLayoutPanelEnable.TabIndex = 8;
-            // 
-            // checkBoxAdvIsRunning
-            // 
-            this.checkBoxAdvIsRunning.BeforeTouchSize = new System.Drawing.Size(233, 40);
-            this.checkBoxAdvIsRunning.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxAdvIsRunning.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxAdvIsRunning.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-            this.checkBoxAdvIsRunning.Name = "checkBoxAdvIsRunning";
-            this.checkBoxAdvIsRunning.Size = new System.Drawing.Size(233, 40);
-            this.checkBoxAdvIsRunning.TabIndex = 1;
-            this.checkBoxAdvIsRunning.Text = "xxEnableScheduleAuditTrail";
-            this.checkBoxAdvIsRunning.ThemesEnabled = true;
-            this.checkBoxAdvIsRunning.CheckStateChanged += new System.EventHandler(this.checkBoxAdvIsRunning_CheckStateChanged);
-            this.checkBoxAdvIsRunning.CheckedChanged += new System.EventHandler(this.checkBoxAdvIsRunningCheckedChanged);
             // 
             // gradientPanelHeader
             // 
@@ -247,8 +215,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelExtStatusText)).EndInit();
             this.gradientPanelExtStatusText.ResumeLayout(false);
             this.gradientPanelExtStatusText.PerformLayout();
-            this.tableLayoutPanelEnable.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvIsRunning)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
             this.gradientPanelHeader.ResumeLayout(false);
             this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -264,8 +230,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
         private Syncfusion.Windows.Forms.Tools.GradientPanelExt gradientPanelExtStatusText;
         private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelStatusText;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelEnable;
-		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvIsRunning;
 		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelHeader;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelHeader;
 		private System.Windows.Forms.Label labelHeader;

@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 
 			var personRequest = new PersonRequestFactory().CreatePersonRequest().WithId();
 			personRequest.Request.SetId(Guid.NewGuid());
-			((IBelongsToBusinessUnit)personRequest).SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			((IFilterOnBusinessUnit)personRequest).SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 			PersonRequestRepository.Add(personRequest);
 			Target.Handle(new PersonRequestChangedEvent
 			{

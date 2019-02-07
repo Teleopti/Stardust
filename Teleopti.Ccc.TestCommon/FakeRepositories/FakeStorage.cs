@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
@@ -95,8 +96,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_removed.Clear();
 
 				var dirty = _comitted
-					.OfType<IAggregateRootWithEvents>()
-					.Where(x => x.HasEvents());
+					.Where(x => (x as IPublishEvents)?.HasEvents() ?? false);
 				updates = _modified
 					.Union(dirty)
 					.Select(x => new RootChangeInfo(x, DomainUpdateType.Update))

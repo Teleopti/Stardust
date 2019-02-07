@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			var justSkillDays = filterSkillDays(@event.SkillDayIds);
 			if (!justSkillDays.Any()) return;
-			var skills = justSkillDays.Select(x => x.Skill);
+			var skills = justSkillDays.Select(x => x.Skill).Distinct();
 			var period = new DateOnlyPeriod(justSkillDays.Min(x => x.CurrentDate), justSkillDays.Max(x => x.CurrentDate));
 			var skillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
-			_skillForecastIntervalCalculator.Calculate(skillDays);
+			_skillForecastIntervalCalculator.Calculate(skillDays, skills, period);
 		}
 
 
@@ -61,8 +61,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public virtual void Handle(UpdateSkillForecastReadModelEvent @event)
 		{
 			var skills = _skillRepository.LoadAllSkills();
-			var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(new DateOnly(@event.StartDateTime), new DateOnly(@event.EndDateTime)), skills, _currentScenario.Current());
-			_skillForecastIntervalCalculator.Calculate(skillDays);
+			var period = new DateOnlyPeriod(new DateOnly(@event.StartDateTime), new DateOnly(@event.EndDateTime));
+			var skillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
+			_skillForecastIntervalCalculator.Calculate(skillDays, skills, period);
 			_systemJobStartTimeRepository.UpdateLastCalculatedTime(@event.LogOnBusinessUnitId, JobNamesForJoStartTime.TriggerSkillForecastReadModel);
 		}
 	}

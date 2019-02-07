@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class Scenario : VersionedAggregateRootWithBusinessUnit, IScenario, IDeleteTag, IAggregateRootWithEvents
+	public class Scenario : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IScenario, IDeleteTag
 	{
 		private Description _description;
 		private bool _defaultScenario;

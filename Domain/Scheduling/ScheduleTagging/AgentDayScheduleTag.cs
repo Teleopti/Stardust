@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 {
-    public class AgentDayScheduleTag : VersionedAggregateRootWithBusinessUnit, IAgentDayScheduleTag
+    public class AgentDayScheduleTag : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IAgentDayScheduleTag
 
     {
         private readonly IPerson _person;

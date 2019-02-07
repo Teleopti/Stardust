@@ -80,5 +80,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <returns></returns>
 		IDictionary<ISkill, ISkillStaffPeriodDictionary> SkillStaffPeriodDictionary(IEnumerable<ISkill> skills,
 																					DateTimePeriod utcPeriod);
-    }
+
+		bool GuessResourceCalculationHasBeenMade();
+	}
 }

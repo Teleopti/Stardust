@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     public interface ISkill : IAggregateRoot, IChangeInfo,
 								IRestrictionChecker<ISkill>, 
                                 IForecastTemplateOwner,
-                                IBelongsToBusinessUnit,
+                                IFilterOnBusinessUnit,
                                 ICloneableEntity<ISkill>, IAggregateSkill
         
     {

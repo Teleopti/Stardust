@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
                                         IOriginator<IPersonRequest>,
                                         IChangeInfo,
                                         INotifyPropertyChanged,
-																				ICreateInfo
+																				ICreateInfo,
+										IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets the date.

@@ -6,6 +6,7 @@ using NHibernate.Collection;
 using NHibernate.SqlCommand;
 using NHibernate.Type;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	public class NHibernateUnitOfWorkInterceptor : EmptyInterceptor
 	{
 		private readonly IUpdatedBy _updatedBy;
+		private readonly ICurrentBusinessUnit _businessUnit;
 		private const string createdByPropertyName = "CREATEDBY";
 		private const string createdOnPropertyName = "CREATEDON";
 		private const string updatedByPropertyName = "UPDATEDBY";
@@ -26,9 +28,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		private readonly ICollection<IAggregateRoot> rootsWithModifiedChildren = new HashSet<IAggregateRoot>();
 		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
 
-		public NHibernateUnitOfWorkInterceptor(IUpdatedBy updatedBy, ICurrentPreCommitHooks currentPreCommitHooks)
+		public NHibernateUnitOfWorkInterceptor(IUpdatedBy updatedBy, ICurrentBusinessUnit businessUnit, ICurrentPreCommitHooks currentPreCommitHooks)
 		{
 			_updatedBy = updatedBy;
+			_businessUnit = businessUnit;
 			_currentPreCommitHooks = currentPreCommitHooks;
 			Iteration = InterceptorIteration.Normal;
 		}
@@ -41,11 +44,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 
 		public InterceptorIteration Iteration { get; set; }
-		
+
 		public IEnumerable<IRootChangeInfo> ModifiedRoots => modifiedRoots;
 
 		public override int[] FindDirty(object entity, object id, object[] currentState, object[] previousState,
-												  string[] propertyNames, IType[] types)
+			string[] propertyNames, IType[] types)
 		{
 			int[] retVal = null;
 			if (Iteration == InterceptorIteration.UpdateRoots)
@@ -53,13 +56,14 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				if (entity is IAggregateRoot root && rootsWithModifiedChildren.Contains(root) && !modifiedRootsContainsRoot(root))
 				{
 					IDictionary<string, int> props = propertyIndexesForUpdate(propertyNames);
-					retVal = new[] { props[updatedByPropertyName], props[updatedOnPropertyName] };
+					retVal = new[] {props[updatedByPropertyName], props[updatedOnPropertyName]};
 				}
 				else
 				{
 					retVal = new int[0];
 				}
 			}
+
 			return retVal;
 		}
 
@@ -74,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			else
 			{
 				//THIS IS WRONG - doesn't have to be IAggregateEntity any longer. Fix when we find out when this code is run
-				var entityOwner = (IAggregateEntity)owner;
+				var entityOwner = (IAggregateEntity) owner;
 				rootsWithModifiedChildren.Add(entityOwner.Root());
 			}
 		}
@@ -94,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 
 		public override bool OnFlushDirty(object entity, object id, object[] currentState, object[] previousState,
-													 string[] propertyNames, IType[] types)
+			string[] propertyNames, IType[] types)
 		{
 			var ent = entity as IEntity;
 			var entityToCheck = entity as IRestrictionChecker;
@@ -106,6 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				setUpdatedInfo(root, currentState, propertyNames);
 				return true;
 			}
+
 			if (Iteration == InterceptorIteration.Normal)
 				markRoot(ent);
 
@@ -121,21 +126,20 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			markRoot(ent);
 
-			if (setCreatedProperties(entity, propertyNames, state))
-			{
+			if (setCreatedBy(entity, propertyNames, state))
 				ret = true;
-			}
 
 			if (entity is IAggregateRoot root)
 			{
 				_currentPreCommitHooks.Current().ForEach(cph => cph.BeforeCommit(root, propertyNames, state));
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Insert));
 			}
-				
-			if (setUpdatedProperties(entity, propertyNames, state))
-			{
+
+			if (setUpdatedBy(entity, propertyNames, state))
 				ret = true;
-			}
+
+			if (setBusinessUnitId(entity, propertyNames, state))
+				ret = true;
 
 			return ret;
 		}
@@ -143,27 +147,26 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		private static IDictionary<string, int> propertyIndexesForInsert(IEnumerable<string> properties)
 		{
 			var listOfProperties = properties.ToList();
-
 			IDictionary<string, int> result = new Dictionary<string, int>();
 
-			int index =
-				listOfProperties.FindIndex(p => createdByPropertyName.Equals(p, StringComparison.InvariantCultureIgnoreCase));
+			var index = listOfProperties.FindIndex(p => createdByPropertyName.Equals(p, StringComparison.InvariantCultureIgnoreCase));
 			if (index >= 0) result.Add(createdByPropertyName, index);
 
 			index = listOfProperties.FindIndex(p => createdOnPropertyName.Equals(p, StringComparison.InvariantCultureIgnoreCase));
 			if (index >= 0) result.Add(createdOnPropertyName, index);
+
+			index = listOfProperties.FindIndex(p => "BUSINESSUNIT".Equals(p, StringComparison.InvariantCultureIgnoreCase));
+			if (index >= 0) result.Add("BUSINESSUNIT", index);
 
 			return result;
 		}
 
 		private static IDictionary<string, int> propertyIndexesForUpdate(IEnumerable<string> properties)
 		{
-			List<string> listOfProperties = properties.ToList();
-
+			var listOfProperties = properties.ToList();
 			IDictionary<string, int> result = new Dictionary<string, int>();
 
-			int index =
-				listOfProperties.FindIndex(p => p.Equals(updatedByPropertyName, StringComparison.InvariantCultureIgnoreCase));
+			var index = listOfProperties.FindIndex(p => p.Equals(updatedByPropertyName, StringComparison.InvariantCultureIgnoreCase));
 			if (index >= 0) result.Add(updatedByPropertyName, index);
 
 			index = listOfProperties.FindIndex(p => p.Equals(updatedOnPropertyName, StringComparison.InvariantCultureIgnoreCase));
@@ -174,7 +177,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private void markRoot(IEntity ent)
 		{
-			if (!(ent is IAggregateEntity aggEnt)) 
+			if (!(ent is IAggregateEntity aggEnt))
 				return;
 			var root = aggEnt.Root();
 			rootsWithModifiedChildren.Add(root);
@@ -187,43 +190,57 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				if (modifiedRoot.Root.Equals(root))
 					return true;
 			}
-			return false;
-		}
 
-		private bool setCreatedProperties(object root, IEnumerable<string> propertyNames, IList<object> state)
-		{
-			if (root is ICreateInfo)
-			{
-				var nu = DateTime.UtcNow;
-				var props = propertyIndexesForInsert(propertyNames);
-				state[props[createdByPropertyName]] = _updatedBy.Person();
-				state[props[createdOnPropertyName]] = nu;
-				return true;
-			}
 			return false;
 		}
 
 		private void setUpdatedInfo(IAggregateRoot root, object[] currentState, string[] propertyNames)
 		{
-			setUpdatedProperties(root, propertyNames, currentState);
+			setUpdatedBy(root, propertyNames, currentState);
 
 			if (root is IDeleteTag deleteInfo && deleteInfo.IsDeleted)
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Delete));
 			else
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Update));
 		}
-
-		private bool setUpdatedProperties(object root, IEnumerable<string> propertyNames, object[] currentState)
+		
+		private bool setCreatedBy(object entity, IEnumerable<string> propertyNames, IList<object> state)
 		{
-			if (root is IChangeInfo)
-			{
-				var nu = DateTime.UtcNow;
-				var props = propertyIndexesForUpdate(propertyNames);
-				currentState[props[updatedByPropertyName]] = _updatedBy.Person();
-				currentState[props[updatedOnPropertyName]] = nu;
-				return true;
-			}
-			return false;
+			if (!(entity is ICreateInfo)) return false;
+			
+			var props = propertyIndexesForInsert(propertyNames);
+			var nu = DateTime.UtcNow;
+			state[props[createdByPropertyName]] = _updatedBy.Person();
+			state[props[createdOnPropertyName]] = nu;
+			return true;
+
+		}
+		
+		private bool setUpdatedBy(object entity, IEnumerable<string> propertyNames, object[] currentState)
+		{
+			if (!(entity is IChangeInfo)) return false;
+			
+			var nu = DateTime.UtcNow;
+			var props = propertyIndexesForUpdate(propertyNames);
+			currentState[props[updatedByPropertyName]] = _updatedBy.Person();
+			currentState[props[updatedOnPropertyName]] = nu;
+			return true;
+
+		}
+
+		private bool setBusinessUnitId(object entity, IEnumerable<string> propertyNames, IList<object> state)
+		{
+			if (!(entity is IFilterOnBusinessUnitId belongsToBusinessUnitId))
+				return false;
+
+			var props = propertyIndexesForInsert(propertyNames);
+			var index = props["BUSINESSUNIT"];
+			if (state[index] != null) return false;
+
+			var businessUnitId = _businessUnit.CurrentId();
+			state[index] = businessUnitId;
+			belongsToBusinessUnitId.BusinessUnit = businessUnitId;
+			return true;
 		}
 
 		public override SqlString OnPrepareStatement(SqlString sql)
@@ -232,4 +249,3 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 	}
 }
- 

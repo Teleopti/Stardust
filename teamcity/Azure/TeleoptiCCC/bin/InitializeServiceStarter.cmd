@@ -16,7 +16,7 @@ IF EXIST "%DIRECTORY%\PendingReboot.txt" (
 ::allow un-signed
 powershell set-executionpolicy unrestricted
 ::execute
-powershell . %DIRECTORY%\%PROCESSNAME%.ps1 "True">> "%DIRECTORY%\StartupLog.txt" 2>&1
+powershell . %DIRECTORY%\%PROCESSNAME%.ps1 >> "%DIRECTORY%\StartupLog.txt" 2>&1
 ::execute task scheduler script
 powershell . %DIRECTORY%\%PROCESSNAME2%.ps1 >> "%DIRECTORY%\StartupLog.txt" 2>&1
 ::copy logfiles to blob for teleoptirnd cloudservice ONLY

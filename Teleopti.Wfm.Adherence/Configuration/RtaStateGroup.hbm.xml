@@ -17,7 +17,7 @@
 			<key column="Parent"/>
 			<one-to-many class="RtaState"/>
 		</bag>
-		<property name="BusinessUnit" access="property"/>
+		<property name="BusinessUnit"/>
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit"/>
 	</class>
 </hibernate-mapping>

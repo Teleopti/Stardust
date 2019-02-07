@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Budgeting
 {
-	public class BudgetDay : VersionedAggregateRootWithBusinessUnit, IBudgetDay
+	public class BudgetDay : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IBudgetDay
 	{
 		private IBudgetGroup _budgetGroup;
 		private readonly IScenario _scenario;

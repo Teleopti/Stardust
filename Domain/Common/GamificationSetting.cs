@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Common
 	}
 
 	[Serializable]
-	public class GamificationSetting : NonversionedAggregateRootWithBusinessUnit, IGamificationSetting, IDeleteTag
+	public class GamificationSetting : AggregateRoot_Events_ChangeInfo_BusinessUnit, IGamificationSetting, IDeleteTag
 	{
 		private Description _description;
 		private GamificationSettingRuleSet _gamificationSettingRuleSet;

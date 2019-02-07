@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			IPersonAssignment ass = new PersonAssignment(Person, DefaultScenario, PartDate);
 			ass.SetId(dto.Id);
 			//rk - hack
-            typeof(VersionedAggregateRoot).GetField("_version", BindingFlags.Instance | BindingFlags.NonPublic)
+            typeof(AggregateRoot_Events_ChangeInfo_Versioned).GetField("_version", BindingFlags.Instance | BindingFlags.NonPublic)
 				.SetValue(ass, dto.Version);
 			addMainShift(ass, dto);
 			addPersonalShift(ass, dto);

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Common
 		double Score { get; set; }
 	}
 
-	public class ExternalPerformanceData : NonversionedAggregateRootWithBusinessUnit, IExternalPerformanceData
+	public class ExternalPerformanceData : AggregateRoot_Events_ChangeInfo_BusinessUnit, IExternalPerformanceData
 	{
 		private IExternalPerformance _externalPerformance;
 

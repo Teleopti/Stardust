@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -46,15 +47,16 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             return rtaMap;
         }
 
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
-        protected override void VerifyAggregateGraphProperties(IRtaMap loadedAggregateFromDatabase)
+		/// <summary>
+		/// Verifies the aggregate graph properties.
+		/// </summary>
+		/// <param name="saved"></param>
+		/// <param name="loaded"></param>
+		protected override void VerifyAggregateGraphProperties(IRtaMap saved, IRtaMap loaded)
         {
             IRtaMap org = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(org.RtaRule.Id, loadedAggregateFromDatabase.RtaRule.Id);
-            Assert.AreEqual(org.StateGroup.Id, loadedAggregateFromDatabase.StateGroup.Id);
+            Assert.AreEqual(org.RtaRule.Id, loaded.RtaRule.Id);
+            Assert.AreEqual(org.StateGroup.Id, loaded.StateGroup.Id);
         }
 
         protected override Repository<IRtaMap> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
@@ -69,11 +71,11 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             PersistAndRemoveFromUnitOfWork(rtaMap);
 
             var result = new RtaMapRepository(new ThisUnitOfWork(UnitOfWork)).LoadAllCompleteGraph();
-            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(1, result.Count());
 			Session.Close();
-			result[0].Activity.ToString();
-			result[0].StateGroup.ToString();
-			result[0].RtaRule.ToString();
+			result.Single().Activity.ToString();
+			result.Single().StateGroup.ToString();
+			result.Single().RtaRule.ToString();
         }
     }
 }

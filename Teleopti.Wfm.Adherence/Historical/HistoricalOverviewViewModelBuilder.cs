@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 		{
 			var teams = getTeams(siteIds, teamIds);
 			// users in different timezones will see different 7 days...
-			var userSevenDays = _userNow.Date().Date.AddDays(-7)
+			var userSevenDays = _userNow.Date().AddDays(-7)
 				.DateRange(7)
 				.Select(x => x.Date)
 				.ToArray();

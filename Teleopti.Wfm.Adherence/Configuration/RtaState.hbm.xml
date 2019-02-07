@@ -8,7 +8,7 @@
 		<id name="Id" access="nosetter.camelcase-underscore" unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
-		<property name="BusinessUnit" access="property"/>
+		<property name="BusinessUnit"/>
 		<property name="Name" />
 		<property name="StateCode" />
 		<many-to-one class="RtaStateGroup" name="Parent" />

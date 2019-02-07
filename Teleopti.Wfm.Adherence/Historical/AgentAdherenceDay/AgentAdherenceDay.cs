@@ -6,7 +6,7 @@ using Teleopti.Wfm.Adherence.States.Events;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	public class AgentAdherenceDay
+	public class AgentAdherenceDay : IAgentAdherenceDay
 	{
 		private readonly DateTime _now;
 		private readonly DateTimePeriod _fullDay;

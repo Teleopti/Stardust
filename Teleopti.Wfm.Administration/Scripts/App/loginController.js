@@ -71,22 +71,6 @@
 			}
 		];
 
-		$http.get("./LoggedInUser")
-			.then(function (response) {
-				if (response.data.Name !== null && response.data.Name !== '') {
-					//vm.user = response.data.Name;
-					$rootScope.user = response.data.Name;
-					vm.id = response.data.Id;
-				} else {
-					vm.user = "";
-					$rootScope.user = "";
-					vm.id = null;
-					window.location = "#/login";
-				}
-			}).catch(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-
 		$http.get("./HasNoUser")
 			.then(function (response) {
 				firstUser = response.data;
@@ -95,15 +79,28 @@
 					$rootScope.user = "";
 					window.location = "firstuser.html";
 				} else {
-					if (!vm.id) {
-						$("#modal-login").dialog({
-							modal: true,
-							title: "Log in to access the admin site",
-							closeOnEscape: false,
-							draggable: false,
-							resizable: false
+					$http.get("./LoggedInUser")
+						.then(function(response) {
+							if (response.data.Name !== null && response.data.Name !== '') {
+								//vm.user = response.data.Name;
+								$rootScope.user = response.data.Name;
+								vm.id = response.data.Id;
+								window.location = "#";
+							} else {
+								vm.user = "";
+								$rootScope.user = "";
+								vm.id = null;
+								$("#modal-login").dialog({
+									modal: true,
+									title: "Log in to access the admin site",
+									closeOnEscape: false,
+									draggable: false,
+									resizable: false
+								});
+							}
+						}).catch(function (xhr, ajaxOptions, thrownError) {
+							console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 						});
-					}
 				}
 			}).catch(function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);

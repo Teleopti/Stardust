@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -10,7 +9,14 @@ using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 {
-	public class AgentAdherenceDayLoader
+	public interface IAgentAdherenceDayLoader
+	{
+		IAgentAdherenceDay Load(Guid personId, DateOnly date);
+		IAgentAdherenceDay LoadUntilNow(Guid personId);
+		IAgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date);
+	}
+
+	public class AgentAdherenceDayLoader : IAgentAdherenceDayLoader
 	{
 		private readonly INow _now;
 		private readonly IRtaEventStoreReader _eventStore;
@@ -35,9 +41,9 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			_serializer = serializer;
 		}
 
-		public AgentAdherenceDay Load(Guid personId, DateOnly date) => load(personId, date, DateTime.MaxValue.Utc());
-		public AgentAdherenceDay LoadUntilNow(Guid personId) => LoadUntilNow(personId, new DateOnly(_now.UtcDateTime().Date));
-		public AgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date) => load(personId, date, _now.UtcDateTime());
+		public IAgentAdherenceDay Load(Guid personId, DateOnly date) => load(personId, date, DateTime.MaxValue.Utc());
+		public IAgentAdherenceDay LoadUntilNow(Guid personId) => LoadUntilNow(personId, new DateOnly(_now.UtcDateTime().Date));
+		public IAgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date) => load(personId, date, _now.UtcDateTime());
 
 		private AgentAdherenceDay load(Guid personId, DateOnly date, DateTime until)
 		{

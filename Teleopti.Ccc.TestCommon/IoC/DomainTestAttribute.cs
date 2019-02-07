@@ -58,6 +58,7 @@ using Teleopti.Wfm.Adherence.Tracer;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_AdjustAdherenceToNeutral_80594)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
@@ -280,7 +281,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<SeatBookingRequestAssembler>().For<ISeatBookingRequestAssembler>();
 				isolate.UseTestDouble<SeatFrequencyCalculator>().For<ISeatFrequencyCalculator>();
 				isolate.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
-				isolate.UseTestDouble<FakeShiftCategorySelectionRepository>().For<IRepository<IShiftCategorySelection>>();
+				isolate.UseTestDouble<FakeShiftCategorySelectionRepository>().For<Domain.InterfaceLegacy.Domain.IRepository<IShiftCategorySelection>>();
 				isolate.UseTestDouble<FakeShiftCategoryUsageFinder>().For<IShiftCategoryUsageFinder>();
 				isolate.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
 				isolate.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
@@ -383,7 +384,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
-			if (QueryAllAttributes<DefaultDataAttribute>().Any())
+			if (QueryAllAttributes<DefaultDataAttribute>().Any() && !QueryAllAttributes<NoDefaultDataAttribute>().Any())
 				Database.Value.CreateDefaultData(businessUnit);
 		}
 

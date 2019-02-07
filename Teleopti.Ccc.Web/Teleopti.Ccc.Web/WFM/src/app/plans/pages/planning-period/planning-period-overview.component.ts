@@ -4,7 +4,10 @@ import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { map } from 'rxjs/operators';
+import {groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators';
+import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
+import {DateFormatPipe} from "ngx-moment";
+import {from} from "rxjs";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -31,6 +34,9 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	valLoading = true;
 	filteredPreValidations: any[];
 	filteredScheduleIssues: any[];
+	months : any;
+	legends: any[] = [];
+	worstDay: any;
 
 	validationFilter;
 
@@ -50,7 +56,9 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		@Inject('$state') private $state: IStateService,
 		private translate: TranslateService,
 		private navService: NavigationService,
-		private fb: FormBuilder
+		private fb: FormBuilder,
+		private heatMapColorHelper:HeatMapColorHelper, 
+		private amDateFormat: DateFormatPipe
 	) {
 		this.ppId = $state.params.ppId.trim();
 		this.groupId = $state.params.groupId.trim();
@@ -62,7 +70,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.loadValidations();
 		this.loadLastResult();
 		this.checkState();
-
+		this.initLegends();
+		
 		this.preValidationFilterControl.valueChanges
 			.pipe(
 				map(filterString => {
@@ -107,6 +116,16 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		clearInterval(this.timer);
+	}
+	
+	private initLegends(){
+		for(let i = 0; i <41;i++){
+			const number = i*5-100;
+			this.legends.push({
+				number: number,
+				bgcolor: this.heatMapColorHelper.getColor(number)
+			});
+		}
 	}
 
 	private checkState() {
@@ -275,7 +294,54 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 				this.scheduleIssuesFilterControl.updateValueAndValidity();
 				this.updateValidationErrorsNumber();
 				if (!fullSchedulingResult) return;
-				this.dayNodes = fullSchedulingResult.SkillResultList ? fullSchedulingResult.SkillResultList : undefined;
+				const skillResultList = fullSchedulingResult.SkillResultList ? fullSchedulingResult.SkillResultList : undefined;
+				if(skillResultList){
+					const culturalDaysOff = {
+						a : 6, //saturday
+						b : 0, //sunday
+						start : 1
+					};
+					skillResultList.forEach(skill=>{
+						skill.SkillDetails.forEach(day=>{
+							day.bgcolor = this.heatMapColorHelper.getColor(day.RelativeDifference*100);
+							const weekday = new Date(day.Date).getDay();
+							if (weekday === culturalDaysOff.a || weekday === culturalDaysOff.b) {
+								day.weekend = true;
+							}
+							if (weekday === culturalDaysOff.start) {
+								day.weekstart = true;
+							}
+							day.RelativeDifferencePercent = (day.RelativeDifference * 100).toFixed(1);
+						});
+					});
+				}
+				this.dayNodes = skillResultList;
+				if(skillResultList && skillResultList.length>0) {
+					const months = skillResultList[0].SkillDetails.map((item: any) => this.amDateFormat.transform(item.Date, 'MMMM'));
+
+					const monthCount = from(months).pipe(
+						groupBy(item => item),
+						mergeMap(group => group.pipe(
+							reduce((total, item) => total + 1, 0),
+							map(total => ({Name: group.key, Count: total}))
+							)
+						),
+						toArray());
+
+					monthCount.subscribe(result => this.months = result);
+					
+					const allDays = [];
+					skillResultList.forEach(skill=>{
+						skill.SkillDetails.forEach(day =>{
+							allDays.push(day);
+						});
+					});
+					allDays.sort((a, b)=>
+						a.RelativeDifference>b.RelativeDifference?1:-1
+					);
+					this.worstDay = allDays[0];
+					console.log(this.worstDay)
+				}
 			} else {
 				this.isScheduled = false;
 			}

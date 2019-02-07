@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             IAbsenceLayer layer = createLayer(dto.AbsenceLayer);
             IPersonAbsence ret = new PersonAbsence(Person, DefaultScenario, layer);
             //hack
-            typeof(VersionedAggregateRoot).GetField("_version", BindingFlags.Instance | BindingFlags.NonPublic)
+            typeof(AggregateRoot_Events_ChangeInfo_Versioned).GetField("_version", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(ret, dto.Version);
             ret.SetId(dto.Id);
             return ret;

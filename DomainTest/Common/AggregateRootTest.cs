@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	[TestWithStaticDependenciesDONOTUSE]
 	public class AggregateRootTest
     {
-        private VersionedAggregateRootWithBusinessUnit _targetAggregateRootWithBusinessUnit;
+        private AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit _targetAggregateRootWithBusinessUnit;
 
         /// <summary>
         /// Determines whether this instance [can set id].
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void CanSetId()
         {
             Guid newId = Guid.NewGuid();
-			VersionedAggregateRootWithBusinessUnit target = new AggRootWithBusinessUnit();
+			AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit target = new AggRootWithBusinessUnit();
             ((IEntity) target).SetId(newId);
             Assert.AreEqual(newId, target.Id);
         }
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyBusinessUnitCanBeRead()
         {
-			VersionedAggregateRootWithBusinessUnit target = new AggRootWithBusinessUnit();
+			AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit target = new AggRootWithBusinessUnit();
             Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
         }
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		 public void ClearIdShouldClearCreatedAndUpdatedInfo()
 		 {
 			 var target = new AggRootWithBusinessUnit();
-		 	var aggRootType = typeof (AggregateRoot);
+		 	var aggRootType = typeof (AggregateRoot_Events_ChangeInfo);
 			 aggRootType.GetField("_updatedOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, DateTime.Now);
 			 aggRootType.GetField("_updatedBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, new Person());
 		 	((IEntity)target).SetId(Guid.NewGuid());
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			target.UpdatedOn.HasValue.Should().Be.False();
 		 }
 
-        internal class AggRootWithNoBusinessUnit : AggregateRoot, IDeleteTag
+        internal class AggRootWithNoBusinessUnit : AggregateRoot_Events_ChangeInfo, IDeleteTag
         {
             private bool _isDeleted;
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
 
-		internal class AggRootWithBusinessUnit : VersionedAggregateRootWithBusinessUnit, IDeleteTag
+		internal class AggRootWithBusinessUnit : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IDeleteTag
         {
             private bool _isDeleted;
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Common
                 _isDeleted = true;
             }
         }
-		internal class CreatedAndChangedTest : VersionedAggregateRootWithBusinessUnit, IDeleteTag
+		internal class CreatedAndChangedTest : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IDeleteTag
         {
             private bool _isDeleted;
 

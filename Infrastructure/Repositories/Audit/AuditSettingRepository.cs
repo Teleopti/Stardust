@@ -16,18 +16,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public void TruncateAndMoveScheduleFromCurrentToAuditTables()
+		public AuditSetting Read()
 		{
-			const int fiveMinutes = 5 * 60;
-			const string sql = "exec Auditing.InitAuditTables";
-			_currentUnitOfWork.Session().CreateSQLQuery(sql)
-				.SetTimeout(fiveMinutes)
-				.ExecuteUpdate();
-		}
-
-		public IAuditSetting Read()
-		{
-			var auditSetting = _currentUnitOfWork.Session().Get<AuditSetting>(AuditSettingDefault.TheId);
+			var auditSetting = _currentUnitOfWork.Session().Get<AuditSetting>(AuditSetting.TheId);
 			if(auditSetting==null)
 				throw new DataSourceException(MissingAuditSetting);
 			return auditSetting;

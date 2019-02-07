@@ -27,14 +27,14 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
             };
         }
 
-        protected override void VerifyAggregateGraphProperties(IRtaRule loadedAggregateFromDatabase)
+        protected override void VerifyAggregateGraphProperties(IRtaRule saved, IRtaRule loaded)
         {
             IRtaRule org = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
-            Assert.AreEqual(org.DisplayColor.ToArgb(), loadedAggregateFromDatabase.DisplayColor.ToArgb());
-            Assert.AreEqual(org.ThresholdTime,loadedAggregateFromDatabase.ThresholdTime);
-            Assert.AreEqual(0.8, loadedAggregateFromDatabase.StaffingEffect );
-			Assert.AreEqual(Adherence.Configuration.Adherence.In, loadedAggregateFromDatabase.Adherence);
+            Assert.AreEqual(org.Description.Name, loaded.Description.Name);
+            Assert.AreEqual(org.DisplayColor.ToArgb(), loaded.DisplayColor.ToArgb());
+            Assert.AreEqual(org.ThresholdTime,loaded.ThresholdTime);
+            Assert.AreEqual(0.8, loaded.StaffingEffect );
+			Assert.AreEqual(Adherence.Configuration.Adherence.In, loaded.Adherence);
         }
 
         protected override Repository<IRtaRule> TestRepository(ICurrentUnitOfWork currentUnitOfWork)

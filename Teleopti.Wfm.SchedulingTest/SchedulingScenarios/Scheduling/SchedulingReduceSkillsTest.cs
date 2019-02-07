@@ -44,7 +44,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			var skill1 = new Skill("skill1").For(activity).IsOpenBetween(skill1Start, skill1End).WithId();
 			var skill2 = new Skill("skill2").For(activity).IsOpenBetween(skill2Start, skill2End).WithId();
 			SkillRepository.Has(skill1, skill2); 
-			var scenario = ScenarioRepository.Has();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			var agentToSchedule = PersonRepository.Has(new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skill1, skill2);
 			PersonRepository.Has(skill1);
@@ -70,7 +70,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var date = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has();
-			var scenario = ScenarioRepository.Has();
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var superSkillThatEveryOneKnows = new Skill("super skill").For(activity).IsOpen().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory().WithId()));
 			SkillDayRepository.Has(superSkillThatEveryOneKnows.CreateSkillDayWithDemand(scenario, date, 1000));

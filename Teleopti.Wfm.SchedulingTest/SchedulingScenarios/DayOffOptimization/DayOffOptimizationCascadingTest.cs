@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.DayOffOptimization
 			var skillA = SkillRepository.Has("A", activity, 1).IsOpenBetween(8, 16);
 			var skillB = SkillRepository.Has("B", activity, 2).IsOpenBetween(8, 16);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var team = new Team { Site = new Site("_") };

@@ -6,7 +6,7 @@ using Percent=Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Percent;
 namespace Teleopti.Ccc.Domain.Common
 {
 
-    public class PartTimePercentage : VersionedAggregateRootWithBusinessUnit, IPartTimePercentage, IDeleteTag
+    public class PartTimePercentage : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IPartTimePercentage, IDeleteTag
     {
         private Description _description;
         private Percent _percentage;

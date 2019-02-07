@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			
 			extend.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
 			extend.AddService<Database>();
-			extend.AddService<DatabaseLegacy>();
 			extend.AddService<AnalyticsDatabase>();
 		}
 

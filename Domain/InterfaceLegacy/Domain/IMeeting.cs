@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// Meeting
     /// </summary>
-    public interface IMeeting : IAggregateRoot, ICloneableEntity<IMeeting>, IChangeInfo, IBelongsToBusinessUnit
+    public interface IMeeting : IAggregateRoot, ICloneableEntity<IMeeting>, IChangeInfo, IFilterOnBusinessUnit
     {
         /// <summary>
         /// Activity

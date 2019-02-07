@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Support.Library;
 
 namespace Teleopti.Ccc.DBManager.Library
@@ -80,7 +80,7 @@ END", userName, password, personId, tenantPassword);
 			_execute.ExecuteNonQuery("exec Auditing.InitAuditTables");
 			_execute.ExecuteNonQuery("delete from auditing.Auditsetting");
 			_execute.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" +
-									 AuditSettingDefault.TheId + ", 1)");
+									 AuditSetting.TheId + ", 1)");
 		}
 
 		public void TryAddTenantAdminUser()

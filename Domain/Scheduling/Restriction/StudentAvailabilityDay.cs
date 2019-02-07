@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-	public class StudentAvailabilityDay : VersionedAggregateRootWithBusinessUnit, IRestrictionOwner, IStudentAvailabilityDay, IAggregateRootWithEvents
+	public class StudentAvailabilityDay : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IRestrictionOwner, IStudentAvailabilityDay
 	{
 		private IList<IStudentAvailabilityRestriction> _restrictionCollection;
 		private readonly IPerson _person;

@@ -1,8 +1,4 @@
-.grid-scroll-wrap {
-	width: 100%;
-	overflow: auto;
-	min-height: 370px;
-}
+
 
 table.overview {
 	table-layout: fixed;
@@ -43,33 +39,59 @@ table.overview {
 	letter-spacing: 1em;
 }
 
-.weekend {
-	background-color: rgba(255, 165, 0, 0.37);
+.heatmap-weekend {
+	color: rgba(255, 165, 0, 0.8);
 }
 
-.resourceplanner-box {
+.legend{
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.legend-box {
+	width: 10px;
+	height: 10px;
+	text-align: center;
+	position: relative;
+}
+
+.heatmap-div {
+	width: auto;
+	padding-bottom: 1px;
+	min-height: 100px;
+	margin-top: 20px;
+	margin-left: 175px;
+	overflow: auto;
+
+	.worst{
+		background-color: rgba(255, 0, 0, 0.5);
+	}
+
+	.heatmap-closed {
+		background-color: rgba(0, 0, 0, 0.25) !important;
+	}
+}
+
+.heatmap-date-header{
+	text-align: center;
+	margin: 2px;
+}
+
+.heatmap-box {
 	width: 20px;
 	height: 20px;
+	text-align: center;
+	position: relative;
+	cursor: pointer;
+	margin: 2px;
 }
 
-.resourceplanner-box:hover {
+.heatmap-box:hover {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
 }
 
-.understaffed {
-	background: #fc0 !important;
-}
-
-.critUnderstaffed {
-	background: red !important;
-}
-
-.closed {
-	background-color: #cacaca;
-}
-
-.overstaffed {
-	background: blue !important;
+.heatmap-day{
+	background-color: rgba(0, 0, 0, 0.1);
 }
 
 [nz-button] {

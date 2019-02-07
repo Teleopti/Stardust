@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			var baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _multisiteSkill.TimeZone);
 			var templateMultisitePeriod = multisiteDay.MultisitePeriodCollection.Select(
 				multisitePeriod => new TemplateMultisitePeriod(getBaseDateTimePeriod(multisitePeriod.Period, ref baseDateUtc), multisitePeriod.Distribution)).Cast<ITemplateMultisitePeriod>().ToList();
+			templateMultisitePeriod.ForEach(x => x.IsDistributionChangeNotAllowed = true);
 			_multisiteDayTemplate.SetMultisitePeriodCollection(templateMultisitePeriod);
 		}
 

@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    public abstract class SkillType : VersionedAggregateRoot, ISkillType, IDeleteTag
+    public abstract class SkillType : AggregateRoot_Events_ChangeInfo_Versioned, ISkillType, IDeleteTag
     {
         private Description _description;
         private ForecastSource _forecastSource;

@@ -211,7 +211,6 @@
     <Compile Include="ApplicationLayer\Staffing\SendUpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherContextBug48226Test.cs" />
     <Compile Include="Auditing\AuditAggregatorServiceTest.cs" />
-    <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\PersonAccessContextPurgeServiceTest.cs" />
     <Compile Include="Auditing\PersonAccessContextReaderServiceTest.cs" />
     <Compile Include="Auditing\PurgeAuditRunnerTest.cs" />
@@ -499,7 +498,6 @@
     <Compile Include="Licensing\LicenseStatusRepositoriesTest.cs" />
     <Compile Include="Licensing\LicenseStatusUpdaterTest.cs" />
     <Compile Include="Licensing\LicenseStatusXmlTest.cs" />
-    <Compile Include="NHibernateConfiguration\AuditSetterTest.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetterTest.cs" />
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />

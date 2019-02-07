@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 namespace Teleopti.Ccc.Domain.Common
 {
 	[Serializable]
-	public class TeamGamificationSetting : NonversionedAggregateRootWithBusinessUnit, ITeamGamificationSetting
+	public class TeamGamificationSetting : AggregateRoot_Events_ChangeInfo_BusinessUnit, ITeamGamificationSetting
 	{
 		private ITeam _team;
 		private IGamificationSetting _gamificationSetting;

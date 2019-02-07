@@ -106,6 +106,7 @@
     <Compile Include="Configuration\Events\RtaMapChangedEvent.cs" />
     <Compile Include="Configuration\Events\RtaRuleChangedEvent.cs" />
     <Compile Include="Configuration\Events\RtaStateGroupChangedEvent.cs" />
+    <Compile Include="Configuration\IRepository.cs" />
     <Compile Include="Configuration\IRtaMap.cs" />
     <Compile Include="Configuration\IRtaMapRepository.cs" />
     <Compile Include="Configuration\IRtaRule.cs" />
@@ -133,11 +134,14 @@
     <Compile Include="Historical\AdjustAdherence\AdjustedPeriod.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePercentageCalculation.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AdherencePeriod.cs" />
+    <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayAdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
+    <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoaderAdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDayLoadException.cs" />
     <Compile Include="Historical\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="Historical\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="Historical\AgentAdherenceDay\HistoricalChangeModel.cs" />
+    <Compile Include="Historical\AgentAdherenceDay\IAgentAdherenceDay.cs" />
     <Compile Include="Historical\AgentAdherenceDay\ScheduleLoader.cs" />
     <Compile Include="Historical\ApprovePeriodAsInAdherence\ApprovedPeriod.cs" />
     <Compile Include="Historical\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherence.cs" />
@@ -147,7 +151,7 @@
     <Compile Include="Historical\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommand.cs" />
     <Compile Include="Historical\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommandHandler.cs" />
     <Compile Include="Historical\ApprovePeriodAsInAdherence\RemovedPeriod.cs" />
-    <Compile Include="Historical\Events\AdjustAdherenceToNeutralEvent.cs" />
+    <Compile Include="Historical\Events\PeriodAdjustedToNeutralEvent.cs" />
     <Compile Include="Historical\Events\ApprovedPeriodRemovedEvent.cs" />
     <Compile Include="Historical\Events\PeriodApprovedAsInAdherenceEvent.cs" />
     <Compile Include="Historical\HistoricalAdherenceDate.cs" />
@@ -168,9 +172,11 @@
     <Compile Include="Historical\RtaEventStoreAsyncSynchronizer.cs" />
     <Compile Include="Historical\RtaEventStoreMaintainer.cs" />
     <Compile Include="Historical\RtaEventStoreSynchronizer.cs" />
+    <Compile Include="Historical\RtaEventStoreSynchronizerAdjustAdherenceToNeutral.cs" />
     <Compile Include="Historical\RtaEventStoreUpgrader.cs" />
     <Compile Include="Historical\RtaEventStoreVersion.cs" />
     <Compile Include="KeyValueStorePersisterExtensions.cs" />
+    <Compile Include="MinMax.cs" />
     <Compile Include="Monitor\AgentStateReadModelMaintainer.cs" />
     <Compile Include="Monitor\AgentStateReadModelUpdater.cs" />
     <Compile Include="Monitor\AgentStatesViewModelBuilder.cs" />
@@ -243,7 +249,6 @@
     <Compile Include="States\Infrastructure\StateQueueHealthCheckerProcess.cs" />
     <Compile Include="States\Infrastructure\StateQueueUtilities.cs" />
     <Compile Include="States\Infrastructure\StateQueueWorker.cs" />
-    <Compile Include="States\INotificationCreator.cs" />
     <Compile Include="States\InputInfo.cs" />
     <Compile Include="States\InvalidAuthenticationKeyException.cs" />
     <Compile Include="States\InvalidSourceException.cs" />
@@ -259,7 +264,6 @@
     <Compile Include="States\Mapping.cs" />
     <Compile Include="States\MappingReadModelUpdater.cs" />
     <Compile Include="States\NoLoggedOutStateGroupsException.cs" />
-    <Compile Include="States\NotificationCreator.cs" />
     <Compile Include="States\PerTenant.cs" />
     <Compile Include="States\Rta.cs" />
     <Compile Include="States\RuleEventPublisher.cs" />

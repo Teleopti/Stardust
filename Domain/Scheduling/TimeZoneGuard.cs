@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private TimeZoneInfo _timeZone;
 
-		public TimeZoneInfo TimeZone => _timeZone ?? (_timeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
-
 		public void Set(TimeZoneInfo timeZone)
 		{
 			_timeZone = timeZone;
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public TimeZoneInfo CurrentTimeZone()
 		{
-			return TimeZone;
+			return _timeZone ?? (_timeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 		}
 	}
 }

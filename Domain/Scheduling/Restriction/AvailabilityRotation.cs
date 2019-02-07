@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class AvailabilityRotation : VersionedAggregateRootWithBusinessUnit, IAvailabilityRotation, IDeleteTag
+    public class AvailabilityRotation : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IAvailabilityRotation, IDeleteTag
     {
         private string _name;
         private readonly IList<IAvailabilityDay> _availabilityDays;

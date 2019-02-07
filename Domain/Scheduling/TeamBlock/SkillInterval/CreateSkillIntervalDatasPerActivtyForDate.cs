@@ -6,15 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
-	public interface ICreateSkillIntervalDatasPerActivtyForDate
-	{
-		//Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, HashSet<ISkill> skills, IEnumerable<ISkillDay> allSkillDays);
-
-		Dictionary<IActivity, IList<ISkillIntervalData>> CreateForAgent(DateOnly dateOnly, HashSet<ISkill> skills,
-			IEnumerable<ISkillDay> allSkillDays, TimeZoneInfo agenTimeZoneInfo);
-	}
-
-	public class CreateSkillIntervalDatasPerActivtyForDate : ICreateSkillIntervalDatasPerActivtyForDate
+	public class CreateSkillIntervalDatasPerActivtyForDate
 	{
 		private readonly ICalculateAggregatedDataForActivtyAndDate _calculateAggregatedDataForActivtyAndDate;
 		

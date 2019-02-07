@@ -104,14 +104,20 @@ Try
 		throw "User is not Admin!"
 	}
 	
-	#Stopping IIS to ensure no requests before system ready and environmental variable $Env:TeleoptiIsAzure needs to be set before IIS is started..
-	iisreset /stop /timeout:120
-	
 	#74478, #76734, #78787
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     $Cname = "$DataSourceName.teleopticloud.com"
+	log-info "Adding Cname '$Cname' to local hosts file..."
     Hostsfile-Add-Cname -Cname $Cname
-
+	
+	#Test - tabort 
+	[System.Environment]::SetEnvironmentVariable('DotJonsson', 'true', [System.EnvironmentVariableTarget]::Machine)
+	$Env:DotJonsson = $true
+	log-info "Environment variable 'DotJonsson' is set to '$Env:DotJonsson'"
+	
+	#Stopping IIS to ensure no requests before system ready and environmental variable $Env:TeleoptiIsAzure needs to be set before IIS is started..
+	iisreset /stop /timeout:120
+	
 	#Setting $Env:TeleoptiIsAzure = $true 
 	[System.Environment]::SetEnvironmentVariable('TeleoptiIsAzure', 'true', [System.EnvironmentVariableTarget]::Machine)
 	$Env:TeleoptiIsAzure = $true

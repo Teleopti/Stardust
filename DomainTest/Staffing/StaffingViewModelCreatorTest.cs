@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
@@ -54,11 +55,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			SkillSetupHelper.PopulateForecastReadModels(skill, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc.AddMinutes(minutesPerInterval), 3, SkillForecastReadModelRepository);
 			  var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, new DateOnly(2016, 8, 26), false);
 
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(96);
-			vm.DataSeries.ForecastedStaffing[24].Should().Be.EqualTo(3);
-			vm.DataSeries.ForecastedStaffing[25].Should().Be.EqualTo(3);
-			vm.DataSeries.ScheduledStaffing[24].Should().Be.EqualTo(10);
-			vm.DataSeries.ScheduledStaffing[25].Should().Be.EqualTo(2);
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing[0].Should().Be.EqualTo(3);
+			vm.DataSeries.ForecastedStaffing[1].Should().Be.EqualTo(3);
+			vm.DataSeries.ScheduledStaffing[0].Should().Be.EqualTo(10);
+			vm.DataSeries.ScheduledStaffing[1].Should().Be.EqualTo(2);
 		}
 		
 		[Test]
@@ -91,11 +92,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var skillIdArray = new List<ISkill> {skill, skill2}.Select(s => s.Id.GetValueOrDefault()).ToArray();
 			var vm = Target.Load(skillIdArray, new DateOnly(2016, 8, 26), false);
 
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(96);
-			vm.DataSeries.ForecastedStaffing[24].Should().Be.EqualTo(6);
-			vm.DataSeries.ForecastedStaffing[25].Should().Be.EqualTo(6);
-			vm.DataSeries.ScheduledStaffing[24].Should().Be.EqualTo(10);
-			vm.DataSeries.ScheduledStaffing[25].Should().Be.EqualTo(2);
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing[0].Should().Be.EqualTo(6);
+			vm.DataSeries.ForecastedStaffing[1].Should().Be.EqualTo(6);
+			vm.DataSeries.ScheduledStaffing[0].Should().Be.EqualTo(10);
+			vm.DataSeries.ScheduledStaffing[1].Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -159,11 +160,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			SkillSetupHelper.PopulateForecastReadModels(skill, userNowUtc.AddMinutes(-minutesPerInterval), userNowUtc.AddMinutes(minutesPerInterval), 3, SkillForecastReadModelRepository,4);
 			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, new DateOnly(2016, 8, 26), true);
 
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(96);
-			vm.DataSeries.ForecastedStaffing[24].Should().Be.EqualTo(4);
-			vm.DataSeries.ForecastedStaffing[25].Should().Be.EqualTo(4);
-			vm.DataSeries.ScheduledStaffing[24].Should().Be.EqualTo(10);
-			vm.DataSeries.ScheduledStaffing[25].Should().Be.EqualTo(2);
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.ForecastedStaffing[0].Should().Be.EqualTo(4);
+			vm.DataSeries.ForecastedStaffing[1].Should().Be.EqualTo(4);
+			vm.DataSeries.ScheduledStaffing[0].Should().Be.EqualTo(10);
+			vm.DataSeries.ScheduledStaffing[1].Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -260,6 +261,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 
 			var act = ActivityFactory.CreateActivity("act");
 			var emailSkill = SkillSetupHelper.CreateSkill(minutesPerInterval, "email", openHours, false, act, TimeSpan.FromHours(opensAtUtc.Hour));
+			
 			SkillRepository.Has(emailSkill);
 
 			//var val = 1;
@@ -279,6 +281,39 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			vm.DataSeries.ScheduledStaffing[48].Should().Be.EqualTo(1);
 			
 			vm.DataSeries.ForecastedStaffing[48].Should().Be.GreaterThan(3);
+		}
+
+		[Test]
+		public void ShouldSplitBacklogSkillToSameResolution()
+		{
+			TimeZone.IsSweden();
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0);
+			var userNowUtc = TimeZoneInfo.ConvertTimeToUtc(userNow, TimeZone.TimeZone());
+			Now.Is(userNowUtc);
+
+			var opensAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 26, 8, 0, 0), TimeZone.TimeZone());
+			var closesAtUtc = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2016, 8, 26, 12, 0, 0), TimeZone.TimeZone());
+			var openHours = new DateTimePeriod(opensAtUtc, closesAtUtc).TimePeriod(TimeZoneInfo.Utc);
+
+			var act = ActivityFactory.CreateActivity("act");
+			var skillInterval = 60;
+			var skill = SkillSetupHelper.CreateSkill(skillInterval, "skill1", openHours, false, act);
+			SkillRepository.Has(skill);
+
+			SkillSetupHelper.PopulateStaffingReadModels(skill, opensAtUtc, closesAtUtc, 1, SkillCombinationResourceRepository, 60);
+
+			SkillSetupHelper.PopulateForecastReadModels(skill, opensAtUtc.AddMinutes(-skillInterval),
+				closesAtUtc.AddMinutes(skillInterval), 3, SkillForecastReadModelRepository, isBackOffice:true, overrideMinutesPerInterval:skillInterval);
+			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() }, new DateOnly(2016, 8, 26), false);
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(24);
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(24);
+			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(24);
+			vm.DataSeries.ScheduledStaffing[4].Should().Be.EqualTo(1);
+			vm.DataSeries.ScheduledStaffing[5].Should().Be.EqualTo(1);
+			vm.DataSeries.ScheduledStaffing[6].Should().Be.EqualTo(1);
+			vm.DataSeries.ScheduledStaffing[7].Should().Be.EqualTo(1);
 		}
 	}
 

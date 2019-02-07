@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     /// Created by: tamasb
     /// Created date: 2008-01-15
     /// </remarks>
-    public class SystemRole : VersionedAggregateRoot, IDeleteTag
+    public class SystemRole : AggregateRoot_Events_ChangeInfo_Versioned, IDeleteTag
     {
         private string _name;
         private string _descriptionText;

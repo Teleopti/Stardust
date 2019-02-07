@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Wfm.Adherence.Tracer
 {

@@ -5,14 +5,9 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-    public interface ISkillStaffPeriodToSkillIntervalDataMapper
+    public class SkillStaffPeriodToSkillIntervalDataMapper
     {
-        IList<ISkillIntervalData> MapSkillIntervalData(IList<ISkillStaffPeriod> skillStaffPeriod, DateOnly baseDate, TimeZoneInfo timeZoneInfo);
-    }
-
-    public class SkillStaffPeriodToSkillIntervalDataMapper : ISkillStaffPeriodToSkillIntervalDataMapper
-    {
-	    public IList<ISkillIntervalData> MapSkillIntervalData(IList<ISkillStaffPeriod> skillStaffPeriodList,DateOnly baseDate, TimeZoneInfo timeZoneInfo)
+	    public IList<ISkillIntervalData> MapSkillIntervalData(IList<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZoneInfo)
 	    {
 		    var skillIntervalList = new List<ISkillIntervalData>();
 		    if (skillStaffPeriodList != null)

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// </summary>
     public interface IWorkload : ICloneableEntity<IWorkload>, IAggregateRoot, IChangeInfo,
 								IForecastTemplateOwner,
-                                IBelongsToBusinessUnit
+                                IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets and sets the name of the Workload

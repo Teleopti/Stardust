@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// </summary>
     public interface IShiftCategory : IAggregateRoot,
                                         IChangeInfo,
-                                        IBelongsToBusinessUnit
+                                        IFilterOnBusinessUnit
     {
         /// <summary>
         /// Gets or sets the description.

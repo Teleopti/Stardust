@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var withEvents = modifiedRoots
-				.Where(m => m.Root is IAggregateRootWithEvents)
+				.Where(m => m.Root is IPublishEvents)
 				.Select(m => new
 				{
-					Root = m.Root as IAggregateRootWithEvents,
+					Root = m.Root as IPublishEvents,
 					m.Status
 				})
 				.ToArray();

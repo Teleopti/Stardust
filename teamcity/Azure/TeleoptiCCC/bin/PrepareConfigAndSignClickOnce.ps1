@@ -423,10 +423,10 @@ Try
 	#Save machine key files for later usage on other instances
 	CopyFileToBlobStorage -sourceFolder "$SupportToolFolder" -pattern "*.key"
     
-       
+    $DriveLocation = $pwd.drive.name + ':'  
     #Sign ClickOnce, create bat files for later execution in Scheduled task
     $ClickOnceSignPath="$directory\..\Tools\ClickOnceSign"
-    CD e:
+    # CD e:   #Is this needed? Testing without
     Set-Location $ClickOnceSignPath
     $ClickOnceTool = $ClickOnceSignPath + "\ClickOnceSign.exe"
 
@@ -439,7 +439,7 @@ Try
 		Remove-Item "$ClickOnceSignPath\SignAdminClient.bat"
 	}
     
-	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "E:"
+	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "$DriveLocation"
 	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "CD $ClickOnceSignPath"
     Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "$ClickOnceTool $cmdArgs"
     &"$ClickOnceSignPath\SignAdminClient.bat"

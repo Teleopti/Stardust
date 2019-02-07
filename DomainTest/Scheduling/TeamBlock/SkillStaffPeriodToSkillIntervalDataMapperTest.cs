@@ -73,8 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		    using (_mock.Playback())
 		    {
-			    returnList = _target.MapSkillIntervalData(_skillStaffPeriodList, new DateOnly(2014,12,26),
-				    TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			    returnList = _target.MapSkillIntervalData(_skillStaffPeriodList, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 		    }
 
 			var localPeriod1 = new DateTimePeriod(new DateTime(2014, 10, 26, 02, 00, 00, DateTimeKind.Utc), new DateTime(2014, 10, 26, 02, 30, 00, DateTimeKind.Utc));
@@ -119,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using(_mock.Playback() )
             {
-                var returnList = _target.MapSkillIntervalData(_skillStaffPeriodList, new DateOnly(), TimeZoneInfo.Utc );
+                var returnList = _target.MapSkillIntervalData(_skillStaffPeriodList, TimeZoneInfo.Utc );
                 Assert.AreEqual(returnList.Count , 3);
                 
                 Assert.That(returnList[0].Period, Is.EqualTo(dateTime));

@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.Messaging
 {
-    public class PushMessageDialogue : VersionedAggregateRootWithBusinessUnit, IPushMessageDialogue
+    public class PushMessageDialogue : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IPushMessageDialogue
     {
         private static readonly string _defaultReply = string.Empty;
         private readonly IPushMessage _pushMessage;

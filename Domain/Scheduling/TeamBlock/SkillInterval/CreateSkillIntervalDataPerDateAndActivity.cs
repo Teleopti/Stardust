@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
 	public class CreateSkillIntervalDataPerDateAndActivity
 	{
-		private readonly ICreateSkillIntervalDatasPerActivtyForDate _createSkillIntervalDatasPerActivtyForDate;
+		private readonly CreateSkillIntervalDatasPerActivtyForDate _createSkillIntervalDatasPerActivtyForDate;
 
-		public CreateSkillIntervalDataPerDateAndActivity(ICreateSkillIntervalDatasPerActivtyForDate createSkillIntervalDatasPerActivtyForDate)
+		public CreateSkillIntervalDataPerDateAndActivity(CreateSkillIntervalDatasPerActivtyForDate createSkillIntervalDatasPerActivtyForDate)
 		{
 			_createSkillIntervalDatasPerActivtyForDate = createSkillIntervalDatasPerActivtyForDate;
 		}

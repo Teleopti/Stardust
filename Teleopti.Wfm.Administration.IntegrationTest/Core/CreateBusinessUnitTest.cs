@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		{
 			_dataSourcesFactory = new FakeDataSourcesFactory(new FakeStorage(), null, null);
 			_runWithUnitOfWork = new FakeRunWithUnitOfWork();
-			_businessUnitRepository = new FakeBusinessUnitRepository(null);
+			_businessUnitRepository = new FakeBusinessUnitRepository();
 			_personRepository = new FakePersonRepositoryLegacy();
 			_scenarioRepository = new FakeScenarioRepository();
 			_applicationRoleRepository =  new FakeApplicationRoleRepository();
@@ -52,8 +52,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				uow => _availableDataRepository,
 				uow => _kpiRepository,
 				uow => _skillTypeRepository,
-				uow => _rtaStateGroupRepository,
-				new StaffingCalculatorServiceFacade());
+				uow => _rtaStateGroupRepository);
 		}
 
 		[Test]

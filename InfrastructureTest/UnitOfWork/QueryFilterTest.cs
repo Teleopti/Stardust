@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				
 			});
 			var scenario = new Scenario("_");
-			typeof(VersionedAggregateRootWithBusinessUnit).GetField("_businessUnit", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(scenario, dummyBu);
+			typeof(AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit).GetField("_businessUnit", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(scenario, dummyBu);
 			WithUnitOfWork.Do(() =>
 			{
 				Scenarios.Add(scenario);

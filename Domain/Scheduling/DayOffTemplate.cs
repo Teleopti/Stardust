@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// Created by: shirang
     /// Created date: 2008-10-28
     /// </remarks>
-    public class DayOffTemplate : VersionedAggregateRootWithBusinessUnit, IDayOffTemplate, IDeleteTag, ICloneableEntity<DayOffTemplate>, IAggregateRootWithEvents
+    public class DayOffTemplate : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IDayOffTemplate, IDeleteTag, ICloneableEntity<DayOffTemplate>
     {
         private Description _description;
         private TimeSpan _flexibility;

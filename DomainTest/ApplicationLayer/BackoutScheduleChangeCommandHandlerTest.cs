@@ -462,44 +462,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		private bool _setting = true;
 
-		public void TruncateAndMoveScheduleFromCurrentToAuditTables()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void SetSetting(bool setting)
 		{
 			_setting = setting;
 		}
 
-		public IAuditSetting Read()
+		public AuditSetting Read()
 		{
 			var setting = new FakeAuditSetting();
 			setting.SetScheduleEnabled(_setting);
 			return setting;
 		}
 
-		internal class FakeAuditSetting : IAuditSetting
+		internal class FakeAuditSetting : AuditSetting
 		{
 			public void SetScheduleEnabled(bool v)
 			{
 				IsScheduleEnabled = v;
-			}
-
-			public bool IsScheduleEnabled { get; protected set; }
-			public void TurnOffScheduleAuditing(IAuditSetter auditSettingSetter)
-			{
-				throw new NotImplementedException();
-			}
-
-			public void TurnOnScheduleAuditing(IAuditSettingRepository auditSettingRepository, IAuditSetter auditSettingSetter)
-			{
-				throw new NotImplementedException();
-			}
-
-			public bool ShouldBeAudited(object entity)
-			{
-				throw new NotImplementedException();
 			}
 		}
 	}

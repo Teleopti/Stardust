@@ -5,6 +5,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			foreach (var skillDay in skillDays)
 			{
-				if (skillDay is IAggregateRootWithEvents events)
+				if (skillDay is IPublishEvents events)
 				{
 					events.PopAllEvents(null);
 				}

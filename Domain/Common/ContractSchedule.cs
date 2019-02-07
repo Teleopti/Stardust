@@ -10,7 +10,7 @@ using InParameter=Teleopti.Ccc.Domain.InterfaceLegacy.Domain.InParameter;
 namespace Teleopti.Ccc.Domain.Common
 {
 
-    public class ContractSchedule : VersionedAggregateRootWithBusinessUnit, IContractSchedule, IDeleteTag
+    public class ContractSchedule : AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit, IContractSchedule, IDeleteTag
     {
         private Description _description;
 	    private readonly ISet<IContractScheduleWeek> _contractScheduleWeeks;

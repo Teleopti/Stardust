@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class ExternalPerformance: NonversionedAggregateRootWithBusinessUnit, IExternalPerformance
+	public class ExternalPerformance: AggregateRoot_Events_ChangeInfo_BusinessUnit, IExternalPerformance
 	{
 		private int _externalId;
 		private string _name;

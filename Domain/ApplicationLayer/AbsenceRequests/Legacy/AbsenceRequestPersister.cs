@@ -76,11 +76,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 		private IPersonRequest addRequest(AbsenceRequestModel model)
 		{
 			var personRequest = _mapper.MapNewAbsenceRequest(model);
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb,
-				new DateOnly(_now.UtcDateTime()), personRequest.Person))
-			{
-				throw new UnauthorizedAccessException();
-			}
+			//if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb,
+			//	new DateOnly(_now.UtcDateTime()), personRequest.Person))
+			//{
+			//	throw new UnauthorizedAccessException();
+			//}
 			using (_disableDeletedFilter.Disable())
 			{
 				_skillTypeRepository.LoadAll();
@@ -95,11 +95,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests.Legacy
 
 		private void updateRequest(AbsenceRequestModel model, IPersonRequest personRequest)
 		{
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb,
-				new DateOnly(_now.UtcDateTime()), personRequest.Person))
-			{
-				throw new UnauthorizedAccessException();
-			}
+			//if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb,
+			//	new DateOnly(_now.UtcDateTime()), personRequest.Person))
+			//{
+			//	throw new UnauthorizedAccessException();
+			//}
 			var existingPeriod = personRequest.Request.Period;
 			_mapper.MapExistingAbsenceRequest(model, personRequest);
 

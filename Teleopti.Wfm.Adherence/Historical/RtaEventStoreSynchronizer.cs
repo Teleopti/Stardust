@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 	{
 		private readonly IRtaEventStoreReader _events;
 		private readonly IHistoricalOverviewReadModelPersister _readModels;
-		private readonly AgentAdherenceDayLoader _adherenceDayLoader;
+		private readonly IAgentAdherenceDayLoader _adherenceDayLoader;
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IDistributedLockAcquirer _distributedLock;
 
@@ -40,7 +40,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 		public RtaEventStoreSynchronizer(
 			IRtaEventStoreReader events,
 			IHistoricalOverviewReadModelPersister readModels,
-			AgentAdherenceDayLoader adherenceDayLoader,
+			IAgentAdherenceDayLoader adherenceDayLoader,
 			IKeyValueStorePersister keyValueStore,
 			IDistributedLockAcquirer distributedLock
 		)
