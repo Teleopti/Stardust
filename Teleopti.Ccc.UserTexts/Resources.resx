@@ -16304,6 +16304,10 @@ Do you want to participate?</value>
     <value>Fill in a name and select suitable filters to create a planning group</value>
     <comment>PlansPageCreatePlanningGroup</comment>
   </data>
+  <data name="ShowNumbers" xml:space="preserve">
+    <value>Show numbers</value>
+	<comment>Show relative difference in web plans heatmap</comment>
+  </data>
   <data name="UnsupportedDataSeriesFound" xml:space="preserve">
     <value>Contains mixed skill types, certain data series may be unavailable</value>
     <comment>intraday feedback message</comment>

@@ -58,15 +58,22 @@
 			<div class="legend">
 				<table>
 					<tbody>
+					<tr>
+						<td colspan="43" style="text-align: center">Relative difference</td>
+					</tr>
 					<tr >
 						<td>-100%</td>
 						<td *ngFor="let legend of legends">
 							<div class="legend-box" [style.background-color]="legend.bgcolor"></div>
 						</td>
 						<td>100%</td>
-						<td style="padding-left:20px">{{'Closed' | translate}}:</td>
-						<td>
-							<div class="legend-box heatmap-closed"></div>
+						<td style="padding-left:20px"><div class="legend-box heatmap-closed"></div></td>
+						<td style="padding-left: 5px">
+							{{'Closed' | translate}}
+						</td>
+						<td style="padding-left:100px" colspan="20">
+								{{ 'ShowNumbers' | translate}}
+											<nz-switch [(ngModel)]="showNumbers"></nz-switch>
 						</td>
 					</tr>
 					</tbody>
@@ -105,7 +112,11 @@
 									class="heatmap-box"
 									[ngClass]="{ 'heatmap-closed': node.ColorId===4}"
 									[style.background-color]="node.bgcolor"
-								></div>
+								>
+									<span *ngIf="showNumbers" style="font-size: xx-small" [style.color]="node.fontcolor">
+									{{(node.RelativeDifference * 100).toFixed(0)}}
+										</span>
+								</div>
 							</td>
 						</tr>
 					</tbody>

@@ -8,10 +8,10 @@ import {
 	NzGridModule,
 	NzTabsModule,
 	NzSpinModule,
-	NzCollapseModule, NzBadgeModule, NzToolTipModule
+	NzCollapseModule, NzBadgeModule, NzToolTipModule, NzSwitchModule
 } from 'ng-zorro-antd';
 import { of } from 'rxjs';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NavigationService } from 'src/app/core/services';
 import {PlanningGroupService, PlanningPeriodService} from '../../shared';
 import { TitleBarComponent } from '../../components/title-bar';
@@ -61,8 +61,10 @@ describe('Planning Period Overview', () => {
 				NzDividerModule,
 				NzGridModule,
 				NzToolTipModule,
-				MomentModule
-			],
+				MomentModule,
+				NzSwitchModule,
+				FormsModule
+			], 
 			providers: [
 				{ provide: PlanningGroupService, useClass: MockPlanningGroupService },
 				{ provide: PlanningPeriodService, useClass: MockPlanningPeriodService },
