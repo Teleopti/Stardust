@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -67,8 +66,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
 		private readonly FakeShiftCategoryRepository _shiftCategories;
 		private readonly FakePersonRequestRepository _personRequests;
-		private readonly ApprovePeriodAsInAdherence _approvePeriod;
-		private readonly RemoveApprovedPeriod _removePeriod;
 		private readonly FakeRtaHistory _rtaHistory;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 		private readonly InitializeBusinessUnitDatabaseState _initializeBusinessUnitDatabaseState;
@@ -131,8 +128,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
 			FakeShiftCategoryRepository shiftCategories,
 			FakePersonRequestRepository personRequests,
-			ApprovePeriodAsInAdherence approvePeriod,
-			RemoveApprovedPeriod removePeriod,
 			FakeRtaHistory rtaHistory,
 			IShiftTradeRequestSetChecksum shiftTradeSetChecksum,
 			InitializeBusinessUnitDatabaseState initializeBusinessUnitDatabaseState,
@@ -171,9 +166,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
 			_shiftCategories = shiftCategories;
 			_personRequests = personRequests;
-			_approvePeriod = approvePeriod;
 			_rtaHistory = rtaHistory;
-			_removePeriod = removePeriod;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 			_initializeBusinessUnitDatabaseState = initializeBusinessUnitDatabaseState;
 			_definedRaptorApplicationFunctionFactory = definedRaptorApplicationFunctionFactory;
@@ -945,23 +938,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithApprovedPeriod(Guid? id, string startTime, string endTime)
 		{
-			_approvePeriod.Approve(new ApprovedPeriod
-			{
-				PersonId = id ?? _person.Id.Value,
-				StartTime = startTime.Utc(),
-				EndTime = endTime.Utc()
-			});
+			_rtaHistory.ApprovedPeriod(id ?? _person.Id.Value, startTime, endTime);
 			return this;
 		}
 
 		public FakeDatabase WithRemovedApprovedPeriod(Guid? id, string startTime, string endTime)
 		{
-			_removePeriod.Remove(new RemovedPeriod
-			{
-				PersonId = id ?? _person.Id.Value,
-				StartTime = startTime.Utc(),
-				EndTime = endTime.Utc()
-			});
+			_rtaHistory.RemovedApprovedPeriod(id ?? _person.Id.Value, startTime, endTime);
 			return this;
 		}
 

@@ -53,7 +53,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public FakeRtaHistory StateChanged(Guid personId, string time) =>
-			StateChanged(personId, time, null, null, null, null, null, null, null);
+			StateChanged(personId, time, null, null, null, null, null, null, null);	
+		
+		public FakeRtaHistory StateChanged(Guid personId, string time, Adherence? adherence) =>
+			StateChanged(personId, time, null, null, null, null, null, null, adherence);
 
 		public FakeRtaHistory StateChanged(Guid personId, string time, string date, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
 		{
@@ -141,6 +144,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				RuleName = rule,
 				RuleColor = ruleColor?.ToArgb(),
 				Adherence = adherence == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), adherence.ToString())
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
+			return this;
+		}
+		
+		public FakeRtaHistory ApprovedPeriod(Guid personId, string start, string end)
+		{
+			_store.Add(new PeriodApprovedAsInAdherenceEvent
+			{
+				PersonId = personId,
+				BelongsToDate = belongsToDate(personId, start, start),
+				StartTime = start.Utc(),
+				EndTime = end.Utc()
+			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
+			return this;
+		}
+		
+		public FakeRtaHistory RemovedApprovedPeriod(Guid personId, string start, string end)
+		{
+			_store.Add(new ApprovedPeriodRemovedEvent
+			{
+				PersonId = personId,
+				BelongsToDate = belongsToDate(personId, start, start),
+				StartTime = start.Utc(),
+				EndTime = end.Utc()
 			}, DeadLockVictim.No, RtaEventStoreVersion.StoreVersion);
 			return this;
 		}
