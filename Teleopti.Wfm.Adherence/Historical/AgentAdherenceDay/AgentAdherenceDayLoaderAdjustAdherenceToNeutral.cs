@@ -14,7 +14,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 	{
 		private readonly INow _now;
 		private readonly IRtaEventStoreReader _eventStore;
-		private readonly RtaEventStoreTypeIdMapper _typeIdMapper;
+		private readonly PersistedTypeMapper _typeMapper;
 		private readonly IJsonEventSerializer _serializer;
 		private readonly ScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
@@ -24,14 +24,14 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			ScheduleLoader scheduleLoader,
 			IPersonRepository persons,
 			IRtaEventStoreReader eventStore,
-			RtaEventStoreTypeIdMapper typeIdMapper,
+			PersistedTypeMapper typeIdMapper,
 			IJsonEventSerializer serializer)
 		{
 			_now = now;
 			_scheduleLoader = scheduleLoader;
 			_persons = persons;
 			_eventStore = eventStore;
-			_typeIdMapper = typeIdMapper;
+			_typeMapper = typeIdMapper;
 			_serializer = serializer;
 		}
 
@@ -79,9 +79,9 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			var stringBuilder = new StringBuilder();
 			events.ForEach(e =>
 			{
-				var typeId = _typeIdMapper.EventTypeId(e);
+				var persistedName = _typeMapper.NameForPersistence(e.GetType());
 				var eventData = _serializer.SerializeEvent(e);
-				stringBuilder.AppendLine($"{typeId}\t{eventData}");
+				stringBuilder.AppendLine($"{persistedName}\t{eventData}");
 			});
 			return stringBuilder.ToString();
 		}

@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Historical.Events
 {
-	[JsonObject(Id = "ApprovedPeriodRemoved")]
 	public class ApprovedPeriodRemovedEvent : IRtaStoredEvent, IEvent
 	{
 		public Guid PersonId { get; set; }

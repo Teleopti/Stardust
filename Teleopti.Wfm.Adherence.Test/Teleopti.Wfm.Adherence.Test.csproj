@@ -190,7 +190,7 @@
     <Compile Include="Historical\Infrastructure\HistoricalOverviewViewModel\AdherenceTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreApprovedReadTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreBatchInsertTest.cs" />
-    <Compile Include="Historical\Infrastructure\RtaEventStoreEventTypeIdTest.cs" />
+    <Compile Include="Historical\Infrastructure\RtaEventStoreEventPersistedNameTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreReadByDateTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreReadForSynchronizationTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreReadTest.cs" />

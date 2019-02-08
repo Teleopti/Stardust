@@ -5,7 +5,6 @@ using Teleopti.Wfm.Adherence.Historical;
 
 namespace Teleopti.Wfm.Adherence.States.Events
 {
-	[JsonObject(Id = "ShiftEnd")]
 	public class PersonShiftEndEvent : IEvent, IRtaStoredEvent
 	{
 		public Guid PersonId { get; set; }

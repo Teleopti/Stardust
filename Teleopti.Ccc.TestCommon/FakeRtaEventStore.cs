@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.TestCommon
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<string> LoadAllEventTypeIds()
+		public IEnumerable<string> LoadAllEventTypes()
 		{
 			throw new NotImplementedException();
 		}

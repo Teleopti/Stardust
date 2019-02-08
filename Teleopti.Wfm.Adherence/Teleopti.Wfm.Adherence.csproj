@@ -165,7 +165,6 @@
     <Compile Include="Historical\Infrastructure\IRtaEventPublisherExceptionHandler.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventPublisher.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStore.cs" />
-    <Compile Include="Historical\Infrastructure\RtaEventStoreTypeIdMapper.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgraderProcess.cs" />
     <Compile Include="Historical\IRtaStoredEvent.cs" />
     <Compile Include="Historical\ISolidProof.cs" />

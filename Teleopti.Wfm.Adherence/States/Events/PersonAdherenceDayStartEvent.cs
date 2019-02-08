@@ -5,7 +5,6 @@ using Teleopti.Wfm.Adherence.Historical;
 
 namespace Teleopti.Wfm.Adherence.States.Events
 {
-	[JsonObject(Id = "AdherenceDayStart")]
 	public class PersonAdherenceDayStartEvent : IEvent, ISolidProof, IRtaStoredEvent
 	{
 		public Guid PersonId { get; set; }

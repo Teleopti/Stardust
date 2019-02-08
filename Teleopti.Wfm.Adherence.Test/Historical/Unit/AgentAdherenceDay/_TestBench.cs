@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 		public FakeRtaEventStore Store;
 		public IAgentAdherenceDayLoader Loader;
 		public IJsonEventDeserializer Deserializer;
-		public RtaEventStoreTypeIdMapper TypeMapper;
+		public PersistedTypeMapper TypeMapper;
 
 		[Test]
 		public void ShouldWork()
@@ -38,9 +38,9 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 		(
 			from l in fileContents().Split('\n')
 			let columns = l.Split('\t')
-			let typeId = columns[0]
+			let persistedName = columns[0]
 			let json = columns[1]
-			let eventType = TypeMapper.TypeForTypeId(typeId)
+			let eventType = TypeMapper.TypeForPersistedName(persistedName)
 			let @event = Deserializer.DeserializeEvent(json, eventType) as IEvent
 			select @event
 		).ToArray();
