@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void AbsenceIsAddedSuccessfully()
 		{
-			var scenario = ScenarioRepository.Has("Default");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepository.Add(person);

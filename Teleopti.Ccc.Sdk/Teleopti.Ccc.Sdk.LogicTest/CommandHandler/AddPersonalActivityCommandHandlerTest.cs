@@ -21,7 +21,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	public class AddPersonalActivityCommandHandlerTest : IExtendSystem, IIsolateSystem
 	{

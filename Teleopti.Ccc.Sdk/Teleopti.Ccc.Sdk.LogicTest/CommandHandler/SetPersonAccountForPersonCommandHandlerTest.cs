@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			DateOnlyDto dateOnlydto2 = new DateOnlyDto { DateTime = startDate.Date };
 			DateOnlyDto dateOnlydto3 = new DateOnlyDto { DateTime = startDate.Date.AddDays(10) };
 
-			var scenario = ScenarioRepository.Has("Default");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var person = PersonFactory.CreatePerson("test").WithId();
 			PersonRepository.Add(person);
 
