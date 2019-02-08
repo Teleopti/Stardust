@@ -69,13 +69,6 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.loadPlanningGroupInfo();
-		this.loadPlanningPeriodInfo();
-		this.loadValidations();
-		this.loadLastResult();
-		this.checkState();
-		this.initLegends();
-		
 		this.preValidationFilterControl.valueChanges
 			.pipe(
 				map(filterString => {
@@ -119,17 +112,24 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		this.skillFilterControl.valueChanges
 			.pipe(
 				debounce(() => timer(600)),
-				map(filterString => 
-					 this.skills
+				map(filterString =>
+					this.skills
 						.filter(
-						g =>
-							g.SkillName.toLowerCase().includes(filterString.toLowerCase()) 
-					)
+							g =>
+								g.SkillName.toLowerCase().includes(filterString.toLowerCase())
+						)
 				)
 			)
 			.subscribe(filteredSkills => {
 				this.filteredSkills = filteredSkills;
 			});
+		
+		this.loadPlanningGroupInfo();
+		this.loadPlanningPeriodInfo();
+		this.loadValidations();
+		this.loadLastResult();
+		this.checkState();
+		this.initLegends();
 	}
 
 	ngOnDestroy(): void {
@@ -424,7 +424,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						let sumb = 0;
 						b.SkillDetails.forEach(item=>{
 							sumb +=item.RelativeDifference;
-						});
+						}); 
 
 						return suma>sumb?1:-1;
 					});

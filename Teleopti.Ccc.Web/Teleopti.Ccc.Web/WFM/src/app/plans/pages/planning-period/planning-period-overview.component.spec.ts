@@ -21,15 +21,79 @@ import {IStateService} from "angular-ui-router";
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
-	getPlanningGroups() {
-		return of([
-		]);
+	getPlanningGroup(groupId: string) {
+		return of({
+			Name: 'a',
+			Id: groupId,
+			AgentCount: 44
+		});
 	}
 }
 
 class MockPlanningPeriodService implements Partial<PlanningPeriodService> {
+
+	getPlanningPeriodInfo(planningPeriodId: string){
+		return of({
+			"Id":planningPeriodId,
+			"StartDate":"2018-05-28T00:00:00",
+			"EndDate":"2018-06-24T00:00:00",
+			"HasNextPlanningPeriod":true,
+			"State":"Scheduled",
+			"PlanningGroupId":"aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
+			"TotalAgents":212,
+			"Number":4,
+			"Type":"Week"}
+			);
+	}
+
+	public getValidation(planningPeriodId: string) {
+		return of({
+			"InvalidResources": []
+		});
+	}
+
+	public lastJobStatus(planningPeriodId: string) {
+		return of({
+			"SchedulingStatus":{"HasJob":false},
+			"IntradayOptimizationStatus":{"HasJob":false},
+			"ClearScheduleStatus":{"HasJob":false}
+		});
+	}
+	
 	lastJobResult() {
-		return of();
+		return of({
+			FullSchedulingResult:{
+				SkillResultList:[
+					{
+						"SkillName": "Channel Support",
+						"SkillDetails": [{
+							"Date": "2018-05-28T00:00:00",
+							"RelativeDifference": -1,
+							"ColorId": 3
+						}, {
+							"Date": "2018-05-29T00:00:00",
+							"RelativeDifference": 0,
+							"ColorId": 4
+						}
+						]
+					}, 
+					{
+						"SkillName": "Direct Support",
+						"SkillDetails": [{
+							"Date": "2018-05-28T00:00:00",
+							"RelativeDifference": -0.6,
+							"ColorId": 3
+						}, {
+							"Date": "2018-05-29T00:00:00",
+							"RelativeDifference": -0.6,
+							"ColorId": 3
+						}
+						]
+					}
+				],
+				BusinessRulesValidationResults: []
+			}
+		});
 	}
 }
 
@@ -43,6 +107,7 @@ const mockStateService: Partial<IStateService> = {
 describe('Planning Period Overview', () => {
 	let component: PlanningPeriodOverviewComponent;
 	let fixture: ComponentFixture<PlanningPeriodOverviewComponent>;
+	let page: PlanningPeriodOverviewPage;
 
 	configureTestSuite();
 
@@ -82,9 +147,19 @@ describe('Planning Period Overview', () => {
 	beforeEach(() => {
 		fixture = TestBed.createComponent(PlanningPeriodOverviewComponent);
 		component = fixture.componentInstance;
+		page = new PlanningPeriodOverviewPage(fixture);
+		fixture.detectChanges();
 	});
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
 	});
+
 });
+
+
+class PlanningPeriodOverviewPage extends PageObject {
+	get filteredSkillNames() {
+		return this.queryAll('.skill-name');
+	}
+}
