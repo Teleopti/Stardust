@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.Staffing.Controllers;
 namespace Teleopti.Ccc.WebTest.Areas.Staffing
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class StaffingControllerTest : IExtendSystem, IIsolateSystem
 	{
 		public StaffingController Target;

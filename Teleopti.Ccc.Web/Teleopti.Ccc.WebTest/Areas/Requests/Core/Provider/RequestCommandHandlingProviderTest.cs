@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 {
 #pragma warning disable 0649
 
-	[TestFixture, DomainTest]
+	[DomainTest]
 	public class RequestCommandHandlingProviderTest : IIsolateSystem
 	{
 		public IRequestCommandHandlingProvider Target;
@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		{
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
 			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario {DefaultScenario = true})).For<IScenarioRepository>();
 			isolate.UseTestDouble<RequestCommandHandlingProvider>().For<IRequestCommandHandlingProvider>();
 			isolate.UseTestDouble<SignificantPartService>().For<ISignificantPartService>();
 			_absence = AbsenceFactory.CreateAbsence("Holiday").WithId();

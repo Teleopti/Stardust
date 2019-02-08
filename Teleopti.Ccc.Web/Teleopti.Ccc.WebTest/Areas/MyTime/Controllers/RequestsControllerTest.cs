@@ -43,10 +43,8 @@ using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 using Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory;
 
-
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
-	[TestFixture]
 	[DomainTest]
 	[WebTest]
 	[RequestsTest]
@@ -77,8 +75,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			isolate.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
 			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true }))
-				.For<IScenarioRepository>();
 			isolate.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			isolate.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
 			isolate.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();

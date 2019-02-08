@@ -14,11 +14,13 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
 
 namespace Teleopti.Ccc.WebTest.Areas.Permissions
 {
 	[PermissionsTest]
+	[NoDefaultData]
 	public class RolesControllerTest
 	{
 		public RolesController Target;

@@ -28,6 +28,7 @@ using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class PlanningPeriodControllerTest : IExtendSystem
 	{
 		//break this test in to multiple

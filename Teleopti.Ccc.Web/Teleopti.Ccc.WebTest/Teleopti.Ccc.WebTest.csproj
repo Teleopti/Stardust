@@ -464,6 +464,7 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
     <Compile Include="Core\IoC\MyTimeWebTestAttribute.cs" />
+    <Compile Include="EnableDefaultData.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersisterTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingTest.cs" />

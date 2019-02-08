@@ -30,7 +30,7 @@ using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	[WebTest]
 	public class AbsenceRequestPersisterTest : IIsolateSystem
