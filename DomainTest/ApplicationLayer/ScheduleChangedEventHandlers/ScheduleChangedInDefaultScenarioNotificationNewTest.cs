@@ -11,7 +11,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[DomainTest]
-	[DefaultData]
 	public class ScheduleChangedInDefaultScenarioNotificationNewTest
 	{
 		public ScheduleChangedInDefaultScenarioNotificationNew Target;

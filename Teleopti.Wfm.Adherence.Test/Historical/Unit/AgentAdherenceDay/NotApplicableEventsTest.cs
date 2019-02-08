@@ -12,8 +12,6 @@ using Teleopti.Wfm.Adherence.States;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class NotApplicableEventsTest
 	{
 		public IAgentAdherenceDayLoader Target;

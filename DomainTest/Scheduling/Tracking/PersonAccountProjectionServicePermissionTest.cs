@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 {
 	[DomainTest]
 	[LoggedOff]
-	[DefaultData]
 	[RealPermissions]
 	public class PersonAccountProjectionServicePermissionTest
 	{

@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Security.License
 {
 	[DomainTest]
 	[LoggedOff]
-	[DefaultData]
 	[RealPermissions]
 	public class LogonLicenseActivationConcurrencyTest35909
 	{

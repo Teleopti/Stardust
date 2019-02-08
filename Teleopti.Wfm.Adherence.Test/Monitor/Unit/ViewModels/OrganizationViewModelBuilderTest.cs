@@ -13,8 +13,6 @@ using Teleopti.Wfm.Adherence.States;
 namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ViewModels
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class OrganizationViewModelBuilderTest : IIsolateSystem
 	{
 		public OrganizationViewModelBuilder Target;

@@ -9,8 +9,6 @@ using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class PercentageAdjustToNeutralTest
 	{
 		public IAgentAdherenceDayLoader Target;

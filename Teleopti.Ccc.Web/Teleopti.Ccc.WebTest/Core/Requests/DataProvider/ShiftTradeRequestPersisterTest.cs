@@ -26,11 +26,9 @@ using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	[TestFixture]
 	[DomainTest] 
 	[WebTest] 
 	[RequestsTest] 
-	[DefaultData]
 	public class ShiftTradeRequestPersisterTest : IIsolateSystem
 	{
 		public IShiftTradeRequestPersister Target;

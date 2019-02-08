@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	[ExtendScope(typeof(ScheduleChangedInDefaultScenarioNotificationNew))]
 	[ExtendScope(typeof(ProjectionChangedEventPublisher))]
 	[DomainTest]
-	[DefaultData]
 	public class ScheduleChangedInDefaultScenarioTest
 	{
 		public IEventPublisher EventPublisher;

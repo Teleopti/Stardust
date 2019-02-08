@@ -2,8 +2,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.IoC;
 
-[assembly: DefaultData]
-
 namespace Teleopti.Ccc.DomainTest
 {
 	[TestFixture]

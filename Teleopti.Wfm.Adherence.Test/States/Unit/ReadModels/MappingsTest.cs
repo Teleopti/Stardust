@@ -12,9 +12,7 @@ using Teleopti.Wfm.Adherence.States;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 {
-	[TestFixture]
 	[DomainTest]
-	[DefaultData]
 	public class MappingsTest
 	{
 		public FakeDatabase Database;

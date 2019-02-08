@@ -375,7 +375,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			{
 				// assuming that if you specify default data you are using FakeDatabase...
 				// ... and thereby you want a current tenant for it to work...
-				if (QueryAllAttributes<DefaultDataAttribute>().Any() && !QueryAllAttributes<NoDefaultDataAttribute>().Any())
+				if (!QueryAllAttributes<NoDefaultDataAttribute>().Any())
 					_tenantScope = DataSourceScope.OnThisThreadUse(DefaultTenantName);
 			}
 		}
@@ -385,7 +385,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
-			if (QueryAllAttributes<DefaultDataAttribute>().Any() && !QueryAllAttributes<NoDefaultDataAttribute>().Any())
+			if (!QueryAllAttributes<NoDefaultDataAttribute>().Any())
 				Database.Value.CreateBusinessUnitDefaultData(businessUnit);
 			
 			if(QueryAllAttributes<AddDatasourceId>().Any())

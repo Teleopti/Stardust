@@ -9,8 +9,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverviewViewModelBuilder
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class BuildAgentTest
 	{
 		public Adherence.Historical.HistoricalOverviewViewModelBuilder Target;

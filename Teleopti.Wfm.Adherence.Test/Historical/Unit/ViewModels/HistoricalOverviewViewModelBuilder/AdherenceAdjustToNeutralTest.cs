@@ -10,8 +10,6 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 {
 	[Ignore("Too soon, not done with AdherenceDay yet")]
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class AdherenceAdjustToNeutralTest
 	{
 		public Adherence.Historical.HistoricalOverviewViewModelBuilder Target;

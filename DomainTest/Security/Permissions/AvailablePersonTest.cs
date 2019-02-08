@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Permissions
 {
 	[DomainTest]
 	[LoggedOff]
-	[DefaultData]
 	[RealPermissions]
 	[AddDatasourceId]
 	public class AvailablePersonTest

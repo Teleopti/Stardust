@@ -13,8 +13,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverviewViewModelBuilder
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	[FakePermissions]
 	public class PermissionTest : IIsolateSystem
 	{

@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -12,8 +11,6 @@ using Teleopti.Wfm.Adherence.Historical.Events;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ApprovePeriodAsInAdherence
 {
 	[DomainTest]
-	[TestFixture]
-	[DefaultData]
 	public class RemovePeriodAsInAdherenceCommandHandlerTest
 	{
 		public RemoveApprovedPeriodCommandHandler Target;

@@ -8,8 +8,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class PercentageTest
 	{
 		public Adherence.Historical.HistoricalAdherenceViewModelBuilder Target;

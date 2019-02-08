@@ -12,8 +12,6 @@ using Teleopti.Wfm.Adherence.Historical.Events;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ApprovePeriodAsInAdherence
 {
 	[DomainTest]
-	[TestFixture]
-	[DefaultData]
 	public class ApprovePeriodAsInAdherenceBelongsToDateCommandHandlerTest
 	{
 		public ApprovePeriodAsInAdherenceCommandHandler Target;

@@ -10,8 +10,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class DateFormatTest
 	{
 		public Adherence.Historical.HistoricalAdherenceViewModelBuilder Target;

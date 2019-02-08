@@ -11,8 +11,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalAdherenceViewModelBuilder
 {
 	[DomainTest]
-	[TestFixture]
-	[DefaultData]
 	public class TimelineTest
 	{
 		public Adherence.Historical.HistoricalAdherenceViewModelBuilder Target;

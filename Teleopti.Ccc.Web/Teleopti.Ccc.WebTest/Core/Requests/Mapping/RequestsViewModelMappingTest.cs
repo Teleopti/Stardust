@@ -26,14 +26,11 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 
-
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
-	[TestFixture]
 	[DomainTest] 
 	[WebTest] 
 	[RequestsTest] 
-	[DefaultData]
 	public class RequestsViewModelMappingTest : IIsolateSystem
 	{
 		public RequestsViewModelMapper Target;

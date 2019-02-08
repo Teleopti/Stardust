@@ -19,12 +19,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
-	[TestFixture]
 	[SetCulture("en-US")]
 	[DomainTest] 
 	[WebTest] 
 	[RequestsTest] 
-	[DefaultData]
 	public class RequestAllowanceViewModelFactoryTest : IIsolateSystem
 	{
 		public IBudgetGroupRepository BudgetGroupRepository;
