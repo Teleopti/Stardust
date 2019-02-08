@@ -3,6 +3,7 @@ using System.Globalization;
 using Teleopti.Ccc.TestCommon.IoC;
 
 [assembly: AddDatasourceId]
+[assembly: DefaultData]
 
 namespace Teleopti.Wfm.Adherence.Test
 {
