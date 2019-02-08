@@ -247,7 +247,7 @@
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbTenantClient.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
-    <Compile Include="Notification\ScheduleChangeForWeekViewEvent.cs" />
+    <Compile Include="Notification\ScheduleChangeForWeekViewMessage.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="Repositories\ISkillForecastReadModelRepository.cs" />
@@ -1450,14 +1450,12 @@
     <Compile Include="InterfaceLegacy\Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\GroupPageChangedMessage.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\InitialLoadScheduleProjection.cs" />
-    <Compile Include="InterfaceLegacy\Messages\Denormalize\Legacy\PersonChangedMessage.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\NewAbsenceReportCreated.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="InterfaceLegacy\Messages\General\BadgeCalculationInitEvent.cs" />
     <Compile Include="InterfaceLegacy\Messages\General\ChildSkillSelection.cs" />
     <Compile Include="InterfaceLegacy\Messages\General\ExportMultisiteSkillToSkill.cs" />
-    <Compile Include="InterfaceLegacy\Messages\General\IForecastsRow.cs" />
     <Compile Include="InterfaceLegacy\Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="InterfaceLegacy\Messages\MessageWithLogOnContext.cs" />
     <Compile Include="InterfaceLegacy\Messages\Queues.cs" />

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -22,12 +23,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	[DomainTest]
 	public class PersonScheduleDayReadModelUpdaterTest
 	{
+		public IJsonDeserializer Deserializer;
+		public IJsonSerializer Serializer;
+		
 		[Test]
 		public void ShouldUpdateDayOffData()
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, Serializer), repository, null);
 			var target =  new ScheduleReadModelWrapperHandler(null, persister, null, null);
 
 			target.Handle(new ProjectionChangedEventNew
@@ -43,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 						}
 				});
 
-			var model = new NewtonsoftJsonSerializer().DeserializeObject<Model>(repository.Updated.Single().Model);
+			var model = Deserializer.DeserializeObject<Model>(repository.Updated.Single().Model);
 			model.DayOff.Title.Should().Be("Day off");
 		}
 
@@ -52,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, Serializer), repository, null);
 			var target =  new ScheduleReadModelWrapperHandler(null, persister, null, null);
 
 			target.Handle(new ProjectionChangedEventNew
@@ -68,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 						}
 			});
 
-			var model = new NewtonsoftJsonSerializer().DeserializeObject<Model>(repository.Updated.Single().Model);
+			var model = Deserializer.DeserializeObject<Model>(repository.Updated.Single().Model);
 			model.DayOff.Should().Be.Null();
 		}
 
@@ -77,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, Serializer), repository, null);
 			var target =  new ScheduleReadModelWrapperHandler(null, persister, null, null);
 
 			target.Handle(new ProjectionChangedEventNew
@@ -99,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var readModel = repository.Updated.Single();
 			readModel.Start.Should().Be.EqualTo(new DateTime(2013, 10, 08, 0, 0, 0));
 			readModel.End.Should().Be.EqualTo(new DateTime(2013, 10, 09, 0, 0, 0));
-			var model = new NewtonsoftJsonSerializer().DeserializeObject<Model>(readModel.Model);
+			var model = Deserializer.DeserializeObject<Model>(readModel.Model);
 			model.DayOff.Start.Should().Be.EqualTo(new DateTime(2013, 10, 08, 0, 0, 0));
 			model.DayOff.End.Should().Be.EqualTo(new DateTime(2013, 10, 09, 0, 0, 0));
 		}
@@ -109,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, Serializer), repository, null);
 			var target =  new ScheduleReadModelWrapperHandler(null, persister, null, null);
 
 			target.Handle(new ProjectionChangedEventNew
@@ -124,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 						}
 			});
 
-			var model = new NewtonsoftJsonSerializer().DeserializeObject<Model>(repository.Updated.Single().Model);
+			var model = Deserializer.DeserializeObject<Model>(repository.Updated.Single().Model);
 			model.Shift.IsFullDayAbsence.Should().Be.True();
 		}
 
@@ -158,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, Serializer), repository, null);
 			var target =  new ScheduleReadModelWrapperHandler(null, persister, null, null);
 
 			target.Handle(new ProjectionChangedEventNew
@@ -182,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, Serializer), repository, null);
 			var target =  new ScheduleReadModelWrapperHandler(null, persister, null, null);
 
 			target.Handle(new ProjectionChangedEventNew
@@ -206,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var persister = new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, Serializer), repository, null);
 			var target =  new ScheduleReadModelWrapperHandler(null, persister, null, null);
 
 			var scheduleLoadTimestamp = DateTime.UtcNow;

@@ -29,10 +29,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 			{
 				if (_personIdCollection != null) return _personIdCollection;
 				_personIdCollection = string.IsNullOrEmpty(_serializedPeople)
-					? new HashSet<Guid>()
-					: new HashSet<Guid>(_serializedPeople.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse));
+					? new List<Guid>()
+					: _serializedPeople.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToList();
 				return _personIdCollection;
 			}
+			set => _personIdCollection = value;
 		}
 
 		public void SetPersonIdCollection(ICollection<Guid> personIdCollection)

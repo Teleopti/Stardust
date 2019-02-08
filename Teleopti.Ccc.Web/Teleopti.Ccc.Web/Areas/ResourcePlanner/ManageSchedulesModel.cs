@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				ToScenario = ToScenario,
 				JobResultId = JobResultId
 			};
-			@event.PersonIds.AddRange(people.Select(person => person.Id.GetValueOrDefault()));
+			@event.PersonIds = @event.PersonIds.Concat(people.Select(person => person.Id.GetValueOrDefault())).ToArray();
 			return @event;
 		}
 	}

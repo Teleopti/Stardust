@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 			});
 
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId,
-				new JobResultDetail(DetailLevel.Info, $"Imported schedules for {@event.PersonIds.Count} people.", DateTime.UtcNow, null),
+				new JobResultDetail(DetailLevel.Info, $"Imported schedules for {@event.PersonIds.Count()} people.", DateTime.UtcNow, null),
 				@event.TotalMessages);
 		}
 

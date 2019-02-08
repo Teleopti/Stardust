@@ -682,9 +682,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 						ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(),
 						OwnerPersonId = person.Id.GetValueOrDefault()
 					};
+					var list = new List<RecalculateForecastOnSkill>();
 					foreach (var model in models.ReforecastModels)
 					{
-                        @event.SkillCollection.Add(
+						list.Add(
 							new RecalculateForecastOnSkill
 							{
 								SkillId = model.Skill.Id.GetValueOrDefault(),
@@ -692,6 +693,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 							});
 
 					}
+					@event.SkillCollection = list;
                     _eventInfrastructureInfoPopulator.PopulateEventContext(@event);
                     _publisher.Publish(@event);
                 }

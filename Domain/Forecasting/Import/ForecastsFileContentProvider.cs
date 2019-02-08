@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
 	public interface IForecastsFileContentProvider
 	{
-		ICollection<IForecastsRow> LoadContent(byte[] fileContent, TimeZoneInfo timeZone);
+		ICollection<ForecastsRow> LoadContent(byte[] fileContent, TimeZoneInfo timeZone);
 	}
 
 	public class ForecastsFileContentProvider : IForecastsFileContentProvider
@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 			_rowExtractor = rowExtractor;
 		}
 
-		public ICollection<IForecastsRow> LoadContent(byte[] fileContent, TimeZoneInfo timeZone)
+		public ICollection<ForecastsRow> LoadContent(byte[] fileContent, TimeZoneInfo timeZone)
 		{
 			var rowNumber = 1;
-			var result = new List<IForecastsRow>();
+			var result = new List<ForecastsRow>();
 			try
 			{
 				var fileContentString = Encoding.UTF8.GetString(fileContent).TrimStart('\uFEFF');

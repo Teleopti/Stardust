@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			.ToDictionary(scheduleDay => new DateOnly(scheduleDay.Date), scheduleDay => _scheduleDayReadModelsCreator.GetReadModel(scheduleDay, person));
 
 			if (message.IsDefaultScenario && !message.IsInitialLoad)
-				_teamScheduleWeekViewChangeCheck.InitiateNotify(new ScheduleChangeForWeekViewEvent
+				_teamScheduleWeekViewChangeCheck.InitiateNotify(new ScheduleChangeForWeekViewMessage
 				{
 					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 					LogOnDatasource = message.LogOnDatasource,

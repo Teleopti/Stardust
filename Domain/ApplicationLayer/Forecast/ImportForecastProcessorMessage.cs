@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
         public DateTime Date { get; set; }
 
-        public ICollection<IForecastsRow> Forecasts { get; set; }
+        public ICollection<ForecastsRow> Forecasts { get; set; }
 
         public ImportForecastsMode ImportMode { get; set; }
     }

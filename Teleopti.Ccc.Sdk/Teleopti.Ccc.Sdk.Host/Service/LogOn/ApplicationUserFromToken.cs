@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
 					return new AuthenticationQuerierResult {Success = true, Person = systemUser};
 
 		    var authQuerier = new AuthenticationTenantClient(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
-				    new PostHttpRequest(), new NewtonsoftJsonSerializer(),
+				    new PostHttpRequest(), NewtonsoftJsonSerializer.Make(),
 				    new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(),
 					    () => DataSourceForTenantServiceLocator.DataSourceForTenant, new LoadUserUnauthorized()));
 

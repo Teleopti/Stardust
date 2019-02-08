@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.LogOn
         {
             //Genomför inloggning. Kasta exception vid fel.
 	        var authQuerier = new AuthenticationTenantClient(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
-			        new PostHttpRequest(), new NewtonsoftJsonSerializer(),
+			        new PostHttpRequest(), NewtonsoftJsonSerializer.Make(),
 			        new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(),
 				        () => DataSourceForTenantServiceLocator.DataSourceForTenant, new LoadUserUnauthorized()));
 

@@ -170,6 +170,7 @@
     <Compile Include="ApplicationLayer\AnalyticsScheduleMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\Events\Hangfire\HangfireEventRealPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\Hangfire\HangfireEventServerForTest.cs" />
+    <Compile Include="ApplicationLayer\Events\Hangfire\HangfireJobTypeNameChangesTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\CopyScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\ImportScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\MoveTestCase.cs" />

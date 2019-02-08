@@ -232,8 +232,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_importForecastsRepository.Stub(x => x.Get(jobId)).Return(_forecastFile);
 			_forecastFile.Stub(x => x.FileContent).Return(fileContent);
-			_contentProvider.Stub(x => x.LoadContent(fileContent, _timeZone)).Return(new List<IForecastsRow>());
-			_analyzeQuery.Stub(x => x.Run(new List<IForecastsRow>(), skill)).Return(queryResult);
+			_contentProvider.Stub(x => x.LoadContent(fileContent, _timeZone)).Return(new List<ForecastsRow>());
+			_analyzeQuery.Stub(x => x.Run(new List<ForecastsRow>(), skill)).Return(queryResult);
 			queryResult.Stub(x => x.Succeeded).Return(false).Repeat.Any();
 			queryResult.Stub(x => x.ErrorMessage).Return("error occured.");
 

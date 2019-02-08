@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 	{
 		private readonly HangfireEventServer _server;
 		private readonly IJsonEventDeserializer _deserializer;
-		private readonly HandlerTypeMapper _handlerTypeMapper;
+		private readonly PersistedTypeMapper _typeMapper;
 
-		public HangfireEventServerForTest(HangfireEventServer server, IJsonEventDeserializer deserializer, HandlerTypeMapper handlerTypeMapper)
+		public HangfireEventServerForTest(HangfireEventServer server, IJsonEventDeserializer deserializer, PersistedTypeMapper typeMapper)
 		{
 			_server = server;
 			_deserializer = deserializer;
-			_handlerTypeMapper = handlerTypeMapper;
+			_typeMapper = typeMapper;
 		}
 		
 		public void ProcessForTest(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			var eventT = Type.GetType(eventType, true);
 			var @event = _deserializer.DeserializeEvent(serializedEvent, eventT) as IEvent;
 			var handlerT = Type.GetType(handlerType, true);
-			var handlerTypeName = _handlerTypeMapper.NameForPersistence(handlerT);
+			var handlerTypeName = _typeMapper.NameForPersistence(handlerT);
 			_server.Process(displayName,
 				new HangfireEventJob
 				{

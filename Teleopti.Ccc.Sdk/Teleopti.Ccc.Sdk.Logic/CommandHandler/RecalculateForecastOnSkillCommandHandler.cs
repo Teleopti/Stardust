@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -34,16 +35,18 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					ScenarioId = command.ScenarioId,
 					OwnerPersonId = person.Id.GetValueOrDefault()
 				};
+			var list = new List<RecalculateForecastOnSkill>();
 			foreach (var model in command.WorkloadOnSkillSelectionDtos)
 			{
-                @event.SkillCollection.Add(
+				list.Add(
 					new RecalculateForecastOnSkill
 						{
 							SkillId = model.SkillId,
 							WorkloadIds = new Collection<Guid>(model.WorkloadId)
 						});
 			}
-
+			@event.SkillCollection = list;
+			
             _eventInfrastructureInfoPopulator.PopulateEventContext(@event);
             _publisher.Publish(@event);
 

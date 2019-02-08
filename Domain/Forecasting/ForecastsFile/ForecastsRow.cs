@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
 {
-    public class ForecastsRow : IForecastsRow
+    public class ForecastsRow
     {
         private const string dateTimeFormat = "yyyyMMdd HH:mm";
         private const char separator = ',';

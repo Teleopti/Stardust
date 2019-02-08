@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class HangfireEventProcessor
 	{
 		private readonly CommonEventProcessor _processor;
-		private readonly HandlerTypeMapper _typeMapper;
+		private readonly PersistedTypeMapper _typeMapper;
 
-		public HangfireEventProcessor(CommonEventProcessor processor, HandlerTypeMapper typeMapper)
+		public HangfireEventProcessor(CommonEventProcessor processor, PersistedTypeMapper typeMapper)
 		{
 			_processor = processor;
 			_typeMapper = typeMapper;

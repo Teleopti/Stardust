@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 				}
 				return _groupPageIdCollection;
 			}
+			set => _groupPageIdCollection = value;
 		}
 
 		/// <summary>

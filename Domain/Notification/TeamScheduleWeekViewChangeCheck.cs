@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Notification
 {
 	public interface ITeamScheduleWeekViewChangeCheck
 	{
-		void InitiateNotify(ScheduleChangeForWeekViewEvent model);
+		void InitiateNotify(ScheduleChangeForWeekViewMessage model);
 	}
 
 	public interface ITeamScheduleWeekViewChangedInDefaultScenario { }
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		}
 
 		[EnabledBy(Toggles.WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242)]
-		public void InitiateNotify(ScheduleChangeForWeekViewEvent @event)
+		public void InitiateNotify(ScheduleChangeForWeekViewMessage @event)
 		{
 			var dates = @event.NewReadModels
 				.Where(readModel => isRelevantChange(readModel.Key, @event.Person, readModel.Value))

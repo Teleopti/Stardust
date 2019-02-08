@@ -9,18 +9,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		private string _serializedIds;
 
 		[NonSerialized]
-		private ICollection<Guid> _idCollection;
+		private IEnumerable<Guid> _idCollection;
 
-		public ICollection<Guid> IdCollection
+		public IEnumerable<Guid> IdCollection
 		{
 			get
 			{
 				if (_idCollection != null) return _idCollection;
 				_idCollection = string.IsNullOrEmpty(_serializedIds)
-					? new HashSet<Guid>()
-					: new HashSet<Guid>(_serializedIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse));
+					? Enumerable.Empty<Guid>()
+					: _serializedIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToArray();
 				return _idCollection;
 			}
+			set => _idCollection = value;
 		}
 
 		public void SetIdCollection(ICollection<Guid> idCollection)

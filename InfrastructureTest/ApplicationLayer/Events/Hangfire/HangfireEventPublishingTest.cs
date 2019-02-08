@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public IJsonSerializer Serializer;
 		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
-		public HandlerTypeMapperForTest TypeMapper;
+		public PersistedTypeMapperForTest TypeMapper;
 
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{

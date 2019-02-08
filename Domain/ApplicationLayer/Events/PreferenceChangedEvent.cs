@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
     public abstract class PreferenceEventBase : EventWithInfrastructureContext
     {
-        public List<DateTime> RestrictionDates { get; set; }
+        public IEnumerable<DateTime> RestrictionDates { get; set; }
         public Guid PersonId { get; set; }
     }
 

@@ -345,7 +345,7 @@
     <Compile Include="FakeTenantLogonInfoLoader.cs" />
     <Compile Include="FakeTransactionHook.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
-    <Compile Include="HandlerTypeMapperForTest.cs" />
+    <Compile Include="PersistedTypeMapperForTest.cs" />
     <Compile Include="HangfireUtilitiesExtensions.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="Exceptions.cs" />

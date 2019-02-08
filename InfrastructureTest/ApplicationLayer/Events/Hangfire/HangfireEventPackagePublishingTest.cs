@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
 		public TestHandler Handler;
-		public HandlerTypeMapperForTest TypeMapper;
+		public PersistedTypeMapperForTest TypeMapper;
 
 		public void Extend(IExtend extend, IocConfiguration configuration)
 		{
