@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -22,12 +23,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private readonly SkillForecastIntervalCalculator _skillForecastIntervalCalculator;
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICurrentScenario _currentScenario;
-		private ISkillRepository _skillRepository;
+		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillForecastJobStartTimeRepository _skillForecastJobStartTimeRepository;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		private readonly SkillForecastReadModelPeriodBuilder _skillForecastReadModelPeriodBuilder;
 
-		public UpdateSkillForecastReadModelHandler(SkillForecastIntervalCalculator skillForecastIntervalCalculator, ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, ISkillRepository skillRepository, ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository)
+		public UpdateSkillForecastReadModelHandler(SkillForecastIntervalCalculator skillForecastIntervalCalculator, ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, ISkillRepository skillRepository, ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository, IStardustJobFeedback stardustJobFeedback)
 		{
 			_skillForecastIntervalCalculator = skillForecastIntervalCalculator;
 			_skillDayRepository = skillDayRepository;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;
 			_skillRepository = skillRepository;
 			_skillForecastJobStartTimeRepository = skillForecastJobStartTimeRepository;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 		[AsSystem]
@@ -61,13 +64,22 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		[UnitOfWork]
 		public virtual void Handle(UpdateSkillForecastReadModelEvent @event)
 		{
-			//if false dont proceed
-			_skillForecastJobStartTimeRepository.UpdateJobStartTime(@event.LogOnBusinessUnitId);
-			var skills = _skillRepository.LoadAllSkills();
-			var period = new DateOnlyPeriod(new DateOnly(@event.StartDateTime), new DateOnly(@event.EndDateTime));
-			var skillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
-			_skillForecastIntervalCalculator.Calculate(skillDays,skills, period);
-			_skillForecastJobStartTimeRepository.ResetLock(@event.LogOnBusinessUnitId);
+			var isLocked = _skillForecastJobStartTimeRepository.UpdateJobStartTime(@event.LogOnBusinessUnitId);
+			if (!isLocked)
+			{
+				var skills = _skillRepository.LoadAllSkills();
+				var period = new DateOnlyPeriod(new DateOnly(@event.StartDateTime), new DateOnly(@event.EndDateTime));
+				_stardustJobFeedback.SendProgress($"Processing {skills.Count()} skills for period between {@event.StartDateTime} and {@event.EndDateTime} ");
+				var skillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
+				_skillForecastIntervalCalculator.Calculate(skillDays, skills, period);
+				_stardustJobFeedback.SendProgress($"Processing Complete now resetting lock timestamp ");
+				_skillForecastJobStartTimeRepository.ResetLock(@event.LogOnBusinessUnitId);
+			}
+			else
+			{
+				_stardustJobFeedback.SendProgress($"Another job is already running or was recently executed");
+			}
+			
 		}
 	}
 }

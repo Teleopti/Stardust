@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					
 					var isLockTimeValid = _skillForecastJobStartTimeRepository.IsLockTimeValid(businessUnitId);
 					var nextRun = lastRun.Value.AddDays(_skillForecastSettingsReader.NumberOfDaysForNextJobRun);
-					if (nextRun <= _now.UtcDateTime() || !isLockTimeValid) 
+					if (nextRun.Date <= _now.UtcDateTime().Date || !isLockTimeValid) 
 						period = _skillForecastReadModelPeriodBuilder.BuildNextPeriod(lastRun.GetValueOrDefault());
 					else
 					{

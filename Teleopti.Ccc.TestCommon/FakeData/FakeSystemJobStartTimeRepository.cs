@@ -24,14 +24,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return EntryList.FirstOrDefault(x => x.BusinessUnit == bu)?.StartedAt;
 		}
 
-		public void UpdateJobStartTime(Guid bu)
+		public bool UpdateJobStartTime(Guid bu)
 		{
 			var entry = EntryList.SingleOrDefault(x => x.BusinessUnit == bu );
 			if (entry != null)
 			{
+				if (_now.UtcDateTime() < entry.Locked)
+					return true;
 				entry.StartedAt = _now.UtcDateTime();
 				entry.Locked = _now.UtcDateTime()
 					.AddMinutes(_skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes);
+				//return false;
 			}
 			else
 			{
@@ -42,7 +45,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					Locked = _now.UtcDateTime().AddMinutes(_skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes)
 				});
 			}
-			
+
+			return false;
 		}
 
 		public bool IsLockTimeValid(Guid businessUnitId)

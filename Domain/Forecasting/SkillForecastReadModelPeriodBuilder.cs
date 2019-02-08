@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Staffing;
 
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var extraDaysForForecast = _skillForecastSettingsReader.NumberOfExtraDaysInFuture;
 			var startDate = lastRun.AddDays(staffingDaysNum + extraDaysForForecast);
 			var endDate = startDate.AddDays(extraDaysForForecast);
-			return new DateTimePeriod(startDate.Date,endDate.Date);
+			return new DateTimePeriod(startDate.Date.Utc(),endDate.Date.Utc());
 		}
 	}
 

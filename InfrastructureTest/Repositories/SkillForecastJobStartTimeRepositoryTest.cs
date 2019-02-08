@@ -150,6 +150,70 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.IsLockTimeValid(bu.Id.GetValueOrDefault()).Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldReturnFalseIfLockedIsNullAndSet()
+		{
+
+			var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
+			BusinessUnitRepository.Add(bu);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+
+			var result = Target.UpdateJobStartTime(bu.Id.GetValueOrDefault());
+
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnTrueIfLockedIsNotNull()
+		{
+
+			var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
+			BusinessUnitRepository.Add(bu);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+
+			Target.UpdateJobStartTime(bu.Id.GetValueOrDefault());
+
+			var newNow = now.AddMinutes(15);
+			Now.Is(newNow);
+
+			var result =  Target.UpdateJobStartTime(bu.Id.GetValueOrDefault());
+			result.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldGetEmptyTimestampIfJobIsNotExecutedForTheFirstTime()
+		{
+			var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
+			BusinessUnitRepository.Add(bu);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var calculatedTime = Target.GetLastCalculatedTime(bu.Id.GetValueOrDefault());
+			calculatedTime.HasValue.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnLastCalculatedTimestamp()
+		{
+			var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
+			BusinessUnitRepository.Add(bu);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+
+			Target.UpdateJobStartTime(bu.Id.GetValueOrDefault());
+
+			var calculatedTime = Target.GetLastCalculatedTime(bu.Id.GetValueOrDefault());
+			calculatedTime.Value.Should().Be.EqualTo(now);
+		}
+
+
 		private List<FakeStartTimeModel> readData(Guid businessUnitId)
 		{
 			var result = new List<FakeStartTimeModel>();

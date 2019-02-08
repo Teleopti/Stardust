@@ -14,26 +14,73 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly INow _now;
 		private readonly SkillForecastSettingsReader _skillForecastSettingsReader;
 
-		public SkillForecastJobStartTimeRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, INow now, SkillForecastSettingsReader skillForecastSettingsReader)
+		public SkillForecastJobStartTimeRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, INow now,
+			SkillForecastSettingsReader skillForecastSettingsReader)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_now = now;
 			_skillForecastSettingsReader = skillForecastSettingsReader;
 		}
 
-		public DateTime? GetLastCalculatedTime(Guid bu)
+		public DateTime? GetLastCalculatedTime(Guid businessUnitId)
 		{
-			return null;
-		}
-
-		public void UpdateJobStartTime(Guid businessUnitId)
-		{
-			var now = _now.UtcDateTime();
+			DateTime? startTime = null;
 			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
 			{
 				connection.Open();
 				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
 				{
+					using (var selectCommand =
+						new SqlCommand(@"select starttime from [SkillForecastJobStartTime] where BusinessUnit = @bu", connection,
+							transaction))
+					{
+						selectCommand.Parameters.AddWithValue("@bu", businessUnitId);
+						using (var reader = selectCommand.ExecuteReader())
+						{
+							if (reader.HasRows)
+							{
+								reader.Read();
+								if (!reader.IsDBNull(0))
+									startTime = reader.GetDateTime(0);
+							}
+						}
+					}
+				}
+			}
+
+			return startTime;
+		}
+
+		public bool UpdateJobStartTime(Guid businessUnitId)
+		{
+			var now = _now.UtcDateTime();
+
+			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
+			{
+				connection.Open();
+				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+				{
+					var isLockValid = true;
+					using (var selectCommand =
+						new SqlCommand(@"select LockTimestamp from [SkillForecastJobStartTime] where BusinessUnit = @bu", connection,
+							transaction))
+					{
+						selectCommand.Parameters.AddWithValue("@bu", businessUnitId);
+						using (var reader = selectCommand.ExecuteReader())
+						{
+							if (reader.HasRows)
+							{
+								reader.Read();
+								if (!reader.IsDBNull(0))
+								{
+									var lockTimestamp = reader.GetDateTime(0);
+									isLockValid = _now.UtcDateTime() > lockTimestamp;
+								}
+							}
+						}
+					}
+
+					if (!isLockValid) return true;
 					var effctedRows = 0;
 					using (var updateCommand =
 						new SqlCommand(
@@ -42,10 +89,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					{
 						updateCommand.Parameters.AddWithValue("@bu", businessUnitId);
 						updateCommand.Parameters.AddWithValue("@startTime", now);
-						updateCommand.Parameters.AddWithValue("@timestamp", now.AddMinutes(_skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes));
+						updateCommand.Parameters.AddWithValue("@timestamp",
+							now.AddMinutes(_skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes));
 						effctedRows = updateCommand.ExecuteNonQuery();
 					}
-					
+
 					if (effctedRows == 0)
 					{
 						using (var insertCommand =
@@ -55,17 +103,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						{
 							insertCommand.Parameters.AddWithValue("@bu", businessUnitId);
 							insertCommand.Parameters.AddWithValue("@startTime", now);
-							insertCommand.Parameters.AddWithValue("@lockTimestamp", now.AddMinutes(_skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes));
+							insertCommand.Parameters.AddWithValue("@lockTimestamp",
+								now.AddMinutes(_skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes));
 							//set lock time to null
 							insertCommand.ExecuteNonQuery();
 						}
 					}
-					
 
 					transaction.Commit();
 				}
 			}
 
+			return false;
 
 		}
 
@@ -77,7 +126,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				connection.Open();
 				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
 				{
-					using (var selectCommand = new SqlCommand(@"select LockTimestamp from [SkillForecastJobStartTime] where BusinessUnit = @bu", connection, transaction))
+					using (var selectCommand =
+						new SqlCommand(@"select LockTimestamp from [SkillForecastJobStartTime] where BusinessUnit = @bu", connection,
+							transaction))
 					{
 						selectCommand.Parameters.AddWithValue("@bu", businessUnitId);
 						using (var reader = selectCommand.ExecuteReader())
@@ -106,11 +157,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
 			{
 				connection.Open();
-				using (var updateCommand = new SqlCommand(@"UPDATE [dbo].[SkillForecastJobStartTime] set LockTimestamp = NULL WHERE BusinessUnit = @bu", connection))
+				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
 				{
-					updateCommand.Parameters.AddWithValue("@bu", businessUnitId);
-					updateCommand.ExecuteNonQuery();
+					using (var updateCommand =
+						new SqlCommand(@"UPDATE [dbo].[SkillForecastJobStartTime] set LockTimestamp = NULL WHERE BusinessUnit = @bu",
+							connection, transaction))
+					{
+						updateCommand.Parameters.AddWithValue("@bu", businessUnitId);
+						updateCommand.ExecuteNonQuery();
+					}
+
+					transaction.Commit();
 				}
+
 			}
 		}
 	}

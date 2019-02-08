@@ -336,6 +336,48 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 
 		}
 
+		[Test]
+		public void ShouldNotRunIfLockIsSet()
+		{
+			Tenants.Has("Teleopti WFM");
+			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
+			PersonRepository.Add(person);
+			var bu = BusinessUnitFactory.CreateWithId("something");
+			BusinessUnitRepository.Add(bu);
+
+			var dtp = new DateOnlyPeriod(new DateOnly(2019, 1, 1), new DateOnly(2019,5, 1));
+			var now = new DateTime(2019, 2, 17, 16, 30, 0, DateTimeKind.Utc);
+			IntervalLengthFetcher.Has(15);
+			Now.Is(now);
+			var skillOpenHours = new TimePeriod(8, 9);
+			var skill = createPhoneSkill(15, "phone", skillOpenHours);
+			var scenario = ScenarioFactory.CreateScenarioWithId("x", true);
+			var skillDay1 = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2019, 4, 16), skillOpenHours, 10, 10, 200).WithId();
+			var skillDay2 = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2019, 4, 17), skillOpenHours, 5, 10, 200).WithId();
+			SkillRepository.Add(skill);
+			SkillDayRepository.AddRange(new[] { skillDay1, skillDay2 });
+			ScenarioRepository.Add(scenario);
+
+			SkillForecastJobStartTimeRepository.EntryList.Add(new FakeStartTimeModel()
+			{
+				StartedAt = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc),
+				Locked = new DateTime(2019, 2, 17, 17, 0, 0, DateTimeKind.Utc),
+				BusinessUnit = bu.Id.GetValueOrDefault(),
+				
+			});
+
+			Target.Handle(new UpdateSkillForecastReadModelEvent()
+			{
+				LogOnBusinessUnitId = bu.Id.GetValueOrDefault(),
+				LogOnDatasource = "Teleopti WFM",
+				StartDateTime = new DateTime(2019, 01, 1),
+				EndDateTime = new DateTime(2019, 5, 17)
+			});
+
+			var skillStaffIntervals = SkillForecastReadModelRepository.LoadSkillForecast(new[] { skill.Id.GetValueOrDefault() }, new DateTimePeriod(dtp.StartDate.Utc(), dtp.EndDate.Date.Utc()));
+			skillStaffIntervals.Count.Should().Be.EqualTo(0);
+		}
+
 
 		protected ISkill createPhoneSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
