@@ -31,7 +31,7 @@
 			<h2>Scheduled skills heatmap</h2>
 
 			<div nz-row>
-				<span nz-col [nzSpan]="8">
+				<span style="margin-left: 20px" nz-col [nzSpan]="8">
 					<nz-input-group
 							[nzSuffix]="suffixSkillMapTemplate"
 							[nzPrefix]="prefixSkillMapTemplate"
@@ -114,8 +114,8 @@
 									[style.background-color]="node.bgcolor"
 								>
 									<span *ngIf="showNumbers" style="font-size: xx-small" [style.color]="node.fontcolor">
-									{{(node.RelativeDifference * 100).toFixed(0)}}
-										</span>
+										{{node.DisplayedPercent}}
+									</span>
 								</div>
 							</td>
 						</tr>

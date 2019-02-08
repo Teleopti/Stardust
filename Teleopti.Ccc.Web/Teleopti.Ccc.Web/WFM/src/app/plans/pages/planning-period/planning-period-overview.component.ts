@@ -356,9 +356,12 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 				allDays.push(day);
 			});
 		});
-		allDays.sort((a, b)=>
-			a.RelativeDifference>b.RelativeDifference?1:-1
-		);
+		allDays.sort((a, b)=>{
+			if(isNaN(a.RelativeDifference)){
+				return 1;
+			}
+			return a.RelativeDifference>b.RelativeDifference?1:-1;
+		});
 		this.worstUnderStaffDay = allDays[0];
 		this.worstOverStaffDay = allDays[allDays.length-1];
 	}
@@ -382,7 +385,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					};
 					skillResultList.forEach(skill=>{
 						skill.SkillDetails.forEach(day=>{
-							day.bgcolor = this.heatMapColorHelper.getColor(day.RelativeDifference*100);
+							let relativeDifferencePercent = day.RelativeDifference * 100;
+							day.bgcolor = this.heatMapColorHelper.getColor(relativeDifferencePercent);
 							day.fontcolor = this.invertColor(day.bgcolor, true);
 							const weekday = new Date(day.Date).getDay();
 							if (weekday === culturalDaysOff.a) {
@@ -396,7 +400,16 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 							if (weekday === culturalDaysOff.start) {
 								day.weekstart = true;
 							}
-							day.RelativeDifferencePercent = (day.RelativeDifference * 100).toFixed(1);
+							day.RelativeDifferencePercent = relativeDifferencePercent.toFixed(2);
+							if(day.ColorId === 4){
+								day.DisplayedPercent = '';
+							}else if(relativeDifferencePercent.toFixed(0)==='-0'){
+								day.DisplayedPercent = '0';
+							}else if(relativeDifferencePercent > 999 || isNaN(relativeDifferencePercent)){
+								day.DisplayedPercent = '999+';
+							}else {
+								day.DisplayedPercent = relativeDifferencePercent.toFixed(0);
+							}
 							day.tooltip = (day.ColorId === 4? this.translate.instant('Closed') : this.translate.instant('RelativeDifference') + ' ' + day.RelativeDifferencePercent + '%') + ' | ' + skill.SkillName + ' | ' + this.amDateFormat.transform(day.Date, 'L');
 						});
 					});
