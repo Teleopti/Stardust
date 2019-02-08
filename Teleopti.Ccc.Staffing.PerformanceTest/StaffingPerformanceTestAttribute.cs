@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -44,6 +45,12 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			isolate.UseTestDouble<MutableNow>().For<INow>();
 			isolate.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
 			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			
+			isolate.UseTestDouble<UpdateSkillForecastReadModel>().For<UpdateSkillForecastReadModel>();
+			isolate.UseTestDouble<SkillForecastIntervalCalculator>().For<SkillForecastIntervalCalculator>();
+			isolate.UseTestDouble<SkillForecastReadModelPeriodBuilder>().For<SkillForecastReadModelPeriodBuilder>();
+			isolate.UseTestDouble<SkillForecastSettingsReader>().For<SkillForecastSettingsReader>();
+			isolate.UseTestDouble<StaffingSettingsReader49Days>().For<IStaffingSettingsReader>();
 		}
 
 		protected override void Startup(IComponentContext container)

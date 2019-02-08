@@ -3,10 +3,12 @@ using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -73,6 +75,12 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			isolate.UseTestDouble(toggles).For<IToggleManager>();
 			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			isolate.UseTestDouble<UpdateSkillForecastReadModel>().For<UpdateSkillForecastReadModel>();
+			isolate.UseTestDouble<SkillForecastIntervalCalculator>().For<SkillForecastIntervalCalculator>();
+			isolate.UseTestDouble<SkillForecastReadModelPeriodBuilder>().For<SkillForecastReadModelPeriodBuilder>();
+			isolate.UseTestDouble<SkillForecastSettingsReader>().For<SkillForecastSettingsReader>();
+			isolate.UseTestDouble<StaffingSettingsReader49Days>().For<IStaffingSettingsReader>();
+			
 			extend.AddService<Database>();
 			extend.AddService<MultiplicatorDefinitionSetRepository>();
 		}

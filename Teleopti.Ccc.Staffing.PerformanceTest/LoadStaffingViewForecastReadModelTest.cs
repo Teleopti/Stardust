@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 	[StaffingPerformanceTest]
 	[Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
 	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
-	public class LoadStaffingViewTest : PerformanceTestWithOneTimeSetup
+	public class LoadStaffingViewForecastReadModelTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public IStaffingViewModelCreator StaffingViewModelCreator;
 		public ISkillRepository SkillRepository;
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
+		public UpdateSkillForecastReadModel UpdateSkillForecastReadModel;
 
 		private IEnumerable<ISkill> skills;
 
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				}
 				skills = SkillRepository.LoadAllSkills();
 				UpdateStaffingLevel.Update(period);
+				UpdateSkillForecastReadModel.Update(period);
 				
 				uow.Current().PersistAll();
 				var skillCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
@@ -93,7 +95,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		}
 
 		[Test]
-		public void Load1MonthUsingSkillDays()
+		[Toggle(Toggles.WFM_Forecast_Readmodel_80790)]
+		public void Load1MonthUsingForecastReadModel()
 		{
 			var startDate = new DateOnly(2016,02,08);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
@@ -117,5 +120,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				day = day + 1;
 			}
 		}
+
 	}
 }

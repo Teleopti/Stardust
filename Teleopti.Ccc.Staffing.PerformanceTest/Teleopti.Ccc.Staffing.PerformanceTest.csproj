@@ -53,12 +53,14 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AddOverTimePerformanceTest.cs" />
+    <Compile Include="LoadStaffingViewForecastReadModelTest.cs" />
     <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
     <Compile Include="LoadStaffingViewTest.cs" />
     <Compile Include="ResourceCalculateWhen49DaysInReadmodel.cs" />
     <Compile Include="ResourceCalculate3DaysTest.cs" />
     <Compile Include="StaffingPerformanceTestAttribute.cs" />
     <Compile Include="UpdateReadModelPerformanceTestAttribute.cs" />
+    <Compile Include="UpdateSkillForecastReadModel.cs" />
     <Compile Include="UpdateStaffingReadModelWithOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="UpdateStaffingReadModel2WeeksTest.cs" />
     <Compile Include="StaffingPerformanceLoadingTest.cs" />
