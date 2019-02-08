@@ -74,7 +74,7 @@ describe('Planning Group Overview', () => {
 		});
 	}));
 
-	it('should sort planning groups', async(() => {
+	xit('should sort planning groups', async(() => {
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
 			expect(page.filteredPlanningGroupsNames[0].nativeElement.innerText).toBe('A');
