@@ -22,6 +22,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class ExportBpoFileTest : IIsolateSystem
 	{
 		public IExportBpoFile Target;

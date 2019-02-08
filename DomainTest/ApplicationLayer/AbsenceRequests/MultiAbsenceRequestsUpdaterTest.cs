@@ -26,12 +26,12 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestWithStaticDependenciesDONOTUSE]
 	[TestFixture, SetCulture("en-US")]
+	[NoDefaultData]
 	public class MultiAbsenceRequestsUpdaterTest : IIsolateSystem
 	{
 		public IMultiAbsenceRequestsUpdater Target;

@@ -23,6 +23,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class ExportForecastAndStaffingFileTest: IIsolateSystem
 	{
 		public ExportForecastAndStaffingFile Target;

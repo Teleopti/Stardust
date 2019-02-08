@@ -26,7 +26,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 {
 	[DomainTest]
-	[TestFixture]
+	[NoDefaultData]
 	[SetCulture("en-US")]
 	[SetUICulture("en-US")]
 	public partial class OvertimeRequestProcessorTest : IIsolateSystem, ITestInterceptor

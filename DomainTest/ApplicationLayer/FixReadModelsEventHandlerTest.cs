@@ -14,12 +14,12 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 #pragma warning disable 0649
-	[TestFixture, DomainTest]
-	class FixReadModelsEventHandlerTest : IIsolateSystem
+	[DomainTest]
+	[NoDefaultData]
+	public class FixReadModelsEventHandlerTest : IIsolateSystem
 	{
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;

@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 {
 	[DomainTest]
 	[ThrowIfRepositoriesAreUsed]
+	[NoDefaultData]
 	public class ThrowIfRepositoriesAreUsedOnTestFixtureTest
 	{
 		public IPersonRepository SomeRepository;

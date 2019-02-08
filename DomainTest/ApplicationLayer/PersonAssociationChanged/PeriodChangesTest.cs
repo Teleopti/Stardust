@@ -13,9 +13,8 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 {
-	[TestFixture]
 	[DomainTest]
-	[DefaultData]
+	[AddDatasourceId]
 	public class PeriodChangesTest
 	{
 		public PersonAssociationChangedEventPublisher Target;

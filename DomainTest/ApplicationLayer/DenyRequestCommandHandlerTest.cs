@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture, DomainTest]
+	[DomainTest]
 	public class DenyRequestCommandHandlerTest : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;
@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new ThisIsNow(new DateTime(2017, 1, 1))).For<INow>();
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario { DefaultScenario = true })).For<IScenarioRepository>();
 		}
 
 		[Test]

@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 {
 	[DomainTest]
 	[AllTogglesOn]
+	[NoDefaultData]
 	public class AddOvertimeTest : IIsolateSystem
 	{
 		public FakePersonAssignmentRepository PersonAssignmentRepository;

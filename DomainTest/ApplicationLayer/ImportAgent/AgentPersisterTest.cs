@@ -22,7 +22,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	public class AgentPersisterTest :IIsolateSystem, IExtendSystem
 	{

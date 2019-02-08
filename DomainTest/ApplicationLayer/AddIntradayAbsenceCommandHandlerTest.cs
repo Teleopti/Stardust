@@ -20,7 +20,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	[TestFixture]
+	[NoDefaultData]
 	public class AddIntradayAbsenceCommandHandlerTest : IIsolateSystem
 	{
 		public AddIntradayAbsenceCommandHandler Target;

@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class WebClearScheduleStardustHandlerTest
 	{
 		public WebClearScheduleStardustHandler Target;

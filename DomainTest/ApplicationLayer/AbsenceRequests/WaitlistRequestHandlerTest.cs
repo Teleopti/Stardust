@@ -28,6 +28,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class WaitlistRequestHandlerTest : IIsolateSystem
 	{
 		public WaitlistRequestHandler Target;

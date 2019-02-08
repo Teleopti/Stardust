@@ -19,7 +19,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	public class MoveShiftLayerCommandHandlerTest : IIsolateSystem
 	{

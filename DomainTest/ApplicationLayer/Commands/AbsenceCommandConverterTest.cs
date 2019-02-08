@@ -7,10 +7,10 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class AbsenceCommandConverterTest : IIsolateSystem
 	{
 		public FakePersonRepository PersonRepository;

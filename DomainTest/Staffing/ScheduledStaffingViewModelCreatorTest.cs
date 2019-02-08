@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
 	[ToggleOff(Toggles.WFM_Forecast_Readmodel_80790)]
+	[NoDefaultData]
 	public class ScheduledStaffingViewModelCreatorTest : IIsolateSystem
 	{
 		public ScheduledStaffingViewModelCreator Target;

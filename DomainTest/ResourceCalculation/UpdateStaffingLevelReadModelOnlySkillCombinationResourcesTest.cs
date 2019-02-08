@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest
 	{
 		public IUpdateStaffingLevelReadModel Target;

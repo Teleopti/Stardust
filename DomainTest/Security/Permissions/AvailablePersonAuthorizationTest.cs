@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Permissions
 	[LoggedOff]
 	[DefaultData]
 	[RealPermissions]
+	[AddDatasourceId]
 	public class AvailablePersonAuthorizationTest
 	{
 		public FakeDatabase Database;

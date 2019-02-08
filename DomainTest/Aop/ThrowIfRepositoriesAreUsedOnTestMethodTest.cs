@@ -5,6 +5,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Aop
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class ThrowIfRepositoriesAreUsedOnTestMethodTest
 	{
 		public IPersonRepository SomeRepository;

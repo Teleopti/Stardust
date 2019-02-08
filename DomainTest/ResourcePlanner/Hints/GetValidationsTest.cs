@@ -18,6 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class GetValidationsTest
 	{
 		public GetValidations Target;

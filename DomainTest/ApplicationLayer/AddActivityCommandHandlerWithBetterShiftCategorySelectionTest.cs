@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
 	[Toggle(Toggles.WfmTeamSchedule_SuggestShiftCategory_152)]
+	[NoDefaultData]
 	public class AddActivityCommandHandlerWithBetterShiftCategorySelectionTest : IIsolateSystem
 	{
 		public AddActivityCommandHandler Target;

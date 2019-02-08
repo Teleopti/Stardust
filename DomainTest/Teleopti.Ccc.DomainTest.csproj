@@ -295,6 +295,7 @@
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForBetweenDayoffsTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForSchedulePeriodTest.cs" />
+    <Compile Include="ResourcePlanner\Hints\BusinessRulesHintDesktopTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BusinessRulesHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingNotMatchShiftBagHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreferenceHintTest.cs" />

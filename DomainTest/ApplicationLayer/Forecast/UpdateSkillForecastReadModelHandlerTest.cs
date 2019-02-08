@@ -22,7 +22,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	[AllTogglesOn]
 	public class UpdateSkillForecastReadModelHandlerTest : IIsolateSystem

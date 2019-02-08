@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		[NoDefaultData]
 		public void ShouldApproveRequestIfAnyValidatorIsUsedForIntraday()
 		{
 			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));

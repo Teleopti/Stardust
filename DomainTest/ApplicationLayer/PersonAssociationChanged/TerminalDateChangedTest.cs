@@ -12,8 +12,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 {
-	[TestFixture]
-	[DefaultData]
+	[AddDatasourceId]
 	[DomainTest]
 	public class TerminalDateChangedTest
 	{

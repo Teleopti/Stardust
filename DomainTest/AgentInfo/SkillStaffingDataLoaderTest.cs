@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.DomainTest.AgentInfo
 {
 	[DomainTest]
@@ -30,9 +29,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 		public void Isolate(IIsolate isolate)
 		{
-			var scenarioRepository = new FakeScenarioRepository();
-			scenarioRepository.Has("Default");
-			isolate.UseTestDouble(scenarioRepository).For<IScenarioRepository>();
 			isolate.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 		}
 

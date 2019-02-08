@@ -19,10 +19,10 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class ShiftTradeTargetTimeSpecificationTests : IIsolateSystem
 	{
 		public FakeScenarioRepository CurrentScenario;

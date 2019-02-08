@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	[DomainTest]
 	[Toggle(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
+	[NoDefaultData]
 	public class AnyPersonSkillsOpenValidatorNoSkillActivityOptimizationOnTest
 	{
 		public IAnyPersonSkillsOpenValidator Target;
@@ -111,6 +112,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 	[DomainTest]
 	[ToggleOff(Toggles.WFM_AbsenceRequest_ImproveThroughput_79139)]
+	[NoDefaultData]
 	public class AnyPersonSkillsOpenValidatorNoSkillActivityOptimizationOffTest
 	{
 		public readonly IAnyPersonSkillsOpenValidator Target;

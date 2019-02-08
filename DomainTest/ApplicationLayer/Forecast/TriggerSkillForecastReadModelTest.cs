@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	[AllTogglesOn]
 	public class TriggerSkillForecastReadModelTest : IIsolateSystem

@@ -56,8 +56,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			var person = new Person().WithId();
 			isolate.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") {DefaultScenario = true}))
-				.For<IScenarioRepository>();
 			isolate.UseTestDouble<businessRulesForPersonalAccountUpdateWithNewPersonAccountRuleHaltModify>()
 				.For<IBusinessRulesForPersonalAccountUpdate>();
 		}

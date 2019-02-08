@@ -21,6 +21,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class RemoveActivityCommandHandlerTest : IIsolateSystem
 	{
 		public RemoveActivityCommandHandler Target;

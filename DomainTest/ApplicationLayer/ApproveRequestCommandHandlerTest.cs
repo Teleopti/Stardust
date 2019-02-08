@@ -22,7 +22,7 @@ using Teleopti.Ccc.TestCommon.Services;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	public class ApproveRequestCommandHandlerTest : IIsolateSystem
 	{

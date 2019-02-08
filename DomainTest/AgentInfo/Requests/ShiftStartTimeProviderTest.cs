@@ -11,23 +11,16 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
 	[DomainTest]
-	public class ShiftStartTimeProviderTest : IIsolateSystem
+	public class ShiftStartTimeProviderTest
 	{
 		public IShiftStartTimeProvider ShiftStartTimeProvider;
 		public ICurrentScenario CurrentScenario;
 		public FakePersonAssignmentRepository FakeAssignmentRepository;
 		public FakeActivityRepository FakeActivityRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
-
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
-				.For<IScenarioRepository>();
-		}
 
 		[Test]
 		public void ShouldGetShiftStartTime()
