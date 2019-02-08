@@ -4,10 +4,10 @@ import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
-import {groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators';
+import {debounce, groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators';
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {DateFormatPipe} from "ngx-moment";
-import {from} from "rxjs";
+import {from, timer} from "rxjs";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -118,13 +118,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 		this.skillFilterControl.valueChanges
 			.pipe(
-				map(filterString => {
-					return this.skills
+				debounce(() => timer(600)),
+				map(filterString => 
+					 this.skills
 						.filter(
 						g =>
 							g.SkillName.toLowerCase().includes(filterString.toLowerCase()) 
-					);
-				})
+					)
+				)
 			)
 			.subscribe(filteredSkills => {
 				this.filteredSkills = filteredSkills;
