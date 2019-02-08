@@ -380,7 +380,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 		}
 
-		private void createDefaultData(IBusinessUnit businessUnit)
+		private void createDefaultData(BusinessUnit businessUnit)
 		{
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);

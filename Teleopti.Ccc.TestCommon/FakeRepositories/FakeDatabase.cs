@@ -179,18 +179,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_definedRaptorApplicationFunctionFactory = definedRaptorApplicationFunctionFactory;
 		}
 
-		public void CreateBusinessUnitDefaultData(IBusinessUnit businessUnit)
+		public void CreateBusinessUnitDefaultData(BusinessUnit businessUnit)
 		{
-			dataFromDbReleaseScript();
-			
-			WithBusinessUnit(businessUnit.Id.Value);
-			
+			addDefaultBusinessUnit(businessUnit);
+			dataInsertedFromDbReleaseScript();
+			dataInsertedFromAdminPage();
+		}
+
+		private void dataInsertedFromAdminPage()
+		{
 			_initializeBusinessUnitDatabaseState.Execute(_businessUnit, _person);
-			//hack for now - we shouldn't care about bu prop in domain
 			_scenario = _scenarios.LoadDefaultScenario().WithBusinessUnit(_businessUnit);
 		}
 
-		private void dataFromDbReleaseScript()
+		private void dataInsertedFromDbReleaseScript()
 		{
 			// all application functions
 			_definedRaptorApplicationFunctionFactory.ApplicationFunctions.ForEach(_applicationFunctions.Add);
@@ -286,6 +288,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithBusinessUnit(Guid? id)
 		{
 			return WithBusinessUnit(id, null);
+		}
+
+		private void addDefaultBusinessUnit(BusinessUnit businessUnit)
+		{
+			_businessUnit = businessUnit;
+			_businessUnits.Add(businessUnit);
 		}
 
 		public FakeDatabase WithBusinessUnit(Guid? id, string name)
