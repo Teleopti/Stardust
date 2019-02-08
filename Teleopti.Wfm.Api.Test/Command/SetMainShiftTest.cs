@@ -19,6 +19,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 {
 	[ApiTest]
 	[LoggedOnAppDomain]
+	[NoDefaultData]
 	public class SetMainShiftTest
 	{
 		public IApiHttpClient Client;

@@ -18,6 +18,7 @@ namespace Teleopti.Wfm.Api.Test.Command
 {
 	[ApiTest]
 	[LoggedOnAppDomain]
+	[NoDefaultData]
 	public class AddPersonAbsenceTest
 	{
 		public IApiHttpClient Client;

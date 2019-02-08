@@ -25,6 +25,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
 	[LoggedOnAppDomain]
+	[NoDefaultData]
 	public class AbsencePossibilityHandlerTest : IExtendSystem
 	{
 		private const int intervalLengthInMinute = 15;
