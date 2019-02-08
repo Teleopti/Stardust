@@ -78,16 +78,7 @@ namespace Teleopti.Support.Security.Library
 			passwordEncryption.Execute(command);
 			licenseStatusChecker.Execute(command);
 			convertDayOffToNewStructure(command);
-			initAuditData(command);
 			analyticsReportableScenarioFixer.Execute(command);
-		}
-
-		private void initAuditData(UpgradeCommand command)
-		{
-			const string proc = "[Auditing].[TryInitAuditTables]";
-			writeLog("Re-init Schedule history ...");
-			callProcInSeparateTransaction(command, proc);
-			writeLog("Re-init Schedule history. Done!");
 		}
 
 		private void convertDayOffToNewStructure(UpgradeCommand command)
