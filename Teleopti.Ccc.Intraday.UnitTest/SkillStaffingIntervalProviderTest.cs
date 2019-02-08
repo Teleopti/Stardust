@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			skill.DefaultResolution = 60;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var skillA = SkillRepository.Has("skillA", activity).WithId();
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var skillA = SkillRepository.Has("skillA", activity).WithId();
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var skillA = SkillRepository.Has("skillA", activityA).WithId();
 			var skillB = SkillRepository.Has("skillB", activityB).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var skillA = SkillRepository.Has("skillA", activity).WithId();
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = skillResolution;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var skillB = SkillRepository.Has("skillB", activityB).WithId();
 			skillA.DefaultResolution = 30;
 			skillB.DefaultResolution = 60;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillB.SetCascadingIndex(2);
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			skill.DefaultResolution = 60;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var skillA = SkillRepository.Has("skillA", activity).WithId();
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			skill.DefaultResolution = 60;
 			var period = new DateTimePeriod(new DateTime(2017, 7, 18, 11, 1, 0, DateTimeKind.Utc), new DateTime(2017, 7, 18, 11, 15, 0, DateTimeKind.Utc));
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 			
 			var combinationResources = new List<SkillCombinationResource>()

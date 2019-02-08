@@ -1417,7 +1417,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			return skill;
 		}
 
-		private IList<SkillIntervalStatistics> createSkillDaysYesterdayTodayTomorrow(ISkill skill, Scenario scenario, DateTime userNow, DateTime latestStatsTime)
+		private IList<SkillIntervalStatistics> createSkillDaysYesterdayTodayTomorrow(ISkill skill, IScenario scenario, DateTime userNow, DateTime latestStatsTime)
 		{
 			var skillStats = new List<SkillIntervalStatistics>();
 			var timePeriod = new TimePeriod(0, 0, 24, 0);
