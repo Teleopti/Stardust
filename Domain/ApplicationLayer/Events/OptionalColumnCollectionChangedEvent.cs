@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 				if (_optionalColumnIdCollection != null) return _optionalColumnIdCollection;
 				_optionalColumnIdCollection = string.IsNullOrEmpty(_serializedOptionalColumn)
 					? Enumerable.Empty<Guid>()
-					: _serializedOptionalColumn.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToArray();
+					: _serializedOptionalColumn.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).Distinct().ToArray();
 				return _optionalColumnIdCollection;
 			}
 			set => _optionalColumnIdCollection = value;

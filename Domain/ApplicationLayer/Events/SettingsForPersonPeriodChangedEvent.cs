@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 				if (_idCollection != null) return _idCollection;
 				_idCollection = string.IsNullOrEmpty(_serializedIds)
 					? Enumerable.Empty<Guid>()
-					: _serializedIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToArray();
+					: _serializedIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).Distinct().ToArray();
 				return _idCollection;
 			}
 			set => _idCollection = value;

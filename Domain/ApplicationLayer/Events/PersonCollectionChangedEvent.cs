@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 				if (_personIdCollection != null) return _personIdCollection;
 				_personIdCollection = string.IsNullOrEmpty(_serializedPeople)
 					? new List<Guid>()
-					: _serializedPeople.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToList();
+					: _serializedPeople.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).Distinct().ToList();
 				return _personIdCollection;
 			}
 			set => _personIdCollection = value;
