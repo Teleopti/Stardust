@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 			_loggedOnUser = loggedOnUser;
 		}
 
-		[UnitOfWork, TenantUnitOfWork]
+		[UnitOfWork]
 		[HttpGet, Route("api/Insights/Permission")]
 		public virtual InsightsPermission GetPermission()
 		{
@@ -50,14 +50,14 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 			return await _reportProvider.GetReports();
 		}
 
-		[UnitOfWork, TenantUnitOfWork]
+		[TenantUnitOfWork]
 		[HttpGet, Route("api/Insights/CreateReport")]
 		public virtual async Task<EmbedReportConfig> CreateReport(string newReportName)
 		{
 			return await _reportProvider.CreateReport(newReportName);
 		}
 
-		[UnitOfWork, TenantUnitOfWork]
+		[TenantUnitOfWork]
 		[HttpGet, Route("api/Insights/CloneReport")]
 		public virtual async Task<EmbedReportConfig> CloneReport(string reportId, string newReportName)
 		{
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Controllers
 			return await _reportProvider.CloneReport(repId, newReportName);
 		}
 
-		[UnitOfWork, TenantUnitOfWork]
+		[TenantUnitOfWork]
 		[HttpGet, Route("api/Insights/DeleteReport")]
 		public virtual async Task<bool> DeleteReport(string reportId)
 		{

@@ -21,7 +21,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 	public class ReportProviderTest
 	{
 		private const string overrideReportName = "Override report name";
-		private readonly IInsightsReportRepository _insightsReportRepository = new FakeInsightsReportRepository();
+		private IInsightsReportRepository insightsReportRepository;
+		private IPerson person;
+
+		[SetUp]
+		public void Setup()
+		{
+			insightsReportRepository = new FakeInsightsReportRepository();
+			person = PersonFactory.CreatePerson("Ashley", "Andeen");
+			person.SetId(Guid.NewGuid());
+		}
 
 		[Test]
 		public void ShouldGetReportList()
@@ -34,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				EmbedUrl = "https://someworkspace/somereport"
 			};
 
-			var reports = createReports(groupId, report);
+			var reports = createReports(groupId, DateTime.Now, report);
 			var target = createReportProvider(reports, groupId);
 
 			var result = target.GetReports().GetAwaiter().GetResult();
@@ -57,11 +66,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				EmbedUrl = "https://someworkspace/somereport"
 			};
 
-			createReportMetadata(reportId, out var now, out var person);
+			var now = DateTime.Now;
+			var reports = createReports(groupId, now, report);
+			updateReportMetadata(reportId, overrideReportName);
 
-			var reports = createReports(groupId, report);
 			var target = createReportProvider(reports, groupId);
-
 			var result = target.GetReports().GetAwaiter().GetResult();
 			result.Length.Should().Be(1);
 			var reportModel = result.Single();
@@ -73,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 		}
 
 		[Test]
-		public void ShouldGetExcludeUsageReportAndTemplateReport()
+		public void ShouldGetReportsExcludeUsageReportAndTemplateReport()
 		{
 			var groupId = Guid.NewGuid().ToString();
 			var report = new Report
@@ -95,9 +104,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				EmbedUrl = "https://someworkspace/templatereport"
 			};
 
-			var reports = createReports(groupId, report, usageReport, templateReport);
-			var target = createReportProvider(reports, groupId);
+			var reports = createReports(groupId, DateTime.Now, report, usageReport, templateReport);
 
+			var target = createReportProvider(reports, groupId);
 			var result = target.GetReports().GetAwaiter().GetResult();
 			result.Length.Should().Be(1);
 			var reportModel = result.Single();
@@ -110,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 		public void ShouldGetEmptyConfigWhenNoReport()
 		{
 			var groupId = Guid.NewGuid().ToString();
-			var reports = createReports(groupId);
+			var reports = createReports(groupId, DateTime.Now);
 			var target = createReportProvider(reports, groupId);
 
 			var config = target.GetReportConfig(Guid.NewGuid()).GetAwaiter().GetResult();
@@ -128,9 +137,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				EmbedUrl = "https://someworkspace/somereport"
 			};
 
-			var reports = createReports(groupId, report);
-			var target = createReportProvider(reports, groupId);
+			var reports = createReports(groupId, DateTime.Now, report);
 
+			var target = createReportProvider(reports, groupId);
 			var config = target.GetReportConfig(Guid.NewGuid()).GetAwaiter().GetResult();
 			reportConfigShouldBeEmpty(config);
 		}
@@ -149,17 +158,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				EmbedUrl = "https://someworkspace/somereport"
 			};
 
-			var reports = createReports(groupId, report);
+			var now = DateTime.Now;
+			var reports = createReports(groupId, now, report);
 			reports.SetAccessToken(token);
-			reports.SetTokenExpiration(DateTime.Now.AddMinutes(tokenExpirationTimeSpanInMinutes));
+			reports.SetTokenExpiration(now.AddMinutes(tokenExpirationTimeSpanInMinutes));
 
 			var target = createReportProvider(reports, groupId);
-
 			var config = target.GetReportConfig(reportId).GetAwaiter().GetResult();
 			config.ReportId.Should().Be(report.Id);
 			config.ReportName.Should().Be(report.Name);
 			config.AccessToken.Should().Be(token);
-			(config.Expiration.Value - DateTime.Now).TotalMinutes.Should().Be.GreaterThan(0);
+			(config.Expiration.Value - now).TotalMinutes.Should().Be.GreaterThan(9);
 		}
 
 		[TestCase(10)]
@@ -176,19 +185,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				EmbedUrl = "https://someworkspace/somereport"
 			};
 
-			var reports = createReports(groupId, report);
+			var now = DateTime.Now;
+			var reports = createReports(groupId, now, report);
 			reports.SetAccessToken(token);
 			reports.SetTokenExpiration(DateTime.Now.AddMinutes(tokenExpirationTimeSpanInMinutes));
 
-			createReportMetadata(reportId, out var now, out var person);
+			updateReportMetadata(reportId, overrideReportName);
 
 			var target = createReportProvider(reports, groupId);
-
 			var config = target.GetReportConfig(reportId).GetAwaiter().GetResult();
 			config.ReportId.Should().Be(report.Id);
 			config.ReportName.Should().Be(overrideReportName);
 			config.AccessToken.Should().Be(token);
-			(config.Expiration.Value - DateTime.Now).TotalMinutes.Should().Be.GreaterThan(0);
+			(config.Expiration.Value - DateTime.Now).TotalMinutes.Should().Be.GreaterThan(9);
 			config.CreatedBy.Should().Be($"{person.Name.FirstName}@{person.Name.LastName}");
 			config.CreatedOn.Should().Be(now);
 		}
@@ -206,7 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 				EmbedUrl = "https://someworkspace/somereport"
 			};
 
-			var reports = createReports(groupId, report);
+			var reports = createReports(groupId, DateTime.Now, report);
 			reports.SetAccessToken(token);
 
 			var target = createReportProvider(reports, groupId);
@@ -223,6 +232,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			reportGroups[groupId].Any(x => x.Id == report.Id).Should().Be.True();
 			reportGroups[groupId].Any(x => x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
+
+			insightsReportRepository.LoadAll()
+				.Single(x => x.Id.ToString() == config.ReportId && x.Name == newReportName)
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -230,14 +243,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 		{
 			const string token = "Test access token for report clone";
 			var groupId = Guid.NewGuid().ToString();
+			var reportId = Guid.NewGuid();
 			var report = new Report
 			{
-				Id = Guid.NewGuid().ToString(),
+				Id = reportId.ToString(),
 				Name = ReportProvider.TemplateReportName,
 				EmbedUrl = "https://someworkspace/templatereport"
 			};
 
-			var reports = createReports(groupId, report);
+			var reports = createReports(groupId, DateTime.Now, report);
 			reports.SetAccessToken(token);
 
 			var target = createReportProvider(reports, groupId);
@@ -254,6 +268,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 
 			reportGroups[groupId].Any(x => x.Id == report.Id).Should().Be.True();
 			reportGroups[groupId].Any(x => x.Id == config.ReportId && x.Name == newReportName).Should().Be.True();
+
+			insightsReportRepository.LoadAll()
+				.SingleOrDefault(x => x.Id.ToString() == config.ReportId && x.Name == newReportName)
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -261,31 +279,85 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 		{
 			const string token = "Test access token for report clone";
 			var groupId = Guid.NewGuid().ToString();
-			var reports = createReports(groupId);
+			var reports = createReports(groupId, DateTime.Now);
 			reports.SetAccessToken(token);
 
 			var target = createReportProvider(reports, groupId);
 
-			const string newReportName = "New report test";
+			const string newReportName = "New report test - copy";
 			var config = target.CreateReport(newReportName).GetAwaiter().GetResult();
 			config.ReportId.Should().Be.Null();
 			config.ReportName.Should().Be.Null();
 			config.AccessToken.Should().Be.Null();
+
+			insightsReportRepository.LoadAll().SingleOrDefault(x => x.Name == newReportName)
+				.Should().Be.Null();
 		}
 
-		private void createReportMetadata(Guid reportId, out DateTime now, out IPerson person)
+		[Test]
+		public void ShouldDeleteExistingReport()
 		{
-			now = DateTime.Now;
-			person = PersonFactory.CreatePerson("Ashley", "Andeen");
-			person.SetId(Guid.NewGuid());
+			var groupId = Guid.NewGuid().ToString();
+			var reportId = Guid.NewGuid();
+			var report = new Report
+			{
+				Id = reportId.ToString(),
+				Name = "Test report",
+				EmbedUrl = "https://someworkspace/templatereport"
+			};
+
+			var reports = createReports(groupId, DateTime.Now, report);
+
+			var target = createReportProvider(reports, groupId);
+			var result = target.DeleteReport(reportId).GetAwaiter().GetResult();
+			result.Should().Be.True();
+
+			var reportList = target.GetReports().GetAwaiter().GetResult();
+			reportList.Length.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldFailedOnDeleteUnExistingReport()
+		{
+			var groupId = Guid.NewGuid().ToString();
+			var reportId = Guid.NewGuid();
+			var report = new Report
+			{
+				Id = reportId.ToString(),
+				Name = "Test report",
+				EmbedUrl = "https://someworkspace/templatereport"
+			};
+
+			var reports = createReports(groupId, DateTime.Now, report);
+
+			var target = createReportProvider(reports, groupId);
+			var result = target.DeleteReport(Guid.NewGuid()).GetAwaiter().GetResult();
+			result.Should().Be.False();
+
+			var reportList = target.GetReports().GetAwaiter().GetResult();
+			reportList.Length.Should().Be(1);
+			var reportModel = reportList.Single();
+			reportModel.Id.Should().Be(report.Id);
+			reportModel.Name.Should().Be(report.Name);
+			reportModel.EmbedUrl.Should().Be(report.EmbedUrl);
+		}
+
+		private void createReportMetadata(Guid reportId, string reportName, DateTime now)
+		{
 			var insightsReport = new InsightsReport
 			{
-				Name = overrideReportName,
+				Name = reportName,
 				CreatedBy = person,
 				CreatedOn = now
 			};
 			insightsReport.SetId(reportId);
-			_insightsReportRepository.Add(insightsReport);
+			insightsReportRepository.Add(insightsReport);
+		}
+
+		private void updateReportMetadata(Guid reportId, string overrideReportName)
+		{
+			var report = insightsReportRepository.Get(reportId);
+			report.Name = overrideReportName;
 		}
 
 		private static void reportConfigShouldBeEmpty(EmbedReportConfig config)
@@ -299,10 +371,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			config.CreatedOn.HasValue.Should().Be.False();
 		}
 
-		private FakeReports createReports(string groupId, params Report[] powerBiReports)
+		private FakeReports createReports(string groupId, DateTime currentTime, params Report[] powerBiReports)
 		{
 			var reports = new FakeReports();
 			reports.AddReports(groupId, powerBiReports);
+
+			foreach (var report in powerBiReports)
+			{
+				createReportMetadata(Guid.Parse(report.Id), report.Name, currentTime);
+			}
+
 			return reports;
 		}
 
@@ -324,8 +402,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core
 			var appConfigProvider = new ApplicationConfigurationDbProviderFake();
 			appConfigProvider.LoadFakeData(appConfigDb);
 
-			return new ReportProvider(appConfigProvider, pbiClientFactory, _insightsReportRepository,
-				new FakeCommonAgentNameProvider());
+			return new ReportProvider(appConfigProvider, new FakeCurrentUnitOfWorkFactory(new FakeStorage()),
+				pbiClientFactory, insightsReportRepository, new FakeCommonAgentNameProvider());
 		}
 	}
 }

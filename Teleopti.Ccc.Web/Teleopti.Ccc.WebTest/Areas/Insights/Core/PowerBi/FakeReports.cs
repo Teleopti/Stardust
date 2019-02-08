@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 			{
 				Value = reports ?? new List<Report>()
 			};
-			var result = new HttpOperationResponse<ODataResponseListReport> {Body = reportList};
+			var result = new HttpOperationResponse<ODataResponseListReport> { Body = reportList };
 			return await Task.FromResult(result);
 		}
 
@@ -127,7 +127,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 			string reportKey, Dictionary<string, List<string>> customHeaders = null,
 			CancellationToken cancellationToken = new CancellationToken())
 		{
-			return null;
+			var reports = ReportGroups[groupId];
+			var report = reports.SingleOrDefault(x => x.Id == reportKey);
+			if (report != null)
+			{
+				reports.Remove(report);
+			}
+			else
+			{
+				throw new KeyNotFoundException($"Report with id \"{reportKey}\" not found.");
+			}
+
+			var result = new HttpOperationResponse<object> { Body = new object() };
+			return Task.FromResult(result);
 		}
 
 		public async Task<HttpOperationResponse<Report>> CloneReportInGroupWithHttpMessagesAsync(string groupId,
@@ -148,8 +160,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 			};
 
 			reports.Add(newReport);
-			
-			var result = new HttpOperationResponse<Report> {Body = newReport};
+
+			var result = new HttpOperationResponse<Report> { Body = newReport };
 			return await Task.FromResult(result);
 		}
 
@@ -194,7 +206,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Insights.Core.PowerBi
 				Token = Token,
 				Expiration = tokenExpiration ?? DateTime.Now.AddMinutes(60)
 			};
-			var result = new HttpOperationResponse<EmbedToken> {Body = token};
+			var result = new HttpOperationResponse<EmbedToken> { Body = token };
 			return await Task.FromResult(result);
 		}
 
