@@ -9,4 +9,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	
 	[AttributeUsage(AttributeTargets.Class)]
 	public class NoDefaultDataAttribute : Attribute{}
+	
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Assembly)]
+	public class AddDatasourceId : Attribute
+	{
+	}
 }

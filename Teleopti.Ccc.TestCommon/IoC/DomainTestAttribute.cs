@@ -387,6 +387,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			if (QueryAllAttributes<DefaultDataAttribute>().Any() && !QueryAllAttributes<NoDefaultDataAttribute>().Any())
 				Database.Value.CreateBusinessUnitDefaultData(businessUnit);
+			
+			if(QueryAllAttributes<AddDatasourceId>().Any())
+				Database.Value.WithDataSource(-1, "-1");
 		}
 
 		private bool fullPermissions()

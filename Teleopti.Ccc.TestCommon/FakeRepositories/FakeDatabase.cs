@@ -183,10 +183,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			dataFromDbReleaseScript();
 			
-			// seems to always exist
-			WithDataSource(-1, "-1");
-			WithDataSource(1, "-1");
-			
 			WithBusinessUnit(businessUnit.Id.Value);
 			
 			_initializeBusinessUnitDatabaseState.Execute(_businessUnit, _person);

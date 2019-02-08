@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using Teleopti.Ccc.TestCommon.IoC;
+
+[assembly: AddDatasourceId]
 
 namespace Teleopti.Wfm.Adherence.Test
 {
