@@ -121,9 +121,9 @@ yield return new PersistedTypeMapping
 
 			yield return new PersistedTypeMapping
 			{
-				CurrentPersistedName = "HangfireJobTypeNameChangesTest+MovedEvent",
+				CurrentPersistedName = "HangfireJobTypeNameChangesTest+TestEvent",
 				LegacyPersistedNames = new[] {"Teleopti.Original.Assembly.Namespace.MovedEventName, Teleopti.Original"},
-				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireJobTypeNameChangesTest+MovedEvent, Teleopti.Ccc.InfrastructureTest"
+				CurrentTypeName = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireJobTypeNameChangesTest+TestEvent, Teleopti.Ccc.InfrastructureTest"
 			};
 			yield return new PersistedTypeMapping
 			{

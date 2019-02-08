@@ -82,7 +82,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		protected virtual IEnumerable<PersistedTypeMapping> Mappings()
 		{
 			return PersistedTypeMapperHandlerMappings.Mappings()
-				.Concat(PersistedTypeMapperEventMappings.Mappings());
+				.Concat(PersistedTypeMapperEventMappings.Mappings())
+				.Append(new PersistedTypeMapping
+				{
+					CurrentPersistedName = "HangfireEventJob",
+					LegacyPersistedNames = new[]
+					{
+						"Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure",
+						"Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared"
+					},
+					CurrentTypeName = "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared"
+				});
 		}
 	}
 }

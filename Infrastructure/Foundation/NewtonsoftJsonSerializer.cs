@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -67,6 +67,56 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			NullValueHandling = NullValueHandling.Ignore;
 			ContractResolver = new customContractResolver();
 			SerializationBinder = new MappingSerializationBinder(_typeMapper);
+			Converters = new List<JsonConverter> {new TypeArrayConverter(_typeMapper)};
+		}
+
+		private class TypeArrayConverter : JsonConverter
+		{
+			private readonly PersistedTypeMapper _typeMapper;
+
+			public TypeArrayConverter(PersistedTypeMapper typeMapper)
+			{
+				_typeMapper = typeMapper;
+			}
+			
+			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+			{
+				var types = (Type[]) value;
+				writer.WriteStartArray();
+				types.ForEach(t =>
+				{
+					serializer.Serialize(writer, t);
+				});
+				writer.WriteEndArray();
+			}
+
+			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+			{
+				var types = Enumerable.Empty<Type>();
+				while (reader.Read() && reader.Value != null)
+				{
+					var typeName = reader.Value as string;
+					if (typeName.Contains("HangfireEventJob"))
+					{
+						var info = typeName.Split(',');
+						var name = info[0];
+						var assemblyName = info[1];
+						var typeName2 = $"{name},{assemblyName}"; 
+						types = types.Append(_typeMapper.TypeForPersistedName(typeName2));
+					}
+//					else if (typeName.Contains("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure"))
+//						types = types.Append(typeof(HangfireEventJob));
+					else
+						types = types.Append(serializer.Deserialize<Type>(reader));
+				}
+
+				return types.ToArray();
+			}
+
+			public override bool CanConvert(Type objectType)
+			{
+				return typeof(Type[]) == objectType;
+			}
 		}
 
 		private class MappingSerializationBinder : DefaultSerializationBinder

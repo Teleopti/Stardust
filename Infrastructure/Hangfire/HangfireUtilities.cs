@@ -132,12 +132,27 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			if (monitoring.FailedCount() <= 0) return;
 
 			// booom!
+			var exception = failedJobsException();
+			deleteJobs(() => monitoring.FailedJobs(0, 1000).Select(x => x.Key), null);
+			throw exception;
+		}
+
+		public void ThrowFailedJob()
+		{
+			var e = failedJobsException();
+			if (e != null)
+				throw e;
+		}
+
+		private AggregateException failedJobsException()
+		{
 			var exceptions = (
 				from j in monitoring.FailedJobs(0, 10)
 				select new Exception($"Hangfire job failure: {j.Value.ExceptionDetails}")
 			).ToArray();
-			deleteJobs(() => monitoring.FailedJobs(0, 1000).Select(x => x.Key), null);
-			throw new AggregateException("Hangfire job has failed!", exceptions);
+			if (exceptions.Any())
+				return new AggregateException("Hangfire job has failed!", exceptions);
+			return null;
 		}
 
 		public void EmulateWorkerIteration()

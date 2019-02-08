@@ -237,6 +237,11 @@ namespace Teleopti.Ccc.Domain.Collection
 			return instance ?? Enumerable.Empty<T>();
 		}
 
+		public static string StringJoin<T>(this IEnumerable<T> instance, Func<T, string> selector)
+		{
+			return instance.StringJoin(selector, "");
+		}
+		
 		public static string StringJoin<T>(this IEnumerable<T> instance, Func<T, string> selector, string separator)
 		{
 			// a tad easier than using Aggregate(..)
