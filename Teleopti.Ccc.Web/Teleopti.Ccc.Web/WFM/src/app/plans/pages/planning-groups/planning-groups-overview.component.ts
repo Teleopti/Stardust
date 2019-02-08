@@ -26,12 +26,13 @@ export class PlanningGroupsOverviewComponent {
 		private navService: NavigationService,
 		private fb: FormBuilder
 	) {
+		this.filterControl.valueChanges.subscribe(filterString => {
+			this.search(filterString);
+		});
+		
 		this.planningGroupService.getPlanningGroups().subscribe(groups => {
 			this.planningGroups = groups;
 			this.filterControl.updateValueAndValidity();
-		});
-		this.filterControl.valueChanges.subscribe(filterString => {
-			this.search(filterString);
 		});
 	}
 
@@ -58,11 +59,11 @@ export class PlanningGroupsOverviewComponent {
 	}
 	
 	public search(filterString: string){
-		const data = this.planningGroups.filter(g => g.Name.includes(filterString));
+		const data = this.planningGroups.filter(g => g.Name.toLowerCase().includes(filterString.toLowerCase()));
 		if (this.sortName && this.sortValue) {
 			this.filteredPlanningGroups = data.sort((a, b) => (this.sortValue === 'ascend') ?
-				(a[ this.sortName ] > b[ this.sortName ] ? 1 : -1) :
-				(b[ this.sortName ] > a[ this.sortName ] ? 1 : -1));
+				(a[ this.sortName ].toLowerCase() > b[ this.sortName ].toLowerCase() ? 1 : -1) :
+				(b[ this.sortName ].toLowerCase() > a[ this.sortName ].toLowerCase() ? 1 : -1));
 		}else{
 			this.filteredPlanningGroups = data;
 		}

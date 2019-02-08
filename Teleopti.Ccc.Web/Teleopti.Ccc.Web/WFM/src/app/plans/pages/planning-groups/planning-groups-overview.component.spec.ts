@@ -13,12 +13,17 @@ class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroups() {
 		return of([
 			{
-				Name: 'planning group',
+				Name: 'B',
 				Id: '123',
 				AgentCount: 44
 			},
 			{
-				Name: 'planning group 2',
+				Name: 'a',
+				Id: '123',
+				AgentCount: 44
+			},
+			{
+				Name: 'A',
 				Id: '123',
 				AgentCount: 44
 			}
@@ -55,22 +60,32 @@ describe('Planning Group Overview', () => {
 		fixture = TestBed.createComponent(PlanningGroupsOverviewComponent);
 		component = fixture.componentInstance;
 		page = new Page(fixture);
+		fixture.detectChanges();
 	});
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('should display planning group rows', () => {
-		fixture.detectChanges();
+	it('should display planning group rows', async(() => {
+		fixture.whenStable().then(async() => {
+			fixture.detectChanges();
+			expect(await page.filteredPlanningGroups.length).toBe(3);
+		});
+	}));
+
+	it('should sort planning groups', async(() => {
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
-			expect(page.filteredPlanningGroups.length).toBe(2);
+			debugger;
+			expect(page.filteredPlanningGroupsNames[0].nativeElement.innerText).toBe('A');
+			expect(page.filteredPlanningGroupsNames[1].nativeElement.innerText).toBe('a');
+			expect(page.filteredPlanningGroupsNames[2].nativeElement.innerText).toBe('B');
 		});
-	});
+	}));
 
 	it('should apply filter', async(() => {
-		component.filterControl.setValue('planning group 2');
+		component.filterControl.setValue('b');
 		fixture.detectChanges();
 
 		fixture.whenStable().then(() => {
@@ -78,7 +93,7 @@ describe('Planning Group Overview', () => {
 			expect(page.filteredPlanningGroups.length).toBe(1);
 
 			const name = page.filteredPlanningGroupsNames[0];
-			expect(name.nativeElement.innerText).toBe('planning group 2');
+			expect(name.nativeElement.innerText).toBe('B');
 		});
 	}));
 });
