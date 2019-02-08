@@ -78,7 +78,7 @@
 					return skill.Id;
 				}),
 				function(item) {
-					return item.Name;
+					return item.Name.toLowerCase();
 				}
 			);
 			vm.skills = _.sortBy(
@@ -86,7 +86,7 @@
 					return skill.Id;
 				}),
 				function(item) {
-					return item.Name;
+					return item.Name.toLowerCase();
 				}
 			);
 			vm.skillGroups[vm.selectedGroupIndex].Saved = false;
@@ -103,7 +103,7 @@
 			clone.Saved = false;
 			vm.skillGroups.push(clone);
 			vm.skillGroups = _.sortBy(vm.skillGroups, function(item) {
-				return item.Name;
+				return item.Name.toLowerCase();
 			});
 			setSaveableState();
 		};
@@ -181,7 +181,7 @@
 			vm.skillGroups[vm.selectedGroupIndex].Skills = _.sortBy(
 				_.difference(vm.skillGroups[vm.selectedGroupIndex].Skills, vm.selectedGroupSkills),
 				function(item) {
-					return item.Name;
+					return item.Name.toLowerCase();
 				}
 			);
 			vm.skills = _.sortBy(
@@ -189,7 +189,7 @@
 					return skill.Id;
 				}),
 				function(item) {
-					return item.Name;
+					return item.Name.toLowerCase();
 				}
 			);
 
@@ -212,6 +212,9 @@
 					vm.newGroup.Name = vm.newGroupName;
 					vm.skills = vm.allSkills.slice();
 					vm.skillGroups.push(vm.newGroup);
+					vm.skillGroups = _.sortBy(vm.skillGroups, function(item) {
+						return item.Name.toLowerCase();
+					});
 					vm.selectedGroupIndex = vm.skillGroups.indexOf(vm.newGroup);
 					vm.newGroup = null;
 				}
@@ -273,15 +276,15 @@
 			vm.addSkills();
 		};
 
-		vm.selectSkillGroup = function(index) {
-			vm.selectedGroupIndex = index;
-			if (index === -1) return;
+		vm.selectSkillGroup = function(group) {
+			if (!group) return;
+			vm.selectedGroupIndex = vm.skillGroups.indexOf(group);
 			vm.skills = _.sortBy(
-				_.differenceBy(vm.allSkills, vm.skillGroups[vm.selectedGroupIndex].Skills, function(skill) {
+				_.differenceBy(vm.allSkills, group.Skills, function(skill) {
 					return skill.Id;
 				}),
 				function(item) {
-					return item.Name;
+					return item.Name.toLowerCase();
 				}
 			);
 			unselectAllSkills();

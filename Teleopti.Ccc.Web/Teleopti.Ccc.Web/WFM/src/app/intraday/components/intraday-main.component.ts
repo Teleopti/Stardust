@@ -77,6 +77,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			this.selectedOffset = persisted.selectedOffset;
 			this.selectedChartType = persisted.selectedChartType;
 			this.selectedDate = persisted.selectedDate;
+			this.displayDate = moment(this.selectedDate).format('LLLL');
 			this.selectedTabIndex = persisted.selectedTabIndex;
 			this.updateData();
 		}

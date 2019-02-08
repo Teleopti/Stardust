@@ -85,7 +85,7 @@
 							</i>
 						</label>
 						<ul class="wfm-list" id="available_skill_groups_list" style="margin-top: 8px">
-							<li ng-repeat="skillGroup in vm.skillGroups | filter:groupFilter track by skillGroup.Id" ng-click="vm.selectSkillGroup($index)">
+							<li ng-repeat="skillGroup in vm.skillGroups | filter:groupFilter track by skillGroup.Id" ng-click="vm.selectSkillGroup(skillGroup)">
 								<span>
 									<span class="list-item-container" ng-class="{'text-warning': !skillGroup.Saved}">
 										{{ skillGroup.Name }}
