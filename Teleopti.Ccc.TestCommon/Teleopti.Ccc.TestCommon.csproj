@@ -230,6 +230,14 @@
     <Compile Include="FakeRepositories\FakeBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeBankHolidayCalendarRepository.cs" />
     <Compile Include="FakeRepositories\FakeBankHolidayDateRepository.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseAdherenceExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseAgentExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseOrganizationExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabasePeriodExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabasePersonExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseRuleExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseScheduleExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDataSources.cs" />
     <Compile Include="FakeRepositories\FakeExtensiveLogRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
