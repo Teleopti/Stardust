@@ -547,10 +547,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void CreateBusinessUnitDefaultData(IBusinessUnit businessUnit)
 		{
-			// default data already created. ugly for now...
-			if (_applicationFunctions.LoadAll().Any())
-				return;
-
 			dataFromDbReleaseScript();
 			
 			// seems to always exist
