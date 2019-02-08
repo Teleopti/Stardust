@@ -21,7 +21,7 @@ export const mainInitializer = [
 	'rtaDataService',
 	'$window',
 	'$http',
-	function(
+	function (
 		$rootScope: IWfmRootScopeService,
 		$state,
 		$translate,
@@ -52,6 +52,7 @@ export const mainInitializer = [
 		};
 
 		let preloadDone = false;
+		let called = false;
 		const preload = Promise.all([
 			areasService.getAreasList(),
 			areasService.getAreasWithPermission(),
@@ -63,7 +64,7 @@ export const mainInitializer = [
 
 			areas.available = areasAvailable;
 			areas.permitted = permittedAreas;
-
+			preloadDone = true;
 			if (isPermittedArea(areas, 'rta')) rtaDataService.load();
 		});
 
@@ -72,11 +73,11 @@ export const mainInitializer = [
 		});
 
 		$rootScope.$on('$stateChangeStart', (event, next: IState, toParams) => {
-			if (!preloadDone) {
-				preloadDone = true; // Why is this done!?
+			if (called === false) {
+				called = true;
 				event.preventDefault();
 				preload.then(() => $state.go(next, toParams));
-			} else if (!isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
+			} else if (preloadDone && !isPermittedArea(areas, internalNameOf(next), urlOfState(next))) {
 				event.preventDefault();
 				handleNotPermitted(areas, noticeService, $translate, $state, next);
 			}
@@ -94,7 +95,7 @@ export function handleNotPermitted(areas, noticeService, $translate, $state: ISt
 
 	noticeService.error(
 		`<span class="test-alert"></span>` +
-			$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', stateName),
+		$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', stateName),
 		null,
 		false
 	);
