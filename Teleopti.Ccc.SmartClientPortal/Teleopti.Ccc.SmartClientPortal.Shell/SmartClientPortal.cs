@@ -5,7 +5,6 @@ using log4net;
 using Syncfusion.Windows.Forms.Tools;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -53,7 +52,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 using Teleopti.Ccc.Win.Main;
 using Action = System.Action;
 using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
-using Timer = System.Windows.Forms.Timer;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
@@ -182,6 +180,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
+			if (e.KeyCode == Keys.G && e.Shift && e.Alt)
+			{
+				toolStripStatusLabelRoger65.Visible = true;
+				roger65(MemoryCounter.DefaultInstance().CurrentMemoryConsumptionString());
+			}
 			if (e.KeyCode == Keys.M && e.Shift && e.Alt)
 			{
 				TestMode.Micke = true;
@@ -252,31 +255,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			roger65(string.Empty);
 			setPermissionOnToolStripButtonControls();
 
-			var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
-			bool showMemBool;
-			if (bool.TryParse(showMemConfig, out showMemBool))
-			{
-				if (showMemBool)
-				{
-					showMem();
-				}
-			}
-
 			backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 
 			_container.Resolve<IHangfireClientStarter>().Start();
-		}
-
-		private void showMem()
-		{
-			toolStripStatusLabelRoger65.Visible = true;
-			var t = new Timer { Interval = 1000, Enabled = true };
-			t.Tick += updateMem;
-		}
-
-		private void updateMem(object sender, EventArgs e)
-		{
-			roger65(MemoryCounter.DefaultInstance().CurrentMemoryConsumptionString());
 		}
 
 		private void smartClientShellFormFormClosing(object sender, FormClosingEventArgs e)
