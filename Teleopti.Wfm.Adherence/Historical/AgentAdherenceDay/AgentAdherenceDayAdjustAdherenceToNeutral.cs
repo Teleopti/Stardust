@@ -291,26 +291,50 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private static HistoricalChangeAdherence? convertAdherence(EventAdherence? adherence) =>
 			adherence != null ? (HistoricalChangeAdherence?) Enum.Parse(typeof(HistoricalChangeAdherence), adherence.ToString()) : null;
 
-		// refact into something we can understand
-		private static IEnumerable<openPeriod> subtractPeriods(IEnumerable<openPeriod> periods, IEnumerable<openPeriod> toSubtract) =>
-			toSubtract
+		private static IEnumerable<openPeriod> subtractPeriods(IEnumerable<openPeriod> periods, IEnumerable<openPeriod> toSubtract)
+		{
+			return toSubtract
 				.Aggregate(periods, (ps, approved) =>
-					ps.Aggregate(Enumerable.Empty<openPeriod>(), (r, recorded) =>
-						{
-							var recordedDateTimePeriod = new DateTimePeriod((recorded.StartTime ?? DateTime.MinValue).Utc(), (recorded.EndTime ?? DateTime.MaxValue).Utc());
-							var approvedDateTimePeriod = new DateTimePeriod(approved.StartTime.Value.Utc(), approved.EndTime.Value.Utc());
-							var subtractedDateTimePeriods = recordedDateTimePeriod.Subtract(approvedDateTimePeriod);
-							var subtracted = subtractedDateTimePeriods.Select(x =>
+					{
+						return ps.Aggregate(Enumerable.Empty<openPeriod>(), (r, recorded) =>
 							{
-								var start = x.StartDateTime == DateTime.MinValue ? (DateTime?) null : x.StartDateTime;
-								var end = x.EndDateTime == DateTime.MaxValue ? (DateTime?) null : x.EndDateTime;
-								return new openPeriod(start, end);
-							});
-							return r.Concat(subtracted);
-						}
-					)
-				)
-				.ToArray();
+								var subtracted = subtract(recorded, approved);
+								return r.Concat(subtracted);
+							}
+						);
+					}
+				).ToArray();
+		}
+
+
+		private static IEnumerable<openPeriod> subtract(openPeriod subtractFrom, openPeriod toSubtract)
+		{
+			var timePeriods = new List<openPeriod>();
+
+			if (notIntersecting(subtractFrom, toSubtract))
+				timePeriods.Add(subtractFrom);
+			else
+			{
+				if (subtractFrom.StartTime == null || subtractFrom.StartTime < toSubtract.StartTime)
+				{
+					var leftTimePeriod = new openPeriod(subtractFrom.StartTime, toSubtract.StartTime);
+					timePeriods.Add(leftTimePeriod);
+
+					if (subtractFrom.EndTime == null || subtractFrom.EndTime > toSubtract.EndTime)
+					{
+						var rightTimePeriod = new openPeriod(toSubtract.EndTime, subtractFrom.EndTime);
+						timePeriods.Add(rightTimePeriod);
+					}
+				}
+				else if (subtractFrom.EndTime == null || subtractFrom.EndTime > toSubtract.EndTime)
+				{
+					var rightTimePeriod = new openPeriod(toSubtract.EndTime, subtractFrom.EndTime);
+					timePeriods.Add(rightTimePeriod);
+				}
+			}
+
+			return timePeriods;
+		}
 
 		private static IEnumerable<openPeriod> addPeriods(IEnumerable<openPeriod> periods, IEnumerable<openPeriod> toAdd)
 		{
