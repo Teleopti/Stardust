@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			calculatedTime.Value.Should().Be.EqualTo(now);
 		}
 
-		[Test]
+		[Test, Ignore("WIP")]
 		public void ShouldNotBeLockedWhenRunOnMultipleThreads()
 		{
 			var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");

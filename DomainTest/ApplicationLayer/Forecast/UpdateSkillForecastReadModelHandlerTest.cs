@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
