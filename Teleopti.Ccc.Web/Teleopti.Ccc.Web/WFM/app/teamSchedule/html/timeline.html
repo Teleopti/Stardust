@@ -2,7 +2,7 @@
 	<div class="relative">
 		<span ng-repeat="hourPoint in $ctrl.times">
 			<span class="ruler absolute" ng-style="{left: (hourPoint.Position() + '%'), height: $ctrl.height + 'px'}"></span>
-			<span ng-show="hourPoint.IsLabelVisible" class="label label-info absolute" ng-style="{left: hourPoint.Position() + '%'}" ng-class="{notcurrentday: !hourPoint.IsCurrentDay}">{{::hourPoint.TimeLabel}}</span>
+			<span ng-show="hourPoint.IsLabelVisible" class="label label-info absolute" ng-style="{left: hourPoint.Position() + '%'}" ng-class="{not-current-day: !hourPoint.IsCurrentDay}">{{::hourPoint.TimeLabel}}</span>
 		</span>
 	</div>
 </div>

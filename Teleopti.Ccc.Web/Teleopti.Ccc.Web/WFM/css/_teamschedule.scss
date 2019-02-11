@@ -21,28 +21,7 @@
 		height: 100%;
 		margin: 0;
 	}
-
-	.start-ellipsis,
-	.end-ellipsis {
-		position: absolute;
-		top: 2px;
-		color: $gray054;
-		width: 0;
-		height: 0;
-
-		.mdi:before {
-			font-size: 14px !important;
-		}
-	}
-
-	.start-ellipsis {
-		left: 5px;
-	}
-
-	.end-ellipsis {
-		right: 19px;
-	}
-
+	
 	.time-line {
 		min-width: 300px;
 		height: 100%;
@@ -70,12 +49,12 @@
 			}
 		}
 
-		.notcurrentday {
+		.not-current-day {
 			background-color: $gray026;
 		}
 	}
 
-	.person-name-column {
+	/*.person-name-column {
 		label {
 			position: relative;
 		}
@@ -99,7 +78,7 @@
 		.validate-warning md-progress-circular {
 			display: inline-block;
 		}
-	}
+	}*/
 
 	.schedule-column {
 		padding: 0px;
@@ -576,7 +555,7 @@ team-schedule-datepicker {
 	height: 100%;
 	min-height: 500px;
 
-	table {
+	/*table {
 		margin-bottom: 0;
 	}
 
@@ -621,9 +600,9 @@ team-schedule-datepicker {
 		border-bottom: none;
 		line-height: 1.5;
 		vertical-align: top;
-	}
+	}*/
 
-	.person-name-column {
+	/*.person-name-column {
 		width: 25%;
 		white-space: nowrap;
 		padding-right: 5px;
@@ -695,7 +674,7 @@ team-schedule-datepicker {
 			display: inline-block;
 			cursor: pointer;
 		}
-	}
+	}*/
 
 	//Week view table
 	thead tr.weekview-thead {
