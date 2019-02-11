@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime;
 
 namespace Teleopti.Ccc.Infrastructure.Util
 {
@@ -32,7 +33,9 @@ namespace Teleopti.Ccc.Infrastructure.Util
 
 		public string CurrentMemoryConsumptionString()
 		{
-			return string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", CurrentMemoryConsumption(), MaximumMemoryConsumption);
+			var result = GCSettings.IsServerGC ? "server" : "workstation";
+
+			return string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", CurrentMemoryConsumption(), MaximumMemoryConsumption) + " GC is " + result;
 		}
 	}
 }
