@@ -6,13 +6,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using System.Threading.Tasks;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -211,6 +211,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var calculatedTime = Target.GetLastCalculatedTime(bu.Id.GetValueOrDefault());
 			calculatedTime.Value.Should().Be.EqualTo(now);
+		}
+
+		[Test]
+		public void ShouldNotBeLockedWhenRunOnMultipleThreads()
+		{
+			var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
+			BusinessUnitRepository.Add(bu);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var now = new DateTime(2019, 2, 17, 16, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var taskList = new List<Task>();
+			for (int i = 0; i < 20; i++)
+			{
+				taskList.Add(Task.Factory.StartNew(() => Target.UpdateJobStartTime(bu.Id.GetValueOrDefault())));
+			}
+
+			
+			Task.WaitAll(taskList.ToArray());
+			
+			var result = readData(bu.Id.GetValueOrDefault());
+
+			result.Any().Should().Be.True();
+			result.FirstOrDefault().StartedAt.Should().Be.EqualTo(now);
+			result.FirstOrDefault().Locked.Should().Be.EqualTo(now.AddMinutes(60));
 		}
 
 

@@ -101,12 +101,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return result;
 		}
-
-
-		private string getInValues(Guid[] values)
-		{
-			return "'" + string.Join("','", values) + "'";
-		}
 	}
 
 

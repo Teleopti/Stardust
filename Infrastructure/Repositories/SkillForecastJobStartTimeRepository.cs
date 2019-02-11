@@ -53,68 +53,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool UpdateJobStartTime(Guid businessUnitId)
 		{
-			var now = _now.UtcDateTime();
-
+			var result = false;
 			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
 			{
 				connection.Open();
-				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-				{
-					var isLockValid = true;
-					using (var selectCommand =
-						new SqlCommand(@"select LockTimestamp from [SkillForecastJobStartTime] where BusinessUnit = @bu", connection,
-							transaction))
-					{
-						selectCommand.Parameters.AddWithValue("@bu", businessUnitId);
-						using (var reader = selectCommand.ExecuteReader())
-						{
-							if (reader.HasRows)
-							{
-								reader.Read();
-								if (!reader.IsDBNull(0))
-								{
-									var lockTimestamp = reader.GetDateTime(0);
-									isLockValid = _now.UtcDateTime() > lockTimestamp;
-								}
-							}
-						}
-					}
+				var getCommand = connection.CreateCommand();
+				getCommand.CommandType = CommandType.StoredProcedure;
+				getCommand.CommandText = @"dbo.UpdateJobStartTime";
+				getCommand.Parameters.AddWithValue("@businessunitId", businessUnitId);
+				getCommand.Parameters.AddWithValue("@now", _now.UtcDateTime());
+				getCommand.Parameters.AddWithValue("@maxExecutionTime", _skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes);
+				getCommand.Parameters.Add("@returnValue", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+				getCommand.ExecuteNonQuery();
 
-					if (!isLockValid) return true;
-					var effctedRows = 0;
-					using (var updateCommand =
-						new SqlCommand(
-							@"UPDATE [dbo].[SkillForecastJobStartTime] set LockTimestamp = @timestamp, StartTime =  @StartTime  WHERE BusinessUnit = @bu",
-							connection, transaction))
-					{
-						updateCommand.Parameters.AddWithValue("@bu", businessUnitId);
-						updateCommand.Parameters.AddWithValue("@startTime", now);
-						updateCommand.Parameters.AddWithValue("@timestamp",
-							now.AddMinutes(_skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes));
-						effctedRows = updateCommand.ExecuteNonQuery();
-					}
-
-					if (effctedRows == 0)
-					{
-						using (var insertCommand =
-							new SqlCommand(
-								@"insert into [SkillForecastJobStartTime] (BusinessUnit, StartTime, LockTimestamp) Values (@bu,@startTime,@lockTimestamp)",
-								connection, transaction))
-						{
-							insertCommand.Parameters.AddWithValue("@bu", businessUnitId);
-							insertCommand.Parameters.AddWithValue("@startTime", now);
-							insertCommand.Parameters.AddWithValue("@lockTimestamp",
-								now.AddMinutes(_skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes));
-							//set lock time to null
-							insertCommand.ExecuteNonQuery();
-						}
-					}
-
-					transaction.Commit();
-				}
+				result =Convert.ToBoolean(getCommand.Parameters["@returnValue"].Value);
+				
 			}
 
-			return false;
+			return result;
 
 		}
 
@@ -157,7 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
 			{
 				connection.Open();
-				using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
+				using (var transaction = connection.BeginTransaction())
 				{
 					using (var updateCommand =
 						new SqlCommand(@"UPDATE [dbo].[SkillForecastJobStartTime] set LockTimestamp = NULL WHERE BusinessUnit = @bu",
