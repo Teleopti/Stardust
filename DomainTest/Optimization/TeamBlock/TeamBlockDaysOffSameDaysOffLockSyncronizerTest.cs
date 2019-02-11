@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -41,13 +42,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			businessUnit.AddSite(sameSite);
 			var sameTeam = businessUnit.SiteCollection[0].TeamCollection[0];
 			var agent1 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, sameTeam).WithId();
-			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
+			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			agent1.AddSchedulePeriod(schedulePeriod1);
 			var agent2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, sameTeam).WithId();
-			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
+			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			agent2.AddSchedulePeriod(schedulePeriod2);
 			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2));
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneGuard.Instance.CurrentTimeZone()).Period(), new[] { agent1, agent2 }).VisiblePeriod);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc).Period(), new[] { agent1, agent2 }).VisiblePeriod);
 			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, new[] {agent1, agent2}, selectedPeriod);
 			var optimizationPreferences = new OptimizationPreferences
 			{
@@ -92,14 +93,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			businessUnit.AddSite(sameSite);
 			var sameTeam = businessUnit.SiteCollection[0].TeamCollection[0];
 			var agent1 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, sameTeam).WithId();
-			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
+			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			agent1.AddSchedulePeriod(schedulePeriod1);
 			var agent2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, sameTeam).WithId();
-			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
+			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			agent2.AddSchedulePeriod(schedulePeriod2);
 
 			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2));
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneGuard.Instance.CurrentTimeZone()).Period(), new[] { agent1, agent2 }).VisiblePeriod);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc).Period(), new[] { agent1, agent2 }).VisiblePeriod);
 			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, new[] { agent1, agent2 }, selectedPeriod);
 			var optimizationPreferences = new OptimizationPreferences
 			{

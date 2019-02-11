@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 using SkillFactory = Teleopti.Ccc.TestCommon.FakeData.SkillFactory;
@@ -53,7 +54,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				new[] { skill },
 				intervalPerDay,
 				_scheduleLoadedForPeriod,
-				new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), TimeZoneGuard.Instance, new AddBpoResourcesToContext()));
+				new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), new FakeTimeZoneGuard(), new AddBpoResourcesToContext()));
 		}
 
 		[Test]

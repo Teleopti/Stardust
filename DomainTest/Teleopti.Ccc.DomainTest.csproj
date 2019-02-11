@@ -1229,7 +1229,6 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayerTest.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionServiceTest.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorTest.cs" />
-    <Compile Include="Scheduling\TimeZoneGuardTest.cs" />
     <Compile Include="Scheduling\Tracking\PersonAccountProjectionServiceTest.cs" />
     <Compile Include="Scheduling\Tracking\TestTrackerOne.cs" />
     <Compile Include="Scheduling\Tracking\TrackerCalculatorTest.cs" />
