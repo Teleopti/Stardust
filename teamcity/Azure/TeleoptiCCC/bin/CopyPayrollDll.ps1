@@ -264,11 +264,12 @@ Try
 	$newFiles1 = Sync-NewFilesOnly $DESTINATION $FILEWATCHNEWDIR
 	##one or more files are new, log info to Eventlog and restart serviceBus
 	If ($newFiles -ge "1" -or $newFiles1 -ge "1" ) {
-		log-info "Stopping service bus..."
-        StopWindowsService -ServiceName $TeleoptiServiceBus
-    	write-host "-------------" -ForegroundColor blue
-		log-info "Starting service bus..."
-        StartWindowsService -ServiceName $TeleoptiServiceBus
+		#log-info "Stopping service bus..."
+        #StopWindowsService -ServiceName $TeleoptiServiceBus
+    	#write-host "-------------" -ForegroundColor blue
+		#log-info "Starting service bus..."
+        #StartWindowsService -ServiceName $TeleoptiServiceBus
+		log-info "$newFiles files synced from: $BlobSource to: '$FILEWATCH' and '$FILEWATCHNEWDIR'"
 	}
 	Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCH"
 	Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCHNEWDIR"
