@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public IScheduleStorage ScheduleStorage;
 		public IBusinessRuleProvider BusinessRuleProvider;
 		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
-		public ITimeZoneGuard TimeZoneGuard;
 		public ShiftTradeTestHelper ShiftTradeTestHelper;
 
 		[Test]
@@ -258,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var periodExtractor = new PeriodExtractorFromScheduleParts();
 			var matrixListFactory = new MatrixListFactory(matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);
 			return new ShiftTradeTargetTimeSpecification(
-				() => new SchedulerStateHolder(SchedulingResultStateHolder, null, TimeZoneGuard)
+				() => new SchedulerStateHolder(SchedulingResultStateHolder, null)
 				, matrixListFactory, new SchedulePeriodTargetTimeCalculator());
 		}
 

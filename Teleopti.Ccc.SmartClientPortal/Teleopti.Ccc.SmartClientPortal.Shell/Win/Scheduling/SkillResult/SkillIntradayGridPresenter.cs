@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -131,8 +132,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 					_rowManager.IntervalLength = Skill.DefaultResolution;
 				}
 
-				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(stateHolder.TimeZoneInfo).Date,
-				                                                   stateHolder.TimeZoneInfo);
+				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()).Date,
+					TimeZoneGuard.Instance.CurrentTimeZone());
 				_rowManager.SetDataSource(skillStaffPeriods);
 			}
         }
@@ -462,7 +463,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         private void createIntervalList(DateTimePeriod period, ISchedulerStateHolder stateHolder)
         {
             _intervals.Clear();
-            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, stateHolder.TimeZoneInfo);
+            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, TimeZoneGuard.Instance.CurrentTimeZone());
         }
 
         private static DateTimePeriod createDateTimePeriod(ICollection<ISkillStaffPeriod> list)

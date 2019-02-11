@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
 				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
-				Expect.Call(_stateHolder.TimeZoneInfo).Return(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).Repeat.AtLeastOnce();
 				Expect.Call(_skill.IsVirtual).Return(true);
 				Expect.Call(_stateHolder.SchedulingResultState).Return(_schedulingResultStateHolder);
 				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder);
@@ -84,7 +83,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
 				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
-				Expect.Call(_stateHolder.TimeZoneInfo).Return(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).Repeat.AtLeastOnce();
 				Expect.Call(_skill.IsVirtual).Return(false);
 				Expect.Call(_stateHolder.SchedulingResultState).Return(_schedulingResultStateHolder);
 				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder);
@@ -109,7 +107,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
 				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
-				Expect.Call(_stateHolder.TimeZoneInfo).Return(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).Repeat.AtLeastOnce();
 				Expect.Call(() => _view.CreateGridRows(_skill, null, _stateHolder)).IgnoreArguments();
 				Expect.Call(() => _view.SetDataSource(_stateHolder, _skill));
 				Expect.Call(() => _view.SetupGrid(1));
@@ -132,7 +129,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
 				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
-				Expect.Call(_stateHolder.TimeZoneInfo).Return(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -156,7 +152,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(_stateHolder.RequestedPeriod).Return(_dateOnlyPeriodAsDateTimePeriod);
 				Expect.Call(_dateOnlyPeriodAsDateTimePeriod.Period()).Return(_dateTimePeriod);
-				Expect.Call(_stateHolder.TimeZoneInfo).Return(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())

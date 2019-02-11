@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Time;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             IAddLayerViewModel<IActivity> dialog1 =
                 ScheduleViewBase.CreateAddPersonalActivityViewModel(SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
                                                                     periodSetup.Period,
-                                                                    SchedulerStateHolder.TimeZoneInfo);
+																	TimeZoneGuard.Instance.CurrentTimeZone());
             bool result = dialog1.Result;
             if (!result) return;
 

@@ -62,14 +62,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			if (_schedulerState.SchedulerStateHolder.Schedules != null && _schedulerState.SchedulerStateHolder.RequestedPeriod.Period().Contains(scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod))
 				return;
+			var timeZone = TimeZoneGuard.Instance.CurrentTimeZone();
 			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (_schedulerState.SchedulerStateHolder.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
 				{
 					((SchedulerStateHolder)_schedulerState.SchedulerStateHolder).RequestedPeriod =
 						new DateOnlyPeriodAsDateTimePeriod(
-							scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
-								_schedulerState.SchedulerStateHolder.TimeZoneInfo), _schedulerState.SchedulerStateHolder.TimeZoneInfo);
+							scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(timeZone), timeZone);
 				}
 				_schedulerState.SchedulerStateHolder.SchedulingResultState.SkillDays = null;
 				reassociateCommonData(uow);
@@ -96,10 +96,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			if (_schedulerState.SchedulerStateHolder.Schedules == null || _schedulerState.SchedulerStateHolder.RequestedPeriod.Period() !=
 				scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
 			{
+				var timeZone = TimeZoneGuard.Instance.CurrentTimeZone();
 				((SchedulerStateHolder) _schedulerState.SchedulerStateHolder).RequestedPeriod =
 					new DateOnlyPeriodAsDateTimePeriod(
-						scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(
-							_schedulerState.SchedulerStateHolder.TimeZoneInfo), _schedulerState.SchedulerStateHolder.TimeZoneInfo);
+						scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(timeZone), timeZone);
 				initializeSchedules(uow, scheduleDateTimePeriod);
 			}
 			if (_backgroundWorker.CancellationPending)
@@ -231,9 +231,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				uow.Reassociate(_schedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents);
 				using (uow.DisableFilter(QueryFilter.Deleted))
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
-				_schedulerState.SchedulerStateHolder.LoadSchedules((IFindSchedulesForPersons)scheduleStorage, _schedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);
+				_schedulerState.SchedulerStateHolder.LoadSchedules(scheduleStorage, _schedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);
 
-				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(_schedulerState.SchedulerStateHolder.TimeZoneInfo);
+				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(TimeZoneGuard.Instance.CurrentTimeZone());
 				foreach (var scheduleRange in _schedulerState.SchedulerStateHolder.Schedules.Values)
 				{
 					scheduleRange.ScheduledDayCollection(period).ForEach(x => _lazyManager.Initialize(x.PersonAssignment(true).DayOffTemplate));

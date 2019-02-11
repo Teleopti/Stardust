@@ -521,7 +521,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var meetingChangedEntities = changes as MeetingChangedEntity[] ?? changes.ToArray();
 			meetingChangedEntities.ForEach(c =>
 			{
-				var period = c.Period.ToDateOnlyPeriod(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
+				var period = c.Period.ToDateOnlyPeriod(TimeZoneGuard.Instance.CurrentTimeZone());
 				period = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
 				period.DayCollection().ForEach(SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated);
 			});
@@ -1632,7 +1632,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						.Execute(new SchedulePostHintInput(SchedulerState.SchedulerStateHolder.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()),
 							selectedPeriod, new FixedBlockPreferenceProvider(_schedulingOptions), _schedulingOptions.UsePreferences?1:0));
 
-					var specificTimeZone = new SpecificTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
+					var specificTimeZone = new SpecificTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
 					foreach (var result in validationResult.InvalidResources)
 					{
 						HintsHelper.BuildErrorMessages(result.ValidationErrors,specificTimeZone);
@@ -2113,7 +2113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (_scheduleView.ViewGrid[rowIndex, colIndex].CellValue is IScheduleDay dest)
 				{
 					IMeeting meeting = _schedulerMeetingHelper.MeetingFromList(dest.Person,
-						dest.Period.StartDateTimeLocal(SchedulerState.SchedulerStateHolder.TimeZoneInfo), dest.PersonMeetingCollection());
+						dest.Period.StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()), dest.PersonMeetingCollection());
 					if (meeting != null)
 					{
 						meeting = meeting.EntityClone();
@@ -4953,8 +4953,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void setupAvailTimeZones()
 		{
 			TimeZoneGuard.Instance.Set(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
-			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.CurrentTimeZone();
-			wpfShiftEditor1.SetTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
+			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
 
 			foreach (TimeZoneInfo info in _detectedTimeZoneInfos)
 			{
@@ -5022,7 +5021,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_undoRedo.Clear(); //see if this can be removed later... Should undo/redo work after refresh?
 			foreach (var data in modifiedDataFromConflictResolution)
 			{
-				SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(data.Period.StartDateTimeLocal(SchedulerState.SchedulerStateHolder.TimeZoneInfo)));
+				SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(data.Period.StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone())));
 				_personsToValidate.Add(data.Person);
 			}
 		}
@@ -5211,7 +5210,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			foreach (ISkillStaffPeriod period in skillStaffPeriods)
 			{
 				period.Payload.UseShrinkage = useShrinkage;
-				SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(period.Period.StartDateTimeLocal(SchedulerState.SchedulerStateHolder.TimeZoneInfo)));
+				SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(period.Period.StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone())));
 			}
 
 			RecalculateResources();
@@ -5655,7 +5654,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void changeTimeZone(TimeZoneInfo timeZone)
 		{
 			TimeZoneGuard.Instance.Set(timeZone);
-			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.CurrentTimeZone();
 			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")

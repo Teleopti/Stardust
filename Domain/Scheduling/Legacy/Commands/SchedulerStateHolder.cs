@@ -22,9 +22,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private bool _filterOnOvertimeAvailability;
 		private bool _filterOnHourlyAvailability;
 
-		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, IDisableDeletedFilter disableDeleteFilter, ISchedulingResultStateHolder schedulingResultStateHolder, ITimeZoneGuard timeZoneGuard)
+		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, IDisableDeletedFilter disableDeleteFilter, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			TimeZoneInfo = timeZoneGuard.CurrentTimeZone();
 			RequestedScenario = loadScenario;
 			CommonStateHolder = new CommonStateHolder(disableDeleteFilter);
 			RequestedPeriod = loadPeriod;
@@ -34,11 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ResetFilteredPersonsOvertimeAvailability();
 		}
 
-		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IDisableDeletedFilter disableDeletedFilter, ITimeZoneGuard timeZoneGuard)
+		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IDisableDeletedFilter disableDeletedFilter)
 		{
 			CommonStateHolder = new CommonStateHolder(disableDeletedFilter);
 			SchedulingResultState = schedulingResultStateHolder;
-			TimeZoneInfo = timeZoneGuard.CurrentTimeZone();
 			ChoosenAgents = new List<IPerson>();
 			ResetFilteredPersonsOvertimeAvailability();
 		}
@@ -55,8 +53,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public bool ConsiderShortBreaks { get; set; } = true;
 
 		public ISchedulingResultStateHolder SchedulingResultState { get; }
-
-		public TimeZoneInfo TimeZoneInfo { get; set; }
 
 		public IDictionary<Guid, IPerson> FilteredCombinedAgentsDictionary => _combinedFilteredAgents.Value;
 

@@ -7,6 +7,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
@@ -230,7 +231,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public override void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
 		{
-		    var stateHolderTimeZone = stateHolder.TimeZoneInfo;
+		    var stateHolderTimeZone = TimeZoneGuard.Instance.CurrentTimeZone();
             var dateTimePeriods = stateHolder.RequestedPeriod.Period(stateHolderTimeZone).WholeDayCollection(stateHolderTimeZone);
             _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolderTimeZone))).ToList();
 			var dataSource = createDataSourceDictionary(dateTimePeriods, stateHolder, skill);
@@ -247,9 +248,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             {
                 Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
                                                GridMergeCellsMode.MergeColumnsInRow;
-
-                var dateTimePeriods = stateHolder.RequestedPeriod.Period(stateHolder.TimeZoneInfo).WholeDayCollection(stateHolder.TimeZoneInfo);
-                _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
+				var timeZone = TimeZoneGuard.Instance.CurrentTimeZone();
+                var dateTimePeriods = stateHolder.RequestedPeriod.Period(timeZone).WholeDayCollection(timeZone);
+                _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();
                 createGridRows(skill, _dates, stateHolder);
             	SetDataSource(stateHolder, skill);
                 ColCount = _dates.Count;

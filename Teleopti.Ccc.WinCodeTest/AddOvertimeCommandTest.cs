@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.WinCodeTest
 		[SetUp]
 		public void Setup()
 		{
-
 			_mock = new MockRepository();
 			_schedulerStateHolder = _mock.StrictMock<ISchedulerStateHolder>();
 			_scheduleViewBase = _mock.StrictMock<IScheduleViewBase>();
@@ -81,7 +80,6 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(_personContract.Contract).Return(_contract);
 				Expect.Call(_contract.MultiplicatorDefinitionSetCollection).Return(new ReadOnlyCollection<IMultiplicatorDefinitionSet>(_multiplicatorDefinitionSets));
 				Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(new CommonStateHolder(_mock.DynamicMock<IDisableDeletedFilter>()));
-				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(null);
 				Expect.Call(_scheduleViewBase.CreateAddOvertimeViewModel( new List<IActivity>(),
 				                                                         _multiplicatorDefinitionSets, null, dateTimePeriod,
 				                                                         null))

@@ -12,6 +12,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -168,7 +169,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 						aggregateSkillSkill,
 						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
-							_currentIntraDayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo));
+							_currentIntraDayDate.AddDays(1).Date, TimeZoneGuard.Instance.CurrentTimeZone()));
 				control.Presenter.RowManager?.SetDataSource(skillStaffPeriods);
 			}
 			else
@@ -647,7 +648,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_chartDescription = string.Empty;
 			IList<ISkillStaffPeriod> skillStaffPeriods;
 			var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date,
-				_currentIntraDayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo);
+				_currentIntraDayDate.AddDays(1).Date, TimeZoneGuard.Instance.CurrentTimeZone());
 			if (aggregateSkillSkill.IsVirtual)
 			{
 				_schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				ScheduleViewBase.CreateAddActivityViewModel(SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 															activeShiftCategories,
 															defaultDateTimePeriod,
-															SchedulerStateHolder.TimeZoneInfo,
+															TimeZoneGuard.Instance.CurrentTimeZone(),
 															DefaultActivity);
 
 

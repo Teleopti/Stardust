@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             
             _clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
             _period = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
-			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZoneInfo), new List<IPerson>(), _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new FakeTimeZoneGuard(_timeZoneInfo));
+			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZoneInfo), new List<IPerson>(), _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
 
             createMockObjects();
@@ -1065,7 +1065,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     null,
                     new List<IShiftCategory> { ShiftCategoryFactory.CreateShiftCategory("Test") },
                     new DateTimePeriod(2001, 1, 1, 2001, 1, 2),
-                    _schedulerState.TimeZoneInfo, null)).IgnoreArguments().Return(dialog);
+                    null, null)).IgnoreArguments().Return(dialog);
 
             Expect.Call(() => scheduleDay.CreateAndAddActivity(null, new DateTimePeriod(),  shiftCategory)).IgnoreArguments().Repeat.Once();
             Expect.Call(scheduleDay.PersonAssignment()).Return(pa);

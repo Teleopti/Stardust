@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         private readonly IMeetingViewModel _meetingViewModel;
         private readonly IList<ISkill> _skills = new List<ISkill>();
         private readonly IPeopleAndSkillLoaderDecider _decider;
-        private readonly IUnitOfWorkFactory _uowFactory;
+		private readonly IUnitOfWorkFactory _uowFactory;
         IList<ISkillStaffPeriod> _skillStaffPeriods = new List<ISkillStaffPeriod>();
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             _schedulerStateHolder = schedulerStateHolder;
             _uowFactory = uowFactory;
             _decider = decider;
-        }
+		}
         private ISchedulingResultStateHolder SchedulingResultStateHolder()
         {
             return _schedulingResultStateHolder ??
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             if (skill != null)
             {
                 var currentIntradayDate = _meetingImpactView.StartDate;
-				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo);
+				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, TimeZoneGuard.Instance.CurrentTimeZone());
                     
                 if (skill.IsVirtual)
                 {

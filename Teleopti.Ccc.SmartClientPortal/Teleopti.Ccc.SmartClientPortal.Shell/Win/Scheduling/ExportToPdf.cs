@@ -93,23 +93,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			var manager = new ScheduleToPdfManager();
-
+			var timeZone = TimeZoneGuard.Instance.CurrentTimeZone();
 			if (teamReport)
 			{
-				manager.ExportTeam(_schedulerStateHolder.SchedulerStateHolder.TimeZoneInfo, _culture, personDic,
+				manager.ExportTeam(timeZone, _culture, personDic,
 								   period, _schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
 								   _rightToLeft, detail, _schedulingScreen, path);
 				return;
 			}
 			if (shiftsPerDay)
 			{
-				ScheduleToPdfManager.ExportShiftsPerDay(_schedulerStateHolder.SchedulerStateHolder.TimeZoneInfo, _culture, personDic,
+				ScheduleToPdfManager.ExportShiftsPerDay(timeZone, _culture, personDic,
 														period, _schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
 														detail, publicNote, _schedulingScreen, path);
 				return;
 			}
 
-			manager.ExportIndividual(_schedulerStateHolder.SchedulerStateHolder.TimeZoneInfo, _culture, personDic,
+			manager.ExportIndividual(timeZone, _culture, personDic,
 									 period, _schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
 									 _rightToLeft, detail, _schedulingScreen, singleFile, path);
 		}

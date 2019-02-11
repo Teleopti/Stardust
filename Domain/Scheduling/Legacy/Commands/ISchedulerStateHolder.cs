@@ -33,10 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		IDictionary<Guid, IPerson> FilteredCombinedAgentsDictionary { get; }
 
-
 		IDictionary<Guid, IPerson> FilteredAgentsDictionary { get; }
-
-		TimeZoneInfo TimeZoneInfo { get; set; }
 
 		CommonStateHolder CommonStateHolder { get; }
 

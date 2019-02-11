@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             scenario = mocks.StrictMock<IScenario>();
             gridlockManager = new GridlockManager();
             clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
-			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date, _date), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
+			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date, _date), TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
             _scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
             target = new DayPresenter(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,

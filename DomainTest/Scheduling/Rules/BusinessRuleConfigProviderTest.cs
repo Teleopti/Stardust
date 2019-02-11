@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var shiftTradeSpecifications = new IShiftTradeSpecification[]
 			{
-				new ShiftTradeTargetTimeSpecification(() => new SchedulerStateHolder(stateHolder, null, new FakeTimeZoneGuard()),
+				new ShiftTradeTargetTimeSpecification(() => new SchedulerStateHolder(stateHolder, null),
 					null, null)
 			};
 
@@ -199,8 +199,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var shiftTradeSpecifications = new IShiftTradeSpecification[]
 			{
-				new ShiftTradeTargetTimeSpecification(() => new SchedulerStateHolder(stateHolder, null,
-					new FakeTimeZoneGuard()), null, null)
+				new ShiftTradeTargetTimeSpecification(() => new SchedulerStateHolder(stateHolder, null), null, null)
 			};
 
 			var target = new BusinessRuleConfigProvider(businessRuleProvider, stateHolder, shiftTradeSpecifications);
