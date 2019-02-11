@@ -15,9 +15,9 @@ IF EXIST "%DIRECTORY%\PendingReboot.txt" (
 powershell set-executionpolicy unrestricted
 
 ::Try copy Log4Net .dll
-set srcFile=%DRIVELETTER%approot\Services\ETL\Tool\log4net.dll
-set targetFile=%DIRECTORY%\log4Net\log4net.dll
-COPY "%srcFile%" "%targetFile%" /Y
+REM set srcFile=%DRIVELETTER%approot\Services\ETL\Tool\log4net.dll
+REM set targetFile=%DIRECTORY%\log4Net\log4net.dll
+REM COPY "%srcFile%" "%targetFile%" /Y
 
 ::execute
 if exist "%targetFile%" (
