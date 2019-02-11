@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 
+			
 
 			var dt = new DataTable();
 			dt.Columns.Add("SkillId", typeof(Guid));
@@ -66,13 +67,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				connection.Open();
 				using (var transaction = connection.BeginTransaction())
 				{
-					//using (var deleteCommand = new SqlCommand(@"DELETE FROM [ReadModel].[SkillCombinationResourceBpo] 
-					//	WHERE StartDateTime <= @8DaysAgo", connection, transaction))
-					//{
-					//	deleteCommand.Parameters.AddWithValue("@buid", bu);
-					//	deleteCommand.Parameters.AddWithValue("@8DaysAgo", _now.UtcDateTime().AddDays(-8));
-					//	deleteCommand.ExecuteNonQuery();
-					//}
+
+					var groupedBySkillIds = listOfIntervals.GroupBy(s => s.SkillId);
+					foreach (var intervalsForSkill in groupedBySkillIds)
+					{
+						var SkillDaysForSkill = intervalsForSkill.GroupBy(s => s.StartDateTime.Date);
+						var skillId = intervalsForSkill.Key;
+						foreach (var skillDay in SkillDaysForSkill)
+						{
+							removeAllExistingSkillForecastOnDay(skillId, skillDay.Key, transaction, connection);
+						}
+
+					}
 
 					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.CheckConstraints, transaction))
 					{
@@ -100,6 +106,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<SkillForecast>());
 
 			return result;
+		}
+
+		private void removeAllExistingSkillForecastOnDay(Guid skillId, DateTime day, SqlTransaction transaction, SqlConnection connection)
+		{
+			using (var deleteCommand = new SqlCommand(@"DELETE  FROM ReadModel.SkillForecast
+					WHERE SkillId = @skillId
+						AND StartDateTime >= @startOfDay
+						AND StartDateTime < @endOfDay", connection, transaction))
+			{
+				deleteCommand.Parameters.AddWithValue("@skillId", skillId);
+				deleteCommand.Parameters.AddWithValue("@startOfDay", day.Date);
+				deleteCommand.Parameters.AddWithValue("@endOfDay", day.Date.AddDays(1));
+				deleteCommand.ExecuteNonQuery();
+			}
 		}
 	}
 
