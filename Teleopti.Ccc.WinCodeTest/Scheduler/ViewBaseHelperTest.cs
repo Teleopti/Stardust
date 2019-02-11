@@ -149,13 +149,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                new TimeSpan(50, 0, 0));
             _contract.MinTimeSchedulePeriod = new TimeSpan(1);
 
-			TimeZoneGuardForDesktop.Instance.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+			TimeZoneGuardForDesktop.Instance_DONTUSE.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
         }
 
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuardForDesktop.Instance.Set(null);
+			TimeZoneGuardForDesktop.Instance_DONTUSE.Set(null);
 		}
 
 		[Test]
@@ -265,14 +265,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAbsence personAbsence = new PersonAbsence(_agent, _scenario, layer);
             var absCollection = new [] { personAbsence };
             var part = _mockRep.StrictMock<IScheduleDay>();
-			string expectedStart = "Tjänsteresa: " + TimeZoneHelper.ConvertFromUtc(startTime, TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).ToShortTimeString() + 
-                                            " - " + partStartperiod.EndDateTimeLocal(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).ToShortTimeString();
+			string expectedStart = "Tjänsteresa: " + TimeZoneHelper.ConvertFromUtc(startTime, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()).ToShortTimeString() + 
+                                            " - " + partStartperiod.EndDateTimeLocal(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()).ToShortTimeString();
 
-			string expectedMiddle = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).ToShortTimeString() +
-											" - " + partStartperiod.EndDateTimeLocal(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).ToShortTimeString();
+			string expectedMiddle = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()).ToShortTimeString() +
+											" - " + partStartperiod.EndDateTimeLocal(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()).ToShortTimeString();
 
-			string expectedEnd = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).ToShortTimeString() +
-											" - " + TimeZoneHelper.ConvertFromUtc(endTime, TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).ToShortTimeString();
+			string expectedEnd = "Tjänsteresa: " + partStartperiod.StartDateTimeLocal(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()).ToShortTimeString() +
+											" - " + TimeZoneHelper.ConvertFromUtc(endTime, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()).ToShortTimeString();
 
             using (_mockRep.Record())
             {
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyToolTipOvertime()
         {
             var period = new DateTimePeriod(new DateTime(2008, 1, 1, 17, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 18, 0, 0, DateTimeKind.Utc));
-			IList<IPersonPeriod> personPeriods = _agent.PersonPeriods(period.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()));
+			IList<IPersonPeriod> personPeriods = _agent.PersonPeriods(period.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()));
             IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
                 MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("Paid Overtime",
                                                                                    MultiplicatorType.Overtime);

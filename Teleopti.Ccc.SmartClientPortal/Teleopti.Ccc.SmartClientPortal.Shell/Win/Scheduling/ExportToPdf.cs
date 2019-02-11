@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			var manager = new ScheduleToPdfManager();
-			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			if (teamReport)
 			{
 				manager.ExportTeam(timeZone, _culture, personDic,

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		{
 
 			worker.ReportProgress(1, "Analyzing Step 1...");
-			var utcDateTime = TimeZoneHelper.ConvertToUtc(localDateTime, TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).AddTicks(1);
+			var utcDateTime = TimeZoneHelper.ConvertToUtc(localDateTime, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()).AddTicks(1);
 			var result = new Dictionary<ISkill, ResourceCalculationAnalyzerModelResult>();
 			var skills =
 				_stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.Where(

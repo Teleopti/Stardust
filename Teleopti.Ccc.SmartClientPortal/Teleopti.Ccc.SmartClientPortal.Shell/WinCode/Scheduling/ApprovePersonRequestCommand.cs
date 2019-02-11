@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					break;
 				case RequestType.ShiftTradeRequest:
 					service = new ShiftTradeRequestApprovalService(_schedules,
-						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, TimeZoneGuardForDesktop.Instance), newBusinessRules, _authorization, _personRequestRepository);
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, TimeZoneGuardForDesktop.Instance_DONTUSE), newBusinessRules, _authorization, _personRequestRepository);
 					break;
 			}
 			return Model.PersonRequest.Approve(service, _authorization);

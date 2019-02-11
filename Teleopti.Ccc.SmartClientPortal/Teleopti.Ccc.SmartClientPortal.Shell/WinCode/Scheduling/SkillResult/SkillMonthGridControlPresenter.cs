@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void DrawMonthGrid(ISchedulerStateHolder stateHolder, ISkill skill)
 		{
 			if (stateHolder == null || skill == null) return;
-			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void SetDates(ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) return;
-			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();	
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 			
 			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillMonthPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
 			IAggregateSkill aggregateSkillSkill = skill;
-			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			foreach (var dateOnlyPeriod in _months)
 			{
 				IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod>();

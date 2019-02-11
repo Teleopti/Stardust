@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				ScheduleViewBase.CreateAddActivityViewModel(SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
 															activeShiftCategories,
 															defaultDateTimePeriod,
-															TimeZoneGuardForDesktop.Instance.CurrentTimeZone(),
+															TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone(),
 															DefaultActivity);
 
 

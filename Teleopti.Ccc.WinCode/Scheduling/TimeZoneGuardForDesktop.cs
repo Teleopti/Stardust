@@ -5,6 +5,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public static class TimeZoneGuardForDesktop
 	{
-		public static ITimeZoneGuard Instance => ServiceLocator_DONTUSE.TimeZoneGuard;
+#pragma warning disable 618
+		public static ITimeZoneGuard Instance_DONTUSE => ServiceLocator_DONTUSE.TimeZoneGuard_DONOTCALLTHIS_JUSTHERETEMP_FOR_DESKTOP;
+#pragma warning restore 618
 	}
 }

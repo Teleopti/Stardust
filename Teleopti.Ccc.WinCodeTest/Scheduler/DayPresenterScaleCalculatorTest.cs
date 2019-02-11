@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             _range = _mocks.StrictMock<IScheduleRange>();
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			TimeZoneGuardForDesktop.Instance.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+			TimeZoneGuardForDesktop.Instance_DONTUSE.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 
     		_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
     		_visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuardForDesktop.Instance.Set(null);
+			TimeZoneGuardForDesktop.Instance_DONTUSE.Set(null);
 		}
 
 		[Test]

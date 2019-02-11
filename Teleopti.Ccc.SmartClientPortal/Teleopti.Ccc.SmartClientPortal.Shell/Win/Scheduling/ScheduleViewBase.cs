@@ -898,7 +898,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             if (Presenter.ClipHandlerSchedule.ClipList.Count > 0)
             {
-				var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuardForDesktop.Instance);
+				var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuardForDesktop.Instance_DONTUSE);
 
 				undoRedo.CreateBatch(Resources.UndoRedoPaste);
 				splitAbsences(SelectedSchedules());
@@ -1551,7 +1551,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                 int row = GetRowForAgent(person);
                 _grid.RefreshRange(GridRangeInfo.Cell(row, (int)ColumnType.RowHeaderColumn + 1), true);
                 //loop for all days in period
-	            var datePeriod = period.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
+	            var datePeriod = period.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 	            foreach (var date in datePeriod.DayCollection())
 	            {
                     int column = GetColumnForDate(date);

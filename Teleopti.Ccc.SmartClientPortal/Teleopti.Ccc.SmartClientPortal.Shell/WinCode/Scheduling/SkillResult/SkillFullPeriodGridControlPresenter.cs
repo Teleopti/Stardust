@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		{
 			if (stateHolder == null || skill == null) return;
 
-            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
-			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, TimeZoneGuardForDesktop.Instance.CurrentTimeZone()))).OrderBy(s => s.Date).ToList();
+            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()))).OrderBy(s => s.Date).ToList();
 			var startDate = _dates.FirstOrDefault();
 			var endDate = _dates.LastOrDefault();
 			_fullPeriods = new List<DateOnlyPeriod> {new DateOnlyPeriod(startDate, endDate)};
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void SetDates(ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) return;
-			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).OrderBy(s => s.Date).ToList();
 		}
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 			
 			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillFullPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
 			IAggregateSkill aggregateSkillSkill = skill;
-			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			foreach (var dateOnlyPeriod in _fullPeriods)
 			{
 				IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod>();

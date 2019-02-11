@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Domain.Common
 		public static INow Now => Instance.current().Now;
 		public static ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal => Instance.current()?.CurrentTeleoptiPrincipal;
 		public static ICurrentAuthorization CurrentAuthorization => Instance.current().CurrentAuthorization;
-		public static ITimeZoneGuard TimeZoneGuard => Instance.current().TimeZoneGuard;
+		[Obsolete("DONT USE!")]
+		public static ITimeZoneGuard TimeZoneGuard_DONOTCALLTHIS_JUSTHERETEMP_FOR_DESKTOP => Instance.current().TimeZoneGuard;
 	}
 
 	public class ServiceLocatorNotAllowedException : Exception

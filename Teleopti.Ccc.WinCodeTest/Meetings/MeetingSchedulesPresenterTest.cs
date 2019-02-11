@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view = _mocks.DynamicMock<IMeetingSchedulesView>();
             _person = PersonFactory.CreatePerson();
 			_timeZone = TimeZoneInfo.Utc;
-			TimeZoneGuardForDesktop.Instance.Set(_timeZone);
+			TimeZoneGuardForDesktop.Instance_DONTUSE.Set(_timeZone);
 			_person.PermissionInformation.SetDefaultTimeZone(_timeZone);
             _startDate = new DateOnly(2009, 10, 27);
             _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));

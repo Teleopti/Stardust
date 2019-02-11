@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             if (skill != null)
             {
                 var currentIntradayDate = _meetingImpactView.StartDate;
-				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
+				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
                     
                 if (skill.IsVirtual)
                 {

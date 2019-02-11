@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			if (_schedulerState.SchedulerStateHolder.Schedules != null && _schedulerState.SchedulerStateHolder.RequestedPeriod.Period().Contains(scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod))
 				return;
-			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (_schedulerState.SchedulerStateHolder.RequestedPeriod.Period() != scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			if (_schedulerState.SchedulerStateHolder.Schedules == null || _schedulerState.SchedulerStateHolder.RequestedPeriod.Period() !=
 				scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod)
 			{
-				var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
+				var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 				((SchedulerStateHolder) _schedulerState.SchedulerStateHolder).RequestedPeriod =
 					new DateOnlyPeriodAsDateTimePeriod(
 						scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(timeZone), timeZone);
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					_repositoryFactory.CreateActivityRepository(uow).LoadAll();
 				_schedulerState.SchedulerStateHolder.LoadSchedules(scheduleStorage, _schedulerState.SchedulerStateHolder.SchedulingResultState.LoadedAgents, scheduleDictionaryLoadOptions, scheduleDateTimePeriod.VisiblePeriod);
 
-				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
+				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 				foreach (var scheduleRange in _schedulerState.SchedulerStateHolder.Schedules.Values)
 				{
 					scheduleRange.ScheduledDayCollection(period).ForEach(x => _lazyManager.Initialize(x.PersonAssignment(true).DayOffTemplate));
