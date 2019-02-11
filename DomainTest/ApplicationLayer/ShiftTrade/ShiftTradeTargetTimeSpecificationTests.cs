@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var matrixListFactory = new MatrixListFactory(matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);
 			return new ShiftTradeTargetTimeSpecification(
 				() => new SchedulerStateHolder(SchedulingResultStateHolder, null)
-				, matrixListFactory, new SchedulePeriodTargetTimeCalculator());
+				, matrixListFactory, new SchedulePeriodTargetTimeCalculator(), new FakeTimeZoneGuard());
 		}
 
 		private void acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(IPersonRequest personRequest, bool enableSiteOpenHoursRule = false)

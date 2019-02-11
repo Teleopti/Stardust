@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IScheduleDay _targetScheduleDay;
         private DateTimePeriod _sourceDateTimePeriod;
         private DateTimePeriod _targetDateTimePeriod;
+		private FakeTimeZoneGuard _fakeTimeZoneGuard;
 
         private DateTime _sourceStartDateTime; 
         private DateTime _sourceEndDateTime; 
@@ -34,20 +36,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _mocks = new MockRepository();
             _sourceScheduleDay = _mocks.StrictMock<IScheduleDay>();
             _targetScheduleDay = _mocks.StrictMock<IScheduleDay>();
-
-			TimeZoneGuard.Instance.Set(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+            _fakeTimeZoneGuard = new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             _singaporeTimeZone = TimeZoneInfoFactory.SingaporeTimeZoneInfo(); // -10
             _hawaiiTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo(); // +8
 
             _target = new PeriodOffsetCalculator();
         }
-
-		[TearDown]
-		public void Teardown()
-		{
-			TimeZoneGuard.Instance.Set(null);
-		}
-
+		
         [Test]
         public void VerifyCalculatePeriodOffsetIsZeroWithinSameTimeZoneAndSameDay()
         {
@@ -67,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                 Assert.AreEqual(new TimeSpan(), offSet);
             }
         }
@@ -91,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                 Assert.AreEqual(new TimeSpan(30, 0, 0, 0), offSet);
             }
         }
@@ -114,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                 Assert.AreEqual(new TimeSpan(0, 18, 0, 0), offSet);
             }
         }
@@ -138,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                 Assert.AreEqual(new TimeSpan(), offSet);
             }
         }
@@ -160,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                 Assert.AreEqual(new TimeSpan(30, 18, 0, 0), offSet);
             }
         }
@@ -184,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                 Assert.AreEqual(new TimeSpan(30, 0, 0, 0), offSet);
             }
         }
@@ -206,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using (_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, false, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                 Assert.AreEqual(new TimeSpan(31, 0, 0, 0), offSet);
             }
         }
@@ -224,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 			using (_mocks.Playback())
 			{
-				var offSet = _target.CalculatePeriodOffsetConsiderDaylightSavings(_sourceScheduleDay, _targetScheduleDay, new DateTimePeriod(2016, 3, 26, 9, 2016, 3, 26, 10));
+				var offSet = _target.CalculatePeriodOffsetConsiderDaylightSavings(_sourceScheduleDay, _targetScheduleDay, new DateTimePeriod(2016, 3, 26, 9, 2016, 3, 26, 10), _fakeTimeZoneGuard);
 				offSet.Should().Be.EqualTo(TimeSpan.FromHours(23));
 			}    
 	    }
@@ -232,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 	    public void ShouldUseCurrentViewPointWhenCalculatingPeriodOffsetWithDaylightSaving()
 		{
-			TimeZoneGuard.Instance.Set(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
+			_fakeTimeZoneGuard.Set(TimeZoneInfoFactory.NewYorkTimeZoneInfo());
 
 			_sourceDateTimePeriod = new DateTimePeriod(2016, 10, 25, 13, 2016, 10, 25, 21);
 			_targetDateTimePeriod = new DateTimePeriod(2016, 11, 1, 13, 2016, 11, 1, 21);
@@ -244,11 +239,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 			using (_mocks.Playback())
 			{
-				var offSet = _target.CalculatePeriodOffsetConsiderDaylightSavings(_sourceScheduleDay, _targetScheduleDay, new DateTimePeriod(2016, 10, 25, 9, 2016, 10, 25, 10));
+				var offSet = _target.CalculatePeriodOffsetConsiderDaylightSavings(_sourceScheduleDay, _targetScheduleDay, new DateTimePeriod(2016, 10, 25, 9, 2016, 10, 25, 10), _fakeTimeZoneGuard);
 				offSet.Should().Be.EqualTo(TimeSpan.FromDays(7));
 			}
-
-			TimeZoneGuard.Instance.Set(null);
 		}
 
         [Test]
@@ -272,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             }
             using(_mocks.Playback())
             {
-                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                 Assert.AreEqual(new TimeSpan(31, 0, 0, 0), offSet);
             }
         }
@@ -300,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 }
                 using (_mocks.Playback())
                 {
-                    TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod);
+                    TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, _sourceDateTimePeriod, _fakeTimeZoneGuard);
                     Assert.AreEqual(new TimeSpan(31, 1, 0, 0), offSet);
                 }
             }
@@ -328,7 +321,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 }
                 using (_mocks.Playback())
                 {
-                    TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, shiftPeriod);
+                    TimeSpan offSet = _target.CalculatePeriodOffset(_sourceScheduleDay, _targetScheduleDay, true, shiftPeriod, _fakeTimeZoneGuard);
                     Assert.AreEqual(new TimeSpan(0, 23, 0, 0), offSet);
                 }
             }

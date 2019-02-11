@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 				case RequestType.ShiftTradeRequest:
 					return new ShiftTradeRequestApprovalService(scheduleDictionary,
-						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization, _personRequestRepository);
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, TimeZoneGuard.Instance), newBusinessRules, _authorization, _personRequestRepository);
 			}
 
 			return null;

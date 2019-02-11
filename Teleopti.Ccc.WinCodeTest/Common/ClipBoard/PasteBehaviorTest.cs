@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 				var handler = new ClipHandler<IScheduleDay>();
 				var rangeList = new GridRangeInfoList();
 				rangeList.Add(range);
-				var pasteAction = new SchedulePasteAction(new PasteOptions { Default = true }, new GridlockManager(), new SchedulePartFilter());
+				var pasteAction = new SchedulePasteAction(new PasteOptions { Default = true }, new GridlockManager(), new SchedulePartFilter(), new FakeTimeZoneGuard());
 				handler.AddClip(0, 0, part);
 
 				pasteAction.PasteBehavior.DoPaste(gridControl, handler, pasteAction, rangeList);

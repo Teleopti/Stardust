@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2010, 1, 1, 2010, 1, 2));
 			var businessRules = new FakeNewBusinessRuleCollection();
 			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
-			var swapAndModifyService = new SwapAndModifyService(new SwapService(), scheduleDayChangeCallback);
+			var swapAndModifyService = new SwapAndModifyService(new SwapService(), scheduleDayChangeCallback, new FakeTimeZoneGuard());
 
 			var target = new ShiftTradeRequestApprovalService(scheduleDictionary, swapAndModifyService, businessRules, new PersonRequestAuthorizationCheckerForTest(), new FakePersonRequestRepository());
 	

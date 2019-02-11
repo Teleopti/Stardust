@@ -897,7 +897,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             if (Presenter.ClipHandlerSchedule.ClipList.Count > 0)
             {
-				var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter);
+				var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter, TimeZoneGuard.Instance);
 
 				undoRedo.CreateBatch(Resources.UndoRedoPaste);
 				splitAbsences(SelectedSchedules());

@@ -19,19 +19,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return CalculatePeriodOffsetWithTimeZoneChanges(sourcePeriod, targetPeriod);
         }
 
-		public TimeSpan CalculatePeriodOffsetConsiderDaylightSavings(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod)
+		public TimeSpan CalculatePeriodOffsetConsiderDaylightSavings(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod, ITimeZoneGuard timeZoneGuard)
 	    {
 			var periodDifference = CalculatePeriodDifference(source.Period, target.Period);
 			var targetShiftPeriod = sourceShiftPeriod.MovePeriod(periodDifference);
-			var dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(sourceShiftPeriod, targetShiftPeriod);
+			var dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(sourceShiftPeriod, targetShiftPeriod, timeZoneGuard);
 			return periodDifference.Add(dayLightSavingsRecorrection);
 	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges, DateTimePeriod sourceShiftPeriod)
+        public TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges, DateTimePeriod sourceShiftPeriod, ITimeZoneGuard timeZoneGuard)
         {
             if (ignoreTimeZoneChanges)
-                return CalculatePeriodOffsetWithoutTimeZoneChanges(source, target, sourceShiftPeriod);
+                return CalculatePeriodOffsetWithoutTimeZoneChanges(source, target, sourceShiftPeriod, timeZoneGuard);
             return CalculatePeriodOffsetWithTimeZoneChanges(source.Period, target.Period);
         }
 
@@ -40,21 +40,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return CalculatePeriodDifference(sourcePeriod, targetPeriod);
         }
 
-        private static TimeSpan CalculatePeriodOffsetWithoutTimeZoneChanges(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod)
+        private static TimeSpan CalculatePeriodOffsetWithoutTimeZoneChanges(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod, ITimeZoneGuard timeZoneGuard)
         {
             var periodDifference = CalculatePeriodDifference(source.Period, target.Period);
             var timeZoneRecorrection = target.TimeZone.GetUtcOffset(target.Period.StartDateTime)
 					.Subtract(source.TimeZone.GetUtcOffset(source.Period.StartDateTime));
             
             var targetShiftPeriod = sourceShiftPeriod.MovePeriod(periodDifference + timeZoneRecorrection);
-            TimeSpan dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(sourceShiftPeriod, targetShiftPeriod);
+            TimeSpan dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(sourceShiftPeriod, targetShiftPeriod, timeZoneGuard);
             return periodDifference.Add(timeZoneRecorrection).Add(dayLightSavingsRecorrection);
         }
 
-		private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
+		private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod, ITimeZoneGuard timeZoneGuard)
 		{
 			//pretty sure this method is compeletly wrong/unnecessary... all timezones here don't make sense.
-			var currentUserTimeZone = TimeZoneGuard.Instance.CurrentTimeZone();
+			var currentUserTimeZone = timeZoneGuard.CurrentTimeZone();
 			
 			var sourceIsDaylightSavingTime = currentUserTimeZone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(sourceShiftPeriod.StartDateTime, currentUserTimeZone));
 			var targetIsDaylightSavingTime = currentUserTimeZone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(targetShiftPeriod.StartDateTime, currentUserTimeZone));

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -10,11 +11,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SwapRawService : ISwapRawService
 	{
         private readonly ICurrentAuthorization _authorizationService;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
-        public SwapRawService(ICurrentAuthorization authorizationService)
-        {
-            _authorizationService = authorizationService;
-        }
+		public SwapRawService(ICurrentAuthorization authorizationService, ITimeZoneGuard timeZoneGuard)
+		{
+			_authorizationService = authorizationService;
+			_timeZoneGuard = timeZoneGuard;
+		}
 
 		public void Swap(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IList<IScheduleDay> selectionOne, IList<IScheduleDay> selectionTwo, IDictionary<IPerson, IList<DateOnly>> locks)
 		{
@@ -51,14 +54,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (tempDayTwoHasShiftOrDayOff)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionOne[i]);
-					selectionOne[i].Merge(tempDayTwo, false, true);
+					selectionOne[i].Merge(tempDayTwo, false, true, _timeZoneGuard);
 					modifyDay(tmpAbsences, selectionOne[i], schedulePartModifyAndRollbackService);
 				}
 				else if (tempDayOneHasShiftOrDayOff)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionOne[i]);
 					selectionOne[i].DeleteOvertime();
-					selectionOne[i].Merge(selectionOne[i], true, true);
+					selectionOne[i].Merge(selectionOne[i], true, true, _timeZoneGuard);
 					modifyDay(tmpAbsences, selectionOne[i], schedulePartModifyAndRollbackService);	
 				}
 
@@ -66,13 +69,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionTwo[i]);
 					selectionTwo[i].DeleteOvertime();
-					selectionTwo[i].Merge(tempDayOne, false, true);
+					selectionTwo[i].Merge(tempDayOne, false, true, _timeZoneGuard);
 					modifyDay(tmpAbsences, selectionTwo[i], schedulePartModifyAndRollbackService);
 				}
 				else if (tempDayTwoHasShiftOrDayOff)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionTwo[i]);
-					selectionTwo[i].Merge(selectionTwo[i], true, true);
+					selectionTwo[i].Merge(selectionTwo[i], true, true, _timeZoneGuard);
 					modifyDay(tmpAbsences, selectionTwo[i], schedulePartModifyAndRollbackService);
 				}
 			}

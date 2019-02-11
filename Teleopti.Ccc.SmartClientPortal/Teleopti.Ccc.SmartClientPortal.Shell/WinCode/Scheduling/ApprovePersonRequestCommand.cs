@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.UserTexts;
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					break;
 				case RequestType.ShiftTradeRequest:
 					service = new ShiftTradeRequestApprovalService(_schedules,
-						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization, _personRequestRepository);
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, TimeZoneGuard.Instance), newBusinessRules, _authorization, _personRequestRepository);
 					break;
 			}
 			return Model.PersonRequest.Approve(service, _authorization);

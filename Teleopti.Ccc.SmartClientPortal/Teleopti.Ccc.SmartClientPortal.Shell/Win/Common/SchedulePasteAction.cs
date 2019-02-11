@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -17,8 +18,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
         private readonly PasteOptions _options;
         private readonly IGridlockManager _lockManager;
         private readonly SchedulePartFilter _schedulePartFilter;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
-        public IPasteBehavior PasteBehavior
+		public IPasteBehavior PasteBehavior
         {
             get { return _options.PasteBehavior; }
         }
@@ -28,11 +30,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 			get { return _options; }
 	    }
 
-        public SchedulePasteAction(PasteOptions options, IGridlockManager lockManager, SchedulePartFilter schedulePartFilter)
+        public SchedulePasteAction(PasteOptions options, IGridlockManager lockManager, SchedulePartFilter schedulePartFilter, ITimeZoneGuard timeZoneGuard)
         {
             _lockManager = lockManager;
             _schedulePartFilter = schedulePartFilter;
-            _options = options;
+			_timeZoneGuard = timeZoneGuard;
+			_options = options;
         }
 
         public IScheduleDay Paste(GridControl gridControl, Clip<IScheduleDay> clip, int rowIndex, int columnIndex)
@@ -74,13 +77,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             {
 	            var significantPart = source.SignificantPart();
 	            if(significantPart != SchedulePartView.PreferenceRestriction && significantPart != SchedulePartView.StudentAvailabilityRestriction)
-                    destination.Merge(source, false, true);
+                    destination.Merge(source, false, true, _timeZoneGuard);
             }
             else if (options.DefaultDelete)
             {
 	            var significantPart = source.SignificantPart();
 	            if (significantPart != SchedulePartView.PreferenceRestriction && significantPart != SchedulePartView.StudentAvailabilityRestriction)
-                    destination.Merge(source, true);
+                    destination.Merge(source, true, _timeZoneGuard);
             }
             else
             {
@@ -96,7 +99,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                     if(tempPart.SignificantPart() == SchedulePartView.MainShift)
                     {
 	                    tempPart.PersonAssignment(true).SetDayOff(null);
-	                    destination.Merge(tempPart, false, true);
+	                    destination.Merge(tempPart, false, true, _timeZoneGuard);
                     }
                 }
 
@@ -120,13 +123,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                     if (personAssignmentNoMainShift.PersonalActivities().Any())
                     {
                         tempPart.Add(personAssignmentNoMainShift);
-                        destination.Merge(tempPart, false);
+                        destination.Merge(tempPart, false, _timeZoneGuard);
                     }
                 }
 
 				if (options.Overtime)
 				{
-					((ExtractedSchedule)destination).MergeOvertime(source);
+					((ExtractedSchedule)destination).MergeOvertime(source, _timeZoneGuard);
 				}
 
                 if (options.DayOff)
@@ -139,7 +142,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
                     if (tempPart.HasDayOff())
-                        destination.Merge(tempPart, false);
+                        destination.Merge(tempPart, false, _timeZoneGuard);
                 }
 
                 if (options.Absences != PasteAction.Ignore)
@@ -162,7 +165,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 	                ((ExtractedSchedule) tempPart).ServiceForSignificantPartForDisplay = null;
 
                     if (((IList<IRestrictionBase>)tempPart.RestrictionCollection()).Count > 0)
-                        destination.Merge(tempPart, false);
+                        destination.Merge(tempPart, false, _timeZoneGuard);
                 }
 
                 if (options.StudentAvailability)
@@ -174,7 +177,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 					((ExtractedSchedule)tempPart).ServiceForSignificantPartForDisplay = null;
 
                     if (((IList<IRestrictionBase>)tempPart.RestrictionCollection()).Count > 0)
-                        destination.Merge(tempPart, false);
+                        destination.Merge(tempPart, false, _timeZoneGuard);
                 }
 
 				if (options.ShiftAsOvertime)

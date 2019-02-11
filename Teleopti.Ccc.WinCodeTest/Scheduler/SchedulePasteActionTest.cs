@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldKeepSourceShiftWhenMergingOvertimeShiftWithMainShiftLayerOnNextDay()
 		{
-			var target = new SchedulePasteAction(null, new GridlockManager(), SchedulePartFilter.None);
+			var target = new SchedulePasteAction(null, new GridlockManager(), SchedulePartFilter.None, new FakeTimeZoneGuard());
 			var multiplicatorSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("_", MultiplicatorType.Overtime);
 			var contract = new Contract("_");
 			contract.AddMultiplicatorDefinitionSetCollection(multiplicatorSet);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldKeepStartHourWhenPastingOverDST([Values(29, 30)] int dateNumber)
 		{
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-			var target = new SchedulePasteAction(null, new GridlockManager(), SchedulePartFilter.None);
+			var target = new SchedulePasteAction(null, new GridlockManager(), SchedulePartFilter.None, new FakeTimeZoneGuard());
 			var agent = new Person().InTimeZone(timeZone);
 			var scenario = new Scenario();
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2017, 1, 1, 2018, 1, 1)), new Dictionary<IPerson, IScheduleRange>());
