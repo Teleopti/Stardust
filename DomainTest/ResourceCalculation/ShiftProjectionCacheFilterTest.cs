@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -396,11 +395,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             using (_mocks.Record())
             {
-                Expect.Call(_rules.PossiblePeriod(_scheduleRange, _dateOnly)).Return(null);
+                Expect.Call(_rules.PossiblePeriod(_scheduleRange, _dateOnly, false)).Return(null);
             }
             using (_mocks.Playback())
             {
-                var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly);
+                var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly, false);
                 Assert.AreEqual(0, ret.Count);
             }
         }
@@ -414,11 +413,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var scheduleDayPeriod = new DateTimePeriod(startTime, endTime);
             using (_mocks.Record())
             {
-                Expect.Call(_rules.PossiblePeriod(_scheduleRange, _dateOnly)).Return(scheduleDayPeriod);
+                Expect.Call(_rules.PossiblePeriod(_scheduleRange, _dateOnly, false)).Return(scheduleDayPeriod);
             }
             using (_mocks.Playback())
             {
-                var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly);
+                var ret = _target.FilterOnBusinessRules(_scheduleRange, GetCashes(), _dateOnly, false);
                 Assert.AreEqual(2, ret.Count);
             }
         }

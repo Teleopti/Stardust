@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_longestPeriodForAssignmentCalculator = longestPeriodForAssignmentCalculator;
 		}
 
-		public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, IPerson person, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck)
+		public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, IPerson person, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck, bool scheduleOnDayOffs)
 		{
 			if (person == null) return null;
 			if (shiftList == null) return null;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			DateTimePeriod? returnPeriod = new DateTimePeriod(approxUtc.AddDays(-2), approxUtc.AddDays(2));
 
 			var scheduleRange = schedules[person];
-			var newRulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck);
+			var newRulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck, scheduleOnDayOffs);
 			if (!newRulePeriod.HasValue)
 			{
 				return filterResults();

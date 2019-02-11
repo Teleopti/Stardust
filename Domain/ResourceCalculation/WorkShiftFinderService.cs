@@ -4,12 +4,9 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -199,7 +196,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 
 				IScheduleRange wholeRange = _resultStateHolder().Schedules[person];
-				shiftList = _shiftProjectionCacheFilter.Filter(_resultStateHolder().Schedules, allowedMinMax.Value, shiftList, dateOnly, wholeRange);
+				shiftList = _shiftProjectionCacheFilter.Filter(_resultStateHolder().Schedules, allowedMinMax.Value, shiftList, dateOnly, wholeRange, schedulingOptions.ScheduleOnDayOffs);
 				if (shiftList.Count == 0)
 					return null;
 

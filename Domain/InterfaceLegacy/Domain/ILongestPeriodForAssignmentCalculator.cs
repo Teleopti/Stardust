@@ -19,6 +19,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: rogerkr
         /// Created date: 2010-04-22
         /// </remarks>
-        DateTimePeriod? PossiblePeriod(IScheduleRange current, DateOnly dateToCheck);
+        DateTimePeriod? PossiblePeriod(IScheduleRange current, DateOnly dateToCheck, bool scheduleOnDayOffs);
     }
 }
