@@ -19,6 +19,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         {
             return CreateDefaultMeeting(organizer, schedulerStateHolder.RequestedScenario,
 										schedulerStateHolder.CommonStateHolder.Activities.NonDeleted().FirstOrDefault(), startDate, participants,
-                                        schedulerStateHolder.CommonNameDescription, TimeZoneGuard.Instance.CurrentTimeZone(), now);
+                                        schedulerStateHolder.CommonNameDescription, TimeZoneGuardForDesktop.Instance.CurrentTimeZone(), now);
         }
 
         public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, IScenario scenario, IActivity activity, DateOnly startDate, IEnumerable<IPerson> participants, CommonNameDescriptionSetting commonNameDescriptionSetting, TimeZoneInfo timeZoneInfo, INow now)

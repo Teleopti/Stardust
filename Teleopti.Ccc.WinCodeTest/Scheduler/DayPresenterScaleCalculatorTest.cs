@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             _range = _mocks.StrictMock<IScheduleRange>();
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			TimeZoneGuard.Instance.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+			TimeZoneGuardForDesktop.Instance.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 
     		_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
     		_visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuard.Instance.Set(null);
+			TimeZoneGuardForDesktop.Instance.Set(null);
 		}
 
 		[Test]

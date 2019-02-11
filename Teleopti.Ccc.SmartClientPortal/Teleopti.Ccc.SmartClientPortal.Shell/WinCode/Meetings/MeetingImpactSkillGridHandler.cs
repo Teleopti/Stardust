@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             if (skill != null)
             {
                 var currentIntradayDate = _meetingImpactView.StartDate;
-				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, TimeZoneGuard.Instance.CurrentTimeZone());
+				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
                     
                 if (skill.IsVirtual)
                 {

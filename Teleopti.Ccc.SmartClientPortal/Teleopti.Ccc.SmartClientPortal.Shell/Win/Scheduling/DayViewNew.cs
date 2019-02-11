@@ -11,6 +11,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
@@ -189,7 +190,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
             foreach (IVisualLayer visualLayer in scheduleDay.ProjectionService().CreateProjection())
             {
-                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuard.Instance.CurrentTimeZone());
+                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
                 int startPixel = (int)Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) + e.Bounds.X;
                 int endPixel = (int)Math.Round(pixelConverter.PositionFromDateTime(local.EndDateTime, IsRightToLeft)) + e.Bounds.X;
 
@@ -292,7 +293,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             foreach (IVisualLayer visualLayer in tomorrow.ProjectionService().CreateProjection())
             {
-				DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuard.Instance.CurrentTimeZone());
+				DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
                 int startPixel =
                     (int) Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
                     e.Bounds.X;
@@ -311,7 +312,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             foreach (IVisualLayer visualLayer in yesterday.ProjectionService().CreateProjection())
             {
-				DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuard.Instance.CurrentTimeZone());
+				DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
                 int startPixel =
                     (int) Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
                     e.Bounds.X;

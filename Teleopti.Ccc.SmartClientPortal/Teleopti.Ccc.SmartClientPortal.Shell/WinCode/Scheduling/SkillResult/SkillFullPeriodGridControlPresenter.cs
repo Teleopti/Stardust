@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
@@ -29,8 +30,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		{
 			if (stateHolder == null || skill == null) return;
 
-            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(TimeZoneGuard.Instance.CurrentTimeZone());
-			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, TimeZoneGuard.Instance.CurrentTimeZone()))).OrderBy(s => s.Date).ToList();
+            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, TimeZoneGuardForDesktop.Instance.CurrentTimeZone()))).OrderBy(s => s.Date).ToList();
 			var startDate = _dates.FirstOrDefault();
 			var endDate = _dates.LastOrDefault();
 			_fullPeriods = new List<DateOnlyPeriod> {new DateOnlyPeriod(startDate, endDate)};
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void SetDates(ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) return;
-			var timeZone = TimeZoneGuard.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
 			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).OrderBy(s => s.Date).ToList();
 		}
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 			
 			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillFullPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
 			IAggregateSkill aggregateSkillSkill = skill;
-			var timeZone = TimeZoneGuard.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
 			foreach (var dateOnlyPeriod in _fullPeriods)
 			{
 				IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod>();

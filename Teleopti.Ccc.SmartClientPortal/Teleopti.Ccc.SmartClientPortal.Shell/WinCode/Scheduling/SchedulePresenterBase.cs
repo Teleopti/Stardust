@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -403,7 +404,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         public virtual void MergeHeaders()
         {
             const int col = (int)ColumnType.StartScheduleColumns;
-            DateTime startDate = SelectedPeriod.Period().StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()).Date;
+            DateTime startDate = SelectedPeriod.Period().StartDateTimeLocal(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).Date;
             for (int i = 0; i < Days; i++)
             {
                 ColWeekMap.Add(col + i, DateHelper.WeekNumber(startDate.AddDays(i), CultureInfo.CurrentCulture));
@@ -476,7 +477,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					if (ColWeekMap.TryGetValue(e.ColIndex, out var week))
                     {
                         e.Style.WrapText = false;
-						var tagDate = new DateOnly(SelectedPeriod.Period().StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()).Date.AddDays(e.ColIndex - (int) ColumnType.StartScheduleColumns).Date);
+						var tagDate = new DateOnly(SelectedPeriod.Period().StartDateTimeLocal(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).Date.AddDays(e.ColIndex - (int) ColumnType.StartScheduleColumns).Date);
                         var period = ViewBaseHelper.WeekHeaderDates(week, tagDate.ToDateOnlyPeriod().Inflate(7));
 						e.Style.Tag = tagDate;
 	                    e.Style.Text = string.Format(CultureInfo.CurrentCulture, Resources.WeekAbbreviationDot, week, period.StartDate.ToShortDateString());

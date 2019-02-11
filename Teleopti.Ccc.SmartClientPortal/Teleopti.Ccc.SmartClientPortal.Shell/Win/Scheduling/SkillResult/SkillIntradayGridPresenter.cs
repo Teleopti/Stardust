@@ -17,6 +17,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Chart;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
@@ -132,8 +133,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 					_rowManager.IntervalLength = Skill.DefaultResolution;
 				}
 
-				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(TimeZoneGuard.Instance.CurrentTimeZone()).Date,
-					TimeZoneGuard.Instance.CurrentTimeZone());
+				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).Date,
+					TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
 				_rowManager.SetDataSource(skillStaffPeriods);
 			}
         }
@@ -463,7 +464,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         private void createIntervalList(DateTimePeriod period, ISchedulerStateHolder stateHolder)
         {
             _intervals.Clear();
-            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, TimeZoneGuard.Instance.CurrentTimeZone());
+            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
         }
 
         private static DateTimePeriod createDateTimePeriod(ICollection<ISkillStaffPeriod> list)

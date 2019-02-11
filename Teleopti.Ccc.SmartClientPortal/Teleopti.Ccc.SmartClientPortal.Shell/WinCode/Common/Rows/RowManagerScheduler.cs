@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows
         {
             get
             {
-                return TimeZoneGuard.Instance.CurrentTimeZone();
+                return TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
             }
         }
 

@@ -14,6 +14,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
@@ -231,7 +232,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public override void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
 		{
-		    var stateHolderTimeZone = TimeZoneGuard.Instance.CurrentTimeZone();
+		    var stateHolderTimeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
             var dateTimePeriods = stateHolder.RequestedPeriod.Period(stateHolderTimeZone).WholeDayCollection(stateHolderTimeZone);
             _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolderTimeZone))).ToList();
 			var dataSource = createDataSourceDictionary(dateTimePeriods, stateHolder, skill);
@@ -248,7 +249,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
             {
                 Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
                                                GridMergeCellsMode.MergeColumnsInRow;
-				var timeZone = TimeZoneGuard.Instance.CurrentTimeZone();
+				var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
                 var dateTimePeriods = stateHolder.RequestedPeriod.Period(timeZone).WholeDayCollection(timeZone);
                 _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();
                 createGridRows(skill, _dates, stateHolder);

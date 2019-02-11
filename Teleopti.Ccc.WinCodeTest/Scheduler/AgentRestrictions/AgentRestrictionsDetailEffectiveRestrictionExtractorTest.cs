@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.RestrictionSummary;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 {
@@ -68,13 +69,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
 			_scheduleDictionary = new ScheduleDictionaryForTest(_scenario, _scheduleDateTimePeriod, _dictionary);
 			_periodTarget = TimeSpan.FromHours(40);
-			TimeZoneGuard.Instance.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+			TimeZoneGuardForDesktop.Instance.Set(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 		}
 
 		[TearDown]
 		public void Teardown()
 		{
-			TimeZoneGuard.Instance.Set(null);
+			TimeZoneGuardForDesktop.Instance.Set(null);
 		}
 
 		[Test]

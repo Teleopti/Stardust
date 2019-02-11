@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (selectedSchedules.IsEmpty())
 				return;
 
-			ISwapRawService swapRawService = new SwapRawService(new ThisAuthorization(PrincipalAuthorization.Current_DONTUSE()), TimeZoneGuard.Instance);
+			ISwapRawService swapRawService = new SwapRawService(new ThisAuthorization(PrincipalAuthorization.Current_DONTUSE()), TimeZoneGuardForDesktop.Instance);
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
 														 _scheduleDayChangeCallback, new ScheduleTagSetter(_defaultScheduleTag));
 

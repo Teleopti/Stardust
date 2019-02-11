@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             using (var unitOfWork = _uowFactory.CreateAndOpenUnitOfWork())
             {
                 var deciderResult = _peopleAndSkillLoaderDecider.Execute(args.Scenario, args.Period, args.Persons);
-				_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(TimeZoneGuard.Instance.CurrentTimeZone()));
+				_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(TimeZoneGuardForDesktop.Instance.CurrentTimeZone()));
                 
                var tempSkills = new HashSet<ISkill>(_schedulingResultStateHolder.Skills);
 

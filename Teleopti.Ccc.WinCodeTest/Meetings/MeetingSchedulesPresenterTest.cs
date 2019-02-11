@@ -15,6 +15,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view = _mocks.DynamicMock<IMeetingSchedulesView>();
             _person = PersonFactory.CreatePerson();
 			_timeZone = TimeZoneInfo.Utc;
-			TimeZoneGuard.Instance.Set(_timeZone);
+			TimeZoneGuardForDesktop.Instance.Set(_timeZone);
 			_person.PermissionInformation.SetDefaultTimeZone(_timeZone);
             _startDate = new DateOnly(2009, 10, 27);
             _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));

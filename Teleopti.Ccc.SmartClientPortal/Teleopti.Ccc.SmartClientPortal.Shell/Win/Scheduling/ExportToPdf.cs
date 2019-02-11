@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			var manager = new ScheduleToPdfManager();
-			var timeZone = TimeZoneGuard.Instance.CurrentTimeZone();
+			var timeZone = TimeZoneGuardForDesktop.Instance.CurrentTimeZone();
 			if (teamReport)
 			{
 				manager.ExportTeam(timeZone, _culture, personDic,

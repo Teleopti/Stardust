@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					break;
 				case RequestType.ShiftTradeRequest:
 					service = new ShiftTradeRequestApprovalService(_schedules,
-						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, TimeZoneGuard.Instance), newBusinessRules, _authorization, _personRequestRepository);
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, TimeZoneGuardForDesktop.Instance), newBusinessRules, _authorization, _personRequestRepository);
 					break;
 			}
 			return Model.PersonRequest.Approve(service, _authorization);

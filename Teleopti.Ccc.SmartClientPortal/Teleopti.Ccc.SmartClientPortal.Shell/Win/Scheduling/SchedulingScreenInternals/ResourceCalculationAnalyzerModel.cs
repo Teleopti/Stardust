@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		{
 
 			worker.ReportProgress(1, "Analyzing Step 1...");
-			var utcDateTime = TimeZoneHelper.ConvertToUtc(localDateTime, TimeZoneGuard.Instance.CurrentTimeZone()).AddTicks(1);
+			var utcDateTime = TimeZoneHelper.ConvertToUtc(localDateTime, TimeZoneGuardForDesktop.Instance.CurrentTimeZone()).AddTicks(1);
 			var result = new Dictionary<ISkill, ResourceCalculationAnalyzerModelResult>();
 			var skills =
 				_stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.Where(

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         {
             _selectedDate = dateOnly;
             _scalePeriod = _scaleCalculator.CalculateScalePeriod(_schedulerState, _selectedDate);
-            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1)), TimeZoneGuard.Instance.CurrentTimeZone());
+            SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1)), TimeZoneGuardForDesktop.Instance.CurrentTimeZone());
         }
 
 
