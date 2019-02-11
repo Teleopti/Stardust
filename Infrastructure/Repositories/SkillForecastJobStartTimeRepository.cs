@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly INow _now;
 		private readonly SkillForecastSettingsReader _skillForecastSettingsReader;
+		private readonly object _jobLock = new object();
 
 		public SkillForecastJobStartTimeRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, INow now,
 			SkillForecastSettingsReader skillForecastSettingsReader)
@@ -53,24 +54,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool UpdateJobStartTime(Guid businessUnitId)
 		{
-			var result = false;
-			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
+			lock (_jobLock)
 			{
-				connection.Open();
-				var getCommand = connection.CreateCommand();
-				getCommand.CommandType = CommandType.StoredProcedure;
-				getCommand.CommandText = @"dbo.UpdateJobStartTime";
-				getCommand.Parameters.AddWithValue("@businessunitId", businessUnitId);
-				getCommand.Parameters.AddWithValue("@now", _now.UtcDateTime());
-				getCommand.Parameters.AddWithValue("@maxExecutionTime", _skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes);
-				getCommand.Parameters.Add("@returnValue", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-				getCommand.ExecuteNonQuery();
+				var result = false;
+				using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
+				{
+					connection.Open();
 
-				result =Convert.ToBoolean(getCommand.Parameters["@returnValue"].Value);
-				
+					var getCommand = connection.CreateCommand();
+
+					getCommand.CommandType = CommandType.StoredProcedure;
+					getCommand.CommandText = @"dbo.UpdateJobStartTime";
+					getCommand.Parameters.AddWithValue("@businessunitId", businessUnitId);
+					getCommand.Parameters.AddWithValue("@now", _now.UtcDateTime());
+					getCommand.Parameters.AddWithValue("@maxExecutionTime", _skillForecastSettingsReader.MaximumEstimatedExecutionTimeOfJobInMinutes);
+					getCommand.Parameters.Add("@returnValue", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+					getCommand.ExecuteNonQuery();
+
+					result = Convert.ToBoolean(getCommand.Parameters["@returnValue"].Value);
+
+
+
+
+				}
+
+				return result;
 			}
-
-			return result;
 
 		}
 
