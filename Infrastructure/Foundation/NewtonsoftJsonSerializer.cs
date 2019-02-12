@@ -66,14 +66,19 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			//DateTimeZoneHandling = DateTimeZoneHandling.Utc,
 			TypeNameHandling = TypeNameHandling.Auto;
 			NullValueHandling = NullValueHandling.Ignore;
-			ContractResolver = new customContractResolver();
+			ContractResolver = new ShortCommonPropertyMappingContractResolver();
 			SerializationBinder = new MappingSerializationBinder(_typeMapper);
 			//Converters = new List<JsonConverter> {new TypeArrayConverter(_typeMapper)};
+//			Converters = new List<JsonConverter>
+//			{
+//				new TypeArrayConverter(_typeMapper),
+//				new TypeConverter(_typeMapper)
+//			};
 		}
 
 		public Type TypeResolver(string typeName)
 		{
-			if (typeName.Contains("HangfireEventJob"))
+			if (typeName.StartsWith("Teleopti."))
 			{
 				var info = typeName.Split(',');
 				var name = info[0];
@@ -82,8 +87,64 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 
 			typeName = typeName.Replace("System.Private.CoreLib", "mscorlib");
-			return System.Type.GetType(typeName, true, true);
+			return Type.GetType(typeName, true, true);
 		}
+//		
+//		private class TypeConverter : JsonConverter
+//		{
+//			private readonly PersistedTypeMapper _typeMapper;
+//
+//			public TypeConverter(PersistedTypeMapper typeMapper)
+//			{
+//				_typeMapper = typeMapper;
+//			}
+//
+//			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+//			{
+//				Console.WriteLine($"WriteJson/Type/{value.ToString()}");
+//				writer.WriteValue(value.ToString());
+//				Console.WriteLine($"/WriteJson/Type");
+//				Console.WriteLine();
+//			}
+//
+//			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+//			{
+//				Console.WriteLine("ReadJson/Type");
+//				Type type = null;
+//				do
+//				{
+//					if (reader.Value == null)
+//						continue;
+//
+//					Console.WriteLine($"ReadJson/Type/{reader.Value}");
+//					var typeName = reader.Value as string;
+//					if (typeName.Contains("HangfireEventJob"))
+//					{
+//						var info = typeName.Split(',');
+//						var name = info[0];
+//						var assemblyName = info[1];
+//						var typeName2 = $"{name},{assemblyName}";
+//						type = _typeMapper.TypeForPersistedName(typeName2);
+//					}
+//					else
+//					{
+//						type = Type.GetType(reader.Value as string);
+//					}
+//
+//					break;
+//				} while (reader.Read());
+//
+//				Console.WriteLine($"/ReadJson/Type/{type}");
+//				Console.WriteLine();
+//				return type;
+//			}
+//
+//			public override bool CanConvert(Type objectType)
+//			{
+//				return typeof(Type) == objectType;
+//			}
+//		}
+
 
 //
 //		private class TypeArrayConverter : JsonConverter
@@ -167,11 +228,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
-		private class customContractResolver : DefaultContractResolver
+		private class ShortCommonPropertyMappingContractResolver : DefaultContractResolver
 		{
 			private readonly Dictionary<string, string> propertyMappings;
 
-			public customContractResolver()
+			public ShortCommonPropertyMappingContractResolver()
 			{
 				propertyMappings = new Dictionary<string, string>
 				{

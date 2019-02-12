@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 
 			Hangfire.Value.EmulateWorkerIteration();
 
-			Hangfire.Value.ThrowFailedJob();
+			Hangfire.Value.ThrowExceptionFromAnyFailedJob();
 			Handler.Got.Should().Be("data");
 		}
 
@@ -51,12 +51,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public void ShouldHandleMovedHangfireEventJobType()
 		{
 			Publisher.Publish(new TestEvent {Data = "data"});
+			outputJobData();
 			replaceInJobs("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared", "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure");
 			assumeJobContains("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure");
+			outputJobData();
 
 			Hangfire.Value.EmulateWorkerIteration();
 
-			Hangfire.Value.ThrowFailedJob();
+			Hangfire.Value.ThrowExceptionFromAnyFailedJob();
 			Handler.Got.Should().Be("data");
 		}
 
@@ -69,10 +71,23 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 
 			Hangfire.Value.EmulateWorkerIteration();
 
-			Hangfire.Value.ThrowFailedJob();
+			Hangfire.Value.ThrowExceptionFromAnyFailedJob();
 			Handler.Got.Should().Be("data");
 		}
 
+		[Test]
+		public void ShouldHandleMovedHangfireServerProcessor()
+		{
+			Publisher.Publish(new TestEvent {Data = "data"});
+			replaceInJobs("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventServer, Teleopti.Ccc.Infrastructure", "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventServer, Teleopti.Wfm.Shared");
+			assumeJobContains("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventServer, Teleopti.Wfm.Shared");
+
+			Hangfire.Value.EmulateWorkerIteration();
+
+			Hangfire.Value.ThrowExceptionFromAnyFailedJob();
+			Handler.Got.Should().Be("data");
+		}
+		
 		public class TestEvent : IEvent
 		{
 			public string Data { get; set; }

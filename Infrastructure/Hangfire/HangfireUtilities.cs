@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			throw exception;
 		}
 
-		public void ThrowFailedJob()
+		public void ThrowExceptionFromAnyFailedJob()
 		{
 			var e = failedJobsException();
 			if (e != null)
