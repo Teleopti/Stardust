@@ -51,10 +51,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public void ShouldHandleMovedHangfireEventJobType()
 		{
 			Publisher.Publish(new TestEvent {Data = "data"});
-			outputJobData();
 			replaceInJobs("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared", "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure");
 			assumeJobContains("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure");
-			outputJobData();
 
 			Hangfire.Value.EmulateWorkerIteration();
 
