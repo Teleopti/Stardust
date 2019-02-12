@@ -55,45 +55,30 @@
 
 	.teamschedule-footer {
 		border-top: 1px solid rgba(0, 0, 0, 0.06);
-		min-height: 60px;
+		height: 60px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin: 0 auto;
-		position: relative;
 
 		.select-all {
 			padding: 0 0.5em;
 		}
 
 		.pagination-navigator {
-			position: absolute;
-			right: 0;
-		}
-	}
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 
-	.teamschedule-footer.flex-end {
-		justify-content: flex-end;
-	}
-	// For fixing align-items:center not working in IE10/11
-	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator: true) {
-		.teamschedule-footer {
-			.select-all,
-			.pagination-navigator {
-				margin-top: 15px;
+			.page-size-selector {
+				text-align: left;
 			}
 		}
+
+		.flex-end {
+			justify-content: flex-end;
+		}
 	}
 
-	.pagination-navigator {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	.page-size-selector {
-		text-align: left;
-	}
 
 	.modal-box .wfm-simple-list {
 		max-height: 430px;

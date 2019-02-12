@@ -126,11 +126,11 @@
 
 		<div class="teamschedule-footer">
 			<div ng-if="vm.commandPanelClosed()">
-				<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
-					<a ng-href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
-				</div>
-				<div class="select-all" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
-					<a ng-href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
+				<div class="select-all">
+					<a href="javascript:void(0);" 
+					   ng-show="vm.selectAllVisible()"
+					   ng-click="vm.toggleSelectAll()"
+					   ng-bind="(vm.hasSelectedAllPeopleInEveryPage ? 'UnselectAllPeopleInEveryPage' : 'SelectAllPeopleInEveryPage') | translate"></a>
 				</div>
 			</div>
 

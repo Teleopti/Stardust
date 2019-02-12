@@ -532,31 +532,25 @@
 				$scope.$broadcast('teamSchedule.command.scheduleChangedApplied');
 			}
 		};
-
-		vm.selectAllForAllPages = function () {
-			personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			vm.hasSelectedAllPeopleInEveryPage = true;
-		};
-
-		vm.unselectAllForAllPages = function () {
-			personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			vm.hasSelectedAllPeopleInEveryPage = false;
-		};
-
+	
 		vm.commandPanelClosed = function () {
 			return !$mdSidenav(commandContainerId).isOpen();
 		};
 
 		vm.selectAllVisible = function () {
-			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
-			return (vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total)
-				&& !vm.hasSelectedAllPeopleInEveryPage;
+			return vm.paginationOptions.totalPages > 1;
 		};
 
-		vm.hasSelectedAllPeople = function () {
-			return vm.hasSelectedAllPeopleInEveryPage;
-		};
+		vm.toggleSelectAll = function () {
+			vm.hasSelectedAllPeopleInEveryPage = !vm.hasSelectedAllPeopleInEveryPage;
+			if (vm.hasSelectedAllPeopleInEveryPage) {
+				personSelectionSvc.selectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			} else {
+				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
+			}
+		}
+
 
 		vm.toggleErrorDetails = function () {
 			vm.showErrorDetails = !vm.showErrorDetails;
