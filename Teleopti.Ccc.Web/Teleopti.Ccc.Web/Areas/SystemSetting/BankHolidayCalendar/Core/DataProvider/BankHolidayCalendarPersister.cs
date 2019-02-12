@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Models;
 
 namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProvider
 {
-
+	 
 	public class BankHolidayCalendarPersister : IBankHolidayCalendarPersister
 	{
 		private readonly IBankHolidayCalendarRepository _bankHolidayCalendarRepository;
