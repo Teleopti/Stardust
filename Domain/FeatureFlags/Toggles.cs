@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WfmTeamSchedule_ShiftEditorInDayView_78295,
 		WfmTeamSchedule_DisableAutoRefreshSchedule_79826,
 		WfmTeamSchedule_OnlyRefreshScheduleForRelevantChangesInWeekView_80242,
+		WfmTeamSchedule_VirtualRepeatInScheduleTable_80404,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
