@@ -234,13 +234,30 @@ INNER JOIN mart.dim_interval i
 	AND i.interval_id BETWEEN @interval_from AND @interval_to
 WHERE b.time_zone_id = @time_zone_id
 
---Get the min/max UTC date_id
 --Get the min/max UTC date_id. Expand UTC -1 +1 when fetching fact_tables (subSP
-SELECT @date_from_id=MIN(b.date_id)-1,@date_to_id=MAX(b.date_id)+1
+SELECT 
+	@date_from_id=MIN(b.date_id),
+	@date_to_id=MAX(b.date_id)
 FROM #bridge_time_zone b
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
 WHERE	d.date_date	between @date_from AND @date_to
+
+SELECT
+	@date_from_id = date_id 
+	FROM mart.dim_date
+	WHERE date_date = (
+		SELECT DATEADD(d, -1, date_date)
+		FROM mart.dim_date
+		WHERE date_id = @date_from_id)
+
+SELECT
+	@date_to_id = date_id 
+	FROM mart.dim_date
+	WHERE date_date = (
+		SELECT DATEADD(d, 1, date_date)
+		FROM mart.dim_date
+		WHERE date_id = @date_to_id)
 
 --Create UTC table from: mart.fact_schedule
 INSERT INTO #fact_schedule(shift_startdate_local_id,schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m, scheduled_paid_time_m)
@@ -258,7 +275,6 @@ INNER JOIN #person_acd_subSP p
 	AND fs.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
 WHERE fs.shift_startdate_local_id between @date_from_id and @date_to_id	--we use the expanded utc (-1,+1) from above when filtering on shift_startdate_local_id
 AND fs.scenario_id=@scenario_id
---AND fs.person_id in (SELECT DISTINCT person_id from #person_acd_subSP)
 
 --This SP will insert Adherence data into table: #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]

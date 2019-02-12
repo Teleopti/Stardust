@@ -247,6 +247,8 @@ DECLARE @nowLocalDateId int
 DECLARE @nowLocalIntervalId smallint
 DECLARE @minUtcDateId int
 DECLARE @maxUtcDateId int
+DECLARE @minUtcDateIdMinus1 int
+DECLARE @maxUtcDateIdPlus1 int
 
 SELECT @nowutcDateOnly = DATEADD(dd, 0, DATEDIFF(dd, 0, GETUTCDATE()))
 SELECT @nowutcInterval = DATEADD(minute,DATEPART(minute, GETUTCDATE()),DATEADD(hour, DATEPART(hour, GETUTCDATE()),'1900-01-01 00:00:00'))
@@ -288,6 +290,22 @@ SELECT
 	@minUtcDateId = MIN(b.date_id),
 	@maxUtcDateId = MAX(b.date_id)
 FROM #bridge_time_zone b
+
+SELECT
+	@minUtcDateIdMinus1 = date_id 
+	FROM mart.dim_date
+	WHERE date_date = (
+		SELECT DATEADD(d, -1, date_date)
+		FROM mart.dim_date
+		WHERE date_id = @minUtcDateId)
+
+SELECT
+	@maxUtcDateIdPlus1 = date_id 
+	FROM mart.dim_date
+	WHERE date_date = (
+		SELECT DATEADD(d, 1, date_date)
+		FROM mart.dim_date
+		WHERE date_id = @maxUtcDateId)
 
 --Get Now() in local date/interval Id variables
 SELECT
@@ -394,8 +412,8 @@ FROM mart.fact_schedule_deviation fsd
 INNER JOIN #person_id p
 	ON fsd.person_id = p.person_id
 	AND fsd.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
-WHERE fsd.shift_startdate_local_id  between @minUtcDateId-1 AND @maxUtcDateId+1
-AND fsd.date_id between @minUtcDateId-1 AND @maxUtcDateId+1
+WHERE fsd.shift_startdate_local_id  between @minUtcDateIdMinus1 AND @maxUtcDateIdPlus1
+AND fsd.date_id between @minUtcDateIdMinus1 AND @maxUtcDateIdPlus1
 
 INSERT INTO #fact_schedule_deviation(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
 SELECT 
@@ -436,8 +454,8 @@ FROM
 INNER JOIN #person_id p
 	ON fs.person_id = p.person_id
 	AND fs.shift_startdate_local_id BETWEEN p.valid_from_date_id_local AND p.valid_to_date_id_local
-WHERE fs.shift_startdate_local_id BETWEEN  @minUtcDateId-1 AND @maxUtcDateId+1
-AND fs.schedule_date_id between @minUtcDateId-1 AND @maxUtcDateId+1
+WHERE fs.shift_startdate_local_id BETWEEN  @minUtcDateIdMinus1 AND @maxUtcDateIdPlus1
+AND fs.schedule_date_id between @minUtcDateIdMinus1 AND @maxUtcDateIdPlus1
 and fs.scenario_id=@scenario_id
 
 INSERT #fact_schedule(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)

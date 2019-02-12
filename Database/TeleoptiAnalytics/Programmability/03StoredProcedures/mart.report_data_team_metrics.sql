@@ -144,11 +144,29 @@ INNER JOIN mart.dim_interval i
 WHERE b.time_zone_id = @time_zone_id
 
 --Get the min/max UTC date_id. Expand UTC -1 +1 when fetching fact_tables (subSP
-SELECT @date_from_id=MIN(b.date_id)-1,@date_to_id=MAX(b.date_id)+1
+SELECT 
+	@date_from_id=MIN(b.date_id),
+	@date_to_id=MAX(b.date_id)
 FROM #bridge_time_zone b
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
 WHERE	d.date_date	between @date_from AND @date_to
+
+SELECT
+	@date_from_id = date_id 
+	FROM mart.dim_date
+	WHERE date_date = (
+		SELECT DATEADD(d, -1, date_date)
+		FROM mart.dim_date
+		WHERE date_id = @date_from_id)
+
+SELECT
+	@date_to_id = date_id 
+	FROM mart.dim_date
+	WHERE date_date = (
+		SELECT DATEADD(d, 1, date_date)
+		FROM mart.dim_date
+		WHERE date_id = @date_to_id)
 
 --This SP will insert data into #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]
