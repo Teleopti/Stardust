@@ -61,15 +61,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				command.CommandText = script;
 				command.ExecuteNonQuery();
 
-				command.CommandText =
-					"IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence_for_test]') AND type in (N'P', N'PC')) DROP PROCEDURE [mart].[report_data_agent_schedule_adherence_for_test]";
-				command.ExecuteNonQuery();
-
-				file = new FileInfo(@"TestData\mart.report_data_agent_schedule_adherence_for_test.sql");
-				script = file.OpenText().ReadToEnd();
-				command.CommandText = script;
-				command.ExecuteNonQuery();
-
 				command.CommandType = System.Data.CommandType.Text;
 				command.CommandText =
 					"IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.Add_One_Interval') AND type in (N'P', N'PC')) DROP PROCEDURE dbo.Add_One_Interval";

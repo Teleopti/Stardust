@@ -213,29 +213,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			}
 		}
 
-		public static DataTable ReportDataAgentScheduleAdherence(DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId)
-		{
-			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
-			{
-				const string reportResourceKey = "ResReportAdherencePerDay";
-				var dtResult = new DataSet();
-				using (var command = sqlConnection.CreateCommand())
-				{
-					var sqlAdapter = new SqlDataAdapter(command);
-					command.CommandType = CommandType.StoredProcedure;
-					command.CommandText = "mart.report_data_agent_schedule_adherence_for_test";
-					command.Parameters.AddWithValue("@date_from", date_from);
-					command.Parameters.AddWithValue("@date_to", date_to);
-					command.Parameters.AddWithValue("@adherence_id", adherence_id);
-					command.Parameters.AddWithValue("@agent_code", person.Id);
-					command.Parameters.AddWithValue("@time_zone_code", timeZoneId);
-					command.Parameters.AddWithValue("@report_resource_key", reportResourceKey);
-					sqlAdapter.Fill(dtResult);
-					return dtResult.Tables[0];
-				}
-			}
-		}
-
 		private static SqlConnection connectAndOpen(string connectionString)
 		{
 			var sqlConnection = new SqlConnection(connectionString);
