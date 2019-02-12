@@ -5,7 +5,6 @@ using Teleopti.Wfm.Adherence.Historical;
 
 namespace Teleopti.Wfm.Adherence.States.Events
 {
-	[JsonObject(Id = "StateChanged")]
 	public class PersonStateChangedEvent : IRtaStoredEvent, IEvent, ISolidProof
 	{
 		public Guid PersonId { get; set; }

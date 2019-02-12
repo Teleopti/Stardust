@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	public class BudgetGroupAllowanceValidatorTest :  IIsolateSystem
 	{

@@ -19,6 +19,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class PersonContractHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;

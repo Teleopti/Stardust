@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -26,6 +27,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: micke
         /// Created date: 2008-09-04
         /// </remarks>
-        IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission);
+        IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission, ITimeZoneGuard timeZoneGuard);
     }
 }

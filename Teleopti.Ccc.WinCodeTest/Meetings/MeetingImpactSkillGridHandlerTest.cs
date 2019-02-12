@@ -107,7 +107,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_meetingImpactView.SelectedSkill()).Return(_skill);
             Expect.Call(_meetingImpactView.StartDate).Return(new DateOnly(2010, 11, 1));
             Expect.Call(_skill.IsVirtual).Return(false);
-            Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);
 
             Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(skillStaffPeriodHolder).Repeat.Once();
             Expect.Call(skillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { _skill }, periodToFind)).IgnoreArguments().Return(skillStaffPeriods).Repeat.Once();

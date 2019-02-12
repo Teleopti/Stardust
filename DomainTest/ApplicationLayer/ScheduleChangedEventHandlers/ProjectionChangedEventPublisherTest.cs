@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	}
 
 	[DomainTest]
-	[DefaultData]
+	[AddDatasourceId]
 	public class ProjectionChangedEventPublisherTest
 	{
 		public ProjectionChangedEventPublisher Target;

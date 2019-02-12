@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
@@ -15,19 +14,10 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 {
 	public class IntradayStaffingApplicationServiceTestHelper
 	{
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
-
-		public IntradayStaffingApplicationServiceTestHelper(IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
-		{
-			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
-		}
-
-		public static Scenario FakeScenarioAndIntervalLength(FakeIntervalLengthFetcher intervalLengthFetcher, FakeScenarioRepository scenarioRepository, int minutesPerInterval)
+		public static IScenario FakeScenarioAndIntervalLength(FakeIntervalLengthFetcher intervalLengthFetcher, FakeScenarioRepository scenarioRepository, int minutesPerInterval)
 		{
 			intervalLengthFetcher.Has(minutesPerInterval);
-			var scenario = ScenarioFactory.CreateScenario("scenariorita", true, true).WithId();
-			scenarioRepository.Has(scenario);
-			return scenario;
+			return scenarioRepository.LoadDefaultScenario();
 		}
 
 		public static ISkill CreateEmailSkill(int intervalLength, string skillName, TimePeriod openHours)

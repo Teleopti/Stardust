@@ -19,7 +19,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	public class ReadModelValidatorTest : IIsolateSystem
 	{

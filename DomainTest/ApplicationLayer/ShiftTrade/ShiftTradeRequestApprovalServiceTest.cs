@@ -17,10 +17,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class ShiftTradeRequestApprovalServiceTest : IIsolateSystem
 	{
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;

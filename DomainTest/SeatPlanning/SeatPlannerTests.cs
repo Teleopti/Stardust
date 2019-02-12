@@ -18,6 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SeatPlanning
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class SeatPlannerTests
 	{
 		public FakeScenarioRepository FakeScenarioRepository;

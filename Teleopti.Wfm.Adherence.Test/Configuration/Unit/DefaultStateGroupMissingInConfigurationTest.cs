@@ -17,6 +17,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 		public void ShouldReturnMessageWhenInvalid()
 		{
 			Database
+				.WithStateGroup(null, "default", true, false) // make sure default bu has a default group
 				.WithBusinessUnit(null);
 
 			var result = Target.Validate();
@@ -29,6 +30,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 		public void ShouldNotReturnMessageWhenValid()
 		{
 			Database
+				.WithStateGroup(null, "default", true, false) // make sure default bu has a default group
 				.WithBusinessUnit(null)
 				.WithStateGroup(null, "default", true, false);
 
@@ -42,6 +44,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 		public void ShouldReturnMessageInvalid2()
 		{
 			Database
+				.WithStateGroup(null, "default", true, false) // make sure default bu has a default group
 				.WithBusinessUnit(null)
 				.WithStateGroup(null, "some group", false, false);
 
@@ -55,6 +58,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Unit
 		public void ShouldReturnMessageForEachBusinessUnit()
 		{
 			Database
+				.WithStateGroup(null, "default", true, false) // make sure default bu has a default group
 				.WithBusinessUnit(null, "invalid business unit 1")
 				.WithStateGroup(null, "some group", false, false)
 				.WithBusinessUnit(null, "invalid business unit 2")

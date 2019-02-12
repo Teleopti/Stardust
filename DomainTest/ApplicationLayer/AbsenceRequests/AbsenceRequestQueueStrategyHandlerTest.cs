@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[TestFixture]
+	[NoDefaultData]
 	public class AbsenceRequestQueueStrategyHandlerTest : IIsolateSystem, ITestInterceptor
 	{
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;

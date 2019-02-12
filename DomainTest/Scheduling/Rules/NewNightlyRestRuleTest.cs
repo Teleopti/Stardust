@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
-				.For<IScenarioRepository>();
 			isolate.UseTestDouble<NewNightlyRestRule>().For<NewNightlyRestRule>();
 		}
 

@@ -23,6 +23,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class PreferenceHintTest
 	{
 		public CheckScheduleHints Target;

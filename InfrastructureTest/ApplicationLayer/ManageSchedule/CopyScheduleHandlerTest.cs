@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ManageSchedule
 			});
 
 			var copyScheduleEvent = createCopyEvent();
-			copyScheduleEvent.PersonIds.Add(secondPerson.Id.GetValueOrDefault());
+			copyScheduleEvent.PersonIds = copyScheduleEvent.PersonIds.Append(secondPerson.Id.GetValueOrDefault()).ToArray();
 			Target.Handle(copyScheduleEvent);
 
 			VerifyCanBeFoundInScheduleStorageForTargetScenario(Person);

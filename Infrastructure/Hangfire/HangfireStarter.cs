@@ -16,18 +16,20 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	{
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly IConfigReader _config;
+		private readonly EventSerializerSettings _serializerSettings;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(HangfireStarter));
 
-		public HangfireStarter(ILifetimeScope lifetimeScope, IConfigReader config)
+		public HangfireStarter(ILifetimeScope lifetimeScope, IConfigReader config, EventSerializerSettings serializerSettings)
 		{
 			_lifetimeScope = lifetimeScope;
 			_config = config;
+			_serializerSettings = serializerSettings;
 		}
 
 		// GOSH.. Sooo much text...
 		public void Start(string connectionString)
 		{
-			JobHelper.SetSerializerSettings(NewtonsoftJsonSerializer.EventSettings);
+			JobHelper.SetSerializerSettings(_serializerSettings);
 
 			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", TimeSpan.FromHours(1).TotalSeconds);
 			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", TimeSpan.FromSeconds(5).TotalSeconds);

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return true;
 		}
 
-		public IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission)
+		public IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission, ITimeZoneGuard timeZoneGuard)
 		{
 			if(!CanSwapAssignments())
 				throw new ConstraintException("Can not swap assignments");
@@ -41,13 +42,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (toPersonAssignment == null)
 				{
-					toPersonSchedule.Merge(fromPersonSchedulePart, false,true);
+					toPersonSchedule.Merge(fromPersonSchedulePart, false,true, timeZoneGuard);
 					toPersonSchedule.DeletePersonalStuff();
 					fromPersonSchedule.DeleteMainShift();
 				}
 				else
 				{
-					fromPersonSchedule.Merge(toPersonSchedulePart, false,true);
+					fromPersonSchedule.Merge(toPersonSchedulePart, false,true, timeZoneGuard);
 					fromPersonSchedule.DeletePersonalStuff();
 					toPersonSchedule.DeleteMainShift();
 				}
@@ -56,20 +57,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (!fromPersonSchedulePart.IsScheduled() && toPersonSchedulePart.IsScheduled())
 				{
-					fromPersonSchedule.Merge(toPersonSchedulePart, false, true);
+					fromPersonSchedule.Merge(toPersonSchedulePart, false, true, timeZoneGuard);
 					toPersonSchedule.DeleteMainShift();
 					toPersonSchedule.DeleteDayOff();
 				}
 				else if (!toPersonSchedulePart.IsScheduled() && fromPersonSchedulePart.IsScheduled())
 				{
-					toPersonSchedule.Merge(fromPersonSchedulePart, false, true);
+					toPersonSchedule.Merge(fromPersonSchedulePart, false, true, timeZoneGuard);
 					fromPersonSchedule.DeleteMainShift();
 					fromPersonSchedule.DeleteDayOff();
 				}
 				else
 				{
-					fromPersonSchedule.Merge(toPersonSchedulePart, false, true, ignoreAssignmentPermission);
-					toPersonSchedule.Merge(fromPersonSchedulePart, false, true, ignoreAssignmentPermission);
+					fromPersonSchedule.Merge(toPersonSchedulePart, false, true, timeZoneGuard, ignoreAssignmentPermission);
+					toPersonSchedule.Merge(fromPersonSchedulePart, false, true, timeZoneGuard, ignoreAssignmentPermission);
 				}
 			}
 			retList.AddRange(_selectedSchedules);

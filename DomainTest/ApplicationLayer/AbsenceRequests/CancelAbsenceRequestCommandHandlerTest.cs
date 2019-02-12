@@ -35,7 +35,6 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[TestFixture]
 	public class CancelAbsenceRequestCommandHandlerEventTest : IIsolateSystem, IExtendSystem
 	{
 		public CancelAbsenceRequestCommandHandler Target;
@@ -82,7 +81,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private void commonSetup()
 		{
-			ScenarioRepository.Has("Default");
 			absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 			person = PersonFactory.CreatePerson("Yngwie", "Malmsteen").WithId();
 			PersonRepository.Add(person);

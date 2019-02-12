@@ -12,12 +12,12 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
-
 	[StaffingPerformanceTest]
 	[Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
 	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public AsSystem AsSystem;
 		public IConfigReader ConfigReader;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
-		public ScheduledStaffingViewModelCreator StaffingViewModelCreator;
+		public IStaffingViewModelCreator StaffingViewModelCreator;
 		public ISkillRepository SkillRepository;
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
@@ -65,9 +65,14 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 					{
 						command.ExecuteNonQuery();
 					}
+					using (var command = new SqlCommand(@"truncate table readmodel.SkillForecast", connection))
+					{
+						command.ExecuteNonQuery();
+					}
 				}
 				skills = SkillRepository.LoadAllSkills();
 				UpdateStaffingLevel.Update(period);
+				
 				uow.Current().PersistAll();
 				var skillCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period);
 				foreach (var skillCombinationResource in skillCombinationResources)
@@ -112,32 +117,5 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				day = day + 1;
 			}
 		}
-		
-		[Test, Ignore("Will be added when toggle for forecast read model is present")]
-		public void Load1MonthUsingForecastReadmodel()
-		{
-			var startDate = new DateOnly(2016,02,08);
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-
-			var day = 0;
-			while(day < 30)
-			{
-				if(day % 7 <= 4)
-				{
-					var currentDay = startDate.AddDays(day);
-					WithUnitOfWork.Do(() =>
-					{
-						var result = StaffingViewModelCreator.Load(new[] {new Guid("DAA1A1EC-1A93-470F-85B5-A14E00F48588") }, currentDay);
-						Assert.AreEqual(result.StaffingHasData, true);
-						Assert.Greater(result.DataSeries.Time.Length, 0);
-						Assert.Greater(result.DataSeries.ForecastedStaffing.Length, 0);
-						Assert.Greater(result.DataSeries.ScheduledStaffing.Length, 0);
-					});
-				}
-				day = day + 1;
-			}
-		}
-
 	}
 }

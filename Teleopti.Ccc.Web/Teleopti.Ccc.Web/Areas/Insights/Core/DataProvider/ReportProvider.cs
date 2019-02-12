@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Common.Logging;
 using Microsoft.PowerBI.Api.V2;
 using Microsoft.PowerBI.Api.V2.Models;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.Insights.Models;
 
@@ -18,17 +18,20 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		public const string TemplateReportName = "__WFM_Insights_Report_Template__";
 		public const string UsageReportName = "Report Usage Metrics Report";
 		private readonly IApplicationConfigurationDbProvider _appConfig;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IPowerBiClientFactory _powerBiClientFactory;
 		private readonly IInsightsReportRepository _reportRepository;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ReportProvider));
 
 		public ReportProvider(IApplicationConfigurationDbProvider appConfig,
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			IPowerBiClientFactory powerBiClientFactory,
 			IInsightsReportRepository reportRepository,
 			ICommonAgentNameProvider commonAgentNameProvider)
 		{
 			_appConfig = appConfig;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_powerBiClientFactory = powerBiClientFactory;
 			_reportRepository = reportRepository;
 			_commonAgentNameProvider = commonAgentNameProvider;
@@ -39,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			var wfmReports = _reportRepository.GetAllValidReports();
 			var reportInformation = wfmReports.ToDictionary(rep => rep.Id.GetValueOrDefault(), mapReportMetaData);
 
-			var excludedReports = new[] {UsageReportName, TemplateReportName};
+			var excludedReports = new[] { UsageReportName, TemplateReportName };
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				var groupId = getPowerBiGroupId();
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 						return new ReportModel
 						{
 							Id = x.Id,
-							Name = reportInfo != null?reportInfo.Name:x.Name,
+							Name = reportInfo != null ? reportInfo.Name : x.Name,
 							EmbedUrl = x.EmbedUrl,
 							CreatedBy = reportInfo?.CreatedBy,
 							CreatedOn = reportInfo?.CreatedOn,
@@ -69,12 +72,10 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 		public async Task<EmbedReportConfig> GetReportConfig(Guid reportId)
 		{
 			var result = new EmbedReportConfig();
-			var rawReportData = getReportMetaData(reportId);
+			var rawReportData = mapReportMetaData(_reportRepository.Get(reportId));
 
-			// Create a Power BI Client object. It will be used to call Power BI APIs.
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
-				// Get a list of reports.
 				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
@@ -103,26 +104,29 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				return result;
 			}
 
-			// Create a Power BI Client object. It will be used to call Power BI APIs.
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
-				// Get a list of reports.
 				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
 				var templateReport = reports.Value.SingleOrDefault(r => r.Name == TemplateReportName);
-				if (templateReport == null) {
+				if (templateReport == null)
+				{
 					logger.Error($"Template report \"{TemplateReportName}\" not found.");
 					return result;
 				}
-				
+
 				var newReport = client.Reports.CloneReportInGroup(groupId, templateReport.Id,
 					new CloneReportRequest(newReportName));
 
 				result = await generateEmbedReportConfig(client, newReport);
 			}
 
-			// TODO: Add a new record for the new created report in InsightsReport table
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				_reportRepository.AddNewInsightsReport(Guid.Parse(result.ReportId), result.ReportName);
+				uow.PersistAll();
+			}
 
 			return result;
 		}
@@ -132,10 +136,8 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			var result = new EmbedReportConfig();
 
 			var reportIdStr = reportId.ToString().ToLower();
-			// Create a Power BI Client object. It will be used to call Power BI APIs.
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
-				// Get a list of reports.
 				var groupId = getPowerBiGroupId();
 				var reports = await client.Reports.GetReportsInGroupAsync(groupId);
 
@@ -153,19 +155,21 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				result = await generateEmbedReportConfig(client, newReport);
 			}
 
-			// TODO: Add a new record for the new created report in InsightsReport table
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				_reportRepository.AddNewInsightsReport(Guid.Parse(result.ReportId), result.ReportName);
+				uow.PersistAll();
+			}
 
 			return result;
 		}
 
 		public async Task<bool> DeleteReport(Guid reportId)
 		{
-			// Create a Power BI Client object. It will be used to call Power BI APIs.
 			using (var client = await _powerBiClientFactory.CreatePowerBiClient())
 			{
 				try
 				{
-					// Get a list of reports.
 					var groupId = getPowerBiGroupId();
 					client.Reports.DeleteReport(groupId, reportId.ToString().ToLower());
 				}
@@ -174,9 +178,15 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 					logger.Error($"Failed to delete report with Id=\"{reportId}\"", ex);
 					return false;
 				}
-
-				return true;
 			}
+
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				_reportRepository.DeleteInsightsReport(reportId);
+				uow.PersistAll();
+			}
+
+			return true;
 		}
 
 		private bool isValidReportName(string newReportName)
@@ -188,10 +198,9 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			Report report, string userName = null, string roles = null)
 		{
 			GenerateTokenRequest generateTokenRequestParameters;
-			// This is how you create embed token with effective identities
 			if (!string.IsNullOrEmpty(userName))
 			{
-				var rls = new EffectiveIdentity(userName, new List<string> {report.DatasetId});
+				var rls = new EffectiveIdentity(userName, new List<string> { report.DatasetId });
 				if (!string.IsNullOrWhiteSpace(roles))
 				{
 					rls.Roles = roles.Split(',').ToList();
@@ -201,11 +210,10 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 				// Possible values for access level: 'View', 'Edit', 'Create'
 				// Refer to https://github.com/Microsoft/PowerBI-CSharp/blob/master/sdk/PowerBI.Api/Source/V2/Models/GenerateTokenRequest.cs
 				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "Edit",
-					identities: new List<EffectiveIdentity> {rls});
+					identities: new List<EffectiveIdentity> { rls });
 			}
 			else
 			{
-				// Generate Embed Token for reports without effective identities.
 				generateTokenRequestParameters = new GenerateTokenRequest(accessLevel: "Edit");
 			}
 
@@ -225,7 +233,7 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			var expiration = token.Expiration < tenMinutesLater
 				? tenMinutesLater
 				: token.Expiration;
-			
+
 			return new EmbedReportConfig
 			{
 				ReportId = report.Id,
@@ -242,19 +250,13 @@ namespace Teleopti.Ccc.Web.Areas.Insights.Core.DataProvider
 			return _appConfig.GetTenantValue(TenantApplicationConfigKey.InsightsPowerBIGroupId);
 		}
 
-		private reportMetaData getReportMetaData(Guid reportId)
-		{
-			var report = _reportRepository.Get(reportId);
-			return mapReportMetaData(report);
-		}
-
 		private reportMetaData mapReportMetaData(IInsightsReport report)
 		{
 			if (report == null)
 			{
 				return null;
 			}
-			
+
 			var nameSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			return new reportMetaData
 			{

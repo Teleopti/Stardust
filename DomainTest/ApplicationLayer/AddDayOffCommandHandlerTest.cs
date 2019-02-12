@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class AddDayOffCommandHandlerTest : IIsolateSystem
 	{
 		public AddDayOffCommandHandler Target;

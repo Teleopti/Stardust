@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -9,7 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -24,7 +23,6 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Historical.ApprovePeriodAsInAdherence;
@@ -34,371 +32,6 @@ using Description = Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public static class FakeDatabaseOrganizationExtensions
-	{
-		public static FakeDatabase WithTeam(this FakeDatabase database, Guid? id)
-		{
-			return database.WithTeam(id, null);
-		}
-
-		public static FakeDatabase WithTeam(this FakeDatabase database, string name)
-		{
-			return database.WithTeam(null, name);
-		}
-
-		public static FakeDatabase WithSite(this FakeDatabase database, Guid? id)
-		{
-			return database.WithSite(id, "s");
-		}
-
-		public static FakeDatabase WithSite(this FakeDatabase database, string name)
-		{
-			return database.WithSite(null, name);
-		}
-
-		public static FakeDatabase WithSite(this FakeDatabase database)
-		{
-			return database.WithSite(null, "s");
-		}
-	}
-
-	public static class FakeDatabaseAgentExtensions
-	{
-		public static FakeDatabase WithAgent(this FakeDatabase database)
-		{
-			return database.WithAgent(null, RandomName.Make(), null, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid personId)
-		{
-			return database.WithAgent(personId, RandomName.Make(), null, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name)
-		{
-			return database.WithAgent(null, name, null, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name)
-		{
-			return database.WithAgent(id, name, null, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid id)
-		{
-			return database.WithAgent(id, name, null, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteId)
-		{
-			return database.WithAgent(personId, name, null, teamId, siteId, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteId, Guid? businessUnitId)
-		{
-			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteId, Guid? businessUnitId, int? employmentNumber)
-		{
-			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, employmentNumber);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
-		{
-			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid? teamId)
-		{
-			return database.WithAgent(null, name, null, teamId, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid? teamId, Guid? siteId)
-		{
-			return database.WithAgent(null, name, null, teamId, siteId, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid? teamId, Guid? siteId, Guid? businessUnitId)
-		{
-			return database.WithAgent(null, name, null, teamId, siteId, businessUnitId, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate)
-		{
-			return database.WithAgent(null, name, terminalDate, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, Guid? teamId)
-		{
-			return database.WithAgent(null, name, terminalDate, teamId, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId)
-		{
-			return database.WithAgent(id, name, terminalDate, teamId, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, int? employeeNumber)
-		{
-			return database.WithAgent(id, name, null, null, null, null, null, employeeNumber);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate)
-		{
-			return database.WithAgent(id, name, terminalDate, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, TimeZoneInfo timeZone)
-		{
-			return database.WithAgent(null, name, null, null, null, null, timeZone, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, TimeZoneInfo timeZone)
-		{
-			return database.WithAgent(null, name, terminalDate, null, null, null, timeZone, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, TimeZoneInfo timeZone)
-		{
-			return database.WithAgent(id, name, null, null, null, null, timeZone, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, TimeZoneInfo timeZone)
-		{
-			return database.WithAgent(id, null, null, null, null, null, timeZone, null);
-		}
-
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, TimeZoneInfo timeZone, int? employeeNumber)
-		{
-			database.WithPerson(id, name, terminalDate, timeZone, null, null, employeeNumber);
-			database.WithPeriod(null, teamId, siteId, businessUnitId);
-			database.WithExternalLogon(name);
-			database.WithSchedulePeriod(null);
-			return database;
-		}
-	}
-
-	public static class FakeDatabaseAdherenceExtensions
-	{
-		public static FakeDatabase WithApprovedPeriod(this FakeDatabase database, string startTime, string endTime)
-		{
-			return database.WithApprovedPeriod(null, startTime, endTime);
-		}
-
-		public static FakeDatabase WithRemovedApprovedPeriod(this FakeDatabase database, string startTime, string endTime)
-		{
-			return database.WithRemovedApprovedPeriod(null, startTime, endTime);
-		}
-
-		public static FakeDatabase WithHistoricalStateChange(this FakeDatabase database, string time, Adherence adherence)
-		{
-			return database.WithHistoricalStateChange(null, time, adherence);
-		}
-
-		public static FakeDatabase WithHistoricalAdherenceDayStart(this FakeDatabase database, string time, Adherence adherence)
-		{
-			return database.WithHistoricalAdherenceDayStart(null, time, adherence);
-		}
-	}
-
-	public static class FakeDatabaseRuleExtensions
-	{
-		public static FakeDatabase WithMappedRule(this FakeDatabase database)
-		{
-			return database.WithMappedRule(null, "", null, 0, null, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode)
-		{
-			return database.WithMappedRule(null, stateCode, null, 0, stateCode, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId)
-		{
-			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, 0, null, null);
-		}
-
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, Adherence adherence)
-		{
-			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, 0, null, adherence);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect)
-		{
-			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId)
-		{
-			return database.WithMappedRule(ruleId, stateCode, activityId, 0, null, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, Guid? ruleId, string name)
-		{
-			return database.WithMappedRule(ruleId, stateCode, activityId, 0, name, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, string name)
-		{
-			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, 0, name, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid activityId, int staffingEffect, Adherence adherence)
-		{
-			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, adherence);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence)
-		{
-			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, adherence);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId)
-		{
-			return database.WithMappedRule(ruleId, stateCode, activityId, 0, null, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, Guid ruleId, string stateCode, Guid? activityId, string name)
-		{
-			return database.WithMappedRule(ruleId, stateCode, activityId, 0, name, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, Guid? ruleId, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
-		{
-			return database.WithMappedRule(ruleId, stateCode, activityId, staffingEffect, name, adherence, null);
-		}
-
-		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color color)
-		{
-			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, name, adherence, color);
-		}
-	}
-
-	public static class FakeDatabasePeriodExtensions
-	{
-		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate)
-		{
-			return database.WithPeriod(startDate, null, null, null);
-		}
-
-		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, ISiteOpenHour siteOpenHour)
-		{
-			return database.WithPeriod(startDate, null, null, null, siteOpenHour);
-		}
-
-		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, Guid? teamId)
-		{
-			return database.WithPeriod(startDate, teamId, null, null);
-		}
-
-		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, Guid? teamId, Guid? siteId)
-		{
-			return database.WithPeriod(startDate, teamId, siteId, null);
-		}
-	}
-
-	public static class FakeDatabasePersonExtensions
-	{
-		public static FakeDatabase WithPerson(this FakeDatabase database, Guid id, string name)
-		{
-			return database.WithPerson(id, name, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithPerson(this FakeDatabase database, string name)
-		{
-			return database.WithPerson(null, name, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithPerson(this FakeDatabase database, Guid id)
-		{
-			return database.WithPerson(id, null, null, null, null, null, null);
-		}
-
-		public static FakeDatabase WithPerson(this FakeDatabase database, Guid id, string name, TimeZoneInfo timeZone)
-		{
-			return database.WithPerson(id, name, null, timeZone, null, null, null);
-		}
-	}
-
-	public static class FakeDatabaseScheduleExtensions
-	{
-		public static FakeDatabase WithScenario(this FakeDatabase database, Guid? id)
-		{
-			return database.WithScenario(id, null);
-		}
-
-		public static FakeDatabase WithActivity(this FakeDatabase database)
-		{
-			return database.WithActivity(null, null, null);
-		}
-
-		public static FakeDatabase WithActivity(this FakeDatabase database, Guid? id)
-		{
-			return database.WithActivity(id, null, null);
-		}
-
-		public static FakeDatabase WithAssignedActivity(this FakeDatabase database, string startTime, string endTime)
-		{
-			return database.WithAssignedActivity(null, startTime, endTime);
-		}
-
-		public static FakeDatabase WithDayOffTemplate(this FakeDatabase database, Guid? id)
-		{
-			return database.WithDayOffTemplate(id, null, null);
-		}
-
-		public static FakeDatabase WithDayOffTemplate(this FakeDatabase database, string name, string shortName)
-		{
-			return database.WithDayOffTemplate(null, name, shortName);
-		}
-
-		public static FakeDatabase WithAbsence(this FakeDatabase database, Guid? id)
-		{
-			return database.WithAbsence(id, null, null);
-		}
-
-		public static FakeDatabase WithAbsence(this FakeDatabase database, string name)
-		{
-			return database.WithAbsence(null, name, null);
-		}
-
-		public static FakeDatabase WithSchedule(this FakeDatabase database, string start, string end)
-		{
-			return database
-				.WithAssignment(start)
-				.WithAssignedActivity(start, end);
-		}
-
-		public static FakeDatabase WithSchedules(this FakeDatabase database, IEnumerable<DateTimePeriod> periods)
-		{
-			periods.ForEach(t => {
-				database
-				.WithAssignment(t.StartDateTime.ToString())
-				.WithAssignedActivity(t.StartDateTime.ToString(), t.EndDateTime.ToString());
-			});
-			return database;
-		}
-
-		public static FakeDatabase WithScheduleDayOff(this FakeDatabase database, string date)
-		{
-			return database
-				.WithAssignment(date)
-				.WithDayOff();
-		}
-	}
-
-	public class FakeDataSources
-	{
-		public List<KeyValuePair<string, int>> Datasources = new List<KeyValuePair<string, int>>();
-
-		public void Add(string sourceId, int datasourceId)
-		{
-			Datasources.Add(new KeyValuePair<string, int>(sourceId, datasourceId));
-		}
-	}
-
 	public class FakeDatabase
 	{
 		private readonly FakeTenants _tenants;
@@ -415,7 +48,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakePersonAssignmentRepository _personAssignments;
 		private readonly FakeApplicationFunctionRepository _applicationFunctions;
 		private readonly FakeAvailableDataRepository _availableDatas;
-		private readonly IDefinedRaptorApplicationFunctionFactory _allApplicationFunctions;
 		private readonly FakeAbsenceRepository _absences;
 		private readonly FakePersonAbsenceRepository _personAbsences;
 		private readonly FakeActivityRepository _activities;
@@ -435,11 +67,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
 		private readonly FakeShiftCategoryRepository _shiftCategories;
 		private readonly FakePersonRequestRepository _personRequests;
-		private readonly ApprovePeriodAsInAdherence _approvePeriod;
-		private readonly RemoveApprovedPeriod _removePeriod;
 		private readonly FakeRtaHistory _rtaHistory;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
-		
+		private readonly InitializeBusinessUnitDatabaseState _initializeBusinessUnitDatabaseState;
+		private readonly IDefinedRaptorApplicationFunctionFactory _definedRaptorApplicationFunctionFactory;
+
 		private BusinessUnit _businessUnit;
 		private Site _site;
 		private Person _person;
@@ -448,7 +80,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private Contract _contract;
 		private PartTimePercentage _partTimePercentage;
 		private ContractSchedule _contractSchedule;
-		private Scenario _scenario;
+		private IScenario _scenario;
 		private DayOffTemplate _dayOffTemplate;
 		private PersonAssignment _personAssignment;
 		private Absence _absence;
@@ -478,7 +110,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakePersonAssignmentRepository personAssignments,
 			FakeApplicationFunctionRepository applicationFunctions,
 			FakeAvailableDataRepository availableDatas,
-			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions,
 			FakeAbsenceRepository absences,
 			FakePersonAbsenceRepository personAbsences,
 			FakeActivityRepository activities,
@@ -498,10 +129,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
 			FakeShiftCategoryRepository shiftCategories,
 			FakePersonRequestRepository personRequests,
-			ApprovePeriodAsInAdherence approvePeriod,
-			RemoveApprovedPeriod removePeriod,
 			FakeRtaHistory rtaHistory,
-			IShiftTradeRequestSetChecksum shiftTradeSetChecksum)
+			IShiftTradeRequestSetChecksum shiftTradeSetChecksum,
+			InitializeBusinessUnitDatabaseState initializeBusinessUnitDatabaseState,
+			IDefinedRaptorApplicationFunctionFactory definedRaptorApplicationFunctionFactory)
 		{
 			_tenants = tenants;
 			_persons = persons;
@@ -517,7 +148,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personAssignments = personAssignments;
 			_applicationFunctions = applicationFunctions;
 			_availableDatas = availableDatas;
-			_allApplicationFunctions = allApplicationFunctions;
 			_absences = absences;
 			_personAbsences = personAbsences;
 			_activities = activities;
@@ -537,24 +167,37 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
 			_shiftCategories = shiftCategories;
 			_personRequests = personRequests;
-			_approvePeriod = approvePeriod;
 			_rtaHistory = rtaHistory;
-			_removePeriod = removePeriod;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
+			_initializeBusinessUnitDatabaseState = initializeBusinessUnitDatabaseState;
+			_definedRaptorApplicationFunctionFactory = definedRaptorApplicationFunctionFactory;
 		}
 
-		public void CreateDefaultData(IBusinessUnit businessUnit)
+		public void CreateBusinessUnitDefaultData(BusinessUnit businessUnit)
 		{
-			// default data already created. ugly for now...
-			if (_applicationFunctions.LoadAll().Any())
-				return;
+			addDefaultBusinessUnit(businessUnit);
+			dataInsertedFromDbReleaseScript();
+			dataInsertedFromAdminPage();
+		}
 
+		private void dataInsertedFromAdminPage()
+		{
+			_initializeBusinessUnitDatabaseState.Execute(_businessUnit, _person);
+			_scenario = _scenarios.LoadDefaultScenario().WithBusinessUnit(_businessUnit);
+		}
+
+		private void dataInsertedFromDbReleaseScript()
+		{
 			// all application functions
-			_allApplicationFunctions.ApplicationFunctions.ForEach(_applicationFunctions.Add);
-
+			_definedRaptorApplicationFunctionFactory.ApplicationFunctions.ForEach(_applicationFunctions.Add);
+			
+			var systemUser = new Person().WithName("System")
+				.InTimeZone(TimeZoneInfo.Utc)
+				.WithCulture(CultureInfoFactory.CreateEnglishCulture())
+				.WithId(SystemUser.Id);
+			
 			// super role
-			var role = new ApplicationRole {Name = SystemUser.SuperRoleName};
-			role.SetId(SystemUser.SuperRoleId);
+			var role = new ApplicationRole {Name = SystemUser.SuperRoleName}.WithId(SystemUser.SuperRoleId);
 			role.AddApplicationFunction(_applicationFunctions.LoadAll().Single(x => x.FunctionPath == DefinedRaptorApplicationFunctionPaths.All));
 			var availableData = new AvailableData
 			{
@@ -564,23 +207,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_availableDatas.Add(availableData);
 			role.AvailableData = availableData;
 			_applicationRoles.Add(role);
-
-			// created by app config app
-			// should should match the system user that is created
-			// not sure if it does...
-			WithPerson(SystemUser.Id, SystemUser.Name, null,
-				TimeZoneInfo.Utc,
-				CultureInfoFactory.CreateEnglishCulture(),
-				CultureInfoFactory.CreateEnglishCulture(), null);
-			_person.PermissionInformation.AddApplicationRole(role);
-
-			WithBusinessUnit(businessUnit.Id.Value);
-
-			WithScenario(null, true);
-
-			// seems to always exist
-			WithDataSource(-1, "-1");
-			WithDataSource(1, "-1");
+			
+			systemUser.PermissionInformation.AddApplicationRole(role);
+			_person = systemUser;
 		}
 
 		// rta stuff we want to remove
@@ -653,6 +282,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithBusinessUnit(Guid? id)
 		{
 			return WithBusinessUnit(id, null);
+		}
+
+		private void addDefaultBusinessUnit(BusinessUnit businessUnit)
+		{
+			_businessUnit = businessUnit;
+			_businessUnits.Add(businessUnit);
 		}
 
 		public FakeDatabase WithBusinessUnit(Guid? id, string name)
@@ -1304,23 +939,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithApprovedPeriod(Guid? id, string startTime, string endTime)
 		{
-			_approvePeriod.Approve(new ApprovedPeriod
-			{
-				PersonId = id ?? _person.Id.Value,
-				StartTime = startTime.Utc(),
-				EndTime = endTime.Utc()
-			});
+			_rtaHistory.ApprovedPeriod(id ?? _person.Id.Value, startTime, endTime);
 			return this;
 		}
 
 		public FakeDatabase WithRemovedApprovedPeriod(Guid? id, string startTime, string endTime)
 		{
-			_removePeriod.Remove(new RemovedPeriod
-			{
-				PersonId = id ?? _person.Id.Value,
-				StartTime = startTime.Utc(),
-				EndTime = endTime.Utc()
-			});
+			_rtaHistory.RemovedApprovedPeriod(id ?? _person.Id.Value, startTime, endTime);
 			return this;
 		}
 

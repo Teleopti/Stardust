@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
         /// Collection of recalculate messages
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public Collection<RecalculateForecastOnSkill> SkillCollection { get; set; }
+        public IEnumerable<RecalculateForecastOnSkill> SkillCollection { get; set; }
 
         public string LogOnDatasource { get; set; }
         public Guid LogOnBusinessUnitId { get; set; }

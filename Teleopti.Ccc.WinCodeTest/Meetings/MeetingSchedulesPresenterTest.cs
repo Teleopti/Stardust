@@ -15,6 +15,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
@@ -43,13 +44,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _view = _mocks.DynamicMock<IMeetingSchedulesView>();
             _person = PersonFactory.CreatePerson();
 			_timeZone = TimeZoneInfo.Utc;
+			TimeZoneGuardForDesktop.Instance_DONTUSE.Set(_timeZone);
 			_person.PermissionInformation.SetDefaultTimeZone(_timeZone);
             _startDate = new DateOnly(2009, 10, 27);
             _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));
             _scenario = _mocks.StrictMock<IScenario>();
             _schedulerStateLoader = _mocks.DynamicMock<ISchedulerStateLoader>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person }, _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuard());
-		    _schedulerStateHolder.TimeZoneInfo = _timeZone;
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person }, _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder());
             _meetingSlotFinderService = _mocks.StrictMock<IMeetingSlotFinderService>();
 
 		    _model = MeetingComposerPresenter.CreateDefaultMeeting(
@@ -359,7 +360,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldReturnDefaultMergedPeriod()
         {
-            var person = new Person();
+			var person = new Person();
             person.PermissionInformation.SetDefaultTimeZone(_timeZone);
             _schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
@@ -376,7 +377,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                 Expect.Call(scheduleDay.ProjectionService()).Return(projectionService);
                 Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
                 Expect.Call(visualLayerCollection.Period()).Return(null);
-				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_model.TimeZone).Repeat.AtLeastOnce();
                 Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary[person]).Return(range);
                 Expect.Call(range.ScheduledDay(_startDate)).Return(scheduleDay);

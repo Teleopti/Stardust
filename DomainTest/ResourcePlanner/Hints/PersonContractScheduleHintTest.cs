@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class PersonContractScheduleHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;

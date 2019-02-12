@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_HintShiftBagCannotFulFillContractTime_78717)]
+	[NoDefaultData]
 	public class PersonContractShiftBagHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;

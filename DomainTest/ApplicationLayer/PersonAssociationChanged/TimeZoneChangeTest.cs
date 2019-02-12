@@ -14,9 +14,8 @@ using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 {
-	[TestFixture]
 	[DomainTest]
-	[DefaultData]
+	[AddDatasourceId]
 	public class TimeZoneChangeTest
 	{
 		public PersonAssociationChangedEventPublisher Target;

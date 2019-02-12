@@ -20,7 +20,7 @@ using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	[WebTest]
 	public class RespondToShiftTradeTest : IIsolateSystem

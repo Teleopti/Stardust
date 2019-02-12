@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Rows;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Chart;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
@@ -131,8 +133,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 					_rowManager.IntervalLength = Skill.DefaultResolution;
 				}
 
-				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(stateHolder.TimeZoneInfo).Date,
-				                                                   stateHolder.TimeZoneInfo);
+				_rowManager.BaseDate = TimeZoneHelper.ConvertToUtc(period.StartDateTimeLocal(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()).Date,
+					TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 				_rowManager.SetDataSource(skillStaffPeriods);
 			}
         }
@@ -462,7 +464,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
         private void createIntervalList(DateTimePeriod period, ISchedulerStateHolder stateHolder)
         {
             _intervals.Clear();
-            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, stateHolder.TimeZoneInfo);
+            _intervals = period.IntervalsFromHourCollection(Skill.DefaultResolution, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
         }
 
         private static DateTimePeriod createDateTimePeriod(ICollection<ISkillStaffPeriod> list)

@@ -88,8 +88,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
       <HintPath>..\packages\NHibernate.5.2.3\lib\net461\NHibernate.dll</HintPath>
@@ -170,6 +170,7 @@
     <Compile Include="ApplicationLayer\AnalyticsScheduleMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\Events\Hangfire\HangfireEventRealPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\Hangfire\HangfireEventServerForTest.cs" />
+    <Compile Include="ApplicationLayer\Events\Hangfire\HangfireJobTypeNameChangesTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\CopyScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\ImportScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ManageSchedule\MoveTestCase.cs" />
@@ -365,6 +366,7 @@
     <Compile Include="Repositories\QueuedAbsenceRequestRepositoryTest.cs" />
     <Compile Include="Repositories\ProjectionVersionPersisterTest.cs" />
     <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
+    <Compile Include="Repositories\SkillForecastJobStartTimeRepositoryTest.cs" />
     <Compile Include="Repositories\SkillForecastReadModelRepositoryTest.cs" />
     <Compile Include="Repositories\SkillGroupRepositoryTest.cs" />
     <Compile Include="Repositories\StaffingAuditRepositoryTest.cs" />

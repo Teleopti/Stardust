@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
@@ -93,23 +94,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			var manager = new ScheduleToPdfManager();
-
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			if (teamReport)
 			{
-				manager.ExportTeam(_schedulerStateHolder.SchedulerStateHolder.TimeZoneInfo, _culture, personDic,
+				manager.ExportTeam(timeZone, _culture, personDic,
 								   period, _schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
 								   _rightToLeft, detail, _schedulingScreen, path);
 				return;
 			}
 			if (shiftsPerDay)
 			{
-				ScheduleToPdfManager.ExportShiftsPerDay(_schedulerStateHolder.SchedulerStateHolder.TimeZoneInfo, _culture, personDic,
+				ScheduleToPdfManager.ExportShiftsPerDay(timeZone, _culture, personDic,
 														period, _schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
 														detail, publicNote, _schedulingScreen, path);
 				return;
 			}
 
-			manager.ExportIndividual(_schedulerStateHolder.SchedulerStateHolder.TimeZoneInfo, _culture, personDic,
+			manager.ExportIndividual(timeZone, _culture, personDic,
 									 period, _schedulerStateHolder.SchedulerStateHolder.SchedulingResultState,
 									 _rightToLeft, detail, _schedulingScreen, singleFile, path);
 		}

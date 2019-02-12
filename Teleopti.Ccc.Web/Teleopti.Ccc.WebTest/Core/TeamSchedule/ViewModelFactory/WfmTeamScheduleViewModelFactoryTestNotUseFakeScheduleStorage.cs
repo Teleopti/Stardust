@@ -19,10 +19,10 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
 
-
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class WfmTeamScheduleViewModelFactoryTestNotUseFakeScheduleStorage : IIsolateSystem, IExtendSystem
 	{
 		public ITeamScheduleViewModelFactory Target;

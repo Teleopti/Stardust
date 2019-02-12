@@ -15,9 +15,7 @@ using FakeDatabase = Teleopti.Ccc.TestCommon.FakeRepositories.FakeDatabase;
 
 namespace Teleopti.Wfm.Adherence.Test.States.Unit.ReadModels
 {
-	[TestFixture]
 	[DomainTest]
-	[DefaultData]
 	public class CurrentScheduleReadModelUpdaterTest
 	{
 		public FakeDatabase Database;

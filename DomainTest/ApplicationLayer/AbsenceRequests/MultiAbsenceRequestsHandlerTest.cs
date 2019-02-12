@@ -28,10 +28,10 @@ using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class MultiAbsenceRequestsHandlerTest : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;

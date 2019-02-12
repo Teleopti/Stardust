@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var messageBrokerSender = MockRepository.GenerateMock<IMessageSender>();
 
-			var target = new TrackingMessageSender(messageBrokerSender, new NewtonsoftJsonSerializer());
+			var target = new TrackingMessageSender(messageBrokerSender, NewtonsoftJsonSerializer.Make());
 
 			var @event = new ActivityAddedEvent
 			{

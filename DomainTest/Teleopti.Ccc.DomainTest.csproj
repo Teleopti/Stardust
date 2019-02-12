@@ -95,8 +95,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NPOI, Version=2.4.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <HintPath>..\packages\NPOI.2.4.0\lib\net40\NPOI.dll</HintPath>
@@ -295,6 +295,7 @@
     <Compile Include="Reports\ScheduleAnalysisProviderTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForBetweenDayoffsTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingExistingShiftNotMatchingEachOtherHintForSchedulePeriodTest.cs" />
+    <Compile Include="ResourcePlanner\Hints\BusinessRulesHintDesktopTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BusinessRulesHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingNotMatchShiftBagHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreferenceHintTest.cs" />
@@ -1228,7 +1229,6 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayerTest.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionServiceTest.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorTest.cs" />
-    <Compile Include="Scheduling\TimeZoneGuardTest.cs" />
     <Compile Include="Scheduling\Tracking\PersonAccountProjectionServiceTest.cs" />
     <Compile Include="Scheduling\Tracking\TestTrackerOne.cs" />
     <Compile Include="Scheduling\Tracking\TrackerCalculatorTest.cs" />

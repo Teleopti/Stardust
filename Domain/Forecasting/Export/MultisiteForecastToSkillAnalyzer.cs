@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
 	    private void analyzeForecast(IChildSkill sourceSkill, ISkill targetSkill, ISkillStaffPeriodDictionary skillStaffPeriods, DateOnlyPeriod period)
 	    {
-			var result = new List<IForecastsRow>();
+			var result = new List<ForecastsRow>();
 			foreach (var skillStaffPeriod in skillStaffPeriods.Values)
 			{
 				result.Add(new ForecastsRow
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
     public interface ISplitImportForecastMessage
     {
-        void Process(IEnumerable<IForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period);
+        void Process(IEnumerable<ForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period);
     }
 
     public interface IMultisiteForecastToSkillCommand

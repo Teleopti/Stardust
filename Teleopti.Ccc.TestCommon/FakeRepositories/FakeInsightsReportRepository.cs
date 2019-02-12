@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeInsightsReportRepository: IInsightsReportRepository
+	public class FakeInsightsReportRepository : IInsightsReportRepository
 	{
 		private readonly List<IInsightsReport> reports = new List<IInsightsReport>();
 
@@ -64,6 +64,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			report.Name = reportName;
 			//report.UpdatedBy = currentUser;
 			//report.UpdatedOn = DateTime.Now;
+		}
+
+		public void DeleteInsightsReport(Guid reportId)
+		{
+			var report = reports.SingleOrDefault(x => x.Id == reportId);
+			if (report != null) reports.Remove(report);
 		}
 	}
 }

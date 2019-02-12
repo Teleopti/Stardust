@@ -2,7 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
@@ -28,9 +30,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void DrawWeekGrid(ISchedulerStateHolder stateHolder, ISkill skill)
 		{
 			if (stateHolder == null || skill == null) return;
-
-            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(stateHolder.TimeZoneInfo );
-			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();
 
 			var weekDates = new List<DateOnly>();
 			_weeks = new List<DateOnlyPeriod>();
@@ -69,9 +71,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void SetDates(ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) return;
-
-			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(stateHolder.TimeZoneInfo );
-			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();	
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).ToList();	
 		}
 
 		public void SetWeeks()
@@ -100,17 +102,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 			
 			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillWeekPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
 			IAggregateSkill aggregateSkillSkill = skill;
-
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			foreach (var dateOnlyPeriod in _weeks)
 			{
 				IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod>();
 				if (aggregateSkillSkill.IsVirtual)
 				{
-					periods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo));
+					periods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateOnlyPeriod.ToDateTimePeriod(timeZone));
 				}
 				else
 				{
-					var periodToFind = dateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo);
+					var periodToFind = dateOnlyPeriod.ToDateTimePeriod(timeZone);
 					periods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, periodToFind);
 				}
 

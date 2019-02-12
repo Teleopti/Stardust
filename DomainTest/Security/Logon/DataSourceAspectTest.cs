@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 {
 	[DomainTest]
 	[LoggedOff]
-	[TestFixture]
+	[NoDefaultData]
 	public class DataSourceAspectTest : IExtendSystem
 	{
 		public Service TheService;

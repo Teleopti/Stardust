@@ -100,8 +100,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
       <HintPath>..\packages\NHibernate.5.2.3\lib\net461\NHibernate.dll</HintPath>
@@ -230,6 +230,14 @@
     <Compile Include="FakeRepositories\FakeBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeBankHolidayCalendarRepository.cs" />
     <Compile Include="FakeRepositories\FakeBankHolidayDateRepository.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseAdherenceExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseAgentExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseOrganizationExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabasePeriodExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabasePersonExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseRuleExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDatabaseScheduleExtensions.cs" />
+    <Compile Include="FakeRepositories\FakeDataSources.cs" />
     <Compile Include="FakeRepositories\FakeExtensiveLogRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
@@ -337,7 +345,9 @@
     <Compile Include="FakeTenantLogonInfoLoader.cs" />
     <Compile Include="FakeTransactionHook.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
-    <Compile Include="HandlerTypeMapperForTest.cs" />
+    <Compile Include="IoC\AddDatasourceId.cs" />
+    <Compile Include="IoC\NoDefaultDataAttribute.cs" />
+    <Compile Include="PersistedTypeMapperForTest.cs" />
     <Compile Include="HangfireUtilitiesExtensions.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="Exceptions.cs" />
@@ -415,7 +425,6 @@
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
     <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="FakeRepositories\FakeStateQueue.cs" />
-    <Compile Include="IoC\DefaultDataAttribute.cs" />
     <Compile Include="IoC\DontSendEventsAtPersistAttribute.cs" />
     <Compile Include="IoC\FakePermissionsAttribute.cs" />
     <Compile Include="IoC\IIoCTestContext.cs" />

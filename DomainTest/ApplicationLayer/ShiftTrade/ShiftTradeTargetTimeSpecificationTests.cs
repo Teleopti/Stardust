@@ -19,10 +19,10 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class ShiftTradeTargetTimeSpecificationTests : IIsolateSystem
 	{
 		public FakeScenarioRepository CurrentScenario;
@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public IScheduleStorage ScheduleStorage;
 		public IBusinessRuleProvider BusinessRuleProvider;
 		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
-		public ITimeZoneGuard TimeZoneGuard;
 		public ShiftTradeTestHelper ShiftTradeTestHelper;
 
 		[Test]
@@ -258,8 +257,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var periodExtractor = new PeriodExtractorFromScheduleParts();
 			var matrixListFactory = new MatrixListFactory(matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);
 			return new ShiftTradeTargetTimeSpecification(
-				() => new SchedulerStateHolder(SchedulingResultStateHolder, null, TimeZoneGuard)
-				, matrixListFactory, new SchedulePeriodTargetTimeCalculator());
+				() => new SchedulerStateHolder(SchedulingResultStateHolder, null)
+				, matrixListFactory, new SchedulePeriodTargetTimeCalculator(), new FakeTimeZoneGuard());
 		}
 
 		private void acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(IPersonRequest personRequest, bool enableSiteOpenHoursRule = false)

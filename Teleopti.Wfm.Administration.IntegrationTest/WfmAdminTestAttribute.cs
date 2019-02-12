@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			isolate.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 			isolate.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
 			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			isolate.UseTestDouble<HandlerTypeMapperForTest>().For<HandlerTypeMapper>();
+			isolate.UseTestDouble<PersistedTypeMapperForTest>().For<PersistedTypeMapper>();
 		}
 	}
 }

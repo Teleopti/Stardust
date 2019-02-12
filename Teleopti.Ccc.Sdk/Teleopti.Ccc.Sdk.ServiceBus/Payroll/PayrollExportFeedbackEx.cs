@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			var messageBrokerUrl = new MutableUrl();
 			var url = ConfigurationManager.AppSettings["MessageBroker"];
 			messageBrokerUrl.Configure(url);
-			_httpClientM = new HttpClientM(new HttpServer(httpClient,new NewtonsoftJsonSerializer()),messageBrokerUrl );
+			_httpClientM = new HttpClientM(new HttpServer(httpClient,NewtonsoftJsonSerializer.Make()),messageBrokerUrl );
 		}
 
 		public virtual void ReportProgress(int percentage, string information)

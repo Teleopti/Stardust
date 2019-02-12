@@ -233,11 +233,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return ret;
         }
 
-        public IList<ShiftProjectionCache> FilterOnBusinessRules(IScheduleRange current, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck)
+        public IList<ShiftProjectionCache> FilterOnBusinessRules(IScheduleRange current, IList<ShiftProjectionCache> shiftList, DateOnly dateToCheck, bool scheduleOnDayOffs)
         {
             if (shiftList.Count == 0)
                 return shiftList;
-            DateTimePeriod? rulePeriod = _rules.PossiblePeriod(current, dateToCheck);
+            DateTimePeriod? rulePeriod = _rules.PossiblePeriod(current, dateToCheck, scheduleOnDayOffs);
             if (!rulePeriod.HasValue)
             {
                 return new List<ShiftProjectionCache>();
@@ -246,11 +246,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return FilterOnDateTimePeriod(shiftList, rulePeriod.Value);
         }
 
-        public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current)
+        public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current, bool scheduleOnDayOffs)
         {
             shiftList = FilterOnContractTime(validMinMax, shiftList);
 
-            shiftList = FilterOnBusinessRules(current, shiftList, dateToSchedule);
+            shiftList = FilterOnBusinessRules(current, shiftList, dateToSchedule, scheduleOnDayOffs);
 
 	        shiftList = _notOverWritableActivitiesShiftFilter.Filter(schedules, dateToSchedule, current.Person, shiftList);
 

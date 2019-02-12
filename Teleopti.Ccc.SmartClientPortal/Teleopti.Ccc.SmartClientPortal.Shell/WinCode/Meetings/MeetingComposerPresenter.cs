@@ -19,6 +19,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
         {
             return CreateDefaultMeeting(organizer, schedulerStateHolder.RequestedScenario,
 										schedulerStateHolder.CommonStateHolder.Activities.NonDeleted().FirstOrDefault(), startDate, participants,
-                                        schedulerStateHolder.CommonNameDescription, schedulerStateHolder.TimeZoneInfo, now);
+                                        schedulerStateHolder.CommonNameDescription, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone(), now);
         }
 
         public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, IScenario scenario, IActivity activity, DateOnly startDate, IEnumerable<IPerson> participants, CommonNameDescriptionSetting commonNameDescriptionSetting, TimeZoneInfo timeZoneInfo, INow now)
@@ -130,7 +131,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 
                 _schedulingScreenState = new SchedulingScreenState(_disableDeletedFilter, new SchedulerStateHolder(_schedulingScreenState.SchedulerStateHolder.RequestedScenario,
                                                                  _schedulingScreenState.SchedulerStateHolder.RequestedPeriod,
-																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder(), new TimeZoneGuard()));
+																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder()));
                 _schedulingScreenState.SchedulerStateHolder.SchedulingResultState.LoadedAgents = new List<IPerson>(availablePersons);
 					((List<IMultiplicatorDefinitionSet>)_schedulingScreenState.SchedulerStateHolder.CommonStateHolder.MultiplicatorDefinitionSets).AddRange(multi);
             }
@@ -159,7 +160,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
             var requestedPeriod =
                 new DateOnlyPeriod(_model.StartDate.AddDays(-1), _model.RecurringEndDate.AddDays(2));
 			_schedulingScreenState = new SchedulingScreenState(_disableDeletedFilter, new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone),
-															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder(), new TimeZoneGuard()));
+															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder()));
                                         
             var stateLoader = new SchedulerStateLoader(_schedulingScreenState,
                                                     RepositoryFactory,

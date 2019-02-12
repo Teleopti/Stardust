@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
@@ -269,7 +270,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 					if(start != DateTime.MaxValue) return new DateTimePeriod(start,end);
 				}
 
-				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(Model.StartDate, Model.StartDate.AddDays(1), _schedulerStateHolder.TimeZoneInfo);
+				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(Model.StartDate, Model.StartDate.AddDays(1), TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 		  }
 
 		  public static IPerson GetPerson(EntityContainer<IPerson> personViewModel)

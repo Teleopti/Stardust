@@ -31,11 +31,9 @@ using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
-	[TestFixture]
 	[DomainTest]
 	[WebTest]
 	[RequestsTest]
-	[DefaultData]
 	public class ShiftTradeRequestViewModelFactoryTest : IIsolateSystem
 	{
 		public ICurrentScenario Scenario;

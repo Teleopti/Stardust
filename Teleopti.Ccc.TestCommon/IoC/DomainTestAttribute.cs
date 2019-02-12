@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -39,7 +40,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.ForEach(a => isolate.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			isolate.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();
 			isolate.UseTestDouble<EmptyStardustJobFeedback>().For<IStardustJobFeedback>();
-			isolate.UseTestDouble<HandlerTypeMapperForTest>().For<HandlerTypeMapper>();
+			isolate.UseTestDouble<PersistedTypeMapperForTest>().For<PersistedTypeMapper>();
 			//
 
 			// Database stuff
@@ -297,8 +297,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 				isolate.UseTestDouble<FakePayrollExportRepository>().For<IPayrollExportRepository>();
 				isolate.UseTestDouble<FakePayrollResultRepository>().For<IPayrollResultRepository>();
-				isolate.UseTestDouble<FakeSystemJobStartTimeRepository>().For<ISystemJobStartTimeRepository>();
+				isolate.UseTestDouble<FakeSkillForecastJobStartTimeRepository>().For<ISkillForecastJobStartTimeRepository>();
 				isolate.UseTestDouble<FakeSkillForecastReadModelRepository>().For<ISkillForecastReadModelRepository, FakeSkillForecastReadModelRepository>();
+				isolate.UseTestDouble<FakeKpiRepository>().For<IKpiRepository>();
 			}
 
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
@@ -374,18 +375,21 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			{
 				// assuming that if you specify default data you are using FakeDatabase...
 				// ... and thereby you want a current tenant for it to work...
-				if (QueryAllAttributes<DefaultDataAttribute>().Any())
+				if (!QueryAllAttributes<NoDefaultDataAttribute>().Any())
 					_tenantScope = DataSourceScope.OnThisThreadUse(DefaultTenantName);
 			}
 		}
 
-		private void createDefaultData(IBusinessUnit businessUnit)
+		private void createDefaultData(BusinessUnit businessUnit)
 		{
 			if (_loggedOnPerson != null)
 				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 
-			if (QueryAllAttributes<DefaultDataAttribute>().Any() && !QueryAllAttributes<NoDefaultDataAttribute>().Any())
-				Database.Value.CreateDefaultData(businessUnit);
+			if (!QueryAllAttributes<NoDefaultDataAttribute>().Any())
+				Database.Value.CreateBusinessUnitDefaultData(businessUnit);
+			
+			if(QueryAllAttributes<AddDatasourceId>().Any())
+				Database.Value.WithDataSource(-1, "-1");
 		}
 
 		private bool fullPermissions()

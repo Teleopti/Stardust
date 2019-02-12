@@ -57,8 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario,
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2012, 1, 1, 2012, 1, 1), TimeZoneInfo.Utc), new[] {_person},
-				MockRepository.GenerateMock<IDisableDeletedFilter>(), _schedulingResultStateHolder,
-				new FakeTimeZoneGuard(TimeZoneInfo.Utc));
+				MockRepository.GenerateMock<IDisableDeletedFilter>(), _schedulingResultStateHolder);
 
 		    _gridlockManager = new GridlockManager();
 			_clipHandler = new ClipHandler<IScheduleDay>();

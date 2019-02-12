@@ -15,20 +15,14 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
 	[DomainTest]
-	public class ShiftEndTimeProviderTest : IIsolateSystem
+	public class ShiftEndTimeProviderTest
 	{
 		public IShiftEndTimeProvider ShiftEndTimeProvider;
 		public ICurrentScenario CurrentScenario;
 		public FakePersonAssignmentRepository FakeAssignmentRepository;
 		public FakeActivityRepository FakeActivityRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
-
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
-				.For<IScenarioRepository>();
-		}
-
+		
 		[Test]
 		public void ShouldGetShiftEndTime()
 		{

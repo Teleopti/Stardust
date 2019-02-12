@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<UnitOfWorkNoCommitAspect>().As<IAspect>().SingleInstance();
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
+			builder.RegisterType<InitializeBusinessUnitDatabaseState>().SingleInstance();
 		}
 
 		private void persistCallbacks(ContainerBuilder builder)

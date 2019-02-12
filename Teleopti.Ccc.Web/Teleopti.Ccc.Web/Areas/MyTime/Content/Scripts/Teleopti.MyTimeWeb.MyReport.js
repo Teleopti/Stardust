@@ -45,22 +45,27 @@
 				self.goToAnotherDay(value);
 			}
 		});
-		self.nextDay = function() {
+		self.nextDay = function () {
+			var date = self
+				.selectedDate()
+				.clone()
+				.add('days', 1);
+			self.selectedDateInternal(date);
 			self.goToAnotherDay(
-				self
-					.selectedDate()
-					.clone()
-					.add('days', 1)
+				date
 			);
 		};
-		self.previousDay = function() {
+		self.previousDay = function () {
+			var date = self
+				.selectedDate()
+				.clone()
+				.add('days', -1);
+			self.selectedDateInternal(date);
 			self.goToAnotherDay(
-				self
-					.selectedDate()
-					.clone()
-					.add('days', -1)
+				date
 			);
 		};
+
 		self.dateFormat = function() {
 			return self.datePickerFormat;
 		};
@@ -73,8 +78,7 @@
 			dataType: 'json',
 			cache: false,
 			data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
-			success: function(data) {
-				vm.selectedDateInternal(date);
+			success: function (data) {
 				vm.adherence(data.Adherence);
 				vm.answeredCalls(data.AnsweredCalls);
 				vm.averageAfterCallWork(data.AverageAfterCallWork);

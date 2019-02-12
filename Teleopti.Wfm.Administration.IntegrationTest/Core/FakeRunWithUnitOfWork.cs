@@ -7,14 +7,14 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 {
 	public class FakeRunWithUnitOfWork : IRunWithUnitOfWork
 	{
-		public void WithGlobalScope(IDataSource dataSource, Action<ICurrentUnitOfWork> action)
+		public void WithGlobalScope(IDataSource dataSource, Action action)
 		{
-			action(null);
+			action();
 		}
 
-		public void WithBusinessUnitScope(IDataSource dataSource, IBusinessUnit businessUnit, Action<ICurrentUnitOfWork> action)
+		public void WithBusinessUnitScope(IDataSource dataSource, IBusinessUnit businessUnit, Action action)
 		{
-			action(null);
+			action();
 		}
 	}
 }

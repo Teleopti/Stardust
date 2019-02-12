@@ -11,8 +11,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverviewViewModelBuilder
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class TimeZoneTest: IIsolateSystem
 	{
 		public Adherence.Historical.HistoricalOverviewViewModelBuilder Target;

@@ -62,8 +62,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
@@ -171,6 +171,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AddDatasourceId.cs" />
     <Compile Include="Configuration\Infrastructure\DatabaseTest.cs" />
     <Compile Include="Configuration\Infrastructure\RepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaMapRepositoryTest.cs" />
@@ -190,7 +191,7 @@
     <Compile Include="Historical\Infrastructure\HistoricalOverviewViewModel\AdherenceTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreApprovedReadTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreBatchInsertTest.cs" />
-    <Compile Include="Historical\Infrastructure\RtaEventStoreEventTypeIdTest.cs" />
+    <Compile Include="Historical\Infrastructure\RtaEventStoreEventPersistedNameTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreReadByDateTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreReadForSynchronizationTest.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreReadTest.cs" />
@@ -234,6 +235,7 @@
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\TimelineTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
+    <Compile Include="Historical\Unit\ViewModels\HistoricalOverviewViewModelBuilder\AdherenceAdjustToNeutralTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalOverviewViewModelBuilder\AdherenceTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalOverviewViewModelBuilder\AgentDaysTest.cs" />
     <Compile Include="Historical\Unit\ViewModels\HistoricalOverviewViewModelBuilder\AgentTest.cs" />

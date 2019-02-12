@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		/// <param name="source"></param>
 		/// <param name="isDelete"></param>
-		void Merge(IScheduleDay source, bool isDelete);
+		void Merge(IScheduleDay source, bool isDelete, ITimeZoneGuard timeZoneGuard);
 
 		/// <summary>
 		/// Updates the SchedulePart from the source
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="isDelete">if set to <c>true</c> [delete].</param>
 		/// <param name="ignoreTimeZoneChanges">if set to <c>true</c> calculate with time changes.</param>
 		/// <param name="ignoreAssignmentPermission">if set to <c>true</c> when team leader has approve shift trade permission, ignore this modify assignment permission.</param>
-		void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges, bool ignoreAssignmentPermission = false);
+		void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges, ITimeZoneGuard timeZoneGuard, bool ignoreAssignmentPermission = false);
 
 		#endregion
 

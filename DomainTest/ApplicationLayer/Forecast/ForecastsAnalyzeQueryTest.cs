@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			Assert.That(result.Period.EndDate, Is.EqualTo(new DateOnly(2012, 3, 2)));
 		}
 
-        private static IEnumerable<IForecastsRow> setUpForecasts()
+        private static IEnumerable<ForecastsRow> setUpForecasts()
         {
             var row1 = new ForecastsRow
             {
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
             return new[] {row1, row2};
         } 
         
-        private static IEnumerable<IForecastsRow> setUpForecastsWithMidnightBreak()
+        private static IEnumerable<ForecastsRow> setUpForecastsWithMidnightBreak()
         {
             var row1 = new ForecastsRow
             {

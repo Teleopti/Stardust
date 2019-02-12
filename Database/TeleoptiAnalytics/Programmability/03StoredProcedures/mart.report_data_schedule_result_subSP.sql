@@ -272,18 +272,14 @@ SELECT	fs.schedule_date_id,
 		AND fsd.date_id=fs.schedule_date_id
 		AND fsd.interval_id=fs.interval_id
 		AND fsd.shift_startdate_local_id=fs.shift_startdate_local_id
-	INNER JOIN #bridge_time_zone b1
-		ON	fs.shift_startinterval_id= b1.interval_id
-		AND fs.shift_startdate_id=b1.date_id
-	INNER JOIN bridge_time_zone b2 WITH (NOLOCK)
-		ON	fs.interval_id= b2.interval_id
-		AND fs.schedule_date_id= b2.date_id
+    INNER JOIN #bridge_time_zone b1
+		ON	fs.interval_id= b1.interval_id
+		AND fs.schedule_date_id= b1.date_id
 	INNER JOIN mart.dim_interval i
-		ON b2.local_interval_id = i.interval_id			
+		ON b1.local_interval_id = i.interval_id			
 	INNER JOIN mart.dim_date d WITH (NOLOCK)
-		ON b2.local_date_id = d.date_id
-	AND b2.time_zone_id=@time_zone_id
-
+		ON b1.local_date_id = d.date_id
+ 
 --include intervals that have ready_time but no scheduled time. 
 INSERT #pre_result_subSP(date_id,interval_id,person_id,adherence_calc_s,deviation_s)
 SELECT	fsd.date_id,

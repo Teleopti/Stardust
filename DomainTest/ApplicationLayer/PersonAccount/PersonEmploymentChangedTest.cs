@@ -18,6 +18,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAccount
 {
 	[TestFixture, DomainTest]
+	[NoDefaultData]
 	public class PersonEmploymentChangedTest
 	{
 		public CalculatePersonAccount Target;

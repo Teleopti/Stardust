@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 				{
 					if (top > page.GetClientSize().Height - 30)
 						top = NewPageAgentView(doc, _rightToLeft, _culture, out page, person, dateOnly);
-					else if(AddPageForDaylightSavingTime(previousDateOnly, dateOnly, TimeZoneGuard.Instance.CurrentTimeZone()))
+					else if(AddPageForDaylightSavingTime(previousDateOnly, dateOnly, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()))
 						top = NewPageAgentView(doc, _rightToLeft, _culture, out page, person, dateOnly);
 
 					var dic = _stateHolder.Schedules;

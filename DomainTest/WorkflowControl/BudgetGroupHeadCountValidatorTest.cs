@@ -11,14 +11,12 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	public class BudgetGroupHeadCountValidatorTest : IIsolateSystem
 	{
-
 		private IAbsenceRequestValidator _target = new BudgetGroupHeadCountValidator();
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public ISchedulingResultStateHolder SchedulingResultStateHolder;

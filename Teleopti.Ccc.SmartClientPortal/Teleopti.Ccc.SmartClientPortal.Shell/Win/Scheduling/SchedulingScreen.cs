@@ -96,6 +96,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCom
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 
 #endregion
@@ -178,6 +179,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IEnumerable<IOptionalColumn> _optionalColumns;
 		private ReplaceActivityParameters _replaceActivityParameters;
 		private readonly UserLockHelper _userLockHelper;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		#region Constructors
 
@@ -320,6 +322,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
 			_undoRedo = new UndoRedoWithScheduleCallbackContainer(_container.Resolve<IScheduleDayChangeCallback>());
+			_timeZoneGuard = _container.Resolve<ITimeZoneGuard>();
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 
@@ -521,7 +524,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var meetingChangedEntities = changes as MeetingChangedEntity[] ?? changes.ToArray();
 			meetingChangedEntities.ForEach(c =>
 			{
-				var period = c.Period.ToDateOnlyPeriod(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
+				var period = c.Period.ToDateOnlyPeriod(_timeZoneGuard.CurrentTimeZone());
 				period = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
 				period.DayCollection().ForEach(SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated);
 			});
@@ -1241,12 +1244,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					var first = sortedList.FirstOrDefault();
 					var last = sortedList.LastOrDefault();
+					var timeZone = _timeZoneGuard.CurrentTimeZone();
 					var period =
 						new DateTimePeriod(
-							DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(first, TimeZoneGuard.Instance.CurrentTimeZone()), DateTimeKind.Utc),
-							DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last.AddDays(1), TimeZoneGuard.Instance.CurrentTimeZone()),
+							DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(first, timeZone), DateTimeKind.Utc),
+							DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last.AddDays(1), timeZone),
 								DateTimeKind.Utc));
-					var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, TimeZoneGuard.Instance.CurrentTimeZone(), period);
+					var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, timeZone, period);
 
 					if (!addDayOffDialog.Result)
 						return;
@@ -1632,7 +1636,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						.Execute(new SchedulePostHintInput(SchedulerState.SchedulerStateHolder.Schedules, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()),
 							selectedPeriod, new FixedBlockPreferenceProvider(_schedulingOptions), _schedulingOptions.UsePreferences?1:0));
 
-					var specificTimeZone = new SpecificTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
+					var specificTimeZone = new SpecificTimeZone(_timeZoneGuard.CurrentTimeZone());
 					foreach (var result in validationResult.InvalidResources)
 					{
 						HintsHelper.BuildErrorMessages(result.ValidationErrors,specificTimeZone);
@@ -2113,7 +2117,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				if (_scheduleView.ViewGrid[rowIndex, colIndex].CellValue is IScheduleDay dest)
 				{
 					IMeeting meeting = _schedulerMeetingHelper.MeetingFromList(dest.Person,
-						dest.Period.StartDateTimeLocal(SchedulerState.SchedulerStateHolder.TimeZoneInfo), dest.PersonMeetingCollection());
+						dest.Period.StartDateTimeLocal(_timeZoneGuard.CurrentTimeZone()), dest.PersonMeetingCollection());
 					if (meeting != null)
 					{
 						meeting = meeting.EntityClone();
@@ -2770,7 +2774,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			_container.Resolve<ScheduleOvertime>()
 				.Execute(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling),
-								LockManager.UnlockedDays(scheduleDays), TimeZoneGuard.Instance.CurrentTimeZone());
+								LockManager.UnlockedDays(scheduleDays), _timeZoneGuard.CurrentTimeZone());
 
 			SchedulerState.SchedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 			_undoRedo.CommitBatch();
@@ -3512,7 +3516,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				using (_container.Resolve<CascadingResourceCalculationContextFactory>().Create(SchedulerState.SchedulerStateHolder.SchedulingResultState, false, _scheduleView.SelectedDateLocal().ToDateOnlyPeriod()))
 				{
-					using (var resourceChanges = new ShovelingAnalyzerView(_container.Resolve<IResourceCalculation>(), _container.Resolve<ITimeZoneGuard>()))
+					using (var resourceChanges = new ShovelingAnalyzerView(_container.Resolve<IResourceCalculation>(), _timeZoneGuard))
 					{
 						resourceChanges.FillForm(SchedulerState.SchedulerStateHolder.SchedulingResultState,
 							schedulerSplitters1.IntraDayGridControl.Presenter.Skill,
@@ -4952,9 +4956,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void setupAvailTimeZones()
 		{
-			TimeZoneGuard.Instance.Set(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
-			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.CurrentTimeZone();
-			wpfShiftEditor1.SetTimeZone(SchedulerState.SchedulerStateHolder.TimeZoneInfo);
+			_timeZoneGuard.Set(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
+			wpfShiftEditor1.SetTimeZone(_timeZoneGuard.CurrentTimeZone());
 
 			foreach (TimeZoneInfo info in _detectedTimeZoneInfos)
 			{
@@ -5022,7 +5025,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_undoRedo.Clear(); //see if this can be removed later... Should undo/redo work after refresh?
 			foreach (var data in modifiedDataFromConflictResolution)
 			{
-				SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(data.Period.StartDateTimeLocal(SchedulerState.SchedulerStateHolder.TimeZoneInfo)));
+				SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(data.Period.StartDateTimeLocal(_timeZoneGuard.CurrentTimeZone())));
 				_personsToValidate.Add(data.Person);
 			}
 		}
@@ -5211,7 +5214,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			foreach (ISkillStaffPeriod period in skillStaffPeriods)
 			{
 				period.Payload.UseShrinkage = useShrinkage;
-				SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(period.Period.StartDateTimeLocal(SchedulerState.SchedulerStateHolder.TimeZoneInfo)));
+				SchedulerState.SchedulerStateHolder.MarkDateToBeRecalculated(new DateOnly(period.Period.StartDateTimeLocal(_timeZoneGuard.CurrentTimeZone())));
 			}
 
 			RecalculateResources();
@@ -5654,9 +5657,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void changeTimeZone(TimeZoneInfo timeZone)
 		{
-			TimeZoneGuard.Instance.Set(timeZone);
-			SchedulerState.SchedulerStateHolder.TimeZoneInfo = TimeZoneGuard.Instance.CurrentTimeZone();
-			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.CurrentTimeZone());
+			_timeZoneGuard.Set(timeZone);
+			wpfShiftEditor1.SetTimeZone(timeZone);
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
@@ -5682,7 +5684,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripSplitButtonTimeZone.Visible = show;
 			toolStripSplitButtonTimeZone.Text = string.Concat(LanguageResourceHelper.Translate("XXViewPointTimeZone"),
 				Resources.Colon,
-				TimeZoneGuard.Instance.CurrentTimeZone().DisplayName);
+				_timeZoneGuard.CurrentTimeZone().DisplayName);
 		}
 
 		private void toolStripMenuItemScheduleOvertimeClick(object sender, EventArgs e)
@@ -5836,7 +5838,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (schedules.IsEmpty()) return;
 			var replaceActivityService = _container.Resolve<ReplaceActivityService>();
 			var defaultPeriod = AddActivityCommand.GetDefaultPeriodFromPart(schedules[0]);
-			using (var view = new ReplaceActivityView(SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.ToList(), defaultPeriod.TimePeriod(TimeZoneGuard.Instance.CurrentTimeZone()), _replaceActivityParameters))
+			using (var view = new ReplaceActivityView(SchedulerState.SchedulerStateHolder.CommonStateHolder.Activities.ToList(), defaultPeriod.TimePeriod(_timeZoneGuard.CurrentTimeZone()), _replaceActivityParameters))
 			{
 				var result = view.ShowDialog(this);
 				if (result != DialogResult.OK)
@@ -5846,7 +5848,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				var activity = view.ActivityParameters.Activity;
 				var replaceWithActivity = view.ActivityParameters.ReplaceWithActivity;
 				var timePeriod = new TimePeriod(view.ActivityParameters.FromTimeSpan, view.ActivityParameters.ToTimeSpan);
-				replaceActivityService.Replace(schedules, activity, replaceWithActivity, timePeriod, TimeZoneGuard.Instance.CurrentTimeZone());
+				replaceActivityService.Replace(schedules, activity, replaceWithActivity, timePeriod, _timeZoneGuard.CurrentTimeZone());
 				_scheduleView.Presenter.ModifySchedulePart(schedules);
 				foreach (var part in schedules)
 				{

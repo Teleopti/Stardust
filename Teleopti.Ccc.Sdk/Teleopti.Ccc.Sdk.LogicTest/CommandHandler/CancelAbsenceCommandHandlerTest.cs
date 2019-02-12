@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
-    [TestFixture]
+    [NoDefaultData]
 	[DomainTest]
     public class CancelAbsenceCommandHandlerTest : IIsolateSystem, IExtendSystem
     {

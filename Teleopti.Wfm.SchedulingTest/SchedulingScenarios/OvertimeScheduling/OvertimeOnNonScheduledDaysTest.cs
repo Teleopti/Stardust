@@ -173,15 +173,16 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.OvertimeScheduling
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneDay(dateOnly);
 			var overtimePreference = new OvertimePreferences {OvertimeType = definitionSet, ShiftBagToUse = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
-			var ass = new PersonAssignment(agent, scenario, dateOnly).WithDayOff();
+			var dayOffTemplate = new DayOffTemplate();
+			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(0));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).WithDayOff(dayOffTemplate);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] {ass}, skillDay);
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, TimeZoneInfo.Utc);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities()
-				.Should().Not.Be.Empty();
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).HasDayOff()
-				.Should().Be(true);
+				.First().Period.ElapsedTime().Hours.Should().Be.EqualTo(9);
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).HasDayOff().Should().Be(true);
 		}
 
 		[Test]

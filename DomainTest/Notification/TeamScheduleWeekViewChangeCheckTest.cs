@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Label = "Late"
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Label = "Late"
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> {
@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Label = "Early"
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> {
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Date = date.Date
 			});
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },
@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			var buId = Guid.NewGuid();
 
-			var @event = new ScheduleChangeForWeekViewEvent
+			var @event = new ScheduleChangeForWeekViewMessage
 			{
 				Person = person,
 				NewReadModels = new Dictionary<DateOnly, ScheduleDayReadModel> { { date, newReadModel } },

@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
 			var shiftList = getCashes();
 			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();
-			var result = _target.Filter(schedules, null, shiftList, _dateOnly);
+			var result = _target.Filter(schedules, null, shiftList, _dateOnly, false);
 			Assert.IsNull(result);
-			result = _target.Filter(schedules, person1, null, _dateOnly);
+			result = _target.Filter(schedules, person1, null, _dateOnly, false);
 			Assert.IsNull(result);
 
-			result = _target.Filter(schedules, person1, new List<ShiftProjectionCache>(), _dateOnly);
+			result = _target.Filter(schedules, person1, new List<ShiftProjectionCache>(), _dateOnly, false);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
 

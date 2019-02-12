@@ -7,7 +7,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Security.License
 {
 	[DomainTest]
-	[DefaultData]
 	public class LincensedFunctionsTest
 	{
 		public IApplicationFunctionsProvider ApplicationFunctions;

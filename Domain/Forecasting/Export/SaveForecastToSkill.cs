@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 			_scenarioRepository = scenarioRepository;
 		}
 
-		public void Execute(DateOnly dateOnly, ISkill targetSkill, ICollection<IForecastsRow> forecasts, ImportForecastsMode importMode)
+		public void Execute(DateOnly dateOnly, ISkill targetSkill, ICollection<ForecastsRow> forecasts, ImportForecastsMode importMode)
 		{
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario(targetSkill.BusinessUnit);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);

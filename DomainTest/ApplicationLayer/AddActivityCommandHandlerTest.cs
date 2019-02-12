@@ -20,6 +20,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class AddActivityCommandHandlerTest : IIsolateSystem
 	{
 		public AddActivityCommandHandler Target;

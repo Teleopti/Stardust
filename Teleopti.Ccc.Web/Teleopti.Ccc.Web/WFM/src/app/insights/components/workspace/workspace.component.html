@@ -19,7 +19,8 @@
 		<ng-template #item let-item>
 			<nz-list-item [nzContent]="reportName" [hidden]="reportNameCriteria && !item.Name.toLowerCase().includes(reportNameCriteria.toLowerCase())" [nzActions]="[editAction,cloneAction,deleteAction]"></nz-list-item>
 			<ng-template #reportName>
-				<a (click)="nav.viewReport(item.Id)"><strong>{{item.Name}}</strong></a>
+				<div nz-col nzSpan="16"><a (click)="nav.viewReport(item.Id)"><strong>{{item.Name}}</strong></a></div>
+				<div nz-col nzSpan="8" *ngIf="item.CreatedBy && item.CreatedBy.length > 0">Created by {{item.CreatedBy}}</div>
 			</ng-template>
 			<ng-template #editAction>
 				<a (click)="nav.editReport(item.Id)" *ngIf="permission.CanEditReport"><i nz-icon type="edit" theme="outline"></i> Edit</a>

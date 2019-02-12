@@ -14,8 +14,6 @@ using Teleopti.Wfm.Adherence.States.Events;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class RtaEventStoreUpgradeTest
 	{
 		public FakeRtaEventStore Events;

@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_timeZone = timeZone;
 		}
 
-		public static ITimeZoneGuard Instance => ServiceLocator_DONTUSE.TimeZoneGuard;
-
 		public TimeZoneInfo CurrentTimeZone()
 		{
 			return _timeZone ?? (_timeZone = TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);

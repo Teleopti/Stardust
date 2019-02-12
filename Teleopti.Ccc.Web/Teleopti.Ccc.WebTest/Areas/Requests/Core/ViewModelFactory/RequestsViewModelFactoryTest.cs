@@ -33,10 +33,8 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 
-
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
-	[TestFixture]
 	[DomainTest]
 	[WebTest]
 	[RequestsTest]
@@ -71,7 +69,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true })).For<IScenarioRepository>();
 
 			team = createTeam();
 			personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2015, 10, 1), team);
@@ -547,6 +544,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
+		[NoDefaultData]
 		public void ShouldGetRequestsByRoleDescription()
 		{
 			var roleDescription = "my role";

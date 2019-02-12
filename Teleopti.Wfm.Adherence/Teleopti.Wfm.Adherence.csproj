@@ -59,8 +59,8 @@
       <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=5.2.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
@@ -165,7 +165,6 @@
     <Compile Include="Historical\Infrastructure\IRtaEventPublisherExceptionHandler.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventPublisher.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStore.cs" />
-    <Compile Include="Historical\Infrastructure\RtaEventStoreTypeIdMapper.cs" />
     <Compile Include="Historical\Infrastructure\RtaEventStoreUpgraderProcess.cs" />
     <Compile Include="Historical\IRtaStoredEvent.cs" />
     <Compile Include="Historical\ISolidProof.cs" />

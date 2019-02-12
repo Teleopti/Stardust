@@ -13,9 +13,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Unit.Service
 	{
 	}
 
-	[DefaultData]
 	[ExtendScope(typeof(Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleChangedEventPublisher))]
-	//[ExtendScope(typeof(PersonAssociationChangedEventPublisher))]
 	[ExtendScope(typeof(ExternalLogonReadModelUpdater))]
 	[ExtendScope(typeof(MappingReadModelUpdater))]
 	[ExtendScope(typeof(ScheduleChangeProcessor))]

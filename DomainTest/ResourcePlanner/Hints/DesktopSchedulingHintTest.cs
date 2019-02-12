@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 	[DomainTest]
 	[ThrowIfRepositoriesAreUsed]
 	[UseIocForFatClient]
+	[NoDefaultData]
 	public class DesktopSchedulingHintTest
 	{
 		public CheckScheduleHints Target;

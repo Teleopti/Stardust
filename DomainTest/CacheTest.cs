@@ -14,7 +14,7 @@ using Module = Autofac.Module;
 namespace Teleopti.Ccc.DomainTest
 {
 	[DomainTest]
-	[TestFixture]
+	[NoDefaultData]
 	public class CacheTest : IIsolateSystem, IExtendSystem
 	{
 		public OuterService Service;

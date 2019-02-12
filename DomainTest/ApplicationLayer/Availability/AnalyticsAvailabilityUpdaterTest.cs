@@ -21,6 +21,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class AnalyticsAvailabilityUpdaterTest : IExtendSystem
 	{
 		public AnalyticsAvailabilityUpdater Target;

@@ -22,6 +22,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class ScheduleStartOnWrongDateHintTest : IIsolateSystem
 	{
 		public Func<ISchedulerStateHolder> StateHolder;

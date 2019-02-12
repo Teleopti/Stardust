@@ -19,6 +19,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.WebTest.Areas.Staffing
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class BpoControllerTest : IExtendSystem, IIsolateSystem
 	{
 		public BpoController Target;

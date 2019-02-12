@@ -128,7 +128,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRtaEventStoreTester>()
 				.As<IRtaEventStoreUpgradeWriter>()
 				.SingleInstance();
-			builder.RegisterType<RtaEventStoreTypeIdMapper>().SingleInstance();
 
 			builder.RegisterType<RtaEventStoreUpgrader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaEventStoreUpgraderProcess>().As<IBackgroundProcess>().SingleInstance().ApplyAspects();

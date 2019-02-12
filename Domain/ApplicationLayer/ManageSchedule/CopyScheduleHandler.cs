@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ManageSchedule
 			});
 
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, 
-				new JobResultDetail(DetailLevel.Info, $"Archived schedules for {@event.PersonIds.Count} people.", DateTime.UtcNow, null), 
+				new JobResultDetail(DetailLevel.Info, $"Archived schedules for {@event.PersonIds.Count()} people.", DateTime.UtcNow, null), 
 				@event.TotalMessages);
 		}
 

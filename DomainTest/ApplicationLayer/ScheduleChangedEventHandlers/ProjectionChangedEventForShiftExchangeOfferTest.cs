@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[DomainTest]
-	[DefaultData]
+	[AddDatasourceId]
 	public class ProjectionChangedEventForShiftExchangeOfferTest
 	{
 		public ProjectionChangedEventPublisher Target;

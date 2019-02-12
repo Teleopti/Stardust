@@ -21,10 +21,10 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class MultiAbsenceRequestsHandlerBug45331Test : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;

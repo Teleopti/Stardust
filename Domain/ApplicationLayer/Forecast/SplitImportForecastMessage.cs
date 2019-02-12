@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		}
 
         [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public void Process(IEnumerable<IForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period)
+        public void Process(IEnumerable<ForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period)
         {
             var result = _analyzeQuery.Run(importForecast, targetSkill);
             var stepMessage = string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}...", targetSkill.Name);

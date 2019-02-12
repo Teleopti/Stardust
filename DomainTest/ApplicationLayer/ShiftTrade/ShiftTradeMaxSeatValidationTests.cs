@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class ShiftTradeMaxSeatValidationTests : IIsolateSystem
 	{
 		public IPersonRepository PersonRepository;

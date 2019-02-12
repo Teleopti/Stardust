@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class AddFullDayAbsenceCommandHandlerTest : IExtendSystem
 	{
 		public FakeWriteSideRepository<IPerson> PersonRepository;

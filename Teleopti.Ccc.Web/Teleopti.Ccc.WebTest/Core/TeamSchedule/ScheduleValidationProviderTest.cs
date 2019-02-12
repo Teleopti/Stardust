@@ -26,7 +26,8 @@ using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 {
-	[TestFixture, DomainTest]
+	[DomainTest]
+	[NoDefaultData]
 	public class ScheduleValidationProviderTest : IIsolateSystem
 	{
 		public FakeScenarioRepository ScenarioRepository;

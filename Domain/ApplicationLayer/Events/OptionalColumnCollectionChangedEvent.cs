@@ -9,18 +9,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		private string _serializedOptionalColumn;
 
 		[NonSerialized]
-		private ICollection<Guid> _optionalColumnIdCollection;
+		private IEnumerable<Guid> _optionalColumnIdCollection;
 
-		public ICollection<Guid> OptionalColumnIdCollection
+		public IEnumerable<Guid> OptionalColumnIdCollection
 		{
 			get
 			{
 				if (_optionalColumnIdCollection != null) return _optionalColumnIdCollection;
 				_optionalColumnIdCollection = string.IsNullOrEmpty(_serializedOptionalColumn)
-					? new HashSet<Guid>()
-					: new HashSet<Guid>(_serializedOptionalColumn.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse));
+					? Enumerable.Empty<Guid>()
+					: _serializedOptionalColumn.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).Distinct().ToArray();
 				return _optionalColumnIdCollection;
 			}
+			set => _optionalColumnIdCollection = value;
 		}
 
 		public void SetOptionalColumnIdCollection(ICollection<Guid> optionalColumnIdCollection)

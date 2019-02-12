@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class MissingForecastHintTest : IIsolateSystem
 	{
 		public MissingForecastHint Target;

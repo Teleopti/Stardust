@@ -63,8 +63,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			fakeMultiplicatorDefinitionSetRepository.Has(_multiplicatorDefinitionSet);
 			isolate.UseTestDouble(fakeMultiplicatorDefinitionSetRepository).For<IMultiplicatorDefinitionSetRepository>();
 
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
-				.For<IScenarioRepository>();
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			isolate.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
 			isolate.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();

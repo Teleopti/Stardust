@@ -158,10 +158,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 			else
 			{
-				// assuming that if you specify default data you are using FakeDatabase...
-				// ... and thereby you want a current tenant for it to work...
-				if (QueryAllAttributes<DefaultDataAttribute>().Any())
-					_tenantScope = DataSourceScope.OnThisThreadUse(DefaultTenantName);
+				_tenantScope = DataSourceScope.OnThisThreadUse(DefaultTenantName);
 			}
 		}
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 
@@ -8,13 +9,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IForecastsAnalyzeQuery
     {
-        IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, ISkill skill);
+        IForecastsAnalyzeQueryResult Run(IEnumerable<ForecastsRow> forecastRows, ISkill skill);
     }
 
     public class ForecastsAnalyzeQuery : IForecastsAnalyzeQuery
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IForecastsAnalyzeQueryResult Run(IEnumerable<IForecastsRow> forecastRows, ISkill skill)
+        public IForecastsAnalyzeQueryResult Run(IEnumerable<ForecastsRow> forecastRows, ISkill skill)
         {
             var result = new ForecastsAnalyzeQueryResult { ForecastFileContainer = new ForecastFileContainer() };
             var startDateTime = DateTime.MaxValue;

@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
 	[TestFixture]
 	[DomainTest]
-	public class HangfireHandlerTypeMappingTest : ITestInterceptor
+	public class TypeMappingHangfireHandlersTest : ITestInterceptor
 	{
-		public HandlerTypeMapperForTest Mapper;
+		public PersistedTypeMapperForTest Mapper;
 
 		public void OnBefore()
 		{
@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				{
 					try
 					{
-						Mapper.NameForPersistence(x);
+						Mapper.NameForPersistence(x)
+							.Should().Not.Be.Empty();
 						return null;
 					}
 					catch (ArgumentException e)
@@ -144,10 +145,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ScheduleChangeProcessorPersistedNameShouldWork()
+		public void LegacyScheduleChangeProcessorPersistedNameShouldWork()
 		{
 			Mapper.TypeForPersistedName("Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service.ScheduleChangeProcessor, Teleopti.Ccc.Domain")
-				.Should().Not.Be.Null();
+				.Name.Should().Contain("ScheduleChangeProcessor");
 		}
 	}
 }

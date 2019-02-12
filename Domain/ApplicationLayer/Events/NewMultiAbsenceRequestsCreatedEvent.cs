@@ -5,8 +5,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	public class NewMultiAbsenceRequestsCreatedEvent : StardustJobInfo
 	{
-		public List<Guid> PersonRequestIds { get; set; }
+		public IEnumerable<Guid> PersonRequestIds { get; set; }
 		public DateTime Sent { get; set; }
-		public List<Guid> Ids { get; set; }
+		public IEnumerable<Guid> Ids { get; set; }
 	}
 }

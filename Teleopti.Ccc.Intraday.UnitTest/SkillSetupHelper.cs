@@ -18,12 +18,10 @@ namespace Teleopti.Ccc.Intraday.UnitTests
 	{	
 		private const int minutesPerInterval = 15;
 
-		public static Scenario FakeScenarioAndIntervalLength(FakeIntervalLengthFetcher intervalLengthFetcher, FakeScenarioRepository scenarioRepository)
+		public static IScenario FakeScenarioAndIntervalLength(FakeIntervalLengthFetcher intervalLengthFetcher, FakeScenarioRepository scenarioRepository)
 		{
 			intervalLengthFetcher.Has(minutesPerInterval);
-			var scenario = ScenarioFactory.CreateScenario("scenariorita", true, true).WithId();
-			scenarioRepository.Has(scenario);
-			return scenario;
+			return scenarioRepository.LoadDefaultScenario();
 		}
 
 		public static ISkill CreateSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, IActivity activity = null)

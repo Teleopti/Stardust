@@ -57,7 +57,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 	</Startup>
 	<Runtime executionContext="elevated">
 	  <Environment>
-		<Variable name="RoleStartupScripts" value="IIS7ConfigMoveToNET4.cmd!;Add-TeleoptiFoldersAndShortcuts.cmd!;InitializeServiceStarter.cmd!" >
+		<Variable name="RoleStartupScripts" value="IIS7ConfigMoveToNET4.cmd!;Add-TeleoptiFoldersAndShortcuts.cmd!;MiscJobAlwaysRun.cmd!" >
 		</Variable>
 	  </Environment>
       <EntryPoint>

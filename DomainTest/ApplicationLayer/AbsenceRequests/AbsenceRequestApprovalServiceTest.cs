@@ -21,6 +21,7 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class AbsenceRequestApprovalServiceTest : IIsolateSystem
 	{
 		private IScheduleDictionary _scheduleDictionary;

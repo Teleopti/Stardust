@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();								
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
 			builder.RegisterType<HangfireEventProcessor>().SingleInstance();
-			builder.RegisterType<HandlerTypeMapper>().SingleInstance().ApplyAspects();
+			builder.RegisterType<PersistedTypeMapper>().SingleInstance().ApplyAspects();
 
 			builder.Register(c => JobStorage.Current).SingleInstance();
 			builder.Register(c =>

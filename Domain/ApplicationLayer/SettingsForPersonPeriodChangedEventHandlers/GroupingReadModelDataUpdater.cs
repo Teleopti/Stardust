@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		[UnitOfWork]
 		public virtual void Handle(SettingsForPersonPeriodChangedEvent @event)
 		{
-			_groupingReadOnlyRepository.UpdateGroupingReadModelData(@event.IdCollection);
+			_groupingReadOnlyRepository.UpdateGroupingReadModelData(@event.IdCollection.ToArray());
 		}
 	}
 }

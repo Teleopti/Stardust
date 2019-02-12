@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
@@ -10,8 +9,6 @@ using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
 namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.AgentAdherenceDay
 {
 	[DomainTest]
-	[DefaultData]
-	[TestFixture]
 	public class ApprovedPeriodPercentageTest
 	{
 		public IAgentAdherenceDayLoader Target;

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				return;
 			}
 
-			_feedback.SendProgress($"Received {@event.PersonRequestIds.Count} Absence Requests.");
+			_feedback.SendProgress($"Received {@event.PersonRequestIds.Count()} Absence Requests.");
 
 			IList<IPersonRequest> personRequests;
 			IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> requestValidators;
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					_queuedAbsenceRequestRepository.Remove(@event.Ids);
+					_queuedAbsenceRequestRepository.Remove(@event.Ids.ToList());
 					uow.PersistAll();
 				}
 			}
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					//reset sent column
-					_queuedAbsenceRequestRepository.ResetSent(@event.Ids);
+					_queuedAbsenceRequestRepository.ResetSent(@event.Ids.ToList());
 					uow.PersistAll();
 				}
 			}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				atleastOneWaitlistedWfc = true;
 				//var queuedRequests = _queuedAbsenceRequestRepository.LoadAll().Where(x => x.Sent.HasValue && DateTime.Compare(x.Sent.Value, @event.Sent.Truncate(TimeSpan.FromSeconds(1))) == 0);
-				var queuedRequests = _queuedAbsenceRequestRepository.FindByIds(@event.Ids);
+				var queuedRequests = _queuedAbsenceRequestRepository.FindByIds(@event.Ids.ToList());
 				foreach (var request in queuedRequests)
 				{
 					if (request.StartDateTime < min)
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		[AsSystem]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
-			_feedback.SendProgress($"Received {@event.PersonRequestIds.Count} Absence Requests.");
+			_feedback.SendProgress($"Received {@event.PersonRequestIds.Count()} Absence Requests.");
 
 			IList<IPersonRequest> personRequests;
 			IDictionary<Guid, IEnumerable<IAbsenceRequestValidator>> requestValidators;

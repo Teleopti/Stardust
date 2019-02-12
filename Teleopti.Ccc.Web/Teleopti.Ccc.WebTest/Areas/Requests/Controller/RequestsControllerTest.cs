@@ -27,7 +27,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 {
-	[TestFixture]
 	[DomainTest]
 	[WebTest]
 	public class RequestsControllerTest: IIsolateSystem
@@ -53,8 +52,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Controller
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>(); 
 			isolate.UseTestDouble<FakeLicenseAvailability>().For<ILicenseAvailability>();
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") {DefaultScenario = true}))
-				.For<IScenarioRepository>();
 		}
 
 		[Test]

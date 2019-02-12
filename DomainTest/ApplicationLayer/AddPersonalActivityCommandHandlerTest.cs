@@ -16,10 +16,10 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class AddPersonalActivityCommandHandlerTest : IIsolateSystem
 	{
 		public AddPersonalActivityCommandHandler Target;

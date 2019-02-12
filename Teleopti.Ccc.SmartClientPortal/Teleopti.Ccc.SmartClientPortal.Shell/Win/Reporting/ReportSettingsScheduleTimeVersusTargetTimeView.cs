@@ -117,8 +117,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 					new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone);
 				var filter = new DisableDeletedFilter(new ThisUnitOfWork(unitOfWork));
 				var schedulingResultStateHolder = new SchedulingResultStateHolder {LoadedAgents = persons};
-				return new SchedulerStateHolder(Scenario, dateTimePeriod, persons, filter, schedulingResultStateHolder,
-					new TimeZoneGuard());
+				return new SchedulerStateHolder(Scenario, dateTimePeriod, persons, filter, schedulingResultStateHolder);
 			}
 		}
 

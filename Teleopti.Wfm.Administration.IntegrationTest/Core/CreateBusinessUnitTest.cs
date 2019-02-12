@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -41,18 +41,15 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			_kpiRepository = new FakeKpiRepository();
 			_skillTypeRepository = new FakeSkillTypeRepository();
 			_rtaStateGroupRepository = new FakeRtaStateGroupRepositoryLegacy();
+			var initializeBusinessUnitDatabaseState = new InitializeBusinessUnitDatabaseState(_personRepository,_scenarioRepository,_applicationRoleRepository,_availableDataRepository,_kpiRepository,_skillTypeRepository,CurrentUnitOfWork.Make());
 
 			_target = new CreateBusinessUnit(
 				_dataSourcesFactory,
 				_runWithUnitOfWork,
-				uow => _businessUnitRepository,
-				uow => _personRepository,
-				uow => _scenarioRepository,
-				uow => _applicationRoleRepository,
-				uow => _availableDataRepository,
-				uow => _kpiRepository,
-				uow => _skillTypeRepository,
-				uow => _rtaStateGroupRepository);
+				_businessUnitRepository,
+				_personRepository,
+				_rtaStateGroupRepository,
+				initializeBusinessUnitDatabaseState);
 		}
 
 		[Test]

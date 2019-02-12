@@ -12,8 +12,6 @@ using Teleopti.Wfm.Adherence.States;
 namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ViewModels
 {
 	[DomainTest]
-	[TestFixture]
-	[DefaultData]
 	[FakePermissions]
 	public class SiteCardViewModelBuilderPermissionTest
 	{

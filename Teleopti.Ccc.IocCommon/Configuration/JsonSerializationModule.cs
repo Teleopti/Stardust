@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<EventSerializerSettings>();
 			builder.RegisterType<NewtonsoftJsonSerializer>()
 				.As<IJsonSerializer>()
 				.As<IJsonDeserializer>()

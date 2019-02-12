@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.UserTexts;
 
@@ -13,17 +14,19 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly MatrixListFactory _scheduleMatrixListCreator;
 		private readonly ISchedulePeriodTargetTimeCalculator _targetTimeTimeCalculator;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public override string DenyReason => nameof(Resources.ShiftTradeTargetTimeDenyReason);
 		public override bool Configurable => true;
 		public override string Description => Resources.DescriptionOfShiftTradeTargetTimeSpecification;
 		public override string PendingReason => nameof(Resources.ShiftTradeTargetTimePendingReason);
 
-		public ShiftTradeTargetTimeSpecification(Func<ISchedulerStateHolder> schedulerStateHolder, MatrixListFactory scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator)
+		public ShiftTradeTargetTimeSpecification(Func<ISchedulerStateHolder> schedulerStateHolder, MatrixListFactory scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator, ITimeZoneGuard timeZoneGuard)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleMatrixListCreator = scheduleMatrixListCreator;
 			_targetTimeTimeCalculator = targetTimeTimeCalculator;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> swapDetails)
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 					var changeTo = (IScheduleDay)shiftTradeDetail.SchedulePartTo.Clone();
 
 					changeTo.Clear<IPersonAssignment>();
-					changeTo.Merge(changeFrom, false, false, false);
+					changeTo.Merge(changeFrom, false, false, _timeZoneGuard, false);
 
 					suggestedChanges.Add(changeTo);
 				}

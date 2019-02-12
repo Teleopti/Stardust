@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 		private readonly DeadLockVictimPriority _deadLockVictimPriority;
 		private readonly IJsonEventSerializer _serializer;
 		private readonly IJsonEventDeserializer _deserializer;
-		private readonly RtaEventStoreTypeIdMapper _typeMapper;
+		private readonly PersistedTypeMapper _typeMapper;
 		private readonly int _batchSize;
 		private readonly int _loadSize;
 
@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 			IJsonEventSerializer serializer,
 			IJsonEventDeserializer deserializer,
 			IConfigReader config,
-			RtaEventStoreTypeIdMapper typeMapper)
+			PersistedTypeMapper typeMapper)
 		{
 			_unitOfWork = unitOfWork;
 			_deadLockVictimPriority = deadLockVictimPriority;
@@ -86,7 +86,7 @@ INSERT INTO [rta].[Events] (
 							.SetParameter("BelongsToDate" + i, queryData.BelongsToDate?.Date)
 							.SetParameter("StartTime" + i, queryData.StartTime == DateTime.MinValue ? null : queryData.StartTime)
 							.SetParameter("EndTime" + i, queryData.EndTime == DateTime.MinValue ? null : queryData.EndTime)
-							.SetParameter("Type" + i, _typeMapper.EventTypeId(@event))
+							.SetParameter("Type" + i, _typeMapper.NameForPersistence(@event.GetType()))
 							.SetParameter("Event" + i, _serializer.SerializeEvent(@event));
 					});
 
@@ -211,7 +211,7 @@ ORDER BY [Id]
 				.List<internalModel>()
 				.Select(x =>
 				{
-					x.DeserializedEvent = _deserializer.DeserializeEvent(x.Event, _typeMapper.TypeForTypeId(x.Type)) as IEvent;
+					x.DeserializedEvent = _deserializer.DeserializeEvent(x.Event, _typeMapper.TypeForPersistedName(x.Type)) as IEvent;
 					return x;
 				});
 
@@ -232,7 +232,7 @@ ORDER BY [Id]
 		public IEnumerable<IEvent> LoadAllForTest() =>
 			loadEvents(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
 
-		public IEnumerable<string> LoadAllEventTypeIds() =>
+		public IEnumerable<string> LoadAllEventTypes() =>
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")
 				.List<string>();

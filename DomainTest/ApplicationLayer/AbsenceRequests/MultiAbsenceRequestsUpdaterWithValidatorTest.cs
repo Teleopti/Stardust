@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private PersonRequest updateAbsenceRequestWithStaffingThresholdValidator(double relativeDifference)
 		{
 			Now.Is(new DateTime(2016, 12, 1, 10, 0, 0));
-			var scenario = ScenarioRepository.Has("scenario");
+			var scenario = ScenarioRepository.LoadDefaultScenario();
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			absence.Tracker = Tracker.CreateDayTracker();
 

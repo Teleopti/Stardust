@@ -1,18 +1,16 @@
 using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Wfm.Administration.Core
 {
 	public interface IRunWithUnitOfWork
 	{
-		void WithGlobalScope(IDataSource dataSource, Action<ICurrentUnitOfWork> action);
-		void WithBusinessUnitScope(IDataSource dataSource, IBusinessUnit businessUnit, Action<ICurrentUnitOfWork> action);
+		void WithGlobalScope(IDataSource dataSource, Action action);
+		void WithBusinessUnitScope(IDataSource dataSource, IBusinessUnit businessUnit, Action action);
 	}
 
 	public class RunWithUnitOfWork : IRunWithUnitOfWork
@@ -30,7 +28,7 @@ namespace Teleopti.Wfm.Administration.Core
 			_transactionHooksScope = transactionHooksScope;
 		}
 
-		public void WithGlobalScope(IDataSource dataSource, Action<ICurrentUnitOfWork> action)
+		public void WithGlobalScope(IDataSource dataSource, Action action)
 		{
 			using (_dataSourceScope.OnThisThreadUse(dataSource))
 			using (_transactionHooksScope.OnThisThreadExclude<MessageBrokerSender>())
@@ -41,7 +39,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 				using (var uow = CurrentUnitOfWorkFactory.Make().Current().CreateAndOpenUnitOfWork())
 				{
-					action(new ThisUnitOfWork(uow));
+					action();
 					uow.PersistAll();
 					uow.Flush();
 					uow.Clear();
@@ -50,7 +48,7 @@ namespace Teleopti.Wfm.Administration.Core
 			}
 		}
 
-		public void WithBusinessUnitScope(IDataSource dataSource, IBusinessUnit businessUnit, Action<ICurrentUnitOfWork> action)
+		public void WithBusinessUnitScope(IDataSource dataSource, IBusinessUnit businessUnit, Action action)
 		{
 			using (_businessUnitScope.OnThisThreadUse(businessUnit))
 				WithGlobalScope(dataSource, action);

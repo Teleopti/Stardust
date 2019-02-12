@@ -21,6 +21,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class RemovePartPersonAbsenceCommandHandlerTest : IIsolateSystem
 	{
 		public FakePersonAbsenceRepository PersonAbsenceRepository;

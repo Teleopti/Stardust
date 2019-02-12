@@ -37,4 +37,3 @@ using Teleopti.Ccc.TestCommon.IoC;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: Parallelizable(ParallelScope.Fixtures)]
-[assembly: DefaultData]

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, 
 																								IScheduleDifferenceSaver scheduleDictionarySaver, 
@@ -37,7 +39,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 																								IDifferenceCollectionService<IPersistableScheduleData> differenceService,
 																								IGlobalSettingDataRepository globalSettingDataRepository, 
 																								ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider,
-																								IScheduleDayChangeCallback scheduleDayChangeCallback)
+																								IScheduleDayChangeCallback scheduleDayChangeCallback,
+																								ITimeZoneGuard timeZoneGuard)
 		{
 			_scheduleStorage = scheduleStorage;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
@@ -50,6 +53,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_globalSettingDataRepository = globalSettingDataRepository;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public virtual IRequestApprovalService GetRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary,
@@ -64,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 				case RequestType.ShiftTradeRequest:
 					return new ShiftTradeRequestApprovalService(scheduleDictionary,
-						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization, _personRequestRepository);
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback, _timeZoneGuard), newBusinessRules, _authorization, _personRequestRepository);
 			}
 
 			return null;

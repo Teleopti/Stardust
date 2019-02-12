@@ -15,11 +15,11 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Wfm.Api.Test.Query
 {
 	[ApiTest]
 	[LoggedOnAppDomain]
+	[NoDefaultData]
 	public class ScheduleByPersonIdTest
 	{
 		public IApiHttpClient Client;

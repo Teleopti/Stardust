@@ -26,6 +26,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class WaitlistRequestHandlerPersonAccountDayTest : IIsolateSystem
 	{
 		public WaitlistRequestHandler Target;

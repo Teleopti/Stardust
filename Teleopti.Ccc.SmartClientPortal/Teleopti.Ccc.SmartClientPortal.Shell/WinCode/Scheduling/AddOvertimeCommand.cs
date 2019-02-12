@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             var addPeriod = DefaultPeriod ?? filteredScheduleParts[0].Period;
             var dialog1 = ScheduleViewBase.CreateAddOvertimeViewModel( SchedulerStateHolder.CommonStateHolder.Activities.NonDeleted(),
                                                             _definitionSets, defaultActivity,
-                                                            addPeriod, SchedulerStateHolder.TimeZoneInfo);
+                                                            addPeriod, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 
 
             var result = dialog1.Result;

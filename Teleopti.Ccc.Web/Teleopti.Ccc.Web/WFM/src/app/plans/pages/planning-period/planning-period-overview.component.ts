@@ -4,10 +4,10 @@ import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
-import {groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators';
+import {debounce, groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators';
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {DateFormatPipe} from "ngx-moment";
-import {from} from "rxjs";
+import {from, timer} from "rxjs";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -18,6 +18,7 @@ import {from} from "rxjs";
 export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	preValidationFilterControl: FormControl = this.fb.control('');
 	scheduleIssuesFilterControl: FormControl = this.fb.control('');
+	skillFilterControl: FormControl = this.fb.control('');
 	ppId: string;
 	groupId: string;
 	runScheduling = false;
@@ -36,11 +37,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	filteredScheduleIssues: any[];
 	months : any;
 	legends: any[] = [];
-	worstDay: any;
+	worstUnderStaffDay: any;
+	worstOverStaffDay: any;
+	showNumbers: false;
 
 	validationFilter;
 
-	dayNodes;
+	skills;
+	filteredSkills;
 
 	valData = {
 		totalValNum: 0,
@@ -65,13 +69,6 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		this.loadPlanningGroupInfo();
-		this.loadPlanningPeriodInfo();
-		this.loadValidations();
-		this.loadLastResult();
-		this.checkState();
-		this.initLegends();
-		
 		this.preValidationFilterControl.valueChanges
 			.pipe(
 				map(filterString => {
@@ -111,11 +108,62 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			.subscribe(filteredScheduleIssues => {
 				this.filteredScheduleIssues = filteredScheduleIssues;
 			});
+
+		this.skillFilterControl.valueChanges
+			.pipe(
+				debounce(() => timer(600)),
+				map(filterString =>
+					this.skills
+						.filter(
+							g =>
+								g.SkillName.toLowerCase().includes(filterString.toLowerCase())
+						)
+				)
+			)
+			.subscribe(filteredSkills => {
+				this.filteredSkills = filteredSkills;
+			});
 		
+		this.loadPlanningGroupInfo();
+		this.loadPlanningPeriodInfo();
+		this.loadValidations();
+		this.loadLastResult();
+		this.checkState();
+		this.initLegends();
 	}
 
 	ngOnDestroy(): void {
 		clearInterval(this.timer);
+	}
+
+	private padZero(str) {
+		let len = 2;
+		let zeros = new Array(len).join('0');
+		return (zeros + str).slice(-len);
+	}
+
+	private invertColor(hex, bw) {
+		if (hex.indexOf('#') === 0) {
+			hex = hex.slice(1);
+		}
+		// convert 3-digit hex to 6-digits.
+		if (hex.length === 3) {
+			hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+		}
+		if (hex.length !== 6) {
+			throw new Error('Invalid HEX color.');
+		}
+		let r = parseInt(hex.slice(0, 2), 16),
+			g = parseInt(hex.slice(2, 4), 16),
+			b = parseInt(hex.slice(4, 6), 16);
+		if (bw) {
+			// http://stackoverflow.com/a/3943023/112731
+			return (r * 0.299 + g * 0.587 + b * 0.114) > 186
+				? '#000000'
+				: '#FFFFFF';
+		}
+		// pad each with zeros and return
+		return "#" + this.padZero((255 - r).toString(16)) + this.padZero((255 - g).toString(16)) + this.padZero((255 - b).toString(16));
 	}
 	
 	private initLegends(){
@@ -139,6 +187,10 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	public clearScheduleIssuesFilter() {
 		this.scheduleIssuesFilterControl.setValue('');
+	}
+	
+	public clearSkillMapFilter() {
+		this.skillFilterControl.setValue('');
 	}
 
 	public launchSchedule() {
@@ -217,7 +269,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					this.runClear = false;
 					this.isScheduled = false;
 					this.scheduledAgents = 0;
-					this.dayNodes = undefined;
+					this.skills = undefined;
 					this.status = '';
 					return;
 				}
@@ -283,6 +335,37 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		}
 		this.valData.totalValNum = this.valData.totalPreValNum + this.valData.totalLastValNum;
 	}
+	
+	private parseMonths(){
+		const months = this.skills[0].SkillDetails.map((item: any) => this.amDateFormat.transform(item.Date, 'MMMM'));
+		const monthCount = from(months).pipe(
+			groupBy(item => item),
+			mergeMap(group => group.pipe(
+				reduce((total, item) => total + 1, 0),
+				map(total => ({Name: group.key, Count: total}))
+				)
+			),
+			toArray());
+
+		monthCount.subscribe(result => this.months = result);
+	}
+	
+	private parseWorstDays(){
+		const allDays = [];
+		this.skills.forEach(skill=>{
+			skill.SkillDetails.forEach(day =>{
+				allDays.push(day);
+			});
+		});
+		allDays.sort((a, b)=>{
+			if(isNaN(a.RelativeDifference)){
+				return 1;
+			}
+			return a.RelativeDifference>b.RelativeDifference?1:-1;
+		});
+		this.worstUnderStaffDay = allDays[0];
+		this.worstOverStaffDay = allDays[allDays.length-1];
+	}
 
 	private loadLastResult() {
 		this.planningPeriodService.lastJobResult(this.ppId).subscribe(data => {
@@ -303,44 +386,54 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 					};
 					skillResultList.forEach(skill=>{
 						skill.SkillDetails.forEach(day=>{
-							day.bgcolor = this.heatMapColorHelper.getColor(day.RelativeDifference*100);
+							let relativeDifferencePercent = day.RelativeDifference * 100;
+							day.bgcolor = this.heatMapColorHelper.getColor(relativeDifferencePercent);
+							day.fontcolor = this.invertColor(day.bgcolor, true);
 							const weekday = new Date(day.Date).getDay();
-							if (weekday === culturalDaysOff.a || weekday === culturalDaysOff.b) {
+							if (weekday === culturalDaysOff.a) {
 								day.weekend = true;
+								day.saturday = true;
+							}
+							if(weekday === culturalDaysOff.b){
+								day.weekend = true;
+								day.sunday = true;
 							}
 							if (weekday === culturalDaysOff.start) {
 								day.weekstart = true;
 							}
-							day.RelativeDifferencePercent = (day.RelativeDifference * 100).toFixed(1);
+							day.RelativeDifferencePercent = relativeDifferencePercent.toFixed(2);
+							if(day.ColorId === 4){
+								day.DisplayedPercent = '';
+							}else if(relativeDifferencePercent.toFixed(0)==='-0'){
+								day.DisplayedPercent = '0';
+							}else if(relativeDifferencePercent > 999 || isNaN(relativeDifferencePercent)){
+								day.DisplayedPercent = '999+';
+							}else {
+								day.DisplayedPercent = relativeDifferencePercent.toFixed(0);
+							}
+							day.tooltip = (day.ColorId === 4? this.translate.instant('Closed') : this.translate.instant('RelativeDifference') + ' ' + day.RelativeDifferencePercent + '%') + ' | ' + skill.SkillName + ' | ' + this.amDateFormat.transform(day.Date, 'L');
 						});
+					});
+
+					skillResultList.sort((a, b)=>
+					{
+						let suma = 0;
+						a.SkillDetails.forEach(item=>{
+							suma +=item.RelativeDifference;
+						});
+						let sumb = 0;
+						b.SkillDetails.forEach(item=>{
+							sumb +=item.RelativeDifference;
+						}); 
+
+						return suma>sumb?1:-1;
 					});
 				}
-				this.dayNodes = skillResultList;
+				this.skills = skillResultList.filter(skill=>skill.SkillDetails.some(day=>day.ColorId!==4));
+				this.skillFilterControl.updateValueAndValidity();
 				if(skillResultList && skillResultList.length>0) {
-					const months = skillResultList[0].SkillDetails.map((item: any) => this.amDateFormat.transform(item.Date, 'MMMM'));
-
-					const monthCount = from(months).pipe(
-						groupBy(item => item),
-						mergeMap(group => group.pipe(
-							reduce((total, item) => total + 1, 0),
-							map(total => ({Name: group.key, Count: total}))
-							)
-						),
-						toArray());
-
-					monthCount.subscribe(result => this.months = result);
-					
-					const allDays = [];
-					skillResultList.forEach(skill=>{
-						skill.SkillDetails.forEach(day =>{
-							allDays.push(day);
-						});
-					});
-					allDays.sort((a, b)=>
-						a.RelativeDifference>b.RelativeDifference?1:-1
-					);
-					this.worstDay = allDays[0];
-					console.log(this.worstDay)
+					this.parseMonths();
+					this.parseWorstDays();
 				}
 			} else {
 				this.isScheduled = false;

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -9,12 +10,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         private readonly ISwapService _swapService;
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
-        public SwapAndModifyService(ISwapService swapService, IScheduleDayChangeCallback scheduleDayChangeCallback)
+		public SwapAndModifyService(ISwapService swapService, IScheduleDayChangeCallback scheduleDayChangeCallback, ITimeZoneGuard timeZoneGuard)
         {
             _swapService = swapService;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
-        }
+			_timeZoneGuard = timeZoneGuard;
+		}
 		
         public IEnumerable<IBusinessRuleResponse> SwapShiftTradeSwapDetails(ReadOnlyCollection<IShiftTradeSwapDetail> shiftTradeSwapDetails, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter)
         {
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IEnumerable<IScheduleDay> swapParts(IScheduleDictionary scheduleDictionary, IList<IScheduleDay> selectedSchedules, bool ignoreAssignmentPermission)
         {
             _swapService.Init(selectedSchedules);
-            return _swapService.SwapAssignments(scheduleDictionary, ignoreAssignmentPermission);
+            return _swapService.SwapAssignments(scheduleDictionary, ignoreAssignmentPermission, _timeZoneGuard);
         }
     }
 }

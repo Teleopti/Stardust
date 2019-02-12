@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IForecastsRowExtractor
     {
-        IForecastsRow Extract(string value, TimeZoneInfo timeZone);
+        ForecastsRow Extract(string value, TimeZoneInfo timeZone);
 		bool IsValidHeaderRow(string content);
 		void PresetTokenSeparator(string templateRow);
 		string HeaderRow { get; }
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 			_tokenSeparator = templateRow.Contains(";") ? ';' : ',';
 		}
 		
-        public IForecastsRow Extract(string value, TimeZoneInfo timeZone)
+        public ForecastsRow Extract(string value, TimeZoneInfo timeZone)
         {
             var content = value.Split(_tokenSeparator);
             if (!_columnsInRowValidSpecification.IsSatisfiedBy(content))

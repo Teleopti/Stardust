@@ -15,8 +15,6 @@ using Teleopti.Wfm.Adherence.States;
 namespace Teleopti.Wfm.Adherence.Test.Monitor.Unit.ViewModels
 {
 	[DomainTest]
-	[TestFixture]
-	[DefaultData]
 	public class SiteCardViewModelBuilderTeamsTest : IIsolateSystem
 	{
 		public SiteCardViewModelBuilder Target;

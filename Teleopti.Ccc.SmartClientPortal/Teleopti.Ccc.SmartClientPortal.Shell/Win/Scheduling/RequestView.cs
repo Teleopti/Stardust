@@ -7,9 +7,11 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             _authorization = new PersonRequestCheckAuthorization();
 			_presenter = new RequestPresenter(_authorization);
 			_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.SchedulerStateHolder.Schedules,_authorization);
-            _model = new HandlePersonRequestViewModel(schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.SchedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection, eventAggregator, _authorization, schedulerStateHolder.SchedulerStateHolder.TimeZoneInfo);
+            _model = new HandlePersonRequestViewModel(schedulerStateHolder.SchedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.SchedulerStateHolder.ChoosenAgents, container, allAccountPersonCollection, eventAggregator, _authorization, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
             CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
             
             InitObservableListEvents();

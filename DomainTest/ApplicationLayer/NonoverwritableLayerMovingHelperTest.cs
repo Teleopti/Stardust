@@ -15,7 +15,8 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture, DomainTest]
+	[DomainTest]
+	[NoDefaultData]
 	public class NonOverwritableLayerMovingHelperTest : IIsolateSystem
 	{
 		public FakePersonRepository PersonRepository;

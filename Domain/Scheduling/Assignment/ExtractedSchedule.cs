@@ -211,12 +211,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					internalCollection.OfType<IPersonAbsence>().Any());
 		}
 
-		public void Merge(IScheduleDay source, bool isDelete)
+		public void Merge(IScheduleDay source, bool isDelete, ITimeZoneGuard timeZoneGuard)
 		{
-			Merge(source, isDelete, false);
+			Merge(source, isDelete, false, timeZoneGuard);
 		}
 
-		public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges,
+		public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges, ITimeZoneGuard timeZoneGuard,
 			bool ignoreAssignmentPermission = false)
 		{
 			var view = source.SignificantPartForDisplay();
@@ -240,11 +240,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					break;
 
 				case SchedulePartView.MainShift:
-					if (isDelete) DeleteMainShift(); else mergeMainShift(source, ignoreTimeZoneChanges, true);
+					if (isDelete) DeleteMainShift(); else mergeMainShift(source, ignoreTimeZoneChanges, true, timeZoneGuard);
 					break;
 
 				case SchedulePartView.PersonalShift:
-					if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source, ignoreTimeZoneChanges);
+					if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source, ignoreTimeZoneChanges, timeZoneGuard);
 					break;
 
 				case SchedulePartView.PreferenceRestriction:
@@ -552,14 +552,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		}
 
-		private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence)
+		private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence, ITimeZoneGuard timeZoneGuard)
 		{
 			var sourceAssignment = source.PersonAssignment();
 			if (sourceAssignment == null)
 				return;
 
 			var periodOffsetCalculator = new PeriodOffsetCalculator();
-			var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAssignment.Period);
+			var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAssignment.Period, timeZoneGuard);
 
 			var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
 			workingCopyOfAssignment.SetActivitiesAndShiftCategoryFromWithOffset(sourceAssignment, periodOffset);
@@ -620,7 +620,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			ass?.ClearPersonalActivities();
 		}
 
-		private void mergePersonalStuff(IScheduleDay source, bool ignoreTimeZoneChanges)
+		private void mergePersonalStuff(IScheduleDay source, bool ignoreTimeZoneChanges, ITimeZoneGuard timeZoneGuard)
 		{
 			var sourceAss = source.PersonAssignment();
 			if (sourceAss == null) return;
@@ -630,7 +630,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			foreach (var personalLayer in sourceAss.PersonalActivities())
 			{
-				var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAss.Period);
+				var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAss.Period, timeZoneGuard);
 				destAss.AddPersonalActivity(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
 			}
 		}
@@ -679,7 +679,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foundPersonAssignment.AddOvertimeActivity(activity, period, definitionSet, muteEvent, trackedCommandInfo);
 		}
 
-		public void MergeOvertime(IScheduleDay source)
+		public void MergeOvertime(IScheduleDay source, ITimeZoneGuard timeZoneGuard)
 		{
 			var dateOnlyPerson = DateOnlyAsPeriod.DateOnly;
 			var period = Person.Period(dateOnlyPerson);
@@ -688,7 +688,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (personAss == null) return;
 
 			var periodOffsetCalculator = new PeriodOffsetCalculator();
-			var diff = periodOffsetCalculator.CalculatePeriodOffsetConsiderDaylightSavings(source, this, personAss.Period);
+			var diff = periodOffsetCalculator.CalculatePeriodOffsetConsiderDaylightSavings(source, this, personAss.Period, timeZoneGuard);
 
 			foreach (var layer in personAss.OvertimeActivities())
 			{

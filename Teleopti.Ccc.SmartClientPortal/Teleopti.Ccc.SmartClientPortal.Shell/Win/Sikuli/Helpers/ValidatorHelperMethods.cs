@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 
 		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, IAggregateSkill totalSkill)
 		{
-			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo);
+			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 			var skillStaffPeriodsTotal = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 					totalSkill, period);
 
@@ -82,7 +84,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 
 			foreach (var day in stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection())
 			{
-				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(stateHolder.TimeZoneInfo);
+				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 				var skillStaffPeriods = skillStaffPeriodsTotal.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
 				dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriods);
 			}
@@ -91,33 +93,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Helpers
 
 		private static IEnumerable<IList<ISkillStaffPeriod>> getDailySkillStaffPeriodsForFullPeriod(ISchedulerStateHolder stateHolder, ISkill singleSkill)
 		{
-			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo);
+			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 			var skillStaffPeriods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill>{ singleSkill }, period);
 
 			var dailySkillStaffPeriodsForFullPeriod = new List<IList<ISkillStaffPeriod>>();
 
 			foreach (var day in stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection())
 			{
-				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(stateHolder.TimeZoneInfo);
+				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
 				var skillStaffPeriodsOnDay = skillStaffPeriods.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
 				dailySkillStaffPeriodsForFullPeriod.Add(skillStaffPeriodsOnDay);
 			}
 			return dailySkillStaffPeriodsForFullPeriod;
-		}
-
-		private static IEnumerable<ISkillStaffPeriod> getSkillStaffPeriodsOnDay(ISchedulerStateHolder stateHolder, ISkill singleSkill, DateOnly requestedDay)
-		{
-
-			var requestedUtcPeriod = stateHolder.RequestedPeriod.DateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo);
-			var requestedDayPeriodPlusMinusOneDay = new DateOnlyPeriod(requestedDay.AddDays(-1), requestedDay.AddDays(1)).ToDateTimePeriod(stateHolder.TimeZoneInfo);
-			var intersectionPeriod = requestedUtcPeriod.Intersection(requestedDayPeriodPlusMinusOneDay);
-			if (!intersectionPeriod.HasValue)
-				return new List<ISkillStaffPeriod>();
-
-			var skillStaffPeriods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { singleSkill }, intersectionPeriod.Value);
-			var requestedDayUtcPeriod = new DateOnlyPeriod(requestedDay, requestedDay).ToDateTimePeriod(stateHolder.TimeZoneInfo);
-			var skillStaffPeriodsOnDay = skillStaffPeriods.Where(x => requestedDayUtcPeriod.Contains(x.Period)).ToList();
-			return skillStaffPeriodsOnDay;
 		}
 	}
 }

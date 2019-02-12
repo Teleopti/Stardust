@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var schedules = new ScheduleDictionary(_targetScenario, new ScheduleDateTimePeriod(_period), null, null);
 			var schedulingResultStateHolder = new SchedulingResultStateHolder() {Schedules = schedules};
 			_selectedSkill = SkillFactory.CreateSkill("Phone");
-			_targetStateHolder = new SchedulingScreenState(null, new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>(), schedulingResultStateHolder, new TimeZoneGuard()));
+			_targetStateHolder = new SchedulingScreenState(null, new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>(), schedulingResultStateHolder));
         	_lazyManager = MockRepository.GenerateMock<ILazyLoadingManager>();
         }
 		

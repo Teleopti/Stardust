@@ -22,6 +22,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class AnalyticsPreferenceUpdaterTests : IExtendSystem
 	{
 		public AnalyticsPreferenceUpdater Target;

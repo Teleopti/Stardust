@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList, isSameOpenHoursInBlock, teamBlockInfo, skillDays);
 			shiftList = runPersonalShiftFilterForEachMember(schedules, shiftList, teamBlockInfo);
 			if(schedulingOptions.IsClassic() ||schedulingOptions.UseBlock && schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.BetweenDayOff && !schedulingOptions.BlockSameShiftCategory)		
-				shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly);
+				shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly, schedulingOptions.ScheduleOnDayOffs);
 
 			if (schedulingOptions.UseBlock && schedulingOptions.BlockSameShift)
 			{
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 									ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> skillDays)
 		{		
 			shiftList = runFiltersForRoleModel(schedules, dateOnly, effectiveRestriction, schedulingOptions, shiftList, person, matrixList,sameContractTime,teamBlockInfo, skillDays );
-			shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly);
+			shiftList = _businessRulesShiftFilter.Filter(schedules, person, shiftList, dateOnly, schedulingOptions.ScheduleOnDayOffs);
 			shiftList = _commonActivityFilter.Filter(shiftList, schedulingOptions, effectiveRestriction);
 			shiftList = _personalShiftsShiftFilter.Filter(schedules, dateOnly, person, shiftList);
 			return shiftList;

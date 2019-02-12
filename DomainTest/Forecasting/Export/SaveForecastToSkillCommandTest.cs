@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 			var intervalEndTime = new DateTime(2011, 1, 1, 6, 30, 0, DateTimeKind.Utc);
 			var intervalPeriod = new DateTimePeriod(intervalStartTime, intervalEndTime);
 
-			var forecasts = new List<IForecastsRow>
+			var forecasts = new List<ForecastsRow>
 										  {
 												new ForecastsRow
 													 {

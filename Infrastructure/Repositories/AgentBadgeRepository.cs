@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				result.AddRange(_currentUnitOfWork.Current().Session().CreateSQLQuery(query)
 					.SetParameterList("personIdList", batchOfPeopleId.ToArray())
 					.SetInt32("badgeType", badgeType)
+					.SetBoolean("isExternal", isExternal)
 					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentBadge)))
 					.SetReadOnly(true)
 					.List<AgentBadge>());

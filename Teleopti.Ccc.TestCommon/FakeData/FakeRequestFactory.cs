@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonRequest personRequest)
 		{
 			var approvalService = new ShiftTradeRequestApprovalService(_scheduleDictionary, 
-				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), allNewRules, new PersonRequestAuthorizationCheckerForTest(), _personRequestRepository);
+				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack(), new FakeTimeZoneGuard()), allNewRules, new PersonRequestAuthorizationCheckerForTest(), _personRequestRepository);
 	        return approvalService;
 		}
 

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			target = new SchedulerStateHolder(scenario,
 											  new DateOnlyPeriodAsDateTimePeriod(
 												dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
-												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulingResultStateHolder, new TimeZoneGuard());
+												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory(null))), schedulingResultStateHolder);
 			target.SetRequestedScenario(scenario);
 			auth = CurrentAuthorization.ThreadlyUse(new FullPermission());
 		}
@@ -80,15 +80,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void LoadPeriodCanBeRead()
 		{
 			Assert.AreEqual(dtp.VisiblePeriod, target.RequestedPeriod.Period());
-		}
-
-
-		[Test]
-		public void ShouldBeAbleToSetTimeZoneInfo()
-		{
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
-			target.TimeZoneInfo = timeZone;
-			Assert.AreEqual(timeZone, target.TimeZoneInfo);
 		}
 
 		[Test]

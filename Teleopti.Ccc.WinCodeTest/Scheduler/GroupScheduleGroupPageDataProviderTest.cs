@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 
             _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(),
-				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, _disableDeletedFilter, _resultHolder, new TimeZoneGuard());
+				TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, _disableDeletedFilter, _resultHolder);
 			_target = new GroupScheduleGroupPageDataProvider(()=>_stateHolder, _repositoryFactory, _currentUnitOfWorkFactory, _disableDeletedFilter, CurrentBusinessUnit.Make());
 		}
 

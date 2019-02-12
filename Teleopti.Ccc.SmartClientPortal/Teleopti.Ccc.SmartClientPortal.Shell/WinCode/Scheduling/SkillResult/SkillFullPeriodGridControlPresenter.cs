@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.WinCode.Scheduling;
 
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
@@ -28,8 +30,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		{
 			if (stateHolder == null || skill == null) return;
 
-            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(stateHolder.TimeZoneInfo);
-			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).OrderBy(s => s.Date).ToList();
+            var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone());
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone()))).OrderBy(s => s.Date).ToList();
 			var startDate = _dates.FirstOrDefault();
 			var endDate = _dates.LastOrDefault();
 			_fullPeriods = new List<DateOnlyPeriod> {new DateOnlyPeriod(startDate, endDate)};
@@ -52,9 +54,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 		public void SetDates(ISchedulerStateHolder stateHolder)
 		{
 			if (stateHolder == null) return;
-
-			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(stateHolder.TimeZoneInfo );
-			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).OrderBy(s => s.Date).ToList();
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
+			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(timeZone);
+			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, timeZone))).OrderBy(s => s.Date).ToList();
 		}
 
 		public void SetFullPeriods()
@@ -76,17 +78,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.SkillResult
 			
 			IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>> skillFullPeriods = new Dictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>();
 			IAggregateSkill aggregateSkillSkill = skill;
-
+			var timeZone = TimeZoneGuardForDesktop.Instance_DONTUSE.CurrentTimeZone();
 			foreach (var dateOnlyPeriod in _fullPeriods)
 			{
 				IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod>();
 				if (aggregateSkillSkill.IsVirtual)
 				{
-					periods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo));
+					periods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateOnlyPeriod.ToDateTimePeriod(timeZone));
 				}
 				else
 				{
-					var periodToFind = dateOnlyPeriod.ToDateTimePeriod(stateHolder.TimeZoneInfo);
+					var periodToFind = dateOnlyPeriod.ToDateTimePeriod(timeZone);
 					periods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, periodToFind);
 				}
 

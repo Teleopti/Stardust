@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		private static IEnumerable<Assembly> assembliesFromTypes()
 		{
+			yield return typeof(IEvent).Assembly;
 			yield return typeof(IHandleEvent<>).Assembly;
 			yield return typeof(Person).Assembly;
 			yield return typeof(Rta).Assembly;

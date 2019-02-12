@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 {
 	[DomainTest]
 	[LoggedOff]
-	[DefaultData]
 	[RealPermissions]
 	public class AsSystemAspectTest : IExtendSystem
 	{
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 					ranWithPrincipal = Principal.Current();
 				});
 
-			ranWithPrincipal.Identity.Name.Should().Be("System");
+			ranWithPrincipal.Identity.Name.Should().Contain("System");
 		}
 
 		[Test]

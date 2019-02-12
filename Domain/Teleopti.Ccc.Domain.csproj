@@ -77,8 +77,8 @@
       <HintPath>..\packages\MathNet.Numerics.Signed.3.6.0\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NodaTime, Version=2.2.2.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.2.2.2\lib\net45\NodaTime.dll</HintPath>
@@ -228,11 +228,14 @@
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_BusinessUnit.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRoot_Events_ChangeInfo_Versioned_BusinessUnit.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ISkillForecastJobStartTimeRepository.cs" />
     <Compile Include="Common\Time\IUserNowExtensions.cs" />
     <Compile Include="Forecasting\SkillForecastIntervalCalculator.cs" />
+    <Compile Include="Forecasting\SkillForecastReadModelPeriodBuilder.cs" />
     <Compile Include="Forecasting\SkillsExtensions.cs" />
-    <Compile Include="Forecasting\TriggerSkillForecastReadModel.cs" />
+    <Compile Include="Forecasting\TriggerSkillForecastReadModelHandler.cs" />
     <Compile Include="Forecasting\WorkloadDayHelper.cs" />
+    <Compile Include="Infrastructure\InitializeBusinessUnitDatabaseState.cs" />
     <Compile Include="Insights\InsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReportRepository.cs" />
@@ -244,7 +247,7 @@
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbTenantClient.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
-    <Compile Include="Notification\ScheduleChangeForWeekViewEvent.cs" />
+    <Compile Include="Notification\ScheduleChangeForWeekViewMessage.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
     <Compile Include="Repositories\ISkillForecastReadModelRepository.cs" />
@@ -1447,14 +1450,12 @@
     <Compile Include="InterfaceLegacy\Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\GroupPageChangedMessage.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\InitialLoadScheduleProjection.cs" />
-    <Compile Include="InterfaceLegacy\Messages\Denormalize\Legacy\PersonChangedMessage.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\NewAbsenceReportCreated.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="InterfaceLegacy\Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="InterfaceLegacy\Messages\General\BadgeCalculationInitEvent.cs" />
     <Compile Include="InterfaceLegacy\Messages\General\ChildSkillSelection.cs" />
     <Compile Include="InterfaceLegacy\Messages\General\ExportMultisiteSkillToSkill.cs" />
-    <Compile Include="InterfaceLegacy\Messages\General\IForecastsRow.cs" />
     <Compile Include="InterfaceLegacy\Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="InterfaceLegacy\Messages\MessageWithLogOnContext.cs" />
     <Compile Include="InterfaceLegacy\Messages\Queues.cs" />

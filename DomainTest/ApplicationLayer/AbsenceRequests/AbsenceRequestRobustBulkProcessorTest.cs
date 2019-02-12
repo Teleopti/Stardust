@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[AllTogglesOn]
+	[NoDefaultData]
 	public class AbsenceRequestRobustBulkProcessorTest : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;

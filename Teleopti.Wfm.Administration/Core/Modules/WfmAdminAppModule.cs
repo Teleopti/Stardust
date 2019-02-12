@@ -1,27 +1,19 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Support.Security;
 using Teleopti.Support.Security.Library;
-using Teleopti.Wfm.Adherence.Configuration;
-using Teleopti.Wfm.Adherence.Configuration.Repositories;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 
@@ -87,15 +79,6 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<HangfireStatisticsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HangfireRepository>().SingleInstance();
 			builder.RegisterType<HangfireUtilities>().AsSelf().As<IManageFailedHangfireEvents>().SingleInstance();
-			builder.Register<Func<ICurrentUnitOfWork, IBusinessUnitRepository>>(context => uow => new BusinessUnitRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IPersonRepository>>(context => uow => new PersonRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IScenarioRepository>>(context => uow => new ScenarioRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IApplicationRoleRepository>>(context => uow => new ApplicationRoleRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IAvailableDataRepository>>(context => uow => new AvailableDataRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IKpiRepository>>(context => uow => new KpiRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, ISkillTypeRepository>>(context => uow => new SkillTypeRepository(uow));
-			builder.Register<Func<ICurrentUnitOfWork, IRtaStateGroupRepository>>(context => uow => new RtaStateGroupRepository(uow));
-
 			builder.RegisterType<AdminAccessTokenRepository>().AsSelf();
 			builder.RegisterType<RecurrentEventTimer>().SingleInstance();
 			builder.RegisterType<InitializeApplicationInsight>().SingleInstance();

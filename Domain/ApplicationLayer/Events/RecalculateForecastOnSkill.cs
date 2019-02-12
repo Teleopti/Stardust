@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
         /// The workloads to recalculate
         /// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public Collection<Guid> WorkloadIds { get; set; }
+		public IEnumerable<Guid> WorkloadIds { get; set; }
 
 	}
 }

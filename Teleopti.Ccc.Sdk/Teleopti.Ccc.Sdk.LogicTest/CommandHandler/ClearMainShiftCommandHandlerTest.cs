@@ -16,10 +16,9 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
-    [TestFixture]
+    [NoDefaultData]
 	[DomainTest]
     public class ClearMainShiftCommandHandlerTest : IIsolateSystem, IExtendSystem
 	{

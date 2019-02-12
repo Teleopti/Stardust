@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages.General;
 
@@ -6,18 +7,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IForecastFileContainer
     {
-        void AddForecastsRow(DateOnly dateOnly, IForecastsRow forecasts);
-        ICollection<IForecastsRow> GetForecastsRows(DateOnly dateOnly);
+        void AddForecastsRow(DateOnly dateOnly, ForecastsRow forecasts);
+        ICollection<ForecastsRow> GetForecastsRows(DateOnly dateOnly);
     }
 
     public class ForecastFileContainer : IForecastFileContainer
     {
-        private readonly IDictionary<DateOnly, ICollection<IForecastsRow>> _forecastedFileDictionary =
-            new Dictionary<DateOnly, ICollection<IForecastsRow>>();
+        private readonly IDictionary<DateOnly, ICollection<ForecastsRow>> _forecastedFileDictionary =
+            new Dictionary<DateOnly, ICollection<ForecastsRow>>();
 
-        public void AddForecastsRow(DateOnly dateOnly, IForecastsRow forecasts)
+        public void AddForecastsRow(DateOnly dateOnly, ForecastsRow forecasts)
         {
-            ICollection<IForecastsRow> forecastsRows;
+            ICollection<ForecastsRow> forecastsRows;
             if (_forecastedFileDictionary.TryGetValue(dateOnly, out forecastsRows))
             {
                 if (forecastsRows.Contains(forecasts))
@@ -25,12 +26,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
                 forecastsRows.Add(forecasts);
             }
             else
-                _forecastedFileDictionary.Add(dateOnly, new List<IForecastsRow> { forecasts });
+                _forecastedFileDictionary.Add(dateOnly, new List<ForecastsRow> { forecasts });
         }
 
-        public ICollection<IForecastsRow> GetForecastsRows(DateOnly dateOnly)
+        public ICollection<ForecastsRow> GetForecastsRows(DateOnly dateOnly)
         {
-            ICollection<IForecastsRow> forecastsRows;
+            ICollection<ForecastsRow> forecastsRows;
             _forecastedFileDictionary.TryGetValue(dateOnly, out forecastsRows);
             return forecastsRows;
         }

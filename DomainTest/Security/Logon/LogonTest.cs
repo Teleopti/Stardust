@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 {
 	[DomainTest]
 	[LoggedOff]
-	[DefaultData]
 	[RealPermissions]
 	public class LogonTest
 	{

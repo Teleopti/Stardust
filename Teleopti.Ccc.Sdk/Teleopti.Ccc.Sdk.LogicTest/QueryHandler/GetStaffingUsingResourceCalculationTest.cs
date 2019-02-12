@@ -20,7 +20,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
-	[TestFixture]
+	[NoDefaultData]
 	[DomainTest]
 	public class GetStaffingUsingResourceCalculationTest : IExtendSystem
 	{

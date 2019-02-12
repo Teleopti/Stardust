@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -32,6 +33,11 @@ namespace Teleopti.Ccc.TestCommon
 			person.SetName(name);
 			return person;
 		}
+		
+		public static Person WithName(this Person person, string name)
+		{
+			return WithName(person, new Name(name, name));
+		}
 
 		public static Person WithName(this Person person, Name name)
 		{
@@ -42,6 +48,13 @@ namespace Teleopti.Ccc.TestCommon
 		public static Person InTimeZone(this Person agent, TimeZoneInfo timeZoneInfo)
 		{
 			agent.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
+			return agent;
+		}
+		
+		public static Person WithCulture(this Person agent, CultureInfo cultureInfo)
+		{
+			agent.PermissionInformation.SetCulture(cultureInfo);
+			agent.PermissionInformation.SetUICulture(cultureInfo);
 			return agent;
 		}
 

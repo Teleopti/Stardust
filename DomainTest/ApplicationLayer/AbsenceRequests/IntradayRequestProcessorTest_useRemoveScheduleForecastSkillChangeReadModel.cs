@@ -19,10 +19,10 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
+	[NoDefaultData]
 	public class IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel : IIsolateSystem
 	{
 		public IRequestProcessor Target;

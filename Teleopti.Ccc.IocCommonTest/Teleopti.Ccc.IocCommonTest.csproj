@@ -97,7 +97,7 @@
     <Compile Include="Configuration\EventHandlersModuleTest.cs" />
     <Compile Include="Configuration\EventsPublisherModuleTest.cs" />
     <Compile Include="Configuration\ForecasterModuleTest.cs" />
-    <Compile Include="Configuration\HangfireHandlerTypeMappingTest.cs" />
+    <Compile Include="Configuration\TypeMappingHangfireHandlersTest.cs" />
     <Compile Include="Configuration\HangfireModuleTest.cs" />
     <Compile Include="Configuration\InitializeModuleTest.cs" />
     <Compile Include="Configuration\LogModuleTest.cs" />
@@ -112,6 +112,7 @@
     <Compile Include="Configuration\ShiftTradeModuleTest.cs" />
     <Compile Include="Configuration\TeleoptiCacheKeyTest.cs" />
     <Compile Include="Configuration\TenantClientModuleTest.cs" />
+    <Compile Include="Configuration\TypeMappingEventsTest.cs" />
     <Compile Include="MultipleConfig\AppConfigOverriderTest.cs" />
     <Compile Include="MultipleConfig\WebConfigReaderTest.cs" />
     <Compile Include="Toggle\CustomerTest.cs" />

@@ -42,6 +42,6 @@ namespace Teleopti.Wfm.Adherence.Historical.Infrastructure
 	{
 		void AddWithoutStoreVersion(IEvent @event, DeadLockVictim deadLockVictim);
 		IEnumerable<IEvent> LoadAllForTest();
-		IEnumerable<string> LoadAllEventTypeIds();
+		IEnumerable<string> LoadAllEventTypes();
 	}
 }
