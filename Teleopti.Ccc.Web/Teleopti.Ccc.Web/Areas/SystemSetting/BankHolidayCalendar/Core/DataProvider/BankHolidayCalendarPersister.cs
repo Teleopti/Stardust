@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.SystemSetting.BankHolidayCalendar.Core.DataProv
 
 		private bool updateCalendarsForSites(Guid Id)
 		{
-			var sites = _bankHolidayCalendarSiteRepository.FindSitesByCalendar(Id);//.LoadAll().Where(s => s.Calendar.Id.Value == Id);
+			var sites = _bankHolidayCalendarSiteRepository.FindSitesByCalendar(Id);
 			var settings = _bankHolidayCalendarSiteRepository.LoadAll();
 			var input = new List<SiteBankHolidayCalendarsViewModel>();
 			sites?.ToList().ForEach(s =>
