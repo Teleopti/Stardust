@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	public class DatesFromPeriod : IDateData
 	{
 		public Dictionary<DateTime, DataRow> DateMap { get; set; }
+		public bool CreateDateIdGap { get; set; }
 		public IEnumerable<DataRow> Rows { get; set; }
 		private readonly DateTime startDate;
 		private readonly DateTime endDate;
@@ -22,16 +23,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			this.startDate = startDate;
 			this.endDate = endDate;
 			DateMap = new Dictionary<DateTime, DataRow>();
-		}
-
-		public int? DateId(DateTime date)
-		{
-			if (!DateMap.Any() || !DateMap.ContainsKey(date))
-			{
-				return null;
-			}
-
-			return (int?) DateMap[date]["date_id"];
 		}
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
@@ -45,6 +36,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			{
 				var row = table.AddDate(id, date, analyticsDataCulture);
 				DateMap[date.Date] = row;
+				if (CreateDateIdGap)
+				{
+					id++;
+				}
 				id++;
 			});
 

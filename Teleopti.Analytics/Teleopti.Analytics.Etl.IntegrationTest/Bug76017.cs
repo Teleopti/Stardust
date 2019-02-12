@@ -131,8 +131,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var businessUnit = new BusinessUnit(TestState.BusinessUnit, dataSource) {BusinessUnitId = 1};
 			var intervals = new QuarterOfAnHourInterval();
 			var scenario = new Scenario(1, TestState.BusinessUnit.Id.GetValueOrDefault(), true);
-			var yesterday = new SpecificDate { Date = new DateOnly(2018, 5, 21), DateId = 1 };
-			var today = new SpecificDate { Date = new DateOnly(2018, 5, 22), DateId = 2 };
+			var yesterday = new SpecificDate { Date = new DateOnly(2018, 5, 21), DateId = 30 };
+			var today = new SpecificDate { Date = new DateOnly(2018, 5, 22), DateId = 31 };
+			var plus1Day = new SpecificDate { Date = new DateOnly(2018, 5, 23), DateId = 32 };
 			var bridgeTimeZoneYesterday = new FillBridgeTimeZoneFromData(yesterday, intervals, timeZones, dataSource);
 			var bridgeTimeZoneToday = new FillBridgeTimeZoneFromData(today, intervals, timeZones, dataSource);
 			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
@@ -152,6 +153,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
 			analyticsDataFactory.Setup(today);
 			analyticsDataFactory.Setup(yesterday);
+			analyticsDataFactory.Setup(plus1Day);
 			analyticsDataFactory.Setup(bridgeTimeZoneToday);
 			analyticsDataFactory.Setup(bridgeTimeZoneYesterday);
 			analyticsDataFactory.Setup(new Person(person, dataSource, personId, yesterday.Date.Date,
@@ -201,7 +203,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var businessUnit = new BusinessUnit(TestState.BusinessUnit, dataSource) {BusinessUnitId = 1};
 			var intervals = new QuarterOfAnHourInterval();
 			var scenario = new Scenario(1, TestState.BusinessUnit.Id.GetValueOrDefault(), true);
-			var today = new SpecificDate { Date = new DateOnly(2018, 5, 21), DateId = 1 };
+			var today = new SpecificDate { Date = new DateOnly(2018, 5, 21), DateId = 30 };
+			var plus1Day = new SpecificDate { Date = new DateOnly(2018, 5, 22), DateId = 31 };
+			var datesExtraNeeded = new DatesFromPeriod(today.Date.AddDays(-11).Date, today.Date.Date);
 			var bridgeTimeZoneToday = new FillBridgeTimeZoneFromData(today, intervals, timeZones, dataSource);
 			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 			var personId = 1;
@@ -223,6 +227,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(scenario);
 			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
 			analyticsDataFactory.Setup(today);
+			analyticsDataFactory.Setup(plus1Day);
+			analyticsDataFactory.Setup(datesExtraNeeded);
 			analyticsDataFactory.Setup(bridgeTimeZoneToday);
 			analyticsDataFactory.Setup(new Person(person, dataSource, personId, today.Date.Date,
 				new DateTime(2059, 12, 31), today.DateId, -2, businessUnit.BusinessUnitId, TestState.BusinessUnit.Id.GetValueOrDefault(),

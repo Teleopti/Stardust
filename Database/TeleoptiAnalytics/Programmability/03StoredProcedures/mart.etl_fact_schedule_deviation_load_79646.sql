@@ -52,28 +52,35 @@ if (@is_delayed_job=0 --only run once per ETL, dynamic SP will call using: @is_d
 	)
 EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_schedule_deviation_load_79646'
 
-DECLARE @start_date_id int
-DECLARE @end_date_id int
-DECLARE @max_date_id int
-DECLARE @min_date_id int
-DECLARE @business_unit_id int
-DECLARE @scenario_id int
-DECLARE @scenario_code uniqueidentifier
-DECLARE @minutes_outside_shift int
-DECLARE @intervals_outside_shift int
-DECLARE @interval_length_minutes int
-
-DECLARE @now_date_date_utc smalldatetime
-DECLARE @now_interval_id_utc smallint
-DECLARE @now_date_id_utc int
-DECLARE @from_interval_id_utc smallint
-DECLARE @from_date_id_utc int
-DECLARE @from_date_date_utc smalldatetime
-DECLARE @intervals_back smallint
-DECLARE @detail_id int
-DECLARE @agent_stats_date_id int
-DECLARE @agent_stats_interval_id smallint
-DECLARE @agent_stats_date smalldatetime
+DECLARE @start_date_id int,
+@end_date_id int,
+@max_date_id int,
+@min_date_id int,
+@business_unit_id int,
+@scenario_id int,
+@scenario_code uniqueidentifier,
+@minutes_outside_shift int,
+@intervals_outside_shift int,
+@interval_length_minutes int,
+@now_date_date_utc smalldatetime,
+@now_interval_id_utc smallint,
+@now_date_id_utc int,
+@from_interval_id_utc smallint,
+@from_date_id_utc int,
+@from_date_date_utc smalldatetime,
+@intervals_back smallint,
+@detail_id int,
+@agent_stats_date_id int,
+@agent_stats_interval_id smallint,
+@agent_stats_date smalldatetime,
+@max_deviation_table_date_id int, 
+@max_deviation_table_interval int,
+@start_date_id_minus_1 int,
+@end_date_id_plus_1 int,
+@agent_stats_date_id_plus_1 int,
+@from_date_id_utc_plus_1 int,
+@now_date_id_utc_minus_1 int,
+@now_date_id_utc_minus_10 int
 
 SET @detail_id=4 --deviation
 
@@ -137,11 +144,13 @@ CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
 
 CREATE TABLE #stg_schedule_changed(
 	[person_id] [int] NOT NULL,
-	[shift_startdate_local_id] [int] NOT NULL,
-	[shift_startdate_local] [smalldatetime] NOT NULL,
 	[person_code] [uniqueidentifier],
 	[acd_login_id] [int],
-	[business_unit_id] [int]
+    [business_unit_id] [int],
+	[shift_startdate_local] [smalldatetime] NOT NULL,
+	[shift_startdate_local_id] [int] NOT NULL,
+	[shift_startdate_local_id_minus_1] [int] NOT NULL,
+	[shift_startdate_local_id_plus_1] [int] NOT NULL
 )
 
 CREATE TABLE #shift_start_intervals(
@@ -153,10 +162,10 @@ CREATE TABLE #shift_start_intervals(
 )
 
 CREATE TABLE #fact_agent (
-	date_id int, 
-	interval_id smallint,
-	acd_login_id int,
-	ready_time_s decimal(19, 0)
+    date_id int, 
+    interval_id smallint,
+    acd_login_id int,
+    ready_time_s decimal(19, 0)
 )
 
 --get the number of intervals outside shift to consider for adherence calc
@@ -180,6 +189,10 @@ SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHE
 /*Remove old data*/
 if (@isIntraday=0)
 BEGIN
+
+	SELECT @start_date_id_minus_1 = date_id FROM mart.dim_date WHERE date_date = DATEADD(d, -1, @start_date)
+	SELECT @end_date_id_plus_1 = date_id FROM mart.dim_date WHERE date_date = DATEADD(d, 1, @end_date)
+
 	INSERT INTO #fact_schedule
 	SELECT
 		fs.shift_startdate_local_id,
@@ -253,7 +266,7 @@ BEGIN
 					OR (fa.date_id = p.valid_to_date_id_maxdate AND fa.interval_id <= p.valid_to_interval_id_maxdate)
 			)
 	WHERE
-		fa.date_id BETWEEN @start_date_id-1 AND @end_date_id+1 --extend stat to cover local date
+		fa.date_id BETWEEN @start_date_id_minus_1 AND @end_date_id_plus_1 --extend stat to cover local date
 		AND b.business_unit_id = @business_unit_id
 END
 ELSE
@@ -269,8 +282,6 @@ BEGIN
 		inner join [mart].[dim_acd_login] l
 		on l.[acd_login_id] = b.[acd_login_id]
 		where p.business_unit_id = @business_unit_id
-
-		--select * from #ds_filter
 
 		select min(l.date_value) [min_local_date], min(l.int_value) [min_local_int], max(l.date_value) [max_local_date], max(l.int_value) [max_local_int], d.[time_zone_id]
 		into #date_filter
@@ -362,23 +373,24 @@ BEGIN
 			)
 		Raiserror ('@now_date_id_utc or @now_interval_id_utc values inside [mart].[etl_fact_schedule_deviation_load_79646] contained null values. Transaction should be aborted by ADO.NET!',16,1) WITH NOWAIT
 
-		declare @max_deviation_table_date_id int, @max_deviation_table_interval int
+		SELECT @now_date_id_utc_minus_10 = date_id FROM mart.dim_date WHERE date_date = DATEADD(d, -10, CONVERT(DATE,@now_utc))
+		SELECT @now_date_id_utc_minus_1 = date_id FROM mart.dim_date WHERE date_date = DATEADD(d, -1, CONVERT(DATE,@now_utc))
 
 		select @max_deviation_table_date_id = max([date_id])
         from [mart].[fact_schedule_deviation] 
-        where shift_startdate_local_id > @now_date_id_utc-10 --Keep data volumes down and speed up this query by using the clustered key better. 10 days back should work.
+        where shift_startdate_local_id > @now_date_id_utc_minus_10 --Keep data volumes down and speed up this query by using the clustered key better. 10 days back should work.
         and business_unit_id = @business_unit_id
         and is_logged_in = 1
 
         select @max_deviation_table_interval = max([interval_id]) 
         from [mart].[fact_schedule_deviation] 
-        where shift_startdate_local_id >= @max_deviation_table_date_id-1 --Keep data volumes down and speed up this query by using the clustered key better. 1 day back should cover all timezones.
+        where shift_startdate_local_id >= @now_date_id_utc_minus_1 --Keep data volumes down and speed up this query by using the clustered key better. 1 day back should cover all timezones.
         and date_id = @max_deviation_table_date_id
         and business_unit_id = @business_unit_id
         and is_logged_in = 1
 
 		--Make sure 10 intervals before last log date goes back at least as far as data in schedule deviation table for current/previous day
-		if @max_deviation_table_date_id >= @now_date_id_utc-1
+		if @max_deviation_table_date_id >= @now_date_id_utc_minus_1
 		BEGIN
 			IF (@from_date_id_utc > @max_deviation_table_date_id OR (@from_date_id_utc = @max_deviation_table_date_id and @from_interval_id_utc > @max_deviation_table_interval))
 			BEGIN
@@ -393,6 +405,10 @@ BEGIN
 			END
 		END
 
+		SELECT @from_date_id_utc_plus_1 = date_id 
+		FROM mart.dim_date 
+		WHERE date_date = DATEADD(d, 1, (SELECT date_date FROM mart.dim_date WHERE date_id = @from_date_id_utc))
+
 		--Use latest log date for BU to set upper filter limits
 		select @agent_stats_date_id = max([date_id]), @agent_stats_date = max([date_date])
 		from #tz_corrected_filter_max
@@ -400,6 +416,8 @@ BEGIN
 		select @agent_stats_interval_id = max([interval_id])
 		from #tz_corrected_filter_max
 		where [date_id] = @agent_stats_date_id
+
+		SELECT @agent_stats_date_id_plus_1 = date_id FROM mart.dim_date WHERE date_date = DATEADD(d, 1, @agent_stats_date)
 
 		drop table #ds_filter
 		drop table #date_filter
@@ -425,11 +443,11 @@ BEGIN
 		FROM mart.fact_schedule fs
 		INNER JOIN mart.dim_person p WITH (NOLOCK)
 			ON fs.person_id = p.person_id
-		WHERE fs.shift_startdate_id between @from_date_id_utc and @agent_stats_date_id+1 AND		
+		WHERE fs.shift_startdate_id between @from_date_id_utc and @agent_stats_date_id_plus_1 AND		
 		(
 			(@from_date_id_utc = @agent_stats_date_id and schedule_date_id = @agent_stats_date_id and interval_id between @from_interval_id_utc and @agent_stats_interval_id) 
 			OR (@from_date_id_utc < @agent_stats_date_id and schedule_date_id = @from_date_id_utc AND interval_id >= @from_interval_id_utc)
-			OR (@from_date_id_utc < @agent_stats_date_id and schedule_date_id between @from_date_id_utc + 1 AND @agent_stats_date_id + 1)
+			OR (@from_date_id_utc < @agent_stats_date_id and schedule_date_id between @from_date_id_utc_plus_1 AND @agent_stats_date_id_plus_1)
 		)
 		AND fs.scenario_id = @scenario_id
 		AND fs.business_unit_id= @business_unit_id
@@ -445,8 +463,6 @@ BEGIN
 			fs.business_unit_id,
 			p.person_code
 
-		--remove intervals for today in the future
-		--DELETE #fact_schedule WHERE (schedule_date_id = @now_date_id_utc AND interval_id > @now_interval_id_utc) OR schedule_date_id > @now_date_id_utc
 
 		INSERT INTO #fact_schedule_deviation
 			(
@@ -485,23 +501,39 @@ BEGIN
 		WHERE (
 			(@from_date_id_utc = @agent_stats_date_id and date_id = @agent_stats_date_id and interval_id between @from_interval_id_utc and @agent_stats_interval_id)
 			OR (@from_date_id_utc < @agent_stats_date_id and date_id = @from_date_id_utc AND interval_id >= @from_interval_id_utc)
-			OR (@from_date_id_utc < @agent_stats_date_id and date_id between @from_date_id_utc+1 AND @now_date_id_utc-1)
+			OR (@from_date_id_utc < @agent_stats_date_id and date_id between @from_date_id_utc_plus_1 AND @now_date_id_utc_minus_1)
 			OR (@from_date_id_utc < @agent_stats_date_id AND date_id = @agent_stats_date_id AND interval_id <= @agent_stats_interval_id)
-		)
+			)
 	END
 
 	if (@isIntraday=3)--service bus changes
 	BEGIN
-		INSERT INTO #stg_schedule_changed
-		SELECT  p.person_id,
-				dd.date_id,
-				ch.schedule_date_local,
-				p.person_code,
-				b.acd_login_id,
-				p.business_unit_id
+		INSERT INTO #stg_schedule_changed (
+			person_id, 
+			person_code, 
+			acd_login_id, 
+			business_unit_id, 
+			shift_startdate_local, 
+			shift_startdate_local_id, 
+			shift_startdate_local_id_minus_1, 
+			shift_startdate_local_id_plus_1
+			)
+		SELECT  
+			p.person_id,
+			p.person_code,
+			b.acd_login_id,
+			p.business_unit_id,
+			ch.schedule_date_local,
+			dd.date_id,
+			shiftStartMinus1.date_id,
+			shiftStartPlus1.date_id
 		FROM stage.stg_schedule_changed_servicebus ch WITH (NOLOCK)
 		INNER JOIN mart.dim_date dd
 			ON dd.date_date = ch.schedule_date_local
+		INNER JOIN mart.dim_date shiftStartMinus1
+			ON shiftStartMinus1.date_date = DATEADD(d, -1, ch.schedule_date_local)
+		INNER JOIN mart.dim_date shiftStartPlus1
+			ON shiftStartPlus1.date_date = DATEADD(d, 1, ch.schedule_date_local)
 		INNER JOIN mart.dim_person p WITH (NOLOCK)
 			ON p.person_code = ch.person_code
 				AND --trim
@@ -554,8 +586,8 @@ BEGIN
 
 		DECLARE @schedule_change_start_date_id int, @schedule_change_end_date_id int
 		SELECT 
-			@schedule_change_start_date_id = ISNULL(MIN(shift_startdate_local_id) -1, NULL), 
-			@schedule_change_end_date_id = ISNULL(MAX(shift_startdate_local_id) + 1, NULL)
+			@schedule_change_start_date_id = ISNULL(MIN(shift_startdate_local_id_minus_1), NULL), 
+			@schedule_change_end_date_id = ISNULL(MAX(shift_startdate_local_id_plus_1), NULL)
 		FROM #stg_schedule_changed
 
 		IF (@schedule_change_start_date_id IS NULL)
@@ -595,7 +627,7 @@ BEGIN
 				person_code				= ch.person_code
 			FROM #stg_schedule_changed ch
 			INNER JOIN #fact_agent fa
-			ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
+			ON fa.date_id BETWEEN ch.shift_startdate_local_id_minus_1 AND ch.shift_startdate_local_id_plus_1 --extend stat to cover local date
 			AND ch.acd_login_id	= fa.acd_login_id
 
 	END
@@ -833,16 +865,6 @@ BEGIN
 	DELETE FROM mart.fact_schedule_deviation
 	WHERE shift_startdate_local_id between @start_date_id AND @end_date_id
 	AND business_unit_id = @business_unit_id
-END
-IF @isIntraday = 1 --changed day
-BEGIN
- 	DELETE fs
-	FROM #stg_schedule_changed ch
- 	INNER JOIN mart.fact_schedule_deviation fs
-		ON ch.shift_startdate_local_id = fs.shift_startdate_local_id
-	INNER JOIN mart.dim_person p
-		ON ch.person_code = p.person_code AND
-			fs.person_id = p.person_id
 END
 IF @isIntraday = 2 --last 10 intervals
 BEGIN --INTRADAY
