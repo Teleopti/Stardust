@@ -14,8 +14,8 @@ function CheckSystemStatus
 	do
     {
         $Response = wget $Url -UseBasicParsing -ErrorAction SilentlyContinue
-		$status = $Response.StatusCode
-		if($status -eq 200) #ska vara 200-299
+        $status = $Response.StatusDescription
+		if($status -eq 'OK') 
 		{
 			$success++
 		}
@@ -23,7 +23,7 @@ function CheckSystemStatus
 		{
 			$success = 0
 		}
-		Write-Output "Status Code: $status"
+		Write-Output "$status"
         
         Start-Sleep 1
     } until($success -ge $minNumberOfSuccess)
