@@ -43,7 +43,6 @@
 		$translate,
 		skillIconService,
 		$rootScope,
-		toggleService,
 		$timeout,
 		localeLanguageSortingService
 	) {
@@ -189,7 +188,7 @@
 		};
 
 		vm.saveAll = function() {
-			SkillGroupSvc.modifySkillGroups(vm.skillGroups).then(function(result) {
+			SkillGroupSvc.modifySkillGroups(vm.skillGroups).then(function() {
 				getAllSkillGroups();
 				setSaveableState();
 				vm.canSave = false;
@@ -236,7 +235,7 @@
 
 			SkillGroupSvc.createSkillGroup
 				.query({ Name: vm.skillGroupName, Skills: selectedSkillIds })
-				.$promise.then(function(result) {
+				.$promise.then(function() {
 					notifySkillGroupCreation();
 					$state.go('intraday', { isNewSkillArea: true });
 				});
@@ -283,11 +282,9 @@
 		//----------- Local functions ----------------------------------------------------
 
 		function sortByName(arr) {
-			return arr.sort((r1, r2) => localeLanguageSortingService.sort(r1.Name, r2.Name));
-		}
-
-		function sortselectedSkillsByName() {
-			return vm.selectedSkills.sort((r1, r2) => localeLanguageSortingService.sort(r1.Name, r2.Name));
+			return arr.sort(function(r1, r2) {
+				return localeLanguageSortingService.sort(r1.Name, r2.Name);
+			});
 		}
 
 		function getAllSkillGroups(select) {
@@ -303,10 +300,6 @@
 					vm.selectSkillGroup(vm.selectedGroupIndex);
 				}
 			});
-		}
-
-		function isNumeric(n) {
-			return !isNaN(parseFloat(n)) && isFinite(n);
 		}
 
 		function setSaveableState() {
@@ -335,7 +328,7 @@
 			getAllSkillGroups(false);
 		}
 
-		$scope.$on('$stateChangeStart', function(event, next, current) {
+		$scope.$on('$stateChangeStart', function(event, next) {
 			if (vm.canSave) {
 				event.preventDefault();
 				$timeout(function() {
