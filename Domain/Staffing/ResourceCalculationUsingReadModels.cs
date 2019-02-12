@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			{
 				var serviceLevel = new ServiceLevel(new Percent(skillForecast.PercentAnswered),
 					skillForecast.AnsweredWithinSeconds);
-				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.3), new Percent(0.8));
+				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.0), new Percent(0.0));
 				var dateTimePeriod = new DateTimePeriod(new DateTime(skillForecast.StartDateTime.Ticks, DateTimeKind.Utc),
 					new DateTime(skillForecast.EndDateTime.Ticks, DateTimeKind.Utc));
 				var skillStaffPeriod = new SkillStaffPeriodForReadmodel(dateTimePeriod, new Task(), serviceAgreement)
