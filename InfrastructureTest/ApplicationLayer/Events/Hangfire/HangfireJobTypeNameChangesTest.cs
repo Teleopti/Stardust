@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public void ShouldHandleMovedHangfireEventJobType()
 		{
 			Publisher.Publish(new TestEvent {Data = "data"});
-			replaceInJobs("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared", "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure");
+			replaceInJobs("HangfireEventJob", "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure");
 			assumeJobContains("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Ccc.Infrastructure");
 
 			Hangfire.Value.EmulateWorkerIteration();
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 		public void ShouldHandleMovedHangfireEventJobTypeFromDifferentAssemblyVersions()
 		{
 			Publisher.Publish(new TestEvent {Data = "data"});
-			replaceInJobs("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null", "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null");
+			replaceInJobs("HangfireEventJob", "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null");
 			assumeJobContains("Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared, Version=3.0.0.0, Culture=neutral, PublicKeyToken=null");
 
 			Hangfire.Value.EmulateWorkerIteration();

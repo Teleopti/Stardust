@@ -239,6 +239,7 @@
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />
     <Compile Include="Foundation\BusinessUnitIdIdForRequest.cs" />
     <Compile Include="Foundation\DatabaseVersion.cs" />
+    <Compile Include="Foundation\EventSerializerSettings.cs" />
     <Compile Include="Foundation\HelperFunctions.cs" />
     <Compile Include="Foundation\InitializeMessageBroker.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
