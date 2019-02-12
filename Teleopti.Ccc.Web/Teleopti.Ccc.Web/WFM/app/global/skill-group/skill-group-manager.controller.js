@@ -31,7 +31,7 @@
 		'$rootScope',
 		'Toggle',
 		'$timeout',
-		'localeLanguageSortingService'
+		'CurrentUserInfo'
 	];
 
 	function SkillGroupManagerController(
@@ -44,7 +44,7 @@
 		skillIconService,
 		$rootScope,
 		$timeout,
-		localeLanguageSortingService
+		CurrentUserInfo
 	) {
 		var _ = $rootScope._;
 		var originalGroups = [];
@@ -283,7 +283,7 @@
 
 		function sortByName(arr) {
 			return arr.sort(function(r1, r2) {
-				return localeLanguageSortingService.sort(r1.Name, r2.Name);
+				return r1.Name.localeCompare(r2.Name);
 			});
 		}
 

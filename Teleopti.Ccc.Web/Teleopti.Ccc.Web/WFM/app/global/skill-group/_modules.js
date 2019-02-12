@@ -1,4 +1,5 @@
 (function() {
 	'use strict';
-	angular.module('wfm.skillGroup', ['wfm.autofocus', 'toggleService', 'localeLanguageSortingService']);
+	'localeLanguageSortingService',
+		angular.module('wfm.skillGroup', ['wfm.autofocus', 'toggleService', 'currentUserInfoService']);
 })();
