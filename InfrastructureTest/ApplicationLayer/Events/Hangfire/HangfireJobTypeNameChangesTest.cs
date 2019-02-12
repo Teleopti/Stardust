@@ -115,7 +115,7 @@ SET
 					.ForEach(row =>
 					{
 						var data = row.StringJoin(o => o as string);
-						Assume.That(data, Does.Contain(contains));
+						Assert.That(data, Does.Contain(contains));
 					});
 			});
 		}
