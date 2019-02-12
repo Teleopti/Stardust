@@ -1,13 +1,13 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
+using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
-
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -64,6 +64,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = _target.Find(person, 2, true, period);
 			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldFindAgentBadgesByPersonBadgeTypeAndIsExternal()
+		{
+			var result = _target.Find(new List<Guid> { person.Id.Value }, 2, true);
+			result.Count.Should().Be.EqualTo(1);
 		}
 	}
 }
