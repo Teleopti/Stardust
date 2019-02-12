@@ -79,11 +79,13 @@ BEGIN  --Single datasource_id
 	DECLARE @end_date_id	INT
 
 	declare @source_date_id_utc int
+	declare @source_date_id_utc_minus1 int
 	declare @source_interval_id_utc int
 	declare @source_date_local smalldatetime
 	declare @source_interval_local int
 	
 	declare @target_date_id_utc int
+	declare @target_date_id_utc_plus1 int
 	declare @target_interval_id_utc smallint
 	declare @target_date_local smalldatetime
 	declare @target_interval_local smallint
@@ -291,18 +293,22 @@ BEGIN  --Single datasource_id
 	-------------
 	-- Delete rows last known date_id and interval_id
 	-------------
-	--select @source_date_local,@source_interval_local,@source_date_id_utc, @source_interval_id_utc,@target_date_id_utc,@target_interval_id_utc 
 	
 	SET NOCOUNT OFF
 
 	IF @source_date_id_utc>@target_date_id_utc
 	BEGIN
+		SELECT @target_date_id_utc_plus1 = date_id
+			FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, 1, date_date) FROM mart.dim_date WHERE date_id = @target_date_id_utc)
+		
+		SELECT @source_date_id_utc_minus1 = date_id
+			FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, -1, date_date) FROM mart.dim_date WHERE date_id = @source_date_id_utc)
+
 		--middle dates
 		DELETE f
 		FROM mart.fact_agent_queue f
-		WHERE f.date_id between @target_date_id_utc + 1 AND @source_date_id_utc-1
+		WHERE f.date_id between @target_date_id_utc_plus1 AND @source_date_id_utc_minus1
 		AND f.datasource_id = @datasource_id
-		--AND EXISTS (SELECT 1 FROM #agg_queue_ids q WHERE q.queue_id = f.queue_id)
 		OPTION (RECOMPILE)
 	
 		--maxdate
@@ -311,7 +317,6 @@ BEGIN  --Single datasource_id
 		WHERE f.date_id=@source_date_id_utc
 		AND f.interval_id <= @source_interval_id_utc
 		AND f.datasource_id = @datasource_id
-		--AND EXISTS (SELECT 1 FROM #agg_queue_ids q WHERE q.queue_id = f.queue_id)
 	END
 	
 	--today
@@ -319,7 +324,6 @@ BEGIN  --Single datasource_id
 	FROM mart.fact_agent_queue f
 	WHERE f.date_id=@target_date_id_utc
 	AND f.interval_id >= @target_interval_id_utc
-	--AND EXISTS (SELECT 1 FROM #agg_queue_ids q WHERE q.queue_id = f.queue_id)
 	AND f.datasource_id = @datasource_id
 	
 	

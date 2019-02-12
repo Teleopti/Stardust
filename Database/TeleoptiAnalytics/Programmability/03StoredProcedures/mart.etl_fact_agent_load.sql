@@ -16,6 +16,7 @@ GO
 -- 2011-07-20 Dual Agg DJ
 -- =============================================
 --EXEC [mart].[etl_fact_agent_load] '2013-03-04','2013-03-04', -2
+--EXEC [mart].[etl_fact_agent_load] '2018-12-26','2018-12-27', 2
 CREATE PROCEDURE [mart].[etl_fact_agent_load] 
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -74,6 +75,8 @@ BEGIN
 	DECLARE @from_interval_id_utc smallint
 	DECLARE @to_date_id_utc int
 	DECLARE @to_interval_id_utc smallint
+	DECLARE @from_date_id_utc_plus1 int
+	DECLARE @to_date_id_utc_minus1 int
 
 	SELECT 
 		@time_zone_id = ds.time_zone_id
@@ -134,16 +137,23 @@ BEGIN
 	WHERE local_date_id = @end_date_id
 	ORDER BY date_id DESC,interval_id DESC
 	
+	SELECT @from_date_id_utc_plus1 = date_id
+		FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, 1, date_date) FROM mart.dim_date WHERE date_id = @from_date_id_utc)
+		
+	SELECT @to_date_id_utc_minus1 = date_id
+		FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, -1, date_date) FROM mart.dim_date WHERE date_id = @to_date_id_utc)
+
+
 	SET NOCOUNT OFF
 
 	DELETE  f
     FROM mart.fact_agent f 
     WHERE EXISTS (select 1 from #agg_acdlogin_ids q where q.mart_acd_login_id = f.acd_login_id)
-    AND date_id between @from_date_id_utc+1 AND @to_date_id_utc-1
+    AND date_id between @from_date_id_utc_plus1 AND @to_date_id_utc_minus1
 
     --first date_id 
     DELETE  f
-    FROM mart.fact_agent f 
+	FROM mart.fact_agent f 
     WHERE EXISTS (select 1 from #agg_acdlogin_ids q where q.mart_acd_login_id = f.acd_login_id)
     AND date_id = @from_date_id_utc
     AND interval_id >= @from_interval_id_utc
@@ -160,7 +170,7 @@ BEGIN
 	-- Same agent_id can occur on several intervals bound to different queues. 
 	-- Important is to get the distinct(min/max) value.
 	
-	--perpare
+	--prepare
 	SELECT @sqlstring = 'INSERT INTO mart.fact_agent
 		(
 		date_id, 

@@ -71,6 +71,8 @@ BEGIN
 	DECLARE @from_interval_id_utc smallint
 	DECLARE @to_date_id_utc int
 	DECLARE @to_interval_id_utc smallint
+	DECLARE @from_date_id_utc_plus1 int
+	DECLARE @to_date_id_utc_minus1 int
 
 	SELECT @UtcNow=CAST(getutcdate() as smalldatetime)
 	SELECT 
@@ -138,6 +140,12 @@ BEGIN
 	FROM #bridge_time_zone
 	WHERE local_date_id = @end_date_id
 	ORDER BY date_id DESC,interval_id DESC
+
+	SELECT @from_date_id_utc_plus1 = date_id
+		FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, 1, date_date) FROM mart.dim_date WHERE date_id = @from_date_id_utc)
+		
+	SELECT @to_date_id_utc_minus1 = date_id
+		FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, -1, date_date) FROM mart.dim_date WHERE date_id = @to_date_id_utc)
 	
 	SET NOCOUNT OFF
 
@@ -145,7 +153,7 @@ BEGIN
 	DELETE  f
     FROM mart.fact_agent_queue f 
     WHERE EXISTS (select 1 from #agg_queue_ids q where q.queue_id = f.queue_id)
-    AND date_id between @from_date_id_utc+1 AND @to_date_id_utc-1
+    AND date_id between @from_date_id_utc_plus1 AND @to_date_id_utc_minus1
 
     --first date_id 
     DELETE  f

@@ -76,11 +76,13 @@ BEGIN  --Single datasource_id
 	DECLARE @end_date_id	INT
 
 	declare @source_date_id_utc int
+	declare @source_date_id_utc_minus1 int
 	declare @source_interval_id_utc int
 	declare @source_date_local smalldatetime
 	declare @source_interval_local int
 	
 	declare @target_date_id_utc int
+	declare @target_date_id_utc_plus1 int
 	declare @target_interval_id_utc smallint
 	declare @target_date_local smalldatetime
 	declare @target_interval_local smallint
@@ -283,11 +285,17 @@ SELECT
 	--select @target_date_id_utc, @source_date_id_utc, @target_date_local,@source_date_local, @source_interval_id_utc, @source_interval_local, @target_interval_id_utc,@target_interval_local
 	
 	IF @source_date_id_utc>@target_date_id_utc
-	BEGIN
+		BEGIN
+		SELECT @target_date_id_utc_plus1 = date_id
+			FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, 1, date_date) FROM mart.dim_date WHERE date_id = @target_date_id_utc)
+		
+		SELECT @source_date_id_utc_minus1 = date_id
+			FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, -1, date_date) FROM mart.dim_date WHERE date_id = @source_date_id_utc)
+
 		--middle dates
 		DELETE f
 		FROM mart.fact_agent f
-		WHERE f.date_id between @target_date_id_utc + 1 AND @source_date_id_utc-1
+		WHERE f.date_id between @target_date_id_utc_plus1 AND @source_date_id_utc_minus1
 		and datasource_id = @datasource_id 
 		OPTION(RECOMPILE)
 
