@@ -21,113 +21,7 @@
 		height: 100%;
 		margin: 0;
 	}
-	
-	.time-line {
-		min-width: 300px;
-		height: 100%;
 
-		.ruler {
-			height: 100%;
-			width: 1px;
-			background-color: $gray012;
-		}
-
-		.label {
-			font-size: x-small;
-			height: 1.32em;
-			z-index: 11;
-			transform: translateX(-50%);
-			padding-left: 0.3em;
-			padding-right: 0.3em;
-		}
-
-		& > .relative {
-			height: 100%;
-
-			> span {
-				padding: 10px;
-			}
-		}
-
-		.not-current-day {
-			background-color: $gray026;
-		}
-	}
-
-	/*.person-name-column {
-		label {
-			position: relative;
-		}
-
-		md-checkbox {
-			display: inline-block;
-			padding: 0;
-			width: auto;
-			border-collapse: separate;
-		}
-
-		.validate-warning,
-		.schedule-note {
-			float: right;
-		}
-
-		.schedule-note .mdi-comment-outline:before {
-			font-size: 13px !important;
-		}
-
-		.validate-warning md-progress-circular {
-			display: inline-block;
-		}
-	}*/
-
-	.schedule-column {
-		padding: 0px;
-	}
-
-	.has-selected .schedule-column .shift .layer:not(.selected) {
-		opacity: 0.4;
-	}
-
-	.shift {
-		position: relative;
-		top: 4px;
-
-		.layer {
-			height: 22px;
-			text-align: center;
-			cursor: pointer;
-		}
-
-		.layer.same-type-as-last {
-			border-left-style: solid;
-			border-left-width: 1px;
-		}
-
-		.layer.selected {
-			opacity: 1;
-			border: 1px dashed #795548;
-		}
-
-		.layer.lighter-border {
-			border-color: #00ffff;
-		}
-
-		.layer:first-of-type {
-			border-radius: 4px 0px 0px 4px;
-		}
-
-		.layer:last-of-type {
-			border-radius: 0px 4px 4px 0px;
-		}
-
-		.layer.unselectable {
-			cursor: not-allowed;
-		}
-	}
-
-	.dayoff {
-		top: 4px;
-	}
 
 	.uib-timepicker {
 		height: 48px;
@@ -555,127 +449,258 @@ team-schedule-datepicker {
 	height: 100%;
 	min-height: 500px;
 
-	/*table {
-		margin-bottom: 0;
-	}
+	schedule-table {
 
-	tbody {
-		height: 100%;
-		display: block;
-		overflow-y: scroll;
-		max-height: 62vh;
-		min-height: 500px;
-		min-width: 680px;
-		border-top: 1px solid $gray012;
-	}
-
-	thead,
-	tbody tr {
-		display: table;
-		width: 100%;
-		table-layout: fixed;
-	}
-
-	thead {
-		width: calc(100% - 17px);
-		height: 40px;
-	}
-
-	tbody tr:last-child {
-		border-bottom: 1px solid #dddddd;
-	}
-
-	tbody tr:not(.shift-editor-row):hover,
-	tbody tr.in-editing {
-		background: $gray012;
-	}
-
-	tbody .shift-editor-row td {
-		padding: 0;
-	}
-
-	th,
-	td {
-		padding: 5px 0 5px 0;
-		border-bottom: none;
-		line-height: 1.5;
-		vertical-align: top;
-	}*/
-
-	/*.person-name-column {
-		width: 25%;
-		white-space: nowrap;
-		padding-right: 5px;
-		padding-left: 5px;
-		min-width: 150px;
-		font-weight: normal;
-
-		span.person-name-text {
-			word-break: break-word;
-			white-space: normal;
-		}
-
-		.sort-agent {
-			margin: 5px 0;
-		}
-
-		md-checkbox {
-			margin-top: 0px;
-			margin-bottom: 0px;
-		}
-	}
-
-	.schedule-tool-column {
-		width: 2%;
-		text-align: center;
-
-		i.mdi:before {
-			font-size: 14px !important;
-		}
-	}
-
-	.contract-time-column {
-		width: 10%;
-		padding: 5px;
-		min-width: 150px;
-		font-weight: 400;
-		text-align: center;
-		white-space: nowrap;
-	}
-
-	td.contract-time-column {
-		border-left: 1px solid $gray012;
-	}
-
-	td.schedule-tool-column.schedule-note-column > span:not(.has-note) {
-		color: $gray-500;
-	}
-
-	.shift-category-cell {
-		width: 30px;
-	}
-
-	td.shift-category-cell {
-		text-align: center;
-		font-size: 12px;
-		border-left: 1px solid $gray012;
-		position: relative;
-		padding: 10px 0 0 0;
-
-		& > .info {
+		.start-ellipsis,
+		.end-ellipsis {
 			position: absolute;
-			top: -7px;
-			right: -2px;
-			transform: scale(0.6);
+			top: 2px;
+			color: $gray054;
+			width: 0;
+			height: 0;
+
+			.mdi:before {
+				font-size: 14px !important;
+			}
 		}
 
-		& > span {
-			width: 20px;
-			display: inline-block;
-			cursor: pointer;
+		.start-ellipsis {
+			left: 5px;
 		}
-	}*/
 
+		.end-ellipsis {
+			right: 19px;
+		}
+
+		.time-line {
+			min-width: 300px;
+			height: 100%;
+			padding-top: 5px;
+
+			.ruler {
+				height: 100%;
+				width: 1px;
+				background-color: $gray012;
+			}
+
+			.label {
+				font-size: x-small;
+				height: 1.32em;
+				z-index: 11;
+				transform: translateX(-50%);
+				padding-left: 0.3em;
+				padding-right: 0.3em;
+			}
+
+			& > .relative {
+				height: 100%;
+
+				> span {
+					padding: 10px;
+				}
+			}
+
+			.not-current-day {
+				background-color: $gray026;
+			}
+		}
+
+		.person-name-column {
+			label {
+				position: relative;
+			}
+
+			md-checkbox {
+				display: inline-block;
+				padding: 0;
+				width: auto;
+				border-collapse: separate;
+			}
+
+			.validate-warning,
+			.schedule-note {
+				float: right;
+			}
+
+			.schedule-note .mdi-comment-outline:before {
+				font-size: 13px !important;
+			}
+
+			.validate-warning md-progress-circular {
+				display: inline-block;
+			}
+		}
+
+		.schedule-column {
+			padding: 0px;
+		}
+
+		.has-selected .schedule-column .shift .layer:not(.selected) {
+			opacity: 0.4;
+		}
+
+		.shift {
+			position: relative;
+			top: 4px;
+
+			.layer {
+				height: 22px;
+				text-align: center;
+				cursor: pointer;
+			}
+
+			.layer.same-type-as-last {
+				border-left-style: solid;
+				border-left-width: 1px;
+			}
+
+			.layer.selected {
+				opacity: 1;
+				border: 1px dashed #795548;
+			}
+
+			.layer.lighter-border {
+				border-color: #00ffff;
+			}
+
+			.layer:first-of-type {
+				border-radius: 4px 0px 0px 4px;
+			}
+
+			.layer:last-of-type {
+				border-radius: 0px 4px 4px 0px;
+			}
+
+			.layer.unselectable {
+				cursor: not-allowed;
+			}
+		}
+
+		.dayoff {
+			top: 4px;
+		}
+
+		table {
+			margin-bottom: 0;
+		}
+
+		tbody {
+			height: 100%;
+			display: block;
+			overflow-y: scroll;
+			max-height: 62vh;
+			min-height: 500px;
+			min-width: 680px;
+			border-top: 1px solid $gray012;
+		}
+
+		thead,
+		tbody tr {
+			display: table;
+			width: 100%;
+			table-layout: fixed;
+		}
+
+		thead {
+			width: calc(100% - 17px);
+			height: 40px;
+		}
+
+		tbody tr:last-child {
+			border-bottom: 1px solid #dddddd;
+		}
+
+		tbody tr:not(.shift-editor-row):hover,
+		tbody tr.in-editing {
+			background: $gray012;
+		}
+
+		tbody .shift-editor-row td {
+			padding: 0;
+		}
+
+		th,
+		td {
+			padding: 5px 0 5px 0;
+			border-bottom: none;
+			line-height: 1.5;
+			vertical-align: top;
+		}
+
+		.person-name-column {
+			width: 25%;
+			white-space: nowrap;
+			padding-right: 5px;
+			padding-left: 5px;
+			min-width: 150px;
+			font-weight: normal;
+
+			span.person-name-text {
+				word-break: break-word;
+				white-space: normal;
+			}
+
+			.sort-agent {
+				margin: 5px 0;
+			}
+
+			md-checkbox {
+				margin-top: 0px;
+				margin-bottom: 0px;
+			}
+		}
+
+		.schedule-tool-column {
+			width: 2%;
+			text-align: center;
+
+			i.mdi:before {
+				font-size: 14px !important;
+			}
+		}
+
+		.contract-time-column {
+			width: 10%;
+			padding: 5px;
+			min-width: 150px;
+			font-weight: 400;
+			text-align: center;
+			white-space: nowrap;
+		}
+
+		td.contract-time-column {
+			border-left: 1px solid $gray012;
+		}
+
+		td.schedule-tool-column.schedule-note-column > span:not(.has-note) {
+			color: $gray-500;
+		}
+
+		.shift-category-cell {
+			width: 30px;
+		}
+
+		td.shift-category-cell {
+			text-align: center;
+			font-size: 12px;
+			border-left: 1px solid $gray012;
+			position: relative;
+			padding: 10px 0 0 0;
+
+			& > .info {
+				position: absolute;
+				top: -7px;
+				right: -2px;
+				transform: scale(0.6);
+			}
+
+			& > span {
+				width: 20px;
+				display: inline-block;
+				cursor: pointer;
+			}
+		}
+	}
 	//Week view table
 	thead tr.weekview-thead {
 		th {

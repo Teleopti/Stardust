@@ -54,6 +54,7 @@
 		vm.permissions = {};
 		vm.isRefreshButtonVisible = !!toggleSvc.WfmTeamSchedule_DisableAutoRefreshSchedule_79826;
 		vm.havingScheduleChanged = false;
+		vm.useScheuleList = !!toggleSvc.WfmTeamSchedule_VirtualRepeatInScheduleTable_80404;
 
 
 		initSelectedGroups(mode.BusinessHierarchy, [], '');

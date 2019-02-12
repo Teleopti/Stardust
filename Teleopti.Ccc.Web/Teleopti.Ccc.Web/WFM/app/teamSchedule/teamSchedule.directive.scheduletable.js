@@ -22,6 +22,21 @@
 		};
 	}
 
+	angular.module('wfm.teamSchedule')
+		.component('scheduleList', {
+			controller: ScheduleTableController,
+			templateUrl: 'app/teamSchedule/html/schedulelist.html',
+			bindings: {
+				selectedDate: '=',
+				selectedTimezone: '<',
+				selectedSortOption: '<',
+				showWarnings: '=?',
+				paginationOptions: '<?',
+				tableStyle: '='
+			},
+			controllerAs: 'vm'
+		});
+
 	ScheduleTableController.$inject = ['$scope', '$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper'];
 	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions, serviceDateFormatHelper) {
 		var vm = this;

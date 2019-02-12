@@ -61,6 +61,13 @@
 			grid-column: 1;
 			-ms-grid-column: 1;
 
+			.validate-warning,
+			.schedule-note {
+				float: right;
+				line-height: 1;
+			}
+
+
 			.md-label {
 				white-space: nowrap;
 				overflow: hidden;
@@ -128,7 +135,6 @@
 		overflow-y: scroll;
 		max-height: 62vh;
 		min-height: 500px;
-
 
 		.list-item {
 			width: 100%;

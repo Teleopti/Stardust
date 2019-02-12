@@ -1915,6 +1915,7 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
+    <Content Include="WFM\app\teamSchedule\html\schedulelist.html" />
     <Content Include="WFM\app\teamSchedule\html\shiftEditor.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsTimePicker.tpl.html" />

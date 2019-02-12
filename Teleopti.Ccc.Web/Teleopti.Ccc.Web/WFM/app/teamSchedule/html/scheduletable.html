@@ -1,42 +1,46 @@
-<div class="schedule-list" ng-if="vm.scheduleVm.Schedules.length > 0">
-	<div class="list-header">
-			<div class="person-name-column">
+<table class="table" ng-if="vm.scheduleVm.Schedules.length > 0">
+	<thead>
+		<tr>
+			<th class="person-name-column">
 				<md-checkbox ng-model="vm.toggleAllInCurrentPage"
 							 ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
 					{{ 'AgentName' | translate }}
 				</md-checkbox>
 				<sort-agent ng-model="vm.selectedSortOption" class="pull-right sort-agent"></sort-agent>
-			</div>
-			<div class="shift-category-cell"></div>
-			<div class="schedule schedule-column">
+			</th>
+			<th class="shift-category-cell"></th>
+			<th id="time-line-container" class="schedule schedule-column">
 				<time-line times="vm.scheduleVm.TimeLine.HourPoints"
 						   schedule-count="vm.scheduleVm.Schedules.length"
 						   is-schedule-in-editing="!!vm.scheduleInEditing">
 				</time-line>
-			</div>
-			<div class="schedule-tool-column schedule-editor-column"></div>
-			<div class="schedule-tool-column schedule-note-column"></div>
-			<div class="contract-time-column">{{ 'ContractTime' | translate }}</div>
-	</div>
-	<div class="list-group" ng-style="::vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
+			</th>
+			<th class="schedule-tool-column"></th>
+			<th class="schedule-tool-column"></th>
+			<th class="contract-time-column">{{ 'ContractTime' | translate }}</th>
+		</tr>
+	</thead>
+	<tbody ng-style="::vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
+		<tr ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
+			ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
+			ng-click="vm.togglePerson(personSchedule, $event)">
+			<td class="person-name-column">
+				<div class="inline-block">
+					<label>
+						<md-checkbox ng-model="personSchedule.IsSelected"
+									 ng-change="vm.updatePersonSelection(personSchedule)"
+									 aria-label="Checkbox">
+							{{::personSchedule.Name}}
+						</md-checkbox>
+						<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
+							<i class="mdi mdi-earth"></i>
+							<md-tooltip md-direction="right">
+								{{::personSchedule.Timezone.DisplayName}}
+							</md-tooltip>
+						</span>
+					</label>
+				</div>
 
-		<div class="list-item" ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
-			 ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
-			 ng-click="vm.togglePerson(personSchedule, $event)">
-			<div class="person-name-column">
-				<label>
-					<md-checkbox ng-model="personSchedule.IsSelected"
-								 ng-change="vm.updatePersonSelection(personSchedule)"
-								 aria-label="Checkbox">
-						{{::personSchedule.Name}}
-					</md-checkbox>
-					<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
-						<i class="mdi mdi-earth"></i>
-						<md-tooltip md-direction="right">
-							{{::personSchedule.Timezone.DisplayName}}
-						</md-tooltip>
-					</span>
-				</label>
 				<span class="validate-warning" ng-if="vm.showWarnings && !!vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
 					<span class="warning-icon">
 						<i class="mdi mdi-account-alert"></i>
@@ -45,9 +49,9 @@
 						<span ng-bind-html="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId) | br"></span>
 					</md-tooltip>
 				</span>
-			</div>
+			</td>
 
-			<div class="shift-category-cell">
+			<td class="shift-category-cell">
 				<i class="mdi mdi-information mdi-alert info" ng-if="!!personSchedule.UnderlyingScheduleSummary"></i>
 				<span id="name"
 					  ng-if="::personSchedule.ShiftCategory.Name"
@@ -63,9 +67,9 @@
 					<underlying-schedule-info person-schedule="personSchedule"
 											  date="vm.selectedDate"></underlying-schedule-info>
 				</md-tooltip>
-			</div>
+			</td>
 
-			<div class="schedule schedule-column">
+			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
 					<span class="dayoff absolute"
 						  ng-repeat="dayOff in personSchedule.DayOffs"
@@ -98,16 +102,16 @@
 						<i class="mdi mdi-chevron-double-right"></i>
 					</div>
 				</div>
-			</div>
-			<div class="schedule-tool-column schedule-editor-column">
+			</td>
+			<td class="schedule-tool-column">
 				<span class="editor cursorpointer"
 					  ng-if="::vm.showEditButton(personSchedule)"
 					  ng-click="vm.clickEditButton(personSchedule)">
 					<i class="mdi mdi-pencil"></i>
 				</span>
-			</div>
-			<div class="schedule-tool-column schedule-note-column"
-				 ng-click="vm.editScheduleNote(personSchedule.PersonId)">
+			</td>
+			<td class="schedule-tool-column schedule-note-column"
+				ng-click="vm.editScheduleNote(personSchedule.PersonId)">
 				<span class="cursorpointer"
 					  ng-class="{'has-note': vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote}">
 					<i class="mdi mdi-comment"></i>
@@ -120,19 +124,19 @@
 								ng-if="!!vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes.length"></md-divider>
 					{{ vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes }}
 				</md-tooltip>
-			</div>
-			<div class="contract-time-column">{{::personSchedule.ContractTime}}</div>
-		</div>
-		<div class="list-item shift-editor-row" ng-repeat-end ng-if="vm.isScheduleInEditing(personSchedule)">
-			<div colspan="6">
+			</td>
+			<td class="contract-time-column">{{::personSchedule.ContractTime}}</td>
+		</tr>
+		<tr class="shift-editor-row" ng-repeat-end ng-if="vm.isScheduleInEditing(personSchedule)">
+			<td colspan="6">
 				<shift-editor date="vm.selectedDate"
 							  timezone="vm.selectedTimezone"
 							  person-id="personSchedule.PersonId"
 							  raw-schedule="vm.getRawSchedule(personSchedule.PersonId)"></shift-editor>
-			</div>
-		</div>
-	</div>
-</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
 <note-editor ng-if="vm.noteEditorInputOption && vm.noteEditorInputOption.showEditor"
 			 note-input-option="vm.noteEditorInputOption"
 			 tabindex="205"></note-editor>

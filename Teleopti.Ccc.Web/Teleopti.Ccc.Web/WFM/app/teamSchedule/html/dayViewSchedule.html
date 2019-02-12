@@ -49,7 +49,7 @@
 							 ng-model="vm.currentTimezone"
 							 ng-change="vm.changeTimezone()"></timezone-picker>
 
-			<md-switch  ng-model="vm.staffingEnabled"
+			<md-switch ng-model="vm.staffingEnabled"
 					   ng-change="vm.showStaffing()">
 				<span translate>ShowStaffing</span>
 			</md-switch>
@@ -92,13 +92,23 @@
 				</div>
 
 				<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-				<schedule-table ng-show="vm.scheduleFullyLoaded"
+				<schedule-table ng-if="!vm.useScheuleList"
+								ng-show="vm.scheduleFullyLoaded"
 								selected-date="vm.scheduleDate"
 								show-warnings="vm.currentSettings.validateWarningEnabled"
 								selected-timezone="vm.currentTimezone"
 								pagination-options="vm.paginationOptions"
 								selected-sort-option="vm.sortOption"
-								table-style="vm.scheduleTableBodyStyle" />
+								table-style="vm.scheduleTableBodyStyle"></schedule-table>
+
+				<schedule-list ng-if="vm.useScheuleList"
+							   ng-show="vm.scheduleFullyLoaded"
+							   selected-date="vm.scheduleDate"
+							   show-warnings="vm.currentSettings.validateWarningEnabled"
+							   selected-timezone="vm.currentTimezone"
+							   pagination-options="vm.paginationOptions"
+							   selected-sort-option="vm.sortOption"
+							   table-style="vm.scheduleTableBodyStyle"></schedule-list>
 			</div>
 
 			<teamschedule-command-container date="vm.scheduleDate"
