@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			isolate.UseTestDouble<SkillForecastReadModelPeriodBuilder>().For<SkillForecastReadModelPeriodBuilder>();
 			isolate.UseTestDouble<SkillForecastSettingsReader>().For<SkillForecastSettingsReader>();
 			isolate.UseTestDouble<StaffingSettingsReader49Days>().For<IStaffingSettingsReader>();
+			isolate.UseTestDouble<SkillForecastReadModelPeriodBuilder>().For<SkillForecastReadModelPeriodBuilder>();
+			isolate.UseTestDouble<UpdateSkillForecastReadModelHandler>().For<UpdateSkillForecastReadModelHandler>();
 		}
 
 		protected override void Startup(IComponentContext container)

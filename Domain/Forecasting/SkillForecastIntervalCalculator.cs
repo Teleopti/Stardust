@@ -14,33 +14,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public class SkillForecastIntervalCalculator
 	{
-		private readonly ICurrentScenario _currentScenario;
 		private readonly ISkillForecastReadModelRepository _skillForecastReadModelRepository;
-		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly ISkillDayRepository _skillDayRepository;
-		private readonly SkillForecastReadModelPeriodBuilder _skillForecastReadModelPeriodBuilder;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		public SkillForecastIntervalCalculator(ISkillForecastReadModelRepository skillForecastReadModelRepository,
-			IIntervalLengthFetcher intervalLengthFetcher, ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder)
+			 IStardustJobFeedback stardustJobFeedback)
 		{
 			_skillForecastReadModelRepository = skillForecastReadModelRepository;
-			_intervalLengthFetcher = intervalLengthFetcher;
-			_skillDayRepository = skillDayRepository;
-			_currentScenario = currentScenario;
-			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 		public void Calculate(IEnumerable<ISkillDay> skillDays, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
-
-			//var periods = skillDays
-			//	.SelectMany(x =>
-			//		x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), false)
-			//			.Select(i => new { SkillDay = x, StaffPeriod = i }));
-			//var periodsWithShrinkage = skillDays
-			//	.SelectMany(x =>
-			//		x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), true)
-			//			.Select(i => new { SkillDay = x, StaffPeriod = i }));
+			_stardustJobFeedback.SendProgress($"Starting skill forecast interval calculation");
 			IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
 			foreach (var skill in skills)
 			{
@@ -52,7 +38,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					skillDay.RecalculateDailyTasks();
 				}
 			}
-			
 			
 
 			var periods = skillDays
@@ -90,6 +75,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				});
 
 			});
+			_stardustJobFeedback.SendProgress($"Persisting {result.Count} intervals for {string.Join(",",skills)}");
 
 			_skillForecastReadModelRepository.PersistSkillForecast(result);
 		}

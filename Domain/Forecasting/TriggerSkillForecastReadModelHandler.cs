@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly SkillForecastSettingsReader _skillForecastSettingsReader;
 
-		public TriggerSkillForecastReadModelHandler(IEventPublisher eventPublisher, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository, INow now, IBusinessUnitRepository businessUnitRepository, SkillForecastSettingsReader skillForecastSettingsReader)
+		public TriggerSkillForecastReadModelHandler(IEventPublisher eventPublisher,SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder,
+			ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository, INow now,IBusinessUnitRepository businessUnitRepository, SkillForecastSettingsReader skillForecastSettingsReader)
 		{
 			_eventPublisher = eventPublisher;
 			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;

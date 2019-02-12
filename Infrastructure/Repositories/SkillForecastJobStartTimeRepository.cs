@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					}
 				}
 			}
-
 			return startTime;
 		}
 
@@ -72,12 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					getCommand.ExecuteNonQuery();
 
 					result = Convert.ToBoolean(getCommand.Parameters["@returnValue"].Value);
-
-
-
-
 				}
-
 				return result;
 			}
 

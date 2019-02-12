@@ -29,7 +29,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		private readonly SkillForecastReadModelPeriodBuilder _skillForecastReadModelPeriodBuilder;
 
-		public UpdateSkillForecastReadModelHandler(SkillForecastIntervalCalculator skillForecastIntervalCalculator, ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, ISkillRepository skillRepository, ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository, IStardustJobFeedback stardustJobFeedback)
+		public UpdateSkillForecastReadModelHandler(SkillForecastIntervalCalculator skillForecastIntervalCalculator,
+			ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario,
+			SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder, ISkillRepository skillRepository,
+			ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository, IStardustJobFeedback stardustJobFeedback)
 		{
 			_skillForecastIntervalCalculator = skillForecastIntervalCalculator;
 			_skillDayRepository = skillDayRepository;
@@ -48,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			if (!justSkillDays.Any()) return;
 			var skills = justSkillDays.Select(x => x.Skill).Distinct();
 			var period = new DateOnlyPeriod(justSkillDays.Min(x => x.CurrentDate), justSkillDays.Max(x => x.CurrentDate));
+			_stardustJobFeedback.SendProgress($"Processing {skills.Count()} skills for period between {period.StartDate} and {period.EndDate} ");
 			var skillDays = _skillDayRepository.FindReadOnlyRange(period, skills, _currentScenario.Current());
 			_skillForecastIntervalCalculator.Calculate(skillDays, skills, period);
 		}

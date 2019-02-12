@@ -58,6 +58,7 @@
     <Compile Include="LoadStaffingViewTest.cs" />
     <Compile Include="ResourceCalculateWhen49DaysInReadmodel.cs" />
     <Compile Include="ResourceCalculate3DaysTest.cs" />
+    <Compile Include="SkillForecastReadModelJobTest.cs" />
     <Compile Include="StaffingPerformanceTestAttribute.cs" />
     <Compile Include="UpdateReadModelPerformanceTestAttribute.cs" />
     <Compile Include="UpdateSkillForecastReadModel.cs" />

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				connection.Open();
 				using (var transaction = connection.BeginTransaction())
 				{
-
+					
 					var groupedBySkillIds = listOfIntervals.GroupBy(s => s.SkillId);
 					foreach (var intervalsForSkill in groupedBySkillIds)
 					{
