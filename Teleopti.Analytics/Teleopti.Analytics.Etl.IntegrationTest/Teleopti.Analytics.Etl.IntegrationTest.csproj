@@ -152,9 +152,6 @@
     <Content Include="TestData\dbo.Add_QueueAgent_stat.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData\mart.report_data_agent_schedule_adherence_for_test.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="TestData\mart.sys_setupTestData.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
