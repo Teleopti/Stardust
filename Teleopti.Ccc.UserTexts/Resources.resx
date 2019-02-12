@@ -16305,7 +16305,7 @@ Do you want to participate?</value>
     <comment>PlansPageCreatePlanningGroup</comment>
   </data>
   <data name="ShowNumbers" xml:space="preserve">
-    <value>Show numbers</value>
+    <value>Show values</value>
 	<comment>Show relative difference in web plans heatmap</comment>
   </data>
   <data name="UnsupportedDataSeriesFound" xml:space="preserve">

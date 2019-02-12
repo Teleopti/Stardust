@@ -34085,7 +34085,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show numbers.
+        ///   Looks up a localized string similar to Show values.
         /// </summary>
         public static string ShowNumbers {
             get {
