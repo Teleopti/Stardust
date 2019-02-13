@@ -547,40 +547,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void ShouldDeleteLastAddedAbsence()
+		public void ShouldDeleteOldestAbsence()
 		{
 			var person1 = PersonFactory.CreatePerson();
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
-			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
-			
-			var parameters1 =
-				new ScheduleParameters(scenario, person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), new Dictionary<IPerson, IScheduleRange>());
+			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(2000,1,1), CurrentAuthorization.Make());
+			IPersonAbsence personAbsence = new PersonAbsence(person1, scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2000,1,1,2000,1,2)));
+			IPersonAbsence oldestAbsence = new PersonAbsence(person1, scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2000,1,1,2000,1,2)));
+			oldestAbsence.LastChange = personAbsence.LastChange.Value.AddDays(-1);		
+			source.Add(personAbsence);
+			source.Add(oldestAbsence);
 
-			var source = ExtractedSchedule.CreateScheduleDay(dic, parameters1.Person, new DateOnly(parameters1.Period.StartDateTime), CurrentAuthorization.Make());
-
-			DateTime absStart1 = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			DateTime absEnd1 = new DateTime(2000, 1, 1, 23, 59, 0, DateTimeKind.Utc);
-			DateTime absStart2 = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
-			DateTime absEnd2 = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-
-			DateTimePeriod absPeriod1 = new DateTimePeriod(absStart1, absEnd1);
-			DateTimePeriod absPeriod2 = new DateTimePeriod(absStart2, absEnd2);
-
-			IAbsenceLayer absenceLayer1 = new AbsenceLayer(new Absence(), absPeriod1);
-			IAbsenceLayer absenceLayer2 = new AbsenceLayer(new Absence(), absPeriod2);
-
-			IPersonAbsence personAbsence1 = new PersonAbsence(person1, scenario, absenceLayer1);
-			IPersonAbsence personAbsence2 = new PersonAbsence(person1, scenario, absenceLayer2);
-
-			source.Add(personAbsence1);
-			source.Add(personAbsence2);
-
-			Assert.AreEqual(2, source.PersistableScheduleDataCollection().Count());
 			source.DeleteAbsence(false);
+
 			Assert.AreEqual(1, source.PersistableScheduleDataCollection().Count());
-			var a = source.PersonAbsenceCollection()[0];
-			Assert.AreEqual(personAbsence1, a);
+			var a = source.PersonAbsenceCollection().Single();
+			Assert.AreEqual(personAbsence, a);
 		}
 
 		[Test]
