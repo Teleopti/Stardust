@@ -63,11 +63,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			// Intraday - application layer WFM_Forecast_Readmodel_80790
 			if (_configuration.IsToggleEnabled(Toggles.WFM_Forecast_Readmodel_80790))
 			{
-				builder.RegisterType<IntradayAppStaffingService>().As<IIntradayApplicationStaffingService>();
+				builder.RegisterType<IntradayAppStaffingService>().As<IIntradayApplicationStaffingService, IntradayAppStaffingService>();
 			}
 			else
 			{
-				builder.RegisterType<IntradayStaffingApplicationService>().As<IIntradayApplicationStaffingService>();
+				builder.RegisterType<IntradayStaffingApplicationService>().As<IIntradayApplicationStaffingService, IntradayStaffingApplicationService>();
 			}
 
 			builder.RegisterType<IntradayPerformanceApplicationService>();
