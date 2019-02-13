@@ -52,7 +52,6 @@
 			border-bottom: 1px solid $gray012;
 			padding-top: 5px;
 			padding-bottom: 5px;
-			width: 100%;
 		}
 
 		& > div.person-name-column {
@@ -64,7 +63,6 @@
 			-ms-grid-column: 1;
 
 			.validate-warning {
-				float: right;
 				line-height: 1;
 			}
 
@@ -139,6 +137,12 @@
 			&:not(.shift-editor-row):hover,
 			&.in-editing {
 				background: $gray012;
+			}
+
+			& > div.person-name-column {
+				display: flex;
+				justify-content: space-between;
+				align-content: center;
 			}
 
 			& > div.schedule-column {
