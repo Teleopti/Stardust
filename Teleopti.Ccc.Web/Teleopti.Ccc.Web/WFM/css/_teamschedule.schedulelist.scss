@@ -4,11 +4,10 @@
 	.list-header {
 		display: grid;
 		display: -ms-grid;
-		grid-template-columns: 25% 2% 59% 2% 2% 10%;
-		-ms-grid-columns: 25% 2% 59% 2% 2% 10%;
+		grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
+		-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
 		grid-template-rows: 40px;
 		-ms-grid-rows: 40px;
-		width: calc(100% - 17px);
 		height: 40px;
 
 		.time-line {
@@ -45,12 +44,15 @@
 	}
 
 	.list-header, .list-group .list-item {
+		width: calc(100% - 17px);
+
 		& > div {
 			vertical-align: middle;
 			line-height: 1.5;
 			border-bottom: 1px solid $gray012;
 			padding-top: 5px;
 			padding-bottom: 5px;
+			width: 100%;
 		}
 
 		& > div.person-name-column {
@@ -61,8 +63,7 @@
 			grid-column: 1;
 			-ms-grid-column: 1;
 
-			.validate-warning,
-			.schedule-note {
+			.validate-warning {
 				float: right;
 				line-height: 1;
 			}
@@ -70,13 +71,6 @@
 
 			.md-label {
 				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-
-			span.person-name-text {
-				word-break: break-word;
-				white-space: normal;
 			}
 
 			.sort-agent {
@@ -114,10 +108,8 @@
 			grid-column: 6;
 			-ms-grid-column: 6;
 			padding: 5px;
-			min-width: 150px;
 			font-weight: 400;
 			text-align: center;
-			white-space: nowrap;
 		}
 
 		& > div.schedule-tool-column {
@@ -133,6 +125,7 @@
 		height: 100%;
 		width: 100%;
 		overflow-y: scroll;
+		overflow-x: hidden;
 		max-height: 62vh;
 		min-height: 500px;
 
@@ -140,8 +133,8 @@
 			width: 100%;
 			display: grid;
 			display: -ms-grid;
-			grid-template-columns: 25% 2% 59% 2% 2% 10%;
-			-ms-grid-columns: 25% 2% 59% 2% 2% 10%;
+			grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
+			-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
 
 			&:not(.shift-editor-row):hover,
 			&.in-editing {

@@ -1,22 +1,22 @@
 <div class="schedule-list" ng-if="vm.scheduleVm.Schedules.length > 0">
 	<div class="list-header">
-			<div class="person-name-column">
-				<md-checkbox ng-model="vm.toggleAllInCurrentPage"
-							 ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
-					{{ 'AgentName' | translate }}
-				</md-checkbox>
-				<sort-agent ng-model="vm.selectedSortOption" class="pull-right sort-agent"></sort-agent>
-			</div>
-			<div class="shift-category-cell"></div>
-			<div class="schedule schedule-column">
-				<time-line times="vm.scheduleVm.TimeLine.HourPoints"
-						   schedule-count="vm.scheduleVm.Schedules.length"
-						   is-schedule-in-editing="!!vm.scheduleInEditing">
-				</time-line>
-			</div>
-			<div class="schedule-tool-column schedule-editor-column"></div>
-			<div class="schedule-tool-column schedule-note-column"></div>
-			<div class="contract-time-column">{{ 'ContractTime' | translate }}</div>
+		<div class="person-name-column">
+			<md-checkbox ng-model="vm.toggleAllInCurrentPage"
+						 ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
+				{{ 'AgentName' | translate }}
+			</md-checkbox>
+			<sort-agent ng-model="vm.selectedSortOption" class="pull-right sort-agent"></sort-agent>
+		</div>
+		<div class="shift-category-cell"></div>
+		<div class="schedule schedule-column">
+			<time-line times="vm.scheduleVm.TimeLine.HourPoints"
+					   schedule-count="vm.scheduleVm.Schedules.length"
+					   is-schedule-in-editing="!!vm.scheduleInEditing">
+			</time-line>
+		</div>
+		<div class="schedule-tool-column schedule-editor-column"></div>
+		<div class="schedule-tool-column schedule-note-column"></div>
+		<div class="contract-time-column">{{ 'ContractTime' | translate }}</div>
 	</div>
 	<div class="list-group" ng-style="::vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
 
@@ -29,13 +29,13 @@
 								 ng-change="vm.updatePersonSelection(personSchedule)"
 								 aria-label="Checkbox">
 						{{::personSchedule.Name}}
+						<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
+							<i class="mdi mdi-earth"></i>
+							<md-tooltip md-direction="right">
+								{{::personSchedule.Timezone.DisplayName}}
+							</md-tooltip>
+						</span>
 					</md-checkbox>
-					<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
-						<i class="mdi mdi-earth"></i>
-						<md-tooltip md-direction="right">
-							{{::personSchedule.Timezone.DisplayName}}
-						</md-tooltip>
-					</span>
 				</label>
 				<span class="validate-warning" ng-if="vm.showWarnings && !!vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
 					<span class="warning-icon">
