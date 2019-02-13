@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -16,18 +17,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly INow _now;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
+		private readonly SkillForecastSettingsReader _skillForecastSettingsReader;
 
-		public SkillForecastReadModelRepository(ICurrentUnitOfWork currentUnitOfWork, INow now)
+		public SkillForecastReadModelRepository(ICurrentUnitOfWork currentUnitOfWork, INow now, IStardustJobFeedback stardustJobFeedback, SkillForecastSettingsReader skillForecastSettingsReader)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_now = now;
+			_stardustJobFeedback = stardustJobFeedback;
+			_skillForecastSettingsReader = skillForecastSettingsReader;
 		}
 
 		public void PersistSkillForecast(List<SkillForecast> listOfIntervals)
 		{
 			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 
-			
+
 
 			var dt = new DataTable();
 			dt.Columns.Add("SkillId", typeof(Guid));
@@ -68,20 +73,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				connection.Open();
 				using (var transaction = connection.BeginTransaction())
 				{
-					
-					var groupedBySkillIds = listOfIntervals.GroupBy(s => s.SkillId);
-					foreach (var intervalsForSkill in groupedBySkillIds)
+					removeHistoricalData(transaction, connection);
+
+					var groupOfIntervalsPerSkill = listOfIntervals.GroupBy(x => x.SkillId)
+						.ToDictionary(g => g.Key, g => g.ToList().Select(x => x.StartDateTime.Date).Distinct());
+					foreach (var intervalsForSkill in groupOfIntervalsPerSkill)
 					{
-						var SkillDaysForSkill = intervalsForSkill.GroupBy(s => s.StartDateTime.Date);
 						var skillId = intervalsForSkill.Key;
-						foreach (var skillDay in SkillDaysForSkill)
+						foreach (var skillDay in intervalsForSkill.Value)
 						{
-							removeAllExistingSkillForecastOnDay(skillId, skillDay.Key, transaction, connection);
+							removeAllExistingSkillForecastOnDay(skillId, skillDay, transaction, connection);
 						}
 
 					}
 
-					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.CheckConstraints, transaction))
+					using (var sqlBulkCopy =
+						new SqlBulkCopy(connection, SqlBulkCopyOptions.CheckConstraints, transaction))
 					{
 						sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillForecast]";
 						sqlBulkCopy.WriteToServer(dt);
@@ -99,17 +106,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"Where SkillId In (:skillIds) AND StartDateTime >= :startDate AND StartDateTime <= :endDate";
 			var result = new List<SkillForecast>();
 			result.AddRange(_currentUnitOfWork.Session().CreateSQLQuery(sql)
-					.SetDateTime("startDate", period.StartDateTime)
-					.SetDateTime("endDate", period.EndDateTime)
-					.SetParameterList("skillIds", skills.ToArray())
-					.SetResultTransformer(Transformers.AliasToBean(typeof(SkillForecast)))
-					.SetReadOnly(true)
-					.List<SkillForecast>());
+				.SetDateTime("startDate", period.StartDateTime)
+				.SetDateTime("endDate", period.EndDateTime)
+				.SetParameterList("skillIds", skills.ToArray())
+				.SetResultTransformer(Transformers.AliasToBean(typeof(SkillForecast)))
+				.SetReadOnly(true)
+				.List<SkillForecast>());
 
 			return result;
 		}
 
-		private void removeAllExistingSkillForecastOnDay(Guid skillId, DateTime day, SqlTransaction transaction, SqlConnection connection)
+		private void removeAllExistingSkillForecastOnDay(Guid skillId, DateTime day, SqlTransaction transaction,
+			SqlConnection connection)
 		{
 			using (var deleteCommand = new SqlCommand(@"DELETE  FROM ReadModel.SkillForecast
 					WHERE SkillId = @skillId
@@ -122,7 +130,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				deleteCommand.ExecuteNonQuery();
 			}
 		}
+
+		private void removeHistoricalData(SqlTransaction transaction,
+			SqlConnection connection)
+		{
+			var purgeDate = _now.UtcDateTime().AddDays(-_skillForecastSettingsReader.NumberOfDaysInPast);
+			_stardustJobFeedback.SendProgress(
+				$"Removing historical resources that is older than {purgeDate.Date}");
+			using (var deleteCommand = new SqlCommand(@"DELETE FROM ReadModel.SkillForecast
+						WHERE StartDateTime < @purgeDate",
+				connection, transaction))
+			{
+				deleteCommand.Parameters.AddWithValue("@purgeDate", purgeDate.Date.AddDays(1));
+				deleteCommand.ExecuteNonQuery();
+			}
+		}
 	}
-
-
 }
