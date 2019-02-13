@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 
 		public StardustController(IStardustRepository stardustRepository, IStardustSender stardustSender,
-			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader, IPingNode pingNode, ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository, IConfigReader configReader = null)
+			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader, IPingNode pingNode, ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository,IConfigReader configReader = null)
 		{
 			_stardustRepository = stardustRepository;
 			_stardustSender = stardustSender;
@@ -168,12 +168,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			foreach (var bu in bus)
 			{
-				_skillForecastJobStartTimeRepository.ResetLock(bu);
+				_skillForecastJobStartTimeRepository.ResetLock(bu, appConnstring);
 				_stardustSender.Send(
 					new UpdateSkillForecastReadModelEvent
 					{
-						StartDateTime = model.StartDate,
-						EndDateTime = model.EndDate,
+						StartDateTime = model.StartDate.Date,
+						EndDateTime = model.EndDate.Date,
 						LogOnDatasource = model.Tenant,
 						LogOnBusinessUnitId = bu
 					});

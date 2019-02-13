@@ -111,9 +111,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return true;
 		}
 
-		public void ResetLock(Guid businessUnitId)
+		public void ResetLock(Guid businessUnitId, string connectionString = "")
 		{
-			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
+			if (String.IsNullOrEmpty(connectionString))
+				connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
 				using (var transaction = connection.BeginTransaction())
