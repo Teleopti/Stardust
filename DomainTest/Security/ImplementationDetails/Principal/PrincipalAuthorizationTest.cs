@@ -7,18 +7,30 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 
 namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
 {
-    [TestFixture]
+	[DomainTest]
+	[LoggedOff]
+	[RealPermissions]
+	[AddDatasourceId]
 	public class PrincipalAuthorizationTest
     {
-        private IAuthorization authorization;
+		public FakeDatabase Database;
+		public FakePersonRepository Persons;
+		public ILogOnOff LogOnOff;
+		public IAuthorization Authorization;
+
+		private IAuthorization authorization;
         private IPerson person;
         private ITeleoptiPrincipal principal;
         private MockRepository mocks;
@@ -261,5 +273,36 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
                 result.Should().Be.True();
             }
         }
-    }
+
+		[Test]
+		[Ignore("81373")]
+		public void ShouldPermitPeriodAfterTerminalDateOnSuperUser()
+		{
+			var date = new DateOnly(2019, 2, 13);
+			var period = new DateOnlyPeriod(date.AddDays(-13), date.AddDays(2));
+			var userId = Guid.NewGuid();
+			var userTeamId = Guid.NewGuid();
+			var agentId = Guid.NewGuid();
+			var agentTeamId = Guid.NewGuid();
+			var applicationRole = new ApplicationRole { Name = "_Super Role", BuiltIn = true };
+			Database
+				.WithTenant("tenant")
+				.WithTeam(agentTeamId, "agentTeam")
+				.WithAgent(agentId, "agent")
+
+				.WithTeam(userTeamId, "userTeam")
+				.WithAgent(userId, "user")
+				.WithPeriod(date.AddDays(-10).ToShortDateString(), userTeamId).WithTerminalDate(date.ToShortDateString())
+				.WithRole(AvailableDataRangeOption.Everyone, userTeamId, applicationRole, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+
+			var me = Persons.Load(userId);
+			var agent = Persons.Load(agentId);
+
+			LogOnOff.LogOn("tenant", me, Database.CurrentBusinessUnitId());
+
+			var permittedPeriods = Authorization.PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, period, agent).ToList();
+			permittedPeriods.Count().Should().Be.EqualTo(1);
+			permittedPeriods.First().Should().Be.EqualTo(period);
+		}
+	}
 }
