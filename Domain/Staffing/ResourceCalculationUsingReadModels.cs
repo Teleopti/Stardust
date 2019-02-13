@@ -151,41 +151,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 		}
 
-		private static List<SkillCombinationResource> split(List<SkillCombinationResource> skillCombinationList, TimeSpan resolution)
-		{
-			var dividedIntervals = new List<SkillCombinationResource>();
-
-			foreach (var skillCombinationInterval in skillCombinationList)
-			{
-				if (!skillCombinationInterval.GetTimeSpan().Equals(resolution))
-				{
-					var startInterval = skillCombinationInterval.StartDateTime;
-					while (startInterval < skillCombinationInterval.EndDateTime)
-					{
-						dividedIntervals.Add(new SkillCombinationResource
-						{
-							SkillCombination = skillCombinationInterval.SkillCombination,
-							StartDateTime = startInterval,
-							EndDateTime = startInterval.Add(resolution),
-							Resource = skillCombinationInterval.Resource
-						});
-						startInterval = startInterval.Add(resolution);
-					}
-				}
-				else
-				{
-					dividedIntervals.Add(new SkillCombinationResource
-					{
-						SkillCombination = skillCombinationInterval.SkillCombination,
-						StartDateTime = skillCombinationInterval.StartDateTime,
-						EndDateTime = skillCombinationInterval.EndDateTime,
-						Resource = skillCombinationInterval.Resource
-					});
-				}
-			}
-			return dividedIntervals;
-		}
-
 		private static SkillStaffingInterval cloneSkillStaffingInterval(SkillStaffingInterval skillStaffingInterval)
 		{
 			return new SkillStaffingInterval()

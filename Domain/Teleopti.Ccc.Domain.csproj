@@ -245,7 +245,6 @@
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
-    <Compile Include="MultiTenancy\IApplicationConfigurationDbTenantClient.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
     <Compile Include="Notification\ScheduleChangeForWeekViewMessage.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
