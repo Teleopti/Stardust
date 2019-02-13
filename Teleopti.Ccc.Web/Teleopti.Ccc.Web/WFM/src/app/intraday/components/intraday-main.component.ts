@@ -564,7 +564,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			const found = this.selectedSkillOrGroup.Skills.find(
 				skill => skill.SkillType === 'SkillTypeEmail' || skill.SkillType === 'SkillTypeBackoffice'
 			);
-			if (found || this.selectedSubSkillId === 'all') return true;
+			if (found && this.selectedSubSkillId === 'all') return true;
 			else {
 				const s = this.selectedSkillOrGroup.Skills.find(x => x.Id === this.selectedSubSkillId);
 				return s.SkillType === 'SkillTypeEmail' || s.SkillType === 'SkillTypeBackoffice';
