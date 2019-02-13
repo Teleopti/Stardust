@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public void ResetLock(Guid businessUnitId)
 		{
 			var entry = EntryList.SingleOrDefault(x => x.BusinessUnit == businessUnitId);
+			if(entry!=null)
 			entry.Locked = null;
 		}
 	}

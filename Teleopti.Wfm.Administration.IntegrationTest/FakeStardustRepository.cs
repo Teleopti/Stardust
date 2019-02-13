@@ -40,12 +40,12 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 
 		public void DeleteQueuedJobs(Guid[] jobIds)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public IList<Job> GetJobs(JobFilterModel filter)
 		{
-			throw new NotImplementedException();
+			return new List<Job>();
 		}
 
 		public IList<Job> GetAllQueuedJobs(JobFilterModel filter)
@@ -65,22 +65,22 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 
 		public IList<JobDetail> GetJobDetailsByJobId(Guid jobId)
 		{
-			throw new NotImplementedException();
+			return  new List<JobDetail>();
 		}
 
 		public IList<Job> GetJobsByNodeId(Guid nodeId, int @from, int to)
 		{
-			throw new NotImplementedException();
+			return new List<Job>();
 		}
 
 		public Job GetQueuedJob(Guid jobId)
 		{
-			throw new NotImplementedException();
+			return null;
 		}
 
 		public List<Guid> SelectAllBus(string connString)
 		{
-			throw new NotImplementedException();
+			return new List<Guid>(){Guid.NewGuid()};
 		}
 
 		public List<Guid> SelectAllTenants()

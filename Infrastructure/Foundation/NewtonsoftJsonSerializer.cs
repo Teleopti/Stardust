@@ -43,6 +43,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return JsonConvert.DeserializeObject(value, type, _settings);
 		}
 
+		public T DeserializeEvent<T>(string value)
+		{
+			return JsonConvert.DeserializeObject<T>(value, _settings);
+		}
+
 		public static NewtonsoftJsonSerializer Make()
 		{
 			return new NewtonsoftJsonSerializer(null);
