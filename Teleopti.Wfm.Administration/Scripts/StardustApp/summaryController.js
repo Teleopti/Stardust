@@ -1,11 +1,11 @@
-﻿(function() {
+﻿(function () {
 	"use strict";
 
 	angular
 		.module("adminApp")
 		.controller("summaryController", summaryController);
 
-	function summaryController($http, $interval, $scope) {
+	function summaryController($http, $interval, $scope, tenantService) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.title = "Stardust Summary";
@@ -27,22 +27,26 @@
 		var refreshPromise = $interval(refresh, 3000);
 
 		$scope.$on("$destroy",
-			function() {
+			function () {
 				$interval.cancel(refreshPromise);
 			});
 
 		$http.get("./Toggle/IsEnabled",
-				{
-					params: { toggle: "Wfm_Payroll_SupportMultiDllPayrolls_75959" }
-				})
-			.then(function(response) {
+			{
+				params: { toggle: "Wfm_Payroll_SupportMultiDllPayrolls_75959" }
+			})
+			.then(function (response) {
 				vm.showRefreshPayrollFormats = response.data;
 			});
 
-	$http.get("./AllTenants")
-		.then(function (response) {
-			vm.Tenants = response.data;
-			});
+		/*$http.get("./AllTenants")
+			.then(function (response) {
+				vm.Tenants = response.data;
+			});_*/
+
+		tenantService.getTenants().then(function (data) {
+			vm.Tenants = data;
+		});
 
 		$http.get("./Stardust/ShowIntradayTool")
 			.then(function (response) {
@@ -53,7 +57,8 @@
 			if (refreshPromise !== null) {
 				$interval.cancel(refreshPromise);
 				refreshPromise = null;
-				window.alert("Your session has expired, please login again");}
+				window.alert("Your session has expired, please login again");
+			}
 		}
 
 		function refresh() {
@@ -68,7 +73,7 @@
 						vm.showHistoryAlert = true;
 					}
 				})
-				.catch(function(xhr, ajaxOptions) {
+				.catch(function (xhr, ajaxOptions) {
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
@@ -87,7 +92,7 @@
 						vm.showFailureAlert = false;
 					}
 				})
-				.catch(function(xhr, ajaxOptions) {
+				.catch(function (xhr, ajaxOptions) {
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
@@ -104,7 +109,7 @@
 						vm.anyQueuedJobs = false;
 					}
 				})
-				.catch(function(xhr, ajaxOptions) {
+				.catch(function (xhr, ajaxOptions) {
 					vm.JobError = ajaxOptions;
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
@@ -128,7 +133,7 @@
 						vm.showNodesAlert = true;
 					}
 				})
-				.catch(function(xhr, ajaxOptions) {
+				.catch(function (xhr, ajaxOptions) {
 					vm.NodeError = ajaxOptions;
 					if (xhr !== "") {
 						vm.NodeError = vm.NodeError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
@@ -148,7 +153,7 @@
 					"Tenant": vm.selectedTenantName,
 					"Days": 14
 				}
-			).then(function() {
+			).then(function () {
 				refresh();
 			});
 		}
@@ -163,7 +168,7 @@
 						vm.showHealthAlert = true;
 					refresh();
 				})
-				.catch(function() {
+				.catch(function () {
 					vm.result = "Something is wrong but we can't figure out what!";
 					vm.showHealthAlert = true;
 				});
@@ -181,7 +186,7 @@
 		}
 
 		function intradayToolGoWithTheFlow() {
-			$http.get("./Stardust/IntradayToolGoWithTheFlow"   
+			$http.get("./Stardust/IntradayToolGoWithTheFlow"
 			).then(function () {
 				refresh();
 			});

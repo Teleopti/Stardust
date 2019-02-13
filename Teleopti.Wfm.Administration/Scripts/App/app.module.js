@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'ngAria', 'ngclipboard'])
+		.module('adminApp', ['ngRoute', 'ngMaterial', 'adminAppHttp', 'ngCookies', 'ngAria', 'ngclipboard', 'createForecastReadModelModule'])
 		.config(function ($locationProvider, $routeProvider, $httpProvider) {
 
 			$locationProvider.hashPrefix('');

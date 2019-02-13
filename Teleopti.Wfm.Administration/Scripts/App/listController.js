@@ -6,7 +6,7 @@
 		.module('adminApp')
 		.controller('listController', listController);
 
-	function listController($scope, $http) {
+	function listController($scope, $http, tenantService) {
 		var vm = this;
 
 		vm.ToggleNameToSave = "";
@@ -53,10 +53,14 @@
 				});
 		};
 
-		$http.get("./AllTenants")
+		/*$http.get("./AllTenants")
 			.then(function (response) {
 				$scope.Tenants = response.data;
-			});
+			});*/
+
+		tenantService.getTenants().then(function (data) {
+			$scope.Tenants = data;
+		});
 
 		$http.get("./AllConfigurations")
 			.then(function (response) {

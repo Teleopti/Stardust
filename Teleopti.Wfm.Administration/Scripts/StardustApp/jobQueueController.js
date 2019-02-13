@@ -5,7 +5,7 @@
 		.module("adminApp")
 		.controller("jobQueueController", jobQueueController);
 
-	function jobQueueController($http, $interval, $scope) {
+	function jobQueueController($http, $interval, $scope, tenantService) {
 		/* jshint validthis:true */
 		var vm = this;
 		vm.title = "Stardust Queue";
@@ -49,10 +49,15 @@
 				vm.types = response.data;
 			});
 
-		$http.get("./AllTenants")
+		/*$http.get("./AllTenants")
 			.then(function (response) {
 				vm.Tenants = response.data;
 			});
+			*/
+
+		tenantService.getTenants().then(function (data) {
+			vm.Tenants = data;
+		});
 
 		function getJobsByFilter() {
 			var dataSource = null;
