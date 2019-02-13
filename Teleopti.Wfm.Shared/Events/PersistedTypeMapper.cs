@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI.WebControls;
 using Teleopti.Ccc.Domain.Collection2;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
