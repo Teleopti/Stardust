@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -7,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -31,7 +29,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			//TODO refactor to ioc
 			_LoadAllTenants = new FakeTenants();
 			Publisher = new FakeStardustSender();
-			//StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			StardustRepository = new FakeStardustRepository();
 			Target = new StardustController(StardustRepository, Publisher, _LoadAllTenants,
 				new StaffingSettingsReader49Days(), new FakePingNode(),new FakeSkillForecastJobStartTimeRepository(new MutableNow(),new SkillForecastSettingsReader() ));

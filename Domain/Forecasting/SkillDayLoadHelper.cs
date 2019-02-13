@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IMultisiteDayRepository _multisiteDayRepository;
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
 		public SkillDayLoadHelper(ISkillDayRepository skillDayRepository, IMultisiteDayRepository multisiteDayRepository, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			_skillDayRepository = skillDayRepository;
 			_multisiteDayRepository = multisiteDayRepository;
-			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
 		/// <summary>
