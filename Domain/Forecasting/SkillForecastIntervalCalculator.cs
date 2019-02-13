@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -24,22 +22,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_stardustJobFeedback = stardustJobFeedback;
 		}
 
-		public void Calculate(IEnumerable<ISkillDay> skillDays, IEnumerable<ISkill> skills, DateOnlyPeriod period)
+		public void Calculate(ICollection<ISkillDay> skillDays, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			_stardustJobFeedback.SendProgress($"Starting skill forecast interval calculation");
-			IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
-			foreach (var skill in skills)
-			{
-				var skillSkilldays = skillDays.Where(x => x.Skill.Equals(skill));
-				calculators.Add(new SkillDayCalculator(skill, skillSkilldays, period));
-				
-				foreach (ISkillDay skillDay in skillSkilldays)
-				{
-					skillDay.RecalculateDailyTasks();
-				}
-			}
 			
-
 			var periods = skillDays
 				.SelectMany(x =>
 					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(x.Skill.DefaultResolution), false)
@@ -50,8 +36,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						.Select(i => new { SkillDay = x, StaffPeriod = i }));
 
 			var agentsWithShrinkage = periodsWithShrinkage.ToDictionary(
-				x => new { SkillId = x.SkillDay.Skill.Id.GetValueOrDefault(), StartDateTime = x.StaffPeriod.Period.StartDateTime },
-				y => y.StaffPeriod.FStaff);
+				x => new { SkillId = x.SkillDay.Skill.Id.GetValueOrDefault(), x.StaffPeriod.Period.StartDateTime },
+				y => y.StaffPeriod.ForecastedIncomingDemand);
 
 			var result = new List<SkillForecast>();
 			periods.ForEach(x =>
@@ -64,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					SkillId = skillId,
 					StartDateTime = startDateTime,
 					EndDateTime = x.StaffPeriod.Period.EndDateTime,
-					Agents = x.StaffPeriod.FStaff,
+					Agents = x.StaffPeriod.ForecastedIncomingDemand,
 					Calls = x.StaffPeriod.ForecastedTasks,
 					AverageHandleTime = x.StaffPeriod.AverageHandlingTaskTime.TotalSeconds,
 					AgentsWithShrinkage = agentsWithShrinkage.ContainsKey(item) ? agentsWithShrinkage[item] : 0,
@@ -80,6 +66,4 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_skillForecastReadModelRepository.PersistSkillForecast(result);
 		}
 	}
-
-	
 }
