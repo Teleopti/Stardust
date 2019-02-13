@@ -22,11 +22,10 @@
 
 		<div class="list-item" ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
 			 ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
-			 ng-click="vm.togglePerson(personSchedule, $event)">
-			<div class="person-name-column">
+			  ng-click="vm.togglePerson(personSchedule, null)">
+			<div class="person-name-column" ng-click="vm.updatePersonSelection(personSchedule, $event)">
 				<label>
 					<md-checkbox ng-model="personSchedule.IsSelected"
-								 ng-change="vm.updatePersonSelection(personSchedule)"
 								 aria-label="Checkbox">
 						{{::personSchedule.Name}}
 						<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">

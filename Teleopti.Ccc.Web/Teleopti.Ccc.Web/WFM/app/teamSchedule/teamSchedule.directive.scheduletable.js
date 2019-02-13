@@ -64,7 +64,10 @@
 				totalSelection.SelectedAbsenceInfo.AbsenceCount;
 		};
 
-		vm.updatePersonSelection = function (personSchedule) {
+		vm.updatePersonSelection = function (personSchedule, $event) {
+			if ($event) {
+				$event.stopPropagation();
+			}
 			personSelectionSvc.updatePersonSelection(personSchedule);
 			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
 		};
@@ -76,15 +79,12 @@
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {
-			if ($event === null) {
-				personSchedule.IsSelected = !personSchedule.IsSelected;
-				vm.updatePersonSelection(personSchedule);
-			}
-			else if ($event.target instanceof HTMLTableCellElement) {
+			if ($event === null || $event.target instanceof HTMLTableCellElement) {
 				personSchedule.IsSelected = !personSchedule.IsSelected;
 				vm.updatePersonSelection(personSchedule);
 			}
 		};
+
 
 		vm.modifyShiftCategoryForAgent = function ($event, personSchedule) {
 			if (!vm.permissions.HasEditShiftCategoryPermission) {

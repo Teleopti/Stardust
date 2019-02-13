@@ -62,9 +62,6 @@
 			grid-column: 1;
 			-ms-grid-column: 1;
 
-			.validate-warning {
-				line-height: 1;
-			}
 
 
 			.md-label {
@@ -79,6 +76,8 @@
 				margin-top: 0px;
 				margin-bottom: 0px;
 				display: inline;
+				width: 100%;
+				height: 100%;
 			}
 		}
 
@@ -143,6 +142,24 @@
 				display: flex;
 				justify-content: space-between;
 				align-content: center;
+				padding: 0;
+
+				> label {
+					width: 100%;
+					padding: 0 5px;
+				}
+
+				md-checkbox {
+					display: inline-block;
+					width: 100%;
+					padding: 5px 0 0 5px;
+				}
+
+
+				.validate-warning {
+					line-height: 1;
+					padding: 5px 5px 0 0;
+				}
 			}
 
 			& > div.schedule-column {
