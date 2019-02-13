@@ -100,7 +100,7 @@
 				</div>
 			</div>
 			<div class="schedule-tool-column schedule-editor-column">
-				<span class="editor cursorpointer"
+				<span class="editor cursor-pointer"
 					  ng-if="::vm.showEditButton(personSchedule)"
 					  ng-click="vm.clickEditButton(personSchedule)">
 					<i class="mdi mdi-pencil"></i>
@@ -123,7 +123,7 @@
 			</div>
 			<div class="contract-time-column">{{::personSchedule.ContractTime}}</div>
 		</div>
-		<div class="list-item shift-editor-row" ng-repeat-end ng-if="vm.isScheduleInEditing(personSchedule)">
+		<div class="shift-editor-row" ng-repeat-end ng-if="vm.isScheduleInEditing(personSchedule)">
 			<div colspan="6">
 				<shift-editor date="vm.selectedDate"
 							  timezone="vm.selectedTimezone"
