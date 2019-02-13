@@ -299,12 +299,8 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			SkillRepository.Has(skill);
 			
 			var vm = Target.GenerateStaffingViewModel(new[] { skill.Id.Value });
+			vm.DataSeries.Should().Be.Null();
 
-			vm.DataSeries.ForecastedStaffing.Should().Be.Empty();
-			vm.DataSeries.UpdatedForecastedStaffing.Should().Be.Empty();
-			vm.DataSeries.ActualStaffing.Should().Be.Empty();
-			vm.DataSeries.ScheduledStaffing.Should().Be.Empty();
-			vm.StaffingHasData.Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -682,10 +678,7 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 
 			var vm = Target.GenerateStaffingViewModel(new[] { skill.Id.Value });
 
-			vm.DataSeries.ForecastedStaffing.Should().Be.Empty();
-			vm.DataSeries.UpdatedForecastedStaffing.Should().Be.Empty();
-			vm.DataSeries.ActualStaffing.Should().Be.Empty();
-			vm.StaffingHasData.Should().Be.EqualTo(false);
+			vm.DataSeries.Should().Be.Null();
 		}
 
 		[Test]
