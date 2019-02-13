@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Hangfire.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 
@@ -22,11 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			NullValueHandling = NullValueHandling.Ignore;
 			ContractResolver = new ShortCommonPropertyMappingContractResolver();
 			SerializationBinder = new MappingSerializationBinder(_typeMapper);
-			Converters = new List<JsonConverter>
-			{
-				//new InvocationDataConverter(),
-				new TypeArrayConverter(_typeMapper)
-			};
+			Converters = new List<JsonConverter> {new InvocationDataConverter(_typeMapper)};
 		}
 
 		public Type TypeResolver(string typeName)
@@ -37,85 +32,42 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return Type.GetType(typeName, true, true);
 		}
 
+		// for hangfire
+		// InvocationData.Type and InvocationData.ParameterTypes
+		// to be persisted with short names
 		private class InvocationDataConverter : JsonConverter
 		{
+			private readonly string _hangfireEventServerPersistedTypeName;
+			private const string HangfireEventServerMethodName = "Process";
+			private const string HangfireEventServerParameterTypes = "[\"System.String, mscorlib\",\"HangfireEventJob\"]";
+
+			public InvocationDataConverter(PersistedTypeMapper typeMapper)
+			{
+				_hangfireEventServerPersistedTypeName = typeMapper.NameForPersistence(typeof(HangfireEventServer));
+			}
+
 			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 			{
 				var invocationData = value as InvocationData;
 				writer.WriteStartObject();
-				writer.WritePropertyName("a");
+				writer.WritePropertyName("Type");
+				writer.WriteValue(_hangfireEventServerPersistedTypeName);
+				writer.WritePropertyName("Method");
+				writer.WriteValue(HangfireEventServerMethodName);
+				writer.WritePropertyName("ParameterTypes");
+				writer.WriteValue(HangfireEventServerParameterTypes);
+				writer.WritePropertyName("Arguments");
 				writer.WriteValue(invocationData.Arguments);
-//				writer.WritePropertyName("ParameterTypes");
-//				writer.WriteValue(invocationData.ParameterTypes);
 				writer.WriteEndObject();
 			}
 
-			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-			{
-				var arguments = "";
-				var parameterTypes = "[\"System.String, mscorlib\",\"HangfireEventJob\"]";
-				do
-				{
-					if (reader.TokenType == JsonToken.PropertyName)
-					{
-						if (reader.Value.ToString() == "Arguments" || reader.Value.ToString() == "a")
-						{
-							reader.Read();
-							arguments = reader.Value.ToString();
-						}
-
-						if (reader.Value.ToString() == "ParameterTypes")
-						{
-							reader.Read();
-							parameterTypes = reader.Value.ToString();
-						}
-					}
-				} while (reader.Read());
-
-				return new InvocationData(
-					typeof(HangfireEventServer).AssemblyQualifiedName,
-					"Process",
-					parameterTypes,
-					arguments
-				);
-			}
-
-			public override bool CanConvert(Type objectType) =>
-				typeof(InvocationData) == objectType;
-		}
-
-
-		// for hangfire InvocationData.ParameterTypes
-		private class TypeArrayConverter : JsonConverter
-		{
-			private readonly PersistedTypeMapper _typeMapper;
-
-			public TypeArrayConverter(PersistedTypeMapper typeMapper)
-			{
-				_typeMapper = typeMapper;
-			}
-
 			public override bool CanRead => false;
-
-			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-			{
-				var types = (Type[]) value;
-				writer.WriteStartArray();
-				types.ForEach(t =>
-				{
-					if (_typeMapper.NameForPersistence(t, out var persistedName))
-						serializer.Serialize(writer, persistedName);
-					else
-						serializer.Serialize(writer, t);
-				});
-				writer.WriteEndArray();
-			}
 
 			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) =>
 				throw new NotImplementedException();
 
 			public override bool CanConvert(Type objectType) =>
-				typeof(Type[]) == objectType;
+				typeof(InvocationData) == objectType;
 		}
 
 		private class MappingSerializationBinder : DefaultSerializationBinder

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			Hangfire.Value.ThrowExceptionFromAnyFailedJob();
 			Handler.Got.Should().Be("data");
 		}
-		
+
 		[Test]
 		public void ShouldHandleMovedHangfireEventServer()
 		{
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			Hangfire.Value.ThrowExceptionFromAnyFailedJob();
 			Handler.Got.Should().Be("data");
 		}
-		
+
 		[Test]
 		public void ShouldHandleMappedHangfireEventServer()
 		{
@@ -136,10 +136,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 				.Replace("[HangfireEventJobType]", values.HangfireEventJobType)
 				.Replace("[EventType]", values.EventType);
 			var invocationData = Deserializer.DeserializeEvent<InvocationDataArguments>(mutated);
-			Analytics.Do(x =>x.Current().FetchSession()
+			Analytics.Do(x => x.Current().FetchSession()
 				.CreateSQLQuery($@"UPDATE Hangfire.Job SET InvocationData = '{mutated}', Arguments = '{invocationData.Arguments}'")
 				.ExecuteUpdate());
-			
+
 			outputJobData();
 		}
 
@@ -154,11 +154,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 
 		// BuildMyString.com generated code. Please enjoy your string responsibly.
 		const string source = "{" +
-					"\"Type\": \"[HangfireEventServer]\"," +
-					"\"Method\": \"Process\"," +
-					"\"ParameterTypes\": \"[\\\"System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\\\",\\\"[HangfireEventJobType]\\\"]\"," +
-					"\"Arguments\": \"[\\\"\\\\\\\"HangfireJobTypeNameChangesTest+TestHandler got TestEvent on TestData\\\\\\\"\\\",\\\"{\\\\\\\"DisplayName\\\\\\\":\\\\\\\"HangfireJobTypeNameChangesTest+TestHandler got TestEvent on TestData\\\\\\\",\\\\\\\"Tenant\\\\\\\":\\\\\\\"TestData\\\\\\\",\\\\\\\"Attempts\\\\\\\":3,\\\\\\\"AllowFailures\\\\\\\":0,\\\\\\\"Event\\\\\\\":{\\\\\\\"$type\\\\\\\":\\\\\\\"[EventType]\\\\\\\",\\\\\\\"Data\\\\\\\":\\\\\\\"data\\\\\\\"},\\\\\\\"HandlerTypeName\\\\\\\":\\\\\\\"HangfireJobTypeNameChangesTest+TestHandler\\\\\\\",\\\\\\\"RunInterval\\\\\\\":1}\\\"]\"" +
-					"}";
+							  "\"Type\": \"[HangfireEventServer]\"," +
+							  "\"Method\": \"Process\"," +
+							  "\"ParameterTypes\": \"[\\\"System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\\\",\\\"[HangfireEventJobType]\\\"]\"," +
+							  "\"Arguments\": \"[\\\"\\\\\\\"HangfireJobTypeNameChangesTest+TestHandler got TestEvent on TestData\\\\\\\"\\\",\\\"{\\\\\\\"DisplayName\\\\\\\":\\\\\\\"HangfireJobTypeNameChangesTest+TestHandler got TestEvent on TestData\\\\\\\",\\\\\\\"Tenant\\\\\\\":\\\\\\\"TestData\\\\\\\",\\\\\\\"Attempts\\\\\\\":3,\\\\\\\"AllowFailures\\\\\\\":0,\\\\\\\"Event\\\\\\\":{\\\\\\\"$type\\\\\\\":\\\\\\\"[EventType]\\\\\\\",\\\\\\\"Data\\\\\\\":\\\\\\\"data\\\\\\\"},\\\\\\\"HandlerTypeName\\\\\\\":\\\\\\\"HangfireJobTypeNameChangesTest+TestHandler\\\\\\\",\\\\\\\"RunInterval\\\\\\\":1}\\\"]\"" +
+							  "}";
 
 		private class JobValues
 		{
@@ -166,16 +166,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 			public string HangfireEventJobType { get; set; } = "Teleopti.Ccc.Infrastructure.Hangfire.HangfireEventJob, Teleopti.Wfm.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
 			public string EventType { get; set; } = "Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire.HangfireJobTypeNameChangesTest+TestEvent, Teleopti.Ccc.InfrastructureTest";
 		}
-		
+
 		public class InvocationDataArguments
 		{
 			public string Arguments { get; set; }
 		}
-		
+
 		private void outputJobData()
 		{
-			#if DEBUG
-			
+#if DEBUG
+
 			Console.WriteLine("Job looks like this:");
 
 			Analytics.Do(x =>
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events.Hangfire
 					});
 			});
 
-			#endif
+#endif
 		}
 	}
 }
