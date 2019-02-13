@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Controllers;
 
@@ -21,7 +22,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			//TODO refactor to ioc
 			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			Target = new StardustController(StardustRepository, new FakeStardustSender(), new FakeTenants(),
-				new StaffingSettingsReader49Days(), new FakePingNode());
+				new StaffingSettingsReader49Days(), new FakePingNode(),null);
 		}
 
 		[Test]
