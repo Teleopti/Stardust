@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using SharpTestsEx;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Web;
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var target = new GrantBotApiController(configReader, httpRequestHandler, new FakeCurrentHttpContext(),
 				new FakeServerConfigurationRepository(), new SignatureCreator(configReader), new MutableNow(),
-				new FakeLoggedOnUser());
+				createPrincipal());
 
 			var result = await target.GetGrantBotConfig();
 			result.Token.Should().Be(expectedToken.token);
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				"https://teleoptibottest.azurewebsites.net/t/api/tenant");
 			configurationRepository.Update(ServerConfigurationKey.GrantBotDirectLineSecret.ToString(), "Secret1234");
 			var target = new GrantBotApiController(configReader, httpRequestHandler, new FakeCurrentHttpContext(),
-				configurationRepository, new SignatureCreator(configReader), new MutableNow(), new FakeLoggedOnUser());
+				configurationRepository, new SignatureCreator(configReader), new MutableNow(), createPrincipal());
 
 			var result = await target.GetGrantBotConfig();
 			result.Token.Should().Be(expectedToken.token);
@@ -93,9 +95,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 
 			var now = new DateTime(2019, 02, 12, 01, 13, 45, DateTimeKind.Utc);
-			var personId = new Guid("D4A1B6A4-7EA3-48DB-BA61-DE9DD6FFB389");
-			var fakeLoggedOnUser = new FakeLoggedOnUser();
-			fakeLoggedOnUser.CurrentUser().SetId(personId);
+			var fakeLoggedOnUser = createPrincipal();
 			var target = new GrantBotApiController(configReader, httpRequestHandler, new FakeCurrentHttpContext(),
 				new FakeServerConfigurationRepository(), new SignatureCreator(configReader), new MutableNow(now),
 				fakeLoggedOnUser);
@@ -104,6 +104,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Timestamp.Should().Be(now.Ticks);
 			result.Signature.Should().Be(
 				"sD5jNVCGUqbvsmABXkjvwC3raRKCUVYT0Q5HeoV5Kv6w3sYYwi8CZAi1qxbtVInw366vIGUdFg653mCJufK0yTmdxXhqBcrRV9EiGtOzhnmo8dadDTVMnb6VH7TwjhmSv7B2E+qjA7Vv0HdGmc5lFoSlJgn5WP6QWNdt+p4epDTGVxBgZvTGqg58MEioOr3JlKMFPrAqcYHDtFrHYtNnNio52wXKq+11UeHJQ8HIgSfTU51bOYGgIZdJmIR5QJj2Y2PNzHctGrfRQTFL5h7OWW1m+km/k11tr10ZsxbOZwDGXSe9a5/a2KbaC4qaDnjHtUeE+pS8YaN95L7XFOegDw==");
+		}
+
+		private static FakeCurrentTeleoptiPrincipal createPrincipal()
+		{
+			var person = new Person().WithId(new Guid("D4A1B6A4-7EA3-48DB-BA61-DE9DD6FFB389"));
+
+			var fakeLoggedOnUser = new FakeCurrentTeleoptiPrincipal();
+			fakeLoggedOnUser.Fake(
+				new TeleoptiPrincipalWithUnsafePerson(new TeleoptiIdentityWithUnsafeBusinessUnit("", null, null, null, ""),
+					person));
+			return fakeLoggedOnUser;
 		}
 
 		private IConfigReader createFakeConfigReader()

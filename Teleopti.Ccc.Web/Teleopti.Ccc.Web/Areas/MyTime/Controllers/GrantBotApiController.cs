@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -22,11 +23,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
 		private readonly SignatureCreator _signatureCreator;
 		private readonly INow _now;
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly ICurrentTeleoptiPrincipal _loggedOnUser;
 
 		public GrantBotApiController(IConfigReader configReader, IHttpServer httpRequestHandler,
 			ICurrentHttpContext currentHttpContext, IServerConfigurationRepository serverConfigurationRepository,
-			SignatureCreator signatureCreator, INow now, ILoggedOnUser loggedOnUser)
+			SignatureCreator signatureCreator, INow now, ICurrentTeleoptiPrincipal loggedOnUser)
 		{
 			_configReader = configReader;
 			_httpRequestHandler = httpRequestHandler;
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var config = new GrantBotConfig
 			{
 				Timestamp = timestamp,
-				Signature = _signatureCreator.Create($"{_loggedOnUser.CurrentUser().Id.ToString().ToLowerInvariant()}{timestamp}"),
+				Signature = _signatureCreator.Create($"{_loggedOnUser.Current().PersonId.ToString().ToLowerInvariant()}{timestamp}"),
 				Token = token,
 			};
 			return config;
