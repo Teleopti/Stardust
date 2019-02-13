@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Hangfire.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -20,7 +22,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			NullValueHandling = NullValueHandling.Ignore;
 			ContractResolver = new ShortCommonPropertyMappingContractResolver();
 			SerializationBinder = new MappingSerializationBinder(_typeMapper);
-			Converters = new List<JsonConverter> {new TypeArrayConverter(_typeMapper)};
+			Converters = new List<JsonConverter>
+			{
+				//new InvocationDataConverter(),
+				new TypeArrayConverter(_typeMapper)
+			};
 		}
 
 		public Type TypeResolver(string typeName)
@@ -30,6 +36,54 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			typeName = typeName.Replace("System.Private.CoreLib", "mscorlib");
 			return Type.GetType(typeName, true, true);
 		}
+
+		private class InvocationDataConverter : JsonConverter
+		{
+			public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+			{
+				var invocationData = value as InvocationData;
+				writer.WriteStartObject();
+				writer.WritePropertyName("a");
+				writer.WriteValue(invocationData.Arguments);
+//				writer.WritePropertyName("ParameterTypes");
+//				writer.WriteValue(invocationData.ParameterTypes);
+				writer.WriteEndObject();
+			}
+
+			public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+			{
+				var arguments = "";
+				var parameterTypes = "[\"System.String, mscorlib\",\"HangfireEventJob\"]";
+				do
+				{
+					if (reader.TokenType == JsonToken.PropertyName)
+					{
+						if (reader.Value.ToString() == "Arguments" || reader.Value.ToString() == "a")
+						{
+							reader.Read();
+							arguments = reader.Value.ToString();
+						}
+
+						if (reader.Value.ToString() == "ParameterTypes")
+						{
+							reader.Read();
+							parameterTypes = reader.Value.ToString();
+						}
+					}
+				} while (reader.Read());
+
+				return new InvocationData(
+					typeof(HangfireEventServer).AssemblyQualifiedName,
+					"Process",
+					parameterTypes,
+					arguments
+				);
+			}
+
+			public override bool CanConvert(Type objectType) =>
+				typeof(InvocationData) == objectType;
+		}
+
 
 		// for hangfire InvocationData.ParameterTypes
 		private class TypeArrayConverter : JsonConverter
