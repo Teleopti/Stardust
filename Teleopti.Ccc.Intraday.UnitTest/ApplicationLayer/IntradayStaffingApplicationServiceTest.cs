@@ -1482,9 +1482,9 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 
 	}
 
-	[DisabledBy(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
-	public class IntradayStaffingApplicationServiceToggleOffTest : IntradayStaffingApplicationServiceBaseTest
-	{
+	//[DisabledBy(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
+	//public class IntradayStaffingApplicationServiceToggleOffTest : IntradayStaffingApplicationServiceBaseTest
+	//{
 
-	}
+	//}
 }
