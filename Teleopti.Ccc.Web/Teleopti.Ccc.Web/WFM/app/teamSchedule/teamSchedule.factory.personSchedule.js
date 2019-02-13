@@ -111,6 +111,7 @@
 
 			var displayEnd = endTimeMinutes <= timelineEndMinute ? endTimeMinutes : timelineEndMinute;
 			var length = (displayEnd - displayStart) * lengthPercentPerMinute;
+			if (!length) return undefined;
 
 			var dayOffVm = new DayOffViewModel(scheduleDate, dayOff.DayOffName, startPosition, length, personSchedule);
 			return dayOffVm;
