@@ -46,6 +46,26 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				},
 				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.EventWithLogOnContext, Teleopti.Wfm.Shared"
 			};
+
+			yield return new PersistedTypeMapping
+			{
+				CurrentPersistedName = "TenantDayTickEvent",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantDayTickEvent, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantDayTickEvent, Teleopti.Wfm.Shared"
+			};
+			yield return new PersistedTypeMapping
+			{
+				CurrentPersistedName = "TenantHourTickEvent",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantHourTickEvent, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantHourTickEvent, Teleopti.Wfm.Shared"
+			};
+			yield return new PersistedTypeMapping
+			{
+				CurrentPersistedName = "TenantMinuteTickEvent",
+				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantMinuteTickEvent, Teleopti.Ccc.Domain"},
+				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantMinuteTickEvent, Teleopti.Wfm.Shared"
+			};
+
 			yield return new PersistedTypeMapping
 			{
 				CurrentPersistedName = "DayOffOptimizationWasOrdered",
@@ -318,12 +338,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			};
 			yield return new PersistedTypeMapping
 			{
-				CurrentPersistedName = "TenantDayTickEvent",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantDayTickEvent, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantDayTickEvent, Teleopti.Ccc.Domain"
-			};
-			yield return new PersistedTypeMapping
-			{
 				CurrentPersistedName = "UnknownStateCodeReceviedEvent",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.UnknownStateCodeReceviedEvent, Teleopti.Ccc.Domain"},
 				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.UnknownStateCodeReceviedEvent, Teleopti.Ccc.Domain"
@@ -588,12 +602,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			};
 			yield return new PersistedTypeMapping
 			{
-				CurrentPersistedName = "TenantMinuteTickEvent",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantMinuteTickEvent, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantMinuteTickEvent, Teleopti.Ccc.Domain"
-			};
-			yield return new PersistedTypeMapping
-			{
 				CurrentPersistedName = "GroupPageCollectionChangedEvent",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.GroupPageCollectionChangedEvent, Teleopti.Ccc.Domain"},
 				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.GroupPageCollectionChangedEvent, Teleopti.Ccc.Domain"
@@ -639,12 +647,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				CurrentPersistedName = "StardustHealthCheckEvent",
 				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.StardustHealthCheckEvent, Teleopti.Ccc.Domain"},
 				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.StardustHealthCheckEvent, Teleopti.Ccc.Domain"
-			};
-			yield return new PersistedTypeMapping
-			{
-				CurrentPersistedName = "TenantHourTickEvent",
-				LegacyPersistedNames = new[] {"Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantHourTickEvent, Teleopti.Ccc.Domain"},
-				CurrentTypeName = "Teleopti.Ccc.Domain.ApplicationLayer.Events.TenantHourTickEvent, Teleopti.Ccc.Domain"
 			};
 			yield return new PersistedTypeMapping
 			{

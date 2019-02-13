@@ -837,7 +837,6 @@
     <Compile Include="ApplicationLayer\Events\ManageScheduleEvent.cs" />
     <Compile Include="ApplicationLayer\Events\OptionalColumnCollectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleBackoutEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\UnknownStateCodeReceviedEvent.cs" />
     <Compile Include="ApplicationLayer\GlobalSettingData\AnalyticsPersonNameUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />
@@ -1601,7 +1600,6 @@
     <Compile Include="ApplicationLayer\Events\RecalculateForecastOnSkillCollectionEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ServiceBusHealthCheckEvent.cs" />
     <Compile Include="ApplicationLayer\Events\SkillChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommandScope.cs" />
     <Compile Include="ApplicationLayer\Forecast\ForecastClassesCreator.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadsEventHandler.cs" />
@@ -1893,7 +1891,6 @@
     <Compile Include="ApplicationLayer\Events\DayUnscheduledEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleOnNode.cs" />
     <Compile Include="ApplicationLayer\Events\StardustHealthCheckEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\TenantHourTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonCollectionChangedEvent.cs" />

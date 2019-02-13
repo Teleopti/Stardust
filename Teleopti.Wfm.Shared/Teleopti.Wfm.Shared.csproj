@@ -129,6 +129,9 @@
     <Compile Include="Events\RunIntervalAttribute.cs" />
     <Compile Include="Events\SyncAllEventPublisher.cs" />
     <Compile Include="Events\SyncEventPublisher.cs" />
+    <Compile Include="Events\TenantDayTickEvent.cs" />
+    <Compile Include="Events\TenantHourTickEvent.cs" />
+    <Compile Include="Events\TenantMinuteTickEvent.cs" />
     <Compile Include="Events\TrackingMessage.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenericDisposable.cs" />
