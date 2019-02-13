@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 
 		[Test]
 		[Timeout(15000)]
-		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
+		public async Task ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 01, 05);
 			var person = new Person().InTimeZone(TimeZoneInfo.Utc);
@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 				PersonRepository.Add(person);
 			});
 
-			var taskToRunInParallell = new Func<Task>(() =>
+			var taskToRunInParallel = new Func<Task>(() =>
 			{
-				return Task.Factory.StartNew(() =>
+				var task = Task.Run(() =>
 				{
 					Target.Handle(new ScheduleChangedEvent
 					{
@@ -41,10 +41,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 						PersonId = person.Id.Value
 					});
 				});
+				task.ConfigureAwait(false);
+				return task;
 			});
-			var tasks = new[] {taskToRunInParallell(), taskToRunInParallell()};
-
-			Task.WaitAll(tasks);
+			
+			await Task.WhenAll(taskToRunInParallel(), taskToRunInParallel(), taskToRunInParallel());
 
 			WithUnitOfWork.Do(() =>
 			{
