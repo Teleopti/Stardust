@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -26,17 +27,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IStaffingSettingsReader _staffingSettingsReader;
 		private readonly IPingNode _pingNode;
 		private readonly IConfigReader _configReader;
+		private readonly ISkillForecastJobStartTimeRepository _skillForecastJobStartTimeRepository;
 
 
 		public StardustController(IStardustRepository stardustRepository, IStardustSender stardustSender,
-			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader, IPingNode pingNode, 
-			IConfigReader configReader = null)
+			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader, IPingNode pingNode, ISkillForecastJobStartTimeRepository skillForecastJobStartTimeRepository, IConfigReader configReader = null)
 		{
 			_stardustRepository = stardustRepository;
 			_stardustSender = stardustSender;
 			_loadAllTenants = loadAllTenants;
 			_staffingSettingsReader = staffingSettingsReader;
 			_pingNode = pingNode;
+			_skillForecastJobStartTimeRepository = skillForecastJobStartTimeRepository;
 			_configReader = configReader ?? new ConfigReader();
 		}
 
@@ -159,13 +161,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[TenantUnitOfWork]
 		public virtual IHttpActionResult TriggerSkillForecastCalculation([FromBody] SkillForecastCalculationModel model)
 		{
-			if (model == null) return BadRequest("logOnModel is null!");
+			if (model == null) return BadRequest("model is null!");
 			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(model.Tenant));
 			var appConnstring = tenant.DataSourceConfiguration.ApplicationConnectionString;
 			var bus = _stardustRepository.SelectAllBus(appConnstring);
 
 			foreach (var bu in bus)
 			{
+				_skillForecastJobStartTimeRepository.ResetLock(bu);
 				_stardustSender.Send(
 					new UpdateSkillForecastReadModelEvent
 					{

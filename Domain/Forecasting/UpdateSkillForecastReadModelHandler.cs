@@ -68,6 +68,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		[UnitOfWork]
 		public virtual void Handle(UpdateSkillForecastReadModelEvent @event)
 		{
+			//reset the job by catching the exception
+			//override the manual event to run always
+
 			var isLocked = _skillForecastJobStartTimeRepository.UpdateJobStartTime(@event.LogOnBusinessUnitId);
 			if (!isLocked)
 			{

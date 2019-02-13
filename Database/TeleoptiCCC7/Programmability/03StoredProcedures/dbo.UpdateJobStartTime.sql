@@ -34,8 +34,7 @@ if @startTime is null
 else
 	begin
 		--if lockedtimestamp is not null
-		print @lockedStarttime
-
+		
 		if @now > @lockedStarttime or @lockedStarttime is null
 			set @shouldProceed = 1
 		else
