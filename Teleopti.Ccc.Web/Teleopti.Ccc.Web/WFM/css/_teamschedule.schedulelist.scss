@@ -222,13 +222,14 @@
 
 				& > .info {
 					position: absolute;
-					top: -7px;
-					right: -2px;
+					top: -9px;
+					right: -4px;
 					transform: scale(0.6);
 				}
 
 				& > span {
 					width: 20px;
+					height: 20px;
 					display: inline-block;
 					cursor: pointer;
 				}
