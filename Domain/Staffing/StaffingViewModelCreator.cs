@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.Domain;
+using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Staffing
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			var skillStaffingIntervals = _resourceCalculationUsingReadModels.LoadAndResourceCalculate(skillIds, startOfDayUtc, endOfDayUtc, useShrinkage, _timeZone);
 			//var relevantPeriod = FindStartAndEndDateFromIntervals(skillStaffingIntervals);
-			var relevantStartTime = skillStaffingIntervals.Any() ? skillStaffingIntervals.Min(s => s.StartDateTime) : startOfDayLocal;
+			var relevantStartTime = skillStaffingIntervals.Any() ? skillStaffingIntervals.Min(s => s.StartDateTime) : startOfDayUtc;
 			var relevantEndTime = skillStaffingIntervals.Any()
 				? skillStaffingIntervals.Max(s => s.StartDateTime)
 				: endOfDayUtc;

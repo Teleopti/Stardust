@@ -239,6 +239,7 @@
     <Compile Include="Insights\InsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReportRepository.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayAppStaffingService.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
     <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
@@ -346,7 +347,6 @@
     <Compile Include="Common\CalculatePersonAccount.cs" />
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
-    <Compile Include="Intraday\ApplicationLayer\ViewModels\StaffingDataSeries.cs" />
     <Compile Include="AgentInfo\BacklogSkillTypesForecastCalculator.cs" />
     <Compile Include="Intraday\Domain\IntradayForecastInterval.cs" />
     <Compile Include="Intraday\Extensions\IntradaySkillDayExtensions.cs" />
@@ -684,7 +684,7 @@
     <Compile Include="Security\Principal\ClaimsOwner.cs" />
     <Compile Include="Security\SignedArgument.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
-    <Compile Include="Intraday\To Staffing\ScheduledStaffingViewModel.cs" />
+    <Compile Include="Staffing\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\To Staffing\ScheduledStaffingViewModelCreator.cs" />
     <Compile Include="Common\SkillTypeIdentifier.cs" />
     <Compile Include="Intraday\Domain\SkillTypeInfo.cs" />
@@ -1644,7 +1644,6 @@
     <Compile Include="Intraday\Domain\IntradayPerformanceDataSeries.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayPerformanceSummary.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayPerformanceViewModel.cs" />
-    <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayStaffingViewModel.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayIncomingDataSeries.cs" />
     <Compile Include="Intraday\Domain\IntradayIncomingSummary.cs" />
     <Compile Include="Intraday\Domain\SkillIntervalStatistics.cs" />
@@ -1652,7 +1651,7 @@
     <Compile Include="Intraday\ApplicationLayer\LatestStatitsticsTimeModel.cs" />
     <Compile Include="Intraday\To Staffing\ScheduledStaffingProvider.cs" />
     <Compile Include="Intraday\Domain\SkillDayStatsRange.cs" />
-    <Compile Include="Intraday\To Staffing\StaffingDataSeries.cs" />
+    <Compile Include="Staffing\StaffingDataSeries.cs" />
     <Compile Include="Intraday\Domain\StaffingInterval.cs" />
     <Compile Include="Intraday\To Staffing\TimeSeriesProvider.cs" />
     <Compile Include="Islands\ClientModel\IslandModel.cs" />

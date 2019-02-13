@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var dateOnlyPeriod = new DateOnlyPeriod(firstPeriodDateInSkillTimeZone, lastPeriodDateInSkillTimeZone);
 
 			var period = new DateTimePeriod(startOfDayUtc, endOfDayUtc);
-			var fetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-8), endOfDayUtc.AddDays(2));
+			var fetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-7), endOfDayUtc.AddDays(2));
 			var fetchPeriodForSkillCombinations = new DateTimePeriod(startOfDayUtc, startOfDayUtc.AddDays(1).AddHours(1));
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(fetchPeriodForSkillCombinations).ToList();
 			
