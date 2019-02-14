@@ -1,13 +1,23 @@
 .schedule-list {
 	min-width: 680px;
 
+	md-checkbox {
+		margin-top: 0px;
+		margin-bottom: 0px;
+		display: inline;
+		width: 100%;
+		height: 100%;
+	}
+
+	.sort-agent {
+		margin: 5px 0;
+	}
+
 	.list-header {
 		display: grid;
 		display: -ms-grid;
 		grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
 		-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
-		grid-template-rows: 40px;
-		-ms-grid-rows: 40px;
 		height: 40px;
 
 		.time-line {
@@ -62,22 +72,8 @@
 			grid-column: 1;
 			-ms-grid-column: 1;
 
-
-
 			.md-label {
 				white-space: nowrap;
-			}
-
-			.sort-agent {
-				margin: 5px 0;
-			}
-
-			md-checkbox {
-				margin-top: 0px;
-				margin-bottom: 0px;
-				display: inline;
-				width: 100%;
-				height: 100%;
 			}
 		}
 
