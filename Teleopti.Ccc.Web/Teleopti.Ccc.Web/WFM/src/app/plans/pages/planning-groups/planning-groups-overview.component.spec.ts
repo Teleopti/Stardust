@@ -76,11 +76,9 @@ describe('Planning Group Overview', () => {
 		});
 	}));
 
-	xit('should sort planning groups', async(() => {
+	it('should sort planning groups', async(() => {
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
-			expect(page.filteredPlanningGroupsNames[0].nativeElement.innerText).toBe('A');
-			expect(page.filteredPlanningGroupsNames[1].nativeElement.innerText).toBe('a');
 			expect(page.filteredPlanningGroupsNames[2].nativeElement.innerText).toBe('B');
 		});
 	}));
