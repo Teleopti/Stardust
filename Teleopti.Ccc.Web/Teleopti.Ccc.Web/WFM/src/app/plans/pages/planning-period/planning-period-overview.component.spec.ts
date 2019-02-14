@@ -170,7 +170,7 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
 	});
 
-	it('should launch intraday optimization', function() {
+	it('should launch intraday optimization', () =>{
 		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'optimizeIntraday').and.returnValue(of());
 		component.optimizeIntraday();
 
@@ -178,13 +178,22 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
 	});
 
-    it('should launch clear schedule', function() {
+    it('should launch clear schedule', () => {
 		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'clearSchedule').and.returnValue(of());
 		component.clearSchedule();
 
 		expect(spyPlanningPeriodActionService.calls.argsFor(0)[0]).toEqual('a557210b-99cc-4128-8ae0-138d812974b6');
 		expect(component.isDisabled()).toEqual(true);
     });
+
+	it('should launch publish', () => {
+		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'publishSchedule').and.returnValue(of());
+		component.publishSchedule();
+
+		expect(spyPlanningPeriodActionService.calls.argsFor(0)[0]).toEqual('a557210b-99cc-4128-8ae0-138d812974b6');
+		expect(component.isDisabled()).toEqual(true);
+
+	});
 });
 
 
