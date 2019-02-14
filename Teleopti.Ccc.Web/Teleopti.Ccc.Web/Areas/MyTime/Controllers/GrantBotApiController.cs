@@ -67,14 +67,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				token = JsonConvert.DeserializeObject<DirectLineToken>(body).token;
 			}
 
-			var timestamp = _now.UtcDateTime().Ticks;
-			var config = new GrantBotConfig
+			var timestamp = _now.UtcDateTime().Ticks.ToString();
+			var content = $"{_loggedOnUser.Current().PersonId.ToString().ToLowerInvariant()}{timestamp}";
+			var signature = _signatureCreator.Create(content);
+
+			return new GrantBotConfig
 			{
 				Timestamp = timestamp,
-				Signature = _signatureCreator.Create($"{_loggedOnUser.Current().PersonId.ToString().ToLowerInvariant()}{timestamp}"),
+				Signature = signature,
 				Token = token,
 			};
-			return config;
 		}
 	}
 }
