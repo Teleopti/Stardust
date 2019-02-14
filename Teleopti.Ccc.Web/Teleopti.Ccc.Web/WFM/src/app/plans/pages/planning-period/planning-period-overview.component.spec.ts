@@ -169,6 +169,14 @@ describe('Planning Period Overview', () => {
 		expect(spyPlanningPeriodActionService.calls.argsFor(0)[0]).toEqual('a557210b-99cc-4128-8ae0-138d812974b6');
 		expect(component.isDisabled()).toEqual(true);
 	});
+
+	it('should launch intraday optimization', function() {
+		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'optimizeIntraday').and.returnValue(of());
+		component.optimizeIntraday();
+
+		expect(spyPlanningPeriodActionService.calls.argsFor(0)[0]).toEqual('a557210b-99cc-4128-8ae0-138d812974b6');
+		expect(component.isDisabled()).toEqual(true);
+	});
 });
 
 
