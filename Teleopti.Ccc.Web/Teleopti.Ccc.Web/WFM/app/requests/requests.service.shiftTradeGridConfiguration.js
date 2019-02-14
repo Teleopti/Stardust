@@ -59,7 +59,7 @@
 
 		function createDayViewModel(day, startOfWeekIsoDay, isUsingRequestSubmitterTimezone, submitterTimezone) {
 			var currentUserTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
-			var originalDate = day.toDate();
+			var originalDate = new Date(moment(day).format("YYYY-M-DD"));
 			var targetTimezone = isUsingRequestSubmitterTimezone ? submitterTimezone : currentUserTimezone;
 			day = convertTimezone(day, submitterTimezone, isUsingRequestSubmitterTimezone);
 
@@ -68,9 +68,9 @@
 			return {
 				originalDate: originalDate,
 				targetTimezone: targetTimezone,
-				date: day.toDate(),
-				shortDate: $filter('date')(day.toDate(), 'shortDate'),
-				dayNumber: $filter('date')(day.toDate(), 'dd'),
+				date: new Date(moment(day).format("YYYY-M-DD")),
+				shortDate: $filter('date')(new Date(moment(day).format("YYYY-M-DD")), 'shortDate'),
+				dayNumber: $filter('date')(new Date(moment(day).format("YYYY-M-DD")), 'dd'),
 				isWeekend: isWeekend,
 				isStartOfWeek: isStartOfWeek(day.clone(), startOfWeekIsoDay),
 				isLatestDayOfPeriod: false

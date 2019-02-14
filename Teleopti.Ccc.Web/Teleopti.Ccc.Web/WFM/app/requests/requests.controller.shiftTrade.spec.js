@@ -440,8 +440,8 @@ describe('Requests shift trade controller tests', function() {
 		expect(shiftTradeDaysViewModels[0].ToScheduleDayDetail.Name).toEqual('name-to-1');
 		expect(shiftTradeDaysViewModels[1].FromScheduleDayDetail.Name).toEqual('name-from-2');
 
-		expect(shiftTradeDaysViewModels[0].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 2 + 'px'); // starts two days after start of period.
-		expect(shiftTradeDaysViewModels[1].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 3 + 'px');
+		expect(shiftTradeDaysViewModels[0].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 3 + 'px'); // starts two days after start of period.
+		expect(shiftTradeDaysViewModels[1].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 4 + 'px');
 	});
 
 	it('should select default status filter', function() {
@@ -694,7 +694,7 @@ describe('Requests shift trade controller tests', function() {
 
 		var expectedDateForScheduleViewModel = moment.tz(requests[0].ShiftTradeDays[0].Date, submitterTimezone);
 		var scheduleViewModel = shiftTradeScheduleViewModels[1][0];
-		expect(scheduleViewModel.originalDate).toEqual(expectedDateForScheduleViewModel.toDate());
+		expect(scheduleViewModel.originalDate).toEqual(new Date(moment(expectedDateForScheduleViewModel).format("YYYY-M-DD")));
 		expect(scheduleViewModel.targetTimezone).toEqual(expectedTimezone);
 		expect(scheduleViewModel.dayNumber).toEqual('08');
 	});
@@ -739,7 +739,7 @@ describe('Requests shift trade controller tests', function() {
 
 		for (var i = 0; i < shiftTradeDayViewModels.length - 1; i++) {
 			var dayViewModel = shiftTradeDayViewModels[i];
-			expect(dayViewModel.originalDate).toEqual(expectedDateForDayViewModel.toDate());
+			expect(dayViewModel.originalDate).toEqual(new Date(moment(expectedDateForDayViewModel).format("YYYY-M-DD")));
 			expect(dayViewModel.dayNumber).toEqual('0' + (i + 1));
 			expectedDateForDayViewModel.add(1, 'days');
 		}
@@ -749,7 +749,7 @@ describe('Requests shift trade controller tests', function() {
 			submitterTimezone
 		);
 		var scheduleViewModel = shiftTradeScheduleViewModels[1][0];
-		expect(scheduleViewModel.originalDate).toEqual(expectedDateForShiftTradeScheduleViewModel.toDate());
+		expect(scheduleViewModel.originalDate).toEqual(new Date(moment(expectedDateForShiftTradeScheduleViewModel).format("YYYY-M-DD")));
 		expect(scheduleViewModel.targetTimezone).toEqual(expectedTimezone);
 		expect(scheduleViewModel.dayNumber).toEqual('09');
 	});
