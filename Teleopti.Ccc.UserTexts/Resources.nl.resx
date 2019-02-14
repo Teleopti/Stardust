@@ -6812,10 +6812,6 @@ ment heb je er {1}.</value>
   <data name="UseTeleoptiMobileAppToScanThisQRCode" xml:space="preserve">
     <value>Gebruik de teleopti app om deze QR code te scannen</value>
   </data>
-  <data name="NextActivityComingMessage" xml:space="preserve">
-    <value>Volgende activiteit ({0}) start om
- {1}</value>
-  </data>
   <data name="FilterTeamSchedules" xml:space="preserve">
     <value>Filter team roosters</value>
   </data>
@@ -6927,5 +6923,8 @@ aangemaakt op: {1}</value>
   </data>
   <data name="LoginNameColon" xml:space="preserve">
     <value>gebruikersnaam</value>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Volgende activiteit ({0}) start om {1}</value>
   </data>
 </root>
