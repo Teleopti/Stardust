@@ -153,8 +153,14 @@
 					display: inline-block;
 					width: 100%;
 					padding: 5px 0 0 5px;
-				}
 
+					.md-container {
+						.md-ripple-container, &:after {
+							top: -5px;
+							bottom: -5px;
+						}
+					}
+				}
 
 				.validate-warning {
 					line-height: 1;
