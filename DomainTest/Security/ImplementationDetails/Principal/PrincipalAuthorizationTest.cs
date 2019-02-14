@@ -275,8 +275,7 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
         }
 
 		[Test]
-		[Ignore("81373")]
-		public void ShouldPermitPeriodAfterTerminalDateOnSuperUser()
+		public void ShouldPermitPeriodAfterTerminalDateOnUserWithPermissionOnEveryone()
 		{
 			var date = new DateOnly(2019, 2, 13);
 			var period = new DateOnlyPeriod(date.AddDays(-13), date.AddDays(2));
@@ -284,25 +283,23 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.Principal
 			var userTeamId = Guid.NewGuid();
 			var agentId = Guid.NewGuid();
 			var agentTeamId = Guid.NewGuid();
-			var applicationRole = new ApplicationRole { Name = "_Super Role", BuiltIn = true };
-			Database
-				.WithTenant("tenant")
+			const string tenant = "_";
+			Database.WithTenant(tenant)
 				.WithTeam(agentTeamId, "agentTeam")
 				.WithAgent(agentId, "agent")
 
 				.WithTeam(userTeamId, "userTeam")
 				.WithAgent(userId, "user")
-				.WithPeriod(date.AddDays(-10).ToShortDateString(), userTeamId).WithTerminalDate(date.ToShortDateString())
-				.WithRole(AvailableDataRangeOption.Everyone, userTeamId, applicationRole, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
-
-			var me = Persons.Load(userId);
+				.WithPeriod(date.AddDays(-10).ToShortDateString(), userTeamId)
+				.WithTerminalDate(date.ToShortDateString())
+				.WithRole(AvailableDataRangeOption.Everyone, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+			var user = Persons.Load(userId);
 			var agent = Persons.Load(agentId);
+			LogOnOff.LogOn(tenant, user, Database.CurrentBusinessUnitId());
 
-			LogOnOff.LogOn("tenant", me, Database.CurrentBusinessUnitId());
-
-			var permittedPeriods = Authorization.PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, period, agent).ToList();
-			permittedPeriods.Count().Should().Be.EqualTo(1);
-			permittedPeriods.First().Should().Be.EqualTo(period);
+			var permittedPeriod = Authorization.PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, period, agent).Single();
+			
+			permittedPeriod.Should().Be.EqualTo(period);
 		}
 	}
 }

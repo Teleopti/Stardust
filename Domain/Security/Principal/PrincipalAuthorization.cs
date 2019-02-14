@@ -139,8 +139,13 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
 		{
-			var owningPersonPeriods = _claimsOwner?.Organisation?.Periods().Select(x => new DateOnlyPeriod(x.StartDate, x.EndDate))
-									  ?? new DateOnlyPeriod[0];
+			var authOnEveryone = _claimsOwner?.ClaimSets.Any(x => x.Any(y => y.Resource is AuthorizeEveryone));
+
+			IEnumerable<DateOnlyPeriod> owningPersonPeriods = new DateOnlyPeriod[0];
+
+			if(authOnEveryone != null && !authOnEveryone.Value)
+				owningPersonPeriods = _claimsOwner?.Organisation?.Periods().Select(x => new DateOnlyPeriod(x.StartDate, x.EndDate)) ?? new DateOnlyPeriod[0];
+
 			owningPersonPeriods = owningPersonPeriods.Where(p => p.StartDate <= period.EndDate);
 
 			var checkPersonPeriods = person.PersonPeriods(period);
