@@ -154,6 +154,21 @@
 		border-radius: 15px;
 		display: block;
 	}
+	.warning-info, .warning-danger {
+		height: 20px;
+		width: 20px;
+		border-radius: 15px;
+		display: block;
+	}
+	.warning-info {
+		color: #FFFFFF;
+	}
+	.warning-danger {
+		color: #FF0000;
+	}
+	.warning-info, .warning-danger i {
+		transform: scale(1.3);
+	}
 	.phone-warning-indicator {
 		position: relative;
 	}

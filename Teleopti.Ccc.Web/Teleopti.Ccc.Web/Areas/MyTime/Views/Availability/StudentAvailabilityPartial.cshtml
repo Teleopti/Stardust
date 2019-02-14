@@ -36,8 +36,16 @@ Layout = null;
 			</li>
 		</ul>
 		<div class="warning-indicator" data-bind="click: toggleWarningDetail, style:{'display': IsHostAMobile ? 'flex' : 'none'}">
-			<span data-bind="css: StudentAvailabilityFeedbackClass,text:WarningCount"
-				  class="warning-count"></span>
+			<!-- ko if: AlertDanger -->
+			<span class="warning-danger">
+				<i class="glyphicon glyphicon-exclamation-sign"></i>
+			</span>
+			<!-- /ko -->
+			<!--  ko ifnot: AlertDanger -->
+			<span class="warning-info">
+				<i class="glyphicon glyphicon-ok-sign"></i>
+			</span>
+			<!-- /ko -->
 		</div>
 		<!--ko if:isInitFinished-->
 		<div id="init-flag"></div>

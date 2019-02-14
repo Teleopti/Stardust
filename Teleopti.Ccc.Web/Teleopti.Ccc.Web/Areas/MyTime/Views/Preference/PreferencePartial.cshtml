@@ -37,8 +37,8 @@
 					}
 					else
 					{
-						<li class="dropdown preference-split-button col-xs-12 col-sm-4 w-30" 
-						data-mytime-preference-option="[@{
+						<li class="dropdown preference-split-button col-xs-12 col-sm-4 w-30"
+							data-mytime-preference-option="[@{
 														var oIdx = 0;
 														foreach (var optionGroup in Model.Options.PreferenceOptions)
 														{
@@ -110,9 +110,20 @@
 				</ul>
 			</li>
 		</ul>
-		<div class="warning-indicator" data-bind="click: toggleWarningDetail, style:{'display': IsHostAMobile ? 'flex' : 'none'}">
-			<span data-bind="css: PreferenceFeedbackClass, text:WarningCount" class="warning-count"></span>
+		
+		<div class="warning-indicator" data-bind="click: toggleWarningDetail,style: {'display': IsHostAMobile ? 'flex' : 'none'}">
+			<!-- ko if: AlertDanger -->
+			<span class="warning-danger">
+				<i class="glyphicon glyphicon-exclamation-sign"></i>
+		    </span>
+			<!-- /ko -->
+			<!--  ko ifnot: AlertDanger -->
+			<span class="warning-info">
+				<i class="glyphicon glyphicon-ok-sign"></i>
+			</span>
+			<!-- /ko -->
 		</div>
+		
 	</div>
 </div>
 

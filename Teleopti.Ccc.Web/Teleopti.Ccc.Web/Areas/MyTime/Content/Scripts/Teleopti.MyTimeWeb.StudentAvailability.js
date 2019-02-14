@@ -138,26 +138,31 @@ Teleopti.MyTimeWeb.StudentAvailability = (function($) {
 			periodData.Date
 		);
 
-		if (isHostAMobile) {
-			function AlertViewModel(feedbackViewModel) {
-				var self = this;
-				self.StudentAvailabilityFeedbackClass = ko.computed(function () {
-					return feedbackViewModel.StudentAvailabilityFeedbackClass();
-				});
+		
+		function AlertViewModel(feedbackViewModel) {
+			var self = this;
+			self.StudentAvailabilityFeedbackClass = ko.computed(function () {
+				return feedbackViewModel.StudentAvailabilityFeedbackClass();
+			});   
 
-				self.WarningCount = ko.computed(function () {
-					return feedbackViewModel.WarningCount();
-				});
+			self.WarningCount = ko.computed(function () {
+				return feedbackViewModel.WarningCount();
+			});
 
-				self.toggleWarningDetail = function () {
-					feedbackViewModel.toggleWarningDetail();
-				};
-				self.IsHostAMobile = true;
-			}
+			self.toggleWarningDetail = function () {
+				feedbackViewModel.toggleWarningDetail();
+			};
 
-			var alertViewModelBinding = new AlertViewModel(periodFeedbackVM);
-			ko.applyBindings(alertViewModelBinding, $('.warning-indicator')[0]);
+			self.AlertDanger= ko.computed(function () {
+				return feedbackViewModel.StudentAvailabilityFeedbackClass() == 'alert-danger' ? true : false;
+			});
+
+			self.IsHostAMobile = feedbackViewModel.IsHostAMobile();
 		}
+
+		var alertViewModelBinding = new AlertViewModel(periodFeedbackVM);
+		ko.applyBindings(alertViewModelBinding, $('.warning-indicator')[0]);
+		
 
 		periodFeedbackVM.LoadFeedback(completelyLoaded);
 
