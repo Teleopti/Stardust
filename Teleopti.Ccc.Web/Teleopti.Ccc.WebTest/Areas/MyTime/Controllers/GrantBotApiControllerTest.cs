@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				fakeLoggedOnUser);
 
 			var result = await target.GetGrantBotConfig();
-			result.Timestamp.Should().Be(now.Ticks);
+			result.Timestamp.Should().Be(now.Ticks.ToString());
 			result.Signature.Should().Be(
 				"sD5jNVCGUqbvsmABXkjvwC3raRKCUVYT0Q5HeoV5Kv6w3sYYwi8CZAi1qxbtVInw366vIGUdFg653mCJufK0yTmdxXhqBcrRV9EiGtOzhnmo8dadDTVMnb6VH7TwjhmSv7B2E+qjA7Vv0HdGmc5lFoSlJgn5WP6QWNdt+p4epDTGVxBgZvTGqg58MEioOr3JlKMFPrAqcYHDtFrHYtNnNio52wXKq+11UeHJQ8HIgSfTU51bOYGgIZdJmIR5QJj2Y2PNzHctGrfRQTFL5h7OWW1m+km/k11tr10ZsxbOZwDGXSe9a5/a2KbaC4qaDnjHtUeE+pS8YaN95L7XFOegDw==");
 		}
