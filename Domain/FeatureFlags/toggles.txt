@@ -115,7 +115,6 @@ WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425 = RC
 ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646 = true
 WFM_AnalyticsForecastUpdater_80798 = true
 
-
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
 WFM_Gamification_Calculate_Badges_47250 = true
