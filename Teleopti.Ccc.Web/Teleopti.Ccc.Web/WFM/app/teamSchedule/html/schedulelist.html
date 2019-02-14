@@ -83,7 +83,7 @@
 							 'lighter-border': projection.UseLighterBorder,
 							 'unselectable': !projection.Selectable(),
 							 'same-type-as-last': projection.ShowDividedLine}"
-							 ng-click="vm.ToggleProjectionSelection(projection, vm.selectedDate)">
+							 ng-click="vm.ToggleProjectionSelection(projection, vm.selectedDate, $event)">
 							<md-tooltip class="multiline-tooltip">
 								<div>{{::projection.Description}}</div>
 								<div>{{::projection.TimeSpan}}</div>

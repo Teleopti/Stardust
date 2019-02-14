@@ -72,7 +72,10 @@
 			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
 		};
 
-		vm.ToggleProjectionSelection = function (currentProjection, viewDate) {
+		vm.ToggleProjectionSelection = function (currentProjection, viewDate, $event) {
+			if ($event) {
+				$event.stopPropagation();
+			}
 			if (!currentProjection.Selectable()) return;
 			currentProjection.ToggleSelection();
 			personSelectionSvc.updatePersonProjectionSelection(currentProjection, viewDate);
