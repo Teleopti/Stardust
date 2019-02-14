@@ -283,6 +283,9 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
+    <Compile Include="MonitorSystemTest\CheckLegacySystemStatusTest.cs" />
+    <Compile Include="MonitorSystemTest\FakeCallLegacySystemStatus.cs" />
+    <Compile Include="MonitorSystemTest\MonitorTestAttribute.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\NotificationServiceClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />

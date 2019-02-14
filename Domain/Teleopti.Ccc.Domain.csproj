@@ -244,6 +244,9 @@
     <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
+    <Compile Include="MonitorSystem\CallLegacySystemStatus.cs" />
+    <Compile Include="MonitorSystem\CheckLegacySystemStatus.cs" />
+    <Compile Include="MonitorSystem\ICallLegacySystemStatus.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />

@@ -437,6 +437,7 @@
     <Compile Include="Core\IRunWithUnitOfWork.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />
     <Compile Include="Core\RtaStateGroupCreator.cs" />
+    <Compile Include="Monitoring\MonitorController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />
