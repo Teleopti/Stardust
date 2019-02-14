@@ -7,38 +7,7 @@ using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	public class FetchNodeConfigurationToggleOff
-	{
-		public NodeConfiguration GetNodeConfiguration(int port, string nodeName, string fixedNodeIp,
-			Uri managerLocation, Assembly handlerAssembly, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds,
-			bool enableGC)
-		{
-			if (string.IsNullOrEmpty(fixedNodeIp))
-			{
-				return new NodeConfiguration(
-					managerLocation,
-					handlerAssembly,
-					port,
-					nodeName,
-					pingToManagerSeconds,
-					sendDetailsToManagerMilliSeconds, enableGC
-				);
-			}
-
-			return new NodeConfiguration(
-				managerLocation,
-				handlerAssembly,
-				port,
-				nodeName,
-				pingToManagerSeconds,
-				sendDetailsToManagerMilliSeconds,
-				IPAddress.Parse(fixedNodeIp), enableGC
-			);
-
-		}
-	}
-
-	public class FetchNodeConfigurationToggleOn
+	public class FetchNodeConfiguration
 	{
 		public NodeConfiguration GetNodeConfiguration(int port, string nodeName, string fixedNodeIp,
 			Uri managerLocation, Assembly handlerAssembly, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds,

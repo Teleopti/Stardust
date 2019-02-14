@@ -110,7 +110,6 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		WFM_Insights_80704,
 
 		Wfm_Payroll_SupportMultiDllPayrolls_75959,
-		Wfm_Stardust_EnableScaleout_77366,
 		Wfm_AuditTrail_StaffingAuditTrail_78125,
 		Wfm_AuditTrail_GenericAuditTrail_74938,
 		WFM_Connect_NewLandingPage_Remove_GDPR_78132,
