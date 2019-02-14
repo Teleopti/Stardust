@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		{
 			Now.Is(new DateTime(2018,06,04));
 			var uow = TenantUnitOfWork as TenantUnitOfWorkManager;
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (uow.EnsureUnitOfWorkIsStarted())
 			{
 				var session = uow.CurrentSession();
@@ -66,7 +66,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			
 			Now.Is(new DateTime(2018, 06, 04));
 			var uow = TenantUnitOfWork as TenantUnitOfWorkManager;
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (uow.EnsureUnitOfWorkIsStarted())
 			{
 				var session = uow.CurrentSession();

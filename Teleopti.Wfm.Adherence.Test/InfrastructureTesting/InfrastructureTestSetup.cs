@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -15,17 +16,6 @@ using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
-	public class NoMessageSender : IMessageSender
-	{
-		public void Send(Message message)
-		{
-		}
-
-		public void SendMultiple(IEnumerable<Message> messages)
-		{
-		}
-	}
-
 	public class InfrastructureTestSetup
 	{
 		internal static IDataSource DataSource;
@@ -67,13 +57,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 
 		private static int createDatabase()
 		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
-			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
-			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
-			var container = builder.Build();
-
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeFromContainer(container));
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource();
 
 			const int someHash = 7545;
 			DataSourceHelper.BackupApplicationDatabase(someHash);

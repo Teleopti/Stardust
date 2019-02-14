@@ -55,7 +55,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfTenantExists()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
@@ -76,7 +76,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfWrongCredentials()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 
 
 			var model = new CreateTenantModel { Tenant = "New Tenant",CreateDbUser = "dummy", CreateDbPassword = "dummy"};
@@ -88,7 +88,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfNotDbCreator()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
@@ -104,7 +104,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueCreatedDb()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			TestPollutionCleaner.Clean("New Tenant", "new TenantAppUser");
 
 			var result = Target.CreateDatabases(new CreateTenantModelForTest

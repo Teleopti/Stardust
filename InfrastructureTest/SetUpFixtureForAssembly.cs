@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeFromContainer(container));
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeFromContainer(container));
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 

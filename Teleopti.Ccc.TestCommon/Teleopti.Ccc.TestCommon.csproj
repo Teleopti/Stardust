@@ -177,6 +177,7 @@
     <Compile Include="ConcurrencyRunner.cs" />
     <Compile Include="CountCallsToNightRestWhiteSpotSolverServiceFactory.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="DataSourceFactoryFactory.cs" />
     <Compile Include="FakeAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="FakeApplicationInsights.cs" />
     <Compile Include="FakeApplicationInsightsConfigReader.cs" />

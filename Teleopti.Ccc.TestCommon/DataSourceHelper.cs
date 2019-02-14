@@ -8,14 +8,15 @@ using NHibernate.Dialect;
 using NUnit.Framework;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Messaging.Client;
 using Teleopti.Support.Library;
-using Teleopti.Wfm.Adherence.States;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.TestCommon
@@ -24,62 +25,29 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public const string TestTenantName = "TestData";
 
-		public static DataSourceFactoryFactory MakeFromContainer(IComponentContext container)
+		public static IDataSource CreateDatabasesAndDataSource(IComponentContext container, string name = TestTenantName) => 
+			CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeFromContainer(container), name);
+
+		public static IDataSource CreateDatabasesAndDataSource(DataSourceFactoryFactory factory, string name = TestTenantName) =>
+			CreateDatabasesAndDataSource(factory.Make(), name);
+
+		public static IDataSource CreateDatabasesAndDataSource(string name = TestTenantName)
 		{
-			return new DataSourceFactoryFactory(container.Resolve<IDataSourcesFactory>);
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
+			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
+			var container = builder.Build();
+			return CreateDatabasesAndDataSource(container.Resolve<IDataSourcesFactory>(), name);
 		}
 
-		public static DataSourceFactoryFactory MakeLegacyWay(EnversConfiguration enversConfiguration = null)
-		{
-			return new DataSourceFactoryFactory(() =>
-			{
-				var mappingAssemblies = new[] {new DataSourceMappingAssembly {Assembly = typeof(Person).Assembly}, new DataSourceMappingAssembly {Assembly = typeof(Rta).Assembly}};
-				enversConfiguration = enversConfiguration ?? new EnversConfiguration();
-				return new DataSourcesFactory(
-					enversConfiguration,
-					new DataSourceConfigurationSetter(
-						new DataSourceApplicationName {Name = DataSourceApplicationName.ForTest()},
-						new ConfigReader(),
-						mappingAssemblies),
-					new MemoryNHibernateConfigurationCache(),
-					new UnitOfWorkFactoryFactory(
-						new NoPreCommitHooks(),
-						null,
-						new CurrentHttpContext(),
-						ServiceLocator_DONTUSE.UpdatedBy,
-						ServiceLocator_DONTUSE.CurrentBusinessUnit,
-						new SirLeakAlot()),
-					ServiceLocator_DONTUSE.UpdatedBy);
-			});
-		}
-
-		public class DataSourceFactoryFactory
-		{
-			private readonly Func<IDataSourcesFactory> _maker;
-
-			public DataSourceFactoryFactory(Func<IDataSourcesFactory> maker)
-			{
-				_maker = maker;
-			}
-
-			public IDataSourcesFactory Make()
-			{
-				return _maker.Invoke();
-			}
-		}
-
-		public static IDataSource CreateDatabasesAndDataSource(IComponentContext container, string name = TestTenantName)
-		{
-			return CreateDatabasesAndDataSource(MakeFromContainer(container), name);
-		}
-
-		public static IDataSource CreateDatabasesAndDataSource(DataSourceFactoryFactory factory, string name = TestTenantName)
+		public static IDataSource CreateDatabasesAndDataSource(IDataSourcesFactory factory, string name = TestTenantName)
 		{
 			using (testDirectoryFix())
 				CreateDatabases(name);
 			return makeDataSource(factory, name);
 		}
-
+		
 		public static void CreateDatabases(string name = TestTenantName)
 		{
 			createOrRestoreApplication(name);
@@ -88,18 +56,18 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public static IDataSource CreateDataSource(IComponentContext container) =>
-			CreateDataSource(MakeFromContainer(container));
+			CreateDataSource(DataSourceFactoryFactory.MakeFromContainer(container));
 
-		public static IDataSource CreateDataSource(DataSourceFactoryFactory factory)
-		{
-			return makeDataSource(factory, TestTenantName);
-		}
+		public static IDataSource CreateDataSource(DataSourceFactoryFactory factory) =>
+			CreateDataSource(factory.Make());
 
-		private static IDataSource makeDataSource(DataSourceFactoryFactory factory, string name)
+		public static IDataSource CreateDataSource(IDataSourcesFactory factory) =>
+			makeDataSource(factory, TestTenantName);
+		
+		private static IDataSource makeDataSource(IDataSourcesFactory factory, string name)
 		{
-			var dataSourceFactory = factory.Make();
 			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ConnectionString, null, name);
-			return dataSourceFactory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
+			return factory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
 		}
 
 
@@ -287,4 +255,5 @@ namespace Teleopti.Ccc.TestCommon
 			database.ConfigureSystem().TryAddTenantAdminUser();
 		}
 	}
+
 }

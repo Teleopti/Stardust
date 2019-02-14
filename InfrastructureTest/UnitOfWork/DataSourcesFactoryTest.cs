@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[SetUp]
 		public void Setup()
 		{
-			target = DataSourceHelper.MakeLegacyWay().Make();
+			target = DataSourceFactoryFactory.MakeLegacyWay().Make();
 		}
 
 		[Test]

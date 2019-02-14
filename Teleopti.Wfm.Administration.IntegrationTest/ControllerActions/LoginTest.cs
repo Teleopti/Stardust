@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfWrongEmail()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfWrongPassword()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -56,7 +56,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueWhenCorrectLogon()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -81,7 +81,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 				new AdminAccessTokenRepository(new BCryptHashFunction(), new Now()));
 			hangfireCookie.CookieIsSet.Should().Be.False();
 
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -105,7 +105,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 				new AdminAccessTokenRepository(new BCryptHashFunction(), new Now()));
 			hangfireCookie.CookieIsSet.Should().Be.False();
 
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -138,7 +138,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnAccessTokenAfterSuccessfulLogon()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };

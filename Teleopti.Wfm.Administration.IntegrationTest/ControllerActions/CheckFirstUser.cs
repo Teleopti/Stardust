@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfUserExists()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var tenant = new Tenant("Tenn");
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
@@ -56,7 +56,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueIfUserNotExists()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var tenant = new Tenant("Tenn");
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())

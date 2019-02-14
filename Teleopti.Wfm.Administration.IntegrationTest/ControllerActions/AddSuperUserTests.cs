@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseWhenNoTenantInDb()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var result = Target.AddSystemUserToTenant(new AddSuperUserToTenantModel {Tenant = "tenantThatNotExists", UserName = "userName", Password = "PassaDej0"});
 			result.Content.Success.Should().Be.False();
 			//if this happen we do it wrong in the javascript
@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueWhenUsernameAndPasswordProvided()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var result =
 				Target.AddSystemUserToTenant(new AddSuperUserToTenantModel
 				{
@@ -59,7 +59,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseWhenFirstNameMissing()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var result =
 				Target.AddSystemUserToTenant(new AddSuperUserToTenantModel
 				{
@@ -75,7 +75,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseWhenLastNameMissing()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var result =
 				Target.AddSystemUserToTenant(new AddSuperUserToTenantModel
 				{

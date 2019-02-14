@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldActivateAllTenantsWhenFirstUserIsAdded()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One") {Active = false};
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldNotActivateAllTenantsWhenFirstUserIsAddedWithNonMatchingPasswords()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One") { Active = false };
