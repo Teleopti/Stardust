@@ -1,5 +1,5 @@
 .schedule-list {
-	min-width: 680px;
+	min-width: 700px;
 
 	md-checkbox {
 		margin-top: 0px;
@@ -16,8 +16,8 @@
 	.list-header {
 		display: grid;
 		display: -ms-grid;
-		grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
-		-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
+		grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(100px, 10%);
+		-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(100px, 10%);
 		height: 40px;
 
 		.time-line {
@@ -103,6 +103,7 @@
 			padding: 5px;
 			font-weight: 400;
 			text-align: center;
+			white-space: nowrap;
 		}
 
 		& > div.schedule-tool-column {
@@ -126,8 +127,8 @@
 			width: 100%;
 			display: grid;
 			display: -ms-grid;
-			grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
-			-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(80px, 10%);
+			grid-template-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(100px, 10%);
+			-ms-grid-columns: minmax(150px, 25%) minmax(30px, 2%) minmax(360px, 59%) repeat(2, minmax(30px, 2%)) minmax(100px, 10%);
 
 			&:not(.shift-editor-row):hover,
 			&.in-editing {
