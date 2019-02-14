@@ -1,20 +1,19 @@
-using System.Net;
 using Teleopti.Ccc.Domain.MonitorSystem;
 
 namespace Teleopti.Ccc.DomainTest.MonitorSystemTest
 {
 	public class FakeCallLegacySystemStatus : ICallLegacySystemStatus
 	{
-		private HttpStatusCode _code = HttpStatusCode.OK;
+		private bool _returnValue = true;
 		
-		public void SetReturnValue(HttpStatusCode code)
+		public void WillFail()
 		{
-			_code = code;
+			_returnValue = false;
 		}
 		
-		public HttpStatusCode Execute()
+		public bool Execute()
 		{
-			return _code;
+			return _returnValue;
 		}
 	}
 }

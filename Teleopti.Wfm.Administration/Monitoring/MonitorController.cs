@@ -15,8 +15,7 @@ namespace Teleopti.Wfm.Administration.Monitoring
 		[HttpGet]
 		public IHttpActionResult Check()
 		{
-			_checkLegacySystemStatus.Execute();
-			return Ok();
+			return Ok(_checkLegacySystemStatus.Execute());
 		}
 	}
 }

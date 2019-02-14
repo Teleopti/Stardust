@@ -1,5 +1,4 @@
 using System.Configuration;
-using System.Net;
 using System.Net.Http;
 
 namespace Teleopti.Ccc.Domain.MonitorSystem
@@ -9,9 +8,9 @@ namespace Teleopti.Ccc.Domain.MonitorSystem
 		private static readonly HttpClient client = new HttpClient();
 		private static readonly string url = ConfigurationManager.AppSettings["SystemStatus"];
 		
-		public HttpStatusCode Execute()
+		public bool Execute()
 		{
-			return client.GetAsync(url).Result.StatusCode;
+			return client.GetAsync(url).Result.IsSuccessStatusCode;
 		}
 	}
 }
