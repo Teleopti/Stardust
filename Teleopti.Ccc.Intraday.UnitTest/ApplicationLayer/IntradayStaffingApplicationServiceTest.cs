@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -15,17 +14,19 @@ using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Intraday.UnitTests;
+using Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
-namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
+namespace Teleopti.Ccc.Intraday.UnitTest.ApplicationLayer
 {
 	[DomainTest]
-	public abstract class IntradayStaffingApplicationServiceBaseTest : IIsolateSystem, IExtendSystem
+	[DisabledBy(Toggles.WFM_Forecast_Readmodel_80790)]
+	public class IntradayStaffingApplicationServiceTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
@@ -1468,16 +1469,4 @@ namespace Teleopti.Ccc.Intraday.UnitTests.ApplicationLayer
 			extend.AddService<IntradayStaffingApplicationServiceTestHelper>();
 		}
 	}
-
-	[EnabledBy(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
-	public class IntradayStaffingApplicationServiceToggleOnTest : IntradayStaffingApplicationServiceBaseTest
-	{
-
-	}
-
-	//[DisabledBy(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
-	//public class IntradayStaffingApplicationServiceToggleOffTest : IntradayStaffingApplicationServiceBaseTest
-	//{
-
-	//}
 }
