@@ -8,12 +8,12 @@ namespace Teleopti.Wfm.Adherence
 		public static IEnumerable<OpenPeriod> Subtract(IEnumerable<OpenPeriod> periods, IEnumerable<OpenPeriod> toSubtract)
 		{
 			return toSubtract
-				.Aggregate(periods, (ps, approved) =>
+				.Aggregate(periods, (ps, toBeSubtracted) =>
 					{
 						return ps.Aggregate(Enumerable.Empty<OpenPeriod>(), (r, recorded) =>
 							{
-								var subtracted = subtract(recorded, approved);
-								return r.Concat(subtracted);
+								var remainder = subtract(recorded, toBeSubtracted);
+								return r.Concat(remainder);
 							}
 						);
 					}
@@ -24,36 +24,20 @@ namespace Teleopti.Wfm.Adherence
 		{
 			var timePeriods = new List<OpenPeriod>();
 
-			if (notIntersecting(subtractFrom, toSubtract))
-				timePeriods.Add(subtractFrom);
+			if (subtractFrom.Intersects(toSubtract))
+			{
+				if (subtractFrom.StartsBefore(toSubtract))
+					timePeriods.Add(new OpenPeriod(subtractFrom.StartTime, toSubtract.StartTime));
+
+				if (subtractFrom.EndsAfter(toSubtract))
+					timePeriods.Add(new OpenPeriod(toSubtract.EndTime, subtractFrom.EndTime));
+			}
 			else
 			{
-				if (subtractFrom.StartTime == null || subtractFrom.StartTime < toSubtract.StartTime)
-				{
-					var leftTimePeriod = new OpenPeriod(subtractFrom.StartTime, toSubtract.StartTime);
-					timePeriods.Add(leftTimePeriod);
-
-					if (subtractFrom.EndTime == null || subtractFrom.EndTime > toSubtract.EndTime)
-					{
-						var rightTimePeriod = new OpenPeriod(toSubtract.EndTime, subtractFrom.EndTime);
-						timePeriods.Add(rightTimePeriod);
-					}
-				}
-				else if (subtractFrom.EndTime == null || subtractFrom.EndTime > toSubtract.EndTime)
-				{
-					var rightTimePeriod = new OpenPeriod(toSubtract.EndTime, subtractFrom.EndTime);
-					timePeriods.Add(rightTimePeriod);
-				}
+				timePeriods.Add(subtractFrom);
 			}
 
 			return timePeriods;
-		}
-
-		private static bool notIntersecting(OpenPeriod firstPeriod, OpenPeriod secondPeriod)
-		{
-			var startsAfterLastPeriodEnds = firstPeriod.StartTime > secondPeriod.EndTime;
-			var endsBeforeLastPeriodStarts = firstPeriod.EndTime < secondPeriod.StartTime;
-			return startsAfterLastPeriodEnds || endsBeforeLastPeriodStarts;
 		}
 	}
 }

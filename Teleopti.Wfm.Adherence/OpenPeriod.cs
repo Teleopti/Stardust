@@ -17,6 +17,27 @@ namespace Teleopti.Wfm.Adherence
 			EndTime = endTime;
 		}
 
+		public bool Intersects(OpenPeriod period)
+		{
+			var startsAfterPeriodEnds = StartTime > period.EndTime;
+			var endsBeforePeriodStarts = EndTime < period.StartTime;
+			return !(startsAfterPeriodEnds || endsBeforePeriodStarts); 
+		}
+
+		public bool StartsBefore(OpenPeriod period)
+		{
+			if (StartTime == null && period.StartTime != null)
+				return true;
+			return StartTime < period.StartTime;
+		}
+
+		public bool EndsAfter(OpenPeriod period)
+		{
+			if (EndTime == null && period.EndTime != null)
+				return true;			
+			return EndTime > period.EndTime;
+		}
+
 		protected bool Equals(OpenPeriod other)
 		{
 			return StartTime.Equals(other.StartTime) && EndTime.Equals(other.EndTime);
