@@ -10,7 +10,7 @@ import {
 	NzSpinModule,
 	NzCollapseModule, NzBadgeModule, NzToolTipModule, NzSwitchModule
 } from 'ng-zorro-antd';
-import { of } from 'rxjs';
+import {of} from 'rxjs';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NavigationService } from 'src/app/core/services';
 import {PlanningGroupService, PlanningPeriodService} from '../../shared';
@@ -19,6 +19,8 @@ import { PlanningPeriodOverviewComponent } from './planning-period-overview.comp
 import {DateFormatPipe, MomentModule} from "ngx-moment";
 import {IStateService} from "angular-ui-router";
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
+import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroup(groupId: string) {
@@ -32,7 +34,7 @@ class MockPlanningGroupService implements Partial<PlanningGroupService> {
 
 class MockPlanningPeriodService implements Partial<PlanningPeriodService> {
 
-	getPlanningPeriodInfo(planningPeriodId: string){
+	public getPlanningPeriodInfo(planningPeriodId: string){
 		return of({
 			"Id":planningPeriodId,
 			"StartDate":"2018-05-28T00:00:00",
@@ -60,7 +62,7 @@ class MockPlanningPeriodService implements Partial<PlanningPeriodService> {
 		});
 	}
 	
-	lastJobResult() {
+	public lastJobResult() {
 		return of({
 			FullSchedulingResult:{
 				SkillResultList:[
@@ -108,6 +110,7 @@ describe('Planning Period Overview', () => {
 	let component: PlanningPeriodOverviewComponent;
 	let fixture: ComponentFixture<PlanningPeriodOverviewComponent>;
 	let page: PlanningPeriodOverviewPage;
+	let planningPeriodActionService: PlanningPeriodActionService;
 
 	configureTestSuite();
 
@@ -128,10 +131,12 @@ describe('Planning Period Overview', () => {
 				NzToolTipModule,
 				MomentModule,
 				NzSwitchModule,
-				FormsModule
+				FormsModule,
+				HttpClientTestingModule
 			], 
 			providers: [
 				{ provide: PlanningGroupService, useClass: MockPlanningGroupService },
+				PlanningPeriodActionService,
 				{ provide: PlanningPeriodService, useClass: MockPlanningPeriodService },
 				{ provide: HeatMapColorHelper, useClass: HeatMapColorHelper },
 				{ provide: DateFormatPipe, useClass: DateFormatPipe },
@@ -142,6 +147,8 @@ describe('Planning Period Overview', () => {
 				{ provide: NavigationService, useValue: {} }
 			]
 		}).compileComponents();
+
+		planningPeriodActionService = TestBed.get(PlanningPeriodActionService);
 	}));
 
 	beforeEach(() => {
@@ -155,7 +162,16 @@ describe('Planning Period Overview', () => {
 		expect(component).toBeTruthy();
 	});
 
+	it('should launch schedule', () =>{
+		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'launchScheduling').and.returnValue(of());
+		
+		component.launchSchedule();
+		expect(spyPlanningPeriodActionService.calls.argsFor(0)[0]).toEqual('a557210b-99cc-4128-8ae0-138d812974b6');
+		expect(component.isDisabled()).toEqual(true);
+	});
 });
+
+
 
 
 class PlanningPeriodOverviewPage extends PageObject {

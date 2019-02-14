@@ -2428,6 +2428,7 @@
     <Content Include="WFM\src\app\plans\shared\heatmapcolor.service.ts" />
     <Content Include="WFM\src\app\plans\shared\index.ts" />
     <Content Include="WFM\src\app\plans\shared\planninggroup.service.ts" />
+    <Content Include="WFM\src\app\plans\shared\planningperiod.action.service.ts" />
     <Content Include="WFM\src\app\plans\shared\planningperiod.service.ts" />
     <Content Include="WFM\src\app\reports\mocks\audit-trail.ts" />
     <Content Include="WFM\src\app\reports\mocks\index.ts" />

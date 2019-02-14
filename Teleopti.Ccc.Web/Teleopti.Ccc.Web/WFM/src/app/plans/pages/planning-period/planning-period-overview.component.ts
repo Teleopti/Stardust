@@ -8,6 +8,7 @@ import {debounce, groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators'
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {DateFormatPipe} from "ngx-moment";
 import {from, timer} from "rxjs";
+import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -56,6 +57,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private planningPeriodService: PlanningPeriodService,
+		private planningPeriodActionService: PlanningPeriodActionService,
 		private planningGroupService: PlanningGroupService,
 		@Inject('$state') private $state: IStateService,
 		private translate: TranslateService,
@@ -196,7 +198,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	public launchSchedule() {
 		this.runScheduling = true;
 		this.status = this.translate.instant('PresentTenseSchedule');
-		this.planningPeriodService.launchScheduling(this.ppId).subscribe(() => {
+		this.planningPeriodActionService.launchScheduling(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
@@ -204,7 +206,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	public optimizeIntraday() {
 		this.runIntraday = true;
 		this.status = this.translate.instant('IntraOptimize');
-		this.planningPeriodService.optimizeIntraday(this.ppId).subscribe(() => {
+		this.planningPeriodActionService.optimizeIntraday(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
@@ -212,14 +214,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	public clearSchedule() {
 		this.runClear = true;
 		this.status = this.translate.instant('ClearScheduleResultAndHistoryData');
-		this.planningPeriodService.clearSchedule(this.ppId).subscribe(() => {
+		this.planningPeriodActionService.clearSchedule(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
 
 	public publishSchedule() {
 		this.runPublish = true;
-		this.planningPeriodService.publishSchedule(this.ppId).subscribe(() => {
+		this.planningPeriodActionService.publishSchedule(this.ppId).subscribe(() => {
 			this.runPublish = false;
 		});
 	}
@@ -229,9 +231,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	public isDisabled() {
-		if (this.runScheduling || this.runClear || this.runIntraday || this.runPublish) {
-			return true;
-		}
+		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;
+		
 	}
 
 	private checkProgress = () => {
