@@ -43,6 +43,7 @@
 		$translate,
 		skillIconService,
 		$rootScope,
+		Toggle,
 		$timeout,
 		CurrentUserInfo
 	) {
@@ -283,7 +284,7 @@
 
 		function sortByName(arr) {
 			return arr.sort(function(r1, r2) {
-				return r1.Name.localeCompare(r2.Name);
+				return r1.Name.localeCompare(r2.Name, CurrentUserInfo.CurrentUserInfo().Language);
 			});
 		}
 
