@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 		}
 
-		[Test, SetCulture("en-US")]
+		[Test]
 		public void ShouldNotReturnAbsencePossibilitiesForDaysNotInAbsenceOpenPeriod()
 		{
 			setupSiteOpenHour();
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Count.Should().Be.EqualTo(0);
 		}
 
-		[Test, SetCulture("en-US")]
+		[Test]
 		public void ShouldReturnPossibilitiesForCurrentWeek()
 		{
 			setupSiteOpenHour();
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(0, result.Count(d => d.Date == dayCollection[2].ToFixedClientDateOnlyFormat()));
 		}
 
-		[Test, SetCulture("en-US")]
+		[Test]
 		public void ShouldReturnPossibilitiesForNextWeek()
 		{
 			setupSiteOpenHour();
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var timezone = User.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var dayInNextWeek = Now.UtcDateTime().ToDateOnly().AddWeeks(1);
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(dayInNextWeek.Date.AddHours(8),timezone), TimeZoneHelper.ConvertToUtc(dayInNextWeek.Date.AddHours(17),timezone));
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(dayInNextWeek.Date.AddHours(8), timezone), TimeZoneHelper.ConvertToUtc(dayInNextWeek.Date.AddHours(17), timezone));
 
 			createAssignment(User.CurrentUser(), period, activity);
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result[1].Date.Should().Be.EqualTo(dayInNextWeek.ToFixedClientDateOnlyFormat());
 		}
 
-		[Test, SetCulture("en-US")]
+		[Test]
 		public void ShouldNotReturnPossibilitiesForPastDays()
 		{
 			setupSiteOpenHour();
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Count.Should().Be.EqualTo(0);
 		}
 
-		[Test, SetCulture("en-US")]
+		[Test]
 		public void ShouldNotReturnPossibilitiesForFarFutureDays()
 		{
 			setupSiteOpenHour();
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Count.Should().Be.EqualTo(2);
 		}
 
-		[Test, SetCulture("en-US")]
+		[Test]
 		public void ShouldGetPossibilitiesAccordingToAgentTimeZone()
 		{
 			var timeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
@@ -516,6 +516,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
 			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		public void ShouldNotRoundStaffingDataForAbsenceProbability()
+		{
+			var underStaffedSkill = createSkill("skill understaffed");
+			underStaffedSkill.StaffingThresholds =
+				new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0.1));
+
+			setupTestData(new double?[] { 1.03, 1.03 }, new double?[] { 1, 1 });
+
+			setupWorkFlowControlSet();
+
+			var possibilities =
+				getPossibilityViewModels(null, StaffingPossiblityType.Absence, false).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
 		}
 
 		private void setupWorkFlowControlSet()
