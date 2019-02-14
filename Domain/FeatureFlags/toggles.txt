@@ -99,7 +99,6 @@ Wfm_AuditTrail_StaffingAuditTrail_78125 = true
 Wfm_AuditTrail_GenericAuditTrail_74938 = true
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
 WFM_ProbabilityView_ImproveResponseTime_80040 = true
-WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = true
 WFM_Intraday_OptimizeSkillDayLoad_80153 = true
 WFM_AbsenceRequest_Robust_Processing_79988= true
 WFM_Forecast_Readmodel_80790 = RC
