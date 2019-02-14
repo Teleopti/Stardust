@@ -567,6 +567,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 			if (found && this.selectedSubSkillId === 'all') return true;
 			else {
 				const s = this.selectedSkillOrGroup.Skills.find(x => x.Id === this.selectedSubSkillId);
+				if (!s) return false;
 				return s.SkillType === 'SkillTypeEmail' || s.SkillType === 'SkillTypeBackoffice';
 			}
 		} else {
