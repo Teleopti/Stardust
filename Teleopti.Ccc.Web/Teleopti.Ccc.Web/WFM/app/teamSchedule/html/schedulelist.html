@@ -18,7 +18,7 @@
 		<div class="schedule-tool-column schedule-note-column"></div>
 		<div class="contract-time-column">{{ 'ContractTime' | translate }}</div>
 	</div>
-	<div class="list-group" ng-style="::vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
+	<div class="list-group" ng-style="vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
 
 		<div class="list-item" ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
 			 ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"

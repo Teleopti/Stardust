@@ -20,7 +20,7 @@
 			<th class="contract-time-column">{{ 'ContractTime' | translate }}</th>
 		</tr>
 	</thead>
-	<tbody ng-style="::vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
+	<tbody ng-style="vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
 		<tr ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
 			ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
 			ng-click="vm.togglePerson(personSchedule, $event)">

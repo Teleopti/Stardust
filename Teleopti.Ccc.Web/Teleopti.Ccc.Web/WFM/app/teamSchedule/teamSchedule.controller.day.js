@@ -90,7 +90,8 @@
 		}
 
 		function getTotalTableRowHeight() {
-			var rows = $document[0].querySelectorAll('.big-table-wrapper table tr');
+			var rowsSelector = vm.useScheuleList ? '.big-table-wrapper .list-group .list-item' : '.big-table-wrapper table tr';
+			var rows = $document[0].querySelectorAll(rowsSelector);
 			var sum = 0;
 			angular.forEach(rows,
 				function (r) {
@@ -104,7 +105,8 @@
 			if (!container) return;
 			var viewHeader = $document[0].querySelector('.view-header');
 			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
-			var tHeader = $document[0].querySelector('.teamschedule-body .big-table-wrapper table thead');
+			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper .schedule-table-header';
+			var tHeader = $document[0].querySelector(tHeaderSelector);
 			var footer = $document[0].querySelector('.teamschedule-footer');
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 
@@ -215,7 +217,8 @@
 			var container = $document[0].querySelector('#materialcontainer');
 			var viewHeader = $document[0].querySelector('.view-header');
 			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
-			var tHeader = $document[0].querySelector('.teamschedule-body .big-table-wrapper table thead');
+			var tHeaderSelector = vm.useScheuleList ? '.big-table-wrapper .list-header' : '.big-table-wrapper .schedule-table-header';
+			var tHeader = $document[0].querySelector(tHeaderSelector);
 			var footer = $document[0].querySelector('.teamschedule-footer');
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
 			var tableHeight = d.height - footer.offsetHeight;
