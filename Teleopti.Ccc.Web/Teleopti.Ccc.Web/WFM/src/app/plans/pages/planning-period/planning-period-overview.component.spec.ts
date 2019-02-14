@@ -34,6 +34,18 @@ class MockPlanningGroupService implements Partial<PlanningGroupService> {
 
 class MockPlanningPeriodService implements Partial<PlanningPeriodService> {
 
+	jobStatus: any;
+	defaultLastJobStatus = {
+		"SchedulingStatus":{"HasJob":false},
+		"IntradayOptimizationStatus":{"HasJob":false},
+		"ClearScheduleStatus":{"HasJob":false}
+	};
+	
+	constructor(){
+		this.jobStatus = this.defaultLastJobStatus;
+	}
+	
+
 	public getPlanningPeriodInfo(planningPeriodId: string){
 		return of({
 			"Id":planningPeriodId,
@@ -55,11 +67,7 @@ class MockPlanningPeriodService implements Partial<PlanningPeriodService> {
 	}
 
 	public lastJobStatus(planningPeriodId: string) {
-		return of({
-			"SchedulingStatus":{"HasJob":false},
-			"IntradayOptimizationStatus":{"HasJob":false},
-			"ClearScheduleStatus":{"HasJob":false}
-		});
+		return of(this.jobStatus);
 	}
 	
 	public lastJobResult() {
@@ -106,11 +114,12 @@ const mockStateService: Partial<IStateService> = {
 	}
 };
 
-describe('Planning Period Overview', () => {
+fdescribe('Planning Period Overview', () => {
 	let component: PlanningPeriodOverviewComponent;
 	let fixture: ComponentFixture<PlanningPeriodOverviewComponent>;
 	let page: PlanningPeriodOverviewPage;
 	let planningPeriodActionService: PlanningPeriodActionService;
+	let planningPeriodService: MockPlanningPeriodService;
 
 	configureTestSuite();
 
@@ -149,13 +158,14 @@ describe('Planning Period Overview', () => {
 		}).compileComponents();
 
 		planningPeriodActionService = TestBed.get(PlanningPeriodActionService);
+		planningPeriodService = TestBed.get(PlanningPeriodService);
 	}));
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(PlanningPeriodOverviewComponent);
 		component = fixture.componentInstance;
 		page = new PlanningPeriodOverviewPage(fixture);
-		fixture.detectChanges();
+		
 	});
 
 	it('should create', () => {
@@ -163,6 +173,7 @@ describe('Planning Period Overview', () => {
 	});
 
 	it('should launch schedule', () =>{
+		fixture.detectChanges();
 		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'launchScheduling').and.returnValue(of());
 		
 		component.launchSchedule();
@@ -170,7 +181,57 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
 	});
 
+	it('should check progress and return schedule is running', function() {
+		component.runScheduling = true;
+		expect(component.isDisabled()).toEqual(true);
+		
+		planningPeriodService.jobStatus = {
+			SchedulingStatus: {
+				Failed: false,
+				HasJob: true,
+				Successful: false
+			}
+		};
+		fixture.detectChanges();
+
+		expect(component.status).toEqual('PresentTenseSchedule');
+		expect(component.isDisabled()).toEqual(true);
+	});
+
+	it('should check progress and return schedule is done with success', function() {
+		component.runScheduling = true;
+		expect(component.isDisabled()).toEqual(true);
+		
+		planningPeriodService.jobStatus = {
+			SchedulingStatus: {
+				Failed: false,
+				HasJob: true,
+				Successful: true
+			}
+		};
+		fixture.detectChanges();
+		
+		expect(component.isDisabled()).toEqual(false);
+	});
+
+	it('should check progress and return schedule is failed', function() {
+		component.runScheduling = true;
+		expect(component.isDisabled()).toEqual(true);
+
+		planningPeriodService.jobStatus = {
+			SchedulingStatus: {
+				Failed: true,
+				HasJob: true,
+				Successful: false
+			} 
+		};
+		fixture.detectChanges();
+
+		expect(component.isDisabled()).toEqual(false);
+	});
+
 	it('should launch intraday optimization', () =>{
+		fixture.detectChanges();
 		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'optimizeIntraday').and.returnValue(of());
 		component.optimizeIntraday();
 
@@ -178,7 +239,38 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
 	});
 
+	it('should check intraday optimization progress and return intraday optimization is done with success', function() {
+		component.runIntraday = true;
+
+		planningPeriodService.jobStatus = {
+			IntradayOptimizationStatus: {
+				Failed: false,
+				HasJob: true,
+				Successful: true
+			}
+		};
+		fixture.detectChanges();
+
+		expect(component.isDisabled()).toEqual(false);
+	});
+
+	it('should check intraday optimization progress and return intraday optimization is failed', function() {
+		component.runIntraday = true;
+
+		planningPeriodService.jobStatus = {
+			IntradayOptimizationStatus: {
+				Failed: true,
+				HasJob: true,
+				Successful: false
+			}
+		};
+		fixture.detectChanges();
+
+		expect(component.isDisabled()).toEqual(false);
+	});
+
     it('should launch clear schedule', () => {
+		fixture.detectChanges();
 		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'clearSchedule').and.returnValue(of());
 		component.clearSchedule();
 
@@ -186,14 +278,45 @@ describe('Planning Period Overview', () => {
 		expect(component.isDisabled()).toEqual(true);
     });
 
+	it('should check clear schedule progress and return clear schedule is done with success', function() {
+		component.runClear = true;
+
+		planningPeriodService.jobStatus = {
+			ClearScheduleStatus: {
+				Failed: false,
+				HasJob: true,
+				Successful: true
+			}
+		};
+		fixture.detectChanges();
+
+		expect(component.isDisabled()).toEqual(false);
+	});
+
+	it('should check clear schedule progress and return clear schedule is failed', function() {
+		component.runClear = true;
+
+		planningPeriodService.jobStatus = {
+			ClearScheduleStatus: {
+				Failed: true,
+				HasJob: true,
+				Successful: false
+			}
+		};
+		fixture.detectChanges();
+
+		expect(component.isDisabled()).toEqual(false);
+	});
+
 	it('should launch publish', () => {
+		fixture.detectChanges();
 		const spyPlanningPeriodActionService = spyOn(planningPeriodActionService, 'publishSchedule').and.returnValue(of());
 		component.publishSchedule();
 
 		expect(spyPlanningPeriodActionService.calls.argsFor(0)[0]).toEqual('a557210b-99cc-4128-8ae0-138d812974b6');
 		expect(component.isDisabled()).toEqual(true);
-
 	});
+	
 });
 
 
