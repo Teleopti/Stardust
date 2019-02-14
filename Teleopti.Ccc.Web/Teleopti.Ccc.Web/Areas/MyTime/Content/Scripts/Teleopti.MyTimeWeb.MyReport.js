@@ -19,6 +19,7 @@
 		self.datePickerFormat(format);
 		self.dataAvailable = ko.observable();
 		self.goToAnotherDay = function(toDate) {
+			self.selectedDateInternal(toDate);
 			Teleopti.MyTimeWeb.Portal.NavigateTo(
 				'MyReport/Index' + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD'))
 			);
@@ -45,24 +46,20 @@
 				self.goToAnotherDay(value);
 			}
 		});
-		self.nextDay = function () {
-			var date = self
-				.selectedDate()
-				.clone()
-				.add('days', 1);
-			self.selectedDateInternal(date);
+		self.nextDay = function() {
 			self.goToAnotherDay(
-				date
+				self
+					.selectedDate()
+					.clone()
+					.add('days', 1)
 			);
 		};
-		self.previousDay = function () {
-			var date = self
-				.selectedDate()
-				.clone()
-				.add('days', -1);
-			self.selectedDateInternal(date);
+		self.previousDay = function() {
 			self.goToAnotherDay(
-				date
+				self
+					.selectedDate()
+					.clone()
+					.add('days', -1)
 			);
 		};
 
@@ -78,7 +75,7 @@
 			dataType: 'json',
 			cache: false,
 			data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
-			success: function (data) {
+			success: function(data) {
 				vm.adherence(data.Adherence);
 				vm.answeredCalls(data.AnsweredCalls);
 				vm.averageAfterCallWork(data.AverageAfterCallWork);
