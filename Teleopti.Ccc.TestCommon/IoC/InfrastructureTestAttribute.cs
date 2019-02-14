@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
 
 			DataSourceForTenant.MakeSureDataSourceCreated(
-				DataSourceHelper.TestTenantName,
+				DataSourceHelper.TenantName,
 				InfraTestConfigReader.ConnectionString,
 				InfraTestConfigReader.AnalyticsConnectionString,
 				null);

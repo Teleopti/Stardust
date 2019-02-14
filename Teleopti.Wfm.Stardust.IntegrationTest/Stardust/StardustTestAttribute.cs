@@ -71,7 +71,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 					DefaultAnalyticsDataCreator.Create();
 					DataCreator.Create();
 
-
 					DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
 					DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 
@@ -93,10 +92,10 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			HangfireClientStarter.Start();
 			TestLog.Debug("HangfireClientStarter.Start");
 			Guid businessUnitId;
-			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
+			using (DataSource.OnThisThreadUse(DataSourceHelper.TenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			TestLog.Debug("AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId)");
-			AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId);
+			AsSystem.Logon(DataSourceHelper.TenantName, businessUnitId);
 
 			TestLog.Debug("Setting up ConfigValues..");
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");
