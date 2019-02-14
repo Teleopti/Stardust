@@ -8,6 +8,7 @@ import { NavigationService } from 'src/app/core/services';
 import { PlanningGroupsOverviewComponent } from './planning-groups-overview.component';
 import { PlanningGroupService } from '../../shared';
 import { TitleBarComponent } from '../../components/title-bar';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroups() {
@@ -47,7 +48,8 @@ describe('Planning Group Overview', () => {
 				ReactiveFormsModule,
 				MockTranslationModule,
 				NzDividerModule,
-				NzGridModule
+				NzGridModule,
+				HttpClientTestingModule
 			],
 			providers: [
 				{ provide: PlanningGroupService, useClass: MockPlanningGroupService },
