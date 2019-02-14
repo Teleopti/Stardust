@@ -98,7 +98,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffing.Time))
 					continue;
 
-				substractUsersSchedule(person, skillStaffing, personAssignmentDictionary[skillStaffing.Date]);
+				var subtracted =  subtractUsersSchedule(person, skillStaffing, personAssignmentDictionary[skillStaffing.Date]);
+				if(!subtracted) continue;
 
 				var possibility = calculatePossibility(skillStaffing);
 				var key = skillStaffing.Time;
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return personAssignment == null || personAssignment.ShiftLayers.IsEmpty();
 		}
 
-		private bool substractUsersSchedule(IPerson person, SkillStaffingData skillStaffingData, IPersonAssignment personAssignment)
+		private bool subtractUsersSchedule(IPerson person, SkillStaffingData skillStaffingData, IPersonAssignment personAssignment)
 		{
 			var skill = skillStaffingData.Skill;
 			var timezone = person.PermissionInformation.DefaultTimeZone();
