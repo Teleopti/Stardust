@@ -5,17 +5,29 @@ namespace Teleopti.Wfm.Administration.Monitoring
 {
 	public class MonitorController : ApiController
 	{
-		private readonly CheckLegacySystemStatus _checkLegacySystemStatus;
+		private readonly TryExecuteMonitorStep _tryExecuteMonitorStep;
+		private readonly ListMonitorSteps _listMonitorSteps;
 
-		public MonitorController(CheckLegacySystemStatus checkLegacySystemStatus)
+		public MonitorController(TryExecuteMonitorStep tryExecuteMonitorStep, ListMonitorSteps listMonitorSteps)
 		{
-			_checkLegacySystemStatus = checkLegacySystemStatus;
+			_tryExecuteMonitorStep = tryExecuteMonitorStep;
+			_listMonitorSteps = listMonitorSteps;
 		}
 		
 		[HttpGet]
-		public IHttpActionResult Check()
+		[Route("monitor/check/{monitorStep}")]
+		public IHttpActionResult Check(string monitorStep)
 		{
-			return Ok(_checkLegacySystemStatus.Execute());
+			if (_tryExecuteMonitorStep.TryExecute(monitorStep, out var result))
+				return Ok(result);
+			return BadRequest($"{monitorStep} is not a known monitor step");
+		}
+		
+		[HttpGet]
+		[Route("monitor/list")]
+		public IHttpActionResult List()
+		{
+			return Ok(_listMonitorSteps.Execute());
 		}
 	}
 }

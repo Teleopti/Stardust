@@ -18,5 +18,7 @@ namespace Teleopti.Ccc.Domain.MonitorSystem
 				new MonitorStepResult(true, SuccessOutput) : 
 				new MonitorStepResult(false, FailureOutput);
 		}
+
+		public string Name { get; } = "SystemStatus";
 	}
 }
