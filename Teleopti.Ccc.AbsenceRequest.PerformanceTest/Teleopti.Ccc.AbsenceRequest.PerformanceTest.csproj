@@ -193,8 +193,11 @@
     <Compile Include="IntrdayAbsenceRequestRunningParallelTest.cs" />
     <Compile Include="MultipleAbsenceRequestPerformanceTest.cs" />
     <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
+    <Compile Include="PerformanceTuningTest.cs" />
     <Compile Include="RequestPerformanceTestAttribute.cs" />
     <Compile Include="StaffingReadModelLocksTest.cs" />
+    <Compile Include="WaitlistRequestProcessor14DaysOneSkillPerformanceTest.cs" />
+    <Compile Include="WaitlistRequestProcessorPerformanceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Prepare200RequestForIntradayTest.sql" />

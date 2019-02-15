@@ -1,9 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
@@ -19,9 +21,9 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 
 namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 {
+
 	[RequestPerformanceTuningTest]
-	//public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
-	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
+	public class WaitlistRequestProcessor14DaysOneSkillPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 		public AsSystem AsSystem;
 		public FakeConfigReader ConfigReader;
 		public IPersonRequestRepository PersonRequestRepository;
-		public IAbsenceRequestProcessor AbsenceRequestProcessor;
+		public WaitlistRequestHandler WaitlistRequestHandler;
 		public IStardustJobFeedback StardustJobFeedback;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public IAbsenceRepository AbsenceRepository;
@@ -45,14 +47,18 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 		public IActivityRepository ActivityRepository;
 		public IAbsencePersister AbsencePersister;
 		public AddOverTime AddOverTime;
-		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
 		private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
+		private ICollection<IPerson> _personList;
+		private List<IWorkflowControlSet> _wfcs;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
+
 
 		public override void OneTimeSetUp()
 		{
-			_nowDateTime = new DateTime(2016, 03, 16, 7, 0, 0).Utc();
+			_wfcs = new List<IWorkflowControlSet>();
+			_nowDateTime = new DateTime(2016, 04, 06, 6, 58, 0).Utc();
 			Now.Is(_nowDateTime);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
@@ -60,8 +66,7 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
-				StardustJobFeedback.SendProgress($"Will run script");
-				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "Prepare100RequestForIntradayTest.sql";
+				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "PrepareWaitlistedRequest14DaysTest.sql";
 				var script = File.ReadAllText(path);
 
 				using (var command = new SqlCommand(script, connection))
@@ -69,52 +74,52 @@ namespace Teleopti.Ccc.AbsenceRequest.PerformanceTest
 					command.ExecuteNonQuery();
 				}
 				connection.Close();
-				StardustJobFeedback.SendProgress($"Have been running the script");
 			}
 
 			var now = Now.UtcDateTime();
 			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
-			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
+			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(14));
 			requests = new List<IPersonRequest>();
 			WithUnitOfWork.Do(() =>
-							  {
-								  StardustJobFeedback.SendProgress($"Preload for less lazy load");
-								  WorkflowControlSetRepository.LoadAll();
-								  AbsenceRepository.LoadAll();
-								  WorkloadRepository.LoadAll();
-								  ActivityRepository.LoadAll();
-								  SkillTypeRepository.LoadAll();
-								  SkillRepository.LoadAllSkills();
-								  ContractRepository.LoadAll();
-								  PartTimePercentageRepository.LoadAll();
-								  ContractScheduleRepository.LoadAllAggregate();
-								  DayOffTemplateRepository.LoadAll();
-								  StardustJobFeedback.SendProgress($"Will update staffing readmodel");
-								  UpdateStaffingLevel.Update(period);
-								  StardustJobFeedback.SendProgress($"Done update staffing readmodel");
-								  PersonRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
-								  requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 03, 16, 7, 0, 0).Utc(), new DateTime(2016, 03, 16, 10, 0, 0).Utc()));
-						  
-							  });
+			{
+				WorkflowControlSetRepository.LoadAll();
+				AbsenceRepository.LoadAll();
+				WorkloadRepository.LoadAll();
+				ActivityRepository.LoadAll();
+				SkillTypeRepository.LoadAll();
+				SkillRepository.LoadAllSkills();
+				ContractRepository.LoadAll();
+				PartTimePercentageRepository.LoadAll();
+				ContractScheduleRepository.LoadAllAggregate();
+				DayOffTemplateRepository.LoadAll();
+
+				UpdateStaffingLevel.Update(period); 
+				var reqIds =
+					PersonRequestRepository.GetWaitlistRequests(new DateTimePeriod(new DateTime(2016, 04, 06, 8, 0, 0).Utc(),
+						new DateTime(2016, 04, 06, 17, 0, 0).Utc()));
+				requests = PersonRequestRepository.Find(reqIds);
+				_personList = PersonRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
+
+				var wfcs = _personList.Select(p => p.WorkflowControlSet).Distinct();
+				_wfcs.AddRange(wfcs);
+
+				_wfcs.ForEach(w => w.AbsenceRequestWaitlistEnabled = true);
+			});
 		}
 
-		[Test,Ignore("Waiting for a fast lane Build")]
-		public void Run100RequestsWithoutValidation()
+		[Test, Ignore("Waiting for a fast lane Build")]
+		public void RunWaitlistedRequestsOneSkillFor14Days()
 		{
-			Now.Is("2016-03-16 07:01");
-			
+			Now.Is("2016-04-06 03:59");
+
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-			StardustJobFeedback.SendProgress($"Will process {requests.Count} requests");
 
-			foreach (var request in requests)
+			WaitlistRequestHandler.Handle(new ProcessWaitlistedRequestsEvent
 			{
-				WithUnitOfWork.Do(() =>
-				{
-					AbsenceRequestProcessor.Process(request);
-				});
-			}
-
+				LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
+				LogOnDatasource = "Teleopti WFM"
+			});
 		}
 	}
 }
