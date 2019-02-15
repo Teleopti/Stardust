@@ -2,10 +2,11 @@
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.Events;
 
 namespace Teleopti.Wfm.Adherence.States.Events
 {
-	public class PersonRuleChangedEvent : IRtaStoredEvent, IEvent, ISolidProof
+	public class PersonRuleChangedEvent : IRtaStoredEvent, IRtaStoredEventForPerson, IEvent, ISolidProof
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }

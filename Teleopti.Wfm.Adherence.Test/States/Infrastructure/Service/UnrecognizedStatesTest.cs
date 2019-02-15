@@ -142,7 +142,7 @@ namespace Teleopti.Wfm.Adherence.Test.States.Infrastructure.Service
 
 			public virtual void DoesWhileNotLoggedIn(Action<IUnitOfWork> action)
 			{
-				using (_dataSource.OnThisThreadUse(InfrastructureTestSetup.DataSource.DataSourceName))
+				using (_dataSource.OnThisThreadUse(TestTenantName.Name))
 					DoesWhileNotLoggedInInner(action);
 			}
 

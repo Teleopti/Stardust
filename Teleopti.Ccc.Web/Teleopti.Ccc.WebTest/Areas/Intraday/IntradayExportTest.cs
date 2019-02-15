@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.Intraday.Domain;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon.IoC;
 
 
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Intraday
 
 				}
 			};
-			dataToExport.StaffingViewModel = new IntradayStaffingViewModel
+			dataToExport.StaffingViewModel = new ScheduledStaffingViewModel
 			{
 				DataSeries = new StaffingDataSeries
 				{

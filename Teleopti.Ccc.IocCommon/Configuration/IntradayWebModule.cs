@@ -60,8 +60,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillStaffingIntervalProvider>().As<ISkillStaffingIntervalProvider>().SingleInstance();
 			builder.RegisterType<IntradaySkillProvider>().As<IIntradaySkillProvider>().SingleInstance();
 
-			// Intraday - application layer
-			builder.RegisterType<IntradayStaffingApplicationService>();
+			// Intraday - application layer WFM_Forecast_Readmodel_80790
+			if (_configuration.IsToggleEnabled(Toggles.WFM_Forecast_Readmodel_80790))
+			{
+				builder.RegisterType<IntradayAppStaffingService>().As<IIntradayApplicationStaffingService, IntradayAppStaffingService>();
+			}
+			else
+			{
+				builder.RegisterType<IntradayStaffingApplicationService>().As<IIntradayApplicationStaffingService, IntradayStaffingApplicationService>();
+			}
+
 			builder.RegisterType<IntradayPerformanceApplicationService>();
 			builder.RegisterType<IntradayIncomingTrafficApplicationService>();
 			if (_configuration.IsToggleEnabled(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153))
@@ -80,17 +88,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayReforecastingService>();
 			builder.RegisterType<IntradayStatisticsService>();
 			builder.RegisterType<IntradayStaffingService>().As<IIntradayStaffingService>();
-
-			if (_configuration.IsToggleEnabled(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128))
-			{
-				builder.RegisterType<SkillCombinationResourcesWithoutBpoToggleOn>().As<ISkillCombinationResourcesWithoutBpo>()
-					.SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<SkillCombinationResourcesWithoutBpoToggleOff>().As<ISkillCombinationResourcesWithoutBpo>()
-					.SingleInstance();
-			}
 
 			if (_configuration.IsToggleEnabled(Toggles.WFM_Forecast_Readmodel_80790))
 			{

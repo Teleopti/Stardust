@@ -239,13 +239,20 @@
     <Compile Include="Insights\InsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReport.cs" />
     <Compile Include="InterfaceLegacy\Domain\IInsightsReportRepository.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayAppStaffingService.cs" />
     <Compile Include="Intraday\ApplicationLayer\LoadSkillDaysWithPeriodFlexibility.cs" />
     <Compile Include="Intraday\To Staffing\SkillForecast.cs" />
     <Compile Include="Logon\IPrincipalFactoryExtensions.cs" />
     <Compile Include="Logon\PersonAndBusinessUnit.cs" />
+    <Compile Include="MonitorSystem\CallLegacySystemStatus.cs" />
+    <Compile Include="MonitorSystem\CheckLegacySystemStatus.cs" />
+    <Compile Include="MonitorSystem\ICallLegacySystemStatus.cs" />
+    <Compile Include="MonitorSystem\IMonitorStep.cs" />
+    <Compile Include="MonitorSystem\ListMonitorSteps.cs" />
+    <Compile Include="MonitorSystem\MonitorStepResult.cs" />
+    <Compile Include="MonitorSystem\TryExecuteMonitorStep.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
-    <Compile Include="MultiTenancy\IApplicationConfigurationDbTenantClient.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
     <Compile Include="Notification\ScheduleChangeForWeekViewMessage.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
@@ -347,7 +354,6 @@
     <Compile Include="Common\CalculatePersonAccount.cs" />
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
-    <Compile Include="Intraday\ApplicationLayer\ViewModels\StaffingDataSeries.cs" />
     <Compile Include="AgentInfo\BacklogSkillTypesForecastCalculator.cs" />
     <Compile Include="Intraday\Domain\IntradayForecastInterval.cs" />
     <Compile Include="Intraday\Extensions\IntradaySkillDayExtensions.cs" />
@@ -685,7 +691,7 @@
     <Compile Include="Security\Principal\ClaimsOwner.cs" />
     <Compile Include="Security\SignedArgument.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
-    <Compile Include="Intraday\To Staffing\ScheduledStaffingViewModel.cs" />
+    <Compile Include="Staffing\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\To Staffing\ScheduledStaffingViewModelCreator.cs" />
     <Compile Include="Common\SkillTypeIdentifier.cs" />
     <Compile Include="Intraday\Domain\SkillTypeInfo.cs" />
@@ -838,7 +844,6 @@
     <Compile Include="ApplicationLayer\Events\ManageScheduleEvent.cs" />
     <Compile Include="ApplicationLayer\Events\OptionalColumnCollectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleBackoutEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\UnknownStateCodeReceviedEvent.cs" />
     <Compile Include="ApplicationLayer\GlobalSettingData\AnalyticsPersonNameUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />
@@ -1602,7 +1607,6 @@
     <Compile Include="ApplicationLayer\Events\RecalculateForecastOnSkillCollectionEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ServiceBusHealthCheckEvent.cs" />
     <Compile Include="ApplicationLayer\Events\SkillChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommandScope.cs" />
     <Compile Include="ApplicationLayer\Forecast\ForecastClassesCreator.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadsEventHandler.cs" />
@@ -1647,7 +1651,6 @@
     <Compile Include="Intraday\Domain\IntradayPerformanceDataSeries.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayPerformanceSummary.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayPerformanceViewModel.cs" />
-    <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayStaffingViewModel.cs" />
     <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayIncomingDataSeries.cs" />
     <Compile Include="Intraday\Domain\IntradayIncomingSummary.cs" />
     <Compile Include="Intraday\Domain\SkillIntervalStatistics.cs" />
@@ -1655,7 +1658,7 @@
     <Compile Include="Intraday\ApplicationLayer\LatestStatitsticsTimeModel.cs" />
     <Compile Include="Intraday\To Staffing\ScheduledStaffingProvider.cs" />
     <Compile Include="Intraday\Domain\SkillDayStatsRange.cs" />
-    <Compile Include="Intraday\To Staffing\StaffingDataSeries.cs" />
+    <Compile Include="Staffing\StaffingDataSeries.cs" />
     <Compile Include="Intraday\Domain\StaffingInterval.cs" />
     <Compile Include="Intraday\To Staffing\TimeSeriesProvider.cs" />
     <Compile Include="Islands\ClientModel\IslandModel.cs" />
@@ -1894,7 +1897,6 @@
     <Compile Include="ApplicationLayer\Events\DayUnscheduledEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleOnNode.cs" />
     <Compile Include="ApplicationLayer\Events\StardustHealthCheckEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\TenantHourTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonCollectionChangedEvent.cs" />

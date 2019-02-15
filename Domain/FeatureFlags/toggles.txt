@@ -94,15 +94,13 @@ WFM_Intraday_Redesign_77214 = true
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
 Wfm_Payroll_SupportMultiDllPayrolls_75959 = true
-Wfm_Stardust_EnableScaleout_77366 = true
 Wfm_AuditTrail_StaffingAuditTrail_78125 = true
 Wfm_AuditTrail_GenericAuditTrail_74938 = true
 WFM_AbsenceRequest_ImproveThroughput_79139 = true
 WFM_ProbabilityView_ImproveResponseTime_80040 = true
-WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128 = true
 WFM_Intraday_OptimizeSkillDayLoad_80153 = true
 WFM_AbsenceRequest_Robust_Processing_79988= true
-WFM_Forecast_Readmodel_80790 = DEV
+WFM_Forecast_Readmodel_80790 = RC
 
 # Squids #
 WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trainings further out...
@@ -115,7 +113,6 @@ WFM_Connect_NewLandingPage_WEB_78578 = true
 WFM_Log_Analytics_Schedule_Change_Hangfire_handler_80425 = RC
 ETL_Intraday_SpeedUp_Fact_Schedule_Deviation_Calculation_79646 = true
 WFM_AnalyticsForecastUpdater_80798 = true
-
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true

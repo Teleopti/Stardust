@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 				User.CurrentUser().PermissionInformation.DefaultTimeZone(), ServiceAgreement.DefaultValuesEmail());
 
 			var skillStaffingDatas = Target.Load(new[] { skill1 }, new DateOnly(utcDate).ToDateOnlyPeriod(), true);
-			Assert.AreEqual(0.7d,
+			Assert.AreEqual(0.748d,
 				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(utcDate.AddHours(7))).ForecastedStaffing);
 		}
 
@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			}
 
 			var skillStaffingDatas = Target.Load(new[] { skill1 }, weekPeriod, true);
-			Assert.AreEqual(1.2d,
+			Assert.AreEqual(1.248d,
 				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(weekPeriod.StartDate.Date.AddHours(7))).ForecastedStaffing);
-			Assert.AreEqual(1.2d,
+			Assert.AreEqual(1.248d,
 				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(weekPeriod.StartDate.Date.AddDays(6).AddHours(7))).ForecastedStaffing);
 		}
 

@@ -2,10 +2,11 @@ using System;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.Events;
 
 namespace Teleopti.Wfm.Adherence.States.Events
 {
-	public class PersonAdherenceDayStartEvent : IEvent, ISolidProof, IRtaStoredEvent
+	public class PersonAdherenceDayStartEvent : IEvent, ISolidProof, IRtaStoredEvent, IRtaStoredEventForPerson
 	{
 		public Guid PersonId { get; set; }
 		public DateTime Timestamp { get; set; }

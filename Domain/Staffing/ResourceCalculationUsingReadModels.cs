@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var dateOnlyPeriod = new DateOnlyPeriod(firstPeriodDateInSkillTimeZone, lastPeriodDateInSkillTimeZone);
 
 			var period = new DateTimePeriod(startOfDayUtc, endOfDayUtc);
-			var fetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-8), endOfDayUtc.AddDays(2));
+			var fetchPeriod = new DateTimePeriod(startOfDayUtc.AddDays(-7), endOfDayUtc.AddDays(2));
 			var fetchPeriodForSkillCombinations = new DateTimePeriod(startOfDayUtc, startOfDayUtc.AddDays(1).AddHours(1));
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(fetchPeriodForSkillCombinations).ToList();
 			
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			{
 				var serviceLevel = new ServiceLevel(new Percent(skillForecast.PercentAnswered),
 					skillForecast.AnsweredWithinSeconds);
-				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.3), new Percent(0.8));
+				var serviceAgreement = new ServiceAgreement(serviceLevel, new Percent(0.0), new Percent(0.0));
 				var dateTimePeriod = new DateTimePeriod(new DateTime(skillForecast.StartDateTime.Ticks, DateTimeKind.Utc),
 					new DateTime(skillForecast.EndDateTime.Ticks, DateTimeKind.Utc));
 				var skillStaffPeriod = new SkillStaffPeriodForReadmodel(dateTimePeriod, new Task(), serviceAgreement)
@@ -149,41 +149,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 						skillStaffPeriodForSkill.SetCalculatedResource65(totalResources);
 				}
 			}
-		}
-
-		private static List<SkillCombinationResource> split(List<SkillCombinationResource> skillCombinationList, TimeSpan resolution)
-		{
-			var dividedIntervals = new List<SkillCombinationResource>();
-
-			foreach (var skillCombinationInterval in skillCombinationList)
-			{
-				if (!skillCombinationInterval.GetTimeSpan().Equals(resolution))
-				{
-					var startInterval = skillCombinationInterval.StartDateTime;
-					while (startInterval < skillCombinationInterval.EndDateTime)
-					{
-						dividedIntervals.Add(new SkillCombinationResource
-						{
-							SkillCombination = skillCombinationInterval.SkillCombination,
-							StartDateTime = startInterval,
-							EndDateTime = startInterval.Add(resolution),
-							Resource = skillCombinationInterval.Resource
-						});
-						startInterval = startInterval.Add(resolution);
-					}
-				}
-				else
-				{
-					dividedIntervals.Add(new SkillCombinationResource
-					{
-						SkillCombination = skillCombinationInterval.SkillCombination,
-						StartDateTime = skillCombinationInterval.StartDateTime,
-						EndDateTime = skillCombinationInterval.EndDateTime,
-						Resource = skillCombinationInterval.Resource
-					});
-				}
-			}
-			return dividedIntervals;
 		}
 
 		private static SkillStaffingInterval cloneSkillStaffingInterval(SkillStaffingInterval skillStaffingInterval)

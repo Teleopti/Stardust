@@ -28,14 +28,14 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldNotAllowDeleteOnUnknowTenant()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			Target.DeleteTenant("SomeUnknownOne").Content.Success.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldNotAllowDeleteOnBaseTenant()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldAllowDeleteOnNotBaseTenant()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 
 
 			TestPollutionCleaner.Clean("tenant", "appuser");

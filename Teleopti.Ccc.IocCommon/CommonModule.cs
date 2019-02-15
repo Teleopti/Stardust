@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MonitorSystem;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.IocCommon
 		protected override void Load(ContainerBuilder builder)
 		{
 			_configuration.AddToggleManagerToBuilder(builder);
+			builder.RegisterModule<MonitorModule>();
 			builder.RegisterModule<ToggleRuntimeModule>();
 			builder.RegisterModule(new SharedModuleUsedInBothRuntimeContainerAndToggleManagerModule(_configuration.Args()));
 			builder.RegisterModule(new RuleSetModule(_configuration));

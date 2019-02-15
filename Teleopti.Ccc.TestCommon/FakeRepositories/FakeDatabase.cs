@@ -474,7 +474,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithRole(AvailableDataRangeOption availableDataRange, Guid? teamId, params string[] functionPaths)
 		{
-			var role = new ApplicationRole {Name = "role"};
+			var role = new ApplicationRole { Name = "role" };
 			role.SetId(Guid.NewGuid());
 			functionPaths.ForEach(p => { role.AddApplicationFunction(_applicationFunctions.LoadAll().Single(x => x.FunctionPath == p)); });
 			var availableData = new AvailableData

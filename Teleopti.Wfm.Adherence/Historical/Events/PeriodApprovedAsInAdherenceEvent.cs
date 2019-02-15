@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Historical.Events
 {
-	public class PeriodApprovedAsInAdherenceEvent : IRtaStoredEvent, IEvent
+	public class PeriodApprovedAsInAdherenceEvent : IRtaStoredEvent, IRtaStoredEventForPerson, IEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }

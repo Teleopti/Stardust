@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			var currentTime = new DateTime(2017, 08, 26, 12, 0, 0, DateTimeKind.Utc);
 			Now.Is(currentTime);
 			
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -54,7 +54,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			var currentTime = new DateTime(2017, 08, 26, 12, 0, 0, DateTimeKind.Utc);
 			Now.Is(currentTime);
 			
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
@@ -80,7 +80,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			var currentTime = new DateTime(2017, 08, 26, 12, 0, 0, DateTimeKind.Utc);
 			Now.Is(currentTime);
 			
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };

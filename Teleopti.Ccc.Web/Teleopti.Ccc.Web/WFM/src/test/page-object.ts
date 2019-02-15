@@ -12,4 +12,8 @@ export class PageObject {
 	public queryAll(selector: string): DebugElement[] {
 		return this.fixture.debugElement.queryAll(By.css(selector));
 	}
+
+	public query(selector: string): DebugElement {
+		return this.fixture.debugElement.query(By.css(selector));
+	}
 }

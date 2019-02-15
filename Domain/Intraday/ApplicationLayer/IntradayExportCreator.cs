@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 {
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 		public string SkillAreaName { get; set; }
 		public string[] Skills { get; set; }
 		public IntradayPerformanceViewModel PerformanceViewModel { get; set; }
-		public IntradayStaffingViewModel StaffingViewModel { get; set; }
+		public ScheduledStaffingViewModel StaffingViewModel { get; set; }
 		public IntradayIncomingViewModel IncomingViewModel { get; set; }
 	}
 	

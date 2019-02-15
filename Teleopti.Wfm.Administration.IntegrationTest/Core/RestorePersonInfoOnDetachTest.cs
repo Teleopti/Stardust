@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		public void ShouldPutBackPersonInfos()
 		{
 			Now.Is(new DateTime(2018, 04, 1));
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;
 			builder.UserID = "dbcreatorperson";

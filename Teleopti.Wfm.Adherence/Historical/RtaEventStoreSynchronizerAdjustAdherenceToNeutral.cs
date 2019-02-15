@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay;
+using Teleopti.Wfm.Adherence.Historical.Events;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 
 namespace Teleopti.Wfm.Adherence.Historical
@@ -46,6 +47,9 @@ namespace Teleopti.Wfm.Adherence.Historical
 				{
 					var fromEventId = FromEventId();
 					var events = LoadEvents(fromEventId);
+					if (events.Events.Any(x => x.GetType() == typeof(PeriodAdjustedToNeutralEvent)))
+						events = LoadEvents(0);
+
 					Synchronize(events.Events);
 					UpdateSynchronizedEventId(events.ToId);
 					if (events.ToId >= toEventId)
@@ -79,15 +83,12 @@ namespace Teleopti.Wfm.Adherence.Historical
 		protected virtual void Synchronize(IEnumerable<IEvent> events)
 		{
 			events
-				.Cast<IRtaStoredEvent>()
-				.Select(e =>
+				.Where(x => x is IRtaStoredEventForPerson)
+				.Cast<IRtaStoredEventForPerson>()
+				.Select(e => new
 				{
-					var data = e.QueryData();
-					return new
-					{
-						PersonId = data.PersonId.GetValueOrDefault(),
-						Day = data.BelongsToDate ?? new DateOnly(data.StartTime.Value)
-					};
+					e.PersonId,
+					Day = e.BelongsToDate ?? new DateOnly((e as IRtaStoredEvent).QueryData().StartTime.Value)
 				})
 				.Distinct()
 				.ForEach(x => synchronizeAdherenceDay(x.PersonId, x.Day));

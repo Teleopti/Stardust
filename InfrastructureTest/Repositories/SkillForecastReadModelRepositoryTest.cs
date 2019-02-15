@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
@@ -12,11 +13,13 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using List = Rhino.Mocks.Constraints.List;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[UnitOfWorkTest]
+	[AllTogglesOn]
 	public class SkillForecastReadModelRepositoryTest
 	{
 		public ISkillForecastReadModelRepository Target;
@@ -24,6 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public ISkillTypeRepository SkillTypeRepository;
 		public ISkillRepository SkillRepository;
 		public IActivityRepository ActivityRepository;
+		public SkillForecastSettingsReader SkillForecastSettingsReader;
 		public IMutateNow Now;
 
 		[Test]
@@ -318,6 +322,101 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.Be.EqualTo(20);
 		}
 
+		[Test]
+		public void ShouldPurgeOldSkillForecasts()
+		{
+			var oldDate = new DateTime(2019, 1, 23, 10, 0, 0);
+			Now.Is(oldDate);
+			var listOfIntervals = new List<SkillForecast>();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
+			SkillTypeRepository.Add(skillType);
+			var activity = new Activity("dummy activity");
+			ActivityRepository.Add(activity);
+			CurrentUnitOfWork.Current().PersistAll();
+
+
+			var skill = SkillFactory.CreateMultisiteSkill("dummy", skillType, 15);
+			skill.Activity = activity;
+			SkillRepository.Add(skill);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			listOfIntervals.Add(new SkillForecast()
+			{
+				SkillId = skill.Id.GetValueOrDefault(),
+				StartDateTime = new DateTime(2019, 1, 23, 10, 0, 0),
+				EndDateTime = new DateTime(2019, 1, 23, 10, 15, 0),
+				Agents = 10,
+				Calls = 400,
+				AverageHandleTime = 15
+			});
+
+			listOfIntervals.Clear();
+			Now.Is(oldDate.AddDays(SkillForecastSettingsReader.NumberOfDaysInPast));
+
+			listOfIntervals.Add(new SkillForecast()
+			{
+				SkillId = skill.Id.GetValueOrDefault(),
+				StartDateTime = new DateTime(2019, 1, 31, 10, 0, 0),
+				EndDateTime = new DateTime(2019, 1, 31, 10, 15, 0),
+				Agents = 10,
+				Calls = 400,
+				AverageHandleTime = 15
+			});
+			Target.PersistSkillForecast(listOfIntervals);
+
+
+			var result = readIntervals();
+			result.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotPurgeRelevantSkills()
+		{
+			var oldDate = new DateTime(2019, 1, 23, 10, 0, 0);
+			Now.Is(oldDate);
+			var listOfIntervals = new List<SkillForecast>();
+			var skillType = SkillTypeFactory.CreateSkillTypePhone();
+			SkillTypeRepository.Add(skillType);
+			var activity = new Activity("dummy activity");
+			ActivityRepository.Add(activity);
+			CurrentUnitOfWork.Current().PersistAll();
+
+
+			var skill = SkillFactory.CreateMultisiteSkill("dummy", skillType, 15);
+			skill.Activity = activity;
+			SkillRepository.Add(skill);
+			CurrentUnitOfWork.Current().PersistAll();
+
+
+			listOfIntervals.Add(new SkillForecast()
+			{
+				SkillId = skill.Id.GetValueOrDefault(),
+				StartDateTime = new DateTime(2019, 1, 24, 10, 0, 0),
+				EndDateTime = new DateTime(2019, 1, 24, 10, 15, 0),
+				Agents = 10,
+				Calls = 400,
+				AverageHandleTime = 15
+			});
+
+			Target.PersistSkillForecast(listOfIntervals);
+			listOfIntervals.Clear();
+			Now.Is(oldDate.AddDays(SkillForecastSettingsReader.NumberOfDaysInPast));
+
+			listOfIntervals.Add(new SkillForecast()
+			{
+				SkillId = skill.Id.GetValueOrDefault(),
+				StartDateTime = new DateTime(2019, 1, 31, 10, 0, 0),
+				EndDateTime = new DateTime(2019, 1, 31, 10, 15, 0),
+				Agents = 10,
+				Calls = 400,
+				AverageHandleTime = 15
+			});
+			Target.PersistSkillForecast(listOfIntervals);
+
+
+			var result = readIntervals();
+			result.Count.Should().Be.EqualTo(2);
+		}
 
 		private List<SkillForecast> readIntervals()
 		{

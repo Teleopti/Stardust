@@ -8,6 +8,7 @@ import { NavigationService } from 'src/app/core/services';
 import { PlanningGroupsOverviewComponent } from './planning-groups-overview.component';
 import { PlanningGroupService } from '../../shared';
 import { TitleBarComponent } from '../../components/title-bar';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroups() {
@@ -47,7 +48,8 @@ describe('Planning Group Overview', () => {
 				ReactiveFormsModule,
 				MockTranslationModule,
 				NzDividerModule,
-				NzGridModule
+				NzGridModule,
+				HttpClientTestingModule
 			],
 			providers: [
 				{ provide: PlanningGroupService, useClass: MockPlanningGroupService },
@@ -68,17 +70,15 @@ describe('Planning Group Overview', () => {
 	});
 
 	it('should display planning group rows', async(() => {
-		fixture.whenStable().then(async() => {
+		fixture.whenStable().then(() => {
 			fixture.detectChanges();
 			expect(page.filteredPlanningGroups.length).toBe(3);
 		});
 	}));
 
-	xit('should sort planning groups', async(() => {
+	it('should sort planning groups', async(() => {
 		fixture.whenStable().then(() => {
 			fixture.detectChanges();
-			expect(page.filteredPlanningGroupsNames[0].nativeElement.innerText).toBe('A');
-			expect(page.filteredPlanningGroupsNames[1].nativeElement.innerText).toBe('a');
 			expect(page.filteredPlanningGroupsNames[2].nativeElement.innerText).toBe('B');
 		});
 	}));

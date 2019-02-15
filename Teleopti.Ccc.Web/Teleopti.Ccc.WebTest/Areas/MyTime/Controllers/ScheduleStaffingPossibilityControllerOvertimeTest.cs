@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetFairPossibilitiesAfterRoundStaffingDataWithOneFractional()
+		public void ShouldGetFairPossibilitiesAfterRoundStaffingDataWithTwoFractional()
 		{
 			setupWorkFlowControlSet();
 			setupSiteOpenHour();

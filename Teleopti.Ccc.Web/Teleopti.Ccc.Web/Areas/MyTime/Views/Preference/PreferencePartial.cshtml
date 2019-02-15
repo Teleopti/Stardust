@@ -29,7 +29,8 @@
 					</span>
 				</span>
 			</li>
-			<li class="col-xs-12 col-sm-4 phone-navbar-bottom">
+
+			<li class="col-xs-12 col-sm-4 preference-phone-navbar" data-bind="style: {'display': IsHostAMobile ? 'none' : 'block'}">
 				<ul class="nav navbar-nav teleopti-toolbar row submenu">
 					@if (Model.ExtendedPreferencesPermission)
 					{
@@ -37,8 +38,89 @@
 					}
 					else
 					{
-						<li class="dropdown preference-split-button col-xs-12 col-sm-4 w-30" 
-						data-mytime-preference-option="[@{
+						<li class="dropdown preference-split-button col-xs-12 col-sm-4 w-30"
+							data-mytime-preference-option="[@{
+														var oIdx = 0;
+														foreach (var optionGroup in Model.Options.PreferenceOptions)
+														{
+															oIdx++;
+															if (optionGroup.Text != Resources.ShiftCategory)
+															{
+																@Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},")
+															}
+															var idx = 0;
+															foreach (var option in optionGroup.Options)
+															{
+																if (idx + 1 == optionGroup.Options.Count() && Model.Options.PreferenceOptions.Count() == oIdx)
+																{
+																	@Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'}")
+																}
+																else
+																{
+																	@Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},")
+
+																}
+																idx++;
+															}
+														}
+														}]">
+							<button type="button" data-toggle="dropdown" class="btn btn-default navbar-btn dropdown-toggle">
+								<span data-bind="'text': selectedPreferenceText()"></span>
+								<span class="caret"></span>
+							</button>
+							<ul role="menu" class="available-preferences-list dropdown-menu w-30" data-bind="foreach: availablePreferences">
+								<!-- ko if: Value != '-' -->
+								<li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
+								<!-- /ko -->
+								<!-- ko if: Value == '-' -->
+								<li class="divider"></li>
+								<!-- /ko -->
+							</ul>
+						</li>
+					}
+					<li class="col-xs-12 col-sm-4 w-30">
+						<a href="#" data-bind="click: deletePreference">
+							<i class="glyphicon glyphicon-remove"></i>&nbsp;<span>@Resources.Remove</span>
+						</a>
+					</li>
+
+					<!-- ko if: mustHaveEnabled -->
+					<li class="col-xs-12 col-sm-4 w-40">
+						<div class="input-group must-have-menu">
+							<div class="btn-group" role="group">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+										<i class="glyphicon glyphicon-heart"></i>&nbsp;
+										<span>
+											<span>@Resources.MustHave</span>&nbsp;
+											<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;
+											(<span data-bind="text: maxMustHave" class="musthave-max"></span>)
+											<span class="caret"></span>
+										</span>
+									</button>
+									<ul class="dropdown-menu w-40" role="menu">
+										<li><a href="#" class="remove-musthave" data-bind="click: removeMustHave">@Resources.RemoveMustHave</a></li>
+										<li><a href="#" class="add-musthave" data-bind="click: addMustHave, enabled: addMustHaveEnabled">@Resources.AddMustHave</a></li>
+									</ul>
+								</div>
+							</div>
+
+						</div>
+					</li>
+					<!-- /ko -->
+				</ul>
+			</li>
+
+			<li class="col-xs-12 col-sm-4 preference-phone-navbar-mobile" data-bind="style: {'display': IsHostAMobile ? 'block' : 'none'}">
+				<ul class="nav navbar-nav teleopti-toolbar row submenu">
+					@if (Model.ExtendedPreferencesPermission)
+					{
+						<li class="col-xs-12 col-sm-4 w-30"><a href="#" class="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;<span>@Resources.Preference</span></a></li>
+					}
+					else
+					{
+						<li class="dropdown preference-split-button col-xs-12 col-sm-4 w-30"
+							data-mytime-preference-option="[@{
 														var oIdx = 0;
 														foreach (var optionGroup in Model.Options.PreferenceOptions)
 														{
@@ -110,9 +192,16 @@
 				</ul>
 			</li>
 		</ul>
-		<div class="warning-indicator" data-bind="click: toggleWarningDetail, style:{'display': IsHostAMobile ? 'flex' : 'none'}">
-			<span data-bind="css: PreferenceFeedbackClass, text:WarningCount" class="warning-count"></span>
+		
+		<div class="warning-indicator" data-bind="click: toggleWarningDetail" style="display:none">
+			<span class="warning-danger" data-bind="style: {'display': AlertDanger() ? 'block' : 'none'}">
+				<i class="glyphicon glyphicon-exclamation-sign"></i>
+			</span>
+			<span class="warning-info" data-bind="style: {'display': AlertDanger() ? 'none' : 'block'}">
+				<i class="glyphicon glyphicon-ok-sign"></i>
+			</span>
 		</div>
+		
 	</div>
 </div>
 

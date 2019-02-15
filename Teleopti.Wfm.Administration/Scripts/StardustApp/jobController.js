@@ -5,7 +5,7 @@
 		.module("adminApp")
 		.controller("jobController", jobController);
 
-	function jobController($http, $interval, $scope) {
+	function jobController($http, $interval, $scope, tenantService) {
 		/* jshint validthis:true */
 
 		var vm = this;
@@ -42,10 +42,14 @@
 				$interval.cancel(refreshPromise);
 			});
 
-		$http.get("./AllTenants")
+		/*$http.get("./AllTenants")
 			.then(function (response) {
 				vm.Tenants = response.data;
-			});
+			});*/
+
+		tenantService.getTenants().then(function (data) {
+			vm.Tenants = data;
+		});
 
 		$http.get("./Stardust/OldestJob")
 			.then(function (response) {

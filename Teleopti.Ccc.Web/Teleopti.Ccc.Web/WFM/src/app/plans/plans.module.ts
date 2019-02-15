@@ -9,6 +9,7 @@ import { PlanningGroupsOverviewComponent } from './pages/planning-groups/plannin
 import { PlanningPeriodOverviewComponent } from './pages/planning-period/planning-period-overview.component';
 import {DateFormatPipe, MomentModule} from "ngx-moment";
 import {HeatMapColorHelper} from "./shared/heatmapcolor.service";
+import {PlanningPeriodActionService} from "./shared/planningperiod.action.service";
 
 @NgModule({
 	declarations: [TitleBarComponent, PlanningGroupsOverviewComponent, PlanningPeriodOverviewComponent],
@@ -19,6 +20,7 @@ import {HeatMapColorHelper} from "./shared/heatmapcolor.service";
 	],
 	providers: [
 		PlanningGroupService,
+		PlanningPeriodActionService,
 		PlanningPeriodService,
 		HeatMapColorHelper,
 		DateFormatPipe,

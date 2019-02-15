@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public void Start(string connectionString)
 		{
 			JobHelper.SetSerializerSettings(_serializerSettings);
+			GlobalConfiguration.Configuration.UseTypeResolver(_serializerSettings.TypeResolver);
 
 			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", TimeSpan.FromHours(1).TotalSeconds);
 			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", TimeSpan.FromSeconds(5).TotalSeconds);

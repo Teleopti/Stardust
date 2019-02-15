@@ -19,7 +19,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
 	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
 	public class LoadStaffingViewTest : PerformanceTestWithOneTimeSetup
 	{

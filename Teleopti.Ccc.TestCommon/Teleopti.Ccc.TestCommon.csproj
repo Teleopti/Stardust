@@ -177,6 +177,9 @@
     <Compile Include="ConcurrencyRunner.cs" />
     <Compile Include="CountCallsToNightRestWhiteSpotSolverServiceFactory.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="DatabaseTestHelper.cs" />
+    <Compile Include="DatabaseTestSetup.cs" />
+    <Compile Include="DataSourceFactoryFactory.cs" />
     <Compile Include="FakeAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="FakeApplicationInsights.cs" />
     <Compile Include="FakeApplicationInsightsConfigReader.cs" />
@@ -580,6 +583,7 @@
     <Compile Include="TestData\Setups\Specific\SpecificUserTimeZone.cs" />
     <Compile Include="TestData\Setups\Specific\PersianCulture.cs" />
     <Compile Include="TestData\ShiftForDate.cs" />
+    <Compile Include="TestTenantName.cs" />
     <Compile Include="ThreadCulture.cs" />
     <Compile Include="DummyInfrastructureInfoPopulator.cs" />
     <Compile Include="EntityExtensions.cs" />

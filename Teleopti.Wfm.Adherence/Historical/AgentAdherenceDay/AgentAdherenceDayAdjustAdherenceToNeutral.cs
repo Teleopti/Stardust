@@ -13,8 +13,8 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private readonly Func<DateTimePeriod?> _shiftFromSchedule;
 
 		private DateTimePeriod? _collectedShift;
-		private readonly IList<openPeriod> _collectedApprovedPeriods = new List<openPeriod>();
-		private readonly IList<openPeriod> _collectedNeutralPeriods = new List<openPeriod>();
+		private readonly IList<OpenPeriod> _collectedApprovedPeriods = new List<OpenPeriod>();
+		private readonly IList<OpenPeriod> _collectedNeutralPeriods = new List<OpenPeriod>();
 		private readonly IList<HistoricalChangeModel> _collectedChanges = new List<HistoricalChangeModel>();
 
 		private DateTimePeriod? _calculatedDisplayPeriod;
@@ -61,13 +61,13 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		}
 
 		public void Apply(PeriodApprovedAsInAdherenceEvent @event) =>
-			_collectedApprovedPeriods.Add(new openPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
+			_collectedApprovedPeriods.Add(new OpenPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
 
 		public void Apply(ApprovedPeriodRemovedEvent @event) =>
-			_collectedApprovedPeriods.Remove(new openPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
+			_collectedApprovedPeriods.Remove(new OpenPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
 
 		public void Apply(PeriodAdjustedToNeutralEvent @event) =>
-			_collectedNeutralPeriods.Add(new openPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
+			_collectedNeutralPeriods.Add(new OpenPeriod {StartTime = @event.StartTime, EndTime = @event.EndTime});
 
 		public void ApplyDone() => calculate();
 
@@ -149,7 +149,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				.Where(x => x.Timestamp >= displayPeriod.StartDateTime && x.Timestamp <= displayPeriod.EndDateTime)
 				.ToArray();
 
-		private static IEnumerable<openPeriod> calculateAdherences(DateTimePeriod displayPeriod, DateTime now, IEnumerable<HistoricalChangeModel> changes, HistoricalChangeAdherence adherence)
+		private static IEnumerable<OpenPeriod> calculateAdherences(DateTimePeriod displayPeriod, DateTime now, IEnumerable<HistoricalChangeModel> changes, HistoricalChangeAdherence adherence)
 		{
 			var adherences = buildPeriods(adherence, changes, displayPeriod);
 			closeOpenPeriod(displayPeriod, now, adherences);
@@ -159,7 +159,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			return adherences;
 		}
 
-		private static IEnumerable<openPeriod> buildPeriods(HistoricalChangeAdherence adherence, IEnumerable<HistoricalChangeModel> changes, DateTimePeriod period)
+		private static IEnumerable<OpenPeriod> buildPeriods(HistoricalChangeAdherence adherence, IEnumerable<HistoricalChangeModel> changes, DateTimePeriod period)
 		{
 			var result = changes
 				.Select(change => new
@@ -168,14 +168,14 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 					periodStarting = change.Adherence == adherence
 				})
 				.TransitionsOf(x => x.periodStarting)
-				.Aggregate(new List<openPeriod>(), (periods, change) =>
+				.Aggregate(new List<OpenPeriod>(), (periods, change) =>
 				{
 					if (change.periodStarting)
 					{
 						DateTime? startTime = null;
 						if (change.Timestamp > period.StartDateTime)
 							startTime = change.Timestamp;
-						periods.Add(new openPeriod(startTime, null));
+						periods.Add(new OpenPeriod(startTime, null));
 					}
 					else if (periods.Any())
 						periods.Last().EndTime = change.Timestamp;
@@ -186,7 +186,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			return result;
 		}
 
-		private static void closeOpenPeriod(DateTimePeriod displayPeriod, DateTime now, IEnumerable<openPeriod> periods)
+		private static void closeOpenPeriod(DateTimePeriod displayPeriod, DateTime now, IEnumerable<OpenPeriod> periods)
 		{
 			var period = periods.LastOrDefault();
 			if (period == null) return;
@@ -195,7 +195,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			period.EndTime = now;
 		}
 
-		private static IEnumerable<openPeriod> removeTinyPeriods(IEnumerable<openPeriod> periods) =>
+		private static IEnumerable<OpenPeriod> removeTinyPeriods(IEnumerable<OpenPeriod> periods) =>
 			(from p in periods
 				let openStart = p.StartTime == null
 				let openEnd = p.EndTime == null
@@ -204,8 +204,8 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				select p
 			).ToArray();
 
-		private static IEnumerable<openPeriod> mergeAdjacentPeriods(IEnumerable<openPeriod> periods) =>
-			periods.Aggregate(new List<openPeriod>(), (acc, i) =>
+		private static IEnumerable<OpenPeriod> mergeAdjacentPeriods(IEnumerable<OpenPeriod> periods) =>
+			periods.Aggregate(new List<OpenPeriod>(), (acc, i) =>
 			{
 				var lastPeriod = acc.LastOrDefault();
 				if (lastPeriod != null && lastPeriod.EndTime.Value == i.StartTime)
@@ -215,17 +215,17 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				return acc;
 			});
 
-		private static IEnumerable<AdherencePeriod> calculateRecordedOutOfAdherences(IEnumerable<openPeriod> recordedOutOfAdherences) =>
+		private static IEnumerable<AdherencePeriod> calculateRecordedOutOfAdherences(IEnumerable<OpenPeriod> recordedOutOfAdherences) =>
 			recordedOutOfAdherences
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
 				.ToArray();
 
-		private static IEnumerable<AdherencePeriod> calculateOutOfAdherences(IEnumerable<openPeriod> recordedOutOfAdherences, IEnumerable<openPeriod> approvedPeriods) =>
-			subtractPeriods(recordedOutOfAdherences, approvedPeriods)
+		private static IEnumerable<AdherencePeriod> calculateOutOfAdherences(IEnumerable<OpenPeriod> recordedOutOfAdherences, IEnumerable<OpenPeriod> approvedPeriods) =>
+			recordedOutOfAdherences.Subtract(approvedPeriods)
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
 				.ToArray();
 
-		private static IEnumerable<AdherencePeriod> calculateApprovedPeriods(IEnumerable<openPeriod> approvedPeriods) =>
+		private static IEnumerable<AdherencePeriod> calculateApprovedPeriods(IEnumerable<OpenPeriod> approvedPeriods) =>
 			approvedPeriods
 				.Select(x => new AdherencePeriod(x.StartTime, x.EndTime))
 				.ToArray();
@@ -233,15 +233,21 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private static int? calculateSecondsInAdherence(
 			DateTimePeriod shift,
 			DateTime now,
-			IEnumerable<openPeriod> outOfAdherences,
-			IEnumerable<openPeriod> neutralAdherences,
-			IEnumerable<openPeriod> adjustedToNeutralPeriods,
-			IEnumerable<openPeriod> approvedPeriods)
+			IEnumerable<OpenPeriod> outOfAdherences,
+			IEnumerable<OpenPeriod> neutralAdherences,
+			IEnumerable<OpenPeriod> adjustedToNeutralPeriods,
+			IEnumerable<OpenPeriod> approvedPeriods)
 		{
-			outOfAdherences = subtractPeriods(outOfAdherences, approvedPeriods);
-			outOfAdherences = subtractPeriods(outOfAdherences, adjustedToNeutralPeriods);
-			neutralAdherences = addPeriods(neutralAdherences, adjustedToNeutralPeriods);
-			neutralAdherences = subtractPeriods(neutralAdherences, approvedPeriods);
+			outOfAdherences = outOfAdherences
+				.Subtract(approvedPeriods)
+				.Subtract(adjustedToNeutralPeriods)
+				.ToArray();
+
+			neutralAdherences = neutralAdherences
+				.Subtract(adjustedToNeutralPeriods)
+				.Concat(adjustedToNeutralPeriods)
+				.Subtract(approvedPeriods)
+				.ToArray();
 
 			var timeOut = timeInShift(shift, outOfAdherences);
 			var timeNeutral = timeInShift(shift, neutralAdherences);
@@ -253,16 +259,17 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			return Convert.ToInt32(timeIn.TotalSeconds);
 		}
 
-		private static int? calculateSecondsOutOfAdherence(DateTimePeriod shift, IEnumerable<openPeriod> outOfAdherences, IEnumerable<openPeriod> neutralAdherences, IEnumerable<openPeriod> approvedPeriods)
+		private static int? calculateSecondsOutOfAdherence(DateTimePeriod shift, IEnumerable<OpenPeriod> outOfAdherences, IEnumerable<OpenPeriod> neutralAdherences, IEnumerable<OpenPeriod> approvedPeriods)
 		{
-			outOfAdherences = subtractPeriods(outOfAdherences, approvedPeriods);
-			outOfAdherences = subtractPeriods(outOfAdherences, neutralAdherences);
+			outOfAdherences = outOfAdherences
+				.Subtract(approvedPeriods)
+				.Subtract(neutralAdherences)
+				.ToArray();
 			var timeOut = timeInShift(shift, outOfAdherences);
-
 			return Convert.ToInt32(timeOut.TotalSeconds);
 		}
 
-		private static TimeSpan timeInShift(DateTimePeriod shift, IEnumerable<openPeriod> periods)
+		private static TimeSpan timeInShift(DateTimePeriod shift, IEnumerable<OpenPeriod> periods)
 		{
 			var seconds = from p in periods
 				let startTime = (p.StartTime ?? DateTime.MinValue).Utc()
@@ -275,7 +282,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			return TimeSpan.FromSeconds(seconds.Sum());
 		}
 
-		private static IEnumerable<openPeriod> intersectsWithPeriod(DateTimePeriod period, IEnumerable<openPeriod> periods) =>
+		private static IEnumerable<OpenPeriod> intersectsWithPeriod(DateTimePeriod period, IEnumerable<OpenPeriod> periods) =>
 			(from p in periods
 				let startTime = p.StartTime ?? DateTime.MinValue
 				let endTime = p.EndTime ?? DateTime.MaxValue
@@ -291,122 +298,5 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 		private static HistoricalChangeAdherence? convertAdherence(EventAdherence? adherence) =>
 			adherence != null ? (HistoricalChangeAdherence?) Enum.Parse(typeof(HistoricalChangeAdherence), adherence.ToString()) : null;
 
-		private static IEnumerable<openPeriod> subtractPeriods(IEnumerable<openPeriod> periods, IEnumerable<openPeriod> toSubtract)
-		{
-			return toSubtract
-				.Aggregate(periods, (ps, approved) =>
-					{
-						return ps.Aggregate(Enumerable.Empty<openPeriod>(), (r, recorded) =>
-							{
-								var subtracted = subtract(recorded, approved);
-								return r.Concat(subtracted);
-							}
-						);
-					}
-				).ToArray();
-		}
-
-
-		private static IEnumerable<openPeriod> subtract(openPeriod subtractFrom, openPeriod toSubtract)
-		{
-			var timePeriods = new List<openPeriod>();
-
-			if (notIntersecting(subtractFrom, toSubtract))
-				timePeriods.Add(subtractFrom);
-			else
-			{
-				if (subtractFrom.StartTime == null || subtractFrom.StartTime < toSubtract.StartTime)
-				{
-					var leftTimePeriod = new openPeriod(subtractFrom.StartTime, toSubtract.StartTime);
-					timePeriods.Add(leftTimePeriod);
-
-					if (subtractFrom.EndTime == null || subtractFrom.EndTime > toSubtract.EndTime)
-					{
-						var rightTimePeriod = new openPeriod(toSubtract.EndTime, subtractFrom.EndTime);
-						timePeriods.Add(rightTimePeriod);
-					}
-				}
-				else if (subtractFrom.EndTime == null || subtractFrom.EndTime > toSubtract.EndTime)
-				{
-					var rightTimePeriod = new openPeriod(toSubtract.EndTime, subtractFrom.EndTime);
-					timePeriods.Add(rightTimePeriod);
-				}
-			}
-
-			return timePeriods;
-		}
-
-		private static IEnumerable<openPeriod> addPeriods(IEnumerable<openPeriod> periods, IEnumerable<openPeriod> toAdd)
-		{
-			return toAdd
-				.Aggregate(periods, (ps, adjusted) =>
-					{
-						List<openPeriod> periodsList = periods.ToList();
-						if (periodsList.Count == 0)
-							return periodsList.Append(adjusted);
-						return ps
-							.Aggregate(new List<openPeriod>(), (acc, period) =>
-								{
-									if (notIntersecting(adjusted, period))
-										acc.Add(adjusted);
-									else
-										extendPeriod(period, adjusted);
-									acc.Add(period);
-									return acc;
-								}
-							);
-					}
-				);
-		}
-
-		private static bool notIntersecting(openPeriod firstPeriod, openPeriod secondPeriod)
-		{
-			var startsAfterLastPeriodEnds = firstPeriod.StartTime > secondPeriod.EndTime;
-			var endsBeforeLastPeriodStarts = firstPeriod.EndTime < secondPeriod.StartTime;
-			return startsAfterLastPeriodEnds || endsBeforeLastPeriodStarts;
-		}
-
-		private static void extendPeriod(openPeriod period, openPeriod adjusted)
-		{
-			period.EndTime = period.EndTime < adjusted.EndTime ? adjusted.EndTime : period.EndTime;
-			period.StartTime = period.StartTime > adjusted.StartTime ? adjusted.StartTime : period.StartTime;
-		}
-
-		private class openPeriod
-		{
-			public DateTime? StartTime;
-			public DateTime? EndTime;
-
-			public openPeriod()
-			{
-			}
-
-			public openPeriod(DateTime? startTime, DateTime? endTime)
-			{
-				StartTime = startTime;
-				EndTime = endTime;
-			}
-
-			protected bool Equals(openPeriod other)
-			{
-				return StartTime.Equals(other.StartTime) && EndTime.Equals(other.EndTime);
-			}
-
-			public override bool Equals(object obj)
-			{
-				if (ReferenceEquals(null, obj)) return false;
-				if (ReferenceEquals(this, obj)) return true;
-				if (obj.GetType() != this.GetType()) return false;
-				return Equals((openPeriod) obj);
-			}
-
-			public override int GetHashCode()
-			{
-				unchecked
-				{
-					return (StartTime.GetHashCode() * 397) ^ EndTime.GetHashCode();
-				}
-			}
-		}
 	}
 }

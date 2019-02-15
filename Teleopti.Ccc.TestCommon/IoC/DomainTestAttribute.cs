@@ -170,7 +170,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// licensing
 			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
 
-
+			//staffing
+			isolate.UseTestDouble<SkillForecastIntervalCalculator>().For<SkillForecastIntervalCalculator>();
+			isolate.UseTestDouble<SkillForecastReadModelPeriodBuilder>().For<SkillForecastReadModelPeriodBuilder>();
+			isolate.UseTestDouble<SkillForecastSettingsReader>().For<SkillForecastSettingsReader>();
+			 
 			// Repositories
 			if (QueryAllAttributes<ThrowIfRepositoriesAreUsedAttribute>().Any())
 			{

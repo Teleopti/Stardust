@@ -25,9 +25,7 @@ describe('SkillGroupManager', function() {
 	];
 
 	beforeEach(function() {
-		module('wfm.skillGroup');
-		module('wfm.notice');
-		module('wfm.utilities');
+		module('wfm.skillGroup', 'wfm.notice', 'wfm.utilities');
 
 		module(function($provide) {
 			$provide.service('SkillGroupSvc', function() {

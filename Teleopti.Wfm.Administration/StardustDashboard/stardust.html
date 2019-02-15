@@ -2,6 +2,7 @@
 	<h2>Stardust Dashboard</h2>
 	<div class="row">
 		<div class="col-md-3">
+			<create-forecast-read-model></create-forecast-read-model>
 			<div class="panel panel-default ">
 				<div class="panel-heading">Trigger Resource Calculation</div>
 				<div class="panel-body">
@@ -121,7 +122,7 @@
 						<tbody>
 							<tr ng-repeat="job in vm.QueuedJobs">
 								<td>{{job.DataSource}}</td>
-								<td><a href="#StardustDashboard/queue/{{job.JobId}}">{{job.Type}}</a></td>
+								<td><a target="_blank" href="#StardustDashboard/queue/{{job.JobId}}">{{job.Type}}</a></td>
 								<td>{{job.CreatedBy}} {{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							</tr>
 						</tbody>

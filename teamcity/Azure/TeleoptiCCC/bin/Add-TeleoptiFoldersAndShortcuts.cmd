@@ -20,9 +20,8 @@ REM set targetFile=%DIRECTORY%\log4Net\log4net.dll
 REM COPY "%srcFile%" "%targetFile%" /Y
 
 ::execute
-if exist "%targetFile%" (
 powershell . .\Add-TeleoptiFoldersAndShortcuts.ps1 >nul
-)
+
 
 exit /b 0
 

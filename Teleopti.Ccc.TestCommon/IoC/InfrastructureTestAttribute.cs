@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.Repositories;
@@ -46,6 +47,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public IDataSourceForTenant DataSourceForTenant;
 		public IEventPublisher Publisher;
 		public IHangfireClientStarter HangfireClientStarter;
+		public ICurrentPrincipalContext PrincipalContext;
+		public IPrincipalFactory PrincipalFactory;
 		private IDisposable _transactionHookScope;
 		
 		protected override FakeConfigReader Config()
@@ -123,7 +126,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
 
 			DataSourceForTenant.MakeSureDataSourceCreated(
-				DataSourceHelper.TestTenantName,
+				TestTenantName.Name,
 				InfraTestConfigReader.ConnectionString,
 				InfraTestConfigReader.AnalyticsConnectionString,
 				null);
@@ -147,6 +150,17 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			TransactionHook = null;
 			TransactionHooks = null;
 			TransactionHooksScope = null;
+		}
+
+		protected void Login(IPerson person, IBusinessUnit businessUnit)
+		{
+			var principal = PrincipalFactory.MakePrincipal(new PersonAndBusinessUnit(person, businessUnit), DataSourceForTenant.Tenant(TestTenantName.Name), null);
+			PrincipalContext.SetCurrentPrincipal(principal);
+		}
+		
+		protected void Logout()
+		{
+			PrincipalContext.SetCurrentPrincipal(null);
 		}
 	}
 }

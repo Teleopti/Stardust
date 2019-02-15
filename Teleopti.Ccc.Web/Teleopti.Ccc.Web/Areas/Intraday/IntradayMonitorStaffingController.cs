@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	public class IntradayMonitorStaffingController : ApiController
 	{
 		private readonly IIntradaySkillProvider _intradaySkillProvider;
-		private readonly IntradayStaffingApplicationService _intradayStaffingApplicationService;
+		private readonly IIntradayApplicationStaffingService _intradayStaffingApplicationService;
 
 		public IntradayMonitorStaffingController(
-			IIntradaySkillProvider intradaySkillProvider, 
-			IntradayStaffingApplicationService intradayStaffingApplicationService)
+			IIntradaySkillProvider intradaySkillProvider,
+			IIntradayApplicationStaffingService intradayStaffingApplicationService)
 		{
 			_intradaySkillProvider = intradaySkillProvider;
 			_intradayStaffingApplicationService = intradayStaffingApplicationService ?? throw new ArgumentNullException(nameof(intradayStaffingApplicationService));

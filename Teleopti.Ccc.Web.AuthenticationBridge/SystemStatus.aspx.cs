@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 			Response.Write($"<br><div style='color:{systemTextColor}'>{systemText}</div>");
 
 			Response.Write($"<input type=\"hidden\" value=\"{sbTriedVisitByIdentityUrls}\">");
-			Response.StatusCode =  allOk ? 200: 202;
+			Response.StatusCode =  allOk ? 200 : 500;
 		}
 
 		private IEnumerable<Func<ValueTuple<string, bool>>> providerUrls()

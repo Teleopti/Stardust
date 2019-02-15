@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the add extended preference button")]
 		public void WhenIClickTheAddExtendedPreferenceButton()
 		{
-			Browser.Interactions.Click(".submenu .Preference-add-extended-button[data-menu-loaded=true]");
+			Browser.Interactions.ClickUsingJQuery(".preference-phone-navbar .Preference-add-extended-button[data-menu-loaded=true]");
 		}
 
 		[When(@"I click the apply extended preferences button")]
@@ -153,13 +153,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see I have (\d) available must haves")]
 		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-			Browser.Interactions.AssertFirstContains(".submenu .musthave-max", mustHave.ToString());
+			Browser.Interactions.AssertExistsUsingJQuery(".preference-phone-navbar .musthave-max", mustHave.ToString());
 		}
 
 		[Then(@"I should see I have (\d) must haves")]
 		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
 		{
-			Browser.Interactions.AssertFirstContains(".submenu .musthave-current", mustHave.ToString());
+			Browser.Interactions.AssertExistsUsingJQuery(".preference-phone-navbar .musthave-current", mustHave.ToString());
 		}
 
 		[Then(@"I should not see the extended preference button")]

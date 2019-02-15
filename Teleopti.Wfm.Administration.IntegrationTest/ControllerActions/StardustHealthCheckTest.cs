@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void TestFixtureSetUp()
 		{
 			StardustRepository = new FakeStardustRepository();
-			Target = new StardustController(StardustRepository, new AnotherTemporaryFakeStardustSender(StardustRepository), new FakeTenants(), new StaffingSettingsReader49Days(), new FakePingNode());
+			Target = new StardustController(StardustRepository, new AnotherTemporaryFakeStardustSender(StardustRepository), new FakeTenants(), new StaffingSettingsReader49Days(), new FakePingNode(),null);
 		}
 
 		[SetUp]

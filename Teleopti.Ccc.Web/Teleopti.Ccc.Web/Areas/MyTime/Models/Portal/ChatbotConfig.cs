@@ -15,5 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	public class GrantBotConfig
 	{
 		public string Token { get; set; }
+		public string Timestamp { get; set; }
+		public string Signature { get; set; }
 	}
 }

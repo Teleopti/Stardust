@@ -1,119 +1,51 @@
-using System.Collections.Generic;
-using Autofac;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 {
-	public class NoMessageSender : IMessageSender
-	{
-		public void Send(Message message)
-		{
-		}
-
-		public void SendMultiple(IEnumerable<Message> messages)
-		{
-		}
-	}
-
 	public class InfrastructureTestSetup
 	{
-		internal static IDataSource DataSource;
-		private static int createdDatabaseHash = 0;
+		private static IPerson _person;
+		private static IBusinessUnit _businessUnit;
 
-		public static IPerson Before()
+		public static (IPerson Person, IBusinessUnit BusinessUnit) Before()
 		{
-			IPerson person;
-
-			ensureDatabase();
-
-			createBusinessUnitAndPerson(out person);
-			Login(person);
-			using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
+			DatabaseTestSetup.Setup(context =>
 			{
-				saveBusinessUnitAndPerson(person, unitOfWork);
-				unitOfWork.PersistAll();
-			}
+				BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
+				_businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+				_person = PersonFactory.CreatePerson(RandomName.Make());
 
-			return person;
+				context.UpdatedByScope.OnThisThreadUse(_person);
+				using (var uow = context.DataSource.Application.CreateAndOpenUnitOfWork())
+				{
+					var session = uow.FetchSession();
+
+					((IDeleteTag) _person).SetDeleted();
+					session.Save(_person);
+
+					//force a insert
+					var businessUntId = _businessUnit.Id.Value;
+					_businessUnit.SetId(null);
+					session.Save(_businessUnit, businessUntId);
+					session.Flush();
+
+					uow.PersistAll();
+				}
+
+				context.UpdatedByScope.OnThisThreadUse(null);
+
+				return 254875;
+			});
+
+			return (_person, _businessUnit);
 		}
 
 		public static void After()
 		{
-			Logout();
-		}
-
-		private static void ensureDatabase()
-		{
-			if (createdDatabaseHash != 0)
-			{
-				DataSourceHelper.RestoreApplicationDatabase(createdDatabaseHash);
-				DataSourceHelper.RestoreAnalyticsDatabase(createdDatabaseHash);
-				return;
-			}
-
-			createdDatabaseHash = createDatabase();
-		}
-
-		private static int createDatabase()
-		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
-			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
-			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
-			var container = builder.Build();
-
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeFromContainer(container));
-
-			const int someHash = 7545;
-			DataSourceHelper.BackupApplicationDatabase(someHash);
-			DataSourceHelper.BackupAnalyticsDatabase(someHash);
-			return someHash;
-		}
-
-
-		private static void createBusinessUnitAndPerson(out IPerson person)
-		{
-			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
-
-			person = PersonFactory.CreatePerson(RandomName.Make());
-		}
-
-		private static void saveBusinessUnitAndPerson(IPerson person, IUnitOfWork uow)
-		{
-			var session = uow.FetchSession();
-
-			((IDeleteTag) person).SetDeleted();
-			session.Save(person);
-
-			//force a insert
-			var businessUntId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value;
-			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
-			session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, businessUntId);
-			session.Flush();
-		}
-
-		public static void Login(IPerson person)
-		{
-			var principalContext = SelectivePrincipalContext.Make();
-			var principal = TeleoptiPrincipalFactory.Make().MakePrincipal(new PersonAndBusinessUnit(person, BusinessUnitFactory.BusinessUnitUsedInTest), DataSource, null);
-			principalContext.SetCurrentPrincipal(principal);
-		}
-
-		public static void Logout()
-		{
-			var principalContext = SelectivePrincipalContext.Make();
-			principalContext.SetCurrentPrincipal(null);
 		}
 	}
 }

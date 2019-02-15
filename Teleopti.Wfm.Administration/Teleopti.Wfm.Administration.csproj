@@ -68,11 +68,13 @@
     <Reference Include="Hangfire.Autofac, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Hangfire.Autofac.2.3.1\lib\net45\Hangfire.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Hangfire.Core, Version=1.6.21.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hangfire.Core.1.6.21\lib\net45\Hangfire.Core.dll</HintPath>
+    <Reference Include="Hangfire.Core, Version=1.6.22.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Hangfire.Core.1.6.22\lib\net45\Hangfire.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Hangfire.SqlServer, Version=1.6.21.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hangfire.SqlServer.1.6.21\lib\net45\Hangfire.SqlServer.dll</HintPath>
+    <Reference Include="Hangfire.SqlServer, Version=1.6.22.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Hangfire.SqlServer.1.6.22\lib\net45\Hangfire.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
       <HintPath>..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
@@ -309,8 +311,13 @@
     <Content Include="Scripts\App\adduserController.js" />
     <Content Include="Scripts\App\changePasswordController.js" />
     <Content Include="Scripts\App\addSuperUserController.js" />
+    <Content Include="Scripts\App\Components\createForecastReadModel\createForecastReadModel.template.html" />
+    <Content Include="Scripts\App\Components\createForecastReadModel\createForecastReadModel.module.js" />
+    <Content Include="Scripts\App\Components\createForecastReadModel\createForecastReadModel.component.js" />
+    <Content Include="Scripts\App\Components\createForecastReadModel\createForecastReadModel.service.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
+    <Content Include="Scripts\App\Services\tenant.service.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\clipboard.min.js" />
@@ -430,6 +437,7 @@
     <Compile Include="Core\IRunWithUnitOfWork.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />
     <Compile Include="Core\RtaStateGroupCreator.cs" />
+    <Compile Include="Monitoring\MonitorController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />

@@ -44,15 +44,15 @@ export class SettingsMenuComponent {
 		});
 	}
 
-	toggleLightFilter(bool: boolean) {
+	toggleLightFilter(enableLowLightFilter: boolean) {
 		this.themeService.saveThemePreference({
 			Name: this.darkTheme ? 'dark' : 'classic',
-			Overlay: bool
+			Overlay: enableLowLightFilter
 		});
 	}
 
-	toggleDarkTheme(bool: boolean) {
-		const themeStyle = bool ? 'dark' : 'classic';
+	toggleDarkTheme(enableDarkTheme: boolean) {
+		const themeStyle = enableDarkTheme ? 'dark' : 'classic';
 		this.themeService.saveThemePreference({
 			Name: themeStyle,
 			Overlay: this.lowLightFilter

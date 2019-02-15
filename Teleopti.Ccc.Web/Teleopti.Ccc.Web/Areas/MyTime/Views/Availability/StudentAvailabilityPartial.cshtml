@@ -28,7 +28,13 @@ Layout = null;
 					</span>
 				</span>
 			</li>
-			<li class="col-xs-12 col-sm-4 phone-navbar-bottom">
+			<li class="col-xs-12 col-sm-4 phone-navbar-bottom" data-bind="style: {'display': IsHostAMobile ? 'none' : 'block'}">
+				<ul class="nav navbar-nav teleopti-toolbar row submenu">
+					<li class="col-xs-12 col-sm-4 w-50"><a href="#" id="Availability-edit-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability</a></li>
+					<li class="col-xs-12 col-sm-4 w-50"><a href="#" id="Availability-delete-button"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
+				</ul>
+			</li>
+			<li class="col-xs-12 col-sm-4 preference-phone-navbar-mobile" data-bind="style: {'display': IsHostAMobile ? 'block' : 'none'}">
 				<ul class="nav navbar-nav teleopti-toolbar row submenu">
 					<li class="col-xs-12 col-sm-4 w-50"><a href="#" id="Availability-edit-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability</a></li>
 					<li class="col-xs-12 col-sm-4 w-50"><a href="#" id="Availability-delete-button"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
@@ -36,8 +42,16 @@ Layout = null;
 			</li>
 		</ul>
 		<div class="warning-indicator" data-bind="click: toggleWarningDetail, style:{'display': IsHostAMobile ? 'flex' : 'none'}">
-			<span data-bind="css: StudentAvailabilityFeedbackClass,text:WarningCount"
-				  class="warning-count"></span>
+			<!-- ko if: AlertDanger -->
+			<span class="warning-danger">
+				<i class="glyphicon glyphicon-exclamation-sign"></i>
+			</span>
+			<!-- /ko -->
+			<!--  ko ifnot: AlertDanger -->
+			<span class="warning-info">
+				<i class="glyphicon glyphicon-ok-sign"></i>
+			</span>
+			<!-- /ko -->
 		</div>
 		<!--ko if:isInitFinished-->
 		<div id="init-flag"></div>

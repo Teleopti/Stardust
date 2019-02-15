@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 	{
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
-		//private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IntradayStatisticsService _intradayStatisticsService;
@@ -46,11 +45,10 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			IntradayStatisticsService intradayStatisticsService,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, 
 			ISkillRepository skillRepository,
-			ISkillDayLoadHelper skillDayLoadHelper, ILoadSkillDaysWithPeriodFlexibility loadSkillDaysWithPeriodFlexibility)
+			ILoadSkillDaysWithPeriodFlexibility loadSkillDaysWithPeriodFlexibility)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository ?? throw new ArgumentNullException(nameof(skillCombinationResourceRepository));
 			_skillRepository = skillRepository ?? throw new ArgumentNullException(nameof(skillRepository));
-			//_skillDayLoadHelper = skillDayLoadHelper;
 			_loadSkillDaysWithPeriodFlexibility = loadSkillDaysWithPeriodFlexibility;
 			_currentScenario = currentScenario ?? throw new ArgumentNullException(nameof(currentScenario));
 			_resourceCalculation = resourceCalculation ?? throw new ArgumentNullException(nameof(resourceCalculation));
@@ -69,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			var lastPeriodDateInSkillTimeZone = new DateOnly(skills.Select(x => TimeZoneInfo.ConvertTimeFromUtc(toUtc, x.TimeZone)).Max());
 			var dateOnlyPeriod = new DateOnlyPeriod(firstPeriodDateInSkillTimeZone, lastPeriodDateInSkillTimeZone);
 
-			//var skillDays = _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, _currentScenario.Current()).Values.SelectMany(i => i).ToList();
 			var skillDays = _loadSkillDaysWithPeriodFlexibility.Load(dateOnlyPeriod, skills, _currentScenario.Current()).Values.SelectMany(i => i).ToList();
 			var returnList = new HashSet<SkillStaffingInterval>();
 			foreach (var skillDay in skillDays)

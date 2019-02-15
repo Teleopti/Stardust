@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Intraday.Extensions;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
-using StaffingDataSeries = Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels.StaffingDataSeries;
 
 namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 {
-	public class IntradayStaffingApplicationService 
+	public class IntradayStaffingApplicationService : IIntradayApplicationStaffingService
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
@@ -61,13 +58,14 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			_loadSkillDaysWithPeriodFlexibility = loadSkillDaysWithPeriodFlexibility;
 		}
 
-		public IntradayStaffingViewModel GenerateStaffingViewModel(Guid[] skillIdList, int dayOffset)
+
+		public ScheduledStaffingViewModel GenerateStaffingViewModel(Guid[] skillIdList, int dayOffset)
 		{
 			var localTimeWithOffset = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).AddDays(dayOffset);
 			return GenerateStaffingViewModel(skillIdList, new DateOnly(localTimeWithOffset));
 		}
 
-		public IntradayStaffingViewModel GenerateStaffingViewModel(
+		public ScheduledStaffingViewModel GenerateStaffingViewModel(
 			Guid[] skillIdList, 
 			DateOnly? dateInLocalTime = null,
 			bool useShrinkage = false)
@@ -83,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			if (!skills.Any())
-				return new IntradayStaffingViewModel();
+				return new ScheduledStaffingViewModel();
 
 			//var skillDaysBySkills = 
 			//	_skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(new DateOnly(startOfDayUtc), new DateOnly(startOfDayUtc.AddDays(1))), skills, scenario);
@@ -93,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			
 			var forecast = _forecastingService.GenerateForecast(skillDays, startOfDayUtc, startOfDayUtc.AddDays(1), TimeSpan.FromMinutes(minutesPerInterval), useShrinkage);
 			if (!forecast.Any())
-				return new IntradayStaffingViewModel();
+				return new ScheduledStaffingViewModel();
 
 			var statisticsPerWorkloadInterval = _intradayQueueStatisticsLoader.LoadSkillVolumeStatistics(skills, startOfDayUtc);
 
@@ -209,7 +207,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 						: null).ToArray())
 					: new double?[]{}
 			};
-			return new IntradayStaffingViewModel
+			return new ScheduledStaffingViewModel
 			{
 				DataSeries = dataSeries,
 				StaffingHasData = forecastedStaffing.Any()

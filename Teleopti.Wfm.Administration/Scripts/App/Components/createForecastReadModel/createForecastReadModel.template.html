@@ -1,0 +1,21 @@
+﻿<div class="panel panel-default ">
+	<div class="panel-heading">Trigger skill forecast calculation</div>
+	<div class="panel-body">
+		<p>Do we want any comment here?</p>
+		<div class="dropdown" style="padding-bottom: 10px">
+			<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				<span ng-show="!$ctrl.selectedTenantName">Select Tenant...</span>
+				<span ng-show="$ctrl.selectedTenantName">{{$ctrl.selectedTenantName}}</span>
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<li ng-repeat="tenant in $ctrl.tenants" ng-click="$ctrl.selectTenant(tenant.Name)"><a>{{tenant.Name}}</a></li>
+			</ul>
+		</div>
+		<div class="row" style="padding: 10px">
+			<button class="btn btn-primary" ng-disabled="!$ctrl.selectedTenantName" ng-click="$ctrl.triggerCreateForecastReadModel()">
+				<span class="text-white">Trigger create forecast read model</span>
+			</button>
+		</div>
+	</div>
+</div>

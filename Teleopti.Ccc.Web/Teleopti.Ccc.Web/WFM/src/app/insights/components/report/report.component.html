@@ -14,6 +14,9 @@
         <button nz-button nzType="default" (click)="nav.gotoInsights()"><i nz-icon type="left" theme="outline"></i> Back</button>
       </div>
       <div nz-col nzSpan="18" *ngIf="!inEditing" class="report-action-panel">
+        <button nz-button nzType="default" [disabled]="!reportLoaded" (click)="printReport(reportId)" class="report-ction">
+          <i nz-icon type="printer" theme="outline"></i> Print
+        </button>
         <button nz-button nzType="default" *ngIf="permission.CanEditReport" (click)="nav.editReport(reportId)" class="report-ction">
           <i nz-icon type="edit" theme="outline"></i> Edit
         </button>

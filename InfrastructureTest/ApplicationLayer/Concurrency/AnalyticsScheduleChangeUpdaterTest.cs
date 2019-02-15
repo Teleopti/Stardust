@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 		
 		[Test]
 		[Timeout(30000)]
-		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
+		public async Task ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 1, 5, 0,0,0,DateTimeKind.Utc);
 			var scenario = new Scenario("_") {DefaultScenario = true};
@@ -68,9 +68,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 						.WithLayer(activity, new TimePeriod(8,17))
 						.ShiftCategory(shiftCategory));
 			});
-
-			var tasksToRunInParallell = Enumerable.Range(0, 5).Select(x =>
-				Task.Factory.StartNew(() =>
+			
+			var tasksToRunInParallel = Enumerable.Repeat(0, 5).Select(x =>
+			{
+				var task = Task.Run(() =>
 				{
 					Target.Handle(new ScheduleChangedEvent
 					{
@@ -79,9 +80,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 						PersonId = person.Id.Value,
 						ScenarioId = scenario.Id.Value
 					});
-				}));
+				});
+				task.ConfigureAwait(false);
+				return task;
+			});
 
-			Task.WaitAll(tasksToRunInParallell.ToArray());
+			await Task.WhenAll(tasksToRunInParallel.ToArray());
 		}
 
 		public void Isolate(IIsolate isolate)

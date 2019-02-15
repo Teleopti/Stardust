@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			for (var i = pasteList.Count - 1; i > 0; i--)
 			{
 				var scheduleDay = pasteList[i];
-				var scheduleDayBefore = pasteList[i - 1];
+				var scheduleDayBefore = pasteList.FirstOrDefault(x => x.Person.Equals(scheduleDay.Person) && x.DateOnlyAsPeriod.DateOnly.Equals(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(-1)));
 
 				if (scheduleDay == null || scheduleDayBefore == null) continue;
 				var isFullDay = ((scheduleDay.SignificantPart() == SchedulePartView.FullDayAbsence || scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff));

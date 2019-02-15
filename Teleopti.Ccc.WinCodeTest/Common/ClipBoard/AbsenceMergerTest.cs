@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -122,6 +123,45 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 			absenceMerger.MergeOnDayStart();
 
 			list.Single().PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(expectedPeriod);
+		}
+
+		[Test]
+		public void ShouldMergeAbsenceOnMultipleAgents()
+		{
+			var dateBefore = new DateOnly(2018, 10, 1);
+			var date = dateBefore.AddDays(1);
+			var scenario = new Scenario().WithId();
+			var activity = new Activity("_").WithId();
+			var absence = new Absence().WithId();
+			var expectedPeriod = dateBefore.ToDateTimePeriod(new TimePeriod(17, 27 + 24), TimeZoneInfo.Utc);
+			var agent1 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance());
+			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance());
+			var personAssignment1 = new PersonAssignment(agent1, scenario, date).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAssignment2 = new PersonAssignment(agent2, scenario, date).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAssignmentBefore1 = new PersonAssignment(agent1, scenario, dateBefore).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAssignmentBefore2 = new PersonAssignment(agent2, scenario, dateBefore).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(activity, new TimePeriod(17, 27));
+			var personAbsenceBefore1 = new PersonAbsence(agent1, scenario, new AbsenceLayer(absence, dateBefore.ToDateTimePeriod(new TimePeriod(17, 27), TimeZoneInfo.Utc)));
+			var personAbsenceBefore2 = new PersonAbsence(agent2, scenario, new AbsenceLayer(absence, dateBefore.ToDateTimePeriod(new TimePeriod(17, 27), TimeZoneInfo.Utc)));
+			var personAbsence1 = new PersonAbsence(agent1, scenario, new AbsenceLayer(absence, date.ToDateTimePeriod(new TimePeriod(2, 27), TimeZoneInfo.Utc)));
+			var personAbsence2 = new PersonAbsence(agent2, scenario, new AbsenceLayer(absence, date.ToDateTimePeriod(new TimePeriod(2, 27), TimeZoneInfo.Utc)));
+			var data = new List<IPersistableScheduleData> { personAssignmentBefore1, personAssignmentBefore2, personAssignment1 , personAssignment2};
+			var stateHolder = SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateBefore, 1), new[] { agent1, agent2 }, data, Enumerable.Empty<ISkillDay>());
+			var scheduleDayBefore1 = stateHolder.Schedules[agent1].ScheduledDay(dateBefore);
+			var scheduleDayBefore2 = stateHolder.Schedules[agent2].ScheduledDay(dateBefore);
+			var scheduleDay1 = stateHolder.Schedules[agent1].ScheduledDay(date);
+			var scheduleDay2 = stateHolder.Schedules[agent2].ScheduledDay(date);
+			scheduleDayBefore1.Add(personAbsenceBefore1);
+			scheduleDayBefore2.Add(personAbsenceBefore2);
+			scheduleDay1.Add(personAbsence1);
+			scheduleDay2.Add(personAbsence2);
+			var list = new List<IScheduleDay> { scheduleDayBefore1, scheduleDayBefore2, scheduleDay1, scheduleDay2 };
+			var absenceMerger = new AbsenceMerger(list);
+
+			absenceMerger.MergeWithDayBefore();
+
+			list.Count.Should().Be.EqualTo(2);
+			list.First().PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(expectedPeriod);
+			list.Second().PersonAbsenceCollection().Single().Period.Should().Be.EqualTo(expectedPeriod);
 		}
 	}
 }

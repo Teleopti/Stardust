@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I try to select shift category '(.*)' standard preference")]
 		public void WhenIChangeStandardPreference(string shiftCategory)
 		{
-			Browser.Interactions.ClickUsingJQuery(".preference-split-button .dropdown-toggle");
+			Browser.Interactions.ClickUsingJQuery(".preference-phone-navbar .dropdown-toggle");
 			Browser.Interactions.ClickUsingJQuery(string.Format("a:contains('{0}')", shiftCategory));
 		}
 
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click add must have button")]
 		public void WhenIClickAddMustHaveButton()
 		{
-			Browser.Interactions.Click(".dropdown-toggle .glyphicon-heart");
-			Browser.Interactions.Click(".dropdown-menu .add-musthave");
+			Browser.Interactions.ClickUsingJQuery(".preference-phone-navbar .dropdown-toggle .glyphicon-heart");
+			Browser.Interactions.ClickUsingJQuery(".preference-phone-navbar .dropdown-menu .add-musthave");
 		}
 
 		[When(@"I also select an editable day without standard preference")]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList(Table preferences)
 		{
 			var items = preferences.CreateSet<PreferenceListItem>();
-			items.ForEach(i => Browser.Interactions.AssertFirstContains(".submenu .preference-split-button", i.Preference));
+			items.ForEach(i => Browser.Interactions.AssertExistsUsingJQuery(".preference-phone-navbar .preference-split-button", i.Preference));
 		}
 
 		public class PreferenceListItem
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the selected standard preference '(.*)' in the split-button")]
 		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button(string shiftCategory)
 		{
-			Browser.Interactions.AssertFirstContains(".submenu .preference-split-button button", shiftCategory);
+			Browser.Interactions.AssertExistsUsingJQuery(".preference-phone-navbar .preference-split-button button", shiftCategory);
 		}
 
 		[Then(@"I should see the standard preference '(.*)' in the calendar")]
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see must have number be updated to '(.*)'")]
 		public void ThenIShouldSeeMustHaveNumberBeUpdatedTo(int mustHave)
 		{ 
-			Browser.Interactions.AssertFirstContains(".submenu .musthave-current", mustHave.ToString());
+			Browser.Interactions.AssertExistsUsingJQuery(".preference-phone-navbar .musthave-current", mustHave.ToString());
 		}
 
 		private static string GetExpectedContractTimesString(string earliest, string latest, CultureInfo culture)

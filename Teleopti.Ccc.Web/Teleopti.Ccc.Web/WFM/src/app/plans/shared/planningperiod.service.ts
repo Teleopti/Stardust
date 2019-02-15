@@ -12,31 +12,6 @@ export class PlanningPeriodService {
 		) as Observable<any>;
 	}
 
-	public launchScheduling(planningPeriodId: string) {
-		return this.httpClient.post(
-			'../api/resourceplanner/planningperiod/' + planningPeriodId + '/schedule',
-			{}
-		) as Observable<string>;
-	}
-
-	public optimizeIntraday(planningPeriodId: string) {
-		return this.httpClient.post(
-			'../api/resourceplanner/planningperiod/' + planningPeriodId + '/optimizeintraday',
-			{}
-		);
-	}
-
-	public clearSchedule(planningPeriodId: string) {
-		return this.httpClient.delete(
-			'../api/resourceplanner/planningperiod/' + planningPeriodId + '/schedule',
-			{}
-		) as Observable<string>;
-	}
-
-	public publishSchedule(planningPeriodId: string) {
-		return this.httpClient.post('../api/resourceplanner/planningperiod/' + planningPeriodId + '/publish', {});
-	}
-
 	public lastJobStatus(planningPeriodId: string) {
 		return this.httpClient.get(
 			'../api/resourceplanner/planningperiod/' + planningPeriodId + '/status'

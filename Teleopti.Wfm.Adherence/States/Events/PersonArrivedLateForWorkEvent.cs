@@ -2,10 +2,11 @@ using System;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Wfm.Adherence.Historical;
+using Teleopti.Wfm.Adherence.Historical.Events;
 
 namespace Teleopti.Wfm.Adherence.States.Events
 {
-	public class PersonArrivedLateForWorkEvent : IRtaStoredEvent, IEvent, ISolidProof
+	public class PersonArrivedLateForWorkEvent : IRtaStoredEvent, IRtaStoredEventForPerson, IEvent, ISolidProof
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }

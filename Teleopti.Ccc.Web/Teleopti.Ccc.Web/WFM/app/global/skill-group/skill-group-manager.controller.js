@@ -30,7 +30,8 @@
 		'skillIconService',
 		'$rootScope',
 		'Toggle',
-		'$timeout'
+		'$timeout',
+		'CurrentUserInfo'
 	];
 
 	function SkillGroupManagerController(
@@ -42,8 +43,9 @@
 		$translate,
 		skillIconService,
 		$rootScope,
-		toggleService,
-		$timeout
+		Toggle,
+		$timeout,
+		CurrentUserInfo
 	) {
 		var _ = $rootScope._;
 		var originalGroups = [];
@@ -73,21 +75,15 @@
 		vm.addSkills = function() {
 			if (vm.selectedSkills.length <= 0) return;
 
-			vm.skillGroups[vm.selectedGroupIndex].Skills = _.sortBy(
+			vm.skillGroups[vm.selectedGroupIndex].Skills = sortByName(
 				_.unionBy(vm.selectedSkills, vm.skillGroups[vm.selectedGroupIndex].Skills, function(skill) {
 					return skill.Id;
-				}),
-				function(item) {
-					return item.Name.toLowerCase();
-				}
+				})
 			);
-			vm.skills = _.sortBy(
+			vm.skills = sortByName(
 				_.differenceBy(vm.allSkills, vm.skillGroups[vm.selectedGroupIndex].Skills, function(skill) {
 					return skill.Id;
-				}),
-				function(item) {
-					return item.Name.toLowerCase();
-				}
+				})
 			);
 			vm.skillGroups[vm.selectedGroupIndex].Saved = false;
 
@@ -102,9 +98,9 @@
 			clone.Id = 'Copy' + skillGroup.Id + '-' + _.uniqueId();
 			clone.Saved = false;
 			vm.skillGroups.push(clone);
-			vm.skillGroups = _.sortBy(vm.skillGroups, function(item) {
-				return item.Name.toLowerCase();
-			});
+
+			vm.skillGroups = sortByName(vm.skillGroups);
+
 			setSaveableState();
 		};
 
@@ -178,19 +174,13 @@
 		vm.removeSkills = function() {
 			if (vm.selectedGroupSkills.length <= 0) return;
 
-			vm.skillGroups[vm.selectedGroupIndex].Skills = _.sortBy(
-				_.difference(vm.skillGroups[vm.selectedGroupIndex].Skills, vm.selectedGroupSkills),
-				function(item) {
-					return item.Name.toLowerCase();
-				}
+			vm.skillGroups[vm.selectedGroupIndex].Skills = sortByName(
+				_.difference(vm.skillGroups[vm.selectedGroupIndex].Skills, vm.selectedGroupSkills)
 			);
-			vm.skills = _.sortBy(
+			vm.skills = sortByName(
 				_.differenceBy(vm.allSkills, vm.skillGroups[vm.selectedGroupIndex].Skills, function(skill) {
 					return skill.Id;
-				}),
-				function(item) {
-					return item.Name.toLowerCase();
-				}
+				})
 			);
 
 			vm.skillGroups[vm.selectedGroupIndex].Saved = false;
@@ -199,7 +189,7 @@
 		};
 
 		vm.saveAll = function() {
-			SkillGroupSvc.modifySkillGroups(vm.skillGroups).then(function(result) {
+			SkillGroupSvc.modifySkillGroups(vm.skillGroups).then(function() {
 				getAllSkillGroups();
 				setSaveableState();
 				vm.canSave = false;
@@ -212,9 +202,7 @@
 					vm.newGroup.Name = vm.newGroupName;
 					vm.skills = vm.allSkills.slice();
 					vm.skillGroups.push(vm.newGroup);
-					vm.skillGroups = _.sortBy(vm.skillGroups, function(item) {
-						return item.Name.toLowerCase();
-					});
+					vm.skillGroups = sortByName(vm.skillGroups);
 					vm.selectedGroupIndex = vm.skillGroups.indexOf(vm.newGroup);
 					vm.newGroup = null;
 				}
@@ -248,7 +236,7 @@
 
 			SkillGroupSvc.createSkillGroup
 				.query({ Name: vm.skillGroupName, Skills: selectedSkillIds })
-				.$promise.then(function(result) {
+				.$promise.then(function() {
 					notifySkillGroupCreation();
 					$state.go('intraday', { isNewSkillArea: true });
 				});
@@ -279,13 +267,10 @@
 		vm.selectSkillGroup = function(group) {
 			if (!group) return;
 			vm.selectedGroupIndex = vm.skillGroups.indexOf(group);
-			vm.skills = _.sortBy(
+			vm.skills = sortByName(
 				_.differenceBy(vm.allSkills, group.Skills, function(skill) {
 					return skill.Id;
-				}),
-				function(item) {
-					return item.Name.toLowerCase();
-				}
+				})
 			);
 			unselectAllSkills();
 		};
@@ -297,6 +282,12 @@
 
 		//----------- Local functions ----------------------------------------------------
 
+		function sortByName(arr) {
+			return arr.sort(function(r1, r2) {
+				return r1.Name.localeCompare(r2.Name, CurrentUserInfo.CurrentUserInfo().Language);
+			});
+		}
+
 		function getAllSkillGroups(select) {
 			SkillGroupSvc.getSkillGroups().then(function(result) {
 				vm.skillGroups = result.data.SkillAreas;
@@ -304,16 +295,12 @@
 					element.Saved = true;
 					return element;
 				});
-
+				vm.skillGroups = sortByName(vm.skillGroups);
 				originalGroups = _.cloneDeep(vm.skillGroups);
 				if (select) {
 					vm.selectSkillGroup(vm.selectedGroupIndex);
 				}
 			});
-		}
-
-		function isNumeric(n) {
-			return !isNaN(parseFloat(n)) && isFinite(n);
 		}
 
 		function setSaveableState() {
@@ -342,7 +329,7 @@
 			getAllSkillGroups(false);
 		}
 
-		$scope.$on('$stateChangeStart', function(event, next, current) {
+		$scope.$on('$stateChangeStart', function(event, next) {
 			if (vm.canSave) {
 				event.preventDefault();
 				$timeout(function() {

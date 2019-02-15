@@ -36,19 +36,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public static ISkillDay CreateSkillDay(ISkill skill, IWorkload workload, DateOnly date, IScenario scenario,
-			bool alwaysMakeWorkloadDayOpen = true)
+			bool alwaysMakeWorkloadDayOpen = true, ServiceAgreement? serviceAgreement = null, DateTimePeriod? openHours = null)
 		{
+			var agreement = serviceAgreement ?? new ServiceAgreement(
+								new ServiceLevel(
+									new Percent(0.8), 20),
+								new Percent(0.5),
+								new Percent(0.7));
+
+
+			var skillDataPeriodsOpenHours = openHours ?? TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+				date.Date.Add(TimeSpan.FromHours(4)),
+				date.Date.Add(TimeSpan.FromHours(19)), skill.TimeZone);
+			
 			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
-			skillDataPeriods.Add(
-				new SkillDataPeriod(
-					new ServiceAgreement(
-						new ServiceLevel(
-							new Percent(0.8), 20),
-						new Percent(0.5),
-						new Percent(0.7)),
-					new SkillPersonData(),
-					TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.Add(TimeSpan.FromHours(4)),
-						date.Date.Add(TimeSpan.FromHours(19)), skill.TimeZone)));
+			skillDataPeriods.Add(new SkillDataPeriod(agreement,new SkillPersonData(), skillDataPeriodsOpenHours));
 
 			if (!skill.Id.HasValue) skill.SetId(Guid.NewGuid());
 

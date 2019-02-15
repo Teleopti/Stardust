@@ -4,10 +4,11 @@ import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
-import {debounce, groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators';
+import {debounceTime, groupBy, map, mergeMap, reduce, tap, toArray} from 'rxjs/operators';
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {DateFormatPipe} from "ngx-moment";
-import {from, timer} from "rxjs";
+import {from} from "rxjs";
+import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
 
 @Component({
 	selector: 'plans-period-overview',
@@ -45,6 +46,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	skills;
 	filteredSkills;
+	
+	forTesting = false;
 
 	valData = {
 		totalValNum: 0,
@@ -56,6 +59,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private planningPeriodService: PlanningPeriodService,
+		private planningPeriodActionService: PlanningPeriodActionService,
 		private planningGroupService: PlanningGroupService,
 		@Inject('$state') private $state: IStateService,
 		private translate: TranslateService,
@@ -111,7 +115,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 		this.skillFilterControl.valueChanges
 			.pipe(
-				debounce(() => timer(600)),
+				this.forTesting ? tap() : debounceTime(600),
 				map(filterString =>
 					this.skills
 						.filter(
@@ -136,36 +140,6 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		clearInterval(this.timer);
 	}
 
-	private padZero(str) {
-		let len = 2;
-		let zeros = new Array(len).join('0');
-		return (zeros + str).slice(-len);
-	}
-
-	private invertColor(hex, bw) {
-		if (hex.indexOf('#') === 0) {
-			hex = hex.slice(1);
-		}
-		// convert 3-digit hex to 6-digits.
-		if (hex.length === 3) {
-			hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-		}
-		if (hex.length !== 6) {
-			throw new Error('Invalid HEX color.');
-		}
-		let r = parseInt(hex.slice(0, 2), 16),
-			g = parseInt(hex.slice(2, 4), 16),
-			b = parseInt(hex.slice(4, 6), 16);
-		if (bw) {
-			// http://stackoverflow.com/a/3943023/112731
-			return (r * 0.299 + g * 0.587 + b * 0.114) > 186
-				? '#000000'
-				: '#FFFFFF';
-		}
-		// pad each with zeros and return
-		return "#" + this.padZero((255 - r).toString(16)) + this.padZero((255 - g).toString(16)) + this.padZero((255 - b).toString(16));
-	}
-	
 	private initLegends(){
 		for(let i = 0; i <41;i++){
 			const number = i*5-100;
@@ -178,7 +152,9 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	private checkState() {
 		this.checkProgress();
-		this.timer = setInterval(this.checkProgress, 10000);
+		if(!this.forTesting){
+			this.timer = setInterval(this.checkProgress, 10000);
+		}
 	}
 
 	public clearPreValidationFilter() {
@@ -196,7 +172,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	public launchSchedule() {
 		this.runScheduling = true;
 		this.status = this.translate.instant('PresentTenseSchedule');
-		this.planningPeriodService.launchScheduling(this.ppId).subscribe(() => {
+		this.planningPeriodActionService.launchScheduling(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
@@ -204,7 +180,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	public optimizeIntraday() {
 		this.runIntraday = true;
 		this.status = this.translate.instant('IntraOptimize');
-		this.planningPeriodService.optimizeIntraday(this.ppId).subscribe(() => {
+		this.planningPeriodActionService.optimizeIntraday(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
@@ -212,14 +188,14 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	public clearSchedule() {
 		this.runClear = true;
 		this.status = this.translate.instant('ClearScheduleResultAndHistoryData');
-		this.planningPeriodService.clearSchedule(this.ppId).subscribe(() => {
+		this.planningPeriodActionService.clearSchedule(this.ppId).subscribe(() => {
 			this.checkProgress();
 		});
 	}
 
 	public publishSchedule() {
 		this.runPublish = true;
-		this.planningPeriodService.publishSchedule(this.ppId).subscribe(() => {
+		this.planningPeriodActionService.publishSchedule(this.ppId).subscribe(() => {
 			this.runPublish = false;
 		});
 	}
@@ -229,9 +205,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 	}
 
 	public isDisabled() {
-		if (this.runScheduling || this.runClear || this.runIntraday || this.runPublish) {
-			return true;
-		}
+		return this.runScheduling || this.runClear || this.runIntraday || this.runPublish;
+		
 	}
 
 	private checkProgress = () => {
@@ -388,7 +363,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 						skill.SkillDetails.forEach(day=>{
 							let relativeDifferencePercent = day.RelativeDifference * 100;
 							day.bgcolor = this.heatMapColorHelper.getColor(relativeDifferencePercent);
-							day.fontcolor = this.invertColor(day.bgcolor, true);
+							day.fontcolor = this.heatMapColorHelper.invertColor(day.bgcolor, true);
 							const weekday = new Date(day.Date).getDay();
 							if (weekday === culturalDaysOff.a) {
 								day.weekend = true;

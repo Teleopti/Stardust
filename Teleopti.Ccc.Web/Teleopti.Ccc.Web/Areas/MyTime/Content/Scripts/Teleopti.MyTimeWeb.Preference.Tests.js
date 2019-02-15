@@ -23,7 +23,8 @@
 
 	test('should load day feedback and bind', function() {
 		$('#qunit-fixture')
-			.html(
+			.html("<div class='warning-indicator'></div>")
+			.append(
 				"<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>"
 			)
 			.append("<li data-mytime-week='week' />")
@@ -102,7 +103,8 @@
 
 	test('should only load feedback for days with class feedback', function() {
 		$('#qunit-fixture')
-			.html("<li data-mytime-week='week' />")
+			.html("<div class='warning-indicator'></div>")
+			.append("<li data-mytime-week='week' />")
 			.append("<li data-mytime-date='2012-06-11' data-bind='text: PossibleContractTimeLower' />")
 			.append(
 				"<li data-mytime-date='2012-06-12' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />"
@@ -166,6 +168,7 @@
 
 	test('should compute with schedule data', function() {
 		$('#qunit-fixture')
+			.html("<div class='warning-indicator'></div>")
 			.append(
 				"<div id='Preference-period-feedback-view'><span data-bind='text: PossibleResultContractTimeLower' /><span data-bind='text: PossibleResultContractTimeUpper' /></div>"
 			)
@@ -275,7 +278,8 @@
 
 	test('should clear day view models on init', function() {
 		$('#qunit-fixture')
-			.html(
+			.html("<div class='warning-indicator'></div>")
+			.append(
 				"<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>"
 			)
 			.append("<li data-mytime-week='week' />")
@@ -343,7 +347,8 @@
 			.html(
 				"<div id='Preference-period-feedback-view' data-bind='text: PossibleResultContractTimeLower'>No data!</div>"
 			)
-			.append("<li data-mytime-date='2012-06-20' class='inperiod feedback' />");
+			.append("<li data-mytime-date='2012-06-20' class='inperiod feedback' />")
+			.append("<div class='warning-indicator'></div>");
 
 		target.InitViewModels();
 
@@ -352,7 +357,8 @@
 
 	test('should show night rest violation message and indicate which day', function() {
 		$('#qunit-fixture')
-			.html(
+			.html("<div class='warning-indicator'></div>")
+			.append(
 				"<div id='Preference-period-feedback-view' data-bind='foreach:PossibleNightRestViolations()'><span data-bind='text:firstDay'></span></div>"
 			)
 			.append("<li data-mytime-week='week' />")
@@ -437,7 +443,8 @@
 
 	test('should get feedback data by period', function() {
 		$('#qunit-fixture')
-			.html("<li data-mytime-week='week' />")
+			.html("<div class='warning-indicator'></div>")
+			.append("<li data-mytime-week='week' />")
 			.append(
 				"<li data-mytime-date='2012-06-11' class='inperiod feedback' data-bind='text: PossibleContractTimeLower' />"
 			)
@@ -522,7 +529,7 @@
 
 		$('#qunit-fixture').html(
 			"<div id='Preference-body-inner'>\n" + weeksHTML.toString().replace(/,/g, '\n') + '\n</div>'
-		);
+		).append("<div class='warning-indicator'></div>");
 
 		var ajax = {
 			Ajax: function(options) {
@@ -629,7 +636,8 @@
 			'\n</div>' +
 			'\n</div>' +
 			'\n</li>' +
-			'\n</ul>';
+			'\n</ul>' +
+			"\n<div class='warning-indicator'></div>";
 
 		for (var i = 0; i < preferenceDaysNum; i++) {
 			dateStr = moment(startDate)
@@ -650,7 +658,7 @@
 
 		$('#qunit-fixture').html(
 			"<div id='Preference-body-inner'>\n" + weeksHTML.toString().replace(/,/g, '\n') + '\n</div>'
-		);
+		).append("<div class='warning-indicator'></div>");
 
 		var ajax = {
 			Ajax: function(options) {

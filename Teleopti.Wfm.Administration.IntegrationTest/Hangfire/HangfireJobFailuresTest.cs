@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Hangfire
 		[Test]
 		public void ShouldRead()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			Publisher.Publish(new TestEvent());
 			Hangfire.EmulateWorkerIteration();
 
@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Hangfire
 		[Test]
 		public void ShouldReadAllProperties()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			Publisher.Publish(new TestEvent());
 			Hangfire.EmulateWorkerIteration();
 
@@ -54,7 +54,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Hangfire
 		[Test]
 		public void ShouldReadCount()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			Publisher.Publish(new TestEvent());
 			Publisher.Publish(new TestEvent());
 			Hangfire.EmulateWorkerIteration();

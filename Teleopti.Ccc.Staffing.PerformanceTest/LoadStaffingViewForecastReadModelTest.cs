@@ -19,7 +19,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.WFM_Intraday_ImproveSkillCombinationDeltaLoad_80128)]
 	[Toggle(Toggles.WFM_Intraday_OptimizeSkillDayLoad_80153)]
 	public class LoadStaffingViewForecastReadModelTest : PerformanceTestWithOneTimeSetup
 	{
@@ -103,10 +102,12 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
 			var day = 0;
+			var usedDays = 0;
 			while(day < 30)
 			{
 				if(day % 7 <= 4)
 				{
+					usedDays++;
 					var currentDay = startDate.AddDays(day);
 					WithUnitOfWork.Do(() =>
 					{
@@ -119,6 +120,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				}
 				day = day + 1;
 			}
+			
+			Console.WriteLine($"Active days:{usedDays} of {day} visited");
 		}
 
 	}

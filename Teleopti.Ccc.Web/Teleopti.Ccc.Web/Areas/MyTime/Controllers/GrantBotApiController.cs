@@ -3,8 +3,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -18,14 +21,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IHttpServer _httpRequestHandler;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
+		private readonly SignatureCreator _signatureCreator;
+		private readonly INow _now;
+		private readonly ICurrentTeleoptiPrincipal _loggedOnUser;
 
-		public GrantBotApiController(IConfigReader configReader,
-			IHttpServer httpRequestHandler, ICurrentHttpContext currentHttpContext, IServerConfigurationRepository serverConfigurationRepository)
+		public GrantBotApiController(IConfigReader configReader, IHttpServer httpRequestHandler,
+			ICurrentHttpContext currentHttpContext, IServerConfigurationRepository serverConfigurationRepository,
+			SignatureCreator signatureCreator, INow now, ICurrentTeleoptiPrincipal loggedOnUser)
 		{
 			_configReader = configReader;
 			_httpRequestHandler = httpRequestHandler;
 			_currentHttpContext = currentHttpContext;
 			_serverConfigurationRepository = serverConfigurationRepository;
+			_signatureCreator = signatureCreator;
+			_now = now;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		[HttpGet, Route("api/GrantBot/Config"), TenantUnitOfWork]
@@ -57,11 +67,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				token = JsonConvert.DeserializeObject<DirectLineToken>(body).token;
 			}
 
-			var config = new GrantBotConfig
+			var timestamp = _now.UtcDateTime().Ticks.ToString();
+			var content = $"{_loggedOnUser.Current().PersonId.ToString().ToLowerInvariant()}{timestamp}";
+			var signature = _signatureCreator.Create(content);
+
+			return new GrantBotConfig
 			{
+				Timestamp = timestamp,
+				Signature = signature,
 				Token = token,
 			};
-			return config;
 		}
 	}
 }

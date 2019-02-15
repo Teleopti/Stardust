@@ -283,6 +283,13 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
+    <Compile Include="MonitorSystemTest\CheckLegacySystemStatusTest.cs" />
+    <Compile Include="MonitorSystemTest\FakeCallLegacySystemStatus.cs" />
+    <Compile Include="MonitorSystemTest\FakeMonitorStep.cs" />
+    <Compile Include="MonitorSystemTest\ListMonitorStepsTest.cs" />
+    <Compile Include="MonitorSystemTest\MonitorStepTests.cs" />
+    <Compile Include="MonitorSystemTest\MonitorTestAttribute.cs" />
+    <Compile Include="MonitorSystemTest\TryExecuteMonitorStepTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\NotificationServiceClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
@@ -1377,6 +1384,7 @@
     <Compile Include="Staffing\ExportForecastAndStaffingFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
     <Compile Include="Staffing\ScheduledStaffingViewModelCreatorTest.cs" />
+    <Compile Include="Staffing\SkillDayCalculatorVsForecastReadModelTest.cs" />
     <Compile Include="Staffing\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Staffing\TenantContextReaderServiceTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />

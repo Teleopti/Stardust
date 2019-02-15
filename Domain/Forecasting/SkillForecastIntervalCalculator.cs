@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.To_Staffing;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -14,47 +12,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public class SkillForecastIntervalCalculator
 	{
-		private readonly ICurrentScenario _currentScenario;
 		private readonly ISkillForecastReadModelRepository _skillForecastReadModelRepository;
-		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly ISkillDayRepository _skillDayRepository;
-		private readonly SkillForecastReadModelPeriodBuilder _skillForecastReadModelPeriodBuilder;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		public SkillForecastIntervalCalculator(ISkillForecastReadModelRepository skillForecastReadModelRepository,
-			IIntervalLengthFetcher intervalLengthFetcher, ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, SkillForecastReadModelPeriodBuilder skillForecastReadModelPeriodBuilder)
+			 IStardustJobFeedback stardustJobFeedback)
 		{
 			_skillForecastReadModelRepository = skillForecastReadModelRepository;
-			_intervalLengthFetcher = intervalLengthFetcher;
-			_skillDayRepository = skillDayRepository;
-			_currentScenario = currentScenario;
-			_skillForecastReadModelPeriodBuilder = skillForecastReadModelPeriodBuilder;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
-		public void Calculate(IEnumerable<ISkillDay> skillDays, IEnumerable<ISkill> skills, DateOnlyPeriod period)
+		public void Calculate(ICollection<ISkillDay> skillDays, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
-
-			//var periods = skillDays
-			//	.SelectMany(x =>
-			//		x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), false)
-			//			.Select(i => new { SkillDay = x, StaffPeriod = i }));
-			//var periodsWithShrinkage = skillDays
-			//	.SelectMany(x =>
-			//		x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(_intervalLengthFetcher.GetIntervalLength()), true)
-			//			.Select(i => new { SkillDay = x, StaffPeriod = i }));
-			IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
-			foreach (var skill in skills)
-			{
-				var skillSkilldays = skillDays.Where(x => x.Skill.Equals(skill));
-				calculators.Add(new SkillDayCalculator(skill, skillSkilldays, period));
-				
-				foreach (ISkillDay skillDay in skillSkilldays)
-				{
-					skillDay.RecalculateDailyTasks();
-				}
-			}
+			_stardustJobFeedback.SendProgress($"Starting skill forecast interval calculation");
 			
-			
-
 			var periods = skillDays
 				.SelectMany(x =>
 					x.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(x.Skill.DefaultResolution), false)
@@ -65,8 +36,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						.Select(i => new { SkillDay = x, StaffPeriod = i }));
 
 			var agentsWithShrinkage = periodsWithShrinkage.ToDictionary(
-				x => new { SkillId = x.SkillDay.Skill.Id.GetValueOrDefault(), StartDateTime = x.StaffPeriod.Period.StartDateTime },
-				y => y.StaffPeriod.FStaff);
+				x => new { SkillId = x.SkillDay.Skill.Id.GetValueOrDefault(), x.StaffPeriod.Period.StartDateTime },
+				y => y.StaffPeriod.ForecastedIncomingDemand);
 
 			var result = new List<SkillForecast>();
 			periods.ForEach(x =>
@@ -79,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					SkillId = skillId,
 					StartDateTime = startDateTime,
 					EndDateTime = x.StaffPeriod.Period.EndDateTime,
-					Agents = x.StaffPeriod.FStaff,
+					Agents = x.StaffPeriod.ForecastedIncomingDemand,
 					Calls = x.StaffPeriod.ForecastedTasks,
 					AverageHandleTime = x.StaffPeriod.AverageHandlingTaskTime.TotalSeconds,
 					AgentsWithShrinkage = agentsWithShrinkage.ContainsKey(item) ? agentsWithShrinkage[item] : 0,
@@ -90,10 +61,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				});
 
 			});
+			_stardustJobFeedback.SendProgress($"Persisting {result.Count} intervals for {string.Join(",",skills)}");
 
 			_skillForecastReadModelRepository.PersistSkillForecast(result);
 		}
 	}
-
-	
 }

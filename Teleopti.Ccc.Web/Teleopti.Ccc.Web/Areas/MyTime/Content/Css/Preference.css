@@ -154,6 +154,23 @@
 		border-radius: 15px;
 		display: block;
 	}
+	.warning-info,
+	.warning-danger {
+		height: 20px;
+		width: 20px;
+		border-radius: 15px;
+		display: block;
+	}
+	.warning-info {
+		color: #ffffff;
+	}
+	.warning-danger {
+		color: #ff0000;
+	}
+	.warning-info,
+	.warning-danger i {
+		transform: scale(1.3);
+	}
 	.phone-warning-indicator {
 		position: relative;
 	}
@@ -195,30 +212,6 @@
 		font-size: 13px;
 		float: inherit;
 	}
-	.phone-navbar .phone-navbar-bottom .navbar-nav {
-		position: fixed;
-		bottom: 0;
-		z-index: 110;
-		white-space: nowrap;
-		width: 100vw !important;
-		left: 0;
-		margin: 0;
-		height: 50px;
-	}
-	.phone-navbar .phone-navbar-bottom .navbar-nav li {
-		padding: 5px;
-	}
-	.phone-navbar .phone-navbar-bottom .glyphicon {
-		display: block;
-	}
-	.phone-navbar .phone-navbar-bottom li {
-		text-align: center;
-		padding-left: 0;
-		padding-right: 0;
-	}
-	.phone-navbar .phone-navbar-bottom li a {
-		padding: 2px 0;
-	}
 	.phone-navbar .w-30 {
 		width: 30% !important;
 	}
@@ -228,65 +221,96 @@
 	.phone-navbar .w-50 {
 		width: 50% !important;
 	}
-	.phone-navbar .phone-navbar-bottom .input-group {
-		padding: 0 !important;
-		width: 100%;
-		margin-left: 0 !important;
-		text-align: center;
-	}
-	.phone-navbar .phone-navbar-bottom .btn {
-		padding: 2px 0 0 0;
-	}
-	.phone-navbar .phone-navbar-bottom .btn-group {
-		width: 100%;
-	}
-	.phone-navbar .phone-navbar-bottom .open .dropdown-menu {
-		position: fixed;
-		top: inherit;
-		left: inherit;
-		bottom: 50px;
-		background-color: #5acdf9;
-		min-width: inherit;
-		width: 100%;
-	}
-	.phone-navbar .phone-navbar-bottom .open .dropdown-menu > li {
-		text-align: left;
-	}
-	.phone-navbar .phone-navbar-bottom .open .dropdown-menu > li > a {
-		padding: 5px;
-	}
-	.phone-navbar .phone-navbar-bottom .dropdown-toggle .caret {
-		transform: rotate(180deg);
-	}
-	.phone-navbar .phone-navbar-bottom .preference-split-button .navbar-btn {
-		margin-left: 0 !important;
-		margin-top: 10px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	.phone-navbar .phone-navbar-bottom .open .dropdown-menu.available-preferences-list {
-		-webkit-overflow-scrolling: touch;
-		max-height: calc(100vh - 50px - 50px - 80px);
-		overflow: auto;
-		min-width: 200px;
-		left: 0;
-		z-index: 10;
-		box-shadow: 0 -1px 1px 2px rgba(0, 0, 0, 0.2);
-	}
-	.teleopti-toolbar.phone-navbar .phone-navbar-bottom .open ul.dropdown-menu.available-preferences-list li a {
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		overflow: hidden;
-		color: white;
-	}
-	.phone-navbar .phone-navbar-bottom .open .dropdown-menu.available-preferences-list .divider {
-		margin: 0;
-		padding: 0;
-	}
 	.phone-navbar.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.add-musthave,
 	.phone-navbar.teleopti-toolbar .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
 		color: white;
 	}
+}
+.nav > li.preference-phone-navbar {
+	display: none;
+}
+.nav > li.preference-phone-navbar-mobile {
+	display: none;
+}
+.phone-navbar .preference-phone-navbar-mobile .input-group {
+	padding: 0 !important;
+	width: 100%;
+	margin-left: 0 !important;
+	text-align: center;
+}
+.phone-navbar .preference-phone-navbar-mobile .btn {
+	padding: 2px 0 0 0;
+}
+.phone-navbar .preference-phone-navbar-mobile .btn-group {
+	width: 100%;
+}
+.phone-navbar .preference-phone-navbar-mobile .open .dropdown-menu {
+	position: fixed;
+	top: inherit;
+	left: inherit;
+	bottom: 50px;
+	background-color: #5acdf9;
+	min-width: inherit;
+	width: 100%;
+}
+.phone-navbar .preference-phone-navbar-mobile .open .dropdown-menu > li {
+	text-align: left;
+}
+.phone-navbar .preference-phone-navbar-mobile .open .dropdown-menu > li > a {
+	padding: 5px;
+}
+.phone-navbar .preference-phone-navbar-mobile .dropdown-toggle .caret {
+	transform: rotate(180deg);
+}
+.phone-navbar .preference-phone-navbar-mobile .preference-split-button .navbar-btn {
+	margin-left: 0 !important;
+	margin-top: 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.phone-navbar .preference-phone-navbar-mobile .open .dropdown-menu.available-preferences-list {
+	-webkit-overflow-scrolling: touch;
+	max-height: calc(100vh - 50px - 50px - 80px);
+	overflow: auto;
+	min-width: 200px;
+	left: 0;
+	z-index: 10;
+	box-shadow: 0 -1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+.teleopti-toolbar.phone-navbar .preference-phone-navbar-mobile .open ul.dropdown-menu.available-preferences-list li a {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	color: white;
+}
+.phone-navbar .preference-phone-navbar-mobile .open .dropdown-menu.available-preferences-list .divider {
+	margin: 0;
+	padding: 0;
+}
+
+.phone-navbar .preference-phone-navbar-mobile .navbar-nav {
+	position: fixed;
+	bottom: 0;
+	z-index: 110;
+	white-space: nowrap;
+	width: 100vw !important;
+	left: 0;
+	margin: 0;
+	height: 50px;
+}
+.phone-navbar .preference-phone-navbar-mobile .navbar-nav li {
+	padding: 5px;
+}
+.phone-navbar .preference-phone-navbar-mobile .glyphicon {
+	display: block;
+}
+.phone-navbar .preference-phone-navbar-mobile li {
+	text-align: center;
+	padding-left: 0;
+	padding-right: 0;
+}
+.phone-navbar .preference-phone-navbar-mobile li a {
+	padding: 2px 0;
 }
 .preference {
 	height: 20px;

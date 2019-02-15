@@ -146,8 +146,11 @@
             },
             set: function (value) {
                 startTime = value;
-                var m = moment('1970-01-01T' + moment(startTime, "LTS").format('HH:mm:ss'));
-                vm.approveStartTime = m.isValid() ? m.toDate() : undefined;
+                var time = moment(startTime, "LTS");
+                vm.approveStartTime =
+                    time.isValid() ?
+                        moment('1970-01-01T' + time.format('HH:mm:ss')).toDate() :
+                        undefined;
             }
         });
 
@@ -158,8 +161,11 @@
             },
             set: function (value) {
                 endTime = value;
-                var m = moment('1970-01-01T' + moment(endTime, "LTS").format('HH:mm:ss'));
-                vm.approveEndTime = m.isValid() ? m.toDate() : undefined;
+                var time = moment(endTime, "LTS");
+                vm.approveEndTime =
+                    time.isValid() ?
+                        moment('1970-01-01T' + time.format('HH:mm:ss')).toDate() :
+                        undefined;
             }
         });
 

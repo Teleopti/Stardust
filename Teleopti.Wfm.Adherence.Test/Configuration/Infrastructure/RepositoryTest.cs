@@ -132,30 +132,6 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		}
 
 		[Test]
-		public void VerifyCreatedPropSetsCorrectly()
-		{
-			var nu = DateTime.UtcNow;
-			if (simpleEntity is ICreateInfo)
-			{
-				rep.Add(simpleEntity);
-				Session.Flush();
-				Session.Evict(simpleEntity);
-				var id = simpleEntity.Id.Value;
-				var loadedEntity = (ICreateInfo) rep.Load(id);
-
-				Assert.Less(nu.Subtract(new TimeSpan(0, 0, 1)), loadedEntity.CreatedOn);
-				Assert.Greater(nu.AddMinutes(1), loadedEntity.CreatedOn);
-				Assert.AreEqual(LoggedOnPerson.Id, loadedEntity.CreatedBy.Id);
-			}
-			else
-			{
-				var entityType = simpleEntity.GetType();
-				Assert.IsFalse(Session.SessionFactory.GetClassMetadata(entityType).PropertyNames.Contains("CreatedBy"),
-					"CreatedBy prop found - have you forgot to impl IChangeInfo for " + entityType.Name + "?");
-			}
-		}
-
-		[Test]
 		public void VerifyAddingWhileLoggedOut()
 		{
 			var entity = CreateAggregateWithCorrectBusinessUnit();
