@@ -28,8 +28,8 @@ table.overview {
 .skill-name {
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	padding-bottom: 1px !important;
-	padding-top: 1px !important;
+	padding-bottom: 0 !important;
+	padding-top: 0 !important;
 }
 
 .long {
@@ -63,7 +63,6 @@ table.overview {
 }
 
 .heatmap-div {
-	width: auto;
 	overflow: auto;
 
 	.worst-under-staff-day {
@@ -82,7 +81,7 @@ table.overview {
 }
 
 .heatmap-date-header{
-	padding: 1px !important;
+	padding: 0 !important;
 }
 
 .heatmap-month{
@@ -91,15 +90,15 @@ table.overview {
 }
 
 .heatmap-date{
-	width: 20px;
-	height: 20px;
+	width: 22px;
+	height: 22px;
 	text-align: center;
 	margin: 2px;
 }
 
 .heatmap-box {
-	width: 20px;
-	height: 20px;
+	width: 22px;
+	height: 22px;
 	text-align: center;
 	margin: 2px;
 	cursor: pointer;
@@ -111,7 +110,7 @@ table.overview {
 
 .heatmap-day{
 	background-color: rgba(0, 0, 0, 0.1);
-	padding: 1px !important;
+	padding: 0 !important;
 }
 
 [nz-button] {

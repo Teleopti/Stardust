@@ -82,8 +82,8 @@
 				</div>
 				
 				<div class="heatmap-div" *ngIf="filteredSkills&&filteredSkills.length>0">
-					<nz-table nzSize="small" [nzFrontPagination]="false"
-							  [nzShowPagination]="false" #nzTable [nzData]="filteredSkills">
+					<nz-table nzSize="small"
+							  [nzPageSize]="20" [nzHideOnSinglePage]="true" #nzTable [nzData]="filteredSkills">
 						<thead>
 							<tr>
 								<th></th>
@@ -93,7 +93,7 @@
 							</tr>
 							<tr>
 								<th nzShowSort [(nzSort)]="sortMap.SkillName" (nzSortChange)="sort('SkillName',$event)">{{ 'Skill' | translate }}</th>
-								<th class="heatmap-date-header" nzWidth="22px" *ngFor ="let datenode of nzTable.data[0].SkillDetails">
+								<th class="heatmap-date-header" *ngFor ="let datenode of nzTable.data[0].SkillDetails">
 									<p class="heatmap-date" [ngClass]="{'heatmap-head-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
 								</th>
 							</tr>
