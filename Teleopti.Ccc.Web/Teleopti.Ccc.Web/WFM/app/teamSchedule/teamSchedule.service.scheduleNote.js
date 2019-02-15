@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module("wfm.teamSchedule").service("ScheduleNoteManagementService", ScheduleNoteService);
 
-	ScheduleNoteService.$inject = ['$q', '$http','serviceDateFormatHelper'];
+	ScheduleNoteService.$inject = ['$q', '$http', 'serviceDateFormatHelper'];
 
 	function ScheduleNoteService($q, $http, serviceDateFormatHelper) {
 		var self = this;
@@ -33,6 +33,7 @@
 
 		function setNoteForPerson(personId, note) {
 			noteDict[personId] = note;
+			noteDict[personId].hasNote = !!note.publicNotes || !!note.internalNotes;
 		}
 
 		function submitNoteForPerson(personId, note, date) {
