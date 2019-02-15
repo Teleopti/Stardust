@@ -17,12 +17,8 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystem
 			var monitorStepResult = new MonitorStepResult(true, "something");
 			MonitorStep.SetResult(monitorStepResult);
 
-			var result = Target.Execute(MonitorStep.Name);
-			
-			Assert.Multiple(() =>
-			{
-				result.Should().Be.SameInstanceAs(monitorStepResult);				
-			});
+			Target.Execute(MonitorStep.Name)
+				.Should().Be.SameInstanceAs(monitorStepResult);				
 		}
 
 		[Test]
