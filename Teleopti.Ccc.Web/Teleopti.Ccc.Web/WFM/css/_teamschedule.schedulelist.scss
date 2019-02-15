@@ -28,7 +28,7 @@
 			.ruler {
 				height: 100%;
 				width: 1px;
-				background-color: $gray012;
+				background-color: $gray-300;
 			}
 
 			.label {
@@ -49,7 +49,7 @@
 			}
 
 			.not-current-day {
-				background-color: $gray026;
+				background-color: $gray-500;
 			}
 		}
 	}
@@ -60,7 +60,7 @@
 		& > div {
 			vertical-align: middle;
 			line-height: 1.5;
-			border-bottom: 1px solid $gray012;
+			border-bottom: 1px solid $gray-300;
 			padding-top: 5px;
 			padding-bottom: 5px;
 		}
@@ -232,7 +232,7 @@
 			}
 
 			& > div.contract-time-column {
-				border-left: 1px solid $gray012;
+				border-left: 1px solid $gray-300;
 			}
 
 			& > div.schedule-tool-column.schedule-note-column > span:not(.has-note) {
@@ -242,7 +242,7 @@
 			& > div.shift-category-cell {
 				text-align: center;
 				font-size: 12px;
-				border-left: 1px solid $gray012;
+				border-left: 1px solid $gray-300;
 				position: relative;
 
 				& > .info {
