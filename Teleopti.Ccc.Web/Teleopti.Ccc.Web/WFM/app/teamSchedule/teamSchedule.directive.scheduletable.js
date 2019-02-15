@@ -118,7 +118,9 @@
 			return ScheduleNoteMgmt.getNoteForPerson(personId);
 		};
 
-		vm.editScheduleNote = function (personId) {
+		vm.editScheduleNote = function (personId, $event) {
+			if ($event)
+				$event.stopPropagation();
 			vm.noteEditorInputOption = {
 				selectedDate: vm.selectedDate,
 				personId: personId,
@@ -134,7 +136,9 @@
 				&& !!personSchedule.ActivityCount();
 		}
 
-		vm.clickEditButton = function (personSchedule) {
+		vm.clickEditButton = function (personSchedule, $event) {
+			if ($event)
+				$event.stopPropagation();
 			if (vm.scheduleInEditing !== personSchedule) {
 				if (vm.scheduleInEditing) {
 					$scope.$emit('teamSchedule.shiftEditor.close', { isOpeningNew: true });

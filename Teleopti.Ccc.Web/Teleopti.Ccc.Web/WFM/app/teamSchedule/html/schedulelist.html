@@ -101,12 +101,12 @@
 			<div class="schedule-tool-column schedule-editor-column">
 				<span class="editor cursor-pointer"
 					  ng-if="::vm.showEditButton(personSchedule)"
-					  ng-click="vm.clickEditButton(personSchedule)">
+					  ng-click="vm.clickEditButton(personSchedule, $event)">
 					<i class="mdi mdi-pencil"></i>
 				</span>
 			</div>
 			<div class="schedule-tool-column schedule-note-column"
-				 ng-click="vm.editScheduleNote(personSchedule.PersonId)">
+				 ng-click="vm.editScheduleNote(personSchedule.PersonId, $event)">
 				<span class="cursorpointer"
 					  ng-class="{'has-note': vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote}">
 					<i class="mdi mdi-comment"></i>
