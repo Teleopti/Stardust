@@ -35,14 +35,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			return _rows.IsNullOrEmpty() 
 				? 0 
-				: _rows.AsEnumerable().Sum(dataRow => Convert.ToInt32(dataRow["answered_calls"]));
+				: _rows.AsEnumerable()
+					.Where(row => Convert.ToInt32(row["offered_calls"]) > 0 || Convert.ToInt32(row["overflow_in_calls"]) > 0)
+					.Sum(dataRow => Convert.ToInt32(dataRow["answered_calls"]));
 		}
 
 		public int HandleTime()
 		{
 			return _rows.IsNullOrEmpty()
 				? 0
-				: _rows.AsEnumerable().Sum(dataRow => Convert.ToInt32(dataRow["handle_time_s"]));
+				: _rows.AsEnumerable()
+					.Where(row => Convert.ToInt32(row["offered_calls"]) > 0 || Convert.ToInt32(row["overflow_in_calls"]) > 0)
+					.Sum(dataRow => Convert.ToInt32(dataRow["handle_time_s"]));
 		}
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture) {

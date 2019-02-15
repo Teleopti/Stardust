@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var workload = new AWorkload(threeSkills, timeZones, businessUnit, datasource) { WorkloadId = 1 };
 			var deletedWorkload = new AWorkload(threeSkills, timeZones, businessUnit, datasource) { WorkloadId = 2, IsDeleted = true};
 			var intervals = new QuarterOfAnHourInterval();
-			var date = new SpecificDate {Date = new DateOnly(1900, 1, 1), DateId = 1};
+			var date = new SpecificDate {Date = new DateOnly(1900, 1, 2), DateId = 1};
 			var bridgeTimeZone = new FillBridgeTimeZoneFromData(date, intervals, timeZones, datasource);
 			var scenario = new Scenario(1, Guid.NewGuid(), true);
 			var factForecastWorkloads1 = new FillFactForecastWorkload(date, intervals, threeSkills)
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(factForecastWorkloads2);
 			analyticsDataFactory.Persist();
 
-			var result = target.Load(new[] {threeSkills.FirstSkillCode}, TimeZoneInfo.Utc, new DateOnly(1900, 1, 1));
+			var result = target.Load(new[] {threeSkills.FirstSkillCode}, TimeZoneInfo.Utc, new DateOnly(1900, 1, 2));
 
 			result.Should().Not.Be.Empty();
 			result.ForEach(x => x.ForecastedCalls.Should().Be.EqualTo(90));
