@@ -82,23 +82,24 @@
 				</div>
 				
 				<div class="heatmap-div" *ngIf="filteredSkills&&filteredSkills.length>0">
-					<table>
+					<nz-table nzSize="small" [nzFrontPagination]="false"
+							  [nzShowPagination]="false" #nzTable [nzData]="filteredSkills">
 						<thead>
 							<tr>
 								<th></th>
 								<th *ngFor ="let month of months" [attr.colspan]="month.Count">
-									<p class="heatmap-date-header">{{ month.Name }}</p>
+									<p class="heatmap-month">{{ month.Name }}</p>
 								</th>
 							</tr>
 							<tr>
 								<th></th>
-								<th *ngFor ="let datenode of filteredSkills[0].SkillDetails">
-									<p class="heatmap-date-header" [ngClass]="{'heatmap-head-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
+								<th class="heatmap-date-header" nzWidth="22px" *ngFor ="let datenode of nzTable.data[0].SkillDetails">
+									<p class="heatmap-date" [ngClass]="{'heatmap-head-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
 								</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngFor="let subnode of filteredSkills">
+							<tr *ngFor="let subnode of nzTable.data">
 								<td class="skill-name">{{ subnode.SkillName }}</td>
 								<td class="heatmap-day"
 									*ngFor="let node of subnode.SkillDetails"
@@ -121,7 +122,7 @@
 								</td>
 							</tr>
 						</tbody>
-					</table>
+					</nz-table>
 				</div>
 			</div>
 		</nz-tab>
