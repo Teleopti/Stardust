@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.MonitorSystem
 {
-	public class MonitorResult
+	public class MonitorStepResult
 	{
-		public MonitorResult(bool success, IEnumerable<string> outputs)
+		public MonitorStepResult(bool success, IEnumerable<string> outputs)
 		{
 			Success = success;
 			Outputs = outputs;

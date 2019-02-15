@@ -247,8 +247,8 @@
     <Compile Include="MonitorSystem\CallLegacySystemStatus.cs" />
     <Compile Include="MonitorSystem\CheckLegacySystemStatus.cs" />
     <Compile Include="MonitorSystem\ICallLegacySystemStatus.cs" />
-    <Compile Include="MonitorSystem\IMonitorHealth.cs" />
-    <Compile Include="MonitorSystem\MonitorResult.cs" />
+    <Compile Include="MonitorSystem\IMonitorStep.cs" />
+    <Compile Include="MonitorSystem\MonitorStepResult.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
