@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.Stardust
 {
 	public interface IGetAllWorkerNodes
 	{
-		List<WorkerNode> GetAllWorkerNodes();
+		IEnumerable<WorkerNode> GetAllWorkerNodes();
 	}
 }

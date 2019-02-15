@@ -54,7 +54,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			return _queuedJobs;
 		}
 
-		public List<WorkerNode> GetAllWorkerNodes()
+		public IEnumerable<WorkerNode> GetAllWorkerNodes()
 		{
 			return _nodes;
 		}
