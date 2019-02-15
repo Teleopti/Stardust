@@ -1,0 +1,1 @@
+UPDATE [dbo].[ApplicationFunction] SET FunctionDescription='Grant' where ForeignId='0161'
