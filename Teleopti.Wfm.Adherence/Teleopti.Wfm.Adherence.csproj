@@ -197,7 +197,7 @@
     <Compile Include="Monitor\SiteCardViewModelBuilder.cs" />
     <Compile Include="Monitor\TeamCardViewModel.cs" />
     <Compile Include="OpenPeriod.cs" />
-    <Compile Include="OpenPeriodsSubtractor.cs" />
+    <Compile Include="OpenPeriodExtensions.cs" />
     <Compile Include="PermissionsViewModelBuilder.cs" />
     <Compile Include="States\ActivityChangeChecker.cs" />
     <Compile Include="States\ActivityEventPublisher.cs" />
