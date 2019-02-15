@@ -3,7 +3,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.MonitorSystem;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.MonitorSystemTest
+namespace Teleopti.Ccc.DomainTest.MonitorSystem
 {
 	[DomainTest]
 	public class CheckLegacySystemStatusTest : IIsolateSystem
