@@ -32,7 +32,7 @@
 				<h2>Scheduled skills heatmap</h2>
 	
 				<div nz-row>
-					<span style="margin-left: 20px" nz-col [nzSpan]="8">
+					<span nz-col [nzSpan]="8">
 						<nz-input-group
 								[nzSuffix]="suffixSkillMapTemplate"
 								[nzPrefix]="prefixSkillMapTemplate"
@@ -55,30 +55,30 @@
 						></ng-template>
 					</span>
 				</div>
-				
-				<div class="legend">
-					<table>
-						<tbody>
-						<tr>
-							<td colspan="43" style="text-align: center">{{ 'RelativeDifference' | translate }}</td>
-						</tr>
-						<tr >
-							<td>-100%</td>
-							<td *ngFor="let legend of legends">
-								<div class="legend-box" [style.background-color]="legend.bgcolor"></div>
-							</td>
-							<td>100%</td>
-							<td style="padding-left:20px"><div class="legend-box heatmap-closed"></div></td>
-							<td style="padding-left: 5px">
-								{{'Closed' | translate}}
-							</td>
-							<td style="padding-left:100px" colspan="20">
-									{{ 'ShowNumbers' | translate}}
-												<nz-switch [(ngModel)]="showNumbers"></nz-switch>
-							</td>
-						</tr>
-						</tbody>
-					</table>
+				<div nz-row style="padding-top: 20px">
+					<span nz-col [nzSpan]="8">
+						<span class="legend-span">{{ 'RelativeDifference' | translate }}</span>
+						<span class="legend-span">
+							<span>-100%</span>
+							<span *ngFor="let legend of legends">
+								<span class="legend-box" [style.background-color]="legend.bgcolor"></span>
+							</span>
+							<span>100%</span>
+						</span>
+					</span>
+					<span nz-col [nzSpan]="2">
+						<span class="legend-span">
+							<span class="legend-box heatmap-closed"></span>
+							<span style="padding-left: 5px">{{'Closed' | translate}}</span>
+						</span>
+					</span>
+
+					<span nz-col [nzSpan]="4">
+						<span class="legend-span">
+							{{ 'ShowNumbers' | translate}}
+							<nz-switch [(ngModel)]="showNumbers"></nz-switch>
+						</span>
+					</span>
 				</div>
 				
 				<div class="heatmap-div" *ngIf="filteredSkills&&filteredSkills.length>0">
