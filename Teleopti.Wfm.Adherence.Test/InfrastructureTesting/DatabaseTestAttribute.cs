@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 
 	public class DatabaseTestAttribute : InfrastructureTestAttribute, ILogOnOffContext
 	{
-		private (IPerson Person, IBusinessUnit BusinessUnit) _data;
+		private IPerson person;
 
 		protected override void Extend(IExtend extend, IocConfiguration configuration)
 		{
@@ -22,26 +22,24 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 
 		protected override void BeforeTest()
 		{
-			_data = InfrastructureTestSetup.Before();
+			person = InfrastructureTestSetup.Before();
 			base.BeforeTest();
-			base.Login(_data.Person, _data.BusinessUnit);
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
-			base.Logout();
 			InfrastructureTestSetup.After();
 		}
 
 		public void Login()
 		{
-			base.Login(_data.Person, _data.BusinessUnit);
+			InfrastructureTestSetup.Login(person);
 		}
 
-		public new void Logout()
+		public void Logout()
 		{
-			base.Logout();
+			InfrastructureTestSetup.Logout();
 		}
 	}
 }

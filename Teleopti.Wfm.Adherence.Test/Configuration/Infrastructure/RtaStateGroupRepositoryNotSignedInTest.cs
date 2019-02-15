@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Adherence.Configuration;
 using Teleopti.Wfm.Adherence.Test.InfrastructureTesting;
@@ -47,7 +46,7 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 
 			public virtual void DoesWhileNotLoggedIn(Action<IUnitOfWork> action)
 			{
-				using (_dataSource.OnThisThreadUse(TestTenantName.Name))
+				using (_dataSource.OnThisThreadUse(InfrastructureTestSetup.DataSource.DataSourceName))
 					DoesWhileNotLoggedInInner(action);
 			}
 
