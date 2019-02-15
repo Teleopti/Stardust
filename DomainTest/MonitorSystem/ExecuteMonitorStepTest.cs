@@ -6,9 +6,9 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.MonitorSystem
 {
 	[DomainTest]
-	public class TryExecuteMonitorStepTest : IIsolateSystem
+	public class ExecuteMonitorStepTest : IIsolateSystem
 	{
-		public TryExecuteMonitorStep Target;
+		public ExecuteMonitorStep Target;
 		public FakeMonitorStep MonitorStep;
 		
 		[Test]
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystem
 			var monitorStepResult = new MonitorStepResult(true, "something");
 			MonitorStep.SetResult(monitorStepResult);
 
-			var result = Target.TryExecute(MonitorStep.Name);
+			var result = Target.Execute(MonitorStep.Name);
 			
 			Assert.Multiple(() =>
 			{
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystem
 		[Test]
 		public void ShouldExecuteMonitorStepAlsoWhenCasingDiffers()
 		{
-			var result1 = Target.TryExecute(MonitorStep.Name.ToUpper());
-			var result2 = Target.TryExecute(MonitorStep.Name.ToLower());
+			var result1 = Target.Execute(MonitorStep.Name.ToUpper());
+			var result2 = Target.Execute(MonitorStep.Name.ToLower());
 			
 			Assert.Multiple(() =>
 			{
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystem
 			const string stepName = "non existing";
 			Assert.Multiple(() =>
 			{
-				var result = Target.TryExecute(stepName);
+				var result = Target.Execute(stepName);
 				result.Success.Should().Be.False();
 				result.Output.Should().Be.EqualTo(string.Format(Target.NonExistingStepName, stepName));
 			});

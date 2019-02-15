@@ -4,17 +4,17 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.MonitorSystem
 {
-	public class TryExecuteMonitorStep
+	public class ExecuteMonitorStep
 	{
 		private readonly IEnumerable<IMonitorStep> _monitorSteps;
 		public readonly string NonExistingStepName = "'{0}' is not a known monitor step";
 
-		public TryExecuteMonitorStep(IEnumerable<IMonitorStep> monitorSteps)
+		public ExecuteMonitorStep(IEnumerable<IMonitorStep> monitorSteps)
 		{
 			_monitorSteps = monitorSteps;
 		}
 		
-		public MonitorStepResult TryExecute(string monitorStepName)
+		public MonitorStepResult Execute(string monitorStepName)
 		{
 			var step = _monitorSteps.SingleOrDefault(x => string.Equals(x.Name, monitorStepName, StringComparison.InvariantCultureIgnoreCase));
 			return step == null ? 

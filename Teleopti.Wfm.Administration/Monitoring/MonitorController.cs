@@ -8,12 +8,12 @@ namespace Teleopti.Wfm.Administration.Monitoring
 {
 	public class MonitorController : ApiController
 	{
-		private readonly TryExecuteMonitorStep _tryExecuteMonitorStep;
+		private readonly ExecuteMonitorStep _executeMonitorStep;
 		private readonly ListMonitorSteps _listMonitorSteps;
 
-		public MonitorController(TryExecuteMonitorStep tryExecuteMonitorStep, ListMonitorSteps listMonitorSteps)
+		public MonitorController(ExecuteMonitorStep executeMonitorStep, ListMonitorSteps listMonitorSteps)
 		{
-			_tryExecuteMonitorStep = tryExecuteMonitorStep;
+			_executeMonitorStep = executeMonitorStep;
 			_listMonitorSteps = listMonitorSteps;
 		}
 		
@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.Monitoring
 		[Route("monitor/check/{monitorStep}")]
 		public HttpResponseMessage Check(string monitorStep)
 		{
-			var result = _tryExecuteMonitorStep.TryExecute(monitorStep);
+			var result = _executeMonitorStep.Execute(monitorStep);
 			return Request.CreateResponse(result.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError, result.Output);
 		}
 		

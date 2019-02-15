@@ -250,7 +250,7 @@
     <Compile Include="MonitorSystem\IMonitorStep.cs" />
     <Compile Include="MonitorSystem\ListMonitorSteps.cs" />
     <Compile Include="MonitorSystem\MonitorStepResult.cs" />
-    <Compile Include="MonitorSystem\TryExecuteMonitorStep.cs" />
+    <Compile Include="MonitorSystem\ExecuteMonitorStep.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />

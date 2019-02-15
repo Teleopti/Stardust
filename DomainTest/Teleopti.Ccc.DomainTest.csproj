@@ -289,7 +289,7 @@
     <Compile Include="MonitorSystem\ListMonitorStepsTest.cs" />
     <Compile Include="MonitorSystem\MonitorStepTests.cs" />
     <Compile Include="MonitorSystem\StardustCheckerTest.cs" />
-    <Compile Include="MonitorSystem\TryExecuteMonitorStepTest.cs" />
+    <Compile Include="MonitorSystem\ExecuteMonitorStepTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\NotificationServiceClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
