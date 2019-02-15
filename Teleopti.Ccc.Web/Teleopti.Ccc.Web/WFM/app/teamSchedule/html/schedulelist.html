@@ -22,7 +22,7 @@
 
 		<div class="list-item" ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
 			 ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
-			  ng-click="vm.togglePerson(personSchedule, null)">
+			 ng-click="vm.togglePerson(personSchedule, null)">
 			<div class="person-name-column" ng-click="vm.updatePersonSelection(personSchedule, $event)">
 				<label>
 					<md-checkbox ng-model="personSchedule.IsSelected"
@@ -47,12 +47,11 @@
 			</div>
 
 			<div class="shift-category-cell">
-				<i class="mdi mdi-information mdi-alert info" ng-if="!!personSchedule.UnderlyingScheduleSummary"></i>
 				<span id="name"
 					  ng-if="::personSchedule.ShiftCategory.Name"
-					  ng-click="vm.modifyShiftCategoryForAgent($event, personSchedule)"
 					  ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.TextColor}">
-					{{::personSchedule.ShiftCategory.ShortName}}
+					<span ng-click="vm.modifyShiftCategoryForAgent($event, personSchedule)">{{::personSchedule.ShiftCategory.ShortName}}</span>
+					<i class="mdi mdi-information mdi-alert info" ng-if="!!personSchedule.UnderlyingScheduleSummary"></i>
 				</span>
 
 				<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name || !!personSchedule.UnderlyingScheduleSummary"
