@@ -514,6 +514,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 			
 			var alertViewModelBinding = new AlertViewModel(periodFeedbackViewModel);
 			ko.applyBindings(alertViewModelBinding, $('.warning-indicator')[0]);
+			if (isHostAMobile) {
+				$('div.warning-indicator').show();
+			}
 
 			var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 			if (periodFeedbackElement) {
