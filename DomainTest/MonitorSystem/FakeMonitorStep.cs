@@ -6,6 +6,11 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystem
 	{
 		private MonitorStepResult _result;
 
+		public FakeMonitorStep()
+		{
+			_result = new MonitorStepResult(true, string.Empty);
+		}
+		
 		public void SetResult(MonitorStepResult result)
 		{
 			_result = result;
