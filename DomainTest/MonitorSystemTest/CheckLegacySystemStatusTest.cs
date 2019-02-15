@@ -1,4 +1,3 @@
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MonitorSystem;
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystemTest
 			var res = Target.Execute();
 			
 			res.Success.Should().Be.True();
-			res.Outputs.Single().Should().Be.EqualTo(CheckLegacySystemStatus.SuccessOutput);
+			res.Output.Should().Be.EqualTo(CheckLegacySystemStatus.SuccessOutput);
 		}
 		
 
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystemTest
 			var res = Target.Execute();
 			
 			res.Success.Should().Be.False();
-			res.Outputs.Single().Should().Be.EqualTo(CheckLegacySystemStatus.FailureOutput);
+			res.Output.Should().Be.EqualTo(CheckLegacySystemStatus.FailureOutput);
 		}
 	}
 }

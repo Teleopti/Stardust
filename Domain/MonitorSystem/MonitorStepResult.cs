@@ -1,16 +1,14 @@
-using System.Collections.Generic;
-
 namespace Teleopti.Ccc.Domain.MonitorSystem
 {
 	public class MonitorStepResult
 	{
-		public MonitorStepResult(bool success, IEnumerable<string> outputs)
+		public MonitorStepResult(bool success, string output)
 		{
 			Success = success;
-			Outputs = outputs;
+			Output = output;
 		}
 
 		public bool Success { get; }
-		public IEnumerable<string> Outputs { get; }
+		public string Output { get; }
 	}
 }

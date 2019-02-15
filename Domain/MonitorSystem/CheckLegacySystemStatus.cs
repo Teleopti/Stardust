@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.MonitorSystem
 		{
 			var result = _callLegacySystemStatus.Execute();
 			return result ? 
-				new MonitorStepResult(true, new[]{SuccessOutput}) : 
-				new MonitorStepResult(false, new[]{FailureOutput});
+				new MonitorStepResult(true, SuccessOutput) : 
+				new MonitorStepResult(false, FailureOutput);
 		}
 	}
 }
