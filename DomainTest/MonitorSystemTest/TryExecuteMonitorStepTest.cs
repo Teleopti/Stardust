@@ -5,7 +5,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.MonitorSystemTest
 {
-	[MonitorTest]
+	[DomainTest]
 	public class TryExecuteMonitorStepTest : IIsolateSystem
 	{
 		public TryExecuteMonitorStep Target;

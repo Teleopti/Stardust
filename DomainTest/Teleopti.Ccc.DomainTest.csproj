@@ -288,7 +288,6 @@
     <Compile Include="MonitorSystemTest\FakeMonitorStep.cs" />
     <Compile Include="MonitorSystemTest\ListMonitorStepsTest.cs" />
     <Compile Include="MonitorSystemTest\MonitorStepTests.cs" />
-    <Compile Include="MonitorSystemTest\MonitorTestAttribute.cs" />
     <Compile Include="MonitorSystemTest\TryExecuteMonitorStepTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\NotificationServiceClientTest.cs" />
