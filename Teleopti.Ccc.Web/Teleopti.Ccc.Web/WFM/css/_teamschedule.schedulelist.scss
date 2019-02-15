@@ -24,6 +24,7 @@
 		.time-line {
 			min-width: 300px;
 			height: 100%;
+			z-index: 1;
 
 			.ruler {
 				height: 100%;
@@ -119,8 +120,7 @@
 	.list-group {
 		height: 100%;
 		width: 100%;
-		overflow-y: scroll;
-		overflow-x: hidden;
+		overflow: hidden;
 		max-height: 62vh;
 		min-height: 500px;
 
@@ -260,5 +260,9 @@
 				}
 			}
 		}
+	}
+
+	.md-virtual-repeat-offsetter {
+		z-index: 1;
 	}
 }

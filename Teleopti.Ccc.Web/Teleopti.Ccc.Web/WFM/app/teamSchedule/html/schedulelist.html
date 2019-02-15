@@ -18,118 +18,116 @@
 		<div class="schedule-tool-column schedule-note-column"></div>
 		<div class="contract-time-column">{{ 'ContractTime' | translate }}</div>
 	</div>
-	<div class="list-group" ng-style="vm.tableStyle" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
-
-		<div class="list-item" ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
-			 ng-repeat-start="personSchedule in vm.scheduleVm.Schedules"
-			 ng-click="vm.togglePerson(personSchedule, null)">
-			<div class="person-name-column" ng-click="vm.updatePersonSelection(personSchedule, $event)">
-				<label>
-					<md-checkbox ng-model="personSchedule.IsSelected"
-								 aria-label="Checkbox">
-						{{::personSchedule.Name}}
-						<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
-							<i class="mdi mdi-earth"></i>
-							<md-tooltip md-direction="right">
-								{{::personSchedule.Timezone.DisplayName}}
-							</md-tooltip>
+	<md-virtual-repeat-container class="list-group" ng-class="{'has-selected':vm.totalSelectedProjections() != 0 }">
+		<div md-virtual-repeat="personSchedule in vm.scheduleVm.Schedules"  ng-style="vm.tableStyle">
+			<div class="list-item" ng-class="{'in-editing': vm.isScheduleInEditing(personSchedule)}"
+				 ng-click="vm.togglePerson(personSchedule, null)">
+				<div class="person-name-column" ng-click="vm.updatePersonSelection(personSchedule, $event)">
+					<label>
+						<md-checkbox ng-model="personSchedule.IsSelected"
+									 aria-label="Checkbox">
+							{{::personSchedule.Name}}
+							<span class="timezone-tip" ng-if="personSchedule.Timezone.IanaId !== vm.selectedTimezone">
+								<i class="mdi mdi-earth"></i>
+								<md-tooltip md-direction="right">
+									{{::personSchedule.Timezone.DisplayName}}
+								</md-tooltip>
+							</span>
+						</md-checkbox>
+					</label>
+					<span class="validate-warning" ng-if="vm.showWarnings && !!vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
+						<span class="warning-icon">
+							<i class="mdi mdi-account-alert"></i>
 						</span>
-					</md-checkbox>
-				</label>
-				<span class="validate-warning" ng-if="vm.showWarnings && !!vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length">
-					<span class="warning-icon">
-						<i class="mdi mdi-account-alert"></i>
+						<md-tooltip class="multiline-tooltip max-width-600" md-direction="right">
+							<span ng-bind-html="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId) | br"></span>
+						</md-tooltip>
 					</span>
-					<md-tooltip class="multiline-tooltip max-width-600" md-direction="right">
-						<span ng-bind-html="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId) | br"></span>
+				</div>
+
+				<div class="shift-category-cell">
+					<span id="name"
+						  ng-if="::personSchedule.ShiftCategory.Name"
+						  ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.TextColor}">
+						<span ng-click="vm.modifyShiftCategoryForAgent($event, personSchedule)">{{::personSchedule.ShiftCategory.ShortName}}</span>
+						<i class="mdi mdi-information mdi-alert info" ng-if="!!personSchedule.UnderlyingScheduleSummary"></i>
+					</span>
+
+					<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name || !!personSchedule.UnderlyingScheduleSummary"
+								class="multiline-tooltip"
+								md-direction="right">
+						<div ng-if="::personSchedule.ShiftCategory.Name">{{::personSchedule.ShiftCategory.Name}}</div>
+						<underlying-schedule-info person-schedule="personSchedule"
+												  date="vm.selectedDate"></underlying-schedule-info>
 					</md-tooltip>
-				</span>
-			</div>
+				</div>
 
-			<div class="shift-category-cell">
-				<span id="name"
-					  ng-if="::personSchedule.ShiftCategory.Name"
-					  ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.TextColor}">
-					<span ng-click="vm.modifyShiftCategoryForAgent($event, personSchedule)">{{::personSchedule.ShiftCategory.ShortName}}</span>
-					<i class="mdi mdi-information mdi-alert info" ng-if="!!personSchedule.UnderlyingScheduleSummary"></i>
-				</span>
-
-				<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name || !!personSchedule.UnderlyingScheduleSummary"
-							class="multiline-tooltip"
-							md-direction="right">
-					<div ng-if="::personSchedule.ShiftCategory.Name">{{::personSchedule.ShiftCategory.Name}}</div>
-					<underlying-schedule-info person-schedule="personSchedule"
-											  date="vm.selectedDate"></underlying-schedule-info>
-				</md-tooltip>
-			</div>
-
-			<div class="schedule schedule-column">
-				<div class="relative time-line-for">
-					<span class="dayoff absolute"
-						  ng-repeat="dayOff in personSchedule.DayOffs"
-						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
-						<md-tooltip ng-if="!!dayOff.DayOffName">{{::dayOff.DayOffName}}</md-tooltip>
-					</span>
-					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
-						<div class="layer absolute pull-left"
-							 ng-repeat="projection in shift.Projections"
-							 projection-name="{{::projection.Description}}"
-							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
-							 ng-class="{
+				<div class="schedule schedule-column">
+					<div class="relative time-line-for">
+						<span class="dayoff absolute"
+							  ng-repeat="dayOff in personSchedule.DayOffs"
+							  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
+							<md-tooltip ng-if="!!dayOff.DayOffName">{{::dayOff.DayOffName}}</md-tooltip>
+						</span>
+						<div class="shift" ng-repeat="shift in personSchedule.Shifts">
+							<div class="layer absolute pull-left"
+								 ng-repeat="projection in shift.Projections"
+								 projection-name="{{::projection.Description}}"
+								 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
+								 ng-class="{
 							 'overtime-light': projection.IsOvertime && projection.UseLighterBorder,
 							 'overtime-dark': projection.IsOvertime && !projection.UseLighterBorder,
 							 'selected': projection.Selected,
 							 'lighter-border': projection.UseLighterBorder,
 							 'unselectable': !projection.Selectable(),
 							 'same-type-as-last': projection.ShowDividedLine}"
-							 ng-click="vm.ToggleProjectionSelection(projection, vm.selectedDate, $event)">
-							<md-tooltip class="multiline-tooltip">
-								<div>{{::projection.Description}}</div>
-								<div>{{::projection.TimeSpan}}</div>
-							</md-tooltip>
+								 ng-click="vm.ToggleProjectionSelection(projection, vm.selectedDate, $event)">
+								<md-tooltip class="multiline-tooltip">
+									<div>{{::projection.Description}}</div>
+									<div>{{::projection.TimeSpan}}</div>
+								</md-tooltip>
+							</div>
+						</div>
+						<div ng-if="personSchedule.HasHiddenScheduleAtStart()" class="start-ellipsis">
+							<i class="mdi mdi-chevron-double-left white-color-text"></i>
+						</div>
+						<div ng-if="personSchedule.HasHiddenScheduleAtEnd()" class="end-ellipsis">
+							<i class="mdi mdi-chevron-double-right"></i>
 						</div>
 					</div>
-					<div ng-if="personSchedule.HasHiddenScheduleAtStart()" class="start-ellipsis">
-						<i class="mdi mdi-chevron-double-left white-color-text"></i>
-					</div>
-					<div ng-if="personSchedule.HasHiddenScheduleAtEnd()" class="end-ellipsis">
-						<i class="mdi mdi-chevron-double-right"></i>
-					</div>
 				</div>
+				<div class="schedule-tool-column schedule-editor-column">
+					<span class="editor cursor-pointer"
+						  ng-if="::vm.showEditButton(personSchedule)"
+						  ng-click="vm.clickEditButton(personSchedule, $event)">
+						<i class="mdi mdi-pencil"></i>
+					</span>
+				</div>
+				<div class="schedule-tool-column schedule-note-column"
+					 ng-click="vm.editScheduleNote(personSchedule.PersonId, $event)">
+					<span class="cursorpointer"
+						  ng-class="{'has-note': vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote}">
+						<i class="mdi mdi-comment"></i>
+					</span>
+					<md-tooltip class="multiline-tooltip max-width-600 truncated"
+								md-direction="left"
+								ng-if="vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote">
+						{{ vm.getScheduleNoteForPerson(personSchedule.PersonId).internalNotes }}
+						<md-divider style="background-color: white"
+									ng-if="!!vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes.length"></md-divider>
+						{{ vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes }}
+					</md-tooltip>
+				</div>
+				<div class="contract-time-column">{{::personSchedule.ContractTime}}</div>
 			</div>
-			<div class="schedule-tool-column schedule-editor-column">
-				<span class="editor cursor-pointer"
-					  ng-if="::vm.showEditButton(personSchedule)"
-					  ng-click="vm.clickEditButton(personSchedule, $event)">
-					<i class="mdi mdi-pencil"></i>
-				</span>
-			</div>
-			<div class="schedule-tool-column schedule-note-column"
-				 ng-click="vm.editScheduleNote(personSchedule.PersonId, $event)">
-				<span class="cursorpointer"
-					  ng-class="{'has-note': vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote}">
-					<i class="mdi mdi-comment"></i>
-				</span>
-				<md-tooltip class="multiline-tooltip max-width-600 truncated"
-							md-direction="left"
-							ng-if="vm.getScheduleNoteForPerson(personSchedule.PersonId).hasNote">
-					{{ vm.getScheduleNoteForPerson(personSchedule.PersonId).internalNotes }}
-					<md-divider style="background-color: white"
-								ng-if="!!vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes.length"></md-divider>
-					{{ vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes }}
-				</md-tooltip>
-			</div>
-			<div class="contract-time-column">{{::personSchedule.ContractTime}}</div>
-		</div>
-		<div class="shift-editor-row" ng-repeat-end ng-if="vm.isScheduleInEditing(personSchedule)">
-			<div colspan="6">
+			<div class="shift-editor-row" ng-if="vm.isScheduleInEditing(personSchedule)">
 				<shift-editor date="vm.selectedDate"
 							  timezone="vm.selectedTimezone"
 							  person-id="personSchedule.PersonId"
 							  raw-schedule="vm.getRawSchedule(personSchedule.PersonId)"></shift-editor>
 			</div>
 		</div>
-	</div>
+	</md-virtual-repeat-container>
 </div>
 <note-editor ng-if="vm.noteEditorInputOption && vm.noteEditorInputOption.showEditor"
 			 note-input-option="vm.noteEditorInputOption"
