@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,11 +13,12 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
+	[AllTogglesOn]
 	public class StaffingPerformanceLoadingTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
@@ -27,11 +26,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
-		public FakeConfigReader ConfigReader;
-		public IPersonRequestRepository PersonRequestRepository;
-		public WaitlistRequestHandler WaitlistRequestHandler;
-		public IStardustJobFeedback StardustJobFeedback;
-		//public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public IAbsenceRepository AbsenceRepository;
 		public IPersonRepository PersonRepository;
 		public ISkillRepository SkillRepository;
@@ -43,21 +37,16 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public IDayOffTemplateRepository DayOffTemplateRepository;
 		public IActivityRepository ActivityRepository;
 		public IScenarioRepository ScenarioRepository;
-		public AddOverTime AddOverTime;
+		public UpdateSkillForecastReadModel UpdateSkillForecastReadModel;
+		
+		public IIntradayApplicationStaffingService Target;
 
-		public IntradayStaffingApplicationService Target;
-
-		//private IList<IPersonRequest> requests;
-		private DateTime _nowDateTime;
-		//private ICollection<IPerson> _personList;
-		//private List<IWorkflowControlSet> _wfcs;
+		private DateTime _nowDateTime;		
 		private IEnumerable<ISkill> _skills;
 		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 
-
 		public override void OneTimeSetUp()
 		{
-			//_wfcs = new List<IWorkflowControlSet>();
 			_nowDateTime = new DateTime(2016, 04, 06, 6, 58, 0).Utc();
 			Now.Is(_nowDateTime);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
@@ -66,7 +55,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(14));
 			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
-			//requests = new List<IPersonRequest>();
+			
 			WithUnitOfWork.Do(() =>
 			{
 				AbsenceRepository.LoadAll();
@@ -78,9 +67,9 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				PartTimePercentageRepository.LoadAll();
 				ContractScheduleRepository.LoadAllAggregate();
 				DayOffTemplateRepository.LoadAll();
-
 				ScenarioRepository.LoadDefaultScenario();
 
+				UpdateSkillForecastReadModel.Update(period);
 				UpdateStaffingLevel.Update(period); 
 			});
 		}
