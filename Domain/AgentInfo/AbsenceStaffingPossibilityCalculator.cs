@@ -153,11 +153,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),
 				skill);
 			if (!skillScheduled) return false;
-			// we can't calculate current user's schedule for a skill in a specific period
-			// so we just substract 1 which means user's schedule is removed(#44607)
+
 			if (skillStaffingData.ScheduledStaffing <= 1)
 			{
 				skillStaffingData.ScheduledStaffing = 0;
+			}
+			else
+			{
+				skillStaffingData.ScheduledStaffing -= 1;
 			}
 
 			return true;

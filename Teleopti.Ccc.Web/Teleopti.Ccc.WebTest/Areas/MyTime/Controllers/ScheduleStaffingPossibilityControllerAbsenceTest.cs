@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldNotReturnAbsencePossibilitiesForDaysNotInAbsenceOpenPeriod()
+		public void ShouldNotReturnPossibilitiesForDaysNotInAbsenceOpenPeriod()
 		{
 			setupSiteOpenHour();
 			setupTestData();
@@ -69,6 +69,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = getPossibilityViewModels(today, StaffingPossiblityType.Absence).ToList();
 			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotReturnAbsencePossibilitiesIfSkillIsNotScheduled()
+		{
+			var underStaffedSkill = createSkill("skill understaffed");
+			underStaffedSkill.StaffingThresholds = new StaffingThresholds(new Percent(-0.95), new Percent(-0.95), new Percent(0.1));
+			setupTestDataWithoutSchedule(underStaffedSkill, new double?[] { 100, 100 }, new double?[] { 4, 4 });
+
+			setupWorkFlowControlSet();
+
+			var possibilities =
+				getPossibilityViewModels(null, StaffingPossiblityType.Absence)
+					.Where(d => d.Date == Now.UtcDateTime().ToDateOnly().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(0, possibilities.Count);
 		}
 
 		[Test]
@@ -215,10 +231,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.Where(x => x.Date == dayInShrinkagePeriod.ToFixedClientDateOnlyFormat()).ToList();
 
 			Assert.AreEqual(2, possibilitiesIntraday.Count);
-			possibilitiesIntraday.ForEach(x => Assert.AreEqual(1, x.Possibility));
+			Assert.AreEqual(1, possibilitiesIntraday[0].Possibility);
+			Assert.AreEqual(0, possibilitiesIntraday[1].Possibility);
 
 			Assert.AreEqual(2, possibilitiesIntradayWithShrinkage.Count);
-			possibilitiesIntradayWithShrinkage.ForEach(x => Assert.AreEqual(0, x.Possibility));
+			Assert.AreEqual(0, possibilitiesIntradayWithShrinkage[0].Possibility);
+			Assert.AreEqual(0, possibilitiesIntradayWithShrinkage[1].Possibility);
 		}
 
 		[Test]
@@ -391,6 +409,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldSubtractCurrentUserShiftWhenSceduledStaffingLagerThanOne()
+		{
+			var underStaffedSkill = createSkill("skill understaffed");
+			underStaffedSkill.StaffingThresholds =
+				new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0.1));
+
+			setupTestData(new double?[] { 5, 5 }, new double?[] { 5, 5 });
+
+			setupWorkFlowControlSet();
+
+			var possibilities =
+				getPossibilityViewModels(null, StaffingPossiblityType.Absence, false).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
 		public void ShouldUsePrimarySkillsWhenCalculatingOvertimeProbability()
 		{
 			setupWorkFlowControlSet();
@@ -483,30 +519,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetAllGoodPossibilitiesWhenStaffingLevelIsEqualToUnderStaffingThresholds()
 		{
 			var skill = createSkill("test1");
-			skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.95), new Percent(-0.95), new Percent(0.1));
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.96), new Percent(-0.96), new Percent(0.1));
 			setupTestData(skill, new double?[] { 100, 100 }, new double?[] { 5, 5 });
-			setupWorkFlowControlSet();
-
-			var possibilities =
-				getPossibilityViewModels(null, StaffingPossiblityType.Absence)
-					.Where(d => d.Date == Now.UtcDateTime().ToDateOnly().ToFixedClientDateOnlyFormat())
-					.ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
-		}
-
-		[Test]
-		public void ShouldGetAllGoodPossibilitiesWhenStaffingForOneSkillIsNotUnderstaffingAndAnotherSkillIsNotScheduled()
-		{
-			var notUnderStaffedSkill = createSkill("skillNot understaffed");
-			notUnderStaffedSkill.StaffingThresholds = new StaffingThresholds(new Percent(-0.95), new Percent(-0.95), new Percent(0.1));
-			setupTestData(notUnderStaffedSkill, new double?[] { 100, 100 }, new double?[] { 5, 5 });
-
-			var underStaffedSkill = createSkill("skill understaffed");
-			underStaffedSkill.StaffingThresholds = new StaffingThresholds(new Percent(-0.95), new Percent(-0.95), new Percent(0.1));
-			setupTestDataWithoutSchedule(underStaffedSkill, new double?[] { 100, 100 }, new double?[] { 4, 4 });
-
 			setupWorkFlowControlSet();
 
 			var possibilities =
