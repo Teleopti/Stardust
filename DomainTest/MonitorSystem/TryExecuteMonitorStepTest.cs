@@ -17,11 +17,10 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystem
 			var monitorStepResult = new MonitorStepResult(true, "something");
 			MonitorStep.SetResult(monitorStepResult);
 
-			var wasFound = Target.TryExecute(MonitorStep.Name, out var result);
+			var result = Target.TryExecute(MonitorStep.Name);
 			
 			Assert.Multiple(() =>
 			{
-				wasFound.Should().Be.True();
 				result.Should().Be.SameInstanceAs(monitorStepResult);				
 			});
 		}
@@ -29,24 +28,25 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystem
 		[Test]
 		public void ShouldExecuteMonitorStepAlsoWhenCasingDiffers()
 		{
-			var wasFound1 = Target.TryExecute(MonitorStep.Name.ToUpper(), out _);
-			var wasFound2 = Target.TryExecute(MonitorStep.Name.ToLower(), out _);
+			var result1 = Target.TryExecute(MonitorStep.Name.ToUpper());
+			var result2 = Target.TryExecute(MonitorStep.Name.ToLower());
 			
 			Assert.Multiple(() =>
 			{
-				wasFound1.Should().Be.True();
-				wasFound2.Should().Be.True();
+				result1.Success.Should().Be.True();
+				result2.Success.Should().Be.True();
 			});		
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfStepNameDoesntExist()
 		{
+			const string stepName = "non existing";
 			Assert.Multiple(() =>
 			{
-				var wasFound = Target.TryExecute("non existing", out var result);
-				wasFound.Should().Be.False();
-				result.Should().Be.Null();
+				var result = Target.TryExecute(stepName);
+				result.Success.Should().Be.False();
+				result.Output.Should().Be.EqualTo(string.Format(Target.NonExistingStepName, stepName));
 			});
 		}
 

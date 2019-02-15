@@ -1,3 +1,6 @@
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.MonitorSystem;
 
@@ -16,11 +19,10 @@ namespace Teleopti.Wfm.Administration.Monitoring
 		
 		[HttpGet]
 		[Route("monitor/check/{monitorStep}")]
-		public IHttpActionResult Check(string monitorStep)
+		public HttpResponseMessage Check(string monitorStep)
 		{
-			if (_tryExecuteMonitorStep.TryExecute(monitorStep, out var result))
-				return Ok(result);
-			return BadRequest($"{monitorStep} is not a known monitor step");
+			var result = _tryExecuteMonitorStep.TryExecute(monitorStep);
+			return Request.CreateResponse(result.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError, result.Output);
 		}
 		
 		[HttpGet]
