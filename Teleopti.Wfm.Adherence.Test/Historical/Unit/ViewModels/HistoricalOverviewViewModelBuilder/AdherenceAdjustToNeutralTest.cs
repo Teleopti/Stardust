@@ -27,11 +27,11 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.WithTeam(teamId)
 				.WithAgent(person)
 				.WithAssignment("2019-02-01")
-				.WithAssignedActivity("2019-02-01 08:00", "2019-02-01 16:00");
+				.WithAssignedActivity("2019-02-01 10:00", "2019-02-01 14:00");
 			History
-				.StateChanged(person, "2019-02-01 08:00", Adherence.Configuration.Adherence.Out)
-				.StateChanged(person, "2019-02-01 10:00", Adherence.Configuration.Adherence.In)
-				.AdjustedAdherenceToNeutral("2019-02-01 12:00", "2019-02-01 16:00");
+				.StateChanged(person, "2019-02-01 10:00", Adherence.Configuration.Adherence.Out)
+				.StateChanged(person, "2019-02-01 11:00", Adherence.Configuration.Adherence.In)
+				.AdjustedAdherenceToNeutral("2019-02-01 12:00", "2019-02-01 14:00");
 			Now.Is("2019-02-08 08:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
