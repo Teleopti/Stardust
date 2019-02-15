@@ -40,13 +40,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var theDay = new SpecificDate { Date = new DateOnly(date), DateId = dateId, Rows = new[] { dateRow } };
 
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
-			var timeZones = DefaultAnalyticsDataCreator.GetTimeZones();
+			var timeZoneIds = DefaultAnalyticsDataCreator.GetTimeZoneIds();
+			var timeZoneRows = DefaultAnalyticsDataCreator.GetTimeZoneRows();
 
 			var personId = Person.FindPersonIdByPersonCode(DataMaker.Me().Person.Id.GetValueOrDefault());
 			if (personId == -1)
 			{
 				var agent = new Person(DataMaker.Me().Person, datasourceData, 76, new DateTime(2010, 1, 1),
-							 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId, Guid.NewGuid());
+							 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZoneIds.CetTimeZoneId, Guid.NewGuid());
 				DataMaker.Data().Analytics().Setup(agent);
 				personId = agent.PersonId;
 			};
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 			DataMaker.Analytics().Setup(queues);
 			
-			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(theDay, DefaultAnalyticsDataCreator.GetInterval(), timeZones, datasourceData));
+			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(theDay, DefaultAnalyticsDataCreator.GetInterval(), timeZoneRows, datasourceData));
 			DataMaker.Data().Analytics().Setup(new FactSchedule(personId, dateId, dateId, 0, 22, intervalId, scenarioId));
 			DataMaker.Data().Analytics().Setup(new FactAgent(dateId, intervalId, acdLoginId, 600, 900, 300, 55,0, 0, 7, 210, 60));
             DataMaker.Data().Analytics().Setup(new FactAgentQueue(dateId, intervalId, queues.QueueId, acdLoginId, 210, 60, 7, 0));
@@ -75,7 +76,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var dateId = DefaultAnalyticsDataCreator.GetDateId(date);
 			var dateRow = DefaultAnalyticsDataCreator.GetDateRow(date);
-			var timeZones = DefaultAnalyticsDataCreator.GetTimeZones();
+			var timeZoneIds = DefaultAnalyticsDataCreator.GetTimeZoneIds();
+			var timeZoneRows = DefaultAnalyticsDataCreator.GetTimeZoneRows();
 			var theDay = new SpecificDate { Date = new DateOnly(date), DateId = dateId, Rows = new[] { dateRow } };
 			var intervals = DefaultAnalyticsDataCreator.GetInterval();
 			var datasource = DefaultAnalyticsDataCreator.GetDataSources();
@@ -84,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			if (personId == -1)
 			{
 				var agent = new Person(DataMaker.Me().Person, datasource, 76, new DateTime(2010, 1, 1),
-							 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+							 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZoneIds.CetTimeZoneId);
 				DataMaker.Data().Analytics().Setup(agent);
 				personId = agent.PersonId;
 			};
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 
 			//common analytics data
-			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(theDay, intervals, timeZones, datasource));
+			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(theDay, intervals, timeZoneRows, datasource));
 			DataMaker.Data().Analytics().Setup(new FillBridgeAcdLoginPersonFromData(personId, acdLoginId));
 
 			//some report data

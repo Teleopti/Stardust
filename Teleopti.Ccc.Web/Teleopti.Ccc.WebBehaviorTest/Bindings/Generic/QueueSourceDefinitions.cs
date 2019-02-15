@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsQueueStatisticsFor(string name)
 		{
 			var intervalData = DefaultAnalyticsDataCreator.GetInterval();
-			var timeZoneData = DefaultAnalyticsDataCreator.GetTimeZones();
+			var timeZoneData = DefaultAnalyticsDataCreator.GetTimeZoneRows();
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
 			var days = new List<Tuple<SpecificDate, IBridgeTimeZone>>();

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			var intervalData = DefaultAnalyticsDataCreator.GetInterval();
-			var timeZoneData = DefaultAnalyticsDataCreator.GetTimeZones();
+			var timeZoneData = DefaultAnalyticsDataCreator.GetTimeZoneRows();
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
 			var theDay = new SpecificDate

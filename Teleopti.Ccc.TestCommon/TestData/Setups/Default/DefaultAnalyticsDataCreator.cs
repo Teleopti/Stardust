@@ -85,7 +85,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 			return setups.OfType<DatesFromPeriod>().First().DateMap[date.Date];
 		}
 
-		public static ITimeZoneData GetTimeZones()
+		public static ITimeZoneData GetTimeZoneRows()
+		{
+			return setups.OfType<ITimeZoneData>().First();
+		}
+
+		public static ITimeZoneUtcAndCet GetTimeZoneIds()
 		{
 			return setups.OfType<UtcAndCetTimeZones>().First();
 		}
