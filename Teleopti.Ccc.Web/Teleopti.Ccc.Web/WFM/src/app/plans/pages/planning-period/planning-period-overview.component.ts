@@ -57,6 +57,12 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 		preValidation: []
 	};
 
+	sortName = 'SkillName';
+	sortValue = null;
+	sortMap = {
+		SkillName   : null
+	};
+
 	constructor(
 		private planningPeriodService: PlanningPeriodService,
 		private planningPeriodActionService: PlanningPeriodActionService,
@@ -114,18 +120,9 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 			});
 
 		this.skillFilterControl.valueChanges
-			.pipe(
-				this.forTesting ? tap() : debounceTime(600),
-				map(filterString =>
-					this.skills
-						.filter(
-							g =>
-								g.SkillName.toLowerCase().includes(filterString.toLowerCase())
-						)
-				)
-			)
-			.subscribe(filteredSkills => {
-				this.filteredSkills = filteredSkills;
+			.pipe(this.forTesting ? tap() : debounceTime(600))
+			.subscribe(filterString => {
+				this.search(filterString);
 			});
 		
 		this.loadPlanningGroupInfo();
@@ -138,6 +135,23 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		clearInterval(this.timer);
+	}
+
+	public search(filterString: string){
+		const data = this.skills.filter(g => g.SkillName.toLowerCase().includes(filterString.toLowerCase()));
+		if (this.sortName && this.sortValue) {
+			this.filteredSkills = data.sort((a, b) => (this.sortValue === 'ascend') ?
+				(a[ this.sortName ].toLowerCase() > b[ this.sortName ].toLowerCase() ? 1 : -1) :
+				(b[ this.sortName ].toLowerCase() > a[ this.sortName ].toLowerCase() ? 1 : -1));
+		}else{
+			this.filteredSkills = data;
+		}
+	}
+
+	public sort(key: string, value: string): void{
+		this.sortName = key;
+		this.sortValue = value;
+		this.search(this.skillFilterControl.value);
 	}
 
 	private initLegends(){

@@ -92,7 +92,7 @@
 								</th>
 							</tr>
 							<tr>
-								<th></th>
+								<th nzShowSort [(nzSort)]="sortMap.SkillName" (nzSortChange)="sort('SkillName',$event)">{{ 'Skill' | translate }}</th>
 								<th class="heatmap-date-header" nzWidth="22px" *ngFor ="let datenode of nzTable.data[0].SkillDetails">
 									<p class="heatmap-date" [ngClass]="{'heatmap-head-weekend': datenode.weekend}">{{datenode.Date | amDateFormat:"D"}}</p>
 								</th>
