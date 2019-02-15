@@ -1,4 +1,4 @@
-﻿using WorkerNode = Teleopti.Ccc.Infrastructure.Repositories.Stardust.WorkerNode;
+﻿using Teleopti.Ccc.Domain.Stardust;
 
 namespace Teleopti.Wfm.Administration.Core.Stardust
 {

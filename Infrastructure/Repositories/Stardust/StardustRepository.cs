@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Stardust;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 

@@ -271,6 +271,8 @@
     <Compile Include="Staffing\SkillStaffPeriodForReadmodel.cs" />
     <Compile Include="Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Forecasting\UpdateSkillForecastReadModelHandler.cs" />
+    <Compile Include="Stardust\IGetAllWorkerNodes.cs" />
+    <Compile Include="Stardust\WorkerNode.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
