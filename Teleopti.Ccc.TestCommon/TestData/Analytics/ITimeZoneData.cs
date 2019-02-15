@@ -7,7 +7,5 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	public interface ITimeZoneData : IAnalyticsDataSetup
 	{
 		IEnumerable<DataRow> Rows { get; }
-		int UtcTimeZoneId { get; }
-		int CetTimeZoneId { get; }
 	}
 }

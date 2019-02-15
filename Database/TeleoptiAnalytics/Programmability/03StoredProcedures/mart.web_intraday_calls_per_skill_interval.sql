@@ -7,9 +7,8 @@ GO
 -- Create date: 2016-09-05
 -- Description:	Get the offered calls & aht per skill for the given day. 
 -- =============================================
--- EXEC [mart].[web_intraday_calls_per_skill_interval] 'W. Europe Standard Time', '2013-02-02', 'C5FFFC8F-BCD6-47F7-9352-9F0800E39578'
+-- EXEC [mart].[web_intraday_calls_per_skill_interval] 'Eastern Standard Time', '2018-11-26', '6E2F21D9-CEFF-45A3-974E-A7E7011F7E2B'
 CREATE PROCEDURE [mart].[web_intraday_calls_per_skill_interval]
-@time_zone_code nvarchar(100),
 @today smalldatetime,
 @skill_list nvarchar(max)
 
@@ -43,8 +42,6 @@ BEGIN
 		answered_calls int,
 		handle_time decimal(19,0)
 	)
-
-	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @time_zone_code
 
 	INSERT INTO #skills
 	SELECT * FROM mart.SplitStringGuid(@skill_list)
@@ -104,13 +101,14 @@ BEGIN
 		#queues q
 		INNER JOIN mart.fact_queue fq ON q.queue_id = fq.queue_id
 	WHERE
-		date_id between @current_date_id - 1 and @current_date_id + 1
+		date_id = @current_date_id
 		AND 
 			(
 				(offered_calls IS NOT NULL AND offered_calls > 0)
 				OR
 				(overflow_in_calls IS NOT NULL AND overflow_in_calls > 0)
 			)
+
 	SELECT
 		qs.skill_code AS SkillId,
 		qs.workload_code AS WorkloadId,
@@ -126,12 +124,8 @@ BEGIN
 		SUM(qs.handle_time) AS HandleTime
 	FROM
 		#queue_stats qs
-		INNER JOIN mart.bridge_time_zone bz ON qs.date_id = bz.date_id AND qs.utc_interval_id = bz.interval_id
-		INNER JOIN mart.dim_date d ON bz.local_date_id = d.date_id
-		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
-	WHERE
-		bz.time_zone_id = @time_zone_id 
-		AND d.date_date = @today
+		INNER JOIN mart.dim_date d ON qs.date_id = d.date_id
+		INNER JOIN mart.dim_interval i ON qs.utc_interval_id = i.interval_id
 	GROUP BY
 		qs.skill_code,
 		qs.workload_code,

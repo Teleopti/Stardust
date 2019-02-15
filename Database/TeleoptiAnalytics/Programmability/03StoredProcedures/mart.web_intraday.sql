@@ -10,7 +10,7 @@ GO
 -- =============================================
 -- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2017-01-13', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
 -- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-04-13', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753,C5FFFC8F-BCD6-47F7-9352-9F0800E39578'
--- EXEC mart.web_intraday 'GMT Standard Time', '2016-11-01', '32411FDD-5A63-45B2-98AE-A59B00B9CDF3'
+-- EXEC mart.web_intraday 'GMT Standard Time', '2018-11-27', '6E2F21D9-CEFF-45A3-974E-A7E7011F7E2B'
 CREATE PROCEDURE [mart].[web_intraday]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -73,10 +73,17 @@ BEGIN
 	FROM mart.dim_scenario WITH (NOLOCK)
 	WHERE business_unit_id = @bu_id
 		AND default_scenario = 1
-                         
+                  
 	-- Prepare Queue stats
-	DECLARE @current_date_id int
+	DECLARE @current_date_id int,
+	@current_date_id_minus1 int,
+	@current_date_id_plus1 int
+
 	SELECT @current_date_id = date_id FROM mart.dim_date WHERE date_date = @today
+	SELECT @current_date_id_minus1 = date_id
+		FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, -1, date_date) FROM mart.dim_date WHERE date_id = @current_date_id)
+	SELECT @current_date_id_plus1 = date_id
+		FROM mart.dim_date WHERE date_date = (SELECT DATEADD(d, 1, date_date) FROM mart.dim_date WHERE date_id = @current_date_id)
 
 	-- Queue incoming statistics
 	INSERT INTO #queue_stats
@@ -110,7 +117,7 @@ BEGIN
 		INNER JOIN mart.dim_skill ds WITH (NOLOCK) ON qw.skill_id = ds.skill_id
 		INNER JOIN #skills s ON ds.skill_code = s.id
 	WHERE 
-		fq.date_id between @current_date_id - 1 and @current_date_id + 1 AND
+		fq.date_id between @current_date_id_minus1 and @current_date_id_plus1 AND
 		w.is_deleted = 0
 	GROUP BY
  		date_id,

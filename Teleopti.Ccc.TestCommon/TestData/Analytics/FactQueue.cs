@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		private readonly IDatasourceData _datasource;
 		private readonly IBridgeTimeZone _bridgeTimeZone;
 		private readonly int _latestStatisticsIntervalId;
+		private IEnumerable<DataRow> _rows;
 
 		public FactQueue(IDateData dates, IIntervalData intervals, IQueueData queue, IDatasourceData datasource, IBridgeTimeZone bridgeTimeZone, int latestStatisticsIntervalId)
 		{
@@ -27,6 +29,20 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_datasource = datasource;
 			_bridgeTimeZone = bridgeTimeZone;
 			_latestStatisticsIntervalId = latestStatisticsIntervalId;
+		}
+
+		public int AnsweredCalls()
+		{
+			return _rows.IsNullOrEmpty() 
+				? 0 
+				: _rows.AsEnumerable().Sum(dataRow => Convert.ToInt32(dataRow["answered_calls"]));
+		}
+
+		public int HandleTime()
+		{
+			return _rows.IsNullOrEmpty()
+				? 0
+				: _rows.AsEnumerable().Sum(dataRow => Convert.ToInt32(dataRow["handle_time_s"]));
 		}
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture) {
@@ -90,6 +106,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			              			);
 			              	});
 
+			_rows = table.AsEnumerable();
 			Bulk.Insert(connection, table);
 		}
 

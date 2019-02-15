@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class ThreeSkills : ISkillData
 	{
-		private readonly ITimeZoneData _timeZones;
+		private readonly ITimeZoneUtcAndCet _timeZones;
 		private readonly IBusinessUnitData _businessUnits;
 		private readonly IDatasourceData _datasource;
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		public Guid Skill3Code = Guid.NewGuid();
 		public string Skill3Name = "Skill 3";
 
-		public ThreeSkills(ITimeZoneData timeZones, IBusinessUnitData businessUnits, IDatasourceData datasource)
+		public ThreeSkills(ITimeZoneUtcAndCet timeZones, IBusinessUnitData businessUnits, IDatasourceData datasource)
 		{
 			FirstSkillId = 0;
 			FirstSkillCode = Guid.NewGuid();

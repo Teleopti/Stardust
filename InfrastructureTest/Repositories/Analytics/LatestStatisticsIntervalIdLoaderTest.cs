@@ -1,8 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
@@ -13,12 +19,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	public class LatestStatisticsIntervalIdLoaderTest
 	{
 		[Test]
-		public void ShouldCheckThatStoredProcedureExists()
+		public void ShouldReturnLatestStatisticsInterval()
 		{
+			var latestStatsIntervalId = 47;
 			var target = new LatestStatisticsIntervalIdLoader();
-			var intervalId = target.Load(new Guid[] {Guid.NewGuid()}, DateOnly.Today, TimeZoneInfo.Utc);
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var timeZones = new UtcAndCetTimeZones();
+			var datasource = new ExistingDatasources(timeZones);
+			var businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource, 1);
+			var threeSkills = new ThreeSkills(timeZones, businessUnit, datasource);
+			var theSkill = new Skill("MySkill");
+			theSkill.SetId(threeSkills.FirstSkillCode);
+			var workload = new AWorkload(threeSkills, timeZones, businessUnit, datasource) { WorkloadId = 1 };
+			var queue = new AQueue(datasource);
+			var bridgeQueueWorkload = new FillBridgeQueueWorkload(threeSkills, businessUnit, datasource)
+			{
+				QueueId = queue.QueueId,
+				WorkloadId = workload.WorkloadId
+			};
+			var intervals = new QuarterOfAnHourInterval();
+			var date = new SpecificDate() { Date = new DateOnly(2018, 11, 26) };
+			var utcBridgeTimeZoneDate = new FillBridgeTimeZoneFromData(date, intervals, timeZones, datasource);
+			var scenario = new Scenario(1, Guid.NewGuid(), true);
+			var queuStatsDate = new FactQueue(date, intervals, queue, datasource, utcBridgeTimeZoneDate, latestStatsIntervalId);
 
-			intervalId.HasValue.Should().Be.False();
+			analyticsDataFactory.Setup(timeZones);
+			analyticsDataFactory.Setup(datasource);
+			analyticsDataFactory.Setup(businessUnit);
+			analyticsDataFactory.Setup(threeSkills);
+			analyticsDataFactory.Setup(workload);
+			analyticsDataFactory.Setup(queue);
+			analyticsDataFactory.Setup(bridgeQueueWorkload);
+			analyticsDataFactory.Setup(intervals);
+			analyticsDataFactory.Setup(date);
+			analyticsDataFactory.Setup(utcBridgeTimeZoneDate);
+			analyticsDataFactory.Setup(scenario);
+			analyticsDataFactory.Setup(queuStatsDate);
+			analyticsDataFactory.Persist();
+
+			var result = target.Load(new Guid[] { theSkill.Id.Value }, new DateOnly(2018, 11, 26));
+
+			result.Should().Be(latestStatsIntervalId);
 		}
 	}
 }

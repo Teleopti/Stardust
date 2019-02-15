@@ -135,7 +135,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
 			Data.Apply(etlUpdateDate);
 
-			var brasilTimeZone = new BrasilTimeZone { TimeZoneId = 2 };
+			var brasilTimeZone = new ATimeZone("E. South America Standard Time") { TimeZoneId = 2 };
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup> { brasilTimeZone }, testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };

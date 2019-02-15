@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class ExistingDatasources : IAnalyticsDataSetup, IDatasourceData
 	{
-		private readonly ITimeZoneData _timeZones;
+		private readonly ITimeZoneUtcAndCet _timeZones;
 
 		public int RaptorDefaultDatasourceId { get; set; }
 		public IEnumerable<DataRow> Rows { get; set; }
 
-		public ExistingDatasources(ITimeZoneData timeZones) {
+		public ExistingDatasources(ITimeZoneUtcAndCet timeZones) {
 			_timeZones = timeZones;
 		}
 

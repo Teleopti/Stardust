@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	public class AWorkload : IWorkloadData
 	{
 		private readonly ISkillData _skills;
-		private readonly ITimeZoneData _timezones;
+		private readonly ITimeZoneUtcAndCet _timezones;
 		private readonly IBusinessUnitData _businessUnits;
 		private readonly IDatasourceData _datasource;
 
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		public IEnumerable<DataRow> Rows { get; set; }
 
-		public AWorkload(ISkillData skills, ITimeZoneData timezones, IBusinessUnitData businessUnits, IDatasourceData datasource)
+		public AWorkload(ISkillData skills, ITimeZoneUtcAndCet timezones, IBusinessUnitData businessUnits, IDatasourceData datasource)
 		{
 			_skills = skills;
 			_timezones = timezones;

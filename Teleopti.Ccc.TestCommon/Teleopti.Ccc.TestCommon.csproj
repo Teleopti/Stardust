@@ -494,6 +494,8 @@
     <Compile Include="SkillDayExtensions.cs" />
     <Compile Include="SkillExtensions.cs" />
     <Compile Include="TestConnectionStrings.cs" />
+    <Compile Include="TestData\Analytics\ATimeZone.cs" />
+    <Compile Include="TestData\Analytics\FillBridgeQueueWorkload.cs" />
     <Compile Include="TestData\Analytics\DataSource.cs" />
     <Compile Include="TestData\Analytics\DatesFromPeriod.cs" />
     <Compile Include="TestData\Analytics\DefaultAcdLogin.cs" />
@@ -503,6 +505,7 @@
     <Compile Include="TestData\Analytics\Absence.cs" />
     <Compile Include="TestData\Analytics\DimOvertime.cs" />
     <Compile Include="TestData\Analytics\FillFactForecastWorkload.cs" />
+    <Compile Include="TestData\Analytics\ITimeZoneUtcAndCet.cs" />
     <Compile Include="TestData\Analytics\LogObjectDetail.cs" />
     <Compile Include="TestData\Analytics\NotDefinedBusinessUnit.cs" />
     <Compile Include="TestData\Analytics\NotDefinedSkill.cs" />
@@ -661,7 +664,6 @@
     <Compile Include="TestData\Analytics\AQueue.cs" />
     <Compile Include="TestData\Analytics\AWorkload.cs" />
     <Compile Include="TestData\Analytics\BusinessUnit.cs" />
-    <Compile Include="TestData\Analytics\BrasilTimeZone.cs" />
     <Compile Include="TestData\Analytics\Datasources.cs" />
     <Compile Include="TestData\Analytics\SpecificDate.cs" />
     <Compile Include="TestData\Analytics\CurrentBeforeAndAfterWeekDates.cs" />

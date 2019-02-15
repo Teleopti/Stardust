@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var timeZones = new UtcAndCetTimeZones();
 			var gmtTimeZone = new SpecificTimeZone(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), 3);
-			var brasilTimeZone = new BrasilTimeZone { TimeZoneId = 2 };
+			var brasilTimeZone = new ATimeZone("E. South America Standard Time") { TimeZoneId = 2 };
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			analyticsDataFactory.Setup(brasilTimeZone);
 			analyticsDataFactory.Setup(new DataSource { DataSourceId = 2, TimeZoneId = brasilTimeZone.TimeZoneId });
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var timeZones = new UtcAndCetTimeZones();
 			var gmtTimeZone = new SpecificTimeZone(TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), 3);
-			var brasilTimeZone = new BrasilTimeZone { TimeZoneId = 2 };
+			var brasilTimeZone = new ATimeZone("E. South America Standard Time") { TimeZoneId = 2 };
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			analyticsDataFactory.Setup(brasilTimeZone);
 			analyticsDataFactory.Setup(new DataSource { DataSourceId = 2, TimeZoneId = brasilTimeZone.TimeZoneId });

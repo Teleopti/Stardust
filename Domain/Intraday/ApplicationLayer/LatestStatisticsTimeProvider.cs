@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 		public LatestStatitsticsTimeModel Get(Guid[] skillIdList, DateTime dateUtc)
 		{
-			var intervalId = _latestStatisticsIntervalIdLoader.Load(skillIdList, new DateOnly(dateUtc), TimeZoneInfo.Utc);
+			var intervalId = _latestStatisticsIntervalIdLoader.Load(skillIdList, new DateOnly(dateUtc));
 			if (!intervalId.HasValue)
 				return null;
 

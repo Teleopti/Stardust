@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
-	public class UtcAndCetTimeZones : ITimeZoneData
+	public class UtcAndCetTimeZones : ITimeZoneData, ITimeZoneUtcAndCet
 	{
 		public UtcAndCetTimeZones()
 		{

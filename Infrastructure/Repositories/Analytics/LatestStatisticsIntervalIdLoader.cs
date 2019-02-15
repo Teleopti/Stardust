@@ -10,14 +10,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class LatestStatisticsIntervalIdLoader : ILatestStatisticsIntervalIdLoader
 	{
-		public int? Load(Guid[] skillIdList, DateOnly today, TimeZoneInfo timeZone)
+		public int? Load(Guid[] skillIdList, DateOnly today)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				var skillListString = String.Join(",", skillIdList.Select(id => id.ToString()).ToArray());
 
-				var intervalId = uow.Session().CreateSQLQuery(@"mart.web_intraday_latest_interval @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
-					.SetString("TimeZone", timeZone.Id)
+				var intervalId = uow.Session().CreateSQLQuery(@"mart.web_intraday_latest_interval @today=:Today, @skill_list=:SkillList")
 					.SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
 					.SetParameter("SkillList", skillListString, NHibernateUtil.StringClob)
 					.UniqueResult<int>();

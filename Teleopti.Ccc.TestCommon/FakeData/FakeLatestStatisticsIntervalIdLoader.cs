@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_intervalDate = intervalDate;
 		}
 
-		public int? Load(Guid[] skillIdList, DateOnly now, TimeZoneInfo userTimeZone)
+		public int? Load(Guid[] skillIdList, DateOnly now)
 		{
 			if (_intervalDate != null && now != _intervalDate)
 			{
