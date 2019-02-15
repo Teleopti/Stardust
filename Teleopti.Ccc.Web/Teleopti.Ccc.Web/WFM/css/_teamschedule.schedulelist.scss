@@ -133,7 +133,8 @@
 
 			&:not(.shift-editor-row):hover,
 			&.in-editing {
-				background: $gray012;
+				background: $gray-300;
+				opacity: 0.7;
 			}
 
 			& > div.person-name-column {
