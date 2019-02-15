@@ -14,14 +14,16 @@ namespace Teleopti.Ccc.DBManager.Library
 		private static readonly Version SQL2005SP2 = Version.Parse("9.00.3042"); //http://www.sqlteam.com/article/sql-server-versions
 
 		private readonly IUpgradeLog _logger;
+		private readonly IInstallationEnvironment _installationEnvironment;
 		private readonly DatabaseFolder _folder;
 		private readonly ExecuteSql _executeSql;
 
-		public PermissionsHelper(IUpgradeLog logger, DatabaseFolder folder, ExecuteSql executeSql)
+		public PermissionsHelper(IUpgradeLog logger, DatabaseFolder folder, ExecuteSql executeSql, IInstallationEnvironment installationEnvironment)
 		{
 			_logger = logger;
 			_folder = folder;
 			_executeSql = executeSql;
+			_installationEnvironment = installationEnvironment;
 		}
 
 		[SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			if (compareStringLowerCase(user, @"sa"))
 				return;
 
-			if (!InstallationEnvironment.IsAzure)
+			if (!_installationEnvironment.IsAzure)
 			{
 				//Create or Re-link e.g Alter the DB-user from SQL-Login
 				var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] FOR LOGIN [{0}]", user);

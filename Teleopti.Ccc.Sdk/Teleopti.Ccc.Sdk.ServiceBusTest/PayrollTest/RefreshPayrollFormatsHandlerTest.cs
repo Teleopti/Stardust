@@ -17,6 +17,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 {
@@ -48,13 +49,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			}
 
 			var serverConfigurationRepository = new FakeServerConfigurationRepository();
+			var installationEnvironment = new FakeInstallationEnvironment {IsAzure = false};
 			serverConfigurationRepository.Update("PayrollSourcePath",
 				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll.DeployNew"));
 			var initializePayrollFormatsUsingAppDomain =
 				new InitializePayrollFormatsUsingAppDomain(dataSourceForTenant, payrollFormatRepositoryFactory);
 			var refreshPayrollFormatsHandler =
 				new RefreshPayrollFormatsHandler(searchPath, new FakeConfigReader("", ""), initializePayrollFormatsUsingAppDomain,
-					new TenantUnitOfWorkFake(), serverConfigurationRepository);
+					new TenantUnitOfWorkFake(), serverConfigurationRepository, installationEnvironment);
 
 			var payrollEvent = new RefreshPayrollFormatsEvent { TenantName = tenantName };
 			IEnumerable<object> objectList = null;
@@ -90,12 +92,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 				Directory.Delete(tenantDestinationPath);
 			}
 
+			var installationEnvironment = new FakeInstallationEnvironment { IsAzure = false };
 			var serverConfigurationRepository = new FakeServerConfigurationRepository();
 			var initializePayrollFormatsUsingAppDomain =
 				new InitializePayrollFormatsUsingAppDomain(dataSourceForTenant, payrollFormatRepositoryFactory);
 			var refreshPayrollFormatsHandler =
 				new RefreshPayrollFormatsHandler(searchPath, new FakeConfigReader("", ""), initializePayrollFormatsUsingAppDomain,
-					new TenantUnitOfWorkFake(), serverConfigurationRepository);
+					new TenantUnitOfWorkFake(), serverConfigurationRepository, installationEnvironment);
 
 			var payrollEvent = new RefreshPayrollFormatsEvent { TenantName = tenantName };
 			IEnumerable<object> objectList = null;
@@ -131,11 +134,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.PayrollTest
 			}
 
 			var serverConfigurationRepository = new FakeServerConfigurationRepository();
+			var installationEnvironment = new FakeInstallationEnvironment { IsAzure = false };
 			var initializePayrollFormatsUsingAppDomain =
 				new InitializePayrollFormatsUsingAppDomain(dataSourceForTenant, payrollFormatRepositoryFactory);
 			var refreshPayrollFormatsHandler =
 				new RefreshPayrollFormatsHandler(searchPath, new FakeConfigReader("", ""), initializePayrollFormatsUsingAppDomain,
-					new TenantUnitOfWorkFake(), serverConfigurationRepository);
+					new TenantUnitOfWorkFake(), serverConfigurationRepository, installationEnvironment);
 
 			var payrollEvent = new RefreshPayrollFormatsEvent { TenantName = tenantName };
 			IEnumerable<object> objectList = null;

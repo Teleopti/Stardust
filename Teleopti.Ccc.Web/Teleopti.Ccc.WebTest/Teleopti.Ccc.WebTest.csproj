@@ -320,6 +320,7 @@
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestPersonToPermissionValidatorTest.cs" />
     <Compile Include="Core\Requests\Mapping\OvertimeRequestFormMappingTest.cs" />
     <Compile Include="Core\Requests\ViewModelFactory\FakePeopleForShiftTradeFinder.cs" />
+    <Compile Include="Core\Startup\NotificationSubscriptionTaskTest.cs" />
     <Compile Include="Core\Startup\PublishStartupJobsTaskTest.cs" />
     <Compile Include="Core\TeamSchedule\FavoriteSearchProviderTest.cs" />
     <Compile Include="Core\TeamSchedule\ScheduleValidationProviderTest.cs" />
@@ -681,6 +682,10 @@
     <ProjectReference Include="..\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj">
       <Project>{807A8AFE-C46B-4907-B287-BD4AEC6DAE01}</Project>
       <Name>Teleopti.Support.Tool</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Azure.Common\Teleopti.Wfm.Azure.Common.csproj">
+      <Project>{84C0328F-2AF7-42B6-8AB4-E9FDA5248374}</Project>
+      <Name>Teleopti.Wfm.Azure.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
       <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>

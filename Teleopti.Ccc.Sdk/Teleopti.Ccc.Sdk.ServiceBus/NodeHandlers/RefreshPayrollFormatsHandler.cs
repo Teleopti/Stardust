@@ -21,18 +21,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		private readonly IInitializePayrollFormats _initializePayrollFormats;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
+		private readonly IInstallationEnvironment _installationEnvironment;
 
 		public RefreshPayrollFormatsHandler(ISearchPath searchPath, 
 			IConfigReader configReader,
 			IInitializePayrollFormats initializePayrollFormats,
 			ITenantUnitOfWork tenantUnitOfWork,
-			IServerConfigurationRepository serverConfigurationRepository)
+			IServerConfigurationRepository serverConfigurationRepository,
+			IInstallationEnvironment installationEnvironment)
 		{
 			_searchPath = searchPath ?? new SearchPath();
 			_configReader = configReader ?? new ConfigReader();
 			_initializePayrollFormats = initializePayrollFormats;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_serverConfigurationRepository = serverConfigurationRepository;
+			_installationEnvironment = installationEnvironment;
 		}
 		public void Handle(RefreshPayrollFormatsEvent parameters, CancellationTokenSource cancellationTokenSource, 
 			Action<string> sendProgress, ref IEnumerable<object> returnObjects)
@@ -55,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 				if (string.IsNullOrEmpty(sourcePayrollDirectory))
 					sourcePayrollDirectory = _searchPath.PayrollDeployNewPath;
 				
-				if(!InstallationEnvironment.IsAzure)
+				if(!_installationEnvironment.IsAzure)
 					PayrollDllCopy.CopyFiles(sourcePayrollDirectory, _searchPath.Path, parameters.TenantName);
 			}
 

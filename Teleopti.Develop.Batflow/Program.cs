@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library.Config;
+using Teleopti.Wfm.Azure.Common;
 using Parser = CommandLine.Parser;
 
 namespace Teleopti.Develop.Batflow
@@ -9,8 +10,9 @@ namespace Teleopti.Develop.Batflow
 	{
 		public static int Main(string[] args)
 		{
+			var env = new WfmInstallationEnvironment();
 			var log = new ConsoleLogger();
-			var fixer = new DatabaseFixer(log);
+			var fixer = new DatabaseFixer(log, env);
 
 			return Parser
 				.Default

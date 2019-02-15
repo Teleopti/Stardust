@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -55,6 +56,7 @@ using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.States.Infrastructure;
 using Teleopti.Wfm.Adherence.Tracer;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -86,6 +88,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected override void Isolate(IIsolate isolate)
 		{
+			// Notification
+			isolate.UseTestDouble<FakeNotificationServiceClient>().For<INotificationServiceClient>();
+			isolate.UseTestDouble<ApplicationConfigurationDbProviderFake>().For<IApplicationConfigurationDbProvider>();
+
+			//Azure
+			isolate.UseTestDouble<FakeInstallationEnvironment>().For<IInstallationEnvironment>();			
+
 			// stuff?
 			isolate.UseTestDouble<MutableNowWithEvents>().For<MutableNow, INow, IMutateNow>();
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();

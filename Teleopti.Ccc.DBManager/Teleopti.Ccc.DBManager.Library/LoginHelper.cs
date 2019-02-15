@@ -12,15 +12,17 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class LoginHelper
 	{
 		private readonly IUpgradeLog _logger;
+		private readonly IInstallationEnvironment _installationEnvironment;
 		private readonly ExecuteSql _masterExecuteSql;
 		private readonly DatabaseFolder _databaseFolder;
 		private readonly NameValueCollection _replaceValues = new NameValueCollection();
 
-		public LoginHelper(IUpgradeLog logger, ExecuteSql masterExecuteSql, DatabaseFolder databaseFolder)
+		public LoginHelper(IUpgradeLog logger, ExecuteSql masterExecuteSql, DatabaseFolder databaseFolder, IInstallationEnvironment installationEnvironment)
 		{
 			_logger = logger;
 			_masterExecuteSql = masterExecuteSql;
 			_databaseFolder = databaseFolder;
+			_installationEnvironment = installationEnvironment;
 		}
 
 		public void EnablePolicyCheck()
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public bool LoginExists(string login, SqlVersion sqlVersion)
 		{
-			if (InstallationEnvironment.IsAzure)
+			if (_installationEnvironment.IsAzure)
 			{
 				if (sqlVersion.ProductVersion < 12)
 					return azureLoginExist(login);
@@ -56,7 +58,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		
 		public void DropLogin(string user)
 		{
-			if (!InstallationEnvironment.IsAzure)
+			if (!_installationEnvironment.IsAzure)
 			{
 				var sql = string.Format("DROP LOGIN [{0}]", user);
 				_masterExecuteSql.ExecuteTransactionlessNonQuery(sql);	
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			//TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
 			string sql;
-			if (InstallationEnvironment.IsAzure)
+			if (_installationEnvironment.IsAzure)
 			{
 				if (iswingroup)
 					_masterExecuteSql.ExecuteNonQuery("PRINT 'Windows Logins cannot be added to Windows Azure for the momement'");

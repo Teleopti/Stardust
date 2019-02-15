@@ -11,13 +11,15 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		private readonly PatchCommand _command;
 		private readonly IUpgradeLog _log;
+		private readonly IInstallationEnvironment _installationEnvironment;
 		private const string applicationName = "Teleopti.Ccc.DBManager";
 		private const string currentLanguage = "us_english";
 
-		public PatchContext(PatchCommand command, IUpgradeLog log)
+		public PatchContext(PatchCommand command, IUpgradeLog log, IInstallationEnvironment installationEnvironment)
 		{
 			_command = command;
 			_log = log;
+			_installationEnvironment = installationEnvironment;
 		}
 
 		private ExecuteSql _masterExecuteSql;
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				try
 				{
-					using (connectAndOpen(connectionStringAppLogOn(InstallationEnvironment.IsAzure ? _command.DatabaseName : DatabaseHelper.MasterDatabaseName)))
+					using (connectAndOpen(connectionStringAppLogOn(_installationEnvironment.IsAzure ? _command.DatabaseName : DatabaseHelper.MasterDatabaseName)))
 					{
 					}
 
@@ -73,7 +75,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 			}
 
-			if (!InstallationEnvironment.IsAzure)
+			if (!_installationEnvironment.IsAzure)
 			{
 				return verifyWinGroup(_command.AppUserName);
 			}

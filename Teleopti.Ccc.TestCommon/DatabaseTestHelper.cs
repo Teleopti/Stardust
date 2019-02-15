@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain;
 using Teleopti.Support.Library;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -151,7 +152,8 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(
 				InfraTestConfigReader.ConnectionString,
 				DatabaseType.TeleoptiCCC7,
-				new DbManagerLog4Net("DbManager.Application")
+				new DbManagerLog4Net("DbManager.Application"), 
+				new WfmInstallationEnvironment()
 			);
 		}
 
@@ -160,7 +162,8 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(
 				InfraTestConfigReader.AggConnectionString,
 				DatabaseType.TeleoptiCCCAgg,
-				new DbManagerLog4Net("DbManager.Agg")
+				new DbManagerLog4Net("DbManager.Agg"),
+				new WfmInstallationEnvironment()
 			);
 		}
 
@@ -169,7 +172,8 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(
 				InfraTestConfigReader.AnalyticsConnectionString,
 				DatabaseType.TeleoptiAnalytics,
-				new DbManagerLog4Net("DbManager.Analytics")
+				new DbManagerLog4Net("DbManager.Analytics"),
+				new WfmInstallationEnvironment()
 			);
 		}
 

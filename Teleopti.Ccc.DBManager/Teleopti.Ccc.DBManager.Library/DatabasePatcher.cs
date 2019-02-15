@@ -10,17 +10,19 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class DatabasePatcher
 	{
 		private IUpgradeLog _log;
+		private IInstallationEnvironment _installationEnvironment;
 
-		public DatabasePatcher(IUpgradeLog log)
+		public DatabasePatcher(IUpgradeLog log, IInstallationEnvironment installationEnvironment)
 		{
 			_log = log ?? new NullLog();
+			_installationEnvironment = installationEnvironment;
 		}
 
 		public int Run(PatchCommand command)
 		{
 			try
 			{
-				var context = new PatchContext(command, _log);
+				var context = new PatchContext(command, _log, _installationEnvironment);
 
 				var safeMode = true;
 
@@ -33,13 +35,13 @@ namespace Teleopti.Ccc.DBManager.Library
 						throw new Exception("No Application user/Windows group name submitted!");
 				}
 
-				if (InstallationEnvironment.IsAzure && command.IsWindowsGroupName)
+				if (_installationEnvironment.IsAzure && command.IsWindowsGroupName)
 					throw new Exception("Windows Azure don't support Windows Login for the moment!");
 
 				//special for Azure => fn_my_permissions does not exist: http://msdn.microsoft.com/en-us/library/windowsazure/ee336248.aspx
 				bool isSrvDbCreator;
 				bool isSrvSecurityAdmin;
-				if (InstallationEnvironment.IsAzure)
+				if (_installationEnvironment.IsAzure)
 				{
 					isSrvDbCreator = true;
 					isSrvSecurityAdmin = true;
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 
 				//Exclude Agg from Azure
-				if (InstallationEnvironment.IsAzure && command.DatabaseType == DatabaseType.TeleoptiCCCAgg)
+				if (_installationEnvironment.IsAzure && command.DatabaseType == DatabaseType.TeleoptiCCCAgg)
 				{
 					_log.Write("This is a TeleoptiCCCAgg, exclude from SQL Azure");
 					return 0;
@@ -124,7 +126,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 				//Try create or re-create login
 				if (command.CreatePermissions && safeMode && isSrvSecurityAdmin)
-					new LoginHelper(_log, context.MasterExecuteSql(), context.DatabaseFolder())
+					new LoginHelper(_log, context.MasterExecuteSql(), context.DatabaseFolder(), _installationEnvironment)
 						.CreateLogin(command.AppUserName, command.AppUserPassword, command.IsWindowsGroupName);
 
 				//if we are not db_owner, bail out
@@ -133,7 +135,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 				//Set permissions of the newly application user on db.
 				if (command.CreatePermissions && safeMode)
-					new PermissionsHelper(_log, context.DatabaseFolder(), context.ExecuteSql())
+					new PermissionsHelper(_log, context.DatabaseFolder(), context.ExecuteSql(), _installationEnvironment)
 						.CreatePermissions(command.AppUserName, command.AppUserPassword);
 
 				if (command.UpgradeDatabase)
@@ -141,7 +143,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					if (context.VersionTableExists())
 					{
 						//Shortcut to release 329, Azure specific script
-						if (InstallationEnvironment.IsAzure && context.DatabaseVersionInformation().GetDatabaseVersion() == 0)
+						if (_installationEnvironment.IsAzure && context.DatabaseVersionInformation().GetDatabaseVersion() == 0)
 							new AzureStartDDL(context.DatabaseFolder(), context.ExecuteSql())
 								.Apply((DatabaseType) Enum.Parse(typeof(DatabaseType), command.DatabaseTypeName));
 
@@ -150,7 +152,8 @@ namespace Teleopti.Ccc.DBManager.Library
 								context.SchemaVersionInformation(),
 								context.ExecuteSql(),
 								context.DatabaseFolder(),
-								_log)
+								_log, 
+								_installationEnvironment)
 							.Create(command.DatabaseType);
 					}
 					else
@@ -197,7 +200,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			_log.Write("Creating database " + command.DatabaseName + "...");
 			var creator = new DatabaseCreator(context.DatabaseFolder(), context.ExecuteSql(), context.MasterExecuteSql());
-			if (InstallationEnvironment.IsAzure)
+			if (_installationEnvironment.IsAzure)
 				creator.CreateAzureDatabase(command.DatabaseType, command.DatabaseName);
 			else
 				creator.CreateDatabase(command.DatabaseType, command.DatabaseName);

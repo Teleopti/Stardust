@@ -17,9 +17,11 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Owin;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
+using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private static readonly object applicationStartLock = new object();
 		private readonly IBootstrapper _bootstrapper = new Bootstrapper();
 		private readonly IContainerConfiguration _containerConfiguration = new ContainerConfiguration();
-
+		
 		public void Configuration(IAppBuilder app)
 		{
 			if (_applicationStarted) return;
@@ -63,13 +65,12 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
 				container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));
-
 				TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>(), application).ToArray();
 
 				SignalRConfiguration.Configure(SignalRSettings.Load(), () => application.MapSignalR(new HubConfiguration()));
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += wsFederationAuthenticationModuleSignedIn;
 				FederatedAuthentication.WSFederationAuthenticationModule.SignInError += wsFederationAuthenticationModuleSignInError;
-				FederatedAuthentication.FederationConfiguration.IdentityConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
+				FederatedAuthentication.FederationConfiguration.IdentityConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());				
 			}
 			catch (Exception ex)
 			{

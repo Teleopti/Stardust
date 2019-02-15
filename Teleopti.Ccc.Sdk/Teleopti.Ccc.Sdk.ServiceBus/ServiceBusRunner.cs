@@ -27,6 +27,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -37,11 +38,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly Action<int> _requestAdditionalTime;
 
 		private IContainer _sharedContainer;
+		private IInstallationEnvironment _installationEnvironment;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ServiceBusRunner));
 
-		public ServiceBusRunner(Action<int> requestAdditionalTime, IConfigReader configReader = null)
+		public ServiceBusRunner(Action<int> requestAdditionalTime, IInstallationEnvironment installationEnvironment, IConfigReader configReader = null)
 		{
 			_requestAdditionalTime = requestAdditionalTime;
+			_installationEnvironment = installationEnvironment;
 			_configReader = configReader ?? new ConfigReader();
 			Nodes = new List<NodeStarter>();
 		}
@@ -171,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
 
-			var fetchNodeConfiguration = new FetchNodeConfiguration();
+			var fetchNodeConfiguration = new FetchNodeConfiguration(new WfmInstallationEnvironment());
 			var nodeConfig = fetchNodeConfiguration.GetNodeConfiguration(port, nodeName, fixedNodeIp, managerLocation, handlerAssembly, pingToManagerSeconds, sendDetailsToManagerMilliSeconds, enableGC);
 			
 			var configuration = new IocConfiguration(iocArgs, toggleManager);

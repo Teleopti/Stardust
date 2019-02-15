@@ -254,6 +254,7 @@
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
+    <Compile Include="Notification\NotificationSubscriptionMessage.cs" />
     <Compile Include="Notification\ScheduleChangeForWeekViewMessage.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />

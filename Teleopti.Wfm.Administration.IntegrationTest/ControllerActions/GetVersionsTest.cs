@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Support.Library;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Models;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
@@ -22,7 +23,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceFactoryFactory.MakeLegacyWay());
 			var appBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			var helper = new DatabaseHelper(appBuilder.ConnectionString, DatabaseType.TeleoptiCCC7);
+			var helper = new DatabaseHelper(appBuilder.ConnectionString, DatabaseType.TeleoptiCCC7, new WfmInstallationEnvironment());
 
 			TestPollutionCleaner.Clean("tenant", "appuser");
 

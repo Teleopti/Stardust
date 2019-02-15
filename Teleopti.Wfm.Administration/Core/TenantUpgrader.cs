@@ -13,17 +13,20 @@ namespace Teleopti.Wfm.Administration.Core
 		private readonly UpgradeRunner _upgradeRunner;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ICurrentTenantSession _currentTenantSession;
+		private readonly IInstallationEnvironment _installationEnvironment;
 
 		public TenantUpgrader(
 			DatabaseUpgrader databaseUpgrader, 
 			UpgradeRunner upgradeRunner, 
 			ITenantUnitOfWork tenantUnitOfWork, 
-			ICurrentTenantSession currentTenantSession)
+			ICurrentTenantSession currentTenantSession,
+			IInstallationEnvironment installationEnvironment)
 		{
 			_databaseUpgrader = databaseUpgrader;
 			_upgradeRunner = upgradeRunner;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_currentTenantSession = currentTenantSession;
+			_installationEnvironment = installationEnvironment;
 		}
 
 		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword, bool permissionMode, bool useIntegratedSecurity)
@@ -50,7 +53,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var analConnstring = builder.ConnectionString;
 			aggDB = builder.InitialCatalog;
 			// and agg to
-			if (!InstallationEnvironment.IsAzure && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
+			if (!_installationEnvironment.IsAzure && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
 			{
 				builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 				_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,
