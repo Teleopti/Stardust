@@ -567,7 +567,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I wait half second and refresh the request page")]
 		public void WhenIWaitHalfSecondAndRefreshTheRequestPage()
 		{
-			Thread.Sleep(500);
+			Thread.Sleep(800);
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 		}
