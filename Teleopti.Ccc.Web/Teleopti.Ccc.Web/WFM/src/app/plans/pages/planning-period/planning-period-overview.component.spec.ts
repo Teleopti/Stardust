@@ -21,6 +21,7 @@ import {IStateService} from "angular-ui-router";
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 
 class MockPlanningGroupService implements Partial<PlanningGroupService> {
 	getPlanningGroup(groupId: string) {
@@ -62,7 +63,27 @@ class MockPlanningPeriodService implements Partial<PlanningPeriodService> {
 
 	public getValidation(planningPeriodId: string) {
 		return of({
-			"InvalidResources": []
+			"InvalidResources": [{
+				"ResourceId": "813348e1-7e4b-4252-8346-a39a00b839c7",
+				"ResourceName": "BTS",
+				"ValidationErrors": [{
+					"ErrorResource": "MissingForecastFrom",
+					"ErrorResourceData": ["2018-07-23T00:00:00", "2018-08-19T00:00:00"],
+					"ErrorMessageLocalized": "Missing forecast from 7/23/2018 to 8/19/2018",
+					"ResourceType": "Skill"
+				}
+				]
+			}, {
+				"ResourceId": "dddf45a9-bdc4-4f0e-88b3-9b5e015b257c",
+				"ResourceName": "Alfred Kobsa",
+				"ValidationErrors": [{
+					"ErrorResource": "NoMatchingSchedulePeriod",
+					"ErrorResourceData": null,
+					"ErrorMessageLocalized": "Schedule period does not match the selected period",
+					"ResourceType": "Basic"
+				}
+				]
+			}]
 		});
 	}
 
@@ -101,7 +122,27 @@ class MockPlanningPeriodService implements Partial<PlanningPeriodService> {
 						]
 					}
 				],
-				BusinessRulesValidationResults: []
+				BusinessRulesValidationResults: [{
+					"ResourceId": "1e348fe9-a6ad-4f50-8ae9-a39a00b9e635",
+					"ResourceName": "BTS1",
+					"ValidationErrors": [{
+						"ErrorResource": "TargetScheduleTimeNotFullfilled",
+						"ErrorResourceData": ["224:00"],
+						"ErrorMessageLocalized": "Contract time target (224:00) is not fulfilled",
+						"ResourceType": "Basic"
+					}
+					]
+				}, {
+					"ResourceId": "af7d197d-2240-4532-a2d7-a39a00b9e949",
+					"ResourceName": "BTS2",
+					"ValidationErrors": [{
+						"ErrorResource": "TargetScheduleTimeNotFullfilled",
+						"ErrorResourceData": ["224:00"],
+						"ErrorMessageLocalized": "Contract time target (224:00) is not fulfilled",
+						"ResourceType": "Basic"
+					}
+					]
+				}]
 			}
 		});
 	}
@@ -141,7 +182,8 @@ describe('Planning Period Overview', () => {
 				MomentModule,
 				NzSwitchModule,
 				FormsModule,
-				HttpClientTestingModule
+				HttpClientTestingModule,
+				NoopAnimationsModule
 			], 
 			providers: [
 				{ provide: PlanningGroupService, useClass: MockPlanningGroupService },
@@ -164,8 +206,8 @@ describe('Planning Period Overview', () => {
 	beforeEach(() => {
 		fixture = TestBed.createComponent(PlanningPeriodOverviewComponent);
 		component = fixture.componentInstance;
+		component.forTesting = true;
 		page = new PlanningPeriodOverviewPage(fixture);
-		
 	});
 
 	it('should create', () => {
@@ -316,7 +358,51 @@ describe('Planning Period Overview', () => {
 		expect(spyPlanningPeriodActionService.calls.argsFor(0)[0]).toEqual('a557210b-99cc-4128-8ae0-138d812974b6');
 		expect(component.isDisabled()).toEqual(true);
 	});
-	
+
+	it('should display skills', async() => {
+		fixture.detectChanges();
+		await fixture.whenStable();
+		expect(page.filteredSkillNames.length).toBe(2);
+	});
+
+	it('should apply filter for skills', async() => {
+		component.skillFilterControl.setValue('channel');
+		fixture.detectChanges();
+		await fixture.whenStable();
+		expect(page.filteredSkillNames.length).toBe(1);
+		const name = page.filteredSkillNames[0];
+		expect(name.nativeElement.innerText).toBe('Channel Support');
+	});
+
+	it('should display pre-validations', async() => {
+		fixture.detectChanges();
+		await fixture.whenStable();
+		expect(page.filteredPreValidations.length).toBe(2);
+	});
+
+	it('should apply filter for pre-validations', async() => {
+		component.preValidationFilterControl.setValue('kobsa');
+		fixture.detectChanges();
+		await fixture.whenStable();
+		expect(page.filteredPreValidations.length).toBe(1);
+		const name = page.filteredPreValidations[0];
+		expect(name.nativeElement.innerText).toBe('Alfred Kobsa');
+	});
+
+	it('should display schedule issues', async() => {
+		fixture.detectChanges();
+		await fixture.whenStable();
+		expect(page.filteredScheduleIssues.length).toBe(2);
+	});
+
+	it('should apply filter for schedule issues', async() => {
+		component.scheduleIssuesFilterControl.setValue('bts2');
+		fixture.detectChanges();
+		await fixture.whenStable();
+		expect(page.filteredScheduleIssues.length).toBe(1);
+		const name = page.filteredScheduleIssues[0];
+		expect(name.nativeElement.innerText).toBe('BTS2');
+	});
 });
 
 
@@ -325,5 +411,13 @@ describe('Planning Period Overview', () => {
 class PlanningPeriodOverviewPage extends PageObject {
 	get filteredSkillNames() {
 		return this.queryAll('.skill-name');
+	}
+
+	get filteredPreValidations() {
+		return this.queryAll('.data-test-pre-validation');
+	}
+
+	get filteredScheduleIssues() {
+		return this.queryAll('.data-test-schedule-issue');
 	}
 }

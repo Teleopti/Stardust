@@ -70,7 +70,7 @@ describe('Planning Group Overview', () => {
 	});
 
 	it('should display planning group rows', async(() => {
-		fixture.whenStable().then(async() => {
+		fixture.whenStable().then(() => {
 			fixture.detectChanges();
 			expect(page.filteredPlanningGroups.length).toBe(3);
 		});

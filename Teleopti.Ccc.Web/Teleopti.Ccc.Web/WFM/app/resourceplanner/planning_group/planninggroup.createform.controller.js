@@ -158,7 +158,6 @@
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 			} else if (!vm.requestSent) {
 				vm.requestSent = true;
-				console.log(vm.editPlanningGroup.TeamSettings);
 				return planningGroupService.savePlanningGroup({
 					Id: vm.isEditGroup ? vm.editPlanningGroup.Id : null,
 					Name: vm.name,

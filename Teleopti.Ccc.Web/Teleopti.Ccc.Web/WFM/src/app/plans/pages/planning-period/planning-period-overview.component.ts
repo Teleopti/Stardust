@@ -4,10 +4,10 @@ import { IStateService } from 'angular-ui-router';
 import { TranslateService } from '@ngx-translate/core';
 import { NavigationService } from '../../../core/services';
 import { FormBuilder, FormControl } from '@angular/forms';
-import {debounce, groupBy, map, mergeMap, reduce, toArray} from 'rxjs/operators';
+import {debounceTime, groupBy, map, mergeMap, reduce, tap, toArray} from 'rxjs/operators';
 import {HeatMapColorHelper} from "../../shared/heatmapcolor.service";
 import {DateFormatPipe} from "ngx-moment";
-import {from, timer} from "rxjs";
+import {from} from "rxjs";
 import {PlanningPeriodActionService} from "../../shared/planningperiod.action.service";
 
 @Component({
@@ -46,6 +46,8 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	skills;
 	filteredSkills;
+	
+	forTesting = false;
 
 	valData = {
 		totalValNum: 0,
@@ -113,7 +115,7 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 		this.skillFilterControl.valueChanges
 			.pipe(
-				debounce(() => timer(600)),
+				this.forTesting ? tap() : debounceTime(600),
 				map(filterString =>
 					this.skills
 						.filter(
@@ -150,7 +152,9 @@ export class PlanningPeriodOverviewComponent implements OnInit, OnDestroy {
 
 	private checkState() {
 		this.checkProgress();
-		this.timer = setInterval(this.checkProgress, 10000);
+		if(!this.forTesting){
+			this.timer = setInterval(this.checkProgress, 10000);
+		}
 	}
 
 	public clearPreValidationFilter() {

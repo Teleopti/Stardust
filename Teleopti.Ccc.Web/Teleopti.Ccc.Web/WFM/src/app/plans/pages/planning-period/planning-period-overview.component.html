@@ -190,7 +190,7 @@
 								</thead>
 								<tbody>
 									<tr *ngFor="let msg of filteredPreValidations">
-										<td>{{ msg.ResourceName }}</td>
+										<td class="data-test-pre-validation">{{ msg.ResourceName }}</td>
 										<td>
 											<div *ngFor="let item of msg.ValidationErrors">
 												{{ item.ResourceType | translate }}
@@ -251,7 +251,7 @@
 								</thead>
 								<tbody>
 									<tr *ngFor="let msg of filteredScheduleIssues">
-										<td>{{ msg.ResourceName }}</td>
+										<td class="data-test-schedule-issue">{{ msg.ResourceName }}</td>
 										<td>
 											<div *ngFor="let item of msg.ValidationErrors">
 												{{ item.ResourceType | translate }}
