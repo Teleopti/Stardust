@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<CheckLegacySystemStatus>().SingleInstance();
-			builder.RegisterType<TryExecuteMonitorStep>().SingleInstance();
+			builder.RegisterType<ExecuteMonitorStep>().SingleInstance();
 			builder.RegisterType<ListMonitorSteps>().SingleInstance();
 			builder.RegisterType<CallLegacySystemStatus>().As<ICallLegacySystemStatus>();
 			builder.RegisterAssemblyTypes(typeof(IMonitorStep).Assembly)

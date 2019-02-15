@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.MonitorSystem;
 
-namespace Teleopti.Ccc.DomainTest.MonitorSystemTest
+namespace Teleopti.Ccc.DomainTest.MonitorSystem
 {
 	public class FakeMonitorStep : IMonitorStep
 	{

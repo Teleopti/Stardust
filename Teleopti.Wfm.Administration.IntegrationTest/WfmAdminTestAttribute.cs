@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 using Teleopti.Wfm.Administration.Core.Modules;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest
 {
@@ -50,6 +51,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			isolate.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
 			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			isolate.UseTestDouble<PersistedTypeMapperForTest>().For<PersistedTypeMapper>();
+			isolate.UseTestDouble<FakeInstallationEnvironment>().For<IInstallationEnvironment>();
 		}
 	}
 }

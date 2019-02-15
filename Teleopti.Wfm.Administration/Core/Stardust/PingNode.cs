@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using WorkerNode = Teleopti.Ccc.Infrastructure.Repositories.Stardust.WorkerNode;
+using WorkerNode = Teleopti.Ccc.Domain.Stardust.WorkerNode;
 
 namespace Teleopti.Wfm.Administration.Core.Stardust
 {

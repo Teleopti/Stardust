@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.ServiceProcess;
 using System.Threading;
 using Teleopti.Ccc.Domain;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 {
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 		public ServiceBusHost()
 		{
 			InitializeComponent();
-			serviceBusRunner = new ServiceBusRunner(RequestAdditionalTime);
+			serviceBusRunner = new ServiceBusRunner(RequestAdditionalTime, new WfmInstallationEnvironment());
 		}
 
 		protected override void OnStart(string[] args)

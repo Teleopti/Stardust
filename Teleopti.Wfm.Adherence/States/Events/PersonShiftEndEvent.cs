@@ -6,7 +6,7 @@ using Teleopti.Wfm.Adherence.Historical.Events;
 
 namespace Teleopti.Wfm.Adherence.States.Events
 {
-	public class PersonShiftEndEvent : IEvent, IRtaStoredEvent, IRtaStoredEventForPerson
+	public class PersonShiftEndEvent : IEvent, IRtaStoredEvent, ISynchronizationInfo
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }
@@ -20,6 +20,14 @@ namespace Teleopti.Wfm.Adherence.States.Events
 				BelongsToDate = BelongsToDate,
 				StartTime = ShiftEndTime,
 				EndTime = ShiftEndTime
+			};
+		
+		public SynchronizationInfo SynchronizationInfo() =>
+			new SynchronizationInfo
+			{
+				PersonId = PersonId,
+				BelongsToDate = BelongsToDate,
+				StartTime = ShiftStartTime
 			};
 	}
 }

@@ -7,6 +7,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Support.Library;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
@@ -29,7 +30,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			builder.UserID = "dbcreatorperson";
 			builder.Password = "passwordPassword7";
 			
-			var helper = new DatabaseHelper(builder.ConnectionString, DatabaseType.TeleoptiCCC7);
+			var helper = new DatabaseHelper(builder.ConnectionString, DatabaseType.TeleoptiCCC7, new WfmInstallationEnvironment());
 			helper.CreateByDbManager();
 			
 			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString,"appuser", "passwordPassword7");
@@ -39,7 +40,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			builderAnal.UserID = "dbcreatorperson";
 			builderAnal.Password = "passwordPassword7";
 
-			helper = new DatabaseHelper(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics);
+			helper = new DatabaseHelper(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics, new WfmInstallationEnvironment());
 			helper.CreateByDbManager();
 
 			builder.UserID = "appuser";

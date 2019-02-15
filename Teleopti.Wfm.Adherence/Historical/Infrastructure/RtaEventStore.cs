@@ -170,10 +170,21 @@ ORDER BY [Id] ASC
 					.SetParameter("date", date.Date)
 			);
 
-		public IEnumerable<IEvent> LoadAllOfType<T>()
-		{
-			throw new NotImplementedException();
-		}
+		public IEnumerable<IEvent> LoadAllOfType<T>() =>
+			loadEvents(
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT 
+	[Type],
+	[Event] 
+FROM 
+	[rta].[Events] WITH (NOLOCK)
+WHERE
+	Type = :eventType
+ORDER BY [Id] ASC
+")
+					.SetParameter("eventType", _typeMapper.NameForPersistence(typeof(T)))
+			);
 
 		public LoadedEvents LoadForSynchronization(long fromEventId)
 		{

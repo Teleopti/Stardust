@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.MonitorSystem;
 
@@ -5,22 +7,21 @@ namespace Teleopti.Wfm.Administration.Monitoring
 {
 	public class MonitorController : ApiController
 	{
-		private readonly TryExecuteMonitorStep _tryExecuteMonitorStep;
+		private readonly ExecuteMonitorStep _executeMonitorStep;
 		private readonly ListMonitorSteps _listMonitorSteps;
 
-		public MonitorController(TryExecuteMonitorStep tryExecuteMonitorStep, ListMonitorSteps listMonitorSteps)
+		public MonitorController(ExecuteMonitorStep executeMonitorStep, ListMonitorSteps listMonitorSteps)
 		{
-			_tryExecuteMonitorStep = tryExecuteMonitorStep;
+			_executeMonitorStep = executeMonitorStep;
 			_listMonitorSteps = listMonitorSteps;
 		}
 		
 		[HttpGet]
 		[Route("monitor/check/{monitorStep}")]
-		public IHttpActionResult Check(string monitorStep)
+		public HttpResponseMessage Check(string monitorStep)
 		{
-			if (_tryExecuteMonitorStep.TryExecute(monitorStep, out var result))
-				return Ok(result);
-			return BadRequest($"{monitorStep} is not a known monitor step");
+			var result = _executeMonitorStep.Execute(monitorStep);
+			return Request.CreateResponse(result.Success ? HttpStatusCode.OK : HttpStatusCode.InternalServerError, result.Output);
 		}
 		
 		[HttpGet]

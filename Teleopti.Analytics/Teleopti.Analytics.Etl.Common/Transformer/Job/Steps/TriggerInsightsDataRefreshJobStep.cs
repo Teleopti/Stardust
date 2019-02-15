@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			var insightsConfig = _jobParameters.InsightsConfig;
 			if (insightsConfig == null || !insightsConfig.IsValid())
 			{
-				return;
+				throw new ConfigurationErrorsException("Insights ETL job configuration is invalid.");
 			}
 
 			try

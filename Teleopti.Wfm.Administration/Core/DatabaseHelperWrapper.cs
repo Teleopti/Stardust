@@ -11,10 +11,12 @@ namespace Teleopti.Wfm.Administration.Core
 	public class DatabaseHelperWrapper : IDatabaseHelperWrapper
 	{
 		private readonly IDbPathProvider _dbPathProvider;
+		private readonly IInstallationEnvironment _installationEnvironment;
 
-		public DatabaseHelperWrapper(IDbPathProvider dbPathProvider)
+		public DatabaseHelperWrapper(IDbPathProvider dbPathProvider, IInstallationEnvironment installationEnvironment)
 		{
 			_dbPathProvider = dbPathProvider;
+			_installationEnvironment = installationEnvironment;
 		}
 
 		public DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType)
@@ -52,7 +54,7 @@ namespace Teleopti.Wfm.Administration.Core
 				};
 			}
 
-			var helper = new DatabaseHelper(databaseConnectionString, databaseType)
+			var helper = new DatabaseHelper(databaseConnectionString, databaseType, _installationEnvironment)
 			{
 				DbManagerFolderPath = _dbPathProvider.GetDbPath()
 			};
@@ -68,7 +70,7 @@ namespace Teleopti.Wfm.Administration.Core
 		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion, string tenant, int tenantId)
 		{
 
-			if (InstallationEnvironment.IsAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
+			if (_installationEnvironment.IsAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
 				return;
 
 			try
@@ -80,11 +82,11 @@ namespace Teleopti.Wfm.Administration.Core
 				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
 				//
 			}
-			var helper = new DatabaseHelper(connectionToNewDb, databaseType, true) { Logger = new TenantLogger(tenant, tenantId), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType, _installationEnvironment, true) { Logger = new TenantLogger(tenant, tenantId), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			if (helper.Tasks().Exists(helper.DatabaseName))
 				return;
 
-			if (InstallationEnvironment.IsAzure)
+			if (_installationEnvironment.IsAzure)
 				helper.CreateInAzureByDbManager();
 			else
 				helper.CreateByDbManager();
@@ -95,69 +97,69 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion)
 		{
-			var helper = new DatabaseHelper(connectionToNewDb, databaseType) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			helper.AddPermissions(login, pwd, sqlVersion);
 		}
 
 		public void AddSystemUser(string connectionToNewDb, Guid personId, string firstName, string lastName)
 		{
-			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			helper.ConfigureSystem().AddSystemUser(personId, firstName, lastName);
 		}
 
 		public void AddSystemUserToPersonInfo(string connectionToNewDb, Guid personId, string userName, string password, string tenantPassword)
 		{
-			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			helper.ConfigureSystem().AddSystemUserToPersonInfo(personId, userName, password, tenantPassword);
 		}
 
 		public SqlVersion Version(string connectionToNewDb)
 		{
-			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			return helper.Version();
 		}
 
 
 		public bool LoginExists(string connectionToNewDb, string login, SqlVersion version)
 		{
-			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			return helper.LoginTasks().LoginExists(login, version);
 		}
 
 		public void CreateLogin(string connectionToNewDb, string login, string password)
 		{
 			// type does not mather now
-			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			helper.LoginTasks().CreateLogin(login, password, false);
 		}
 
 		public bool HasCreateDbPermission(string connectionString)
 		{
-			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			return helper.HasCreateDbPermission();
 		}
 
 		public bool HasCreateViewAndLoginPermission(string connectionString)
 		{
-			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			return helper.HasCreateViewAndLoginPermission();
 		}
 		
 		public bool LoginCanBeCreated(string connectionString, string login, string password, out string message)
 		{
-			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			return helper.LoginCanBeCreated(login, password, out message);
 		}
 
 		public void DeActivateTenantOnImport(string connectionString)
 		{
-			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			helper.DeActivateTenantOnImport(connectionString);
 		}
 
 		public void ActivateTenantOnDelete(Tenant tenant)
 		{
-			var helper = new DatabaseHelper(tenant.DataSourceConfiguration.ApplicationConnectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(tenant.DataSourceConfiguration.ApplicationConnectionString, DatabaseType.TeleoptiCCC7, _installationEnvironment) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			helper.ReActivateTenentOnDelete(tenant.DataSourceConfiguration.ApplicationConnectionString, tenant.DataSourceConfiguration.AnalyticsConnectionString, tenant.DataSourceConfiguration.AggregationConnectionString);
 		}
 	}

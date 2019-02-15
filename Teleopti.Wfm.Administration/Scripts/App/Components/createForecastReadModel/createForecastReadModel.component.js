@@ -25,7 +25,7 @@
 createForecastReadModel.$inject = ['$scope', 'tenantService', 'createForecastReadModelService'];
 
 angular.module('createForecastReadModelModule').component('createForecastReadModel', {
-	templateUrl: '/Scripts/App/Components/createForecastReadModel/createForecastReadModel.template.html',
+	templateUrl: './Scripts/App/Components/createForecastReadModel/createForecastReadModel.template.html',
 	controller: createForecastReadModel,
 	bindings: {
 		

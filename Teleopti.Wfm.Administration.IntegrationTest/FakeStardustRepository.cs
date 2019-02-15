@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Stardust;
 using Teleopti.Ccc.Infrastructure.Repositories.Stardust;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest
@@ -53,7 +54,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			return _queuedJobs;
 		}
 
-		public List<WorkerNode> GetAllWorkerNodes()
+		public IEnumerable<WorkerNode> GetAllWorkerNodes()
 		{
 			return _nodes;
 		}

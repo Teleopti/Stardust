@@ -19,15 +19,17 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly ExecuteSql _executeSql;
 		private readonly DatabaseFolder _databaseFolder;
 		private readonly IUpgradeLog _logger;
+		private readonly IInstallationEnvironment _installationEnvironment;
 		private const int buildNumberWhenTrunkDisappeared = 500;
 
-		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SchemaVersionInformation schemaVersionInformation, ExecuteSql executeSql, DatabaseFolder databaseFolder, IUpgradeLog logger)
+		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SchemaVersionInformation schemaVersionInformation, ExecuteSql executeSql, DatabaseFolder databaseFolder, IUpgradeLog logger, IInstallationEnvironment installationEnvironment)
 		{
 			_versionInformation = versionInformation;
 			_schemaVersionInformation = schemaVersionInformation;
 			_executeSql = executeSql;
 			_databaseFolder = databaseFolder;
 			_logger = logger;
+			_installationEnvironment = installationEnvironment;
 		}
 
 		public void Create(DatabaseType databaseType)
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			if (databaseType == DatabaseType.TeleoptiAnalytics)
 			{
 				_executeSql.Execute(c => new HangfireSchemaCreator().ApplyHangfire(c));
-				if(!InstallationEnvironment.IsAzure)
+				if(!_installationEnvironment.IsAzure)
 					_executeSql.Execute(c => new SignalRSqlBackplaneSchemaCreator().ApplySignalRSqlBackplane(c));
 			}
 			addInstallLogRow();

@@ -10,7 +10,7 @@ function tenantService($http) {
 	};
 
 	function getTenants() {
-		return $http.get('/AllTenants')
+		return $http.get('./AllTenants')
 			.then(getAllTenantsComplete)
 			.catch(getAllTenantsFailed);
 

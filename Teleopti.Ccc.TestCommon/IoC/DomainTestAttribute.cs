@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -30,6 +31,7 @@ using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Domain.Stardust;
 using Teleopti.Ccc.Domain.ToggleAdmin;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -55,6 +57,7 @@ using Teleopti.Wfm.Adherence.Monitor.Infrastructure;
 using Teleopti.Wfm.Adherence.States;
 using Teleopti.Wfm.Adherence.States.Infrastructure;
 using Teleopti.Wfm.Adherence.Tracer;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -86,6 +89,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected override void Isolate(IIsolate isolate)
 		{
+			// Notification
+			isolate.UseTestDouble<FakeNotificationServiceClient>().For<INotificationServiceClient>();
+			isolate.UseTestDouble<ApplicationConfigurationDbProviderFake>().For<IApplicationConfigurationDbProvider>();
+
+			//Azure
+			isolate.UseTestDouble<FakeInstallationEnvironment>().For<IInstallationEnvironment>();			
+
 			// stuff?
 			isolate.UseTestDouble<MutableNowWithEvents>().For<MutableNow, INow, IMutateNow>();
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
@@ -306,6 +316,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeKpiRepository>().For<IKpiRepository>();
 			}
 
+			isolate.UseTestDouble<FakeGetAllWorkerNodes>().For<IGetAllWorkerNodes>();
+			
 			isolate.UseTestDouble<PersonSearchProvider>().For<PersonSearchProvider>();
 
 			isolate.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();

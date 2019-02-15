@@ -35,6 +35,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IUpdateCrossDatabaseView _updateCrossDatabaseView;
 		private readonly ICreateBusinessUnit _createBusinessUnit;
 		private readonly IHashFunction _currentHashFunction;
+		private readonly IInstallationEnvironment _installationEnvironment;
 
 		public DatabaseController(
 			IDatabaseHelperWrapper databaseHelperWrapper,
@@ -44,7 +45,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			ICheckPasswordStrength checkPasswordStrength,
 			PersistTenant persistTenant,
 			IUpdateCrossDatabaseView updateCrossDatabaseView,
-			ICreateBusinessUnit createBusinessUnit, IHashFunction currentHashFunction)
+			ICreateBusinessUnit createBusinessUnit, 
+			IHashFunction currentHashFunction, 
+			IInstallationEnvironment installationEnvironment)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
@@ -55,6 +58,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_updateCrossDatabaseView = updateCrossDatabaseView;
 			_createBusinessUnit = createBusinessUnit;
 			_currentHashFunction = currentHashFunction;
+			_installationEnvironment = installationEnvironment;
 		}
 
 
@@ -90,7 +94,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));
 			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString(model));
-			if (!InstallationEnvironment.IsAzure)
+			if (!_installationEnvironment.IsAzure)
 				newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionString(model));
 			_persistTenant.Persist(newTenant);
 			
@@ -103,7 +107,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_createBusinessUnit.Create(newTenant, model.BusinessUnit);
 
 			_updateCrossDatabaseView.Execute(analyticsDbConnectionString,
-				InstallationEnvironment.IsAzure ? $"{model.Tenant}_TeleoptiAnalytics" : $"{model.Tenant}_TeleoptiAgg");
+				_installationEnvironment.IsAzure ? $"{model.Tenant}_TeleoptiAnalytics" : $"{model.Tenant}_TeleoptiAgg");
 
 			addSystemUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 

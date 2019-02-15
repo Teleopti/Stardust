@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Support.Library;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.DBManager
 {
@@ -20,13 +21,14 @@ namespace Teleopti.Ccc.DBManager
 				loggerSuffix = "Agg";
 
 			var log = new FileLogger(loggerSuffix);
+			var env = new WfmInstallationEnvironment();
 			try
 			{
 				log.Write($"Teleopti Database Manager version {Assembly.GetExecutingAssembly().GetName().Version}");
 				log.Write($"Was called with args: {string.Join(" ", args)}");
 				if (args.Length > 0 && args.Length < 20)
 				{
-					return new DatabasePatcher(log)
+					return new DatabasePatcher(log, env)
 						.Run(PatchCommand.ParseCommandLine(args));
 				}
 				else

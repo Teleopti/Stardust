@@ -178,7 +178,6 @@
     <Compile Include="CountCallsToNightRestWhiteSpotSolverServiceFactory.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DatabaseTestHelper.cs" />
-    <Compile Include="DatabaseTestSetup.cs" />
     <Compile Include="DataSourceFactoryFactory.cs" />
     <Compile Include="FakeAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="FakeApplicationInsights.cs" />
@@ -246,6 +245,7 @@
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
     <Compile Include="FakeRepositories\FakeFetchAllToggleOverrides.cs" />
     <Compile Include="FakeRepositories\FakeForecastDayOverrideRepository.cs" />
+    <Compile Include="FakeRepositories\FakeGetAllWorkerNodes.cs" />
     <Compile Include="FakeRepositories\FakeInsightsReportRepository.cs" />
     <Compile Include="FakeRepositories\FakePersistToggleOverride.cs" />
     <Compile Include="FakeRepositories\FakePersonAccessAuditRepository.cs" />
@@ -853,6 +853,10 @@
     <ProjectReference Include="..\Teleopti.Wfm.Adherence\Teleopti.Wfm.Adherence.csproj">
       <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
       <Name>Teleopti.Wfm.Adherence</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Wfm.Azure.Common\Teleopti.Wfm.Azure.Common.csproj">
+      <Project>{84C0328F-2AF7-42B6-8AB4-E9FDA5248374}</Project>
+      <Name>Teleopti.Wfm.Azure.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
       <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>

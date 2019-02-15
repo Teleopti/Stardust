@@ -2,9 +2,14 @@
 using System.Globalization;
 using Autofac;
 using NHibernate.Dialect;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Messaging.Client;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.TestCommon
@@ -19,13 +24,23 @@ namespace Teleopti.Ccc.TestCommon
 		public static IDataSource CreateDatabasesAndDataSource(DataSourceFactoryFactory factory, string name = TenantName) =>
 			CreateDatabasesAndDataSource(factory.Make(), name);
 
+		public static IDataSource CreateDatabasesAndDataSource(string name = TenantName)
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
+			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
+			var container = builder.Build();
+			return CreateDatabasesAndDataSource(container.Resolve<IDataSourcesFactory>(), name);
+		}
+
 		public static IDataSource CreateDatabasesAndDataSource(IDataSourcesFactory factory, string name = TenantName)
 		{
 			CreateDatabases(name);
 			return makeDataSource(factory, name);
 		}
 
-		public static void CreateDatabases(string name = TenantName) =>
+		public static void CreateDatabases(string name = TenantName) => 
 			new DatabaseTestHelper().CreateDatabases(name);
 
 		public static IDataSource CreateDataSource(IComponentContext container) =>
@@ -58,17 +73,18 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 
+
 		public static void BackupApplicationDatabase(int dataHash) => new DatabaseTestHelper().BackupApplicationDatabase(dataHash);
 		public static void BackupApplicationDatabaseBySql(string path, int dataHash) => new DatabaseTestHelper().BackupApplicationDatabaseBySql(path, dataHash);
 		public static void RestoreApplicationDatabase(int dataHash) => new DatabaseTestHelper().RestoreApplicationDatabase(dataHash);
 		public static bool TryRestoreApplicationDatabaseBySql(string path, int dataHash) => new DatabaseTestHelper().TryRestoreApplicationDatabaseBySql(path, dataHash);
-
+		
 		public static void BackupAnalyticsDatabase(int dataHash) => new DatabaseTestHelper().BackupAnalyticsDatabase(dataHash);
 		public static void BackupAnalyticsDatabaseBySql(string path, int dataHash) => new DatabaseTestHelper().BackupAnalyticsDatabaseBySql(path, dataHash);
 		public static void RestoreAnalyticsDatabase(int dataHash) => new DatabaseTestHelper().RestoreAnalyticsDatabase(dataHash);
 		public static bool TryRestoreAnalyticsDatabaseBySql(string path, int dataHash) => new DatabaseTestHelper().TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 		public static void ClearAnalyticsData() => new DatabaseTestHelper().ClearAnalyticsData();
-
+		
 		public static void CreateFirstTenantAdminUser() => new DatabaseTestHelper().CreateFirstTenantAdminUser();
 	}
 }

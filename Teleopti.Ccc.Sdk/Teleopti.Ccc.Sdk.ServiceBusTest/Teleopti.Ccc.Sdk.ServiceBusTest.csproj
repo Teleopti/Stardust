@@ -231,6 +231,10 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Azure.Common\Teleopti.Wfm.Azure.Common.csproj">
+      <Project>{84C0328F-2AF7-42B6-8AB4-E9FDA5248374}</Project>
+      <Name>Teleopti.Wfm.Azure.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Wfm.Shared\Teleopti.Wfm.Shared.csproj">
       <Project>{94841D3A-191A-4AFB-8E4E-78AF8138BFE6}</Project>
       <Name>Teleopti.Wfm.Shared</Name>

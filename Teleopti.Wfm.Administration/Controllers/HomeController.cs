@@ -23,11 +23,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly DeleteTenant _deleteTenant;
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
+		private readonly IInstallationEnvironment _installationEnvironment;
 		private readonly RestorePersonInfoOnDetach _restorePersonInfo;
 
 		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists,
 			DeleteTenant deleteTenant, ICheckDatabaseVersions checkDatabaseVersions,
-			IDatabaseHelperWrapper databaseHelperWrapper, RestorePersonInfoOnDetach restorePersonInfo)
+			IDatabaseHelperWrapper databaseHelperWrapper, RestorePersonInfoOnDetach restorePersonInfo, IInstallationEnvironment installationEnvironment)
 		{
 			_loadAllTenants = loadAllTenants;
 			_saveTenant = saveTenant;
@@ -36,6 +37,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_checkDatabaseVersions = checkDatabaseVersions;
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_restorePersonInfo = restorePersonInfo;
+			_installationEnvironment = installationEnvironment;
 		}
 
 
@@ -135,7 +137,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("IsAzure")]
 		public virtual bool IsInstalledEnvironmentAzure()
 		{
-			return InstallationEnvironment.IsAzure;
+			return _installationEnvironment.IsAzure;
 		}
 
 		private TenantResultModel tenantCanBeDeletedInternal(string tenantName)

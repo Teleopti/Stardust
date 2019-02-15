@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Wfm.Adherence.Historical.AdjustAdherence;
 using Teleopti.Wfm.Adherence.Historical.Events;
 using Teleopti.Wfm.Adherence.Historical.Infrastructure;
 using Teleopti.Wfm.Adherence.States.Events;
@@ -85,6 +86,22 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Infrastructure
 			actual.Cast<PeriodApprovedAsInAdherenceEvent>()
 				.Select(x => x.StartTime)
 				.Should().Have.SameSequenceAs(firstIsLast);
+		}
+
+		[Test]
+		public void ShouldLoadOfType()
+		{
+			Publisher.Publish(new PeriodAdjustedToNeutralEvent
+			{
+				StartTime = "2019-02-14 08:00".Utc(),
+				EndTime = "2019-02-14 18:00".Utc(),				
+			});
+
+			var actual = WithUnitOfWork.Get(() => Events.LoadAllOfType<PeriodAdjustedToNeutralEvent>());
+
+			var @event = actual.Cast<PeriodAdjustedToNeutralEvent>().Single();
+			@event.StartTime.Should().Be("2019-02-14 08:00".Utc());
+			@event.EndTime.Should().Be("2019-02-14 18:00".Utc());
 		}
 	}
 }

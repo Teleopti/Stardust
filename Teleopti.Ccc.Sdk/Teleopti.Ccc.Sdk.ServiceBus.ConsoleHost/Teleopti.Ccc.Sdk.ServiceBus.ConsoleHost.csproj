@@ -103,6 +103,10 @@
       <Project>{94841d3a-191a-4afb-8e4e-78af8138bfe6}</Project>
       <Name>Teleopti.Wfm.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Wfm.Azure.Common\Teleopti.Wfm.Azure.Common.csproj">
+      <Project>{84C0328F-2AF7-42B6-8AB4-E9FDA5248374}</Project>
+      <Name>Teleopti.Wfm.Azure.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj">
       <Project>{9DF2D12C-4895-42D9-A365-6B9F97E787B5}</Project>
       <Name>Teleopti.Ccc.Sdk.ServiceBus</Name>

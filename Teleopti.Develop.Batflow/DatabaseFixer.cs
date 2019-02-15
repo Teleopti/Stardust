@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library;
 using Teleopti.Support.Security.Library;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Develop.Batflow
 {
@@ -16,10 +17,12 @@ namespace Teleopti.Develop.Batflow
 	public class DatabaseFixer
 	{
 		private readonly IUpgradeLog _log;
+		private readonly IInstallationEnvironment _installationEnvironment;
 
-		public DatabaseFixer(IUpgradeLog log)
+		public DatabaseFixer(IUpgradeLog log, IInstallationEnvironment installationEnvironment)
 		{
 			_log = log;
+			_installationEnvironment = installationEnvironment;
 		}
 
 		public void Fix(FixDatabasesCommand command)
@@ -97,7 +100,7 @@ namespace Teleopti.Develop.Batflow
 				}
 			}
 
-			new DatabasePatcher(_log).Run(patchCommand);
+			new DatabasePatcher(_log, _installationEnvironment).Run(patchCommand);
 		}
 
 		private void ensure(FixDatabasesCommand command, string database, string backup, DatabaseType type)
@@ -120,11 +123,11 @@ namespace Teleopti.Develop.Batflow
 					patchCommand.RecreateDatabaseIfNotExistsOrNewer = true;
 			}
 
-			new DatabasePatcher(_log).Run(patchCommand);
+			new DatabasePatcher(_log, _installationEnvironment).Run(patchCommand);
 		}
 
 		private void drop(FixDatabasesCommand command, string database, DatabaseType type) =>
-			new DatabasePatcher(_log).Run(new PatchCommand
+			new DatabasePatcher(_log, _installationEnvironment).Run(new PatchCommand
 			{
 				DbManagerFolderPath = command.DatabaseSourcePath(),
 				ServerName = command.Server(),

@@ -47,6 +47,7 @@ namespace Teleopti.Wfm.Adherence.Historical
 				{
 					var fromEventId = FromEventId();
 					var events = LoadEvents(fromEventId);
+					// INFINITE LOOP
 					if (events.Events.Any(x => x.GetType() == typeof(PeriodAdjustedToNeutralEvent)))
 						events = LoadEvents(0);
 
@@ -82,28 +83,41 @@ namespace Teleopti.Wfm.Adherence.Historical
 		[FullPermissions]
 		protected virtual void Synchronize(IEnumerable<IEvent> events)
 		{
-			events
-				.Where(x => x is IRtaStoredEventForPerson)
-				.Cast<IRtaStoredEventForPerson>()
-				.Select(e => new
-				{
-					e.PersonId,
-					Day = e.BelongsToDate ?? new DateOnly((e as IRtaStoredEvent).QueryData().StartTime.Value)
-				})
-				.Distinct()
-				.ForEach(x => synchronizeAdherenceDay(x.PersonId, x.Day));
+			synchronizationKeysForEvents(events)
+				.ForEach(synchronizeHistoricalOverviewReadModel);
 		}
 
-		private void synchronizeAdherenceDay(Guid personId, DateOnly day)
+		private static IEnumerable<synchronizationKey> synchronizationKeysForEvents(IEnumerable<IEvent> events) =>
+			events
+				.Where(x => x is ISynchronizationInfo)
+				.Cast<ISynchronizationInfo>()
+				.Select(e =>
+				{
+					var synchronizationInfo = e.SynchronizationInfo();
+					return new synchronizationKey
+					{
+						PersonId = synchronizationInfo.PersonId,
+						Day = synchronizationInfo.BelongsToDate ?? new DateOnly(synchronizationInfo.StartTime)
+					};
+				})
+				.Distinct();
+
+		private class synchronizationKey
 		{
-			var adherenceDay = _adherenceDayLoader.Load(personId, day);
+			public Guid PersonId;
+			public DateOnly Day;
+		}
+
+		private void synchronizeHistoricalOverviewReadModel(synchronizationKey key)
+		{
+			var adherenceDay = _adherenceDayLoader.Load(key.PersonId, key.Day);
 
 			var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWorkMinutes.HasValue);
 
 			_readModels.Upsert(new HistoricalOverviewReadModel
 			{
-				PersonId = personId,
-				Date = day,
+				PersonId = key.PersonId,
+				Date = key.Day,
 				WasLateForWork = lateForWork != null,
 				MinutesLateForWork = lateForWork?.LateForWorkMinutes ?? 0,
 				SecondsInAdherence = adherenceDay.SecondsInAdherence(),

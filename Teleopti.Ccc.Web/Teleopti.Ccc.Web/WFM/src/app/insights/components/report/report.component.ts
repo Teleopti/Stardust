@@ -89,12 +89,13 @@ export class ReportComponent implements OnInit {
 	updateToken(reportId) {
 		this.reportSvc.getReportConfig(reportId).then(config => {
 			const embedContainer = this.getReportContainer();
+			if (!embedContainer) return;
 
 			// If redirect to other page on update token, since the report container will be destroyed,
 			// the container will not be a embed report, it will failed to get the embed container and cause problem.
 			// Refer to test issue #80713: Error when edit a report
-			const powerBiElement = <IPowerBiElement>embedContainer;
-			if (!powerBiElement.powerBiEmbed) return;
+			var pbiElement = <IPowerBiElement>embedContainer;
+			if(!pbiElement || !pbiElement.powerBiEmbed) return;
 
 			const self = this;
 			const report = this.pbiCoreService.get(embedContainer);
@@ -183,7 +184,6 @@ export class ReportComponent implements OnInit {
 		}).catch(error => {
 			this.notification.create('error', 'Failed to save as new report', 'Error message: ' + error, this.errorNotificationOption);
 		});
-
 	}
 
 	public deleteReport(reportId) {

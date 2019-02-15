@@ -53,6 +53,7 @@ using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -172,6 +173,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<GroupPageViewModelFactory>().SingleInstance();
 			builder.RegisterType<DataTokenManager>().As<IDataTokenManager>();
 			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
+			builder.RegisterType<WfmInstallationEnvironment>().As<IInstallationEnvironment>().SingleInstance();
 		}
 
 		private static void tenantWebSpecificTypes(ContainerBuilder builder)

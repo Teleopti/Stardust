@@ -35,13 +35,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ISdkServiceFactory _sdkServiceFactory;
+		private readonly IInstallationEnvironment _installationEnvironment;
 
 		public PayrollExportHandlerNew(ICurrentUnitOfWork currentUnitOfWork,
 			IPayrollExportRepository payrollExportRepository, IPayrollResultRepository payrollResultRepository, IPersonBusAssembler personBusAssembler,
 			IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback,
 			IPayrollPeopleLoader payrollPeopleLoader, IDomainAssemblyResolver domainAssemblyResolver,
 			ITenantPeopleLoader tenantPeopleLoader, IStardustJobFeedback stardustJobFeedback, IBusinessUnitScope businessUnitScope, 
-			IBusinessUnitRepository businessUnitRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ISdkServiceFactory sdkServiceFactory
+			IBusinessUnitRepository businessUnitRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ISdkServiceFactory sdkServiceFactory, 
+			IInstallationEnvironment installationEnvironment
 			)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			_businessUnitRepository = businessUnitRepository;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_sdkServiceFactory = sdkServiceFactory;
+			_installationEnvironment = installationEnvironment;
 		}
 
 		[AsSystem]
@@ -95,7 +98,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 					var searchPath = new SearchPath();
 					var dto = createDto(payrollExport, @event, personDtos);
 					
-					if(!InstallationEnvironment.IsAzure)
+					if(!_installationEnvironment.IsAzure)
 						PayrollDllCopy.CopyFiles(searchPath.PayrollDeployNewPath, searchPath.Path, @event.LogOnDatasource);
 					
 					var result = wrapper.RunPayroll(_sdkServiceFactory, dto, @event, payrollResult.Id.GetValueOrDefault(),

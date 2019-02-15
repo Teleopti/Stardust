@@ -78,6 +78,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			_deleteSchedulePartService.Delete(new [] {schedulePart}, options, schedulePartModifyAndRollbackService, new NoSchedulingProgress());
 
+			//var dates = new ScheduleChangesAffectedDates(_timeZoneGuard).DecideDates(schedulePart.ReFetch(), schedulePart).ToList();
+			//var daysToRecalculate = new HashSet<DateOnly>(dates);
+
 			var daysToRecalculate = new HashSet<DateOnly>();
 			var date = new DateOnly(schedulePart.Period.StartDateTimeLocal(_timeZoneGuard.CurrentTimeZone()));
 			daysToRecalculate.Add(date);

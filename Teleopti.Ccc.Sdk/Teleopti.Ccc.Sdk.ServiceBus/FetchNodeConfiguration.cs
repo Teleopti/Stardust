@@ -9,11 +9,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class FetchNodeConfiguration
 	{
+		private readonly IInstallationEnvironment _installationEnvironment;
+
+		public FetchNodeConfiguration(IInstallationEnvironment installationEnvironment)
+		{
+			_installationEnvironment = installationEnvironment;
+		}
+
 		public NodeConfiguration GetNodeConfiguration(int port, string nodeName, string fixedNodeIp,
 			Uri managerLocation, Assembly handlerAssembly, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds,
 			bool enableGC)
 		{
-			if (InstallationEnvironment.IsAzure)
+			if (_installationEnvironment.IsAzure)
 			{
 				var ipAddress = getIPAddress();
 				if (!string.IsNullOrEmpty(fixedNodeIp))

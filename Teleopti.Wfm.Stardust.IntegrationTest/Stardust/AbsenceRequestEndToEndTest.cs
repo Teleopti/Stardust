@@ -19,7 +19,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon;
-
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
@@ -71,7 +71,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			});
 
 			TestLog.Debug("Starting service bus");
-			var host = new ServiceBusRunner(i => { }, ConfigReader);
+			var host = new ServiceBusRunner(i => { }, new WfmInstallationEnvironment(), ConfigReader);
 			host.Start();
 			Thread.Sleep(2019);
 			EventPublisher.Publish(new TenantMinuteTickEvent());

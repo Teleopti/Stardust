@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Stardust;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 {
-	public interface IStardustRepository
+	public interface IStardustRepository : IGetAllWorkerNodes
 	{
 		void DeleteQueuedJobs(Guid[] jobIds);
 		IList<Job> GetJobs(JobFilterModel filter);
 		IList<Job> GetAllQueuedJobs(JobFilterModel filter);
-		List<WorkerNode> GetAllWorkerNodes();
 		Job GetJobByJobId(Guid jobId);
 		IList<JobDetail> GetJobDetailsByJobId(Guid jobId);
 		IList<Job> GetJobsByNodeId(Guid nodeId, int from, int to);

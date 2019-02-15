@@ -250,10 +250,11 @@
     <Compile Include="MonitorSystem\IMonitorStep.cs" />
     <Compile Include="MonitorSystem\ListMonitorSteps.cs" />
     <Compile Include="MonitorSystem\MonitorStepResult.cs" />
-    <Compile Include="MonitorSystem\TryExecuteMonitorStep.cs" />
+    <Compile Include="MonitorSystem\ExecuteMonitorStep.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />
     <Compile Include="MultiTenancy\IApplicationConfigurationDbProvider.cs" />
     <Compile Include="MultiTenancy\ServerConfigurationKey.cs" />
+    <Compile Include="Notification\NotificationSubscriptionMessage.cs" />
     <Compile Include="Notification\ScheduleChangeForWeekViewMessage.cs" />
     <Compile Include="Notification\TeamScheduleWeekViewChangeCheck.cs" />
     <Compile Include="Repositories\IBankHolidayCalendarSiteRepository.cs" />
@@ -271,6 +272,9 @@
     <Compile Include="Staffing\SkillStaffPeriodForReadmodel.cs" />
     <Compile Include="Staffing\StaffingViewModelCreator.cs" />
     <Compile Include="Forecasting\UpdateSkillForecastReadModelHandler.cs" />
+    <Compile Include="Stardust\IGetAllWorkerNodes.cs" />
+    <Compile Include="Stardust\StardustChecker.cs" />
+    <Compile Include="Stardust\WorkerNode.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\BankHolidayCalendarSite.cs" />
     <Compile Include="SystemSetting\BankHolidayCalendar\IBankHolidayCalendarSite.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />

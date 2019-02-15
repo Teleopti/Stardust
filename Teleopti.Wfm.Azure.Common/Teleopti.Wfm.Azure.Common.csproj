@@ -45,7 +45,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="InstallationEnvironment.cs" />
+    <Compile Include="FakeInstallationEnvironment.cs" />
+    <Compile Include="IInstallationEnvironment.cs" />
+    <Compile Include="WfmInstallationEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

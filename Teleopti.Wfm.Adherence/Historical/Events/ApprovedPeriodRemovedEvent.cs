@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Adherence.Historical.Events
 {
-	public class ApprovedPeriodRemovedEvent : IRtaStoredEvent, IRtaStoredEventForPerson, IEvent
+	public class ApprovedPeriodRemovedEvent : IRtaStoredEvent, ISynchronizationInfo, IEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }
@@ -18,6 +18,14 @@ namespace Teleopti.Wfm.Adherence.Historical.Events
 				BelongsToDate = BelongsToDate,
 				StartTime = StartTime,
 				EndTime = EndTime
+			};
+
+		public SynchronizationInfo SynchronizationInfo() =>
+			new SynchronizationInfo
+			{
+				PersonId = PersonId,
+				BelongsToDate = BelongsToDate,
+				StartTime = StartTime
 			};
 	}
 }

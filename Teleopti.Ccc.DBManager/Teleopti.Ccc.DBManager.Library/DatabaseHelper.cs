@@ -14,8 +14,9 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly ExecuteSql _usingMaster;
 		private readonly ExecuteSql _usingDatabase;
 		private readonly Lazy<SqlVersion> _sqlVersion;
+		private readonly IInstallationEnvironment _installationEnvironment;
 
-		public DatabaseHelper(string connectionString, DatabaseType databaseType, IUpgradeLog log, bool forceMasterInAzure = false)
+		public DatabaseHelper(string connectionString, DatabaseType databaseType, IUpgradeLog log, IInstallationEnvironment installationEnvironment, bool forceMasterInAzure = false)
 		{
 			ConnectionString = connectionString;
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			_usingMaster = new ExecuteSql(() =>
 			{
-				if (InstallationEnvironment.IsAzure)
+				if (_installationEnvironment.IsAzure)
 					openConnection(forceMasterInAzure);
 				return openConnection(true);
 			}, Logger);
@@ -33,10 +34,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			_usingDatabase = new ExecuteSql(() => openConnection(), Logger);
 
 			_sqlVersion = new Lazy<SqlVersion>(() => new ServerVersionHelper(_usingMaster).Version());
+			_installationEnvironment = installationEnvironment;
+
 		}
 
-		public DatabaseHelper(string connectionString, DatabaseType databaseType, bool forceMasterInAzure = false)
-			: this(connectionString, databaseType, new NullLog(), forceMasterInAzure)
+		public DatabaseHelper(string connectionString, DatabaseType databaseType, IInstallationEnvironment installationEnvironment, bool forceMasterInAzure = false)
+			: this(connectionString, databaseType, new NullLog(), installationEnvironment, forceMasterInAzure)
 		{
 		}
 
@@ -108,7 +111,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public LoginHelper LoginTasks()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			var loginHandler = new LoginHelper(Logger, _usingMaster, databaseFolder);
+			var loginHandler = new LoginHelper(Logger, _usingMaster, databaseFolder, _installationEnvironment);
 			loginHandler.EnablePolicyCheck();
 			return loginHandler;
 		}
@@ -116,20 +119,20 @@ namespace Teleopti.Ccc.DBManager.Library
 		public void AddPermissions(string login, string pwd, SqlVersion sqlVersion)
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _usingDatabase);
+			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _usingDatabase, _installationEnvironment);
 			permissionsHandler.CreatePermissions(login, pwd);
 		}
 
 		public bool HasCreateDbPermission()
 		{
-			if (InstallationEnvironment.IsAzure)
+			if (_installationEnvironment.IsAzure)
 				return true;
 			return Convert.ToBoolean(_usingDatabase.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));
 		}
 
 		public bool HasCreateViewAndLoginPermission()
 		{
-			if (InstallationEnvironment.IsAzure)
+			if (_installationEnvironment.IsAzure)
 			{
 				const string pwd = "tT12@andSomeMore";
 				var login = Guid.NewGuid().ToString().Replace("-", "#");
@@ -162,7 +165,8 @@ namespace Teleopti.Ccc.DBManager.Library
 				schemaVersionInformation,
 				_usingDatabase,
 				databaseFolder,
-				Logger);
+				Logger, 
+				_installationEnvironment);
 			schemaCreator.Create(DatabaseType);
 		}
 
