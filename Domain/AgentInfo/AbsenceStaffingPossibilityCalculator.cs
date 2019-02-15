@@ -63,11 +63,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private IScheduleDictionary loadScheduleDictionary(IPerson person, DateOnlyPeriod period)
 		{
-			var loadOption = new ScheduleDictionaryLoadOptions(false, false) {LoadAgentDayScheduleTags = false};
+			var loadOption = new ScheduleDictionaryLoadOptions(false, false) { LoadAgentDayScheduleTags = false };
 			var scenario = _scenarioRepository.Current();
 
 			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {person}, loadOption, period, scenario);
+				_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person }, loadOption, period, scenario);
 			return scheduleDictionary;
 		}
 
@@ -97,8 +97,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffing.Time))
 					continue;
-				
-				substractUsersSchedule(person, skillStaffing, personAssignmentDictionary[skillStaffing.Date]);
+
+				var subtracted =  subtractUsersSchedule(person, skillStaffing, personAssignmentDictionary[skillStaffing.Date]);
+				if(!subtracted) continue;
 
 				var possibility = calculatePossibility(skillStaffing);
 				var key = skillStaffing.Time;
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return personAssignment == null || personAssignment.ShiftLayers.IsEmpty();
 		}
 
-		private void substractUsersSchedule(IPerson person, SkillStaffingData skillStaffingData, IPersonAssignment personAssignment)
+		private bool subtractUsersSchedule(IPerson person, SkillStaffingData skillStaffingData, IPersonAssignment personAssignment)
 		{
 			var skill = skillStaffingData.Skill;
 			var timezone = person.PermissionInformation.DefaultTimeZone();
@@ -151,13 +152,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillScheduled = isSkillScheduled(personAssignment,
 				new DateTimePeriod(startTime, startTime.AddMinutes(skillStaffingData.Resolution)),
 				skill);
-			if (!skillScheduled) return;
+			if (!skillScheduled) return false;
 			// we can't calculate current user's schedule for a skill in a specific period
 			// so we just substract 1 which means user's schedule is removed(#44607)
-			if (skillStaffingData.ScheduledStaffing <= 1 && !skill.StaffingThresholds.Understaffing.Value.Equals(-1))
+			if (skillStaffingData.ScheduledStaffing <= 1)
 			{
 				skillStaffingData.ScheduledStaffing = 0;
 			}
+
+			return true;
 		}
 
 		private static bool hasFairPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)

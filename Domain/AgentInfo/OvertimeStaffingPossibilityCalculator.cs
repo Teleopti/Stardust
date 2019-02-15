@@ -40,10 +40,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 					var siteOpenHour = person.SiteOpenHour(date);
 					return siteOpenHour == null || !siteOpenHour.IsClosed;
 				});
-
 			var filteredSkillStaffingDatas = _skillStaffingDataSkillTypeFilter.Filter(skillStaffingDatas);
 
 			return calculatePossibilities(filteredSkillStaffingDatas, satisfyAllSkills);
+		}
+
+		private static double? roundWithTwoFractionalDigit(double? value)
+		{
+			if (!value.HasValue)
+				return value;
+			return Math.Round(value.Value, 2);
 		}
 
 		private IList<CalculatedPossibilityModel> calculatePossibilities(
@@ -89,6 +95,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private static int calculatePossibility(SkillStaffingData skillStaffingData)
 		{
+			skillStaffingData.ForecastedStaffing = roundWithTwoFractionalDigit(skillStaffingData.ForecastedStaffing);
+			skillStaffingData.ScheduledStaffing = roundWithTwoFractionalDigit(skillStaffingData.ScheduledStaffing);
 			var isSatisfied = new IntervalHasSeriousUnderstaffing(skillStaffingData.Skill).IsSatisfiedBy(skillStaffingData.SkillStaffingInterval);
 			return isSatisfied ? ScheduleStaffingPossibilityConsts.GoodPossibility : ScheduleStaffingPossibilityConsts.FairPossibility;
 		}

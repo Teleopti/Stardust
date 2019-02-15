@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	{
 		public bool IsSatisfiedBy(ISkill skill, IValidatePeriod validatePeriod)
 		{
-			var understaffingValue = skill.StaffingThresholds.Understaffing.Value;
-			var isSatified = validatePeriod.RelativeDifference <= understaffingValue;
-			return isSatified;
+			var underStaffingValue = skill.StaffingThresholds.Understaffing.Value;
+			var isSatisfied = validatePeriod.RelativeDifference < underStaffingValue;
+			return isSatisfied;
 		}
 	}
 }
