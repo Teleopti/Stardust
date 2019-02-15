@@ -20,7 +20,7 @@ export class ReportComponent implements OnInit {
 	private errorNotificationOption = { nzDuration: 0 };
 
 	public initialized = false;
-	public isLoading = false;
+	public reportLoaded = false;
 	public isProcessing = false;
 	public inEditing = false;
 
@@ -59,7 +59,7 @@ export class ReportComponent implements OnInit {
 			return;
 		}
 
-		this.isLoading = true;
+		this.reportLoaded = false;
 		this.reportSvc.getPermission().then(permission => {
 			this.permission = permission;
 
@@ -73,7 +73,7 @@ export class ReportComponent implements OnInit {
 					this.loadReport(config);
 				});
 			} else {
-				this.isLoading = false;
+				this.reportLoaded = true;
 			}
 
 			this.initialized = true;
@@ -152,7 +152,7 @@ export class ReportComponent implements OnInit {
 		const self = this;
 		report.off('loaded');
 		report.on('loaded', function () {
-			self.isLoading = false;
+			self.reportLoaded = true;
 			self.setTokenExpirationListener(config.Expiration, 2, config.ReportId);
 		});
 	}
@@ -163,6 +163,13 @@ export class ReportComponent implements OnInit {
 
 	public cancelCloneReport() {
 		this.isConfirmingClone = false;
+	}
+
+	public printReport() {
+		const report = this.pbiCoreService.get(this.getReportContainer());
+		report.print().catch(error => {
+			this.notification.create('error', 'Failed to print report', 'Error message: ' + error, this.errorNotificationOption);
+		});
 	}
 
 	public cloneReport(reportId) {
