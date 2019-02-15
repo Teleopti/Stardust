@@ -114,7 +114,7 @@ const mockStateService: Partial<IStateService> = {
 	}
 };
 
-fdescribe('Planning Period Overview', () => {
+describe('Planning Period Overview', () => {
 	let component: PlanningPeriodOverviewComponent;
 	let fixture: ComponentFixture<PlanningPeriodOverviewComponent>;
 	let page: PlanningPeriodOverviewPage;
