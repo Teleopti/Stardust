@@ -73,7 +73,7 @@ MyTimeWeb_NewTeamScheduleView_75989 = true
 MyTimeWeb_NewTeamScheduleViewDesktop_76313 = true
 MyTimeWeb_TrafficLightOnMobileDayView_77447 = true
 MyTimeWeb_NewTrafficLightIconHelpingColorBlindness_78640 = true
-MyTimeWeb_NewAbsenceRequestWaitlistPosition_80131 = RC
+MyTimeWeb_NewAbsenceRequestWaitlistPosition_80131 = true
 
 # Kittens, Bugs&Roses and Micke #
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release just yet
