@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		ResourcePlanner_ConsiderOpenHoursWhenDecidingPossibleWorkTimes_76118,
 		ResourcePlanner_QueryHintOnLayers_79780,
 		ResourcePlanner_TeamSchedulingInPlans_79283,
+		ResourcePlanner_DelayShiftCreations_81680,
 		WFM_Plans_Redesign_81198,
 		WFM_Plans_HeatMap_79112,
 
