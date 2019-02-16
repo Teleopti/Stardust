@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 
@@ -24,7 +23,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public FakeTeamRepository TeamRepository;
 		public FakeTimeZoneGuard TimeZoneGuard;
 
 		[Test, Ignore("bug #81679")]
@@ -41,15 +39,10 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 					TimeSpan.FromHours(11), TimeSpan.FromHours(16))
 			};
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
-			var skillDays = new List<ISkillDay>();
-			for (var i = 0; i < 7; i++)
-			{
-				skillDays.Add(skill.CreateSkillDayWithDemand(scenario, date.AddDays(i), 1));
-			}
+			var skillDays = skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(2018, 6, 11, 2018, 6, 17), 1);
 
 			var startTimePeriod = new TimePeriod(23, 23);
-			var endTimePeriod = new TimePeriod(TimeSpan.FromDays(1).Add(TimeSpan.FromHours(7)),
-				TimeSpan.FromDays(1).Add(TimeSpan.FromHours(7)));
+			var endTimePeriod = new TimePeriod(31, 31);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
 				new TimePeriodWithSegment(startTimePeriod, TimeSpan.FromMinutes(15)),
 				new TimePeriodWithSegment(endTimePeriod, TimeSpan.FromMinutes(15)), shiftCategory));
@@ -57,20 +50,21 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 				.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Aleutian Standard Time")).WithId();
 			agent.SchedulePeriod(date).DaysOff = 2;
 
-			var period = new DateOnlyPeriod(date, date);
-			var dayOffTemplate = new DayOffTemplate();
-			var assA = new PersonAssignment(agent, scenario, date.AddDays(5));
-			assA.SetDayOff(dayOffTemplate);
-			var assB = new PersonAssignment(agent, scenario, date.AddDays(6));
-			assB.SetDayOff(dayOffTemplate);
-			var stateholder =
-				SchedulerStateHolderFrom.Fill(scenario, period, new[] {agent}, new[] {assA, assB}, skillDays);
+			var assA = new PersonAssignment(agent, scenario, date.AddDays(5)).WithDayOff();
+			var assB = new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff();
 
+			SchedulerStateHolderFrom.Fill(scenario, date.ToDateOnlyPeriod(), new[] {agent}, new[] {assA, assB}, skillDays);
+
+			var schedulingOptionsTeamSingleAgent = new SchedulingOptions
+			{
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("not interesting", GroupPageType.SingleAgent),
+				UseTeam = true,
+				UseBlock = false,
+				UseShiftCategoryLimitations = true
+			};
 			TimeZoneGuard.Set(TimeZoneInfo.FindSystemTimeZoneById("Aleutian Standard Time"));
-			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(),
-				new NoSchedulingProgress(), new[] {agent}, period);
-
-			//skillDays = stateholder.SchedulingResultState.SkillDays[skill].ToList();
+			Target.Execute(new NoSchedulingCallback(), schedulingOptionsTeamSingleAgent,
+				new NoSchedulingProgress(), new[] {agent}, date.ToDateOnlyPeriod());
 
 			TimeSpan? timeForDay;
 			timeForDay = scheduledTimeOnSkillDay(skillDays[0]);
@@ -82,12 +76,13 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 			timeForDay = scheduledTimeOnSkillDay(skillDays[2]);
 			timeForDay.Value.Should().Be.EqualTo(TimeSpan.Zero);
 
-			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory) { MaxNumberOf = 0 });
+			agent.SchedulePeriod(date)
+				.AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory) {MaxNumberOf = 0});
 
 			TimeZoneGuard.Set(TimeZoneInfo.FindSystemTimeZoneById("Line Islands Standard Time"));
-			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { agent }, period);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptionsTeamSingleAgent,
+				new NoSchedulingProgress(), new[] {agent}, date.ToDateOnlyPeriod());
 
-			skillDays = stateholder.SchedulingResultState.SkillDays[skill].ToList();
 			timeForDay = scheduledTimeOnSkillDay(skillDays[0]);
 			timeForDay.Value.Should().Be.EqualTo(TimeSpan.Zero);
 
@@ -106,17 +101,6 @@ namespace Teleopti.Wfm.SchedulingTest.SchedulingScenarios.Scheduling
 										 skillStaffPeriod.Period.ElapsedTime().TotalMinutes))
 				.Aggregate<TimeSpan, TimeSpan?>(null,
 					(current, toAdd) => !current.HasValue ? toAdd : current.Value.Add(toAdd));
-		}
-
-		private static SchedulingOptions createSchedulingOptionsTeamSingleAgent()
-		{
-			return new SchedulingOptions
-			{
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("not interesting", GroupPageType.SingleAgent),
-				UseTeam = true,
-				UseBlock = false,
-				UseShiftCategoryLimitations = true
-			};
 		}
 
 		public ResourceCalculationsInExtremeTimeZonesTest(ResourcePlannerTestParameters resourcePlannerTestParameters) : base(resourcePlannerTestParameters)
