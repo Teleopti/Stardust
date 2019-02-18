@@ -16,6 +16,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Support.Security.Library;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Hangfire;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Wfm.Administration.Core.Modules
 {
@@ -83,6 +84,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<RecurrentEventTimer>().SingleInstance();
 			builder.RegisterType<InitializeApplicationInsight>().SingleInstance();
 			builder.RegisterType<PurgeOldSignInAttempts>().As<IPurgeOldSignInAttempts>().SingleInstance();
+			builder.RegisterType<WfmInstallationEnvironment>().As<IInstallationEnvironment>();
 
 			builder.RegisterType<PurgeNoneEmployeeData>().As<IPurgeNoneEmployeeData>().SingleInstance();
 
