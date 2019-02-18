@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Monitor TeleoptiWFM</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<style>
+		body {
+			font-family: Helvetica Neue, Arial, sans-serif;
+			font-size: 14px;
+			color: #444;
+		}
+
+		table {
+			border: 2px solid;
+			border-radius: 3px;
+		}
+
+		th {
+			text-align: left;
+			background-color: #dddddd;
+		}
+		
+		th, td {
+			min-width: 120px;
+			padding: 10px;
+		}
+		
+		.stepSuccess {
+			color : green;
+		}
+		.stepFailure{
+			color : red;
+		}
+	</style>
+</head>
+<body>
+<div id="steps">
+	<table>
+		<thead>
+			<tr>
+				<th>Step Name</th>
+				<th>Result</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr v-for="step in steps">
+				<td>
+					<div v-bind:class="outputColor(step.stepSuccess)">{{step.stepName}}</div>
+				</td>
+				<td>
+					<div v-bind:class="outputColor(step.stepSuccess)">{{step.output}}</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<p>
+		{{result}}
+	</p>
+</div>
+</body>
+
+<script>
+	var vm = new Vue({
+		unknwown : 'unknown',
+		el: '#steps',
+		data: {
+			steps: []
+		},
+		mounted() {
+			axios.get('/monitor/list')
+					.then(monitorSteps => {
+				monitorSteps.data.forEach(function (step) {
+					vm.$data.steps.push({
+						stepName: step,
+						stepSuccess : false,
+						output: this.unknwown
+					});
+
+					axios.get('/monitor/check/' + step)
+							.then(result => {
+						var stepToUse = vm.$data.steps.find(function (stepToFind) {
+							return stepToFind.stepName === step;
+						});
+					stepToUse.output = result.data;
+					stepToUse.stepSuccess = true;
+				})
+					.catch(error => {
+						var stepToUse = vm.$data.steps.find(function (stepToFind) {
+							return stepToFind.stepName === step;
+						});
+					stepToUse.output = error.response.data;
+					})
+				});
+		});
+		},
+		methods : {
+			outputColor : function(value){
+				return value ? 'stepSuccess' : 'stepFailure';
+			}
+		},
+		computed : {
+			success : function(){
+				if(this.steps.length === 0)
+					return false;
+
+				return this.steps.length > 0 &&
+						this.steps.every(function(value){
+							return value.stepSuccess;
+						})
+			},
+			result : function(){
+				if(this.steps.some(function (step) {
+					return step.stepSuccess === false;
+				}))
+					return 'FAILURE!';
+				if(this.steps.some(function (step) {
+					return step.output === this.unknwown;
+				}))
+					return 'Loading...';
+				return 'System OK!'
+			}
+		}
+	});
+</script>
+</html>

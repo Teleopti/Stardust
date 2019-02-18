@@ -268,6 +268,7 @@
     <Content Include="Etl\modal.html" />
     <Content Include="Etl\schedule.html" />
     <Content Include="Etl\scheduleModal.html" />
+    <Content Include="monitor.html" />
     <Content Include="HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />
