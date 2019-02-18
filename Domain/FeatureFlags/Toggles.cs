@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		MyTimeWeb_AbsenceRequest_LimitAbsenceTypes_77446,
 		MyTimeWeb_Preference_Indicate_BankHoliday_79900,
 		MyTimeWeb_Schedule_MobileMonth_Indicate_BankHoliday_79901,
+		MyTimeWeb_Schedule_WeekView_Indicate_BankHoliday_81154,
 
 		WFM_Intraday_Redesign_77214,
 
