@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -18,6 +19,7 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -651,7 +653,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 			};
 
 			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _container.Resolve<MatrixListFactory>(), _container.Resolve<IWorkShiftMinMaxCalculator>());
-			helper.SchedulePeriodData(true);
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_DelayShiftCreations_81680))
+			{
+				helper.SchedulePeriodData(false);
+			}
+			else
+			{
+				helper.SchedulePeriodData(true);
+			}
+			
 			if (nullOrZeroPeriod(helper.Period))
 			{
 				var noPeriodPresentItem = new ListViewItem(Resources.NoPeriodPresent);
@@ -739,7 +749,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 
             listViewSchedulePeriod.Items.Add("");
 
-            if (employmentType != EmploymentType.HourlyStaff)
+            if (employmentType != EmploymentType.HourlyStaff && !_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_DelayShiftCreations_81680))
             {
 				listViewSchedulePeriod.Items.Add("");
 	            createAndAddItem(listViewSchedulePeriod, Resources.PeriodInLegalState,
