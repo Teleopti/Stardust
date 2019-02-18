@@ -74,11 +74,12 @@
 			}
 		}
 
-		.flex-end {
+		&.flex-end {
 			justify-content: flex-end;
 		}
 	}
 
+	
 
 	.modal-box .wfm-simple-list {
 		max-height: 430px;
