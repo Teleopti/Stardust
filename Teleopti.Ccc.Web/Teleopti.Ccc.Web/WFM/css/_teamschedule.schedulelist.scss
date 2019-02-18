@@ -262,6 +262,10 @@
 		}
 	}
 
+	.md-virtual-repeat-scroller {
+		overflow-y: scroll;
+	}
+
 	.md-virtual-repeat-offsetter {
 		z-index: 1;
 	}
