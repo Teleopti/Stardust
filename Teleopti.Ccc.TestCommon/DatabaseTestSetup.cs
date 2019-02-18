@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Messaging.Client;
 
@@ -29,11 +28,9 @@ namespace Teleopti.Ccc.TestCommon
 
 			withContainer(container =>
 			{
-				var dataSourcesFactory = container.Resolve<IDataSourcesFactory>();
+				container.Resolve<DatabaseTestHelper>().CreateDatabases();
+				var dataSource = container.Resolve<IDataSourceForTenant>().Tenant(TestTenantName.Name);
 				var dataSourceScope = container.Resolve<IDataSourceScope>();
-				
-				var dataSource = DataSourceHelper.CreateDatabasesAndDataSource(dataSourcesFactory);
-				
 				using (dataSourceScope.OnThisThreadUse(dataSource))
 				{
 					createdDataHash = createData.Invoke(new CreateDataContext
@@ -60,6 +57,7 @@ namespace Teleopti.Ccc.TestCommon
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
+			builder.RegisterType<DatabaseTestHelper>().SingleInstance();
 			var container = builder.Build();
 			
 			action.Invoke(container);

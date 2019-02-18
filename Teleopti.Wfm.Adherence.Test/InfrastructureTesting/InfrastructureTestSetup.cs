@@ -19,17 +19,14 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 				_person = new Person()
 					.WithName(RandomName.Make())
 					.InTimeZone(TimeZoneInfo.Utc);
-
 				context.UpdatedByScope.OnThisThreadUse(_person);
-				using (var uow = context.DataSource.Application.CreateAndOpenUnitOfWork())
+				context.WithUnitOfWork.Do(() =>
 				{
 					context.Persons.Add(_person);
 					context.Persons.Remove(_person); // SetDeleted
 					context.BusinessUnits.Add(_businessUnit);
-					uow.PersistAll();
-				}
+				});
 				context.UpdatedByScope.OnThisThreadUse(null);
-
 				return 254875;
 			});
 
