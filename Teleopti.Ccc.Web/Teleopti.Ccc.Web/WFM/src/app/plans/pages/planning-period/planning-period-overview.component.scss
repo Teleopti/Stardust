@@ -50,9 +50,9 @@ table.overview {
 	border-width: thin;
 }
 
-.legend-span{
-	display: block; 
-	text-align: center;
+.legend{
+	margin-top: 20px;
+	margin-left: 20px;
 }
 
 .legend-box {
@@ -60,8 +60,6 @@ table.overview {
 	height: 10px;
 	text-align: center;
 	position: relative;
-	display: inline-block;
-	margin: 1px;
 }
 
 .heatmap-div {
