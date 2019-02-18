@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldGetOnlyOwnBusinessUnitIfNotPermittedToAccessAll()
 		{
-			var bu1 = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var bu1 = BusinessUnitUsedInTests.BusinessUnit;
 			var person = PersonFactory.CreatePerson();
 			var loggedOnUser = new FakeLoggedOnUser(person);
 			var applicationRole = new ApplicationRole();
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldGetCurrentLoggedOnBusinessUnit()
 		{
-			var bu1 = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var bu1 = BusinessUnitUsedInTests.BusinessUnit;
 			var buRepository = new FakeBusinessUnitRepository();
 			buRepository.Add(bu1);
 			var currentBusinessUnit = new SpecificBusinessUnit(bu1);

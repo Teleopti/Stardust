@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			BusinessUnitRepository.Add(businessUnit);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
-			scenario.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			scenario.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			ScenarioRepository.Add(scenario);
 
 			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),

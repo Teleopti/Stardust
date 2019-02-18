@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest
 
             var stateMock = new FakeState();
 			StateHolderProxyHelper.PrincipalFactory = new TeleoptiPrincipalForLegacyFactory();
-            StateHolderProxyHelper.ClearAndSetStateHolder(loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest, StateHolderProxyHelper.CreateApplicationData(new MessageBrokerCompositeDummy()),dataSource, stateMock);
+            StateHolderProxyHelper.ClearAndSetStateHolder(loggedOnPerson, BusinessUnitUsedInTests.BusinessUnit, StateHolderProxyHelper.CreateApplicationData(new MessageBrokerCompositeDummy()),dataSource, stateMock);
         }
 
 		[OneTimeTearDown]

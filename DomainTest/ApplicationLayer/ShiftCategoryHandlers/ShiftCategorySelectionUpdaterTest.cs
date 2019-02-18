@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 		[Test]
 		public void ShouldCreateModelWhenNoPreviousExists()
 		{
-			BusinessUnitRepository.Add(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Add(BusinessUnitUsedInTests.BusinessUnit);
 
 			Target.Handle(new TenantDayTickEvent());
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 		[Test]
 		public void ShouldUpdateModelWhenPreviousExists()
 		{
-			BusinessUnitRepository.Add(BusinessUnitFactory.BusinessUnitUsedInTest);
+			BusinessUnitRepository.Add(BusinessUnitUsedInTests.BusinessUnit);
 			ShiftCategoryUsageFinder.Has(new ShiftCategoryExample
 			{
 				DayOfWeek = DayOfWeek.Wednesday,

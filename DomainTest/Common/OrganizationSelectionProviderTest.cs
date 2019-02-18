@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldReturnDynamicOptions()
 		{
-			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			var result = Target.Provide();
 			result.DynamicOptions.Length.Should()
 				.Be.EqualTo(Enum.GetNames(typeof(AvailableDataRangeOption)).Length);
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldReturnOrganizationStructureForCurrentBusinessUnit()
 		{
-			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			SiteRepository.Add(SiteFactory.CreateSiteWithOneTeam("Team 1"));
 			var result = Target.Provide();
-			((Guid)result.BusinessUnit.Id).Should().Be.EqualTo(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
+			((Guid)result.BusinessUnit.Id).Should().Be.EqualTo(BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault());
 			result.BusinessUnit.ChildNodes.Length.Should().Be.EqualTo(1);
 			result.BusinessUnit.ChildNodes.First().ChildNodes.Length.Should().Be.EqualTo(1);
 		}
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldIgnoreDeletedTeam()
 		{
-			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			var siteWithOneTeam = SiteFactory.CreateSiteWithOneTeam("Team 1");
 
 			((IDeleteTag)siteWithOneTeam.TeamCollection[0]).SetDeleted();

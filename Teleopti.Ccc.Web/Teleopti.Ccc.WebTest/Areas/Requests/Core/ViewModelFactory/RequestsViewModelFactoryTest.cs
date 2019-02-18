@@ -869,7 +869,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var stateMock = new FakeState();
 			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitUsedInTests.BusinessUnit);
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 		}
 

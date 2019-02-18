@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyDefaultPropertiesAreSet()
         {
             Assert.AreEqual("test", _testContract.Description.Name);
-            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, ((Contract)_testContract).BusinessUnit);
+            Assert.AreEqual(BusinessUnitUsedInTests.BusinessUnit, ((Contract)_testContract).BusinessUnit);
             Assert.AreEqual(EmploymentType.FixedStaffNormalWorkTime, _testContract.EmploymentType);
             Assert.IsNotNull(_testContract.WorkTime);
             Assert.AreEqual(8, _testContract.WorkTime.AvgWorkTimePerDay.TotalHours);

@@ -598,7 +598,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			SetupPersonsInOrganizationWithContract();
 
-			Session.Evict(BusinessUnitFactory.BusinessUnitUsedInTest);
+			Session.Evict(BusinessUnitUsedInTests.BusinessUnit);
 			ICollection<IPerson> res = target.FindAllAgents(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), false);
 
 			Assert.AreEqual(2, res.Count);
@@ -2164,7 +2164,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				DescriptionText = "description",
 				Name = "name"
 			};
-			role.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			role.SetBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			var fkn1 = new ApplicationFunction("FUNCTION1");
 			var fkn2 = new ApplicationFunction("FUNCTION2");
 			var ad = new AvailableData();

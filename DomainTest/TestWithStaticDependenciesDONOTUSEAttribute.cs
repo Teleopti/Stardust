@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest
 			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
 			loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(new PersonAndBusinessUnit(loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest), dataSource, null);
+			var principal = new TeleoptiPrincipalForLegacyFactory().MakePrincipal(new PersonAndBusinessUnit(loggedOnPerson, BusinessUnitUsedInTests.BusinessUnit), dataSource, null);
 			Thread.CurrentPrincipal = principal;
 
 			StateHolderProxyHelper.ClearStateHolder();

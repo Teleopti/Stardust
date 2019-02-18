@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			datasource = new ExistingDatasources(timeZones);
-			businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
+			businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource);
 
 			var threeSkills = new ThreeSkills(timeZones, businessUnit, datasource);
 
@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				PersonPeriodCode = personPeriodCode1,
 				ValidFromDate = new DateTime(2000, 1, 1),
 				ValidToDate = new DateTime(2001, 1, 1),
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
-				BusinessUnitName = BusinessUnitFactory.BusinessUnitUsedInTest.Name,
+				BusinessUnitCode = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault(),
+				BusinessUnitName = BusinessUnitUsedInTests.BusinessUnit.Name,
 				BusinessUnitId = 1,
 				ContractCode = Guid.NewGuid(),
 				ContractName = "Test contract",

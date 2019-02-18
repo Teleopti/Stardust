@@ -369,7 +369,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			agentRole.WithId();
 			agentRole.AddApplicationFunction(functionOne);
 			agentRole.AvailableData.AvailableDataRange = AvailableDataRangeOption.MySite;
-			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			agentRole.AvailableData.AddAvailableSite(team.Site);
 			agentRole.AvailableData.AddAvailableTeam(team);
 			ApplicationRoleRepository.Add(agentRole);
@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			var simpleTeam = TeamFactory.CreateTeam("Team 1", "Paris");
 			agentRole.AvailableData.AddAvailableTeam(simpleTeam);
 			agentRole.AvailableData.AddAvailableSite(simpleTeam.Site);
-			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			ApplicationRoleRepository.Add(agentRole);
 			dynamic result = Target.Get(agentRole.Id.GetValueOrDefault());
 

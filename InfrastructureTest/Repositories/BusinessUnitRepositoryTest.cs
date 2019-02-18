@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(bu2);
             //load
             IList<IBusinessUnit> loadedList = rep.LoadAllBusinessUnitSortedByName();
-            loadedList.Remove(BusinessUnitFactory.BusinessUnitUsedInTest);
+            loadedList.Remove(BusinessUnitUsedInTests.BusinessUnit);
             Assert.AreEqual(2, loadedList.Count); 
             Assert.IsTrue(loadedList[0].Equals(bu2));       
         }
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyCanLoadAllTimeZones()
         {
-            PersistAndRemoveFromUnitOfWork(BusinessUnitFactory.BusinessUnitUsedInTest);
+            PersistAndRemoveFromUnitOfWork(BusinessUnitUsedInTests.BusinessUnit);
 
             ISkillType type = SkillTypeFactory.CreateSkillTypePhone();
             PersistAndRemoveFromUnitOfWork(type);
@@ -85,9 +85,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             site1team2.Site = site1;
             PersistAndRemoveFromUnitOfWork(site1team2);
 
-            BusinessUnitFactory.BusinessUnitUsedInTest.AddSite(site1);
+            BusinessUnitUsedInTests.BusinessUnit.AddSite(site1);
 
-            PersistAndRemoveFromUnitOfWork(BusinessUnitFactory.BusinessUnitUsedInTest);
+            PersistAndRemoveFromUnitOfWork(BusinessUnitUsedInTests.BusinessUnit);
 
             IBusinessUnitRepository repository = new BusinessUnitRepository(UnitOfWork);
             IList<IBusinessUnit> loadedList = rep.LoadAllBusinessUnitSortedByName();

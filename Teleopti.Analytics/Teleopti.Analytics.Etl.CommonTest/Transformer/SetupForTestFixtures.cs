@@ -17,7 +17,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			StateHolderProxyHelper.PrincipalFactory = new TeleoptiPrincipalForLegacyFactory();
-			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitUsedInTests.BusinessUnit);
 
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 		}

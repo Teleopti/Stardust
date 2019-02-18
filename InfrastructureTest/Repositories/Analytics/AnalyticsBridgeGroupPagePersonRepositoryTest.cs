@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[SetUp]
 		public void SetUp()
 		{
-			businessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault();
+			businessUnitId = BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault();
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			var datasource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
+			var businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource);
 
 			analyticsDataFactory.Setup(businessUnit);
 			var person = PersonFactory.CreatePersonWithPersonPeriod(

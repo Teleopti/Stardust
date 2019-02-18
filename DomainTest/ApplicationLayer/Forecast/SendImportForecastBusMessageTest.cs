@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var person = PersonFactory.CreatePerson(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			_target = new SplitImportForecastMessage(_analyzeQuery, _feedback, _openAndSplitTarget,
 				new CurrentIdentity(new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipalWithUnsafePerson(
-					new TeleoptiIdentity(person.Name.ToString(), new DummyDataSource("test"), () => BusinessUnitFactory.BusinessUnitUsedInTest.Id, BusinessUnitFactory.BusinessUnitUsedInTest.Name, null,
+					new TeleoptiIdentity(person.Name.ToString(), new DummyDataSource("test"), () => BusinessUnitUsedInTests.BusinessUnit.Id, BusinessUnitUsedInTests.BusinessUnit.Name, null,
 						""), person))));
 		}
 

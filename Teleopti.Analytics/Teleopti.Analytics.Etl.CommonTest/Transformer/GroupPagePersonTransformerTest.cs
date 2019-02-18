@@ -548,7 +548,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 		public IBusinessUnit BusinessUnit
 		{
-			get { return BusinessUnitFactory.BusinessUnitUsedInTest; }
+			get { return BusinessUnitUsedInTests.BusinessUnit; }
 		}
 
 		public DateOnlyPeriod SelectedPeriod

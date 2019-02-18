@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			var datasource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource, 1);
+			var businessUnit = new BusinessUnit(BusinessUnitUsedInTests.BusinessUnit, datasource, 1);
 			var threeSkills = new ThreeSkills(timeZones, businessUnit, datasource);
 			var theSkill = new Skill("MySkill");
 			theSkill.SetId(threeSkills.FirstSkillCode);

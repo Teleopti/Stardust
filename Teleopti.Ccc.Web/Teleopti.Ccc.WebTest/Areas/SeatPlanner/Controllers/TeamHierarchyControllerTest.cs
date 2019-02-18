@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		public void Setup()
 		{
 			siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var bu1 = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var bu1 = BusinessUnitUsedInTests.BusinessUnit;
 			businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			currentBusinessUnit.Stub(x => x.Current()).Return(bu1);

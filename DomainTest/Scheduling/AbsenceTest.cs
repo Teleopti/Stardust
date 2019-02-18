@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(Color.DarkSalmon.ToArgb(), target.DisplayColor.ToArgb());
             Assert.AreEqual("Sjuk", target.Description.Name);
             Assert.AreEqual("SJ", target.Description.ShortName);
-            Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
+            Assert.AreEqual(BusinessUnitUsedInTests.BusinessUnit, target.BusinessUnit);
             Assert.AreEqual(37, target.Priority);
             Assert.IsFalse(target.Requestable);
             target.Requestable = true;

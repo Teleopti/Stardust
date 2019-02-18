@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
 
-			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitUsedInTests.BusinessUnit);
 			isolate.UseTestDouble(currentBusinessUnit).For<ICurrentBusinessUnit>();
 			var dataSource = new FakeCurrentDatasource("Test");
 			isolate.UseTestDouble(dataSource).For<ICurrentDataSource>();

@@ -63,7 +63,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			person.AddPersonPeriod(personPeriod);
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			analyticsDataFactory.Setup(new Person(person, _datasource, 0, validFrom, AnalyticsDate.Eternity.DateDate, 0, -2, 0,
-				BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault(),
 				false, _timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Persist();
 
@@ -110,7 +110,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			person.AddPersonPeriod(personPeriod);
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			analyticsDataFactory.Setup(new Person(person, _datasource, 0, validFrom, new DateTime(2010, 1, 4), 0, 4, 0,
-				BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				BusinessUnitUsedInTests.BusinessUnit.Id.GetValueOrDefault(),
 				false, _timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Persist();
 

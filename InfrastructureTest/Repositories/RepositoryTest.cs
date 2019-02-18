@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             T loadedAggregate = rep.Load(id);
             Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
-                Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
+                Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, buRef.BusinessUnit);
             VerifyAggregateGraphProperties(loadedAggregate);
         }
 
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             T loadedAggregate = rep.Get(id);
             Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
-                Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
+                Assert.AreSame(BusinessUnitUsedInTests.BusinessUnit, buRef.BusinessUnit);
             VerifyAggregateGraphProperties(loadedAggregate);
         }
 

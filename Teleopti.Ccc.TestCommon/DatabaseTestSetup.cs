@@ -1,9 +1,12 @@
 using System;
 using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -27,14 +30,22 @@ namespace Teleopti.Ccc.TestCommon
 			withContainer(container =>
 			{
 				var dataSourcesFactory = container.Resolve<IDataSourcesFactory>();
-
+				var dataSourceScope = container.Resolve<IDataSourceScope>();
+				
 				var dataSource = DataSourceHelper.CreateDatabasesAndDataSource(dataSourcesFactory);
-
-				createdDataHash = createData.Invoke(new CreateDataContext
+				
+				using (dataSourceScope.OnThisThreadUse(dataSource))
 				{
-					DataSource = dataSource,
-					UpdatedByScope = container.Resolve<IUpdatedByScope>()
-				});
+					createdDataHash = createData.Invoke(new CreateDataContext
+					{
+						DataSource = dataSource,
+						DataSourceScope = dataSourceScope,
+						WithUnitOfWork = container.Resolve<WithUnitOfWork>(),
+						UpdatedByScope = container.Resolve<IUpdatedByScope>(),
+						BusinessUnits = container.Resolve<IBusinessUnitRepository>(),
+						Persons = container.Resolve<IPersonRepository>()
+					});
+				}
 				if (createdDataHash == 0)
 					throw new Exception("create data function needs to return a number representing the data created");
 
@@ -60,6 +71,10 @@ namespace Teleopti.Ccc.TestCommon
 	public class CreateDataContext
 	{
 		public IDataSource DataSource;
+		public IDataSourceScope DataSourceScope;
+		public WithUnitOfWork WithUnitOfWork;
 		public IUpdatedByScope UpdatedByScope;
+		public IPersonRepository Persons;
+		public IBusinessUnitRepository BusinessUnits;
 	}
 }
