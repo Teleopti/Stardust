@@ -194,4 +194,16 @@ describe('planningGroupSettingEditController', function() {
 		expect(vm.settingInfo.Name).toEqual('Default');
 		expect(vm.settingInfo.Default).toEqual(true);
 	});
+
+	it('should have correct default block comparision type', function() {
+		var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo }, {settingInfo: defaultSettingInfo, teamSettings: teamSettings});
+		$httpBackend.flush();
+
+		vm.blockFinderType = "BlockFinderTypeBetweenDayOff";
+		vm.blockFinderTypeOptionChanged();
+		
+		expect(vm.settingInfo["BlockSameShiftCategory"]).toEqual(true);
+		expect(vm.settingInfo["BlockSameStartTime"]).toEqual(false);
+		expect(vm.settingInfo["BlockSameShift"]).toEqual(false);
+	});
 });

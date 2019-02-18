@@ -186,6 +186,7 @@
         
         function blockFinderTypeOptionChanged(){
 			vm.settingInfo.BlockFinderType = vm.blockFinderTypeOptions.indexOf(vm.blockFinderType);
+			blockComparisonTypeOptionChanged();
 		}
         
         function blockComparisonTypeOptionChanged(){
