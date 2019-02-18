@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			var applicationFunctions = new[]
 			{
 				DefinedRaptorApplicationFunctionPaths.WebForecasts,
-				DefinedRaptorApplicationFunctionPaths.WebCancelRequest,
 				DefinedRaptorApplicationFunctionPaths.WebModifySkill
 			};
 
