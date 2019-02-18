@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class DatabaseTestHelper
 	{
-		public void CreateDatabases(string name = TestTenantName.Name)
+		public void CreateDatabases(string tenant = TestTenantName.Name)
 		{
 			using (testDirectoryFix())
 			{
-				createOrRestoreApplication(name);
+				createOrRestoreApplication(tenant);
 				createOrRestoreAnalytics();
 				createOrRestoreAgg();
 			}
@@ -74,22 +74,19 @@ namespace Teleopti.Ccc.TestCommon
 			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
-		private static void createOrRestoreApplication(string name)
+		private static void createOrRestoreApplication(string tenant)
 		{
 			var database = application();
 			if (tryRestoreByFileCopy(database, 0))
-			{
-				database.ConfigureSystem().SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
 				return;
-			}
 
 			createDatabase(database);
 
 			//would be better if dbmanager was called, but don't have the time right now....
 			// eh, that thing that is called IS the db manager!
-			application().ConfigureSystem().MergePersonAssignments();
+			database.ConfigureSystem().MergePersonAssignments();
 			database.ConfigureSystem().PersistAuditSetting();
-			database.ConfigureSystem().SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
+			database.ConfigureSystem().SetTenantConnectionInfo(tenant, database.ConnectionString, analytics().ConnectionString);
 
 			backupByFileCopy(database, 0);
 		}
