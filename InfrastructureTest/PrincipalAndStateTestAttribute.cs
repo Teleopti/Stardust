@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			SetupFixtureForAssembly.Login(person);
 		}
 
-		public void Logout()
+		public new void Logout()
 		{
 			SetupFixtureForAssembly.Logout();
 		}
