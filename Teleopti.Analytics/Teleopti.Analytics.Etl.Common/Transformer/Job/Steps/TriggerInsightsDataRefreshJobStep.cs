@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -13,6 +14,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 {
 	public class TriggerInsightsDataRefreshJobStep : JobStepBase
 	{
+		private static readonly ILog _logger = LogManager.GetLogger(typeof(TriggerInsightsDataRefreshJobStep));
 		private readonly IServiceBusTopicClientFactory _serviceBusTopicClientProvider;
 
 		public TriggerInsightsDataRefreshJobStep(IJobParameters jobParameters,
@@ -32,14 +34,18 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		private async Task sendMessagesAsync()
 		{
-			ITopicClient topicClient = null;
-
 			var insightsConfig = _jobParameters.InsightsConfig;
-			if (insightsConfig == null || !insightsConfig.IsValid())
+			if (!_jobParameters.InsightsEnabled || insightsConfig == null || !insightsConfig.IsValid())
 			{
-				throw new ConfigurationErrorsException("Insights ETL job configuration is invalid.");
+				// TODO: It's not an problem (When scheduled Insights ETL job for all tenants, some tenant is not
+				// enabled with Insights and no configuration applied, then no message should be send out for them),
+				// It's just for debug by now (To find out why no message send out), should be removed later.
+				_logger.WarnFormat("Insights not enabled or configuration for Insights ETL job is invalid for data source {0}.",
+					_jobParameters.Helper.SelectedDataSource.DataSourceName);
+				return;
 			}
 
+			ITopicClient topicClient = null;
 			try
 			{
 				topicClient = _serviceBusTopicClientProvider.CreateTopicClient(insightsConfig.ServiceBusAddress,
