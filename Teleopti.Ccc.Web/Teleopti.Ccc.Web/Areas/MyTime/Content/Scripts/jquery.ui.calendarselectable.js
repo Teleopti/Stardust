@@ -12,7 +12,7 @@
 		options: {
 			distance: 0,
 			filter: "ul.calendarview-week li.editable",
-			cancel: "ul.weekdays li, ul.calendarview-week li:first-child, ul.calendarview-week li.non-editable "
+			cancel: "ul.weekdays li, ul.calendarview-week li.non-editable"
 		},
 		_create: function () {
 			var self = this;

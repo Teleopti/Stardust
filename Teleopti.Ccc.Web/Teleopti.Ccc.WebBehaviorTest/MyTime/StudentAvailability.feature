@@ -91,6 +91,13 @@ Scenario: Can edit student availability in open period
 	When I view student availability
 	Then the student availabilty calendar should be editable
 
+Scenario: Can edit all student availabilities in open period
+	Given I am a student agent
+	And the time is '2014-05-02 08:00'
+	And I have a workflow control set with open availability periods
+	When I view student availability
+	Then All the student availabilties calendar should be editable
+
 	@NotKeyExample
 Scenario: Default to first virtual schedule period overlapping open student availability period
 	Given I am a student agent

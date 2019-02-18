@@ -56,6 +56,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0}.{1}",cell,"ui-selected"));
 		}
 
+		[Then(@"All the student availabilties calendar should be editable")]
+		public void AllThenTheCalendarsShouldBeEditable()
+		{
+			var amount = Convert.ToInt32(Browser.Interactions.Javascript_IsFlaky("return $('li[data-mytime-editable=True]').length;"));
+			for (int i = 0; i < amount; i++)
+			{
+				var cell = string.Format("li[data-mytime-editable=True]:nth({0})", i);
+				Browser.Interactions.ClickUsingJQuery(cell);
+				Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0}.{1}", cell, "ui-selected"));
+			}
+		}
+
 		[Then(@"the student availability calendar should not be editable")]
 		public void ThenTheCalendarShouldNotBeEditable()
 		{
