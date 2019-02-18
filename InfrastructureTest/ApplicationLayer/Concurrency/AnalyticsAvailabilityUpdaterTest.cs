@@ -19,13 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
-		public void ADummyTestToMakeSureSetupTimeIsNotIncludedInTimeout()
-		{
-			Assert.Pass("Whoop whoop");
-		}
-
-		[Test]
-		[Timeout(15000)]
+		[Timeout(60000)]
 		public async Task ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 01, 05);
