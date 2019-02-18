@@ -19,15 +19,17 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 		private ISession _session;
 		private IUnitOfWork _unitOfWork;
 		private IContainer container;
-
+		
+		protected IBusinessUnit _businessUnit;
 		protected ISession Session => _session;
 		protected IUnitOfWork UnitOfWork => _unitOfWork;
-		protected ICurrentUnitOfWork CurrUnitOfWork => new ThisUnitOfWork(_unitOfWork);
+		protected ICurrentUnitOfWork CurrentUnitOfWork => new ThisUnitOfWork(_unitOfWork);
 
 		[SetUp]
 		public void Setup()
 		{
 			var (person, businessUnit) = InfrastructureTestSetup.Before();
+			_businessUnit = businessUnit;
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) {FeatureToggle = "http://notinuse"})));
 			container = builder.Build();

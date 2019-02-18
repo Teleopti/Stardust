@@ -83,9 +83,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			var loadedAggregate = rep.Load(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
-				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
+				Assert.AreEqual(_businessUnit, buRef.BusinessUnit);
 			if (loadedAggregate is IFilterOnBusinessUnitId buId)
-				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value, buId.BusinessUnit);
+				Assert.AreEqual(_businessUnit.Id.Value, buId.BusinessUnit);
 			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
 		}
 
@@ -99,9 +99,9 @@ namespace Teleopti.Wfm.Adherence.Test.Configuration.Infrastructure
 			var loadedAggregate = rep.Get(id);
 			Assert.AreEqual(id, loadedAggregate.Id);
 			if (loadedAggregate is IFilterOnBusinessUnit buRef)
-				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, buRef.BusinessUnit);
+				Assert.AreEqual(_businessUnit, buRef.BusinessUnit);
 			if (loadedAggregate is IFilterOnBusinessUnitId buId)
-				Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value, buId.BusinessUnit);
+				Assert.AreEqual(_businessUnit.Id.Value, buId.BusinessUnit);
 			VerifyAggregateGraphProperties(simpleEntity, loadedAggregate);
 		}
 
