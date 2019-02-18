@@ -74,45 +74,40 @@ namespace Teleopti.Ccc.TestCommon
 			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
-		private static void createOrRestoreApplication(string tenant)
+		private static void createOrRestoreApplication(string tenant) =>
+			createOrRestore(application(), tenant);
+
+		private static void createOrRestoreAnalytics() =>
+			createOrRestore(analytics(), null);
+
+		private static void createOrRestoreAgg() =>
+			createOrRestore(agg(), null);
+
+		private static void createOrRestore(DatabaseHelper database, string tenant)
 		{
-			var database = application();
 			if (tryRestoreByFileCopy(database, 0))
 				return;
-
-			createDatabase(database);
-
-			//would be better if dbmanager was called, but don't have the time right now....
-			// eh, that thing that is called IS the db manager!
-			database.ConfigureSystem().MergePersonAssignments();
-			database.ConfigureSystem().PersistAuditSetting();
-			database.ConfigureSystem().SetTenantConnectionInfo(tenant, database.ConnectionString, analytics().ConnectionString);
-
+			createDatabase(database, tenant);
 			backupByFileCopy(database, 0);
 		}
 
-		private static void createOrRestoreAnalytics()
-		{
-			var database = analytics();
-			if (tryRestoreByFileCopy(database, 0))
-				return;
-			createDatabase(database);
-			backupByFileCopy(database, 0);
-		}
-
-		private static void createOrRestoreAgg()
-		{
-			var database = agg();
-			if (tryRestoreByFileCopy(database, 0))
-				return;
-			createDatabase(database);
-			backupByFileCopy(database, 0);
-		}
-
-		private static void createDatabase(DatabaseHelper database)
+		private static void createDatabase(DatabaseHelper database, string tenant)
 		{
 			database.CreateByDbManager();
 			database.CreateSchemaByDbManager();
+
+			if (database.DatabaseType != DatabaseType.TeleoptiCCC7) return;
+
+			var configure = database.ConfigureSystem();
+
+			//would be better if dbmanager was called, but don't have the time right now....
+			// eh, that thing that is called IS the db manager!
+			// I think this is because "normally" MergePersonAssignments proc is called from security tool on upgrade...
+			// .. and that proc makes database schema changes.
+			configure.MergePersonAssignments();
+
+			configure.PersistAuditSetting();
+			configure.SetTenantConnectionInfo(tenant, database.ConnectionString, analytics().ConnectionString);
 		}
 
 		private static void backupByFileCopy(DatabaseHelper database, int dataHash)
@@ -149,7 +144,7 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(
 				InfraTestConfigReader.ConnectionString,
 				DatabaseType.TeleoptiCCC7,
-				new DbManagerLog4Net("DbManager.Application"), 
+				new DbManagerLog4Net("DbManager.Application"),
 				new WfmInstallationEnvironment()
 			);
 		}
