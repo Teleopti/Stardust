@@ -47,7 +47,12 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
                 Date = new DateOnly(2014, 2, 6),
                 DateId = 0
             };
-            var intervals = new QuarterOfAnHourInterval();
+			var tomorrow = new SpecificDate
+			{
+				Date = new DateOnly(2014, 2, 8),
+				DateId = 2
+			};
+			var intervals = new QuarterOfAnHourInterval();
             var datasource = new ExistingDatasources(timeZones);
 
             _loggedOnUser = new Domain.Common.Person();
@@ -68,6 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
             _analyticsDataFactory.Setup(timeZones);
 			_analyticsDataFactory.Setup(yesterDay);
+			_analyticsDataFactory.Setup(tomorrow);
 			_analyticsDataFactory.Setup(TheDate);
             _analyticsDataFactory.Setup(intervals);
             _analyticsDataFactory.Setup(datasource);
