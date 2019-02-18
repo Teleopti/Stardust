@@ -88,18 +88,12 @@
 					]
 				}
 			})
-			.state('resourceplanner.angular', {
-				url: '/planninggroup1/:groupId/detail/:ppId',
-				templateUrl: 'app/resourceplanner/plans-planningperiodoverview-modern.html',
-				params: {
-					groupId: '',
-					ppId: ''
-				}
-			})
 			.state('resourceplanner.planningperiodoverview', {
 				url: '/planninggroup/:groupId/detail/:ppId',
 				templateUrl: function() {
-					return 'app/resourceplanner/planning_period/planningperiod.overview.html';
+					return ToggleProvider.WFM_Plans_HeatMap_79112
+						? 'app/resourceplanner/plans-planningperiodoverview-modern.html'
+						: 'app/resourceplanner/planning_period/planningperiod.overview.html';
 				},
 				controller: 'planningPeriodOverviewController as vm',
 				params: {

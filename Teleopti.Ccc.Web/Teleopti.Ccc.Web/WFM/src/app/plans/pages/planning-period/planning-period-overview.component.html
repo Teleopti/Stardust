@@ -6,8 +6,8 @@
 
 <div nz-row>
 	<nz-spin [nzTip]="status" [nzSpinning]="isDisabled()">
-		<button nz-button nzType="default" (click)="launchSchedule()">{{ 'ScheduleVerb' | translate }}</button>
-		<button nz-button nzType="default" (click)="optimizeIntraday()">{{ 'IntraOptimize' | translate }}</button>
+		<button class="schedule-button" nz-button nzType="default" (click)="launchSchedule()">{{ 'ScheduleVerb' | translate }}</button>
+		<button class="intraday-optimization-button" nz-button nzType="default" (click)="optimizeIntraday()">{{ 'IntraOptimize' | translate }}</button>
 		<button nz-button nzType="default" (click)="clearSchedule()">
 			{{ 'ClearScheduleResultAndHistoryData' | translate }}
 		</button>
@@ -22,7 +22,7 @@
 			<div nz-row style="margin-bottom: 15px">
 				<div class="wfm-chip-wrap">
 					<span class="wfm-chip" style="cursor: default">
-						<span class="chip-handle"> {{ scheduledAgents }}/{{ totalAgents }} </span>
+						<span class="scheduled-agents chip-handle"> {{ scheduledAgents }}/{{ totalAgents }} </span>
 						<span class="chip-text">{{ 'ScheduledAgents' | translate }}</span>
 					</span>
 				</div>

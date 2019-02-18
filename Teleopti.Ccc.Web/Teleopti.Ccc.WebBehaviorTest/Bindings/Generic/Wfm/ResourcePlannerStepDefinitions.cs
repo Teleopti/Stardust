@@ -28,22 +28,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"Planning period should have been scheduled")]
 		public void ThenPlanningPeriodShouldHaveBeenScheduled()
 		{
+			Browser.Interactions.AssertAnyContains("nz-spin .ant-spin-text", "Scheduling");
 			using (Browser.TimeoutScope(TimeSpan.FromMinutes(2)))
 			{
-				Browser.Interactions.AssertExists(".notice-success");
 				Browser.Interactions.AssertExists(".scheduled-agents");
-				Browser.Interactions.AssertVisibleUsingJQuery(".heatmap");
+				Browser.Interactions.AssertVisibleUsingJQuery(".heatmap-div");
+				Browser.Interactions.AssertNoContains("nz-spin", ".ant-spin-text", "Scheduling");
 			}
 		}
 		
 		[Then(@"Planning period should have been intraday optimized")]
 		public void ThenPlanningPeriodShouldHaveBeenIntradayOptimized()
 		{
+			Browser.Interactions.AssertAnyContains("nz-spin .ant-spin-text", "Optimize intraday");
 			using (Browser.TimeoutScope(TimeSpan.FromMinutes(3)))
 			{
-				Browser.Interactions.AssertAnyContains(".notice-success", "intraday");
 				Browser.Interactions.AssertExists(".scheduled-agents");
-				Browser.Interactions.AssertVisibleUsingJQuery(".heatmap");
+				Browser.Interactions.AssertVisibleUsingJQuery(".heatmap-div");
+				Browser.Interactions.AssertNoContains("nz-spin", ".ant-spin-text", "Optimize intraday");
 			}
 		}
 		
