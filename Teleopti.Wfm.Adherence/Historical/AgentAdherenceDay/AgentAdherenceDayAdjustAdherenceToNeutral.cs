@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Wfm.Adherence.Historical.Events;
 using Teleopti.Wfm.Adherence.States.Events;
 
@@ -136,7 +133,6 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 
 			var recordedNeutralAdherences = calculateAdherences(_calculatedDisplayPeriod.Value, _now, _collectedChanges, HistoricalChangeAdherence.Neutral);
 
-			Console.WriteLine("calculate");
 			_secondsInAdherence = calculateSecondsInAdherence(shift.Value, _now, recordedOutOfAdherences, recordedNeutralAdherences, _collectedAdjustedToNeutralPeriods, _collectedApprovedPeriods);
 			_secondsOutOfAdherence = calculateSecondsOutOfAdherence(shift.Value, recordedOutOfAdherences, _collectedAdjustedToNeutralPeriods, _collectedApprovedPeriods);
 			_adherencePercentage = AdherencePercentageCalculation.Calculate(_secondsInAdherence, _secondsOutOfAdherence);
@@ -251,7 +247,7 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 				.Subtract(adjustedToNeutralPeriods)
 				.ToArray();
 				
-			neutralAdherences = neutralAdherences
+			neutralAdherences = neutralAdherences	
 				.Subtract(adjustedToNeutralPeriods)
 				.Concat(adjustedToNeutralPeriods)
 				.Subtract(approvedPeriods)
@@ -264,7 +260,6 @@ namespace Teleopti.Wfm.Adherence.Historical.AgentAdherenceDay
 			var shiftTime = calculateUntil - shift.StartDateTime;
 			var timeIn = shiftTime - timeOut - timeNeutral;
 
-			Console.WriteLine("/calculateSecondsInAdherence");
 			return Convert.ToInt32(timeIn.TotalSeconds);
 		}
 

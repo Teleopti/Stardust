@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Wfm.Adherence
 {
@@ -10,108 +7,23 @@ namespace Teleopti.Wfm.Adherence
 	{
 		public static IEnumerable<OpenPeriod> Subtract(this IEnumerable<OpenPeriod> periods, IEnumerable<OpenPeriod> toSubtract)
 		{
-//			var result = new List<OpenPeriod>();
-//			periods.ForEach(x =>
-//			{
-//				result.AddRange(x.subtract(toSubtract));
-//			});
-//			return result;
-
-
-			// allwrong
-//			var result = periods.ToList();
-//			toSubtract.ForEach(x =>
-//			{
-//				result.AddRange(result.subtract(x));
-//				result.Remove(x);
-//			});
-
-
-//			var result = new List<OpenPeriod>();
-//			toSubtract.ForEach(x =>
-//			{
-//				result.AddRange(periods.subtract(x));
-//			});
-
-
-//			return toSubtract
-//				.Aggregate(periods, (ps, toBeSubtracted) =>
-//					{
-//						return ps.Aggregate(Enumerable.Empty<OpenPeriod>(), (r, subtractFrom) =>
-//							{
-//								var remainder = subtractFrom.subtract(toBeSubtracted);
-//								return r.Concat(remainder);
-//							}
-//						);
-//					}
-//				).ToArray();
-
-
-			// WORKING
-//			var result = toSubtract
-////				.Aggregate(periods, subtract)
-//				.Aggregate(periods, (ps, toBeSubtracted) =>
-//				{
-//					return ps.subtract(toBeSubtracted);
-//				})
-//				.ToArray();
-
-//			var result = new List<OpenPeriod>();
-//			periods.ForEach(x =>
-//			{
-//				
-//				toSubtract.ForEach(y =>
-//				{
-//					Console.WriteLine("Subtract/x" + JsonConvert.SerializeObject(x));
-//					Console.WriteLine("Subtract/y" + JsonConvert.SerializeObject(y));
-//
-//					var r = x.subtract(y);
-//					result.AddRange(r);
-//					
-//					Console.WriteLine("Subtract/reminder" + JsonConvert.SerializeObject(r));
-//
-//				});
-//				
-//
-//			});
-
-			var result = periods.ToList();
-
+			var result = periods.ToArray().AsEnumerable();
 			toSubtract.ForEach(s =>
 			{
-				var subtracted = new List<OpenPeriod>();
-				result.ForEach(p =>
-				{
-					var r = p.subtract(s);
-					subtracted.AddRange(r);
-				});
-				result = subtracted;
+				result = result.subtract(s);
 			});
-
-			return result;
-		}
-
-		private static IEnumerable<OpenPeriod> subtract(this OpenPeriod subtractFrom, IEnumerable<OpenPeriod> toSubtract)
-		{
-			// note: doesnt work when nothing in toSubtract
-			var result = new List<OpenPeriod>() {subtractFrom};
-			toSubtract.ForEach(x => { result.AddRange(subtractFrom.subtract(x)); });
 			return result;
 		}
 
 		private static IEnumerable<OpenPeriod> subtract(this IEnumerable<OpenPeriod> subtractFroms, OpenPeriod toSubtract)
 		{
 			var result = new List<OpenPeriod>();
-			subtractFroms.ForEach(x => { result.AddRange(x.subtract(toSubtract)); });
+			subtractFroms.ForEach(x =>
+			{
+				result.AddRange(x.subtract(toSubtract));
+			});
 			return result;
-//			return subtractFroms.Aggregate(Enumerable.Empty<OpenPeriod>(), (r, subtractFrom) =>
-//				{
-//					var remainder = subtractFrom.subtract(toSubtract);
-//					return r.Concat(remainder);
-//				}
-//			);
 		}
-
 
 		private static IEnumerable<OpenPeriod> subtract(this OpenPeriod subtractFrom, OpenPeriod toSubtract)
 		{
