@@ -93,13 +93,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		{
 			var appDomainArguments = AppDomain.CurrentDomain.GetData(InterAppDomainParameters.AppDomainArgumentsParameter) as InterAppDomainArguments;
 
-			preLoadAssemblies(appDomainArguments.PayrollBasePath, appDomainArguments.TenantName);
+			var sdkServiceFactory = appDomainArguments.SdkServiceFactory;
+			var feedback = sdkServiceFactory.CreatePayrollExportFeedback(appDomainArguments);
+
+			if (preLoadAssemblies(appDomainArguments.PayrollBasePath, appDomainArguments.TenantName,
+					feedback as PayrollExportFeedbackEx) == false)
+			{
+				SetFeedbackData(feedback);
+				return;
+			}
 
 			fixAuthenticationMessageHeader(appDomainArguments);
 			var payrollExportDto = JsonConvert.DeserializeObject<PayrollExportDto>(appDomainArguments.PayrollExportDto);
-			var sdkServiceFactory = appDomainArguments.SdkServiceFactory;
-
-			var feedback = sdkServiceFactory.CreatePayrollExportFeedback(appDomainArguments);
 			
 			var processors = load(appDomainArguments.PayrollBasePath, feedback as PayrollExportFeedbackEx, appDomainArguments.TenantName);
 			
@@ -171,18 +176,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			AuthenticationMessageHeader.UseWindowsIdentity = false;
 		}
 
-		private static void preLoadAssemblies(string payrollBasePath, string tenantName)
+		private static bool preLoadAssemblies(string payrollBasePath, string tenantName,
+			PayrollExportFeedbackEx feedback)
 		{
 			var tenantSpecificPath = Path.Combine(payrollBasePath, tenantName);
 			AppDomain.CurrentDomain.SetData("APPBASE", tenantSpecificPath);
 
 			var domainAssemblyResolver = new DomainAssemblyResolverNew(new AssemblyFileLoaderTenant());
 			try
-			{ 
+			{
 				AppDomain.CurrentDomain.AssemblyResolve += domainAssemblyResolver.Resolve;
 
 				var files = Directory.GetFiles(
-					Directory.Exists(tenantSpecificPath) ? tenantSpecificPath : payrollBasePath, "*.dll", SearchOption.TopDirectoryOnly);
+					Directory.Exists(tenantSpecificPath) ? tenantSpecificPath : payrollBasePath, "*.dll",
+					SearchOption.TopDirectoryOnly);
 				var filePaths = files.ToList().ConvertAll(input => new FileInfo(input));
 				var dllFilesOnly = filePaths.Where(f => f.Extension.Equals(".dll")).Select(f => f.FullName).ToList();
 				dllFilesOnly.Reverse();
@@ -192,10 +199,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 					Assembly.Load(assemblyName);
 				}
 			}
+			catch (DirectoryNotFoundException ex)
+			{
+				var message = $"No payroll is configured for {tenantName}. Directory not found: {tenantSpecificPath}";
+				feedback?.Error(message, ex);
+				return false;
+			}
+			catch (Exception ex)
+			{
+				var message = $"Problems when loading Payroll files from payrollBasePath: {tenantSpecificPath}  {ex.Message} AppBase:{AppDomain.CurrentDomain.BaseDirectory}";
+				feedback?.Error(message, ex);
+				return false;
+			}
 			finally
 			{
 				AppDomain.CurrentDomain.AssemblyResolve -= domainAssemblyResolver.Resolve;
 			}
+			return true;
 		}
 
 		private static IList<IPayrollExportProcessor> load(string path, PayrollExportFeedbackEx feedback, string tenantName)
