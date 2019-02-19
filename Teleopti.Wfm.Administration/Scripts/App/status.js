@@ -8,7 +8,7 @@
 		},
 		mounted() {
 			var vm = this;
-			axios.get('/monitor/list')
+			axios.get('/status/list')
 				.then(function (monitorSteps) {
 					monitorSteps.data.forEach(function (step) {
 						vm.steps.push({
@@ -16,7 +16,7 @@
 							stepSuccess: false,
 							output: 'Loading...'
 						});
-						axios.get('/monitor/check/' + step)
+						axios.get('/status/check/' + step)
 							.then(function (result) {
 								var stepToUse = vm.findStep(step);
 								stepToUse.output = result.data;

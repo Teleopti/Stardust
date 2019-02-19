@@ -268,7 +268,7 @@
     <Content Include="Etl\modal.html" />
     <Content Include="Etl\schedule.html" />
     <Content Include="Etl\scheduleModal.html" />
-    <Content Include="monitor.html" />
+    <Content Include="status.html" />
     <Content Include="HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />
@@ -318,7 +318,7 @@
     <Content Include="Scripts\App\Components\createForecastReadModel\createForecastReadModel.service.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
-    <Content Include="Scripts\App\monitor.js" />
+    <Content Include="Scripts\App\status.js" />
     <Content Include="Scripts\App\Services\tenant.service.js" />
     <Content Include="Scripts\axios.min.js" />
     <Content Include="Scripts\Chart.js" />
@@ -441,7 +441,7 @@
     <Compile Include="Core\IRunWithUnitOfWork.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />
     <Compile Include="Core\RtaStateGroupCreator.cs" />
-    <Compile Include="Monitoring\MonitorController.cs" />
+    <Compile Include="Status\StatusController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />

@@ -1,31 +1,31 @@
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MonitorSystem;
+using Teleopti.Ccc.Domain.Status;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.MonitorSystem
+namespace Teleopti.Ccc.DomainTest.Status
 {
 	[DomainTest]
 	public class ExecuteMonitorStepTest : IIsolateSystem
 	{
-		public ExecuteMonitorStep Target;
-		public FakeMonitorStep MonitorStep;
+		public ExecuteStatusStep Target;
+		public FakeStatusStep StatusStep;
 		
 		[Test]
 		public void ShouldExecuteMonitorStep()
 		{
-			var monitorStepResult = new MonitorStepResult(true, "something");
-			MonitorStep.SetResult(monitorStepResult);
+			var monitorStepResult = new StatusStepResult(true, "something");
+			StatusStep.SetResult(monitorStepResult);
 
-			Target.Execute(MonitorStep.Name)
+			Target.Execute(StatusStep.Name)
 				.Should().Be.SameInstanceAs(monitorStepResult);				
 		}
 
 		[Test]
 		public void ShouldExecuteMonitorStepAlsoWhenCasingDiffers()
 		{
-			var result1 = Target.Execute(MonitorStep.Name.ToUpper());
-			var result2 = Target.Execute(MonitorStep.Name.ToLower());
+			var result1 = Target.Execute(StatusStep.Name.ToUpper());
+			var result2 = Target.Execute(StatusStep.Name.ToLower());
 			
 			Assert.Multiple(() =>
 			{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.MonitorSystem
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeMonitorStep>().For<IMonitorStep>();
+			isolate.UseTestDouble<FakeStatusStep>().For<IStatusStep>();
 		}
 	}
 }

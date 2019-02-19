@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.MonitorSystem
+namespace Teleopti.Ccc.Domain.Status
 {
 	public interface ICallLegacySystemStatus
 	{

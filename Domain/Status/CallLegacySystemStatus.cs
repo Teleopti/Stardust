@@ -1,7 +1,7 @@
 using System.Configuration;
 using System.Net.Http;
 
-namespace Teleopti.Ccc.Domain.MonitorSystem
+namespace Teleopti.Ccc.Domain.Status
 {
 	public class CallLegacySystemStatus : ICallLegacySystemStatus
 	{
