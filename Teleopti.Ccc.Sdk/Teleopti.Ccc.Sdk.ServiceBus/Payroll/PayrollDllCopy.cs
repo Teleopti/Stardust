@@ -133,23 +133,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 					Log.Warn($"File {fileInfo.FullName} have been in use for {totalSleepTime} milliseconds, skipping file");
 					continue;
 				}
-
-				if (file.EndsWith(".xml", StringComparison.OrdinalIgnoreCase) || file.EndsWith(".settings", StringComparison.OrdinalIgnoreCase))
-				{
-					var xmlFileDestination = destination;
-					while (!xmlFileDestination.EndsWith("\\Payroll", StringComparison.OrdinalIgnoreCase))
-						xmlFileDestination = Directory.GetParent(xmlFileDestination).ToString();
-					xmlFileDestination = Path.GetFullPath(xmlFileDestination + "\\" + Path.GetFileName(file));
-					Log.Info($"Copying {file} to {xmlFileDestination}");
-					File.Copy(file, xmlFileDestination, true);
-				}
-
-				else
-				{
-					var fileDestination = Path.GetFullPath(destination + "\\" + Path.GetFileName(file));
-					Log.Info($"Copying {file} to {fileDestination}");
-					File.Copy(file, fileDestination, true);
-				}
+				
+				var fileDestination = Path.GetFullPath(destination + "\\" + Path.GetFileName(file));
+				Log.Info($"Copying {file} to {fileDestination}");
+				File.Copy(file, fileDestination, true);
 			}
 		}
 
@@ -166,8 +153,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			}
 			finally
 			{
-				if (stream != null)
-					stream.Close();
+				stream?.Close();
 			}
 			return false;
 		}

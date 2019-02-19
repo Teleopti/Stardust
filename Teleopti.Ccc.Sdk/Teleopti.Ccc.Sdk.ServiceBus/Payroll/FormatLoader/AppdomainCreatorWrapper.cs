@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Hosting;
 using System.Security;
 using System.Security.Permissions;
 using System.Xml;
@@ -91,6 +92,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 		private static void runPayroll()
 		{
 			var appDomainArguments = AppDomain.CurrentDomain.GetData(InterAppDomainParameters.AppDomainArgumentsParameter) as InterAppDomainArguments;
+
+			preLoadAssemblies(appDomainArguments.PayrollBasePath, appDomainArguments.TenantName);
+
 			fixAuthenticationMessageHeader(appDomainArguments);
 			var payrollExportDto = JsonConvert.DeserializeObject<PayrollExportDto>(appDomainArguments.PayrollExportDto);
 			var sdkServiceFactory = appDomainArguments.SdkServiceFactory;
@@ -123,13 +127,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				return;
 			}
 		
-			// Changing the Base directory of the Appdomain to find non-assembly files used from Payroll processors
-			var payrollPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Payroll");
-			if (Directory.Exists(Path.Combine(payrollPath, appDomainArguments.TenantName)))
-				payrollPath = Path.Combine(payrollPath, appDomainArguments.TenantName);
-
-			AppDomain.CurrentDomain.SetData("APPBASE", payrollPath);
-
 			IXPathNavigable result;
 			var domainAssemblyResolver = new DomainAssemblyResolverNew(new AssemblyFileLoaderTenant());
 			AppDomain.CurrentDomain.AssemblyResolve += domainAssemblyResolver.Resolve;
@@ -174,54 +171,77 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			AuthenticationMessageHeader.UseWindowsIdentity = false;
 		}
 
+		private static void preLoadAssemblies(string payrollBasePath, string tenantName)
+		{
+			var tenantSpecificPath = Path.Combine(payrollBasePath, tenantName);
+			AppDomain.CurrentDomain.SetData("APPBASE", tenantSpecificPath);
+
+			var domainAssemblyResolver = new DomainAssemblyResolverNew(new AssemblyFileLoaderTenant());
+			try
+			{ 
+				AppDomain.CurrentDomain.AssemblyResolve += domainAssemblyResolver.Resolve;
+
+				var files = Directory.GetFiles(
+					Directory.Exists(tenantSpecificPath) ? tenantSpecificPath : payrollBasePath, "*.dll", SearchOption.TopDirectoryOnly);
+				var filePaths = files.ToList().ConvertAll(input => new FileInfo(input));
+				var dllFilesOnly = filePaths.Where(f => f.Extension.Equals(".dll")).Select(f => f.FullName).ToList();
+				dllFilesOnly.Reverse();
+				foreach (var file in dllFilesOnly)
+				{
+					var assemblyName = AssemblyName.GetAssemblyName(file);
+					Assembly.Load(assemblyName);
+				}
+			}
+			finally
+			{
+				AppDomain.CurrentDomain.AssemblyResolve -= domainAssemblyResolver.Resolve;
+			}
+		}
+
 		private static IList<IPayrollExportProcessor> load(string path, PayrollExportFeedbackEx feedback, string tenantName)
 		{
 			var availablePayrollExportProcessors = new List<IPayrollExportProcessor>();
 			var domainAssemblyResolver = new DomainAssemblyResolverNew(new AssemblyFileLoaderTenant());
+			
+			var tenantSpecificPath = Path.Combine(path, tenantName);
+			try
 			{
 				AppDomain.CurrentDomain.AssemblyResolve += domainAssemblyResolver.Resolve;
-				var tenantSpecificPath = Path.Combine(path, tenantName);
-				try
+				var	files = Directory.GetFiles(
+					Directory.Exists(tenantSpecificPath) ? tenantSpecificPath : path, "*.dll", SearchOption.TopDirectoryOnly);
+				var filePaths = files.ToList().ConvertAll(input => new FileInfo(input));
+				var dllFilesOnly = filePaths.Where(f => f.Extension.Equals(".dll")).Select(f => f.FullName).ToList();
+				foreach (var file in dllFilesOnly)
 				{
-					var	files = Directory.GetFiles(
-						Directory.Exists(tenantSpecificPath) ? tenantSpecificPath : path, "*.dll", SearchOption.TopDirectoryOnly);
-					var filePaths = files.ToList().ConvertAll(input => new FileInfo(input));
-					var dllFilesOnly = filePaths.Where(f => f.Extension.Equals(".dll")).Select(f => f.FullName).ToList();
-					foreach (var file in dllFilesOnly)
+					var assembly = Assembly.Load(AssemblyName.GetAssemblyName(file));
+					foreach (var type in assembly.GetExportedTypes())
 					{
-						Assembly.Load(AssemblyName.GetAssemblyName(file));
+						if (!type.IsClass || type.IsNotPublic) continue;
+						var interfaces = type.GetInterfaces();
+						if (!interfaces.Contains(typeof(IPayrollExportProcessor))) continue;
+						var obj = Activator.CreateInstance(type);
+						var t = (IPayrollExportProcessor)obj;
+						availablePayrollExportProcessors.Add(t);
 					}
-					foreach (var file in dllFilesOnly)
-					{
-						var assembly = Assembly.Load(AssemblyName.GetAssemblyName(file));
-						foreach (var type in assembly.GetExportedTypes())
-						{
-							if (!type.IsClass || type.IsNotPublic) continue;
-							var interfaces = type.GetInterfaces();
-							if (!interfaces.Contains(typeof(IPayrollExportProcessor))) continue;
-							var obj = Activator.CreateInstance(type);
-							var t = (IPayrollExportProcessor)obj;
-							availablePayrollExportProcessors.Add(t);
-						}
-					}
-				}
-				catch (DirectoryNotFoundException ex)
-				{
-					var message = $"No payroll is configured for {tenantName}. Directory not found: {tenantSpecificPath}";
-					feedback?.Error(message, ex);
-					return new List<IPayrollExportProcessor>();
-				}
-				catch (Exception ex)
-				{
-					var message = $"Problems when loading Payroll files from path: {tenantSpecificPath}  {ex.Message} AppBase:{AppDomain.CurrentDomain.BaseDirectory}";
-					feedback?.Error(message, ex);
-					return new List<IPayrollExportProcessor>();
-				}
-				finally
-				{ 
-					AppDomain.CurrentDomain.AssemblyResolve -= domainAssemblyResolver.Resolve;
 				}
 			}
+			catch (DirectoryNotFoundException ex)
+			{
+				var message = $"No payroll is configured for {tenantName}. Directory not found: {tenantSpecificPath}";
+				feedback?.Error(message, ex);
+				return new List<IPayrollExportProcessor>();
+			}
+			catch (Exception ex)
+			{
+				var message = $"Problems when loading Payroll files from payrollBasePath: {tenantSpecificPath}  {ex.Message} AppBase:{AppDomain.CurrentDomain.BaseDirectory}";
+				feedback?.Error(message, ex);
+				return new List<IPayrollExportProcessor>();
+			}
+			finally
+			{ 
+				AppDomain.CurrentDomain.AssemblyResolve -= domainAssemblyResolver.Resolve;
+			}
+
 			return availablePayrollExportProcessors;
 		}
 
