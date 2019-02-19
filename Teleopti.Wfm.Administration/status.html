@@ -33,7 +33,10 @@
 <body>
 <div id="steps">
 	<div v-for="step in steps" class="stepItem">
-		<div><b>{{step.stepName}}</b> (<a v-bind:href="step.url">{{step.url}}</a>)</div>
+		<div>
+			<b>{{step.stepName}}</b><br>
+			<small><a v-bind:href="step.url">{{step.url}}</a></small>
+		</div>
 		<div>{{step.description}}</div>
 		<div v-bind:class="outputColor(step.stepSuccess)">
 			{{step.output}}

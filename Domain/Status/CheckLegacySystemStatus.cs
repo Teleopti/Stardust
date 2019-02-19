@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Status
 				new StatusStepResult(false, FailureOutput);
 		}
 
-		public string Name { get; } = "SystemStatus";
+		public string Name { get; } = "SystemUp";
 		public string Description { get; } = "Verifies that users can access the web and sign in.";
 	}
 }
