@@ -249,6 +249,7 @@
     <Compile Include="Status\ICallLegacySystemStatus.cs" />
     <Compile Include="Status\IStatusStep.cs" />
     <Compile Include="Status\ListStatusSteps.cs" />
+    <Compile Include="Status\StatusStepInfo.cs" />
     <Compile Include="Status\StatusStepResult.cs" />
     <Compile Include="Status\ExecuteStatusStep.cs" />
     <Compile Include="MultiTenancy\ApplicationConfigurationDb.cs" />

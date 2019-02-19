@@ -9,22 +9,22 @@
 		mounted() {
 			var vm = this;
 			axios.get('/status/list')
-				.then(function (monitorSteps) {
-					monitorSteps.data.forEach(function (step) {
-						vm.steps.push({
-							stepName: step,
+				.then(function (statusSteps) {
+					statusSteps.data.forEach(function (step) {
+						var newStep = {
+							stepName: step.Name,
 							stepSuccess: false,
-							output: 'Loading...'
-						});
-						axios.get('/status/check/' + step)
+							output: 'Loading...',
+							url: step.Url
+						};
+						vm.steps.push(newStep);
+						axios.get(step.Url)
 							.then(function (result) {
-								var stepToUse = vm.findStep(step);
-								stepToUse.output = result.data;
-								stepToUse.stepSuccess = true;
+								newStep.output = result.data;
+								newStep.stepSuccess = true;
 							})
 							.catch(function (error) {
-								var stepToUse = vm.findStep(step);
-								stepToUse.output = error.response.data;
+								newStep.output = error.response.data;
 							})
 					});
 				});
@@ -32,11 +32,6 @@
 		methods: {
 			outputColor: function (value) {
 				return value ? 'stepSuccess' : 'stepFailure';
-			},
-			findStep: function (stepName) {
-				return this.steps.find(function (stepToFind) {
-					return stepToFind.stepName === stepName;
-				});
 			}
 		}
 	});

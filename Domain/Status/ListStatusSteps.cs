@@ -12,9 +12,14 @@ namespace Teleopti.Ccc.Domain.Status
 			_monitorSteps = monitorSteps;
 		}
 		
-		public IEnumerable<string> Execute()
+		public IEnumerable<StatusStepInfo> Execute(string baseUrl)
 		{
-			return _monitorSteps.Select(x => x.Name);
+			var startUrl = baseUrl.EndsWith("/") ? baseUrl : baseUrl + "/";
+			foreach (var monitorStep in _monitorSteps)
+			{
+				var stepName = monitorStep.Name;
+				yield return new StatusStepInfo(stepName, startUrl + stepName);
+			}
 		}
 	}
 }
