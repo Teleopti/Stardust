@@ -55,10 +55,6 @@
 			</tr>
 		</tbody>
 	</table>
-	
-	<p>
-		{{result}}
-	</p>
 </div>
 </body>
 
@@ -75,9 +71,8 @@
 					vm.$data.steps.push({
 						stepName: step,
 						stepSuccess : false,
-						output: this.unknown
+						output: 'Loading...'
 					});
-
 					axios.get('/monitor/check/' + step)
 							.then(result => {
 						var stepToUse = vm.$data.steps.find(function (stepToFind) {
@@ -98,29 +93,6 @@
 		methods : {
 			outputColor : function(value){
 				return value ? 'stepSuccess' : 'stepFailure';
-			},
-			unknown : 'unknown'
-		},
-		computed : {
-			success : function(){
-				if(this.steps.length === 0)
-					return false;
-
-				return this.steps.length > 0 &&
-						this.steps.every(function(value){
-							return value.stepSuccess;
-						})
-			},
-			result : function(){
-				if(this.steps.some(function (step) {
-					return step.stepSuccess === false;
-				}))
-					return 'FAILURE!';
-				if(this.steps.some(function (step) {
-					return step.output === this.unknown;
-				}))
-					return 'Loading...';
-				return 'System OK!'
 			}
 		}
 	});
