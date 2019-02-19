@@ -318,6 +318,7 @@
     <Content Include="Scripts\App\Components\createForecastReadModel\createForecastReadModel.service.js" />
     <Content Include="Scripts\App\httpInterceptor.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
+    <Content Include="Scripts\App\monitor.js" />
     <Content Include="Scripts\App\Services\tenant.service.js" />
     <Content Include="Scripts\axios.min.js" />
     <Content Include="Scripts\Chart.js" />
