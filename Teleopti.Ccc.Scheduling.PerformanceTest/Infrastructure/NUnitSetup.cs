@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 			IntegrationIoCTest.Setup(builder =>
 			{
 				var config = new FakeConfigReader();
-				config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-				config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+				config.FakeConnectionString("Tenancy", InfraTestConfigReader.ApplicationConnectionString());
+				config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString());
 				builder.Register(c => config).As<IConfigReader>().SingleInstance();
 				//is this something we should fake?!
 				builder.RegisterType<FakeMessageSender>().As<IMessageSender>().SingleInstance();

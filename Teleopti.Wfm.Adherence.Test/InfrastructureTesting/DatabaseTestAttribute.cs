@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Autofac;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -20,18 +22,29 @@ namespace Teleopti.Wfm.Adherence.Test.InfrastructureTesting
 			extend.AddService(this);
 		}
 
-		protected override void BeforeTest()
+		protected override void BeforeInject(IComponentContext container)
 		{
 			_data = InfrastructureTestSetup.Before();
+			base.BeforeInject(container);
+		}
+
+		protected override void BeforeTest()
+		{
 			base.BeforeTest();
 			base.Login(_data.Person, _data.BusinessUnit);
 		}
 
 		protected override void AfterTest()
 		{
-			base.AfterTest();
-			base.Logout();
-			InfrastructureTestSetup.After();
+			try
+			{
+				base.AfterTest();
+				base.Logout();
+			}
+			finally
+			{
+				InfrastructureTestSetup.After();
+			}
 		}
 
 		public void Login()

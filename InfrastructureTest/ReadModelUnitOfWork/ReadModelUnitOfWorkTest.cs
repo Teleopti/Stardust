@@ -202,12 +202,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[Test]
 		public void ShouldProduceUnitOfWorkForEachDataSourceOnPrincipal()
 		{
-			using (new TestTable("TestTable", InfraTestConfigReader.ConnectionString))
-			using (new TestTable("TestTable", InfraTestConfigReader.AnalyticsConnectionString))
+			using (new TestTable("TestTable", InfraTestConfigReader.ApplicationConnectionString()))
+			using (new TestTable("TestTable", InfraTestConfigReader.AnalyticsConnectionString()))
 			{
 				var factory = DataSourcesFactory;
-				using (var dataSource1 = factory.Create("One", InfraTestConfigReader.ConnectionString, null))
-				using (var dataSource2 = factory.Create("Two", InfraTestConfigReader.AnalyticsConnectionString, null))
+				using (var dataSource1 = factory.Create("One", InfraTestConfigReader.ApplicationConnectionString(), null))
+				using (var dataSource2 = factory.Create("Two", InfraTestConfigReader.AnalyticsConnectionString(), null))
 				{
 					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null, null, null), null));
 					TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
@@ -215,8 +215,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null, null, null), null));
 					TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
-					TestTable.Values("TestTable", InfraTestConfigReader.ConnectionString).Count().Should().Be(1);
-					TestTable.Values("TestTable", InfraTestConfigReader.AnalyticsConnectionString).Count().Should().Be(1);
+					TestTable.Values("TestTable", InfraTestConfigReader.ApplicationConnectionString()).Count().Should().Be(1);
+					TestTable.Values("TestTable", InfraTestConfigReader.AnalyticsConnectionString()).Count().Should().Be(1);
 				}
 			}
 		}
@@ -224,11 +224,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[Test]
 		public void ShouldProduceUnitOfWorkForDataSourceOnThread()
 		{
-			using (new TestTable("TestTable1", InfraTestConfigReader.AnalyticsConnectionString))
-			using (new TestTable("TestTable2", InfraTestConfigReader.ConnectionString))
+			using (new TestTable("TestTable1", InfraTestConfigReader.AnalyticsConnectionString()))
+			using (new TestTable("TestTable2", InfraTestConfigReader.ApplicationConnectionString()))
 			{
-				using (var dataSource1 = DataSourcesFactory.Create("One", InfraTestConfigReader.AnalyticsConnectionString, null))
-				using (var dataSource2 = DataSourcesFactory.Create("Two", InfraTestConfigReader.ConnectionString, null))
+				using (var dataSource1 = DataSourcesFactory.Create("One", InfraTestConfigReader.AnalyticsConnectionString(), null))
+				using (var dataSource2 = DataSourcesFactory.Create("Two", InfraTestConfigReader.ApplicationConnectionString(), null))
 				{
 					var thread1 = onAnotherThread(() =>
 					{
@@ -251,8 +251,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 					thread1.Join();
 					thread2.Join();
 
-					TestTable.Values("TestTable1", InfraTestConfigReader.AnalyticsConnectionString).Count().Should().Be(1000);
-					TestTable.Values("TestTable2", InfraTestConfigReader.ConnectionString).Count().Should().Be(1000);
+					TestTable.Values("TestTable1", InfraTestConfigReader.AnalyticsConnectionString()).Count().Should().Be(1000);
+					TestTable.Values("TestTable2", InfraTestConfigReader.ApplicationConnectionString()).Count().Should().Be(1000);
 				}
 			}
 		}
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		private readonly string _connectionString;
 
 		public TestTable(string name)
-			: this(name, InfraTestConfigReader.ConnectionString)
+			: this(name, InfraTestConfigReader.ApplicationConnectionString())
 		{
 		}
 
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 		public static IEnumerable<int> Values(string tableName)
 		{
-			return Values(tableName, InfraTestConfigReader.ConnectionString);
+			return Values(tableName, InfraTestConfigReader.ApplicationConnectionString());
 		}
 
 		public static IEnumerable<int> Values(string tableName, string connectionString)

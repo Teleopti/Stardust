@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ApplicationConnectionString());
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString());
 			return config;
 		}
 
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 		}
 
-		protected override void Startup (IComponentContext container)
+		protected override void BeforeInject (IComponentContext container)
 		{
-			base.Startup (container);
+			base.BeforeInject (container);
 
 			// normal test injection is not working...
 			((MutableNow) container.Resolve<INow>()).Is (new DateTime (2016, 04, 01, 10, 00, 00, DateTimeKind.Utc));

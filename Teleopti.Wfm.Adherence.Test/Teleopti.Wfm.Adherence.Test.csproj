@@ -173,6 +173,7 @@
     </Compile>
     <Compile Include="AddDatasourceId.cs" />
     <Compile Include="Configuration\Infrastructure\DatabaseTest.cs" />
+    <Compile Include="Configuration\Infrastructure\Parallelize.cs" />
     <Compile Include="Configuration\Infrastructure\RepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaMapRepositoryTest.cs" />
     <Compile Include="Configuration\Infrastructure\RtaRuleRepositoryTest.cs" />

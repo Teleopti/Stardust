@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			var service = new IoCTestService(new[] { this }, null);
 
 			var config = service.Config();
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
-			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString());
+			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ApplicationConnectionString());
+			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString());
 
 			var toggles = service.Toggles();
 

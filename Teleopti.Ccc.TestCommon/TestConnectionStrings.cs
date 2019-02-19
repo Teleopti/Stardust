@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public string Application()
 		{
-			return InfraTestConfigReader.ConnectionString;
+			return InfraTestConfigReader.ApplicationConnectionString();
 		}
 
 		public string Analytics()
 		{
-			return InfraTestConfigReader.AnalyticsConnectionString;
+			return InfraTestConfigReader.AnalyticsConnectionString();
 		}
 	}
 }

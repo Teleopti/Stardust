@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private List<FakeStartTimeModel> readData(Guid businessUnitId)
 		{
 			var result = new List<FakeStartTimeModel>();
-			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
+			using (var connection = new SqlConnection(InfraTestConfigReader.ApplicationConnectionString()))
 			{
 				connection.Open();
 				using (var transaction = connection.BeginTransaction())

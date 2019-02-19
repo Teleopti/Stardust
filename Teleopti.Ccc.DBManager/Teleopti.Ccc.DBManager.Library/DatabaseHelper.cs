@@ -16,7 +16,12 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly Lazy<SqlVersion> _sqlVersion;
 		private readonly IInstallationEnvironment _installationEnvironment;
 
-		public DatabaseHelper(string connectionString, DatabaseType databaseType, IUpgradeLog log, IInstallationEnvironment installationEnvironment, bool forceMasterInAzure = false)
+		public DatabaseHelper(
+			string connectionString, 
+			DatabaseType databaseType, 
+			IUpgradeLog log, 
+			IInstallationEnvironment installationEnvironment, 
+			bool forceMasterInAzure = false)
 		{
 			ConnectionString = connectionString;
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { $"TestToggle={fileValue.ToString()}" });
 				var configReader = new FakeConfigReader();
-				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString());
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
 				
 				var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { $"TestToggle={fileValue.ToString()}" });
 				var configReader = new FakeConfigReader();
-				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString());
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
 				new PersistToggleOverride(configReader).Save(Toggles.TestToggle, dbValue);
 				
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { $"TestToggle={false}" });
 				var configReader = new FakeConfigReader();
-				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString());
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
 				new PersistToggleOverride(configReader).Save(Toggles.TestToggle, true);
 				var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Toggle
 			{
 				File.WriteAllLines(tempFile, new[] { $"TestToggle={false}" });
 				var configReader = new FakeConfigReader();
-				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ConnectionString);
+				configReader.FakeConnectionString("Toggle", InfraTestConfigReader.ApplicationConnectionString());
 				var iocArgs = new IocArgs(configReader) { FeatureToggle = tempFile };
 				new PersistToggleOverride(configReader).Save(Toggles.TestToggle, true);
 				var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));

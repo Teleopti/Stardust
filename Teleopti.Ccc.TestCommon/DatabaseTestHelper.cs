@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class DatabaseTestHelper
 	{
-		public void CreateDatabases(string tenant = TestTenantName.Name)
+		public void CreateDatabases() => CreateDatabases(null);
+		public void CreateDatabases(string tenant) 
 		{
 			using (testDirectoryFix())
 			{
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.TestCommon
 			configure.MergePersonAssignments();
 
 			configure.PersistAuditSetting();
-			configure.SetTenantConnectionInfo(tenant, database.ConnectionString, analytics().ConnectionString);
+			configure.SetTenantConnectionInfo(tenant ?? InfraTestConfigReader.TenantName(), database.ConnectionString, analytics().ConnectionString);
 		}
 
 		private static void backupByFileCopy(DatabaseHelper database, int dataHash)
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static DatabaseHelper application()
 		{
 			return new DatabaseHelper(
-				InfraTestConfigReader.ConnectionString,
+				InfraTestConfigReader.ApplicationConnectionString(),
 				DatabaseType.TeleoptiCCC7,
 				new DbManagerLog4Net("DbManager.Application"),
 				new WfmInstallationEnvironment()
@@ -152,7 +153,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static DatabaseHelper agg()
 		{
 			return new DatabaseHelper(
-				InfraTestConfigReader.AggConnectionString,
+				InfraTestConfigReader.AggConnectionString(),
 				DatabaseType.TeleoptiCCCAgg,
 				new DbManagerLog4Net("DbManager.Agg"),
 				new WfmInstallationEnvironment()
@@ -162,7 +163,7 @@ namespace Teleopti.Ccc.TestCommon
 		private static DatabaseHelper analytics()
 		{
 			return new DatabaseHelper(
-				InfraTestConfigReader.AnalyticsConnectionString,
+				InfraTestConfigReader.AnalyticsConnectionString(),
 				DatabaseType.TeleoptiAnalytics,
 				new DbManagerLog4Net("DbManager.Analytics"),
 				new WfmInstallationEnvironment()
