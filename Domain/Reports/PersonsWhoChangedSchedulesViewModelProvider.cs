@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Reports
@@ -13,9 +14,9 @@ namespace Teleopti.Ccc.Domain.Reports
 			_scheduleAuditTrailReport = scheduleAuditTrailReport;
 		}
 
-		public IList<SimplestPersonInfo> Provide()
+		public IList<SimplestPersonInfo> Provide(DateOnlyPeriod searchPeriod)
 		{
-			return _scheduleAuditTrailReport.GetRevisionPeople().OrderBy(x=>x.Name).ToList();
+			return _scheduleAuditTrailReport.GetRevisionPeople(searchPeriod).OrderBy(x=>x.Name).ToList();
 		}
 	}
 }

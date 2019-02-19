@@ -6,7 +6,9 @@
   ReportsService.$inject = ['$resource'];
   function ReportsService($resource) {
     var categorizedReports = $resource('../api/Reports/NavigationsCategorized');
-    var auditTrailChangedByPerson = $resource('../api/Reports/PersonsWhoChangedSchedules');
+	  var auditTrailChangedByPerson = $resource('../api/Reports/PersonsWhoChangedSchedules', {}, {
+		  personsChanged: { method: 'POST', params: {}, isArray: true }
+	  });
 
 	var organization = $resource('../api/Reports/OrganizationSelectionAuditTrail', {}, {
         org: { method: 'POST', params: {}, isArray: true }

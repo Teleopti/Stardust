@@ -48,7 +48,7 @@
 				.subtract(1, 'days'),
 			endDate: moment().locale(JSON.stringify(local))
 		};
-		vm.changesData = [];
+		
 
 		vm.filteredOrgData = [];
 		vm.orgData = {};
@@ -63,6 +63,7 @@
 		vm.refreshData = refreshData;
 		vm.calculateOrgSelection = calculateOrgSelection;
 		vm.getOrgData = getOrgData;
+		vm.changesData = getChangedBy;
 		vm.maxResults = 10000;
 
 		init();
@@ -73,13 +74,31 @@
 		}
 
 		function getChangedBy() {
-			ReportsService.getAuditTrailChangedByPerson.query().$promise.then(function(result) {
-				result.push({
-					Id: '',
-					Name: $translate.instant('Everyone'),
-					Default: true
-				});
-				vm.changedBy = result;
+			if (
+				angular.isUndefined(vm.dateChangeRange) ||
+					!vm.dateChangeRange.startDate ||
+					!vm.dateChangeRange.endDate ||
+					vm.dateChangeRange.startDate > vm.dateChangeRange.endDate
+			) {
+				return;
+			}
+			
+			var postObj = {
+				startDate: moment(vm.dateChangeRange.startDate).format('YYYY-MM-DD'),
+				endDate: moment(vm.dateChangeRange.endDate).format('YYYY-MM-DD')
+			};
+			ReportsService.getAuditTrailChangedByPerson.personsChanged(postObj).$promise.then(function (response) {
+				vm.changedBy = [];
+				vm.changedBy.push({
+								Id: '',
+								Name: $translate.instant('Everyone'),
+								Default: true
+							});
+				if (response.length > 0) {
+					for (var i = 0; i < response.length; i++) {
+						vm.changedBy.push(response[i]);
+					}
+				}
 			});
 		}
 
@@ -121,6 +140,7 @@
 				!vm.dateChangeRange.startDate ||
 				!vm.dateChangeRange.endDate ||
 				vm.dateChangeRange.startDate > vm.dateChangeRange.endDate ||
+				angular.isUndefined(vm.dateChangeRange) ||
 				angular.isUndefined(vm.dateModifyRange) ||
 				!vm.dateModifyRange.startDate ||
 				!vm.dateModifyRange.endDate ||

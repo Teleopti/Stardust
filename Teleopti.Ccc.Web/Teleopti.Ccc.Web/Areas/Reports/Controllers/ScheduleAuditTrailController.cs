@@ -39,10 +39,11 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			_permissionProvider = permissionProvider;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Reports/PersonsWhoChangedSchedules")]
-		public virtual IHttpActionResult PersonsWhoChangedSchedules()
+		[UnitOfWork, HttpPost, Route("api/Reports/PersonsWhoChangedSchedules")]
+		public virtual IHttpActionResult PersonsWhoChangedSchedules([FromBody] ValidPeriod searchPeriod)
 		{
-			return Ok(_personsWhoChangedSchedulesViewModelProvider.Provide());
+			var period = new DateOnlyPeriod(new DateOnly(searchPeriod.StartDate), new DateOnly(searchPeriod.EndDate));
+			return Ok(_personsWhoChangedSchedulesViewModelProvider.Provide(period));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Reports/ScheduleAuditTrailReport")]

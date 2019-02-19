@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeScheduleAuditTrailReport : IScheduleAuditTrailReport
 	{
 		private readonly IUserTimeZone _timeZone;
-		private readonly IList<IPerson> modifiedByList = new List<IPerson>();
+		private readonly IList<auditedBy> modifiedByList = new List<auditedBy>();
 
 		private readonly IList<ScheduleAuditingReportDataForTest> auditingReportList =
 			new List<ScheduleAuditingReportDataForTest>();
@@ -22,23 +22,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_timeZone = timeZone;
 		}
 
-		public void AddModifiedByPerson(IPerson personThatModified)
+		public void AddModifiedByPerson(IPerson personThatModified, DateOnly modifiedAt)
 		{
-			modifiedByList.Add(personThatModified);
+			modifiedByList.Add(new auditedBy(){person = personThatModified, modifiedAt = modifiedAt});
 		}
 
-		public IEnumerable<SimplestPersonInfo> GetRevisionPeople()
+		public IEnumerable<SimplestPersonInfo> GetRevisionPeople(DateOnlyPeriod searchPeriod)
 		{
-			return modifiedByList.Select(x => new SimplestPersonInfo
-			{
-				Id = x.Id.GetValueOrDefault(),
-				Name = x.Name.ToString()
-			});
-		}
-
-		public IEnumerable<IPerson> RevisionPeople()
-		{
-			return modifiedByList;
+			return modifiedByList
+				.Where(y => searchPeriod.Contains(y.modifiedAt))
+				.Select(x => new SimplestPersonInfo
+				{
+					Id = x.person.Id.GetValueOrDefault(),
+					Name = x.person.Name.ToString()
+				});
 		}
 
 		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod,
@@ -86,5 +83,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class ScheduleAuditingReportDataForTest : ScheduleAuditingReportData
 	{
 		public Guid scheduleAgentId { get; set; }
+	}
+
+	public class auditedBy
+	{
+		public IPerson person { get; set; }
+		public DateOnly modifiedAt { get; set; }
 	}
 }
