@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class WriteProtectionRepository : Repository<IPersonWriteProtectionInfo>, IWriteProtectionRepository
     {
 				public WriteProtectionRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

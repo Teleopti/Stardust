@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 
         public void Apply(ICurrentUnitOfWork currentUnitOfWork)
         {
-            new BusinessUnitRepository(currentUnitOfWork).Add(_fakeBusinessUnit);
+            new BusinessUnitRepository(currentUnitOfWork, null, null).Add(_fakeBusinessUnit);
         }
     }
 }

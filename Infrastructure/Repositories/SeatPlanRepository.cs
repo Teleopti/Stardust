@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class SeatPlanRepository : Repository<ISeatPlan>, ISeatPlanRepository
 	{
-		public SeatPlanRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public SeatPlanRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
 		

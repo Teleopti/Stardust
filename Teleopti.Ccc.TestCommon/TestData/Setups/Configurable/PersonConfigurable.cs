@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var repository = new PersonRepository(currentUnitOfWork);
+			var repository = new PersonRepository(currentUnitOfWork, null, null);
 			Person = PersonFactory.CreatePerson();
 			SetName(Person, Name);
 			repository.Add(Person);

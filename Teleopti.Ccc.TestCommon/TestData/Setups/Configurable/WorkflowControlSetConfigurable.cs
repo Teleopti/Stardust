@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 
 			if (!string.IsNullOrEmpty(BusinessUnit))
-				workflowControlSet.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit));
+				workflowControlSet.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork, null, null).LoadAll().Single(b => b.Name == BusinessUnit));
 
 			workflowControlSet.AnonymousTrading = AnonymousTrading;
 

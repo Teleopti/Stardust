@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public AgentDayScheduleTagRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

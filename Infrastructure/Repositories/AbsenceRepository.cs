@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-	    public AbsenceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    public AbsenceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 	    {
 	    }
 

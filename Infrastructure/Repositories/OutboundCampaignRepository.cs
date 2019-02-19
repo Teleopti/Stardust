@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class OutboundCampaignRepository : Repository<IOutboundCampaign>, IOutboundCampaignRepository
 	{
 		public OutboundCampaignRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

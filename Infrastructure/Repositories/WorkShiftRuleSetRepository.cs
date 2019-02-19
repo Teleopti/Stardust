@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 		public WorkShiftRuleSetRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

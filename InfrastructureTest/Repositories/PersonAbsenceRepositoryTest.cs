@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personAbsence = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(personAbsence);
-			new PersonRepository(CurrUnitOfWork).Remove(personAbsence.Person);
+			new PersonRepository(CurrUnitOfWork, null, null).Remove(personAbsence.Person);
 			PersistAndRemoveFromUnitOfWork(personAbsence.Person);
 
 			Assert.AreEqual(0, new PersonAbsenceRepository(CurrUnitOfWork).Find(new DateTimePeriod(1900, 1, 1, 2111, 1, 1), defaultScenario).Count);

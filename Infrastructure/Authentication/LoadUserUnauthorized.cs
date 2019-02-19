@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		{
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				return new PersonRepository(new ThisUnitOfWork(uow)).LoadPersonAndPermissions(personId);
+				return new PersonRepository(new ThisUnitOfWork(uow), null, null).LoadPersonAndPermissions(personId);
 			}
 		}
 	}

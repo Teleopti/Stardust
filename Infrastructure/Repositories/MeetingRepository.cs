@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class MeetingRepository : Repository<IMeeting>, IMeetingRepository
     {
 				public MeetingRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class BudgetDayRepository : Repository<IBudgetDay>, IBudgetDayRepository
     {
-	    public BudgetDayRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    public BudgetDayRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 	    {
 		  }
 

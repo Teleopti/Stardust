@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class ValidatedVolumeDayRepository : Repository<IValidatedVolumeDay>, IValidatedVolumeDayRepository
     {
 				public ValidatedVolumeDayRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

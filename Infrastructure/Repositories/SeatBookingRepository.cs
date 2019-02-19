@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class SeatBookingRepository : Repository<ISeatBooking>, ISeatBookingRepository
 	{
 		public SeatBookingRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 		

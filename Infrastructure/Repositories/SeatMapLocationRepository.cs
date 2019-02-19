@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class SeatMapLocationRepository : Repository<ISeatMapLocation>, ISeatMapLocationRepository
 	{
 		public SeatMapLocationRepository (ICurrentUnitOfWork currentUnitOfWork)
-			: base (currentUnitOfWork)
+			: base (currentUnitOfWork, null, null)
 		{
 		}
 

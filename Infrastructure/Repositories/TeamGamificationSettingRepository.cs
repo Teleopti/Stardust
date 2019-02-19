@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class TeamGamificationSettingRepository : Repository<ITeamGamificationSetting>, ITeamGamificationSettingRepository
 	{
 		public TeamGamificationSettingRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

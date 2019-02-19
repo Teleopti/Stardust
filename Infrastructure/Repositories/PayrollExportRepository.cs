@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class PayrollExportRepository : Repository<IPayrollExport>, IPayrollExportRepository
     {
 				public PayrollExportRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

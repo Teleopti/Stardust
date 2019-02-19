@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 				public SiteRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

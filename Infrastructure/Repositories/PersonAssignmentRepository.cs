@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
 	{
 		public PersonAssignmentRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

@@ -50,7 +50,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 							)
 						);
 
-				roleToPrincipalCommand.Execute(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal, new PersonRepository(new ThisUnitOfWork(uow)), unitOfWorkFactory.Name);
+				roleToPrincipalCommand.Execute(TeleoptiPrincipalLocator_DONTUSE_REALLYDONTUSE.CurrentPrincipal, new PersonRepository(new ThisUnitOfWork(uow), null, null), unitOfWorkFactory.Name);
 			}
 			return true;
 		}

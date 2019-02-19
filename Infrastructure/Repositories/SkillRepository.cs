@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 				public SkillRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

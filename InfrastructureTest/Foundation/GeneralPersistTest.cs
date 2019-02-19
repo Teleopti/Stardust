@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IPerson per = PersonFactory.CreatePerson("Kalle", "Banan");
             PersistAndRemoveFromUnitOfWork(per);
 
-            PersonRepository rep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+            PersonRepository rep = new PersonRepository(new ThisUnitOfWork(UnitOfWork), null, null);
             rep.Remove(per);
             PersistAndRemoveFromUnitOfWork(per);
 

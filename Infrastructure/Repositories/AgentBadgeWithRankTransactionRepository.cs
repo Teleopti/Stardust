@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public AgentBadgeWithRankTransactionRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 		

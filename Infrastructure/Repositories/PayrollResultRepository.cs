@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class PayrollResultRepository : Repository<IPayrollResult>, IPayrollResultRepository
     {
 				public PayrollResultRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PlanningGroupRepository : Repository<PlanningGroup>, IPlanningGroupRepository
 	{
-		public PlanningGroupRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public PlanningGroupRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
 		

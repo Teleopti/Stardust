@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -25,11 +26,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-			public BusinessUnitRepository(ICurrentUnitOfWork currentUnitOfWork)
-				: base(currentUnitOfWork)
-	    {
-		    
-	    }
+		public BusinessUnitRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
+		{
+		}
 
 	    public IEnumerable<IBusinessUnit> LoadAllWithDeleted()
 	    {

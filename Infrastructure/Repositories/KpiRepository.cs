@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 		public KpiRepository(ICurrentUnitOfWork currentUnitOfWork)
-				: base(currentUnitOfWork)
+				: base(currentUnitOfWork, null, null)
 	    {
 		}
 	}

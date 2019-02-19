@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public PersonRotationRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 
 		}

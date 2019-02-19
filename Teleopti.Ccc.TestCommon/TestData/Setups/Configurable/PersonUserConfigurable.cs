@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			if (Delete)
 			{
-				var repository = new PersonRepository(new ThisUnitOfWork(uow));
+				var repository = new PersonRepository(new ThisUnitOfWork(uow), null, null);
 				repository.Remove(user);
 				return;
 			}

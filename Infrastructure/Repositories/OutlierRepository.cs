@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 				public OutlierRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+					: base(currentUnitOfWork, null, null)
 	    {
 		    
 	    }

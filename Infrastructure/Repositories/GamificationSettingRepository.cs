@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public GamificationSettingRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public GamificationSettingRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
 

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonAccessAuditRepository : Repository<IPersonAccess>, IPersonAccessAuditRepository
 	{
 		public PersonAccessAuditRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

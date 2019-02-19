@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public TeamRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 
 		}

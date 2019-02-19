@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public RuleSetBagRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public RuleSetBagRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
 

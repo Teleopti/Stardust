@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			InParameter.NotNull("peopleId", peopleId);
 
-			var rep = new PersonRepository(new ThisUnitOfWork(GetUnitOfWork));
+			var rep = new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null);
 			var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
 			var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
 
@@ -840,14 +840,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void MarkForRemove(IPerson person)
 		{
-			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork)).Remove(person);
+			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null).Remove(person);
 
 			toBeRemovedList.Add(person.Id.GetValueOrDefault());
 		}
 
 		public void MarkForInsert(IPerson person)
 		{
-			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork)).Add(person);
+			new PersonRepository(new ThisUnitOfWork(GetUnitOfWork), null, null).Add(person);
 		}
 
 		public void DeleteAndSavePerson(IPerson person)

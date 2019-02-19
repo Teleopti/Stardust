@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 	    public MultiplicatorRepository(ICurrentUnitOfWork currentUnitOfWork)
-		    : base(currentUnitOfWork)
+		    : base(currentUnitOfWork, null, null)
 	    {
 	    }
 		

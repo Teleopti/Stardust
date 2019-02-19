@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(new ThisUnitOfWork(uow)).Add(loggedOnPerson);
+				new PersonRepository(new ThisUnitOfWork(uow), null, null).Add(loggedOnPerson);
 				uow.PersistAll();
 			}
 		}

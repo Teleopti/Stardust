@@ -3160,7 +3160,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			using (PerformanceOutput.ForOperation("Loading people"))
 			{
 				_optionalColumns = new OptionalColumnRepository(uow).GetOptionalColumns<Person>();
-				var personRep = new PersonRepository(new ThisUnitOfWork(uow));
+				var personRep = new PersonRepository(new ThisUnitOfWork(uow), null, null);
 				IPeopleLoader loader;
 				if (_teamLeaderMode)
 				{

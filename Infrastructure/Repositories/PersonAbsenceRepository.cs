@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonAbsenceRepository : Repository<IPersonAbsence>, IPersonAbsenceRepository
 	{
 		public PersonAbsenceRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 

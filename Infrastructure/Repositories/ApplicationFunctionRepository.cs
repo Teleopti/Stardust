@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public ApplicationFunctionRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public ApplicationFunctionRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork, null, null)
 		{
 		}
 

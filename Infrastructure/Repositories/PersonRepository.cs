@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
@@ -29,8 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonRepository : Repository<IPerson>, IPersonRepository, IWriteSideRepository<IPerson>,
 		IProxyForId<IPerson>
 	{
-		public PersonRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+		public PersonRepository(ICurrentUnitOfWork currentUnitOfWork, ICurrentBusinessUnit currentBusinessUnit, Lazy<IUpdatedBy> updatedBy)
+			: base(currentUnitOfWork, currentBusinessUnit, updatedBy)
 		{
 		}
 

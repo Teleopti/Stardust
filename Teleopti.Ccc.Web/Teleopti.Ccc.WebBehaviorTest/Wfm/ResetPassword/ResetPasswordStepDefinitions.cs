@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResetPassword
 		{
 			using (LocalSystem.TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				var repository = new PersonRepository(LocalSystem.UnitOfWork);
+				var repository = new PersonRepository(LocalSystem.UnitOfWork, null, null);
 				var users = repository.FindAllSortByName();
 	
 				var tokenGenerator = IntegrationIoCTest.Container.Resolve<ITokenGenerator>();

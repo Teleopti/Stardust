@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public ExternalLogOnRepository(ICurrentUnitOfWork currentUnitOfWork)
-			: base(currentUnitOfWork)
+			: base(currentUnitOfWork, null, null)
 		{
 		}
 
