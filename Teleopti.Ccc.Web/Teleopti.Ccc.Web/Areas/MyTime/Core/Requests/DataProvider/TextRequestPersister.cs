@@ -45,10 +45,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public void Delete(Guid id)
 		{
 			var personRequest = _personRequestRepository.Find(id);
-			if (personRequest == null)
-				throw new CustomMessageException(404, "PersonRequest not found", Resources.Request);
 			try
 			{
+				if (personRequest == null) return;
+
 				_personRequestRepository.Remove(personRequest);
 				setExchangeOfferBack(personRequest);
 			}
