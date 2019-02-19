@@ -319,6 +319,7 @@
     <Content Include="Scripts\App\httpInterceptor.js" />
     <Content Include="Scripts\App\configurationDetailsController.js" />
     <Content Include="Scripts\App\Services\tenant.service.js" />
+    <Content Include="Scripts\axios.min.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\clipboard.min.js" />
@@ -345,6 +346,7 @@
     <Content Include="Scripts\StardustApp\nodeDetailsController.js" />
     <Content Include="Scripts\StardustApp\jobFailedController.js" />
     <Content Include="Scripts\StardustApp\summaryController.js" />
+    <Content Include="Scripts\vue.min.js" />
     <Content Include="StardustDashboard\failedJobs.html" />
     <Content Include="StardustDashboard\jobqueuedetails.html" />
     <Content Include="StardustDashboard\nodedetails.html" />
