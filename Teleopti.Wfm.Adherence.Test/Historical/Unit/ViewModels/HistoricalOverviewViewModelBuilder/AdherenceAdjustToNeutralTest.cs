@@ -98,7 +98,6 @@ namespace Teleopti.Wfm.Adherence.Test.Historical.Unit.ViewModels.HistoricalOverv
 				.StateChanged(person, "2019-02-01 11:00", Adherence.Configuration.Adherence.In)
 				.AdjustedAdherenceToNeutral("2019-02-01 12:00", "2019-02-01 14:00");
 
-			Console.WriteLine("HERE");
 			History
 				.AdjustedAdherenceToNeutral("2019-02-01 12:00", "2019-02-01 14:00");
 			Now.Is("2019-02-08 08:00");
