@@ -8,6 +8,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Wfm.Azure.Common;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			builder.RegisterType<PayrollPeopleLoader>().As<IPayrollPeopleLoader>();
 			builder.RegisterType<emptyTenantPeopleLoader>().As<ITenantPeopleLoader>();
 			builder.RegisterType<SdkServiceFactory>().As<ISdkServiceFactory>();
+			builder.RegisterType<WfmInstallationEnvironment>().As<IInstallationEnvironment>().SingleInstance();
 		}
 
 		private class emptyTenantPeopleLoader : ITenantPeopleLoader
