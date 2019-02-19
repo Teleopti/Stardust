@@ -523,8 +523,7 @@ export class IntradayMainComponent implements OnInit, OnDestroy, AfterContentIni
 							['x'].concat(timeStamps),
 							['Forecasted_staffing'].concat(input.ForecastedStaffing),
 							['Actual_staffing'].concat(input.ActualStaffing),
-							['Scheduled_staffing']
-								.concat(input.ScheduledStaffing)
+							['Scheduled_staffing'].concat(input.ScheduledStaffing),
 								['Updated_forecasted_staffing'].concat(input.UpdatedForecastedStaffing)
 					  ],
 				type: 'area-spline',
