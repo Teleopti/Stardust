@@ -13551,7 +13551,7 @@ La aplicación ahora se cerrará.</value>
     <value>Fallo el exporte a Excel, usualmente es causado por falta de datos</value>
   </data>
   <data name="ChatBot" xml:space="preserve">
-    <value>Chat bot</value>
+    <value>Grant</value>
   </data>
   <data name="ShiftTradeRequestForExchangeOfferHasBeenCompleted" xml:space="preserve">
     <value>La oferta de intercambio de turno fue completada por otro agente.</value>
