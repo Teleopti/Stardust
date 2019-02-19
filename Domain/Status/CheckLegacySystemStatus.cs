@@ -1,6 +1,6 @@
-namespace Teleopti.Ccc.Domain.MonitorSystem
+namespace Teleopti.Ccc.Domain.Status
 {
-	public class CheckLegacySystemStatus : IMonitorStep
+	public class CheckLegacySystemStatus : IStatusStep
 	{
 		private readonly ICallLegacySystemStatus _callLegacySystemStatus;
 		public const string FailureOutput = "SystemStatus is failing!";
@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.MonitorSystem
 			_callLegacySystemStatus = callLegacySystemStatus;
 		}
 
-		public MonitorStepResult Execute()
+		public StatusStepResult Execute()
 		{
 			var result = _callLegacySystemStatus.Execute();
 			return result ? 
-				new MonitorStepResult(true, SuccessOutput) : 
-				new MonitorStepResult(false, FailureOutput);
+				new StatusStepResult(true, SuccessOutput) : 
+				new StatusStepResult(false, FailureOutput);
 		}
 
 		public string Name { get; } = "SystemStatus";

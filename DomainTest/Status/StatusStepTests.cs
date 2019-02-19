@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MonitorSystem;
+using Teleopti.Ccc.Domain.Status;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.MonitorSystem
+namespace Teleopti.Ccc.DomainTest.Status
 {
 	[DomainTest]
-	public class MonitorStepTests
+	public class StatusStepTests
 	{
-		public IEnumerable<IMonitorStep> MonitorSteps;
+		public IEnumerable<IStatusStep> MonitorSteps;
 		
 		[Test]
 		public void ShouldHaveRealMonitorStepsRegistered()
