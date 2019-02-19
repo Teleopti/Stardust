@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class SchedulerSplitters : BaseUserControl
 	{
-		//Most of theese needs to be properties with backend field, otherwise can't work in the designer for this control
+		//Most of those needs to be properties with backend field, otherwise can't work in the designer for this control
 		private readonly PinnedSkillHelper _pinnedSkillHelper;
 		private IList<IPerson> _filteredPersons = new List<IPerson>();
 		private readonly ContextMenuStrip _contextMenuSkillGrid;
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			skillGridControl.Refresh();
 		}
 
-		public MultipleHostControl MultipleHostControl3 { get => _multipleHostControl3; private set => _multipleHostControl3 = value; }
+		public MultipleHostControl MultipleHostControl3 => _multipleHostControl3;
 
 		public AgentInfoControl AgentInfoControl => tabInfoPanels.TabPages[0].Controls[0] as AgentInfoControl;
 
