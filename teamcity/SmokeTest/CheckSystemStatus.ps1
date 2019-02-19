@@ -1,4 +1,4 @@
-$listUrl =  "https://$env:CloudServiceName.teleopticloud.com/administration/status/list"
+$Url = "https://$env:CloudServiceName.teleopticloud.com/AuthenticationBridge/systemstatus.aspx"
 
 function CheckSystemStatus
 {
@@ -8,38 +8,24 @@ function CheckSystemStatus
 	)
 	$minNumberOfSuccess = 5
 	
-    do
-    {
-        $listRead = $false
-        try
-        {
-            $steps = Invoke-RestMethod -Uri $listUrl
-            $listRead = $true 
-        }
-        catch
-        {
-			Write-Output "Waiting for the admin site to start..."
-            Start-sleep -s 2
-        }
-    }until($listRead -eq $true)
-
+	Write-Host "Checking Systemstatus on: '$Url'"
+	
     $success = 0
 	do
     {
-        $success++
-        Foreach($step in $steps)
-        {
-            try
-            {
-                Invoke-RestMethod -Uri $step.Url
-            }
-            catch
-            {
-                Write-Output $_.ErrorDetails.Message
-                $success = 0
-                Start-sleep -s 2
-            }
-        }
+        $Response = wget $Url -UseBasicParsing -ErrorAction SilentlyContinue
+        $status = $Response.StatusDescription
+		if($status -eq 'OK') 
+		{
+			$success++
+		}
+		else 
+		{
+			$success = 0
+		}
+		Write-Output "$status"
+        
+        Start-Sleep 1
     } until($success -ge $minNumberOfSuccess)
 }
 
@@ -55,7 +41,7 @@ add-type @"
 		}
 "@
 
-[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-[Net.ServicePointManager]::SecurityProtocol = 'Tls12'
+	[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+	[Net.ServicePointManager]::SecurityProtocol = 'Tls12'
 
 CheckSystemStatus  $Url
